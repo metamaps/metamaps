@@ -1,0 +1,8 @@
+<%= form_for @group || Group.new, url: groups_path do |form| %>
+
+  <%= form.text_field :name, label: "Name", class: "name" %>
+  <%= form.text_field :desc, label: "Description", class: "description" %>
+  <%= form.text_field :link, label: "Link", class: "link" %>
+  <%= form.submit "Add Group", class: "add" %>
+   
+<% end %>

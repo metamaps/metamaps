@@ -1,0 +1,6 @@
+<%= div_for item do %>
+	<%= image_tag item.item_category.icon, :class => 'icon' %>
+	<%= link_to item.name, item_url(item), :class => 'title' %>
+	<div class="desc"><h3>About</h3><%=item.desc %></div>
+	<%= link_to item.link, item.link, :class => 'link' %>
+<% end %>

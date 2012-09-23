@@ -1,0 +1,9 @@
+<div class="everything" id="everything">
+  <% @all.each do |object| %>
+    <%= render object %>
+  <% end %>
+  <% if @all.empty? %>
+	 <p><br>Shucks, there is nothing in ISSAD.<p>
+	<% end %>
+</div>
+<div class="clearfloat"></div>

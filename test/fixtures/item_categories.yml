@@ -1,0 +1,40 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: Action
+  icon: action.png
+
+two:
+  name: Experience
+  icon: experience.png
+
+three:
+  name: Idea
+  icon: idea.png
+
+four:
+  name: Intention
+  icon: intention.png
+
+five:
+  name: Opinion
+  icon: opinion.png
+
+six:
+  name: Question
+  icon: question.png
+
+seven:
+  name: Reference
+  icon: reference.png
+
+eight:
+  name: Resource
+  icon: resource.png 
+
+nine:
+  name: Tool	
+  icon: tool.png  
+  
+
+

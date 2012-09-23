@@ -1,0 +1,32 @@
+development:
+  min_messages: WARNING
+  adapter: postgresql
+  host: 127.0.0.1
+  port: 5432
+  encoding: unicode
+  database: issad_development
+  pool: 5
+  username: postgres
+  password: "3112"
+
+test:
+  min_messages: WARNING
+  adapter: postgresql
+  host: 127.0.0.1
+  port: 5432
+  encoding: unicode
+  database: issad_test
+  pool: 5
+  username: postgres
+  password: "3112"
+
+production:
+  min_messages: WARNING
+  adapter: postgresql
+  host: 127.0.0.1
+  port: 5432
+  encoding: unicode
+  database: issad_production
+  pool: 5
+  username: postgres
+  password: "3112"

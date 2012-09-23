@@ -1,0 +1,58 @@
+<div class="focus">
+	<div class="focusleft">
+		<p>Group</p>
+		<%= image_tag "group.png", :class => 'icon' %>
+	</div>
+	<div class="focusmiddle">
+		<h1 class="title"><%= @group.name %></h1>
+		<div class="desc">
+			<h3>About</h3>
+			<p><%= @group.desc %></p>
+		</div>
+	</div>
+	<div class="focusright">
+		<p>Link</p>
+		<%= link_to @group.link, @group.link, :class => 'link' %>
+	</div>
+</div>
+<div class="clearfloat nodemargin"></div>
+
+<div class="groups">
+  <% @gparents.each do |group| %>
+    <%= render group %>
+  <% end %>
+  <% if @gparents.empty? %>
+	 <p><br>Shucks, there are no groups.<p>
+	<% end %>
+</div>
+<div class="clearfloat"></div>
+
+<div class="groups">
+  <% @gchildren.each do |group| %>
+    <%= render group %>
+  <% end %>
+  <% if @gchildren.empty? %>
+	 <p><br>Shucks, there are no groups.<p>
+	<% end %>
+</div>
+<div class="clearfloat"></div>
+
+<div class="people">
+  <% @pchildren.each do |people| %>
+    <%= render people %>
+  <% end %>
+  <% if @pchildren.empty? %>
+	 <p><br>Shucks, there are no people.<p>
+	<% end %>
+</div>
+<div class="clearfloat"></div>
+
+<div class="items">
+  <% @ichildren.each do |item| %>
+    <%= render item %>
+  <% end %>
+  <% if @ichildren.empty? %>
+	 <p><br>Shucks, there are no items.<p>
+	<% end %>
+</div>
+<div class="clearfloat"></div>

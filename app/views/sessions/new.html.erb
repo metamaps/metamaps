@@ -1,0 +1,7 @@
+<%= form_for @session || Session.new, url: session_path do |form| %>
+
+  <%= form.text_field :email, label: "Email", class: "email" %>
+  <%= form.password_field :password, label: "Password", class: "password" %>
+  <%= form.submit "Login", class: "add" %>
+   
+<% end %>

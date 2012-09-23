@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: Venessa Miemis
+  desc: Culture hacker.
+  link: http://emergentbydesign.com
+
+two:
+  name: Seb Paquet
+  desc: Culture hacker. 
+  link: http://emergentcities.sebpaquet.net/

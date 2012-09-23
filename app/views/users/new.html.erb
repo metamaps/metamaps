@@ -1,0 +1,10 @@
+<%= formula_form_for @user, url: user_url do |form| %>
+
+  <%= form.input :name, label: "Name", class: "name" %>
+  <%= form.input :email, label: "Email", class: "email" %>
+  <%= form.input :password, label: "Password", class: "password" %>
+  <%= form.submit "Login", class: "add" %>
+   
+<% end %>
+
+

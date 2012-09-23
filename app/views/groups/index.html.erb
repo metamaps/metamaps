@@ -1,0 +1,11 @@
+<h1>Groups</h1>
+
+<div class="groups" id="groups">
+  <% @groups.each do |group| %>
+    <%= render group %>
+  <% end %>
+  <% if @groups.empty? %>
+	 <p><br>Shucks, there are no groups.<p>
+	<% end %>
+</div>
+<div class="clearfloat"></div>

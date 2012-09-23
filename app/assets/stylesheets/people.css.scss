@@ -1,0 +1,14 @@
+// Place all the styles related to the people controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.person { display:block; float:left; position:relative; width:155px; height:265px; padding:10px 10px 10px 35px; background:#d1d1d1; border-radius:15px; margin:15px 0 15px 50px; color:#000; }
+
+.person .icon { position:absolute; top:117px; left:-25px; }
+
+.person .title { font-size:22px; line-height:25px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
+
+.person .desc { font-style:italic; }
+.person .desc h3 { font-style:normal; margin-top:5px; }
+
+.person .link { position:absolute; width:155px; top:260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

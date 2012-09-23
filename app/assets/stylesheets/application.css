@@ -1,0 +1,58 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+*/
+
+/* clear styles */
+html, body, div, h1, h2, h3, h4, h5, h6, ul, ol, dl, li, dt, dd, p, blockquote,
+pre, form, fieldset, table, th, td, legend { margin: 0; padding: 0; }
+img {border:0; padding:0; margin:0; display:block; text-indent:-9999px;}
+
+html { }
+body { background:#031924; font-family:Arial, Helvetica, sans-serif; background-attachment:fixed; color:#FFF; }
+
+h1 {display:block; text-align:left; }
+h2 {display:block; text-align:center; background: #333; font-size:24px;}
+
+a {color:#2d6a5d; text-decoration:none;}
+.clearfloat {clear:both;}
+
+.contentarea p, .contentarea ul , .contentarea ol, .contentarea table {font-size:14px; line-height:1.55em; padding:0.5em 0}
+.contentarea ul li {padding:0.2em 0; }
+.contentarea ol li {padding:0.2em 0; }
+.contentarea ul {margin:0 0 0 1em; }
+.contentarea ol {margin:0 0 0 1.3em; }
+
+.main { }
+
+.headertop { display:block; position:fixed; top:0; left:0; z-index:10; height:38px; width:100%; min-width:622px; background:#000; }
+#mainTitle { float: left; }
+#mainTitle a { color:#FFF; }
+.headertop ul { display:block; float: right; }
+.headertop ul li {display:block; float:right; margin:10px 5px 0 5px; }
+
+.wrapper {display:block; height:100%; margin:50px 0; }
+
+.nodemargin { padding-top:120px; }
+
+.focus { position:fixed; top:0; left:0; width:90%; z-index:10; display: block; min-width:533px; margin: 50px 50px 25px 50px; background: #D1D1D1; border-radius: 20px; color:#000; border:1px solid #000; }
+.focusleft, .focusmiddle, .focusright { display:block; float:left; }
+.focusleft { width:20%; min-width:70px; text-align:center; }
+.focusmiddle { display:block; width:49%; min-height:100px; border-right:2px solid #000; border-left:2px solid #000;}
+.focusright { width:30%; min-width:150px; }
+.focus .focusleft p { font-weight:bold; font-size:16px; line-height:20px; padding:10px 0 5px 0; }
+.focus .focusright p { font-weight:bold; font-size:16px; line-height:20px; padding:10px 0 5px 10px; }
+.focus .icon { margin:0 auto; }
+.focus .title { font-size:22px; line-height:25px; border-bottom:2px solid #000; padding:10px; }
+.focus .desc { font-style:italic; padding:10px; }
+.focus .desc h3 { font-style:normal; }
+.focus .link { padding:0 0 0 10px; display:block; width:90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

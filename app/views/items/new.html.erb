@@ -1,0 +1,8 @@
+<%= form_for @item || Item.new, url: items_path do |form| %>
+  <%= select_tag "category", options_from_collection_for_select(ItemCategory.all, "id", "name") %>
+  <%= form.text_field :name, label: "Name", class: "name" %>
+  <%= form.text_field :desc, label: "Description", class: "description" %>
+  <%= form.text_field :link, label: "Link", class: "link" %>
+  <%= form.submit "Add Item", class: "add" %>
+   
+<% end %>

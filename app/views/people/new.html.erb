@@ -1,0 +1,8 @@
+<%= form_for @person || Person.new, url: people_path do |form| %>
+  <%= form.text_field :name, label: "Name", class: "name" %>
+  <%= form.text_field :desc, label: "Description", class: "description" %>
+  <%= form.text_field :link, label: "Link", class: "link" %>
+  <%= select_tag "ingroups", options_from_collection_for_select(Group.all, "id", "name"), { :multiple => true } %>
+  <%= form.submit "Add Person", class: "add" %>
+   
+<% end %>
