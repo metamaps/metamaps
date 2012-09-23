@@ -23,10 +23,10 @@ test:
 production:
   min_messages: WARNING
   adapter: postgresql
-  host: 127.0.0.1
+  host: ec2-54-243-217-241.compute-1.amazonaws.com
   port: 5432
   encoding: unicode
-  database: issad_production
+  database: dbct9hosrirq2h
   pool: 5
-  username: postgres
-  password: "3112"
+  username: tkbwavghytilon
+  password: "To6z-64f1Lr3LqpWrcLBPG2Xdv"
