@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ISSAD</title>
+  <title>Metamap</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= stylesheet_link_tag 'style.css'   %>
   <%= javascript_include_tag "application" %>
@@ -11,7 +11,7 @@
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
         <div class="headertop">
-			<h1 id="mainTitle"><%= link_to "ISSAD", root_path %></h1>&nbsp;beta
+			<h1 id="mainTitle"><%= link_to "metamap", root_path %></h1>&nbsp;beta
 			<% unless authenticated? %>
 				<ul>
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>
