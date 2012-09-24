@@ -1,12 +1,10 @@
-<%= form_for @person || Person.new, url: people_path do |form| %>
-  <h3>Add Person</h3>
+<%= form_for @person, url: person_url do |form| %>
+  <h3>Edit Person</h3>
   <label for="person_name">Name</label>
   <%= form.text_field :name, label: "Name", class: "name" %>
   <label for="person_desc">Description</label>
   <%= form.text_area :desc, label: "Description", class: "description", :rows => 5 %>
   <label for="person_link">Link</label>
   <%= form.text_field :link, label: "Link", class: "link" %>
-  <label for="ingroups">In These Groups</label>
-  <%= select_tag "ingroups", options_from_collection_for_select(Group.all, "id", "name"), { :multiple => true } %>
-  <%= form.submit "Add Person", class: "add" %> 
+  <%= form.submit "Update", class: "update" %>
 <% end %>

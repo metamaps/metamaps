@@ -63,10 +63,17 @@ class ItemsController < ApplicationController
   def update
     @user = current_user
 	@item = Item.find_by_id(params[:id])
-    @item.attributes = params[:action] if @item
     
-    @item.save if @item
-    
+	if @item 
+		@item.name = params[:item][:name]
+		@item.desc = params[:item][:desc]
+		@item.link = params[:item][:link]
+		@item.item_category = ItemCategory.find(params[:category])
+		@item.user = @user
+	
+		@item.save
+    end
+	
     respond_with(@user, location: restore(default: root_url)) do |format|
     end
   end

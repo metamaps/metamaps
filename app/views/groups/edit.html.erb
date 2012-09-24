@@ -1,10 +1,10 @@
-<%= form_for @group || Group.new, url: groups_path do |form| %>
-  <h3>Add Group</h3>
+<%= form_for @group, url: group_url do |form| %>
+  <h3>Edit Group</h3>
   <label for="group_name">Name</label>
   <%= form.text_field :name, label: "Name", class: "name" %>
   <label for="group_desc">Description</label>
   <%= form.text_area :desc, label: "Description", class: "description", :rows => 5 %>
   <label for="group_link">Link</label>
   <%= form.text_field :link, label: "Link", class: "link" %>
-  <%= form.submit "Add Group", class: "add" %>
+  <%= form.submit "Update", class: "update" %>
 <% end %>

@@ -3,7 +3,6 @@
 <head>
   <title>Metamap</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= stylesheet_link_tag 'style.css'   %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
@@ -15,16 +14,23 @@
 			<% unless authenticated? %>
 				<ul>
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>
+					<li><%= link_to "Create Account", new_user_path, id: "CreateAccount" %></li>
+					<li>|</li>
+					<li><%= link_to "Items", items_path %></li>
+					<li><%= link_to "People", people_path %></li>
+					<li><%= link_to "Groups", groups_path %></li>
 				</ul>
 			<% end %>
 			<% if authenticated? %>
 				<ul>
 					<li><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
-					<li><%= link_to "New Item", new_item_path %></li>
+					<li>|</li>
+					<li><%= link_to "Add Item", new_item_path %></li>
+					<li><%= link_to "Add Person", new_person_path %></li>
+					<li><%= link_to "Add Group", new_group_path %></li>
+					<li>|</li>
 					<li><%= link_to "Items", items_path %></li>
-					<li><%= link_to "New Person", new_person_path %></li>
 					<li><%= link_to "People", people_path %></li>
-					<li><%= link_to "New Group", new_group_path %></li>
 					<li><%= link_to "Groups", groups_path %></li>
 				</ul>
 			<% end %>

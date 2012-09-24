@@ -1,6 +1,8 @@
+
 <%= div_for group do %>
+	<p class="type">Group</p>
 	<%= image_tag "group.png", :class => 'icon' %>
 	<%= link_to group.name, group_url(group), :class => 'title' %>
-	<div class="desc"><h3>About</h3><%= group.desc %></div>
+	<div class="desc"><p><%= group.desc %></p></div>
 	<%= link_to group.link, group.link, :class => 'link' %>
 <% end %>

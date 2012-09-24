@@ -1,5 +1,5 @@
-<%= form_for @item || Item.new, url: items_path do |form| %>
-  <h3>Add Item</h3>
+<%= form_for @item, url: item_url do |form| %>
+  <h3>Edit Item</h3>
   <label for="category">Category</label>
   <%= select_tag "category", options_from_collection_for_select(ItemCategory.all, "id", "name") %>
   <label for="item_name">Title</label>
@@ -8,5 +8,5 @@
   <%= form.text_area :desc, class: "description", :rows => 5 %>
   <label for="item_link">Link</label>
   <%= form.text_field :link, class: "link" %>
-  <%= form.submit "Add Item", class: "add" %>
+  <%= form.submit "Update", class: "update" %>
 <% end %>

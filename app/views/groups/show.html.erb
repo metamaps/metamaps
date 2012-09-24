@@ -4,9 +4,8 @@
 		<%= image_tag "group.png", :class => 'icon' %>
 	</div>
 	<div class="focusmiddle">
-		<h1 class="title"><%= @group.name %></h1>
+		<h1 class="title"><%= @group.name %> <%= link_to "[edit]", edit_group_path(@group) %></h1>
 		<div class="desc">
-			<h3>About</h3>
 			<p><%= @group.desc %></p>
 		</div>
 	</div>
@@ -18,41 +17,45 @@
 <div class="clearfloat nodemargin"></div>
 
 <div class="groups">
+  <div class="divider"><%= @group.name %> is included in these groups</div>
   <% @gparents.each do |group| %>
     <%= render group %>
   <% end %>
   <% if @gparents.empty? %>
-	 <p><br>Shucks, there are no groups.<p>
-	<% end %>
+	 <p class="empty">Shucks, there are no groups.</p>
+  <% end %>
 </div>
 <div class="clearfloat"></div>
 
 <div class="groups">
+  <div class="divider"><%= @group.name %> includes these groups</div>
   <% @gchildren.each do |group| %>
     <%= render group %>
   <% end %>
   <% if @gchildren.empty? %>
-	 <p><br>Shucks, there are no groups.<p>
-	<% end %>
+	 <p class="empty">Shucks, there are no groups.</p>
+  <% end %>
 </div>
 <div class="clearfloat"></div>
 
 <div class="people">
+  <div class="divider"><%= @group.name %> includes these people</div>
   <% @pchildren.each do |people| %>
     <%= render people %>
   <% end %>
   <% if @pchildren.empty? %>
-	 <p><br>Shucks, there are no people.<p>
+	 <p class="empty">Shucks, there are no people.</p>
 	<% end %>
 </div>
 <div class="clearfloat"></div>
 
 <div class="items">
+  <div class="divider"><%= @group.name %> includes these items</div>
   <% @ichildren.each do |item| %>
     <%= render item %>
   <% end %>
   <% if @ichildren.empty? %>
-	 <p><br>Shucks, there are no items.<p>
+	 <p class="empty">Shucks, there are no items.</p>
 	<% end %>
 </div>
 <div class="clearfloat"></div>

@@ -4,9 +4,8 @@
 		<%= image_tag "person.png", :class => 'icon' %>
 	</div>
 	<div class="focusmiddle">
-		<h1 class="title"><%= @person.name %></h1>
+		<h1 class="title"><%= @person.name %> <%= link_to "[edit]", edit_person_path(@person) %></h1>
 		<div class="desc">
-			<h3>About</h3>
 			<p><%= @person.desc %></p>
 		</div>
 	</div>
@@ -19,21 +18,23 @@
 <div class="clearfloat nodemargin"></div>
 
 <div class="groups">
+  <div class="divider"><%= @person.name %> is included in these groups</div>
   <% @gparents.each do |group| %>
     <%= render group %>
   <% end %>
   <% if @gparents.empty? %>
-	 <p><br>Shucks, there are no groups.<p>
+	 <p class="empty">Shucks, there are no groups.</p>
 	<% end %>
 </div>
 <div class="clearfloat"></div>
 
 <div class="items">
+  <div class="divider"><%= @person.name %> includes these items</div>
   <% @ichildren.each do |item| %>
     <%= render item %>
   <% end %>
   <% if @ichildren.empty? %>
-	 <p><br>Shucks, there are no items.<p>
+	 <p class="empty">Shucks, there are no items.</p>
 	<% end %>
 </div>
 <div class="clearfloat"></div>
