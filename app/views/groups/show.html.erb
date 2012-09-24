@@ -10,6 +10,8 @@
 		</div>
 	</div>
 	<div class="focusright">
+	    <p>Location</p>
+		<%= @group.city %>, <%= @group.province %>, <%= @group.country %>
 		<p>Link</p>
 		<%= link_to @group.link, @group.link, :class => 'link' %>
 	</div>

@@ -8,5 +8,11 @@
   <%= form.text_field :link, label: "Link", class: "link" %>
   <label for="ingroups">In These Groups</label>
   <%= select_tag "ingroups", options_from_collection_for_select(Group.all, "id", "name"), { :multiple => true } %>
+  <label for="person_city">City</label>
+  <%= form.text_field :city, class: "city" %>
+  <label for="person_province">Province/State</label>
+  <%= form.text_field :province, class: "province" %>
+  <label for="person_country">Country</label>
+  <%= form.text_field :country, class: "country" %>
   <%= form.submit "Add Person", class: "add" %> 
 <% end %>

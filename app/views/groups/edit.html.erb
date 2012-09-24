@@ -6,5 +6,11 @@
   <%= form.text_area :desc, label: "Description", class: "description", :rows => 5 %>
   <label for="group_link">Link</label>
   <%= form.text_field :link, label: "Link", class: "link" %>
+  <label for="group_city">City</label>
+  <%= form.text_field :city, class: "city" %>
+  <label for="group_province">Province/State</label>
+  <%= form.text_field :province, class: "province" %>
+  <label for="group_country">Country</label>
+  <%= form.text_field :country, class: "country" %>
   <%= form.submit "Update", class: "update" %>
 <% end %>
