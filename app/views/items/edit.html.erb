@@ -1,12 +1,79 @@
 <%= form_for @item, url: item_url do |form| %>
   <h3>Edit Item</h3>
   <label for="category">Category</label>
-  <%= select_tag "category", options_from_collection_for_select(ItemCategory.all, "id", "name") %>
+  <%= select "category", "item_category_id", ItemCategory.all.collect {|p| [ p.name, p.id ] }, { :selected => @item.item_category.id } %>
   <label for="item_name">Title</label>
   <%= form.text_field :name %>
   <label for="item_desc">Description</label>
   <%= form.text_area :desc, class: "description", :rows => 5 %>
   <label for="item_link">Link</label>
   <%= form.text_field :link, class: "link" %>
+  
+  <% if @ingroups.count > 0 %>
+	<label for="ingroups">Remove Parent Groups</label>
+	<%= select_tag "ingroups", options_from_collection_for_select(@ingroups, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "ingroups", options_from_collection_for_select(@ingroups, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @outgroups.count > 0 %>
+	<label for="outgroups">Add Parent Groups</label>
+	<%= select_tag "outgroups", options_from_collection_for_select(@outgroups, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "outgroups", options_from_collection_for_select(@outgroups, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @inpeople.count > 0 %>
+	<label for="inpeople">Remove Parent People</label>
+	<%= select_tag "inpeople", options_from_collection_for_select(@inpeople, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "inpeople", options_from_collection_for_select(@inpeople, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @outpeople.count > 0 %>
+	<label for="outpeople">Add Parent People</label>
+	<%= select_tag "outpeople", options_from_collection_for_select(@outpeople, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "outpeople", options_from_collection_for_select(@outpeople, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  
+  <% if @initems1.count > 0 %>
+	<label for="initems1">Remove Parent Items</label>
+	<%= select_tag "initems1", options_from_collection_for_select(@initems1, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "initems1", options_from_collection_for_select(@initems1, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @outitems1.count > 0 %>
+	<label for="outitems1">Add Parent Items</label>
+	<%= select_tag "outitems1", options_from_collection_for_select(@outitems1, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "outitems1", options_from_collection_for_select(@outitems1, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @initems2.count > 0 %>
+	<label for="initems2">Remove Child Items</label>
+	<%= select_tag "initems2", options_from_collection_for_select(@initems2, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "initems2", options_from_collection_for_select(@initems2, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @outitems2.count > 0 %>
+	<label for="outitems2">Add Child Items</label>
+	<%= select_tag "outitems2", options_from_collection_for_select(@outitems2, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "outitems2", options_from_collection_for_select(@outitems2, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  
   <%= form.submit "Update", class: "update" %>
 <% end %>

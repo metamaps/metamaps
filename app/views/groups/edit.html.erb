@@ -12,5 +12,37 @@
   <%= form.text_field :province, class: "province" %>
   <label for="group_country">Country</label>
   <%= form.text_field :country, class: "country" %>
+  <% if @ingroups1.count > 0 %>
+	<label for="ingroups1">Remove Parent Groups</label>
+	<%= select_tag "ingroups1", options_from_collection_for_select(@ingroups1, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "ingroups1", options_from_collection_for_select(@ingroups1, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @outgroups1.count > 0 %>
+	<label for="outgroups1">Add Parent Groups</label>
+	<%= select_tag "outgroups1", options_from_collection_for_select(@outgroups1, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "outgroups1", options_from_collection_for_select(@outgroups1, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @ingroups2.count > 0 %>
+	<label for="ingroups2">Remove Child Groups</label>
+	<%= select_tag "ingroups2", options_from_collection_for_select(@ingroups2, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "ingroups2", options_from_collection_for_select(@ingroups2, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @outgroups2.count > 0 %>
+	<label for="outgroups2">Add Child Groups</label>
+	<%= select_tag "outgroups2", options_from_collection_for_select(@outgroups2, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "outgroups2", options_from_collection_for_select(@outgroups2, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

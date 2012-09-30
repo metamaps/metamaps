@@ -6,7 +6,7 @@
   <%= form.text_area :desc, label: "Description", class: "description", :rows => 5 %>
   <label for="person_link">Link</label>
   <%= form.text_field :link, label: "Link", class: "link" %>
-  <label for="ingroups">In These Groups</label>
+  <label for="ingroups">Add To Groups</label>
   <%= select_tag "ingroups", options_from_collection_for_select(Group.all, "id", "name"), { :multiple => true } %>
   <label for="person_city">City</label>
   <%= form.text_field :city, class: "city" %>

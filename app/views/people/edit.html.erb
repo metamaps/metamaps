@@ -12,5 +12,21 @@
   <%= form.text_field :province, class: "province" %>
   <label for="person_country">Country</label>
   <%= form.text_field :country, class: "country" %>
+  <% if @ingroups.count > 0 %>
+	<label for="ingroups">Remove From Groups</label>
+	<%= select_tag "ingroups", options_from_collection_for_select(@ingroups, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "ingroups", options_from_collection_for_select(@ingroups, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
+  <% if @outgroups.count > 0 %>
+	<label for="outgroups">Add To Groups</label>
+	<%= select_tag "outgroups", options_from_collection_for_select(@outgroups, "id", "name"), { :multiple => true } %>
+  <% else %>
+	<div style="display:none">
+	<%= select_tag "outgroups", options_from_collection_for_select(@outgroups, "id", "name"), { :multiple => true } %>
+	</div>
+  <% end %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

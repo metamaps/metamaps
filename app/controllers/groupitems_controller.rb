@@ -1,0 +1,2 @@
+class GroupitemsController < ApplicationController
+end

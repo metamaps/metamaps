@@ -1,0 +1,2 @@
+class PersonitemsController < ApplicationController
+end
