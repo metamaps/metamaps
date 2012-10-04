@@ -38,6 +38,9 @@ class PeopleController < ApplicationController
 	@person.name = params[:person][:name]
 	@person.desc = params[:person][:desc]
 	@person.link = params[:person][:link]
+	@person.city = params[:person][:city]
+	@person.province = params[:person][:province]
+	@person.country = params[:person][:country]
 	@person.user = @user
 		
 	@person.save 

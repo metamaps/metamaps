@@ -89,7 +89,6 @@ class ItemsController < ApplicationController
   
   # PUT /actions/:id
   def update
-    @user = current_user
 	@item = Item.find_by_id(params[:id])
     
 	if @item 
@@ -97,7 +96,6 @@ class ItemsController < ApplicationController
 		@item.desc = params[:item][:desc]
 		@item.link = params[:item][:link]
 		@item.item_category = ItemCategory.find(params[:category][:item_category_id])
-		@item.user = @user
 	
 		@item.save
     end
