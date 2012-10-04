@@ -4,37 +4,110 @@ one:
   name: Action
   icon: action.png
 
-two:
+two: 
+  name: Activity
+  icon: activity.png
+  
+three: 
+  name: Bizarre
+  icon: bizarre.png
+  
+four: 
+  name: Catalyst
+  icon: catalyst.png
+  
+five: 
+  name: Closed
+  icon: closed.png
+  
+six:
   name: Experience
   icon: experience.png
 
-three:
+seven: 
+  name: Future Dev
+  icon: futuredev.png
+  
+
+eight:
   name: Idea
   icon: idea.png
+  
+nine: 
+  name: Implication
+  icon: implication.png
+  
+ten: 
+  name: Insight
+  icon: insight.png
 
-four:
+eleven:
   name: Intention
   icon: intention.png
+  
+twelve: 
+  name: Knowledge
+  icon: knowledge.png
+  
+thirteen:
+  name: Location
+  icon: location.png
+  
+fourteen:
+  name: Open Issue
+  icon: openissue.png
 
-five:
+fifteen:
   name: Opinion
   icon: opinion.png
+  
+sixteen:
+  name: Opportunity
+  icon: opportunity.png
+  
+seventeen:
+  name: Platform
+  icon: platform.png
+  
+eighteen:
+  name: Problem
+  icon: problem.png
 
-six:
+nineteen:
   name: Question
   icon: question.png
 
-seven:
+twenty:
   name: Reference
   icon: reference.png
+  
+twentyone:
+  name: Requirement
+  icon: requirement.png
 
-eight:
+twentytwo:
   name: Resource
   icon: resource.png 
+  
+twentythree:
+  name: Role
+  icon: role.png
+  
+twentyfour:
+  name: Task
+  icon: task.png
 
-nine:
+twentyfive:
   name: Tool	
-  icon: tool.png  
+  icon: tool.png 
+
+twentysix:
+  name: Trajectory
+  icon: trajectory.png  
+  
+
+  
+
   
 
 

@@ -1,7 +1,7 @@
 <div class="focus">
 	<div class="focusleft">
 		<p>Person</p>
-		<%= image_tag "person.png", :class => 'icon' %>
+		<%= image_tag "person.png", :class => 'icon', :size => '50x50' %>
 	</div>
 	<div class="focusmiddle">
 		<h1 class="title"><%= @person.name %> <%= link_to "[edit]", edit_person_path(@person) %></h1>
