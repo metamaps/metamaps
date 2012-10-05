@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120922164150) do
+ActiveRecord::Schema.define(:version => 20121005160234) do
 
   create_table "groupgroups", :force => true do |t|
     t.integer  "group_id"
@@ -87,6 +87,16 @@ ActiveRecord::Schema.define(:version => 20120922164150) do
   create_table "personitems", :force => true do |t|
     t.integer  "person_id"
     t.integer  "item_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "synapses", :force => true do |t|
+    t.text     "desc"
+    t.text     "category"
+    t.integer  "node1_id"
+    t.integer  "node2_id"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
