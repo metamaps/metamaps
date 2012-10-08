@@ -11,7 +11,10 @@
 	</div>
 	<div class="focusright">
 		<p>Location</p>
-		<%= @person.city %>, <%= @person.province %>, <%= @person.country %>
+		<Span class="location">
+			<%= @person.city %><% if @person.city != "" && @person.province != "" %>, <% end %><%= @person.province %><% if (@person.city != "" || @person.province != "") && @person.country != "" %>, <% end %><%= @person.country %>
+			<% if (@person.city == "" && @person.province == "" && @person.country == "") %>Earth<% end %>
+		</span>
 		<p>Link</p>
 		<%= link_to @person.link, @person.link, :class => 'link', :target => '_blank' %>
 	</div>
