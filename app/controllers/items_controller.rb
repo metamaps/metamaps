@@ -176,8 +176,9 @@ class ItemsController < ApplicationController
 		end 
 	end
 	
-    respond_with(@user, location: restore(default: root_url)) do |format|
+    respond_with(@user, location: restore(default: item_url(@item))) do |format|
     end
+	
   end
   
   # DELETE /actions/:id

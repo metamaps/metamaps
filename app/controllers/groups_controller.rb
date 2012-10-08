@@ -117,7 +117,7 @@ class GroupsController < ApplicationController
 		end 
 	end
     
-    respond_with(@user, location: restore(default: root_url)) do |format|
+    respond_with(@user, location: restore(default: group_url(@group))) do |format|
     end
   end
   

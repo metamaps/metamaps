@@ -13,7 +13,7 @@
 		<p>Location</p>
 		<%= @person.city %>, <%= @person.province %>, <%= @person.country %>
 		<p>Link</p>
-		<%= link_to @person.link, @person.link, :class => 'link' %>
+		<%= link_to @person.link, @person.link, :class => 'link', :target => '_blank' %>
 	</div>
 	<div class="clearfloat"></div>
 </div>

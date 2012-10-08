@@ -54,7 +54,7 @@ input[type="submit"] { margin-top:5px; }
 .focus { position:fixed; top:0; left:0; width:90%; z-index:10; display: block; min-width:533px; margin: 50px 50px 25px 50px; background: #D1D1D1; border-radius: 20px; color:#000; border:1px solid #000; }
 .focusleft, .focusmiddle, .focusright { display:block; float:left; }
 .focusleft { width:20%; min-width:70px; text-align:center; }
-.focusmiddle { display:block; width:49%; min-height:100px; border-right:2px solid #000; border-left:2px solid #000;}
+.focusmiddle { display:block; width:49%; min-height:115px; border-right:2px solid #000; border-left:2px solid #000;}
 .focusright { width:30%; min-width:150px; }
 .focus .focusleft p { font-weight:bold; font-size:16px; line-height:20px; padding:10px 0 5px 0; }
 .focus .focusright p { font-weight:bold; font-size:16px; line-height:20px; padding:10px 0 5px 10px; }
@@ -62,6 +62,7 @@ input[type="submit"] { margin-top:5px; }
 .focus .title { font-size:22px; line-height:25px; border-bottom:2px solid #000; padding:10px; }
 .focus .desc { font-style:italic; padding:10px; }
 .focus .desc h3 { font-style:normal; }
+.focus .location { padding-left:10px; }
 .focus .link { padding:0 0 0 10px; display:block; width:90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .divider { margin: 20px 50px 20px 50px; border-bottom:2px solid #FFF; }

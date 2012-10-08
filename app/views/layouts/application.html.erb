@@ -14,7 +14,6 @@
 			<% unless authenticated? %>
 				<ul>
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>
-					<li><%= link_to "Create Account", new_user_path, id: "CreateAccount" %></li>
 					<li>|</li>
 					<li><%= link_to "Items", items_path %></li>
 					<li><%= link_to "People", people_path %></li>
@@ -24,6 +23,7 @@
 			<% if authenticated? %>
 				<ul>
 					<li><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
+					<li><%= link_to "My Objects", userobjects_path %></li>
 					<li>|</li>
 					<li><%= link_to "Add Item", new_item_path %></li>
 					<li><%= link_to "Add Person", new_person_path %></li>

@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.person { display:block; float:left; position:relative; width:155px; height:265px; padding:10px 10px 10px 35px; background:#d1d1d1; border-radius:15px; margin:30px 0 30px 50px; color:#000; }
+.person { display:block; float:left; position:relative; width:170px; height:300px; padding:10px 10px 10px 35px; background:#d1d1d1; border-radius:15px; margin:30px 0 30px 50px; color:#000; }
 
 .person .type {position: absolute;
 color: white;
@@ -12,11 +12,11 @@ font-weight: bold;
 font-size: 20px;
 line-height: 24px;}
 
-.person .icon { position:absolute; top:117px; left:-25px; }
+.person .icon { position:absolute; top:135px; left:-25px; }
 
 .person .title { font-size:22px; line-height:25px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
 
-.person .desc { font-style:italic; overflow-y:scroll;}
+.person .desc { font-style:italic; }
 .person .desc h3 { font-style:normal; margin-top:5px; }
 
-.person .link { position:absolute; width:155px; top:260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.person .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

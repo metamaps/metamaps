@@ -101,7 +101,7 @@ class PeopleController < ApplicationController
 		end 
 	end
 	
-    respond_with(@user, location: restore(default: root_url)) do |format|
+    respond_with(@user, location: restore(default: person_url(@person))) do |format|
     end
   end
   

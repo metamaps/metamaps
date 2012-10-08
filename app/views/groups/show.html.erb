@@ -11,9 +11,12 @@
 	</div>
 	<div class="focusright">
 	    <p>Location</p>
-		<%= @group.city %>, <%= @group.province %>, <%= @group.country %>
+		<Span class="location">
+			<%= @group.city %><% if @group.city != "" && @group.province != "" %>, <% end %><%= @group.province %><% if (@group.city != "" || @group.province != "") && @group.country != "" %>, <% end %><%= @group.country %>
+			<% if (@group.city == "" && @group.province == "" && @group.country == "") %>Earth<% end %>
+		</span>
 		<p>Link</p>
-		<%= link_to @group.link, @group.link, :class => 'link' %>
+		<%= link_to @group.link, @group.link, :class => 'link', :target => '_blank' %>
 	</div>
 </div>
 <div class="clearfloat nodemargin"></div>

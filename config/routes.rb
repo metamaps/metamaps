@@ -2,6 +2,8 @@ ISSAD::Application.routes.draw do
 
   root to: 'main#home', via: :get
   
+  match 'my-objects', to: 'main#userobjects', via: :get, as: :userobjects
+  
   resource :user
   resource :session
   
