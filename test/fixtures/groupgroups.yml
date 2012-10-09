@@ -1,5 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  group_id: 1
-  parent_group_id: 1
