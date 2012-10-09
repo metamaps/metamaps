@@ -10,6 +10,7 @@ gem 'authlogic'
 gem 'cancan'
 gem 'formula'
 gem 'formtastic'
+gem 'json'
 
 
 # Gems used only for assets and not required
@@ -30,7 +31,7 @@ gem 'jquery-rails'
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
-# gem 'jbuilder'
+ gem 'jbuilder'
 
 # Use unicorn as the web server
 # gem 'unicorn'

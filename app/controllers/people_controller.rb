@@ -23,11 +23,15 @@ class PeopleController < ApplicationController
   # GET /people/:id
   def show
   	@person = Person.find(params[:id])
-	
+		
 	@gparents = @person.groups
+	@relatives = @person.as_json.html_safe
 	@ichildren = @person.items
 	
-	respond_with(@person, @gparents, @ichildren)
+	respond_to do |format|
+      format.html { respond_with(@person, @gparents, @ichildren) }
+      format.json { respond_with(@relatives) }
+    end
   end
   
   # POST /people

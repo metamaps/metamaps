@@ -33,6 +33,26 @@
 </div>
 <div class="clearfloat"></div>
 
+<div class="relatives" id="container">
+  <div class="divider"><%= @person.name %> is connected to these people</div>
+  <div id="center-container">
+    <div id="infovis"></div>    
+  </div>
+  <div id="right-container">
+    <div id="log"></div>
+	<div id="inner-details"></div>
+  </div>
+</div>
+<div class="clearfloat"></div>
+
+<script>
+	json = <%= @relatives %>;
+	console.log(json);
+	$(document).ready(function() {
+		init();
+	});
+</script>
+
 <div class="items">
   <div class="divider"><%= @person.name %> includes these items</div>
   <% @ichildren.each do |item| %>

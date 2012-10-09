@@ -25,11 +25,15 @@ class GroupsController < ApplicationController
   	@group = Group.find(params[:id])
 	
 	@gparents = @group.parent_groups
+	@relatives = @group.as_json.html_safe
 	@gchildren = @group.child_groups
 	@pchildren = @group.people
 	@ichildren = @group.items
 	
-	respond_with(@group, @gparents, @gchildren, @pchildren, @ichildren)
+	respond_to do |format|
+      format.html { respond_with(@group, @gparents, @gchildren, @pchildren, @ichildren) }
+      format.json { respond_with(@relatives) }
+    end
   end
   
   # POST /groups

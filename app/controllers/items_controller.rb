@@ -27,9 +27,13 @@ class ItemsController < ApplicationController
 	@gparents = @item.groups
 	@pparents = @item.people
 	@iparents = @item.parent_items
+	@relatives = @item.as_json.html_safe
 	@ichildren = @item.child_items
 	
-	respond_with(@item, @gparents, @pparents, @iparents, @ichildren)
+	respond_to do |format|
+      format.html { respond_with(@item, @gparents, @pparents, @iparents, @ichildren) }
+      format.json { respond_with(@relatives) }
+    end
   end
   
   # POST /items

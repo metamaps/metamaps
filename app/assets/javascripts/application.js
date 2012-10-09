@@ -13,6 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+//= require Jit/jit
+//= require Jit/jit-yc
+//= require Jit/excanvas
+//= require Jit/examples/ForceDirected/example1
 
  $(document).ready(function() {
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));

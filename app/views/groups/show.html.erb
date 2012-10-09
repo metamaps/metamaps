@@ -32,6 +32,26 @@
 </div>
 <div class="clearfloat"></div>
 
+<div class="relatives" id="container">
+  <div class="divider"><%= @group.name %> is connected to these groups</div>
+  <div id="center-container">
+    <div id="infovis"></div>    
+  </div>
+  <div id="right-container">
+    <div id="log"></div>
+	<div id="inner-details"></div>
+  </div>
+</div>
+<div class="clearfloat"></div>
+
+<script>
+	json = <%= @relatives %>;
+	console.log(json);
+	$(document).ready(function() {
+		init();
+	});
+</script>
+
 <div class="groups">
   <div class="divider"><%= @group.name %> includes these groups</div>
   <% @gchildren.each do |group| %>

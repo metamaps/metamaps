@@ -10,6 +10,8 @@
  *
  *= require_self
  *= require_tree .
+ *= require base
+ *= require ForceDirected
 */
 
 /* clear styles */

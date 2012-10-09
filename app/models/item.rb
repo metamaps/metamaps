@@ -16,7 +16,11 @@ has_many :synapses2, :class_name => 'Synapse', :foreign_key => 'node2_id', :cond
 has_many :items1, :through => :synapses2, :source => :item1
 has_many :items2, :through => :synapses1, :source => :item2
   
-  def siblings
+  def synapses
+     synapses1 + synapses2
+  end
+  
+  def relatives
      items1 + items2
   end 
 
@@ -24,5 +28,27 @@ belongs_to :item_category
 
 has_many :child_items, :through => :itemitem_c, :source => :item
 has_many :parent_items, :through => :itemitem_p, :source => :parent_item
+
+  def as_json
+    Jbuilder.encode do |json|
+	  @data1 = {'$color'=> '#909291'}
+	  @data2 = {'$color'=> '#70A35E', '$type'=> 'triangle', '$dim'=> 11 }
+	  @single = Array.new
+	  @single.push(self)
+	  @items = @single + self.relatives
+	  
+	  json.array!(@items) do |item|
+	      json.adjacencies item.synapses2 do |json, synapse|
+			json.nodeTo synapse.node1_id
+			json.nodeFrom synapse.node2_id
+			json.data @data1
+		  end
+		  
+		  json.data @data2
+		  json.id item.id
+		  json.name item.name
+	  end	
+    end
+  end
 
 end
