@@ -16,7 +16,7 @@
 //= require Jit/jit
 //= require Jit/jit-yc
 //= require Jit/excanvas
-//= require Jit/examples/ForceDirected/example1
+//= require Jit/Examples/ForceDirected/example1
 
  $(document).ready(function() {
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));
