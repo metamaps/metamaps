@@ -30,7 +30,7 @@ has_many :people2, :through => :synapses1, :source => :person2
 	  @people = @single + self.relatives
 	  
 	  json.array!(@people) do |person|
-	      json.adjacencies person.synapses2 do |json, synapse|
+	      json.adjacencies person.synapses2.delete_if{|synapse| not @people.include?(Person.find_by_id(synapse.node1_id))} do |json, synapse| 
 			json.nodeTo synapse.node1_id
 			json.nodeFrom synapse.node2_id
 			json.data @data1

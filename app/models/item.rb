@@ -38,10 +38,10 @@ has_many :parent_items, :through => :itemitem_p, :source => :parent_item
 	  @items = @single + self.relatives
 	  
 	  json.array!(@items) do |item|
-	      json.adjacencies item.synapses2 do |json, synapse|
-			json.nodeTo synapse.node1_id
-			json.nodeFrom synapse.node2_id
-			json.data @data1
+	      json.adjacencies item.synapses2.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node1_id))} do |json, synapse|
+				json.nodeTo synapse.node1_id
+				json.nodeFrom synapse.node2_id
+				json.data @data1
 		  end
 		  
 		  json.data @data2

@@ -1,0 +1,31 @@
+<div class="focus">	
+	<div class="focusleft">
+		<p><%= @node1.name %></p>
+		<% if (@node1.class == Group) %>
+			<%= image_tag "group.png", :class => 'icon', :size => '50x50' %>
+		<% elsif (@node1.class == Person) %>
+			<%= image_tag "person.png", :class => 'icon', :size => '50x50' %>		
+		<% elsif (@node1.class == Item) %>
+			<%= image_tag @node1.item_category.icon, :class => 'icon', :size => '50x50' %>
+		<% end %>
+		<p><%= @node1.desc %></p>
+	</div>
+	<div class="focusmiddle">
+		<h1 class="title">Synapse <%= link_to "[edit]", edit_synapse_path(@synapse) %></h1>
+		<div class="desc">
+			<p><%= @synapse.desc %></p>
+		</div>
+	</div>
+	<div class="focusright">
+		<p><%= @node2.name %></p>
+		<% if (@node2.class == Group) %>
+			<%= image_tag "group.png", :class => 'icon', :size => '50x50' %>
+		<% elsif (@node2.class == Person) %>
+			<%= image_tag "person.png", :class => 'icon', :size => '50x50' %>		
+		<% elsif (@node2.class == Item) %>
+			<%= image_tag @node2.item_category.icon, :class => 'icon', :size => '50x50' %>
+		<% end %>
+		<p><%= @node2.desc %></p>
+	</div>
+</div>
+<div class="clearfloat nodemargin"></div>

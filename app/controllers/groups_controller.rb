@@ -46,7 +46,7 @@ class GroupsController < ApplicationController
 	@group.save   
     
     respond_to do |format|
-      format.html { respond_with(@user, location: restore(default: group_url(@group))) }
+      format.html { respond_with(@user, location: group_url(@group)) }
       format.js { respond_with(@group) }
     end
     
@@ -121,7 +121,7 @@ class GroupsController < ApplicationController
 		end 
 	end
     
-    respond_with(@user, location: restore(default: group_url(@group))) do |format|
+    respond_with(@user, location: group_url(@group)) do |format|
     end
   end
   

@@ -60,7 +60,7 @@ class PeopleController < ApplicationController
 	end		
     
     respond_to do |format|
-      format.html { respond_with(@user, location: restore(default: person_url(@person))) }
+      format.html { respond_with(@user, location: person_url(@person)) }
       format.js { respond_with(@person) }
     end
     
@@ -105,7 +105,7 @@ class PeopleController < ApplicationController
 		end 
 	end
 	
-    respond_with(@user, location: restore(default: person_url(@person))) do |format|
+    respond_with(@user, location: person_url(@person)) do |format|
     end
   end
   

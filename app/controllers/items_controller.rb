@@ -50,7 +50,7 @@ class ItemsController < ApplicationController
 	@item.save   
     
     respond_to do |format|
-      format.html { respond_with(@user, location: restore(default: item_url(@item))) }
+      format.html { respond_with(@user, location: item_url(@item)) }
       format.js { respond_with(@item) }
     end
     
@@ -180,12 +180,12 @@ class ItemsController < ApplicationController
 		end 
 	end
 	
-    respond_with(@user, location: restore(default: item_url(@item))) do |format|
+    respond_with(@user, location: item_url(@item)) do |format|
     end
 	
   end
   
-  # DELETE /actions/:id
+  # DELETE /items/:id
   def destroy
 	@item = Item.find_by_id(params[:id])
 	

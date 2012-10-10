@@ -23,7 +23,9 @@
 			<% if authenticated? %>
 				<ul>
 					<li><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
-					<li><%= link_to "My Objects", userobjects_path %></li>
+					<li><%= link_to "My Cards", userobjects_path %></li>
+					<li>|</li>
+					<li><%= link_to "Add Synapse", new_synapse_path %></li>
 					<li>|</li>
 					<li><%= link_to "Add Item", new_item_path %></li>
 					<li><%= link_to "Add Person", new_person_path %></li>

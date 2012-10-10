@@ -36,10 +36,10 @@ has_many :items, :through => :groupitems
 	  @groups = @single + self.relatives
 	  
 	  json.array!(@groups) do |group|
-	      json.adjacencies group.synapses2 do |json, synapse|
-			json.nodeTo synapse.node1_id
-			json.nodeFrom synapse.node2_id
-			json.data @data1
+	      json.adjacencies group.synapses2.delete_if{|synapse| not @groups.include?(Group.find_by_id(synapse.node1_id))} do |json, synapse|
+				json.nodeTo synapse.node1_id
+				json.nodeFrom synapse.node2_id
+				json.data @data1
 		  end
 		  
 		  json.data @data2

@@ -2,7 +2,7 @@ ISSAD::Application.routes.draw do
 
   root to: 'main#home', via: :get
   
-  match 'my-objects', to: 'main#userobjects', via: :get, as: :userobjects
+  match 'my-cards', to: 'main#userobjects', via: :get, as: :userobjects
   
   resource :user
   resource :session
@@ -10,6 +10,7 @@ ISSAD::Application.routes.draw do
   resources :items
   resources :people
   resources :groups
+  resources :synapses
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
