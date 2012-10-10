@@ -29,8 +29,6 @@ has_many :items, :through => :groupitems
 
   def as_json
     Jbuilder.encode do |json|
-	  @data1 = {'$color'=> '#909291'}
-	  @data2 = {'$color'=> '#70A35E', '$type'=> 'triangle', '$dim'=> 11 }
 	  @single = Array.new
 	  @single.push(self)
 	  @groups = @single + self.relatives
@@ -39,10 +37,16 @@ has_many :items, :through => :groupitems
 	      json.adjacencies group.synapses2.delete_if{|synapse| not @groups.include?(Group.find_by_id(synapse.node1_id))} do |json, synapse|
 				json.nodeTo synapse.node1_id
 				json.nodeFrom synapse.node2_id
-				json.data @data1
+				
+				@synapsedata = Hash.new
+				@synapsedata['desc'] = synapse.desc
+				json.data @synapsedata
 		  end
 		  
-		  json.data @data2
+		  @groupdata = Hash.new
+		  @groupdata['desc'] = group.desc
+		  @groupdata['link'] = group.link
+		  json.data @groupdata
 		  json.id group.id
 		  json.name group.name
 	  end	

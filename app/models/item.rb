@@ -31,8 +31,6 @@ has_many :parent_items, :through => :itemitem_p, :source => :parent_item
 
   def as_json
     Jbuilder.encode do |json|
-	  @data1 = {'$color'=> '#909291'}
-	  @data2 = {'$color'=> '#70A35E', '$type'=> 'triangle', '$dim'=> 11 }
 	  @single = Array.new
 	  @single.push(self)
 	  @items = @single + self.relatives
@@ -41,10 +39,16 @@ has_many :parent_items, :through => :itemitem_p, :source => :parent_item
 	      json.adjacencies item.synapses2.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node1_id))} do |json, synapse|
 				json.nodeTo synapse.node1_id
 				json.nodeFrom synapse.node2_id
-				json.data @data1
+				
+				@synapsedata = Hash.new
+				@synapsedata['desc'] = synapse.desc
+				json.data @synapsedata
 		  end
 		  
-		  json.data @data2
+		  @itemdata = Hash.new
+		  @itemdata['desc'] = item.desc
+		  @itemdata['link'] = item.link
+		  json.data @itemdata
 		  json.id item.id
 		  json.name item.name
 	  end	

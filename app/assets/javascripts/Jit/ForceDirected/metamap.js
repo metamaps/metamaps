@@ -48,17 +48,20 @@ function init(){
     // with dollar prefixed data-properties in the
     // JSON structure.
     Node: {
-      overridable: true
+      overridable: true,
+	  color: '#2D6A5D',
+	  type: 'circle',
+	  dim: 11
     },
     Edge: {
       overridable: true,
       color: '#23A4FF',
-      lineWidth: 0.4
+      lineWidth: 0.5
     },
     //Native canvas text styling
     Label: {
       type: labelType, //Native or HTML
-      size: 10,
+      size: 12,
       style: 'bold'
     },
     //Add Tips
@@ -117,7 +120,7 @@ function init(){
     onCreateLabel: function(domElement, node){
       domElement.innerHTML = node.name;
       var style = domElement.style;
-      style.fontSize = "0.8em";
+      style.fontSize = "0.9em";
       style.color = "#ddd";
     },
     // Change node styles when DOM labels are placed
