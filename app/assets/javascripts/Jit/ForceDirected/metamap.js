@@ -51,18 +51,18 @@ function init(){
       overridable: true,
 	  color: '#2D6A5D',
 	  type: 'circle',
-	  dim: 11
+	  dim: 15
     },
     Edge: {
       overridable: true,
-      color: '#23A4FF',
-      lineWidth: 0.5
+      color: '#d1d1d1',
+      lineWidth: 2
     },
     //Native canvas text styling
     Label: {
       type: labelType, //Native or HTML
-      size: 12,
-      style: 'bold'
+      size: 17,
+      //style: 'bold'
     },
     //Add Tips
     Tips: {
@@ -73,7 +73,7 @@ function init(){
         node.eachAdjacency(function() { count++; });
         //display node info in tooltip
         tip.innerHTML = "<div class=\"tip-title\">" + node.name + "</div>"
-          + "<div class=\"tip-text\"><b>connections:</b> " + count + "</div>";
+          + "<div class=\"tip-text\">connections: " + count + "</div>";
       }
     },
     // Add node events
@@ -102,7 +102,7 @@ function init(){
         if(!node) return;
         // Build the right column relations list.
         // This is done by traversing the clicked node connections.
-        var html = "<h4>" + node.name + "</h4><b> connections:</b><ul><li>",
+        var html = "<h4>" + node.name + "</h4><b>has connections to:</b><ul><li>",
             list = [];
         node.eachAdjacency(function(adj){
           list.push(adj.nodeTo.name);
@@ -121,7 +121,7 @@ function init(){
       domElement.innerHTML = node.name;
       var style = domElement.style;
       style.fontSize = "0.9em";
-      style.color = "#ddd";
+      style.color = "#fff";
     },
     // Change node styles when DOM labels are placed
     // or moved.
