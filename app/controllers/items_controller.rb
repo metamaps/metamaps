@@ -81,7 +81,17 @@ class ItemsController < ApplicationController
   def destroy
 	@item = Item.find_by_id(params[:id])
 	
+	@synapses = @item.synapses
+	
+	@synapses.each do |synapse| 
+		synapse.delete
+	end
+	
 	@item.delete
+	
+	respond_to do |format|
+      format.js
+    end
   end
   
 end

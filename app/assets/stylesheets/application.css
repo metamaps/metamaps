@@ -28,7 +28,7 @@ h2 {display:block; text-align:center; background: #333; font-size:24px;}
 a {color:#2d6a5d; text-decoration:none;}
 .clearfloat {clear:both;}
 
-form { display: block; width: 350px; margin: 0 auto; background: #D1D1D1; padding: 20px; border-radius: 15px; color: #000; }
+.new_session, .new_item, .new_synapse, .edit_item, .edit_synapse { display: block; width: 350px; margin: 0 auto; background: #D1D1D1; padding: 20px; border-radius: 15px; color: #000; }
 
 label, select, input, textarea { display:block; }
 
