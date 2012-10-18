@@ -1,7 +1,0 @@
-<%= div_for person do %>
-	<p class="type">Person</p>
-	<%= image_tag "person.png", :class => 'icon', :size => '50x50' %>
-	<%= link_to person.name, person_url(person), :class => 'title' %>
-	<div class="desc"><p><%=person.desc %></p></div>
-	<%= link_to person.link, person.link, :class => 'link', :target => '_blank' %>
-<% end %>

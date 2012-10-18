@@ -1,2 +1,0 @@
-class GrouppeopleController < ApplicationController
-end
