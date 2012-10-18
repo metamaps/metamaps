@@ -2,7 +2,7 @@ development:
   min_messages: WARNING
   adapter: postgresql
   host: ec2-54-243-188-58.compute-1.amazonaws.com
-  port: 5432
+  port: 5442
   encoding: unicode
   database: da81fvorvn5pp9
   pool: 5
@@ -24,7 +24,7 @@ production:
   min_messages: WARNING
   adapter: postgresql
   host: ec2-54-243-188-58.compute-1.amazonaws.com
-  port: 5432
+  port: 5442
   encoding: unicode
   database: da81fvorvn5pp9
   pool: 5
