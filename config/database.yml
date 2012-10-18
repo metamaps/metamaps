@@ -1,13 +1,13 @@
 development:
   min_messages: WARNING
   adapter: postgresql
-  host: 127.0.0.1
+  host: ec2-54-243-188-58.compute-1.amazonaws.com
   port: 5432
   encoding: unicode
-  database: metamap002_development
+  database: da81fvorvn5pp9
   pool: 5
-  username: postgres
-  password: "3112"
+  username: yolhqgtlivenrk
+  password: "oi_EAZwbXboYjqB_9tWPh2x5YS"
 
 test:
   min_messages: WARNING
@@ -23,10 +23,10 @@ test:
 production:
   min_messages: WARNING
   adapter: postgresql
-  host: 127.0.0.1
+  host: ec2-54-243-188-58.compute-1.amazonaws.com
   port: 5432
   encoding: unicode
-  database: metamap002_production
+  database: da81fvorvn5pp9
   pool: 5
-  username: postgres
-  password: "3112"
+  username: yolhqgtlivenrk
+  password: "oi_EAZwbXboYjqB_9tWPh2x5YS"
