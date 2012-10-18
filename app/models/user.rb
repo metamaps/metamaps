@@ -2,9 +2,8 @@ require 'open-uri'
 
 class User < ActiveRecord::Base
 
-has_many :people
-has_many :groups
 has_many :items
+has_many :synapses
 
   acts_as_authentic do |configuration| 
     configuration.session_class = Session

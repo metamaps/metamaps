@@ -1,40 +1,5 @@
-<div class="selecttype">
-	<button onclick="$('.selecttype').fadeOut('fast', function(){$('.newsynapses form:eq(0)').fadeIn('fast')});">Group to Group</button>
-	<button class="middle" onclick="$('.selecttype').fadeOut('fast', function(){$('.newsynapses form:eq(1)').fadeIn('fast')});">Person to Person</button>
-	<button onclick="$('.selecttype').fadeOut('fast', function(){$('.newsynapses form:eq(2)').fadeIn('fast')});">Item to Item</button>
-</div>
 <div class="newsynapses">
-	<%= form_for @synapse1, url: synapses_url do |form| %>
-	  <h3>Add Synapse Between Groups</h3>
-	  <%= hidden_field_tag(:category, "Group") %>
-	  <% if @allgroups.count > 0 %>
-		<label for="node1_id">Choose First Group</label>
-		<%= select_tag :node1_id, options_from_collection_for_select(@allgroups, "id", "name") %>
-	  <% end %>
-	  <label for="item_desc">Describe The Connection</label>
-	  <%= form.text_field :desc, class: "description" %>
-	  <% if @allgroups.count > 0 %>
-		<label for="node2_id">Choose Second Group</label>
-		<%= select_tag :node2_id, options_from_collection_for_select(@allgroups, "id", "name") %>
-	  <% end %>
-	  <%= form.submit "Add Synapse", class: "add" %>
-	<% end %>
-	<%= form_for @synapse2, url: synapses_url do |form| %>
-	  <h3>Add Synapse Between People</h3> 
-	  <%= hidden_field_tag(:category, "Person") %>  
-	  <% if @allpeople.count > 0 %>
-		<label for="node1_id">Choose First Person</label>
-		<%= select_tag :node1_id, options_from_collection_for_select(@allpeople, "id", "name") %>
-	  <% end %>
-	  <label for="item_desc">Describe The Connection</label>
-	  <%= form.text_field :desc, class: "description" %>
-	  <% if @allpeople.count > 0 %>
-		<label for="node2_id">Choose Second Person</label>
-		<%= select_tag :node2_id, options_from_collection_for_select(@allpeople, "id", "name") %>
-	  <% end %>
-	  <%= form.submit "Add Synapse", class: "add" %>
-	<% end %>
-	<%= form_for @synapse3, url: synapses_url do |form| %>
+	<%= form_for @synapse, url: synapses_url do |form| %>
 	  <h3>Add Synapse Between Items</h3> 
 	  <%= hidden_field_tag(:category, "Item") %>  
 	  <% if @allitems.count > 0 %>

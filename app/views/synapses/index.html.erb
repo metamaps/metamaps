@@ -1,0 +1,11 @@
+<h1>Synapses</h1>
+
+<div class="synapses" id="synapses">
+  <% @synapses.each do |synapse| %>
+    <%= render synapse %>
+  <% end %>
+  <% if @synapses.empty? %>
+	 <p><br>Shucks, there are no synapses.<p>
+  <% end %>
+</div>
+<div class="clearfloat"></div>

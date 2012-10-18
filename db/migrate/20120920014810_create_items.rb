@@ -5,8 +5,6 @@ class CreateItems < ActiveRecord::Migration
       t.text :desc
       t.text :link
 	  t.integer :user_id
-	  t.integer :person_id
-	  t.integer :group_id
 	  t.integer :item_category_id
 
       t.timestamps

@@ -1,11 +1,11 @@
-<h1>Items</h1>
+<h1>All Topics</h1>
 
 <div class="items" id="items">
   <% @items.each do |item| %>
     <%= render item %>
   <% end %>
   <% if @items.empty? %>
-	 <p><br>Shucks, there are no items.<p>
+	 <p><br>Shucks, there are no topics.<p>
   <% end %>
 </div>
 <div class="clearfloat"></div>

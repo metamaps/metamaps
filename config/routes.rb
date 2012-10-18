@@ -2,7 +2,8 @@ ISSAD::Application.routes.draw do
 
   root to: 'main#home', via: :get
   
-  match 'my-cards', to: 'main#userobjects', via: :get, as: :userobjects
+  match 'my-topics', to: 'main#userobjects', via: :get, as: :userobjects
+  match 'my-synapses', to: 'main#usersynapses', via: :get, as: :usersynapses
   
   resource :user
   resource :session

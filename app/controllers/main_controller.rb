@@ -6,7 +6,7 @@ class MainController < ApplicationController
   def home
     @current_user = current_user
 	
-	@all = Group.all + Person.all + Item.all
+	@all = Item.all
 	
     respond_with(@all)
   end
@@ -14,7 +14,15 @@ class MainController < ApplicationController
   def userobjects
     @user = current_user
 	
-	@all = @user.groups + @user.people + @user.items
+	@all = @user.items
+	
+    respond_with(@all)
+  end
+  
+  def usersynapses
+    @user = current_user
+	
+	@all = @user.synapses
 	
     respond_with(@all)
   end

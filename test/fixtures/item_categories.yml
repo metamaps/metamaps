@@ -1,12 +1,12 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: Action
-  icon: action.png
+  name: Person
+  icon: person.png
 
 two: 
-  name: Activity
-  icon: activity.png
+  name: Group
+  icon: group.png
   
 three: 
   name: Bizarre
@@ -28,7 +28,6 @@ seven:
   name: Future Dev
   icon: futuredev.png
   
-
 eight:
   name: Idea
   icon: idea.png
@@ -105,7 +104,13 @@ twentysix:
   name: Trajectory
   icon: trajectory.png  
   
-
+twentyseven:
+  name: Action
+  icon: action.png
+  
+twentyeight:
+  name: Activity
+  icon: activity.png
   
 
   

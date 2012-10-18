@@ -24,14 +24,10 @@ class ItemsController < ApplicationController
   def show
   	@item = Item.find(params[:id])
 	
-	@gparents = @item.groups
-	@pparents = @item.people
-	@iparents = @item.parent_items
 	@relatives = @item.as_json.html_safe
-	@ichildren = @item.child_items
 	
 	respond_to do |format|
-      format.html { respond_with(@item, @gparents, @pparents, @iparents, @ichildren) }
+      format.html { respond_with(@item) }
       format.json { respond_with(@relatives) }
     end
   end
