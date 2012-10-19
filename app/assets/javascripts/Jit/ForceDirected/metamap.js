@@ -170,7 +170,7 @@ function init(){
 		  });
         // Build the right column relations list.
         // This is done by traversing the clicked node connections.
-        var html = '<div class="item" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p><img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" /><a href="http://localhost:3000/items/' + node.id + '" class="title">' + node.name + '</a><div class="desc"><p>' + node.getData('desc') + '</p></div><a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
+        var html = '<div class="item" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p><img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" /><a href="/items/' + node.id + '" class="title">' + node.name + '</a><div class="desc"><p>' + node.getData('desc') + '</p></div><a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
         //append connections information
         $jit.id('showcard').innerHTML = html;
       }
@@ -244,7 +244,7 @@ function init(){
 		  });  
 		  // Build the right column relations list.  
 		  // This is done by traversing the clicked node connections.  
-		  var html = '<div class="item" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p><img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" /><a href="http://localhost:3000/items/' + node.id + '" class="title">' + node.name + '</a><div class="desc"><p>' + node.getData('desc') + '</p></div><a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
+		  var html = '<div class="item" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p><img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" /><a href="/items/' + node.id + '" class="title">' + node.name + '</a><div class="desc"><p>' + node.getData('desc') + '</p></div><a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
 		  //append connections information  
 		  $jit.id('showcard').innerHTML = html;  
 		};  
