@@ -1,9 +1,16 @@
-<div class="everything" id="everything">
-  <% @all.each do |object| %>
-    <%= render object %>
-  <% end %>
-  <% if @all.empty? %>
-	 <p><br>You haven't added any synapses yet.<p>
-	<% end %>
+<div class="synapses" id="container">
+  <div id="center-container">
+    <div id="infovis"></div>    
+  </div>
+  <div id="showcard">
+  </div>
 </div>
 <div class="clearfloat"></div>
+
+<script>
+	json = <%= @synapsesjson %>;
+	console.log(json);
+	$(document).ready(function() {
+		init();
+	});
+</script>

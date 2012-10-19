@@ -1,4 +1,5 @@
 class Item < ActiveRecord::Base
+include ItemsHelper
 
 belongs_to :user
 
@@ -44,11 +45,12 @@ belongs_to :item_category
     end
   end
   
+  #build a json object of everything connected to a specified node
   def map_as_json
     Jbuilder.encode do |json|
 	  @single = Array.new
 	  @single.push(self)
-	  @items = @single + self.relatives
+	  @items = network(self,nil)
 	  
 	  json.array!(@items) do |item|
 	      json.adjacencies item.synapses2.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node1_id))} do |json, synapse|

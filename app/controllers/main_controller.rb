@@ -1,4 +1,5 @@
 class MainController < ApplicationController
+include ItemsHelper
 
   before_filter :require_user, only: [:userobjects]
   respond_to :html, :js, :json
@@ -27,9 +28,12 @@ class MainController < ApplicationController
   def usersynapses
     @user = current_user
 	
-	@all = @user.synapses
+	@synapsesjson = usersynapses_as_json(@user).html_safe
 	
-    respond_with(@all)
+    respond_to do |format|
+      format.html 
+      format.json { respond_with(@synapsesjson) }
+    end
   end
 
 end

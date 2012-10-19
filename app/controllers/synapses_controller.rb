@@ -25,17 +25,13 @@ class SynapsesController < ApplicationController
   def show
   	@synapse = Synapse.find(params[:id])
 	
-	@node1 = nil
-	@node2 = nil
-	
 	if @synapse
-		@node1 = @synapse.item1
-		@node2 = @synapse.item2
+		@synapsejson = @synapse.self_as_json.html_safe
 	end
 	
 	respond_to do |format|
-      format.html { respond_with(@synapse, @node1, @node2) }
-      # format.json { respond_with(@relatives) }
+      format.html
+      format.json { respond_with(@synapsejson) }
     end
   end
   
@@ -71,7 +67,7 @@ class SynapsesController < ApplicationController
 	respond_with(@synapse, @items)
   end
   
-  # PUT /actions/:id
+  # PUT /synapses/:id
   def update
 	@synapse = Synapse.find_by_id(params[:id])
     
