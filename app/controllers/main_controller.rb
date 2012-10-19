@@ -6,9 +6,14 @@ class MainController < ApplicationController
   def home
     @current_user = current_user
 	
-	@all = Item.all
+	@item = Item.all.first
 	
-    respond_with(@all)
+	@alljson = @item.all_as_json.html_safe
+	
+	respond_to do |format|
+      format.html { respond_with(@item) }
+      format.json { respond_with(@alljson) }
+    end
   end
   
   def userobjects

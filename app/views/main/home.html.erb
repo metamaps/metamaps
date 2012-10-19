@@ -1,9 +1,20 @@
-<div class="everything" id="everything">
-  <% @all.each do |object| %>
-    <%= render object %>
-  <% end %>
-  <% if @all.empty? %>
-	 <p><br>Shucks, there is nothing in metamaps.<p>
-	<% end %>
+<% unless @item.nil? %>
+<div class="home" id="home">
+  <div id="center-container">
+    <div id="infovis"></div>    
+  </div>
+  <div id="showcard">
+  </div>
 </div>
 <div class="clearfloat"></div>
+<script>
+	json = <%= @alljson %>;
+	console.log(json);
+	$(document).ready(function() {
+		init();
+	});
+</script>
+<% end %>
+<% if @item.nil? %>
+	 <p><br>Shucks, there is nothing in metamaps.<p>
+<% end %>

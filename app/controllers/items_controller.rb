@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
   def show
   	@item = Item.find(params[:id])
 	
-	@relatives = @item.as_json.html_safe
+	@relatives = @item.map_as_json.html_safe
 	
 	respond_to do |format|
       format.html { respond_with(@item) }

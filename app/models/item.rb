@@ -17,11 +17,64 @@ has_many :items2, :through => :synapses1, :source => :item2
 
 belongs_to :item_category
 
-  def as_json
+  def self_as_json
     Jbuilder.encode do |json|
 	  @single = Array.new
 	  @single.push(self)
-	  #@items = @single + self.relatives
+	  
+	  json.array!(@single) do |item|
+	      json.adjacencies item.synapses2.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node1_id))} do |json, synapse|
+				json.nodeTo synapse.node1_id
+				json.nodeFrom synapse.node2_id
+				
+				@synapsedata = Hash.new
+				@synapsedata['$desc'] = synapse.desc
+				@synapsedata['$category'] = synapse.category
+				json.data @synapsedata
+		  end
+		  
+		  @itemdata = Hash.new
+		  @itemdata['$desc'] = item.desc
+		  @itemdata['$link'] = item.link
+		  @itemdata['$itemcatname'] = item.item_category.name
+		  json.data @itemdata
+		  json.id item.id
+		  json.name item.name
+	  end	
+    end
+  end
+  
+  def map_as_json
+    Jbuilder.encode do |json|
+	  @single = Array.new
+	  @single.push(self)
+	  @items = @single + self.relatives
+	  
+	  json.array!(@items) do |item|
+	      json.adjacencies item.synapses2.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node1_id))} do |json, synapse|
+				json.nodeTo synapse.node1_id
+				json.nodeFrom synapse.node2_id
+				
+				@synapsedata = Hash.new
+				@synapsedata['$desc'] = synapse.desc
+				@synapsedata['$category'] = synapse.category
+				json.data @synapsedata
+		  end
+		  
+		  @itemdata = Hash.new
+		  @itemdata['$desc'] = item.desc
+		  @itemdata['$link'] = item.link
+		  @itemdata['$itemcatname'] = item.item_category.name
+		  json.data @itemdata
+		  json.id item.id
+		  json.name item.name
+	  end	
+    end
+  end
+  
+  def all_as_json
+    Jbuilder.encode do |json|
+
 	  @items = Item.all
 	  
 	  json.array!(@items) do |item|

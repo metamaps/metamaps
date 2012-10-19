@@ -10,21 +10,10 @@ var labelType, useGradients, nativeTextSupport, animate, json;
   //I'm setting this based on the fact that ExCanvas provides text support for IE
   //and that as of today iPhone/iPad current text support is lame
   labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
-  console.log(labelType);
   nativeTextSupport = labelType == 'Native';
   useGradients = nativeCanvasSupport;
   animate = !(iStuff || !nativeCanvasSupport);
 })();
-
-var Log = {
-  elem: false,
-  write: function(text){
-    if (!this.elem) 
-      this.elem = document.getElementById('log');
-    this.elem.innerHTML = text;
-    this.elem.style.left = (500 - this.elem.offsetWidth / 2) + 'px';
-  }
-};
 
 var imgArray = new Object();
 
@@ -183,13 +172,13 @@ function init(){
         // This is done by traversing the clicked node connections.
         var html = '<div class="item" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p><img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" /><a href="http://localhost:3000/items/' + node.id + '" class="title">' + node.name + '</a><div class="desc"><p>' + node.getData('desc') + '</p></div><a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
         //append connections information
-        $jit.id('inner-details').innerHTML = html;
+        $jit.id('showcard').innerHTML = html;
       }
     },
     //Number of iterations for the FD algorithm
     iterations: 200,
     //Edge length
-    levelDistance: 130,
+    levelDistance: 150,
     // Add text to the labels. This method is only triggered
     // on label creation and only for DOM labels (not native canvas ones).
     onCreateLabel: function(domElement, node){  
@@ -257,7 +246,7 @@ function init(){
 		  // This is done by traversing the clicked node connections.  
 		  var html = '<div class="item" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p><img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" /><a href="http://localhost:3000/items/' + node.id + '" class="title">' + node.name + '</a><div class="desc"><p>' + node.getData('desc') + '</p></div><a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
 		  //append connections information  
-		  $jit.id('inner-details').innerHTML = html;  
+		  $jit.id('showcard').innerHTML = html;  
 		};  
 	  },  
     // Change node styles when DOM labels are placed
@@ -280,10 +269,8 @@ function init(){
     iter: 40,
     property: 'end',
     onStep: function(perc){
-      Log.write(perc + '% loaded...');
     },
     onComplete: function(){
-      Log.write('done');
       fd.animate({
         modes: ['linear'],
         transition: $jit.Trans.Elastic.easeOut,
