@@ -279,8 +279,4 @@ function init(){
     }
   });
   // end
-  fd.graph.eachNode(function(n) {  
-			var x = n.getData('itemcatname');
-			console.log(x);
-		  });
 }
