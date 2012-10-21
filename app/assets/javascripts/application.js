@@ -15,7 +15,8 @@
 //= require_tree .
 //= require Jit/jit-yc
 //= require Jit/excanvas
-//= require Jit/ForceDirected/metamap
+//= require Jit/ForceDirected/metamapFD
+//= require Jit/RGraph/metamapRG
 
  $(document).ready(function() {
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));
