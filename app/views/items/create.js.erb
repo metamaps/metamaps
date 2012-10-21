@@ -7,6 +7,8 @@ obj = document.getElementById('container');
 
 if (obj != null) {
 	    var newnode = <%= @item.self_as_json.html_safe %>;
+		
+		if (fd != null) {
 		fd.graph.addNode(newnode);
 		var temp = fd.graph.getNode('<%= @item.id %>');
 		temp.setData('dim', 1, 'start');
@@ -15,6 +17,17 @@ if (obj != null) {
 			modes: ['node-property:dim'],  
 			duration: 400  
 		  });
+		 }
+		else if (rg != null) {
+		rg.graph.addNode(newnode);
+		var temp = rggraph.getNode('<%= @item.id %>');
+		temp.setData('dim', 1, 'start');
+		temp.setData('dim', 40, 'end');
+		rg.fx.animate({  
+			modes: ['node-property:dim'],  
+			duration: 400  
+		  });
+		 } 
 }
 else {
 	$('#cards').prepend('<%= escape_javascript(render(@item)) %>');
