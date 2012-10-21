@@ -34,8 +34,6 @@ belongs_to :item_category
   #build a json object of everything connected to a specified node
   def map_as_json
     Jbuilder.encode do |json|
-	  @single = Array.new
-	  @single.push(self)
 	  @items = network(self,nil)
 	  
 	  json.array!(@items) do |item|

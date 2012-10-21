@@ -1,3 +1,4 @@
+<div class="nothidden">
 <%= form_for @item || Item.new, url: items_path do |form| %>
   <h3>Add Item</h3>
   <label for="category">Category</label>
@@ -10,3 +11,4 @@
   <%= form.text_field :link, class: "link" %>
   <%= form.submit "Add Item", class: "add" %>
 <% end %>
+</div>

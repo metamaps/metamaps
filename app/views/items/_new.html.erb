@@ -1,4 +1,6 @@
+<div class="anypage">
 <%= form_for Item.new, url: items_path, remote: true do |form| %>
+  <button id="closenewtopic" onclick="$('#new_item').fadeOut('fast'); $('#new_item')[0].reset(); return false;">close</button>
   <h3>Add Item</h3>
   <label for="category">Category</label>
   <%= select_tag "category", options_from_collection_for_select(ItemCategory.all, "id", "name") %>
@@ -10,3 +12,4 @@
   <%= form.text_field :link, class: "link" %>
   <%= form.submit "Add Item", class: "addItem", id: "addItem" %>
 <% end %>
+</div>
