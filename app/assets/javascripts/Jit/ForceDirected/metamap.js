@@ -94,7 +94,7 @@ function init(){
     Edge: {
       overridable: true,
       color: '#d1d1d1',
-      lineWidth: 2
+      lineWidth: 0.4
     },
     //Native canvas text styling
     Label: {
