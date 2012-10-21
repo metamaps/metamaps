@@ -9,8 +9,9 @@
 
 <script>
 	json = <%= @synapsesjson %>;
-	console.log(json);
 	$(document).ready(function() {
 		init();
 	});
 </script>
+
+<%= render :partial => 'items/new' %>

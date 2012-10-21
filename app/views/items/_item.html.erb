@@ -1,5 +1,5 @@
 <%= div_for item do %>
-	<%= link_to 'Delete', item, :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%>
+	<% if @user %><%= link_to 'Delete', item, :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%><% end %>
 	<p class="type"><%= item.item_category.name %></p>
 	<%= image_tag item.item_category.icon, :class => 'icon', :size => '50x50' %>
 	<%= link_to item.name, item_url(item), :class => 'title' %>

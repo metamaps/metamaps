@@ -1,4 +1,4 @@
-var labelType, useGradients, nativeTextSupport, animate, json;
+var labelType, useGradients, nativeTextSupport, animate, json, fd;
 
 (function() {
   var ua = navigator.userAgent,
@@ -67,7 +67,7 @@ function init(){
   });
   // end
   // init ForceDirected
-  var fd = new $jit.ForceDirected({
+    fd = new $jit.ForceDirected({
     //id of the visualization container
     injectInto: 'infovis',
     //Enable zooming and panning

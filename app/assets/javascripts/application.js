@@ -19,6 +19,14 @@
 
  $(document).ready(function() {
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));
+	
+	$('#newtopic').click(function(event){
+		obj = $('#new_item');
+		if (obj != null) {
+			  $('#new_item').fadeIn('fast');
+			  return false;
+		}
+	});
  });
  
  

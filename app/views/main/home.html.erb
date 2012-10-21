@@ -9,7 +9,6 @@
 <div class="clearfloat"></div>
 <script>
 	json = <%= @alljson %>;
-	console.log(json);
 	$(document).ready(function() {
 		init();
 	});
@@ -18,3 +17,5 @@
 <% if @item.nil? %>
 	 <p><br>Shucks, there is nothing in metamaps.<p>
 <% end %>
+
+<%= render :partial => 'items/new' %>

@@ -1,0 +1,5 @@
+$('#new_item').fadeOut('fast');
+var newnode = <%= @item.self_as_json.html_safe %>;
+console.log(newnode);
+fd.graph.addNode(newnode);
+fd.plot();

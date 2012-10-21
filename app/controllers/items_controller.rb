@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
     @user = current_user
     @items = Item.all
      
-    respond_with(@items)
+    respond_with(@items,@user)
   end
   
   # Get /item/new
@@ -22,12 +22,13 @@ class ItemsController < ApplicationController
   
   # GET /item/:id
   def show
+    @user = current_user
   	@item = Item.find(params[:id])
 	
 	@relatives = @item.map_as_json.html_safe
 	
 	respond_to do |format|
-      format.html { respond_with(@item) }
+      format.html { respond_with(@item, @user) }
       format.json { respond_with(@relatives) }
     end
   end

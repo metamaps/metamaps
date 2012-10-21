@@ -1,0 +1,12 @@
+<%= form_for Item.new, url: items_path, remote: true do |form| %>
+  <h3>Add Item</h3>
+  <label for="category">Category</label>
+  <%= select_tag "category", options_from_collection_for_select(ItemCategory.all, "id", "name") %>
+  <label for="item_name">Title</label>
+  <%= form.text_field :name %>
+  <label for="item_desc">Description</label>
+  <%= form.text_area :desc, class: "description", :rows => 5 %>
+  <label for="item_link">Link</label>
+  <%= form.text_field :link, class: "link" %>
+  <%= form.submit "Add Item", class: "add" %>
+<% end %>
