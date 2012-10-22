@@ -60,16 +60,6 @@ function capitaliseFirstLetter(string)
         
 		var category = $(this).children('img').attr('alt');
 		category = capitaliseFirstLetter(category);
-
-		// toggle the image and the boolean array value
-		if (categoryVisible[category] == true) {
-			$(this).addClass('toggledOff');
-			categoryVisible[category] = false;
-		}
-		else if (categoryVisible[category] == false) {
-			$(this).removeClass('toggledOff');
-			categoryVisible[category] = true;
-		}
 		
 		// this means that we are on a map view		
 		if (obj != null) {		  
@@ -83,15 +73,22 @@ function capitaliseFirstLetter(string)
 		// this means that we are on a card view
 	  	else {	
 		  console.log('test');	  		 
-		  if (categoryVisible[category] == false) {
+		  if (categoryVisible[category] == true) {
 			  $('#cards .' + category).fadeOut('fast');
-			  console.log('#cards .' + category);
 		  }
-		  else if (categoryVisible[category] == true) {
-			  $('#cards .' + category).fadeOut('fast');
-			  console.log('#cards .' + category);
+		  else if (categoryVisible[category] == false) {
+			  $('#cards .' + category).fadeIn('fast');
 		  }
-	  }
+	    }
+				// toggle the image and the boolean array value
+		if (categoryVisible[category] == true) {
+			$(this).addClass('toggledOff');
+			categoryVisible[category] = false;
+		}
+		else if (categoryVisible[category] == false) {
+			$(this).removeClass('toggledOff');
+			categoryVisible[category] = true;
+		}
 	});
 });
  
