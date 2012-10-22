@@ -1,118 +1,113 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  name: Person
-  icon: person.png
+one: 
+  name: Action  
+  icon: action.png
 
 two: 
-  name: Group
-  icon: group.png
-  
+  name: Activity  
+  icon: activity.png
+
 three: 
-  name: Bizarre
+  name: Bizarre  
   icon: bizarre.png
-  
+
 four: 
-  name: Catalyst
+  name: Catalyst  
   icon: catalyst.png
-  
+
 five: 
-  name: Closed
+  name: Closed  
   icon: closed.png
-  
-six:
-  name: Experience
+
+six: 
+  name: Experience  
   icon: experience.png
 
 seven: 
-  name: Future Dev
+  name: Future Dev  
   icon: futuredev.png
-  
+
 eight:
-  name: Idea
+  name: Group  
+  icon: group.png
+
+nine:
+  name: Idea  
   icon: idea.png
-  
-nine: 
-  name: Implication
+
+ten:
+  name: Implication  
   icon: implication.png
-  
-ten: 
-  name: Insight
-  icon: insight.png
 
 eleven:
-  name: Intention
+  name: Insight  
+  icon: insight.png
+
+twelve:
+  name: Intention  
   icon: intention.png
-  
-twelve: 
-  name: Knowledge
-  icon: knowledge.png
-  
+
 thirteen:
-  name: Location
-  icon: location.png
-  
+  name: Knowledge  
+  icon: knowledge.png
+
 fourteen:
-  name: Open Issue
-  icon: openissue.png
+  name: Location  
+  icon: location.png
 
 fifteen:
-  name: Opinion
-  icon: opinion.png
-  
+  name: Open Issue  
+  icon: openissue.png
+
 sixteen:
-  name: Opportunity
-  icon: opportunity.png
-  
+  name: Opinion  
+  icon: opinion.png
+
 seventeen:
-  name: Platform
-  icon: platform.png
-  
+  name: Opportunity  
+  icon: opportunity.png
+
 eighteen:
-  name: Problem
-  icon: problem.png
+  name: Person  
+  icon: person.png
 
 nineteen:
-  name: Question
-  icon: question.png
+  name: Platform  
+  icon: platform.png
 
 twenty:
-  name: Reference
+  name: Problem  
+  icon: problem.png
+
+twenty-one:
+  name: Question  
+  icon: question.png
+
+twenty-two:
+  name: Reference  
   icon: reference.png
-  
-twentyone:
-  name: Requirement
+
+twenty-three:
+  name: Requirement  
   icon: requirement.png
 
-twentytwo:
-  name: Resource
+twenty-four:
+  name: Resource  
   icon: resource.png 
-  
-twentythree:
-  name: Role
+
+twenty-five:
+  name: Role  
   icon: role.png
-  
-twentyfour:
-  name: Task
+
+twenty-six:
+  name: Task  
   icon: task.png
 
-twentyfive:
-  name: Tool	
+twenty-seven:
+  name: Tool	  
   icon: tool.png 
 
-twentysix:
-  name: Trajectory
+twenty-eight:
+  name: Trajectory  
   icon: trajectory.png  
-  
-twentyseven:
-  name: Action
-  icon: action.png
-  
-twentyeight:
-  name: Activity
-  icon: activity.png
-  
-
-  
-
-

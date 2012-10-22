@@ -17,6 +17,12 @@
 //= require Jit/excanvas
 //= require Jit/ForceDirected/metamapFD
 //= require Jit/RGraph/metamapRG
+//= require Jit/filters
+
+function capitaliseFirstLetter(string)
+{
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
  $(document).ready(function() {
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));
@@ -29,6 +35,64 @@
 		}
 	});
 	
- });
+    var sliding = false; 
+    $(".legend").hover( 
+        function () { 
+          if (! sliding) { 
+            sliding = true; 
+            $("#iconLegend ul").slideDown('slow', function() { 
+              sliding = false; 
+            }); 
+          } 
+        },  
+        function () { 
+          if (! sliding) { 
+            sliding = true; 
+            $("#iconLegend ul").slideUp('slow', function() { 
+              sliding = false; 
+            }); 
+          } 
+        } 
+    ); 
+
+	$('.legend ul li').click(function(event) {
+		obj = document.getElementById('container');
+        
+		var category = $(this).children('img').attr('alt');
+		category = capitaliseFirstLetter(category);
+
+		// toggle the image and the boolean array value
+		if (categoryVisible[category] == true) {
+			$(this).addClass('toggledOff');
+			categoryVisible[category] = false;
+		}
+		else if (categoryVisible[category] == false) {
+			$(this).removeClass('toggledOff');
+			categoryVisible[category] = true;
+		}
+		
+		// this means that we are on a map view		
+		if (obj != null) {		  
+			  if (fd != null) {
+			  		switchVisible(fd, category);
+			  }
+			  else if (rg != null) {
+			  		switchVisible(rg, category);
+			  } 
+	  	}
+		// this means that we are on a card view
+	  	else {	
+		  console.log('test');	  		 
+		  if (categoryVisible[category] == false) {
+			  $('#cards .' + category).fadeOut('fast');
+			  console.log('#cards .' + category);
+		  }
+		  else if (categoryVisible[category] == true) {
+			  $('#cards .' + category).fadeOut('fast');
+			  console.log('#cards .' + category);
+		  }
+	  }
+	});
+});
  
  

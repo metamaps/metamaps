@@ -7,6 +7,43 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div class="legend">
+     <div id="iconLegend">
+       <h3>FILTERS</h3>
+       <ul id="filters-left">
+         <li><img src="/assets/action.png" alt="action" /><p>action</p></li>
+         <li><img src="/assets/activity.png" alt="activity" /><p>activity</p></li>
+         <li><img src="/assets/bizarre.png" alt="bizarre" /><p>bizarre</p></li>
+         <li><img src="/assets/catalyst.png" alt="catalyst" /><p>catalyst</p></li>
+         <li><img src="/assets/closed.png" alt="closed" /><p>closed</p></li>
+         <li><img src="/assets/experience.png" alt="experience" /><p>experience</p></li>
+         <li><img src="/assets/futuredev.png" alt="future dev" /><p>future dev</p></li>
+         <li><img src="/assets/group.png" alt="group" /><p>group</p></li>
+         <li><img src="/assets/idea.png" alt="idea" /><p>idea</p></li>
+         <li><img src="/assets/implication.png" alt="implication" /><p>implication</p></li>
+         <li><img src="/assets/insight.png" alt="insight" /><p>insight</p></li>
+         <li><img src="/assets/intention.png" alt="intention" /><p>intention</p></li>
+         <li><img src="/assets/knowledge.png" alt="knowledge" /><p>knowledge</p></li>
+         <li><img src="/assets/location.png" alt="location" /><p>location</p></li>
+        </ul>
+        <ul id="filters-right">
+         <li><img src="/assets/openissue.png" alt="openissue" /><p>open issue</p></li>
+         <li><img src="/assets/opinion.png" alt="opinion" /><p>opinion</p></li>
+         <li><img src="/assets/opportunity.png" alt="opportunity" /><p>opportunity</p></li>
+         <li><img src="/assets/person.png" alt="person" /><p>person</p></li>         
+         <li><img src="/assets/platform.png" alt="platform" /><p>platform</p></li>
+         <li><img src="/assets/problem.png" alt="problem" /><p>problem</p></li>
+         <li><img src="/assets/question.png" alt="question" /><p>question</p></li>
+         <li><img src="/assets/reference.png" alt="reference" /><p>reference</p></li>
+         <li><img src="/assets/requirement.png" alt="requirement" /><p>requirement</p></li>
+         <li><img src="/assets/resource.png" alt="resource" /><p>resource</p></li>
+         <li><img src="/assets/role.png" alt="role" /><p>role</p></li>
+         <li><img src="/assets/task.png" alt="task" /><p>task</p></li>
+         <li><img src="/assets/tool.png" alt="tool" /><p>tool</p></li>
+         <li><img src="/assets/trajectory.png" alt="trajectory" /><p>trajectory</p></li>
+        </ul>
+     </div>
+  </div>
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
         <div class="headertop">

@@ -60,7 +60,7 @@ input[type="submit"] { margin-top:5px; }
 
 .nodemargin { padding-top:120px; }
 
-.focus { position:fixed; top:0; left:0; width:90%; z-index:10; display: block; min-width:533px; margin: 50px 50px 25px 50px; background: #D1D1D1; border-radius: 20px; color:#000; border:1px solid #000; }
+.focus { position:fixed; top:0; left:0; width:90%; z-index:10; display: block; min-width:533px; margin: 50px 50px 25px 50px; background: url('bg.png'); border-radius: 20px; color:#000; border:1px solid #000; }
 .focusleft, .focusmiddle, .focusright { display:block; float:left; }
 .focusleft { width:20%; min-width:70px; text-align:center; }
 .focusmiddle { display:block; width:49%; min-height:115px; border-right:2px solid #000; border-left:2px solid #000;}
@@ -76,3 +76,40 @@ input[type="submit"] { margin-top:5px; }
 
 .divider { margin: 20px 50px 20px 50px; border-bottom:2px solid #FFF; }
 .empty { margin-left:50px; }
+
+
+/* --- styling the filter ---*/
+.legend { position:fixed; bottom:10px; right:15px; z-index:12; display:block; width:auto; color: #67AF9F;
+white-space: nowrap;
+font-family: sans-serif;
+text-align: center;
+font-size: 14px;
+overflow: hidden;
+padding: 3px 8px;
+margin: -0.75em 0 0;
+border: 2px solid #AAA;
+background: white;
+border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+-webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+-moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+background: -moz-linear-gradient( center top, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.03) 0% ) repeat scroll 0 0 white;
+background: -webkit-gradient( linear, 0% 0%, 0% 100%, from(white), to(rgba(0, 0, 0, 0.03)), color-stop(0.5, rgba(255, 255, 255, 0)), color-stop(0.5, rgba(0, 0, 0, 0.03)) ) repeat scroll 0 0 white;
+border: 1px solid rgba(0, 0, 0, 0.2);
+cursor: pointer; }
+
+#iconLegend { width:inherit; height:inherit; }
+
+#iconLegend ul { display:none; }
+#iconLegend ul li {clear:both; list-style-type:none; display:block; padding:3px; }
+#iconLegend ul img { width:40px; height:40px; float:left; }
+#iconLegend ul p {float:left; font-weight:bold; font-family: sans-serif; display: block; margin: 0; background: none; padding: 10px 4px 2px 4px;}
+#iconLegend #filters-left { float:left; }
+#iconLegend #filters-right { float:left; }
+
+#iconLegend li.toggledOff {
+  opacity: 0.2;
+}
+
