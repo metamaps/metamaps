@@ -19,11 +19,6 @@
 //= require Jit/RGraph/metamapRG
 //= require Jit/filters
 
-function capitaliseFirstLetter(string)
-{
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
  $(document).ready(function() {
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));
 	
@@ -55,11 +50,11 @@ function capitaliseFirstLetter(string)
         } 
     ); 
 
+	// toggle visibility of item categories based on status in the filters list
 	$('.legend ul li').click(function(event) {
 		obj = document.getElementById('container');
         
 		var category = $(this).children('img').attr('alt');
-		category = capitaliseFirstLetter(category);
 		
 		// this means that we are on a map view		
 		if (obj != null) {		  
@@ -74,10 +69,20 @@ function capitaliseFirstLetter(string)
 	  	else {	
 		  console.log('test');	  		 
 		  if (categoryVisible[category] == true) {
-			  $('#cards .' + category).fadeOut('fast');
+			  if (category.split(' ').length == 1) {
+			  	$('#cards .' + category).fadeOut('slow');
+			  }
+			  else {
+				  $('#cards .' + category.split(' ')[0]).fadeOut('slow');
+			  }
 		  }
 		  else if (categoryVisible[category] == false) {
-			  $('#cards .' + category).fadeIn('fast');
+			  if (category.split(' ').length == 1) {
+			  	$('#cards .' + category).fadeIn('slow');
+			  }
+			  else {
+				  $('#cards .' + category.split(' ')[0]).fadeIn('slow');
+			  }
 		  }
 	    }
 				// toggle the image and the boolean array value
