@@ -2,32 +2,44 @@ $('#new_item').fadeOut('fast');
 $('#new_item')[0].reset()
 
 // if there's a map, add the node to that, if its in card view add card
-obj = document.getElementById('container');
+map2 = document.getElementById('container');
 
-
-if (obj != null) {
+if (map2 != null) {
 	    var newnode = <%= @item.self_as_json.html_safe %>;
+		console.log(newnode);
 		
 		if (fd != null) {
-		fd.graph.addNode(newnode);
-		var temp = fd.graph.getNode('<%= @item.id %>');
-		temp.setData('dim', 1, 'start');
-		temp.setData('dim', 40, 'end');
-		fd.fx.animate({  
-			modes: ['node-property:dim'],  
-			duration: 400  
-		  });
+			fd.graph.addNode(newnode);
+			var temp = fd.graph.getNode('<%= @item.id %>');
+			temp.setData('dim', 1, 'start');
+			temp.setData('dim', 40, 'end');
+			temp.setPos(new $jit.Complex(0, 0), 'current');
+			temp.setPos(new $jit.Complex(0, 0), 'start');
+			temp.setPos(new $jit.Complex(0, 0), 'end');
+			fd.fx.plotNode(temp, fd.canvas);
+			fd.fx.animate({  
+				modes: ['node-property:dim'],  
+				duration: 400  
+			  });
 		 }
 		else if (rg != null) {
-		rg.graph.addNode(newnode);
-		var temp = rggraph.getNode('<%= @item.id %>');
-		temp.setData('dim', 1, 'start');
-		temp.setData('dim', 40, 'end');
-		rg.fx.animate({  
-			modes: ['node-property:dim'],  
-			duration: 400  
-		  });
-		 } 
+			rg.graph.addNode(newnode);
+			var temp = rg.graph.getNode('<%= @item.id %>');
+			temp.setData('dim', 1, 'start');
+			temp.setData('dim', 40, 'end');
+			temp.setPos(new $jit.Polar(5.54, 347.6), 'current');
+			temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
+			temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
+			rg.fx.plotNode(temp, rg.canvas);
+			rg.fx.animate({  
+				modes: ['node-property:dim'],  
+				duration: 400  
+			  });
+		 }
+		 // add the new node to the synapse select list
+		 $("#node1_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
+		 $("#node2_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
+
 }
 else {
 	$('#cards').prepend('<%= escape_javascript(render(@item)) %>');

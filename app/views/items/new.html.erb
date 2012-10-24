@@ -1,8 +1,8 @@
 <div class="nothidden">
 <%= form_for @item || Item.new, url: items_path do |form| %>
-  <h3>Add Item</h3>
+  <h3>Add Topic</h3>
   <label for="category">Category</label>
-  <%= select_tag "category", options_from_collection_for_select(ItemCategory.all, "id", "name") %>
+  <%= select_tag "category", options_from_collection_for_select(ItemCategory.order("name ASC").all, "id", "name") %>
   <label for="item_name">Title</label>
   <%= form.text_field :name %>
   <label for="item_desc">Description</label>

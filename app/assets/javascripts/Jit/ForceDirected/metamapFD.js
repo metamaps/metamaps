@@ -94,6 +94,7 @@ function initFD(){
     Edge: {
       overridable: true,
       color: '#d1d1d1',
+	  //type: 'arrow',
       lineWidth: 0.4
     },
     //Native canvas text styling
@@ -265,18 +266,14 @@ function initFD(){
   // load JSON data.
   fd.loadJSON(json);
   // compute positions incrementally and animate.
-  fd.computeIncremental({
-    iter: 40,
-    property: 'end',
-    onStep: function(perc){
-    },
-    onComplete: function(){
-      fd.animate({
+  fd.compute()
+
+	$(document).ready(function() {
+        fd.animate({
         modes: ['linear'],
         transition: $jit.Trans.Elastic.easeOut,
         duration: 2500
-      });
-    }
-  });
+        });
+ 	});
   // end
 }

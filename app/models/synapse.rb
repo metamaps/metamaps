@@ -6,6 +6,15 @@ belongs_to :item1, :class_name => "Item", :foreign_key => "node1_id"
 belongs_to :item2, :class_name => "Item", :foreign_key => "node2_id"
 
   def self_as_json
+	Jbuilder.encode do |json|			
+		@synapsedata = Hash.new
+		@synapsedata['$desc'] = self.desc
+		@synapsedata['$category'] = self.category
+		json.data @synapsedata
+    end
+  end
+  
+  def selfplusnodes_as_json
     Jbuilder.encode do |json|
 	  @items = Array.new
 	  @items.push(self.item1)

@@ -16,9 +16,8 @@ class SynapsesController < ApplicationController
   def new
   	@synapse = Synapse.new
     @user = current_user
-	@allitems = Item.all
     
-    respond_with(@synapse, @allitems)
+    respond_with(@synapse)
   end
   
   # GET /synapse/:id
@@ -26,7 +25,7 @@ class SynapsesController < ApplicationController
   	@synapse = Synapse.find(params[:id])
 	
 	if @synapse
-		@synapsejson = @synapse.self_as_json.html_safe
+		@synapsejson = @synapse.selfplusnodes_as_json.html_safe
 	end
 	
 	respond_to do |format|

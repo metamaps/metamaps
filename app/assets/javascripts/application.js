@@ -22,10 +22,23 @@
  $(document).ready(function() {
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));
 	
+	
+	// if there's an add topic directly to page form loaded on the page you're on then let the user add one
 	$('#newtopic').click(function(event){
-		obj = document.getElementById('new_item');
-		if (obj != null) {
+		obj1 = document.getElementById('new_item');
+		if (obj1 != null) {
+			  $('#new_synapse').css('display','none');
 			  $('#new_item').fadeIn('fast');
+			  event.preventDefault();
+		}
+	});
+	
+	// if there's an add synapse directly to page form loaded on the page you're on then let the user add one
+	$('#newsynapse').click(function(event){
+		obj2 = document.getElementById('new_synapse');
+		if (obj2 != null) {
+			  $('#new_item').css('display','none');
+			  $('#new_synapse').fadeIn('fast');
 			  event.preventDefault();
 		}
 	});

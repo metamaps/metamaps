@@ -1,0 +1,82 @@
+$('#new_synapse').fadeOut('fast');
+$('#new_synapse')[0].reset();
+
+// if there's a map, add the synapse to that
+map1 = document.getElementById('container');
+
+if (map1 != null) {
+		
+		var mymap, newnode, select1, select2, option, temp1, temp2, temp;	
+		if (fd != null) {
+			mymap = fd;
+		}
+		else if (rg != null) {
+			mymap = rg;
+		}
+		 
+		temp1 = mymap.graph.getNode(<%= @synapse.item1.id %>);
+		if (temp1 == null) {
+			newnode = <%= @synapse.item1.self_as_json.html_safe %>;
+			mymap.graph.addNode(newnode);
+			temp = mymap.graph.getNode('<%= @synapse.item1.id %>');
+			temp.setData('dim', 1, 'start');
+			temp.setData('dim', 40, 'end');
+			if (mymap == fd) {
+				temp.setPos(new $jit.Complex(0, 0), 'current');
+				temp.setPos(new $jit.Complex(0, 0), 'start');
+				temp.setPos(new $jit.Complex(0, 0), 'end');
+			}
+			else if (mymap == rg) {
+				temp.setPos(new $jit.Polar(5.54, 347.6), 'current');
+				temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
+				temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
+			}
+			mymap.fx.plotNode(temp, mymap.canvas);
+			temp1 = mymap.graph.getNode(<%= @synapse.item1.id %>);
+			// add the new node to the synapse select list
+			 $("#node1_id").prepend("<option value='<%= @synapse.item1.id %>'><%= @synapse.item1.name %></option>");
+			 $("#node2_id").prepend("<option value='<%= @synapse.item1.id %>'><%= @synapse.item1.name %></option>");
+		}
+		temp2 = mymap.graph.getNode(<%= @synapse.item2.id %>);
+		if (temp2 == null) {
+			newnode = <%= @synapse.item2.self_as_json.html_safe %>;
+			mymap.graph.addNode(newnode);
+			temp = mymap.graph.getNode('<%= @synapse.item2.id %>');
+			temp.setData('dim', 1, 'start');
+			temp.setData('dim', 40, 'end');
+			if (mymap == fd) {
+				temp.setPos(new $jit.Complex(0, 0), 'current');
+				temp.setPos(new $jit.Complex(0, 0), 'start');
+				temp.setPos(new $jit.Complex(0, 0), 'end');
+			}
+			else if (mymap == rg) {
+				temp.setPos(new $jit.Polar(5.54, 347.6), 'current');
+				temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
+				temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
+			}
+			mymap.fx.plotNode(temp, mymap.canvas);
+			temp2 = mymap.graph.getNode(<%= @synapse.item2.id %>);
+			// add the new node to the synapse select list
+			 $("#node1_id").prepend("<option value='<%= @synapse.item2.id %>'><%= @synapse.item2.name %></option>");
+			 $("#node2_id").prepend("<option value='<%= @synapse.item2.id %>'><%= @synapse.item2.name %></option>");
+		}
+		mymap.graph.addAdjacence(temp1, temp2, {});
+		temp = mymap.graph.getAdjacence(temp1.id, temp2.id);
+		temp.setDataset('start', {  
+			lineWidth: 0.4,  
+			color: '#d1d1d1'  
+		  });
+		temp.setDataset('end', {
+			lineWidth: 3,  
+			color: '#36acfb'
+		});
+		temp.setDataset('current', {  
+			desc: '<%= @synapse.desc %>',  
+			category: '<%= @synapse.category %>'  
+		  });
+		mymap.fx.plotLine(temp, mymap.canvas);
+		mymap.fx.animate({  
+			modes: ['node-property:dim','edge-property:lineWidth:color'],  
+			duration: 400  
+		  });
+}

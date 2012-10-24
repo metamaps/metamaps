@@ -1,5 +1,6 @@
-<div class="newsynapses">
-	<%= form_for @synapse, url: synapses_url do |form| %>
+<div class="anypage">
+	<%= form_for Synapse.new, url: synapses_url, remote: true do |form| %>
+	  <button id="closenewsynapse" onclick="$('#new_synapse').fadeOut('fast'); $('#new_synapse')[0].reset(); return false;">close</button>
 	  <h3>Add Synapse Between Topics</h3> 
 	  <%= hidden_field_tag(:category, "Item") %>  
 	  <% if Item.all.count > 0 %>
