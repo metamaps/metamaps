@@ -2,16 +2,15 @@ ISSAD::Application.routes.draw do
 
   root to: 'main#home', via: :get
   
-  match 'my-topics', to: 'main#userobjects', via: :get, as: :userobjects
-  match 'my-synapses', to: 'main#usersynapses', via: :get, as: :usersynapses
+  match 'maps', to: 'main#allmaps', via: :get, as: :allmaps
   
-  resource :user
   resource :session
   
-  resources :items
-  resources :people
-  resources :groups
-  resources :synapses
+  resources :users do
+	resources :items
+    resources :synapses
+	resources :maps
+  end
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

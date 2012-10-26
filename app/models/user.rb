@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 
 has_many :items
 has_many :synapses
+has_many :maps
+has_many :mappings
 
   acts_as_authentic do |configuration| 
     configuration.session_class = Session

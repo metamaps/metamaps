@@ -4,15 +4,16 @@ class ItemsController < ApplicationController
     
   respond_to :html, :js, :json
   
-  # GET /items
+  # GET /users/:user_id/items
   def index
-    @user = current_user
-    @items = Item.all
+	@user = User.find(params[:user_id])
+  	
+	@items = @user.items
      
-    respond_with(@items,@user)
+    respond_with(@user,@items)
   end
   
-  # Get /item/new
+  # Get /users/:user_id/items/new
   def new
   	@item = Item.new
     @user = current_user
@@ -20,12 +21,13 @@ class ItemsController < ApplicationController
     respond_with(@item)
   end
   
-  # GET /item/:id
+  # GET /users/:user_id/items/:id
   def show
-    @user = current_user
-  	@item = Item.find(params[:id])
+    @user = User.find(params[:user_id])
+  	
+	@item = @user.items.find(params[:id])
 	
-	@relatives = @item.map_as_json.html_safe
+	@relatives = @item.network_as_json.html_safe
 	
 	respond_to do |format|
       format.html { respond_with(@item, @user) }
@@ -33,7 +35,7 @@ class ItemsController < ApplicationController
     end
   end
   
-  # POST /items
+  # POST /users/:user_id/items
   def create
     
     @user = current_user
@@ -41,51 +43,73 @@ class ItemsController < ApplicationController
 	@item.name = params[:item][:name]
 	@item.desc = params[:item][:desc]
 	@item.link = params[:item][:link]
+	@item.permission = params[:item][:permission]
 	@item.item_category = ItemCategory.find(params[:category])
     @item.user = @user
 	
 	@item.save   
+	
+	if params[:item][:map]
+		@mapping = Mapping.new()
+		@mapping.category = "Item"
+		@mapping.user = @user
+		@mapping.map = Map.find(params[:item][:map])
+		@mapping.item = @item
+		@mapping.save
+	end
     
     respond_to do |format|
-      format.html { respond_with(@user, location: item_url(@item)) }
+      format.html { respond_with(@user, location: user_item_url(@user, @item)) }
       format.js { respond_with(@item) }
     end
     
   end
   
-  # GET /items/:id/edit
+  # GET /users/:user_id/items/:id/edit
   def edit
-	@item = Item.find_by_id(params[:id])
+	@user = User.find(params[:user_id])
+  	
+	@item = @user.items.find(params[:id])
   
 	respond_with(@item)
   end
   
-  # PUT /actions/:id
+  # PUT /users/:user_id/items/:id
   def update
-	@item = Item.find_by_id(params[:id])
+	@user = User.find(params[:user_id])
+  	
+	@item = @user.items.find(params[:id])
     
 	if @item 
 		@item.name = params[:item][:name]
 		@item.desc = params[:item][:desc]
 		@item.link = params[:item][:link]
+		@item.permission = params[:item][:permission]
 		@item.item_category = ItemCategory.find(params[:category][:item_category_id])
 	
 		@item.save
     end
 	
-    respond_with(@user, location: item_url(@item)) do |format|
+    respond_with(@user, location: user_item_url(@user, @item)) do |format|
     end
 	
   end
   
-  # DELETE /items/:id
+  # DELETE /users/:user_id/items/:id
   def destroy
-	@item = Item.find_by_id(params[:id])
+	@user = User.find(params[:user_id])
+  	
+	@item = @user.items.find(params[:id])
 	
 	@synapses = @item.synapses
+	@mappings = @item.mappings
 	
 	@synapses.each do |synapse| 
 		synapse.delete
+	end
+	
+	@mappings.each do |mapping| 
+		mapping.delete
 	end
 	
 	@item.delete

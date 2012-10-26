@@ -1,8 +1,8 @@
 <%= div_for item, class: item.item_category.name do %>
-	<% if @user %><%= link_to 'Delete', item, :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%><% end %>
+	<% if @user %><%= link_to 'Delete', user_item_path(@user,item), :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%><% end %>
 	<p class="type"><%= item.item_category.name %></p>
 	<%= image_tag item.item_category.icon, :class => 'icon', :size => '50x50' %>
-	<%= link_to item.name, item_url(item), :class => 'title' %>
+	<%= link_to item.name, user_item_path(@user, item), :class => 'title' %>
 	<div class="desc"><p><%=item.desc %></p></div>
 	<%= link_to item.link, item.link, :class => 'link', :target => '_blank' %>
 <% end %>

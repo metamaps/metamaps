@@ -54,6 +54,8 @@ module ItemsHelper
 		  @itemdata['$desc'] = item.desc
 		  @itemdata['$link'] = item.link
 		  @itemdata['$itemcatname'] = item.item_category.name
+		  @itemdata['$userid'] = item.user.id
+		  @itemdata['$username'] = item.user.name
 		  json.data @itemdata
 		  json.id item.id
 		  json.name item.name

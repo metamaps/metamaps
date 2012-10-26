@@ -4,6 +4,7 @@ class CreateItems < ActiveRecord::Migration
       t.text :name
       t.text :desc
       t.text :link
+	  t.text :permission
 	  t.integer :user_id
 	  t.integer :item_category_id
 

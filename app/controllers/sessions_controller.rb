@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
     
     @user = User.new
 		
-    respond_with(@user, @session, location: restore(default: root_url)) do |format|
+    respond_with(@user, @session, location: root_url) do |format|
       
     end
   end
@@ -33,7 +33,7 @@ class SessionsController < ApplicationController
     @session.destroy
     
     respond_to do |format|
-      format.html   { respond_with(@session, location: restore(default: root_url)) }
+      format.html   { respond_with(@session, location: root_url) }
     end
     
   end

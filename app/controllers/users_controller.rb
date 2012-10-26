@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   before_filter :require_no_user, only: [:new, :create]
-  before_filter :require_user, only: [:edit, :show, :update]
+  before_filter :require_user, only: [:edit, :update]
     
   respond_to :html, :json
   
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
 	
     @user.save
         
-    respond_with(@user, location: restore(default: root_url)) do |format|
+    respond_with(@user, location: root_url) do |format|
     end
   end
   
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
     
     @user.save
     
-    respond_with(@user, location: restore(default: root_url)) do |format|
+    respond_with(@user, location: user_url(@user)) do |format|
     end
   end
 

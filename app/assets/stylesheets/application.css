@@ -30,7 +30,7 @@ h2 {display:block; text-align:center; background: #333; font-size:24px;}
 a {color:#2d6a5d; text-decoration:none;}
 .clearfloat {clear:both;}
 
-.new_session, .new_user, .new_item, .new_synapse, .edit_item, .edit_synapse { display: block; width: 350px; margin: 0 auto; background: #D1D1D1; padding: 20px; border-radius: 15px; color: #000; border:2px solid #000; }
+.new_session, .new_user, .new_item, .new_synapse, .new_map, .edit_user, .edit_item, .edit_synapse, .edit_map { display: block; width: 350px; margin: 0 auto; background: url('bg.png'); padding: 20px; border-radius: 15px; color: #000; border:2px solid #000; }
 
 .anypage .new_item, .anypage .new_synapse { display: none; position:absolute; left:50%; top:0; margin:200px 0 0 -195px; border:2px solid #000; }
 #closenewtopic, #closenewsynapse { position:absolute; top: 3px; right:3px; }
@@ -51,7 +51,7 @@ input[type="submit"] { margin-top:5px; }
 
 .headertop { display:block; position:fixed; top:0; left:0; z-index:10; height:38px; width:100%; min-width:622px; background: url(topbg2.png) repeat-x top left; }
 #mainTitle { float: left; }
-#mainTitle a { color:#FFF; }
+#mainTitle a { color:#FFF; font-family: "vinyl",sans-serif; text-transform:uppercase; font-style: italic; font-weight: 400;}
 .headertop ul { display:block; float: right; }
 .headertop ul li {display:block; float:right; margin:10px 5px 0 5px; }
 .headertop ul li a { color:#FFF; }

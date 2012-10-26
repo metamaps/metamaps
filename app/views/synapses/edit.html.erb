@@ -1,4 +1,4 @@
-<%= form_for @synapse, url: synapse_url do |form| %>
+<%= form_for @synapse, url: user_synapse_url do |form| %>
   <h3>Edit Synapse</h3>
   <% if @collection.count > 0 %>
 	<label for="node1_id">Choose First <%= @synapse.category %></label>
@@ -10,5 +10,7 @@
 	<label for="node2_id">Choose Second <%= @synapse.category %></label>
 	<%= select "node2_id", "node2", @collection.order("name ASC").map {|p| [ p.name, p.id ] }, { :selected => @synapse.node2_id } %>
   <% end %>
+  <label for="synapse_permission">Permission</label>
+  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

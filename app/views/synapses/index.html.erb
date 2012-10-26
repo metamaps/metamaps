@@ -1,11 +1,20 @@
-<h1>Synapses</h1>
-
-<div class="synapses" id="synapses">
-  <% @synapses.each do |synapse| %>
-    <%= render synapse %>
-  <% end %>
-  <% if @synapses.empty? %>
-	 <p><br>Shucks, there are no synapses.<p>
-  <% end %>
+<div class="synapses" id="container">
+  <div id="center-container">
+    <div id="infovis"></div>    
+  </div>
+  <div id="showcard">
+  </div>
 </div>
 <div class="clearfloat"></div>
+
+<script>
+	json = <%= @synapsesjson %>;
+	$(document).ready(function() {
+		initFD();
+	});
+</script>
+
+<% if authenticated? %>
+	<%= render :partial => 'items/new' %>
+	<%= render :partial => 'synapses/new' %>
+<% end %>

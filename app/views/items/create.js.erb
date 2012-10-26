@@ -36,6 +36,10 @@ if (map2 != null) {
 				duration: 400  
 			  });
 		 }
+		 else {
+			json = newnode;
+			initFD();
+		 }
 		 // add the new node to the synapse select list
 		 $("#node1_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
 		 $("#node2_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");

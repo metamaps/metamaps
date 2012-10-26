@@ -1,5 +1,5 @@
 <div class="anypage">
-	<%= form_for Synapse.new, url: synapses_url, remote: true do |form| %>
+	<%= form_for Synapse.new, url: user_synapses_url(user), remote: true do |form| %>
 	  <button id="closenewsynapse" onclick="$('#new_synapse').fadeOut('fast'); $('#new_synapse')[0].reset(); return false;">close</button>
 	  <h3>Add Synapse Between Topics</h3> 
 	  <%= hidden_field_tag(:category, "Item") %>  
@@ -13,6 +13,8 @@
 		<label for="node2_id">Choose Second Item</label>
 		<%= select_tag :node2_id, options_from_collection_for_select(Item.order("name ASC").all, "id", "name") %>
 	  <% end %>
+	  <label for="synapse_permission">Permission</label>
+	  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
 	  <%= form.submit "Add Synapse", class: "add" %>
 	<% end %>
 </div>

@@ -1,0 +1,37 @@
+<div class="focus">
+	<div class="focusleft">
+		<p># of Topics: <%= @map.items.count %></p>
+		<p># of Synapses: <%= @map.synapses.count %></p>
+	</div>
+	<div class="focusmiddle">
+		<h1 class="title"><%= @map.name %> <% if authenticated? %><%= link_to "[edit]", edit_user_map_path(@user, @map) %><% end %></h1>
+		<div class="desc">
+			<p><%= @map.desc %></p>
+		</div>
+	</div>
+	<div class="focusright">
+		<div class="link"><p>Permissions:<%= @map.permission %></p></div>
+	</div>
+</div>
+<div class="clearfloat nodemargin"></div>
+
+<div class="maps" id="container">
+  <div id="center-container">
+    <div id="infovis"></div>    
+  </div>
+  <div id="showcard">
+  </div>
+</div>
+<div class="clearfloat"></div>
+
+<script>
+	json = <%= @mapjson %>;
+	if (json.length > 0) {
+		$(document).ready(function() {
+			initFD();
+		});
+	}
+</script>
+
+<%= render :partial => 'newtopic' %>
+<%= render :partial => 'newsynapse' %>

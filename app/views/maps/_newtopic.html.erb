@@ -1,5 +1,6 @@
-<div class="nothidden">
-<%= form_for @item || Item.new, url: user_items_path do |form| %>
+<div class="anypage">
+<%= form_for Item.new, url: user_items_url(user), remote: true do |form| %>
+  <button id="closenewtopic" onclick="$('#new_item').fadeOut('fast'); $('#new_item')[0].reset(); return false;">close</button>
   <h3>Add Topic</h3>
   <label for="category">Category</label>
   <%= select_tag "category", options_from_collection_for_select(ItemCategory.order("name ASC").all, "id", "name") %>
@@ -11,6 +12,7 @@
   <%= form.text_field :link, class: "link" %>
   <label for="item_permission">Permission</label>
   <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
-  <%= form.submit "Add Item", class: "add" %>
+  <%= form.hidden_field :map, :value => @map.id %>
+  <%= form.submit "Add Item", class: "addItem", id: "addItem" %>
 <% end %>
 </div>

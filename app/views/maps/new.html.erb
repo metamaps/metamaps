@@ -1,0 +1,12 @@
+<div class="nothidden">
+<%= form_for @map || Map.new, url: user_maps_url do |form|%>
+  <h3>Add Map</h3>
+  <label for="map_name">Name</label>
+  <%= form.text_field :name %>
+  <label for="map_desc">Description</label>
+  <%= form.text_area :desc, class: "description", :rows => 5 %>
+  <label for="map_permission">Permission</label>
+  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
+  <%= form.submit "Add Map", class: "add" %>
+<% end %>
+</div>

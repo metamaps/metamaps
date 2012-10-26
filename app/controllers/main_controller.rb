@@ -1,7 +1,6 @@
 class MainController < ApplicationController
-include ItemsHelper
+  include ItemsHelper
 
-  before_filter :require_user, only: [:userobjects]
   respond_to :html, :js, :json
   
   def home
@@ -9,7 +8,9 @@ include ItemsHelper
 	
 	@item = Item.all.first
 	
-	@alljson = @item.all_as_json.html_safe
+    if @item
+	  @alljson = @item.all_as_json.html_safe
+    end
 	
 	respond_to do |format|
       format.html { respond_with(@item) }
@@ -17,22 +18,13 @@ include ItemsHelper
     end
   end
   
-  def userobjects
-    @user = current_user
+  def allmaps
+    @current_user = current_user
 	
-	@all = @user.items
+	@maps = Map.all
 	
-    respond_with(@all)
-  end
-  
-  def usersynapses
-    @user = current_user
-	
-	@synapsesjson = usersynapses_as_json(@user).html_safe
-	
-    respond_to do |format|
-      format.html 
-      format.json { respond_with(@synapsesjson) }
+	respond_to do |format|
+      format.html { respond_with(@maps) }
     end
   end
 

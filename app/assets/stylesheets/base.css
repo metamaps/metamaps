@@ -15,9 +15,9 @@
 	position:absolute;
 	top:50%;
 	left:10px;
-	margin-top:-150px;
-	
+	margin-top:-150px;	
 }
+#showcard .contributor { font-size:12px; }
 
 .text {
     margin: 7px;

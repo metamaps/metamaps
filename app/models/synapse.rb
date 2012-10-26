@@ -5,11 +5,16 @@ belongs_to :user
 belongs_to :item1, :class_name => "Item", :foreign_key => "node1_id"
 belongs_to :item2, :class_name => "Item", :foreign_key => "node2_id"
 
+has_many :mappings
+has_many :maps, :through => :mappings
+
   def self_as_json
 	Jbuilder.encode do |json|			
 		@synapsedata = Hash.new
 		@synapsedata['$desc'] = self.desc
 		@synapsedata['$category'] = self.category
+		@synapsedata['$userid'] = synapse.user.id
+		@synapsedata['$username'] = synapse.user.name
 		json.data @synapsedata
     end
   end
@@ -28,6 +33,8 @@ belongs_to :item2, :class_name => "Item", :foreign_key => "node2_id"
 				@synapsedata = Hash.new
 				@synapsedata['$desc'] = synapse.desc
 				@synapsedata['$category'] = synapse.category
+				@synapsedata['$userid'] = synapse.user.id
+				@synapsedata['$username'] = synapse.user.name
 				json.data @synapsedata
 		  end
 		  
@@ -35,6 +42,8 @@ belongs_to :item2, :class_name => "Item", :foreign_key => "node2_id"
 		  @itemdata['$desc'] = item.desc
 		  @itemdata['$link'] = item.link
 		  @itemdata['$itemcatname'] = item.item_category.name
+		  @itemdata['$userid'] = self.user.id
+		  @itemdata['$username'] = self.user.name
 		  json.data @itemdata
 		  json.id item.id
 		  json.name item.name

@@ -4,6 +4,8 @@
   <title>Metamaps</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -52,20 +54,24 @@
 				<ul>
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>
 					<li>|</li>
-					<li><%= link_to "Topics", items_path %></li>
+					<li><%= link_to "Maps", allmaps_path %></li>
 				</ul>
 			<% end %>
 			<% if authenticated? %>
 				<ul>
 					<li><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
-					<li><%= link_to "My Synapses", usersynapses_path %></li>
-					<li><%= link_to "My Topics", userobjects_path %></li>
+					<li><%= link_to "Account", edit_user_url(user) %></li>
+					<li><%= link_to "My Maps", user_maps_url(user) %></li>
+					<li><%= link_to "My Synapses", user_synapses_url(user) %></li>
+					<li><%= link_to "My Topics", user_items_url(user) %></li>
 					<li>|</li>
-					<li><%= link_to "Add Synapse", new_synapse_path, id: "newsynapse" %></li>
+					<li><%= link_to "Add Map", new_user_map_path(user), id: "newmap" %></li>
 					<li>|</li>
-					<li><%= link_to "Add Topic", new_item_path, id: "newtopic" %></li>
+					<li><%= link_to "Add Synapse", new_user_synapse_path(user), id: "newsynapse" %></li>
 					<li>|</li>
-					<li><%= link_to "Topics", items_path %></li>
+					<li><%= link_to "Add Topic", new_user_item_path(user), id: "newtopic" %></li>
+					<li>|</li>
+					<li><%= link_to "Maps", allmaps_path %></li>
 				</ul>
 			<% end %>
 		</div>

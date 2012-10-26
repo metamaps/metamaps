@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121005160234) do
+ActiveRecord::Schema.define(:version => 20121026064859) do
 
   create_table "item_categories", :force => true do |t|
     t.text     "name"
@@ -28,6 +28,28 @@ ActiveRecord::Schema.define(:version => 20121005160234) do
     t.integer  "item_category_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.text     "permission"
+  end
+
+  create_table "mappings", :force => true do |t|
+    t.text     "category"
+    t.integer  "xloc"
+    t.integer  "yloc"
+    t.integer  "map_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "item_id"
+    t.integer  "synapse_id"
+  end
+
+  create_table "maps", :force => true do |t|
+    t.text     "name"
+    t.text     "desc"
+    t.text     "permission"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "user_id"
   end
 
   create_table "synapses", :force => true do |t|
@@ -38,6 +60,8 @@ ActiveRecord::Schema.define(:version => 20121005160234) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.text     "permission"
+    t.text     "weight"
   end
 
   create_table "users", :force => true do |t|

@@ -1,4 +1,4 @@
-<h1>All Topics</h1>
+<h1>Topics</h1>
 
 <div class="items" id="cards">
   <% @items.each do |item| %>
@@ -10,4 +10,6 @@
 </div>
 <div class="clearfloat"></div>
 
-<%= render :partial => 'items/new' %>
+<% if authenticated? %>
+	<%= render :partial => 'items/new' %>
+<% end %>
