@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   
   # GET /user
   def show
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
     
     respond_with(@user) 
   end
