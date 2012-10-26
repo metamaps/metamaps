@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121026064859) do
+ActiveRecord::Schema.define(:version => 20121026103129) do
 
   create_table "item_categories", :force => true do |t|
     t.text     "name"
@@ -35,20 +35,20 @@ ActiveRecord::Schema.define(:version => 20121026064859) do
     t.text     "category"
     t.integer  "xloc"
     t.integer  "yloc"
+    t.integer  "item_id"
+    t.integer  "synapse_id"
     t.integer  "map_id"
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "item_id"
-    t.integer  "synapse_id"
   end
 
   create_table "maps", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.text     "name"
     t.text     "desc"
     t.text     "permission"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
     t.integer  "user_id"
   end
 
