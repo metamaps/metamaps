@@ -4,13 +4,10 @@ class MainController < ApplicationController
   respond_to :html, :js, :json
   
   def home
-    @current_user = current_user
-	
-	@item = Item.all.first
-	
-    if @item
-	  @alljson = @item.all_as_json.html_safe
-    end
+    @current = current_user
+    
+	@item = Item.visibleToUser(@current, nil).first
+	@alljson = all_as_json(@current).html_safe
 	
 	respond_to do |format|
       format.html { respond_with(@item) }
@@ -18,10 +15,9 @@ class MainController < ApplicationController
     end
   end
   
-  def allmaps
-    @current_user = current_user
-	
-	@maps = Map.all
+  def allmaps	
+	@current = current_user
+    @maps = Map.visibleToUser(@current, nil)
 	
 	respond_to do |format|
       format.html { respond_with(@maps) }

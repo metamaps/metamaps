@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-
+  
   before_filter :require_user, only: [:new, :create, :edit, :update]
     
   respond_to :html, :js, :json
@@ -8,7 +8,8 @@ class ItemsController < ApplicationController
   def index
 	@user = User.find(params[:user_id])
   	
-	@items = @user.items
+	@current = current_user
+    @items = Item.visibleToUser(@current, @user)
      
     respond_with(@user,@items)
   end
@@ -25,9 +26,14 @@ class ItemsController < ApplicationController
   def show
     @user = User.find(params[:user_id])
   	
-	@item = @user.items.find(params[:id])
+	@current = current_user
+	@item = @user.items.find(params[:id]).authorize_to_show(@current)
 	
-	@relatives = @item.network_as_json.html_safe
+	if @item
+		@relatives = @item.network_as_json(@current).html_safe
+	else
+		redirect_to root_url and return
+	end
 	
 	respond_to do |format|
       format.html { respond_with(@item, @user) }
@@ -69,7 +75,12 @@ class ItemsController < ApplicationController
   def edit
 	@user = User.find(params[:user_id])
   	
-	@item = @user.items.find(params[:id])
+	@current = current_user
+	@item = @user.items.find(params[:id]).authorize_to_edit(@current)
+	
+	if not @item
+		redirect_to root_url and return
+	end
   
 	respond_with(@item)
   end

@@ -9,7 +9,9 @@ class SynapsesController < ApplicationController
   def index
     @user = User.find(params[:user_id])
   	
-	@synapsesjson = usersynapses_as_json(@user).html_safe
+	@current = current_user
+	@synapses = Synapse.visibleToUser(@current, @user)
+	@synapsesjson = synapses_as_json(@current, @synapses).html_safe
 
     respond_to do |format|
       format.html 
@@ -29,10 +31,15 @@ class SynapsesController < ApplicationController
   def show
   	@user = User.find(params[:user_id])
   	
-	@synapse = @user.synapses.find(params[:id])
+	@current = current_user
+	@synapse = @user.synapses.find(params[:id]).authorize_to_show(@current)
+	@item1 = @synapse.item1.authorize_to_show(@current)
+	@item2 = @synapse.item2.authorize_to_show(@current)
 	
-	if @synapse
+	if @synapse && @item1 && @item2
 		@synapsejson = @synapse.selfplusnodes_as_json.html_safe
+	else
+		redirect_to root_url and return
 	end
 	
 	respond_to do |format|
@@ -91,12 +98,13 @@ class SynapsesController < ApplicationController
   def edit
 	@user = User.find(params[:user_id])
   	
-	@synapse = @user.synapses.find(params[:id])
-	
-	@items = nil
+	@current = current_user
+	@synapse = @user.synapses.find(params[:id]).authorize_to_edit(@current)
 	
 	if @synapse 
-		@items = Item.all
+		@items = Item.visibleToUser(@current)
+	elsif not @synapse
+		redirect_to root_url and return
 	end
   
 	respond_with(@synapse, @items)

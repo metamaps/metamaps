@@ -5,6 +5,6 @@
   <label for="map_desc">Description</label>
   <%= form.text_area :desc, class: "description", :rows => 5 %>
   <label for="map_perm">Permission</label>
-  <%= form.select(:permission, options_for_select(['commons', 'public', 'private']), { :selected => @map.permission }) %>
+  <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @map.permission) %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

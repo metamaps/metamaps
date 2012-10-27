@@ -8,6 +8,8 @@ belongs_to :item2, :class_name => "Item", :foreign_key => "node2_id"
 has_many :mappings
 has_many :maps, :through => :mappings
 
+  ##### JSON ######
+
   def self_as_json
 	Jbuilder.encode do |json|			
 		@synapsedata = Hash.new
@@ -49,6 +51,58 @@ has_many :maps, :through => :mappings
 		  json.name item.name
 	  end	
     end
+  end
+  
+  ##### PERMISSIONS ######
+  
+  scope :visibleToUser, lambda { |current, user|  
+    if user != nil
+	   if user != current
+		 Synapse.find_all_by_user_id_and_permission(user.id, "commons") | Synapse.find_all_by_user_id_and_permission(user.id, "public")
+	   elsif user ==  current
+	     Synapse.find_all_by_user_id_and_permission(user.id, "commons") | Synapse.find_all_by_user_id_and_permission(user.id, "public") | current.synapses.where(:permission => "private")
+	   end
+	elsif (current != nil &&  user == nil)
+		Synapse.find_all_by_permission("commons") | Synapse.find_all_by_permission("public") | current.synapses.where(:permission => "private")
+	elsif (current == nil) 
+		Synapse.find_all_by_permission("commons") | Synapse.find_all_by_permission("public")
+	end
+  }
+  
+  # returns false if user not allowed to 'show' Topic, Synapse, or Map
+  def authorize_to_show(user)  
+	if (self.permission == "private" && self.user != user)
+		return false
+	end
+	return self
+  end
+  
+  # returns false if user not allowed to 'edit' Topic, Synapse, or Map
+  def authorize_to_edit(user)  
+	if (self.permission == "private" && self.user != user)
+		return false
+	elsif (self.permission == "public" && self.user != user)
+		return false
+	end
+	return self
+  end
+  
+  # returns Boolean if user allowed to view Topic, Synapse, or Map
+  def authorize_to_view(user)  
+	if (self.permission == "private" && self.user != user)
+		return false
+	end
+	return true
+  end
+  
+  # returns Boolean based on whether user has permissions to edit or not
+  def authorize_linkto_edit(user)
+    if (self.user == user)
+		return true
+    elsif (self.permission == "commons")
+		return true
+	end
+	return false
   end
 
 end

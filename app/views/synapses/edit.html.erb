@@ -11,6 +11,6 @@
 	<%= select "node2_id", "node2", @collection.order("name ASC").map {|p| [ p.name, p.id ] }, { :selected => @synapse.node2_id } %>
   <% end %>
   <label for="synapse_permission">Permission</label>
-  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
+  <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @synapse.permission) %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

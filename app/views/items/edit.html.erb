@@ -9,6 +9,6 @@
   <label for="item_link">Link</label>
   <%= form.text_field :link, class: "link" %> 
   <label for="item_permission">Permission</label>
-  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
+  <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @item.permission) %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

@@ -1,5 +1,5 @@
 class MapsController < ApplicationController
-
+  
   before_filter :require_user, only: [:new, :create, :edit, :update]
     
   respond_to :html, :js, :json
@@ -7,7 +7,9 @@ class MapsController < ApplicationController
   # GET /users/:user_id/maps
   def index
     @user = User.find(params[:user_id])
-    @maps = @user.maps
+	
+	@current = current_user
+    @maps = Map.visibleToUser(@current, @user)
      
     respond_with(@maps,@user)
   end
@@ -24,9 +26,14 @@ class MapsController < ApplicationController
   def show
     @user = User.find(params[:user_id])
   	
-	@map = @user.maps.find(params[:id])
+	@current = current_user
+	@map = @user.maps.find(params[:id]).authorize_to_show(@current)
 	
-	@mapjson = @map.self_as_json.html_safe
+	if not @map
+	  redirect_to root_url and return
+	end
+		
+	@mapjson = @map.self_as_json(@current).html_safe
 	
 	respond_to do |format|
       format.html { respond_with(@map, @user) }
@@ -53,7 +60,12 @@ class MapsController < ApplicationController
   def edit
 	@user = User.find(params[:user_id])
   	
-	@map = @user.maps.find(params[:id])
+	@current = current_user
+	@map = @user.maps.find(params[:id]).authorize_to_edit(@current)
+	
+	if not @map
+	  redirect_to root_url and return
+	end
   
 	respond_with(@user, @map)
   end
