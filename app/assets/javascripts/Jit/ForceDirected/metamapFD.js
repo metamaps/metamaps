@@ -93,9 +93,9 @@ function initFD(){
     },
     Edge: {
       overridable: true,
-      color: '#d1d1d1',
+      color: '#222222',
 	  //type: 'arrow',
-      lineWidth: 0.4
+      lineWidth: 0.5
     },
     //Native canvas text styling
     Label: {
@@ -146,8 +146,8 @@ function initFD(){
 			n.setData('dim', 25, 'end');  
 			n.eachAdjacency(function(adj) {  
 			  adj.setDataset('end', {  
-				lineWidth: 0.4,  
-				color: '#d1d1d1'  
+				lineWidth: 0.5,  
+				color: '#222222'  
 			  });  
 			});  
 		  });  
@@ -157,7 +157,7 @@ function initFD(){
 			node.eachAdjacency(function(adj) {  
 			  adj.setDataset('end', {  
 				lineWidth: 3,  
-				color: '#36acfb'  
+				color: '#FFF'  
 			  });  
 			});  
 		  } else {  
@@ -194,29 +194,12 @@ function initFD(){
 		// Create a 'name' and 'close' buttons and add them  
 		// to the main node label  
 		var nameContainer = document.createElement('span'),  
-			closeButton = document.createElement('span'),  
 			style = nameContainer.style;  
 		nameContainer.className = 'name';  
-		nameContainer.innerHTML = node.name;  
-		closeButton.className = 'close';  
-		closeButton.innerHTML = 'x';  
+		nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
 		domElement.appendChild(nameContainer);  
-		domElement.appendChild(closeButton);  
 		style.fontSize = "0.9em";  
-		style.color = "#ddd";  
-		//Fade the node and its connections when  
-		//clicking the close button  
-		closeButton.onclick = function() {  
-		  node.setData('alpha', 0, 'end');  
-		  node.eachAdjacency(function(adj) {  
-			adj.setData('alpha', 0, 'end');  
-		  });  
-		  fd.fx.animate({  
-			modes: ['node-property:alpha',  
-					'edge-property:alpha'],  
-			duration: 500  
-		  });  
-		};  
+		style.color = "#222222";  
 		//Toggle a node selection when clicking  
 		//its name. This is done by animating some  
 		//node styles like its dimension and the color  
@@ -229,7 +212,7 @@ function initFD(){
 			n.eachAdjacency(function(adj) {  
 			  adj.setDataset('end', {  
 				lineWidth: 0.4,  
-				color: '#d1d1d1'  
+				color: '#222222'  
 			  });  
 			});  
 		  });  

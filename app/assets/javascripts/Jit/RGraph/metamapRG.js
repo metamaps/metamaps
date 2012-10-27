@@ -100,8 +100,8 @@ function initRG(){
     },
     Edge: {
       overridable: true,
-      color: '#d1d1d1',
-      lineWidth: 0.4
+      color: '#222222',
+      lineWidth: 0.5
     },
     //Native canvas text styling
     Label: {
@@ -152,8 +152,8 @@ function initRG(){
 			n.setData('dim', 25, 'end');  
 			n.eachAdjacency(function(adj) {  
 			  adj.setDataset('end', {  
-				lineWidth: 0.4,  
-				color: '#d1d1d1'  
+				lineWidth: 0.5,  
+				color: '#222222'  
 			  });  
 			});  
 		  });  
@@ -163,7 +163,7 @@ function initRG(){
 			node.eachAdjacency(function(adj) {  
 			  adj.setDataset('end', {  
 				lineWidth: 3,  
-				color: '#36acfb'  
+				color: '#FFF'  
 			  });  
 			});  
 		  } else {  
@@ -199,11 +199,21 @@ function initRG(){
     onCreateLabel: function(domElement, node){  
 		// Create a 'name' and 'close' buttons and add them  
 		// to the main node label  
-			domElement.innerHTML = node.name;  
+			domElement.innerHTML = '<div class="label">' + node.name + '</div>';  
 			domElement.onclick = function(){  
 				rg.onClick(node.id, {  
 					onComplete: function() {  
-
+						var html = 
+						  '<p class="type">' + node.getData("itemcatname") + '</p>' + 
+						   '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
+						   '<a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+						   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
+						   '<div class="desc"><p>' + node.getData('desc') + '</p></div>' +
+						   '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
+				
+						//append connections information
+						$jit.id('showcard').innerHTML = '<div class="item" id="item_' + node.id + '"></div>';
+						$jit.id('item_' + node.id).innerHTML = html;
 					}  
 				});  
 			}  
