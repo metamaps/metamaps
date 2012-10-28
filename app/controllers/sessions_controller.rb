@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
     @session.destroy
     
     respond_to do |format|
-      format.html   { respond_with(@session, location: maps_url) }
+      format.html   { respond_with(@session, location: restore(default: root_path)) }
     end
     
   end
