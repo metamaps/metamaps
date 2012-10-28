@@ -4,7 +4,7 @@
 		<p># of Synapses: <%= @map.synapses.count %></p>
 	</div>
 	<div class="focusmiddle">
-		<h1 class="title"><%= @map.name %> <% if (@map.permission == "commons" && @user != nil) || @map.user == @user %><%= link_to "[edit]", edit_user_map_path(@user, @map) %><% end %></h1>
+		<h1 class="title"><%= @map.name %></h1>
 		<div class="desc">
 			<p><%= @map.desc %></p>
 		</div>
@@ -32,6 +32,3 @@
 		});
 	}
 </script>
-
-<%= render :partial => 'newtopic' %>
-<%= render :partial => 'newsynapse' %>

@@ -2,15 +2,15 @@
 	<%= form_for @synapse, url: user_synapses_url do |form| %>
 	  <h3>Add Synapse Between Topics</h3> 
 	  <%= hidden_field_tag(:category, "Item") %>  
-	  <% if Item.all.count > 0 %>
+	  <% if Item.visibleToUser(user, nil).count > 0 %>
 		<label for="node1_id">Choose First Item</label>
-		<%= select_tag :node1_id, options_from_collection_for_select(Item.order("name ASC").all, "id", "name") %>
+		<%= select_tag :node1_id, options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil), "id", "name") %>
 	  <% end %>
 	  <label for="item_desc">Describe The Connection</label>
 	  <%= form.text_field :desc, class: "description" %>
-	  <% if Item.all.count > 0 %>
+	  <% if Item.visibleToUser(user, nil).count > 0 %>
 		<label for="node2_id">Choose Second Item</label>
-		<%= select_tag :node2_id, options_from_collection_for_select(Item.order("name ASC").all, "id", "name") %>
+		<%= select_tag :node2_id, options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil), "id", "name") %>
 	  <% end %>
 	  <label for="synapse_permission">Permission</label>
 	  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>

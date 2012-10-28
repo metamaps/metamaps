@@ -49,29 +49,45 @@
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
         <div class="headertop">
-			<h1 id="mainTitle"><%= link_to "metamaps", root_path %></h1>&nbsp;beta
+			<h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1>&nbsp;beta
 			<% unless authenticated? %>
 				<ul>
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>
 					<li>|</li>
 					<li><%= link_to "Maps", allmaps_path %></li>
+					<li>|</li>
+					<li><%= link_to "All", metamap_path %></li>
 				</ul>
 			<% end %>
 			<% if authenticated? %>
-				<ul>
-					<li><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
-					<li><%= link_to "Account", edit_user_url(user) %></li>
-					<li><%= link_to "My Maps", user_maps_url(user) %></li>
-					<li><%= link_to "My Synapses", user_synapses_url(user) %></li>
-					<li><%= link_to "My Topics", user_items_url(user) %></li>
+				<ul id="menus">
+					<li class="accountWrap">
+						<p id="account">Account</p>
+						<ul class="account">
+							<li class="first"><%= link_to "My Topics", user_items_url(user) %></li>
+							<li><%= link_to "My Synapses", user_synapses_url(user) %></li>
+							<li><%= link_to "My Maps", user_maps_url(user) %></li>
+							<li><%= link_to "Settings", edit_user_url(user) %></li>
+							<li class="last"><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
+						</ul>
+					</li>
 					<li>|</li>
-					<li><%= link_to "Add Map", new_user_map_path(user), id: "newmap" %></li>
+					<li class="createWrap">
+						<p id="create">Create</p>
+						<ul class="create">
+							<li class="first"><%= link_to "Add Topic", new_user_item_path(user), id: "newtopic" %></li>
+							<li><%= link_to "Add Synapse", new_user_synapse_path(user), id: "newsynapse" %></li>
+							<li class="last"><%= link_to "Add Map", new_user_map_path(user), id: "newmap" %></li>
+						</ul>	
+					</li>
 					<li>|</li>
-					<li><%= link_to "Add Synapse", new_user_synapse_path(user), id: "newsynapse" %></li>
-					<li>|</li>
-					<li><%= link_to "Add Topic", new_user_item_path(user), id: "newtopic" %></li>
-					<li>|</li>
-					<li><%= link_to "Maps", allmaps_path %></li>
+					<li class="exploreWrap">
+						<p id="explore">Explore</p>
+						<ul class="explore">
+							<li class="first"><%= link_to "Maps", allmaps_path %></li>
+							<li class="last"><%= link_to "Metamap", metamap_path %></li>
+						</ul>
+					</li>					
 				</ul>
 			<% end %>
 		</div>

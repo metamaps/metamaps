@@ -222,7 +222,7 @@ function initFD(){
 			node.eachAdjacency(function(adj) {  
 			  adj.setDataset('end', {  
 				lineWidth: 3,  
-				color: '#36acfb'  
+				color: '#FFF'  
 			  });  
 			});  
 		  } else {  

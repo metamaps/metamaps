@@ -61,7 +61,7 @@ input[type="submit"] { margin-top:5px; }
 
 .nodemargin { padding-top:120px; }
 
-.focus { position:fixed; top:0; left:0; width:90%; z-index:10; display: block; min-width:533px; margin: 50px 50px 25px 50px; background: url('bg.png'); border-radius: 20px; color:#000; border:1px solid #000; }
+.focus { position:fixed; top:0; left:0; width:90%; z-index:2; display: block; min-width:533px; margin: 50px 50px 25px 50px; background: url('bg.png'); border-radius: 20px; color:#000; border:1px solid #000; }
 .focus h1 { margin-top:0; }
 .focusleft, .focusmiddle, .focusright { display:block; float:left; }
 .focusleft { width:20%; min-width:70px; text-align:center; }
@@ -78,6 +78,34 @@ input[type="submit"] { margin-top:5px; }
 
 .divider { margin: 20px 50px 20px 50px; border-bottom:2px solid #FFF; }
 .empty { margin-left:50px; }
+
+#menus { margin-right:15px; }
+.accountWrap, .createWrap, .exploreWrap { display:block; position:relative; cursor: pointer;}
+
+#menus .account, #menus .create, #menus .explore { display:none; position:absolute; right:0; z-index:12; width:auto; color: #67AF9F;
+white-space: nowrap;
+text-align: center;
+font-size: 16px;
+overflow: hidden;
+padding: 3px 8px;
+margin: 0;
+border: 2px solid #AAA;
+background: white;
+border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+-webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+-moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+background: -moz-linear-gradient( center top, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.03) 0% ) repeat scroll 0 0 white;
+background: -webkit-gradient( linear, 0% 0%, 0% 100%, from(white), to(rgba(0, 0, 0, 0.03)), color-stop(0.5, rgba(255, 255, 255, 0)), color-stop(0.5, rgba(0, 0, 0, 0.03)) ) repeat scroll 0 0 white;
+border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#menus ul li { margin:0; clear:both; float:none; list-style-type:none; display:block; padding:3px; text-align:center; border-top:1px solid #999; }
+#menus ul li.first { border:none; }
+#menus ul li a:hover { color:#2d6a5d; }
+#menus ul li a { color: #67AF9F; display:block; }
 
 
 /* --- styling the filter ---*/

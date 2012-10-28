@@ -43,21 +43,83 @@
 		}
 	});
 	
-    var sliding = false; 
-    $(".legend").hover( 
+	
+	// controls the sliding hover of the filters
+    var sliding1 = false; 
+    $(".accountWrap").hover( 
         function () { 
-          if (! sliding) { 
-            sliding = true; 
-            $("#iconLegend ul").slideDown('slow', function() { 
-              sliding = false; 
+          if (! sliding1) { 
+            sliding1 = true; 
+            $(".account").slideDown('slow', function() { 
+              sliding1 = false; 
             }); 
           } 
         },  
         function () { 
-          if (! sliding) { 
-            sliding = true; 
+          if (! sliding1) { 
+            sliding1 = true; 
+            $(".account").slideUp('slow', function() { 
+              sliding1 = false; 
+            }); 
+          } 
+        } 
+    );
+	
+	var sliding2 = false; 
+    $(".createWrap").hover( 
+        function () { 
+          if (! sliding2) { 
+            sliding2 = true; 
+            $(".create").slideDown('slow', function() { 
+              sliding2 = false; 
+            }); 
+          } 
+        },  
+        function () { 
+          if (! sliding2) { 
+            sliding2 = true; 
+            $(".create").slideUp('slow', function() { 
+              sliding2 = false; 
+            }); 
+          } 
+        } 
+    );
+	
+	var sliding3 = false; 
+    $(".exploreWrap").hover( 
+        function () { 
+          if (! sliding3) { 
+            sliding3 = true; 
+            $(".explore").slideDown('slow', function() { 
+              sliding3 = false; 
+            }); 
+          } 
+        },  
+        function () { 
+          if (! sliding3) { 
+            sliding3 = true; 
+            $(".explore").slideUp('slow', function() { 
+              sliding3 = false; 
+            }); 
+          } 
+        } 
+    );
+	
+	var sliding4 = false; 
+    $(".legend").hover( 
+        function () { 
+          if (! sliding4) { 
+            sliding4 = true; 
+            $("#iconLegend ul").slideDown('slow', function() { 
+              sliding4 = false; 
+            }); 
+          } 
+        },  
+        function () { 
+          if (! sliding4) { 
+            sliding4 = true; 
             $("#iconLegend ul").slideUp('slow', function() { 
-              sliding = false; 
+              sliding4 = false; 
             }); 
           } 
         } 

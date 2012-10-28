@@ -1,5 +1,5 @@
 <%= div_for map do %>
-	<% if authenticated? %><%= link_to 'Delete', user_map_path(map.user,map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete %><% end %>
+	<% if map.user == user %><%= link_to 'Delete', user_map_path(map.user,map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, :remote => true %><% end %>
 	<%= link_to map.name, user_map_path(map.user, map), :class => 'title' %>
 	<div class="desc"><p><%= map.desc %></p><p># of Topics: <%= map.items.count %></p><p># of Synapses: <%= map.synapses.count %></p></div>
 	<div class="link"><p>Permissions:<%= map.permission %></p></div>

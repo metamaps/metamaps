@@ -21,9 +21,11 @@ class SessionsController < ApplicationController
     @session = Session.create(params[:session])
     
     @user = User.new
+	
+	@connor = User.find(555629996)
+	@map = Map.find(5)
 		
-    respond_with(@user, @session, location: root_url) do |format|
-      
+    respond_with(@user, @session, location: user_map_url(@connor,@map)) do |format| 
     end
   end
   
@@ -33,7 +35,7 @@ class SessionsController < ApplicationController
     @session.destroy
     
     respond_to do |format|
-      format.html   { respond_with(@session, location: root_url) }
+      format.html   { respond_with(@session, location: maps_url) }
     end
     
   end
