@@ -1,6 +1,8 @@
 class MainController < ApplicationController
   include ItemsHelper
 
+  before_filter :require_user, only: [:invite] 
+   
   respond_to :html, :js, :json
   
   #homepage pick a random map and show it
@@ -35,6 +37,14 @@ class MainController < ApplicationController
 	
 	respond_to do |format|
       format.html { respond_with(@maps) }
+    end
+  end
+  
+  def invite	
+	@user = current_user
+	
+	respond_to do |format|
+      format.html { respond_with(@user) }
     end
   end
   

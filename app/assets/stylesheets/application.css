@@ -30,7 +30,10 @@ h2 {display:block; text-align:center; font-family: "vinyl",sans-serif; backgroun
 a {color:#2d6a5d; text-decoration:none;}
 .clearfloat {clear:both;}
 
-.new_session, .new_user, .new_item, .new_synapse, .new_map, .edit_user, .edit_item, .edit_synapse, .edit_map { display: block; width: 350px; position:absolute; left:50%; top:0; margin:200px 0 0 -195px; background: url('bg.png'); padding: 20px; border-radius: 15px; color: #000; border:2px solid #000; }
+.new_session, .new_user, .new_item, .new_synapse, .new_map, .edit_user, .edit_item, .edit_synapse, .edit_map, .invite { display: block; width: 350px; position:absolute; left:50%; top:0; margin:200px 0 0 -195px; background: url('bg.png'); padding: 20px; border-radius: 15px; color: #000; border:2px solid #000; }
+
+.invite p { margin:10px 0; }
+.invite strong { text-align:center; display:block; color:#67AF9F; }
 
 .anypage .new_item, .anypage .new_synapse { display: none; position:absolute; left:50%; top:0; margin:200px 0 0 -195px; border:2px solid #000; }
 #closenewtopic, #closenewsynapse { position:absolute; top: 3px; right:3px; }

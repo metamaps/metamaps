@@ -5,6 +5,8 @@ ISSAD::Application.routes.draw do
   match 'metamap', to: 'main#metamap', via: :get, as: :metamap
   match 'maps', to: 'main#allmaps', via: :get, as: :allmaps
   
+  match 'invite', to: 'main#invite', via: :get, as: :invite
+  
   resource :session
   
   resources :users do

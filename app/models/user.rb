@@ -16,10 +16,16 @@ has_many :mappings
   end
   
   validates :password, :presence => true,
-                       :length => {:within => 6..20},
+					   :length => {
+					   :maximum => 20,
+					   :too_long  => "is too long (maximum is %{count} characters)" },
                        :on => :create
-  validates :password, :length => {:within => 6..20},
-                       :allow_blank => true,
+  validates :password, :allow_blank => true,
+					   :length => {
+					   :maximum => 20,
+					   :too_long  => "is too long (maximum is %{count} characters)"},
                        :on => :update
+	
+  validates :joinedwithcode, :presence => true, :inclusion => { :in => User.all.map(&:code), :message => "%{value} is not a valid code" }, :on => :create
 
 end

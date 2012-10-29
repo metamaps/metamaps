@@ -34,9 +34,15 @@ class UsersController < ApplicationController
     
     @user = User.create(params[:user])
 	
+	#generate a random 8 letter/digit code that they can use to invite people
+	@user.code = rand(36**8).to_s(36)	
     @user.save
+	
+	# direct them straight to the metamaps manual map. 
+	@connor = User.find(555629996)
+	@map = Map.find(5)
         
-    respond_with(@user, location: root_url) do |format|
+    respond_with(@user, location: user_map_url(@connor,@map)) do |format|
     end
   end
   

@@ -51,12 +51,16 @@
         <div class="headertop">
 			<h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1>&nbsp;beta
 			<% unless authenticated? %>
-				<ul>
+				<ul id="menus">
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>
 					<li>|</li>
-					<li><%= link_to "Maps", allmaps_path %></li>
-					<li>|</li>
-					<li><%= link_to "All", metamap_path %></li>
+					<li class="exploreWrap">
+						<p id="explore">Explore</p>
+						<ul class="explore">
+							<li class="first"><%= link_to "Maps", allmaps_path %></li>
+							<li class="last"><%= link_to "Metamap", metamap_path %></li>
+						</ul>
+					</li>
 				</ul>
 			<% end %>
 			<% if authenticated? %>
@@ -67,6 +71,7 @@
 							<li class="first"><%= link_to "My Topics", user_items_url(user) %></li>
 							<li><%= link_to "My Synapses", user_synapses_url(user) %></li>
 							<li><%= link_to "My Maps", user_maps_url(user) %></li>
+							<li><%= link_to "Invite", invite_path %></li>
 							<li><%= link_to "Settings", edit_user_url(user) %></li>
 							<li class="last"><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
 						</ul>

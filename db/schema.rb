@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121026103129) do
+ActiveRecord::Schema.define(:version => 20121029164735) do
 
   create_table "item_categories", :force => true do |t|
     t.text     "name"
@@ -71,8 +71,10 @@ ActiveRecord::Schema.define(:version => 20121026103129) do
     t.string   "password_salt"
     t.string   "persistence_token"
     t.string   "perishable_token"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.string   "code",              :limit => 8
+    t.string   "joinedwithcode",    :limit => 8
   end
 
 end
