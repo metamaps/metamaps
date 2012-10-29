@@ -9,43 +9,6 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="legend">
-     <div id="iconLegend">
-       <h3>FILTERS</h3>
-       <ul id="filters-left">
-         <li><img src="/assets/action.png" alt="Action" /><p>action</p></li>
-         <li><img src="/assets/activity.png" alt="Activity" /><p>activity</p></li>
-         <li><img src="/assets/bizarre.png" alt="Bizarre" /><p>bizarre</p></li>
-         <li><img src="/assets/catalyst.png" alt="Catalyst" /><p>catalyst</p></li>
-         <li><img src="/assets/closed.png" alt="Closed" /><p>closed</p></li>
-         <li><img src="/assets/experience.png" alt="Experience" /><p>experience</p></li>
-         <li><img src="/assets/futuredev.png" alt="Future Dev" /><p>future dev</p></li>
-         <li><img src="/assets/group.png" alt="Group" /><p>group</p></li>
-         <li><img src="/assets/idea.png" alt="Idea" /><p>idea</p></li>
-         <li><img src="/assets/implication.png" alt="Implication" /><p>implication</p></li>
-         <li><img src="/assets/insight.png" alt="Insight" /><p>insight</p></li>
-         <li><img src="/assets/intention.png" alt="Intention" /><p>intention</p></li>
-         <li><img src="/assets/knowledge.png" alt="Knowledge" /><p>knowledge</p></li>
-         <li><img src="/assets/location.png" alt="Location" /><p>location</p></li>
-        </ul>
-        <ul id="filters-right">
-         <li><img src="/assets/openissue.png" alt="Open Issue" /><p>open issue</p></li>
-         <li><img src="/assets/opinion.png" alt="Opinion" /><p>opinion</p></li>
-         <li><img src="/assets/opportunity.png" alt="Opportunity" /><p>opportunity</p></li>
-         <li><img src="/assets/person.png" alt="Person" /><p>person</p></li>         
-         <li><img src="/assets/platform.png" alt="Platform" /><p>platform</p></li>
-         <li><img src="/assets/problem.png" alt="Problem" /><p>problem</p></li>
-         <li><img src="/assets/question.png" alt="Question" /><p>question</p></li>
-         <li><img src="/assets/reference.png" alt="Reference" /><p>reference</p></li>
-         <li><img src="/assets/requirement.png" alt="Requirement" /><p>requirement</p></li>
-         <li><img src="/assets/resource.png" alt="Resource" /><p>resource</p></li>
-         <li><img src="/assets/role.png" alt="Role" /><p>role</p></li>
-         <li><img src="/assets/task.png" alt="Task" /><p>task</p></li>
-         <li><img src="/assets/tool.png" alt="Tool" /><p>tool</p></li>
-         <li><img src="/assets/trajectory.png" alt="Trajectory" /><p>trajectory</p></li>
-        </ul>
-     </div>
-  </div>
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
         <div class="headertop">
@@ -102,10 +65,44 @@
 		</div>
 			
     <div class="footer">
-      <div class="wrap">
-        <div class="copy">
-
-      </div>
+      <div class="feedback"><%= link_to "Feedback", user_map_path(User.find(555629996), Map.find(7)) %></div>
+	  <div class="legend">
+		 <div id="iconLegend">
+		   <h3>FILTERS</h3>
+		   <ul id="filters-left">
+			 <li><img src="/assets/action.png" alt="Action" /><p>action</p></li>
+			 <li><img src="/assets/activity.png" alt="Activity" /><p>activity</p></li>
+			 <li><img src="/assets/bizarre.png" alt="Bizarre" /><p>bizarre</p></li>
+			 <li><img src="/assets/catalyst.png" alt="Catalyst" /><p>catalyst</p></li>
+			 <li><img src="/assets/closed.png" alt="Closed" /><p>closed</p></li>
+			 <li><img src="/assets/experience.png" alt="Experience" /><p>experience</p></li>
+			 <li><img src="/assets/futuredev.png" alt="Future Dev" /><p>future dev</p></li>
+			 <li><img src="/assets/group.png" alt="Group" /><p>group</p></li>
+			 <li><img src="/assets/idea.png" alt="Idea" /><p>idea</p></li>
+			 <li><img src="/assets/implication.png" alt="Implication" /><p>implication</p></li>
+			 <li><img src="/assets/insight.png" alt="Insight" /><p>insight</p></li>
+			 <li><img src="/assets/intention.png" alt="Intention" /><p>intention</p></li>
+			 <li><img src="/assets/knowledge.png" alt="Knowledge" /><p>knowledge</p></li>
+			 <li><img src="/assets/location.png" alt="Location" /><p>location</p></li>
+			</ul>
+			<ul id="filters-right">
+			 <li><img src="/assets/openissue.png" alt="Open Issue" /><p>open issue</p></li>
+			 <li><img src="/assets/opinion.png" alt="Opinion" /><p>opinion</p></li>
+			 <li><img src="/assets/opportunity.png" alt="Opportunity" /><p>opportunity</p></li>
+			 <li><img src="/assets/person.png" alt="Person" /><p>person</p></li>         
+			 <li><img src="/assets/platform.png" alt="Platform" /><p>platform</p></li>
+			 <li><img src="/assets/problem.png" alt="Problem" /><p>problem</p></li>
+			 <li><img src="/assets/question.png" alt="Question" /><p>question</p></li>
+			 <li><img src="/assets/reference.png" alt="Reference" /><p>reference</p></li>
+			 <li><img src="/assets/requirement.png" alt="Requirement" /><p>requirement</p></li>
+			 <li><img src="/assets/resource.png" alt="Resource" /><p>resource</p></li>
+			 <li><img src="/assets/role.png" alt="Role" /><p>role</p></li>
+			 <li><img src="/assets/task.png" alt="Task" /><p>task</p></li>
+			 <li><img src="/assets/tool.png" alt="Tool" /><p>tool</p></li>
+			 <li><img src="/assets/trajectory.png" alt="Trajectory" /><p>trajectory</p></li>
+			</ul>
+		 </div>
+	  </div>
     </div>
     
   <% end %>

@@ -24,6 +24,7 @@ html, body, .main, .wrapper, #container { height: 100%; }
 html { }
 body { background:#031924 url(background2.jpg) repeat 0 0; font-family: 'katarine-web', sans-serif; background-attachment:fixed; color:#FFF; }
 
+h1,h2,h3,h4,h5,h6 { font-weight:normal; }
 h1 {display:block; text-align:left; font-family: "vinyl",sans-serif; }
 h2 {display:block; text-align:center; font-family: "vinyl",sans-serif; background: #333; font-size:24px;}
 
@@ -70,8 +71,8 @@ input[type="submit"] { margin-top:5px; }
 .focusleft { width:20%; min-width:70px; text-align:center; }
 .focusmiddle { display:block; width:49%; min-height:115px; border-right:2px solid #000; border-left:2px solid #000;}
 .focusright { width:30%; min-width:150px; }
-.focus .focusleft p { font-weight:bold; font-size:16px; line-height:20px; padding:10px 0 5px 0; }
-.focus .focusright p { font-weight:bold; font-size:16px; line-height:20px; padding:10px 0 5px 10px; }
+.focus .focusleft p { font-weight:normal; font-size:16px; line-height:20px; padding:10px 0 5px 0; }
+.focus .focusright p { font-weight:normal; font-size:16px; line-height:20px; padding:10px 0 5px 10px; }
 .focus .icon { margin:0 auto; }
 .focus .title { font-size:22px; line-height:25px; border-bottom:2px solid #000; padding:10px; }
 .focus .desc { padding:10px; }
@@ -144,4 +145,26 @@ cursor: pointer; }
 #iconLegend li.toggledOff {
   opacity: 0.2;
 }
+
+/* --- styling feedback button ---*/
+.feedback { position:fixed; bottom:10px; left:15px; z-index:12; display:block; width:auto; color: #67AF9F;
+white-space: nowrap;
+text-align: center;
+font-size: 16px;
+overflow: hidden;
+padding: 3px 8px;
+margin: -0.75em 0 0;
+border: 2px solid #AAA;
+background: white;
+border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+-webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+-moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+background: -moz-linear-gradient( center top, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.03) 0% ) repeat scroll 0 0 white;
+background: -webkit-gradient( linear, 0% 0%, 0% 100%, from(white), to(rgba(0, 0, 0, 0.03)), color-stop(0.5, rgba(255, 255, 255, 0)), color-stop(0.5, rgba(0, 0, 0, 0.03)) ) repeat scroll 0 0 white;
+border: 1px solid rgba(0, 0, 0, 0.2);
+cursor: pointer; }
+.feedback a { color: #67AF9F; }
 
