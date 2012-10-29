@@ -4,13 +4,13 @@
 		<p># of Synapses: <%= @map.synapses.count %></p>
 	</div>
 	<div class="focusmiddle">
-		<h1 class="title"><%= @map.name %> <% if (@map.permission == "commons" && @user != nil) || @map.user == @user %><%= link_to "[edit]", edit_user_map_path(@user, @map) %><% end %></h1>
+		<h1 class="title"><%= @map.name %> <% if (@map.permission == "commons" && authenticated?) || @map.user == user %><%= link_to "[edit]", edit_user_map_path(@user, @map) %><% end %></h1>
 		<div class="desc">
 			<p><%= @map.desc %></p>
 		</div>
 	</div>
 	<div class="focusright">
-		<div class="link"><p>Permissions:<%= @map.permission %></p></div>
+		<div class="link"><p>Permissions: <%= @map.permission %></p></div>
 	</div>
 </div>
 <div class="clearfloat nodemargin"></div>
