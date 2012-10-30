@@ -45,15 +45,20 @@ class ItemsController < ApplicationController
   def create
     
     @user = current_user
-	@item = Item.new()
-	@item.name = params[:item][:name]
-	@item.desc = params[:item][:desc]
-	@item.link = params[:item][:link]
-	@item.permission = params[:item][:permission]
-	@item.item_category = ItemCategory.find(params[:category])
-    @item.user = @user
 	
-	@item.save   
+	if params[:initem]
+		@item = Item.find(params[:initem])
+	else
+		@item = Item.new()
+		@item.name = params[:item][:name]
+		@item.desc = params[:item][:desc]
+		@item.link = params[:item][:link]
+		@item.permission = params[:item][:permission]
+		@item.item_category = ItemCategory.find(params[:category])
+		@item.user = @user
+		
+		@item.save
+    end		
 	
 	if params[:item][:map]
 		@mapping = Mapping.new()

@@ -66,8 +66,10 @@ class MapsController < ApplicationController
 	if not @map
 	  redirect_to root_url and return
 	end
+	
+	@outitems = @map.items.order("name ASC").delete_if{|item| not item.authorize_to_view(@current)}
   
-	respond_with(@user, @map)
+	respond_with(@user, @map, @outitems)
   end
   
   # PUT /users/:user_id/maps/:id
@@ -78,6 +80,14 @@ class MapsController < ApplicationController
     
 	@map.attributes = params[:map]
 	@map.save
+	
+	if params[:outitems]
+		@outitems = params[:outitems]
+		@outitems.each do |item|
+			@mapping = Mapping.where("map_id = ? AND item_id = ?", @map.id, item).first
+			@mapping.delete
+		end
+	end
 	
     respond_with(@user, location: user_map_path(@user, @map)) do |format|
     end
