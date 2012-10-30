@@ -18,12 +18,12 @@
 	  <label for="item_permission">Permission</label>
 	  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
 	  <%= form.hidden_field :map, :value => @map.id %>
-	  <%= form.submit "Add Item", class: "addItem", id: "addItem" %>
+	  <%= form.submit "Add Topic", class: "addTopic", id: "addTopic" %>
   </div>
   <div class="existingtopic" style="display:none;" >
       <label for="initem">Select Topic To Add</label>
 	  <%= select_tag "initem", options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil).delete_if{|item| @map.items.include?(item)}, "id", "name") %>
-	  <%= form.submit "Add Item", class: "addItem", id: "addItem" %>
+	  <%= form.submit "Add Topic", class: "addTopic", id: "addTopic" %>
   </div>
 <% end %>
 </div>
