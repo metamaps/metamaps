@@ -46,7 +46,7 @@ class ItemsController < ApplicationController
     
     @user = current_user
 	
-	if params[:initem]
+	if params[:initem] != ""
 		@item = Item.find(params[:initem])
 	else
 		@item = Item.new()
