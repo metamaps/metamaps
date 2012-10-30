@@ -22,7 +22,7 @@
   </div>
   <div class="existingtopic" style="display:none;" >
       <label for="initem">Select Topic To Add</label>
-	  <%= select_tag "initem", options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil).delete_if{|item| @map.items.include?(item)}, "id", "name") %>
+	  <%= select_tag "initem", options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil).delete_if{|item| @map.items.include?(item)}, "id", "name"), {:include_blank => true} %>
 	  <%= form.submit "Add Topic", class: "addTopic", id: "addTopic" %>
   </div>
 <% end %>
