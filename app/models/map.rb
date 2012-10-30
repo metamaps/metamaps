@@ -22,7 +22,9 @@ end
 	  
 	  json.array!(@items.delete_if{|item| not item.authorize_to_view(current)}) do |item|
 		
-	      json.adjacencies item.synapses2.delete_if{|synapse| (not @items.include?(synapse.item1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.item1.authorize_to_view(current)) } do |json, synapse|
+		#json.adjacencies item.synapses2.delete_if{|synapse| (not @items.include?(synapse.item1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.item1.authorize_to_view(current)) } do |json, synapse|
+		
+	      json.adjacencies item.synapses2.delete_if{|synapse| (not @items.include?(synapse.item1)) || (not synapse.authorize_to_view(current)) || (not synapse.item1.authorize_to_view(current)) } do |json, synapse|
 				json.nodeTo synapse.node1_id
 				json.nodeFrom synapse.node2_id
 				
