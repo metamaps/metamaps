@@ -12,6 +12,7 @@
  *= require_tree .
  *= require base
  *= require ForceDirected
+ *= require jquery.mCustomScrollbar
 */
 
 /* clear styles */
@@ -55,7 +56,7 @@ input[type="submit"] { margin-top:5px; }
 
 .headertop { display:block; position:fixed; top:0; left:0; z-index:10; height:38px; width:100%; min-width:622px; background: url(topbg2.png) repeat-x top left; }
 #mainTitle { float: left; }
-#mainTitle a { color:#FFF; font-family: "vinyl",sans-serif; text-transform:uppercase; font-weight: 400;}
+#mainTitle a { color:#FFF; font-family: "vinyl",sans-serif; font-style: italic; text-transform:uppercase; font-weight: 400;}
 .headertop ul { display:block; float: right; }
 .headertop ul li {display:block; float:right; margin:10px 5px 0 5px; }
 .headertop ul li a { color:#FFF; }
@@ -75,7 +76,7 @@ input[type="submit"] { margin-top:5px; }
 .focus .focusright p { font-weight:normal; font-size:16px; line-height:20px; padding:10px 0 5px 10px; }
 .focus .icon { margin:0 auto; }
 .focus .title { font-size:22px; line-height:25px; border-bottom:2px solid #000; padding:10px; }
-.focus .desc { padding:10px; }
+.focus .desc { padding:10px; height:75px; font-family:Arial, Helvetica, sans-serif; }
 .focus .desc h3 { font-style:normal; }
 .focus .location { padding-left:10px; }
 .focus .link { padding:0 0 0 10px; display:block; width:90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

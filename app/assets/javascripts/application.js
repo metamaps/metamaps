@@ -18,8 +18,15 @@
 //= require Jit/ForceDirected/metamapFD
 //= require Jit/RGraph/metamapRG
 //= require Jit/filters
+//= require scroll/jquery-ui-1.8.23.custom.min
+//= require scroll/jquery.mousewheel.min
+//= require scroll/jquery.mCustomScrollbar.min
 
  $(document).ready(function() {
+	 
+	$(".focus .desc").mCustomScrollbar(); 
+	$(".scroll").mCustomScrollbar();
+	
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));
 	
 	

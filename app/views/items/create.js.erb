@@ -47,5 +47,6 @@ if (map2 != null) {
 }
 else {
 	$('#cards').prepend('<%= escape_javascript(render(@item)) %>');
+	$(".scroll").mCustomScrollbar();
 }
 		

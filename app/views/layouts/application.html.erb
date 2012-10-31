@@ -29,7 +29,7 @@
 			<% if authenticated? %>
 				<ul id="menus">
 					<li class="accountWrap">
-						<p id="account">Account</p>
+						<p id="account">ACCOUNT</p>
 						<ul class="account">
 							<li class="first"><%= link_to "My Topics", user_items_url(user) %></li>
 							<li><%= link_to "My Synapses", user_synapses_url(user) %></li>
@@ -41,7 +41,7 @@
 					</li>
 					<li>|</li>
 					<li class="createWrap">
-						<p id="create">Create</p>
+						<p id="create">CREATE</p>
 						<ul class="create">
 							<li class="first"><%= link_to "Add Topic", new_user_item_path(user), id: "newtopic" %></li>
 							<li><%= link_to "Add Synapse", new_user_synapse_path(user), id: "newsynapse" %></li>
@@ -50,7 +50,7 @@
 					</li>
 					<li>|</li>
 					<li class="exploreWrap">
-						<p id="explore">Explore</p>
+						<p id="explore">EXPLORE</p>
 						<ul class="explore">
 							<li class="first"><%= link_to "Maps", allmaps_path %></li>
 							<li class="last"><%= link_to "Metamap", metamap_path %></li>

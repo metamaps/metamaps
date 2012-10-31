@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.item { display:block; float:left; position:relative; width:170px; height:300px; padding:10px 10px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
+.item { display:block; float:left; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
 
 .item .delete {position: absolute;
 top: -14px;
@@ -17,6 +17,8 @@ padding: 0;
 cursor:pointer;
 }
 
+.item .scroll { display:block; height:283px; }
+
 .item .type {position: absolute;
 color: white;
 top: -22px;
@@ -29,7 +31,7 @@ line-height: 24px;}
 
 .item .title { font-size:22px; line-height:25px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
 
-.item .desc { font-size:15px; }
+.item .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
 .item .desc h3 { font-style:normal; margin-top:5px; }
 
 .item .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

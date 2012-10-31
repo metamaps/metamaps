@@ -180,14 +180,15 @@ function initRG(){
         var html = 
           '<p class="type">' + node.getData("itemcatname") + '</p>' + 
            '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-           '<a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+           '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
 		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
-           '<div class="desc"><p>' + node.getData('desc') + '</p></div>' +
+           '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
            '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
 
         //append connections information
         $jit.id('showcard').innerHTML = '<div class="item" id="item_' + node.id + '"></div>';
         $jit.id('item_' + node.id).innerHTML = html;
+		$("#showcard .scroll").mCustomScrollbar();
       }
     },
     //Number of iterations for the rg algorithm
@@ -206,14 +207,15 @@ function initRG(){
 						var html = 
 						  '<p class="type">' + node.getData("itemcatname") + '</p>' + 
 						   '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-						   '<a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+						   '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
 						   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
-						   '<div class="desc"><p>' + node.getData('desc') + '</p></div>' +
+						   '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
 						   '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
 				
 						//append connections information
 						$jit.id('showcard').innerHTML = '<div class="item" id="item_' + node.id + '"></div>';
 						$jit.id('item_' + node.id).innerHTML = html;
+						$("#showcard .scroll").mCustomScrollbar();
 					}  
 				});  
 			}  
