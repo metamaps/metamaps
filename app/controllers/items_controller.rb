@@ -46,8 +46,17 @@ class ItemsController < ApplicationController
     
     @user = current_user
 	
-	if params[:initem] != ""
-		@item = Item.find(params[:initem])
+	@addtomap = false
+	
+	if params[:initem] 
+		if params[:initem] != ""
+			@addtomap = true
+			@itemid = params[:initem]
+		end
+	end
+	
+	if @addtomap
+			@item = Item.find(@itemid)
 	else
 		@item = Item.new()
 		@item.name = params[:item][:name]
