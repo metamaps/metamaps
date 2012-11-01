@@ -51,7 +51,7 @@ belongs_to :item_category
   #build a json object of everything connected to a specified node
   def network_as_json(current)
     Jbuilder.encode do |json|
-	  @items = network(self,nil)
+	  @items = network(self,nil,4)
 	  
 	    if @items.count > 1
 		  json.array!(@items.delete_if{|item| (not item.authorize_to_view(current)) || (not item.has_viewable_synapses(current))}) do |item|
