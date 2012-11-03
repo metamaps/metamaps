@@ -1,3 +1,4 @@
+<% if @map %>
 <div class="focus">
 	<div class="focusleft">
 		<p># of Topics: <%= @map.items.count %></p>
@@ -32,3 +33,7 @@
 		});
 	}
 </script>
+
+<% else %>
+  <h1><br>Shucks, there are no maps.<h1>
+<% end %>
