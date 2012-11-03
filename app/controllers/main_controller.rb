@@ -11,7 +11,7 @@ class MainController < ApplicationController
     @maps = Map.visibleToUser(@current, nil)
 	@map = @maps.sample
 	
-	@mapjson = @map.self_as_json(@current).html_safe
+	@mapjson = @map.self_as_json(@current).html_safe if @map
 	
 	respond_to do |format|
       format.html { respond_with(@map, @user) }

@@ -23,9 +23,14 @@ class SessionsController < ApplicationController
     @user = User.new
 	
 	@connor = User.find(555629996)
-	@map = Map.find(5)
+	@map = Map.find(:first, 5)
 		
-    respond_with(@user, @session, location: user_map_url(@connor,@map)) do |format| 
+    if @map
+      respond_with(@user, @session, location: user_map_url(@connor,@map)) do |format| 
+      end
+    else
+      respond_with(@user, @session, location: root_url) do |format| 
+      end
     end
   end
   
