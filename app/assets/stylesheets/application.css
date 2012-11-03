@@ -23,7 +23,7 @@ img {border:0; padding:0; margin:0; display:block; text-indent:-9999px;}
 html, body, .main, .wrapper, #container { height: 100%; }
 
 html { }
-body { background:#031924 url(background2.jpg) repeat 0 0; font-family: 'katarine-web', sans-serif; background-attachment:fixed; color:#FFF; }
+body { background:#031924 url(background2-for-repeating.jpg) repeat 0 0; font-family: 'katarine-web', sans-serif; background-attachment:fixed; color:#FFF; }
 
 h1,h2,h3,h4,h5,h6 { font-weight:normal; }
 h1 {display:block; text-align:left; font-family: "vinyl",sans-serif; }
