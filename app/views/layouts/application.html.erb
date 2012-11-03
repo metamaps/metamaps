@@ -65,7 +65,7 @@
 		</div>
 			
     <div class="footer">
-      <% unless Map.find(:first, 7).nil? %>
+      <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
         <div class="feedback"><%= link_to "Feedback", user_map_path(User.find(555629996), Map.find(7)) %></div>
       <% end %>
 	  <div class="legend">

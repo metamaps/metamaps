@@ -40,7 +40,7 @@ class UsersController < ApplicationController
 	
 	# direct them straight to the metamaps manual map. 
 	@connor = User.find(555629996)
-	@map = Map.find(:first, 5)
+    @map = Map.first(:conditions => [ "id = ?", 5])
         
     if @map
       respond_with(@user, location: user_map_url(@connor,@map)) do |format|
