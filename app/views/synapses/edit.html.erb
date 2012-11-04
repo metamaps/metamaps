@@ -1,14 +1,16 @@
 <%= form_for @synapse, url: user_synapse_url do |form| %>
   <h3>Edit Synapse</h3>
-  <% if @collection.count > 0 %>
+  <% if Item.visibleToUser(user, nil).count > 0 %>
 	<label for="node1_id">Choose First <%= @synapse.category %></label>
-	<%= select "node1_id", "node1", @collection.order("name ASC").map {|p| [ p.name, p.id ] }, { :selected => @synapse.node1_id } %>
+	<%= select "node1_id", "node1", Item.order("name ASC").visibleToUser(user, nil).map {|p| [ p.name, p.id ] }, { :selected => @synapse.node1_id } %>
   <% end %>
+  <label for="item_category">Directionality of the Connection</label>
+  <%= form.select :category, options_for_select(['none', 'both', 'from-to', 'to-from'], @synapse.category) %>
   <label for="item_desc">Describe The Connection</label>
   <%= form.text_field :desc, class: "description" %>
-  <% if @collection.count > 0 %>
+  <% if Item.visibleToUser(user, nil).count > 0 %>
 	<label for="node2_id">Choose Second <%= @synapse.category %></label>
-	<%= select "node2_id", "node2", @collection.order("name ASC").map {|p| [ p.name, p.id ] }, { :selected => @synapse.node2_id } %>
+	<%= select "node2_id", "node2", Item.order("name ASC").visibleToUser(user, nil).map {|p| [ p.name, p.id ] }, { :selected => @synapse.node2_id } %>
   <% end %>
   <label for="synapse_permission">Permission</label>
   <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @synapse.permission) %>

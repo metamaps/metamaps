@@ -2,15 +2,16 @@
 	<%= form_for Synapse.new, url: user_synapses_url(user), remote: true do |form| %>
 	  <button id="closenewsynapse" onclick="$('#new_synapse').fadeOut('fast'); $('#new_synapse')[0].reset(); return false;">close</button>
 	  <h3>Add Synapse Between Topics</h3> 
-	  <%= hidden_field_tag(:category, "Item") %>  
 	  <% if Item.visibleToUser(user, nil).count > 0 %>
-		<label for="node1_id">Choose First Item</label>
+		<label for="node1_id">Choose First Topic</label>
 		<%= select_tag :node1_id, options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil), "id", "name") %>
 	  <% end %>
+	  <label for="item_category">Directionality of the Connection</label>
+	  <%= form.select :category, options_for_select(['none', 'both', 'from-to', 'to-from']) %>
 	  <label for="item_desc">Describe The Connection</label>
 	  <%= form.text_field :desc, class: "description" %>
 	  <% if Item.visibleToUser(user, nil).count > 0 %>
-		<label for="node2_id">Choose Second Item</label>
+		<label for="node2_id">Choose Second Topic</label>
 		<%= select_tag :node2_id, options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil), "id", "name") %>
 	  <% end %>
 	  <label for="synapse_permission">Permission</label>

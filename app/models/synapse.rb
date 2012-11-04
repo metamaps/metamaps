@@ -14,6 +14,7 @@ has_many :maps, :through => :mappings
 	Jbuilder.encode do |json|			
 		@synapsedata = Hash.new
 		@synapsedata['$desc'] = self.desc
+		@synapsedata['$showDesc'] = false
 		@synapsedata['$category'] = self.category
 		@synapsedata['$userid'] = synapse.user.id
 		@synapsedata['$username'] = synapse.user.name
@@ -34,6 +35,7 @@ has_many :maps, :through => :mappings
 				
 				@synapsedata = Hash.new
 				@synapsedata['$desc'] = synapse.desc
+				@synapsedata['$showDesc'] = false
 				@synapsedata['$category'] = synapse.category
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name

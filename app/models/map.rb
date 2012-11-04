@@ -30,6 +30,7 @@ end
 				
 				@synapsedata = Hash.new
 				@synapsedata['$desc'] = synapse.desc
+				@synapsedata['$showDesc'] = false
 				@synapsedata['$category'] = synapse.category
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name

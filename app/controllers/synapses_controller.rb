@@ -54,7 +54,7 @@ class SynapsesController < ApplicationController
     @user = current_user
 	@synapse = Synapse.new()
 	@synapse.desc = params[:synapse][:desc]
-	@synapse.category = params[:category]
+	@synapse.category = params[:synapse][:category]
 	@synapse.item1 = Item.find(params[:node1_id])
 	@synapse.item2 = Item.find(params[:node2_id])
 	@synapse.permission = params[:synapse][:permission]
@@ -102,7 +102,7 @@ class SynapsesController < ApplicationController
 	@synapse = @user.synapses.find(params[:id]).authorize_to_edit(@current)
 	
 	if @synapse 
-		@items = Item.visibleToUser(@current)
+		@items = Item.visibleToUser(@current, nil)
 	elsif not @synapse
 		redirect_to root_url and return
 	end
@@ -118,6 +118,7 @@ class SynapsesController < ApplicationController
     
 	if @synapse 
 		@synapse.desc = params[:synapse][:desc]
+		@synapse.category = params[:synapse][:category]
 		@synapse.item1 = Item.find(params[:node1_id][:node1])
 		@synapse.item2 = Item.find(params[:node2_id][:node2])
 	    @synapse.permission = params[:synapse][:permission]

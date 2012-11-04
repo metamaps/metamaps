@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121029164735) do
+ActiveRecord::Schema.define(:version => 20121026000731) do
 
   create_table "item_categories", :force => true do |t|
     t.text     "name"
@@ -24,11 +24,11 @@ ActiveRecord::Schema.define(:version => 20121029164735) do
     t.text     "name"
     t.text     "desc"
     t.text     "link"
+    t.text     "permission"
     t.integer  "user_id"
     t.integer  "item_category_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
-    t.text     "permission"
   end
 
   create_table "mappings", :force => true do |t|
@@ -44,37 +44,37 @@ ActiveRecord::Schema.define(:version => 20121029164735) do
   end
 
   create_table "maps", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
     t.text     "name"
     t.text     "desc"
     t.text     "permission"
     t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "synapses", :force => true do |t|
     t.text     "desc"
     t.text     "category"
+    t.text     "weight"
+    t.text     "permission"
     t.integer  "node1_id"
     t.integer  "node2_id"
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.text     "permission"
-    t.text     "weight"
   end
 
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
+    t.string   "code",              :limit => 8
+    t.string   "joinedwithcode",    :limit => 8
     t.string   "crypted_password"
     t.string   "password_salt"
     t.string   "persistence_token"
     t.string   "perishable_token"
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
-    t.string   "code",              :limit => 8
-    t.string   "joinedwithcode",    :limit => 8
   end
 
 end

@@ -6295,12 +6295,18 @@ var EdgeHelper = {
           from = to;
           to = tmp;
         }
-        var vect = new Complex(to.x - from.x, to.y - from.y);
+		var vect = new Complex(to.x - from.x, to.y - from.y);
         vect.$scale(dim / vect.norm());
         var intermediatePoint = new Complex(to.x - vect.x, to.y - vect.y),
-            normal = new Complex(-vect.y / 2, vect.x / 2),
+            normal = new Complex(-vect.y / 2.5, vect.x / 2.5),
             v1 = intermediatePoint.add(normal), 
             v2 = intermediatePoint.$add(normal.$scale(-1));
+		
+		var vect1 = new Complex(to.x - from.x, to.y - from.y);	
+		vect1.$scale(15 / vect1.norm());
+        var toPoint = new Complex(to.x - vect1.x, to.y - vect1.y);
+		to.x = toPoint.x;
+		to.y = toPoint.y;
         
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
