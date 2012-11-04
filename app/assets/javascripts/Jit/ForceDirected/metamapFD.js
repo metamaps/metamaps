@@ -91,7 +91,7 @@ function initFD(){
 		  }
 		   
 		  //check for edge label in data  
-		  var desc = adj.getData("desc");
+		  var desc = adj.getData("desc") + ' (' + adj.getData("userid") + ',' + adj.getData("id") + ')';
 		  var showDesc = adj.getData("showDesc");
 		  if( desc != "" && showDesc ) { 
 			 //now adjust the label placement 

@@ -32,6 +32,7 @@ end
 				@synapsedata['$desc'] = synapse.desc
 				@synapsedata['$showDesc'] = false
 				@synapsedata['$category'] = synapse.category
+				@synapsedata['$id'] = synapse.id
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name
 				json.data @synapsedata

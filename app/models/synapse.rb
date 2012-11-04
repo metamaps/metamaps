@@ -16,6 +16,7 @@ has_many :maps, :through => :mappings
 		@synapsedata['$desc'] = self.desc
 		@synapsedata['$showDesc'] = false
 		@synapsedata['$category'] = self.category
+		@synapsedata['$id'] = synapse.id
 		@synapsedata['$userid'] = synapse.user.id
 		@synapsedata['$username'] = synapse.user.name
 		json.data @synapsedata
@@ -37,6 +38,7 @@ has_many :maps, :through => :mappings
 				@synapsedata['$desc'] = synapse.desc
 				@synapsedata['$showDesc'] = false
 				@synapsedata['$category'] = synapse.category
+				@synapsedata['$id'] = synapse.id
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name
 				json.data @synapsedata
