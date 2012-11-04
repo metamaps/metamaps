@@ -1,7 +1,7 @@
 <%= form_for @synapse, url: user_synapse_url do |form| %>
   <h3>Edit Synapse</h3>
   <% if Item.visibleToUser(user, nil).count > 0 %>
-	<label for="node1_id">Choose First <%= @synapse.category %></label>
+	<label for="node1_id">Choose First Topic</label>
 	<%= select "node1_id", "node1", Item.order("name ASC").visibleToUser(user, nil).map {|p| [ p.name, p.id ] }, { :selected => @synapse.node1_id } %>
   <% end %>
   <label for="item_category">Directionality of the Connection</label>
@@ -9,7 +9,7 @@
   <label for="item_desc">Describe The Connection</label>
   <%= form.text_field :desc, class: "description" %>
   <% if Item.visibleToUser(user, nil).count > 0 %>
-	<label for="node2_id">Choose Second <%= @synapse.category %></label>
+	<label for="node2_id">Choose Second Topic</label>
 	<%= select "node2_id", "node2", Item.order("name ASC").visibleToUser(user, nil).map {|p| [ p.name, p.id ] }, { :selected => @synapse.node2_id } %>
   <% end %>
   <label for="synapse_permission">Permission</label>
