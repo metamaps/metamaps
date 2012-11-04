@@ -65,6 +65,46 @@ function initFD(){
 		  }
 	  }
   });
+  //implement an edge type  
+	$jit.ForceDirected.Plot.EdgeTypes.implement({  
+	  'customEdge': {  
+		'render': function(adj, canvas) {  
+		  //get nodes cartesian coordinates 
+		  var pos = adj.nodeFrom.pos.getc(true); 
+		  var posChild = adj.nodeTo.pos.getc(true);
+		  
+		  var direction = adj.getData("category");
+		  //label placement on edges 
+		  //plot arrow edge 
+		  if (direction == "none") {
+				this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
+		  }
+		  else if (direction == "both") {
+				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, false, canvas);
+				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
+		  }
+		  else if (direction == "from-to") {
+				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, false, canvas);
+		  }
+		  else if (direction == "to-from") {
+				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
+		  }
+		   
+		  //check for edge label in data  
+		  var desc = adj.getData("desc");
+		  var showDesc = adj.getData("showDesc");
+		  if( desc != "" && showDesc ) { 
+			 //now adjust the label placement 
+			var radius = canvas.getSize(); 
+			var x = parseInt((pos.x + posChild.x - (desc.length * 5)) /2); 
+			var y = parseInt((pos.y + posChild.y) /2); 
+			canvas.getCtx().fillStyle = '#000';
+			canvas.getCtx().font = 'bold 14px arial';
+			canvas.getCtx().fillText(desc, x, y); 
+		  }
+		}  
+	  }  
+	});
   // end
   // init ForceDirected
     fd = new $jit.ForceDirected({
@@ -94,8 +134,8 @@ function initFD(){
     Edge: {
       overridable: true,
       color: '#222222',
-	  //type: 'arrow',
-      lineWidth: 0.5
+	  type: 'customEdge',
+      lineWidth: 1
     },
     //Native canvas text styling
     Label: {
@@ -148,7 +188,8 @@ function initFD(){
 			  adj.setDataset('end', {  
 				lineWidth: 0.5,  
 				color: '#222222'  
-			  });  
+			  }); 
+			  adj.setData('showDesc', false, 'current'); 
 			});  
 		  });  
 		  if(!node.selected) {  
@@ -158,7 +199,8 @@ function initFD(){
 			  adj.setDataset('end', {  
 				lineWidth: 3,  
 				color: '#FFF'  
-			  });  
+			  }); 
+			  adj.setData('showDesc', true, 'current'); 
 			});  
 		  } else {  
 			delete node.selected;  
@@ -214,7 +256,8 @@ function initFD(){
 			  adj.setDataset('end', {  
 				lineWidth: 0.4,  
 				color: '#222222'  
-			  });  
+			  }); 
+			  adj.setData('showDesc', false, 'current'); 
 			});  
 		  });  
 		  if(!node.selected) {  
@@ -225,6 +268,7 @@ function initFD(){
 				lineWidth: 3,  
 				color: '#FFF'  
 			  });  
+			  adj.setData('showDesc', true, 'current');
 			});  
 		  } else {  
 			delete node.selected;  
