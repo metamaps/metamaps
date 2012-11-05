@@ -100,7 +100,7 @@ function initFD(){
 			var y = parseInt((pos.y + posChild.y) /2); 
 			canvas.getCtx().fillStyle = '#000';
 			canvas.getCtx().font = 'bold 14px arial';
-			canvas.getCtx().fillText(desc, x, y); 
+			//canvas.getCtx().fillText(desc, x, y); 
 		  }
 		}  
 	  }  
