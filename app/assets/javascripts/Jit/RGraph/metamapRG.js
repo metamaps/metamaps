@@ -84,10 +84,10 @@ function initRG(){
 				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
 		  }
 		  else if (direction == "from-to") {
-				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
+				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, false, canvas);
 		  }
 		  else if (direction == "to-from") {
-				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, false, canvas);
+				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
 		  }
 		   
 		  //check for edge label in data  
@@ -237,7 +237,7 @@ function initRG(){
     //Number of iterations for the rg algorithm
     iterations: 200,
     //Edge length
-    levelDistance: 150,
+    levelDistance: 200,
     // Add text to the labels. This method is only triggered
     // on label creation and only for DOM labels (not native canvas ones).
     onCreateLabel: function(domElement, node){  
