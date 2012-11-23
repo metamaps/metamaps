@@ -5,7 +5,7 @@
 	<%= select "node1_id", "node1", Item.order("name ASC").visibleToUser(user, nil).map {|p| [ p.name, p.id ] }, { :selected => @synapse.node1_id } %>
   <% end %>
   <label for="item_category">Directionality of the Connection</label>
-  <%= form.select :category, options_for_select(['none', 'both', 'from-to', 'to-from'], @synapse.category) %>
+  <%= form.select :category, options_for_select(['none', 'both', 'from-to'], @synapse.category) %>
   <label for="item_desc">Describe The Connection</label>
   <%= form.text_field :desc, class: "description" %>
   <% if Item.visibleToUser(user, nil).count > 0 %>

@@ -13,9 +13,8 @@
     text-align: left;
     overflow: auto;
 	position:absolute;
-	top:50%;
+	top:200px;
 	left:10px;
-	margin-top:-150px;	
 }
 #showcard .contributor { font-size:14px; }
 

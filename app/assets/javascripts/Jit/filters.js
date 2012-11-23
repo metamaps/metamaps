@@ -74,3 +74,33 @@ function showCategory(g, category, duration) {
 		duration: duration  
 	});	
 }
+
+function hideAll(g, duration) {
+    if (duration == null) duration = 500;
+	g.graph.eachNode( function (n) {
+		  n.setData('alpha', 0, 'end');
+		  n.eachAdjacency(function(adj) {  
+		  adj.setData('alpha', 0, 'end');  
+		  });	
+	});
+	g.fx.animate({  
+		modes: ['node-property:alpha',  
+				'edge-property:alpha'],  
+		duration: duration  
+	}); 	
+}
+
+function showAll(g, duration) {
+    if (duration == null) duration = 500;
+	g.graph.eachNode( function (n) {
+		  n.setData('alpha', 1, 'end');
+		  n.eachAdjacency(function(adj) {  
+		  adj.setData('alpha', 1, 'end');  
+		  });	
+	});
+	g.fx.animate({  
+		modes: ['node-property:alpha',  
+				'edge-property:alpha'],  
+		duration: duration  
+	});	
+}

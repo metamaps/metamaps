@@ -6,7 +6,7 @@
 		<%= select_tag :node1_id, options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil), "id", "name") %>
 	  <% end %>
 	  <label for="item_category">Directionality of the Connection</label>
-	  <%= form.select :category, options_for_select(['none', 'both', 'from-to', 'to-from']) %>
+	  <%= form.select :category, options_for_select(['none', 'both', 'from-to']) %>
 	  <label for="item_desc">Describe The Connection</label>
 	  <%= form.text_field :desc, class: "description" %>
 	  <% if Item.visibleToUser(user, nil).count > 0 %>
