@@ -73,21 +73,20 @@ function initRG(){
 		  var pos = adj.nodeFrom.pos.getc(true); 
 		  var posChild = adj.nodeTo.pos.getc(true);
 		  
-		  var direction = adj.getData("category");
+		  var directionCat = adj.getData("category");
 		  //label placement on edges 
 		  //plot arrow edge 
-		  if (direction == "none") {
+		  if (directionCat == "none") {
 				this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
 		  }
-		  else if (direction == "both") {
+		  else if (directionCat == "both") {
 				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, false, canvas);
 				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
 		  }
-		  else if (direction == "from-to") {
-				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, false, canvas);
-		  }
-		  else if (direction == "to-from") {
-				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
+		  else if (directionCat == "from-to") {
+			  	var direction = adj.data.$direction;
+				var inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id);
+				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, inv, canvas);
 		  }
 		   
 		  //check for edge label in data  

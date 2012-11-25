@@ -19,6 +19,7 @@ has_many :maps, :through => :mappings
 		@synapsedata['$id'] = synapse.id
 		@synapsedata['$userid'] = synapse.user.id
 		@synapsedata['$username'] = synapse.user.name
+		@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
 		json.data @synapsedata
     end
   end
@@ -30,9 +31,9 @@ has_many :maps, :through => :mappings
 	  @items.push(self.item2)
 	  
 	  json.array!(@items) do |item|
-	      json.adjacencies item.synapses2.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node1_id))} do |json, synapse|
-				json.nodeTo synapse.node1_id
-				json.nodeFrom synapse.node2_id
+	      json.adjacencies item.synapses1.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node2_id))} do |json, synapse|
+				json.nodeTo synapse.node2_id
+				json.nodeFrom synapse.node1_id
 				
 				@synapsedata = Hash.new
 				@synapsedata['$desc'] = synapse.desc
@@ -41,6 +42,7 @@ has_many :maps, :through => :mappings
 				@synapsedata['$id'] = synapse.id
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name
+				@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
 				json.data @synapsedata
 		  end
 		  

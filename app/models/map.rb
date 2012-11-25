@@ -24,9 +24,9 @@ end
 		
 		#json.adjacencies item.synapses2.delete_if{|synapse| (not @items.include?(synapse.item1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.item1.authorize_to_view(current)) } do |json, synapse|
 		
-	      json.adjacencies item.synapses2.delete_if{|synapse| (not @items.include?(synapse.item1)) || (not synapse.authorize_to_view(current)) || (not synapse.item1.authorize_to_view(current)) } do |json, synapse|
-				json.nodeTo synapse.node1_id
-				json.nodeFrom synapse.node2_id
+	      json.adjacencies item.synapses1.delete_if{|synapse| (not @items.include?(synapse.item2)) || (not synapse.authorize_to_view(current)) || (not synapse.item2.authorize_to_view(current)) } do |json, synapse|
+				json.nodeTo synapse.node2_id
+				json.nodeFrom synapse.node1_id
 				
 				@synapsedata = Hash.new
 				@synapsedata['$desc'] = synapse.desc
@@ -35,6 +35,7 @@ end
 				@synapsedata['$id'] = synapse.id
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name
+				@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
 				json.data @synapsedata
 		  end
 		  

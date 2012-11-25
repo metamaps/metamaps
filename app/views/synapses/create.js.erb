@@ -65,10 +65,18 @@ if (map1 != null) {
 					lineWidth: 3,  
 					color: '#36acfb'
 				});
+				var d = new Array(<%= @synapse.node1_id.to_s() %>, <%= @synapse.node2_id.to_s() %>);
+				console.log('d=' + d);
 				temp.setDataset('current', {  
 					desc: '<%= @synapse.desc %>',  
-					category: '<%= @synapse.category %>'  
+					showDesc: false,
+					category: '<%= @synapse.category %>',
+				    id: '<%= @synapse.id %>',
+					userid: '<%= @synapse.user.id %>',
+					username: '<%= @synapse.user.name %>'					
 				  });
+				  temp.data.$direction = d;
+				 console.log(temp);
 				mymap.fx.plotLine(temp, mymap.canvas);
 				mymap.fx.animate({  
 					modes: ['node-property:dim','edge-property:lineWidth:color'],  

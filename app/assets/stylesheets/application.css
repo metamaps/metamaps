@@ -140,8 +140,9 @@ cursor: pointer; }
 #iconLegend ul li {clear:both; list-style-type:none; display:block; padding:3px; }
 #iconLegend ul img { width:40px; height:40px; float:left; }
 #iconLegend ul p {float:left; display: block; margin: 0; background: none; padding: 10px 4px 2px 4px;}
-#iconLegend #filters-left { float:left; }
-#iconLegend #filters-right { float:left; }
+#iconLegend #filters-one { float:left; }
+#iconLegend #filters-two { float:left; }
+#iconLegend #filters-three { float:left; }
 
 #iconLegend li.toggledOff {
   opacity: 0.4;
