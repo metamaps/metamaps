@@ -45,6 +45,10 @@ end
 		  @itemdata['$itemcatname'] = item.item_category.name
 		  @itemdata['$userid'] = item.user.id
 		  @itemdata['$username'] = item.user.name
+		  @mapping = Mapping.find_by_item_id_and_map_id(item.id,self.id)
+		  @itemdata['$xloc'] = @mapping.xloc
+		  @itemdata['$yloc'] = @mapping.yloc
+		  @itemdata['$mappingid'] = @mapping.id
 		  json.data @itemdata
 		  json.id item.id
 		  json.name item.name

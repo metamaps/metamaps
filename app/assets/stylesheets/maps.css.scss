@@ -2,6 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.saveMapLayout { 
+	margin:10px auto 5px auto;
+	width:87px;
+}
+
+
 .map { display:block; float:left; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
 
 .map .delete {position: absolute;

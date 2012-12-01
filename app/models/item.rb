@@ -32,6 +32,11 @@ belongs_to :item_category
 	return result
   end
   
+  ##### MAKE SEARCHABLE ######
+  def self.search(query)
+    self.where("(UPPER(name) LIKE UPPER(:query)", query: "%#{query}%").order(:name)
+  end
+  
   ###### JSON ######
   def self_as_json
     Jbuilder.encode do |json|

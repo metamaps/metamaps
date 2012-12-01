@@ -2,6 +2,12 @@
 	<div class="focusleft">
 		<p># of Topics: <%= @map.items.count %></p>
 		<p># of Synapses: <%= @map.synapses.count %></p>
+		<% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
+			<%= form_for @map, :url => savelayout_path(@user,@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
+				<%= form.hidden_field "coordinates", :value => "" %>
+				<%= form.submit "Save Layout", class: "saveLayout", id: "saveLayout" %>
+			<% end %>
+		<% end %>
 	</div>
 	<div class="focusmiddle">
 		<h1 class="title"><%= @map.name %> <% if (@map.permission == "commons" && authenticated?) || @map.user == user %><%= link_to "[edit]", edit_user_map_path(@user, @map) %><% end %></h1>
@@ -28,7 +34,7 @@
 	json = <%= @mapjson %>;
 	if (json.length > 0) {
 		$(document).ready(function() {
-			initFD();
+			initMAP();
 		});
 	}
 </script>

@@ -1,6 +1,6 @@
 class MapsController < ApplicationController
   
-  before_filter :require_user, only: [:new, :create, :edit, :update]
+  before_filter :require_user, only: [:new, :create, :edit, :update, :savelayout]
     
   respond_to :html, :js, :json
   
@@ -92,6 +92,25 @@ class MapsController < ApplicationController
     respond_with(@user, location: user_map_path(@user, @map)) do |format|
     end
 	
+  end
+  
+  # PUT /users/:user_id/maps/:id/savelayout
+  def savelayout
+	@user = User.find(params[:user_id])
+  	
+	@map = @user.maps.find(params[:id])
+	
+	if params[:map][:coordinates]
+		@all = params[:map][:coordinates]
+		@all = @all.split(',')
+		@all.each do |item|
+			item = item.split('/')
+			@mapping = Mapping.find(item[0])
+			@mapping.xloc = item[1]
+			@mapping.yloc = item[2]
+			@mapping.save
+		end
+	end	
   end
   
   # DELETE /users/:user_id/maps/:id

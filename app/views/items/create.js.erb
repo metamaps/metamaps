@@ -36,6 +36,23 @@ if (map2 != null) {
 				duration: 400  
 			  });
 		 }
+		 if (map != null) {
+			map.graph.addNode(newnode);
+			var temp = map.graph.getNode('<%= @item.id %>');
+			temp.setData('dim', 1, 'start');
+			temp.setData('dim', 40, 'end');
+			temp.setData('xloc',0);
+			temp.setData('yloc',0);
+			temp.setData('mappingid', '<%= @mapping.id %>');
+			temp.setPos(new $jit.Complex(0, 0), 'current');
+			temp.setPos(new $jit.Complex(0, 0), 'start');
+			temp.setPos(new $jit.Complex(0, 0), 'end');
+			map.fx.plotNode(temp, map.canvas);
+			map.fx.animate({  
+				modes: ['node-property:dim'],  
+				duration: 400  
+			  });
+		 }
 		 else {
 			json = newnode;
 			initFD();

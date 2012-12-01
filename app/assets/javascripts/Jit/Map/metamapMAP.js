@@ -1,4 +1,4 @@
-var labelType, useGradients, nativeTextSupport, animate, json, rg;
+var labelType, useGradients, nativeTextSupport, animate, json, map;
 
 (function() {
   var ua = navigator.userAgent,
@@ -46,9 +46,9 @@ imgArray['Trajectory'] = new Image(); imgArray['Trajectory'].src = '/assets/traj
 imgArray['Action'] = new Image(); imgArray['Action'].src = '/assets/action.png';
 imgArray['Activity'] = new Image(); imgArray['Activity'].src = '/assets/activity.png';
 
-function initRG(){
+function initMAP(){
   // init custom node type 
-  $jit.RGraph.Plot.NodeTypes.implement({  
+  $jit.ForceDirected.Plot.NodeTypes.implement({  
 	  'customNode': {  
 		  'render': function (node, canvas) {		  			  
 			  var pos = node.pos.getc(true),
@@ -65,8 +65,8 @@ function initRG(){
 		  }
 	  }
   });
-    //implement an edge type  
-	$jit.RGraph.Plot.EdgeTypes.implement({  
+  //implement an edge type  
+	$jit.ForceDirected.Plot.EdgeTypes.implement({  
 	  'customEdge': {  
 		'render': function(adj, canvas) {  
 		  //get nodes cartesian coordinates 
@@ -105,18 +105,10 @@ function initRG(){
 	  }  
 	});
   // end
-  // init RGraph
-    rg = new $jit.RGraph({
+  // init ForceDirected
+    map = new $jit.ForceDirected({
     //id of the visualization container
     injectInto: 'infovis',
-	//Optional: create a background canvas that plots  
-    //concentric circles.  
-    background: {  
-      CanvasStyles: {  
-        strokeStyle: '#333',
-		lineWidth: 1.5 
-      }  
-    },
     //Enable zooming and panning
     //by scrolling and DnD
     Navigation: {
@@ -168,16 +160,16 @@ function initRG(){
 	  type: 'HTML',
       //Change cursor style when hovering a node
       onMouseEnter: function() {
-        //rg.canvas.getElement().style.cursor = 'move';
+        //fd.canvas.getElement().style.cursor = 'move';
       },
       onMouseLeave: function() {
-        //rg.canvas.getElement().style.cursor = '';
+        //fd.canvas.getElement().style.cursor = '';
       },
       //Update node positions when dragged
       onDragMove: function(node, eventInfo, e) {
           var pos = eventInfo.getPos();
           node.pos.setc(pos.x, pos.y);
-          rg.plot();
+          map.plot();
       },
       //Implement the same handler for touchscreens
       onTouchMove: function(node, eventInfo, e) {
@@ -188,13 +180,13 @@ function initRG(){
       onClick: function(node) {
         if(!node) return;
 		//set final styles  
-		  rg.graph.eachNode(function(n) {  
+		  map.graph.eachNode(function(n) {  
 			if(n.id != node.id) delete n.selected;  
 			n.setData('dim', 25, 'end');  
 			n.eachAdjacency(function(adj) {  
 			  adj.setDataset('end', {  
-				lineWidth: 1,  
-				color: '#222222'
+				lineWidth: 0.5,  
+				color: '#222222'  
 			  }); 
 			  adj.setData('showDesc', false, 'current'); 
 			});  
@@ -213,7 +205,7 @@ function initRG(){
 			delete node.selected;  
 		  }  
 		  //trigger animation to final styles  
-		  rg.fx.animate({  
+		  map.fx.animate({  
 			modes: ['node-property:dim',  
 					'edge-property:lineWidth:color'],  
 			duration: 500  
@@ -234,7 +226,7 @@ function initRG(){
 		$("#showcard .scroll").mCustomScrollbar();
       }
     },
-    //Number of iterations for the rg algorithm
+    //Number of iterations for the FD algorithm
     iterations: 200,
     //Edge length
     levelDistance: 200,
@@ -243,25 +235,64 @@ function initRG(){
     onCreateLabel: function(domElement, node){  
 		// Create a 'name' and 'close' buttons and add them  
 		// to the main node label  
-			domElement.innerHTML = '<div class="label">' + node.name + '</div>';  
-			domElement.onclick = function(){  
-				rg.onClick(node.id, {  
-					onComplete: function() {  
-						var html = 
-						  '<p class="type">' + node.getData("itemcatname") + '</p>' + 
-						   '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-						   '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
-						   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
-						   '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
-						   '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
-				
-						//append connections information
-						$jit.id('showcard').innerHTML = '<div class="item" id="item_' + node.id + '"></div>';
-						$jit.id('item_' + node.id).innerHTML = html;
-						$("#showcard .scroll").mCustomScrollbar();
-					}  
-				});  
-			}  
+		var nameContainer = document.createElement('span'),  
+			style = nameContainer.style;  
+		nameContainer.className = 'name';  
+		nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
+		domElement.appendChild(nameContainer);  
+		style.fontSize = "0.9em";  
+		style.color = "#222222";  
+		//Toggle a node selection when clicking  
+		//its name. This is done by animating some  
+		//node styles like its dimension and the color  
+		//and lineWidth of its adjacencies.  
+		nameContainer.onclick = function() {  
+		  //set final styles  
+		  map.graph.eachNode(function(n) {  
+			if(n.id != node.id) delete n.selected;  
+			n.setData('dim', 25, 'end');  
+			n.eachAdjacency(function(adj) {  
+			  adj.setDataset('end', {  
+				lineWidth: 0.4,  
+				color: '#222222'  
+			  }); 
+			  adj.setData('showDesc', false, 'current'); 
+			});  
+		  });  
+		  if(!node.selected) {  
+			node.selected = true;  
+			node.setData('dim', 35, 'end');  
+			node.eachAdjacency(function(adj) {  
+			  adj.setDataset('end', {  
+				lineWidth: 3,  
+				color: '#FFF'  
+			  });  
+			  adj.setData('showDesc', true, 'current');
+			});  
+		  } else {  
+			delete node.selected;  
+		  }  
+		  //trigger animation to final styles  
+		  map.fx.animate({  
+			modes: ['node-property:dim',  
+					'edge-property:lineWidth:color'],  
+			duration: 500  
+		  });  
+		  // Build the right column relations list.  
+		  // This is done by traversing the clicked node connections.  
+		   var html = 
+          '<p class="type">' + node.getData("itemcatname") + '</p>' + 
+           '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
+           '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
+           '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
+           '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
+
+        //append connections information
+        $jit.id('showcard').innerHTML = '<div class="item" id="item_' + node.id + '"></div>';
+        $jit.id('item_' + node.id).innerHTML = html;
+		$("#showcard .scroll").mCustomScrollbar();  
+		};  
 	  },  
     // Change node styles when DOM labels are placed
     // or moved.
@@ -277,17 +308,35 @@ function initRG(){
     }
   });
   // load JSON data.
-  rg.loadJSON(json);
+  map.loadJSON(json);
   // compute positions incrementally and animate.
-  //trigger small animation  
-  rg.graph.eachNode(function(n) {  
+  map.graph.eachNode(function(n) {  
 	var pos = n.getPos();  
-	pos.setc(-200, -200);  
-  });  
-  rg.compute('end');  
-  rg.fx.animate({  
-	modes:['polar'],  
-	duration: 2000  
+	pos.setc(0, 0); 
+	var newPos = new $jit.Complex(); 
+	newPos.x = n.data.$xloc; 
+	newPos.y = n.data.$yloc; 
+	n.setPos(newPos, 'end');
   });
+
+	$(document).ready(function() {
+		var coor = "";
+		$("#saveLayout").click(function(event) {
+		  event.preventDefault();
+		  coor = "";
+		  map.graph.eachNode(function(n) {
+			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
+		  });
+		  coor = coor.slice(0, -1);
+		  $('#map_coordinates').val(coor);
+		  $('#saveMapLayout').submit();
+		});
+		
+        map.animate({
+        modes: ['linear'],
+        transition: $jit.Trans.Quad.easeInOut,
+        duration: 2500
+        });
+ 	});
   // end
 }

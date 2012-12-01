@@ -69,18 +69,21 @@ class ItemsController < ApplicationController
 		@item.save
     end		
 	
+	@mapping = nil
 	if params[:item][:map]
 		@mapping = Mapping.new()
 		@mapping.category = "Item"
 		@mapping.user = @user
 		@mapping.map = Map.find(params[:item][:map])
 		@mapping.item = @item
+		@mapping.xloc = 0
+		@mapping.yloc = 0
 		@mapping.save
 	end
     
     respond_to do |format|
       format.html { respond_with(@user, location: user_item_url(@user, @item)) }
-      format.js { respond_with(@item) }
+      format.js { respond_with(@item, @mapping) }
     end
     
   end
