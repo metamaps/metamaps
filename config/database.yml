@@ -9,6 +9,7 @@ development:
   username: postgres
   password: "3112"
 
+# staging environment
 production:
   min_messages: WARNING
   adapter: postgresql
