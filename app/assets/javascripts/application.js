@@ -219,6 +219,26 @@
 			}
 		}
 	});
+	
+	// this is to save the layout of maps
+	var coor = "";
+	$("#saveLayout").click(function(event) {
+	  event.preventDefault();
+	  coor = "";
+	  if (map != null) {
+		  map.graph.eachNode(function(n) {
+			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
+		  });
+	  }
+	  else if (fd != null) {
+		  fd.graph.eachNode(function(n) {
+			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
+		  });
+	  }
+	  coor = coor.slice(0, -1);
+	  $('#map_coordinates').val(coor);
+	  $('#saveMapLayout').submit();
+	});
 });
  
  

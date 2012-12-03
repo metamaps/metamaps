@@ -320,18 +320,6 @@ function initMAP(){
   });
 
 	$(document).ready(function() {
-		var coor = "";
-		$("#saveLayout").click(function(event) {
-		  event.preventDefault();
-		  coor = "";
-		  map.graph.eachNode(function(n) {
-			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
-		  });
-		  coor = coor.slice(0, -1);
-		  $('#map_coordinates').val(coor);
-		  $('#saveMapLayout').submit();
-		});
-		
         map.animate({
         modes: ['linear'],
         transition: $jit.Trans.Quad.easeInOut,

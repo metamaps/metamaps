@@ -34,7 +34,11 @@
 	json = <%= @mapjson %>;
 	if (json.length > 0) {
 		$(document).ready(function() {
-			initMAP();
+			<% if (@map.arranged) %>
+				initMAP();
+			<% else %>
+				initFD();
+			<% end %>
 		});
 	}
 </script>

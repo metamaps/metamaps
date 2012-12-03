@@ -47,7 +47,7 @@ class MapsController < ApplicationController
     @user = current_user
 	@map = Map.create(params[:map])
     @map.user = @user    
-	
+	@map.arranged = false
 	@map.save   
     
     respond_to do |format|
@@ -110,6 +110,8 @@ class MapsController < ApplicationController
 			@mapping.yloc = item[2]
 			@mapping.save
 		end
+		@map.arranged = true
+		@map.save
 	end	
   end
   
@@ -127,7 +129,8 @@ class MapsController < ApplicationController
 	
 	@map.delete
 	
-	respond_with(location: user_maps_path(@user)) do |format|
+	respond_to do |format|
+      format.js
     end
   end
   

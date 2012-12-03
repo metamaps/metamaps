@@ -6,13 +6,18 @@ map2 = document.getElementById('container');
 
 if (map2 != null) {
 	    var newnode = <%= @item.self_as_json.html_safe %>;
-		console.log(newnode);
+		
 		
 		if (fd != null) {
 			fd.graph.addNode(newnode);
 			var temp = fd.graph.getNode('<%= @item.id %>');
 			temp.setData('dim', 1, 'start');
 			temp.setData('dim', 40, 'end');
+			<% unless (@mapping.nil?) %>
+				temp.setData('xloc',0);
+				temp.setData('yloc',0);
+				temp.setData('mappingid', '<%= @mapping.id %>');
+			<% end %>
 			temp.setPos(new $jit.Complex(0, 0), 'current');
 			temp.setPos(new $jit.Complex(0, 0), 'start');
 			temp.setPos(new $jit.Complex(0, 0), 'end');
@@ -36,7 +41,7 @@ if (map2 != null) {
 				duration: 400  
 			  });
 		 }
-		 if (map != null) {
+		 else if (map != null) {
 			map.graph.addNode(newnode);
 			var temp = map.graph.getNode('<%= @item.id %>');
 			temp.setData('dim', 1, 'start');
@@ -57,7 +62,8 @@ if (map2 != null) {
 			json = newnode;
 			initFD();
 		 }
-		 // add the new node to the synapse select list
+		 console.log(temp);
+		 // add the new node to the synapse select lists
 		 $("#node1_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
 		 $("#node2_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
 
