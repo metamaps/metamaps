@@ -146,6 +146,9 @@
 					else if (rg != null) {
 						  showAll(rg);
 					}
+					else if (map != null) {
+						  showAll(map);
+					}
 				}
 				// this means that we are on a card view
 				else {
@@ -165,6 +168,9 @@
 					}
 					else if (rg != null) {
 						  hideAll(rg);
+					}
+					else if (map != null) {
+						  hideAll(map);
 					}
 				}
 				// this means that we are on a card view
@@ -188,6 +194,9 @@
 				  else if (rg != null) {
 						switchVisible(rg, category);
 				  } 
+				  else if (map != null) {
+						switchVisible(map, category);
+				  }
 			}
 			// this means that we are on a card view
 			else {	
