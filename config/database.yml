@@ -6,8 +6,6 @@ development:
   encoding: unicode
   database: metamap002_development
   pool: 5
-  username: postgres
-  password: "3112"
 
 production:
   min_messages: WARNING
