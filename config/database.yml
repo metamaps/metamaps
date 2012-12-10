@@ -1,32 +1,21 @@
 development:
   min_messages: WARNING
   adapter: postgresql
-  host: ec2-54-243-188-58.compute-1.amazonaws.com
-  port: 5442
+  host: 127.0.0.1
+  port: 5432
   encoding: unicode
-  database: da81fvorvn5pp9
+  database: metamap002_development
   pool: 5
-  username: yolhqgtlivenrk
-  password: "oi_EAZwbXboYjqB_9tWPh2x5YS"
-  
-test:
-  min_messages: WARNING
-  adapter: postgresql
-  host: ec2-54-243-188-58.compute-1.amazonaws.com
-  port: 5442
-  encoding: unicode
-  database: da81fvorvn5pp9
-  pool: 5
-  username: yolhqgtlivenrk
-  password: "oi_EAZwbXboYjqB_9tWPh2x5YS"
+  username: postgres
+  password: "3112"
 
 production:
   min_messages: WARNING
   adapter: postgresql
-  host: ec2-54-243-188-58.compute-1.amazonaws.com
-  port: 5442
+  host: ec2-107-21-107-194.compute-1.amazonaws.com
+  port: 5432
   encoding: unicode
-  database: da81fvorvn5pp9
+  database: ddcrn2lgphjk9k
   pool: 5
-  username: yolhqgtlivenrk
-  password: "oi_EAZwbXboYjqB_9tWPh2x5YS"
+  username: qqpckkahytovwv
+  password: "njeP6cMA8EjM9ukHk9s3ReOdy7"
