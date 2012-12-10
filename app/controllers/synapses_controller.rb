@@ -89,7 +89,7 @@ class SynapsesController < ApplicationController
     
     respond_to do |format|
       format.html { respond_with(@user, location: user_synapse_url(@user, @synapse)) }
-      format.js { respond_with(@synapse) }
+      format.js { respond_with(@synapse, @mapping1, @mapping2) }
     end
     
   end
