@@ -18,7 +18,7 @@ if (map1 != null) {
 			mymap = map;
 		}
 		 
-		if (mymap == fd || mymap == rg || mymap == map) {
+		if (mymap == fd || mymap == rg || mymap = map) {
 				temp1 = mymap.graph.getNode(<%= @synapse.item1.id %>);
 				if (temp1 == null) {
 					newnode = <%= @synapse.item1.self_as_json.html_safe %>;
@@ -36,11 +36,6 @@ if (map1 != null) {
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
 					}
-					<% unless (@mapping1.nil?) %>
-						temp.setData('xloc',0);
-						temp.setData('yloc',0);
-						temp.setData('mappingid', '<%= @mapping1.id %>');
-					<% end %>
 					mymap.fx.plotNode(temp, mymap.canvas);
 					temp1 = mymap.graph.getNode(<%= @synapse.item1.id %>);
 				}
@@ -61,11 +56,6 @@ if (map1 != null) {
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
 					}
-					<% unless (@mapping2.nil?) %>
-						temp.setData('xloc',0);
-						temp.setData('yloc',0);
-						temp.setData('mappingid', '<%= @mapping2.id %>');
-					<% end %>
 					mymap.fx.plotNode(temp, mymap.canvas);
 					temp2 = mymap.graph.getNode(<%= @synapse.item2.id %>);
 				}
