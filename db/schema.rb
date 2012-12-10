@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121026000731) do
+ActiveRecord::Schema.define(:version => 20121203225613) do
 
   create_table "item_categories", :force => true do |t|
     t.text     "name"
@@ -45,12 +45,12 @@ ActiveRecord::Schema.define(:version => 20121026000731) do
 
   create_table "maps", :force => true do |t|
     t.text     "name"
-    t.boolean  "arranged"
     t.text     "desc"
     t.text     "permission"
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.boolean  "arranged"
   end
 
   create_table "synapses", :force => true do |t|
