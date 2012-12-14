@@ -13,9 +13,7 @@
 //= require jquery
 //= require jquery-ui
 //= require autocomplete-rails-uncompressed
-//= require ui/jquery.ui.autocomplete.html.js
 //= require jquery_ujs
-//= require metamaps_pack
 //= require_tree .
 
 
