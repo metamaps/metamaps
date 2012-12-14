@@ -6,16 +6,27 @@ class MainController < ApplicationController
   respond_to :html, :js, :json
   
   #homepage pick a random map and show it
-  def samplemap	
-	@current = current_user
-    @maps = Map.visibleToUser(@current, nil)
-	@map = @maps.sample
+  def console	
 	
-	@mapjson = @map.self_as_json(@current).html_safe if @map
-	
-	respond_to do |format|
-      format.html { respond_with(@map, @user) }
-      format.json { respond_with(@mapjson) }
+    @current = current_user
+    
+    if authenticated? 
+      @items = all_as_json(@current, @current).html_safe
+     
+      respond_to do |format|
+        format.html { respond_with(@current) }
+        format.json { respond_with(@items) }
+      end
+    else 
+      @maps = Map.visibleToUser(@current, nil)
+      @map = @maps.sample
+    
+      @mapjson = @map.self_as_json(@current).html_safe if @map
+    
+      respond_to do |format|
+        format.html { respond_with(@map) }
+        format.json { respond_with(@mapjson) }
+      end
     end
   end
   

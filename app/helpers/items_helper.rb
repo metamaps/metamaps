@@ -68,11 +68,18 @@ module ItemsHelper
     end
   end
   
-  def all_as_json(current)
+  def all_as_json(current, user)
+  
+    # current is current user
+    
     Jbuilder.encode do |json|
-
-	  @items = Item.visibleToUser(current, nil)
-	  @synapses = Synapse.visibleToUser(current, nil)
+    if user.nil?
+      @items = Item.visibleToUser(current, nil) 
+	    @synapses = Synapse.visibleToUser(current, nil)
+    else
+      @items = Item.visibleToUser(current, user) 
+	    @synapses = Synapse.visibleToUser(current, user)
+    end
 	  
 	  json.array!(@items) do |item|
 	      json.adjacencies item.synapses2.delete_if{|synapse| (not @items.include?(Item.find_by_id(synapse.node1_id))) || (not @synapses.include?(synapse))} do |json, synapse|

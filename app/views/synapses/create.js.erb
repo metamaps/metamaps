@@ -6,61 +6,51 @@ map1 = document.getElementById('container');
 
 if (map1 != null) {
 		
-		var mymap, newnode, temp1, temp2, temp;	
-		if (fd != null) {
-			mymap = fd;
-		}
-		else if (rg != null) {
-			mymap = rg;
-		}
-		
-		else if (map != null) {
-			mymap = map;
-		}
+		var newnode, temp1, temp2, temp;	
 		 
-		if (mymap == fd || mymap == rg || mymap = map) {
-				temp1 = mymap.graph.getNode(<%= @synapse.item1.id %>);
+		if ( console != null) {
+				temp1 = console.graph.getNode(<%= @synapse.item1.id %>);
 				if (temp1 == null) {
 					newnode = <%= @synapse.item1.self_as_json.html_safe %>;
-					mymap.graph.addNode(newnode);
-					temp = mymap.graph.getNode('<%= @synapse.item1.id %>');
+					console.graph.addNode(newnode);
+					temp = console.graph.getNode('<%= @synapse.item1.id %>');
 					temp.setData('dim', 1, 'start');
 					temp.setData('dim', 40, 'end');
-					if (mymap == fd) {
+					if (gType == "arranged" || gType == "chaotic") {
 						temp.setPos(new $jit.Complex(0, 0), 'current');
 						temp.setPos(new $jit.Complex(0, 0), 'start');
 						temp.setPos(new $jit.Complex(0, 0), 'end');
 					}
-					else if (mymap == rg) {
+					else if (gType == "centered") {
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'current');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
 					}
-					mymap.fx.plotNode(temp, mymap.canvas);
-					temp1 = mymap.graph.getNode(<%= @synapse.item1.id %>);
+					console.fx.plotNode(temp, console.canvas);
+					temp1 = console.graph.getNode(<%= @synapse.item1.id %>);
 				}
-				temp2 = mymap.graph.getNode(<%= @synapse.item2.id %>);
+				temp2 = console.graph.getNode(<%= @synapse.item2.id %>);
 				if (temp2 == null) {
 					newnode = <%= @synapse.item2.self_as_json.html_safe %>;
-					mymap.graph.addNode(newnode);
-					temp = mymap.graph.getNode('<%= @synapse.item2.id %>');
+					console.graph.addNode(newnode);
+					temp = console.graph.getNode('<%= @synapse.item2.id %>');
 					temp.setData('dim', 1, 'start');
 					temp.setData('dim', 40, 'end');
-					if (mymap == fd) {
+					if (gType == "arranged" || gType == "chaotic") {
 						temp.setPos(new $jit.Complex(0, 0), 'current');
 						temp.setPos(new $jit.Complex(0, 0), 'start');
 						temp.setPos(new $jit.Complex(0, 0), 'end');
 					}
-					else if (mymap == rg) {
+					else if (gType == "centered") {
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'current');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
 					}
-					mymap.fx.plotNode(temp, mymap.canvas);
-					temp2 = mymap.graph.getNode(<%= @synapse.item2.id %>);
+					console.fx.plotNode(temp, console.canvas);
+					temp2 = console.graph.getNode(<%= @synapse.item2.id %>);
 				}
-				mymap.graph.addAdjacence(temp1, temp2, {});
-				temp = mymap.graph.getAdjacence(temp1.id, temp2.id);
+				console.graph.addAdjacence(temp1, temp2, {});
+				temp = console.graph.getAdjacence(temp1.id, temp2.id);
 				temp.setDataset('start', {  
 					lineWidth: 0.4,  
 					color: '#d1d1d1'  
@@ -70,25 +60,23 @@ if (map1 != null) {
 					color: '#36acfb'
 				});
 				var d = new Array(<%= @synapse.node1_id.to_s() %>, <%= @synapse.node2_id.to_s() %>);
-				console.log('d=' + d);
 				temp.setDataset('current', {  
 					desc: '<%= @synapse.desc %>',  
 					showDesc: false,
 					category: '<%= @synapse.category %>',
-				    id: '<%= @synapse.id %>',
+				  id: '<%= @synapse.id %>',
 					userid: '<%= @synapse.user.id %>',
 					username: '<%= @synapse.user.name %>'					
 				  });
 				  temp.data.$direction = d;
-				 console.log(temp);
-				mymap.fx.plotLine(temp, mymap.canvas);
-				mymap.fx.animate({  
+				console.fx.plotLine(temp, console.canvas);
+				console.fx.animate({  
 					modes: ['node-property:dim','edge-property:lineWidth:color'],  
 					duration: 400  
 				  });
 		}
 		else {
 			json = <%= @synapse.selfplusnodes_as_json.html_safe %>
-			initFD();
+			initialize("chaotic");
 		}
 }

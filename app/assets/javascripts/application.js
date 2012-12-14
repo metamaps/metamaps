@@ -156,19 +156,10 @@
 			if (switchAll == "showAll") {
 				// this means that we are on a map view		
 				if (obj != null) {
-					if (fd != null) {
-						  showAll(fd);
-					}
-					else if (rg != null) {
-						  showAll(rg);
-					}
-					else if (map != null) {
-						  showAll(map);
-					}
+					showAll();
 				}
 				// this means that we are on a card view
 				else {
-					console.log('rightone');
 					$('.item').fadeIn('slow');
 				}
 				$('.legend ul li').not('#hideAll, #showAll').removeClass('toggledOff');
@@ -179,15 +170,7 @@
 			else if (switchAll == "hideAll") {
 				// this means that we are on a map view		
 				if (obj != null) {
-					if (fd != null) {
-						  hideAll(fd);
-					}
-					else if (rg != null) {
-						  hideAll(rg);
-					}
-					else if (map != null) {
-						  hideAll(map);
-					}
+					hideAll();
 				}
 				// this means that we are on a card view
 				else {
@@ -204,15 +187,7 @@
 			
 			// this means that we are on a map view		
 			if (obj != null) {		  
-				  if (fd != null) {
-						switchVisible(fd, category);
-				  }
-				  else if (rg != null) {
-						switchVisible(rg, category);
-				  } 
-				  else if (map != null) {
-						switchVisible(map, category);
-				  }
+				  switchVisible(category);
 			}
 			// this means that we are on a card view
 			else {	
@@ -250,19 +225,14 @@
 	$("#saveLayout").click(function(event) {
 	  event.preventDefault();
 	  coor = "";
-	  if (map != null) {
-		  map.graph.eachNode(function(n) {
+	  if (gType == "arranged" || gType == "chaotic") {
+		  console.graph.eachNode(function(n) {
 			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
 		  });
+		  coor = coor.slice(0, -1);
+		  $('#map_coordinates').val(coor);
+		  $('#saveMapLayout').submit();
 	  }
-	  else if (fd != null) {
-		  fd.graph.eachNode(function(n) {
-			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
-		  });
-	  }
-	  coor = coor.slice(0, -1);
-	  $('#map_coordinates').val(coor);
-	  $('#saveMapLayout').submit();
 	});
 });
  

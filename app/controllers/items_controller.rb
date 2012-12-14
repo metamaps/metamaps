@@ -9,9 +9,9 @@ class ItemsController < ApplicationController
   
   # GET /users/:user_id/items
   def index
-	@user = User.find(params[:user_id])
+    @user = User.find(params[:user_id])
   	
-	@current = current_user
+    @current = current_user
     @items = Item.visibleToUser(@current, @user)
      
     respond_with(@user,@items)
