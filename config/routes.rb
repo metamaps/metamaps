@@ -11,10 +11,14 @@ ISSAD::Application.routes.draw do
   
   resource :session
   
+  resources :items do
+    get :autocomplete_item_name, :on => :collection
+  end
+  
   resources :users do
-	resources :items
+	  resources :items
     resources :synapses
-	resources :maps
+	  resources :maps
   end
   
   # The priority is based upon order of creation:

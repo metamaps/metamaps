@@ -12,7 +12,10 @@
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
         <div class="headertop">
-			<h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1>&nbsp;beta
+			<h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1><div id="beta">beta</div>
+      <%= form_for Item.new, :html => { :class => "find_item", :id => "find_item" } do |f| %>
+        <%= f.autocomplete_field :name, autocomplete_item_name_items_path, :placeholder => "Search for topics..." %>
+      <% end %>
 			<% unless authenticated? %>
 				<ul id="menus">
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>

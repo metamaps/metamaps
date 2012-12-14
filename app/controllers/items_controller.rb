@@ -4,6 +4,8 @@ class ItemsController < ApplicationController
     
   respond_to :html, :js, :json
   
+  autocomplete :item, :name, :full => true, :extra_data => [:user_id]
+  
   # GET /users/:user_id/items
   def index
 	@user = User.find(params[:user_id])

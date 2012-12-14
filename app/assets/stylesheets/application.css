@@ -13,6 +13,7 @@
  *= require base
  *= require ForceDirected
  *= require jquery.mCustomScrollbar
+ *= require jquery-ui
 */
 
 /* clear styles */
@@ -57,6 +58,15 @@ input[type="submit"] { margin-top:5px; }
 .headertop { display:block; position:fixed; top:0; left:0; z-index:10; height:38px; width:100%; min-width:622px; background: url(topbg2.png) repeat-x top left; }
 #mainTitle { float: left; }
 #mainTitle a { color:#FFF; font-family: "vinyl",sans-serif; font-style: italic; text-transform:uppercase; font-weight: 400;}
+#beta { float:left; margin-left: 7px; }
+#find_item { position:absolute; top:7px; left:50%; display: block; width: 300px; margin-left:-150px; }
+#find_item input { 
+	width: 280px;
+	border-radius: 10px;
+	height: 20px;
+	padding: 0 10px;
+	outline: none; 
+	}
 .headertop ul { display:block; float: right; }
 .headertop ul li {display:block; float:right; margin:10px 5px 0 5px; }
 .headertop ul li a { color:#FFF; }

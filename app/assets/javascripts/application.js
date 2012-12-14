@@ -11,12 +11,30 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery-ui
+//= require autocomplete-rails-uncompressed
+//= require ui/jquery.ui.autocomplete.html.js
 //= require jquery_ujs
+//= require metamaps_pack
 //= require_tree .
 
 
  $(document).ready(function() {
-	 
+   
+   $('#find_item #item_name').bind('railsAutocomplete.select', function(event, data){
+      /* Do something here */
+      if (data.item.user_id != undefined && data.item.id != undefined) {
+        window.open("/users/" + data.item.user_id + "/items/" + data.item.id)
+      }
+      else if (data.item.value == "no existing match"){
+        $('#find_item #item_name').val('');
+      }
+    });
+    
+    $('#find_item').bind('submit', function(event, data){
+      event.preventDefault();
+    });
+
 	$(".focus .desc").mCustomScrollbar(); 
 	$(".scroll").mCustomScrollbar();
 	
