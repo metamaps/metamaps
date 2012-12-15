@@ -20,8 +20,6 @@
   <div id="center-container">
     <div id="infovis"></div>    
   </div>
-  <div id="showcard">
-  </div>
 </div>
 <div class="clearfloat"></div>
 
@@ -30,14 +28,35 @@
 	if (json.length > 0) {
 		$(document).ready(function() {
 			<% if (@map.arranged) %>
-				initMAP();
+				initialize("arranged");
 			<% else %>
-				initFD();
+				initialize("chaotic");
 			<% end %>
 		});
 		
 	}
 </script>
+
+<% elsif @items %>
+<div class="maps" id="container">
+  <div id="center-container">
+    <div id="infovis"></div>    
+  </div>
+</div>
+<div class="clearfloat"></div>
+<% if authenticated? %>
+	<%= render :partial => 'items/new' %>
+	<%= render :partial => 'synapses/new' %>
+<% end %>
+<script>
+	json = <%= @items %>;
+	if (json.length > 0) {
+		$(document).ready(function() {
+				initialize("chaotic");
+		});
+	}
+</script>
+
 
 <% else %>
   <h1><br>Shucks, there are no maps.<h1>

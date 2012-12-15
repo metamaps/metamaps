@@ -6,15 +6,12 @@
     color:#444;
 }
 
-#showcard{
+#showcard {
     width:auto;
 	height:auto;
     color:#FFF;
     text-align: left;
     overflow: auto;
-	position:absolute;
-	top:200px;
-	left:10px;
 }
 #showcard .contributor { font-size:14px; }
 
@@ -28,21 +25,4 @@
     height:100%;
     margin:0;
     overflow:hidden;
-}
-
-/*TOOLTIPS*/
-.tip {
-    color: #111;
-    width: 139px;
-    background-color: white;
-    border:1px solid #ccc;
-    -moz-box-shadow:#555 2px 2px 8px;
-    -webkit-box-shadow:#555 2px 2px 8px;
-    -o-box-shadow:#555 2px 2px 8px;
-    box-shadow:#555 2px 2px 8px;
-    opacity:0.9;
-    filter:alpha(opacity=90);
-    font-size:12px;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    padding:7px;
 }

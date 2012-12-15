@@ -11,7 +11,7 @@
 <body>
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
-        <div class="headertop">
+    <div class="headertop">
 			<h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1><div id="beta">beta</div>
       <%= form_for Item.new, :html => { :class => "find_item", :id => "find_item" } do |f| %>
         <%= f.autocomplete_field :name, autocomplete_item_name_items_path, :placeholder => "Search for topics..." %>
@@ -62,12 +62,13 @@
 				</ul>
 			<% end %>
 		</div>
-		<div class="clearfloat"></div>
+		<div class="clearfloat"></div> 
+    
 		<div class="wrapper" id="wrapper">
 			<%= yield %>
 		</div>
 			
-    <div class="footer">
+     <div class="footer">
       <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
         <div class="feedback"><%= link_to "Feedback", user_map_path(User.find(555629996), Map.find(7)) %></div>
       <% end %>

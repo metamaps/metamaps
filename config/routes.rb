@@ -1,6 +1,6 @@
 ISSAD::Application.routes.draw do
 
-  root to: 'main#samplemap', via: :get
+  root to: 'main#console', via: :get
   
   match 'metamap', to: 'main#metamap', via: :get, as: :metamap
   match 'maps', to: 'main#allmaps', via: :get, as: :allmaps

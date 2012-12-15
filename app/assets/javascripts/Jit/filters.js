@@ -32,18 +32,18 @@ categoryVisible['Trajectory'] = true;
 categoryVisible['Action'] = true; 
 categoryVisible['Activity'] = true; 
 
-function switchVisible(g, category, duration) {
+function switchVisible(category, duration) {
 	if (categoryVisible[category] == true) {
-		hideCategory(g, category, duration);
+		hideCategory(category, duration);
 	}
 	else if (categoryVisible[category] == false) {
-		showCategory(g, category, duration);
+		showCategory(category, duration);
 	}
 }
 
-function hideCategory(g, category, duration) {
+function hideCategory(category, duration) {
     if (duration == null) duration = 500;
-	g.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		if (n.getData('itemcatname') == category) {
 			n.setData('alpha', 0, 'end');
 			n.eachAdjacency(function(adj) {  
@@ -51,16 +51,16 @@ function hideCategory(g, category, duration) {
 		  	});	
 		}	
 	});
-	g.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  
 	}); 	
 }
 
-function showCategory(g, category, duration) {
+function showCategory(category, duration) {
     if (duration == null) duration = 500;
-	g.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		if (n.getData('itemcatname') == category) {
 			n.setData('alpha', 1, 'end');
 			n.eachAdjacency(function(adj) {  
@@ -68,37 +68,37 @@ function showCategory(g, category, duration) {
 		  	});	
 		}	
 	});
-	g.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  
 	});	
 }
 
-function hideAll(g, duration) {
+function hideAll(duration) {
     if (duration == null) duration = 500;
-	g.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		  n.setData('alpha', 0, 'end');
 		  n.eachAdjacency(function(adj) {  
 		  adj.setData('alpha', 0, 'end');  
 		  });	
 	});
-	g.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  
 	}); 	
 }
 
-function showAll(g, duration) {
+function showAll(duration) {
     if (duration == null) duration = 500;
-	g.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		  n.setData('alpha', 1, 'end');
 		  n.eachAdjacency(function(adj) {  
 		  adj.setData('alpha', 1, 'end');  
 		  });	
 	});
-	g.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  

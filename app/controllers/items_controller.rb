@@ -9,9 +9,9 @@ class ItemsController < ApplicationController
   
   # GET /users/:user_id/items
   def index
-	@user = User.find(params[:user_id])
+    @user = User.find(params[:user_id])
   	
-	@current = current_user
+    @current = current_user
     @items = Item.visibleToUser(@current, @user)
      
     respond_with(@user,@items)
@@ -72,9 +72,8 @@ class ItemsController < ApplicationController
 		@item.save
     end		
 	
-	@mapping = nil
+	@mapping = Mapping.new()
 	if params[:item][:map]
-		@mapping = Mapping.new()
 		@mapping.category = "Item"
 		@mapping.user = @user
 		@mapping.map = Map.find(params[:item][:map])
