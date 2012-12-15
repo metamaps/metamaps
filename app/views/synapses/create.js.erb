@@ -8,15 +8,18 @@ if (map1 != null) {
 		
 		var newnode, temp1, temp2, temp;	
 		 
-		if ( console != null) {
-				temp1 = console.graph.getNode(<%= @synapse.item1.id %>);
+		if ( Mconsole != null) {
+				temp1 = Mconsole.graph.getNode(<%= @synapse.item1.id %>);
 				if (temp1 == null) {
 					newnode = <%= @synapse.item1.self_as_json.html_safe %>;
-					console.graph.addNode(newnode);
-					temp = console.graph.getNode('<%= @synapse.item1.id %>');
+					Mconsole.graph.addNode(newnode);
+					temp = Mconsole.graph.getNode('<%= @synapse.item1.id %>');
 					temp.setData('dim', 1, 'start');
 					temp.setData('dim', 40, 'end');
 					if (gType == "arranged" || gType == "chaotic") {
+            temp.setData('xloc',0);
+            temp.setData('yloc',0);
+            temp.setData('mappingid', '<%= @mapping1.id %>');
 						temp.setPos(new $jit.Complex(0, 0), 'current');
 						temp.setPos(new $jit.Complex(0, 0), 'start');
 						temp.setPos(new $jit.Complex(0, 0), 'end');
@@ -26,17 +29,20 @@ if (map1 != null) {
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
 					}
-					console.fx.plotNode(temp, console.canvas);
-					temp1 = console.graph.getNode(<%= @synapse.item1.id %>);
+					Mconsole.fx.plotNode(temp, Mconsole.canvas);
+					temp1 = Mconsole.graph.getNode(<%= @synapse.item1.id %>);
 				}
-				temp2 = console.graph.getNode(<%= @synapse.item2.id %>);
+				temp2 = Mconsole.graph.getNode(<%= @synapse.item2.id %>);
 				if (temp2 == null) {
 					newnode = <%= @synapse.item2.self_as_json.html_safe %>;
-					console.graph.addNode(newnode);
-					temp = console.graph.getNode('<%= @synapse.item2.id %>');
+					Mconsole.graph.addNode(newnode);
+					temp = Mconsole.graph.getNode('<%= @synapse.item2.id %>');
 					temp.setData('dim', 1, 'start');
 					temp.setData('dim', 40, 'end');
 					if (gType == "arranged" || gType == "chaotic") {
+            temp.setData('xloc',0);
+            temp.setData('yloc',0);
+            temp.setData('mappingid', '<%= @mapping2.id %>');
 						temp.setPos(new $jit.Complex(0, 0), 'current');
 						temp.setPos(new $jit.Complex(0, 0), 'start');
 						temp.setPos(new $jit.Complex(0, 0), 'end');
@@ -46,11 +52,11 @@ if (map1 != null) {
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
 						temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
 					}
-					console.fx.plotNode(temp, console.canvas);
-					temp2 = console.graph.getNode(<%= @synapse.item2.id %>);
+					Mconsole.fx.plotNode(temp, Mconsole.canvas);
+					temp2 = Mconsole.graph.getNode(<%= @synapse.item2.id %>);
 				}
-				console.graph.addAdjacence(temp1, temp2, {});
-				temp = console.graph.getAdjacence(temp1.id, temp2.id);
+				Mconsole.graph.addAdjacence(temp1, temp2, {});
+				temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
 				temp.setDataset('start', {  
 					lineWidth: 0.4,  
 					color: '#d1d1d1'  
@@ -69,8 +75,8 @@ if (map1 != null) {
 					username: '<%= @synapse.user.name %>'					
 				  });
 				  temp.data.$direction = d;
-				console.fx.plotLine(temp, console.canvas);
-				console.fx.animate({  
+				Mconsole.fx.plotLine(temp, Mconsole.canvas);
+				Mconsole.fx.animate({  
 					modes: ['node-property:dim','edge-property:lineWidth:color'],  
 					duration: 400  
 				  });

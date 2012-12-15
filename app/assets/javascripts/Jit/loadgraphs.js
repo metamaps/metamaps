@@ -1,4 +1,4 @@
-var labelType, useGradients, nativeTextSupport, animate, json, console, gType;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole, gType;
 
 (function() {
   var ua = navigator.userAgent,
@@ -46,75 +46,72 @@ imgArray['Trajectory'] = new Image(); imgArray['Trajectory'].src = '/assets/traj
 imgArray['Action'] = new Image(); imgArray['Action'].src = '/assets/action.png';
 imgArray['Activity'] = new Image(); imgArray['Activity'].src = '/assets/activity.png';
 
+
+// defining code to draw edges with arrows pointing in the middle of them
+var renderMidArrow = function(from, to, dim, swap, canvas){ 
+        var ctx = canvas.getCtx(); 
+        // invert edge direction 
+        if (swap) { 
+              var tmp = from; 
+              from = to; 
+              to = tmp; 
+        } 
+        // vect represents a line from tip to tail of the arrow 
+        var vect = new $jit.Complex(to.x - from.x, to.y - from.y); 
+        // scale it 
+        vect.$scale(dim / vect.norm()); 
+        // compute the midpoint of the edge line 
+        var midPoint = new $jit.Complex((to.x + from.x) / 2, (to.y + from.y) / 2); 
+        // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
+        midPoint.x += (vect.x / 0.7); 
+        midPoint.y += (vect.y / 0.7); 
+        // compute the tail intersection point with the edge line 
+        var intermediatePoint = new $jit.Complex(midPoint.x - vect.x, 
+midPoint.y - vect.y); 
+        // vector perpendicular to vect 
+        var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
+        var v1 = intermediatePoint.add(normal); 
+        var v2 = intermediatePoint.$add(normal.$scale(-1)); 
+
+        ctx.beginPath(); 
+        ctx.moveTo(from.x, from.y); 
+        ctx.lineTo(to.x, to.y); 
+        ctx.stroke(); 
+        ctx.beginPath(); 
+        ctx.moveTo(v1.x, v1.y); 
+        ctx.lineTo(midPoint.x, midPoint.y); 
+        ctx.lineTo(v2.x, v2.y); 
+        ctx.stroke(); 
+}; 
+
+var containsMidArrow = function(posFrom, posTo, pos, epsilon) { 
+        return $jit.EdgeHelper.line.contains(posFrom, posTo, pos, epsilon); 
+}; 
+
 function initialize(type){
+  viewMode = "graph";
   gType = type;
   
   // init custom node type 
-  $jit.ForceDirected.Plot.NodeTypes.implement({  
-	  'customNode': {  
-		  'render': function (node, canvas) {		  			  
-			  var pos = node.pos.getc(true),
-			  dim = node.getData('dim'),
-			  cat = node.getData('itemcatname'),
-			  ctx = canvas.getCtx();
-			  ctx.drawImage(imgArray[cat], pos.x - dim, pos.y - dim, dim*2, dim*2);
-
-		  },
-		  'contains': function(node, pos) {
-			var npos = node.pos.getc(true), 
-			dim = node.getData('dim');
-			return this.nodeHelper.circle.contains(npos, pos, dim);
-		  }
-	  }
-  });
+  $jit.ForceDirected.Plot.NodeTypes.implement(nodeSettings);
   //implement an edge type  
-	$jit.ForceDirected.Plot.EdgeTypes.implement({  
-	  'customEdge': {  
-		'render': function(adj, canvas) {  
-		  //get nodes cartesian coordinates 
-		  var pos = adj.nodeFrom.pos.getc(true); 
-		  var posChild = adj.nodeTo.pos.getc(true);
-		  
-		  var directionCat = adj.getData("category");
-		  //label placement on edges 
-		  //plot arrow edge 
-		  if (directionCat == "none") {
-				this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
-		  }
-		  else if (directionCat == "both") {
-				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, false, canvas);
-				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, true, canvas);
-		  }
-		  else if (directionCat == "from-to") {
-			  	var direction = adj.data.$direction;
-				var inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id);
-				this.edgeHelper.arrow.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 40, inv, canvas);
-		  }
-		   
-		  //check for edge label in data  
-		  var desc = adj.getData("desc") + ' (' + adj.getData("userid") + ',' + adj.getData("id") + ')';
-		  var showDesc = adj.getData("showDesc");
-		  if( desc != "" && showDesc ) { 
-			 //now adjust the label placement 
-			var radius = canvas.getSize(); 
-			var x = parseInt((pos.x + posChild.x - (desc.length * 5)) /2); 
-			var y = parseInt((pos.y + posChild.y) /2); 
-			canvas.getCtx().fillStyle = '#000';
-			canvas.getCtx().font = 'bold 14px arial';
-			//canvas.getCtx().fillText(desc, x, y); 
-		  }
-		}  
-	  }  
-	});
+	$jit.ForceDirected.Plot.EdgeTypes.implement(edgeSettings);
+  // end
+  
+  // init custom node type 
+  $jit.RGraph.Plot.NodeTypes.implement(nodeSettings);
+  //implement an edge type  
+  $jit.RGraph.Plot.EdgeTypes.implement(edgeSettings);
   // end
   
   
   if ( type == "centered") {
-	 console = new $jit.RGraph(graphSettings(type));
+	  // init Rgraph
+	 Mconsole = new $jit.RGraph(graphSettings(type));
   }
   else if ( type == "arranged" || type == "chaotic" ) {
 	  // init ForceDirected
-	 console = new $jit.ForceDirected(graphSettings(type));
+	 Mconsole = new $jit.ForceDirected(graphSettings(type));
   }
   else {
 	 alert("You didn't specify a type!"); 
@@ -122,7 +119,7 @@ function initialize(type){
   }
   
   // load JSON data.
-  console.loadJSON(json);
+  Mconsole.loadJSON(json);
   
   // choose how to plot and animate the data onto the screen
   var chooseAnimate;
@@ -130,11 +127,11 @@ function initialize(type){
   if ( type == "centered") {
 	  // compute positions incrementally and animate.
 	  //trigger small animation  
-	  console.graph.eachNode(function(n) {  
+	  Mconsole.graph.eachNode(function(n) {  
 		var pos = n.getPos();  
 		pos.setc(-200, -200);  
 	  });  
-	  console.compute('end');
+	  Mconsole.compute('end');
 	  
 	  chooseAnimate = {  
 		modes:['polar'],  
@@ -143,7 +140,7 @@ function initialize(type){
   }
   else if ( type == "arranged" ) {
 	  // compute positions incrementally and animate.
-	  console.graph.eachNode(function(n) {  
+	  Mconsole.graph.eachNode(function(n) {  
 		var pos = n.getPos();  
 		pos.setc(0, 0); 
 		var newPos = new $jit.Complex(); 
@@ -160,7 +157,7 @@ function initialize(type){
   }
   else if ( type == "chaotic" ) {
 	  // compute positions incrementally and animate.
-      console.compute()
+      Mconsole.compute()
 	  
 	  chooseAnimate = {
          modes: ['linear'],
@@ -172,10 +169,10 @@ function initialize(type){
 
   $(document).ready(function() {
 	if ( type == "centered") {
-		console.fx.animate(chooseAnimate);
+		Mconsole.fx.animate(chooseAnimate);
 	}
 	else if ( type == "arranged" || type == "chaotic") {
-		console.animate(chooseAnimate);
+		Mconsole.animate(chooseAnimate);
 	}
   });
   // end

@@ -2360,8 +2360,8 @@ Extras.Classes.Tips = new Class({
   },
   
   hide: function(triggerCallback) {
-    this.tip.style.display = 'none';
-    triggerCallback && this.config.onHide();
+      this.tip.style.display = 'none';
+      triggerCallback && this.config.onHide();
   }
 });
 

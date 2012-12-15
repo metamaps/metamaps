@@ -1,15 +1,13 @@
 $('#new_item').fadeOut('fast');
-$('#new_item')[0].reset()
+$('#new_item')[0].reset();
 
-// if there's a map, add the node to that, if its in card view add card
-map2 = document.getElementById('container');
-
-if (map2 != null) {
-	    var newnode = <%= @item.self_as_json.html_safe %>;
+if(viewMode == "graph") {
+	  var newnode = <%= @item.self_as_json.html_safe %>;
 		
 		
-		if (console != null) {
-      var temp = fd.graph.getNode('<%= @item.id %>');
+		if (Mconsole != null) {
+      Mconsole.graph.addNode(newnode);
+      var temp = Mconsole.graph.getNode('<%= @item.id %>');
 			temp.setData('dim', 1, 'start');
 			temp.setData('dim', 40, 'end');
       
@@ -18,7 +16,7 @@ if (map2 != null) {
 			  temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
 			  temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
       }
-      else if (gType == "arranged") {
+      else if (gType == "arranged" || gType == "chaotic") {
         temp.setData('xloc',0);
         temp.setData('yloc',0);
         temp.setData('mappingid', '<%= @mapping.id %>');
@@ -26,19 +24,9 @@ if (map2 != null) {
         temp.setPos(new $jit.Complex(0, 0), 'start');
         temp.setPos(new $jit.Complex(0, 0), 'end');
       }
-      else if (gType == "chaotic") {
-        <% unless (@mapping.nil?) %>
-				temp.setData('xloc',0);
-				temp.setData('yloc',0);
-				temp.setData('mappingid', '<%= @mapping.id %>');
-			  <% end %>
-        temp.setPos(new $jit.Complex(0, 0), 'current');
-        temp.setPos(new $jit.Complex(0, 0), 'start');
-        temp.setPos(new $jit.Complex(0, 0), 'end');
-      }
       
-			console.fx.plotNode(temp, console.canvas);
-			console.fx.animate({  
+			Mconsole.fx.plotNode(temp, Mconsole.canvas);
+			Mconsole.fx.animate({  
 				modes: ['node-property:dim'],  
 				duration: 400  
 			  });
@@ -47,14 +35,13 @@ if (map2 != null) {
 			json = newnode;
 			initialize("chaotic");
 		 }
-		 console.log(temp);
 		 // add the new node to the synapse select lists
 		 $("#node1_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
 		 $("#node2_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
 
 }
 else {
+  alert('wrong!');
 	$('#cards').prepend('<%= escape_javascript(render(@item)) %>');
-	$(".scroll").mCustomScrollbar();
+	$(".scroll").mCustomScrollbar(); 
 }
-		

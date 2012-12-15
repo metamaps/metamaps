@@ -58,9 +58,11 @@ class SynapsesController < ApplicationController
 	@synapse.item1 = Item.find(params[:node1_id])
 	@synapse.item2 = Item.find(params[:node2_id])
 	@synapse.permission = params[:synapse][:permission]
-    @synapse.user = @user	
+  @synapse.user = @user	
 	@synapse.save   
 	
+  @mapping1 = Mapping.new()
+  @mapping2 = Mapping.new()
 	if params[:synapse][:map]
 		@mapping = Mapping.new()
 		@mapping.category = "Synapse"
@@ -70,7 +72,6 @@ class SynapsesController < ApplicationController
 		@mapping.save
 		
 		if not Map.find(params[:synapse][:map]).items.include?(@synapse.item1)
-			@mapping1 = Mapping.new()
 			@mapping1.category = "Item"
 			@mapping1.user = @user
 			@mapping1.map = Map.find(params[:synapse][:map])
@@ -78,7 +79,6 @@ class SynapsesController < ApplicationController
 			@mapping1.save
 		end
 		if not Map.find(params[:synapse][:map]).items.include?(@synapse.item2)
-			@mapping2 = Mapping.new()
 			@mapping2.category = "Item"
 			@mapping2.user = @user
 			@mapping2.map = Map.find(params[:synapse][:map])
@@ -89,7 +89,7 @@ class SynapsesController < ApplicationController
     
     respond_to do |format|
       format.html { respond_with(@user, location: user_synapse_url(@user, @synapse)) }
-      format.js { respond_with(@synapse) }
+      format.js { respond_with(@synapse, @mapping1, @mapping2) }
     end
     
   end

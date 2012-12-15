@@ -43,7 +43,7 @@ function switchVisible(category, duration) {
 
 function hideCategory(category, duration) {
     if (duration == null) duration = 500;
-	console.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		if (n.getData('itemcatname') == category) {
 			n.setData('alpha', 0, 'end');
 			n.eachAdjacency(function(adj) {  
@@ -51,7 +51,7 @@ function hideCategory(category, duration) {
 		  	});	
 		}	
 	});
-	console.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  
@@ -60,7 +60,7 @@ function hideCategory(category, duration) {
 
 function showCategory(category, duration) {
     if (duration == null) duration = 500;
-	console.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		if (n.getData('itemcatname') == category) {
 			n.setData('alpha', 1, 'end');
 			n.eachAdjacency(function(adj) {  
@@ -68,7 +68,7 @@ function showCategory(category, duration) {
 		  	});	
 		}	
 	});
-	console.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  
@@ -77,13 +77,13 @@ function showCategory(category, duration) {
 
 function hideAll(duration) {
     if (duration == null) duration = 500;
-	console.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		  n.setData('alpha', 0, 'end');
 		  n.eachAdjacency(function(adj) {  
 		  adj.setData('alpha', 0, 'end');  
 		  });	
 	});
-	console.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  
@@ -92,13 +92,13 @@ function hideAll(duration) {
 
 function showAll(duration) {
     if (duration == null) duration = 500;
-	console.graph.eachNode( function (n) {
+	Mconsole.graph.eachNode( function (n) {
 		  n.setData('alpha', 1, 'end');
 		  n.eachAdjacency(function(adj) {  
 		  adj.setData('alpha', 1, 'end');  
 		  });	
 	});
-	console.fx.animate({  
+	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
 				'edge-property:alpha'],  
 		duration: duration  

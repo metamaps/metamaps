@@ -72,9 +72,8 @@ class ItemsController < ApplicationController
 		@item.save
     end		
 	
-	@mapping = nil
+	@mapping = Mapping.new()
 	if params[:item][:map]
-		@mapping = Mapping.new()
 		@mapping.category = "Item"
 		@mapping.user = @user
 		@mapping.map = Map.find(params[:item][:map])

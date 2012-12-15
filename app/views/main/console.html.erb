@@ -20,8 +20,6 @@
   <div id="center-container">
     <div id="infovis"></div>    
   </div>
-  <div id="showcard">
-  </div>
 </div>
 <div class="clearfloat"></div>
 
@@ -44,10 +42,12 @@
   <div id="center-container">
     <div id="infovis"></div>    
   </div>
-  <div id="showcard">
-  </div>
 </div>
 <div class="clearfloat"></div>
+<% if authenticated? %>
+	<%= render :partial => 'items/new' %>
+	<%= render :partial => 'synapses/new' %>
+<% end %>
 <script>
 	json = <%= @items %>;
 	if (json.length > 0) {

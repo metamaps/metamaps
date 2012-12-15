@@ -7,16 +7,3 @@
 span.name {
   cursor: pointer;
 }
-
-/*TOOLTIPS*/
-.tip {
-   text-align: left;
-   width:auto;
-   max-width:500px;
-}
-
-.tip-title {
-  font-size: 11px;
-  text-align:center;
-  margin-bottom:2px;
-}

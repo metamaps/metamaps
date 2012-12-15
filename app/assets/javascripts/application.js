@@ -16,6 +16,8 @@
 //= require jquery_ujs
 //= require_tree .
 
+// other options are 'graph'
+var viewMode = "list";
 
  $(document).ready(function() {
    
@@ -150,7 +152,6 @@
 		obj = document.getElementById('container');
         
 		var switchAll = $(this).attr('id');
-		console.log(switchAll);
 		
 		if ( switchAll === "showAll" || switchAll === "hideAll") {
 			if (switchAll == "showAll") {
@@ -226,12 +227,13 @@
 	  event.preventDefault();
 	  coor = "";
 	  if (gType == "arranged" || gType == "chaotic") {
-		  console.graph.eachNode(function(n) {
+		  Mconsole.graph.eachNode(function(n) {
 			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
 		  });
 		  coor = coor.slice(0, -1);
 		  $('#map_coordinates').val(coor);
 		  $('#saveMapLayout').submit();
+		  
 	  }
 	});
 });
