@@ -6,12 +6,16 @@
     color:#444;
 }
 
-#showcard {
-    width:auto;
-	height:auto;
+.showcard, #showcard {
+    width:216px;
+	height:320px;
     color:#FFF;
     text-align: left;
-    overflow: auto;
+    overflow: visible;
+	position: relative;
+	top: -185px;
+	left: 107px;
+	z-index:14000;
 }
 #showcard .contributor { font-size:14px; }
 
@@ -26,3 +30,24 @@
     margin:0;
     overflow:hidden;
 }
+
+.CardOnGraph { display:block; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; color:#000; }
+
+.CardOnGraph .scroll { display:block; height:283px; }
+
+.CardOnGraph .type {position: absolute;
+color: white;
+top: -22px;
+right: 0;
+font-weight: bold;
+font-size: 20px;
+line-height: 24px;}
+
+.CardOnGraph .icon { position:absolute; top:135px; left:-25px; }
+
+.CardOnGraph .title { font-size:22px; line-height:25px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
+
+.CardOnGraph .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
+.CardOnGraph .desc h3 { font-style:normal; margin-top:5px; }
+
+.CardOnGraph .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

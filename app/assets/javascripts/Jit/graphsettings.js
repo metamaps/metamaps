@@ -63,10 +63,10 @@ function graphSettings(type) {
             type: 'HTML',
             //Change cursor style when hovering a node
             onMouseEnter: function () {
-               //fd.canvas.getElement().style.cursor = 'move';
+               
             },
             onMouseLeave: function () {
-               //fd.canvas.getElement().style.cursor = '';
+               
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
@@ -122,15 +122,45 @@ function graphSettings(type) {
          // Add text to the labels. This method is only triggered
          // on label creation and only for DOM labels (not native canvas ones).
          onCreateLabel: function (domElement, node) {
-            // Create a 'name' and 'close' buttons and add them  
+			var html = 
+           '<div class="CardOnGraph" title="Click to Hide" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p>' + 
+           '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
+           '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
+           '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
+           '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
+		   var showCard = document.createElement('div'); 
+			showCard.className = 'showcard item_' + node.id;  
+			showCard.innerHTML = html; 
+			showCard.style.display = "none";
+			domElement.appendChild(showCard);
+			
+			// add some events to the label
+			showCard.onclick = function(){
+				$('.showcard.item_' + node.id).fadeOut('fast', function(){
+					$('.name').css('display','block');
+					Mconsole.plot();
+				});	
+			}
+			
+            // Create a 'name' button and add it  
 			// to the main node label  
 			var nameContainer = document.createElement('span'),  
 				style = nameContainer.style;  
-			nameContainer.className = 'name';  
+			nameContainer.className = 'name item_' + node.id;  
 			nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
 			domElement.appendChild(nameContainer);  
 			style.fontSize = "0.9em";  
-			style.color = "#222222"; 
+			style.color = "#222222";
+			
+			// add some events to the label
+			nameContainer.onmouseover = function(){
+				$('.showcard').css('display','none');
+				$('.name').css('display','block');
+				$('.name.item_' + node.id).css('display','none');
+				$('.showcard.item_' + node.id).fadeIn('fast');
+				Mconsole.plot();
+			} 
          },
          // Change node styles when DOM labels are placed
          // or moved.
