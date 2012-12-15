@@ -81,39 +81,13 @@ function graphSettings(type) {
             },
             //Add also a click handler to nodes
             onClick: function (node) {
-               if (!node) return;
-               //set final styles  
-               Mconsole.graph.eachNode(function (n) {
-                  if (n.id != node.id) delete n.selected;
-                  n.setData('dim', 25, 'end');
-                  n.eachAdjacency(function (adj) {
-                     adj.setDataset('end', {
-                        lineWidth: 0.5,
-                        color: '#222222'
-                     });
-                     adj.setData('showDesc', false, 'current');
-                  });
-               });
-               if (!node.selected) {
-                  node.selected = true;
-                  node.setData('dim', 35, 'end');
-                  node.eachAdjacency(function (adj) {
-                     adj.setDataset('end', {
-                        lineWidth: 3,
-                        color: '#FFF'
-                     });
-                     adj.setData('showDesc', true, 'current');
-                  });
+               //clicking on a node, or clicking on blank part of canvas?
+               if (node) {
+                 selectNodeOnClickHandler(node);
                } else {
-                  delete node.selected;
-               }
-               //trigger animation to final styles  
-               Mconsole.fx.animate({
-                  modes: ['node-property:dim',
-                     'edge-property:lineWidth:color'],
-                  duration: 500
-               });
-            }
+                 createNodeOnClickHandler();
+               }//if
+            }//onClick
          },
          //Number of iterations for the FD algorithm
          iterations: 200,
@@ -417,4 +391,39 @@ var nodeSettings = {
 	  }  
 	}
 	
+function selectNodeOnClickHandler(node) {
+   //set final styles  
+   Mconsole.graph.eachNode(function (n) {
+      if (n.id != node.id) delete n.selected;
+      n.setData('dim', 25, 'end');
+      n.eachAdjacency(function (adj) {
+         adj.setDataset('end', {
+            lineWidth: 0.5,
+            color: '#222222'
+         });
+         adj.setData('showDesc', false, 'current');
+      });
+   });
+   if (!node.selected) {
+      node.selected = true;
+      node.setData('dim', 35, 'end');
+      node.eachAdjacency(function (adj) {
+         adj.setDataset('end', {
+            lineWidth: 3,
+            color: '#FFF'
+         });
+         adj.setData('showDesc', true, 'current');
+      });
+   } else {
+      delete node.selected;
+   }
+   //trigger animation to final styles  
+   Mconsole.fx.animate({
+      modes: ['node-property:dim',
+         'edge-property:lineWidth:color'],
+      duration: 500
+   });
+}//selectNodeOnClickHandler
 
+function createNodeOnClickHandler() {
+}//createNodeOnClickHandler
