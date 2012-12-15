@@ -80,40 +80,14 @@ function graphSettings(type) {
                this.onDragMove(node, eventInfo, e);
             },
             //Add also a click handler to nodes
-            onClick: function (node) {
-               if (!node) return;
-               //set final styles  
-               Mconsole.graph.eachNode(function (n) {
-                  if (n.id != node.id) delete n.selected;
-                  n.setData('dim', 25, 'end');
-                  n.eachAdjacency(function (adj) {
-                     adj.setDataset('end', {
-                        lineWidth: 0.5,
-                        color: '#222222'
-                     });
-                     adj.setData('showDesc', false, 'current');
-                  });
-               });
-               if (!node.selected) {
-                  node.selected = true;
-                  node.setData('dim', 35, 'end');
-                  node.eachAdjacency(function (adj) {
-                     adj.setDataset('end', {
-                        lineWidth: 3,
-                        color: '#FFF'
-                     });
-                     adj.setData('showDesc', true, 'current');
-                  });
+            onClick: function (node, eventInfo, e) {
+               //clicking on a node, or clicking on blank part of canvas?
+               if (node) {
+                 selectNodeOnClickHandler(node);
                } else {
-                  delete node.selected;
-               }
-               //trigger animation to final styles  
-               Mconsole.fx.animate({
-                  modes: ['node-property:dim',
-                     'edge-property:lineWidth:color'],
-                  duration: 500
-               });
-            }
+                 canvasDoubleClickHandler(e);
+               }//if
+            }//onClick
          },
          //Number of iterations for the FD algorithm
          iterations: 200,
@@ -417,4 +391,56 @@ var nodeSettings = {
 	  }  
 	}
 	
+function selectNodeOnClickHandler(node) {
+   //set final styles  
+   Mconsole.graph.eachNode(function (n) {
+      if (n.id != node.id) delete n.selected;
+      n.setData('dim', 25, 'end');
+      n.eachAdjacency(function (adj) {
+         adj.setDataset('end', {
+            lineWidth: 0.5,
+            color: '#222222'
+         });
+         adj.setData('showDesc', false, 'current');
+      });
+   });
+   if (!node.selected) {
+      node.selected = true;
+      node.setData('dim', 35, 'end');
+      node.eachAdjacency(function (adj) {
+         adj.setDataset('end', {
+            lineWidth: 3,
+            color: '#FFF'
+         });
+         adj.setData('showDesc', true, 'current');
+      });
+   } else {
+      delete node.selected;
+   }
+   //trigger animation to final styles  
+   Mconsole.fx.animate({
+      modes: ['node-property:dim',
+         'edge-property:lineWidth:color'],
+      duration: 500
+   });
+}//selectNodeOnClickHandler
 
+//for the canvasDoubleClickHandler function
+var canvasDoubleClickHandlerObject = new Object();
+canvasDoubleClickHandlerObject.stored_timestamp = 0;
+
+function canvasDoubleClickHandler(e) {
+  var TOLERANCE = 1000; //1 second
+
+  //grab the location and timestamp of the click
+  var stored_timestamp = canvasDoubleClickHandlerObject.stored_timestamp;
+  var now = Date.now(); //not compatible with IE8 FYI
+
+  if (now - stored_timestamp < TOLERANCE) {
+    //pop up node creation :)
+    $('#new_item').fadeIn('fast');
+    //NOTE: we have e.x, e.y so use them!!
+  } else {
+    canvasDoubleClickHandlerObject.stored_timestamp = now;
+  }
+}//canvasDoubleClickHandler
