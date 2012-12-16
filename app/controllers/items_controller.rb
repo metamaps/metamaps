@@ -63,14 +63,20 @@ class ItemsController < ApplicationController
 	else
 		@item = Item.new()
 		@item.name = params[:item][:name]
-		@item.desc = params[:item][:desc]
-		@item.link = params[:item][:link]
-		@item.permission = params[:item][:permission]
-		@item.item_category = ItemCategory.find(params[:category])
+		@item.desc = ""
+		@item.link = ""
+		@item.permission = 'commons'
+        @item.item_category = ItemCategory.all.first
+		#@item.item_category = ItemCategory.find(params[:category])
 		@item.user = @user
-		
+
 		@item.save
     end		
+
+    @position = Hash.new()
+    @position.x = params[:item][:x]
+    @position.y = params[:item][:y]
+    @position.save
 	
 	@mapping = Mapping.new()
 	if params[:item][:map]
@@ -85,7 +91,7 @@ class ItemsController < ApplicationController
     
     respond_to do |format|
       format.html { respond_with(@user, location: user_item_url(@user, @item)) }
-      format.js { respond_with(@item, @mapping) }
+      format.js { respond_with(@item, @mapping, @position) }
     end
     
   end
