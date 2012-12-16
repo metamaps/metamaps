@@ -12,21 +12,9 @@
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
     <div class="headertop">
-			<h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1><div id="beta">beta</div>
-      <%= form_for Item.new, :html => { :class => "find_item", :id => "find_item" } do |f| %>
-        <%= f.autocomplete_field :name, autocomplete_item_name_items_path, :placeholder => "Search for topics..." %>
-      <% end %>
 			<% unless authenticated? %>
 				<ul id="menus">
 					<li><%= link_to "Login", new_session_path, id: "Login" %></li>
-					<li>|</li>
-					<li class="exploreWrap">
-						<p id="explore">Explore</p>
-						<ul class="explore">
-							<li class="first"><%= link_to "Maps", allmaps_path %></li>
-							<li class="last"><%= link_to "Metamap", metamap_path %></li>
-						</ul>
-					</li>
 				</ul>
 			<% end %>
 			<% if authenticated? %>
@@ -39,6 +27,9 @@
 							<li><%= link_to "My Maps", user_maps_url(user) %></li>
 							<li><%= link_to "Invite", invite_path %></li>
 							<li><%= link_to "Settings", edit_user_url(user) %></li>
+							<% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
+							   <li><%= link_to "Feedback", user_map_path(User.find(555629996), Map.find(7)) %></li>
+						    <% end %>
 							<li class="last"><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
 						</ul>
 					</li>
@@ -46,18 +37,8 @@
 					<li class="createWrap">
 						<p id="create">CREATE</p>
 						<ul class="create">
-							<li class="first"><%= link_to "Add Topic", new_user_item_path(user), id: "newtopic" %></li>
-							<li><%= link_to "Add Synapse", new_user_synapse_path(user), id: "newsynapse" %></li>
-							<li class="last"><%= link_to "Add Map", new_user_map_path(user), id: "newmap" %></li>
+							<li class="first"><%= link_to "Add Map", new_user_map_path(user), id: "newmap" %></li>
 						</ul>	
-					</li>
-					<li>|</li>
-					<li class="exploreWrap">
-						<p id="explore">EXPLORE</p>
-						<ul class="explore">
-							<li class="first"><%= link_to "Maps", allmaps_path %></li>
-							<li class="last"><%= link_to "Metamap", metamap_path %></li>
-						</ul>
 					</li>					
 				</ul>
 			<% end %>
@@ -67,52 +48,67 @@
 		<div class="wrapper" id="wrapper">
 			<%= yield %>
 		</div>
+		
+		<div class="sideOption" id="sideOptionFind">
+			<span class="find_key">Find...</span>
+			<select class="select_content">
+				<option value="topics">Topics</option>
+				<!-- <option value="synapses">Synapses</option>
+				<option value="maps">Maps</option>
+				<option value="mappers">Mappers</option> -->
+			</select>
+			<span class="spacer">by</span>
+			<select class="select_type">
+				<option value="name">Name</option>
+				<option value="metacode">Metacode</option>
+			</select>
+			<div class="clearfloat"></div>
+			<%= form_for Item.new, :html => { :class => "find_topic_by_name", :id => "find_topic_by_name" } do |f| %>
+				<%= f.autocomplete_field :name, autocomplete_item_name_items_path, :placeholder => "Search for topics..." %>
+			<% end %>
+			<div class="find_topic_by_metacode" id="find_topic_by_metacode">
+				   <ul id="filters-one">
+					 <li id="showAll">Show All</li>
+					 <li><img src="/assets/action.png" alt="Action" /><p>action</p></li>
+					 <li><img src="/assets/activity.png" alt="Activity" /><p>activity</p></li>
+					 <li><img src="/assets/bizarre.png" alt="Bizarre" /><p>bizarre</p></li>
+					 <li><img src="/assets/catalyst.png" alt="Catalyst" /><p>catalyst</p></li>
+					 <li><img src="/assets/closed.png" alt="Closed" /><p>closed</p></li>
+					 <li><img src="/assets/experience.png" alt="Experience" /><p>experience</p></li>
+					 <li><img src="/assets/futuredev.png" alt="Future Dev" /><p>future dev</p></li>
+					 <li><img src="/assets/group.png" alt="Group" /><p>group</p></li>
+					 <li><img src="/assets/idea.png" alt="Idea" /><p>idea</p></li>
+					</ul>
+					<ul id="filters-two">
+					 <li id="hideAll">Hide All</li>
+					 <li><img src="/assets/implication.png" alt="Implication" /><p>implication</p></li>
+					 <li><img src="/assets/insight.png" alt="Insight" /><p>insight</p></li>
+					 <li><img src="/assets/intention.png" alt="Intention" /><p>intention</p></li>
+					 <li><img src="/assets/knowledge.png" alt="Knowledge" /><p>knowledge</p></li>
+					 <li><img src="/assets/location.png" alt="Location" /><p>location</p></li>
+					 <li><img src="/assets/openissue.png" alt="Open Issue" /><p>open issue</p></li>
+					 <li><img src="/assets/opinion.png" alt="Opinion" /><p>opinion</p></li>
+					 <li><img src="/assets/opportunity.png" alt="Opportunity" /><p>opportunity</p></li>
+					 <li><img src="/assets/person.png" alt="Person" /><p>person</p></li>         
+					</ul>
+					<ul id="filters-three">         
+					 <li><img src="/assets/platform.png" alt="Platform" /><p>platform</p></li>
+					 <li><img src="/assets/problem.png" alt="Problem" /><p>problem</p></li>
+					 <li><img src="/assets/question.png" alt="Question" /><p>question</p></li>
+					 <li><img src="/assets/reference.png" alt="Reference" /><p>reference</p></li>
+					 <li><img src="/assets/requirement.png" alt="Requirement" /><p>requirement</p></li>
+					 <li><img src="/assets/resource.png" alt="Resource" /><p>resource</p></li>
+					 <li><img src="/assets/role.png" alt="Role" /><p>role</p></li>
+					 <li><img src="/assets/task.png" alt="Task" /><p>task</p></li>
+					 <li><img src="/assets/tool.png" alt="Tool" /><p>tool</p></li>
+					 <li><img src="/assets/trajectory.png" alt="Trajectory" /><p>trajectory</p></li>
+					</ul>
+			  </div>
+		</div>
+		
 			
      <div class="footer">
-      <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
-        <div class="feedback"><%= link_to "Feedback", user_map_path(User.find(555629996), Map.find(7)) %></div>
-      <% end %>
-	  <div class="legend">
-		 <div id="iconLegend">
-		   <h3>FILTERS</h3>
-		   <ul id="filters-one">
-		     <li id="showAll">Show All</li>
-			 <li><img src="/assets/action.png" alt="Action" /><p>action</p></li>
-			 <li><img src="/assets/activity.png" alt="Activity" /><p>activity</p></li>
-			 <li><img src="/assets/bizarre.png" alt="Bizarre" /><p>bizarre</p></li>
-			 <li><img src="/assets/catalyst.png" alt="Catalyst" /><p>catalyst</p></li>
-			 <li><img src="/assets/closed.png" alt="Closed" /><p>closed</p></li>
-			 <li><img src="/assets/experience.png" alt="Experience" /><p>experience</p></li>
-			 <li><img src="/assets/futuredev.png" alt="Future Dev" /><p>future dev</p></li>
-			 <li><img src="/assets/group.png" alt="Group" /><p>group</p></li>
-			 <li><img src="/assets/idea.png" alt="Idea" /><p>idea</p></li>
-			</ul>
-			<ul id="filters-two">
-			 <li id="hideAll">Hide All</li>
-			 <li><img src="/assets/implication.png" alt="Implication" /><p>implication</p></li>
-			 <li><img src="/assets/insight.png" alt="Insight" /><p>insight</p></li>
-			 <li><img src="/assets/intention.png" alt="Intention" /><p>intention</p></li>
-			 <li><img src="/assets/knowledge.png" alt="Knowledge" /><p>knowledge</p></li>
-			 <li><img src="/assets/location.png" alt="Location" /><p>location</p></li>
-			 <li><img src="/assets/openissue.png" alt="Open Issue" /><p>open issue</p></li>
-			 <li><img src="/assets/opinion.png" alt="Opinion" /><p>opinion</p></li>
-			 <li><img src="/assets/opportunity.png" alt="Opportunity" /><p>opportunity</p></li>
-			 <li><img src="/assets/person.png" alt="Person" /><p>person</p></li>         
-			</ul>
-			<ul id="filters-three">         
-			 <li><img src="/assets/platform.png" alt="Platform" /><p>platform</p></li>
-			 <li><img src="/assets/problem.png" alt="Problem" /><p>problem</p></li>
-			 <li><img src="/assets/question.png" alt="Question" /><p>question</p></li>
-			 <li><img src="/assets/reference.png" alt="Reference" /><p>reference</p></li>
-			 <li><img src="/assets/requirement.png" alt="Requirement" /><p>requirement</p></li>
-			 <li><img src="/assets/resource.png" alt="Resource" /><p>resource</p></li>
-			 <li><img src="/assets/role.png" alt="Role" /><p>role</p></li>
-			 <li><img src="/assets/task.png" alt="Task" /><p>task</p></li>
-			 <li><img src="/assets/tool.png" alt="Tool" /><p>tool</p></li>
-			 <li><img src="/assets/trajectory.png" alt="Trajectory" /><p>trajectory</p></li>
-			</ul>
-		 </div>
-	  </div>
+	  <div class="logo"><h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1><div id="beta">beta</div></div>
     </div>
     
   <% end %>

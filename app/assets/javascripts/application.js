@@ -21,17 +21,37 @@ var viewMode = "list";
 
  $(document).ready(function() {
    
-   $('#find_item #item_name').bind('railsAutocomplete.select', function(event, data){
+   $('.sideOption .select_type').change(function() {
+	      firstVal = $(this).children("option[value='name']").attr('selected');
+		  secondVal = $(this).children("option[value='metacode']").attr('selected');
+		  if ( firstVal === 'selected') {
+			  $('.find_topic_by_metacode').fadeOut('fast', function() {
+				  showAll();
+				  $('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
+				  for (var catVis in categoryVisible) {
+					  categoryVisible[catVis] = true;
+				  }
+				  $('.find_topic_by_name').fadeIn('fast');  
+			  });
+		  }
+		  else if ( secondVal === 'selected' ) {
+			  $('.find_topic_by_name').fadeOut('fast', function() {
+				  $('.find_topic_by_metacode').fadeIn('fast');  
+			  });
+		  }
+	});
+   
+   $('.find_topic_by_name #item_name').bind('railsAutocomplete.select', function(event, data){
       /* Do something here */
       if (data.item.user_id != undefined && data.item.id != undefined) {
         window.open("/users/" + data.item.user_id + "/items/" + data.item.id)
       }
       else if (data.item.value == "no existing match"){
-        $('#find_item #item_name').val('');
+        $('.find_topic_by_name #item_name').val('');
       }
     });
     
-    $('#find_item').bind('submit', function(event, data){
+    $('.find_topic_by_name').bind('submit', function(event, data){
       event.preventDefault();
     });
 
@@ -148,7 +168,7 @@ var viewMode = "list";
     ); 
 
 	// toggle visibility of item categories based on status in the filters list
-	$('.legend ul li').click(function(event) {
+	$('.find_topic_by_metacode ul li').click(function(event) {
 		obj = document.getElementById('container');
         
 		var switchAll = $(this).attr('id');
@@ -163,7 +183,7 @@ var viewMode = "list";
 				else {
 					$('.item').fadeIn('slow');
 				}
-				$('.legend ul li').not('#hideAll, #showAll').removeClass('toggledOff');
+				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
 				for (var catVis in categoryVisible) {
 					categoryVisible[catVis] = true;
 				}
@@ -177,7 +197,7 @@ var viewMode = "list";
 				else {
 					$('.item').fadeOut('slow');
 				}
-				$('.legend ul li').not('#hideAll, #showAll').addClass('toggledOff');
+				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').addClass('toggledOff');
 				for (var catVis in categoryVisible) {
 					categoryVisible[catVis] = false;
 				}
