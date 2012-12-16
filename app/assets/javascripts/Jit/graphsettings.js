@@ -85,7 +85,7 @@ function graphSettings(type) {
                if (node) {
                  selectNodeOnClickHandler(node);
                } else {
-                 canvasDoubleClickHandler(e);
+                 canvasDoubleClickHandler(eventInfo.getPos(), e);
                }//if
             }//onClick
          },
@@ -111,6 +111,19 @@ function graphSettings(type) {
 			
 			// add some events to the label
 			showCard.onclick = function(){
+				delete node.selected;
+			    node.setData('dim', 25, 'current');
+			    node.eachAdjacency(function (adj) {
+				   adj.setDataset('end', {
+					  lineWidth: 0.5,
+					  color: '#222222'
+				   });
+				   adj.setData('showDesc', false, 'current');
+			    });
+				Mconsole.fx.animate({
+				  modes: ['edge-property:lineWidth:color'],
+				  duration: 500
+			   });
 				$('.showcard.item_' + node.id).fadeOut('fast', function(){
 					$('.name').css('display','block');
 					Mconsole.plot();
@@ -128,8 +141,8 @@ function graphSettings(type) {
 			style.color = "#222222";
 			
 			// add some events to the label
-			nameContainer.onmouseover = function(){
-                if (node.id == 0) return;
+			nameContainer.onclick = function(){
+				node.setData('dim', 1, 'current');
 				$('.showcard').css('display','none');
 				$('.name').css('display','block');
 				$('.name.item_' + node.id).css('display','none');
@@ -144,9 +157,8 @@ function graphSettings(type) {
             var left = parseInt(style.left);
             var top = parseInt(style.top);
             var w = domElement.offsetWidth;
-            var dim = node.getData('dim');
             style.left = (left - w / 2) + 'px';
-            style.top = (top + dim) + 'px';
+            style.top = (top+25) + 'px';
             style.display = '';
          }
       };
@@ -393,10 +405,17 @@ var nodeSettings = {
 	}
 	
 function selectNodeOnClickHandler(node) {
+   
+    $('.showcard').css('display','none');
+	$('.name').css('display','block');
+	$('.name.item_' + node.id).css('display','none');
+	$('.showcard.item_' + node.id).fadeIn('fast');
+	Mconsole.plot();
+				
    //set final styles  
    Mconsole.graph.eachNode(function (n) {
       if (n.id != node.id) delete n.selected;
-      n.setData('dim', 25, 'end');
+      n.setData('dim', 25, 'current');
       n.eachAdjacency(function (adj) {
          adj.setDataset('end', {
             lineWidth: 0.5,
@@ -407,7 +426,7 @@ function selectNodeOnClickHandler(node) {
    });
    if (!node.selected) {
       node.selected = true;
-      node.setData('dim', 35, 'end');
+      node.setData('dim', 1, 'current');
       node.eachAdjacency(function (adj) {
          adj.setDataset('end', {
             lineWidth: 3,
@@ -416,12 +435,12 @@ function selectNodeOnClickHandler(node) {
          adj.setData('showDesc', true, 'current');
       });
    } else {
+	  node.setData('dim', 25, 'current');
       delete node.selected;
    }
    //trigger animation to final styles  
    Mconsole.fx.animate({
-      modes: ['node-property:dim',
-         'edge-property:lineWidth:color'],
+      modes: ['edge-property:lineWidth:color'],
       duration: 500
    });
 }//selectNodeOnClickHandler
@@ -430,8 +449,7 @@ function selectNodeOnClickHandler(node) {
 var canvasDoubleClickHandlerObject = new Object();
 canvasDoubleClickHandlerObject.storedTime = 0;
 
-function canvasDoubleClickHandler(e) {
-   console.log(e);
+function canvasDoubleClickHandler(canvasLoc,e) {
    var TOLERANCE = 300; //0.3 seconds
 
    //grab the location and timestamp of the click
@@ -442,11 +460,12 @@ function canvasDoubleClickHandler(e) {
       //pop up node creation :)
       document.getElementById('new_item').style.left = e.x + "px";
       document.getElementById('new_item').style.top = e.y + "px";
-      $('#item_x').val(e.x);
-      $('#item_y').val(e.y);
+      $('#item_x').val(canvasLoc.x);
+      $('#item_y').val(canvasLoc.y);
       $('#new_item').fadeIn('fast');
       $('#item_name').focus();
    } else {
       canvasDoubleClickHandlerObject.storedTime = now;
+	  $('#new_item').fadeOut('fast');
    }
 }//canvasDoubleClickHandler

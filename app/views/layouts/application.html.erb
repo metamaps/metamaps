@@ -55,22 +55,23 @@
 			<%= yield %>
 		</div>
 		
+		<span id="closeFind">close</span>
 		<div class="sideOption" id="sideOptionFind">
 			<span class="find_key">Find...</span>
 			<select class="select_content">
-				<option value="topics">Topics</option>
+				<option value="topics" selected="selected">Topics</option>
 				<!-- <option value="synapses">Synapses</option>
 				<option value="maps">Maps</option>
 				<option value="mappers">Mappers</option> -->
 			</select>
 			<span class="spacer">by</span>
 			<select class="select_type">
-				<option value="name">Name</option>
+				<option value="name" selected="selected">Name</option>
 				<option value="metacode">Metacode</option>
 			</select>
 			<div class="clearfloat"></div>
 			<%= form_for Item.new, :html => { :class => "find_topic_by_name", :id => "find_topic_by_name" } do |f| %>
-				<%= f.autocomplete_field :name, autocomplete_item_name_items_path, :placeholder => "Search for topics..." %>
+				<%= f.autocomplete_field :name, autocomplete_item_name_items_path, :id => "by_name_input", :placeholder => "Search for topics..." %>
 			<% end %>
 			<div class="find_topic_by_metacode" id="find_topic_by_metacode">
 				   <ul id="filters-one">

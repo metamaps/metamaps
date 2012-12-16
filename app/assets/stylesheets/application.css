@@ -94,7 +94,7 @@ input[type="submit"] { margin-top:5px; }
 #menus { margin:0 7px; }
 .accountWrap, .createWrap, .exploreWrap { display:block; position:relative; cursor: pointer;}
 
-#menus .account, #menus .create, #menus .explore { display:none; position:absolute; right:0; z-index:12; width:auto; color: #67AF9F;
+#menus .account, #menus .create { display:none; position:absolute; right:0; z-index:12; width:auto; color: #67AF9F;
 white-space: nowrap;
 text-align: center;
 font-size: 16px;
@@ -123,9 +123,10 @@ border: 1px solid rgba(0, 0, 0, 0.2);
 
 
 /* --- styling the FIND section ---*/
-.sideOption { position:fixed; top:20%; left:0px; display:block; width:auto; background: url('bg.png') repeat 0 0; padding:15px; border-bottom-right-radius:10px; border-top-right-radius:10px; color:#000; border:1px solid #000; overflow:visible;}
-.sideOption select, .sideOption span { float:left; }
-.sideOption .spacer { margin:0 8px; }
+.sideOption { position:fixed; top:25%; left:0px; display:block; width:45px; height:32px; background: url('bg.png') repeat 0 0; padding:0 0 0 15px; border-bottom-right-radius:10px; border-top-right-radius:10px; color:#000; border:1px solid #000; overflow:hidden; cursor:pointer; }
+#closeFind { position:fixed; top:25%; left:4px; display:none; margin-top:-20px; cursor:pointer; }
+.sideOption select, .sideOption span { float:left; margin-top:10px; }
+.sideOption .spacer { margin:10px 10px 0; }
 .sideOption .find_key { margin-right:8px; }
 .find_topic_by_name { display: block; }
 .find_topic_by_name input { 
@@ -138,9 +139,6 @@ border: 1px solid rgba(0, 0, 0, 0.2);
 	}
 
 .find_topic_by_metacode { z-index:12; display:none; width:auto; color: #67AF9F; }
-
-#iconLegend { width:inherit; height:inherit; }
-
 .find_topic_by_metacode ul { display:block; }
 .find_topic_by_metacode ul li {clear:both; list-style-type:none; display:block; padding:3px; }
 .find_topic_by_metacode ul img { width:40px; height:40px; float:left; }

@@ -21,6 +21,50 @@ var viewMode = "list";
 
  $(document).ready(function() {
    
+   $('.sideOption').bind('click',function(){
+	  $('.sideOption').animate({
+		width: '245px',
+		height: '76px'
+	  }, 700, function() {
+		$('#by_name_input').focus();
+	  });
+	  $('#closeFind').css('display','block');
+	  $('.sideOption').unbind('click');
+	  $('.sideOption').css('cursor','default');
+   });
+   
+   $('#closeFind').click(function(){
+	   $('#closeFind').css('display','none');
+	   $('.sideOption').css('cursor','pointer');
+	   $('.sideOption').animate({
+		width: '45px',
+		height: '32px'
+	  }, 700, function() {
+		    $('.sideOption').bind('click',function(){
+				  firstVal = $('.sideOption option[value="name"]').attr('selected');
+				  secondVal = $('.sideOption option[value="metacode"]').attr('selected');
+				  if ( firstVal === 'selected') {
+					  $('.sideOption').animate({
+						width: '245px',
+						height: '76px'
+					  }, 700, function() {
+						$('#by_name_input').focus();
+					  });
+				  } else if ( secondVal === 'selected') {
+					  $('.sideOption').animate({
+						width: '380px',
+						height: '463px'
+					  }, 700, function() {
+						// Animation complete.
+					  });
+				  }
+				  $('#closeFind').css('display','block');
+				  $('.sideOption').unbind('click');
+				  $('.sideOption').css('cursor','default');
+			   });
+	  });
+   });
+   
    $('.sideOption .select_type').change(function() {
 	      firstVal = $(this).children("option[value='name']").attr('selected');
 		  secondVal = $(this).children("option[value='metacode']").attr('selected');
@@ -31,23 +75,35 @@ var viewMode = "list";
 				  for (var catVis in categoryVisible) {
 					  categoryVisible[catVis] = true;
 				  }
+				  $('.sideOption').animate({
+					width: '245px',
+					height: '76px'
+				  }, 700, function() {
+					// Animation complete.
+				  });
 				  $('.find_topic_by_name').fadeIn('fast');  
 			  });
 		  }
 		  else if ( secondVal === 'selected' ) {
 			  $('.find_topic_by_name').fadeOut('fast', function() {
+				  $('.sideOption').animate({
+					width: '380px',
+					height: '463px'
+				  }, 700, function() {
+					// Animation complete.
+				  });
 				  $('.find_topic_by_metacode').fadeIn('fast');  
 			  });
 		  }
 	});
    
-   $('.find_topic_by_name #item_name').bind('railsAutocomplete.select', function(event, data){
+   $('.find_topic_by_name #by_name_input').bind('railsAutocomplete.select', function(event, data){
       /* Do something here */
       if (data.item.user_id != undefined && data.item.id != undefined) {
         window.open("/users/" + data.item.user_id + "/items/" + data.item.id)
       }
       else if (data.item.value == "no existing match"){
-        $('.find_topic_by_name #item_name').val('');
+        $('.find_topic_by_name #by_name_input').val('');
       }
     });
     
@@ -58,29 +114,7 @@ var viewMode = "list";
 	$(".focus .desc").mCustomScrollbar(); 
 	$(".scroll").mCustomScrollbar();
 	
-	$('.nodemargin').css('padding-top',$('.focus').css('height'));
-	
-	
-	// if there's an add topic directly to page form loaded on the page you're on then let the user add one
-	$('#newtopic').click(function(event){
-		obj1 = document.getElementById('new_item');
-		if (obj1 != null) {
-			  $('#new_synapse').css('display','none');
-			  $('#new_item').fadeIn('fast');
-			  event.preventDefault();
-		}
-	});
-	
-	// if there's an add synapse directly to page form loaded on the page you're on then let the user add one
-	$('#newsynapse').click(function(event){
-		obj2 = document.getElementById('new_synapse');
-		if (obj2 != null) {
-			  $('#new_item').css('display','none');
-			  $('#new_synapse').fadeIn('fast');
-			  event.preventDefault();
-		}
-	});
-	
+	$('.nodemargin').css('padding-top',$('.focus').css('height'));	
 	
 	// controls the sliding hover of the filters
     var sliding1 = false; 
@@ -122,50 +156,6 @@ var viewMode = "list";
           } 
         } 
     );
-	
-	var sliding3 = false; 
-    $(".exploreWrap").hover( 
-        function () { 
-          if (! sliding3) { 
-            sliding3 = true; 
-            $(".explore").slideDown('slow', function() { 
-              sliding3 = false; 
-            }); 
-          } 
-        },  
-        function () { 
-          if (! sliding3) { 
-            sliding3 = true; 
-            $(".explore").slideUp('slow', function() { 
-              sliding3 = false; 
-            }); 
-          } 
-        } 
-    );
-	
-	var sliding4 = false; 
-	var lT;
-    $(".legend").hover( 
-        function () { 
-		  clearTimeout(lT);
-          if (! sliding4) { 
-			  sliding4 = true; 
-			  $("#iconLegend ul").slideDown('slow', function() { 
-				sliding4 = false; 
-			  });
-          } 
-        },  
-        function () { 
-          lT = setTimeout(function() { 
-			  if (! sliding4) { 
-					sliding4 = true; 
-					$("#iconLegend ul").slideUp('slow', function() { 
-					  sliding4 = false; 
-					});		
-			  }
-		  },800); 
-        } 
-    ); 
 
 	// toggle visibility of item categories based on status in the filters list
 	$('.find_topic_by_metacode ul li').click(function(event) {

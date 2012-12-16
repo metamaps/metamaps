@@ -74,9 +74,8 @@ class ItemsController < ApplicationController
     end		
 
     @position = Hash.new()
-    @position.x = params[:item][:x]
-    @position.y = params[:item][:y]
-    @position.save
+    @position['x'] = params[:item][:x]
+    @position['y'] = params[:item][:y]
 	
 	@mapping = Mapping.new()
 	if params[:item][:map]

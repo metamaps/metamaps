@@ -3,8 +3,9 @@ $('#new_item')[0].reset();
 
 if(viewMode == "graph") {
 	  var newnode = <%= @item.self_as_json.html_safe %>;
-      var x = <%= position.x %>;
-      var y = <%= position.y %>;
+      var x = <%= @position['x'] %>;
+      var y = <%= @position['y'] %>;
+      
 		
 		if (Mconsole != null) {
       Mconsole.graph.addNode(newnode);
@@ -21,9 +22,9 @@ if(viewMode == "graph") {
         temp.setData('xloc',0);
         temp.setData('yloc',0);
         temp.setData('mappingid', '<%= @mapping.id %>');
-        temp.setPos(new $jit.Complex(0, 0), 'current');
-        temp.setPos(new $jit.Complex(0, 0), 'start');
-        temp.setPos(new $jit.Complex(0, 0), 'end');
+        temp.setPos(new $jit.Complex(x, y), 'current');
+        temp.setPos(new $jit.Complex(x, y), 'start');
+        temp.setPos(new $jit.Complex(x, y), 'end');
       }
       
 			Mconsole.fx.plotNode(temp, Mconsole.canvas);
@@ -42,7 +43,6 @@ if(viewMode == "graph") {
 
 }
 else {
-  alert('wrong!');
 	$('#cards').prepend('<%= escape_javascript(render(@item)) %>');
 	$(".scroll").mCustomScrollbar(); 
 }
