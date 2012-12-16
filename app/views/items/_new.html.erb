@@ -1,17 +1,7 @@
 <div class="anypage">
 <%= form_for Item.new, url: user_items_url(user), remote: true do |form| %>
-  <button id="closenewtopic" onclick="$('#new_item').fadeOut('fast'); $('#new_item')[0].reset(); return false;">close</button>
-  <h3>Add Topic</h3>
-  <label for="category">Category</label>
-  <%= select_tag "category", options_from_collection_for_select(ItemCategory.order("name ASC").all, "id", "name") %>
-  <label for="item_name">Title</label>
   <%= form.text_field :name %>
-  <label for="item_desc">Description</label>
-  <%= form.text_area :desc, class: "description", :rows => 5 %>
-  <label for="item_link">Link</label>
-  <%= form.text_field :link, class: "link" %>
-  <label for="item_permission">Permission</label>
-  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
-  <%= form.submit "Add Topic", class: "addTopic", id: "addTopic" %>
+  <%= form.hidden_field :x, :value => 0 %>
+  <%= form.hidden_field :y, :value => 0 %>
 <% end %>
 </div>

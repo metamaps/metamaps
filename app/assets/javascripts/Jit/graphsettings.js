@@ -129,6 +129,7 @@ function graphSettings(type) {
 			
 			// add some events to the label
 			nameContainer.onmouseover = function(){
+                if (node.id == 0) return;
 				$('.showcard').css('display','none');
 				$('.name').css('display','block');
 				$('.name.item_' + node.id).css('display','none');
@@ -328,7 +329,7 @@ function graphSettings(type) {
 
 
 // defining custom node type	
-var nodeSettings = {  
+var nodeSettings = {
 	  'customNode': {  
 		  'render': function (node, canvas) {		  			  
 			  var pos = node.pos.getc(true),
@@ -427,20 +428,25 @@ function selectNodeOnClickHandler(node) {
 
 //for the canvasDoubleClickHandler function
 var canvasDoubleClickHandlerObject = new Object();
-canvasDoubleClickHandlerObject.stored_timestamp = 0;
+canvasDoubleClickHandlerObject.storedTime = 0;
 
 function canvasDoubleClickHandler(e) {
-  var TOLERANCE = 1000; //1 second
+   console.log(e);
+   var TOLERANCE = 300; //0.3 seconds
 
-  //grab the location and timestamp of the click
-  var stored_timestamp = canvasDoubleClickHandlerObject.stored_timestamp;
-  var now = Date.now(); //not compatible with IE8 FYI
+   //grab the location and timestamp of the click
+   var storedTime = canvasDoubleClickHandlerObject.storedTime;
+   var now = Date.now(); //not compatible with IE8 FYI
 
-  if (now - stored_timestamp < TOLERANCE) {
-    //pop up node creation :)
-    $('#new_item').fadeIn('fast');
-    //NOTE: we have e.x, e.y so use them!!
-  } else {
-    canvasDoubleClickHandlerObject.stored_timestamp = now;
-  }
+   if (now - storedTime < TOLERANCE) {
+      //pop up node creation :)
+      document.getElementById('new_item').style.left = e.x + "px";
+      document.getElementById('new_item').style.top = e.y + "px";
+      $('#item_x').val(e.x);
+      $('#item_y').val(e.y);
+      $('#new_item').fadeIn('fast');
+      $('#item_name').focus();
+   } else {
+      canvasDoubleClickHandlerObject.storedTime = now;
+   }
 }//canvasDoubleClickHandler
