@@ -4,6 +4,8 @@ class MapsController < ApplicationController
     
   respond_to :html, :js, :json
   
+  autocomplete :map, :name, :full => true, :extra_data => [:user_id]
+  
   # GET /users/:user_id/maps
   def index
     @user = User.find(params[:user_id])

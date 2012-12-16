@@ -52,7 +52,7 @@
           }, function() {
             if(arguments[0].length == 0) {
               arguments[0] = []
-              arguments[0][0] = { id: "", label: "no existing match" }
+              //arguments[0][0] = { id: "", label: "no existing match" }
             }
             jQuery(arguments[0]).each(function(i, el) {
               var obj = {};

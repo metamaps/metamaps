@@ -48,45 +48,40 @@ class ItemsController < ApplicationController
   def create
     
     @user = current_user
-	
-	@addtomap = false
-	
-	if params[:initem] 
-		if params[:initem] != ""
-			@addtomap = true
-			@itemid = params[:initem]
-		end
-	end
-	
-	if @addtomap
-			@item = Item.find(@itemid)
-	else
-		@item = Item.new()
-		@item.name = params[:item][:name]
-		@item.desc = ""
-		@item.link = ""
-		@item.permission = 'commons'
-        @item.item_category = ItemCategory.all.first
-		#@item.item_category = ItemCategory.find(params[:category])
-		@item.user = @user
+    
+    # if the topic exists grab it and return it
+    if params[:item][:grabItem] != "null"
+        @item = Item.find(params[:item][:grabItem])
+    # if the topic doesn't exist yet, create it
+    else
+      @item = Item.new()
+      @item.name = params[:item][:name]
+      @item.desc = ""
+      @item.link = ""
+      @item.permission = 'commons'
+      @item.item_category = ItemCategory.all.first
+      #@item.item_category = ItemCategory.find(params[:category])
+      @item.user = @user
 
-		@item.save
+      @item.save
     end		
 
+    # also create an object to return the position to the canvas
     @position = Hash.new()
     @position['x'] = params[:item][:x]
     @position['y'] = params[:item][:y]
-	
-	@mapping = Mapping.new()
-	if params[:item][:map]
-		@mapping.category = "Item"
-		@mapping.user = @user
-		@mapping.map = Map.find(params[:item][:map])
-		@mapping.item = @item
-		@mapping.xloc = 0
-		@mapping.yloc = 0
-		@mapping.save
-	end
+    
+    # set this for the case where the item is being created on a map.
+    @mapping = Mapping.new()
+    if params[:item][:map]
+      @mapping.category = "Item"
+      @mapping.user = @user
+      @mapping.map = Map.find(params[:item][:map])
+      @mapping.item = @item
+      @mapping.xloc = params[:item][:x]
+      @mapping.yloc = params[:item][:y]
+      @mapping.save
+    end
     
     respond_to do |format|
       format.html { respond_with(@user, location: user_item_url(@user, @item)) }

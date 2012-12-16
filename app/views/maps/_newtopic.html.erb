@@ -1,29 +1,9 @@
-<div class="anypage mapspages">
+<div class="anypage">
 <%= form_for Item.new, url: user_items_url(user), remote: true do |form| %>
-  <button id="closenewtopic" onclick="$('#new_item').fadeOut('fast'); $('#new_item')[0].reset(); return false;">close</button>
-  <div class="selecttype">	
-	<h3 onclick="$('.existingtopic').fadeOut('fast', function () { $('.newtopic').fadeIn('fast'); });" style="border-right:1px solid #000;">Add New Topic</h3>
-	<h3 onclick="$('.newtopic').fadeOut('fast', function () { $('.existingtopic').fadeIn('fast'); });">Add Existing Topic</h3>
-	<div style="clear:both;"></div>
-  </div>
-  <div class="newtopic">
-	  <label for="category">Category</label>
-	  <%= select_tag "category", options_from_collection_for_select(ItemCategory.order("name ASC").all, "id", "name") %>
-	  <label for="item_name">Title</label>
-	  <%= form.text_field :name %>
-	  <label for="item_desc">Description</label>
-	  <%= form.text_area :desc, class: "description", :rows => 5 %>
-	  <label for="item_link">Link</label>
-	  <%= form.text_field :link, class: "link" %>
-	  <label for="item_permission">Permission</label>
-	  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
-	  <%= form.hidden_field :map, :value => @map.id %>
-	  <%= form.submit "Add Topic", class: "addTopic", id: "addTopic" %>
-  </div>
-  <div class="existingtopic" style="display:none;" >
-      <label for="initem">Select Topic To Add</label>
-	  <%= select_tag "initem", options_from_collection_for_select(Item.order("name ASC").visibleToUser(user, nil).delete_if{|item| @map.items.include?(item)}, "id", "name"), {:include_blank => true} %>
-	  <%= form.submit "Add Topic", class: "addTopic", id: "addTopic" %>
-  </div>
+  <%= form.autocomplete_field :name, autocomplete_item_name_items_path, :placeholder => "What is the name of your topic?" %>
+  <%= form.hidden_field :x, :value => 0 %>
+  <%= form.hidden_field :y, :value => 0 %>
+  <%= form.hidden_field :map, :value => @map.id %>
+  <%= form.hidden_field :grabItem, :value => "null" %>
 <% end %>
 </div>

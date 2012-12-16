@@ -129,7 +129,8 @@ border: 1px solid rgba(0, 0, 0, 0.2);
 .sideOption .spacer { margin:10px 10px 0; }
 .sideOption .find_key { margin-right:8px; }
 .find_topic_by_name { display: block; }
-.find_topic_by_name input { 
+
+.find_topic_by_name input, .find_map_by_name input, .find_mapper_by_name input { 
 	margin:10px 0 0 0;
 	width: 207px;
 	border-radius: 10px;
@@ -137,6 +138,8 @@ border: 1px solid rgba(0, 0, 0, 0.2);
 	padding: 0 10px;
 	outline: none; 
 	}
+
+.find_mapper_by_name, .find_map_by_name { display:none; }
 
 .find_topic_by_metacode { z-index:12; display:none; width:auto; color: #67AF9F; }
 .find_topic_by_metacode ul { display:block; }

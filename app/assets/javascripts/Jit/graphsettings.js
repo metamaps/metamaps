@@ -41,21 +41,7 @@ function graphSettings(type) {
          //Add Tips
          Tips: {
             enable: false,
-            onShow: function (tip, node) {
-               
-			   //display node info in tooltip
-			   var html =
-                  '<p class="type">' + node.getData("itemcatname") + '</p>' +
-                  '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-                  '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' +
-                  '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' +
-                  '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
-                  '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
-				  
-               tip.innerHTML = '<div class="" id="item_' + node.id + '"></div>';
-			   $jit.id('item_' + node.id).innerHTML = html;
-               $("#_tooltip .scroll").mCustomScrollbar();
-            }
+            onShow: function (tip, node) {}
          },
          // Add node events
          Events: {
@@ -142,12 +128,7 @@ function graphSettings(type) {
 			
 			// add some events to the label
 			nameContainer.onclick = function(){
-				node.setData('dim', 1, 'current');
-				$('.showcard').css('display','none');
-				$('.name').css('display','block');
-				$('.name.item_' + node.id).css('display','none');
-				$('.showcard.item_' + node.id).fadeIn('fast');
-				Mconsole.plot();
+				selectNodeOnClickHandler(node)
 			} 
          },
          // Change node styles when DOM labels are placed
@@ -209,16 +190,8 @@ function graphSettings(type) {
          },
          //Add Tips
          Tips: {
-            enable: true,
-            onShow: function (tip, node) {
-               //count connections
-               var count = 0;
-               node.eachAdjacency(function () {
-                  count++;
-               });
-               //display node info in tooltip
-               tip.innerHTML = "<div class=\"tip-title\">" + node.name + "</div>" + "<div class=\"tip-text\">connections: " + count + "</div>";
-            }
+            enable: false,
+            onShow: function (tip, node) {}
          },
          // Add node events
          Events: {
@@ -226,10 +199,10 @@ function graphSettings(type) {
             type: 'HTML',
             //Change cursor style when hovering a node
             onMouseEnter: function () {
-               //Mconsole.canvas.getElement().style.cursor = 'move';
+               
             },
             onMouseLeave: function () {
-               //Mconsole.canvas.getElement().style.cursor = '';
+               
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
@@ -243,83 +216,82 @@ function graphSettings(type) {
                this.onDragMove(node, eventInfo, e);
             },
             //Add also a click handler to nodes
-            onClick: function (node) {
-               if (!node) return;
-               //set final styles  
-               Mconsole.graph.eachNode(function (n) {
-                  if (n.id != node.id) delete n.selected;
-                  n.setData('dim', 25, 'end');
-                  n.eachAdjacency(function (adj) {
-                     adj.setDataset('end', {
-                        lineWidth: 1,
-                        color: '#222222'
-                     });
-                     adj.setData('showDesc', false, 'current');
-                  });
-               });
-               if (!node.selected) {
-                  node.selected = true;
-                  node.setData('dim', 35, 'end');
-                  node.eachAdjacency(function (adj) {
-                     adj.setDataset('end', {
-                        lineWidth: 3,
-                        color: '#FFF'
-                     });
-                     adj.setData('showDesc', true, 'current');
-                  });
+            onClick: function (node, eventInfo, e) {
+               //clicking on a node, or clicking on blank part of canvas?
+               if (node) {
+				 if (!Mconsole.busy) {
+					selectNodeOnClickHandler(node);
+					Mconsole.onClick(node.id, {  
+					   hideLabels: false  
+					});
+				 }
                } else {
-                  delete node.selected;
-               }
-               //trigger animation to final styles  
-               Mconsole.fx.animate({
-                  modes: ['node-property:dim',
-                     'edge-property:lineWidth:color'],
-                  duration: 500
-               });
-               // Build the right column relations list.
-               // This is done by traversing the clicked node connections.
-               var html =
-                  '<p class="type">' + node.getData("itemcatname") + '</p>' +
-                  '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-                  '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' +
-                  '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' +
-                  '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
-                  '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
-
-               //append connections information
-               $jit.id('showcard').innerHTML = '<div class="item" id="item_' + node.id + '"></div>';
-               $jit.id('item_' + node.id).innerHTML = html;
-               $("#showcard .scroll").mCustomScrollbar();
-            }
+                 canvasDoubleClickHandler(eventInfo.getPos(), e);
+               }//if
+            }//onClick
          },
-         //Number of iterations for the Mconsole algorithm
+         //Number of iterations for the FD algorithm
          iterations: 200,
          //Edge length
          levelDistance: 200,
          // Add text to the labels. This method is only triggered
          // on label creation and only for DOM labels (not native canvas ones).
          onCreateLabel: function (domElement, node) {
-            // Create a 'name' and 'close' buttons and add them  
-            // to the main node label  
-            domElement.innerHTML = '<div class="label">' + node.name + '</div>';
-            domElement.onclick = function () {
-               Mconsole.onClick(node.id, {
-                  onComplete: function () {
-                     var html =
-                        '<p class="type">' + node.getData("itemcatname") + '</p>' +
-                        '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-                        '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' +
-                        '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' +
-                        '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
-                        '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a>';
-
-                     //append connections information
-                     $jit.id('showcard').innerHTML = '<div class="item" id="item_' + node.id + '"></div>';
-                     $jit.id('item_' + node.id).innerHTML = html;
-                     $("#showcard .scroll").mCustomScrollbar();
-                  }
-               });
-            }
+			var html = 
+           '<div class="CardOnGraph" title="Click to Hide" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p>' + 
+           '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
+           '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
+           '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
+           '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
+		   var showCard = document.createElement('div'); 
+			showCard.className = 'showcard item_' + node.id;  
+			showCard.innerHTML = html; 
+			showCard.style.display = "none";
+			domElement.appendChild(showCard);
+			
+			// add some events to the label
+			showCard.onclick = function(){
+				if (!Mconsole.busy) {
+					delete node.selected;
+					node.setData('dim', 25, 'current');
+					node.eachAdjacency(function (adj) {
+					   adj.setDataset('end', {
+						  lineWidth: 0.5,
+						  color: '#222222'
+					   });
+					   adj.setData('showDesc', false, 'current');
+					});
+					Mconsole.fx.animate({
+					  modes: ['edge-property:lineWidth:color'],
+					  duration: 500
+				   });
+					$('.showcard.item_' + node.id).fadeOut('fast', function(){
+						$('.name').css('display','block');
+						Mconsole.plot();
+					});	
+				}
+			}
+			
+            // Create a 'name' button and add it  
+			// to the main node label  
+			var nameContainer = document.createElement('span'),  
+				style = nameContainer.style;  
+			nameContainer.className = 'name item_' + node.id;  
+			nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
+			domElement.appendChild(nameContainer);  
+			style.fontSize = "0.9em";  
+			style.color = "#222222";
+			
+			// add some events to the label
+			nameContainer.onclick = function(){
+				if (!Mconsole.busy) {
+					selectNodeOnClickHandler(node);
+					Mconsole.onClick(node.id, {  
+					   hideLabels: false  
+					});
+				 }
+			} 
          },
          // Change node styles when DOM labels are placed
          // or moved.
@@ -328,9 +300,8 @@ function graphSettings(type) {
             var left = parseInt(style.left);
             var top = parseInt(style.top);
             var w = domElement.offsetWidth;
-            var dim = node.getData('dim');
             style.left = (left - w / 2) + 'px';
-            style.top = (top + dim) + 'px';
+            style.top = (top+25) + 'px';
             style.display = '';
          }
       };
@@ -410,7 +381,6 @@ function selectNodeOnClickHandler(node) {
 	$('.name').css('display','block');
 	$('.name.item_' + node.id).css('display','none');
 	$('.showcard.item_' + node.id).fadeIn('fast');
-	Mconsole.plot();
 				
    //set final styles  
    Mconsole.graph.eachNode(function (n) {
@@ -426,7 +396,8 @@ function selectNodeOnClickHandler(node) {
    });
    if (!node.selected) {
       node.selected = true;
-      node.setData('dim', 1, 'current');
+	  node.setData('dim', 1, 'current');  
+
       node.eachAdjacency(function (adj) {
          adj.setDataset('end', {
             lineWidth: 3,
@@ -458,6 +429,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
 
    if (now - storedTime < TOLERANCE) {
       //pop up node creation :)
+	  $('#item_grabItem').val("null");
       document.getElementById('new_item').style.left = e.x + "px";
       document.getElementById('new_item').style.top = e.y + "px";
       $('#item_x').val(canvasLoc.x);

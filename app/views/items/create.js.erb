@@ -1,5 +1,8 @@
 $('#new_item').fadeOut('fast');
-$('#new_item')[0].reset();
+$('#item_name').data().autocomplete.term = null;
+$('.ui-autocomplete').children().remove();
+$('.ui-autocomplete').css('display','none');
+$('#item_name').attr('value','');
 
 if(viewMode == "graph") {
 	  var newnode = <%= @item.self_as_json.html_safe %>;
@@ -9,6 +12,12 @@ if(viewMode == "graph") {
 		
 		if (Mconsole != null) {
       Mconsole.graph.addNode(newnode);
+      
+      // set the animation for everything back to normal
+      Mconsole.graph.eachNode( function (n) {
+        n.setData('dim', 25, 'start');
+			  n.setData('dim', 25, 'end');
+      });
       var temp = Mconsole.graph.getNode('<%= @item.id %>');
 			temp.setData('dim', 1, 'start');
 			temp.setData('dim', 40, 'end');
@@ -37,10 +46,6 @@ if(viewMode == "graph") {
 			json = newnode;
 			initialize("chaotic");
 		 }
-		 // add the new node to the synapse select lists
-		 $("#node1_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
-		 $("#node2_id").prepend("<option value='<%= @item.id %>'><%= @item.name %></option>");
-
 }
 else {
 	$('#cards').prepend('<%= escape_javascript(render(@item)) %>');

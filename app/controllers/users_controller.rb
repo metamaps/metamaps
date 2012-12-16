@@ -5,6 +5,8 @@ class UsersController < ApplicationController
     
   respond_to :html, :json
   
+  autocomplete :user, :name, :full => true
+  
   # GET /user/new
   def new
     @user = User.new

@@ -11,7 +11,7 @@ class MainController < ApplicationController
     @current = current_user
     
     if authenticated? 
-      @items = all_as_json(@current, @current).html_safe
+      @items = Item.all.first.self_as_json.html_safe
      
       respond_to do |format|
         format.html { respond_with(@current) }
