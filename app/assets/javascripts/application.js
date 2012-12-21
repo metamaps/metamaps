@@ -19,9 +19,11 @@
 // other options are 'graph'
 var viewMode = "list";
 
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole, gType, tempNode = null, tempInit = false, tempNode2 = null;
+
  $(document).ready(function() {
  
-    $('#new_item').bind('contextmenu', function(e){
+    $('#new_item, #new_synapse').bind('contextmenu', function(e){
 		return false;
 	});
 	

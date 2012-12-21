@@ -1,41 +1,41 @@
 $('#new_synapse').fadeOut('fast');
-$('#new_synapse')[0].reset();
+$('#synapse_desc').attr('value','');
+$('#synapse_item1id').attr('value','0');
+$('#synapse_item2id').attr('value','0');
 
-if (viewMode == "graph") {
-		
-		var temp1, temp2, temp;	
+var temp1, temp2, temp;	
 		 
-		if ( Mconsole != null) {
-				temp1 = Mconsole.graph.getNode(<%= @synapse.item1.id %>);
-				temp2 = Mconsole.graph.getNode(<%= @synapse.item2.id %>);
-				Mconsole.graph.addAdjacence(temp1, temp2, {});
-				temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
-				temp.setDataset('start', {  
-					lineWidth: 0.4,  
-					color: '#d1d1d1'  
-				  });
-				temp.setDataset('end', {
-					lineWidth: 3,  
-					color: '#36acfb'
-				});
-				var d = new Array(<%= @synapse.node1_id.to_s() %>, <%= @synapse.node2_id.to_s() %>);
-				temp.setDataset('current', {  
-					desc: '<%= @synapse.desc %>',  
-					showDesc: false,
-					category: '<%= @synapse.category %>',
-				  id: '<%= @synapse.id %>',
-					userid: '<%= @synapse.user.id %>',
-					username: '<%= @synapse.user.name %>'					
-				  });
-				  temp.data.$direction = d;
-				Mconsole.fx.plotLine(temp, Mconsole.canvas);
-				Mconsole.fx.animate({  
-					modes: ['node-property:dim','edge-property:lineWidth:color'],  
-					duration: 400  
-				  });
-		}
-		else {
-			json = <%= @synapse.selfplusnodes_as_json.html_safe %>
-			initialize("chaotic");
-		}
+if ( Mconsole != null) {
+    temp1 = Mconsole.graph.getNode(<%= @synapse.item1.id %>);
+    temp2 = Mconsole.graph.getNode(<%= @synapse.item2.id %>);
+    Mconsole.graph.addAdjacence(temp1, temp2, {});
+    temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
+    console.log(temp);
+    temp.setDataset('start', {  
+      lineWidth: 0.4,  
+      color: '#d1d1d1'  
+      });
+    temp.setDataset('end', {
+      lineWidth: 3,  
+      color: '#36acfb'
+    });
+    var d = new Array(<%= @synapse.node1_id.to_s() %>, <%= @synapse.node2_id.to_s() %>);
+    temp.setDataset('current', {  
+      desc: '<%= @synapse.desc %>',  
+      showDesc: true,
+      category: '<%= @synapse.category %>',
+      id: '<%= @synapse.id %>',
+      userid: '<%= @synapse.user.id %>',
+      username: '<%= @synapse.user.name %>'					
+      });
+    temp.data.$direction = d;
+    Mconsole.fx.plotLine(temp, Mconsole.canvas);
+    Mconsole.fx.animate({  
+      modes: ['edge-property:lineWidth:color'],  
+      duration: 400  
+      });
+}
+else {
+  json = <%= @synapse.selfplusnodes_as_json.html_safe %>
+  initialize("chaotic");
 }

@@ -54,12 +54,15 @@ class SynapsesController < ApplicationController
   def create
 	
     @user = current_user
-	@synapse = Synapse.new()
-	@synapse.desc = params[:synapse][:desc]
-	@synapse.item1 = Item.find(params[:synapse][:item1id])
-	@synapse.item2 = Item.find(params[:synapse][:item2id])
-  @synapse.user = @user	
-	@synapse.save   
+    @synapse = Synapse.new()
+    @synapse.desc = params[:synapse][:desc]
+    @synapse.item1 = Item.find(params[:synapse][:item1id])
+    @synapse.item2 = Item.find(params[:synapse][:item2id])
+    @synapse.permission = "commons"
+    @synapse.category = "from-to"
+    @synapse.weight = 5
+    @synapse.user = @user	
+    @synapse.save   
 	
 	if params[:synapse][:map]
 		@mapping = Mapping.new()

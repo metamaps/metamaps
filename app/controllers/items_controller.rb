@@ -66,11 +66,10 @@ class ItemsController < ApplicationController
       @item.save
     end
 
-    # pass the variables for synapse creation onto the javascript file
-    if params[:item][:addSynapse] != "false"
-      @synapse = Hash.new()
-      @synapse['item1id'] = params[:item][:item1id]
-      @synapse['item2id'] = params[:item][:item2id]
+    # pass on to the item create js whether it's being created with a synapse
+    @synapse = "false"
+    if params[:item][:addSynapse] == "true"
+      @synapse = "true" 
     end		
 
     # also create an object to return the position to the canvas

@@ -58,6 +58,7 @@ function graphSettings(type) {
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
 			   if (node && !node.nodeFrom) {
+				   $('#new_synapse').fadeOut('fast');
 				   $('#new_item').fadeOut('fast');
 				   var pos = eventInfo.getPos();
 				   // if it's a left click, move the node
@@ -78,15 +79,17 @@ function graphSettings(type) {
 						  tempNode2 = temp;
 						  Mconsole.plot();
 						  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
+						  // before making the highlighted one bigger, make sure all the others are regular size
+						  Mconsole.graph.eachNode(function (n) {
+							  n.setData('dim', 25, 'current');
+						  });
 						  temp.setData('dim',35,'current');
 						  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
 						  Mconsole.fx.plotNode(temp, Mconsole.canvas);
 					   } else if (!temp) {
-						   if (tempNode2 != null) {
-							   tempNode2.setData('dim',25,'current');
-							   Mconsole.fx.plotNode(tempNode2, Mconsole.canvas);
-							   tempNode2 = null;
-						   }
+						   Mconsole.graph.eachNode(function (n) {
+							  n.setData('dim', 25, 'current');
+						   });
 						   //pop up node creation :)
 						  $('#item_grabItem').val("null");
 						  var myX = e.x - 110;
@@ -106,13 +109,14 @@ function graphSettings(type) {
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
-					tempNode = null;
-					tempNode2 = null;
-					tempInit = false;
+					$('#item_addSynapse').val("true");
 					$('#new_item').fadeIn('fast');
 					$('#item_name').focus();
 				}
 				else if (tempInit && tempNode2 != null) {
+					$('#item_addSynapse').val("false");
+					$('#synapse_item1id').val(tempNode.id);
+        			$('#synapse_item2id').val(tempNode2.id);
 					$('#new_synapse').fadeIn('fast');
 					$('#synapse_desc').focus();
 					tempNode = null;
@@ -125,6 +129,9 @@ function graphSettings(type) {
 					tempNode = null;
 					tempNode2 = null;
 					tempInit = false;
+					$('#item_addSynapse').val("false");
+					$('#item_item1id').val(0);
+					$('#item_item2id').val(0);
 					Mconsole.plot();
 				}
 			},
@@ -517,6 +524,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
    if (now - storedTime < TOLERANCE) {
       //pop up node creation :)
 	  $('#item_grabItem').val("null");
+	  $('#item_addSynapse').val("false");
       document.getElementById('new_item').style.left = e.x + "px";
       document.getElementById('new_item').style.top = e.y + "px";
       $('#item_x').val(canvasLoc.x);
@@ -526,5 +534,10 @@ function canvasDoubleClickHandler(canvasLoc,e) {
    } else {
       canvasDoubleClickHandlerObject.storedTime = now;
 	  $('#new_item').fadeOut('fast');
+	  $('#new_synapse').fadeOut('fast');
+	  tempInit = false;
+	  tempNode = null;
+	  tempNode2 = null;
+	  Mconsole.plot();
    }
 }//canvasDoubleClickHandler

@@ -1,5 +1,3 @@
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole, gType, tempNode, tempInit = false, tempNode2 = null;
-
 (function() {
   var ua = navigator.userAgent,
       iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
