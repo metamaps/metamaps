@@ -15,6 +15,10 @@ ISSAD::Application.routes.draw do
     get :autocomplete_item_name, :on => :collection
   end
   
+  resources :synapses do
+    get :autocomplete_synapse_desc, :on => :collection
+  end
+  
   resources :maps do
     get :autocomplete_map_name, :on => :collection
   end

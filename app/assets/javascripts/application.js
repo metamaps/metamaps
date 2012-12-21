@@ -21,6 +21,10 @@ var viewMode = "list";
 
  $(document).ready(function() {
  
+    $('#new_item').bind('contextmenu', function(e){
+		return false;
+	});
+	
 	/// this is for the topic creation autocomplete fielf
 	$('#item_name').bind('railsAutocomplete.select', function(event, data){  
       if (data.item.id != undefined) {

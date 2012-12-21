@@ -64,6 +64,13 @@ class ItemsController < ApplicationController
       @item.user = @user
 
       @item.save
+    end
+
+    # pass the variables for synapse creation onto the javascript file
+    if params[:item][:addSynapse] != "false"
+      @synapse = Hash.new()
+      @synapse['item1id'] = params[:item][:item1id]
+      @synapse['item2id'] = params[:item][:item2id]
     end		
 
     # also create an object to return the position to the canvas
@@ -85,7 +92,7 @@ class ItemsController < ApplicationController
     
     respond_to do |format|
       format.html { respond_with(@user, location: user_item_url(@user, @item)) }
-      format.js { respond_with(@item, @mapping, @position) }
+      format.js { respond_with(@item, @mapping, @synapse, @position) }
     end
     
   end

@@ -51,7 +51,12 @@ module ItemsHelper
 				
 				@synapsedata = Hash.new
 				@synapsedata['$desc'] = synapse.desc
-				@synapsedata['$category'] = synapse.category
+        @synapsedata['$showDesc'] = false
+        @synapsedata['$category'] = synapse.category
+        @synapsedata['$id'] = synapse.id
+        @synapsedata['$userid'] = synapse.user.id
+        @synapsedata['$username'] = synapse.user.name
+        @synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
 				json.data @synapsedata
 		  end
 		  

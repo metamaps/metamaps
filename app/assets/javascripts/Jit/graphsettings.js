@@ -46,6 +46,7 @@ function graphSettings(type) {
          // Add node events
          Events: {
             enable: true,
+			enableForEdges: true,
             type: 'HTML',
             //Change cursor style when hovering a node
             onMouseEnter: function () {
@@ -56,10 +57,77 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-               var pos = eventInfo.getPos();
-               node.pos.setc(pos.x, pos.y);
-               Mconsole.plot();
+			   if (node && !node.nodeFrom) {
+				   $('#new_item').fadeOut('fast');
+				   var pos = eventInfo.getPos();
+				   // if it's a left click, move the node
+				   if (e.button == 0) {
+					   node.pos.setc(pos.x, pos.y);
+					   Mconsole.plot();
+				   }
+				   // if it's a right click, start synapse creation
+				   else if (e.button == 2) {
+					   if (tempInit == false) {
+						  tempNode = node;
+						  console.log(tempNode);
+						  tempInit = true;   
+					   }
+					   // 
+					   temp = eventInfo.getNode();
+					   if (temp != false && temp.id != node.id) { // this means a Node has been returned
+						  tempNode2 = temp;
+						  Mconsole.plot();
+						  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
+						  temp.setData('dim',35,'current');
+						  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
+						  Mconsole.fx.plotNode(temp, Mconsole.canvas);
+					   } else if (!temp) {
+						   if (tempNode2 != null) {
+							   tempNode2.setData('dim',25,'current');
+							   Mconsole.fx.plotNode(tempNode2, Mconsole.canvas);
+							   tempNode2 = null;
+						   }
+						   //pop up node creation :)
+						  $('#item_grabItem').val("null");
+						  var myX = e.x - 110;
+						  var myY = e.y - 30;
+						  document.getElementById('new_item').style.left = myX + "px";
+						  document.getElementById('new_item').style.top = myY + "px";
+						  document.getElementById('new_synapse').style.left = myX + "px";
+						  document.getElementById('new_synapse').style.top = myY + "px";
+						  $('#item_x').val(eventInfo.getPos().x);
+						  $('#item_y').val(eventInfo.getPos().y);
+						  Mconsole.plot();
+						  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
+						  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
+					   }
+				   }
+			   }
             },
+			onDragEnd: function() {
+				if (tempInit && tempNode2 == null) {
+					tempNode = null;
+					tempNode2 = null;
+					tempInit = false;
+					$('#new_item').fadeIn('fast');
+					$('#item_name').focus();
+				}
+				else if (tempInit && tempNode2 != null) {
+					$('#new_synapse').fadeIn('fast');
+					$('#synapse_desc').focus();
+					tempNode = null;
+					tempNode2 = null;
+					tempInit = false;
+				}
+			},
+			onDragCancel: function() {
+				if (tempInit && tempNode2 == null) {
+					tempNode = null;
+					tempNode2 = null;
+					tempInit = false;
+					Mconsole.plot();
+				}
+			},
             //Implement the same handler for touchscreens
             onTouchMove: function (node, eventInfo, e) {
                $jit.util.event.stop(e); //stop default touchmove event
@@ -68,7 +136,10 @@ function graphSettings(type) {
             //Add also a click handler to nodes
             onClick: function (node, eventInfo, e) {
                //clicking on a node, or clicking on blank part of canvas?
-               if (node) {
+               if (node.nodeFrom) {
+					selectEdgeOnClickHandler(node);   
+			   }
+			   else if (node && !node.nodeFrom) {
                  selectNodeOnClickHandler(node);
                } else {
                  canvasDoubleClickHandler(eventInfo.getPos(), e);
@@ -206,9 +277,11 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-               var pos = eventInfo.getPos();
-               node.pos.setc(pos.x, pos.y);
-               Mconsole.plot();
+               if (node && !node.nodeFrom) {
+				   var pos = eventInfo.getPos();
+				   node.pos.setc(pos.x, pos.y);
+				   Mconsole.plot();
+			   }
             },
             //Implement the same handler for touchscreens
             onTouchMove: function (node, eventInfo, e) {
@@ -217,8 +290,11 @@ function graphSettings(type) {
             },
             //Add also a click handler to nodes
             onClick: function (node, eventInfo, e) {
-               //clicking on a node, or clicking on blank part of canvas?
-               if (node) {
+               //clicking on an edge, a node, or clicking on blank part of canvas?
+               if (node.nodeFrom) {
+					selectEdgeOnClickHandler(node);  
+			   }
+			   else if (node && !node.nodeFrom) {
 				 if (!Mconsole.busy) {
 					selectNodeOnClickHandler(node);
 					Mconsole.onClick(node.id, {  
@@ -365,16 +441,27 @@ var nodeSettings = {
 			var y = parseInt((pos.y + posChild.y) /2); 
 			canvas.getCtx().fillStyle = '#000';
 			canvas.getCtx().font = 'bold 14px arial';
-			//canvas.getCtx().fillText(desc, x, y); 
+			canvas.getCtx().fillText(desc, x, y); 
 		  }
 		}, 'contains' : function(adj, pos) { 
 				var from = adj.nodeFrom.pos.getc(true), 
 				to = adj.nodeTo.pos.getc(true); 
-				return containsMidArrow(from, to, pos, this.edge.epsilon); 
+				return this.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon); 
 		}  
 	  }  
 	}
 	
+function selectEdgeOnClickHandler(adj) {
+      var showDesc = adj.getData("showDesc");
+	  if (showDesc) {
+		adj.setData('showDesc', false, 'current');
+	  	Mconsole.plot();  
+	  } else if (!showDesc) {
+	  	adj.setData('showDesc', true, 'current');
+	  	Mconsole.plot();
+	  }
+}//selectEdgeOnClickHandler
+
 function selectNodeOnClickHandler(node) {
    
     $('.showcard').css('display','none');

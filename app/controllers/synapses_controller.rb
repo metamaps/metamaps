@@ -5,6 +5,8 @@ class SynapsesController < ApplicationController
     
   respond_to :html, :js, :json
   
+  autocomplete :synapse, :desc, :full => true
+  
   # GET users/:user_id/synapses
   def index
     @user = User.find(params[:user_id])
@@ -54,15 +56,11 @@ class SynapsesController < ApplicationController
     @user = current_user
 	@synapse = Synapse.new()
 	@synapse.desc = params[:synapse][:desc]
-	@synapse.category = params[:synapse][:category]
-	@synapse.item1 = Item.find(params[:node1_id])
-	@synapse.item2 = Item.find(params[:node2_id])
-	@synapse.permission = params[:synapse][:permission]
+	@synapse.item1 = Item.find(params[:synapse][:item1id])
+	@synapse.item2 = Item.find(params[:synapse][:item2id])
   @synapse.user = @user	
 	@synapse.save   
 	
-  @mapping1 = Mapping.new()
-  @mapping2 = Mapping.new()
 	if params[:synapse][:map]
 		@mapping = Mapping.new()
 		@mapping.category = "Synapse"
@@ -70,26 +68,11 @@ class SynapsesController < ApplicationController
 		@mapping.map = Map.find(params[:synapse][:map])
 		@mapping.synapse = @synapse
 		@mapping.save
-		
-		if not Map.find(params[:synapse][:map]).items.include?(@synapse.item1)
-			@mapping1.category = "Item"
-			@mapping1.user = @user
-			@mapping1.map = Map.find(params[:synapse][:map])
-			@mapping1.item = @synapse.item1
-			@mapping1.save
-		end
-		if not Map.find(params[:synapse][:map]).items.include?(@synapse.item2)
-			@mapping2.category = "Item"
-			@mapping2.user = @user
-			@mapping2.map = Map.find(params[:synapse][:map])
-			@mapping2.item = @synapse.item2
-			@mapping2.save
-		end
 	end
     
     respond_to do |format|
       format.html { respond_with(@user, location: user_synapse_url(@user, @synapse)) }
-      format.js { respond_with(@synapse, @mapping1, @mapping2) }
+      format.js { respond_with(@synapse) }
     end
     
   end

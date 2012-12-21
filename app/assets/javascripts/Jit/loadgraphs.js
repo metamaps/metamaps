@@ -1,4 +1,4 @@
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole, gType;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole, gType, tempNode, tempInit = false, tempNode2 = null;
 
 (function() {
   var ua = navigator.userAgent,
@@ -82,10 +82,6 @@ midPoint.y - vect.y);
         ctx.lineTo(midPoint.x, midPoint.y); 
         ctx.lineTo(v2.x, v2.y); 
         ctx.stroke(); 
-}; 
-
-var containsMidArrow = function(posFrom, posTo, pos, epsilon) { 
-        return $jit.EdgeHelper.line.contains(posFrom, posTo, pos, epsilon); 
 }; 
 
 function initialize(type){
