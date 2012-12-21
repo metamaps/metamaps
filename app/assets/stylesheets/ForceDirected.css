@@ -2,7 +2,13 @@
 
 }
 
-.label { display:block; padding: 2px 4px; background:#ddd; opacity:0.8; border-radius:5px; }
+.label {
+  display:block;
+  padding: 2px 4px;
+  background:#ddd;
+  opacity:0.8;
+  border-radius:5px;
+}
 
 span.name {
   cursor: pointer;
