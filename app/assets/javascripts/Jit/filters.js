@@ -221,8 +221,8 @@ function showAll(duration) {
    
    $('.find_topic_by_name #topic_by_name_input').bind('railsAutocomplete.select', function(event, data){
       /* Do something here */
-      if (data.item.user_id != undefined && data.item.id != undefined) {
-        window.open("/users/" + data.item.user_id + "/items/" + data.item.id)
+      if (data.item.id != undefined) {
+        window.open("/items/" + data.item.id)
       }
       $('.find_topic_by_name #topic_by_name_input').val('');
     });
@@ -233,8 +233,8 @@ function showAll(duration) {
 	
 	$('.find_map_by_name #map_by_name_input').bind('railsAutocomplete.select', function(event, data){
       /* Do something here */
-      if (data.item.user_id != undefined && data.item.id != undefined) {
-        window.open("/users/" + data.item.user_id + "/maps/" + data.item.id)
+      if (data.item.id != undefined) {
+        window.open("/maps/" + data.item.id)
       }
       $('.find_map_by_name #map_by_name_input').val('');
     });

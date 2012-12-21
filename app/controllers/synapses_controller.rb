@@ -7,13 +7,19 @@ class SynapsesController < ApplicationController
   
   autocomplete :synapse, :desc, :full => true
   
-  # GET users/:user_id/synapses
+  # GET synapses
+  # or GET users/:user_id/synapses
   def index
-    @user = User.find(params[:user_id])
-  	
-	@current = current_user
-	@synapses = Synapse.visibleToUser(@current, @user)
-	@synapsesjson = synapses_as_json(@current, @synapses).html_safe
+    @current = current_user
+    
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+  	  @synapses = Synapse.visibleToUser(@current, @user)
+    elsif
+      @synapses = Synapse.visibleToUser(@current, nil)
+    end
+	  
+	  @synapsesjson = synapses_as_json(@current, @synapses).html_safe
 
     respond_to do |format|
       format.html 
@@ -21,7 +27,7 @@ class SynapsesController < ApplicationController
     end
   end
   
-  # Get users/:user_id/synapses/new
+  # Get synapses/new
   def new
   	@synapse = Synapse.new
     @user = current_user
@@ -29,28 +35,26 @@ class SynapsesController < ApplicationController
     respond_with(@synapse)
   end
   
-  # GET users/:user_id/synapses/:id
+  # GET synapses/:id
   def show
-  	@user = User.find(params[:user_id])
-  	
-	@current = current_user
-	@synapse = @user.synapses.find(params[:id]).authorize_to_show(@current)
-	@item1 = @synapse.item1.authorize_to_show(@current)
-	@item2 = @synapse.item2.authorize_to_show(@current)
+  	@current = current_user
+    @synapse = Synapse.find(params[:id]).authorize_to_show(@current)
+	  @item1 = @synapse.item1.authorize_to_show(@current)
+	  @item2 = @synapse.item2.authorize_to_show(@current)
 	
-	if @synapse && @item1 && @item2
-		@synapsejson = @synapse.selfplusnodes_as_json.html_safe
-	else
-		redirect_to root_url and return
-	end
+	  if @synapse && @item1 && @item2
+		  @synapsejson = @synapse.selfplusnodes_as_json.html_safe
+	  else
+		  redirect_to root_url and return
+	  end
 	
-	respond_to do |format|
+	  respond_to do |format|
       format.html
       format.json { respond_with(@synapsejson) }
     end
   end
   
-  # POST users/:user_id/synapses
+  # POST synapses
   def create
 	
     @user = current_user
@@ -64,65 +68,59 @@ class SynapsesController < ApplicationController
     @synapse.user = @user	
     @synapse.save   
 	
-	if params[:synapse][:map]
-		@mapping = Mapping.new()
-		@mapping.category = "Synapse"
-		@mapping.user = @user
-		@mapping.map = Map.find(params[:synapse][:map])
-		@mapping.synapse = @synapse
-		@mapping.save
-	end
+	  if params[:synapse][:map]
+		  @mapping = Mapping.new()
+		  @mapping.category = "Synapse"
+		  @mapping.user = @user
+		  @mapping.map = Map.find(params[:synapse][:map])
+		  @mapping.synapse = @synapse
+		  @mapping.save
+	  end
     
     respond_to do |format|
-      format.html { respond_with(@user, location: user_synapse_url(@user, @synapse)) }
+      format.html { respond_with(@user, location: synapse_url(@synapse)) }
       format.js { respond_with(@synapse) }
     end
     
   end
   
-  # GET users/:user_id/synapses/:id/edit
+  # GET synapses/:id/edit
   def edit
-	@user = User.find(params[:user_id])
-  	
-	@current = current_user
-	@synapse = @user.synapses.find(params[:id]).authorize_to_edit(@current)
+	  @current = current_user
+    @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
 	
-	if @synapse 
-		@items = Item.visibleToUser(@current, nil)
-	elsif not @synapse
-		redirect_to root_url and return
-	end
+	  if @synapse 
+		  @items = Item.visibleToUser(@current, nil)
+	  elsif not @synapse
+		  redirect_to root_url and return
+	  end
   
-	respond_with(@synapse, @items)
+	  respond_with(@synapse, @items)
   end
   
-  # PUT users/:user_id/synapses/:id
+  # PUT synapses/:id
   def update
-	@user = User.find(params[:user_id])
-  	
-	@synapse = @user.synapses.find(params[:id])
+	  @current = current_user
+    @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
     
-	if @synapse 
-		@synapse.desc = params[:synapse][:desc]
-		@synapse.category = params[:synapse][:category]
-		@synapse.item1 = Item.find(params[:node1_id][:node1])
-		@synapse.item2 = Item.find(params[:node2_id][:node2])
+	  if @synapse 
+		  @synapse.desc = params[:synapse][:desc]
+		  @synapse.category = params[:synapse][:category]
+		  @synapse.item1 = Item.find(params[:node1_id][:node1])
+		  @synapse.item2 = Item.find(params[:node2_id][:node2])
 	    @synapse.permission = params[:synapse][:permission]
-		@synapse.save
+		  @synapse.save
     end
 	
-    respond_with(@user, location: user_synapse_url(@user, @synapse)) do |format|
+    respond_with(@user, location: synapse_url(@synapse)) do |format|
     end
-	
   end
   
-  # DELETE users/:user_id/synapses/:id
+  # DELETE synapses/:id
   def destroy
-	@user = User.find(params[:user_id])
-  	
-	@synapse = @user.synapses.find(params[:id])
+	  @current = current_user
+	  @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
 	
-	@synapse.delete
+	  @synapse.delete if @synapse
   end
-
 end

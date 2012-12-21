@@ -4,7 +4,7 @@
 		<%= image_tag @item.item_category.icon, :class => 'icon', :size => '50x50' %>
 	</div>
 	<div class="focusmiddle">
-		<h1 class="title"><%= @item.name %> <% if (@item.permission == "commons" && authenticated?) || @item.user == user %><%= link_to "[edit]", edit_user_item_path(@user, @item) %><% end %></h1>
+		<h1 class="title"><%= @item.name %> <% if (@item.permission == "commons" && authenticated?) || @item.user == user %><%= link_to "[edit]", edit_item_path(@item) %><% end %></h1>
 		<div class="desc">
 			<p><%= @item.desc %></p>
 		</div>
@@ -32,7 +32,6 @@
 </script>
 
 <% if authenticated? %>
-	<%= render :partial => 'items/new' %>
 	<%= render :partial => 'synapses/new' %>
 <% end %>
 

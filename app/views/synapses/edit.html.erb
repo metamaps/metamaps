@@ -1,4 +1,4 @@
-<%= form_for @synapse, url: user_synapse_url do |form| %>
+<%= form_for @synapse, url: synapse_url do |form| %>
   <h3>Edit Synapse</h3>
   <% if Item.visibleToUser(user, nil).count > 0 %>
 	<label for="node1_id">Choose First Topic</label>

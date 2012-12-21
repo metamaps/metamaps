@@ -1,5 +1,5 @@
 <div class="newsynapses">
-	<%= form_for @synapse, url: user_synapses_url do |form| %>
+	<%= form_for @synapse, url: synapses_url do |form| %>
 	  <h3>Add Synapse Between Topics</h3> 
 	  <% if Item.visibleToUser(user, nil).count > 0 %>
 		<label for="node1_id">Choose First Topic</label>

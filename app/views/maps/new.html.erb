@@ -1,5 +1,5 @@
 <div class="nothidden">
-<%= form_for @map || Map.new, url: user_maps_url do |form|%>
+<%= form_for @map || Map.new, url: maps_url do |form|%>
   <h3>Add Map</h3>
   <label for="map_name">Name</label>
   <%= form.text_field :name %>

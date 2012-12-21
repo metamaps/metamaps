@@ -3,11 +3,10 @@ ISSAD::Application.routes.draw do
   root to: 'main#console', via: :get
   
   match 'metamap', to: 'main#metamap', via: :get, as: :metamap
-  match 'maps', to: 'main#allmaps', via: :get, as: :allmaps
   
   match 'invite', to: 'main#invite', via: :get, as: :invite
   
-  match 'users/:user_id/maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
+  match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
   
   resource :session
   
@@ -25,9 +24,9 @@ ISSAD::Application.routes.draw do
   
   resources :users do
     get :autocomplete_user_name, :on => :collection
-	  resources :items
-    resources :synapses
-	  resources :maps
+	  resources :items, :only => [:index]
+    resources :synapses, :only => [:index]
+	  resources :maps, :only => [:index]
   end
   
   # The priority is based upon order of creation:

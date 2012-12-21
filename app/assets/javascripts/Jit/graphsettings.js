@@ -57,54 +57,7 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-			   if (node && !node.nodeFrom) {
-				   $('#new_synapse').fadeOut('fast');
-				   $('#new_item').fadeOut('fast');
-				   var pos = eventInfo.getPos();
-				   // if it's a left click, move the node
-				   if (e.button == 0) {
-					   node.pos.setc(pos.x, pos.y);
-					   Mconsole.plot();
-				   }
-				   // if it's a right click, start synapse creation
-				   else if (e.button == 2) {
-					   if (tempInit == false) {
-						  tempNode = node;
-						  tempInit = true;   
-					   }
-					   // 
-					   temp = eventInfo.getNode();
-					   if (temp != false && temp.id != node.id) { // this means a Node has been returned
-						  tempNode2 = temp;
-						  Mconsole.plot();
-						  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
-						  // before making the highlighted one bigger, make sure all the others are regular size
-						  Mconsole.graph.eachNode(function (n) {
-							  n.setData('dim', 25, 'current');
-						  });
-						  temp.setData('dim',35,'current');
-						  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
-						  Mconsole.fx.plotNode(temp, Mconsole.canvas);
-					   } else if (!temp) {
-						   Mconsole.graph.eachNode(function (n) {
-							  n.setData('dim', 25, 'current');
-						   });
-						   //pop up node creation :)
-						  $('#item_grabItem').val("null");
-						  var myX = e.x - 110;
-						  var myY = e.y - 30;
-						  document.getElementById('new_item').style.left = myX + "px";
-						  document.getElementById('new_item').style.top = myY + "px";
-						  document.getElementById('new_synapse').style.left = myX + "px";
-						  document.getElementById('new_synapse').style.top = myY + "px";
-						  $('#item_x').val(eventInfo.getPos().x);
-						  $('#item_y').val(eventInfo.getPos().y);
-						  Mconsole.plot();
-						  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
-						  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
-					   }
-				   }
-			   }
+			   clickDragOnTopicForceDirected(node, eventInfo, e);
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
@@ -124,15 +77,13 @@ function graphSettings(type) {
 				}
 			},
 			onDragCancel: function() {
-				if (tempInit && tempNode2 == null) {
-					tempNode = null;
-					tempNode2 = null;
-					tempInit = false;
-					$('#item_addSynapse').val("false");
-					$('#item_item1id').val(0);
-					$('#item_item2id').val(0);
-					Mconsole.plot();
-				}
+				tempNode = null;
+				tempNode2 = null;
+				tempInit = false;
+				$('#item_addSynapse').val("false");
+				$('#item_item1id').val(0);
+				$('#item_item2id').val(0);
+				Mconsole.plot();
 			},
             //Implement the same handler for touchscreens
             onTouchMove: function (node, eventInfo, e) {
@@ -162,7 +113,7 @@ function graphSettings(type) {
 			var html = 
            '<div class="CardOnGraph" title="Click to Hide" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p>' + 
            '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-           '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+           '<div class="scroll"><a href="/items/' + node.id + '" class="title">' + node.name + '</a>' + 
 		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
            '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
            '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
@@ -283,12 +234,32 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-               if (node && !node.nodeFrom) {
-				   var pos = eventInfo.getPos();
-				   node.pos.setc(pos.x, pos.y);
-				   Mconsole.plot();
-			   }
+               clickDragOnTopicRGraph(node, eventInfo, e);
             },
+			onDragEnd: function() {
+				if (tempInit && tempNode2 != null) {
+					$('#item_addSynapse').val("false");
+					$('#synapse_item1id').val(tempNode.id);
+        			$('#synapse_item2id').val(tempNode2.id);
+					$('#new_synapse').fadeIn('fast');
+					$('#synapse_desc').focus();
+					tempNode = null;
+					tempNode2 = null;
+					tempInit = false;
+				}
+				else {
+					tempNode = null;
+					tempNode2 = null;
+					tempInit = false;
+				    Mconsole.plot();	
+				}
+			},
+			onDragCancel: function() {
+				tempNode = null;
+				tempNode2 = null;
+				tempInit = false;
+				Mconsole.plot();
+			},
             //Implement the same handler for touchscreens
             onTouchMove: function (node, eventInfo, e) {
                $jit.util.event.stop(e); //stop default touchmove event
@@ -307,7 +278,8 @@ function graphSettings(type) {
 					   hideLabels: false  
 					});
 				 }
-               } else {
+               } 
+			   else {
                  canvasDoubleClickHandler(eventInfo.getPos(), e);
                }//if
             }//onClick
@@ -322,7 +294,7 @@ function graphSettings(type) {
 			var html = 
            '<div class="CardOnGraph" title="Click to Hide" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p>' + 
            '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-           '<div class="scroll"><a href="/users/' + node.getData("userid") + '/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+           '<div class="scroll"><a href="/items/' + node.id + '" class="title">' + node.name + '</a>' + 
 		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
            '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
            '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
@@ -520,7 +492,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
    var storedTime = canvasDoubleClickHandlerObject.storedTime;
    var now = Date.now(); //not compatible with IE8 FYI
 
-   if (now - storedTime < TOLERANCE) {
+   if (now - storedTime < TOLERANCE && (gType == "arranged" || gType == "chaotic")) {
       //pop up node creation :)
 	  $('#item_grabItem').val("null");
 	  $('#item_addSynapse').val("false");
@@ -532,7 +504,9 @@ function canvasDoubleClickHandler(canvasLoc,e) {
       $('#item_name').focus();
    } else {
       canvasDoubleClickHandlerObject.storedTime = now;
-	  $('#new_item').fadeOut('fast');
+	  if (gType != "centered") {
+	  	$('#new_item').fadeOut('fast');
+	  }
 	  $('#new_synapse').fadeOut('fast');
 	  tempInit = false;
 	  tempNode = null;
@@ -540,3 +514,102 @@ function canvasDoubleClickHandler(canvasLoc,e) {
 	  Mconsole.plot();
    }
 }//canvasDoubleClickHandler
+
+// ForceDirected Mode: for the creation of new topics and synapses through clicking and draggin with right clicks off of topics
+function clickDragOnTopicForceDirected(node, eventInfo, e) {
+    if (node && !node.nodeFrom) {
+	   $('#new_synapse').fadeOut('fast');
+	   $('#new_item').fadeOut('fast');
+	   var pos = eventInfo.getPos();
+	   // if it's a left click, move the node
+	   if (e.button == 0) {
+		   node.pos.setc(pos.x, pos.y);
+		   Mconsole.plot();
+	   }
+	   // if it's a right click, start synapse creation
+	   else if (e.button == 2) {
+		   if (tempInit == false) {
+			  tempNode = node;
+			  tempInit = true;   
+		   }
+		   // 
+		   temp = eventInfo.getNode();
+		   if (temp != false && temp.id != node.id) { // this means a Node has been returned
+			  tempNode2 = temp;
+			  Mconsole.plot();
+			  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
+			  // before making the highlighted one bigger, make sure all the others are regular size
+			  Mconsole.graph.eachNode(function (n) {
+				  n.setData('dim', 25, 'current');
+			  });
+			  temp.setData('dim',35,'current');
+			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
+			  Mconsole.fx.plotNode(temp, Mconsole.canvas);
+		   } else if (!temp) {
+			   Mconsole.graph.eachNode(function (n) {
+				  n.setData('dim', 25, 'current');
+			   });
+			   //pop up node creation :)
+			  $('#item_grabItem').val("null");
+			  var myX = e.x - 110;
+			  var myY = e.y - 30;
+			  document.getElementById('new_item').style.left = myX + "px";
+			  document.getElementById('new_item').style.top = myY + "px";
+			  document.getElementById('new_synapse').style.left = myX + "px";
+			  document.getElementById('new_synapse').style.top = myY + "px";
+			  $('#item_x').val(eventInfo.getPos().x);
+			  $('#item_y').val(eventInfo.getPos().y);
+			  Mconsole.plot();
+			  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
+			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
+		   }
+	   }
+   }	
+}
+
+// RGRAPH MODE: for the creation of synapses through clicking and draggin with right clicks off of topics
+function clickDragOnTopicRGraph(node, eventInfo, e) {
+    if (node && !node.nodeFrom) {
+	   $('#new_synapse').fadeOut('fast');
+	   var pos = eventInfo.getPos();
+	   
+	   // if it's a left click, move the node
+	   if (e.button == 0) {
+		   node.pos.setc(pos.x, pos.y);
+		   Mconsole.plot();
+	   }
+	   // if it's a right click, start synapse creation
+	   else if (e.button == 2) {
+		   if (tempInit == false) {
+			  tempNode = node;
+			  tempInit = true;   
+		   }
+		   // 
+		   temp = eventInfo.getNode();
+		   if (temp != false && temp.id != node.id) { // this means a Node has been returned
+			  tempNode2 = temp;
+			  Mconsole.plot();
+			  renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: temp.pos.getc().x, y: temp.pos.getc().y }, 13, false, Mconsole.canvas);
+			  // before making the highlighted one bigger, make sure all the others are regular size
+			  Mconsole.graph.eachNode(function (n) {
+				  n.setData('dim', 25, 'current');
+			  });
+			  temp.setData('dim',35,'current');
+			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
+			  Mconsole.fx.plotNode(temp, Mconsole.canvas);
+		   } else if (!temp) {
+			   tempNode2 = null;
+			   Mconsole.graph.eachNode(function (n) {
+				  n.setData('dim', 25, 'current');
+			   });
+			  var myX = e.x - 110;
+			  var myY = e.y - 30;
+			  document.getElementById('new_synapse').style.left = myX + "px";
+			  document.getElementById('new_synapse').style.top = myY + "px";
+			  Mconsole.plot();
+			  renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
+			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
+		   }
+	   }
+   }	
+}

@@ -1,5 +1,5 @@
 <div class="nothidden">
-<%= form_for @item || Item.new, url: user_items_path do |form| %>
+<%= form_for @item || Item.new, url: items_path do |form| %>
   <h3>Add Topic</h3>
   <label for="category">Category</label>
   <%= select_tag "category", options_from_collection_for_select(ItemCategory.order("name ASC").all, "id", "name") %>

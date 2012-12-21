@@ -1,4 +1,4 @@
-<%= form_for @map, url: user_map_url(@user, @map) do |form| %>
+<%= form_for @map, url: map_url(@map) do |form| %>
   <h3>Edit Map</h3>
   <label for="map_name">Name</label>
   <%= form.text_field :name %>

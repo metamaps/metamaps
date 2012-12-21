@@ -1,4 +1,4 @@
-<%= form_for @item, url: user_item_url do |form| %>
+<%= form_for @item, url: item_url do |form| %>
   <h3>Edit Item</h3>
   <label for="category">Category</label>
   <%= select "category", "item_category_id", ItemCategory.order("name ASC").all.collect {|p| [ p.name, p.id ] }, { :selected => @item.item_category.id } %>
