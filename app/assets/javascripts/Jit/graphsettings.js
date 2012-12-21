@@ -70,7 +70,6 @@ function graphSettings(type) {
 				   else if (e.button == 2) {
 					   if (tempInit == false) {
 						  tempNode = node;
-						  console.log(tempNode);
 						  tempInit = true;   
 					   }
 					   // 

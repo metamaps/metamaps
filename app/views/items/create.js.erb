@@ -39,23 +39,29 @@ if (Mconsole != null) {
     temp.setPos(new $jit.Complex(x, y), 'end');
   }
   
-  Mconsole.fx.plotNode(temp, Mconsole.canvas);
-  Mconsole.fx.animate({  
-    modes: ['node-property:dim'],  
-    duration: 400  
-    });
-  
   if ( '<%= @synapse %>' == "true" ) {
-    renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
-		Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
-    Mconsole.fx.plotNode(temp, Mconsole.canvas);
     $('#synapse_item1id').val(tempNode.id);
     $('#synapse_item2id').val(temp.id);
     $('#new_synapse').fadeIn('fast');
     $('#synapse_desc').focus();
-		tempNode = null;
-		tempNode2 = null;
-		tempInit = false;
+    Mconsole.fx.animate({  
+      modes: ['node-property:dim'],  
+      duration: 500,
+      onComplete: function() {
+        renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
+        Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
+        Mconsole.fx.plotNode(temp, Mconsole.canvas);
+        tempNode = null;
+		    tempNode2 = null;
+		    tempInit = false;
+     }    
+    });
+  } else {
+      Mconsole.fx.plotNode(temp, Mconsole.canvas);
+      Mconsole.fx.animate({  
+        modes: ['node-property:dim'],  
+        duration: 500    
+      });
   }
   
 } else {
