@@ -12,7 +12,7 @@ class MainController < ApplicationController
     
     if authenticated? 
       @synapses = Synapse.visibleToUser(@current, nil)
-      @synapses.slice(0, 50)
+      @synapses = @synapses.slice(0, 50)
 	    @items = synapses_as_json(@current, @synapses).html_safe
      
       respond_to do |format|
