@@ -255,7 +255,29 @@ $(document).ready(function() {
    //
    $("#topic_by_name_input").keyup(function() {
           var topicName = $(this).val();
-          onCanvasSearch(topicName,null,null);
+		  
+		  // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+		  firstVal = $("#onCanvas").attr('checked');
+		  secondVal = $("#inCommons").attr('checked');
+		  
+		  // only have the autocomplete enabled if they are searching in the commons
+		  
+		  if (firstVal == "checked" && secondVal == "checked"){
+			$('#topic_by_name_input').autocomplete( "option", "disabled", false );
+			onCanvasSearch(topicName,null,null);  
+		  }
+		  else if (firstVal == "checked"){
+			$('#topic_by_name_input').autocomplete( "option", "disabled", true );
+			onCanvasSearch(topicName,null,null);  
+		  }
+		  else if (secondVal == "checked"){
+			hideAll();
+			$('#topic_by_name_input').autocomplete( "option", "disabled", false ); 
+		  }
+		  else {
+			$('#topic_by_name_input').autocomplete( "option", "disabled", true );  
+		  }
+		  
    });
 			
    $('.sideOption .select_content').change(function() {

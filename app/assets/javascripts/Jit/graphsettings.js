@@ -372,7 +372,16 @@ var nodeSettings = {
 			  var pos = node.pos.getc(true),
 			  dim = node.getData('dim'),
 			  cat = node.getData('itemcatname'),
+			  isNew = node.getData('isNew'),
 			  ctx = canvas.getCtx();
+			  
+			  // if the topic is temporary draw a green circle around it
+			  if (isNew) {
+				  ctx.beginPath();
+				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
+				  ctx.fillStyle = 'green';
+				  ctx.fill();
+			  }
 			  ctx.drawImage(imgArray[cat], pos.x - dim, pos.y - dim, dim*2, dim*2);
 
 		  },
