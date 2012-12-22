@@ -63,6 +63,10 @@
 <% end %>
 
 <span id="closeFind">close</span>
+<form id="findWhere">
+  <span class="findWhereField"><input type="checkbox"  name="onCanvas" value="1" checked="checked"><p>On my Canvas</p></span>
+  <span class="findWhereField"><input type="checkbox" name="inCommons" value="0"><p>In the Commons</p></span>
+</form>
 <div class="sideOption" id="sideOptionFind">
   <span class="find_key">Find...</span>
   <select class="select_content">
@@ -73,8 +77,10 @@
   </select>
   <span class="spacer">by</span>
   <select class="select_type">
-    <option value="name" selected="selected">Name</option>
-    <option value="metacode">Metacode</option>
+    <option value="name" selected="selected">name</option>
+    <option value="metacode">metacode</option>
+    <option value="map (by name)">map (by name)</option>
+    <option value="mapper (by name)">mapper (by name)</option>
   </select>
   <div class="clearfloat"></div>
   <%= form_for Item.new, :html => { :class => "find_topic_by_name find find_topic", :id => "find_topic_by_name" } do |f| %>

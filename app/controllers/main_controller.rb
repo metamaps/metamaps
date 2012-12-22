@@ -11,7 +11,8 @@ class MainController < ApplicationController
     @current = current_user
     
     if authenticated? 
-      @items = Item.all.first.self_as_json.html_safe
+      @synapses = Synapse.visibleToUser(@current, nil)
+	    @items = synapses_as_json(@current, @synapses).html_safe
      
       respond_to do |format|
         format.html { respond_with(@current) }

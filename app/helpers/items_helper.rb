@@ -60,10 +60,16 @@ module ItemsHelper
 				json.data @synapsedata
 		  end
 		  
+      @inmaps = Array.new
+      item.maps.each do |map|
+        @inmaps.push(map.id)
+      end
+      
 		  @itemdata = Hash.new
 		  @itemdata['$desc'] = item.desc
 		  @itemdata['$link'] = item.link
 		  @itemdata['$itemcatname'] = item.item_category.name
+      @itemdata['$inmaps'] = @inmaps
 		  @itemdata['$userid'] = item.user.id
 		  @itemdata['$username'] = item.user.name
 		  json.data @itemdata
@@ -99,10 +105,16 @@ module ItemsHelper
 				json.data @synapsedata
 		  end
 		  
+		  @inmaps = Array.new
+      item.maps.each do |map|
+        @inmaps.push(map.id)
+      end
+      
 		  @itemdata = Hash.new
 		  @itemdata['$desc'] = item.desc
 		  @itemdata['$link'] = item.link
 		  @itemdata['$itemcatname'] = item.item_category.name
+      @itemdata['$inmaps'] = @inmaps
 		  @itemdata['$userid'] = item.user.id
 		  @itemdata['$username'] = item.user.name
 		  

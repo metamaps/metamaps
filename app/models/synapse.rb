@@ -46,12 +46,18 @@ has_many :maps, :through => :mappings
 				json.data @synapsedata
 		  end
 		  
+		  @inmaps = Array.new
+      item.maps.each do |map|
+        @inmaps.push(map.id)
+      end
+      
 		  @itemdata = Hash.new
 		  @itemdata['$desc'] = item.desc
 		  @itemdata['$link'] = item.link
 		  @itemdata['$itemcatname'] = item.item_category.name
-		  @itemdata['$userid'] = self.user.id
-		  @itemdata['$username'] = self.user.name
+      @itemdata['$inmaps'] = @inmaps
+		  @itemdata['$userid'] = item.user.id
+		  @itemdata['$username'] = item.user.name
 		  json.data @itemdata
 		  json.id item.id
 		  json.name item.name

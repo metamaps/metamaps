@@ -36,11 +36,16 @@ belongs_to :item_category
   
   def self_as_json
     Jbuilder.encode do |json|
-		  
+		  @inmaps = Array.new
+      self.maps.each do |map|
+        @inmaps.push(map.id)
+      end
+      
 		  @itemdata = Hash.new
 		  @itemdata['$desc'] = self.desc
 		  @itemdata['$link'] = self.link
 		  @itemdata['$itemcatname'] = self.item_category.name
+      @itemdata['$inmaps'] = @inmaps
 		  @itemdata['$userid'] = self.user.id
 		  @itemdata['$username'] = self.user.name
 		  json.data @itemdata
@@ -72,10 +77,16 @@ belongs_to :item_category
 					json.data @synapsedata
 			  end
 			  
-			  @itemdata = Hash.new
-			  @itemdata['$desc'] = item.desc
-			  @itemdata['$link'] = item.link
-			  @itemdata['$itemcatname'] = item.item_category.name
+			  @inmaps = Array.new
+        item.maps.each do |map|
+          @inmaps.push(map.id)
+        end
+        
+        @itemdata = Hash.new
+        @itemdata['$desc'] = item.desc
+        @itemdata['$link'] = item.link
+        @itemdata['$itemcatname'] = item.item_category.name
+        @itemdata['$inmaps'] = @inmaps
 			  @itemdata['$userid'] = item.user.id
 			  @itemdata['$username'] = item.user.name
 			  json.data @itemdata
@@ -84,15 +95,21 @@ belongs_to :item_category
 		  end
 		elsif @items.count == 1
 		    json.array!(@items) do |item|
-			  @itemdata = Hash.new
-			  @itemdata['$desc'] = item.desc
-			  @itemdata['$link'] = item.link
-			  @itemdata['$itemcatname'] = item.item_category.name
-			  @itemdata['$userid'] = item.user.id
-			  @itemdata['$username'] = item.user.name
-			  json.data @itemdata
-			  json.id item.id
-			  json.name item.name
+          @inmaps = Array.new
+          item.maps.each do |map|
+            @inmaps.push(map.id)
+          end
+          
+          @itemdata = Hash.new
+          @itemdata['$desc'] = item.desc
+          @itemdata['$link'] = item.link
+          @itemdata['$itemcatname'] = item.item_category.name
+          @itemdata['$inmaps'] = @inmaps
+          @itemdata['$userid'] = item.user.id
+          @itemdata['$username'] = item.user.name
+          json.data @itemdata
+          json.id item.id
+          json.name item.name
 		    end
 		end
     end

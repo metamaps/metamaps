@@ -394,6 +394,18 @@ input[type="submit"] {
   cursor:pointer;
 }
 
+#findWhere {
+  position:fixed;
+  top:25%;
+  left:40px;
+  display:none;
+  margin-top:-20px;
+}
+
+.findWhereField, #findWhere input, #findWhere p {
+  float:left; 
+}
+
 .sideOption select,
 .sideOption span {
   float:left;
@@ -414,7 +426,7 @@ input[type="submit"] {
 
 .find_topic_by_name input, .find_map_by_name input, .find_mapper_by_name input { 
 	margin:10px 0 0 0;
-	width: 207px;
+	width: 270px;
 	border-radius: 10px;
 	height: 20px;
 	padding: 0 10px;
