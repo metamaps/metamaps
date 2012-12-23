@@ -37,35 +37,33 @@
 	}
 </script>
 
-<% elsif @items %>
-<div class="maps" id="container">
-  <div id="center-container">
-    <div id="infovis"></div>    
+<% elsif authenticated? %>
+  <div class="maps" id="container">
+    <div id="center-container">
+      <div id="infovis"></div>    
+    </div>
   </div>
-</div>
-<div class="clearfloat"></div>
-<% if authenticated? %>
-	<%= render :partial => 'items/new' %>
-	<%= render :partial => 'synapses/new' %>
-<% end %>
-<script>
-	json = <%= @items %>;
+  <div class="clearfloat"></div>
+  <% if authenticated? %>
+    <%= render :partial => 'items/new' %>
+    <%= render :partial => 'synapses/new' %>
+  <% end %>
+  <script>
 	//if (json.length > 0) {
 		$(document).ready(function() {
-				initialize("chaotic");
-		});
+			initialize("chaotic", true);
+		});	
 	//}
 </script>
-
-
+  
 <% else %>
   <h1><br>Shucks, there are no maps.<h1>
 <% end %>
 
 <span id="closeFind">close</span>
 <form id="findWhere">
-  <span class="findWhereField"><input type="checkbox"  id="onCanvas" checked="checked"><p>On my Canvas</p></span>
-  <span class="findWhereField"><input type="checkbox" id="inCommons"><p>In the Commons</p></span>
+  <span class="findWhereField"><input type="checkbox"  id="onCanvas"><p>On my Canvas</p></span>
+  <span class="findWhereField"><input type="checkbox" id="inCommons" checked="checked"><p>In the Commons</p></span>
 </form>
 <div class="sideOption" id="sideOptionFind">
   <span class="find_key">Find...</span>
@@ -130,4 +128,8 @@
        <li><img src="/assets/trajectory.png" alt="Trajectory" /><p>trajectory</p></li>
       </ul>
     </div>
+    <%= form_tag("/search", :method => "get", :id => 'get_topics_form', :class => 'get_topics_form', :remote => true) do %>
+      <%= text_field_tag(:topics_by_user_id, "", :id => "topicsByUser", :class => "getTopicsInput") %>
+      <%= text_field_tag(:topics_by_map_id, "", :id => "topicsByMap", :class => "getTopicsInput") %>
+    <% end %>
 </div>

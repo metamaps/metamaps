@@ -45,59 +45,26 @@ imgArray['Action'] = new Image(); imgArray['Action'].src = '/assets/action.png';
 imgArray['Activity'] = new Image(); imgArray['Activity'].src = '/assets/activity.png';
 
 
-// defining code to draw edges with arrows pointing in the middle of them
-var renderMidArrow = function(from, to, dim, swap, canvas){ 
-        var ctx = canvas.getCtx(); 
-        // invert edge direction 
-        if (swap) { 
-              var tmp = from; 
-              from = to; 
-              to = tmp; 
-        } 
-        // vect represents a line from tip to tail of the arrow 
-        var vect = new $jit.Complex(to.x - from.x, to.y - from.y); 
-        // scale it 
-        vect.$scale(dim / vect.norm()); 
-        // compute the midpoint of the edge line 
-        var midPoint = new $jit.Complex((to.x + from.x) / 2, (to.y + from.y) / 2); 
-        // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
-        midPoint.x += (vect.x / 0.7); 
-        midPoint.y += (vect.y / 0.7); 
-        // compute the tail intersection point with the edge line 
-        var intermediatePoint = new $jit.Complex(midPoint.x - vect.x, 
-midPoint.y - vect.y); 
-        // vector perpendicular to vect 
-        var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
-        var v1 = intermediatePoint.add(normal); 
-        var v2 = intermediatePoint.$add(normal.$scale(-1)); 
+// init custom node type 
+$jit.ForceDirected.Plot.NodeTypes.implement(nodeSettings);
+//implement an edge type  
+$jit.ForceDirected.Plot.EdgeTypes.implement(edgeSettings);
+// end
 
-        ctx.beginPath(); 
-        ctx.moveTo(from.x, from.y); 
-        ctx.lineTo(to.x, to.y); 
-        ctx.stroke(); 
-        ctx.beginPath(); 
-        ctx.moveTo(v1.x, v1.y); 
-        ctx.lineTo(midPoint.x, midPoint.y); 
-        ctx.lineTo(v2.x, v2.y); 
-        ctx.stroke(); 
-}; 
+// init custom node type 
+$jit.RGraph.Plot.NodeTypes.implement(nodeSettings);
+//implement an edge type  
+$jit.RGraph.Plot.EdgeTypes.implement(edgeSettings);
+// end
 
-function initialize(type){
+function initialize(type, loadLater){
+
+  if (loadLater == null) {
+	   loadlater = false;
+  }
+
   viewMode = "graph";
   gType = type;
-  
-  // init custom node type 
-  $jit.ForceDirected.Plot.NodeTypes.implement(nodeSettings);
-  //implement an edge type  
-	$jit.ForceDirected.Plot.EdgeTypes.implement(edgeSettings);
-  // end
-  
-  // init custom node type 
-  $jit.RGraph.Plot.NodeTypes.implement(nodeSettings);
-  //implement an edge type  
-  $jit.RGraph.Plot.EdgeTypes.implement(edgeSettings);
-  // end
-  
   
   if ( type == "centered") {
 	  // init Rgraph
@@ -113,61 +80,63 @@ function initialize(type){
   }
   
   // load JSON data.
-  Mconsole.loadJSON(json);
-  
-  // choose how to plot and animate the data onto the screen
-  var chooseAnimate;
-  
-  if ( type == "centered") {
-	  // compute positions incrementally and animate.
-	  //trigger small animation  
-	  Mconsole.graph.eachNode(function(n) {  
-		var pos = n.getPos();  
-		pos.setc(-200, -200);  
-	  });  
-	  Mconsole.compute('end');
+  if (!loadLater) {
+  	  Mconsole.loadJSON(json);
 	  
-	  chooseAnimate = {  
-		modes:['polar'],  
-		duration: 2000  
-	  };
-  }
-  else if ( type == "arranged" ) {
-	  // compute positions incrementally and animate.
-	  Mconsole.graph.eachNode(function(n) {  
-		var pos = n.getPos();  
-		pos.setc(0, 0); 
-		var newPos = new $jit.Complex(); 
-		newPos.x = n.data.$xloc; 
-		newPos.y = n.data.$yloc; 
-		n.setPos(newPos, 'end');
+	  // choose how to plot and animate the data onto the screen
+	  var chooseAnimate;
+	  
+	  if ( type == "centered") {
+		  // compute positions incrementally and animate.
+		  //trigger small animation  
+		  Mconsole.graph.eachNode(function(n) {  
+			var pos = n.getPos();  
+			pos.setc(-200, -200);  
+		  });  
+		  Mconsole.compute('end');
+		  
+		  chooseAnimate = {  
+			modes:['polar'],  
+			duration: 2000  
+		  };
+	  }
+	  else if ( type == "arranged" ) {
+		  // compute positions incrementally and animate.
+		  Mconsole.graph.eachNode(function(n) {  
+			var pos = n.getPos();  
+			pos.setc(0, 0); 
+			var newPos = new $jit.Complex(); 
+			newPos.x = n.data.$xloc; 
+			newPos.y = n.data.$yloc; 
+			n.setPos(newPos, 'end');
+		  });
+		  
+		  chooseAnimate = {
+			 modes: ['linear'],
+			 transition: $jit.Trans.Quad.easeInOut,
+			 duration: 2500
+		   };
+	  }
+	  else if ( type == "chaotic" ) {
+		  // compute positions incrementally and animate.
+		  Mconsole.compute();
+		  
+		  chooseAnimate = {
+			 modes: ['linear'],
+			 transition: $jit.Trans.Elastic.easeOut,
+			 duration: 2500
+		   };
+	  }
+	  
+	
+	  $(document).ready(function() {
+		if ( type == "centered") {
+			Mconsole.fx.animate(chooseAnimate);
+		}
+		else if ( type == "arranged" || type == "chaotic") {
+			Mconsole.animate(chooseAnimate);
+		}
 	  });
-	  
-	  chooseAnimate = {
-		 modes: ['linear'],
-		 transition: $jit.Trans.Quad.easeInOut,
-		 duration: 2500
-       };
-  }
-  else if ( type == "chaotic" ) {
-	  // compute positions incrementally and animate.
-      Mconsole.compute()
-	  
-	  chooseAnimate = {
-         modes: ['linear'],
-         transition: $jit.Trans.Elastic.easeOut,
-         duration: 2500
-       };
-  }
-  
-
-  $(document).ready(function() {
-	if ( type == "centered") {
-		Mconsole.fx.animate(chooseAnimate);
-	}
-	else if ( type == "arranged" || type == "chaotic") {
-		Mconsole.animate(chooseAnimate);
-	}
-  });
-  // end
+	  // end
+  }// if not loadLater
 }

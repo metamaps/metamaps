@@ -364,6 +364,42 @@ function graphSettings(type) {
    return t;
 }
 
+// defining code to draw edges with arrows pointing in the middle of them
+var renderMidArrow = function(from, to, dim, swap, canvas){ 
+        var ctx = canvas.getCtx(); 
+        // invert edge direction 
+        if (swap) { 
+              var tmp = from; 
+              from = to; 
+              to = tmp; 
+        } 
+        // vect represents a line from tip to tail of the arrow 
+        var vect = new $jit.Complex(to.x - from.x, to.y - from.y); 
+        // scale it 
+        vect.$scale(dim / vect.norm()); 
+        // compute the midpoint of the edge line 
+        var midPoint = new $jit.Complex((to.x + from.x) / 2, (to.y + from.y) / 2); 
+        // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
+        midPoint.x += (vect.x / 0.7); 
+        midPoint.y += (vect.y / 0.7); 
+        // compute the tail intersection point with the edge line 
+        var intermediatePoint = new $jit.Complex(midPoint.x - vect.x, 
+midPoint.y - vect.y); 
+        // vector perpendicular to vect 
+        var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
+        var v1 = intermediatePoint.add(normal); 
+        var v2 = intermediatePoint.$add(normal.$scale(-1)); 
+
+        ctx.beginPath(); 
+        ctx.moveTo(from.x, from.y); 
+        ctx.lineTo(to.x, to.y); 
+        ctx.stroke(); 
+        ctx.beginPath(); 
+        ctx.moveTo(v1.x, v1.y); 
+        ctx.lineTo(midPoint.x, midPoint.y); 
+        ctx.lineTo(v2.x, v2.y); 
+        ctx.stroke(); 
+};
 
 // defining custom node type	
 var nodeSettings = {
@@ -379,8 +415,9 @@ var nodeSettings = {
 			  if (isNew) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
-				  ctx.fillStyle = 'green';
-				  ctx.fill();
+				  ctx.strokeStyle = 'white';
+				  ctx.lineWidth = 2;
+				  ctx.stroke();
 			  }
 			  ctx.drawImage(imgArray[cat], pos.x - dim, pos.y - dim, dim*2, dim*2);
 
@@ -555,6 +592,7 @@ function clickDragOnTopicForceDirected(node, eventInfo, e) {
 			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
 			  Mconsole.fx.plotNode(temp, Mconsole.canvas);
 		   } else if (!temp) {
+			   tempNode2 = null;
 			   Mconsole.graph.eachNode(function (n) {
 				  n.setData('dim', 25, 'current');
 			   });

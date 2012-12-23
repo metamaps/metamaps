@@ -397,7 +397,7 @@ input[type="submit"] {
 #findWhere {
   position:fixed;
   top:25%;
-  left:40px;
+  left:90px;
   display:none;
   margin-top:-20px;
 }
@@ -484,6 +484,10 @@ input[type="submit"] {
 
 .find_topic_by_metacode li.toggledOff {
   opacity: 0.4;
+}
+
+#get_topics_form {
+  display:none;	
 }
 
 /* --- styling the logo button ---*/

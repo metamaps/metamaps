@@ -19,7 +19,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole, gType, tempNode = null, tempInit = false, tempNode2 = null;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null;
 
  $(document).ready(function() {
  

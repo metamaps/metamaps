@@ -1,0 +1,48 @@
+$('.getTopicsInput').attr('value','');
+
+var h = Mconsole.canvas.element.clientHeight / 2;
+var w = Mconsole.canvas.element.clientWidth / 2;
+
+var myX = -w + 100;
+var myY = -h + 100;
+
+<% @items.each do |item| %>
+  if ($.isEmptyObject(Mconsole.graph.nodes)) {
+    json = <%= item.self_as_json.html_safe %>;
+    Mconsole.loadJSON(json);
+    var temp = Mconsole.graph.getNode('<%= item.id %>');
+    temp.setData('dim', 1, 'start');
+    temp.setData('dim', 25, 'end');
+    temp.setData('isNew',true);
+    temp.setPos(new $jit.Complex(myX, myY), 'current');
+    temp.setPos(new $jit.Complex(myX, myY), 'start');
+    temp.setPos(new $jit.Complex(myX, myY), 'end');
+    Mconsole.fx.plotNode(temp, Mconsole.canvas);
+    myX += 100;
+  }
+  else {
+    var temp = Mconsole.graph.getNode('<%= item.id %>');
+    if (temp == null) {
+      var newnode = <%= item.self_as_json.html_safe %>;
+      Mconsole.graph.addNode(newnode);
+      var temp = Mconsole.graph.getNode('<%= item.id %>');
+      temp.setData('dim', 1, 'start');
+      temp.setData('dim', 25, 'end');
+      temp.setData('isNew',true);
+      if (myX > (w-100)) {
+        myX = -w + 100;
+        myY += 100
+      }
+      temp.setPos(new $jit.Complex(myX, myY), 'current');
+      temp.setPos(new $jit.Complex(myX, myY), 'start');
+      temp.setPos(new $jit.Complex(myX, myY), 'end');
+      Mconsole.fx.plotNode(temp, Mconsole.canvas);
+      myX += 100;
+    }
+  }
+<% end %>
+  
+  Mconsole.fx.animate({  
+    modes: ['node-property:dim'],  
+    duration: 500    
+  });

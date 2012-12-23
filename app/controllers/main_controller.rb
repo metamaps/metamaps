@@ -11,14 +11,7 @@ class MainController < ApplicationController
     @current = current_user
     
     if authenticated? 
-      @synapses = Synapse.visibleToUser(@current, nil)
-      @synapses = @synapses.slice(0, 50)
-	    @items = synapses_as_json(@current, @synapses).html_safe
-     
-      respond_to do |format|
-        format.html { respond_with(@current) }
-        format.json { respond_with(@items) }
-      end
+	    
     else 
       @maps = Map.visibleToUser(@current, nil)
       @map = @maps.sample
@@ -29,6 +22,21 @@ class MainController < ApplicationController
         format.html { respond_with(@map) }
         format.json { respond_with(@mapjson) }
       end
+    end
+  end
+  
+  def search
+    @current = current_user
+    @items = Array.new()
+    if params[:topics_by_user_id] != ""
+      @user = User.find(params[:topics_by_user_id])
+      @items = Item.visibleToUser(@current, @user)
+    elsif params[:topics_by_map_id] != ""
+      @map = Map.find(params[:topics_by_map_id])
+      @items = @map.items.delete_if{|item| not item.authorize_to_view(@current)}
+    end
+    respond_to do |format|
+      format.js { respond_with(@items) }
     end
   end
   

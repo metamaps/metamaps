@@ -194,7 +194,7 @@ $(document).ready(function() {
 	  $('.sideOption').animate({
 		width: '305px',
 		height: '76px'
-	  }, 700, function() {
+	  }, 300, function() {
 		$('#topic_by_name_input').focus();
 	  });
 	  $('#closeFind, #findWhere').css('display','block');
@@ -204,12 +204,16 @@ $(document).ready(function() {
    
    // this sets up the closing of the find box, and the toggling between open and closed.
    $('#closeFind').click(function(){
+	   Mconsole.graph.eachNode( function (n) {
+		  n.setData('isNew', false);	
+	   });
+	   Mconsole.plot();
 	   $('#closeFind, #findWhere').css('display','none');
 	   $('.sideOption').css('cursor','pointer');
 	   $('.sideOption').animate({
 		width: '45px',
 		height: '32px'
-	  }, 700, function() {
+	  }, 300, function() {
 		    $('.sideOption').bind('click',function(){
 				  firstVal = $('.sideOption option[value="name"]').attr('selected');
 				  secondVal = $('.sideOption option[value="metacode"]').attr('selected');
@@ -393,7 +397,30 @@ $(document).ready(function() {
 		  secondVal = $('.sideOption .select_content').children("option[value='maps']").attr('selected');
 		  thirdVal = $('.sideOption .select_content').children("option[value='mappers']").attr('selected');
 		  if ( firstVal == 'selected') {
-			 onCanvasSearch(null,data.item.id,null);
+			  // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+			  firstNewVal = $("#onCanvas").attr('checked');
+			  secondNewVal = $("#inCommons").attr('checked');
+			  
+			  // only have the autocomplete enabled if they are searching in the commons
+			  
+			  if (firstNewVal == "checked" && secondNewVal == "checked"){
+				onCanvasSearch(null,data.item.id,null);  
+				$('#topicsByMap').val(data.item.id);
+				$('#topicsByUser').val("");
+				$('#get_topics_form').submit(); 
+			  }
+			  else if (firstNewVal == "checked"){
+				onCanvasSearch(null,data.item.id,null); 
+			  }
+			  else if (secondNewVal == "checked"){
+				//hideAll();
+				$('#topicsByMap').val(data.item.id);
+				$('#topicsByUser').val("");
+				$('#get_topics_form').submit(); 
+			  }
+			  else {
+				 alert('You either need to have searching On Your Canvas or In the Commons enabled'); 
+			  }
 		  }
 		  else if ( secondVal == 'selected' ) {
 			 if (data.item.id != undefined) {
@@ -415,7 +442,30 @@ $(document).ready(function() {
 		  secondVal = $('.sideOption .select_content').children("option[value='maps']").attr('selected');
 		  thirdVal = $('.sideOption .select_content').children("option[value='mappers']").attr('selected');
 		  if ( firstVal == 'selected') {
-			 onCanvasSearch(null,null,data.item.id.toString());
+			 // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+			  firstNewVal = $("#onCanvas").attr('checked');
+			  secondNewVal = $("#inCommons").attr('checked');
+			  
+			  // only have the autocomplete enabled if they are searching in the commons
+			  
+			  if (firstNewVal == "checked" && secondNewVal == "checked"){
+				onCanvasSearch(null,null,data.item.id.toString());  
+				$('#topicsByUser').val(data.item.id);
+				$('#topicsByMap').val("");
+				$('#get_topics_form').submit(); 
+			  }
+			  else if (firstNewVal == "checked"){
+				onCanvasSearch(null,null,data.item.id.toString()); 
+			  }
+			  else if (secondNewVal == "checked"){
+				//hideAll();
+				$('#topicsByUser').val(data.item.id);
+				$('#topicsByMap').val("");
+				$('#get_topics_form').submit(); 
+			  }
+			  else {
+				 alert('You either need to have searching On Your Canvas or In the Commons enabled'); 
+			  }
 		  }
 		  else if ( secondVal == 'selected' ) {
 			 

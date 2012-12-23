@@ -13,7 +13,7 @@ var x = <%= @position['x'] %>;
 var y = <%= @position['y'] %>;
   
 
-if (Mconsole != null) {
+if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   Mconsole.graph.addNode(newnode);
   
   // set the animation for everything back to normal
@@ -66,5 +66,16 @@ if (Mconsole != null) {
   
 } else {
   json = newnode;
-  initialize("chaotic");
+  Mconsole.loadJSON(json);
+  var temp = Mconsole.graph.getNode('<%= @item.id %>');
+  temp.setData('dim', 1, 'start');
+  temp.setData('dim', 25, 'end');
+  temp.setPos(new $jit.Complex(x, y), 'current');
+  temp.setPos(new $jit.Complex(x, y), 'start');
+  temp.setPos(new $jit.Complex(x, y), 'end');
+  Mconsole.fx.plotNode(temp, Mconsole.canvas);
+  Mconsole.fx.animate({  
+        modes: ['node-property:dim'],  
+        duration: 500    
+      });
 }

@@ -6,6 +6,8 @@ ISSAD::Application.routes.draw do
   
   match 'invite', to: 'main#invite', via: :get, as: :invite
   
+  match 'search', to: 'main#search', via: :get, as: :search
+  
   match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
   
   resource :session
