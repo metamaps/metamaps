@@ -19,15 +19,17 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false;
 
  $(document).ready(function() {
+	 
+	document.ontouchmove = function(e){ e.preventDefault(); }
  
     $('#new_item, #new_synapse').bind('contextmenu', function(e){
 		return false;
 	});
 	
-	/// this is for the topic creation autocomplete fielf
+	/// this is for the topic creation autocomplete field
 	$('#item_name').bind('railsAutocomplete.select', function(event, data){  
       if (data.item.id != undefined) {
         $('#item_grabItem').val(data.item.id);
@@ -41,47 +43,44 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 	$('.nodemargin').css('padding-top',$('.focus').css('height'));	
 	
 	// controls the sliding hover of the menus at the top
-    var sliding1 = false; 
-    $(".accountWrap").hover( 
+	var sliding1 = false; 
+	var lT;
+    $(".logo").hover( 
         function () { 
+		  clearTimeout(lT);
           if (! sliding1) { 
             sliding1 = true; 
-            $(".account").slideDown('slow', function() { 
-              sliding1 = false; 
-            }); 
+			if (userid != null) {
+              $('.footer .menu').animate({
+				height: '243px'
+			  }, 300, function() {
+				sliding1 = false;
+			  });
+			}
+			else {
+			  $('.footer .menu').animate({
+				height: '55px'
+			  }, 300, function() {
+				sliding1 = false;
+			  });
+			}
           } 
         },  
         function () { 
-          if (! sliding1) { 
-            sliding1 = true; 
-            $(".account").slideUp('slow', function() { 
-              sliding1 = false; 
-            }); 
-          } 
+          lT = setTimeout(function() { 
+			  if (! sliding1) { 
+				sliding1 = true; 
+				$('.footer .menu').animate({
+					height: '0px'
+				  }, 300, function() {
+					sliding1 = false;
+				  });
+			  } 
+		  },800); 
         } 
     );
 	
-	var sliding2 = false; 
-    $(".createWrap").hover( 
-        function () { 
-          if (! sliding2) { 
-            sliding2 = true; 
-            $(".create").slideDown('slow', function() { 
-              sliding2 = false; 
-            }); 
-          } 
-        },  
-        function () { 
-          if (! sliding2) { 
-            sliding2 = true; 
-            $(".create").slideUp('slow', function() { 
-              sliding2 = false; 
-            }); 
-          } 
-        } 
-    );
-	
-	// this is to save the layout of maps
+	// this is to save the layout of maps when you're on a map page
 	var coor = "";
 	$("#saveLayout").click(function(event) {
 	  event.preventDefault();
@@ -96,6 +95,40 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 		  
 	  }
 	});
+	
 });
+
+// this is to save your console to a map
+function saveToMap() {
+  var Coor = "";
+  Mconsole.graph.eachNode(function(n) {
+    Coor = Coor + n.id + '/' + n.pos.x + '/' + n.pos.y + ',';
+  });
+  Coor = Coor.slice(0, -1);
+  $('#map_topicsToMap').val(Coor);
+  $('#new_map').fadeIn('fast');
+}
+
+function addMetacode() {
+	// code from http://www.professorcloud.com/mainsite/carousel-integration.htm
+	if (!metacodeIMGinit) {		
+		$("#metacodeImg").CloudCarousel( { 
+			//reflHeight: 10,
+			//reflGap: 2,
+			titleBox: $('#metacodeImgTitle'),
+			//buttonLeft: $('#left-but'),
+			//buttonRight: $('#right-but'),
+			yRadius:40,
+			xPos: 150,
+			yPos: 40,
+			speed:0.15,
+			mouseWheel:true,
+			bringToFront: true
+		});
+		metacodeIMGinit = true;
+	}
+}
+
+
  
  

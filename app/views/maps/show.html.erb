@@ -42,6 +42,11 @@
 			<% end %>
 		});
 	}
+  else {
+		$(document).ready(function() {
+				initialize("chaotic", true);
+		});
+	}
 </script>
 
 <%= render :partial => 'newtopic' %>

@@ -1,15 +1,11 @@
-<h1>Topics</h1>
+<h1 class="index"><% if @user %><%= @user.name %>'s<% end %> Topics</h1>
 
 <div class="items" id="cards">
   <% @items.each do |item| %>
     <%= render item %>
   <% end %>
   <% if @items.empty? %>
-	 <p><br>Shucks, there are no topics.<p>
+	 <p class="empty"><br>Shucks, there are no topics. <% if authenticated? %><%= link_to "Create some if you want.", console_url %><% end %></p>
   <% end %>
 </div>
 <div class="clearfloat"></div>
-
-<% if authenticated? %>
-	<%= render :partial => 'items/new' %>
-<% end %>

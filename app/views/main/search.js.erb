@@ -3,8 +3,9 @@ $('.getTopicsInput').attr('value','');
 var h = Mconsole.canvas.element.clientHeight / 2;
 var w = Mconsole.canvas.element.clientWidth / 2;
 
-var myX = -w + 100;
+var myX = -w + 400;
 var myY = -h + 100;
+var even = true;
 
 <% @items.each do |item| %>
   if ($.isEmptyObject(Mconsole.graph.nodes)) {
@@ -13,12 +14,13 @@ var myY = -h + 100;
     var temp = Mconsole.graph.getNode('<%= item.id %>');
     temp.setData('dim', 1, 'start');
     temp.setData('dim', 25, 'end');
-    temp.setData('isNew',true);
+    temp.setData('inCommons',true);
     temp.setPos(new $jit.Complex(myX, myY), 'current');
     temp.setPos(new $jit.Complex(myX, myY), 'start');
     temp.setPos(new $jit.Complex(myX, myY), 'end');
     Mconsole.fx.plotNode(temp, Mconsole.canvas);
     myX += 100;
+    even = !even;
   }
   else {
     var temp = Mconsole.graph.getNode('<%= item.id %>');
@@ -28,16 +30,25 @@ var myY = -h + 100;
       var temp = Mconsole.graph.getNode('<%= item.id %>');
       temp.setData('dim', 1, 'start');
       temp.setData('dim', 25, 'end');
-      temp.setData('isNew',true);
+      temp.setData('inCommons',true);
       if (myX > (w-100)) {
-        myX = -w + 100;
-        myY += 100
+        myX = -w + 400;
+        myY += 200;
+        even = true;
       }
-      temp.setPos(new $jit.Complex(myX, myY), 'current');
-      temp.setPos(new $jit.Complex(myX, myY), 'start');
-      temp.setPos(new $jit.Complex(myX, myY), 'end');
+      if (even) {
+        temp.setPos(new $jit.Complex(myX, myY), 'current');
+        temp.setPos(new $jit.Complex(myX, myY), 'start');
+        temp.setPos(new $jit.Complex(myX, myY), 'end');
+      }
+      else if (!even) {
+        temp.setPos(new $jit.Complex(myX, myY+100), 'current');
+        temp.setPos(new $jit.Complex(myX, myY+100), 'start');
+        temp.setPos(new $jit.Complex(myX, myY+100), 'end');
+      }
       Mconsole.fx.plotNode(temp, Mconsole.canvas);
       myX += 100;
+      even = !even;
     }
   }
 <% end %>

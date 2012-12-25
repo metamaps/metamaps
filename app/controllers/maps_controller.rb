@@ -14,9 +14,9 @@ class MapsController < ApplicationController
     
     if params[:user_id]
       @user = User.find(params[:user_id])
-      @maps = Map.visibleToUser(@current, @user)
+      @maps = Map.order("name ASC").visibleToUser(@current, @user)
     elsif 
-      @maps = Map.visibleToUser(@current, nil)
+      @maps = Map.order("name ASC").visibleToUser(@current, nil)
     end
     
 	  respond_with(@maps,@user)
@@ -52,14 +52,38 @@ class MapsController < ApplicationController
   def create
     
     @user = current_user
-	  @map = Map.create(params[:map])
-    @map.user = @user    
-	  @map.arranged = false
-	  @map.save   
-    
-    respond_to do |format|
-      format.html { respond_with(@user, location: map_path(@map)) }
-    end
+	  @map = Map.new()
+    @map.name = params[:map][:name]
+    @map.desc = params[:map][:desc]
+    @map.permission = params[:map][:permission]
+    @map.user = @user
+    @map.arranged = false    
+    @map.save    
+	  
+    if params[:map][:topicsToMap]
+		  @all = params[:map][:topicsToMap]
+  		@all = @all.split(',')
+		  @all.each do |item|
+			  item = item.split('/')
+			  @mapping = Mapping.new()
+        @mapping.category = "Item"
+        @mapping.user = @user
+        @mapping.map  = @map
+        @mapping.item = Item.find(item[0])
+        @mapping.xloc = item[1]
+        @mapping.yloc = item[2]
+        @mapping.save
+		  end
+		  @map.arranged = true
+      @map.save
+      respond_to do |format|
+        format.js { respond_with(@map) }
+      end
+    else
+      respond_to do |format|
+        format.html { respond_with(@user, location: map_path(@map)) }
+      end
+	  end	
   end
   
   # GET maps/:id/edit
@@ -114,7 +138,7 @@ class MapsController < ApplicationController
 	  end	
   end
   
-  # DELETE /users/:user_id/maps/:id
+  # DELETE maps/:id
   def destroy
 	  @map = Map.find(params[:id])
 	

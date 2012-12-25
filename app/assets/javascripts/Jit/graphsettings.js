@@ -63,6 +63,7 @@ function graphSettings(type) {
 				if (tempInit && tempNode2 == null) {
 					$('#item_addSynapse').val("true");
 					$('#new_item').fadeIn('fast');
+					addMetacode();
 					$('#item_name').focus();
 				}
 				else if (tempInit && tempNode2 != null) {
@@ -408,11 +409,20 @@ var nodeSettings = {
 			  var pos = node.pos.getc(true),
 			  dim = node.getData('dim'),
 			  cat = node.getData('itemcatname'),
-			  isNew = node.getData('isNew'),
+			  inCommons = node.getData('inCommons'),
+			  onCanvas = node.getData('onCanvas'),
 			  ctx = canvas.getCtx();
 			  
-			  // if the topic is temporary draw a green circle around it
-			  if (isNew) {
+			  // if the topic is from the Commons draw a green circle around it
+			  if (inCommons) {
+				  ctx.beginPath();
+				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
+				  ctx.strokeStyle = '#67be5f'; // green
+				  ctx.lineWidth = 2;
+				  ctx.stroke();
+			  }
+			  // if the topic is on the Canvas draw a white circle around it
+			  if (onCanvas) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
 				  ctx.strokeStyle = 'white';
@@ -547,6 +557,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
       $('#item_x').val(canvasLoc.x);
       $('#item_y').val(canvasLoc.y);
       $('#new_item').fadeIn('fast');
+	  addMetacode();
       $('#item_name').focus();
    } else {
       canvasDoubleClickHandlerObject.storedTime = now;
@@ -567,13 +578,14 @@ function clickDragOnTopicForceDirected(node, eventInfo, e) {
 	   $('#new_synapse').fadeOut('fast');
 	   $('#new_item').fadeOut('fast');
 	   var pos = eventInfo.getPos();
+	   console.log(e);
 	   // if it's a left click, move the node
-	   if (e.button == 0) {
+	   if (e.button == 0 && !e.altKey ) {
 		   node.pos.setc(pos.x, pos.y);
 		   Mconsole.plot();
 	   }
 	   // if it's a right click, start synapse creation
-	   else if (e.button == 2) {
+	   else if (e.button == 2 || (e.button == 0 && e.altKey)) {
 		   if (tempInit == false) {
 			  tempNode = node;
 			  tempInit = true;   

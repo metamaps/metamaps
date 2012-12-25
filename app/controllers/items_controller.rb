@@ -14,9 +14,9 @@ class ItemsController < ApplicationController
     
     if params[:user_id]
       @user = User.find(params[:user_id])
-  	  @items = Item.visibleToUser(@current, @user)
+  	  @items = Item.order("name ASC").visibleToUser(@current, @user)
     elsif      
-      @items = Item.visibleToUser(@current, nil)
+      @items = Item.order("name ASC").visibleToUser(@current, nil)
     end
      
     respond_with(@user,@items)
@@ -62,8 +62,7 @@ class ItemsController < ApplicationController
       @item.desc = ""
       @item.link = ""
       @item.permission = 'commons'
-      @item.item_category = ItemCategory.all.first
-      #@item.item_category = ItemCategory.find(params[:category])
+      @item.item_category = ItemCategory.find_by_name(params[:item][:metacode])
       @item.user = @user
 
       @item.save

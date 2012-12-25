@@ -98,6 +98,15 @@ a {
   border:2px solid #000;
 }
 
+.onConsole .new_map {
+  display:none;	
+}
+
+.onConsole .new_map button, .onConsole .new_map input.add {
+  float:left;
+  margin-top:5px;	
+}
+
 .invite p {
   margin:10px 0;
 }
@@ -114,12 +123,45 @@ a {
   right:3px;
 }
 
+.anypage .new_item {
+  width:300px;	
+  margin:-40px 0 0 -50px;
+}
+
 .anypage .new_item,
 .anypage .new_synapse {
-  display: none;
+  display: block;
   position: absolute;
-  background: url('bg.png');
-  border: 2px solid #000;
+}
+
+.anypage #item_name {
+  width:200px;
+  position:absolute;
+  top:40px;
+  left:50px;
+  z-index:9999;	
+}
+
+#metacodeImg {
+  height:120px;	
+}
+
+#metacodeImgTitle {
+  color:#000;
+  float:left;
+  width:120px;
+  text-align:center;
+  margin-left:90px;
+}
+
+#left-but {
+  position:absolute;
+  left:50px;
+}
+
+#right-but {
+  position:absolute;
+  right:50px;	
 }
 
 label, select, input, textarea {
@@ -160,7 +202,7 @@ input[type="submit"] {
 }
 
 .main {
-  overflow:hidden;
+  /*overflow:hidden; */
 }
 
 /* --- top options --*/
@@ -170,26 +212,13 @@ input[type="submit"] {
   top:0;
   right:0;
   z-index:10;
-  height:38px;
   width:auto;
-  background: url(topbg2.png) repeat-x top left;
   border-radius:15px;
   margin:10px;
 }
 
-.headertop ul {
-  display:block;
-  float: right;
-}
-
-.headertop ul li {
-  display:block;
-  float:right;
-  margin:10px 5px 0 5px;
-}
-
-.headertop ul li a {
-  color:#FFF;
+.headertop button {
+  float:left;	
 }
 
 .wrapper {
@@ -198,8 +227,11 @@ input[type="submit"] {
   margin:0 0;
 }
 
-.wrapper h1 {
-  margin-top:50px;
+.wrapper h1.index {
+  position:absolute;
+  top:50px;
+  left:50px;
+  z-index:9999;
 }
 
 .nodemargin {
@@ -311,60 +343,12 @@ input[type="submit"] {
   margin:0 7px;
 }
 
-.accountWrap,
-.createWrap,
-.exploreWrap {
-  display:block;
-  position:relative;
-  cursor: pointer;
+#cards {
+  margin:100px 0;	
 }
 
-#menus .account,
-#menus .create {
-  display:none;
-  position:absolute;
-  right:0;
-  z-index:12;
-  width:auto;
-  color: #67AF9F;
-  white-space: nowrap;
-  text-align: center;
-  font-size: 16px;
-  overflow: hidden;
-  padding: 3px 8px;
-  margin: 0;
-  border: 2px solid #AAA;
-  background: white;
-  border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
-  -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
-  -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
-  background: -moz-linear-gradient( center top, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.03) 0% ) repeat scroll 0 0 white;
-  background: -webkit-gradient( linear, 0% 0%, 0% 100%, from(white), to(rgba(0, 0, 0, 0.03)), color-stop(0.5, rgba(255, 255, 255, 0)), color-stop(0.5, rgba(0, 0, 0, 0.03)) ) repeat scroll 0 0 white;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-#menus ul li {
-  margin:0;
-  clear:both;
-  float:none;
-  list-style-type:none;
-  display:block;
-  padding:3px;
-  text-align:center;
-  border-top:1px solid #999;
-}
-#menus ul li.first {
-  border:none;
-}
-#menus ul li a:hover {
-  color:#2d6a5d;
-}
-#menus ul li a {
-  color: #67AF9F;
-  display:block;
+#cards p.empty {
+  margin-left:50px;	
 }
 
 /* --- styling the FIND section ---*/
@@ -404,6 +388,10 @@ input[type="submit"] {
 
 .findWhereField, #findWhere input, #findWhere p {
   float:left; 
+}
+
+.findWhereField.inCommons {
+  color:#67be5f;	
 }
 
 .sideOption select,
@@ -498,7 +486,6 @@ input[type="submit"] {
   z-index:12;
   display:block;
   width:auto;
-  overflow: hidden;
   padding: 3px 8px;
   margin: -0.75em 0 0;
 }
@@ -518,4 +505,50 @@ input[type="submit"] {
 #beta {
   float:left;
   margin-left: 7px;
+}
+
+.footer .menu {
+  display:block;
+  position:absolute;
+  bottom:40px;
+  left:0;
+  height:0px;
+  z-index:12;
+  width:124px;
+  color: #67AF9F;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 16px;
+  overflow: hidden;
+  padding: 0 8px;
+  margin: 0;
+  background: white;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+  -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+  -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
+  background: url('bg.png') no-repeat 0 0;
+}
+
+.footer ul li {
+  margin:0;
+  clear:both;
+  float:none;
+  list-style-type:none;
+  display:block;
+  padding:3px;
+  text-align:center;
+  border-top:1px solid #999;
+}
+.footer ul li.first {
+  border:none;
+}
+.footer ul li a:hover {
+  color:#2d6a5d;
+}
+.footer ul li a {
+  color: #67AF9F;
+  display:block;
 }

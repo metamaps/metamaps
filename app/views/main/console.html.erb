@@ -1,43 +1,8 @@
-<% if @map %>
-<div class="focus">
-	<div class="focusleft">
-		<p># of Topics: <%= @map.items.count %></p>
-		<p># of Synapses: <%= @map.synapses.count %></p>
-	</div>
-	<div class="focusmiddle">
-		<h1 class="title"><%= @map.name %></h1>
-		<div class="desc">
-			<p><%= @map.desc %></p>
-		</div>
-	</div>
-	<div class="focusright">
-		<div class="link"><p>Permissions:<%= @map.permission %></p></div>
-	</div>
-</div>
-<div class="clearfloat nodemargin"></div>
-
-<div class="maps" id="container">
-  <div id="center-container">
-    <div id="infovis"></div>    
+  <div class="headertop">
+    <% if authenticated? %><button onclick="saveToMap();">Save to Map</button><% end %>
+    <button onclick='clearCanvas();'>Clear Canvas</button>
   </div>
-</div>
-<div class="clearfloat"></div>
-
-<script>
-	json = <%= @mapjson %>;
-	if (json.length > 0) {
-		$(document).ready(function() {
-			<% if (@map.arranged) %>
-				initialize("arranged");
-			<% else %>
-				initialize("chaotic");
-			<% end %>
-		});
-		
-	}
-</script>
-
-<% elsif authenticated? %>
+  <div class="clearfloat"></div>
   <div class="maps" id="container">
     <div id="center-container">
       <div id="infovis"></div>    
@@ -47,6 +12,7 @@
   <% if authenticated? %>
     <%= render :partial => 'items/new' %>
     <%= render :partial => 'synapses/new' %>
+    <%= render :partial => 'maps/new' %>
   <% end %>
   <script>
 	//if (json.length > 0) {
@@ -55,15 +21,11 @@
 		});	
 	//}
 </script>
-  
-<% else %>
-  <h1><br>Shucks, there are no maps.<h1>
-<% end %>
 
 <span id="closeFind">close</span>
 <form id="findWhere">
-  <span class="findWhereField"><input type="checkbox"  id="onCanvas"><p>On my Canvas</p></span>
-  <span class="findWhereField"><input type="checkbox" id="inCommons" checked="checked"><p>In the Commons</p></span>
+  <span class="findWhereField onCanvas"><input type="checkbox"  id="onCanvas"><p>On my Canvas</p></span>
+  <span class="findWhereField inCommons"><input type="checkbox" id="inCommons" checked="checked"><p>In the Commons</p></span>
 </form>
 <div class="sideOption" id="sideOptionFind">
   <span class="find_key">Find...</span>
