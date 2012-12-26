@@ -52,14 +52,14 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
             sliding1 = true; 
 			if (userid != null) {
               $('.footer .menu').animate({
-				height: '243px'
+				height: '252px'
 			  }, 300, function() {
 				sliding1 = false;
 			  });
 			}
 			else {
 			  $('.footer .menu').animate({
-				height: '55px'
+				height: '57px'
 			  }, 300, function() {
 				sliding1 = false;
 			  });

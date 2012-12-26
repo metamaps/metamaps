@@ -30,7 +30,7 @@ function graphSettings(type) {
             overridable: true,
             color: '#222222',
             type: 'customEdge',
-            lineWidth: 1
+            lineWidth: 3
          },
          //Native canvas text styling
          Label: {
@@ -57,7 +57,7 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-			   clickDragOnTopicForceDirected(node, eventInfo, e);
+			   clickDragOnTopic(node, eventInfo, e);
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
@@ -95,7 +95,7 @@ function graphSettings(type) {
             onClick: function (node, eventInfo, e) {
                //clicking on a node, or clicking on blank part of canvas?
                if (node.nodeFrom) {
-					selectEdgeOnClickHandler(node);   
+					selectEdgeOnClickHandler(node);  
 			   }
 			   else if (node && !node.nodeFrom) {
                  selectNodeOnClickHandler(node);
@@ -130,7 +130,7 @@ function graphSettings(type) {
 			    node.setData('dim', 25, 'current');
 			    node.eachAdjacency(function (adj) {
 				   adj.setDataset('end', {
-					  lineWidth: 0.5,
+					  lineWidth: 3,
 					  color: '#222222'
 				   });
 				   adj.setData('showDesc', false, 'current');
@@ -209,7 +209,7 @@ function graphSettings(type) {
             overridable: true,
             color: '#222222',
             type: 'customEdge',
-            lineWidth: 1
+            lineWidth: 3
          },
          //Native canvas text styling
          Label: {
@@ -235,10 +235,16 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-               clickDragOnTopicRGraph(node, eventInfo, e);
+               clickDragOnTopic(node, eventInfo, e);
             },
 			onDragEnd: function() {
-				if (tempInit && tempNode2 != null) {
+				if (tempInit && tempNode2 == null) {
+					$('#item_addSynapse').val("true");
+					$('#new_item').fadeIn('fast');
+					addMetacode();
+					$('#item_name').focus();
+				}
+				else if (tempInit && tempNode2 != null) {
 					$('#item_addSynapse').val("false");
 					$('#synapse_item1id').val(tempNode.id);
         			$('#synapse_item2id').val(tempNode2.id);
@@ -247,12 +253,6 @@ function graphSettings(type) {
 					tempNode = null;
 					tempNode2 = null;
 					tempInit = false;
-				}
-				else {
-					tempNode = null;
-					tempNode2 = null;
-					tempInit = false;
-				    Mconsole.plot();	
 				}
 			},
 			onDragCancel: function() {
@@ -266,11 +266,12 @@ function graphSettings(type) {
                $jit.util.event.stop(e); //stop default touchmove event
                this.onDragMove(node, eventInfo, e);
             },
-            //Add also a click handler to nodes
+			//Add also a click handler to nodes
             onClick: function (node, eventInfo, e) {
                //clicking on an edge, a node, or clicking on blank part of canvas?
-               if (node.nodeFrom) {
-					selectEdgeOnClickHandler(node);  
+               if (eventInfo.getEdge() != false || node.nodeFrom) {
+					if (eventInfo.getEdge() != false) selectEdgeOnClickHandler(eventInfo.getEdge());
+					else if (node.nodeFrom) selectEdgeOnClickHandler(node);  
 			   }
 			   else if (node && !node.nodeFrom) {
 				 if (!Mconsole.busy) {
@@ -312,7 +313,7 @@ function graphSettings(type) {
 					node.setData('dim', 25, 'current');
 					node.eachAdjacency(function (adj) {
 					   adj.setDataset('end', {
-						  lineWidth: 0.5,
+						  lineWidth: 3,
 						  color: '#222222'
 					   });
 					   adj.setData('showDesc', false, 'current');
@@ -391,6 +392,7 @@ midPoint.y - vect.y);
         var v1 = intermediatePoint.add(normal); 
         var v2 = intermediatePoint.$add(normal.$scale(-1)); 
 
+        //ctx.strokeStyle = 'black';
         ctx.beginPath(); 
         ctx.moveTo(from.x, from.y); 
         ctx.lineTo(to.x, to.y); 
@@ -466,7 +468,7 @@ var nodeSettings = {
 		  }
 		   
 		  //check for edge label in data  
-		  var desc = adj.getData("desc") + ' (' + adj.getData("userid") + ',' + adj.getData("id") + ')';
+		  var desc = adj.getData("desc") + ' (' + adj.getData("id") + ')';
 		  var showDesc = adj.getData("showDesc");
 		  if( desc != "" && showDesc ) { 
 			 //now adjust the label placement 
@@ -479,7 +481,7 @@ var nodeSettings = {
 		  }
 		}, 'contains' : function(adj, pos) { 
 				var from = adj.nodeFrom.pos.getc(true), 
-				to = adj.nodeTo.pos.getc(true); 
+				 to = adj.nodeTo.pos.getc(true);
 				return this.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon); 
 		}  
 	  }  
@@ -509,7 +511,7 @@ function selectNodeOnClickHandler(node) {
       n.setData('dim', 25, 'current');
       n.eachAdjacency(function (adj) {
          adj.setDataset('end', {
-            lineWidth: 0.5,
+            lineWidth: 3,
             color: '#222222'
          });
          adj.setData('showDesc', false, 'current');
@@ -521,7 +523,7 @@ function selectNodeOnClickHandler(node) {
 
       node.eachAdjacency(function (adj) {
          adj.setDataset('end', {
-            lineWidth: 3,
+            lineWidth: 4,
             color: '#FFF'
          });
          adj.setData('showDesc', true, 'current');
@@ -548,7 +550,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
    var storedTime = canvasDoubleClickHandlerObject.storedTime;
    var now = Date.now(); //not compatible with IE8 FYI
 
-   if (now - storedTime < TOLERANCE && (gType == "arranged" || gType == "chaotic")) {
+   if (now - storedTime < TOLERANCE) {
       //pop up node creation :)
 	  $('#item_grabItem').val("null");
 	  $('#item_addSynapse').val("false");
@@ -561,9 +563,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
       $('#item_name').focus();
    } else {
       canvasDoubleClickHandlerObject.storedTime = now;
-	  if (gType != "centered") {
-	  	$('#new_item').fadeOut('fast');
-	  }
+	  $('#new_item').fadeOut('fast');
 	  $('#new_synapse').fadeOut('fast');
 	  tempInit = false;
 	  tempNode = null;
@@ -573,12 +573,11 @@ function canvasDoubleClickHandler(canvasLoc,e) {
 }//canvasDoubleClickHandler
 
 // ForceDirected Mode: for the creation of new topics and synapses through clicking and draggin with right clicks off of topics
-function clickDragOnTopicForceDirected(node, eventInfo, e) {
+function clickDragOnTopic(node, eventInfo, e) {
     if (node && !node.nodeFrom) {
 	   $('#new_synapse').fadeOut('fast');
 	   $('#new_item').fadeOut('fast');
 	   var pos = eventInfo.getPos();
-	   console.log(e);
 	   // if it's a left click, move the node
 	   if (e.button == 0 && !e.altKey ) {
 		   node.pos.setc(pos.x, pos.y);
@@ -586,59 +585,6 @@ function clickDragOnTopicForceDirected(node, eventInfo, e) {
 	   }
 	   // if it's a right click, start synapse creation
 	   else if (e.button == 2 || (e.button == 0 && e.altKey)) {
-		   if (tempInit == false) {
-			  tempNode = node;
-			  tempInit = true;   
-		   }
-		   // 
-		   temp = eventInfo.getNode();
-		   if (temp != false && temp.id != node.id) { // this means a Node has been returned
-			  tempNode2 = temp;
-			  Mconsole.plot();
-			  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
-			  // before making the highlighted one bigger, make sure all the others are regular size
-			  Mconsole.graph.eachNode(function (n) {
-				  n.setData('dim', 25, 'current');
-			  });
-			  temp.setData('dim',35,'current');
-			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
-			  Mconsole.fx.plotNode(temp, Mconsole.canvas);
-		   } else if (!temp) {
-			   tempNode2 = null;
-			   Mconsole.graph.eachNode(function (n) {
-				  n.setData('dim', 25, 'current');
-			   });
-			   //pop up node creation :)
-			  $('#item_grabItem').val("null");
-			  var myX = e.x - 110;
-			  var myY = e.y - 30;
-			  document.getElementById('new_item').style.left = myX + "px";
-			  document.getElementById('new_item').style.top = myY + "px";
-			  document.getElementById('new_synapse').style.left = myX + "px";
-			  document.getElementById('new_synapse').style.top = myY + "px";
-			  $('#item_x').val(eventInfo.getPos().x);
-			  $('#item_y').val(eventInfo.getPos().y);
-			  Mconsole.plot();
-			  renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
-			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
-		   }
-	   }
-   }	
-}
-
-// RGRAPH MODE: for the creation of synapses through clicking and draggin with right clicks off of topics
-function clickDragOnTopicRGraph(node, eventInfo, e) {
-    if (node && !node.nodeFrom) {
-	   $('#new_synapse').fadeOut('fast');
-	   var pos = eventInfo.getPos();
-	   
-	   // if it's a left click, move the node
-	   if (e.button == 0) {
-		   node.pos.setc(pos.x, pos.y);
-		   Mconsole.plot();
-	   }
-	   // if it's a right click, start synapse creation
-	   else if (e.button == 2) {
 		   if (tempInit == false) {
 			  tempNode = node;
 			  tempInit = true;   
@@ -661,10 +607,16 @@ function clickDragOnTopicRGraph(node, eventInfo, e) {
 			   Mconsole.graph.eachNode(function (n) {
 				  n.setData('dim', 25, 'current');
 			   });
+			   //pop up node creation :)
+			  $('#item_grabItem').val("null");
 			  var myX = e.x - 110;
 			  var myY = e.y - 30;
+			  document.getElementById('new_item').style.left = myX + "px";
+			  document.getElementById('new_item').style.top = myY + "px";
 			  document.getElementById('new_synapse').style.left = myX + "px";
 			  document.getElementById('new_synapse').style.top = myY + "px";
+			  $('#item_x').val(eventInfo.getPos().x);
+			  $('#item_y').val(eventInfo.getPos().y);
 			  Mconsole.plot();
 			  renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
 			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);

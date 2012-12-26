@@ -45,8 +45,8 @@
                 <li><%= link_to "My Maps", user_maps_url(user) %></li>
                 <li><%= link_to "Invite", invite_path %></li>
                 <li><%= link_to "Settings", edit_user_url(user) %></li>
-                <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
-                  <li><%= link_to "Feedback", map_path(Map.find(7)) %></li>
+                <% unless Map.first(:conditions => [ "id = ?", 20]).nil? %>
+                  <li><%= link_to "Feedback", map_path(Map.find(20)) %></li>
                 <% end %>
                 <li class="last"><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
             </ul>

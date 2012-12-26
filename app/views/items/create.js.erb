@@ -26,9 +26,11 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   temp.setData('dim', 40, 'end');
   
   if (gType == "centered") {
-    temp.setPos(new $jit.Polar(5.54, 347.6), 'current');
-    temp.setPos(new $jit.Polar(5.54, 347.6), 'start');
-    temp.setPos(new $jit.Polar(5.54, 347.6), 'end');
+    var tempPos = new $jit.Complex(x, y);
+    tempPos = tempPos.toPolar();
+    temp.setPos(tempPos, 'current');
+    temp.setPos(tempPos, 'start');
+    temp.setPos(tempPos, 'end');
   }
   else if (gType == "arranged" || gType == "chaotic") {
     temp.setData('xloc',0);
@@ -48,7 +50,7 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
       modes: ['node-property:dim'],  
       duration: 500,
       onComplete: function() {
-        renderMidArrow({ x: tempNode.pos.x, y: tempNode.pos.y }, { x: temp.pos.x, y: temp.pos.y }, 13, false, Mconsole.canvas);
+        renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: temp.pos.getc().x, y: temp.pos.getc().y }, 13, false, Mconsole.canvas);
         Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
         Mconsole.fx.plotNode(temp, Mconsole.canvas);
         tempNode = null;
