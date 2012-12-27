@@ -31,8 +31,11 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 	$('#item_name').bind('railsAutocomplete.select', function(event, data){  
       if (data.item.id != undefined) {
         $('#item_grabItem').val(data.item.id);
-		$('#new_item').submit();
       }
+    });
+	
+	$('.new_topic').bind('submit', function(event, data){
+      event.preventDefault();
     });
 	
 	$(".focus .desc").mCustomScrollbar(); 
