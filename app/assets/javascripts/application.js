@@ -22,8 +22,6 @@ var viewMode = "list";
 var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false;
 
  $(document).ready(function() {
-	 
-	document.ontouchmove = function(e){ e.preventDefault(); }
  
     $('#new_item, #new_synapse').bind('contextmenu', function(e){
 		return false;
@@ -59,7 +57,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 			}
 			else {
 			  $('.footer .menu').animate({
-				height: '57px'
+				height: '140px'
 			  }, 300, function() {
 				sliding1 = false;
 			  });

@@ -13,7 +13,7 @@ function graphSettings(type) {
             //Enable panning events only if we're dragging the empty
             //canvas (and not a node).
             panning: 'avoid nodes',
-            zooming: 10 //zoom speed. higher is more sensible
+            zooming: 15 //zoom speed. higher is more sensible
          },
          // Change node and edge styles such as
          // color and width.
@@ -30,7 +30,7 @@ function graphSettings(type) {
             overridable: true,
             color: '#222222',
             type: 'customEdge',
-            lineWidth: 3
+            lineWidth: 2
          },
          //Native canvas text styling
          Label: {
@@ -130,7 +130,7 @@ function graphSettings(type) {
 			    node.setData('dim', 25, 'current');
 			    node.eachAdjacency(function (adj) {
 				   adj.setDataset('end', {
-					  lineWidth: 3,
+					  lineWidth: 2,
 					  color: '#222222'
 				   });
 				   adj.setData('showDesc', false, 'current');
@@ -192,7 +192,7 @@ function graphSettings(type) {
             //Enable panning events only if we're dragging the empty
             //canvas (and not a node).
             panning: 'avoid nodes',
-            zooming: 10 //zoom speed. higher is more sensible
+            zooming: 15 //zoom speed. higher is more sensible
          },
          // Change node and edge styles such as
          // color and width.
@@ -209,7 +209,7 @@ function graphSettings(type) {
             overridable: true,
             color: '#222222',
             type: 'customEdge',
-            lineWidth: 3
+            lineWidth: 2
          },
          //Native canvas text styling
          Label: {
@@ -313,7 +313,7 @@ function graphSettings(type) {
 					node.setData('dim', 25, 'current');
 					node.eachAdjacency(function (adj) {
 					   adj.setDataset('end', {
-						  lineWidth: 3,
+						  lineWidth: 2,
 						  color: '#222222'
 					   });
 					   adj.setData('showDesc', false, 'current');
@@ -511,7 +511,7 @@ function selectNodeOnClickHandler(node) {
       n.setData('dim', 25, 'current');
       n.eachAdjacency(function (adj) {
          adj.setDataset('end', {
-            lineWidth: 3,
+            lineWidth: 2,
             color: '#222222'
          });
          adj.setData('showDesc', false, 'current');
