@@ -73,9 +73,21 @@ a {
   text-decoration:none;
 }
 
+/*
+ * Utility
+ */
+
 .clearfloat {
   clear:both;
 }
+
+.hidden {
+  display: none;
+}
+
+/*
+ * Layout stuffs
+ */
 
 .new_session, 
 .new_user,
