@@ -128,57 +128,44 @@ function onCanvasSearch(name,mapID,mapperID) {
 
 	Mconsole.graph.eachNode( function (n) {
 		  if (name != null) {
-		     if (n.name.indexOf(name) !== -1) {
-				 n.setData('alpha', 1, 'end');
-				 n.eachAdjacency(function(adj) {  
-				   adj.setData('alpha', 0.4, 'end');  
-				 });
+		     if (n.name.indexOf(name) !== -1 && name != "") {
+				 n.setData('onCanvas', true);
+				 //$('.name.item_' + n.id).css('display','block');
 		     }
 			 else {
-				 n.setData('alpha', 0.4, 'end');
-				 n.eachAdjacency(function(adj) {  
-				   adj.setData('alpha', 0.4, 'end');  
-				 }); 
+				 n.setData('onCanvas', false);
+				 //$('.name.item_' + n.id).css('display','none'); 
 			 }
 		  }
 		  else if (mapID != null) {
 		     if (n.getData('inmaps').indexOf(parseInt(mapID)) !== -1) {
-				 n.setData('alpha', 1, 'end');
-				 n.eachAdjacency(function(adj) {  
-				   adj.setData('alpha', 0.4, 'end');  
-				 });
+				 n.setData('onCanvas', true);
+				 //$('.name.item_' + n.id).css('display','block');
 		     }
 			 else {
-				 n.setData('alpha', 0.4, 'end');
-				 n.eachAdjacency(function(adj) {  
-				   adj.setData('alpha', 0.4, 'end');  
-				 }); 
+				 n.setData('onCanvas', false);
+				 //$('.name.item_' + n.id).css('display','none'); 
 			 }
 		  }
 		  else if (mapperID != null) {
 		     if (n.getData('userid').toString() == mapperID) {
-			    n.setData('alpha', 1, 'end');
-		        n.eachAdjacency(function(adj) {  
-		           adj.setData('alpha', 0.4, 'end');  
-		        });
+			    n.setData('onCanvas', true);
+				 //$('.name.item_' + n.id).css('display','block');
 			 }
 			 else {
-				 n.setData('alpha', 0.4, 'end');
-				 n.eachAdjacency(function(adj) {  
-				   adj.setData('alpha', 0.4, 'end');  
-				 }); 
+				 n.setData('onCanvas', false);
+				 //$('.name.item_' + n.id).css('display','none'); 
 			 }
 		  }
+		  Mconsole.plot();
 	});
-	Mconsole.fx.animate({  
-		modes: ['node-property:alpha',  
-				'edge-property:alpha'],  
-		duration: 500  
-	});	
 }
 
 
-
+function clearCanvas() {
+	Mconsole.graph.eachNode( function(n) { Mconsole.graph.removeNode(n.id); $('#'+n.id).remove(); });	
+	Mconsole.plot();
+}
 
 
 
@@ -205,7 +192,9 @@ $(document).ready(function() {
    // this sets up the closing of the find box, and the toggling between open and closed.
    $('#closeFind').click(function(){
 	   Mconsole.graph.eachNode( function (n) {
-		  n.setData('isNew', false);	
+		  n.setData('inCommons', false);
+		  n.setData('onCanvas', false);
+		  //$('.name.item_' + n.id).css('display','block');
 	   });
 	   Mconsole.plot();
 	   $('#closeFind, #findWhere').css('display','none');
@@ -544,7 +533,7 @@ $(document).ready(function() {
 //				  }
 //			  }
 //			}
-					// toggle the image and the boolean array value
+			// toggle the image and the boolean array value
 			if (categoryVisible[category] == true) {
 				$(this).addClass('toggledOff');
 				categoryVisible[category] = false;

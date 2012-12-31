@@ -2,7 +2,7 @@ ISSAD::Application.routes.draw do
 
   root to: 'main#console', via: :get
   
-  match 'metamap', to: 'main#metamap', via: :get, as: :metamap
+  match 'console', to: 'main#console', via: :get, as: :console
   
   match 'invite', to: 'main#invite', via: :get, as: :invite
   

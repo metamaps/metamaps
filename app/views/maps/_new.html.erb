@@ -1,0 +1,15 @@
+<div class="onConsole">
+<%= form_for @map || Map.new, url: maps_url, remote: true do |form|%>
+  <h3>Save to Map</h3>
+  <label for="map_name">Name</label>
+  <%= form.text_field :name %>
+  <label for="map_desc">Description</label>
+  <%= form.text_area :desc, class: "description", :rows => 5 %>
+  <label for="map_permission">Permission</label>
+  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
+  <%= form.hidden_field :topicsToMap, :value => 0 %>
+  <%= form.submit "Save", class: "add" %>
+  <button onclick="$('#new_map').fadeOut('fast'); event.preventDefault();">Cancel</button>
+  <div class="clearfloat"></div>
+<% end %>
+</div>

@@ -1,0 +1,13 @@
+$('#map_name').val('');
+$('#map_desc').val('');
+$('#map_permission').val('commons');
+$('#map_topicsToMap').val('0');
+
+var tempForm = $('#new_map').html();
+$('#new_map').html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='javascript:closeIt(); event.preventDefault();'>Stay on the Console?</a>");
+
+function closeIt() {
+  $('#new_map').fadeOut('fast', function(){
+    $('#new_map').html(tempForm);
+  }); 
+}

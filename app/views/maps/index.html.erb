@@ -1,11 +1,11 @@
-<h1>Maps</h1>
+<h1 class="index"><% if @user %><%= @user.name %>'s<% end %> Maps</h1>
 
 <div class="maps" id="cards">
   <% @maps.each do |map| %>
     <%= render map %>
   <% end %>
   <% if @maps.empty? %>
-	 <p><br>Shucks, there are no maps.<p>
+	 <p class="empty"><br>Shucks, there are no maps. <% if authenticated? %><%= link_to "Create one if you want.", new_map_url %><% end %></p>
   <% end %>
 </div>
 <div class="clearfloat"></div>
