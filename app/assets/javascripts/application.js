@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery-ui
+//= require jquery.purr
+//= require best_in_place
 //= require autocomplete-rails-uncompressed
 //= require jquery_ujs
 //= require_tree .
