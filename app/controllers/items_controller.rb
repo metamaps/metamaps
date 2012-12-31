@@ -33,17 +33,27 @@ class ItemsController < ApplicationController
   # GET items/:id
   def show
     @current = current_user
-	  @item = Item.find(params[:id]).authorize_to_show(@current)
+    @item = Item.find(params[:id]).authorize_to_show(@current)
 	
-	  if @item
-		  @relatives = @item.network_as_json(@current).html_safe
-	  else
-		  redirect_to root_url and return
-	  end
+    if @item
+	  @relatives = @item.network_as_json(@current).html_safe
+    else
+	  redirect_to root_url and return
+    end
 	
-	  respond_to do |format|
+    respond_to do |format|
       format.html { respond_with(@item, @user) }
       format.json { respond_with(@relatives) }
+    end
+  end
+
+  # GET showcard/:id
+  def showcard
+    @user = current_user
+    @item = Item.find(params[:id]).authorize_to_show(@user)
+	
+    respond_to do |format|
+      format.html { respond_with(@item, @user) }
     end
   end
   

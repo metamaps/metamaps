@@ -32,6 +32,9 @@ GEM
     authlogic (3.1.0)
       activerecord (>= 3.0.7)
       activerecord (>= 3.0.7)
+    best_in_place (2.0.2)
+      jquery-rails
+      rails (~> 3.1)
     builder (3.0.3)
     cancan (1.6.7)
     coffee-rails (3.2.2)
@@ -118,6 +121,7 @@ PLATFORMS
 
 DEPENDENCIES
   authlogic
+  best_in_place
   cancan
   coffee-rails (~> 3.2.1)
   formtastic
