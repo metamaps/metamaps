@@ -1,0 +1,29 @@
+<div class="showcard item_<%= @item.id %>">
+  <div class="CardOnGraph" title="Click to Hide" id="item_' + node.id + '">
+    <p class="type">
+      <%= @item.item_category.name %>
+    </p>
+    <img alt="<%= @item.item_category.name %>" 
+         src="/assets/<%= @item.item_category.name %>.png" 
+         class="icon" height="50" width="50" />
+    <div class="scroll">
+      <a href="/items/<%=@item.id%>" class="title">
+        <%= node.name %>
+      </a>
+      <div class="contributor">
+        Added by: 
+        <a href="/users/<%= @item.user_id%>">
+          <%= User.all.find(@item.user_id).name %>
+        </a>
+      </div>
+      <div class="desc">
+        <p>
+          <%= @item.desc %>
+        </p>
+      </div>
+    </div><!-- div.scroll -->
+    <a href="<%= @item.link %>" class="link" target="_blank">
+      <%= @item.link %>
+    </a>
+  </div>
+</div>
