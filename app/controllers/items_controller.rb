@@ -49,11 +49,11 @@ class ItemsController < ApplicationController
 
   # GET showcard/:id
   def showcard
-    @current = current_user
-    @item = Item.find(params[:id]).authorize_to_show(@current)
+    @user = current_user
+    @item = Item.find(params[:id]).authorize_to_show(@user)
 	
     respond_to do |format|
-      format.json { respond_with(@item) }
+      format.html { respond_with(@item, @user) }
     end
   end
   

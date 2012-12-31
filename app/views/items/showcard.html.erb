@@ -8,12 +8,12 @@
          class="icon" height="50" width="50" />
     <div class="scroll">
       <a href="/items/<%=@item.id%>" class="title">
-        <%= node.name %>
+        <%= @item.name %>
       </a>
       <div class="contributor">
         Added by: 
-        <a href="/users/<%= @item.user_id%>">
-          <%= User.all.find(@item.user_id).name %>
+        <a href="/users/<%= @user.id %>">
+          <%= @user.name %>
         </a>
       </div>
       <div class="desc">
