@@ -13,24 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20130101215010) do
 
-  create_table "item_categories", :force => true do |t|
-    t.text     "name"
-    t.string   "icon"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "items", :force => true do |t|
-    t.text     "name"
-    t.text     "desc"
-    t.text     "link"
-    t.text     "permission"
-    t.integer  "user_id"
-    t.integer  "item_category_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-  end
-
   create_table "mappings", :force => true do |t|
     t.text     "category"
     t.integer  "xloc"
