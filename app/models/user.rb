@@ -2,7 +2,7 @@ require 'open-uri'
 
 class User < ActiveRecord::Base
 
-has_many :items
+has_many :topics
 has_many :synapses
 has_many :maps
 has_many :mappings

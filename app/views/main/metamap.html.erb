@@ -1,4 +1,4 @@
-<% unless @item.nil? %>
+<% unless @topic.nil? %>
 <div class="home" id="container">
   <div id="center-container">
     <div id="infovis"></div>    
@@ -14,12 +14,12 @@
 	});
 </script>
 <% end %>
-<% if @item.nil? %>
+<% if @topic.nil? %>
 	 <p><br>Shucks, there is nothing in metamaps.<p>
 <% end %>
 
 <% if authenticated? %>
-	<%= render :partial => 'items/new' %>
+	<%= render :partial => 'topics/new' %>
 	<%= render :partial => 'synapses/new' %>
 <% end %>
 

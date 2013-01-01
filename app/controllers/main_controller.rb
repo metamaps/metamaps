@@ -1,5 +1,5 @@
 class MainController < ApplicationController
-  include ItemsHelper
+  include TopicsHelper
 
   before_filter :require_user, only: [:invite] 
    
@@ -11,16 +11,16 @@ class MainController < ApplicationController
   
   def search
     @current = current_user
-    @items = Array.new()
+    @topics = Array.new()
     if params[:topics_by_user_id] != ""
       @user = User.find(params[:topics_by_user_id])
-      @items = Item.visibleToUser(@current, @user)
+      @topics = Topic.visibleToUser(@current, @user)
     elsif params[:topics_by_map_id] != ""
       @map = Map.find(params[:topics_by_map_id])
-      @items = @map.items.delete_if{|item| not item.authorize_to_view(@current)}
+      @topics = @map.topics.delete_if{|topic| not topic.authorize_to_view(@current)}
     end
     respond_to do |format|
-      format.js { respond_with(@items) }
+      format.js { respond_with(@topics) }
     end
   end
   

@@ -33,7 +33,7 @@
           <% unless authenticated? %>
             <ul class="menu">
               <li class="first"><%= link_to "Console", console_url %></li>
-              <li><%= link_to "Topics", items_url %></li>
+              <li><%= link_to "Topics", topics_url %></li>
               <li><%= link_to "Synapses", synapses_url %></li>
               <li><%= link_to "Maps", maps_url %></li>
               <li class="last"><%= link_to "Login", new_session_path, id: "Login" %></li>
@@ -43,7 +43,7 @@
             <ul class="menu">
                 <li class="first"><%= link_to "Console", console_url %></li>
                 <li><%= link_to "Create Map", new_map_url %></li>
-                <li><%= link_to "My Topics", user_items_url(user) %></li>
+                <li><%= link_to "My Topics", user_topics_url(user) %></li>
                 <li><%= link_to "My Synapses", user_synapses_url(user) %></li>
                 <li><%= link_to "My Maps", user_maps_url(user) %></li>
                 <li><%= link_to "Invite", invite_path %></li>

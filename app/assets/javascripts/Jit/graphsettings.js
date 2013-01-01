@@ -61,15 +61,15 @@ function graphSettings(type) {
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
-					$('#item_addSynapse').val("true");
-					$('#new_item').fadeIn('fast');
+					$('#topic_addSynapse').val("true");
+					$('#new_topic').fadeIn('fast');
 					addMetacode();
-					$('#item_name').focus();
+					$('#topic_name').focus();
 				}
 				else if (tempInit && tempNode2 != null) {
-					$('#item_addSynapse').val("false");
-					$('#synapse_item1id').val(tempNode.id);
-        			$('#synapse_item2id').val(tempNode2.id);
+					$('#topic_addSynapse').val("false");
+					$('#synapse_topic1id').val(tempNode.id);
+        			$('#synapse_topic2id').val(tempNode2.id);
 					$('#new_synapse').fadeIn('fast');
 					$('#synapse_desc').focus();
 					tempNode = null;
@@ -81,9 +81,9 @@ function graphSettings(type) {
 				tempNode = null;
 				tempNode2 = null;
 				tempInit = false;
-				$('#item_addSynapse').val("false");
-				$('#item_item1id').val(0);
-				$('#item_item2id').val(0);
+				$('#topic_addSynapse').val("false");
+				$('#topic_topic1id').val(0);
+				$('#topic_topic2id').val(0);
 				Mconsole.plot();
 			},
             //Implement the same handler for touchscreens
@@ -112,14 +112,14 @@ function graphSettings(type) {
          // on label creation and only for DOM labels (not native canvas ones).
          onCreateLabel: function (domElement, node) {
 			var html = 
-           '<div class="CardOnGraph" title="Click to Hide" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p>' + 
-           '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-           '<div class="scroll"><a href="/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+           '<div class="CardOnGraph" title="Click to Hide" id="topic_' + node.id + '"><p class="type">' + node.getData("metacode") + '</p>' + 
+           '<img alt="' + node.getData("metacode") + '" class="icon" height="50" src="' + imgArray[node.getData("metacode")].src + '" width="50" />' +
+           '<div class="scroll"><a href="/topics/' + node.id + '" class="title">' + node.name + '</a>' + 
 		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
            '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
            '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
 		   var showCard = document.createElement('div'); 
-			showCard.className = 'showcard item_' + node.id;  
+			showCard.className = 'showcard topic_' + node.id;  
 			showCard.innerHTML = html; 
 			showCard.style.display = "none";
 			domElement.appendChild(showCard);
@@ -139,7 +139,7 @@ function graphSettings(type) {
 				  modes: ['edge-property:lineWidth:color'],
 				  duration: 500
 			   });
-				$('.showcard.item_' + node.id).fadeOut('fast', function(){
+				$('.showcard.topic_' + node.id).fadeOut('fast', function(){
 					$('.name').css('display','block');
 					Mconsole.plot();
 				});	
@@ -149,7 +149,7 @@ function graphSettings(type) {
 			// to the main node label  
 			var nameContainer = document.createElement('span'),  
 				style = nameContainer.style;  
-			nameContainer.className = 'name item_' + node.id;  
+			nameContainer.className = 'name topic_' + node.id;  
 			nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
 			domElement.appendChild(nameContainer);  
 			style.fontSize = "0.9em";  
@@ -239,15 +239,15 @@ function graphSettings(type) {
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
-					$('#item_addSynapse').val("true");
-					$('#new_item').fadeIn('fast');
+					$('#topic_addSynapse').val("true");
+					$('#new_topic').fadeIn('fast');
 					addMetacode();
-					$('#item_name').focus();
+					$('#topic_name').focus();
 				}
 				else if (tempInit && tempNode2 != null) {
-					$('#item_addSynapse').val("false");
-					$('#synapse_item1id').val(tempNode.id);
-        			$('#synapse_item2id').val(tempNode2.id);
+					$('#topic_addSynapse').val("false");
+					$('#synapse_topic1id').val(tempNode.id);
+        			$('#synapse_topic2id').val(tempNode2.id);
 					$('#new_synapse').fadeIn('fast');
 					$('#synapse_desc').focus();
 					tempNode = null;
@@ -294,14 +294,14 @@ function graphSettings(type) {
          // on label creation and only for DOM labels (not native canvas ones).
          onCreateLabel: function (domElement, node) {
 			var html = 
-           '<div class="CardOnGraph" title="Click to Hide" id="item_' + node.id + '"><p class="type">' + node.getData("itemcatname") + '</p>' + 
-           '<img alt="' + node.getData("itemcatname") + '" class="icon" height="50" src="' + imgArray[node.getData("itemcatname")].src + '" width="50" />' +
-           '<div class="scroll"><a href="/items/' + node.id + '" class="title">' + node.name + '</a>' + 
+           '<div class="CardOnGraph" title="Click to Hide" id="topic_' + node.id + '"><p class="type">' + node.getData("metacode") + '</p>' + 
+           '<img alt="' + node.getData("metacode") + '" class="icon" height="50" src="' + imgArray[node.getData("metacode")].src + '" width="50" />' +
+           '<div class="scroll"><a href="/topics/' + node.id + '" class="title">' + node.name + '</a>' + 
 		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
            '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
            '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
 		   var showCard = document.createElement('div'); 
-			showCard.className = 'showcard item_' + node.id;  
+			showCard.className = 'showcard topic_' + node.id;  
 			showCard.innerHTML = html; 
 			showCard.style.display = "none";
 			domElement.appendChild(showCard);
@@ -322,7 +322,7 @@ function graphSettings(type) {
 					  modes: ['edge-property:lineWidth:color'],
 					  duration: 500
 				   });
-					$('.showcard.item_' + node.id).fadeOut('fast', function(){
+					$('.showcard.topic_' + node.id).fadeOut('fast', function(){
 						$('.name').css('display','block');
 						Mconsole.plot();
 					});	
@@ -333,7 +333,7 @@ function graphSettings(type) {
 			// to the main node label  
 			var nameContainer = document.createElement('span'),  
 				style = nameContainer.style;  
-			nameContainer.className = 'name item_' + node.id;  
+			nameContainer.className = 'name topic_' + node.id;  
 			nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
 			domElement.appendChild(nameContainer);  
 			style.fontSize = "0.9em";  
@@ -410,7 +410,7 @@ var nodeSettings = {
 		  'render': function (node, canvas) {		  			  
 			  var pos = node.pos.getc(true),
 			  dim = node.getData('dim'),
-			  cat = node.getData('itemcatname'),
+			  cat = node.getData('metacode'),
 			  inCommons = node.getData('inCommons'),
 			  onCanvas = node.getData('onCanvas'),
 			  ctx = canvas.getCtx();
@@ -502,8 +502,8 @@ function selectNodeOnClickHandler(node) {
    
     $('.showcard').css('display','none');
 	$('.name').css('display','block');
-	$('.name.item_' + node.id).css('display','none');
-	$('.showcard.item_' + node.id).fadeIn('fast');
+	$('.name.topic_' + node.id).css('display','none');
+	$('.showcard.topic_' + node.id).fadeIn('fast');
 				
    //set final styles  
    Mconsole.graph.eachNode(function (n) {
@@ -552,18 +552,18 @@ function canvasDoubleClickHandler(canvasLoc,e) {
 
    if (now - storedTime < TOLERANCE) {
       //pop up node creation :)
-	  $('#item_grabItem').val("null");
-	  $('#item_addSynapse').val("false");
-      document.getElementById('new_item').style.left = e.x + "px";
-      document.getElementById('new_item').style.top = e.y + "px";
-      $('#item_x').val(canvasLoc.x);
-      $('#item_y').val(canvasLoc.y);
-      $('#new_item').fadeIn('fast');
+	  $('#topic_grabTopic').val("null");
+	  $('#topic_addSynapse').val("false");
+      document.getElementById('new_topic').style.left = e.x + "px";
+      document.getElementById('new_topic').style.top = e.y + "px";
+      $('#topic_x').val(canvasLoc.x);
+      $('#topic_y').val(canvasLoc.y);
+      $('#new_topic').fadeIn('fast');
 	  addMetacode();
-      $('#item_name').focus();
+      $('#topic_name').focus();
    } else {
       canvasDoubleClickHandlerObject.storedTime = now;
-	  $('#new_item').fadeOut('fast');
+	  $('#new_topic').fadeOut('fast');
 	  $('#new_synapse').fadeOut('fast');
 	  tempInit = false;
 	  tempNode = null;
@@ -576,7 +576,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
 function clickDragOnTopic(node, eventInfo, e) {
     if (node && !node.nodeFrom) {
 	   $('#new_synapse').fadeOut('fast');
-	   $('#new_item').fadeOut('fast');
+	   $('#new_topic').fadeOut('fast');
 	   var pos = eventInfo.getPos();
 	   // if it's a left click, move the node
 	   if (e.button == 0 && !e.altKey ) {
@@ -608,15 +608,15 @@ function clickDragOnTopic(node, eventInfo, e) {
 				  n.setData('dim', 25, 'current');
 			   });
 			   //pop up node creation :)
-			  $('#item_grabItem').val("null");
+			  $('#topic_grabTopic').val("null");
 			  var myX = e.x - 110;
 			  var myY = e.y - 30;
-			  document.getElementById('new_item').style.left = myX + "px";
-			  document.getElementById('new_item').style.top = myY + "px";
+			  document.getElementById('new_topic').style.left = myX + "px";
+			  document.getElementById('new_topic').style.top = myY + "px";
 			  document.getElementById('new_synapse').style.left = myX + "px";
 			  document.getElementById('new_synapse').style.top = myY + "px";
-			  $('#item_x').val(eventInfo.getPos().x);
-			  $('#item_y').val(eventInfo.getPos().y);
+			  $('#topic_x').val(eventInfo.getPos().x);
+			  $('#topic_y').val(eventInfo.getPos().y);
 			  Mconsole.plot();
 			  renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
 			  Mconsole.fx.plotNode(tempNode, Mconsole.canvas);

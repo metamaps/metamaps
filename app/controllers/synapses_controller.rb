@@ -1,5 +1,5 @@
 class SynapsesController < ApplicationController
-  include ItemsHelper
+  include TopicsHelper
 
   before_filter :require_user, only: [:new, :create, :edit, :update]
     
@@ -39,10 +39,10 @@ class SynapsesController < ApplicationController
   def show
   	@current = current_user
     @synapse = Synapse.find(params[:id]).authorize_to_show(@current)
-	  @item1 = @synapse.item1.authorize_to_show(@current)
-	  @item2 = @synapse.item2.authorize_to_show(@current)
+	  @topic1 = @synapse.topic1.authorize_to_show(@current)
+	  @topic2 = @synapse.topic2.authorize_to_show(@current)
 	
-	  if @synapse && @item1 && @item2
+	  if @synapse && @topic1 && @topic2
 		  @synapsejson = @synapse.selfplusnodes_as_json.html_safe
 	  else
 		  redirect_to root_url and return
@@ -60,8 +60,8 @@ class SynapsesController < ApplicationController
     @user = current_user
     @synapse = Synapse.new()
     @synapse.desc = params[:synapse][:desc]
-    @synapse.item1 = Item.find(params[:synapse][:item1id])
-    @synapse.item2 = Item.find(params[:synapse][:item2id])
+    @synapse.topic1 = Topic.find(params[:synapse][:topic1id])
+    @synapse.topic2 = Topic.find(params[:synapse][:topic2id])
     @synapse.permission = "commons"
     @synapse.category = "from-to"
     @synapse.weight = 5
@@ -90,12 +90,12 @@ class SynapsesController < ApplicationController
     @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
 	
 	  if @synapse 
-		  @items = Item.visibleToUser(@current, nil)
+		  @topics = Topic.visibleToUser(@current, nil)
 	  elsif not @synapse
 		  redirect_to root_url and return
 	  end
   
-	  respond_with(@synapse, @items)
+	  respond_with(@synapse, @topics)
   end
   
   # PUT synapses/:id
@@ -106,8 +106,8 @@ class SynapsesController < ApplicationController
 	  if @synapse 
 		  @synapse.desc = params[:synapse][:desc]
 		  @synapse.category = params[:synapse][:category]
-		  @synapse.item1 = Item.find(params[:node1_id][:node1])
-		  @synapse.item2 = Item.find(params[:node2_id][:node2])
+		  @synapse.topic1 = Topic.find(params[:node1_id][:node1])
+		  @synapse.topic2 = Topic.find(params[:node2_id][:node2])
 	    @synapse.permission = params[:synapse][:permission]
 		  @synapse.save
     end

@@ -1,0 +1,37 @@
+// Place all the styles related to the Topics controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.topic { display:block; float:left; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
+
+.topic .delete {position: absolute;
+top: -14px;
+left: 0px;
+background: none;
+border: 0;
+color: white;
+border: none;
+font-size: 14px;
+margin: 0;
+padding: 0;
+cursor:pointer;
+}
+
+.topic .scroll { display:block; height:283px; }
+
+.topic .type {position: absolute;
+color: white;
+top: -22px;
+right: 0;
+font-weight: bold;
+font-size: 20px;
+line-height: 24px;}
+
+.topic .icon { position:absolute; top:135px; left:-25px; }
+
+.topic .title { font-size:22px; line-height:25px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
+
+.topic .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
+.topic .desc h3 { font-style:normal; margin-top:5px; }
+
+.topic .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

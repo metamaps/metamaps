@@ -25,14 +25,14 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 
  $(document).ready(function() {
  
-    $('#new_item, #new_synapse').bind('contextmenu', function(e){
+    $('#new_topic, #new_synapse').bind('contextmenu', function(e){
 		return false;
 	});
 	
 	/// this is for the topic creation autocomplete field
-	$('#item_name').bind('railsAutocomplete.select', function(event, data){  
+	$('#topic_name').bind('railsAutocomplete.select', function(event, data){  
       if (data.item.id != undefined) {
-        $('#item_grabItem').val(data.item.id);
+        $('#topic_grabTopic').val(data.item.id);
       }
     });
 	

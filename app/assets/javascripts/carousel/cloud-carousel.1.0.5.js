@@ -187,7 +187,7 @@
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
 			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
 			// METAMAPS CODE
-			$('#item_metacode').val( $(items[this.frontIndex].image).attr('title'));
+			$('#topic_metacode').val( $(items[this.frontIndex].image).attr('title'));
 			// NOT METAMAPS CODE
 			$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				
 		};

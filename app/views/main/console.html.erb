@@ -10,7 +10,7 @@
   </div>
   <div class="clearfloat"></div>
   <% if authenticated? %>
-    <%= render :partial => 'items/new' %>
+    <%= render :partial => 'topics/new' %>
     <%= render :partial => 'synapses/new' %>
     <%= render :partial => 'maps/new' %>
   <% end %>
@@ -43,8 +43,8 @@
     <option value="mapper (by name)">mapper (by name)</option>
   </select>
   <div class="clearfloat"></div>
-  <%= form_for Item.new, :html => { :class => "find_topic_by_name find find_topic", :id => "find_topic_by_name" } do |f| %>
-    <%= f.autocomplete_field :name, autocomplete_item_name_items_path, :id => "topic_by_name_input", :placeholder => "Search for topics..." %>
+  <%= form_for Topic.new, :html => { :class => "find_topic_by_name find find_topic", :id => "find_topic_by_name" } do |f| %>
+    <%= f.autocomplete_field :name, autocomplete_topic_name_topics_path, :id => "topic_by_name_input", :placeholder => "Search for topics..." %>
   <% end %>
   <%= form_for Map.new, :html => { :class => "find_map_by_name find", :id => "find_map_by_name" } do |f| %>
     <%= f.autocomplete_field :name, autocomplete_map_name_maps_path, :id => "map_by_name_input", :placeholder => "Search for maps..." %>

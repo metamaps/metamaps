@@ -1,0 +1,14 @@
+<%= form_for @topic, url: topic_url do |form| %>
+  <h3>Edit Topic</h3>
+  <label for="category">Category</label>
+  <%= select "category", "metacode_id", Metacode.order("name ASC").all.collect {|p| [ p.name, p.id ] }, { :selected => @topic.metacode.id } %>
+  <label for="topic_name">Title</label>
+  <%= form.text_field :name %>
+  <label for="topic_desc">Description</label>
+  <%= form.text_area :desc, class: "description", :rows => 5 %>
+  <label for="topic_link">Link</label>
+  <%= form.text_field :link, class: "link" %> 
+  <label for="topic_permission">Permission</label>
+  <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @topic.permission) %>
+  <%= form.submit "Update", class: "update" %>
+<% end %>

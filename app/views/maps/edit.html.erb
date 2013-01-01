@@ -4,8 +4,8 @@
   <%= form.text_field :name %>
   <label for="map_desc">Description</label>
   <%= form.text_area :desc, class: "description", :rows => 5 %>
-  <label for="outitems">Remove Topics From Map</label>
-  <%= select_tag "outitems", options_from_collection_for_select(@outitems, "id", "name"), { :multiple => true } %>
+  <label for="outtopics">Remove Topics From Map</label>
+  <%= select_tag "outtopics", options_from_collection_for_select(@outtopics, "id", "name"), { :multiple => true } %>
   <label for="map_perm">Permission</label>
   <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @map.permission) %>
   <%= form.submit "Update", class: "update" %>

@@ -63,15 +63,15 @@ class MapsController < ApplicationController
     if params[:map][:topicsToMap]
 		  @all = params[:map][:topicsToMap]
   		@all = @all.split(',')
-		  @all.each do |item|
-			  item = item.split('/')
+		  @all.each do |topic|
+			  topic = topic.split('/')
 			  @mapping = Mapping.new()
-        @mapping.category = "Item"
+        @mapping.category = "Topic"
         @mapping.user = @user
         @mapping.map  = @map
-        @mapping.item = Item.find(item[0])
-        @mapping.xloc = item[1]
-        @mapping.yloc = item[2]
+        @mapping.topic = Topic.find(topic[0])
+        @mapping.xloc = topic[1]
+        @mapping.yloc = topic[2]
         @mapping.save
 		  end
 		  @map.arranged = true
@@ -95,9 +95,9 @@ class MapsController < ApplicationController
 	    redirect_to root_url and return
 	  end
 	
-	  @outitems = @map.items.order("name ASC").delete_if{|item| not item.authorize_to_view(@current)}
+	  @outtopics = @map.topics.order("name ASC").delete_if{|topic| not topic.authorize_to_view(@current)}
   
-	  respond_with(@user, @map, @outitems)
+	  respond_with(@user, @map, @outtopics)
   end
   
   # PUT maps/:id
@@ -107,10 +107,10 @@ class MapsController < ApplicationController
 	  @map.attributes = params[:map]
 	  @map.save
 	
-	  if params[:outitems]
-		  @outitems = params[:outitems]
-		  @outitems.each do |item|
-			  @mapping = Mapping.where("map_id = ? AND item_id = ?", @map.id, item).first
+	  if params[:outtopics]
+		  @outtopics = params[:outtopics]
+		  @outtopics.each do |topic|
+			  @mapping = Mapping.where("map_id = ? AND topic_id = ?", @map.id, topic).first
 			  @mapping.delete
 		  end
 	  end
@@ -126,11 +126,11 @@ class MapsController < ApplicationController
 	  if params[:map][:coordinates]
 		  @all = params[:map][:coordinates]
   		@all = @all.split(',')
-		  @all.each do |item|
-			  item = item.split('/')
-			  @mapping = Mapping.find(item[0])
-			  @mapping.xloc = item[1]
-			  @mapping.yloc = item[2]
+		  @all.each do |topic|
+			  topic = topic.split('/')
+			  @mapping = Mapping.find(topic[0])
+			  @mapping.xloc = topic[1]
+			  @mapping.yloc = topic[2]
 			  @mapping.save
 		  end
 		  @map.arranged = true

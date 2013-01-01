@@ -1,0 +1,10 @@
+<%= div_for topic, class: topic.metacode.name do %>
+	<% if topic.user == user %><%= link_to 'Delete', topic_path(topic), :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%><% end %>
+	<p class="type"><%= topic.metacode.name %></p>
+	<%= image_tag topic.metacode.icon, :class => 'icon', :size => '50x50' %>
+	<div class="scroll">
+		<%= link_to topic.name, topic_path(topic), :class => 'title' %>
+		<div class="desc"><p><%=topic.desc %></p></div>
+	</div>
+	<%= link_to topic.link, topic.link, :class => 'link', :target => '_blank' %>
+<% end %>

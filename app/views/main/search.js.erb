@@ -7,11 +7,11 @@ var myX = -w + 400;
 var myY = -h + 100;
 var even = true;
 
-<% @items.each do |item| %>
+<% @topics.each do |topic| %>
   if ($.isEmptyObject(Mconsole.graph.nodes)) {
-    json = <%= item.self_as_json.html_safe %>;
+    json = <%= topic.self_as_json.html_safe %>;
     Mconsole.loadJSON(json);
-    var temp = Mconsole.graph.getNode('<%= item.id %>');
+    var temp = Mconsole.graph.getNode('<%= topic.id %>');
     temp.setData('dim', 1, 'start');
     temp.setData('dim', 25, 'end');
     temp.setData('inCommons',true);
@@ -23,11 +23,11 @@ var even = true;
     even = !even;
   }
   else {
-    var temp = Mconsole.graph.getNode('<%= item.id %>');
+    var temp = Mconsole.graph.getNode('<%= topic.id %>');
     if (temp == null) {
-      var newnode = <%= item.self_as_json.html_safe %>;
+      var newnode = <%= topic.self_as_json.html_safe %>;
       Mconsole.graph.addNode(newnode);
-      var temp = Mconsole.graph.getNode('<%= item.id %>');
+      var temp = Mconsole.graph.getNode('<%= topic.id %>');
       temp.setData('dim', 1, 'start');
       temp.setData('dim', 25, 'end');
       temp.setData('inCommons',true);

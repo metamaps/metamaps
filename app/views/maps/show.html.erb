@@ -1,6 +1,6 @@
 <div class="focus">
 	<div class="focusleft">
-		<p># of Topics: <%= @map.items.count %></p>
+		<p># of Topics: <%= @map.topics.count %></p>
 		<p># of Synapses: <%= @map.synapses.count %></p>
 		<% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
 			<%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>

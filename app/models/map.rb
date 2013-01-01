@@ -2,14 +2,14 @@ class Map < ActiveRecord::Base
 
 belongs_to :user
 
-has_many :itemmappings, :class_name => 'Mapping', :conditions => {:category => 'Item'}
+has_many :topicmappings, :class_name => 'Mapping', :conditions => {:category => 'Topic'}
 has_many :synapsemappings, :class_name => 'Mapping', :conditions => {:category => 'Synapse'}
 
-has_many :items, :through => :itemmappings
+has_many :topics, :through => :topicmappings
 has_many :synapses, :through => :synapsemappings
 
 def mappings 
-	itemmappings + synapsemappings
+	topicmappings + synapsemappings
 end
   
   
@@ -17,14 +17,14 @@ end
   #build a json object of a map
   def self_as_json(current)
     Jbuilder.encode do |json|
-	  @items = self.items
+	  @topics = self.topics
 	  @synapses = self.synapses
 	  
-	  json.array!(@items.delete_if{|item| not item.authorize_to_view(current)}) do |item|
+	  json.array!(@topics.delete_if{|topic| not topic.authorize_to_view(current)}) do |topic|
 		
-		#json.adjacencies item.synapses2.delete_if{|synapse| (not @items.include?(synapse.item1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.item1.authorize_to_view(current)) } do |json, synapse|
+		#json.adjacencies topic.synapses2.delete_if{|synapse| (not @topics.include?(synapse.topic1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.topic1.authorize_to_view(current)) } do |json, synapse|
 		
-	      json.adjacencies item.synapses1.delete_if{|synapse| (not @items.include?(synapse.item2)) || (not synapse.authorize_to_view(current)) || (not synapse.item2.authorize_to_view(current)) } do |json, synapse|
+	      json.adjacencies topic.synapses1.delete_if{|synapse| (not @topics.include?(synapse.topic2)) || (not synapse.authorize_to_view(current)) || (not synapse.topic2.authorize_to_view(current)) } do |json, synapse|
 				json.nodeTo synapse.node2_id
 				json.nodeFrom synapse.node1_id
 				
@@ -40,24 +40,24 @@ end
 		  end
 		  
 		  @inmaps = Array.new
-      item.maps.each do |map|
+      topic.maps.each do |map|
         @inmaps.push(map.id)
       end
       
-		  @itemdata = Hash.new
-		  @itemdata['$desc'] = item.desc
-		  @itemdata['$link'] = item.link
-		  @itemdata['$itemcatname'] = item.item_category.name
-      @itemdata['$inmaps'] = @inmaps
-		  @itemdata['$userid'] = item.user.id
-		  @itemdata['$username'] = item.user.name
-		  @mapping = Mapping.find_by_item_id_and_map_id(item.id,self.id)
-		  @itemdata['$xloc'] = @mapping.xloc
-		  @itemdata['$yloc'] = @mapping.yloc
-		  @itemdata['$mappingid'] = @mapping.id
-		  json.data @itemdata
-		  json.id item.id
-		  json.name item.name
+		  @topicdata = Hash.new
+		  @topicdata['$desc'] = topic.desc
+		  @topicdata['$link'] = topic.link
+		  @topicdata['$metacode'] = topic.metacode.name
+      @topicdata['$inmaps'] = @inmaps
+		  @topicdata['$userid'] = topic.user.id
+		  @topicdata['$username'] = topic.user.name
+		  @mapping = Mapping.find_by_topic_id_and_map_id(topic.id,self.id)
+		  @topicdata['$xloc'] = @mapping.xloc
+		  @topicdata['$yloc'] = @mapping.yloc
+		  @topicdata['$mappingid'] = @mapping.id
+		  json.data @topicdata
+		  json.id topic.id
+		  json.name topic.name
 	  end	
     end
   end

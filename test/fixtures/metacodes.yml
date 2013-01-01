@@ -1,0 +1,117 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: 
+  name: Action  
+  icon: action.png
+
+two: 
+  name: Activity  
+  icon: activity.png
+
+three: 
+  name: Bizarre  
+  icon: bizarre.png
+
+four: 
+  name: Catalyst  
+  icon: catalyst.png
+
+five: 
+  name: Closed  
+  icon: closed.png
+
+six: 
+  name: Experience  
+  icon: experience.png
+
+seven: 
+  name: Future Dev  
+  icon: futuredev.png
+
+eight:
+  name: Group  
+  icon: group.png
+
+nine:
+  name: Idea  
+  icon: idea.png
+
+ten:
+  name: Implication  
+  icon: implication.png
+
+eleven:
+  name: Insight  
+  icon: insight.png
+
+twelve:
+  name: Intention  
+  icon: intention.png
+
+thirteen:
+  name: Knowledge  
+  icon: knowledge.png
+
+fourteen:
+  name: Location  
+  icon: location.png
+
+fifteen:
+  name: Open Issue  
+  icon: openissue.png
+
+sixteen:
+  name: Opinion  
+  icon: opinion.png
+
+seventeen:
+  name: Opportunity  
+  icon: opportunity.png
+
+eighteen:
+  name: Person  
+  icon: person.png
+
+nineteen:
+  name: Platform  
+  icon: platform.png
+
+twenty:
+  name: Problem  
+  icon: problem.png
+
+twenty-one:
+  name: Question  
+  icon: question.png
+
+twenty-two:
+  name: Reference  
+  icon: reference.png
+
+twenty-three:
+  name: Requirement  
+  icon: requirement.png
+
+twenty-four:
+  name: Resource  
+  icon: resource.png 
+
+twenty-five:
+  name: Role  
+  icon: role.png
+
+twenty-six:
+  name: Task  
+  icon: task.png
+
+twenty-seven:
+  name: Tool	  
+  icon: tool.png 
+
+twenty-eight:
+  name: Trajectory  
+  icon: trajectory.png

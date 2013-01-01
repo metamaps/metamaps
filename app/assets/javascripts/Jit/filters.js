@@ -1,6 +1,6 @@
 // create filters for maps, and for card views
 
-//  keep an array of which item categories are currently visible.
+//  keep an array of which metacodes are currently visible.
 var categoryVisible = new Object();
 
 categoryVisible['Group'] = true; 
@@ -44,7 +44,7 @@ function switchVisible(category, duration) {
 function hideCategory(category, duration) {
     if (duration == null) duration = 500;
 	Mconsole.graph.eachNode( function (n) {
-		if (n.getData('itemcatname') == category) {
+		if (n.getData('metacode') == category) {
 			n.setData('alpha', 0.4, 'end');
 			n.eachAdjacency(function(adj) {  
 			adj.setData('alpha', 0.4, 'end');  
@@ -61,7 +61,7 @@ function hideCategory(category, duration) {
 function showCategory(category, duration) {
     if (duration == null) duration = 500;
 	Mconsole.graph.eachNode( function (n) {
-		if (n.getData('itemcatname') == category) {
+		if (n.getData('metacode') == category) {
 			n.setData('alpha', 1, 'end');
 			n.eachAdjacency(function(adj) {  
 			adj.setData('alpha', 1, 'end');  
@@ -130,31 +130,31 @@ function onCanvasSearch(name,mapID,mapperID) {
 		  if (name != null) {
 		     if (n.name.indexOf(name) !== -1 && name != "") {
 				 n.setData('onCanvas', true);
-				 //$('.name.item_' + n.id).css('display','block');
+				 //$('.name.topic_' + n.id).css('display','block');
 		     }
 			 else {
 				 n.setData('onCanvas', false);
-				 //$('.name.item_' + n.id).css('display','none'); 
+				 //$('.name.topic_' + n.id).css('display','none'); 
 			 }
 		  }
 		  else if (mapID != null) {
 		     if (n.getData('inmaps').indexOf(parseInt(mapID)) !== -1) {
 				 n.setData('onCanvas', true);
-				 //$('.name.item_' + n.id).css('display','block');
+				 //$('.name.topic_' + n.id).css('display','block');
 		     }
 			 else {
 				 n.setData('onCanvas', false);
-				 //$('.name.item_' + n.id).css('display','none'); 
+				 //$('.name.topic_' + n.id).css('display','none'); 
 			 }
 		  }
 		  else if (mapperID != null) {
 		     if (n.getData('userid').toString() == mapperID) {
 			    n.setData('onCanvas', true);
-				 //$('.name.item_' + n.id).css('display','block');
+				 //$('.name.topic_' + n.id).css('display','block');
 			 }
 			 else {
 				 n.setData('onCanvas', false);
-				 //$('.name.item_' + n.id).css('display','none'); 
+				 //$('.name.topic_' + n.id).css('display','none'); 
 			 }
 		  }
 		  Mconsole.plot();
@@ -194,7 +194,7 @@ $(document).ready(function() {
 	   Mconsole.graph.eachNode( function (n) {
 		  n.setData('inCommons', false);
 		  n.setData('onCanvas', false);
-		  //$('.name.item_' + n.id).css('display','block');
+		  //$('.name.topic_' + n.id).css('display','block');
 	   });
 	   Mconsole.plot();
 	   $('#closeFind, #findWhere').css('display','none');
@@ -372,7 +372,7 @@ $(document).ready(function() {
    $('.find_topic_by_name #topic_by_name_input').bind('railsAutocomplete.select', function(event, data){
       /* Do something here */
       if (data.item.id != undefined) {
-        window.open("/items/" + data.item.id)
+        window.open("/topics/" + data.item.id)
       }
       $('.find_topic_by_name #topic_by_name_input').val('');
     });
@@ -471,7 +471,7 @@ $(document).ready(function() {
       event.preventDefault();
     });
 
-	// toggle visibility of item categories based on status in the filters list
+	// toggle visibility of topics with metacodes based on status in the filters list
 	$('.find_topic_by_metacode ul li').click(function(event) {
 		obj = document.getElementById('container');
         
@@ -485,7 +485,7 @@ $(document).ready(function() {
 				}
 				// this means that we are on a card view
 				else {
-					$('.item').fadeIn('slow');
+					$('.topic').fadeIn('slow');
 				}
 				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
 				for (var catVis in categoryVisible) {
@@ -499,7 +499,7 @@ $(document).ready(function() {
 				}
 				// this means that we are on a card view
 				else {
-					$('.item').fadeOut('slow');
+					$('.topic').fadeOut('slow');
 				}
 				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').addClass('toggledOff');
 				for (var catVis in categoryVisible) {

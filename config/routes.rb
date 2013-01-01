@@ -14,8 +14,8 @@ ISSAD::Application.routes.draw do
 
   resource :session
   
-  resources :items do
-    get :autocomplete_item_name, :on => :collection
+  resources :topics do
+    get :autocomplete_topic_name, :on => :collection
   end
   
   resources :synapses do
@@ -28,7 +28,7 @@ ISSAD::Application.routes.draw do
   
   resources :users do
     get :autocomplete_user_name, :on => :collection
-	  resources :items, :only => [:index]
+	  resources :topics, :only => [:index]
     resources :synapses, :only => [:index]
 	  resources :maps, :only => [:index]
   end

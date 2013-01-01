@@ -1,0 +1,11 @@
+<h1 class="index"><% if @user %><%= @user.name %>'s<% end %> Topics</h1>
+
+<div class="topics" id="cards">
+  <% @topics.each do |topic| %>
+    <%= render topic %>
+  <% end %>
+  <% if @topics.empty? %>
+	 <p class="empty"><br>Shucks, there are no topics. <% if authenticated? %><%= link_to "Create some if you want.", console_url %><% end %></p>
+  <% end %>
+</div>
+<div class="clearfloat"></div>

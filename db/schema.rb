@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121203225613) do
+ActiveRecord::Schema.define(:version => 20130101215010) do
 
   create_table "item_categories", :force => true do |t|
     t.text     "name"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 20121203225613) do
     t.text     "category"
     t.integer  "xloc"
     t.integer  "yloc"
-    t.integer  "item_id"
+    t.integer  "topic_id"
     t.integer  "synapse_id"
     t.integer  "map_id"
     t.integer  "user_id"
@@ -53,6 +53,13 @@ ActiveRecord::Schema.define(:version => 20121203225613) do
     t.boolean  "arranged"
   end
 
+  create_table "metacodes", :force => true do |t|
+    t.text     "name"
+    t.string   "icon"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "synapses", :force => true do |t|
     t.text     "desc"
     t.text     "category"
@@ -63,6 +70,17 @@ ActiveRecord::Schema.define(:version => 20121203225613) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "topics", :force => true do |t|
+    t.text     "name"
+    t.text     "desc"
+    t.text     "link"
+    t.text     "permission"
+    t.integer  "user_id"
+    t.integer  "metacode_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|

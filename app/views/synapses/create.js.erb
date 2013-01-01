@@ -1,13 +1,13 @@
 $('#new_synapse').fadeOut('fast');
 $('#synapse_desc').attr('value','');
-$('#synapse_item1id').attr('value','0');
-$('#synapse_item2id').attr('value','0');
+$('#synapse_topic1id').attr('value','0');
+$('#synapse_topic2id').attr('value','0');
 
 var temp1, temp2, temp;	
 		 
 if ( Mconsole != null) {
-    temp1 = Mconsole.graph.getNode(<%= @synapse.item1.id %>);
-    temp2 = Mconsole.graph.getNode(<%= @synapse.item2.id %>);
+    temp1 = Mconsole.graph.getNode(<%= @synapse.topic1.id %>);
+    temp2 = Mconsole.graph.getNode(<%= @synapse.topic2.id %>);
     Mconsole.graph.addAdjacence(temp1, temp2, {});
     temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
     console.log(temp);

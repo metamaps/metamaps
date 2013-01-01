@@ -2,8 +2,8 @@ class Synapse < ActiveRecord::Base
 
 belongs_to :user
 
-belongs_to :item1, :class_name => "Item", :foreign_key => "node1_id"
-belongs_to :item2, :class_name => "Item", :foreign_key => "node2_id"
+belongs_to :topic1, :class_name => "Topic", :foreign_key => "node1_id"
+belongs_to :topic2, :class_name => "Topic", :foreign_key => "node2_id"
 
 has_many :mappings
 has_many :maps, :through => :mappings
@@ -26,12 +26,12 @@ has_many :maps, :through => :mappings
   
   def selfplusnodes_as_json
     Jbuilder.encode do |json|
-	  @items = Array.new
-	  @items.push(self.item1)
-	  @items.push(self.item2)
+	  @topics = Array.new
+	  @topics.push(self.topic1)
+	  @topics.push(self.topic2)
 	  
-	  json.array!(@items) do |item|
-	      json.adjacencies item.synapses1.delete_if{|synapse| not @items.include?(Item.find_by_id(synapse.node2_id))} do |json, synapse|
+	  json.array!(@topics) do |topic|
+	      json.adjacencies topic.synapses1.delete_if{|synapse| not @topics.include?(Topic.find_by_id(synapse.node2_id))} do |json, synapse|
 				json.nodeTo synapse.node2_id
 				json.nodeFrom synapse.node1_id
 				
@@ -47,20 +47,20 @@ has_many :maps, :through => :mappings
 		  end
 		  
 		  @inmaps = Array.new
-      item.maps.each do |map|
+      topic.maps.each do |map|
         @inmaps.push(map.id)
       end
       
-		  @itemdata = Hash.new
-		  @itemdata['$desc'] = item.desc
-		  @itemdata['$link'] = item.link
-		  @itemdata['$itemcatname'] = item.item_category.name
-      @itemdata['$inmaps'] = @inmaps
-		  @itemdata['$userid'] = item.user.id
-		  @itemdata['$username'] = item.user.name
-		  json.data @itemdata
-		  json.id item.id
-		  json.name item.name
+		  @topicdata = Hash.new
+		  @topicdata['$desc'] = topic.desc
+		  @topicdata['$link'] = topic.link
+		  @topicdata['$metacode'] = topic.metacode.name
+      @topicdata['$inmaps'] = @inmaps
+		  @topicdata['$userid'] = topic.user.id
+		  @topicdata['$username'] = topic.user.name
+		  json.data @topicdata
+		  json.id topic.id
+		  json.name topic.name
 	  end	
     end
   end

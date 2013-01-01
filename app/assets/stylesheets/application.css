@@ -93,7 +93,7 @@ a {
 .new_user,
 .new_map,
 .edit_user,
-.edit_item,
+.edit_topic,
 .edit_synapse,
 .edit_map,
 .invite {
@@ -135,18 +135,18 @@ a {
   right:3px;
 }
 
-.anypage .new_item {
+.anypage .new_topic {
   width:300px;	
   margin:-40px 0 0 -50px;
 }
 
-.anypage .new_item,
+.anypage .new_topic,
 .anypage .new_synapse {
   display: block;
   position: absolute;
 }
 
-.anypage #item_name {
+.anypage #topic_name {
   width:200px;
   position:absolute;
   top:40px;
