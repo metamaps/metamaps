@@ -124,18 +124,24 @@ class TopicsController < ApplicationController
 	  @topic = Topic.find(params[:id]).authorize_to_edit(@current)
     
 	  if @topic 
-		  @topic.name = params[:topic][:name]
-		  @topic.desc = params[:topic][:desc]
-		  @topic.link = params[:topic][:link]
-		  @topic.permission = params[:topic][:permission]
-		  @topic.metacode = Metacode.find(params[:category][:metacode_id])
+        if params[:topic]
+          @topic.name = params[:topic][:name] if params[:topic][:name]
+		  @topic.desc = params[:topic][:desc] if params[:topic][:desc]
+		  @topic.link = params[:topic][:link] if params[:topic][:link]
+		  @topic.permission = params[:topic][:permission] if params[:topic][:permission]
+        end
+        if params[:category]
+          @topic.metacode = Metacode.find(params[:category][:metacode_id]) if params[:category][:metacode_id]
+        end
 	    @topic.save
-    end
+      end
+
+      respond_with @topic
 	
-    respond_with(@user, location: topic_url(@topic)) do |format|
-    end
+#    respond_with(@user, location: topic_url(@topic)) do |format|
+#    end
   end
-  
+
   # DELETE topics/:id
   def destroy
 	  @current = current_user

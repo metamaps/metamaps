@@ -116,7 +116,8 @@ function graphSettings(type) {
            '<img alt="' + node.getData("metacode") + '" class="icon" height="50" src="' + imgArray[node.getData("metacode")].src + '" width="50" />' +
            '<div class="scroll"><a href="/topics/' + node.id + '" class="title">' + node.name + '</a>' + 
 		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
-           '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
+           //'<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
+           '<div class="desc best_in_place" id="best_in_place_desc" data-url="/topics/' + node.id + '" data-object="topic" data-attribute="desc" data-type="input">' + node.getData('desc') + '.' + '</div></div>' +
            '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
 		   var showCard = document.createElement('div'); 
 			showCard.className = 'showcard topic_' + node.id;  
@@ -139,10 +140,10 @@ function graphSettings(type) {
 				  modes: ['edge-property:lineWidth:color'],
 				  duration: 500
 			   });
-				$('.showcard.topic_' + node.id).fadeOut('fast', function(){
-					$('.name').css('display','block');
-					Mconsole.plot();
-				});	
+//				$('.showcard.topic_' + node.id).fadeOut('fast', function(){
+//					$('.name').css('display','block');
+//					Mconsole.plot();
+//				});	
 			}
 			
             // Create a 'name' button and add it  
@@ -298,7 +299,8 @@ function graphSettings(type) {
            '<img alt="' + node.getData("metacode") + '" class="icon" height="50" src="' + imgArray[node.getData("metacode")].src + '" width="50" />' +
            '<div class="scroll"><a href="/topics/' + node.id + '" class="title">' + node.name + '</a>' + 
 		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
-           '<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
+           //'<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
+           '<div class="desc best_in_place" id="best_in_place_desc" data-url="/topics/' + node.id + '" data-object="topic" data-attribute="desc" data-type="input">' + node.getData('desc') + '.' + '</div></div>' +
            '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
 		   var showCard = document.createElement('div'); 
 			showCard.className = 'showcard topic_' + node.id;  
@@ -322,10 +324,10 @@ function graphSettings(type) {
 					  modes: ['edge-property:lineWidth:color'],
 					  duration: 500
 				   });
-					$('.showcard.topic_' + node.id).fadeOut('fast', function(){
-						$('.name').css('display','block');
-						Mconsole.plot();
-					});	
+//					$('.showcard.topic_' + node.id).fadeOut('fast', function(){
+//						$('.name').css('display','block');
+//						Mconsole.plot();
+//					});	
 				}
 			}
 			
