@@ -111,55 +111,7 @@ function graphSettings(type) {
          // Add text to the labels. This method is only triggered
          // on label creation and only for DOM labels (not native canvas ones).
          onCreateLabel: function (domElement, node) {
-			var html = 
-           '<div class="CardOnGraph" title="Click to Hide" id="topic_' + node.id + '"><p class="type">' + node.getData("metacode") + '</p>' + 
-           '<img alt="' + node.getData("metacode") + '" class="icon" height="50" src="' + imgArray[node.getData("metacode")].src + '" width="50" />' +
-           '<div class="scroll"><a href="/topics/' + node.id + '" class="title">' + node.name + '</a>' + 
-		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
-           //'<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
-           '<div class="desc best_in_place" id="best_in_place_desc" data-url="/topics/' + node.id + '" data-object="topic" data-attribute="desc" data-type="input">' + node.getData('desc') + '.' + '</div></div>' +
-           '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
-		   var showCard = document.createElement('div'); 
-			showCard.className = 'showcard topic_' + node.id;  
-			showCard.innerHTML = html; 
-			showCard.style.display = "none";
-			domElement.appendChild(showCard);
-			
-			// add some events to the label
-			showCard.onclick = function(){
-				delete node.selected;
-			    node.setData('dim', 25, 'current');
-			    node.eachAdjacency(function (adj) {
-				   adj.setDataset('end', {
-					  lineWidth: 2,
-					  color: '#222222'
-				   });
-				   adj.setData('showDesc', false, 'current');
-			    });
-				Mconsole.fx.animate({
-				  modes: ['edge-property:lineWidth:color'],
-				  duration: 500
-			   });
-//				$('.showcard.topic_' + node.id).fadeOut('fast', function(){
-//					$('.name').css('display','block');
-//					Mconsole.plot();
-//				});	
-			}
-			
-            // Create a 'name' button and add it  
-			// to the main node label  
-			var nameContainer = document.createElement('span'),  
-				style = nameContainer.style;  
-			nameContainer.className = 'name topic_' + node.id;  
-			nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
-			domElement.appendChild(nameContainer);  
-			style.fontSize = "0.9em";  
-			style.color = "#222222";
-			
-			// add some events to the label
-			nameContainer.onclick = function(){
-				selectNodeOnClickHandler(node)
-			} 
+           onCreateLabelHandler(domElement, node);
          },
          // Change node styles when DOM labels are placed
          // or moved.
@@ -294,62 +246,7 @@ function graphSettings(type) {
          // Add text to the labels. This method is only triggered
          // on label creation and only for DOM labels (not native canvas ones).
          onCreateLabel: function (domElement, node) {
-			var html = 
-           '<div class="CardOnGraph" title="Click to Hide" id="topic_' + node.id + '"><p class="type">' + node.getData("metacode") + '</p>' + 
-           '<img alt="' + node.getData("metacode") + '" class="icon" height="50" src="' + imgArray[node.getData("metacode")].src + '" width="50" />' +
-           '<div class="scroll"><a href="/topics/' + node.id + '" class="title">' + node.name + '</a>' + 
-		   '<div class="contributor">Added by: <a href="/users/' + node.getData('userid') + '">' + node.getData('username') + '</a></div>' + 
-           //'<div class="desc"><p>' + node.getData('desc') + '</p></div></div>' +
-           '<div class="desc best_in_place" id="best_in_place_desc" data-url="/topics/' + node.id + '" data-object="topic" data-attribute="desc" data-type="input">' + node.getData('desc') + '.' + '</div></div>' +
-           '<a href="' + node.getData('link') + '" class="link" target="_blank">' + node.getData('link') + '</a></div>';
-		   var showCard = document.createElement('div'); 
-			showCard.className = 'showcard topic_' + node.id;  
-			showCard.innerHTML = html; 
-			showCard.style.display = "none";
-			domElement.appendChild(showCard);
-			
-			// add some events to the label
-			showCard.onclick = function(){
-				if (!Mconsole.busy) {
-					delete node.selected;
-					node.setData('dim', 25, 'current');
-					node.eachAdjacency(function (adj) {
-					   adj.setDataset('end', {
-						  lineWidth: 2,
-						  color: '#222222'
-					   });
-					   adj.setData('showDesc', false, 'current');
-					});
-					Mconsole.fx.animate({
-					  modes: ['edge-property:lineWidth:color'],
-					  duration: 500
-				   });
-//					$('.showcard.topic_' + node.id).fadeOut('fast', function(){
-//						$('.name').css('display','block');
-//						Mconsole.plot();
-//					});	
-				}
-			}
-			
-            // Create a 'name' button and add it  
-			// to the main node label  
-			var nameContainer = document.createElement('span'),  
-				style = nameContainer.style;  
-			nameContainer.className = 'name topic_' + node.id;  
-			nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';  
-			domElement.appendChild(nameContainer);  
-			style.fontSize = "0.9em";  
-			style.color = "#222222";
-			
-			// add some events to the label
-			nameContainer.onclick = function(){
-				if (!Mconsole.busy) {
-					selectNodeOnClickHandler(node);
-					Mconsole.onClick(node.id, {  
-					   hideLabels: false  
-					});
-				 }
-			} 
+           onCreateLabelHandler(domElement, node);
          },
          // Change node styles when DOM labels are placed
          // or moved.
@@ -626,3 +523,104 @@ function clickDragOnTopic(node, eventInfo, e) {
 	   }
    }	
 }
+
+function onCreateLabelHandler(domElement, node) {
+  var html = '                                                                \
+    <div class="CardOnGraph"                                                  \
+         title="Click to Hide"                                                \
+         id="topic_$_id_$">                                                   \
+      <p class="type best_in_place"                                           \
+         id="best_in_place_metacode"                                          \
+         data-url="/topics/$_id_$"                                            \
+         data-object="topic"                                                  \
+         data-collection=$_metacode_choices_$                                 \
+         data-attribute="metacode"                                            \
+         data-type="select">$_metacode_$</p>                                  \
+      <a href="/topics/$_id_$">                                               \
+        <img alt="$_metacode_$"                                               \
+             class="icon"                                                     \
+             height="50"                                                      \
+             width="50"                                                       \
+           src="$_imgsrc_$" />                                                \
+      </a>                                                                    \
+      <div class="scroll">                                                    \
+        <span class="title best_in_place"                                     \
+              id="best_in_place_name"                                         \
+              data-url="/topics/$_id_$"                                       \
+              data-object="topic"                                             \
+              data-attribute="name"                                           \
+              data-type="input">$_name_$</span>                               \
+        <div class="contributor">                                             \
+          Added by: <a href="/users/$_userid_$">$_username_$</a>              \
+        </div>                                                                \
+        <div class="desc">                                                    \
+          <p>$_desc_$</p>                                                     \
+        </div>                                                                \
+      </div>                                                                  \
+      <a href="$_link_$" class="link" target="_blank">$_link_$</a>            \
+    </div>';
+
+  //create metacode_choices array from imgArray
+  var metacode_choices = "'[";
+  for (var key in imgArray) {
+    if (imgArray.hasOwnProperty(key)) {
+      var caps = key;
+      var nocaps = caps.toLowerCase();
+      metacode_choices += '["' + nocaps + '","' + caps + '"],';
+    }
+  }
+  //remove trailing comma and add ]
+  metacode_choices = metacode_choices.slice(0, -1); 
+  metacode_choices += "]'";
+
+  html = html.replace(/\$_id_\$/g, node.id);
+  html = html.replace(/\$_metacode_\$/g, node.getData("metacode"));
+  html = html.replace(/\$_imgsrc_\$/g, imgArray[node.getData("metacode")].src);
+  html = html.replace(/\$_name_\$/g, node.name);
+  html = html.replace(/\$_userid_\$/g, node.getData("userid"));
+  html = html.replace(/\$_username_\$/g, node.getData("username"));
+  html = html.replace(/\$_desc_\$/g, node.getData("desc"));
+  html = html.replace(/\$_link_\$/g, node.getData("link"));
+  html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
+
+  var showCard = document.createElement('div');
+  showCard.className = 'showcard topic_' + node.id;
+  showCard.innerHTML = html;
+  showCard.style.display = "none";
+  domElement.appendChild(showCard);
+
+  // add some events to the label
+  showCard.onclick = function(){
+    delete node.selected;
+    node.setData('dim', 25, 'current');
+    node.eachAdjacency(function (adj) {
+      adj.setDataset('end', {
+        lineWidth: 2,
+        color: '#222222'
+      });
+      adj.setData('showDesc', false, 'current');
+    });
+    Mconsole.fx.animate({
+      modes: ['edge-property:lineWidth:color'],
+      duration: 500
+    });
+//    $('.showcard.topic_' + node.id).fadeOut('fast', function(){
+//      $('.name').css('display','block');
+//      Mconsole.plot();
+//    });
+  }
+
+  // Create a 'name' button and add it to the main node label
+  var nameContainer = document.createElement('span'),
+    style = nameContainer.style;
+  nameContainer.className = 'name topic_' + node.id;
+  nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';
+  domElement.appendChild(nameContainer);
+  style.fontSize = "0.9em";
+  style.color = "#222222";
+
+  // add some events to the label
+  nameContainer.onclick = function(){
+    selectNodeOnClickHandler(node)
+  }
+}//onCreateLabelHandler
