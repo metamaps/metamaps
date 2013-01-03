@@ -246,32 +246,55 @@ $(document).ready(function() {
    
    // this is where interactions within the find box begin
    //
-   $("#topic_by_name_input").keyup(function() {
-          var topicName = $(this).val();
-		  
-		  // grab the checkboxes to see if the search is on the canvas, in the commons, or both
-		  firstVal = $("#onCanvas").attr('checked');
-		  secondVal = $("#inCommons").attr('checked');
-		  
-		  // only have the autocomplete enabled if they are searching in the commons
-		  
-		  if (firstVal == "checked" && secondVal == "checked"){
-			$('#topic_by_name_input').autocomplete( "option", "disabled", false );
-			onCanvasSearch(topicName,null,null);  
-		  }
-		  else if (firstVal == "checked"){
-			$('#topic_by_name_input').autocomplete( "option", "disabled", true );
-			onCanvasSearch(topicName,null,null);  
-		  }
-		  else if (secondVal == "checked"){
-			hideAll();
-			$('#topic_by_name_input').autocomplete( "option", "disabled", false ); 
-		  }
-		  else {
-			$('#topic_by_name_input').autocomplete( "option", "disabled", true );  
-		  }
-		  
-   });
+
+    //on keyup, start the countdown
+    $('#topic_by_name_input').typing({
+        start: function (event, $elem) {
+          // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+          firstVal = $("#onCanvas").attr('checked');
+          secondVal = $("#inCommons").attr('checked');
+          
+          // only have the autocomplete enabled if they are searching in the commons
+          if (firstVal == "checked" && secondVal == "checked"){
+            $('#topic_by_name_input').autocomplete( "option", "disabled", false );
+          }
+          else if (firstVal == "checked"){
+            showAll();
+            $('#topic_by_name_input').autocomplete( "option", "disabled", true );
+          }
+          else if (secondVal == "checked"){
+            hideAll();
+            $('#topic_by_name_input').autocomplete( "option", "disabled", false ); 
+          }
+          else {
+            alert('Either select searching In the Commons, or On the Canvas to search');  
+          }
+        },
+        stop: function (event, $elem) {
+            // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+            firstVal = $("#onCanvas").attr('checked');
+            secondVal = $("#inCommons").attr('checked');
+            
+            var topicName = $('#topic_by_name_input').val();
+            // run a search on the canvas or in the commons or both
+            if (firstVal == "checked" && secondVal == "checked"){
+              onCanvasSearch(topicName,null,null);
+              // and run a search in the commons
+            }
+            else if (firstVal == "checked"){
+              onCanvasSearch(topicName,null,null);
+            }
+            else if (secondVal == "checked"){
+              //run a search in the commons
+            }
+            else {
+              //do nothing
+            }
+            
+            if (topicName == "") showAll();
+        },
+        delay: 2000
+    });
 			
    $('.sideOption .select_content').change(function() {
 	      firstVal = $(this).children("option[value='topics']").attr('selected');

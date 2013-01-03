@@ -149,7 +149,9 @@
 				$(options.titleBox).html( ($(event.target).attr('title') ));							
 				if ( options.bringToFront && event.type == 'click' )				
 				{
-				
+				  // METAMAPS CODE
+			    $('#topic_metacode').val($(event.target).attr('title'));
+			    // NOT METAMAPS CODE
 					var	idx = $(event.target).data('itemIndex');	
 					var	frontIndex = event.data.frontIndex;
 					//var	diff = idx - frontIndex;                    
@@ -186,9 +188,6 @@
 		{	
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
 			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
-			// METAMAPS CODE
-			$('#topic_metacode').val( $(items[this.frontIndex].image).attr('title'));
-			// NOT METAMAPS CODE
 			$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				
 		};
 						
