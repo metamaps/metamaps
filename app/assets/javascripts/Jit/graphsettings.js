@@ -568,17 +568,16 @@ function onCreateLabelHandler(domElement, node) {
                 data-type="textarea">$_desc_$</span>                          \
         </div>                                                                \
       </div>                                                                  \
-      <span class="best_in_place"                                             \
-            id="best_in_place_link"                                           \
-            data-url="/topics/$_id_$"                                         \
-            data-object="topic"                                               \
-            data-attribute="link"                                             \
-            data-type="input">$_link_$</span>                                 \
       <a href="$_link_$" class="link" target="_blank">                        \
-        <img class="topic-go-arrow link"                                      \
-             title="Visit $_link_$"                                           \
-             src="/assets/go-arrow.png" />                                    \
+        <span class="best_in_place"                                           \
+              id="best_in_place_link"                                         \
+              data-url="/topics/$_id_$"                                       \
+              data-object="topic"                                             \
+              data-attribute="link"                                           \
+              data-activator=".topic_$_id_$ .edit-link"                       \
+              data-type="input">$_link_$</span>                               \
       </a>                                                                    \
+      <span class="edit-link">(Edit)</span>                                   \
     </div>';
 
   //create metacode_choices array from imgArray
@@ -671,4 +670,5 @@ function onCreateLabelHandler(domElement, node) {
     node.setData("metacode", metacode);
     Mconsole.plot();
   });
+
 }//onCreateLabelHandler
