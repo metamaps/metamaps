@@ -535,20 +535,26 @@ function onCreateLabelHandler(domElement, node) {
          data-collection=$_metacode_choices_$                                 \
          data-attribute="metacode"                                            \
          data-type="select">$_metacode_$</p>                                  \
-      <a href="/topics/$_id_$">                                               \
-        <img alt="$_metacode_$"                                               \
-             class="icon"                                                     \
-             height="50"                                                      \
-             width="50"                                                       \
+      <img alt="$_metacode_$"                                                 \
+           class="icon"                                                       \
+           height="50"                                                        \
+           width="50"                                                         \
            src="$_imgsrc_$" />                                                \
-      </a>                                                                    \
       <div class="scroll">                                                    \
-        <span class="title best_in_place"                                     \
-              id="best_in_place_name"                                         \
-              data-url="/topics/$_id_$"                                       \
-              data-object="topic"                                             \
-              data-attribute="name"                                           \
-              data-type="input">$_name_$</span>                               \
+        <span class="title">                                                  \
+          <span class="best_in_place"                                         \
+                id="best_in_place_name"                                       \
+                data-url="/topics/$_id_$"                                     \
+                data-object="topic"                                           \
+                data-attribute="name"                                         \
+                data-type="input">                                            \
+          $_name_$</span>                                                     \
+          <a href="/topics/$_id_$">                                           \
+            <img class="topic-go-arrow"                                       \
+                 title="Go to the topic page"                                 \
+                 src="/assets/go-arrow.png" />                                \
+          </a>                                                                \
+        </span>                                                               \
         <div class="contributor">                                             \
           Added by: <a href="/users/$_userid_$">$_username_$</a>              \
         </div>                                                                \
@@ -561,13 +567,16 @@ function onCreateLabelHandler(domElement, node) {
                 data-type="textarea">$_desc_$</span>                          \
         </div>                                                                \
       </div>                                                                  \
+      <span class="best_in_place"                                             \
+            id="best_in_place_link"                                           \
+            data-url="/topics/$_id_$"                                         \
+            data-object="topic"                                               \
+            data-attribute="link"                                             \
+            data-type="input">$_link_$</span>                                 \
       <a href="$_link_$" class="link" target="_blank">                        \
-        <span class="best_in_place"                                           \
-              id="best_in_place_link"                                         \
-              data-url="/topics/$_id_$"                                       \
-              data-object="topic"                                             \
-              data-attribute="link"                                           \
-              data-type="input">$_link_$</span>                               \
+        <img class="topic-go-arrow link"                                      \
+             title="Visit $_link_$"                                           \
+             src="/assets/go-arrow.png" />                                    \
       </a>                                                                    \
     </div>';
 
