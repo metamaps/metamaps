@@ -10,8 +10,6 @@ ISSAD::Application.routes.draw do
   
   match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
 
-  match 'showcard/:id', to: 'items#showcard', via: :get, as: :showcard
-
   resource :session
   
   resources :topics do

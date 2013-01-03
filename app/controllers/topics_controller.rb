@@ -46,16 +46,6 @@ class TopicsController < ApplicationController
     end
   end
 
-  # GET showcard/:id
-  def showcard
-    @user = current_user
-    @topic = Topic.find(params[:id]).authorize_to_show(@user)
-	
-    respond_to do |format|
-      format.html { respond_with(@topic, @user) }
-    end
-  end
-  
   # POST topics
   def create
     
