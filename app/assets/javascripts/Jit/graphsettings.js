@@ -528,6 +528,7 @@ function onCreateLabelHandler(domElement, node) {
   var html = '                                                                \
     <div class="CardOnGraph"                                                  \
          id="topic_$_id_$">                                                   \
+      <a href="#" class="close-link">close</a>                                \
       <p class="type best_in_place"                                           \
          id="best_in_place_metacode"                                          \
          data-url="/topics/$_id_$"                                            \
@@ -549,7 +550,7 @@ function onCreateLabelHandler(domElement, node) {
                 data-attribute="name"                                         \
                 data-type="input">                                            \
           $_name_$</span>                                                     \
-          <a href="/topics/$_id_$">                                           \
+          <a href="/topics/$_id_$" target="_blank">                           \
             <img class="topic-go-arrow"                                       \
                  title="Go to the topic page"                                 \
                  src="/assets/go-arrow.png" />                                \
@@ -623,7 +624,7 @@ function onCreateLabelHandler(domElement, node) {
   domElement.appendChild(showCard);
 
   // add some events to the label
-  showCard.onclick = function(){
+  $(showCard).find('a.close-link').click(function(){
     delete node.selected;
     node.setData('dim', 25, 'current');
     node.eachAdjacency(function (adj) {
@@ -637,11 +638,11 @@ function onCreateLabelHandler(domElement, node) {
       modes: ['edge-property:lineWidth:color'],
       duration: 500
     });
-//    $('.showcard.topic_' + node.id).fadeOut('fast', function(){
-//      $('.name').css('display','block');
-//      Mconsole.plot();
-//    });
-  }
+    $('.showcard.topic_' + node.id).fadeOut('fast', function(){
+      $('.name').css('display','block');
+      Mconsole.plot();
+    });
+  });
 
   // Create a 'name' button and add it to the main node label
   var nameContainer = document.createElement('span'),
@@ -656,4 +657,14 @@ function onCreateLabelHandler(domElement, node) {
   nameContainer.onclick = function(){
     selectNodeOnClickHandler(node)
   }
+
+  //bind callbacks
+  $(showCard).find('.type.best_in_place').bind("ajax:success", function() {
+    var metacode = $(this).html();
+    $(showCard).find('img.icon').attr('alt', metacode);
+    $(showCard).find('img.icon').attr('src', imgArray[metacode].src);
+    
+    node.setData("metacode", metacode);
+    Mconsole.plot();
+  });
 }//onCreateLabelHandler
