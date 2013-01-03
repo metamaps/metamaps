@@ -91,7 +91,10 @@
       </ul>
     </div>
     <%= form_tag("/search", :method => "get", :id => 'get_topics_form', :class => 'get_topics_form', :remote => true) do %>
+      <%= text_field_tag(:topics_by_name, "", :id => "topicsByName", :class => "getTopicsInput") %>
       <%= text_field_tag(:topics_by_user_id, "", :id => "topicsByUser", :class => "getTopicsInput") %>
       <%= text_field_tag(:topics_by_map_id, "", :id => "topicsByMap", :class => "getTopicsInput") %>
+      <%= text_field_tag(:synapses_by_user_id, "", :id => "synapsesByUser", :class => "getTopicsInput") %>
+      <%= text_field_tag(:synapses_by_map_id, "", :id => "synapsesByMap", :class => "getTopicsInput") %>
     <% end %>
 </div>

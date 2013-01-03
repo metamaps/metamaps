@@ -93,10 +93,12 @@ var findMappers = ['name', 'topic (by name)', 'map (by name)', 'synapse (by topi
 function hideAll(duration) {
     if (duration == null) duration = 500;
 	Mconsole.graph.eachNode( function (n) {
-		  n.setData('alpha', 0.4, 'end');
-		  n.eachAdjacency(function(adj) {  
-		  adj.setData('alpha', 0.4, 'end');  
-		  });	
+		  if (!(n.getData('inCommons') || n.getData('onCanvas'))) {
+        n.setData('alpha', 0.4, 'end');
+        n.eachAdjacency(function(adj) {  
+        adj.setData('alpha', 0.4, 'end');  
+        });
+      }        
 	});
 	Mconsole.fx.animate({  
 		modes: ['node-property:alpha',  
@@ -109,7 +111,7 @@ function showAll(duration) {
 	Mconsole.graph.eachNode( function (n) {
 		  n.setData('alpha', 1, 'end');
 		  n.eachAdjacency(function(adj) {  
-		  adj.setData('alpha', 1, 'end');  
+		    adj.setData('alpha', 1, 'end');  
 		  });	
 	});
 	Mconsole.fx.animate({  
@@ -163,8 +165,18 @@ function onCanvasSearch(name,mapID,mapperID) {
 
 
 function clearCanvas() {
-	Mconsole.graph.eachNode( function(n) { Mconsole.graph.removeNode(n.id); $('#'+n.id).remove(); });	
+	Mconsole.graph.eachNode( function(n) { Mconsole.graph.removeNode(n.id); Mconsole.labels.disposeLabel(n.id); });	
 	Mconsole.plot();
+}
+
+function clearFoundData() {
+	Mconsole.graph.eachNode( function(n) { 
+    if (n.getData('inCommons') === true) {
+      Mconsole.graph.removeNode(n.id);
+      Mconsole.labels.disposeLabel(n.id);
+    }
+  });
+  Mconsole.plot();
 }
 
 
@@ -256,18 +268,20 @@ $(document).ready(function() {
           
           // only have the autocomplete enabled if they are searching in the commons
           if (firstVal == "checked" && secondVal == "checked"){
-            $('#topic_by_name_input').autocomplete( "option", "disabled", false );
+            //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
+            $('#topic_by_name_input').autocomplete( "option", "disabled", true );
           }
           else if (firstVal == "checked"){
-            showAll();
+            setTimeout(function(){showAll();},0);
             $('#topic_by_name_input').autocomplete( "option", "disabled", true );
           }
           else if (secondVal == "checked"){
-            hideAll();
-            $('#topic_by_name_input').autocomplete( "option", "disabled", false ); 
+            //setTimeout(function(){hideAll();},0);
+            //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
+            $('#topic_by_name_input').autocomplete( "option", "disabled", true );
           }
           else {
-            alert('Either select searching In the Commons, or On the Canvas to search');  
+            alert('You either need to have searching On Your Canvas or In the Commons enabled');  
           }
         },
         stop: function (event, $elem) {
@@ -278,20 +292,26 @@ $(document).ready(function() {
             var topicName = $('#topic_by_name_input').val();
             // run a search on the canvas or in the commons or both
             if (firstVal == "checked" && secondVal == "checked"){
-              onCanvasSearch(topicName,null,null);
-              // and run a search in the commons
+              setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
+              $('#topicsByName').val(topicName);
+				      $('#topicsByUser').val("");
+              $('#topicsByMap').val("");
+				      $('#get_topics_form').submit();
             }
             else if (firstVal == "checked"){
-              onCanvasSearch(topicName,null,null);
+              setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
             }
             else if (secondVal == "checked"){
-              //run a search in the commons
+              $('#topicsByName').val(topicName);
+				      $('#topicsByUser').val("");
+              $('#topicsByMap').val("");
+				      $('#get_topics_form').submit();
             }
             else {
               //do nothing
             }
             
-            if (topicName == "") showAll();
+            if (topicName == "") { clearFoundData(); }
         },
         delay: 2000
     });
@@ -416,18 +436,20 @@ $(document).ready(function() {
 			  // only have the autocomplete enabled if they are searching in the commons
 			  
 			  if (firstNewVal == "checked" && secondNewVal == "checked"){
-				onCanvasSearch(null,data.item.id,null);  
+				setTimeout(function(){onCanvasSearch(null,data.item.id,null);},0);
 				$('#topicsByMap').val(data.item.id);
 				$('#topicsByUser').val("");
+        $('#topicsByName').val("");
 				$('#get_topics_form').submit(); 
 			  }
 			  else if (firstNewVal == "checked"){
-				onCanvasSearch(null,data.item.id,null); 
+				setTimeout(function(){onCanvasSearch(null,data.item.id,null);},0); 
 			  }
 			  else if (secondNewVal == "checked"){
 				//hideAll();
 				$('#topicsByMap').val(data.item.id);
 				$('#topicsByUser').val("");
+        $('#topicsByName').val("");
 				$('#get_topics_form').submit(); 
 			  }
 			  else {
@@ -460,19 +482,21 @@ $(document).ready(function() {
 			  
 			  // only have the autocomplete enabled if they are searching in the commons
 			  
-			  if (firstNewVal == "checked" && secondNewVal == "checked"){
-				onCanvasSearch(null,null,data.item.id.toString());  
+			  if (firstNewVal == "checked" && secondNewVal == "checked"){ 
+        setTimeout(function(){onCanvasSearch(null,null,data.item.id.toString());},0);        
 				$('#topicsByUser').val(data.item.id);
 				$('#topicsByMap').val("");
+        $('#topicsByName').val("");
 				$('#get_topics_form').submit(); 
 			  }
 			  else if (firstNewVal == "checked"){
-				onCanvasSearch(null,null,data.item.id.toString()); 
+				setTimeout(function(){onCanvasSearch(null,null,data.item.id.toString());},0); 
 			  }
 			  else if (secondNewVal == "checked"){
 				//hideAll();
 				$('#topicsByUser').val(data.item.id);
 				$('#topicsByMap').val("");
+        $('#topicsByName').val("");
 				$('#get_topics_form').submit(); 
 			  }
 			  else {

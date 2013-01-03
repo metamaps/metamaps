@@ -367,7 +367,7 @@ var nodeSettings = {
 		  }
 		   
 		  //check for edge label in data  
-		  var desc = adj.getData("desc") + ' (' + adj.getData("id") + ')';
+		  var desc = adj.getData("desc");
 		  var showDesc = adj.getData("showDesc");
 		  if( desc != "" && showDesc ) { 
 			 //now adjust the label placement 
@@ -399,7 +399,7 @@ function selectEdgeOnClickHandler(adj) {
 
 function selectNodeOnClickHandler(node) {
    
-    $('.showcard').css('display','none');
+  $('.showcard').css('display','none');
 	$('.name').css('display','block');
 	$('.name.topic_' + node.id).css('display','none');
 	$('.showcard.topic_' + node.id).fadeIn('fast');
@@ -529,8 +529,7 @@ function onCreateLabelHandler(domElement, node) {
     <div class="CardOnGraph"                                                  \
          id="topic_$_id_$">                                                   \
       <a href="#" class="close-link">close</a>                                \
-      <p class="type best_in_place"                                           \
-         id="best_in_place_metacode"                                          \
+      <p class="type best_in_place best_in_place_metacode"                    \
          data-url="/topics/$_id_$"                                            \
          data-object="topic"                                                  \
          data-collection=$_metacode_choices_$                                 \
@@ -543,24 +542,23 @@ function onCreateLabelHandler(domElement, node) {
            src="$_imgsrc_$" />                                                \
       <div class="scroll">                                                    \
         <span class="title">                                                  \
-          <span class="best_in_place"                                         \
-                id="best_in_place_name"                                       \
+          <span class="best_in_place best_in_place_name"                      \
                 data-url="/topics/$_id_$"                                     \
                 data-object="topic"                                           \
                 data-attribute="name"                                         \
                 data-type="input">$_name_$</span>                             \
-          <a href="/topics/$_id_$" target="_blank">                           \
+          <a href="/topics/$_id_$" class="topic-go-arrow" target="_blank">    \
             <img class="topic-go-arrow"                                       \
                  title="Go to the topic page"                                 \
                  src="/assets/go-arrow.png" />                                \
           </a>                                                                \
+          <div class="clearfloat"></div>                                      \
         </span>                                                               \
         <div class="contributor">                                             \
           Added by: <a href="/users/$_userid_$">$_username_$</a>              \
         </div>                                                                \
         <div class="desc">                                                    \
-          <span class="best_in_place"                                         \
-                id="best_in_place_desc"                                       \
+          <span class="best_in_place best_in_place_desc"                      \
                 data-url="/topics/$_id_$"                                     \
                 data-object="topic"                                           \
                 data-nil="$_desc_nil_$"                                       \
@@ -568,8 +566,7 @@ function onCreateLabelHandler(domElement, node) {
                 data-type="textarea">$_desc_$</span>                          \
         </div>                                                                \
       </div>                                                                  \
-      <span class="best_in_place"                                             \
-            id="best_in_place_link"                                           \
+      <span class="best_in_place best_in_place_link"                          \
             data-url="/topics/$_id_$"                                         \
             data-object="topic"                                               \
             data-attribute="link"                                             \
@@ -612,7 +609,7 @@ function onCreateLabelHandler(domElement, node) {
 
   var desc_nil = "<span class='gray'>Click to add description.</span>";
   html = html.replace(/\$_desc_nil_\$/g, desc_nil);
-  if (node.getData("desc") == "") {
+  if (node.getData("desc") == "" && userid != null) {
     html = html.replace(/\$_desc_\$/g, desc_nil);
   } else {
     html = html.replace(/\$_desc_\$/g, node.getData("desc"));

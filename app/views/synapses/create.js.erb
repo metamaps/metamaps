@@ -12,12 +12,10 @@ if ( Mconsole != null) {
     temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
     console.log(temp);
     temp.setDataset('start', {  
-      lineWidth: 0.4,  
-      color: '#d1d1d1'  
+      lineWidth: 0.4  
       });
     temp.setDataset('end', {
-      lineWidth: 3,  
-      color: '#36acfb'
+      lineWidth: 2
     });
     var d = new Array(<%= @synapse.node1_id.to_s() %>, <%= @synapse.node2_id.to_s() %>);
     temp.setDataset('current', {  
@@ -31,7 +29,7 @@ if ( Mconsole != null) {
     temp.data.$direction = d;
     Mconsole.fx.plotLine(temp, Mconsole.canvas);
     Mconsole.fx.animate({  
-      modes: ['edge-property:lineWidth:color'],  
+      modes: ['edge-property:lineWidth'],  
       duration: 400  
       });
 }

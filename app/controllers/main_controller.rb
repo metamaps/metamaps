@@ -12,15 +12,28 @@ class MainController < ApplicationController
   def search
     @current = current_user
     @topics = Array.new()
+    @synapses = Array.new()
+    if params[:topics_by_name] != ""
+      like_keyword = "%"+params[:topics_by_name]+"%"    
+      @topics = Topic.where("name LIKE ?", like_keyword)
+    end
     if params[:topics_by_user_id] != ""
       @user = User.find(params[:topics_by_user_id])
-      @topics = Topic.visibleToUser(@current, @user)
-    elsif params[:topics_by_map_id] != ""
-      @map = Map.find(params[:topics_by_map_id])
-      @topics = @map.topics.delete_if{|topic| not topic.authorize_to_view(@current)}
+      @topics = @topics | Topic.visibleToUser(@current, @user)
     end
+    if params[:topics_by_map_id] != ""
+      @map = Map.find(params[:topics_by_map_id])
+      @topics = @topics | @map.topics.delete_if{|topic| not topic.authorize_to_view(@current)}
+    end
+    
+    @topics.each do |t|
+      t.synapses.each do |s|
+        @synapses = @synapses.push(s) if not @synapses.include? s 
+      end
+    end
+    
     respond_to do |format|
-      format.js { respond_with(@topics) }
+      format.js { respond_with(@topics,@synapses) }
     end
   end
   

@@ -38,6 +38,15 @@ line-height: 24px;}
 
 .topic .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+.best_in_place_name {
+  max-width:130px;
+  float:left;
+}
+
+.best_in_place_name input{
+  max-width:130px;
+}
+
 .topic-go-arrow {
   width: 1em;
   height: 1em;

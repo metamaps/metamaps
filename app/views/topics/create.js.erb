@@ -24,6 +24,8 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   var temp = Mconsole.graph.getNode('<%= @topic.id %>');
   temp.setData('dim', 1, 'start');
   temp.setData('dim', 40, 'end');
+  temp.setData('onCanvas', false);
+  temp.setData('inCommons', false);
   
   if (gType == "centered") {
     var tempPos = new $jit.Complex(x, y);
@@ -58,12 +60,16 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
 		    tempInit = false;
      }    
     });
-  } else {
+  } else if ( '<%= @synapse %>' == "false" ) {
       Mconsole.fx.plotNode(temp, Mconsole.canvas);
       Mconsole.fx.animate({  
         modes: ['node-property:dim'],  
-        duration: 500    
+        duration: 500,
+        onComplete: function() {
+            selectNodeOnClickHandler(temp);
+        }
       });
+      
   }
   
 } else {
@@ -72,12 +78,17 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   var temp = Mconsole.graph.getNode('<%= @topic.id %>');
   temp.setData('dim', 1, 'start');
   temp.setData('dim', 25, 'end');
+  temp.setData('onCanvas', false);
+  temp.setData('inCommons', false);
   temp.setPos(new $jit.Complex(x, y), 'current');
   temp.setPos(new $jit.Complex(x, y), 'start');
   temp.setPos(new $jit.Complex(x, y), 'end');
   Mconsole.fx.plotNode(temp, Mconsole.canvas);
   Mconsole.fx.animate({  
         modes: ['node-property:dim'],  
-        duration: 500    
+        duration: 500,
+        onComplete: function() {
+            selectNodeOnClickHandler(temp);
+        }
       });
 }
