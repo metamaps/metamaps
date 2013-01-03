@@ -189,71 +189,13 @@ function clearFoundData() {
 $(document).ready(function() {
    
    // this sets up the initial opening of the find box
-   $('.sideOption').bind('click',function(){
-	  $('.sideOption').animate({
-		width: '305px',
-		height: '76px'
-	  }, 300, function() {
-		$('#topic_by_name_input').focus();
-	  });
-	  $('#closeFind, #findWhere').css('display','block');
-	  $('.sideOption').unbind('click');
-	  $('.sideOption').css('cursor','default');
+   $('#sideOptionFind').bind('click',function(){
+	   if (!findOpen) openFind();  
    });
    
    // this sets up the closing of the find box, and the toggling between open and closed.
-   $('#closeFind').click(function(){
-	   Mconsole.graph.eachNode( function (n) {
-		  n.setData('inCommons', false);
-		  n.setData('onCanvas', false);
-		  //$('.name.topic_' + n.id).css('display','block');
-	   });
-	   Mconsole.plot();
-	   $('#closeFind, #findWhere').css('display','none');
-	   $('.sideOption').css('cursor','pointer');
-	   $('.sideOption').animate({
-		width: '45px',
-		height: '32px'
-	  }, 300, function() {
-		    $('.sideOption').bind('click',function(){
-				  firstVal = $('.sideOption option[value="name"]').attr('selected');
-				  secondVal = $('.sideOption option[value="metacode"]').attr('selected');
-				  thirdVal = $('.sideOption option[value="map (by name)"]').attr('selected');
-				  fourthVal = $('.sideOption option[value="mapper (by name)"]').attr('selected');
-				  if ( firstVal === 'selected' || thirdVal === 'selected' || fourthVal === 'selected' ) {
-					  $('.sideOption').animate({
-						width: '305px',
-					    height: '76px'
-					  }, 300, function() {
-						$('#topic_by_name_input').focus();
-					  });
-				  } else if ( secondVal === 'selected') {
-					  $('.sideOption').animate({
-						width: '380px',
-						height: '463px'
-					  }, 300, function() {
-						// Animation complete.
-					  });
-				  } else if ( thirdVal === 'selected' ) {
-					  $('.sideOption').animate({
-						width: '305px',
-					    height: '76px'
-					  }, 300, function() {
-						$('#map_by_name_input').focus();
-					  });
-				  } else if ( fourthVal === 'selected' ) {
-					  $('.sideOption').animate({
-						width: '305px',
-					    height: '76px'
-					  }, 300, function() {
-						$('#mapper_by_name_input').focus();
-					  });
-				  }
-				  $('#closeFind, #findWhere').css('display','block');
-				  $('.sideOption').unbind('click');
-				  $('.sideOption').css('cursor','default');
-			   });
-	  });
+   $('#closeFind').bind('click',function(){
+	   if (findOpen) closeFind();
    });
    
    // this is where interactions within the find box begin
@@ -265,6 +207,7 @@ $(document).ready(function() {
           // grab the checkboxes to see if the search is on the canvas, in the commons, or both
           firstVal = $("#onCanvas").attr('checked');
           secondVal = $("#inCommons").attr('checked');
+          clearFoundData();
           
           // only have the autocomplete enabled if they are searching in the commons
           if (firstVal == "checked" && secondVal == "checked"){
@@ -316,48 +259,48 @@ $(document).ready(function() {
         delay: 2000
     });
 			
-   $('.sideOption .select_content').change(function() {
+   $('#sideOptionFind .select_content').change(function() {
 	      firstVal = $(this).children("option[value='topics']").attr('selected');
 		  secondVal = $(this).children("option[value='maps']").attr('selected');
 		  thirdVal = $(this).children("option[value='mappers']").attr('selected');
 		  if ( firstVal == 'selected') {
-			  $('.sideOption .select_type').children("option[value='metacode']").removeAttr('disabled');
-			  $('.sideOption .select_type').children("option[value='map (by name)']").removeAttr('disabled');
-			  $('.sideOption .select_type').children("option[value='mapper (by name)']").removeAttr('disabled');
+			  $('#sideOptionFind .select_type').children("option[value='metacode']").removeAttr('disabled');
+			  $('#sideOptionFind .select_type').children("option[value='map (by name)']").removeAttr('disabled');
+			  $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").removeAttr('disabled');
 			  $('.find').css('display','none');
 			  $('.find_topic_by_name').css('display','block');
 			  $('#topic_by_name_input').focus();
 			  
 		  }
 		  else if ( secondVal == 'selected' ) {
-			  if ( $(".sideOption .select_type").val() != "name") { 
-			  	$(".sideOption .select_type").val('name');
-			    $('.sideOption').animate({
+			  if ( $("#sideOptionFind .select_type").val() != "name") { 
+			  	$("#sideOptionFind .select_type").val('name');
+			    $('#sideOptionFind').animate({
 					width: '305px',
 					height: '76px'
 				  }, 300, function() {
 					// Animation complete.
 				  });
 			  }
-			  $('.sideOption .select_type').children("option[value='metacode']").attr('disabled','disabled');
-			  $('.sideOption .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
-			  $('.sideOption .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
+			  $('#sideOptionFind .select_type').children("option[value='metacode']").attr('disabled','disabled');
+			  $('#sideOptionFind .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
+			  $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
 			  $('.find').css('display','none');
 			  $('.find_map_by_name').css('display','block');
 			  $('#map_by_name_input').focus();
 		  }
 		  else if ( thirdVal == 'selected' ) {
-			  $(".sideOption .select_type").val('name');
-			  $('.sideOption .select_type').children("option[value='metacode']").attr('disabled','disabled');
-			  $('.sideOption .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
-			  $('.sideOption .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
+			  $("#sideOptionFind .select_type").val('name');
+			  $('#sideOptionFind .select_type').children("option[value='metacode']").attr('disabled','disabled');
+			  $('#sideOptionFind .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
+			  $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
 			  $('.find').css('display','none');
 			  $('.find_mapper_by_name').css('display','block');
 			  $('#mapper_by_name_input').focus();
 		  }
 	});
    
-   $('.sideOption .select_type').change(function() {
+   $('#sideOptionFind .select_type').change(function() {
 	      firstVal = $(this).children("option[value='name']").attr('selected');
 		  secondVal = $(this).children("option[value='metacode']").attr('selected');
 		  thirdVal = $(this).children("option[value='map (by name)']").attr('selected');
@@ -369,7 +312,7 @@ $(document).ready(function() {
 				  for (var catVis in categoryVisible) {
 					  categoryVisible[catVis] = true;
 				  }
-				  $('.sideOption').animate({
+				  $('#sideOptionFind').animate({
 					width: '305px',
 					height: '76px'
 				  }, 300, function() {
@@ -380,7 +323,7 @@ $(document).ready(function() {
 		  }
 		  else if ( secondVal === 'selected' ) {
 			  $('.find').fadeOut('fast', function() {
-				  $('.sideOption').animate({
+				  $('#sideOptionFind').animate({
 					width: '380px',
 					height: '463px'
 				  }, 300, function() {
@@ -390,7 +333,7 @@ $(document).ready(function() {
 		  }
 		  else if ( thirdVal === 'selected' ) {
 			  $('.find').fadeOut('fast', function() {
-				  $('.sideOption').animate({
+				  $('#sideOptionFind').animate({
 					width: '305px',
 					height: '76px'
 				  }, 300, function() {
@@ -401,7 +344,7 @@ $(document).ready(function() {
 		  }
 		  else if ( fourthVal === 'selected' ) {
 			  $('.find').fadeOut('fast', function() {
-				  $('.sideOption').animate({
+				  $('#sideOptionFind').animate({
 					width: '305px',
 					height: '76px'
 				  }, 300, function() {
@@ -425,9 +368,9 @@ $(document).ready(function() {
     });
 	
 	$('.find_map_by_name #map_by_name_input').bind('railsAutocomplete.select', function(event, data){
-          firstVal = $('.sideOption .select_content').children("option[value='topics']").attr('selected');
-		  secondVal = $('.sideOption .select_content').children("option[value='maps']").attr('selected');
-		  thirdVal = $('.sideOption .select_content').children("option[value='mappers']").attr('selected');
+          firstVal = $('#sideOptionFind .select_content').children("option[value='topics']").attr('selected');
+		  secondVal = $('#sideOptionFind .select_content').children("option[value='maps']").attr('selected');
+		  thirdVal = $('#sideOptionFind .select_content').children("option[value='mappers']").attr('selected');
 		  if ( firstVal == 'selected') {
 			  // grab the checkboxes to see if the search is on the canvas, in the commons, or both
 			  firstNewVal = $("#onCanvas").attr('checked');
@@ -472,9 +415,9 @@ $(document).ready(function() {
     });
 	
 	$('.find_mapper_by_name #mapper_by_name_input').bind('railsAutocomplete.select', function(event, data){
-          firstVal = $('.sideOption .select_content').children("option[value='topics']").attr('selected');
-		  secondVal = $('.sideOption .select_content').children("option[value='maps']").attr('selected');
-		  thirdVal = $('.sideOption .select_content').children("option[value='mappers']").attr('selected');
+          firstVal = $('#sideOptionFind .select_content').children("option[value='topics']").attr('selected');
+		  secondVal = $('#sideOptionFind .select_content').children("option[value='maps']").attr('selected');
+		  thirdVal = $('#sideOptionFind .select_content').children("option[value='mappers']").attr('selected');
 		  if ( firstVal == 'selected') {
 			 // grab the checkboxes to see if the search is on the canvas, in the commons, or both
 			  firstNewVal = $("#onCanvas").attr('checked');
@@ -526,28 +469,14 @@ $(document).ready(function() {
 		
 		if ( switchAll === "showAll" || switchAll === "hideAll") {
 			if (switchAll == "showAll") {
-				// this means that we are on a map view		
-				if (obj != null) {
-					showAll();
-				}
-				// this means that we are on a card view
-				else {
-					$('.topic').fadeIn('slow');
-				}
+				showAll();
 				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
 				for (var catVis in categoryVisible) {
 					categoryVisible[catVis] = true;
 				}
 			}
 			else if (switchAll == "hideAll") {
-				// this means that we are on a map view		
-				if (obj != null) {
-					hideAll();
-				}
-				// this means that we are on a card view
-				else {
-					$('.topic').fadeOut('slow');
-				}
+				hideAll();
 				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').addClass('toggledOff');
 				for (var catVis in categoryVisible) {
 					categoryVisible[catVis] = false;
@@ -556,30 +485,8 @@ $(document).ready(function() {
 		}
 		else {
 			var category = $(this).children('img').attr('alt');
-			
-			// this means that we are on a map view		
-			if (obj != null) {		  
-				  switchVisible(category);
-			}
-			// this means that we are on a card view
-			//else {	
-//			  if (categoryVisible[category] == true) {
-//				  if (category.split(' ').length == 1) {
-//					$('#cards .' + category).fadeOut('slow');
-//				  }
-//				  else {
-//					  $('#cards .' + category.split(' ')[0]).fadeOut('slow');
-//				  }
-//			  }
-//			  else if (categoryVisible[category] == false) {
-//				  if (category.split(' ').length == 1) {
-//					$('#cards .' + category).fadeIn('slow');
-//				  }
-//				  else {
-//					  $('#cards .' + category.split(' ')[0]).fadeIn('slow');
-//				  }
-//			  }
-//			}
+			switchVisible(category);
+
 			// toggle the image and the boolean array value
 			if (categoryVisible[category] == true) {
 				$(this).addClass('toggledOff');
@@ -592,3 +499,62 @@ $(document).ready(function() {
 		}
 	});
 });
+
+function openFind() {
+  findOpen = true;
+  if (analyzeOpen) closeAnalyze();
+  if (organizeOpen) closeOrganize();
+  $('#sideOptionFind, #closeFind').css('z-index','10');
+  $('#sideOptionAnalyze').css('z-index','9');
+  $('#sideOptionOrganize').css('z-index','8');
+  firstVal = $('#sideOptionFind option[value="name"]').attr('selected');
+  secondVal = $('#sideOptionFind option[value="metacode"]').attr('selected');
+  thirdVal = $('#sideOptionFind option[value="map (by name)"]').attr('selected');
+  fourthVal = $('#sideOptionFind option[value="mapper (by name)"]').attr('selected');
+  if ( firstVal === 'selected' || thirdVal === 'selected' || fourthVal === 'selected' ) {
+    $('#sideOptionFind').animate({
+    width: '305px',
+      height: '76px'
+    }, 100, function() {
+      $('#topic_by_name_input').focus();
+    });
+  } else if ( secondVal === 'selected') {
+    $('#sideOptionFind').animate({
+    width: '380px',
+    height: '463px'
+    }, 100, function() {
+      // Animation complete.
+    });
+  } else if ( thirdVal === 'selected' ) {
+    $('#sideOptionFind').animate({
+    width: '305px',
+      height: '76px'
+    }, 100, function() {
+      $('#map_by_name_input').focus();
+    });
+  } else if ( fourthVal === 'selected' ) {
+    $('#sideOptionFind').animate({
+    width: '305px',
+      height: '76px'
+    }, 100, function() {
+      $('#mapper_by_name_input').focus();
+    });
+  }
+  $('#closeFind, #findWhere').css('display','block');
+  $('#sideOptionFind').css('cursor','default');
+}
+
+function closeFind() {
+  findOpen = false;
+  Mconsole.graph.eachNode( function (n) {
+    n.setData('inCommons', false);
+    n.setData('onCanvas', false);
+   });
+   Mconsole.plot();
+   $('#closeFind, #findWhere').css('display','none');
+   $('#sideOptionFind').css('cursor','pointer');
+   $('#sideOptionFind').animate({
+     width: '45px',
+     height: '32px'
+     }, 100);
+}

@@ -32,6 +32,8 @@ class MainController < ApplicationController
       end
     end
     
+    @topics.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    
     respond_to do |format|
       format.js { respond_with(@topics,@synapses) }
     end

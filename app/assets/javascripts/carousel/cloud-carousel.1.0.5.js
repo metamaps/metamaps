@@ -146,9 +146,10 @@
 					
 				clearTimeout(event.data.showFrontTextTimer);			
 				$(options.altBox).html( ($(event.target).attr('alt') ));
-				$(options.titleBox).html( ($(event.target).attr('title') ));							
+				//$(options.titleBox).html( ($(event.target).attr('title') ));							
 				if ( options.bringToFront && event.type == 'click' )				
 				{
+          $(options.titleBox).html( ($(event.target).attr('title') ));
 				  // METAMAPS CODE
 			    $('#topic_metacode').val($(event.target).attr('title'));
 			    // NOT METAMAPS CODE
@@ -187,6 +188,9 @@
 		this.showFrontText = function()
 		{	
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
+      // METAMAPS CODE
+			$('#topic_metacode').val($(items[this.frontIndex].image).attr('title'));
+			// NOT METAMAPS CODE
 			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
 			$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				
 		};

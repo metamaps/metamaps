@@ -166,16 +166,6 @@ a {
   margin-left:90px;
 }
 
-#left-but {
-  position:absolute;
-  left:50px;
-}
-
-#right-but {
-  position:absolute;
-  right:50px;	
-}
-
 label, select, input, textarea {
   display:block;
 }
@@ -363,13 +353,11 @@ input[type="submit"] {
   margin-left:50px;	
 }
 
-/* --- styling the FIND section ---*/
+/* --- styling the sideOptions section ---*/
 .sideOption {
   position:fixed;
-  top:25%;
   left:0px;
   display:block;
-  width:45px;
   height:32px;
   background: url('bg.png') repeat 0 0;
   padding:0 0 0 15px;
@@ -381,13 +369,43 @@ input[type="submit"] {
   cursor:pointer;
 }
 
-#closeFind {
-  position:fixed;
+#sideOptionFind {
   top:25%;
+  width:45px;
+}
+
+#sideOptionAnalyze {
+  top:35%;
+  width:64px;
+  display:none;
+}
+
+#sideOptionOrganize {
+  top:45%;
+  width:75px;
+  display:none;
+}
+
+.closeSideOption {
+  position:fixed;
   left:4px;
   display:none;
-  margin-top:-20px;
-  cursor:pointer;
+  margin-top: -22px;
+  cursor: pointer;
+  background: #000;
+  padding: 0 4px;
+  border-radius: 8px;
+}
+#closeFind {
+  top:25%;
+}
+
+#closeAnalyze {
+  top:35%;
+}
+
+#closeOrganize {
+  top:45%;
 }
 
 #findWhere {
@@ -504,6 +522,9 @@ input[type="submit"] {
 
 #mainTitle {
   float: left;
+  background: #000;
+  padding: 0 5px;
+  border-radius: 10px;
 }
 
 #mainTitle a {
@@ -516,12 +537,13 @@ input[type="submit"] {
 
 #beta {
   float:left;
-  margin-left: 7px;
+  margin-left: 2px;
 }
 
 .footer .menu {
   display:block;
   position:absolute;
+  border:none;
   bottom:40px;
   left:0;
   height:0px;

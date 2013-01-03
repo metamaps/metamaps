@@ -21,7 +21,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false;
 
  $(document).ready(function() {
  
@@ -54,6 +54,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
           if (! sliding1) { 
             sliding1 = true; 
 			if (userid != null) {
+              $('.footer .menu').css('border','1px solid #000');
               $('.footer .menu').animate({
 				height: '252px'
 			  }, 300, function() {
@@ -77,6 +78,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 					height: '0px'
 				  }, 300, function() {
 					sliding1 = false;
+          $('.footer .menu').css('border','none');
 				  });
 			  } 
 		  },800); 
@@ -114,18 +116,14 @@ function saveToMap() {
 
 function addMetacode() {
 	// code from http://www.professorcloud.com/mainsite/carousel-integration.htm
+  //mouseWheel:true,
 	if (!metacodeIMGinit) {		
-		$("#metacodeImg").CloudCarousel( { 
-			//reflHeight: 10,
-			//reflGap: 2,
+		$("#metacodeImg").CloudCarousel( {
 			titleBox: $('#metacodeImgTitle'),
-			//buttonLeft: $('#left-but'),
-			//buttonRight: $('#right-but'),
 			yRadius:40,
 			xPos: 150,
 			yPos: 40,
-			speed:0.15,
-			mouseWheel:true,
+			speed:0.15, 
 			bringToFront: true
 		});
 		metacodeIMGinit = true;

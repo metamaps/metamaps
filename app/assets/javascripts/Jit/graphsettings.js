@@ -57,7 +57,7 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-			   clickDragOnTopic(node, eventInfo, e);
+			         clickDragOnTopic(node, eventInfo, e);
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
@@ -69,7 +69,7 @@ function graphSettings(type) {
 				else if (tempInit && tempNode2 != null) {
 					$('#topic_addSynapse').val("false");
 					$('#synapse_topic1id').val(tempNode.id);
-        			$('#synapse_topic2id').val(tempNode2.id);
+        	$('#synapse_topic2id').val(tempNode2.id);
 					$('#new_synapse').fadeIn('fast');
 					$('#synapse_desc').focus();
 					tempNode = null;
@@ -451,10 +451,10 @@ function canvasDoubleClickHandler(canvasLoc,e) {
 
    if (now - storedTime < TOLERANCE) {
       //pop up node creation :)
-	  $('#topic_grabTopic').val("null");
-	  $('#topic_addSynapse').val("false");
-      document.getElementById('new_topic').style.left = e.x + "px";
-      document.getElementById('new_topic').style.top = e.y + "px";
+	    $('#topic_grabTopic').val("null");
+	    $('#topic_addSynapse').val("false");
+      $('#new_topic').css('left',e.clientX + "px");
+      $('#new_topic').css('top',e.clientY + "px");
       $('#topic_x').val(canvasLoc.x);
       $('#topic_y').val(canvasLoc.y);
       $('#new_topic').fadeIn('fast');
@@ -478,12 +478,12 @@ function clickDragOnTopic(node, eventInfo, e) {
 	   $('#new_topic').fadeOut('fast');
 	   var pos = eventInfo.getPos();
 	   // if it's a left click, move the node
-	   if (e.button == 0 && !e.altKey ) {
+	   if (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined)) {
 		   node.pos.setc(pos.x, pos.y);
 		   Mconsole.plot();
 	   }
-	   // if it's a right click, start synapse creation
-	   else if (e.button == 2 || (e.button == 0 && e.altKey)) {
+	   // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
+	   else if (e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) {
 		   if (tempInit == false) {
 			  tempNode = node;
 			  tempInit = true;   
@@ -508,12 +508,12 @@ function clickDragOnTopic(node, eventInfo, e) {
 			   });
 			   //pop up node creation :)
 			  $('#topic_grabTopic').val("null");
-			  var myX = e.x - 110;
-			  var myY = e.y - 30;
-			  document.getElementById('new_topic').style.left = myX + "px";
-			  document.getElementById('new_topic').style.top = myY + "px";
-			  document.getElementById('new_synapse').style.left = myX + "px";
-			  document.getElementById('new_synapse').style.top = myY + "px";
+			  var myX = e.clientX - 110;
+			  var myY = e.clientY - 30;
+			  $('#new_topic').css('left',myX + "px");
+        $('#new_topic').css('top',myY + "px");
+        $('#new_synapse').css('left',myX + "px");
+        $('#new_synapse').css('top',myY + "px");
 			  $('#topic_x').val(eventInfo.getPos().x);
 			  $('#topic_y').val(eventInfo.getPos().y);
 			  Mconsole.plot();
@@ -644,6 +644,8 @@ function onCreateLabelHandler(domElement, node) {
       Mconsole.plot();
     });
   });
+  
+  //$(showCard).find('.scroll').mCustomScrollbar();
 
   // Create a 'name' button and add it to the main node label
   var nameContainer = document.createElement('span'),
