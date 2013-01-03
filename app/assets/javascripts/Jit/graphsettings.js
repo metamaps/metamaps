@@ -527,7 +527,6 @@ function clickDragOnTopic(node, eventInfo, e) {
 function onCreateLabelHandler(domElement, node) {
   var html = '                                                                \
     <div class="CardOnGraph"                                                  \
-         title="Click to Hide"                                                \
          id="topic_$_id_$">                                                   \
       <p class="type best_in_place"                                           \
          id="best_in_place_metacode"                                          \
@@ -554,10 +553,22 @@ function onCreateLabelHandler(domElement, node) {
           Added by: <a href="/users/$_userid_$">$_username_$</a>              \
         </div>                                                                \
         <div class="desc">                                                    \
-          <p>$_desc_$</p>                                                     \
+          <span class="best_in_place"                                         \
+                id="best_in_place_desc"                                       \
+                data-url="/topics/$_id_$"                                     \
+                data-object="topic"                                           \
+                data-attribute="desc"                                         \
+                data-type="textarea">$_desc_$</span>                          \
         </div>                                                                \
       </div>                                                                  \
-      <a href="$_link_$" class="link" target="_blank">$_link_$</a>            \
+      <a href="$_link_$" class="link" target="_blank">                        \
+        <span class="best_in_place"                                           \
+              id="best_in_place_link"                                         \
+              data-url="/topics/$_id_$"                                       \
+              data-object="topic"                                             \
+              data-attribute="link"                                           \
+              data-type="input">$_link_$</span>                               \
+      </a>                                                                    \
     </div>';
 
   //create metacode_choices array from imgArray
@@ -577,7 +588,11 @@ function onCreateLabelHandler(domElement, node) {
   html = html.replace(/\$_name_\$/g, node.name);
   html = html.replace(/\$_userid_\$/g, node.getData("userid"));
   html = html.replace(/\$_username_\$/g, node.getData("username"));
-  html = html.replace(/\$_desc_\$/g, node.getData("desc"));
+  if (node.getData("desc") == "") {
+    html = html.replace(/\$_desc_\$/g, '<span style="color: #cccccc">Click to add description.</span>');
+  } else {
+    html = html.replace(/\$_desc_\$/g, node.getData("desc"));
+  }
   html = html.replace(/\$_link_\$/g, node.getData("link"));
   html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
 
