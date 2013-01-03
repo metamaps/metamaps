@@ -581,11 +581,22 @@ function onCreateLabelHandler(domElement, node) {
     </div>';
 
   //create metacode_choices array from imgArray
-  var metacode_choices = "'[";
+  var metacodes = new Array();
   for (var key in imgArray) {
     if (imgArray.hasOwnProperty(key)) {
-      metacode_choices += '["' + key + '","' + key + '"],';
+      if (key != node.getData("metacode")) {
+        metacodes.push(key);
+      }
     }
+  }
+ 
+  //Arrange it how we want it
+  metacodes.sort();
+  metacodes.unshift(node.getData("metacode")); 
+
+  var metacode_choices = "'[";
+  for (var i in metacodes) {
+    metacode_choices += '["' + metacodes[i] + '","' + metacodes[i] + '"],';
   }
   //remove trailing comma and add ]
   metacode_choices = metacode_choices.slice(0, -1); 
