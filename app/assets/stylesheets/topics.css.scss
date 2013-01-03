@@ -4,7 +4,9 @@
 
 .topic { display:block; float:left; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
 
-.topic .delete {position: absolute;
+.close-link,
+.topic .delete {
+position: absolute;
 top: -14px;
 left: 0px;
 background: none;
@@ -35,3 +37,9 @@ line-height: 24px;}
 .topic .desc h3 { font-style:normal; margin-top:5px; }
 
 .topic .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.topic-go-arrow {
+  width: 1em;
+  height: 1em;
+  float: right;
+}

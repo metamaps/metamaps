@@ -527,8 +527,8 @@ function clickDragOnTopic(node, eventInfo, e) {
 function onCreateLabelHandler(domElement, node) {
   var html = '                                                                \
     <div class="CardOnGraph"                                                  \
-         title="Click to Hide"                                                \
          id="topic_$_id_$">                                                   \
+      <a href="#" class="close-link">close</a>                                \
       <p class="type best_in_place"                                           \
          id="best_in_place_metacode"                                          \
          data-url="/topics/$_id_$"                                            \
@@ -536,36 +536,68 @@ function onCreateLabelHandler(domElement, node) {
          data-collection=$_metacode_choices_$                                 \
          data-attribute="metacode"                                            \
          data-type="select">$_metacode_$</p>                                  \
-      <a href="/topics/$_id_$">                                               \
-        <img alt="$_metacode_$"                                               \
-             class="icon"                                                     \
-             height="50"                                                      \
-             width="50"                                                       \
+      <img alt="$_metacode_$"                                                 \
+           class="icon"                                                       \
+           height="50"                                                        \
+           width="50"                                                         \
            src="$_imgsrc_$" />                                                \
-      </a>                                                                    \
       <div class="scroll">                                                    \
-        <span class="title best_in_place"                                     \
-              id="best_in_place_name"                                         \
-              data-url="/topics/$_id_$"                                       \
-              data-object="topic"                                             \
-              data-attribute="name"                                           \
-              data-type="input">$_name_$</span>                               \
+        <span class="title">                                                  \
+          <span class="best_in_place"                                         \
+                id="best_in_place_name"                                       \
+                data-url="/topics/$_id_$"                                     \
+                data-object="topic"                                           \
+                data-attribute="name"                                         \
+                data-type="input">                                            \
+          $_name_$</span>                                                     \
+          <a href="/topics/$_id_$" target="_blank">                           \
+            <img class="topic-go-arrow"                                       \
+                 title="Go to the topic page"                                 \
+                 src="/assets/go-arrow.png" />                                \
+          </a>                                                                \
+        </span>                                                               \
         <div class="contributor">                                             \
           Added by: <a href="/users/$_userid_$">$_username_$</a>              \
         </div>                                                                \
         <div class="desc">                                                    \
-          <p>$_desc_$</p>                                                     \
+          <span class="best_in_place"                                         \
+                id="best_in_place_desc"                                       \
+                data-url="/topics/$_id_$"                                     \
+                data-object="topic"                                           \
+                data-attribute="desc"                                         \
+                data-type="textarea">$_desc_$</span>                          \
         </div>                                                                \
       </div>                                                                  \
-      <a href="$_link_$" class="link" target="_blank">$_link_$</a>            \
+      <span class="best_in_place"                                             \
+            id="best_in_place_link"                                           \
+            data-url="/topics/$_id_$"                                         \
+            data-object="topic"                                               \
+            data-attribute="link"                                             \
+            data-type="input">$_link_$</span>                                 \
+      <a href="$_link_$" class="link" target="_blank">                        \
+        <img class="topic-go-arrow link"                                      \
+             title="Visit $_link_$"                                           \
+             src="/assets/go-arrow.png" />                                    \
+      </a>                                                                    \
     </div>';
 
   //create metacode_choices array from imgArray
-  var metacode_choices = "'[";
+  var metacodes = new Array();
   for (var key in imgArray) {
     if (imgArray.hasOwnProperty(key)) {
-      metacode_choices += '["' + key + '","' + key + '"],';
+      if (key != node.getData("metacode")) {
+        metacodes.push(key);
+      }
     }
+  }
+ 
+  //Arrange it how we want it
+  metacodes.sort();
+  metacodes.unshift(node.getData("metacode")); 
+
+  var metacode_choices = "'[";
+  for (var i in metacodes) {
+    metacode_choices += '["' + metacodes[i] + '","' + metacodes[i] + '"],';
   }
   //remove trailing comma and add ]
   metacode_choices = metacode_choices.slice(0, -1); 
@@ -577,7 +609,11 @@ function onCreateLabelHandler(domElement, node) {
   html = html.replace(/\$_name_\$/g, node.name);
   html = html.replace(/\$_userid_\$/g, node.getData("userid"));
   html = html.replace(/\$_username_\$/g, node.getData("username"));
-  html = html.replace(/\$_desc_\$/g, node.getData("desc"));
+  if (node.getData("desc") == "") {
+    html = html.replace(/\$_desc_\$/g, '<span style="color: #cccccc">Click to add description.</span>');
+  } else {
+    html = html.replace(/\$_desc_\$/g, node.getData("desc"));
+  }
   html = html.replace(/\$_link_\$/g, node.getData("link"));
   html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
 
@@ -588,7 +624,7 @@ function onCreateLabelHandler(domElement, node) {
   domElement.appendChild(showCard);
 
   // add some events to the label
-  showCard.onclick = function(){
+  $(showCard).find('a.close-link').click(function(){
     delete node.selected;
     node.setData('dim', 25, 'current');
     node.eachAdjacency(function (adj) {
@@ -602,11 +638,11 @@ function onCreateLabelHandler(domElement, node) {
       modes: ['edge-property:lineWidth:color'],
       duration: 500
     });
-//    $('.showcard.topic_' + node.id).fadeOut('fast', function(){
-//      $('.name').css('display','block');
-//      Mconsole.plot();
-//    });
-  }
+    $('.showcard.topic_' + node.id).fadeOut('fast', function(){
+      $('.name').css('display','block');
+      Mconsole.plot();
+    });
+  });
 
   // Create a 'name' button and add it to the main node label
   var nameContainer = document.createElement('span'),
@@ -621,4 +657,14 @@ function onCreateLabelHandler(domElement, node) {
   nameContainer.onclick = function(){
     selectNodeOnClickHandler(node)
   }
+
+  //bind callbacks
+  $(showCard).find('.type.best_in_place').bind("ajax:success", function() {
+    var metacode = $(this).html();
+    $(showCard).find('img.icon').attr('alt', metacode);
+    $(showCard).find('img.icon').attr('src', imgArray[metacode].src);
+    
+    node.setData("metacode", metacode);
+    Mconsole.plot();
+  });
 }//onCreateLabelHandler
