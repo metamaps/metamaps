@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130101215010) do
+ActiveRecord::Schema.define(:version => 20130101194424) do
 
   create_table "mappings", :force => true do |t|
     t.text     "category"
@@ -27,12 +27,12 @@ ActiveRecord::Schema.define(:version => 20130101215010) do
 
   create_table "maps", :force => true do |t|
     t.text     "name"
+    t.boolean  "arranged"
     t.text     "desc"
     t.text     "permission"
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.boolean  "arranged"
   end
 
   create_table "metacodes", :force => true do |t|
