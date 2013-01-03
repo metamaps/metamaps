@@ -548,8 +548,7 @@ function onCreateLabelHandler(domElement, node) {
                 data-url="/topics/$_id_$"                                     \
                 data-object="topic"                                           \
                 data-attribute="name"                                         \
-                data-type="input">                                            \
-          $_name_$</span>                                                     \
+                data-type="input">$_name_$</span>                             \
           <a href="/topics/$_id_$" target="_blank">                           \
             <img class="topic-go-arrow"                                       \
                  title="Go to the topic page"                                 \
@@ -564,6 +563,7 @@ function onCreateLabelHandler(domElement, node) {
                 id="best_in_place_desc"                                       \
                 data-url="/topics/$_id_$"                                     \
                 data-object="topic"                                           \
+                data-nil="$_desc_nil_$"                                       \
                 data-attribute="desc"                                         \
                 data-type="textarea">$_desc_$</span>                          \
         </div>                                                                \
@@ -609,11 +609,15 @@ function onCreateLabelHandler(domElement, node) {
   html = html.replace(/\$_name_\$/g, node.name);
   html = html.replace(/\$_userid_\$/g, node.getData("userid"));
   html = html.replace(/\$_username_\$/g, node.getData("username"));
+
+  var desc_nil = "<span class='gray'>Click to add description.</span>";
+  html = html.replace(/\$_desc_nil_\$/g, desc_nil);
   if (node.getData("desc") == "") {
-    html = html.replace(/\$_desc_\$/g, '<span style="color: #cccccc">Click to add description.</span>');
+    html = html.replace(/\$_desc_\$/g, desc_nil);
   } else {
     html = html.replace(/\$_desc_\$/g, node.getData("desc"));
   }
+
   html = html.replace(/\$_link_\$/g, node.getData("link"));
   html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
 

@@ -7,4 +7,5 @@
 		<div class="desc"><p><%=topic.desc %></p></div>
 	</div>
 	<%= link_to topic.link, topic.link, :class => 'link', :target => '_blank' %>
+    <%= best_in_place topic, :name, :nil => 'lol' %>
 <% end %>
