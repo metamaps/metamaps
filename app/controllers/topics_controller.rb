@@ -129,9 +129,7 @@ class TopicsController < ApplicationController
 		  @topic.desc = params[:topic][:desc] if params[:topic][:desc]
 		  @topic.link = params[:topic][:link] if params[:topic][:link]
 		  @topic.permission = params[:topic][:permission] if params[:topic][:permission]
-        end
-        if params[:category]
-          @topic.metacode = Metacode.find(params[:category][:metacode_id]) if params[:category][:metacode_id]
+          @topic.metacode = Metacode.find_by_name(params[:topic][:metacode]) if params[:topic][:metacode]
         end
 	    @topic.save
       end

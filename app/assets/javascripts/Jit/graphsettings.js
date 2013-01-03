@@ -564,9 +564,7 @@ function onCreateLabelHandler(domElement, node) {
   var metacode_choices = "'[";
   for (var key in imgArray) {
     if (imgArray.hasOwnProperty(key)) {
-      var caps = key;
-      var nocaps = caps.toLowerCase();
-      metacode_choices += '["' + nocaps + '","' + caps + '"],';
+      metacode_choices += '["' + key + '","' + key + '"],';
     }
   }
   //remove trailing comma and add ]
