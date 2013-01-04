@@ -29,7 +29,6 @@ if (!arraysEqual(json,newJSON)) {
             });
           }
           else { // in this case we found a topic so we have to update it
-            temp.adjacencies = topic.adjacencies;
             var newPos = new $jit.Complex(); 
             newPos.x = temp.data.$xloc; 
             newPos.y = temp.data.$yloc; 
