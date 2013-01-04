@@ -76,6 +76,7 @@ function graphSettings(type) {
 					tempNode2 = null;
 					tempInit = false;
 				}
+        else if (dragged != 0 && goRealtime) { saveLayout(dragged); }
 			},
 			onDragCancel: function() {
 				tempNode = null;
@@ -479,7 +480,10 @@ function clickDragOnTopic(node, eventInfo, e) {
 	   var pos = eventInfo.getPos();
 	   // if it's a left click, move the node
 	   if (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined)) {
-		   node.pos.setc(pos.x, pos.y);
+		   dragged = node.id;
+       node.pos.setc(pos.x, pos.y);
+       node.data.$xloc = pos.x;
+       node.data.$yloc = pos.y;
 		   Mconsole.plot();
 	   }
 	   // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox

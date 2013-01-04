@@ -129,9 +129,11 @@ class MapsController < ApplicationController
 		  @all.each do |topic|
 			  topic = topic.split('/')
 			  @mapping = Mapping.find(topic[0])
-			  @mapping.xloc = topic[1]
-			  @mapping.yloc = topic[2]
-			  @mapping.save
+			  if @mapping
+          @mapping.xloc = topic[1]
+			    @mapping.yloc = topic[2]
+			    @mapping.save
+        end
 		  end
 		  @map.arranged = true
 		  @map.save
@@ -143,10 +145,19 @@ class MapsController < ApplicationController
   	@current = current_user
 	  @map = Map.find(params[:id])
 		
-	  @mapjson = @map.self_as_json(@current).html_safe
+    @time = params[:map][:time]
+    @time = @time.to_i
+    
+    @topics = Array.new()
+    @synapses = Array.new()
+    @mappings = Array.new()
+    # add code for finding deleted topics and sending the ids of those back to the client here
+    @topics = @map.topics.select{|t| t.updated_at.to_i > @time}
+    @synapses = @map.synapses.select{|t| t.updated_at.to_i > @time}
+    @mappings = @map.mappings.select{|t| t.updated_at.to_i > @time && t.category == "Topic"}
 	  
 	  respond_to do |format|
-      format.js { respond_with(@mapjson) }
+      format.js { respond_with(@map,@topics,@synapses,@mappings) }
     end
   end
   

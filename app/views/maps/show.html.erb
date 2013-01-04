@@ -8,7 +8,7 @@
 				<%= form.submit "Save Layout", class: "saveLayout", id: "saveLayout" %>
 			<% end %>
 		<% end %>
-    <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'} else if (goRealtime) { this.innerHTML = 'Start Realtime'} goRealtime = !goRealtime;">Start Realtime</button>
+    <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; $('#saveLayout').css('display','none');} else if (goRealtime) { this.innerHTML = 'Start Realtime'; $('#saveLayout').css('display','block');} goRealtime = !goRealtime;">Start Realtime</button>
 	</div>
 	<div class="focusmiddle">
 		<h1 class="title"><%= @map.name %> <% if (@map.permission == "commons" && authenticated?) || @map.user == user %><%= link_to "[edit]", edit_map_path(@map) %><% end %></h1>
@@ -55,7 +55,14 @@
   <%= render :partial => 'newsynapse' %>
 <% end %>
 <%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
+  <%= form.hidden_field :time, :value => Time.now.to_i %>
+  <%= form.hidden_field :ids, :value => 0 %>
 <% end %>
 <script>
-  var int = setInterval(function(){if (goRealtime) {$('#MapRealtime').submit();}},5000);
+  var dragged = 0;
+  var int = setInterval(function(){
+      if (goRealtime) {
+        $('#MapRealtime').submit();
+      }
+    },4000);
 </script>

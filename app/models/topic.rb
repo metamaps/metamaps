@@ -55,6 +55,30 @@ belongs_to :metacode
     end
   end
   
+  def selfonmap_as_json(mapid)
+    Jbuilder.encode do |json|
+		  @inmaps = Array.new
+      self.maps.each do |map|
+        @inmaps.push(map.id)
+      end
+      
+		  @topicdata = Hash.new
+		  @topicdata['$desc'] = self.desc
+		  @topicdata['$link'] = self.link
+		  @topicdata['$metacode'] = self.metacode.name
+      @topicdata['$inmaps'] = @inmaps
+		  @topicdata['$userid'] = self.user.id
+		  @topicdata['$username'] = self.user.name
+      @mapping = Mapping.find_by_topic_id_and_map_id(self.id,mapid)
+		  @topicdata['$xloc'] = @mapping.xloc
+		  @topicdata['$yloc'] = @mapping.yloc
+		  @topicdata['$mappingid'] = @mapping.id
+		  json.data @topicdata
+		  json.id self.id
+		  json.name self.name
+    end
+  end
+  
   #build a json object of everything connected to a specified node
   def network_as_json(current)
     Jbuilder.encode do |json|

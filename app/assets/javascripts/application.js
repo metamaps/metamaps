@@ -86,22 +86,33 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     );
 	
 	// this is to save the layout of maps when you're on a map page
-	var coor = "";
 	$("#saveLayout").click(function(event) {
 	  event.preventDefault();
-	  coor = "";
-	  if (gType == "arranged" || gType == "chaotic") {
-		  Mconsole.graph.eachNode(function(n) {
-			coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
-		  });
-		  coor = coor.slice(0, -1);
-		  $('#map_coordinates').val(coor);
-		  $('#saveMapLayout').submit();
-		  
-	  }
+	  saveLayoutAll();
 	});
 	
 });
+
+// this is to save the layout of a map
+function saveLayoutAll() {
+  var coor = "";
+  if (gType == "arranged" || gType == "chaotic") {
+    Mconsole.graph.eachNode(function(n) {
+    coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
+    });
+    coor = coor.slice(0, -1);
+    $('#map_coordinates').val(coor);
+    $('#saveMapLayout').submit();
+  }
+}
+
+// this is to update the location coordinate of a single node on a map
+function saveLayout(id) {
+  var n = Mconsole.graph.getNode(id);
+  $('#map_coordinates').val(n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y);
+  $('#saveMapLayout').submit();
+  dragged = 0;
+}
 
 // this is to save your console to a map
 function saveToMap() {
