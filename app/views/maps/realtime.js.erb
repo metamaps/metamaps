@@ -25,25 +25,34 @@ if (!arraysEqual(json,newJSON)) {
             Mconsole.labels.plotLabel(Mconsole.canvas, temp, Mconsole.config);
             Mconsole.fx.animate({  
               modes: ['node-property:dim','edge-property:lineWidth'],  
-              duration: 500    
+              duration: 1000    
             });
           }
           else { // in this case we found a topic so we have to update it
-            temp.data = topic.data;
+            temp.adjacencies = topic.adjacencies;
             var newPos = new $jit.Complex(); 
             newPos.x = temp.data.$xloc; 
             newPos.y = temp.data.$yloc; 
             temp.setPos(newPos, 'end');
             var label = Mconsole.labels.getLabel(topic.id);  
-            $(label).find('.best_in_place_name').html(topic.name);
-            $(label).find('.label').html(topic.name);
-            $(label).find('.best_in_place_metacode').html(topic.data.$metacode);
-            $(label).find('img.icon').attr('alt', topic.data.$metacode);
-            $(label).find('img.icon').attr('src', imgArray[topic.data.$metacode].src);
-            $(label).find('.best_in_place_desc').html(topic.data.$desc);
-            $(label).find('.best_in_place_link').html(topic.data.$link);
-            $(label).find('.link').attr('href',topic.data.$link);
-            
+            if (temp.name != topic.name) {
+              temp.name = topic.name;
+              $(label).find('.best_in_place_name').html(topic.name);
+              $(label).find('.label').html(topic.name);
+            }
+            if (temp.data.$metacode != topic.data.$metacode) {
+              $(label).find('.best_in_place_metacode').html(topic.data.$metacode);
+              $(label).find('img.icon').attr('alt', topic.data.$metacode);
+              $(label).find('img.icon').attr('src', imgArray[topic.data.$metacode].src);
+            }
+            if (temp.data.$desc != topic.data.$desc) {
+              $(label).find('.best_in_place_desc').html(topic.data.$desc);
+            }
+            if (temp.data.$link != topic.data.$link) {
+              $(label).find('.best_in_place_link').html(topic.data.$link);
+              $(label).find('.link').attr('href',topic.data.$link);
+            }
+            temp.data = topic.data;
           }
   });
 

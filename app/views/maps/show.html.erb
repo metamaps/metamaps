@@ -57,5 +57,5 @@
 <%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
 <% end %>
 <script>
-  var int = setInterval(function(){if (goRealtime) {$('#MapRealtime').submit(); console.log('realtime');}},5000);
+  var int = setInterval(function(){if (goRealtime) {$('#MapRealtime').submit();}},50);
 </script>
