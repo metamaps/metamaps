@@ -1,0 +1,55 @@
+function arraysEqual(a1,a2) {
+    return JSON.stringify(a1)==JSON.stringify(a2);
+}
+
+newJSON = <%= @mapjson %>;
+
+if (!arraysEqual(json,newJSON)) {
+  json = newJSON;
+  $.each(json, function(i,topic){
+          var temp = Mconsole.graph.getNode(topic.id);
+          
+          // in this case the node wasn't on the page before, so we create it
+          if (temp == null) {
+            Mconsole.graph.addNode(topic);
+            var temp = Mconsole.graph.getNode(topic.id);
+            temp.setData('dim', 1, 'start');
+            temp.setData('dim', 25, 'end');
+            var newPos = new $jit.Complex(); 
+            newPos.x = temp.data.$xloc; 
+            newPos.y = temp.data.$yloc; 
+            temp.setPos(newPos, 'start');
+            temp.setPos(newPos, 'current');
+            temp.setPos(newPos, 'end');
+            Mconsole.fx.plotNode(temp, Mconsole.canvas);
+            Mconsole.labels.plotLabel(Mconsole.canvas, temp, Mconsole.config);
+            Mconsole.fx.animate({  
+              modes: ['node-property:dim','edge-property:lineWidth'],  
+              duration: 500    
+            });
+          }
+          else { // in this case we found a topic so we have to update it
+            temp.data = topic.data;
+            var newPos = new $jit.Complex(); 
+            newPos.x = temp.data.$xloc; 
+            newPos.y = temp.data.$yloc; 
+            temp.setPos(newPos, 'end');
+            var label = Mconsole.labels.getLabel(topic.id);  
+            $(label).find('.best_in_place_name').html(topic.name);
+            $(label).find('.label').html(topic.name);
+            $(label).find('.best_in_place_metacode').html(topic.data.$metacode);
+            $(label).find('img.icon').attr('alt', topic.data.$metacode);
+            $(label).find('img.icon').attr('src', imgArray[topic.data.$metacode].src);
+            $(label).find('.best_in_place_desc').html(topic.data.$desc);
+            $(label).find('.best_in_place_link').html(topic.data.$link);
+            $(label).find('.link').attr('href',topic.data.$link);
+            
+          }
+  });
+
+  Mconsole.animate({
+     modes: ['linear'],
+     transition: $jit.Trans.Quad.easeInOut,
+     duration: 500
+  });
+}

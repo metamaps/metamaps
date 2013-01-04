@@ -138,6 +138,18 @@ class MapsController < ApplicationController
 	  end	
   end
   
+  # GET maps/:id/realtime
+  def realtime
+  	@current = current_user
+	  @map = Map.find(params[:id])
+		
+	  @mapjson = @map.self_as_json(@current).html_safe
+	  
+	  respond_to do |format|
+      format.js { respond_with(@mapjson) }
+    end
+  end
+  
   # DELETE maps/:id
   def destroy
 	  @map = Map.find(params[:id])

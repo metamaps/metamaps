@@ -670,5 +670,10 @@ function onCreateLabelHandler(domElement, node) {
     node.setData("metacode", metacode);
     Mconsole.plot();
   });
+  
+  $(showCard).find('.best_in_place_name').bind("ajax:success", function() {
+    var name = $(this).html();
+    $(nameContainer).find('.label').html(name);
+  });
 
 }//onCreateLabelHandler

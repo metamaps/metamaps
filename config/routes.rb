@@ -9,6 +9,7 @@ ISSAD::Application.routes.draw do
   match 'search', to: 'main#search', via: :get, as: :search
   
   match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
+  match 'maps/:id/realtime', to: 'maps#realtime', via: :get, as: :realtime
 
   resource :session
   
