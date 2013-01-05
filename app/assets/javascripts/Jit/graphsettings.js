@@ -587,16 +587,26 @@ function onCreateLabelHandler(domElement, node) {
 				<div class="clearfloat"></div>                                \
         </div>                                                                \
       </div>                                                                  \
-      <a href="$_link_$" class="link" target="_blank">                        \
-        <span class="best_in_place best_in_place_link"                        \
-              data-url="/topics/$_id_$"                                       \
-              data-object="topic"                                             \
-              data-attribute="link"                                           \
-              data-activator=".topic_$_id_$ .edit-link"                       \
-              data-type="input">$_link_$</span>                               \
-      </a>                                                                    \
-      <span class="edit-link">(Edit)</span>                                   \
+      $_go_link_$                                                             \
+      $_a_tag_$<span class="best_in_place best_in_place_link"                 \
+            data-url="/topics/$_id_$"                                         \
+            data-object="topic"                                               \
+            data-attribute="link"                                             \
+            data-type="input">$_link_$</span>$_close_a_tag_$                  \
     </div>';
+
+  //link is rendered differently if user is logged out or in
+  var go_link, a_tag, close_a_tag;
+  if (userid == null) {
+    golink = '';
+    var a_tag = '<a href="' + node.getData("link") + '">';
+    var close_a_tag = '</a>';
+  } else {
+    go_link = '<a href="' + node.getData("link") + '" ' + 
+              '   class="go-link" target="_blank">[go]</a>';
+    a_tag = '';
+    close_a_tag = '';
+  }
 
   //create metacode_choices array from imgArray
   var metacodes = new Array();
@@ -620,23 +630,27 @@ function onCreateLabelHandler(domElement, node) {
   metacode_choices = metacode_choices.slice(0, -1); 
   metacode_choices += "]'";
 
+  var desc_nil = "<span class='gray'>Click to add description.</span>";
+
   html = html.replace(/\$_id_\$/g, node.id);
   html = html.replace(/\$_metacode_\$/g, node.getData("metacode"));
   html = html.replace(/\$_imgsrc_\$/g, imgArray[node.getData("metacode")].src);
   html = html.replace(/\$_name_\$/g, node.name);
   html = html.replace(/\$_userid_\$/g, node.getData("userid"));
   html = html.replace(/\$_username_\$/g, node.getData("username"));
+  html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
+  html = html.replace(/\$_link_\$/g, node.getData("link"));
+  html = html.replace(/\$_go_link_\$/g, go_link);
+  html = html.replace(/\$_a_tag_\$/g, a_tag);
+  html = html.replace(/\$_close_a_tag_\$/g, close_a_tag);
 
-  var desc_nil = "<span class='gray'>Click to add description.</span>";
   html = html.replace(/\$_desc_nil_\$/g, desc_nil);
   if (node.getData("desc") == "" && userid != null) {
+    //logged in but desc isn't there so it's invisible
     html = html.replace(/\$_desc_\$/g, desc_nil);
   } else {
     html = html.replace(/\$_desc_\$/g, node.getData("desc"));
   }
-
-  html = html.replace(/\$_link_\$/g, node.getData("link"));
-  html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
 
   var showCard = document.createElement('div');
   showCard.className = 'showcard topic_' + node.id;
@@ -665,7 +679,7 @@ function onCreateLabelHandler(domElement, node) {
     });
   });
   
-  //$(showCard).find('.scroll').mCustomScrollbar();
+  $(showCard).find('.scroll').mCustomScrollbar();
 
   // Create a 'name' button and add it to the main node label
   var nameContainer = document.createElement('span'),
@@ -725,14 +739,23 @@ function onCreateLabelHandler(domElement, node) {
   nameContainer.onmouseout = function(){
     $('.name.topic_' + node.id + ' .nodeOptions').css('display','none');
   }
-  
 
-  //bind callbacks
-  $(showCard).find('.type.best_in_place').bind("ajax:success", function() {
+  //jQuery selector for the card thing at the top of a topic view
+  //only works if we're editing the topic whose page we are on
+  //e.g. on /topics/1 you only need to update .focus.topic_1
+  var topcard = '.focus.topic_' + node.id;
+
+  //bind best_in_place ajax callbacks
+  $(showCard).find('.best_in_place_metacode')
+      .bind("ajax:success", function() {
     var metacode = $(this).html();
+    //changing img alt, img src for top card (topic view page) 
+    //and on-canvas card. Also changing image of node
     $(showCard).find('img.icon').attr('alt', metacode);
     $(showCard).find('img.icon').attr('src', imgArray[metacode].src);
-    
+    $(topcard + ' img').attr('alt', metacode);
+    $(topcard + ' img').attr('src', imgArray[metacode].src);
+    $(topcard + ' .focusleft p').html(metacode);
     node.setData("metacode", metacode);
     Mconsole.plot();
   });
@@ -740,6 +763,18 @@ function onCreateLabelHandler(domElement, node) {
   $(showCard).find('.best_in_place_name').bind("ajax:success", function() {
     var name = $(this).html();
     $(nameContainer).find('.label').html(name);
+    $(topcard + ' .focusmiddle .title-text').html(name);
+  });
+
+  $(showCard).find('.best_in_place_desc').bind("ajax:success", function() {
+    var desc = $(this).html();
+    $(topcard + ' .focusmiddle p').html(desc);
+  });
+
+  $(showCard).find('.best_in_place_link').bind("ajax:success", function() {
+    var link = $(this).html();
+    $(topcard + ' .focusright a').html(link);
+    $(topcard + ' .focusright a').attr('href', link);
   });
 
 }//onCreateLabelHandler
