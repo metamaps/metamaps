@@ -12,9 +12,6 @@
     color:#FFF;
     text-align: left;
     overflow: visible;
-	position: relative;
-	top: -185px;
-	left: 107px;
 	z-index:14000;
 }
 
@@ -91,4 +88,21 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.best_in_place_desc {
+  width:160px;
+  height:200px;
+  display:block;
+  margin-top:2px;	
+}
+
+.best_in_place_desc input {
+  float: right;
+  margin: 2px 0px 0px 2px;
+  padding: 1px 5px;	
+}
+
+.best_in_place_desc input[value="Save"] {
+margin-right: -8px;
 }
