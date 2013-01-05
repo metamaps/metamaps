@@ -598,9 +598,9 @@ function onCreateLabelHandler(domElement, node) {
   //link is rendered differently if user is logged out or in
   var go_link, a_tag, close_a_tag;
   if (userid == null) {
-    golink = '';
-    var a_tag = '<a href="' + node.getData("link") + '">';
-    var close_a_tag = '</a>';
+    go_link = '';
+    a_tag = '<a href="' + node.getData("link") + '">';
+    close_a_tag = '</a>';
   } else {
     go_link = '<a href="' + node.getData("link") + '" ' + 
               '   class="go-link" target="_blank">[go]</a>';
@@ -631,6 +631,7 @@ function onCreateLabelHandler(domElement, node) {
   metacode_choices += "]'";
 
   var desc_nil = "<span class='gray'>Click to add description.</span>";
+  var link_nil = "<span class='gray'>Click to add link.</span>";
 
   html = html.replace(/\$_id_\$/g, node.id);
   html = html.replace(/\$_metacode_\$/g, node.getData("metacode"));
@@ -639,10 +640,14 @@ function onCreateLabelHandler(domElement, node) {
   html = html.replace(/\$_userid_\$/g, node.getData("userid"));
   html = html.replace(/\$_username_\$/g, node.getData("username"));
   html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
-  html = html.replace(/\$_link_\$/g, node.getData("link"));
   html = html.replace(/\$_go_link_\$/g, go_link);
   html = html.replace(/\$_a_tag_\$/g, a_tag);
   html = html.replace(/\$_close_a_tag_\$/g, close_a_tag);
+  if (node.getData("link") == "") {
+    html = html.replace(/\$_link_\$/g, link_nil);
+  } else {
+    html = html.replace(/\$_link_\$/g, node.getData("link"));
+  }
 
   html = html.replace(/\$_desc_nil_\$/g, desc_nil);
   if (node.getData("desc") == "" && userid != null) {
@@ -775,6 +780,7 @@ function onCreateLabelHandler(domElement, node) {
     var link = $(this).html();
     $(topcard + ' .focusright a').html(link);
     $(topcard + ' .focusright a').attr('href', link);
+    $(showCard).find('.go-link').attr('href', link);
   });
 
 }//onCreateLabelHandler
