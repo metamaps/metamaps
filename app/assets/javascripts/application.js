@@ -33,6 +33,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 	$('#topic_name').bind('railsAutocomplete.select', function(event, data){  
       if (data.item.id != undefined) {
         $('#topic_grabTopic').val(data.item.id);
+		$('.new_topic').submit();
       }
     });
 	

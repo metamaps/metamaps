@@ -57,7 +57,7 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-			         clickDragOnTopic(node, eventInfo, e);
+			    clickDragOnTopic(node, eventInfo, e);
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
@@ -196,7 +196,7 @@ function graphSettings(type) {
             },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
-               clickDragOnTopic(node, eventInfo, e);
+			   clickDragOnTopic(node, eventInfo, e);
             },
 			onDragEnd: function() {
 				if (tempInit && tempNode2 == null) {
@@ -557,7 +557,6 @@ function onCreateLabelHandler(domElement, node) {
            height="50"                                                        \
            width="50"                                                         \
            src="$_imgsrc_$" />                                                \
-      <div class="scroll">                                                    \
         <span class="title">                                                  \
           <span class="best_in_place best_in_place_name"                      \
                 data-url="/topics/$_id_$"                                     \
@@ -575,6 +574,7 @@ function onCreateLabelHandler(domElement, node) {
           Added by: <a href="/users/$_userid_$" target="_blank">$_username_$  \
           </a>                                                                \
         </div>                                                                \
+      <div class="scroll">                                                    \
         <div class="desc">                                                    \
           <span class="best_in_place best_in_place_desc"                      \
                 data-url="/topics/$_id_$"                                     \
@@ -593,6 +593,7 @@ function onCreateLabelHandler(domElement, node) {
             data-object="topic"                                               \
             data-attribute="link"                                             \
             data-type="input">$_link_$</span>$_close_a_tag_$                  \
+	  <div class="clearfloat"></div>                                          \
     </div>';
 
   //link is rendered differently if user is logged out or in

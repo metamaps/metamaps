@@ -75,16 +75,7 @@ line-height: 24px;}
 .topic .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
 .topic .desc h3 { font-style:normal; margin-top:5px; }
 
-.topic .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.best_in_place_name {
-  max-width:130px;
-  float:left;
-}
-
-.best_in_place_name input{
-  max-width:130px;
-}
+.topic .link { position:absolute; width:140px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .topic-go-arrow {
   width: 25px;

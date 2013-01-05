@@ -127,27 +127,19 @@
 			return false;
 		});
 		
-		// Add code that makes up and down arrows scroll through.
-		$('.new_topic').bind('keydown keypress',this,function(event) {
-			//console.log(event)
-			if (event.keyCode == 38 || event.keyCode == 40) 
-			{
-				//e.preventDefault();
+		// Add code that makes tab and shift+tab scroll through metacodes
+		$('.new_topic').bind('keydown',this,function(event){
+			if (event.keyCode == 9 || (event.keyCode == 9 && event.shiftKey)) {
+				event.preventDefault();
 			}
 		});
 		$('.new_topic').bind('keyup',this,function(event){
-			console.log(event);
+			//console.log(event);
 			/*key navigation through elements*/
-			if (event.keyCode == 38 || event.keyCode == 40) {
-				switch ( event.keyCode ) {
-					case 38: // Up
-						event.data.rotate(-1);
-						break;
-					case 40: // Down
-						event.data.rotate(1);
-						break;
-				}
-				return;
+			if (event.keyCode == 9 && event.shiftKey) {
+				event.data.rotate(-1);
+			} else if (event.keyCode == 9) {
+				event.data.rotate(1);
 			}
 		});
 		

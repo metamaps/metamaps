@@ -22,6 +22,10 @@ has_many :maps, :through => :mappings
 
 belongs_to :metacode
 
+  def topic_autocomplete_method
+    "Get: #{self.name}"
+  end
+
   # has no viewable synapses helper function
   def has_viewable_synapses(current)
 	result = false

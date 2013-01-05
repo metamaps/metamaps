@@ -2585,6 +2585,9 @@ Extras.Classes.Navigation = new Class({
   
   onMouseWheel: function(e, win, scroll) {
     if(!this.config.zooming) return;
+	// START METAMAPS CODE
+	if (e.target.id != 'infovis-canvas') return;
+	// END METAMAPS CODE
     $.event.stop($.event.get(e, win));
     var val = this.config.zooming / 1000,
         ans = 1 + scroll * val;
@@ -2611,6 +2614,12 @@ Extras.Classes.Navigation = new Class({
     if(!this.config.panning) return;
     if(!this.pressed) return;
     if(this.config.panning == 'avoid nodes' && eventInfo.getNode()) return;
+	// START METAMAPS CODE
+	if (e.target.id != 'infovis-canvas') { 
+        this.pressed = false; 
+        return;
+	}
+	// END METAMAPS CODE
     var thispos = this.pos, 
         currentPos = eventInfo.getPos(),
         canvas = this.canvas,

@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
     
   respond_to :html, :js, :json
   
-  autocomplete :topic, :name, :full => true, :extra_data => [:user_id]
+  autocomplete :topic, :name, :full => true, :extra_data => [:user_id], :display_value => :topic_autocomplete_method
   
   
   # GET topics

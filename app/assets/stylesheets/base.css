@@ -44,7 +44,7 @@
 
 .CardOnGraph .scroll {
    display:block;
-   height:283px;
+   height:232px;
 }
  
 .CardOnGraph .type {
@@ -71,6 +71,15 @@
   padding-bottom:5px;
 }
 
+.CardOnGraph .best_in_place_name {
+  max-width:130px;
+  float:left;
+}
+
+.CardOnGraph .best_in_place_name input{
+  max-width:130px;
+}
+
 .CardOnGraph .desc {
   font-size:15px;
   font-family:Arial, Helvetica, sans-serif;
@@ -81,28 +90,47 @@
   margin-top:5px;
 }
 
-.CardOnGraph .link {
-  position:absolute;
-  width:170px;
-  top:295px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.CardOnGraph .best_in_place_desc {
-  width:160px;
-  height:180px;
-  display:block;
-  margin-top:2px;	
-}
-
 .CardOnGraph .best_in_place_desc input {
   float: right;
   margin: 2px 0px 0px 2px;
   padding: 1px 5px;	
 }
 
+.CardOnGraph .best_in_place_desc {
+  width:140px;
+  display:block;
+  margin-top:2px;	
+}
+
 .CardOnGraph .best_in_place_desc input[value="Save"] {
 margin-right: -8px;
+}
+
+.CardOnGraph .link {
+  position:absolute;
+  width:170px;
+  top:293px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.CardOnGraph .best_in_place_link { 
+  width: 135px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  float: left;
+  padding-left: 5px; 
+  padding-top:2px;
+}
+
+.CardOnGraph .best_in_place_link input {
+  width:130px;
+  margin-top:-2px;	
+}
+
+.CardOnGraph .go-link {
+  float:left;	
 }
