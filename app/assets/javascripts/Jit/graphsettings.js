@@ -571,17 +571,26 @@ function onCreateLabelHandler(domElement, node) {
                 data-type="textarea">$_desc_$</span>                          \
         </div>                                                                \
       </div>                                                                  \
-      <a href="$_link_$" class="link" target="_blank">                        \
-        <span class="best_in_place best_in_place_link"                        \
-              data-url="/topics/$_id_$"                                       \
-              data-object="topic"                                             \
-              data-nil="$_link_nil_$"                                         \
-              data-attribute="link"                                           \
-              data-activator=".topic_$_id_$ .edit-link"                       \
-              data-type="input">$_link_$</span>                               \
-      </a>                                                                    \
-      <span class="edit-link">(Edit)</span>                                   \
+      $_go_link_$                                                             \
+      $_a_tag_$<span class="best_in_place best_in_place_link"                 \
+            data-url="/topics/$_id_$"                                         \
+            data-object="topic"                                               \
+            data-attribute="link"                                             \
+            data-type="input">$_link_$</span>$_close_a_tag_$                  \
     </div>';
+
+  //link is rendered differently if user is logged out or in
+  var go_link, a_tag, close_a_tag;
+  if (userid == null) {
+    golink = '';
+    var a_tag = '<a href="' + node.getData("link") + '">';
+    var close_a_tag = '</a>';
+  } else {
+    go_link = '<a href="' + node.getData("link") + '" ' + 
+              '   class="go-link" target="_blank">[go]</a>';
+    a_tag = '';
+    close_a_tag = '';
+  }
 
   //create metacode_choices array from imgArray
   var metacodes = new Array();
@@ -605,6 +614,8 @@ function onCreateLabelHandler(domElement, node) {
   metacode_choices = metacode_choices.slice(0, -1); 
   metacode_choices += "]'";
 
+  var desc_nil = "<span class='gray'>Click to add description.</span>";
+
   html = html.replace(/\$_id_\$/g, node.id);
   html = html.replace(/\$_metacode_\$/g, node.getData("metacode"));
   html = html.replace(/\$_imgsrc_\$/g, imgArray[node.getData("metacode")].src);
@@ -613,8 +624,10 @@ function onCreateLabelHandler(domElement, node) {
   html = html.replace(/\$_username_\$/g, node.getData("username"));
   html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
   html = html.replace(/\$_link_\$/g, node.getData("link"));
+  html = html.replace(/\$_go_link_\$/g, go_link);
+  html = html.replace(/\$_a_tag_\$/g, a_tag);
+  html = html.replace(/\$_close_a_tag_\$/g, close_a_tag);
 
-  var desc_nil = "<span class='gray'>Click to add description.</span>";
   html = html.replace(/\$_desc_nil_\$/g, desc_nil);
   if (node.getData("desc") == "" && userid != null) {
     //logged in but desc isn't there so it's invisible
