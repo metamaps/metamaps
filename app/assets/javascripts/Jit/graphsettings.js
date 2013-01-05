@@ -48,7 +48,9 @@ function graphSettings(type) {
             enable: true,
 			enableForEdges: true,
             type: 'HTML',
-            //Change cursor style when hovering a node
+            onMouseMove: function(node, eventInfo, e) {
+              onMouseMoveHandler(node, eventInfo, e);
+            },
             onMouseEnter: function () {
                
             },
@@ -187,7 +189,9 @@ function graphSettings(type) {
          Events: {
             enable: true,
             type: 'HTML',
-            //Change cursor style when hovering a node
+            onMouseMove: function(node, eventInfo, e) {
+              onMouseMoveHandler(node, eventInfo, e);
+            },
             onMouseEnter: function () {
                
             },
@@ -785,3 +789,11 @@ function onCreateLabelHandler(domElement, node) {
   });
 
 }//onCreateLabelHandler
+
+function onMouseMoveHandler(node, eventInfo, e) {
+  if (eventInfo.getEdge() != false) {
+    $('canvas').css('cursor', 'pointer');
+  } else {
+    $('canvas').css('cursor', 'default');
+  }
+}
