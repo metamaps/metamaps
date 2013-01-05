@@ -138,7 +138,7 @@ class TopicsController < ApplicationController
     @map = Map.find(params[:map_id])
     @topic = Topic.find(params[:topic_id])
     @mappings = @map.mappings.select{|m| 
-      if m.category == "Synapse"
+      if m.synapse != nil
         m.synapse.topic1 == @topic || m.synapse.topic2 == @topic 
       else
         false
