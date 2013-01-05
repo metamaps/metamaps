@@ -12,4 +12,6 @@
 
 span.name {
   cursor: pointer;
+  position: absolute;
+  top: 185px;
 }

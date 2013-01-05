@@ -76,7 +76,7 @@ function graphSettings(type) {
 					tempNode2 = null;
 					tempInit = false;
 				}
-        else if (dragged != 0 && goRealtime) { saveLayout(dragged); }
+                else if (dragged != 0 && goRealtime) { saveLayout(dragged); }
 			},
 			onDragCancel: function() {
 				tempNode = null;
@@ -94,6 +94,8 @@ function graphSettings(type) {
             },
             //Add also a click handler to nodes
             onClick: function (node, eventInfo, e) {
+			   console.log(e);
+			   if (e.target.id != "infovis-canvas") return false;
                //clicking on a node, or clicking on blank part of canvas?
                if (node.nodeFrom) {
 					selectEdgeOnClickHandler(node);  
@@ -121,9 +123,14 @@ function graphSettings(type) {
             var left = parseInt(style.left);
             var top = parseInt(style.top);
             var w = domElement.offsetWidth;
-            style.left = (left - w / 2) + 'px';
-            style.top = (top+25) + 'px';
+            style.left = (left - w / 2 + 107) + 'px';
+			//style.left = (left - w / 2) + 'px';
+            style.top = (top-165) + 'px';
             style.display = '';
+			var label = document.getElementById('topic_' + node.id + '_label');
+			w = label.offsetWidth;
+			style = label.style;
+            style.left = (-(w / 2 + 106)) + 'px';	
          }
       };
    } else if (type = "centered") {
@@ -222,6 +229,7 @@ function graphSettings(type) {
             },
 			//Add also a click handler to nodes
             onClick: function (node, eventInfo, e) {
+			   if (e.target.id != "infovis-canvas") return false;
                //clicking on an edge, a node, or clicking on blank part of canvas?
                if (eventInfo.getEdge() != false || node.nodeFrom) {
 					if (eventInfo.getEdge() != false) selectEdgeOnClickHandler(eventInfo.getEdge());
@@ -256,9 +264,14 @@ function graphSettings(type) {
             var left = parseInt(style.left);
             var top = parseInt(style.top);
             var w = domElement.offsetWidth;
-            style.left = (left - w / 2) + 'px';
-            style.top = (top+25) + 'px';
+            style.left = (left - w / 2 + 107) + 'px';
+			//style.left = (left - w / 2) + 'px';
+            style.top = (top-165) + 'px';
             style.display = '';
+			var label = document.getElementById('topic_' + node.id + '_label');
+			w = label.offsetWidth;
+			style = label.style;
+            style.left = (-(w / 2 + 106)) + 'px';
          }
       };
    }
@@ -568,7 +581,10 @@ function onCreateLabelHandler(domElement, node) {
                 data-object="topic"                                           \
                 data-nil="$_desc_nil_$"                                       \
                 data-attribute="desc"                                         \
+				data-ok-button="Save"                                         \
+				data-cancel-button="Discard"                                   \
                 data-type="textarea">$_desc_$</span>                          \
+				<div class="clearfloat"></div>                                \
         </div>                                                                \
       </div>                                                                  \
       $_go_link_$                                                             \
@@ -672,8 +688,10 @@ function onCreateLabelHandler(domElement, node) {
 
   // Create a 'name' button and add it to the main node label
   var nameContainer = document.createElement('span'),
-    style = nameContainer.style;
+  style = nameContainer.style;
   nameContainer.className = 'name topic_' + node.id;
+  nameContainer.id = 'topic_' + node.id + '_label';
+  
   var littleHTML = '                                                    \
 		 <div class="label">$_name_$</div>                              \
 		 <div class="nodeOptions">';
