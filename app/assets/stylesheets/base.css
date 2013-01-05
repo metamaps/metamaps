@@ -90,19 +90,19 @@
   text-overflow: ellipsis;
 }
 
-.best_in_place_desc {
+.CardOnGraph .best_in_place_desc {
   width:160px;
-  height:200px;
+  height:180px;
   display:block;
   margin-top:2px;	
 }
 
-.best_in_place_desc input {
+.CardOnGraph .best_in_place_desc input {
   float: right;
   margin: 2px 0px 0px 2px;
   padding: 1px 5px;	
 }
 
-.best_in_place_desc input[value="Save"] {
+.CardOnGraph .best_in_place_desc input[value="Save"] {
 margin-right: -8px;
 }

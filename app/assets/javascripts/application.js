@@ -149,7 +149,8 @@ function addMetacode() {
 			yRadius:40,
 			xPos: 150,
 			yPos: 40,
-			speed:0.15, 
+			speed:0.15,
+			mouseWheel:true, 
 			bringToFront: true
 		});
 		metacodeIMGinit = true;

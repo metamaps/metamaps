@@ -127,6 +127,30 @@
 			return false;
 		});
 		
+		// Add code that makes up and down arrows scroll through.
+		$('.new_topic').bind('keydown keypress',this,function(event) {
+			//console.log(event)
+			if (event.keyCode == 38 || event.keyCode == 40) 
+			{
+				//e.preventDefault();
+			}
+		});
+		$('.new_topic').bind('keyup',this,function(event){
+			console.log(event);
+			/*key navigation through elements*/
+			if (event.keyCode == 38 || event.keyCode == 40) {
+				switch ( event.keyCode ) {
+					case 38: // Up
+						event.data.rotate(-1);
+						break;
+					case 40: // Down
+						event.data.rotate(1);
+						break;
+				}
+				return;
+			}
+		});
+		
 		// You will need this plugin for the mousewheel to work: http://plugins.jquery.com/project/mousewheel
 		if (options.mouseWheel)
 		{
@@ -149,10 +173,10 @@
 				//$(options.titleBox).html( ($(event.target).attr('title') ));							
 				if ( options.bringToFront && event.type == 'click' )				
 				{
-          $(options.titleBox).html( ($(event.target).attr('title') ));
-				  // METAMAPS CODE
-			    $('#topic_metacode').val($(event.target).attr('title'));
-			    // NOT METAMAPS CODE
+                    $(options.titleBox).html( ($(event.target).attr('title') ));
+				    // METAMAPS CODE
+			        $('#topic_metacode').val($(event.target).attr('title'));
+			        // NOT METAMAPS CODE
 					var	idx = $(event.target).data('itemIndex');	
 					var	frontIndex = event.data.frontIndex;
 					//var	diff = idx - frontIndex;                    
@@ -188,7 +212,7 @@
 		this.showFrontText = function()
 		{	
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
-      // METAMAPS CODE
+            // METAMAPS CODE
 			$('#topic_metacode').val($(items[this.frontIndex].image).attr('title'));
 			// NOT METAMAPS CODE
 			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
@@ -213,6 +237,7 @@
 		this.rotate = function(direction)
 		{	
 			this.frontIndex -= direction;
+			if (this.frontIndex == -1) this.frontIndex = items.length - 1;
 			this.frontIndex %= items.length;					 			
 			this.destRotation += ( Math.PI / items.length ) * ( 2*direction );
 			this.showFrontText();
