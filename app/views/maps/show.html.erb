@@ -22,14 +22,30 @@
 </div>
 <div class="clearfloat nodemargin"></div>
 
-<div class="maps" id="container">
+<div class="maps onMap" id="container">
   <div id="center-container">
     <div id="infovis"></div>    
   </div>
-  <div id="showcard">
-  </div>
 </div>
 <div class="clearfloat"></div>
+
+<% if authenticated? %>
+  <%= render :partial => 'newtopic' %>
+  <%= render :partial => 'newsynapse' %>
+<% end %>
+<%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
+  <%= form.hidden_field :time, :value => Time.now.to_i %>
+  <%= form.hidden_field :ids, :value => 0 %>
+<% end %>
+<script>
+  var dragged = 0;
+  mapid = <%= @map.id %>;
+  var int = setInterval(function(){
+      if (goRealtime) {
+        $('#MapRealtime').submit();
+      }
+    },4000);
+</script>
 
 <script>
   viewMode = "graph";
@@ -48,21 +64,4 @@
 				initialize("chaotic", true);
 		});
 	}
-</script>
-
-<% if authenticated? %>
-  <%= render :partial => 'newtopic' %>
-  <%= render :partial => 'newsynapse' %>
-<% end %>
-<%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
-  <%= form.hidden_field :time, :value => Time.now.to_i %>
-  <%= form.hidden_field :ids, :value => 0 %>
-<% end %>
-<script>
-  var dragged = 0;
-  var int = setInterval(function(){
-      if (goRealtime) {
-        $('#MapRealtime').submit();
-      }
-    },4000);
 </script>

@@ -532,7 +532,6 @@ function onCreateLabelHandler(domElement, node) {
   var html = '                                                                \
     <div class="CardOnGraph"                                                  \
          id="topic_$_id_$">                                                   \
-      <a href="#" class="close-link">close</a>                                \
       <p class="type best_in_place best_in_place_metacode"                    \
          data-url="/topics/$_id_$"                                            \
          data-object="topic"                                                  \
@@ -541,6 +540,7 @@ function onCreateLabelHandler(domElement, node) {
          data-type="select">$_metacode_$</p>                                  \
       <img alt="$_metacode_$"                                                 \
            class="icon"                                                       \
+		   title="Click to hide card"                                         \
            height="50"                                                        \
            width="50"                                                         \
            src="$_imgsrc_$" />                                                \
@@ -553,7 +553,7 @@ function onCreateLabelHandler(domElement, node) {
                 data-type="input">$_name_$</span>                             \
           <a href="/topics/$_id_$" class="topic-go-arrow" target="_blank">    \
             <img class="topic-go-arrow"                                       \
-                 title="Go to the topic page"                                 \
+                 title="Explore Topic"                                        \
                  src="/assets/go-arrow.png" />                                \
           </a>                                                                \
           <div class="clearfloat"></div>                                      \
@@ -629,10 +629,10 @@ function onCreateLabelHandler(domElement, node) {
   domElement.appendChild(showCard);
 
   // add some events to the label
-  $(showCard).find('a.close-link').click(function(){
+  $(showCard).find('img.icon').click(function(){
     delete node.selected;
     node.setData('dim', 25, 'current');
-    node.eachAdjacency(function (adj) {
+    /*node.eachAdjacency(function (adj) {
       adj.setDataset('end', {
         lineWidth: 2,
         color: '#222222'
@@ -642,7 +642,7 @@ function onCreateLabelHandler(domElement, node) {
     Mconsole.fx.animate({
       modes: ['edge-property:lineWidth:color'],
       duration: 500
-    });
+    });*/
     $('.showcard.topic_' + node.id).fadeOut('fast', function(){
       $('.name').css('display','block');
       Mconsole.plot();
@@ -655,15 +655,59 @@ function onCreateLabelHandler(domElement, node) {
   var nameContainer = document.createElement('span'),
     style = nameContainer.style;
   nameContainer.className = 'name topic_' + node.id;
-  nameContainer.innerHTML = '<div class="label">' + node.name + '</div>';
+  var littleHTML = '                                                    \
+		 <div class="label">$_name_$</div>                              \
+		 <div class="nodeOptions">';
+  if (mapid == null) {
+	  littleHTML += '                                                   \
+		   <span class="removeFromCanvas"                               \
+				 onclick="removeFromCanvas($_id_$)"                     \
+				 title="Click to remove topic from canvas">              \
+		   </span>';
+  }
+  else if (mapid != null && userid != null) {
+	  littleHTML += '                                               \
+	  <a href="/mappings/$_mapid_$/$_id_$/removefrommap"            \
+		  title="Click to remove topic from map"                    \
+		  class="removeFromMap"                                               \
+		  data-method="get"                                         \
+		  data-remote="true"                                        \
+		  rel="nofollow">                                           \
+	  </a>';
+  }
+  if (userid != null) {
+	  littleHTML += '                                               \
+	  <a href="/topics/$_id_$"                                      \
+		  title="Click to delete this topic"                        \
+		  class="deleteTopic"                                               \
+		  data-confirm="Delete this topic and all synapses linking to it?"  \
+		  data-method="delete"                                      \
+		  data-remote="true"                                        \
+		  rel="nofollow">                                           \
+	  </a>';
+  }
+  littleHTML += '</div>';
+  littleHTML = littleHTML.replace(/\$_id_\$/g, node.id);
+  littleHTML = littleHTML.replace(/\$_mapid_\$/g, mapid);
+  littleHTML = littleHTML.replace(/\$_name_\$/g, node.name);
+  nameContainer.innerHTML = littleHTML;
   domElement.appendChild(nameContainer);
   style.fontSize = "0.9em";
   style.color = "#222222";
 
   // add some events to the label
-  nameContainer.onclick = function(){
+  $(nameContainer).find('.label').click(function(){
     selectNodeOnClickHandler(node)
+  });
+  
+  nameContainer.onmouseover = function(){
+    $('.name.topic_' + node.id + ' .nodeOptions').css('display','block');
   }
+  
+  nameContainer.onmouseout = function(){
+    $('.name.topic_' + node.id + ' .nodeOptions').css('display','none');
+  }
+  
 
   //bind callbacks
   $(showCard).find('.type.best_in_place').bind("ajax:success", function() {

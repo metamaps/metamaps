@@ -10,6 +10,7 @@ ISSAD::Application.routes.draw do
   
   match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
   match 'maps/:id/realtime', to: 'maps#realtime', via: :get, as: :realtime
+  match 'mappings/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :get, as: :removefrommap
 
   resource :session
   

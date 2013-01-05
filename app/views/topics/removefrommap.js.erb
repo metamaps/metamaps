@@ -1,5 +1,5 @@
 if (Mconsole != null) {
-  var node = Mconsole.graph.getNode(<%= @topic.id %>);
+  var node = Mconsole.graph.getNode(<%= @mapping.topic_id %>);
   node.setData('alpha', 0, 'end');  
   node.eachAdjacency(function(adj) {  
 	adj.setData('alpha', 0, 'end');  
@@ -9,9 +9,6 @@ if (Mconsole != null) {
 			'edge-property:alpha'],  
 	duration: 1000  
   });
-  Mconsole.graph.removeNode(<%= @topic.id %>);
-  Mconsole.labels.disposeLabel(<%= @topic.id %>);
-}
-else {
-  $('#<%= dom_id(@topic) %>').fadeOut('slow');
+  Mconsole.graph.removeNode(<%= @mapping.topic_id %>);
+  Mconsole.labels.disposeLabel(<%= @mapping.topic_id %>);
 }

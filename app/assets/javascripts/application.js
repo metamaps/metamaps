@@ -21,7 +21,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null;
 
  $(document).ready(function() {
  
@@ -54,7 +54,6 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
           if (! sliding1) { 
             sliding1 = true; 
 			if (userid != null) {
-              $('.footer .menu').css('border','1px solid #000');
               $('.footer .menu').animate({
 				height: '252px'
 			  }, 300, function() {
@@ -78,7 +77,6 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 					height: '0px'
 				  }, 300, function() {
 					sliding1 = false;
-          $('.footer .menu').css('border','none');
 				  });
 			  } 
 		  },800); 
@@ -123,6 +121,23 @@ function saveToMap() {
   Coor = Coor.slice(0, -1);
   $('#map_topicsToMap').val(Coor);
   $('#new_map').fadeIn('fast');
+}
+
+
+// this is for hiding one topic from your canvas
+function removeFromCanvas(topic_id) {
+  var node = Mconsole.graph.getNode(topic_id);
+  node.setData('alpha', 0, 'end');  
+  node.eachAdjacency(function(adj) {  
+	adj.setData('alpha', 0, 'end');  
+  });  
+  Mconsole.fx.animate({  
+	modes: ['node-property:alpha',  
+			'edge-property:alpha'],  
+	duration: 1000  
+  });
+  Mconsole.graph.removeNode(topic_id);
+  Mconsole.labels.disposeLabel(topic_id);
 }
 
 function addMetacode() {

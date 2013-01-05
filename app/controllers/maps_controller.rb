@@ -107,14 +107,6 @@ class MapsController < ApplicationController
 	  @map.attributes = params[:map]
 	  @map.save
 	
-	  if params[:outtopics]
-		  @outtopics = params[:outtopics]
-		  @outtopics.each do |topic|
-			  @mapping = Mapping.where("map_id = ? AND topic_id = ?", @map.id, topic).first
-			  @mapping.delete
-		  end
-	  end
-	
     respond_with(@user, location: map_path(@map)) do |format|
     end
   end

@@ -129,7 +129,32 @@ class TopicsController < ApplicationController
 #    respond_with(@user, location: topic_url(@topic)) do |format|
 #    end
   end
-
+  
+  # GET mappings/:map_id/:topic_id/removefrommap
+  def removefrommap
+	  @current = current_user
+	  @mapping = Mapping.find_by_topic_id_and_map_id(params[:topic_id],params[:map_id])
+	  
+    @map = Map.find(params[:map_id])
+    @topic = Topic.find(params[:topic_id])
+    @mappings = @map.mappings.select{|m| 
+      if m.category == "Synapse"
+        m.synapse.topic1 == @topic || m.synapse.topic2 == @topic 
+      else
+        false
+      end
+    }
+    @mappings.each do |m|
+      m.delete
+    end
+    
+    @mapping.delete
+      
+	  respond_to do |format|
+      format.js
+    end
+  end
+  
   # DELETE topics/:id
   def destroy
 	  @current = current_user

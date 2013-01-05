@@ -2,9 +2,48 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.nodeOptions {
+  display:none;
+  position: absolute;
+  top: -5px;
+  right: -17px;
+}
+
+.onCanvas .removeFromMap {
+  display:none !important;
+}
+
+.onMap .removeFromCanvas {
+  display:none !important;
+}
+
+.unauthenticated .deleteTopic {
+  display:none !important;
+}
+
+.removeFromCanvas {
+  display: block;
+  width: 17px;
+  height: 16px;
+  background: url('removeFromCanvas.png') no-repeat 2px 0;
+}
+
+.removeFromMap {
+  display: block;
+  width: 17px;
+  height: 16px;
+  background: url('removeFromMap.png') no-repeat 2px 0;
+}
+
+.deleteTopic {
+  display: block;
+  width: 17px;
+  height: 16px;
+  background: url('delete.png') no-repeat 2px 0;
+}
+
 .topic { display:block; float:left; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
 
-.close-link,
 .topic .delete {
 position: absolute;
 top: -14px;
@@ -48,8 +87,8 @@ line-height: 24px;}
 }
 
 .topic-go-arrow {
-  width: 1em;
-  height: 1em;
+  width: 25px;
+  height: 25px;
   float: right;
 }
 
