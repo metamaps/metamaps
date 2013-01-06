@@ -51,12 +51,6 @@ function graphSettings(type) {
             onMouseMove: function(node, eventInfo, e) {
               onMouseMoveHandler(node, eventInfo, e);
             },
-            onMouseEnter: function () {
-               
-            },
-            onMouseLeave: function () {
-               
-            },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
 			    clickDragOnTopic(node, eventInfo, e);
@@ -192,12 +186,6 @@ function graphSettings(type) {
             onMouseMove: function(node, eventInfo, e) {
               onMouseMoveHandler(node, eventInfo, e);
             },
-            onMouseEnter: function () {
-               
-            },
-            onMouseLeave: function () {
-               
-            },
             //Update node positions when dragged
             onDragMove: function (node, eventInfo, e) {
 			   clickDragOnTopic(node, eventInfo, e);
@@ -235,7 +223,9 @@ function graphSettings(type) {
             onClick: function (node, eventInfo, e) {
 			   if (e.target.id != "infovis-canvas") return false;
                //clicking on an edge, a node, or clicking on blank part of canvas?
-               if (eventInfo.getEdge() != false || node.nodeFrom) {
+               console.log(eventInfo);
+               console.log(eventInfo.getNode());
+               if (eventInfo.getNode() == false) {
 					if (eventInfo.getEdge() != false) selectEdgeOnClickHandler(eventInfo.getEdge(), e);
 					else if (node.nodeFrom) selectEdgeOnClickHandler(node, e);  
 			   }
@@ -795,11 +785,21 @@ function onCreateLabelHandler(domElement, node) {
 
 }//onCreateLabelHandler
 
+//edge that the mouse is currently hovering over
 var edgeHover = false;
 
 function onMouseMoveHandler(node, eventInfo, e) {
   var edge = eventInfo.getEdge();
+  var node = eventInfo.getNode();
   
+  //if we're on top of a node object, act like there aren't edges under it
+  if (node != false) {
+    if (edgeHover) {
+      onMouseLeave(edgeHover);
+    }
+    return;
+  }
+
   if (edge == false && edgeHover != false) {
     //mouse not on an edge, but we were on an edge previously
     onMouseLeave(edgeHover);
