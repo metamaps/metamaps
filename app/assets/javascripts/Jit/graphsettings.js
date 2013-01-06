@@ -99,10 +99,11 @@ function graphSettings(type) {
 			   if (e.target.id != "infovis-canvas") return false;
                //clicking on a node, or clicking on blank part of canvas?
                if (node.nodeFrom) {
-					selectEdgeOnClickHandler(node);  
+                 selectEdgeOnClickHandler(node, e);  
 			   }
 			   else if (node && !node.nodeFrom) {
-                 selectNodeOnClickHandler(node);
+                 //do nothing - let it select edges, etc instead
+                 //we don't want to run double click handler
                } else {
                  canvasDoubleClickHandler(eventInfo.getPos(), e);
                }//if
@@ -235,8 +236,8 @@ function graphSettings(type) {
 			   if (e.target.id != "infovis-canvas") return false;
                //clicking on an edge, a node, or clicking on blank part of canvas?
                if (eventInfo.getEdge() != false || node.nodeFrom) {
-					if (eventInfo.getEdge() != false) selectEdgeOnClickHandler(eventInfo.getEdge());
-					else if (node.nodeFrom) selectEdgeOnClickHandler(node);  
+					if (eventInfo.getEdge() != false) selectEdgeOnClickHandler(eventInfo.getEdge(), e);
+					else if (node.nodeFrom) selectEdgeOnClickHandler(node, e);  
 			   }
 			   else if (node && !node.nodeFrom) {
 				 if (!Mconsole.busy) {
@@ -278,6 +279,18 @@ function graphSettings(type) {
          }
       };
    }
+
+   $('body').keypress(function(e) {
+     console.log(e);
+     switch(e.keyCode) {
+       case 114: case 82:
+         removeSelectedEdges();
+         break;
+       case 100: case 68:
+         deleteSelectedEdges();
+         break;
+     }//switch
+   });
 
    return t;
 }
@@ -364,7 +377,6 @@ var nodeSettings = {
 	  }
   }
   
-  
 // defining custom edges
  var edgeSettings = {  
 	  'customEdge': {  
@@ -408,57 +420,53 @@ var nodeSettings = {
 		}  
 	  }  
 	}
-	
-function selectEdgeOnClickHandler(adj) {
-      var showDesc = adj.getData("showDesc");
-	  if (showDesc) {
-		adj.setData('showDesc', false, 'current');
-	  	Mconsole.plot();  
-	  } else if (!showDesc) {
-	  	adj.setData('showDesc', true, 'current');
-	  	Mconsole.plot();
-	  }
+
+function selectEdgeOnClickHandler(adj, e) {
+  if (e.altKey) {
+    removeEdge(adj);
+  }
+  var showDesc = adj.getData("showDesc");
+  if (showDesc) {
+    deselectEdge(adj);
+    Mconsole.plot();
+  } else if (!showDesc) {
+    selectEdge(adj);
+    Mconsole.plot();
+  }
 }//selectEdgeOnClickHandler
 
 function selectNodeOnClickHandler(node) {
-   
   $('.showcard').css('display','none');
-	$('.name').css('display','block');
-	$('.name.topic_' + node.id).css('display','none');
-	$('.showcard.topic_' + node.id).fadeIn('fast');
+  $('.name').css('display','block');
+  $('.name.topic_' + node.id).css('display','none');
+  $('.showcard.topic_' + node.id).fadeIn('fast');
 				
-   //set final styles  
-   Mconsole.graph.eachNode(function (n) {
-      if (n.id != node.id) delete n.selected;
-      n.setData('dim', 25, 'current');
-      n.eachAdjacency(function (adj) {
-         adj.setDataset('end', {
-            lineWidth: 2,
-            color: '#222222'
-         });
-         adj.setData('showDesc', false, 'current');
-      });
-   });
-   if (!node.selected) {
-      node.selected = true;
-	  node.setData('dim', 1, 'current');  
+  //set final styles  
+  Mconsole.graph.eachNode(function (n) {
+    if (n.id != node.id) delete n.selected;
+    n.setData('dim', 25, 'current');
+    n.eachAdjacency(function (adj) {
+      deselectEdge(adj);
+    });
+  });
+  if (!node.selected) {
+    node.selected = true;
+    node.setData('dim', 1, 'current');  
 
-      node.eachAdjacency(function (adj) {
-         adj.setDataset('end', {
-            lineWidth: 4,
-            color: '#FFF'
-         });
-         adj.setData('showDesc', true, 'current');
-      });
-   } else {
-	  node.setData('dim', 25, 'current');
-      delete node.selected;
-   }
-   //trigger animation to final styles  
-   Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color'],
-      duration: 500
-   });
+    node.eachAdjacency(function (adj) {
+      selectEdge(adj);
+    });
+    Mconsole.plot();
+  } else {
+    node.setData('dim', 25, 'current');
+    delete node.selected;
+  }
+  //trigger animation to final styles  
+  Mconsole.fx.animate({
+    modes: ['edge-property:lineWidth:color'],
+    duration: 500
+  });
+  Mconsole.plot();
 }//selectNodeOnClickHandler
 
 //for the canvasDoubleClickHandler function
@@ -677,17 +685,9 @@ function onCreateLabelHandler(domElement, node) {
   $(showCard).find('img.icon').click(function(){
     delete node.selected;
     node.setData('dim', 25, 'current');
-    /*node.eachAdjacency(function (adj) {
-      adj.setDataset('end', {
-        lineWidth: 2,
-        color: '#222222'
-      });
-      adj.setData('showDesc', false, 'current');
+    node.eachAdjacency(function (adj) {
+      deselectEdge(adj);
     });
-    Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color'],
-      duration: 500
-    });*/
     $('.showcard.topic_' + node.id).fadeOut('fast', function(){
       $('.name').css('display','block');
       Mconsole.plot();
@@ -795,49 +795,137 @@ function onCreateLabelHandler(domElement, node) {
 
 }//onCreateLabelHandler
 
-var lol = new Object();
+var edgeHover = false;
 
 function onMouseMoveHandler(node, eventInfo, e) {
   var edge = eventInfo.getEdge();
   
-  if (edge == false && lol['edgeHover']) {
+  if (edge == false && edgeHover != false) {
     //mouse not on an edge, but we were on an edge previously
-    onMouseLeave(lol['edgeHover']);
-  } else if (edge != false && lol['edgeHover'] == false) {
+    onMouseLeave(edgeHover);
+  } else if (edge != false && edgeHover == false) {
     //mouse is on an edge, but there isn't a stored edge
     onMouseEnter(edge);
-  } else if (edge != false && lol['edgeHover'] != edge) {
+  } else if (edge != false && edgeHover != edge) {
     //mouse is on an edge, but a different edge is stored
-    onMouseLeave(lol['edgeHover'])
-    onMouseEnter(lol['edge']);
+    onMouseLeave(edgeHover)
+    onMouseEnter(edge);
   }
-  lol['edgeHover'] = edge;
+  edgeHover = edge;
 }
 
 function onMouseEnter(edge) {
-  console.log("Mouse enter");
   $('canvas').css('cursor', 'pointer');
-  edge.setDataset('end', {
-    lineWidth: 4,
-    color: '#FFF'
-  });
-  Mconsole.fx.animate({
-    modes: ['edge-property:lineWidth:color'],
-    duration: 100
-  });
-  Mconsole.plot();
+  var showDesc = edge.getData("showDesc");
+  if (!showDesc) {
+    edge.setDataset('end', {
+      lineWidth: 4,
+      color: '#222222'
+    });
+    Mconsole.fx.animate({
+      modes: ['edge-property:lineWidth:color'],
+      duration: 100
+    });
+    Mconsole.plot();
+  }
 }
 
 function onMouseLeave(edge) {
-  console.log("Mouse leave");
   $('canvas').css('cursor', 'default');
-  edge.setDataset('end', {
-    lineWidth: 2,
-    color: '#222222'
-  });
-  Mconsole.fx.animate({
-    modes: ['edge-property:lineWidth:color'],
-    duration: 100
-  });
+  var showDesc = edge.getData("showDesc");
+  if (!showDesc) {
+    edge.setDataset('end', {
+      lineWidth: 2,
+      color: '#222222'
+    });
+    Mconsole.fx.animate({
+      modes: ['edge-property:lineWidth:color'],
+      duration: 100
+    });
+  }
   Mconsole.plot();
+}
+ 
+// this is for hiding one topic from your canvas
+function removeEdge(edge) {
+  var id = edge.getData("id");
+  $.ajax({
+    type: "DELETE",
+    url: "/synapses/" + id,
+    success: function(){
+      hideEdge(edge);
+    },
+  });
+} 
+
+function hideEdge(edge) {
+  var from = edge.nodeFrom.id;
+  var to = edge.nodeTo.id;
+  edge.setData('alpha', 0, 'end');
+  Mconsole.fx.animate({
+    modes: ['edge-property:alpha'],
+    duration: 1000
+  });
+  Mconsole.graph.removeAdjacence(from, to);
+  Mconsole.plot();
+}
+
+function removeSelectedEdges() {
+  alert ("remove");
+}
+
+function deleteSelectedEdges() {
+  for (var i = 0; i < selectedEdges.length; i += 1) {
+    var edge = selectedEdges[i];
+    var id = edge.getData("id");
+    $.ajax({
+      type: "DELETE",
+      url: "/synapses/" + id,
+    });
+    hideEdge(edge);
+  }
+  selectedEdges = new Array();
+}
+
+//keeps track of all selected edges globally
+var selectedEdges = new Array();
+
+function selectEdge(edge) {
+  var showDesc = edge.getData("showDesc");
+  if (! showDesc) {
+    edge.setData('showDesc', true, 'current');
+    edge.setDataset('end', {
+      lineWidth: 4,
+      color: '#FFFFFF'
+    });
+    Mconsole.fx.animate({
+      modes: ['edge-property:lineWidth:color'],
+      duration: 100
+    });
+  }
+  selectedEdges.push(edge);
+}
+
+function deselectEdge(edge) {
+  var showDesc = edge.getData("showDesc");
+  if (showDesc) {
+    edge.setData('showDesc', false, 'current');
+    edge.setDataset('end', {
+      lineWidth: 2,
+      color: '#222222'
+    });
+
+    if (edgeHover == edge) {
+      edge.setDataset('end', {
+        lineWidth: 4,
+        color: '#222222'
+      });
+    }
+
+    Mconsole.fx.animate({
+      modes: ['edge-property:lineWidth:color'],
+      duration: 100
+    });
+  }
+  selectedEdges.splice(selectedEdges.indexOf(edge), 1);
 }
