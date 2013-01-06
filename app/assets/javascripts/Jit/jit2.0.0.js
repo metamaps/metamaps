@@ -2591,7 +2591,22 @@ Extras.Classes.Navigation = new Class({
     $.event.stop($.event.get(e, win));
     var val = this.config.zooming / 1000,
         ans = 1 + scroll * val;
-    this.canvas.scale(ans, ans);
+	if (ans > 1) {
+       if (5 >= this.canvas.scaleOffsetX) {
+		 this.canvas.scale(ans, ans);
+	   }
+	}
+	else if (ans < 1) {
+       if (this.canvas.scaleOffsetX >= 0.2) {
+		 this.canvas.scale(ans, ans);
+	   }
+	}
+	if (this.canvas.scaleOffsetX < 0.5) {
+		this.canvas.viz.labels.hideLabels(true);
+	}
+	else if (this.canvas.scaleOffsetX > 0.5) {
+		this.canvas.viz.labels.hideLabels(false);
+	}
   },
   
   onMouseDown: function(e, win, eventInfo) {

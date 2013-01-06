@@ -1,2 +1,3 @@
-$('.focusleft').append('<div id="saveNotify">Saved!</div>');
-$('#saveNotify').delay(1500).fadeOut('fast', function(){$('#saveNotify').remove()});
+$('.saveNotify').remove();
+$('.focusleft').append('<div class="saveNotify">Saved!</div>');
+$('.saveNotify').delay(1500).fadeOut('fast', function(){$('.saveNotify').remove()});
