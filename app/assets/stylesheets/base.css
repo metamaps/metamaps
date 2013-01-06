@@ -40,6 +40,7 @@
   background: url('bg.png');
   border-radius:15px;
   color:#000;
+  z-index: 25;
 }
 
 .CardOnGraph .scroll {

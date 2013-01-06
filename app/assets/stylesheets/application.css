@@ -38,6 +38,7 @@ body,
 .wrapper, 
 #container {
   height: 100%;
+  overflow:hidden;
 }
 
 html {
@@ -230,10 +231,18 @@ input[type="submit"] {
 }
 
 .wrapper h1.index {
-  position:absolute;
-  top:50px;
-  left:50px;
-  z-index:9999;
+  position: fixed;
+  bottom: 9px;
+  right: 0;
+  z-index: 9999;
+  width: auto;
+  background: url('black_bg.png');
+  padding: 0px 10px 0px 20px;
+  border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
+  height: 38px;
+  font-size: 30px;
+  line-height: 38px;
 }
 
 .nodemargin {
@@ -346,7 +355,8 @@ input[type="submit"] {
 }
 
 #cards {
-  margin:100px 0;	
+  height:100%;
+  overflow-y:scroll;	
 }
 
 #cards p.empty {
@@ -509,6 +519,18 @@ input[type="submit"] {
 }
 
 /* --- styling the logo button ---*/
+.footer {
+  width: 188px;
+  display: block;
+  position: fixed;
+  bottom: 9px;
+  height: 38px;
+  background: url('black_bg.png');
+  border-bottom-right-radius: 15px;
+  border-top-right-radius: 15px;
+  z-index: 15000;
+}
+
 .logo {
   position:fixed;
   bottom:6px;
@@ -522,7 +544,7 @@ input[type="submit"] {
 
 #mainTitle {
   float: left;
-  background: #000;
+  /*background: url('black_bg.png') repeat 0 0;*/
   padding: 0 5px;
   border-radius: 10px;
 }
@@ -545,10 +567,10 @@ input[type="submit"] {
   position:absolute;
   border:none;
   bottom:40px;
-  left:0;
+  left:10px;
   height:0px;
   z-index:12;
-  width:124px;
+  width:118px;
   color: #67AF9F;
   white-space: nowrap;
   text-align: center;
@@ -563,7 +585,7 @@ input[type="submit"] {
   box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
   -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
   -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
-  background: url('bg.png') no-repeat 0 0;
+  background: url('black_bg.png') repeat 0 0;
 }
 
 .footer ul li {
@@ -580,9 +602,9 @@ input[type="submit"] {
   border:none;
 }
 .footer ul li a:hover {
-  color:#2d6a5d;
+  color:#9E2;
 }
 .footer ul li a {
-  color: #67AF9F;
+  color: #FFF;
   display:block;
 }

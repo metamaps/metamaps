@@ -13,10 +13,6 @@
   display:none !important;
 }
 
-.onMap .removeFromCanvas {
-  display:none !important;
-}
-
 .unauthenticated .deleteTopic {
   display:none !important;
 }
@@ -42,7 +38,10 @@
   background: url('delete.png') no-repeat 2px 0;
 }
 
-.topic { display:block; float:left; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
+.topic { 
+  float:left; 
+  margin:30px 0 30px 50px;
+}
 
 .topic .delete {
 position: absolute;
@@ -58,7 +57,9 @@ padding: 0;
 cursor:pointer;
 }
 
-.topic .scroll { display:block; height:283px; }
+.topic .scroll { 
+  display:block; 
+}
 
 .topic .type {position: absolute;
 color: white;
@@ -74,8 +75,6 @@ line-height: 24px;}
 
 .topic .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
 .topic .desc h3 { font-style:normal; margin-top:5px; }
-
-.topic .link { position:absolute; width:140px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .topic-go-arrow {
   width: 25px;

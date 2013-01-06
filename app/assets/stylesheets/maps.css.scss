@@ -3,8 +3,11 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .saveMapLayout { 
-	margin:10px auto 5px auto;
-	width:87px;
+  float:left;
+}
+
+.saveMapLayout input {
+ margin-top:2px;
 }
 
 #MapRealtime { 

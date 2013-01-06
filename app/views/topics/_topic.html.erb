@@ -1,11 +1,58 @@
-<%= div_for topic, class: topic.metacode.name do %>
-	<% if topic.user == user %><%= link_to 'Delete', topic_path(topic), :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%><% end %>
-	<p class="type"><%= topic.metacode.name %></p>
-	<%= image_tag topic.metacode.icon, :class => 'icon', :size => '50x50' %>
-	<div class="scroll">
-		<%= link_to topic.name, topic_path(topic), :class => 'title' %>
-		<div class="desc"><p><%=topic.desc %></p></div>
-	</div>
-	<%= link_to topic.link, topic.link, :class => 'link', :target => '_blank' %>
-    <%= best_in_place topic, :name, :nil => 'lol' %>
+<%= div_for topic do %>
+<div class="CardOnGraph"                                                  
+         id="topic_<%=topic.id %>">
+      <% if topic.user == user %><%= link_to 'Delete', topic_path(topic), :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%><% end %>         
+      <p class="type best_in_place best_in_place_metacode"                    
+         data-url="/topics/<%=topic.id %>"                                            
+         data-object="topic"                                                  
+         data-collection='[["Action","Action"],["Activity","Activity"],["Bizarre","Bizarre"],["Catalyst","Catalyst"],["Closed","Closed"],["Experience","Experience"],["Future Dev","Future Dev"],["Group","Group"],["Idea","Idea"],["Implication","Implication"],["Insight","Insight"],["Intention","Intention"],["Knowledge","Knowledge"],["Location","Location"],["Open Issue","Open Issue"],["Opinion","Opinion"],["Opportunity","Opportunity"],["Person","Person"],["Platform","Platform"],["Problem","Problem"],["Question","Question"],["Reference","Reference"],["Requirement","Requirement"],["Resource","Resource"],["Role","Role"],["Task","Task"],["Tool","Tool"],["Trajectory","Trajectory"]]'                                 
+         data-attribute="metacode"                                            
+         data-type="select"><%= topic.metacode.name %></p>                                  
+      <%= image_tag topic.metacode.icon, :class => 'icon', :size => '50x50' %>                                                
+        <span class="title">                                                  
+          <span class="best_in_place best_in_place_name"                      
+                data-url="/topics/<%=topic.id %>"                                     
+                data-object="topic"                                           
+                data-attribute="name"                                         
+                data-type="input"><%=topic.name %></span>                             
+          <a href="/topics/<%=topic.id %>" class="topic-go-arrow" target="_blank">    
+            <img class="topic-go-arrow"                                       
+                 title="Explore Topic"                                        
+                 src="/assets/go-arrow.png" />                                
+          </a>                                                                
+          <div class="clearfloat"></div>                                      
+        </span>                                                               
+        <div class="contributor">                                             
+          Added by: <a href="/users/<%=topic.user.id %>" target="_blank"><%=topic.user.name %>  
+          </a>                                                                
+        </div>                                                                
+      <div class="scroll">                                                    
+        <div class="desc">                                                    
+          <span class="best_in_place best_in_place_desc"                      
+                data-url="/topics/<%=topic.id %>"                                     
+                data-object="topic"                                           
+                data-nil="<span class='gray'>Click to add description.</span>"                                       
+                data-attribute="desc"                                         
+				        data-ok-button="Save"                                         
+				        data-cancel-button="Discard"                                   
+                data-type="textarea"><%=topic.desc %></span>                          
+				<div class="clearfloat"></div>                                
+        </div>                                                                
+      </div>
+      <div class="link">
+      <% if (authenticated? && topic.permission == "commons") || topic.user == user  %>
+        <a href="<%=topic.link %>" class="go-link" target="_blank">[go]</a>
+        <span class="best_in_place best_in_place_link"                 
+            data-url="/topics/<%=topic.id %>"                                         
+            data-object="topic"                                               
+            data-attribute="link"
+            data-nil="<span class='gray'>Click to add link.</span>"            
+            data-type="input"><%=topic.link %></span> 
+      <% else %>
+        <a href="<%=topic.link %>" target="_blank"><%= topic.link %></a>
+      <% end %>
+      </div>      
+                       
+	  <div class="clearfloat"></div>                                          
+    </div>
 <% end %>

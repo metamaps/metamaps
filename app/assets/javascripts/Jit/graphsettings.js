@@ -96,8 +96,7 @@ function graphSettings(type) {
                  selectEdgeOnClickHandler(node, e);  
 			   }
 			   else if (node && !node.nodeFrom) {
-                 //do nothing - let it select edges, etc instead
-                 //we don't want to run double click handler
+                 selectNodeOnClickHandler(node, e);
                } else {
                  canvasDoubleClickHandler(eventInfo.getPos(), e);
                }//if
@@ -223,15 +222,13 @@ function graphSettings(type) {
             onClick: function (node, eventInfo, e) {
 			   if (e.target.id != "infovis-canvas") return false;
                //clicking on an edge, a node, or clicking on blank part of canvas?
-               console.log(eventInfo);
-               console.log(eventInfo.getNode());
                if (eventInfo.getNode() == false) {
 					if (eventInfo.getEdge() != false) selectEdgeOnClickHandler(eventInfo.getEdge(), e);
 					else if (node.nodeFrom) selectEdgeOnClickHandler(node, e);  
 			   }
 			   else if (node && !node.nodeFrom) {
 				 if (!Mconsole.busy) {
-					selectNodeOnClickHandler(node);
+					selectNodeOnClickHandler(node, e);
 					Mconsole.onClick(node.id, {  
 					   hideLabels: false  
 					});
@@ -270,7 +267,7 @@ function graphSettings(type) {
       };
    }
 
-   $('body').keypress(function(e) {
+   /*$('body').keypress(function(e) {
      console.log(e);
      switch(e.keyCode) {
        case 114: case 82:
@@ -280,7 +277,7 @@ function graphSettings(type) {
          deleteSelectedEdges();
          break;
      }//switch
-   });
+   });*/
 
    return t;
 }
@@ -412,9 +409,13 @@ var nodeSettings = {
 	}
 
 function selectEdgeOnClickHandler(adj, e) {
-  if (e.altKey) {
-    removeEdge(adj);
+  if (!e.shiftKey) {
+	for (var i = 0; i < selectedEdges.length; i += 1) {
+      var edge = selectedEdges[i];
+      deselectEdge(edge);
+    }  
   }
+  
   var showDesc = adj.getData("showDesc");
   if (showDesc) {
     deselectEdge(adj);
@@ -425,24 +426,26 @@ function selectEdgeOnClickHandler(adj, e) {
   }
 }//selectEdgeOnClickHandler
 
-function selectNodeOnClickHandler(node) {
-  $('.showcard').css('display','none');
-  $('.name').css('display','block');
-  $('.name.topic_' + node.id).css('display','none');
-  $('.showcard.topic_' + node.id).fadeIn('fast');
+function selectNodeOnClickHandler(node, e) {
 				
-  //set final styles  
-  Mconsole.graph.eachNode(function (n) {
-    if (n.id != node.id) delete n.selected;
-    n.setData('dim', 25, 'current');
-    n.eachAdjacency(function (adj) {
-      deselectEdge(adj);
-    });
-  });
+  //set final styles 
+  if (!e.shiftKey) { 
+	  Mconsole.graph.eachNode(function (n) {
+		if (n.id != node.id) {
+			delete n.selected;
+			n.setData('onCanvas',false);
+		}
+		
+		n.setData('dim', 25, 'current');
+		n.eachAdjacency(function (adj) {
+		  deselectEdge(adj);
+		});
+	  });
+  }
   if (!node.selected) {
     node.selected = true;
-    node.setData('dim', 1, 'current');  
-
+    node.setData('dim', 30, 'current');  
+    node.setData('onCanvas',true);
     node.eachAdjacency(function (adj) {
       selectEdge(adj);
     });
@@ -450,6 +453,7 @@ function selectNodeOnClickHandler(node) {
   } else {
     node.setData('dim', 25, 'current');
     delete node.selected;
+	node.setData('onCanvas',false);
   }
   //trigger animation to final styles  
   Mconsole.fx.animate({
@@ -507,7 +511,7 @@ function clickDragOnTopic(node, eventInfo, e) {
 		   Mconsole.plot();
 	   }
 	   // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
-	   else if (e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) {
+	   else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && userid != null) {
 		   if (tempInit == false) {
 			  tempNode = node;
 			  tempInit = true;   
@@ -535,9 +539,9 @@ function clickDragOnTopic(node, eventInfo, e) {
 			  var myX = e.clientX - 110;
 			  var myY = e.clientY - 30;
 			  $('#new_topic').css('left',myX + "px");
-        $('#new_topic').css('top',myY + "px");
-        $('#new_synapse').css('left',myX + "px");
-        $('#new_synapse').css('top',myY + "px");
+              $('#new_topic').css('top',myY + "px");
+              $('#new_synapse').css('left',myX + "px");
+              $('#new_synapse').css('top',myY + "px");
 			  $('#topic_x').val(eventInfo.getPos().x);
 			  $('#topic_y').val(eventInfo.getPos().y);
 			  Mconsole.plot();
@@ -594,12 +598,14 @@ function onCreateLabelHandler(domElement, node) {
 				<div class="clearfloat"></div>                                \
         </div>                                                                \
       </div>                                                                  \
+	  <div class="link">                                                      \
       $_go_link_$                                                             \
       $_a_tag_$<span class="best_in_place best_in_place_link"                 \
             data-url="/topics/$_id_$"                                         \
             data-object="topic"                                               \
             data-attribute="link"                                             \
             data-type="input">$_link_$</span>$_close_a_tag_$                  \
+	  </div>                                                                  \
 	  <div class="clearfloat"></div>                                          \
     </div>';
 
@@ -607,8 +613,14 @@ function onCreateLabelHandler(domElement, node) {
   var go_link, a_tag, close_a_tag;
   if (userid == null) {
     go_link = '';
-    a_tag = '<a href="' + node.getData("link") + '">';
-    close_a_tag = '</a>';
+	if (node.getData("link") != "") {
+      a_tag = '<a href="' + node.getData("link") + '">';
+      close_a_tag = '</a>';
+	}
+	else { 
+	  a_tag = '';
+	  close_a_tag = '';
+    }  
   } else {
     go_link = '<a href="' + node.getData("link") + '" ' + 
               '   class="go-link" target="_blank">[go]</a>';
@@ -651,7 +663,7 @@ function onCreateLabelHandler(domElement, node) {
   html = html.replace(/\$_go_link_\$/g, go_link);
   html = html.replace(/\$_a_tag_\$/g, a_tag);
   html = html.replace(/\$_close_a_tag_\$/g, close_a_tag);
-  if (node.getData("link") == "") {
+  if (node.getData("link") == "" && userid != null) {
     html = html.replace(/\$_link_\$/g, link_nil);
   } else {
     html = html.replace(/\$_link_\$/g, node.getData("link"));
@@ -673,13 +685,9 @@ function onCreateLabelHandler(domElement, node) {
 
   // add some events to the label
   $(showCard).find('img.icon').click(function(){
-    delete node.selected;
-    node.setData('dim', 25, 'current');
-    node.eachAdjacency(function (adj) {
-      deselectEdge(adj);
-    });
     $('.showcard.topic_' + node.id).fadeOut('fast', function(){
-      $('.name').css('display','block');
+      node.setData('dim', 25, 'current');
+	  $('.name').css('display','block');
       Mconsole.plot();
     });
   });
@@ -695,24 +703,28 @@ function onCreateLabelHandler(domElement, node) {
   var littleHTML = '                                                    \
 		 <div class="label">$_name_$</div>                              \
 		 <div class="nodeOptions">';
-  if (mapid == null) {
+  if (userid == null && node.id != Mconsole.root) {
 	  littleHTML += '                                                   \
 		   <span class="removeFromCanvas"                               \
 				 onclick="removeFromCanvas($_id_$)"                     \
 				 title="Click to remove topic from canvas">              \
 		   </span>';
   }
-  else if (mapid != null && userid != null) {
+  else if (mapid != null && userid != null && node.id != Mconsole.root) {
 	  littleHTML += '                                               \
+	  <span class="removeFromCanvas"                                \
+				 onclick="removeFromCanvas($_id_$)"                 \
+				 title="Click to remove topic from canvas">         \
+	  </span>                                                       \
 	  <a href="/mappings/$_mapid_$/$_id_$/removefrommap"            \
 		  title="Click to remove topic from map"                    \
-		  class="removeFromMap"                                               \
+		  class="removeFromMap"                                     \
 		  data-method="get"                                         \
 		  data-remote="true"                                        \
 		  rel="nofollow">                                           \
 	  </a>';
   }
-  if (userid != null) {
+  if (userid != null && node.id != Mconsole.root) {
 	  littleHTML += '                                               \
 	  <a href="/topics/$_id_$"                                      \
 		  title="Click to delete this topic"                        \
@@ -733,8 +745,13 @@ function onCreateLabelHandler(domElement, node) {
   style.color = "#222222";
 
   // add some events to the label
-  $(nameContainer).find('.label').click(function(){
-    selectNodeOnClickHandler(node)
+  $(nameContainer).find('.label').click(function(e){
+    $('.showcard').css('display','none');
+    $('.name').css('display','block');
+    $('.name.topic_' + node.id).css('display','none');
+    $('.showcard.topic_' + node.id).fadeIn('fast');
+	selectNodeOnClickHandler(node,e);
+	node.setData('dim', 1, 'current');
   });
   
   nameContainer.onmouseover = function(){
@@ -868,6 +885,14 @@ function hideEdge(edge) {
   });
   Mconsole.graph.removeAdjacence(from, to);
   Mconsole.plot();
+}
+
+function hideSelectedEdges() {
+  for (var i = 0; i < selectedEdges.length; i += 1) {
+    var edge = selectedEdges[i];
+    hideEdge(edge);
+  }
+  selectedEdges = new Array();
 }
 
 function removeSelectedEdges() {

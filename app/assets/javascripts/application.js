@@ -41,10 +41,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       event.preventDefault();
     });
 	
-	$(".focus .desc").mCustomScrollbar(); 
+	//$("#cards").mCustomScrollbar(); 
 	$(".scroll").mCustomScrollbar();
 	
-	$('.nodemargin').css('padding-top',$('.focus').css('height'));	
+	//$('.nodemargin').css('padding-top',$('.focus').css('height'));	
 	
 	// controls the sliding hover of the menus at the top
 	var sliding1 = false; 
@@ -169,7 +169,3 @@ function MconsoleReset() {
 	Mconsole.canvas.scale((1/mX),(1/mY));
 	
 }
-
-
- 
- 

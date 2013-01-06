@@ -1,8 +1,17 @@
   <div class="headertop">
-    <% if authenticated? %><button onclick="saveToMap();">Save to Map</button><% end %>
+    <button onclick="hideSelectedEdges();">Hide Selected</button>
+    <% if authenticated? %>
+      <button onclick="deleteSelectedEdges();">Permanently Delete Selected</button>
+      <button onclick="saveToMap();">Save to Map</button>      
+    <% end %>
     <button onclick='clearCanvas();'>Clear Canvas</button>
   </div>
   <div class="clearfloat"></div>
+  
+<h1 class="index">
+  Console
+</h1>
+
   <div class="maps onCanvas" id="container">
     <div id="center-container">
       <div id="infovis"></div>    

@@ -1,3 +1,2 @@
-$('.saveNotify').remove();
-$('.focusleft').append('<div class="saveNotify">Saved!</div>');
-$('.saveNotify').delay(1500).fadeOut('fast', function(){$('.saveNotify').remove()});
+$('#saveLayout').attr('value','Saved!');
+setTimeout(function(){$('#saveLayout').attr('value','Save Layout')},1500);
