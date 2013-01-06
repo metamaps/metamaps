@@ -48,7 +48,9 @@ function graphSettings(type) {
             enable: true,
 			enableForEdges: true,
             type: 'HTML',
-            //Change cursor style when hovering a node
+            onMouseMove: function(node, eventInfo, e) {
+              onMouseMoveHandler(node, eventInfo, e);
+            },
             onMouseEnter: function () {
                
             },
@@ -94,7 +96,6 @@ function graphSettings(type) {
             },
             //Add also a click handler to nodes
             onClick: function (node, eventInfo, e) {
-			   console.log(e);
 			   if (e.target.id != "infovis-canvas") return false;
                //clicking on a node, or clicking on blank part of canvas?
                if (node.nodeFrom) {
@@ -187,7 +188,9 @@ function graphSettings(type) {
          Events: {
             enable: true,
             type: 'HTML',
-            //Change cursor style when hovering a node
+            onMouseMove: function(node, eventInfo, e) {
+              onMouseMoveHandler(node, eventInfo, e);
+            },
             onMouseEnter: function () {
                
             },
@@ -295,24 +298,30 @@ var renderMidArrow = function(from, to, dim, swap, canvas){
         // compute the midpoint of the edge line 
         var midPoint = new $jit.Complex((to.x + from.x) / 2, (to.y + from.y) / 2); 
         // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
-        midPoint.x += (vect.x / 0.7); 
-        midPoint.y += (vect.y / 0.7); 
+        var arrowPoint = new $jit.Complex((vect.x / 0.7) + midPoint.x, (vect.y / 0.7) + midPoint.y);
         // compute the tail intersection point with the edge line 
-        var intermediatePoint = new $jit.Complex(midPoint.x - vect.x, 
-midPoint.y - vect.y); 
+        var intermediatePoint = new $jit.Complex(arrowPoint.x - vect.x, 
+arrowPoint.y - vect.y); 
         // vector perpendicular to vect 
         var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
         var v1 = intermediatePoint.add(normal); 
         var v2 = intermediatePoint.$add(normal.$scale(-1)); 
 
-        //ctx.strokeStyle = 'black';
+        //draw circle
+        //ctx.strokeStyle = "rgb(150,0,0)";
+        //ctx.beginPath();
+        //ctx.arc(midPoint.x, midPoint.y, 8, 0, (Math.PI/180)*360, true);
+        //ctx.stroke();
+        //ctx.closePath();
+
+        //ctx.strokeStyle = "#222222";
         ctx.beginPath(); 
         ctx.moveTo(from.x, from.y); 
         ctx.lineTo(to.x, to.y); 
         ctx.stroke(); 
         ctx.beginPath(); 
         ctx.moveTo(v1.x, v1.y); 
-        ctx.lineTo(midPoint.x, midPoint.y); 
+        ctx.lineTo(arrowPoint.x, arrowPoint.y); 
         ctx.lineTo(v2.x, v2.y); 
         ctx.stroke(); 
 };
@@ -785,3 +794,50 @@ function onCreateLabelHandler(domElement, node) {
   });
 
 }//onCreateLabelHandler
+
+var lol = new Object();
+
+function onMouseMoveHandler(node, eventInfo, e) {
+  var edge = eventInfo.getEdge();
+  
+  if (edge == false && lol['edgeHover']) {
+    //mouse not on an edge, but we were on an edge previously
+    onMouseLeave(lol['edgeHover']);
+  } else if (edge != false && lol['edgeHover'] == false) {
+    //mouse is on an edge, but there isn't a stored edge
+    onMouseEnter(edge);
+  } else if (edge != false && lol['edgeHover'] != edge) {
+    //mouse is on an edge, but a different edge is stored
+    onMouseLeave(lol['edgeHover'])
+    onMouseEnter(lol['edge']);
+  }
+  lol['edgeHover'] = edge;
+}
+
+function onMouseEnter(edge) {
+  console.log("Mouse enter");
+  $('canvas').css('cursor', 'pointer');
+  edge.setDataset('end', {
+    lineWidth: 4,
+    color: '#FFF'
+  });
+  Mconsole.fx.animate({
+    modes: ['edge-property:lineWidth:color'],
+    duration: 100
+  });
+  Mconsole.plot();
+}
+
+function onMouseLeave(edge) {
+  console.log("Mouse leave");
+  $('canvas').css('cursor', 'default');
+  edge.setDataset('end', {
+    lineWidth: 2,
+    color: '#222222'
+  });
+  Mconsole.fx.animate({
+    modes: ['edge-property:lineWidth:color'],
+    duration: 100
+  });
+  Mconsole.plot();
+}
