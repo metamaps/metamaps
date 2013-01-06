@@ -28,8 +28,9 @@ if ( Mconsole != null) {
       });
     temp.data.$direction = d;
     Mconsole.fx.plotLine(temp, Mconsole.canvas);
+    selectEdge(temp);
     Mconsole.fx.animate({  
-      modes: ['edge-property:lineWidth'],  
+      modes: ['edge-property:lineWidth:color'],  
       duration: 400  
       });
 }
