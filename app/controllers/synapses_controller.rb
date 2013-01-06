@@ -116,6 +116,15 @@ class SynapsesController < ApplicationController
     end
   end
 
+  # POST mappings/:map_id/:synapse_id/removefrommap
+  def removefrommap
+    @mapping = Mapping.find_by_synapse_id_and_map_id(params[:synapse_id],params[:map_id])
+    @mapping.delete
+
+    respond_to do |format|
+      format.js
+    end
+  end
   
   # DELETE synapses/:id
   def destroy
