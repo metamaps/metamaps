@@ -24,7 +24,7 @@ end
 		
 		#json.adjacencies topic.synapses2.delete_if{|synapse| (not @topics.include?(synapse.topic1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.topic1.authorize_to_view(current)) } do |json, synapse|
 		
-	      json.adjacencies topic.synapses1.delete_if{|synapse| (not @topics.include?(synapse.topic2)) || (not synapse.authorize_to_view(current)) || (not synapse.topic2.authorize_to_view(current)) } do |json, synapse|
+	      json.adjacencies topic.synapses1.delete_if{|synapse| (not @synapses.include?(synapse)) || (not @topics.include?(synapse.topic2)) || (not synapse.authorize_to_view(current)) || (not synapse.topic2.authorize_to_view(current)) } do |json, synapse|
 				json.nodeTo synapse.node2_id
 				json.nodeFrom synapse.node1_id
 				
