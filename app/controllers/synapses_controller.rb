@@ -115,12 +115,17 @@ class SynapsesController < ApplicationController
     respond_with(@user, location: synapse_url(@synapse)) do |format|
     end
   end
+
   
   # DELETE synapses/:id
   def destroy
-	  @current = current_user
-	  @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
-	
-	  @synapse.delete if @synapse
+    @current = current_user
+    @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
+
+    @synapse.mappings.each do |m|
+      m.delete
+    end
+
+    @synapse.delete if @synapse
   end
 end
