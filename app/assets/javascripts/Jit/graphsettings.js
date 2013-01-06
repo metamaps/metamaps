@@ -871,7 +871,19 @@ function hideEdge(edge) {
 }
 
 function removeSelectedEdges() {
-  alert ("remove");
+  for (var i = 0; i < selectedEdges.length; i += 1) {
+    if (mapid != null) {
+      var edge = selectedEdges[i];
+      var id = edge.getData("id");
+      //delete mapping of id mapid
+      $.ajax({
+        type: "POST",
+        url: "/mappings/" + mapid + "/" + id + "/removefrommap",
+      });
+    }
+    hideEdge(edge);
+  }
+  selectedEdges = new Array();
 }
 
 function deleteSelectedEdges() {
