@@ -44,7 +44,7 @@
 
 .CardOnGraph .scroll {
    display:block;
-   height:232px;
+   height:230px;
 }
  
 .CardOnGraph .type {
@@ -97,7 +97,7 @@
 }
 
 .CardOnGraph .best_in_place_desc {
-  width:140px;
+  width:155px;
   display:block;
   margin-top:2px;	
 }

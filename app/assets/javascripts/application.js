@@ -158,6 +158,18 @@ function addMetacode() {
 	}
 }
 
+function MconsoleReset() {
+	
+	var tX = Mconsole.canvas.translateOffsetX;
+	var tY = Mconsole.canvas.translateOffsetY;
+	Mconsole.canvas.translate(-tX,-tY);
+	
+	var mX = Mconsole.canvas.scaleOffsetX;
+	var mY = Mconsole.canvas.scaleOffsetY;
+	Mconsole.canvas.scale((1/mX),(1/mY));
+	
+}
+
 
  
  

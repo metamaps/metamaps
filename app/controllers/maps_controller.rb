@@ -138,7 +138,7 @@ class MapsController < ApplicationController
 	  @map = Map.find(params[:id])
 		
     @time = params[:map][:time]
-    @time = @time.to_i
+    @time = @time.to_i - 10
     
     @topics = Array.new()
     @synapses = Array.new()
