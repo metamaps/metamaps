@@ -409,18 +409,18 @@ var nodeSettings = {
 	}
 
 function selectEdgeOnClickHandler(adj, e) {
+  var showDesc = adj.getData("showDesc");
+  if (showDesc) {
+    deselectEdge(adj);
+    Mconsole.plot();
+  } 
   if (!e.shiftKey) {
 	for (var i = 0; i < selectedEdges.length; i += 1) {
       var edge = selectedEdges[i];
       deselectEdge(edge);
     }  
   }
-  
-  var showDesc = adj.getData("showDesc");
-  if (showDesc) {
-    deselectEdge(adj);
-    Mconsole.plot();
-  } else if (!showDesc) {
+  if (!showDesc) {
     selectEdge(adj);
     Mconsole.plot();
   }
@@ -703,7 +703,7 @@ function onCreateLabelHandler(domElement, node) {
   var littleHTML = '                                                    \
 		 <div class="label">$_name_$</div>                              \
 		 <div class="nodeOptions">';
-  if (userid == null && node.id != Mconsole.root) {
+  if ((userid == null || mapid == null) && node.id != Mconsole.root) {
 	  littleHTML += '                                                   \
 		   <span class="removeFromCanvas"                               \
 				 onclick="removeFromCanvas($_id_$)"                     \
@@ -716,10 +716,10 @@ function onCreateLabelHandler(domElement, node) {
 				 onclick="removeFromCanvas($_id_$)"                 \
 				 title="Click to remove topic from canvas">         \
 	  </span>                                                       \
-	  <a href="/mappings/$_mapid_$/$_id_$/removefrommap"            \
+	  <a href="/topics/$_mapid_$/$_id_$/removefrommap"            \
 		  title="Click to remove topic from map"                    \
 		  class="removeFromMap"                                     \
-		  data-method="get"                                         \
+		  data-method="post"                                         \
 		  data-remote="true"                                        \
 		  rel="nofollow">                                           \
 	  </a>';
@@ -903,7 +903,7 @@ function removeSelectedEdges() {
       //delete mapping of id mapid
       $.ajax({
         type: "POST",
-        url: "/mappings/" + mapid + "/" + id + "/removefrommap",
+        url: "/synapses/" + mapid + "/" + id + "/removefrommap",
       });
     }
     hideEdge(edge);
@@ -965,4 +965,34 @@ function deselectEdge(edge) {
     });
   }
   selectedEdges.splice(selectedEdges.indexOf(edge), 1);
+}
+
+function hideSelectedNodes() {
+  Mconsole.graph.eachNode( function (n) {
+	  if (n.data.$onCanvas == true && n.id != Mconsole.root) {	  
+		  removeFromCanvas(n.id);	
+	  }
+  });
+}
+
+function removeSelectedNodes() {
+  Mconsole.graph.eachNode( function (n) {
+	  if (n.data.$onCanvas == true && n.id != Mconsole.root) {	  
+		  $.ajax({
+			type: "POST",
+			url: "/topics/" + mapid + "/" + n.id + "/removefrommap",
+		  });	
+	  }
+  });
+}
+
+function deleteSelectedNodes() {
+  Mconsole.graph.eachNode( function (n) {
+	  if (n.data.$onCanvas == true && n.id != Mconsole.root) {	  
+		$.ajax({
+		  type: "DELETE",
+		  url: "/topics/" + n.id,
+		});	
+	  }
+  });
 }
