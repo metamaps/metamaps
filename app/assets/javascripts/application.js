@@ -115,15 +115,28 @@ function saveLayout(id) {
 
 // this is to save your console to a map
 function saveToMap() {
-  var Coor = "";
+  var nodes_data = "", synapses_data = "";
+  var synapses_array = new Array();
   Mconsole.graph.eachNode(function(n) {
-    Coor = Coor + n.id + '/' + n.pos.x + '/' + n.pos.y + ',';
+    nodes_data += n.id + '/' + n.pos.x + '/' + n.pos.y + ',';
+    n.eachAdjacency(function(adj) {
+      synapses_array.push(adj.getData("id"));
+    });
   });
-  Coor = Coor.slice(0, -1);
-  $('#map_topicsToMap').val(Coor);
+
+  //get unique values only
+  synapses_array = $.grep(synapses_array, function(value, key){
+    return $.inArray(value, synapses_array) === key;
+  });
+
+  synapses_data = synapses_array.join();
+  console.log(synapses_data);
+  nodes_data = nodes_data.slice(0, -1);
+
+  $('#map_topicsToMap').val(nodes_data);
+  $('#map_synapsesToMap').val(synapses_data);
   $('#new_map').fadeIn('fast');
 }
-
 
 // this is for hiding one topic from your canvas
 function removeFromCanvas(topic_id) {

@@ -307,13 +307,6 @@ arrowPoint.y - vect.y);
         var v1 = intermediatePoint.add(normal); 
         var v2 = intermediatePoint.$add(normal.$scale(-1)); 
 
-        //draw circle
-        //ctx.strokeStyle = "rgb(150,0,0)";
-        //ctx.beginPath();
-        //ctx.arc(midPoint.x, midPoint.y, 8, 0, (Math.PI/180)*360, true);
-        //ctx.stroke();
-        //ctx.closePath();
-
         //ctx.strokeStyle = "#222222";
         ctx.beginPath(); 
         ctx.moveTo(from.x, from.y); 
@@ -392,13 +385,32 @@ var nodeSettings = {
 		  var desc = adj.getData("desc");
 		  var showDesc = adj.getData("showDesc");
 		  if( desc != "" && showDesc ) { 
-			 //now adjust the label placement 
+            //now adjust the label placement 
+            var ctx = canvas.getCtx();
 			var radius = canvas.getSize(); 
 			var x = parseInt((pos.x + posChild.x - (desc.length * 5)) /2); 
 			var y = parseInt((pos.y + posChild.y) /2); 
-			canvas.getCtx().fillStyle = '#000';
-			canvas.getCtx().font = 'bold 14px arial';
-			canvas.getCtx().fillText(desc, x, y); 
+			ctx.font = 'bold 14px arial';
+
+            //render background
+            ctx.fillStyle = '#FFF';
+            var margin = 5;
+            var height = 14 + margin; //font size + margin
+            var CURVE = height / 2; //offset for curvy corners
+            var width = ctx.measureText(desc).width + 2 * margin - 2 * CURVE
+            var labelX = x - margin + CURVE;
+            var labelY = y - height + margin;
+            ctx.fillRect(labelX, labelY, width, height);
+
+            //curvy corners woo - circles in place of last CURVE pixels of rect
+            ctx.beginPath();
+            ctx.arc(labelX, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
+            ctx.arc(labelX + width, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
+            ctx.fill();
+            
+            //render text
+			ctx.fillStyle = '#000';
+			ctx.fillText(desc, x, y); 
 		  }
 		}, 'contains' : function(adj, pos) { 
 				var from = adj.nodeFrom.pos.getc(true), 
@@ -409,39 +421,46 @@ var nodeSettings = {
 	}
 
 function editEdge(edge, e) {
-  deselectEdge(edge); //so the label is missing while editing
-  if (!document.getElementById('edit_synapse')) {
-    var edit_div = document.createElement('div');
-    edit_div.setAttribute('id', 'edit_synapse');
-    edit_div.setAttribute('class', 'best_in_place best_in_place_desc');
-    edit_div.setAttribute('data-object', 'synapse');
-    edit_div.setAttribute('data-attribute', 'desc');
-    edit_div.setAttribute('data-type', 'input');
-    //TODO how to get blank data-nil
-    edit_div.setAttribute('data-nil', ' ');
-    $('.main .wrapper').append(edit_div);
-  }//if
+  //reset so we don't interfere with other edges
+  $('#edit_synapse').remove();
 
+  deselectEdge(edge); //so the label is missing while editing
+  var edit_div = document.createElement('div');
+  edit_div.setAttribute('id', 'edit_synapse');
+  $('.main .wrapper').append(edit_div);
+  $('#edit_synapse').attr('class', 'best_in_place best_in_place_desc');
+  $('#edit_synapse').attr('data-object', 'synapse');
+  $('#edit_synapse').attr('data-attribute', 'desc');
+  $('#edit_synapse').attr('data-type', 'input');
+  //TODO how to get blank data-nil
+  $('#edit_synapse').attr('data-nil', ' ');
   $('#edit_synapse').attr('data-url', '/synapses/' + edge.getData("id"));
   $('#edit_synapse').html(edge.getData("desc"));
+
   $('#edit_synapse').css('position', 'absolute');
   $('#edit_synapse').css('left', e.clientX);
   $('#edit_synapse').css('top', e.clientY);
 
   $('#edit_synapse').bind("ajax:success", function() {
     var desc = $(this).html();
-    $('#edit_synapse').hide();
     edge.setData("desc", desc);
     selectEdge(edge);
     Mconsole.plot();
+    $('#edit_synapse').remove();
   });
 
   $('#edit_synapse').focusout(function() {
-    $('#edit_synapse').hide();
+    //in case they cancel
+//    $('#edit_synapse').hide();
   });
   
   //css stuff above moves it, this activates it
   $('#edit_synapse').click();
+  $('#edit_synapse form').submit(function() {
+    //hide it once form submits.
+    //If you don't do this, and data is unchanged, it'll show up on canvas
+    $('#edit_synapse').hide();
+  });
   $('#edit_synapse input').focus();
   $('#edit_synapse').show();
 }
@@ -737,11 +756,7 @@ function onCreateLabelHandler(domElement, node) {
 
   // add some events to the label
   $(showCard).find('img.icon').click(function(){
-    $('.showcard.topic_' + node.id).fadeOut('fast', function(){
-      node.setData('dim', 25, 'current');
-	  $('.name').css('display','block');
-      Mconsole.plot();
-    });
+    hideCard(node);
   });
   
   $(showCard).find('.scroll').mCustomScrollbar();
@@ -853,6 +868,19 @@ function onCreateLabelHandler(domElement, node) {
   });
 
 }//onCreateLabelHandler
+
+function hideCard(node) {
+  var card = '.showcard';
+  if (node != null) {
+    card += '.topic_' + node.id;
+  }
+  
+  $(card).fadeOut('fast', function(){
+    node.setData('dim', 25, 'current');
+    $('.name').show();
+    Mconsole.plot();
+  });
+}
 
 //edge that the mouse is currently hovering over
 var edgeHover = false;

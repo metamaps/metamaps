@@ -52,7 +52,7 @@ class MapsController < ApplicationController
   def create
     
     @user = current_user
-	  @map = Map.new()
+    @map = Map.new()
     @map.name = params[:map][:name]
     @map.desc = params[:map][:desc]
     @map.permission = params[:map][:permission]
@@ -61,11 +61,11 @@ class MapsController < ApplicationController
     @map.save    
 	  
     if params[:map][:topicsToMap]
-		  @all = params[:map][:topicsToMap]
-  		@all = @all.split(',')
-		  @all.each do |topic|
-			  topic = topic.split('/')
-			  @mapping = Mapping.new()
+      @all = params[:map][:topicsToMap]
+      @all = @all.split(',')
+      @all.each do |topic|
+        topic = topic.split('/')
+        @mapping = Mapping.new()
         @mapping.category = "Topic"
         @mapping.user = @user
         @mapping.map  = @map
@@ -73,8 +73,22 @@ class MapsController < ApplicationController
         @mapping.xloc = topic[1]
         @mapping.yloc = topic[2]
         @mapping.save
-		  end
-		  @map.arranged = true
+      end
+
+      if params[:map][:synapsesToMap]
+        @synAll = params[:map][:synapsesToMap]
+        @synAll = @synAll.split(',')
+        @synAll.each do |synapse_id|
+          @mapping = Mapping.new()
+          @mapping.category = "Synapse"
+          @mapping.user = @user
+          @mapping.map = @map
+          @mapping.synapse = Synapse.find(synapse_id)
+          @mapping.save
+        end
+      end
+
+      @map.arranged = true
       @map.save
       respond_to do |format|
         format.js { respond_with(@map) }
@@ -83,7 +97,7 @@ class MapsController < ApplicationController
       respond_to do |format|
         format.html { respond_with(@user, location: map_path(@map)) }
       end
-	  end	
+    end	
   end
   
   # GET maps/:id/edit
