@@ -100,20 +100,27 @@ class SynapsesController < ApplicationController
   
   # PUT synapses/:id
   def update
-	  @current = current_user
+	@current = current_user
     @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
     
-	  if @synapse 
-		  @synapse.desc = params[:synapse][:desc]
-		  @synapse.category = params[:synapse][:category]
-		  @synapse.topic1 = Topic.find(params[:node1_id][:node1])
-		  @synapse.topic2 = Topic.find(params[:node2_id][:node2])
-	    @synapse.permission = params[:synapse][:permission]
-		  @synapse.save
+	if @synapse
+      if params[:synapse]
+        @synapse.desc = params[:synapse][:desc] if params[:synapse][:desc]
+	    @synapse.category = params[:synapse][:category] if params[:synapse][:category]
+	    @synapse.permission = params[:synapse][:permission] if params[:synapse][:permission]
+      end
+      if params[:node1_id] and params[:node1_id][:node1]
+	    @synapse.topic1 = Topic.find(params[:node1_id][:node1])
+      end
+      if params[:node1_id] and params[:node1_id][:node1]
+	    @synapse.topic2 = Topic.find(params[:node2_id][:node2])
+      end
+	  @synapse.save
     end
 	
-    respond_with(@user, location: synapse_url(@synapse)) do |format|
-    end
+    respond_with @synapse
+    #respond_with(@user, location: synapse_url(@synapse)) do |format|
+    #end
   end
 
   # POST mappings/:map_id/:synapse_id/removefrommap
