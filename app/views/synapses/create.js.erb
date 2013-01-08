@@ -10,7 +10,6 @@ if ( Mconsole != null) {
     temp2 = Mconsole.graph.getNode(<%= @synapse.topic2.id %>);
     Mconsole.graph.addAdjacence(temp1, temp2, {});
     temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
-    console.log(temp);
     temp.setDataset('start', {  
       lineWidth: 0.4  
       });
@@ -20,7 +19,7 @@ if ( Mconsole != null) {
     var d = new Array(<%= @synapse.node1_id.to_s() %>, <%= @synapse.node2_id.to_s() %>);
     temp.setDataset('current', {  
       desc: '<%= @synapse.desc %>',  
-      showDesc: true,
+      showDesc: false, //will be changed by selectEdge
       category: '<%= @synapse.category %>',
       id: '<%= @synapse.id %>',
       userid: '<%= @synapse.user.id %>',

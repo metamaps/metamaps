@@ -408,26 +408,78 @@ var nodeSettings = {
 	  }  
 	}
 
+function editEdge(edge, e) {
+  deselectEdge(edge); //so the label is missing while editing
+  if (!document.getElementById('edit_synapse')) {
+    var edit_div = document.createElement('div');
+    edit_div.setAttribute('id', 'edit_synapse');
+    edit_div.setAttribute('class', 'best_in_place best_in_place_desc');
+    edit_div.setAttribute('data-object', 'synapse');
+    edit_div.setAttribute('data-attribute', 'desc');
+    edit_div.setAttribute('data-type', 'input');
+    //TODO how to get blank data-nil
+    edit_div.setAttribute('data-nil', ' ');
+    $('.main .wrapper').append(edit_div);
+  }//if
+
+  $('#edit_synapse').attr('data-url', '/synapses/' + edge.getData("id"));
+  $('#edit_synapse').html(edge.getData("desc"));
+  $('#edit_synapse').css('position', 'absolute');
+  $('#edit_synapse').css('left', e.clientX);
+  $('#edit_synapse').css('top', e.clientY);
+
+  $('#edit_synapse').bind("ajax:success", function() {
+    var desc = $(this).html();
+    $('#edit_synapse').hide();
+    edge.setData("desc", desc);
+    selectEdge(edge);
+    Mconsole.plot();
+  });
+
+  $('#edit_synapse').focusout(function() {
+    $('#edit_synapse').hide();
+  });
+  
+  //css stuff above moves it, this activates it
+  $('#edit_synapse').click();
+  $('#edit_synapse input').focus();
+  $('#edit_synapse').show();
+}
+
 function selectEdgeOnClickHandler(adj, e) {
+  //editing overrides everything else
+  if (e.altKey) {
+    editEdge(adj, e);
+    return;
+  }
+
   var showDesc = adj.getData("showDesc");
-  if (showDesc) {
+  if (showDesc && e.shiftKey) {
+    //deselecting an edge with shift
     deselectEdge(adj);
-    Mconsole.plot();
-  } 
-  if (!e.shiftKey) {
-	for (var i = 0; i < selectedEdges.length; i += 1) {
-      var edge = selectedEdges[i];
-      deselectEdge(edge);
-    }  
-  }
-  if (!showDesc) {
+  } else if (!showDesc && e.shiftKey) {
+    //selecting an edge with shift
     selectEdge(adj);
-    Mconsole.plot();
+  } else if (showDesc && !e.shiftKey) {
+    //deselecting an edge without shift - unselect all
+    deselectAllEdges();
+  } else if (!showDesc && !e.shiftKey) {
+    //selecting an edge without shift - unselect all but new one
+    deselectAllEdges();
+    selectEdge(adj);
   }
+
+  Mconsole.plot();
 }//selectEdgeOnClickHandler
 
+function deselectAllEdges() {
+  for (var i = 0; i < selectedEdges.length; i += 1) {
+    var edge = selectedEdges[i];
+    deselectEdge(edge);
+  }  
+}
+
 function selectNodeOnClickHandler(node, e) {
-				
   //set final styles 
   if (!e.shiftKey) { 
 	  Mconsole.graph.eachNode(function (n) {
