@@ -115,15 +115,18 @@ function saveLayout(id) {
 
 // this is to save your console to a map
 function saveToMap() {
-  var Coor = "";
+  var nodes_data = "", syapses_data = "";
   Mconsole.graph.eachNode(function(n) {
-    Coor = Coor + n.id + '/' + n.pos.x + '/' + n.pos.y + ',';
+    nodes_data += n.id + '/' + n.pos.x + '/' + n.pos.y + ',';
   });
-  Coor = Coor.slice(0, -1);
-  $('#map_topicsToMap').val(Coor);
+  Mconsole.graph.eachAdjacence(function(adj) {
+    synapses_data += adj.id + ',';
+  }
+  nodes_data = nodes_data.slice(0, -1);
+  $('#map_topicsToMap').val(nodes_data);
+  $('#map_synapsesToMap').val(synapses_data);
   $('#new_map').fadeIn('fast');
 }
-
 
 // this is for hiding one topic from your canvas
 function removeFromCanvas(topic_id) {
