@@ -23,7 +23,9 @@
 <div class="clearfloat nodemargin"></div>-->
 
 <div class="headertop">
-    <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; $('#saveLayout').css('display','none');} else if (goRealtime) { this.innerHTML = 'Start Realtime'; $('#saveLayout').css('display','block');} goRealtime = !goRealtime;">Start Realtime</button>
+    <% if false %>
+      <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; $('#saveLayout').css('display','none');} else if (goRealtime) { this.innerHTML = 'Start Realtime'; $('#saveLayout').css('display','block');} goRealtime = !goRealtime;">Start Realtime</button>
+    <% end %>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
     <% if authenticated? %>
       <button onclick="removeSelectedEdges();removeSelectedNodes();">Remove Selected From Map</button>
@@ -47,6 +49,9 @@
     Viewing Map:  
   <% end %>
   <%= @map.name %>
+  <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
+    <%= link_to "[edit]", edit_map_path(@map) %>
+  <% end %>
 </h1>
 
 <div class="maps onMap" id="container">
@@ -61,18 +66,22 @@
   <%= render :partial => 'newsynapse' %>
   <%= render :partial => 'maps/new' %>
 <% end %>
-<%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
-  <%= form.hidden_field :time, :value => Time.now.to_i %>
-  <%= form.hidden_field :ids, :value => 0 %>
+
+<% if false %>
+  <%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
+    <%= form.hidden_field :time, :value => Time.now.to_i %>
+    <%= form.hidden_field :ids, :value => 0 %>
+  <% end %>
 <% end %>
+  
 <script>
   var dragged = 0;
   mapid = <%= @map.id %>;
-  var int = setInterval(function(){
+  /*var int = setInterval(function(){
       if (goRealtime) {
         $('#MapRealtime').submit();
       }
-    },4000);
+    },4000);*/
 </script>
 
 <script>

@@ -451,7 +451,7 @@ function editEdge(edge, e) {
 
   $('#edit_synapse').focusout(function() {
     //in case they cancel
-//    $('#edit_synapse').hide();
+    $('#edit_synapse').hide();
   });
   
   //css stuff above moves it, this activates it

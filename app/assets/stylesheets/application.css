@@ -83,7 +83,7 @@ a {
   clear:both;
 }
 
-.spacer {
+.leaveSpace {
   display:block;
   height:50px;	
 }
@@ -238,8 +238,20 @@ input[type="submit"] {
   margin:10px;
 }
 
-.headertop button {
-  float:left;	
+.headertop button, .headertop input {
+  float:left;
+  height: 30px;
+  border-radius: 12px;
+  background: url('black_bg.png');
+  color: #FFF;
+  font-family: 'katarine-web';
+  font-size: 18px;
+  border: 1px solid #000;
+  cursor: pointer;	
+}
+
+.headertop button:hover, .headertop input:hover {
+  background: #000;	
 }
 
 .wrapper {
