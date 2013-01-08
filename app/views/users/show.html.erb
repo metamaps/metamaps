@@ -17,6 +17,17 @@
 </div>
 <div class="clearfloat nodemargin"></div>-->
 
+<h2>Recently Created Topics</h2>
+<% @topics.each do |topic| %>
+    <%= render topic %>
+<% end %>
+<div class="clearfloat"></div>
+
+<h2>Recently Created Maps</h2>
+<% @maps.each do |map| %>
+    <%= render map %>
+<% end %>
+<div class="clearfloat"></div>
 
 <h1 class="index">
   Viewing Mapper: <%= @user.name %>

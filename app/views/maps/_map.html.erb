@@ -1,8 +1,24 @@
 <%= div_for map do %>
 	<% if map.user == user %><%= link_to 'Delete', map_path(map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, :remote => true %><% end %>
-	<div class="scroll">
-		<%= link_to map.name, map_path(map), :class => 'title' %>
-		<div class="desc"><p><%= map.desc %></p><p># of Topics: <%= map.topics.count %></p><p># of Synapses: <%= map.synapses.count %></p></div>
+  <p class="type">Map</p>
+  <%= image_tag 'map.png', :class => 'icon', :size => '50x50' %>
+  <span class="title">                                                  
+          <span><%=map.name %></span>                             
+          <a href="/maps/<%=map.id %>" class="topic-go-arrow">    
+            <img class="topic-go-arrow"                                       
+                 title="Go to map"                                        
+                 src="/assets/go-arrow.png" />                                
+          </a>                                                                
+          <div class="clearfloat"></div>                                      
+  </span>                                                               
+  <div class="contributor">                                             
+      Added by: <a href="/users/<%=map.user.id %>" target="_blank"><%=map.user.name %>  
+      </a>                                                                
+  </div> 
+  <div class="scroll">
+		<div class="desc">
+      <p class="mapdata"><%= map.topics.count %> topics and <%= map.synapses.count %> synapses</p>
+      <p><%= map.desc %></p>
+    </div>
 	</div>
-	<div class="link"><p>Permissions:<%= map.permission %></p></div>
 <% end %>

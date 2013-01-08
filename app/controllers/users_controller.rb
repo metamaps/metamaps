@@ -24,8 +24,11 @@ class UsersController < ApplicationController
   # GET /user
   def show
     @user = User.find(params[:id])
+    @topics = @user.topics.order("created_at").limit(3)
+    @synapses = @user.synapses.order("created_at").limit(3)
+    @maps = @user.maps.order("created_at").limit(3)
     
-    respond_with(@user) 
+    respond_with(@user, @topics, @synapses, @maps) 
   end
   
   # POST /user

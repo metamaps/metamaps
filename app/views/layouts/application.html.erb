@@ -46,6 +46,7 @@
                 <li><%= link_to "My Topics", user_topics_url(user) %></li>
                 <li><%= link_to "My Synapses", user_synapses_url(user) %></li>
                 <li><%= link_to "My Maps", user_maps_url(user) %></li>
+                <li><%= link_to "My Profile", user_url(user) %></li>
                 <li><%= link_to "Invite", invite_path %></li>
                 <li><%= link_to "Settings", edit_user_url(user) %></li>
                 <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
