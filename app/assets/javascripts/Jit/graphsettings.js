@@ -307,13 +307,6 @@ arrowPoint.y - vect.y);
         var v1 = intermediatePoint.add(normal); 
         var v2 = intermediatePoint.$add(normal.$scale(-1)); 
 
-        //draw circle
-        //ctx.strokeStyle = "rgb(150,0,0)";
-        //ctx.beginPath();
-        //ctx.arc(midPoint.x, midPoint.y, 8, 0, (Math.PI/180)*360, true);
-        //ctx.stroke();
-        //ctx.closePath();
-
         //ctx.strokeStyle = "#222222";
         ctx.beginPath(); 
         ctx.moveTo(from.x, from.y); 
@@ -392,13 +385,32 @@ var nodeSettings = {
 		  var desc = adj.getData("desc");
 		  var showDesc = adj.getData("showDesc");
 		  if( desc != "" && showDesc ) { 
-			 //now adjust the label placement 
+            //now adjust the label placement 
+            var ctx = canvas.getCtx();
 			var radius = canvas.getSize(); 
 			var x = parseInt((pos.x + posChild.x - (desc.length * 5)) /2); 
 			var y = parseInt((pos.y + posChild.y) /2); 
-			canvas.getCtx().fillStyle = '#000';
-			canvas.getCtx().font = 'bold 14px arial';
-			canvas.getCtx().fillText(desc, x, y); 
+			ctx.font = 'bold 14px arial';
+
+            //render background
+            ctx.fillStyle = '#FFF';
+            var margin = 5;
+            var height = 14 + margin; //font size + margin
+            var CURVE = height / 2; //offset for curvy corners
+            var width = ctx.measureText(desc).width + 2 * margin - 2 * CURVE
+            var labelX = x - margin + CURVE;
+            var labelY = y - height + margin;
+            ctx.fillRect(labelX, labelY, width, height);
+
+            //curvy corners woo - circles in place of last CURVE pixels of rect
+            ctx.beginPath();
+            ctx.arc(labelX, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
+            ctx.arc(labelX + width, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
+            ctx.fill();
+            
+            //render text
+			ctx.fillStyle = '#000';
+			ctx.fillText(desc, x, y); 
 		  }
 		}, 'contains' : function(adj, pos) { 
 				var from = adj.nodeFrom.pos.getc(true), 
@@ -737,11 +749,7 @@ function onCreateLabelHandler(domElement, node) {
 
   // add some events to the label
   $(showCard).find('img.icon').click(function(){
-    $('.showcard.topic_' + node.id).fadeOut('fast', function(){
-      node.setData('dim', 25, 'current');
-	  $('.name').css('display','block');
-      Mconsole.plot();
-    });
+    hideCard(node);
   });
   
   $(showCard).find('.scroll').mCustomScrollbar();
@@ -853,6 +861,19 @@ function onCreateLabelHandler(domElement, node) {
   });
 
 }//onCreateLabelHandler
+
+function hideCard(node) {
+  var card = '.showcard';
+  if (node != null) {
+    card += '.topic_' + node.id;
+  }
+  
+  $(card).fadeOut('fast', function(){
+    node.setData('dim', 25, 'current');
+    $('.name').show();
+    Mconsole.plot();
+  });
+}
 
 //edge that the mouse is currently hovering over
 var edgeHover = false;
