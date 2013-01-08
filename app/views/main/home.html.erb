@@ -1,0 +1,31 @@
+<div class="profile">
+
+<h2>Recently Created Topics <%= link_to "see all", topics_url%></h2>
+<div class="centeredProfile">
+<% @topics.each do |topic| %>
+    <%= render topic %>
+<% end %>
+</div>
+<div class="clearfloat"></div>
+
+<h2>Recently Created Synapses <%= link_to "see all", synapses_url%></h2>
+<div class="centeredProfile">
+<% @synapses.each do |synapse| %>
+    <%= render synapse %>
+<% end %>
+</div>
+<div class="clearfloat"></div>
+
+<h2>Recently Created Maps <%= link_to "see all", maps_url%></h2>
+<div class="centeredProfile">
+<% @maps.each do |map| %>
+    <%= render map %>
+<% end %>
+</div>
+<div class="clearfloat spacer"></div>
+
+</div>
+
+<h1 class="index">
+  Home
+</h1>

@@ -5,6 +5,14 @@ class MainController < ApplicationController
    
   respond_to :html, :js, :json
   
+  def home
+    @topics = Topic.order("created_at DESC").limit(3).visibleToUser(@current, nil)
+    @synapses = Synapse.order("created_at DESC").limit(3).visibleToUser(@current, nil)
+    @maps = Map.order("created_at DESC").limit(3).visibleToUser(@current, nil)
+    
+    respond_with(@topics, @synapses, @maps) 
+  end
+  
   def console	
 	
   end

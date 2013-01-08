@@ -1,0 +1,11 @@
+<%= div_for synapse do %>
+  <div class="synapseTopic1">  
+    <p class="topic1desc"><%= link_to synapse.topic1.name, topic_url(synapse.topic1) %></p>
+    <%= image_tag synapse.topic1.metacode.icon, :class => 'icon', :size => '50x50' %> 
+  </div>
+  <div class="synapseDesc"><%= synapse.desc %></div>
+  <div class="synapseTopic2">  
+    <%= image_tag synapse.topic2.metacode.icon, :class => 'icon', :size => '50x50' %>
+    <p class="topic2desc"><%= link_to synapse.topic2.name, topic_url(synapse.topic2) %></p>
+  </div>
+<% end %>

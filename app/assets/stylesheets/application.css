@@ -65,8 +65,9 @@ h2 {
   display:block;
   text-align:center;
   font-family: "vinyl",sans-serif;
-  background: #333;
+  background: url('black_bg.png');
   font-size:24px;
+  line-height:35px;
 }
 
 a {
@@ -82,6 +83,11 @@ a {
   clear:both;
 }
 
+.spacer {
+  display:block;
+  height:50px;	
+}
+
 .hidden {
   display: none;
 }
@@ -89,6 +95,18 @@ a {
 /*
  * Layout stuffs
  */
+ 
+.profile {
+  overflow-y:scroll;
+  height:100%;
+  margin-bottom:50px;	 
+}
+
+.centeredProfile {
+  margin:0 auto;
+  display: block;
+  width: 845px;	
+}
 
 .new_session, 
 .new_user,
@@ -387,7 +405,6 @@ input[type="submit"] {
 #sideOptionAnalyze {
   top:35%;
   width:64px;
-  display:none;
 }
 
 #sideOptionOrganize {

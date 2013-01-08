@@ -17,17 +17,33 @@
 </div>
 <div class="clearfloat nodemargin"></div>-->
 
-<h2>Recently Created Topics</h2>
+<div class="profile">
+
+<h2>Recently Created Topics <%= link_to "see all", user_topics_path(@user)%></h2>
+<div class="centeredProfile">
 <% @topics.each do |topic| %>
     <%= render topic %>
 <% end %>
+</div>
 <div class="clearfloat"></div>
 
-<h2>Recently Created Maps</h2>
+<h2>Recently Created Synapses <%= link_to "see all", user_synapses_path(@user)%></h2>
+<div class="centeredProfile">
+<% @synapses.each do |synapse| %>
+    <%= render synapse %>
+<% end %>
+</div>
+<div class="clearfloat"></div>
+
+<h2>Recently Created Maps <%= link_to "see all", user_maps_path(@user)%></h2>
+<div class="centeredProfile">
 <% @maps.each do |map| %>
     <%= render map %>
 <% end %>
-<div class="clearfloat"></div>
+</div>
+<div class="clearfloat spacer"></div>
+
+</div>
 
 <h1 class="index">
   Viewing Mapper: <%= @user.name %>

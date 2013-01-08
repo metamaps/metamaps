@@ -1,6 +1,6 @@
 ISSAD::Application.routes.draw do
 
-  root to: 'main#console', via: :get
+  root to: 'main#home', via: :get
   
   match 'console', to: 'main#console', via: :get, as: :console
   

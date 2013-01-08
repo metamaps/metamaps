@@ -29,6 +29,15 @@ function openAnalyze() {
     }, 100);
   $('#closeAnalyze').css('display','block');
   $('#sideOptionAnalyze').css('cursor','default');
+  var numT = Object.keys(Mconsole.graph.nodes).length;
+  var numS = 0;
+  Mconsole.graph.eachNode(function (n) {
+		n.eachAdjacency(function () {
+		  numS++;
+		});
+  });
+  numS = numS/2;
+  $('.analysis').html('<p>' + numT + ' topics</p><p>' + numS + ' synapses</p>');
 }
 
 function closeAnalyze() {
