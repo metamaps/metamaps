@@ -78,12 +78,12 @@ class MapsController < ApplicationController
       if params[:map][:synapsesToMap]
         @synAll = params[:map][:synapsesToMap]
         @synAll = @synAll.split(',')
-        @synAll.each do |synapse|
+        @synAll.each do |synapse_id|
           @mapping = Mapping.new()
           @mapping.category = "Synapse"
           @mapping.user = @user
           @mapping.map = @map
-          @mapping.synapse = Synapse.find(synapse[0])
+          @mapping.synapse = Synapse.find(synapse_id)
           @mapping.save
         end
       end
