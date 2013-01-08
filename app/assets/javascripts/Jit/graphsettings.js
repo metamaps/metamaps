@@ -421,39 +421,46 @@ var nodeSettings = {
 	}
 
 function editEdge(edge, e) {
-  deselectEdge(edge); //so the label is missing while editing
-  if (!document.getElementById('edit_synapse')) {
-    var edit_div = document.createElement('div');
-    edit_div.setAttribute('id', 'edit_synapse');
-    edit_div.setAttribute('class', 'best_in_place best_in_place_desc');
-    edit_div.setAttribute('data-object', 'synapse');
-    edit_div.setAttribute('data-attribute', 'desc');
-    edit_div.setAttribute('data-type', 'input');
-    //TODO how to get blank data-nil
-    edit_div.setAttribute('data-nil', ' ');
-    $('.main .wrapper').append(edit_div);
-  }//if
+  //reset so we don't interfere with other edges
+  $('#edit_synapse').remove();
 
+  deselectEdge(edge); //so the label is missing while editing
+  var edit_div = document.createElement('div');
+  edit_div.setAttribute('id', 'edit_synapse');
+  $('.main .wrapper').append(edit_div);
+  $('#edit_synapse').attr('class', 'best_in_place best_in_place_desc');
+  $('#edit_synapse').attr('data-object', 'synapse');
+  $('#edit_synapse').attr('data-attribute', 'desc');
+  $('#edit_synapse').attr('data-type', 'input');
+  //TODO how to get blank data-nil
+  $('#edit_synapse').attr('data-nil', ' ');
   $('#edit_synapse').attr('data-url', '/synapses/' + edge.getData("id"));
   $('#edit_synapse').html(edge.getData("desc"));
+
   $('#edit_synapse').css('position', 'absolute');
   $('#edit_synapse').css('left', e.clientX);
   $('#edit_synapse').css('top', e.clientY);
 
   $('#edit_synapse').bind("ajax:success", function() {
     var desc = $(this).html();
-    $('#edit_synapse').hide();
     edge.setData("desc", desc);
     selectEdge(edge);
     Mconsole.plot();
+    $('#edit_synapse').remove();
   });
 
   $('#edit_synapse').focusout(function() {
-    $('#edit_synapse').hide();
+    //in case they cancel
+//    $('#edit_synapse').hide();
   });
   
   //css stuff above moves it, this activates it
   $('#edit_synapse').click();
+  $('#edit_synapse form').submit(function() {
+    //hide it once form submits.
+    //If you don't do this, and data is unchanged, it'll show up on canvas
+    $('#edit_synapse').hide();
+  });
   $('#edit_synapse input').focus();
   $('#edit_synapse').show();
 }
