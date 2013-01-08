@@ -56,7 +56,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
             sliding1 = true; 
 			if (userid != null) {
               $('.footer .menu').animate({
-				height: '272px'
+				height: '282px'
 			  }, 300, function() {
 				sliding1 = false;
 			  });
