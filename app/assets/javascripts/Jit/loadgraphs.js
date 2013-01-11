@@ -68,10 +68,12 @@ function initialize(type, loadLater){
   
   if ( type == "centered") {
 	  // init Rgraph
+     alert("Going in, and we're centered");
 	 Mconsole = new $jit.RGraph(graphSettings(type));
   }
   else if ( type == "arranged" || type == "chaotic" ) {
 	  // init ForceDirected
+     alert("Going in, and we're arranged/chaotic");
 	 Mconsole = new $jit.ForceDirected(graphSettings(type));
   }
   else {
