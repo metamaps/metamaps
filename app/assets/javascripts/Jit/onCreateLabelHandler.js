@@ -21,7 +21,7 @@ function onCreateLabelHandler(domElement, node) {
   var showCard = document.createElement('div');
   showCard.className = 'showcard topic_' + node.id;
   showCard.innerHTML = html;
-  showCard.style.display = "none";
+ showCard.style.display = "none";
   domElement.appendChild(showCard);
 
   // Create a 'name' button and add it to the main node label
@@ -210,12 +210,14 @@ function generateLittleHTML(node) {
   littleHTML = littleHTML.replace(/\$_id_\$/g, node.id);
   littleHTML = littleHTML.replace(/\$_mapid_\$/g, mapid);
   littleHTML = littleHTML.replace(/\$_name_\$/g, node.name);
+
+  return littleHTML;
 }
 
-function hideCard(id) {
+function hideCard(node) {
   var card = '.showcard';
   if (node != null) {
-    card += '.topic_' + id;
+    card += '.topic_' + node.id;
   }
 
   $(card).fadeOut('fast', function(){
@@ -228,7 +230,7 @@ function hideCard(id) {
 function bindCallbacks(showCard, nameContainer, node) {
    // add some events to the label
   $(showCard).find('img.icon').click(function(){
-    hideCard(node.id);
+    hideCard(node);
   });
 
   $(showCard).find('.scroll').mCustomScrollbar(); 

@@ -81,24 +81,21 @@ function graphSettings(type) {
         } else {
           canvasDoubleClickHandler(eventInfo.getPos(), e);
         }//if
-      },
-      //Number of iterations for the FD algorithm
-      iterations: 200,
-      //Edge length
-      levelDistance: 200,
-      // Add text to the labels. This method is only triggered
-      // on label creation and only for DOM labels (not native canvas ones).
-      onCreateLabel: function (domElement, node) {
-        alert ("onCreateLabel");
-        console.log(onCreateLabelHandler);
-        onCreateLabelHandler(domElement, node);
-      },
-      // Change node styles when DOM labels are placed or moved.
-      onPlaceLabel: function (domElement, node) {
-        alert ("onPlaceLabel");
-        onPlaceLabelHandler(domElement, node);
       }
-    }//end Events
+    },
+    //Number of iterations for the FD algorithm
+    iterations: 200,
+    //Edge length
+    levelDistance: 200,
+    // Add text to the labels. This method is only triggered
+    // on label creation and only for DOM labels (not native canvas ones).
+    onCreateLabel: function (domElement, node) {
+      onCreateLabelHandler(domElement, node);
+    },
+    // Change node styles when DOM labels are placed or moved.
+    onPlaceLabel: function (domElement, node) {
+      onPlaceLabelHandler(domElement, node);
+    }
   };
 
   if (type == "centered") {
