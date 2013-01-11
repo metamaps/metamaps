@@ -663,8 +663,6 @@ function onCreateLabelHandler(domElement, node) {
                 data-object="topic"                                           \
                 data-nil="$_desc_nil_$"                                       \
                 data-attribute="desc"                                         \
-				data-ok-button="Save"                                         \
-				data-cancel-button="Discard"                                   \
                 data-type="textarea">$_desc_$</span>                          \
 				<div class="clearfloat"></div>                                \
         </div>                                                                \
