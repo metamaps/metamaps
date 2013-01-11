@@ -1,3 +1,8 @@
+<%#
+  # @file
+  # partial generating a new synapse
+  # TODO: Where is this code used?
+  #%>
 <div class="anypage">
 	<%= form_for Synapse.new, url: synapses_url, remote: true do |form| %>
     <%= form.autocomplete_field :desc, autocomplete_synapse_desc_synapses_path, :placeholder => "Describe the connection..." %>

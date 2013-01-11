@@ -1,3 +1,10 @@
+<%#
+  # @file
+  # This view shows an index of all topics, or just your topics if you're
+  # logged in
+  # TODO: What URL accesses this view?
+  #%>
+
 <h1 class="index"><% if @user %><%= @user.name %>'s <% end %>Topics</h1>
 
 <div class="topics" id="cards">

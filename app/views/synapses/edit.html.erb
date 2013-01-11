@@ -1,3 +1,10 @@
+<%#
+  # @file
+  # Synapse creation form. OOOOOLD!
+  # TODO: Is it actually old, or is it in use?
+  # Can probably be removed, otherwise:
+  # TODO: What URL is this?
+  #%>
 <%= form_for @synapse, url: synapse_url do |form| %>
   <h3>Edit Synapse</h3>
   <% if Topic.visibleToUser(user, nil).count > 0 %>

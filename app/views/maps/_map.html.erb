@@ -1,3 +1,10 @@
+<%#
+  # @file
+  # Shows a map as a card.
+  # I believe this is rendered on the profile pages.
+  # TODO: Am I correct?
+  # TODO: Is it rendered on any other pages?
+  #%>
 <%= div_for map do %>
 	<% if map.user == user %><%= link_to 'Delete', map_path(map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, :remote => true %><% end %>
   <p class="type">Map</p>
