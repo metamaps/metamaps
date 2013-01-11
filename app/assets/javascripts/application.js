@@ -130,7 +130,6 @@ function saveToMap() {
   });
 
   synapses_data = synapses_array.join();
-  console.log(synapses_data);
   nodes_data = nodes_data.slice(0, -1);
 
   $('#map_topicsToMap').val(nodes_data);
