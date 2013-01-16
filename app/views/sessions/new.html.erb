@@ -1,3 +1,8 @@
+<%#
+  # @file
+  # Located at /sessions/new
+  # Form to log in
+  #%>
 <%= form_for @session || Session.new, url: session_path do |form| %>
   <h3>Login</h3>
   <label for="session_email">Email</label>

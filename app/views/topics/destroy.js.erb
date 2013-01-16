@@ -1,3 +1,9 @@
+/*
+ * @file
+ * The javascript returned when destroy is called in the topic controller
+ * This happens when a DELETE is sent to /topics/:id
+ */
+
 if (Mconsole != null) {
   var node = Mconsole.graph.getNode(<%= @topic.id %>);
   node.setData('alpha', 0, 'end');  

@@ -1,3 +1,19 @@
+<%#
+  # @file
+  # This shows a topic view. It is used.
+  # The first commented out section used to be a card at the top showing all
+  # info. Now we're moving towards most screens looking the same. The
+  # consequence of accessing data from this view is that you can't remove
+  # the topic that corresponds to the page you're on. Originally, accessing this
+  # page showed the topic with its neighbours arrayed around. Now it shows the
+  # same, but there's no cues to say which topic's page you're on. So when the
+  # map recenters on a new topic, it's like you're on that topic's page.
+  # Nice, but the URL and being unable to remove the root node still hamper that
+  # experience.
+  # TODO: What URL accesses this view?
+  #
+  #%>
+
 <!--<div class="focus topic_<%= @topic.id %>">
 	<div class="focusleft">
 		<p><%= @topic.metacode.name %></p>
