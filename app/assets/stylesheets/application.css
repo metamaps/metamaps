@@ -637,3 +637,12 @@ input[type="submit"] {
   color: #FFF;
   display:block;
 }
+
+.contact {
+  text-align: center;
+  margin: 1em 0 1em 0;
+}
+
+.contact a {
+  color: #36bbe8;
+}
