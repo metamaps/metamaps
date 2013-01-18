@@ -1,16 +1,30 @@
 <%#
   # @file
   # Shows a map as a card.
-  # I believe this is rendered on the profile pages.
-  # TODO: Am I correct?
-  # TODO: Is it rendered on any other pages?
+  # Any list of maps uses this rendering.
   #%>
 <%= div_for map do %>
+  <% if map.authorize_to_edit(user) %>
+    <div class="permission canEdit">  
+  <% end %>
+  
 	<% if map.user == user %><%= link_to 'Delete', map_path(map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, :remote => true %><% end %>
   <p class="type">Map</p>
   <%= image_tag 'map.png', :class => 'icon', :size => '50x50' %>
+  <div class="cardSettings">
+    <% if map.user == user %>
+      <div class="permActivator">
+        <div class="editSettings">        
+          <span>Permissions:&nbsp;</span>
+          <span title="Click to Edit"><%= best_in_place map, :permission, :type => :select, :collection => [['commons', 'commons'], ['public','public'], ['private','private']] %></span>
+          <div class="clearfloat"></div>
+        </div>
+      </div>
+    <% end %>
+    <div class="mapPerm"><%= map.mk_permission %></div>
+  </div>
   <span class="title">                                                  
-          <span><%=map.name %></span>                             
+          <span><%= best_in_place map, :name, :type => :input %></span>                             
           <a href="/maps/<%=map.id %>" class="topic-go-arrow">    
             <img class="topic-go-arrow"                                       
                  title="Go to map"                                        
@@ -25,7 +39,11 @@
   <div class="scroll">
 		<div class="desc">
       <p class="mapdata"><%= map.topics.count %> topics and <%= map.synapses.count %> synapses</p>
-      <p><%= map.desc %></p>
+      <p><%= best_in_place map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>" %></p>
     </div>
 	</div>
+  
+  <% if map.authorize_to_edit(user) %>
+    </div>
+  <% end %>
 <% end %>

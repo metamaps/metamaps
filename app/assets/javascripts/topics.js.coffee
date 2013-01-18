@@ -3,4 +3,4 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 jQuery ->
-  $('.authenticated .best_in_place').best_in_place()
+  $('.authenticated div.permission.canEdit .best_in_place').best_in_place()

@@ -1,7 +1,7 @@
 class SynapsesController < ApplicationController
   include TopicsHelper
 
-  before_filter :require_user, only: [:new, :create, :edit, :update]
+  before_filter :require_user, only: [:new, :create, :edit, :update, :destroy]
     
   respond_to :html, :js, :json
   
@@ -54,6 +54,20 @@ class SynapsesController < ApplicationController
     end
   end
   
+  # GET synapses/:id/json
+  def json
+    @current = current_user
+    @synapse = Synapse.find(params[:id]).authorize_to_show(@current)
+	
+    if not @synapse
+	    redirect_to root_url and return
+    end
+	
+    respond_to do |format|
+      format.json { render :json => @synapse.selfplusnodes_as_json }
+    end
+  end
+  
   # POST synapses
   def create
 	
@@ -69,12 +83,18 @@ class SynapsesController < ApplicationController
     @synapse.save   
 	
 	  if params[:synapse][:map]
-		  @mapping = Mapping.new()
+		  @map = Map.find(params[:synapse][:map])
+      
+      @mapping = Mapping.new()
 		  @mapping.category = "Synapse"
 		  @mapping.user = @user
-		  @mapping.map = Map.find(params[:synapse][:map])
+		  @mapping.map = @map
 		  @mapping.synapse = @synapse
 		  @mapping.save
+      
+      # set the permission of the synapse to whatever the permission of the map is
+      @synapse.permission = @map.permission
+      @synapse.save
 	  end
     
     respond_to do |format|

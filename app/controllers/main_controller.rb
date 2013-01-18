@@ -6,9 +6,12 @@ class MainController < ApplicationController
   respond_to :html, :js, :json
   
   def home
-    @topics = Topic.order("created_at DESC").limit(3).visibleToUser(@current, nil)
-    @synapses = Synapse.order("created_at DESC").limit(3).visibleToUser(@current, nil)
-    @maps = Map.order("created_at DESC").limit(3).visibleToUser(@current, nil)
+    @topics = Topic.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
+    @topics = @topics.slice(0,3)
+    @synapses = Synapse.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
+    @synapses = @synapses.slice(0,3)
+    @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
+    @maps = @maps.slice(0,3)
     
     respond_with(@topics, @synapses, @maps) 
   end

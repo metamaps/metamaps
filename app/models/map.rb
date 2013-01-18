@@ -11,6 +11,16 @@ has_many :synapses, :through => :synapsemappings
 def mappings 
 	topicmappings + synapsemappings
 end
+
+def mk_permission
+  if self.permission == "commons"
+    "co"
+  elsif self.permission == "public"
+    "pu"
+  elsif self.permission == "private"
+    "pr"
+  end
+end
   
   
   ###### JSON ######

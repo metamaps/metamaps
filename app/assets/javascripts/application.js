@@ -83,7 +83,40 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 		  },800); 
         } 
     );
-	
+  
+
+  // controls the sliding hover of the settings for cards
+	var sliding2 = false; 
+	var lT2;
+    $(".permActivator").hover( 
+        function () { 
+		      clearTimeout(lT2);
+          if (! sliding2) { 
+            sliding2 = true; 
+              $(this).animate({
+				        width: '203px',
+                height: '37px'
+			        }, 300, function() {
+				        sliding2 = false;
+			        });
+          } 
+        },  
+        function () {
+          that = this;        
+          lT2 = setTimeout(function() { 
+			      if (! sliding2) { 
+				      sliding2 = true; 
+				      $(that).animate({
+					      height: '16px',
+                width: '16px'
+				      }, 300, function() {
+					      sliding2 = false;
+				      });
+			      } 
+		      },800); 
+        } 
+    );
+    
 	// this is to save the layout of maps when you're on a map page
 	$("#saveLayout").click(function(event) {
 	  event.preventDefault();

@@ -1,6 +1,6 @@
 class MapsController < ApplicationController
   
-  before_filter :require_user, only: [:new, :create, :edit, :update, :savelayout]
+  before_filter :require_user, only: [:new, :create, :edit, :update, :savelayout, :destroy]
     
   respond_to :html, :js, :json
   
@@ -45,6 +45,21 @@ class MapsController < ApplicationController
 	  respond_to do |format|
       format.html { respond_with(@map, @user) }
       format.json { respond_with(@mapjson) }
+    end
+  end
+  
+  # GET maps/:id/json
+  def json
+  	
+	  @current = current_user
+	  @map = Map.find(params[:id]).authorize_to_show(@current)
+	
+	  if not @map
+	    redirect_to root_url and return
+	  end
+		
+	  respond_to do |format|
+      format.json { render :json => @map.self_as_json(@current) }
     end
   end
   
@@ -116,13 +131,19 @@ class MapsController < ApplicationController
   
   # PUT maps/:id
   def update
-	  @map = Map.find(params[:id])
+	  @current = current_user
+	  @map = Map.find(params[:id]).authorize_to_edit(@current)
     
-	  @map.attributes = params[:map]
-	  @map.save
-	
-    respond_with(@user, location: map_path(@map)) do |format|
+	  if @map 
+        if params[:map]
+          @map.name = params[:map][:name] if params[:map][:name]
+		      @map.desc = params[:map][:desc] if params[:map][:desc]
+		      @map.permission = params[:map][:permission] if params[:map][:permission]
+        end
+	    @map.save
     end
+
+    respond_with @map
   end
   
   # PUT maps/:id/savelayout

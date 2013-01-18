@@ -25,6 +25,16 @@ belongs_to :metacode
   def topic_autocomplete_method
     "Get: #{self.name}"
   end
+  
+  def mk_permission
+    if self.permission == "commons"
+      "cc"
+    elsif self.permission == "public"
+      "pu"
+    elsif self.permission == "private"
+      "pr"
+    end
+  end
 
   # has no viewable synapses helper function
   def has_viewable_synapses(current)
