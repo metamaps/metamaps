@@ -1,0 +1,21 @@
+development:
+  min_messages: WARNING
+  adapter: postgresql
+  host: 127.0.0.1
+  port: 5432
+  encoding: unicode
+  database: metamap002_development
+  pool: 5
+  username: postgres
+  password: "3112"
+
+production:
+  min_messages: WARNING
+  adapter: postgresql
+  host: ec2-107-21-107-194.compute-1.amazonaws.com
+  port: 5432
+  encoding: unicode
+  database: ddcrn2lgphjk9k
+  pool: 5
+  username: qqpckkahytovwv
+  password: "njeP6cMA8EjM9ukHk9s3ReOdy7"
