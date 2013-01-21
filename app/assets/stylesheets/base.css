@@ -135,3 +135,44 @@ margin-right: -8px;
 .CardOnGraph .go-link {
   float:left;	
 }
+
+.cardSettings {
+  position: absolute;
+  left: 12px;
+  top: 13px;
+}
+
+.editSettings {
+  background: #ddd;
+  border-radius: 10px;
+  padding: 5px 0 5px 5px;
+  position: relative;
+  left: 16px;
+  width: 172px;
+  opacity: 0.98;
+  box-shadow: 4px 4px 5px #888888;
+  border: 1px solid #AAA;
+}
+
+.editSettings span {
+  float:left;
+}
+
+.permActivator {
+  width: 16px;
+  height: 16px;
+  background: url('settings.png') no-repeat 0 0;
+  overflow:hidden;
+}
+
+.mapPerm {
+  background: #fff;
+  padding: 0 4px 4px 4px;
+  border-radius: 15px;
+  border: 1px solid #AAA;
+  position: absolute;
+  left: -7px;
+  top: 18px;
+  width:16px;
+  text-align:center;
+}

@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_filter :require_user, only: [:new, :create, :edit, :update]
+  before_filter :require_user, only: [:new, :create, :edit, :update, :destroy]
     
   respond_to :html, :js, :json
   
@@ -45,6 +45,20 @@ class TopicsController < ApplicationController
       format.json { respond_with(@relatives) }
     end
   end
+  
+  # GET topics/:id/json
+  def json
+    @current = current_user
+    @topic = Topic.find(params[:id]).authorize_to_show(@current)
+	
+    if not @topic
+	    redirect_to root_url and return
+    end
+	
+    respond_to do |format|
+      format.json { render :json => @topic.self_as_json }
+    end
+  end
 
   # POST topics
   def create
@@ -63,6 +77,12 @@ class TopicsController < ApplicationController
       @topic.permission = 'commons'
       @topic.metacode = Metacode.find_by_name(params[:topic][:metacode])
       @topic.user = @user
+      
+      #if being created on a map, set topic by default to whatever permissions the map is
+      if params[:topic][:map]
+        @map = Map.find(params[:topic][:map])
+        @topic.permission = @map.permission
+      end 
 
       @topic.save
     end
@@ -81,9 +101,11 @@ class TopicsController < ApplicationController
     # set this for the case where the topic is being created on a map.
     @mapping = Mapping.new()
     if params[:topic][:map]
+      @map = Map.find(params[:topic][:map])
+      
       @mapping.category = "Topic"
       @mapping.user = @user
-      @mapping.map = Map.find(params[:topic][:map])
+      @mapping.map = @map
       @mapping.topic = @topic
       @mapping.xloc = params[:topic][:x]
       @mapping.yloc = params[:topic][:y]
@@ -116,18 +138,15 @@ class TopicsController < ApplicationController
 	  if @topic 
         if params[:topic]
           @topic.name = params[:topic][:name] if params[:topic][:name]
-		  @topic.desc = params[:topic][:desc] if params[:topic][:desc]
-		  @topic.link = params[:topic][:link] if params[:topic][:link]
-		  @topic.permission = params[:topic][:permission] if params[:topic][:permission]
+		      @topic.desc = params[:topic][:desc] if params[:topic][:desc]
+		      @topic.link = params[:topic][:link] if params[:topic][:link]
+		      @topic.permission = params[:topic][:permission] if params[:topic][:permission]
           @topic.metacode = Metacode.find_by_name(params[:topic][:metacode]) if params[:topic][:metacode]
         end
 	    @topic.save
-      end
+    end
 
-      respond_with @topic
-	
-#    respond_with(@user, location: topic_url(@topic)) do |format|
-#    end
+    respond_with @topic
   end
   
   # GET mappings/:map_id/:topic_id/removefrommap

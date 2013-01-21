@@ -18,14 +18,17 @@ ISSAD::Application.routes.draw do
   resources :topics do
     get :autocomplete_topic_name, :on => :collection
   end
+  match 'topics/:id/:format', to: 'topics#json', via: :get, as: :json
   
   resources :synapses do
     get :autocomplete_synapse_desc, :on => :collection
   end
+  match 'synapses/:id/:format', to: 'synapses#json', via: :get, as: :json
   
   resources :maps do
     get :autocomplete_map_name, :on => :collection
   end
+  match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json
   
   resources :users do
     get :autocomplete_user_name, :on => :collection

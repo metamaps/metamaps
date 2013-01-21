@@ -1,8 +1,7 @@
 <%#
   # @file
   # Form to create a new map.
-  # TODO: What URL is this accessible from?
-  # TODO: Is this code being used anymore?
+  # Accessible from /maps/new. Still in use.
   #%>
 <div class="nothidden">
 <%= form_for @map || Map.new, url: maps_url do |form|%>
@@ -13,6 +12,7 @@
   <%= form.text_area :desc, class: "description", :rows => 5 %>
   <label for="map_permission">Permission</label>
   <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
+  <p>Topics and synapses you create newly on this map will be set by default to the permissions of your map.</p>
   <%= form.submit "Add Map", class: "add" %>
 <% end %>
 </div>

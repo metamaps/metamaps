@@ -5,6 +5,11 @@
   #%>
 
 <%= div_for topic do %>
+
+  <% if topic.authorize_to_edit(user) %>
+    <div class="permission canEdit">  
+  <% end %>
+  
 <div class="CardOnGraph"                                                  
          id="topic_<%=topic.id %>">
       <% if topic.user == user %><%= link_to 'Delete', topic_path(topic), :class => 'delete', :confirm => 'Delete this topic and all synapses linking to it?', :method => :delete, :remote => true%><% end %>         
@@ -59,4 +64,8 @@
                        
 	  <div class="clearfloat"></div>                                          
     </div>
+    
+  <% if topic.authorize_to_edit(user) %>
+    </div>
+  <% end %>
 <% end %>
