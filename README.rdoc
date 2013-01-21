@@ -1,0 +1,14 @@
+How to code in Metamaps
+
+Here are the important folders/files:
+
+config/database.yml: This file is your database configuration. If it doesn't exist, copy it from config/database.yml.default and then get it set up. config/database.yml is in .gitignore
+
+app/assets/javascripts/application.js: Global Javascript
+app/assets/javascripts/Jit/*: These files handle all code that uses the Javascript Infovis Toolkit, so realistically, most code for laying stuff out is in here.
+
+app/assets/controllers/*: These files define actions you can do on the different database objects. So for instance, what happens when you edit a Synapse? Check in app/assets/controllers/synapse_controller.rb, in the edit block
+
+app/assets/views/*.html.erb: Files in here define either html that is displayed when a certain action is called (like edit, or create) on a thing. E.G. app/assets/views/topic/new.html.erb would have a form for creating a new topic. We don't use that way very much anymore though. "Partial" views can be called elsewhere in ruby code and are prefixed with an underscore. So we focus more on the files starting with an underscore. Read through the comments at the top of each file to understand what they all do.
+
+app/assets/views/*.js.erb: Javascript that is called in response to, e.g., editing or creating a topic, synapse, etc.
