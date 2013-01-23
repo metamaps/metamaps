@@ -14,7 +14,9 @@
   <%= form.text_area :desc, class: "description", :rows => 5 %>
   <label for="topic_link">Link</label>
   <%= form.text_field :link, class: "link" %> 
-  <label for="topic_permission">Permission</label>
-  <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @topic.permission) %>
+  <% if @topic.user == user %>
+    <label for="topic_permission">Permission</label>
+    <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @topic.permission) %>
+  <% end %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

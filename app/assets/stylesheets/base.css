@@ -72,39 +72,40 @@
   padding-bottom:5px;
 }
 
-.CardOnGraph .best_in_place_name {
+.best_in_place_name {
   max-width:130px;
   float:left;
 }
 
-.CardOnGraph .best_in_place_name input{
+.best_in_place_name input{
   max-width:130px;
 }
 
-.CardOnGraph .desc {
+.desc {
   font-size:15px;
   font-family:Arial, Helvetica, sans-serif;
 }
 
-.CardOnGraph .desc h3 {
+.desc h3 {
   font-style:normal;
   margin-top:5px;
 }
 
-.CardOnGraph .best_in_place_desc input {
+.best_in_place_desc input {
   float: right;
   margin: 2px 0px 0px 2px;
   padding: 1px 5px;	
 }
 
-.CardOnGraph .best_in_place_desc {
+.best_in_place_desc {
   width:155px;
   display:block;
   margin-top:2px;	
 }
 
-.CardOnGraph .best_in_place_desc input[value="Save"] {
-margin-right: -8px;
+.best_in_place_desc  textarea{
+  width:150px;
+  display:block;	
 }
 
 .CardOnGraph .link {
@@ -139,7 +140,7 @@ margin-right: -8px;
 .cardSettings {
   position: absolute;
   left: 12px;
-  top: 13px;
+  top: 12px;
 }
 
 .editSettings {
@@ -152,6 +153,7 @@ margin-right: -8px;
   opacity: 0.98;
   box-shadow: 4px 4px 5px #888888;
   border: 1px solid #AAA;
+  z-index: 5;
 }
 
 .editSettings span {
@@ -163,6 +165,9 @@ margin-right: -8px;
   height: 16px;
   background: url('settings.png') no-repeat 0 0;
   overflow:hidden;
+  position: absolute;
+  left: 0px;
+  top: 30px;
 }
 
 .mapPerm {
@@ -172,7 +177,7 @@ margin-right: -8px;
   border: 1px solid #AAA;
   position: absolute;
   left: -7px;
-  top: 18px;
+  top: 0px;
   width:16px;
   text-align:center;
 }

@@ -9,7 +9,9 @@
   <%= form.text_field :name %>
   <label for="map_desc">Description</label>
   <%= form.text_area :desc, class: "description", :rows => 5 %>
-  <label for="map_perm">Permission</label>
-  <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @map.permission) %>
+  <% if @map.user == user %>
+    <label for="map_perm">Permission</label>
+    <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @map.permission) %>
+  <% end %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

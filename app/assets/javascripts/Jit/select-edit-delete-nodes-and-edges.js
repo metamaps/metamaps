@@ -1,46 +1,54 @@
 function editEdge(edge, e) {
-  //reset so we don't interfere with other edges
-  $('#edit_synapse').remove();
+  if (authorizeToEdit(edge)) {
+      //reset so we don't interfere with other edges
+      $('#edit_synapse').remove();
 
-  deselectEdge(edge); //so the label is missing while editing
-  var edit_div = document.createElement('div');
-  edit_div.setAttribute('id', 'edit_synapse');
-  $('.main .wrapper').append(edit_div);
-  $('#edit_synapse').attr('class', 'best_in_place best_in_place_desc');
-  $('#edit_synapse').attr('data-object', 'synapse');
-  $('#edit_synapse').attr('data-attribute', 'desc');
-  $('#edit_synapse').attr('data-type', 'input');
-  //TODO how to get blank data-nil
-  $('#edit_synapse').attr('data-nil', ' ');
-  $('#edit_synapse').attr('data-url', '/synapses/' + edge.getData("id"));
-  $('#edit_synapse').html(edge.getData("desc"));
+      deselectEdge(edge); //so the label is missing while editing
+      var perm = document.createElement('div');
+      perm.className = 'permission canEdit';
+      var edit_div = document.createElement('div');
+      edit_div.setAttribute('id', 'edit_synapse');
+      perm.appendChild(edit_div);
+      $('.main .wrapper').append(perm);
+      $('#edit_synapse').attr('class', 'best_in_place best_in_place_desc');
+      $('#edit_synapse').attr('data-object', 'synapse');
+      $('#edit_synapse').attr('data-attribute', 'desc');
+      $('#edit_synapse').attr('data-type', 'input');
+      //TODO how to get blank data-nil
+      $('#edit_synapse').attr('data-nil', ' ');
+      $('#edit_synapse').attr('data-url', '/synapses/' + edge.getData("id"));
+      $('#edit_synapse').html(edge.getData("desc"));
 
-  $('#edit_synapse').css('position', 'absolute');
-  $('#edit_synapse').css('left', e.clientX);
-  $('#edit_synapse').css('top', e.clientY);
+      $('#edit_synapse').css('position', 'absolute');
+      $('#edit_synapse').css('left', e.clientX);
+      $('#edit_synapse').css('top', e.clientY);
 
-  $('#edit_synapse').bind("ajax:success", function() {
-    var desc = $(this).html();
-    edge.setData("desc", desc);
-    selectEdge(edge);
-    Mconsole.plot();
-    $('#edit_synapse').remove();
-  });
+      $('#edit_synapse').bind("ajax:success", function() {
+        var desc = $(this).html();
+        edge.setData("desc", desc);
+        selectEdge(edge);
+        Mconsole.plot();
+        $('#edit_synapse').remove();
+      });
 
-  $('#edit_synapse').focusout(function() {
-    //in case they cancel
-    $('#edit_synapse').hide();
-  });
+      $('#edit_synapse').focusout(function() {
+        //in case they cancel
+        $('#edit_synapse').hide();
+      });
 
-  //css stuff above moves it, this activates it
-  $('#edit_synapse').click();
-  $('#edit_synapse form').submit(function() {
-    //hide it once form submits.
-    //If you don't do this, and data is unchanged, it'll show up on canvas
-    $('#edit_synapse').hide();
-  });
-  $('#edit_synapse input').focus();
-  $('#edit_synapse').show();
+      //css stuff above moves it, this activates it
+      $('#edit_synapse').click();
+      $('#edit_synapse form').submit(function() {
+        //hide it once form submits.
+        //If you don't do this, and data is unchanged, it'll show up on canvas
+        $('#edit_synapse').hide();
+      });
+      $('#edit_synapse input').focus();
+      $('#edit_synapse').show();
+  }
+  else if (! authorizeToEdit(edge)) {
+    alert("You don't have the permissions to edit this synapse.");
+  }
 }
 
 function deselectAllEdges() {

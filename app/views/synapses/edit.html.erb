@@ -19,7 +19,9 @@
 	<label for="node2_id">Choose Second Topic</label>
 	<%= select "node2_id", "node2", Topic.order("name ASC").visibleToUser(user, nil).map {|p| [ p.name, p.id ] }, { :selected => @synapse.node2_id } %>
   <% end %>
-  <label for="synapse_permission">Permission</label>
-  <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @synapse.permission) %>
+  <% if @synapse.user == user %>
+    <label for="synapse_permission">Permission</label>
+    <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @synapse.permission) %>
+  <% end %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

@@ -46,6 +46,7 @@ end
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name
 				@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
+        @synapsedata['$permission'] = synapse.permission
 				json.data @synapsedata
 		  end
 		  
@@ -65,6 +66,7 @@ end
 		  @topicdata['$xloc'] = @mapping.xloc
 		  @topicdata['$yloc'] = @mapping.yloc
 		  @topicdata['$mappingid'] = @mapping.id
+      @topicdata['$permission'] = topic.permission
 		  json.data @topicdata
 		  json.id topic.id
 		  json.name topic.name

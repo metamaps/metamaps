@@ -87,21 +87,25 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 
   // controls the sliding hover of the settings for cards
 	var sliding2 = false; 
-	var lT2;
+	var lT1,lT2;
     $(".permActivator").hover( 
         function () { 
-		      clearTimeout(lT2);
-          if (! sliding2) { 
-            sliding2 = true; 
-              $(this).animate({
-				        width: '203px',
-                height: '37px'
-			        }, 300, function() {
-				        sliding2 = false;
-			        });
-          } 
+          clearTimeout(lT2);
+          that = this;       
+          lT1 = setTimeout(function() {
+            if (! sliding2) { 
+              sliding2 = true;            
+                $(that).animate({
+                  width: '203px',
+                  height: '37px'
+                }, 300, function() {
+                  sliding2 = false;
+                });
+            } 
+          }, 300);
         },  
         function () {
+          clearTimeout(lT1);
           that = this;        
           lT2 = setTimeout(function() { 
 			      if (! sliding2) { 
@@ -116,6 +120,24 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 		      },800); 
         } 
     );
+    //bind best_in_place ajax callbacks
+  $('.best_in_place_permission').bind("ajax:success", function() {
+    var permission = $(this).html();
+    var el = $(this).parents('.cardSettings').find('.mapPerm');
+    el.attr('title', permission);
+    if (permission == "commons") el.html("co");
+    else if (permission == "public") el.html("pu");
+    else if (permission == "private") el.html("pr");
+  });
+  
+  //bind best_in_place ajax callbacks
+  $('.best_in_place_metacode').bind("ajax:success", function() {
+    var metacode = $(this).html();
+    //changing img alt, img src for top card (topic view page)
+    //and on-canvas card. Also changing image of node
+    $(this).parents('.CardOnGraph').find('img.icon').attr('alt', metacode);
+    $(this).parents('.CardOnGraph').find('img.icon').attr('src', imgArray[metacode].src);
+  });
     
 	// this is to save the layout of maps when you're on a map page
 	$("#saveLayout").click(function(event) {

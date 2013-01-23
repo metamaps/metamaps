@@ -16,10 +16,11 @@ has_many :maps, :through => :mappings
 		@synapsedata['$desc'] = self.desc
 		@synapsedata['$showDesc'] = false
 		@synapsedata['$category'] = self.category
-		@synapsedata['$id'] = synapse.id
-		@synapsedata['$userid'] = synapse.user.id
-		@synapsedata['$username'] = synapse.user.name
-		@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
+		@synapsedata['$id'] = self.id
+		@synapsedata['$userid'] = self.user.id
+		@synapsedata['$username'] = self.user.name
+		@synapsedata['$direction'] = [self.node1_id.to_s(), self.node2_id.to_s()]
+    @synapsedata['$permission'] = self.permission
 		json.data @synapsedata
     end
   end
@@ -43,6 +44,7 @@ has_many :maps, :through => :mappings
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name
 				@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
+        @synapsedata['$permission'] = synapse.permission
 				json.data @synapsedata
 		  end
 		  
@@ -58,6 +60,7 @@ has_many :maps, :through => :mappings
       @topicdata['$inmaps'] = @inmaps
 		  @topicdata['$userid'] = topic.user.id
 		  @topicdata['$username'] = topic.user.name
+      @topicdata['$permission'] = topic.permission
 		  json.data @topicdata
 		  json.id topic.id
 		  json.name topic.name

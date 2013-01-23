@@ -12,19 +12,19 @@
   <p class="type">Map</p>
   <%= image_tag 'map.png', :class => 'icon', :size => '50x50' %>
   <div class="cardSettings">
+    <div class="mapPerm" title="<%= map.permission %>"><%= map.mk_permission %></div>
     <% if map.user == user %>
       <div class="permActivator">
         <div class="editSettings">        
           <span>Permissions:&nbsp;</span>
-          <span title="Click to Edit"><%= best_in_place map, :permission, :type => :select, :collection => [['commons', 'commons'], ['public','public'], ['private','private']] %></span>
+          <span title="Click to Edit"><%= best_in_place map, :permission, :type => :select, :collection => [['commons', 'commons'], ['public','public'], ['private','private']], :classes => 'best_in_place_permission' %></span>
           <div class="clearfloat"></div>
         </div>
       </div>
     <% end %>
-    <div class="mapPerm"><%= map.mk_permission %></div>
   </div>
   <span class="title">                                                  
-          <span><%= best_in_place map, :name, :type => :input %></span>                             
+          <span><%= best_in_place map, :name, :type => :input, :classes => 'best_in_place_name' %></span>                             
           <a href="/maps/<%=map.id %>" class="topic-go-arrow">    
             <img class="topic-go-arrow"                                       
                  title="Go to map"                                        
@@ -39,7 +39,7 @@
   <div class="scroll">
 		<div class="desc">
       <p class="mapdata"><%= map.topics.count %> topics and <%= map.synapses.count %> synapses</p>
-      <p><%= best_in_place map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>" %></p>
+      <p><%= best_in_place map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>", :classes => 'best_in_place_desc' %></p>
     </div>
 	</div>
   

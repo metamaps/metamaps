@@ -19,7 +19,19 @@
          data-collection='[["Action","Action"],["Activity","Activity"],["Bizarre","Bizarre"],["Catalyst","Catalyst"],["Closed","Closed"],["Experience","Experience"],["Future Dev","Future Dev"],["Group","Group"],["Idea","Idea"],["Implication","Implication"],["Insight","Insight"],["Intention","Intention"],["Knowledge","Knowledge"],["Location","Location"],["Open Issue","Open Issue"],["Opinion","Opinion"],["Opportunity","Opportunity"],["Person","Person"],["Platform","Platform"],["Problem","Problem"],["Question","Question"],["Reference","Reference"],["Requirement","Requirement"],["Resource","Resource"],["Role","Role"],["Task","Task"],["Tool","Tool"],["Trajectory","Trajectory"]]'                                 
          data-attribute="metacode"                                            
          data-type="select"><%= topic.metacode.name %></p>                                  
-      <%= image_tag topic.metacode.icon, :class => 'icon', :size => '50x50' %>                                                
+      <%= image_tag topic.metacode.icon, :class => 'icon', :size => '50x50' %> 
+        <div class="cardSettings">
+          <div class="mapPerm" title="<%= topic.permission %>"><%= topic.mk_permission %></div>
+          <% if topic.user == user %>
+            <div class="permActivator">
+              <div class="editSettings">        
+                <span>Permissions:&nbsp;</span>
+                <span title="Click to Edit"><%= best_in_place topic, :permission, :type => :select, :collection => [['commons', 'commons'], ['public','public'], ['private','private']], :classes => 'best_in_place_permission' %></span>
+                <div class="clearfloat"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
         <span class="title">                                                  
           <span class="best_in_place best_in_place_name"                      
                 data-url="/topics/<%=topic.id %>"                                     

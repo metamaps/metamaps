@@ -20,8 +20,15 @@ function onCreateLabelHandler(domElement, node) {
   
   var showCard = document.createElement('div');
   showCard.className = 'showcard topic_' + node.id;
-  showCard.innerHTML = html;
- showCard.style.display = "none";
+  if (authorizeToEdit(node)) {
+    var perm = document.createElement('div');
+    perm.className = 'permission canEdit';
+    perm.innerHTML = html;
+    showCard.appendChild(perm);
+  } else {
+    showCard.innerHTML = html;
+  }
+  showCard.style.display = "none";
   domElement.appendChild(showCard);
 
   // Create a 'name' button and add it to the main node label

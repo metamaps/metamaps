@@ -28,7 +28,7 @@ belongs_to :metacode
   
   def mk_permission
     if self.permission == "commons"
-      "cc"
+      "co"
     elsif self.permission == "public"
       "pu"
     elsif self.permission == "private"
@@ -58,11 +58,12 @@ belongs_to :metacode
       
 		  @topicdata = Hash.new
 		  @topicdata['$desc'] = self.desc
-		  @topicdata['$link'] = self.link
+      @topicdata['$link'] = self.link
 		  @topicdata['$metacode'] = self.metacode.name
       @topicdata['$inmaps'] = @inmaps
 		  @topicdata['$userid'] = self.user.id
 		  @topicdata['$username'] = self.user.name
+      @topicdata['$permission'] = self.permission
 		  json.data @topicdata
 		  json.id self.id
 		  json.name self.name
@@ -87,6 +88,7 @@ belongs_to :metacode
 		  @topicdata['$xloc'] = @mapping.xloc
 		  @topicdata['$yloc'] = @mapping.yloc
 		  @topicdata['$mappingid'] = @mapping.id
+      @topicdata['$permission'] = self.permission
 		  json.data @topicdata
 		  json.id self.id
 		  json.name self.name
@@ -113,6 +115,7 @@ belongs_to :metacode
 					@synapsedata['$userid'] = synapse.user.id
 					@synapsedata['$username'] = synapse.user.name
 					@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
+          @synapsedata['$permission'] = synapse.permission
 					json.data @synapsedata
 			  end
 			  
@@ -128,6 +131,7 @@ belongs_to :metacode
         @topicdata['$inmaps'] = @inmaps
 			  @topicdata['$userid'] = topic.user.id
 			  @topicdata['$username'] = topic.user.name
+        @topicdata['$permission'] = topic.permission
 			  json.data @topicdata
 			  json.id topic.id
 			  json.name topic.name
@@ -146,6 +150,7 @@ belongs_to :metacode
           @topicdata['$inmaps'] = @inmaps
           @topicdata['$userid'] = topic.user.id
           @topicdata['$username'] = topic.user.name
+          @topicdata['$permission'] = topic.permission
           json.data @topicdata
           json.id topic.id
           json.name topic.name

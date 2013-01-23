@@ -11,7 +11,7 @@
   <title>Metamaps</title>
   <% if authenticated? %>
     <script type="text/javascript">
-      var userid = "<%= user.id %>";
+      var userid = <%= user.id %>;
       var username = "<%= user.name %>";
     </script>
   <% else %>
