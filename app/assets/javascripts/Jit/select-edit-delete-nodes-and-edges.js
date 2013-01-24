@@ -125,10 +125,11 @@ function selectEdge(edge) {
     edge.setData('showDesc', true, 'current');
     edge.setDataset('end', {
       lineWidth: 4,
-      color: '#FFFFFF'
+      color: '#FFFFFF',
+      alpha: 1
     });
     Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color'],
+      modes: ['edge-property:lineWidth:color:alpha'],
       duration: 100
     });
   }
@@ -141,18 +142,20 @@ function deselectEdge(edge) {
     edge.setData('showDesc', false, 'current');
     edge.setDataset('end', {
       lineWidth: 2,
-      color: '#222222'
+      color: '#222222',
+      alpha: 0.4
     });
 
     if (MetamapsModel.edgeHoveringOver == edge) {
       edge.setDataset('end', {
         lineWidth: 4,
-        color: '#222222'
+        color: '#222222',
+        alpha: 1
       });
     }
 
     Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color'],
+      modes: ['edge-property:lineWidth:color:alpha'],
       duration: 100
     });
   }

@@ -60,7 +60,7 @@ function selectNodeOnClickHandler(node, e) {
   }
   //trigger animation to final styles
   Mconsole.fx.animate({
-    modes: ['edge-property:lineWidth:color'],
+    modes: ['edge-property:lineWidth:color:alpha'],
     duration: 500
   });
   Mconsole.plot();

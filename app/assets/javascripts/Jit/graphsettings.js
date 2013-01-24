@@ -34,7 +34,8 @@ function graphSettings(type) {
        overridable: true,
        color: '#222222',
        type: 'customEdge',
-       lineWidth: 2
+       lineWidth: 2,
+       alpha: 0.4
     },
     //Native canvas text styling
     Label: {
@@ -331,10 +332,11 @@ function onMouseEnter(edge) {
   if (!showDesc) {
     edge.setDataset('end', {
       lineWidth: 4,
-      color: '#222222'
+      color: '#222222',
+      alpha: 1
     });
     Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color'],
+      modes: ['edge-property:lineWidth:color:alpha'],
       duration: 100
     });
     Mconsole.plot();
@@ -347,10 +349,11 @@ function onMouseLeave(edge) {
   if (!showDesc) {
     edge.setDataset('end', {
       lineWidth: 2,
-      color: '#222222'
+      color: '#222222',
+      alpha: 0.4
     });
     Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color'],
+      modes: ['edge-property:lineWidth:color:alpha'],
       duration: 100
     });
   }

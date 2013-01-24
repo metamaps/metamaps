@@ -57,6 +57,7 @@ module TopicsHelper
         @synapsedata['$userid'] = synapse.user.id
         @synapsedata['$username'] = synapse.user.name
         @synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
+        @synapsedata['$permission'] = synapse.permission
 				json.data @synapsedata
 		  end
 
@@ -72,6 +73,7 @@ module TopicsHelper
       @topicdata['$inmaps'] = @inmaps
 		  @topicdata['$userid'] = topic.user.id
 		  @topicdata['$username'] = topic.user.name
+      @topicdata['$permission'] = topic.permission
 		  json.data @topicdata
 		  json.id topic.id
 		  json.name topic.name
@@ -99,9 +101,13 @@ module TopicsHelper
 
 				@synapsedata = Hash.new
 				@synapsedata['$desc'] = synapse.desc
-				@synapsedata['$category'] = synapse.category
-				@synapsedata['$userid'] = synapse.user.id
-				@synapsedata['$username'] = synapse.user.name
+        @synapsedata['$showDesc'] = false
+        @synapsedata['$category'] = synapse.category
+        @synapsedata['$id'] = synapse.id
+        @synapsedata['$userid'] = synapse.user.id
+        @synapsedata['$username'] = synapse.user.name
+        @synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
+        @synapsedata['$permission'] = synapse.permission
 				json.data @synapsedata
 		  end
 
@@ -117,7 +123,7 @@ module TopicsHelper
       @topicdata['$inmaps'] = @inmaps
 		  @topicdata['$userid'] = topic.user.id
 		  @topicdata['$username'] = topic.user.name
-
+      @topicdata['$permission'] = topic.permission
 		  json.data @topicdata
 		  json.id topic.id
 		  json.name topic.name
