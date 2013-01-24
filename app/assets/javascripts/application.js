@@ -84,51 +84,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
         } 
     );
   
-
-  // controls the sliding hover of the settings for cards
-	var sliding2 = false; 
-	var lT1,lT2;
-    $(".permActivator").hover( 
-        function () { 
-          clearTimeout(lT2);
-          that = this;       
-          lT1 = setTimeout(function() {
-            if (! sliding2) { 
-              sliding2 = true;            
-                $(that).animate({
-                  width: '203px',
-                  height: '37px'
-                }, 300, function() {
-                  sliding2 = false;
-                });
-            } 
-          }, 300);
-        },  
-        function () {
-          clearTimeout(lT1);
-          that = this;        
-          lT2 = setTimeout(function() { 
-			      if (! sliding2) { 
-				      sliding2 = true; 
-				      $(that).animate({
-					      height: '16px',
-                width: '16px'
-				      }, 300, function() {
-					      sliding2 = false;
-				      });
-			      } 
-		      },800); 
-        } 
-    );
-    //bind best_in_place ajax callbacks
-  $('.best_in_place_permission').bind("ajax:success", function() {
-    var permission = $(this).html();
-    var el = $(this).parents('.cardSettings').find('.mapPerm');
-    el.attr('title', permission);
-    if (permission == "commons") el.html("co");
-    else if (permission == "public") el.html("pu");
-    else if (permission == "private") el.html("pr");
-  });
+  addHoverForSettings();
   
   //bind best_in_place ajax callbacks
   $('.best_in_place_metacode').bind("ajax:success", function() {
@@ -146,6 +102,59 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 	});
 	
 });
+
+function addHoverForSettings() {
+  // controls the sliding hover of the settings for cards
+  $(".permActivator").unbind('mouseover');
+  $(".permActivator").unbind('mouseout');
+	var sliding2 = false; 
+	var lT1,lT2;
+    $(".permActivator").bind('mouseover', 
+        function () { 
+          clearTimeout(lT2);
+          that = this;       
+          lT1 = setTimeout(function() {
+            if (! sliding2) { 
+              sliding2 = true;            
+                $(that).animate({
+                  width: '203px',
+                  height: '37px'
+                }, 300, function() {
+                  sliding2 = false;
+                });
+            } 
+          }, 300);
+        });
+    
+    $(".permActivator").bind('mouseout',    
+        function () {
+          clearTimeout(lT1);
+          that = this;        
+          lT2 = setTimeout(function() { 
+			      if (! sliding2) { 
+				      sliding2 = true; 
+				      $(that).animate({
+					      height: '16px',
+                width: '16px'
+				      }, 300, function() {
+					      sliding2 = false;
+				      });
+			      } 
+		      },800); 
+        } 
+    );
+    
+  $('.best_in_place_permission').unbind("ajax:success");
+    //bind best_in_place ajax callbacks
+  $('.best_in_place_permission').bind("ajax:success", function() {
+    var permission = $(this).html();
+    var el = $(this).parents('.cardSettings').find('.mapPerm');
+    el.attr('title', permission);
+    if (permission == "commons") el.html("co");
+    else if (permission == "public") el.html("pu");
+    else if (permission == "private") el.html("pr");
+  });
+}
 
 // this is to save the layout of a map
 function saveLayoutAll() {

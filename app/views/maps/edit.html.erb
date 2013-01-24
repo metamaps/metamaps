@@ -12,6 +12,7 @@
   <% if @map.user == user %>
     <label for="map_perm">Permission</label>
     <%= form.select :permission, options_for_select(['commons', 'public', 'private'], @map.permission) %>
+    <p>Topics and synapses you create newly on this map will be set by default to the permissions of your map.<br>Permissions of already created topics will not be changed to your new map permission.</p>
   <% end %>
   <%= form.submit "Update", class: "update" %>
 <% end %>

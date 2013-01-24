@@ -46,7 +46,7 @@ function editEdge(edge, e) {
       $('#edit_synapse input').focus();
       $('#edit_synapse').show();
   }
-  else if (! authorizeToEdit(edge)) {
+  else if ((! authorizeToEdit(edge)) && userid) {
     alert("You don't have the permissions to edit this synapse.");
   }
 }

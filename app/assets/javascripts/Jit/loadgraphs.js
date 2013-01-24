@@ -81,6 +81,7 @@ function initialize(type, loadLater){
   
   // load JSON data.
   if (!loadLater) {
+      Mconsole.busy = true;
   	  Mconsole.loadJSON(json);
 	  
 	  // choose how to plot and animate the data onto the screen
@@ -97,7 +98,10 @@ function initialize(type, loadLater){
 		  
 		  chooseAnimate = {  
 			modes:['polar'],  
-			duration: 2000  
+			duration: 2000,
+      onComplete: function() {
+         Mconsole.busy = false;
+       }
 		  };
 	  }
 	  else if ( type == "arranged" ) {
@@ -114,7 +118,10 @@ function initialize(type, loadLater){
 		  chooseAnimate = {
 			 modes: ['linear'],
 			 transition: $jit.Trans.Quad.easeInOut,
-			 duration: 2500
+			 duration: 2500,
+       onComplete: function() {
+         Mconsole.busy = false;
+        }
 		   };
 	  }
 	  else if ( type == "chaotic" ) {
@@ -124,7 +131,10 @@ function initialize(type, loadLater){
 		  chooseAnimate = {
 			 modes: ['linear'],
 			 transition: $jit.Trans.Elastic.easeOut,
-			 duration: 2500
+			 duration: 2500,
+       onComplete: function() {
+         Mconsole.busy = false;
+        }
 		   };
 	  }
 	  

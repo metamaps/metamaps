@@ -123,9 +123,29 @@ function graphSettings(type) {
       } else if (node && !node.nodeFrom) {
         //node is actually a node :)
         if (!Mconsole.busy) {
-          selectNodeOnClickHandler(node, e);
           Mconsole.onClick(node.id, {  
-            hideLabels: false  
+            hideLabels: false,
+            onComplete: function() {
+              selectNodeOnClickHandler(node, e);
+              $('h1.index').html('Viewing Topic: ' + node.name);
+              window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
+              var myA = $.ajax({
+                  type: "Get",
+                  url: "/topics/" + node.id + "?format=json",
+                  success: function(data) {
+                    console.log(data);
+                    Mconsole.op.morph(data, {  
+                      type: 'fade',  
+                      duration: 1500,  
+                      hideLabels: false,  
+                      transition: $jit.Trans.Quart.easeOut  
+                    });
+                  },
+                  error: function(){
+                    alert('failure');
+                  }
+                });
+            }            
           });
         }
       } else {
@@ -277,6 +297,9 @@ var nodeSettings = {
 
 
 function onMouseMoveHandler(node, eventInfo, e) {
+  
+  if (Mconsole.busy) return;
+
   var node = eventInfo.getNode();
   var edge = eventInfo.getEdge();
   

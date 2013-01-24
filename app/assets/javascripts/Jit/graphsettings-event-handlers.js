@@ -1,4 +1,7 @@
 function selectEdgeOnClickHandler(adj, e) {
+  
+  if (Mconsole.busy) return;
+  
   //editing overrides everything else
   if (e.altKey) {
     editEdge(adj, e);
@@ -25,6 +28,9 @@ function selectEdgeOnClickHandler(adj, e) {
 }//selectEdgeOnClickHandler
 
 function selectNodeOnClickHandler(node, e) {
+
+  if (Mconsole.busy) return;
+
   //set final styles
   if (!e.shiftKey) {
       Mconsole.graph.eachNode(function (n) {

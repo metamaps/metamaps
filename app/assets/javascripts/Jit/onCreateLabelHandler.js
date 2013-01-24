@@ -61,6 +61,13 @@ function generateShowcardHTML() {
            height="50"                                                        \
            width="50"                                                         \
            src="$_imgsrc_$" />                                                \
+        <div class="cardSettings">                                            \
+          <div class="mapPerm"                                                \
+               title="$_permission_$">                                        \
+               $_mk_permission_$                                              \
+          </div>                                                              \
+          $_edit_permission_$                                                 \
+        </div>                                                                \
         <span class="title">                                                  \
           <span class="best_in_place best_in_place_name"                      \
                 data-url="/topics/$_id_$"                                     \
@@ -104,7 +111,7 @@ function generateShowcardHTML() {
 function replaceVariables(html, node) {
   //link is rendered differently if user is logged out or in
   var go_link, a_tag, close_a_tag;
-  if (userid == null) {
+  if (! authorizeToEdit(node)) {
     go_link = '';
     if (node.getData("link") != "") {
       a_tag = '<a href="' + node.getData("link") + '">';
@@ -145,7 +152,42 @@ function replaceVariables(html, node) {
 
   var desc_nil = "<span class='gray'>Click to add description.</span>";
   var link_nil = "<span class='gray'>Click to add link.</span>";
-
+  
+  var edit_perm = '';
+  if (userid == node.getData("userid")) {
+      edit_perm = '                                                  \
+        <div class="permActivator">                                  \
+          <div class="editSettings">                                 \
+            <span>Permissions:&nbsp;</span>                          \
+            <span title="Click to Edit">                             \
+              <span class="best_in_place best_in_place_permission"   \
+                    id="best_in_place_topic_$_id_$_permission"       \
+                    data-url="/topics/$_id_$"                        \
+                    data-object="topic"                              \
+                    data-collection=$_permission_choices_$           \
+                    data-attribute="permission"                      \
+                    data-type="select"                               \
+                    data-value="$_permission_$">                     \
+                $_permission_$                                       \
+              </span>                                                \
+            </span>                                                  \
+            <div class="clearfloat"></div>                           \
+          </div>                                                     \
+        </div>';
+  }
+  var permissions = ['commons','public','private'];
+  var permission_choices = "'[";
+  for (var i in permissions) {
+    permission_choices += '["' + permissions[i] + '","' + permissions[i] + '"],';
+  }
+  //remove trailing comma and add ]
+  permission_choices = permission_choices.slice(0, -1);
+  permission_choices += "]'";
+  edit_perm = edit_perm.replace(/\$_permission_choices_\$/g, permission_choices);
+  
+  html = html.replace(/\$_edit_permission_\$/g, edit_perm);
+  html = html.replace(/\$_permission_\$/g, node.getData("permission"));
+  html = html.replace(/\$_mk_permission_\$/g, mk_permission(node));
   html = html.replace(/\$_id_\$/g, node.id);
   html = html.replace(/\$_metacode_\$/g, node.getData("metacode"));
   html = html.replace(/\$_imgsrc_\$/g, imgArray[node.getData("metacode")].src);
@@ -156,14 +198,14 @@ function replaceVariables(html, node) {
   html = html.replace(/\$_go_link_\$/g, go_link);
   html = html.replace(/\$_a_tag_\$/g, a_tag);
   html = html.replace(/\$_close_a_tag_\$/g, close_a_tag);
-  if (node.getData("link") == "" && userid != null) {
+  if (node.getData("link") == "" && authorizeToEdit(node)) {
     html = html.replace(/\$_link_\$/g, link_nil);
   } else {
     html = html.replace(/\$_link_\$/g, node.getData("link"));
   }
 
   html = html.replace(/\$_desc_nil_\$/g, desc_nil);
-  if (node.getData("desc") == "" && userid != null) {
+  if (node.getData("desc") == "" && authorizeToEdit(node)) {
     //logged in but desc isn't there so it's invisible
     html = html.replace(/\$_desc_\$/g, desc_nil);
   } else {
@@ -235,6 +277,7 @@ function hideCard(node) {
 }
 
 function bindCallbacks(showCard, nameContainer, node) {
+  
    // add some events to the label
   $(showCard).find('img.icon').click(function(){
     hideCard(node);
@@ -284,5 +327,52 @@ function bindCallbacks(showCard, nameContainer, node) {
   $(showCard).find('.best_in_place_link').bind("ajax:success", function() {
     var link = $(this).html();
     $(showCard).find('.go-link').attr('href', link);
+  });
+  
+  var sliding2 = false; 
+	var lT1,lT2;
+  $(showCard).find(".permActivator").bind('mouseover', 
+        function () { 
+          clearTimeout(lT2);
+          that = this;       
+          lT1 = setTimeout(function() {
+            if (! sliding2) { 
+              sliding2 = true;            
+                $(that).animate({
+                  width: '203px',
+                  height: '37px'
+                }, 300, function() {
+                  sliding2 = false;
+                });
+            } 
+          }, 300);
+        });
+    
+    $(showCard).find(".permActivator").bind('mouseout',    
+        function () {
+          clearTimeout(lT1);
+          that = this;        
+          lT2 = setTimeout(function() { 
+			      if (! sliding2) { 
+				      sliding2 = true; 
+				      $(that).animate({
+					      height: '16px',
+                width: '16px'
+				      }, 300, function() {
+					      sliding2 = false;
+				      });
+			      } 
+		      },800); 
+        } 
+    );
+    
+  //bind best_in_place ajax callbacks
+  $(showCard).find('.best_in_place_permission').bind("ajax:success", function() {
+    var permission = $(this).html();
+    var el = $(this).parents('.cardSettings').find('.mapPerm');
+    el.attr('title', permission);
+    if (permission == "commons") el.html("co");
+    else if (permission == "public") el.html("pu");
+    else if (permission == "private") el.html("pr");
   });
 }
