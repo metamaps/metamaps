@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
     
     @user = User.new
 	
-	  @map = Map.first(:conditions => [ "id = ?", 5])
+    @map = Map.first(:conditions => [ "id = ?", 5])
 		
     if @map
       respond_with(@user, @session, location: map_url(@map)) do |format| 
