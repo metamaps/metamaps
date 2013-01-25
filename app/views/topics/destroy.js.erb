@@ -5,7 +5,15 @@
  */
 
 if (Mconsole != null) {
+  
   var node = Mconsole.graph.getNode(<%= @topic.id %>);
+  
+  if (node.id == Mconsole.root) {
+    Mconsole.graph.eachNode(function (n) {
+		  if (n.id != node.id) Mconsole.root = n.id;
+    });
+  }
+  
   node.setData('alpha', 0, 'end');  
   node.eachAdjacency(function(adj) {  
 	adj.setData('alpha', 0, 'end');  

@@ -30,40 +30,42 @@ function selectEdgeOnClickHandler(adj, e) {
 function selectNodeOnClickHandler(node, e) {
 
   if (Mconsole.busy) return;
-
-  //set final styles
-  if (!e.shiftKey) {
-      Mconsole.graph.eachNode(function (n) {
-        if (n.id != node.id) {
-            delete n.selected;
-            n.setData('onCanvas',false);
-        }
   
-        n.setData('dim', 25, 'current');
-        n.eachAdjacency(function (adj) {
-          deselectEdge(adj);
+  if (gType != "centered") {
+      //set final styles
+      if (!e.shiftKey) {
+          Mconsole.graph.eachNode(function (n) {
+            if (n.id != node.id) {
+                delete n.selected;
+                n.setData('onCanvas',false);
+            }
+      
+            n.setData('dim', 25, 'current');
+            n.eachAdjacency(function (adj) {
+              deselectEdge(adj);
+            });
+          });
+      }
+      if (!node.selected) {
+        node.selected = true;
+        node.setData('dim', 30, 'current');
+        node.setData('onCanvas',true);
+        node.eachAdjacency(function (adj) {
+          selectEdge(adj);
         });
+        Mconsole.plot();
+      } else {
+        node.setData('dim', 25, 'current');
+        delete node.selected;
+        node.setData('onCanvas',false);
+      }
+      //trigger animation to final styles
+      Mconsole.fx.animate({
+        modes: ['edge-property:lineWidth:color:alpha'],
+        duration: 500
       });
+      Mconsole.plot();
   }
-  if (!node.selected) {
-    node.selected = true;
-    node.setData('dim', 30, 'current');
-    node.setData('onCanvas',true);
-    node.eachAdjacency(function (adj) {
-      selectEdge(adj);
-    });
-    Mconsole.plot();
-  } else {
-    node.setData('dim', 25, 'current');
-    delete node.selected;
-    node.setData('onCanvas',false);
-  }
-  //trigger animation to final styles
-  Mconsole.fx.animate({
-    modes: ['edge-property:lineWidth:color:alpha'],
-    duration: 500
-  });
-  Mconsole.plot();
 }//selectNodeOnClickHandler
 
 function canvasDoubleClickHandler(canvasLoc,e) { 

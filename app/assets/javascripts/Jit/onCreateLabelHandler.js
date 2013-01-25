@@ -219,41 +219,33 @@ function generateLittleHTML(node) {
     <div class="label">$_name_$</div>                                         \
       <div class="nodeOptions">';
 
-  if ((userid == null || mapid == null) && node.id != Mconsole.root) {
+  if (userid == null || mapid == null || !mapperm) {
     //unauthenticated, not on a map: can remove from canvas
     littleHTML += '                                                           \
         <span class="removeFromCanvas"                                        \
-              onclick="removeFromCanvas($_id_$)"                              \
+              onclick="hideNode($_id_$)"                              \
               title="Click to remove topic from canvas">                      \
         </span>';
-  } else if (mapid != null && userid != null && node.id != Mconsole.root) {
-    //not on a map, authenticated, and not looking at root node
-    //(you can't delete the root node of a JIT graph)
+  } else if (mapperm) {
+    //permission to remove nodes from the map
     littleHTML += '                                                           \
         <span class="removeFromCanvas"                                        \
-                 onclick="removeFromCanvas($_id_$)"                           \
+                 onclick="hideNode($_id_$)"                                   \
                  title="Click to remove topic from canvas">                   \
         </span>                                                               \
-        <a href="/topics/$_mapid_$/$_id_$/removefrommap"                      \
-           title="Click to remove topic from map"                             \
-           class="removeFromMap"                                              \
-           data-method="post"                                                 \
-           data-remote="true"                                                 \
-           rel="nofollow">                                                    \
-        </a>';
+        <span class="removeFromMap"                                           \
+                 onclick="removeNode($_id_$)"                                 \
+                 title="Click to remove topic from map">                      \
+        </span>';
   }
 
-  if (userid != null && node.id != Mconsole.root) {
-    //logged in, whether you're on a map or not
-    littleHTML += '                                                           \
-        <a href="/topics/$_id_$"                                              \
-           title="Click to delete this topic"                                 \
-           class="deleteTopic"                                                \
-           data-confirm="Delete this topic and all synapses linking to it?"   \
-           data-method="delete"                                               \
-           data-remote="true"                                                 \
-           rel="nofollow">                                                    \
-        </a>';
+  if (userid == node.getData('userid')) {
+    //logged in, and owner of the topic, thus permission to delete
+    littleHTML += '                                                          \
+        <span class="deleteTopic"                                            \
+                 onclick="deleteNode($_id_$)"                                \
+                 title="Click to delete this topic">                         \
+        </span>';
   }
   littleHTML += '</div>';
   littleHTML = littleHTML.replace(/\$_id_\$/g, node.id);
@@ -291,8 +283,9 @@ function bindCallbacks(showCard, nameContainer, node) {
     $('.name').css('display','block');
     $('.name.topic_' + node.id).css('display','none');
     $('.showcard.topic_' + node.id).fadeIn('fast');
-    selectNodeOnClickHandler(node,e);
+    //selectNodeOnClickHandler(node,e);
     node.setData('dim', 1, 'current');
+    Mconsole.plot();
   });
 
   nameContainer.onmouseover = function(){

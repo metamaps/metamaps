@@ -5,10 +5,12 @@
   #%>
 
 <div class="headertop">
-    <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; $('#saveLayout').css('display','none'); } else if (goRealtime) { this.innerHTML = 'Start Realtime'; $('#saveLayout').css('display','block');} goRealtime = !goRealtime;">Start Realtime</button>
+    <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; } else if (goRealtime) { this.innerHTML = 'Start Realtime'; } goRealtime = !goRealtime;">Start Realtime</button>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
     <% if authenticated? %>
-      <button onclick="removeSelectedEdges();removeSelectedNodes();">Remove Selected From Map</button>
+      <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
+        <button onclick="removeSelectedEdges();removeSelectedNodes();">Remove Selected From Map</button>
+      <% end %>
       <button onclick="var r=confirm('Are you sure you want to permanently delete selected objects?!'); if (r == true) {deleteSelectedEdges();deleteSelectedNodes();}">Permanently Delete Selected</button>
       <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
 			  <%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
@@ -55,6 +57,9 @@
 <script>
   var dragged = 0;
   mapid = <%= @map.id %>;
+  <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
+    mapperm = true;
+  <% end %>
   var int = setInterval(function(){
       if (goRealtime) {
         $('#MapRealtime').submit();

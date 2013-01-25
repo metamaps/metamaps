@@ -165,32 +165,66 @@ function deselectEdge(edge) {
     MetamapsModel.selectedEdges.indexOf(edge), 1);
 }
 
+// this is for hiding one topic from your canvas
+function hideNode(nodeid) {
+  var node = Mconsole.graph.getNode(nodeid);
+  if (nodeid == Mconsole.root && gType == "centered") {
+    alert("You can't hide this topic, it is the root of your graph.");
+    return;
+  }
+  
+  node.setData('alpha', 0, 'end');  
+  node.eachAdjacency(function(adj) {  
+	adj.setData('alpha', 0, 'end');  
+  });  
+  Mconsole.fx.animate({  
+	modes: ['node-property:alpha',  
+			'edge-property:alpha'],  
+	duration: 1000  
+  });
+  Mconsole.graph.removeNode(nodeid);
+  Mconsole.labels.disposeLabel(nodeid);
+}
 function hideSelectedNodes() {
   Mconsole.graph.eachNode( function (n) {
-      if (n.data.$onCanvas == true && n.id != Mconsole.root) {
-          removeFromCanvas(n.id);
+      if (n.data.$onCanvas == true) {
+          hideNode(n.id);
       }
   });
 }
 
+function removeNode(nodeid) {
+  if (mapperm) {
+    $.ajax({
+      type: "POST",
+      url: "/topics/" + mapid + "/" + nodeid + "/removefrommap",
+    });
+  }
+}
 function removeSelectedNodes() {
-  Mconsole.graph.eachNode( function (n) {
-      if (n.data.$onCanvas == true && n.id != Mconsole.root) {
-          $.ajax({
-            type: "POST",
-            url: "/topics/" + mapid + "/" + n.id + "/removefrommap",
-          });
+ if (mapperm) {
+    Mconsole.graph.eachNode( function (n) {
+      if (n.data.$onCanvas == true) {
+          removeNode(n.id);
       }
-  });
+    });
+  }
 }
 
+function deleteNode(nodeid) {
+  if (nodeid == Mconsole.root && gType == "centered") {
+    alert("You can't delete this topic, it is the root of your graph.");
+    return;
+  }
+  $.ajax({
+    type: "DELETE",
+    url: "/topics/" + nodeid,
+  });
+}
 function deleteSelectedNodes() {
   Mconsole.graph.eachNode( function (n) {
-      if (n.data.$onCanvas == true && n.id != Mconsole.root) {
-        $.ajax({
-          type: "DELETE",
-          url: "/topics/" + n.id,
-        });
+      if (n.data.$onCanvas == true) {
+        deleteNode(n.id);
       }
   });
 }

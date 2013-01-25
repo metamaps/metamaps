@@ -124,28 +124,13 @@ function graphSettings(type) {
       } else if (node && !node.nodeFrom) {
         //node is actually a node :)
         if (!Mconsole.busy) {
+          $('h1.index').html('Viewing Topic: ' + node.name);
+          window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
           Mconsole.onClick(node.id, {  
             hideLabels: false,
+            duration: 1000,
             onComplete: function() {
-              selectNodeOnClickHandler(node, e);
-              $('h1.index').html('Viewing Topic: ' + node.name);
-              window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
-              var myA = $.ajax({
-                  type: "Get",
-                  url: "/topics/" + node.id + "?format=json",
-                  success: function(data) {
-                    console.log(data);
-                    Mconsole.op.morph(data, {  
-                      type: 'fade',  
-                      duration: 1500,  
-                      hideLabels: false,  
-                      transition: $jit.Trans.Quart.easeOut  
-                    });
-                  },
-                  error: function(){
-                    alert('failure');
-                  }
-                });
+              fetchRelatives(node);
             }            
           });
         }
@@ -158,7 +143,7 @@ function graphSettings(type) {
   return t;
 }//graphSettings
 
-// defining code to draw edges with arrows pointing in the middle of them
+// defining code to draw edges with arrows pointing in one direction
 var renderMidArrow = function(from, to, dim, swap, canvas){ 
         var ctx = canvas.getCtx(); 
         // invert edge direction 
@@ -188,6 +173,38 @@ arrowPoint.y - vect.y);
         ctx.moveTo(from.x, from.y); 
         ctx.lineTo(to.x, to.y); 
         ctx.stroke(); 
+        ctx.beginPath(); 
+        ctx.moveTo(v1.x, v1.y); 
+        ctx.lineTo(arrowPoint.x, arrowPoint.y); 
+        ctx.lineTo(v2.x, v2.y); 
+        ctx.stroke(); 
+};
+// defining code to draw edges with arrows pointing in both directions
+var renderMidArrows = function(from, to, dim, swap, canvas){ 
+        var ctx = canvas.getCtx(); 
+        // invert edge direction 
+        if (swap) { 
+              var tmp = from; 
+              from = to; 
+              to = tmp; 
+        } 
+        // vect represents a line from tip to tail of the arrow 
+        var vect = new $jit.Complex(to.x - from.x, to.y - from.y); 
+        // scale it 
+        vect.$scale(dim / vect.norm()); 
+        // compute the midpoint of the edge line 
+        var midPoint = new $jit.Complex((to.x + from.x) / 2, (to.y + from.y) / 2); 
+        // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
+        var arrowPoint = new $jit.Complex((vect.x / 0.7) + midPoint.x, (vect.y / 0.7) + midPoint.y);
+        // compute the tail intersection point with the edge line 
+        var intermediatePoint = new $jit.Complex(arrowPoint.x - vect.x, 
+arrowPoint.y - vect.y); 
+        // vector perpendicular to vect 
+        var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
+        var v1 = intermediatePoint.add(normal); 
+        var v2 = intermediatePoint.$add(normal.$scale(-1)); 
+
+        //ctx.strokeStyle = "#222222";
         ctx.beginPath(); 
         ctx.moveTo(v1.x, v1.y); 
         ctx.lineTo(arrowPoint.x, arrowPoint.y); 
@@ -248,8 +265,9 @@ var nodeSettings = {
 				this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
 		  }
 		  else if (directionCat == "both") {
-				renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, true, canvas);
-				renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, false, canvas);
+        this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
+				renderMidArrows({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, true, canvas);
+        renderMidArrows({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, false, canvas);
 		  }
 		  else if (directionCat == "from-to") {
 				var direction = adj.data.$direction;
@@ -376,7 +394,7 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     tempNode = null;
     tempNode2 = null;
     tempInit = false;
-  } else if (allowRealtime && dragged != 0 && goRealtime) {
+  } else if (dragged != 0 && goRealtime) {
     saveLayout(dragged); 
   }
 }//onDragEndTopicHandler

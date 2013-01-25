@@ -98,7 +98,7 @@ belongs_to :metacode
   #build a json object of everything connected to a specified node
   def network_as_json(current)
     Jbuilder.encode do |json|
-	  @topics = network(self,nil,2)
+	  @topics = network(self,nil,1)
 	  
 	    if @topics.count > 1
 		  json.array!(@topics.delete_if{|topic| (not topic.authorize_to_view(current)) || (not topic.has_viewable_synapses(current))}) do |topic|
@@ -108,6 +108,7 @@ belongs_to :metacode
 					json.nodeFrom synapse.node1_id
 					
 					@synapsedata = Hash.new
+          @synapsedata['$alpha'] = 0.4
 					@synapsedata['$desc'] = synapse.desc
 					@synapsedata['$showDesc'] = false
 					@synapsedata['$category'] = synapse.category

@@ -21,7 +21,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false;
 
  $(document).ready(function() {
  
@@ -175,6 +175,8 @@ function saveLayout(id) {
   $('#map_coordinates').val(n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y);
   $('#saveMapLayout').submit();
   dragged = 0;
+  $('#saveLayout').attr('value','Saved!');
+  setTimeout(function(){$('#saveLayout').attr('value','Save Layout')},1500);
 }
 
 // this is to save your console to a map
@@ -201,22 +203,6 @@ function saveToMap() {
   $('#new_map').fadeIn('fast');
 }
 
-// this is for hiding one topic from your canvas
-function removeFromCanvas(topic_id) {
-  var node = Mconsole.graph.getNode(topic_id);
-  node.setData('alpha', 0, 'end');  
-  node.eachAdjacency(function(adj) {  
-	adj.setData('alpha', 0, 'end');  
-  });  
-  Mconsole.fx.animate({  
-	modes: ['node-property:alpha',  
-			'edge-property:alpha'],  
-	duration: 1000  
-  });
-  Mconsole.graph.removeNode(topic_id);
-  Mconsole.labels.disposeLabel(topic_id);
-}
-
 function addMetacode() {
 	// code from http://www.professorcloud.com/mainsite/carousel-integration.htm
   //mouseWheel:true,
@@ -232,6 +218,47 @@ function addMetacode() {
 		});
 		metacodeIMGinit = true;
 	}
+}
+
+function fetchRelatives(node) {
+  var myA = $.ajax({
+    type: "Get",
+    url: "/topics/" + node.id + "?format=json",
+    success: function(data) {
+      if (gType == "centered") {
+        Mconsole.op.sum(data, {  
+          type: 'fade',
+          duration: 500
+        });
+        Mconsole.graph.eachNode(function (n) {
+          n.eachAdjacency(function (a) {
+            if (!a.getData('showDesc')) {
+              a.setData('alpha', 0.4, 'start');
+              a.setData('alpha', 0.4, 'current');
+              a.setData('alpha', 0.4, 'end');
+            }
+          });
+        });
+      }
+      else {
+        Mconsole.op.sum(data, {  
+          type: 'nothing',
+        });
+        Mconsole.plot();
+      }
+      /*Mconsole.op.contract(node, {  
+        type: 'replot' 
+      });
+      Mconsole.op.expand(node, {  
+        type: 'animate',
+        transition: $jit.Trans.Elastic.easeOut,
+        duration: 1000                     
+      });*/
+    },
+    error: function(){
+      alert('failure');
+    }
+  });
 }
 
 function MconsoleReset() {

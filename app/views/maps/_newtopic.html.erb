@@ -9,7 +9,9 @@
   <%= form.hidden_field :metacode, :value => "Action" %>
   <%= form.hidden_field :x, :value => 0 %>
   <%= form.hidden_field :y, :value => 0 %>
-  <%= form.hidden_field :map, :value => @map.id %>
+  <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
+    <%= form.hidden_field :map, :value => @map.id %>
+  <% end %>
   <%= form.hidden_field :grabTopic, :value => "null" %>
   <%= form.hidden_field :addSynapse, :value => false %>
   <!--<input id="left-but"  type="button" value="Left" />-->
