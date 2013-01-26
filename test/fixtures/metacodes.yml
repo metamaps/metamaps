@@ -115,3 +115,51 @@ twenty-seven:
 twenty-eight:
   name: Trajectory  
   icon: trajectory.png
+  
+twenty-nine:
+  name: Argument  
+  icon: argument.png
+  
+thirty:
+  name: Con  
+  icon: con_icon.png
+  
+thirty-one:
+  name: Decision  
+  icon: decision.png
+  
+thirty-two:
+  name: Example  
+  icon: example.png
+  
+thirty-three:
+  name: Foresight  
+  icon: foresight.png
+  
+thirty-four:
+  name: Good Practice  
+  icon: goodpractice.png
+  
+thirty-five:
+  name: List  
+  icon: list.png
+  
+thirty-six:
+  name: Movie Map  
+  icon: moviemap.png
+  
+thirty-seven:
+  name: Note  
+  icon: note.png
+  
+thirty-eight:
+  name: Pro  
+  icon: pro.png
+  
+thirty-nine:
+  name: Research  
+  icon: research.png
+  
+forty:
+  name: Wildcard  
+  icon: wildcard.png

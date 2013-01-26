@@ -64,6 +64,9 @@ class UsersController < ApplicationController
     @user = current_user
     @user.attributes = params[:user]
     
+    @m = params[:metacodes][:value]
+    @user.settings.metacodes=@m.split(',')
+    
     @user.save
     
     respond_with(@user, location: user_url(@user)) do |format|

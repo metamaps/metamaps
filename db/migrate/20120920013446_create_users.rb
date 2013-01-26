@@ -3,6 +3,7 @@ class CreateUsers < ActiveRecord::Migration
     create_table :users do |t|
       t.string :name
       t.string :email
+      t.text   :settings
 	    t.string :code, :limit => 8
 	    t.string :joinedwithcode, :limit => 8
       t.string :crypted_password

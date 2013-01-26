@@ -20,6 +20,13 @@
       var username = null;
     </script>  
   <% end %>
+  <script>
+    var imgArray = new Object();
+    
+    <% Metacode.all.each do |m| %>
+      imgArray['<%= m.name %>'] = new Image(); imgArray['<%= m.name %>'].src = '/assets/<%= m.icon %>';
+    <% end %>
+  </script>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>

@@ -13,38 +13,6 @@
   animate = !(iStuff || !nativeCanvasSupport);
 })();
 
-var imgArray = new Object();
-
-imgArray['Group'] = new Image(); imgArray['Group'].src = '/assets/group.png';
-imgArray['Person'] = new Image(); imgArray['Person'].src = '/assets/person.png';
-imgArray['Bizarre'] = new Image(); imgArray['Bizarre'].src = '/assets/bizarre.png';
-imgArray['Catalyst'] = new Image(); imgArray['Catalyst'].src = '/assets/catalyst.png';
-imgArray['Closed'] = new Image(); imgArray['Closed'].src = '/assets/closed.png';
-imgArray['Experience'] = new Image(); imgArray['Experience'].src = '/assets/experience.png';
-imgArray['Future Dev'] = new Image(); imgArray['Future Dev'].src = '/assets/futuredev.png';
-imgArray['Idea'] = new Image(); imgArray['Idea'].src = '/assets/idea.png';
-imgArray['Implication'] = new Image(); imgArray['Implication'].src = '/assets/implication.png';
-imgArray['Insight'] = new Image(); imgArray['Insight'].src = '/assets/insight.png';
-imgArray['Intention'] = new Image(); imgArray['Intention'].src = '/assets/intention.png';
-imgArray['Knowledge'] = new Image(); imgArray['Knowledge'].src = '/assets/knowledge.png';
-imgArray['Location'] = new Image(); imgArray['Location'].src = '/assets/location.png';
-imgArray['Open Issue'] = new Image(); imgArray['Open Issue'].src = '/assets/openissue.png';
-imgArray['Opinion'] = new Image(); imgArray['Opinion'].src = '/assets/opinion.png';
-imgArray['Opportunity'] = new Image(); imgArray['Opportunity'].src = '/assets/opportunity.png';
-imgArray['Platform'] = new Image(); imgArray['Platform'].src = '/assets/platform.png';
-imgArray['Problem'] = new Image(); imgArray['Problem'].src = '/assets/problem.png';
-imgArray['Question'] = new Image(); imgArray['Question'].src = '/assets/question.png';
-imgArray['Reference'] = new Image(); imgArray['Reference'].src = '/assets/reference.png';
-imgArray['Requirement'] = new Image(); imgArray['Requirement'].src = '/assets/requirement.png';
-imgArray['Resource'] = new Image(); imgArray['Resource'].src = '/assets/resource.png';
-imgArray['Role'] = new Image(); imgArray['Role'].src = '/assets/role.png';
-imgArray['Task'] = new Image(); imgArray['Task'].src = '/assets/task.png';
-imgArray['Tool'] = new Image(); imgArray['Tool'].src = '/assets/tool.png';
-imgArray['Trajectory'] = new Image(); imgArray['Trajectory'].src = '/assets/trajectory.png';
-imgArray['Action'] = new Image(); imgArray['Action'].src = '/assets/action.png';
-imgArray['Activity'] = new Image(); imgArray['Activity'].src = '/assets/activity.png';
-
-
 // init custom node type 
 $jit.ForceDirected.Plot.NodeTypes.implement(nodeSettings);
 //implement an edge type  

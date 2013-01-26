@@ -226,9 +226,11 @@ function fetchRelatives(node) {
     url: "/topics/" + node.id + "?format=json",
     success: function(data) {
       if (gType == "centered") {
+        Mconsole.busy = true;
         Mconsole.op.sum(data, {  
           type: 'fade',
-          duration: 500
+          duration: 500,
+          hideLabels: false
         });
         Mconsole.graph.eachNode(function (n) {
           n.eachAdjacency(function (a) {
@@ -239,6 +241,7 @@ function fetchRelatives(node) {
             }
           });
         });
+        Mconsole.busy = false;
       }
       else {
         Mconsole.op.sum(data, {  

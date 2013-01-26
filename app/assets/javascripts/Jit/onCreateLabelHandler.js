@@ -243,7 +243,7 @@ function generateLittleHTML(node) {
     //logged in, and owner of the topic, thus permission to delete
     littleHTML += '                                                          \
         <span class="deleteTopic"                                            \
-                 onclick="deleteNode($_id_$)"                                \
+                 onclick="var t = confirm(\'Are you sure you want to permanently delete this node and all synapses linking to it?\'); if (t) deleteNode($_id_$)"                                       \
                  title="Click to delete this topic">                         \
         </span>';
   }

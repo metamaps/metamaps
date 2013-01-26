@@ -111,7 +111,6 @@ a {
 .new_session, 
 .new_user,
 .new_map,
-.edit_user,
 .edit_topic,
 .edit_synapse,
 .edit_map,
@@ -122,6 +121,20 @@ a {
   left:50%;
   top:0;
   margin:200px 0 0 -195px;
+  background: url('bg.png');
+  padding: 20px;
+  border-radius: 15px;
+  color: #000;
+  border:2px solid #000;
+}
+
+.edit_user{
+  display: block;
+  width: 800px;
+  position:absolute;
+  left:50%;
+  top:0;
+  margin:50px 0 0 -420px;
   background: url('bg.png');
   padding: 20px;
   border-radius: 15px;
