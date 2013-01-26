@@ -5,7 +5,9 @@
   #%>
 
 <div class="headertop">
+    <% if false %>
     <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; } else if (goRealtime) { this.innerHTML = 'Start Realtime'; } goRealtime = !goRealtime;">Start Realtime</button>
+    <% end %>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
     <% if authenticated? %>
       <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
@@ -49,9 +51,11 @@
   <%= render :partial => 'maps/new' %>
 <% end %>
 
+<% if false %>
 <%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
     <%= form.hidden_field :time, :value => Time.now.to_i %>
     <%= form.hidden_field :ids, :value => 0 %>
+<% end %>
 <% end %>
   
 <script>
@@ -60,11 +64,11 @@
   <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
     mapperm = true;
   <% end %>
-  var int = setInterval(function(){
+  /*var int = setInterval(function(){
       if (goRealtime) {
         $('#MapRealtime').submit();
       }
-    },4000);
+    },4000);*/
 </script>
 
 <script>
