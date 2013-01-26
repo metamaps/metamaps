@@ -5,7 +5,7 @@
 <div class="anypage">
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
   <div id="metacodeImg">
-    <% @m = user.settings.unserialize().metacodes %>
+    <% @m = user.settings.metacodes %>
     <% @m.each do |m| %>
       <% metacode = Metacode.find(m.to_i) %>
       <img class="cloudcarousel" width="40" height="40" src="/assets/<%= metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>"/>
