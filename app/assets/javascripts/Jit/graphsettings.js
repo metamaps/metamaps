@@ -240,7 +240,7 @@ var nodeSettings = {
 
     //plot arrow edge 
     if (directionCat == "none") {
-      //this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
+      edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
     }
     else if (directionCat == "both") {
       renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, true, canvas);

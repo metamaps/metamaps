@@ -139,7 +139,7 @@ function add_direction_form(edge) {
     $('#edit_synapse_left').prop('checked', true);
     $('#edit_synapse_right').prop('checked', true);
   }
-  $('edit_synapse_left, #edit_synapse_right').click(function() {
+  $('#edit_synapse_left, #edit_synapse_right').click(function() {
     var leftChecked = $('#edit_synapse_left').is(':checked');
     var rightChecked = $('#edit_synapse_right').is(':checked');
 
@@ -149,10 +149,10 @@ function add_direction_form(edge) {
       dirCat = 'both';
     } else if (!leftChecked && rightChecked) {
       dirCat = 'from-to';
-      dir = [left.id, right.id];
+      dir = [right.id, left.id];
     } else if (leftChecked && !rightChecked) {
       dirCat = 'from-to';
-      dir = [right.id, left.id];
+      dir = [left.id, right.id];
     }
     $.ajax({
       'type': 'PUT',
@@ -180,7 +180,8 @@ function updateEdgeDisplay(edge, dir, dirCat) {
   edge.setData('direction', dir);
 
   //render mid arrow
-  renderEdgeArrows(null, edge);
+  renderEdgeArrows(Mconsole.fx.edgeHelper, edge);
+  Mconsole.plot();
 }
 
 function best_in_place_perms(edge) {
