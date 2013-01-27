@@ -106,14 +106,14 @@ class SynapsesController < ApplicationController
   
   # GET synapses/:id/edit
   def edit
-	  @current = current_user
+    @current = current_user
     @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
 	
-	  if @synapse 
-		  @topics = Topic.visibleToUser(@current, nil)
-	  elsif not @synapse
-		  redirect_to root_url and return
-	  end
+    if @synapse 
+      @topics = Topic.visibleToUser(@current, nil)
+    elsif not @synapse
+      redirect_to root_url and return
+    end
   
 	  respond_with(@synapse, @topics)
   end
@@ -132,7 +132,7 @@ class SynapsesController < ApplicationController
       if params[:node1_id] and params[:node1_id][:node1]
 	    @synapse.topic1 = Topic.find(params[:node1_id][:node1])
       end
-      if params[:node1_id] and params[:node1_id][:node1]
+      if params[:node2_id] and params[:node2_id][:node2]
 	    @synapse.topic2 = Topic.find(params[:node2_id][:node2])
       end
 	  @synapse.save

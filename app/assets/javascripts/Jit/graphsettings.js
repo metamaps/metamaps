@@ -175,8 +175,7 @@ var renderMidArrow = function(from, to, dim, swap, canvas){
         // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
         var arrowPoint = new $jit.Complex((vect.x / 0.7) + midPoint.x, (vect.y / 0.7) + midPoint.y);
         // compute the tail intersection point with the edge line 
-        var intermediatePoint = new $jit.Complex(arrowPoint.x - vect.x, 
-arrowPoint.y - vect.y); 
+        var intermediatePoint = new $jit.Complex(arrowPoint.x - vect.x, arrowPoint.y - vect.y); 
         // vector perpendicular to vect 
         var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
         var v1 = intermediatePoint.add(normal); 
@@ -232,6 +231,28 @@ var nodeSettings = {
 	  }
   }
   
+  var renderEdgeArrows = function(edgeHelper, adj) {
+    var canvas = Mconsole.canvas;
+    var directionCat = adj.getData('category');
+    var direction = adj.getData('direction');
+    var pos = adj.nodeFrom.pos.getc(true); 
+    var posChild = adj.nodeTo.pos.getc(true);
+
+    //plot arrow edge 
+    if (directionCat == "none") {
+      //this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
+    }
+    else if (directionCat == "both") {
+      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, true, canvas);
+      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, false, canvas);
+    }
+    else if (directionCat == "from-to") {
+      var direction = adj.data.$direction;
+      var inv = (direction && direction.length > 1 && direction[0] != adj.nodeFrom.id);
+      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, inv, canvas);
+    }
+  }//renderEdgeArrow
+
 // defining custom edges
  var edgeSettings = {  
 	  'customEdge': {  
@@ -242,19 +263,7 @@ var nodeSettings = {
 		  
 		  var directionCat = adj.getData("category");
 		  //label placement on edges 
-		  //plot arrow edge 
-		  if (directionCat == "none") {
-				this.edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
-		  }
-		  else if (directionCat == "both") {
-				renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, true, canvas);
-				renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, false, canvas);
-		  }
-		  else if (directionCat == "from-to") {
-				var direction = adj.data.$direction;
-				var inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id);
-				renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, inv, canvas);
-		  }
+          renderEdgeArrows(this.edgeHelper, adj);
 		   
 		  //check for edge label in data  
 		  var desc = adj.getData("desc");
@@ -322,6 +331,8 @@ function onMouseMoveHandler(node, eventInfo, e) {
     onMouseLeave(MetamapsModel.edgeHoveringOver)
     onMouseEnter(edge);
   }
+
+  //could be false
   MetamapsModel.edgeHoveringOver = edge;
 }
 
