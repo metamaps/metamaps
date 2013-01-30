@@ -73,6 +73,10 @@ function graphSettings(type) {
       //Add also a click handler to nodes
       onClick: function (node, eventInfo, e) {
         if (e.target.id != "infovis-canvas") return false;
+
+        //hide synapse editing dialog
+        $('#edit_synapse').hide();
+
         //clicking on a node, or clicking on blank part of canvas?
         if (node.nodeFrom) {
           selectEdgeOnClickHandler(node, e);  
