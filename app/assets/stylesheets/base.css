@@ -194,6 +194,15 @@
   margin: 2px;
 }
 
+#edit_synapse .mapPerm {
+  margin-left: 1em;
+}
+
+#edit_synapse .permActivator {
+  position: absolute;
+  margin-top: -0.5em;
+}
+
 #edit_synapse {
   background-color: #aaa;
   border-radius: 0.5em;
@@ -201,4 +210,8 @@
 
 #edit_synapse_name {
   margin-left: 0.4em;
+}
+
+#edit_synapse .click-to-edit {
+  margin-left: 0.3em;
 }
