@@ -29,9 +29,12 @@ function editEdge(edge, e) {
 }
 
 function populateEditEdgeForm(edge) {
-  add_name_form(edge);
-  add_perms_form(edge);
+  //disabled for now since permissions are complicated
+  //TODO: figure out why permissions are "0" in edge objects
+  //instead of being "commons" or "public", etc
+  //add_perms_form(edge);
   add_direction_form(edge);
+  add_name_form(edge);
 }
 function add_name_form(edge) {
   //name editing form
@@ -55,7 +58,7 @@ function add_name_form(edge) {
 function add_perms_form(edge) {
   //permissions - if owner, also allow permission editing
   $('#edit_synapse').append('<div class="mapPerm"></div>');
-  $('#edit_synapse .mapPerm').text(mk_permission(edge));
+  $('#edit_synapse .mapPerm').html(mk_permission(edge));
   if (userid == edge.getData('userid')) {
     $('#edit_synapse').append('<div class="permActivator" />');
     $('#edit_synapse .permActivator').append('<div class="editSettings" />');
@@ -80,7 +83,7 @@ function add_perms_form(edge) {
       }, 300);
     });
     $('#edit_synapse .permActivator').bind('mouseout', function () {
-        return;
+        return; //devin
         clearTimeout(MetamapsModel.edgePermTimer1);
         that = this;
         MetamapsModel.edgePermTimer2 = setTimeout(function() {
@@ -193,7 +196,7 @@ function best_in_place_perms(edge) {
         data-collection=$_permission_choices_$                                \
         data-attribute="permission"                                           \
         data-type="select"                                                    \
-        data-value="$_current_$">';
+        data-value="$_current_$">$_perm_$</span>';
 
   var permission_choices = "'[";
   permission_choices += '["commons","commons"],';
@@ -204,6 +207,7 @@ function best_in_place_perms(edge) {
   output = output.replace(/\$_permission_choices_\$/g, permission_choices);
   output = output.replace(/\$_id_\$/g, edge.getData('id'));
   output = output.replace(/\$_current_$\$/g, edge.getData('permission'));
+  output = output.replace(/\$_perm_\$/g, mk_permission(edge));
   return output;
 }//best_in_place_perms
 
