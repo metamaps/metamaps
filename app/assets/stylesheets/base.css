@@ -103,6 +103,10 @@
   margin-top:2px;	
 }
 
+#edit_synapse .best_in_place_desc {
+  width: auto;
+}
+
 .best_in_place_desc  textarea{
   width:150px;
   display:block;	
@@ -157,7 +161,7 @@
 }
 
 .editSettings span {
-  float:left;
+  display: inline-block;
 }
 
 .permActivator {
@@ -180,4 +184,34 @@
   top: 0px;
   width:16px;
   text-align:center;
+}
+
+#edit_synapse .mapPerm,
+#edit_synapse .permActivator {
+  position: static;
+  display: inline-block;
+  color: #000;
+  margin: 2px;
+}
+
+#edit_synapse .mapPerm {
+  margin-left: 1em;
+}
+
+#edit_synapse .permActivator {
+  position: absolute;
+  margin-top: -0.5em;
+}
+
+#edit_synapse {
+  background-color: #aaa;
+  border-radius: 0.5em;
+}
+
+#edit_synapse_name {
+  margin-left: 0.4em;
+}
+
+#edit_synapse .click-to-edit {
+  margin-left: 0.3em;
 }

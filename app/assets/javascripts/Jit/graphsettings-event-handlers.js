@@ -4,6 +4,7 @@ function selectEdgeOnClickHandler(adj, e) {
   
   //editing overrides everything else
   if (e.altKey) {
+    //in select-edit-delete-nodes-and-edges.js
     editEdge(adj, e);
     return;
   }

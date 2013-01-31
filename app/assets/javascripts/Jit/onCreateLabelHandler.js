@@ -322,20 +322,18 @@ function bindCallbacks(showCard, nameContainer, node) {
     $(showCard).find('.go-link').attr('href', link);
   });
   
-  var sliding2 = false; 
-	var lT1,lT2;
   $(showCard).find(".permActivator").bind('mouseover', 
         function () { 
-          clearTimeout(lT2);
+          clearTimeout(MetamapsModel.topicPermTimer2);
           that = this;       
-          lT1 = setTimeout(function() {
-            if (! sliding2) { 
-              sliding2 = true;            
+          MetamapsModel.topicPermTimer1 = setTimeout(function() {
+            if (! MetamapsModel.topicPermSliding) { 
+              MetamapsModel.topicPermSliding = true;            
                 $(that).animate({
                   width: '203px',
                   height: '37px'
                 }, 300, function() {
-                  sliding2 = false;
+                  MetamapsModel.topicPermSliding = false;
                 });
             } 
           }, 300);
@@ -343,16 +341,16 @@ function bindCallbacks(showCard, nameContainer, node) {
     
     $(showCard).find(".permActivator").bind('mouseout',    
         function () {
-          clearTimeout(lT1);
+          clearTimeout(MetamapsModel.topicPermTimer1);
           that = this;        
-          lT2 = setTimeout(function() { 
-			      if (! sliding2) { 
-				      sliding2 = true; 
+          MetamapsModel.topicPermTimer2 = setTimeout(function() { 
+			      if (! MetamapsModel.topicPermSliding) { 
+				      MetamapsModel.topicPermSliding = true; 
 				      $(that).animate({
 					      height: '16px',
                 width: '16px'
 				      }, 300, function() {
-					      sliding2 = false;
+					      MetamapsModel.topicPermSliding = false;
 				      });
 			      } 
 		      },800); 
