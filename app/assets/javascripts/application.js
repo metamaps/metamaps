@@ -53,21 +53,13 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
         function () { 
 		  clearTimeout(lT);
           if (! sliding1) { 
-            sliding1 = true; 
-			if (userid != null) {
+            sliding1 = true;
+            var listLength = $('.logo .menu li').length * 27;          
               $('.footer .menu').animate({
-				height: '272px'
-			  }, 300, function() {
-				sliding1 = false;
-			  });
-			}
-			else {
-			  $('.footer .menu').animate({
-				height: '140px'
-			  }, 300, function() {
-				sliding1 = false;
-			  });
-			}
+              height: listLength + 'px'
+              }, 300, function() {
+              sliding1 = false;
+              });
           } 
         },  
         function () { 
