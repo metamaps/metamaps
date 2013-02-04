@@ -22,10 +22,10 @@ class SessionsController < ApplicationController
     
     @user = User.new
 	
-    @map = Map.first(:conditions => [ "id = ?", 5])
+    @topic = Topic.find(260)
 		
     if @map
-      respond_with(@user, @session, location: map_url(@map)) do |format| 
+      respond_with(@user, @session, location: topic_url(@topic)) do |format| 
       end
     else
       respond_with(@user, @session, location: root_url) do |format| 
