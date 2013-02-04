@@ -73,9 +73,28 @@
 }
 
 .best_in_place_name {
-  max-width:130px;
+  width:150px;
   float:left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
+.best_in_place_name:hover {
+  width:150px;
+  float:left;
+  text-overflow: none;
+  white-space: normal;
+  overflow: visible;
+  position: absolute;
+  background: #ddd;
+  border-radius: 10px;
+  padding: 5px;
+  opacity: 0.98;
+  box-shadow: 4px 4px 5px #888888;
+  border: 1px solid #AAA;
+  z-index: 5;
+}
+
 
 .best_in_place_name input{
   max-width:130px;

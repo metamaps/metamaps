@@ -6,14 +6,10 @@ class MainController < ApplicationController
   respond_to :html, :js, :json
   
   def home
-    @topics = Topic.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
-    @topics = @topics.slice(0,3)
-    @synapses = Synapse.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
-    @synapses = @synapses.slice(0,3)
     @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
     @maps = @maps.slice(0,3)
     
-    respond_with(@topics, @synapses, @maps) 
+    respond_with(@maps) 
   end
   
   def console	
@@ -48,6 +44,11 @@ class MainController < ApplicationController
     respond_to do |format|
       format.js { respond_with(@topics,@synapses) }
     end
+  end
+  
+  
+  def requestinvite
+	  
   end
   
   def invite	

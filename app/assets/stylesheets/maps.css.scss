@@ -34,7 +34,7 @@ padding: 0;
 cursor:pointer;
 }
 
-.map .scroll { display:block; height:283px; }
+.map .scroll { display:block; height:250px; }
 
 .map .type {position: absolute;
 color: white;
@@ -46,7 +46,7 @@ line-height: 24px;}
 
 .map .icon { position:absolute; top:135px; left:-25px; }
 
-.map .title { font-size:22px; line-height:25px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
+.map .title { font-size:22px; line-height:27px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
 
 .map .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
 .map .desc h3 { font-style:normal; margin-top:5px; }

@@ -25,7 +25,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 
  $(document).ready(function() {
  
-    $('#new_topic, #new_synapse').bind('contextmenu', function(e){
+  $('#new_topic, #new_synapse').bind('contextmenu', function(e){
 		return false;
 	});
 	
@@ -33,7 +33,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 	$('#topic_name').bind('railsAutocomplete.select', function(event, data){  
       if (data.item.id != undefined) {
         $('#topic_grabTopic').val(data.item.id);
-		$('.new_topic').submit();
+		    $('.new_topic').submit();
       }
     });
 	
@@ -41,7 +41,6 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       event.preventDefault();
     });
 	
-	//$("#cards").mCustomScrollbar(); 
 	$(".scroll").mCustomScrollbar();
 	
 	//$('.nodemargin').css('padding-top',$('.focus').css('height'));	
@@ -85,6 +84,13 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     //and on-canvas card. Also changing image of node
     $(this).parents('.CardOnGraph').find('img.icon').attr('alt', metacode);
     $(this).parents('.CardOnGraph').find('img.icon').attr('src', imgArray[metacode].src);
+  });
+  $('.best_in_place_desc').bind("ajax:success", function() {
+    $(this).parents('.CardOnGraph').find('.scroll').mCustomScrollbar("update");
+  });
+  $('.best_in_place_link').bind("ajax:success", function() {
+    var link = $(this).html();
+    $(this).parents('.CardOnGraph').find('.go-link').attr('href', link);
   });
     
 	// this is to save the layout of maps when you're on a map page

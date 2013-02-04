@@ -46,22 +46,22 @@
       <div class="logo">
           <% unless authenticated? %>
             <ul class="menu">
-              <li class="first"><%= link_to "About", "http://blog.metamaps.cc" %></li>
-              <li><%= link_to "Request Invite", topics_url %></li>
-              <li><%= link_to "Console", console_url %></li>
+              <li class="first"><a href="http://blog.metamaps.cc" target="_blank">About</a></li>
+              <li><a href="/request">Request Invite</a></li>
               <li><%= link_to "Explore Maps", maps_url %></li>
               <li class="last"><%= link_to "Login", new_session_path, id: "Login" %></li>
             </ul>
           <% end %>
           <% if authenticated? %>
             <ul class="menu">
-                <li class="first"><%= link_to "Console", console_url %></li>
-                <li><%= link_to "Create Map", new_map_url %></li>
+                <li class="first"><a href="http://blog.metamaps.cc" target="_blank">About</a></li>
+                <li><%= link_to "Send Invite", invite_path %></li>
                 <li><%= link_to "Explore Maps", maps_url %></li>
+                <li><%= link_to "Create Map", new_map_url %></li>
                 <li><%= link_to "My Maps", user_maps_url(user) %></li>
                 <li><%= link_to "My Profile", user_url(user) %></li>
-                <li><%= link_to "Send Invite", invite_path %></li>
                 <li><%= link_to "Settings", edit_user_url(user) %></li>
+                <li><%= link_to "Console", console_url %></li>
                 <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
                   <li><%= link_to "Feedback", map_path(Map.find(7)) %></li>
                 <% end %>

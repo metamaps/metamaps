@@ -71,7 +71,7 @@ line-height: 24px;}
 
 .topic .icon { position:absolute; top:135px; left:-25px; }
 
-.topic .title { font-size:22px; line-height:25px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
+.topic .title { font-size:22px; line-height:27px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
 
 .topic .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
 .topic .desc h3 { font-style:normal; margin-top:5px; }
@@ -79,6 +79,7 @@ line-height: 24px;}
 .topic-go-arrow {
   width: 25px;
   height: 25px;
+  padding-bottom: 2px;
   float: right;
 }
 

@@ -4,6 +4,8 @@ ISSAD::Application.routes.draw do
   
   match 'console', to: 'main#console', via: :get, as: :console
   
+  match 'request', to: 'main#requestinvite', via: :get, as: :request
+  
   match 'invite', to: 'main#invite', via: :get, as: :invite
   
   match 'search', to: 'main#search', via: :get, as: :search

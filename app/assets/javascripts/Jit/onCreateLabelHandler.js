@@ -283,7 +283,7 @@ function bindCallbacks(showCard, nameContainer, node) {
     $('.name').css('display','block');
     $('.name.topic_' + node.id).css('display','none');
     $('.showcard.topic_' + node.id).fadeIn('fast');
-    //selectNodeOnClickHandler(node,e);
+    $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar("update");
     node.setData('dim', 1, 'current');
     Mconsole.plot();
   });
@@ -312,10 +312,9 @@ function bindCallbacks(showCard, nameContainer, node) {
     $(nameContainer).find('.label').html(name);
   });
 
-  //available if you want it :)
-  //$(showCard).find('.best_in_place_desc').bind("ajax:success", function() {
-  //  var desc = $(this).html();
-  //});
+  $(showCard).find('.best_in_place_desc').bind("ajax:success", function() {
+    $(showCard).find('.scroll').mCustomScrollbar("update");
+  });
 
   $(showCard).find('.best_in_place_link').bind("ajax:success", function() {
     var link = $(this).html();

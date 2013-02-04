@@ -3,28 +3,16 @@
   # Located at /
   # Shows 3 most recently created topics, synapses, and maps.
   #%>
-
+<div class="home_bg">
 <p class="contact">
   To get in touch, follow or tweet at us! <a target="_blank" href="https://twitter.com/metamapps">@metamapps</a>.
 </p>
-<div class="profile">
 
-<h2>Recently Created Topics <%= link_to "see all", topics_url%></h2>
-<div class="centeredProfile">
-<% @topics.each do |topic| %>
-    <%= render topic %>
-<% end %>
+<div class="home_content">
+<div class="home_desc">
+<span class="blue">Metamaps</span> is a plateau for visioning, magic making, productive conversation, understanding something, innovation, free style weaving and all night brainstorming. Metamaps is a game for making the world a better place.
 </div>
 <div class="clearfloat"></div>
-
-<h2>Recently Created Synapses <%= link_to "see all", synapses_url%></h2>
-<div class="centeredProfile">
-<% @synapses.each do |synapse| %>
-    <%= render synapse %>
-<% end %>
-</div>
-<div class="clearfloat"></div>
-
 <h2>Recently Created Maps <%= link_to "see all", maps_url%></h2>
 <div class="centeredProfile">
 <% @maps.each do |map| %>
@@ -32,9 +20,13 @@
 <% end %>
 </div>
 <div class="clearfloat leaveSpace"></div>
-
+<p class="contact">
+  Creative designs by <a target="_blank" href="http://gavinkeech.com">Gavin Keech</a>.
+</p>
 </div>
+<div class="clearfloat"></div>
 
 <h1 class="index">
-  Home
+  Welcome
 </h1>
+</div>
