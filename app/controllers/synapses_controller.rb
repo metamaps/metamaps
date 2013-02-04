@@ -106,41 +106,42 @@ class SynapsesController < ApplicationController
   
   # GET synapses/:id/edit
   def edit
-	  @current = current_user
+    @current = current_user
     @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
 	
-	  if @synapse 
-		  @topics = Topic.visibleToUser(@current, nil)
-	  elsif not @synapse
-		  redirect_to root_url and return
-	  end
+    if @synapse 
+      @topics = Topic.visibleToUser(@current, nil)
+    elsif not @synapse
+      redirect_to root_url and return
+    end
   
 	  respond_with(@synapse, @topics)
   end
   
   # PUT synapses/:id
   def update
-	@current = current_user
+	  @current = current_user
     @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
     
-	if @synapse
+	  if @synapse
       if params[:synapse]
         @synapse.desc = params[:synapse][:desc] if params[:synapse][:desc]
-	    @synapse.category = params[:synapse][:category] if params[:synapse][:category]
-	    @synapse.permission = params[:synapse][:permission] if params[:synapse][:permission]
+	      @synapse.category = params[:synapse][:category] if params[:synapse][:category]
+	      @synapse.permission = params[:synapse][:permission] if params[:synapse][:permission]
       end
       if params[:node1_id] and params[:node1_id][:node1]
-	    @synapse.topic1 = Topic.find(params[:node1_id][:node1])
+	      @synapse.topic1 = Topic.find(params[:node1_id][:node1])
       end
-      if params[:node1_id] and params[:node1_id][:node1]
-	    @synapse.topic2 = Topic.find(params[:node2_id][:node2])
+      if params[:node2_id] and params[:node2_id][:node2]
+	      @synapse.topic2 = Topic.find(params[:node2_id][:node2])
       end
-	  @synapse.save
+	    @synapse.save
     end
 	
-    respond_with @synapse
-    #respond_with(@user, location: synapse_url(@synapse)) do |format|
-    #end
+    respond_to do |format|
+      format.js
+      format.json { respond_with(@synapse) }
+    end
   end
 
   # POST mappings/:map_id/:synapse_id/removefrommap

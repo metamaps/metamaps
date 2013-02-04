@@ -49,7 +49,9 @@
               <li class="first"><a href="http://blog.metamaps.cc" target="_blank">About</a></li>
               <li><a href="/request">Request Invite</a></li>
               <li><%= link_to "Explore Maps", maps_url %></li>
-              <li><%= link_to "Tour", "/topics/260" %></li>
+              <% if Topic.exists?(260) %>
+                <li><%= link_to "Tour", "/topics/260" %></li>
+              <% end %>
               <li class="last"><%= link_to "Login", new_session_path, id: "Login" %></li>
             </ul>
           <% end %>

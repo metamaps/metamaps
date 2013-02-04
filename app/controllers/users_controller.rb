@@ -42,16 +42,15 @@ class UsersController < ApplicationController
     
     @user = User.create(params[:user])
 	
-	#generate a random 8 letter/digit code that they can use to invite people
-	@user.code = rand(36**8).to_s(36)	
+	  #generate a random 8 letter/digit code that they can use to invite people
+	  @user.code = rand(36**8).to_s(36)	
     @user.save
 	
-	# direct them straight to the metamaps manual map. 
-	  
-    @map = Map.first(:conditions => [ "id = ?", 5])
+	  # direct them straight to the metamaps manual topic 'Click Me'
+    @topic = Topic.exists?(260)
         
-    if @map
-      respond_with(@user, location: map_url(@map)) do |format|
+    if @topic
+      respond_with(@user, location: topic_url(260)) do |format|
       end
     else
       respond_with(@user, location: root_url) do |format|

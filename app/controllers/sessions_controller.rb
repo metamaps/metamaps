@@ -22,10 +22,10 @@ class SessionsController < ApplicationController
     
     @user = User.new
 	
-    @topic = Topic.find(260)
+    @topic = Topic.exists?(260)
 		
-    if @map
-      respond_with(@user, @session, location: topic_url(@topic)) do |format| 
+    if @topic
+      respond_with(@user, @session, location: topic_url(260)) do |format| 
       end
     else
       respond_with(@user, @session, location: root_url) do |format| 

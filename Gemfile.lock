@@ -128,7 +128,7 @@ DEPENDENCIES
   formtastic
   formula
   jbuilder
-  jquery-rails
+  jquery-rails (= 2.1.2)
   json
   pg
   rails (= 3.2.11)
