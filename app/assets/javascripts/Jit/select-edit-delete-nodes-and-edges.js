@@ -50,9 +50,10 @@ function add_name_form(edge) {
   $('#edit_synapse_name').attr('data-url', '/synapses/' + edge.getData("id"));
   $('#edit_synapse_name').html(edge.getData("desc"));
 
-  $('#edit_synapse_name').click(function() {
-    
-  });
+  //if edge data is blank or just whitespace, populate it with data_nil
+  if ($('#edit_synapse_name').html().trim() == '') {
+    $('#edit_synapse_name').html(data_nil);
+  }
 
   $('#edit_synapse_name').bind("ajax:success", function() {
     var desc = $(this).html();
