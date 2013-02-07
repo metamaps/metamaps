@@ -36,7 +36,9 @@ function populateEditEdgeForm(edge) {
   add_direction_form(edge);
   add_name_form(edge);
 }
+
 function add_name_form(edge) {
+  var data_nil = '<span class="gray">Click to add description.</span>';
   //name editing form
   $('#edit_synapse').append('<div id="edit_synapse_name"></div>');
   $('#edit_synapse_name').attr('class', 'best_in_place best_in_place_desc');
@@ -44,17 +46,26 @@ function add_name_form(edge) {
   $('#edit_synapse_name').attr('data-attribute', 'desc');
   $('#edit_synapse_name').attr('data-type', 'input');
   //TODO how to get blank data-nil
-  $('#edit_synapse_name').attr('data-nil', ' ');
+  $('#edit_synapse_name').attr('data-nil', data_nil);
   $('#edit_synapse_name').attr('data-url', '/synapses/' + edge.getData("id"));
   $('#edit_synapse_name').html(edge.getData("desc"));
 
+  $('#edit_synapse_name').click(function() {
+    
+  });
+
   $('#edit_synapse_name').bind("ajax:success", function() {
     var desc = $(this).html();
-    edge.setData("desc", desc);
+    if (desc == data_nil) {
+      edge.setData("desc", '');
+    } else {
+      edge.setData("desc", desc);
+    }
     selectEdge(edge);
     Mconsole.plot();
   });
 }
+
 function add_perms_form(edge) {
   //permissions - if owner, also allow permission editing
   $('#edit_synapse').append('<div class="mapPerm"></div>');
