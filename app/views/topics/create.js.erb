@@ -11,8 +11,6 @@ $('#topic_name').attr('value','');
 $('#topic_grabTopic').attr('value','null');
 $('#topic_addSynapse').attr('value','false');
 
-
-
 var newnode = <%= @topic.self_as_json.html_safe %>;
 var x = <%= @position['x'] %>;
 var y = <%= @position['y'] %>;
@@ -85,6 +83,9 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   temp.setData('dim', 25, 'end');
   temp.setData('onCanvas', false);
   temp.setData('inCommons', false);
+  if (gType == "arranged" || gType == "chaotic") {
+    temp.setData('mappingid', <%= @mapping.id %>);
+  }
   temp.setPos(new $jit.Complex(x, y), 'current');
   temp.setPos(new $jit.Complex(x, y), 'start');
   temp.setPos(new $jit.Complex(x, y), 'end');

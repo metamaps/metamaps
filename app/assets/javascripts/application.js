@@ -159,7 +159,7 @@ function saveLayoutAll() {
   var coor = "";
   if (gType == "arranged" || gType == "chaotic") {
     Mconsole.graph.eachNode(function(n) {
-    coor = coor + n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y + ',';
+      coor = coor + n.getData("mappingid") + '/' + n.pos.x + '/' + n.pos.y + ',';
     });
     coor = coor.slice(0, -1);
     $('#map_coordinates').val(coor);
@@ -170,7 +170,7 @@ function saveLayoutAll() {
 // this is to update the location coordinate of a single node on a map
 function saveLayout(id) {
   var n = Mconsole.graph.getNode(id);
-  $('#map_coordinates').val(n.data.$mappingid + '/' + n.pos.x + '/' + n.pos.y);
+  $('#map_coordinates').val(n.getData("mappingid") + '/' + n.pos.x + '/' + n.pos.y);
   $('#saveMapLayout').submit();
   dragged = 0;
   $('#saveLayout').attr('value','Saved!');
