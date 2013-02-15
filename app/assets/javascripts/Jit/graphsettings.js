@@ -122,6 +122,10 @@ function graphSettings(type) {
     t.Events.onClick = function(node, eventInfo, e) {
       //this is handled mostly differently than in arranged/chaotic
       if (e.target.id != "infovis-canvas") return false;
+
+      //hide synapse editing dialog
+      $('#edit_synapse').hide();
+
       //clicking on an edge, a node, or clicking on blank part of canvas?
       if (node.nodeFrom) {
           selectEdgeOnClickHandler(node, e);  
