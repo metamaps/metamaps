@@ -14,23 +14,13 @@
   #
   #%>
 
-<!--<div class="focus topic_<%= @topic.id %>">
-	<div class="focusleft">
-		<p><%= @topic.metacode.name %></p>
-		<%= image_tag @topic.metacode.icon, :class => 'icon', :size => '50x50' %>
-	</div>
-	<div class="focusmiddle">
-		<h1 class="title"><span class="title-text"><%= @topic.name %></span> <% if (@topic.permission == "commons" && authenticated?) || @topic.user == user %><%= link_to "[edit]", edit_topic_path(@topic) %><% end %></h1>
-		<div class="desc">
-			<p><%= @topic.desc %></p>
-		</div>
-	</div>
-	<div class="focusright">
-		<p>Link</p>
-		<%= link_to @topic.link, @topic.link, :class => 'link', :target => '_blank' %>
-	</div>
+<div class="headertop">
+  <% if authenticated? %>
+    <button onclick="saveToMap();">Save to Map</button>
+  <% end %>
+  <button onclick='clearCanvasExceptRoot();'>Clear Canvas</button>
 </div>
-<div class="clearfloat nodemargin"></div>-->
+<div class="clearfloat"></div>
 
 <h1 class="index">
   Viewing Topic: <%= @topic.name %>
@@ -53,6 +43,7 @@
 
 <% if authenticated? %>
   <%= render :partial => 'topics/new' %>
-	<%= render :partial => 'synapses/new' %>
+  <%= render :partial => 'synapses/new' %>
+  <%= render :partial => 'maps/new' %>
 <% end %>
 
