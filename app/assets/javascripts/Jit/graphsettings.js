@@ -75,8 +75,8 @@ function graphSettings(type) {
       onClick: function (node, eventInfo, e) {
         if (e.target.id != "infovis-canvas") return false;
 
-        //hide synapse editing dialog
-        $('#edit_synapse').hide();
+        //topic and synapse editing cards
+        hideCards();
 
         //clicking on a node, or clicking on blank part of canvas?
         if (node.nodeFrom) {
@@ -123,8 +123,8 @@ function graphSettings(type) {
       //this is handled mostly differently than in arranged/chaotic
       if (e.target.id != "infovis-canvas") return false;
 
-      //hide synapse editing dialog
-      $('#edit_synapse').hide();
+      //hide synapse and topic editing dialog
+      hideCards();
 
       //clicking on an edge, a node, or clicking on blank part of canvas?
       if (node.nodeFrom) {
@@ -150,6 +150,11 @@ function graphSettings(type) {
 
   return t;
 }//graphSettings
+
+function hideCards() {
+  $('#edit_synapse').hide();
+  hideCurrentCard();
+}
 
 // defining code to draw edges with arrows pointing in one direction
 var renderMidArrow = function(from, to, dim, swap, canvas){ 

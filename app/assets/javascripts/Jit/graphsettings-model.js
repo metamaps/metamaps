@@ -7,6 +7,7 @@
 
 var MetamapsModel = new Object();
 MetamapsModel.selectedEdges = new Array();
+MetamapsModel.showcardInUse = null;
 MetamapsModel.lastCanvasClick = 0;
 MetamapsModel.DOUBLE_CLICK_TOLERANCE = 300;
 MetamapsModel.edgeHoveringOver = false;
