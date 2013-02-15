@@ -182,7 +182,15 @@ function saveToMap() {
   var nodes_data = "", synapses_data = "";
   var synapses_array = new Array();
   Mconsole.graph.eachNode(function(n) {
-    nodes_data += n.id + '/' + n.pos.x + '/' + n.pos.y + ',';
+    var x, y;
+    if (n.pos.x && n.pos.y) {
+      x = n.pos.x;
+      y = n.pos.y;
+    } else {
+      var x = Math.cos(n.pos.theta) * n.pos.rho;
+      var y = Math.sin(n.pos.theta) * n.pos.rho;
+    }
+    nodes_data += n.id + '/' + x + '/' + y + ',';
     n.eachAdjacency(function(adj) {
       synapses_array.push(adj.getData("id"));
     });

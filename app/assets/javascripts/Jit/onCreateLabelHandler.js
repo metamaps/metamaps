@@ -255,6 +255,13 @@ function generateLittleHTML(node) {
   return littleHTML;
 }
 
+function hideCurrentCard() {
+  if (MetamapsModel.showcardInUse) {
+    var node = Mconsole.graph.getNode(MetamapsModel.showcardInUse);
+    hideCard(node);
+  }
+}
+
 function hideCard(node) {
   var card = '.showcard';
   if (node != null) {
@@ -263,13 +270,14 @@ function hideCard(node) {
 
   $(card).fadeOut('fast', function(){
     node.setData('dim', 25, 'current');
-    $('.name').show();
+    $('.name.topic_' + node.id).show();
     Mconsole.plot();
   });
+
+  MetamapsModel.showcardInUse = null;
 }
 
 function bindCallbacks(showCard, nameContainer, node) {
-  
    // add some events to the label
   $(showCard).find('img.icon').click(function(){
     hideCard(node);
@@ -279,12 +287,14 @@ function bindCallbacks(showCard, nameContainer, node) {
 
   // add some events to the label
   $(nameContainer).find('.label').click(function(e){
-    $('.showcard').css('display','none');
     $('.name').css('display','block');
     $('.name.topic_' + node.id).css('display','none');
     $('.showcard.topic_' + node.id).fadeIn('fast');
     $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar("update");
     node.setData('dim', 1, 'current');
+
+    hideCurrentCard();
+    MetamapsModel.showcardInUse = node.id;
     Mconsole.plot();
   });
 

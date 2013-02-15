@@ -163,14 +163,34 @@ function onCanvasSearch(name,mapID,mapperID) {
 	});
 }
 
-
 function clearCanvas() {
-	Mconsole.graph.eachNode( function(n) { Mconsole.graph.removeNode(n.id); Mconsole.labels.disposeLabel(n.id); });	
-	Mconsole.plot();
+  Mconsole.graph.eachNode(function(n) {
+    Mconsole.graph.removeNode(n.id);
+    Mconsole.labels.disposeLabel(n.id);
+  });
+  Mconsole.plot();
+}
+
+function clearCanvasExceptRoot() {
+  var ids = new Array();
+  Mconsole.graph.eachNode(function(n) {
+    ids.push(n.id);
+  });
+
+  var root = Mconsole.graph.nodes[Mconsole.root];
+  ids.forEach(function(id, index) {
+    if (id != root.id) {
+      Mconsole.graph.removeNode(id);
+      //OK I feel bad about this, but not too bad
+      //TODO: this leaves labels hidden on the map
+      Mconsole.labels.hideLabel(id);
+    }
+  });
+  fetchRelatives(root); //also runs Mconsole.plot()
 }
 
 function clearFoundData() {
-	Mconsole.graph.eachNode( function(n) { 
+  Mconsole.graph.eachNode( function(n) { 
     if (n.getData('inCommons') === true) {
       Mconsole.graph.removeNode(n.id);
       Mconsole.labels.disposeLabel(n.id);
