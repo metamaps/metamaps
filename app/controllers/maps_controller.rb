@@ -148,23 +148,23 @@ class MapsController < ApplicationController
   
   # PUT maps/:id/savelayout
   def savelayout
-	  @map = Map.find(params[:id])
-	
-	  if params[:map][:coordinates]
-		  @all = params[:map][:coordinates]
-  		@all = @all.split(',')
-		  @all.each do |topic|
-			  topic = topic.split('/')
-			  @mapping = Mapping.find(topic[0])
-			  if @mapping
+    @map = Map.find(params[:id])
+  
+    if params[:map][:coordinates]
+      @all = params[:map][:coordinates]
+      @all = @all.split(',')
+      @all.each do |topic|
+        topic = topic.split('/')
+        @mapping = Mapping.find(topic[0])
+        if @mapping
           @mapping.xloc = topic[1]
-			    @mapping.yloc = topic[2]
-			    @mapping.save
+          @mapping.yloc = topic[2]
+          @mapping.save
         end
-		  end
-		  @map.arranged = true
-		  @map.save
-	  end	
+      end
+      @map.arranged = true
+      @map.save
+    end	
   end
   
   # GET maps/:id/realtime
