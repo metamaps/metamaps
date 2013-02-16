@@ -83,7 +83,8 @@ function canvasDoubleClickHandler(canvasLoc,e) {
       $('#new_topic').css('left', e.clientX + "px"); 
       $('#new_topic').css('top', e.clientY + "px"); 
       $('#topic_x').val(canvasLoc.x); 
-      $('#topic_y').val(canvasLoc.y); 
+      $('#topic_y').val(canvasLoc.y);
+      $('#topic_name').autocomplete('enable');      
       $('#new_topic').fadeIn('fast'); 
       addMetacode(); 
       $('#topic_name').focus(); 
@@ -106,9 +107,9 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        // if it's a left click, move the node
        if (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined)) {
            dragged = node.id;
-       node.pos.setc(pos.x, pos.y);
-       node.data.$xloc = pos.x;
-       node.data.$yloc = pos.y;
+           node.pos.setc(pos.x, pos.y);
+           node.data.$xloc = pos.x;
+           node.data.$yloc = pos.y;
            Mconsole.plot();
        }
        // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox

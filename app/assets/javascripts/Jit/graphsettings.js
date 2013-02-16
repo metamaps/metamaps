@@ -412,6 +412,7 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     $('#topic_addSynapse').val("false");
     $('#synapse_topic1id').val(tempNode.id);
     $('#synapse_topic2id').val(tempNode2.id);
+    $('#synapse_desc').autocomplete('enable');
     $('#new_synapse').fadeIn('fast');
     $('#synapse_desc').focus();
     tempNode = null;

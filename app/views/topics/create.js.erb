@@ -2,11 +2,8 @@
  * @file
  * This javascript is returned and executed when you create a new node.
  */
-
 $('#new_topic').fadeOut('fast');
-$('#topic_name').data().autocomplete.term = null;
-$('.ui-autocomplete').children().remove();
-$('.ui-autocomplete').css('display','none');
+$('#topic_name').autocomplete('disable');
 $('#topic_name').attr('value','');
 $('#topic_grabTopic').attr('value','null');
 $('#topic_addSynapse').attr('value','false');
@@ -49,6 +46,7 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   if ( '<%= @synapse %>' == "true" ) {
     $('#synapse_topic1id').val(tempNode.id);
     $('#synapse_topic2id').val(temp.id);
+    $('#synapse_desc').autocomplete('enable');
     $('#new_synapse').fadeIn('fast');
     $('#synapse_desc').focus();
     Mconsole.fx.animate({  
@@ -83,7 +81,7 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   temp.setData('dim', 25, 'end');
   temp.setData('onCanvas', false);
   temp.setData('inCommons', false);
-  if (gType == "arranged" || gType == "chaotic") {
+  if ((gType == "arranged" || gType == "chaotic") && mapid != null) {
     temp.setData('mappingid', <%= @mapping.id %>);
   }
   temp.setPos(new $jit.Complex(x, y), 'current');

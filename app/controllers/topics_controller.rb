@@ -91,7 +91,7 @@ class TopicsController < ApplicationController
     @synapse = "false"
     if params[:topic][:addSynapse] == "true"
       @synapse = "true" 
-    end		
+    end
 
     # also create an object to return the position to the canvas
     @position = Hash.new()
