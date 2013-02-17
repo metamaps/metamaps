@@ -37,7 +37,11 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   else if (gType == "arranged" || gType == "chaotic") {
     temp.setData('xloc',0);
     temp.setData('yloc',0);
-    temp.setData('mappingid', '<%= @mapping.id %>');
+    <% if not @mapping.nil? %>
+      temp.setData('mappingid', <%= @mapping.id %>);
+    <% elsif @mapping.nil? %>
+      temp.setData('mappingid', null);
+    <% end %>
     temp.setPos(new $jit.Complex(x, y), 'current');
     temp.setPos(new $jit.Complex(x, y), 'start');
     temp.setPos(new $jit.Complex(x, y), 'end');
@@ -81,8 +85,12 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   temp.setData('dim', 25, 'end');
   temp.setData('onCanvas', false);
   temp.setData('inCommons', false);
-  if ((gType == "arranged" || gType == "chaotic") && mapid != null) {
-    temp.setData('mappingid', <%= @mapping.id %>);
+  if (gType == "arranged" || gType == "chaotic") {
+    <% if not @mapping.nil? %>
+      temp.setData('mappingid', <%= @mapping.id %>);
+    <% elsif @mapping.nil? %>
+      temp.setData('mappingid', null);
+    <% end %>
   }
   temp.setPos(new $jit.Complex(x, y), 'current');
   temp.setPos(new $jit.Complex(x, y), 'start');

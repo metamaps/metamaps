@@ -99,10 +99,11 @@ class TopicsController < ApplicationController
     @position['y'] = params[:topic][:y]
     
     # set this for the case where the topic is being created on a map.
-    @mapping = Mapping.new()
+    @mapping = nil
     if params[:topic][:map]
       @map = Map.find(params[:topic][:map])
       
+      @mapping = Mapping.new()
       @mapping.category = "Topic"
       @mapping.user = @user
       @mapping.map = @map
