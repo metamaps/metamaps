@@ -300,6 +300,9 @@ var nodeSettings = {
 		  var desc = adj.getData("desc");
 		  var showDesc = adj.getData("showDesc");
 		  if( desc != "" && showDesc ) { 
+            // '&amp;' to '&'
+            desc = decodeEntities(desc);
+
             //now adjust the label placement 
             var ctx = canvas.getCtx();
 			var radius = canvas.getSize(); 
@@ -450,3 +453,14 @@ function onPlaceLabelHandler(domElement, node) {
   style = label.style;
   style.left = (-(w / 2 + 106)) + 'px';    
 }
+
+// thanks to http://stackoverflow.com/questions/4338963/
+// convert-html-character-entities-back-to-regular-text-using-javascript
+function decodeEntities(desc) {
+  var str, temp = document.createElement('p');
+  temp.innerHTML = desc; //browser handles the entities
+  str = temp.textContent || temp.innerText;
+  temp = null; //delete the element;
+  return str;
+}//decodeEntities
+

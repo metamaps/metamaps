@@ -41,6 +41,10 @@
 	});
 </script>
 
+<%= render :partial => 'main/find' %>
+<%= render :partial => 'main/analyze' %>
+<%= render :partial => 'main/organize' %>
+
 <% if authenticated? %>
   <%= render :partial => 'topics/new' %>
   <%= render :partial => 'synapses/new' %>
