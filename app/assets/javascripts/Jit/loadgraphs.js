@@ -17,6 +17,7 @@
 $jit.ForceDirected.Plot.NodeTypes.implement(nodeSettings);
 //implement an edge type  
 $jit.ForceDirected.Plot.EdgeTypes.implement(edgeSettings);
+$jit.ForceDirected.Plot.EdgeTypes.implement(edgeSettingsEmbed);
 // end
 
 // init custom node type 
@@ -25,10 +26,13 @@ $jit.RGraph.Plot.NodeTypes.implement(nodeSettings);
 $jit.RGraph.Plot.EdgeTypes.implement(edgeSettings);
 // end
 
-function initialize(type, loadLater){
+function initialize(type, loadLater, embed){
 
   if (loadLater == null) {
 	   loadlater = false;
+  }
+  if (embed == null) {
+	   embed = false;
   }
 
   viewMode = "graph";
@@ -40,7 +44,7 @@ function initialize(type, loadLater){
   }
   else if ( type == "arranged" || type == "chaotic" ) {
 	  // init ForceDirected
-	 Mconsole = new $jit.ForceDirected(graphSettings(type));
+	 Mconsole = new $jit.ForceDirected(graphSettings(type, embed));
   }
   else {
 	 alert("You didn't specify a type!"); 

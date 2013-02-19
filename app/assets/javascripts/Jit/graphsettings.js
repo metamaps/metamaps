@@ -5,7 +5,7 @@
  * Then if it's a centred graph additional settings are added.
  */
 
-function graphSettings(type) {
+function graphSettings(type, embed) {
    var t = {
      //id of the visualization container
      injectInto: 'infovis',
@@ -103,6 +103,10 @@ function graphSettings(type) {
     }
   };
 
+  if (embed) {
+    t.Edge.type = 'customEdgeEmbed';
+  }
+  
   if (type == "centered") {
     t.background  = {
       CanvasStyles: {
@@ -247,7 +251,8 @@ var nodeSettings = {
 			  if (onCanvas) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
-				  ctx.strokeStyle = 'white';
+          if (! MetamapsModel.embed) ctx.strokeStyle = 'white';
+          if (MetamapsModel.embed) ctx.strokeStyle = '#999';
 				  ctx.lineWidth = 2;
 				  ctx.stroke();
 			  }
@@ -312,6 +317,59 @@ var nodeSettings = {
 
             //render background
             ctx.fillStyle = '#FFF';
+            var margin = 5;
+            var height = 14 + margin; //font size + margin
+            var CURVE = height / 2; //offset for curvy corners
+            var width = ctx.measureText(desc).width + 2 * margin - 2 * CURVE
+            var labelX = x - margin + CURVE;
+            var labelY = y - height + margin;
+            ctx.fillRect(labelX, labelY, width, height);
+
+            //curvy corners woo - circles in place of last CURVE pixels of rect
+            ctx.beginPath();
+            ctx.arc(labelX, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
+            ctx.arc(labelX + width, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
+            ctx.fill();
+            
+            //render text
+			ctx.fillStyle = '#000';
+			ctx.fillText(desc, x, y); 
+		  }
+		}, 'contains' : function(adj, pos) { 
+				var from = adj.nodeFrom.pos.getc(true), 
+				 to = adj.nodeTo.pos.getc(true);
+				return this.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon); 
+		}  
+	  }  
+	}
+  
+  var edgeSettingsEmbed = {  
+	  'customEdgeEmbed': {  
+		'render': function(adj, canvas) {  
+		  //get nodes cartesian coordinates 
+		  var pos = adj.nodeFrom.pos.getc(true); 
+		  var posChild = adj.nodeTo.pos.getc(true);
+		  
+		  var directionCat = adj.getData("category");
+		  //label placement on edges 
+          renderEdgeArrows(this.edgeHelper, adj);
+		   
+		  //check for edge label in data  
+		  var desc = adj.getData("desc");
+		  var showDesc = adj.getData("showDesc");
+		  if( desc != "" && showDesc ) { 
+            // '&amp;' to '&'
+            desc = decodeEntities(desc);
+
+            //now adjust the label placement 
+            var ctx = canvas.getCtx();
+			var radius = canvas.getSize(); 
+			var x = parseInt((pos.x + posChild.x - (desc.length * 5)) /2); 
+			var y = parseInt((pos.y + posChild.y) /2); 
+			ctx.font = 'bold 14px arial';
+
+            //render background
+            ctx.fillStyle = '#999';
             var margin = 5;
             var height = 14 + margin; //font size + margin
             var CURVE = height / 2; //offset for curvy corners

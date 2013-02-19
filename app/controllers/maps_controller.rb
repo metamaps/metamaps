@@ -48,6 +48,24 @@ class MapsController < ApplicationController
     end
   end
   
+  # GET maps/:id/embed
+  def embed
+  	
+	  @current = current_user
+	  @map = Map.find(params[:id]).authorize_to_show(@current)
+	
+	  if not @map
+	    redirect_to root_url and return
+	  end
+		
+	  @mapjson = @map.self_as_json(@current).html_safe
+	
+	  respond_to do |format|
+      format.html { respond_with(@map, @user) }
+      format.json { respond_with(@mapjson) }
+    end
+  end
+  
   # GET maps/:id/json
   def json
   	

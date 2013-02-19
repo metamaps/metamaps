@@ -295,11 +295,19 @@ function selectEdge(edge) {
   var showDesc = edge.getData("showDesc");
   if (! showDesc) {
     edge.setData('showDesc', true, 'current');
-    edge.setDataset('end', {
-      lineWidth: 4,
-      color: '#FFFFFF',
-      alpha: 1
-    });
+    if ( ! MetamapsModel.embed) {
+      edge.setDataset('end', {
+        lineWidth: 4,
+        color: '#FFFFFF',
+        alpha: 1
+      });
+    } else if (MetamapsModel.embed) {
+      edge.setDataset('end', {
+        lineWidth: 4,
+        color: '#999',
+        alpha: 1
+      });
+    }
     Mconsole.fx.animate({
       modes: ['edge-property:lineWidth:color:alpha'],
       duration: 100

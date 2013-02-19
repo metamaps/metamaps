@@ -30,6 +30,7 @@ ISSAD::Application.routes.draw do
   resources :maps do
     get :autocomplete_map_name, :on => :collection
   end
+  match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
   match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json
   
   resources :users do

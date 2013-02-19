@@ -6,6 +6,7 @@
  */
 
 var MetamapsModel = new Object();
+MetamapsModel.embed = false;
 MetamapsModel.selectedEdges = new Array();
 MetamapsModel.showcardInUse = null;
 MetamapsModel.lastCanvasClick = 0;
