@@ -53,7 +53,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 		  clearTimeout(lT);
           if (! sliding1) { 
             sliding1 = true;
-            var listLength = $('.logo .menu li').length * 27;          
+            var listLength = $('.logo .menu li').length * 28;          
               $('.footer .menu').animate({
               height: listLength + 'px'
               }, 300, function() {
