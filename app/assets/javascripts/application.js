@@ -182,6 +182,11 @@ function saveToMap() {
   var nodes_data = "", synapses_data = "";
   var synapses_array = new Array();
   Mconsole.graph.eachNode(function(n) {
+    //don't add to the map if it was filtered out
+    if (categoryVisible[n.getData('metacode')] == false) {
+      return;
+    }
+
     var x, y;
     if (n.pos.x && n.pos.y) {
       x = n.pos.x;
