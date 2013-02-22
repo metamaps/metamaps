@@ -507,6 +507,7 @@ function onPlaceLabelHandler(domElement, node) {
   style.top = (top-165) + 'px';
   style.display = ''; 
   var label = document.getElementById('topic_' + node.id + '_label');
+  $(label).show(); 
   w = label.offsetWidth;
   style = label.style;
   style.left = (-(w / 2 + 106)) + 'px';    

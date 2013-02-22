@@ -164,9 +164,10 @@ function clearCanvasExceptRoot() {
   ids.forEach(function(id, index) {
     if (id != root.id) {
       Mconsole.graph.removeNode(id);
-      //OK I feel bad about this, but not too bad
-      //TODO: this leaves labels hidden on the map
+      //don't use disposeLabel or they'll never come back!
+      //maybe there's a better way that recreates the labels later??
       Mconsole.labels.hideLabel(id);
+      $('#topic_' + id + '_label').hide();
     }
   });
   fetchRelatives(root); //also runs Mconsole.plot()

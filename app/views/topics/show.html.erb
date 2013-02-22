@@ -10,7 +10,7 @@
   # map recenters on a new topic, it's like you're on that topic's page.
   # Nice, but the URL and being unable to remove the root node still hamper that
   # experience.
-  # TODO: What URL accesses this view?
+  # URL: /topics/<topicid>
   #
   #%>
 
@@ -18,7 +18,7 @@
   <% if authenticated? %>
     <button onclick="saveToMap();">Save to Map</button>
   <% end %>
-  <!-- <button onclick='clearCanvasExceptRoot();'>Clear Canvas</button> -->
+  <button onclick='clearCanvasExceptRoot();'>Clear Canvas</button>
 </div>
 <div class="clearfloat"></div>
 
