@@ -202,22 +202,19 @@ $(document).ready(function() {
   $('#topic_by_name_input').typing({
     start: function (event, $elem) {
       // grab the checkboxes to see if the search is on the canvas, in the commons, or both
-      firstVal = $("#onCanvas").attr('checked');
-      secondVal = $("#inCommons").attr('checked');
+      onCanvasChecked = $("#onCanvas").attr('checked');
+      inCommonsChecked = $("#inCommons").attr('checked');
       clearFoundData();
           
       // only have the autocomplete enabled if they are searching in the commons
-      if (firstVal == "checked" && secondVal == "checked"){
-        //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
+      if (onCanvasChecked == "checked" && inCommonsChecked == "checked"){
         $('#topic_by_name_input').autocomplete( "option", "disabled", true );
       }
-      else if (firstVal == "checked"){
+      else if (onCanvasChecked == "checked"){
         setTimeout(function(){showAll();},0);
         $('#topic_by_name_input').autocomplete( "option", "disabled", true );
       }
-      else if (secondVal == "checked"){
-        //setTimeout(function(){hideAll();},0);
-        //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
+      else if (inCommonsChecked == "checked"){
         $('#topic_by_name_input').autocomplete( "option", "disabled", true );
       }
       else {
@@ -226,22 +223,22 @@ $(document).ready(function() {
     },
     stop: function (event, $elem) {
       // grab the checkboxes to see if the search is on the canvas, in the commons, or both
-      firstVal = $("#onCanvas").attr('checked');
-      secondVal = $("#inCommons").attr('checked');
+      onCanvasChecked = $("#onCanvas").attr('checked');
+      inCommonsChecked = $("#inCommons").attr('checked');
             
       var topicName = $('#topic_by_name_input').val();
       // run a search on the canvas or in the commons or both
-      if (firstVal == "checked" && secondVal == "checked") {
-        setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
+      if (onCanvasChecked == "checked" && inCommonsChecked == "checked") {
+        setTimeout(function() {onCanvasSearch(topicName,null,null);}, 0);
         $('#topicsByName').val(topicName);
         $('#topicsByUser').val("");
         $('#topicsByMap').val("");
         $('#get_topics_form').submit();
       }
-      else if (firstVal == "checked") {
+      else if (onCanvasChecked == "checked") {
         setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
       }
-      else if (secondVal == "checked") {
+      else if (inCommonsChecked == "checked") {
         $('#topicsByName').val(topicName);
         $('#topicsByUser').val("");
         $('#topicsByMap').val("");
@@ -386,7 +383,6 @@ $(document).ready(function() {
         setTimeout(function(){onCanvasSearch(null,data.item.id,null);},0); 
       }
       else if (secondNewVal == "checked"){
-        //hideAll();
         $('#topicsByMap').val(data.item.id);
         $('#topicsByUser').val("");
         $('#topicsByName').val("");
@@ -432,7 +428,6 @@ $(document).ready(function() {
         setTimeout(function(){onCanvasSearch(null,null,data.item.id.toString());},0); 
       }
       else if (secondNewVal == "checked"){
-        //hideAll();
         $('#topicsByUser').val(data.item.id);
         $('#topicsByMap').val("");
         $('#topicsByName').val("");
