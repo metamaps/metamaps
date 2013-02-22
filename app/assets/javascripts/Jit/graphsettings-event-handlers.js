@@ -53,6 +53,24 @@ function nodeWasDoubleClicked() {
    }
 }//nodeWasDoubleClicked;
 
+function selectNode(node) {
+  node.selected = true;
+  node.setData('dim', 30, 'current');
+  node.setData('onCanvas',true);
+  node.eachAdjacency(function (adj) {
+    selectEdge(adj);
+  });
+}
+
+function deselectNode(node) {
+  delete node.selected;
+  node.setData('onCanvas', false);
+  node.eachAdjacency(function(adj) {
+    deselectEdge(adj);
+  });
+  node.setData('dim', 25, 'current');
+}
+
 function selectNodeOnClickHandler(node, e) {
   if (Mconsole.busy) return;
 
@@ -66,28 +84,14 @@ function selectNodeOnClickHandler(node, e) {
       if (!e.shiftKey) {
           Mconsole.graph.eachNode(function (n) {
             if (n.id != node.id) {
-                delete n.selected;
-                n.setData('onCanvas',false);
+              deselectNode(n);
             }
-      
-            n.setData('dim', 25, 'current');
-            n.eachAdjacency(function (adj) {
-              deselectEdge(adj);
-            });
           });
       }
-      if (!node.selected) {
-        node.selected = true;
-        node.setData('dim', 30, 'current');
-        node.setData('onCanvas',true);
-        node.eachAdjacency(function (adj) {
-          selectEdge(adj);
-        });
-        Mconsole.plot();
+      if (node.selected) {
+        deselectNode(node);
       } else {
-        node.setData('dim', 25, 'current');
-        delete node.selected;
-        node.setData('onCanvas',false);
+        selectNode(node);
       }
       //trigger animation to final styles
       Mconsole.fx.animate({
