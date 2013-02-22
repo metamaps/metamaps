@@ -22,7 +22,8 @@ class MainController < ApplicationController
     @synapses = Array.new()
     if params[:topics_by_name] != ""
       like_keyword = "%"+params[:topics_by_name]+"%"    
-      @topics = Topic.where("name LIKE ?", like_keyword)
+      like_keyword.downcase! #convert to lowercase for better comparison
+      @topics = Topic.where("LOWER(name) LIKE ?", like_keyword)
     end
     if params[:topics_by_user_id] != ""
       @user = User.find(params[:topics_by_user_id])
