@@ -101,6 +101,7 @@ function generateShowcardHTML() {
       $_a_tag_$<span class="best_in_place best_in_place_link"                 \
             data-url="/topics/$_id_$"                                         \
             data-object="topic"                                               \
+            data-nil="$_link_nil_$"                                            \
             data-attribute="link"                                             \
             data-type="input">$_link_$</span>$_close_a_tag_$                  \
       </div>                                                                  \
@@ -198,6 +199,8 @@ function replaceVariables(html, node) {
   html = html.replace(/\$_go_link_\$/g, go_link);
   html = html.replace(/\$_a_tag_\$/g, a_tag);
   html = html.replace(/\$_close_a_tag_\$/g, close_a_tag);
+
+  html = html.replace(/\$_link_nil_\$/g, link_nil);
   if (node.getData("link") == "" && authorizeToEdit(node)) {
     html = html.replace(/\$_link_\$/g, link_nil);
   } else {
