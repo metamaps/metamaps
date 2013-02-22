@@ -182,325 +182,319 @@ function clearFoundData() {
   Mconsole.plot();
 }
 
-
-
 /**
  * Define all the dynamic interactions for the FIND/FILTER using Jquery
  */
 
 $(document).ready(function() {
-   // this sets up the initial opening of the find box
-   $('#sideOptionFind').bind('click',function(){
-	   if (!findOpen) openFind();  
-   });
+  // this sets up the initial opening of the find box
+  $('#sideOptionFind').bind('click',function(){
+    if (!findOpen) openFind();  
+  });
    
-   // this sets up the closing of the find box, and the toggling between open and closed.
-   $('#closeFind').bind('click',function(){
-	   if (findOpen) closeFind();
-   });
+  // this sets up the closing of the find box, and the toggling between open and closed.
+  $('#closeFind').bind('click',function(){
+    if (findOpen) closeFind();
+  });
    
-   // this is where interactions within the find box begin
-   //
-
-    //on keyup, start the countdown
-    $('#topic_by_name_input').typing({
-        start: function (event, $elem) {
-          // grab the checkboxes to see if the search is on the canvas, in the commons, or both
-          firstVal = $("#onCanvas").attr('checked');
-          secondVal = $("#inCommons").attr('checked');
-          clearFoundData();
+  // this is where interactions within the find box begin
+  //on keyup, start the countdown
+  $('#topic_by_name_input').typing({
+    start: function (event, $elem) {
+      // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+      firstVal = $("#onCanvas").attr('checked');
+      secondVal = $("#inCommons").attr('checked');
+      clearFoundData();
           
-          // only have the autocomplete enabled if they are searching in the commons
-          if (firstVal == "checked" && secondVal == "checked"){
-            //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
-            $('#topic_by_name_input').autocomplete( "option", "disabled", true );
-          }
-          else if (firstVal == "checked"){
-            setTimeout(function(){showAll();},0);
-            $('#topic_by_name_input').autocomplete( "option", "disabled", true );
-          }
-          else if (secondVal == "checked"){
-            //setTimeout(function(){hideAll();},0);
-            //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
-            $('#topic_by_name_input').autocomplete( "option", "disabled", true );
-          }
-          else {
-            alert('You either need to have searching On Your Canvas or In the Commons enabled');  
-          }
-        },
-        stop: function (event, $elem) {
-            // grab the checkboxes to see if the search is on the canvas, in the commons, or both
-            firstVal = $("#onCanvas").attr('checked');
-            secondVal = $("#inCommons").attr('checked');
-            
-            var topicName = $('#topic_by_name_input').val();
-            // run a search on the canvas or in the commons or both
-            if (firstVal == "checked" && secondVal == "checked"){
-              setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
-              $('#topicsByName').val(topicName);
-				      $('#topicsByUser').val("");
-              $('#topicsByMap').val("");
-				      $('#get_topics_form').submit();
-            }
-            else if (firstVal == "checked"){
-              setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
-            }
-            else if (secondVal == "checked"){
-              $('#topicsByName').val(topicName);
-				      $('#topicsByUser').val("");
-              $('#topicsByMap').val("");
-				      $('#get_topics_form').submit();
-            }
-            else {
-              //do nothing
-            }
-            
-            if (topicName == "") { clearFoundData(); }
-        },
-        delay: 2000
-    });
-			
-   $('#sideOptionFind .select_content').change(function() {
-	      firstVal = $(this).children("option[value='topics']").attr('selected');
-		  secondVal = $(this).children("option[value='maps']").attr('selected');
-		  thirdVal = $(this).children("option[value='mappers']").attr('selected');
-		  if ( firstVal == 'selected') {
-			  $('#sideOptionFind .select_type').children("option[value='metacode']").removeAttr('disabled');
-			  $('#sideOptionFind .select_type').children("option[value='map (by name)']").removeAttr('disabled');
-			  $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").removeAttr('disabled');
-			  $('.find').css('display','none');
-			  $('.find_topic_by_name').css('display','block');
-			  $('#topic_by_name_input').focus();
-			  
-		  }
-		  else if ( secondVal == 'selected' ) {
-			  if ( $("#sideOptionFind .select_type").val() != "name") { 
-			  	$("#sideOptionFind .select_type").val('name');
-			    $('#sideOptionFind').animate({
-					width: '305px',
-					height: '76px'
-				  }, 300, function() {
-					// Animation complete.
-				  });
-			  }
-			  $('#sideOptionFind .select_type').children("option[value='metacode']").attr('disabled','disabled');
-			  $('#sideOptionFind .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
-			  $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
-			  $('.find').css('display','none');
-			  $('.find_map_by_name').css('display','block');
-			  $('#map_by_name_input').focus();
-		  }
-		  else if ( thirdVal == 'selected' ) {
-			  $("#sideOptionFind .select_type").val('name');
-			  $('#sideOptionFind .select_type').children("option[value='metacode']").attr('disabled','disabled');
-			  $('#sideOptionFind .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
-			  $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
-			  $('.find').css('display','none');
-			  $('.find_mapper_by_name').css('display','block');
-			  $('#mapper_by_name_input').focus();
-		  }
-	});
-   
-   $('#sideOptionFind .select_type').change(function() {
-	      firstVal = $(this).children("option[value='name']").attr('selected');
-		  secondVal = $(this).children("option[value='metacode']").attr('selected');
-		  thirdVal = $(this).children("option[value='map (by name)']").attr('selected');
-		  fourthVal = $(this).children("option[value='mapper (by name)']").attr('selected');
-		  if ( firstVal === 'selected') {
-			  $('.find').fadeOut('fast', function() {
-				  showAll();
-				  $('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
-				  for (var catVis in categoryVisible) {
-					  categoryVisible[catVis] = true;
-				  }
-				  $('#sideOptionFind').animate({
-					width: '305px',
-					height: '76px'
-				  }, 300, function() {
-					$('.find_topic_by_name').css('display','block');
-					$('#topic_by_name_input').focus();
-				  });
-			  });
-		  }
-		  else if ( secondVal === 'selected' ) {
-			  $('.find').fadeOut('fast', function() {
-				  $('#sideOptionFind').animate({
-					width: '380px',
-					height: '463px'
-				  }, 300, function() {
-					$('.find_topic_by_metacode').fadeIn('fast');
-				  }); 
-			  });
-		  }
-		  else if ( thirdVal === 'selected' ) {
-			  $('.find').fadeOut('fast', function() {
-				  $('#sideOptionFind').animate({
-					width: '305px',
-					height: '76px'
-				  }, 300, function() {
-					$('.find_map_by_name').css('display','block'); 
-					$('#map_by_name_input').focus();
-				  });  
-			  });
-		  }
-		  else if ( fourthVal === 'selected' ) {
-			  $('.find').fadeOut('fast', function() {
-				  $('#sideOptionFind').animate({
-					width: '305px',
-					height: '76px'
-				  }, 300, function() {
-					$('.find_mapper_by_name').css('display','block'); 
-					$('#mapper_by_name_input').focus();
-				  });  
-			  });
-		  }
-	});
-   
-   $('.find_topic_by_name #topic_by_name_input').bind('railsAutocomplete.select', function(event, data){
-      /* Do something here */
-      if (data.item.id != undefined) {
-        window.open("/topics/" + data.item.id)
+      // only have the autocomplete enabled if they are searching in the commons
+      if (firstVal == "checked" && secondVal == "checked"){
+        //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
+        $('#topic_by_name_input').autocomplete( "option", "disabled", true );
       }
-      $('.find_topic_by_name #topic_by_name_input').val('');
-    });
-    
-    $('.find_topic_by_name').bind('submit', function(event, data){
-      event.preventDefault();
-    });
-	
-	$('.find_map_by_name #map_by_name_input').bind('railsAutocomplete.select', function(event, data){
-          firstVal = $('#sideOptionFind .select_content').children("option[value='topics']").attr('selected');
-		  secondVal = $('#sideOptionFind .select_content').children("option[value='maps']").attr('selected');
-		  thirdVal = $('#sideOptionFind .select_content').children("option[value='mappers']").attr('selected');
-		  if ( firstVal == 'selected') {
-			  // grab the checkboxes to see if the search is on the canvas, in the commons, or both
-			  firstNewVal = $("#onCanvas").attr('checked');
-			  secondNewVal = $("#inCommons").attr('checked');
-			  
-			  // only have the autocomplete enabled if they are searching in the commons
-			  
-			  if (firstNewVal == "checked" && secondNewVal == "checked"){
-				setTimeout(function(){onCanvasSearch(null,data.item.id,null);},0);
-				$('#topicsByMap').val(data.item.id);
-				$('#topicsByUser').val("");
-        $('#topicsByName').val("");
-				$('#get_topics_form').submit(); 
-			  }
-			  else if (firstNewVal == "checked"){
-				setTimeout(function(){onCanvasSearch(null,data.item.id,null);},0); 
-			  }
-			  else if (secondNewVal == "checked"){
-				//hideAll();
-				$('#topicsByMap').val(data.item.id);
-				$('#topicsByUser').val("");
-        $('#topicsByName').val("");
-				$('#get_topics_form').submit(); 
-			  }
-			  else {
-				 alert('You either need to have searching On Your Canvas or In the Commons enabled'); 
-			  }
-		  }
-		  else if ( secondVal == 'selected' ) {
-			 if (data.item.id != undefined) {
-                window.open("/maps/" + data.item.id);
-             }
-             $('.find_map_by_name #map_by_name_input').val('');
-		  }
-		  else if ( thirdVal == 'selected' ) {
+      else if (firstVal == "checked"){
+        setTimeout(function(){showAll();},0);
+        $('#topic_by_name_input').autocomplete( "option", "disabled", true );
+      }
+      else if (secondVal == "checked"){
+        //setTimeout(function(){hideAll();},0);
+        //$('#topic_by_name_input').autocomplete( "option", "disabled", false );
+        $('#topic_by_name_input').autocomplete( "option", "disabled", true );
+      }
+      else {
+        alert('You either need to have searching On Your Canvas or In the Commons enabled');  
+      }
+    },
+    stop: function (event, $elem) {
+      // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+      firstVal = $("#onCanvas").attr('checked');
+      secondVal = $("#inCommons").attr('checked');
+            
+      var topicName = $('#topic_by_name_input').val();
+      // run a search on the canvas or in the commons or both
+      if (firstVal == "checked" && secondVal == "checked") {
+        setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
+        $('#topicsByName').val(topicName);
+        $('#topicsByUser').val("");
+        $('#topicsByMap').val("");
+        $('#get_topics_form').submit();
+      }
+      else if (firstVal == "checked") {
+        setTimeout(function(){onCanvasSearch(topicName,null,null);},0);
+      }
+      else if (secondVal == "checked") {
+        $('#topicsByName').val(topicName);
+        $('#topicsByUser').val("");
+        $('#topicsByMap').val("");
+        $('#get_topics_form').submit();
+      }
+      else {
+        //do nothing
+      }
+            
+      if (topicName == "") {
+        clearFoundData();
+      }
+    },
+    delay: 2000
+  });
 
-		  }
-	});
+  $('#sideOptionFind .select_content').change(function() {
+    firstVal = $(this).children("option[value='topics']").attr('selected');
+    secondVal = $(this).children("option[value='maps']").attr('selected');
+    thirdVal = $(this).children("option[value='mappers']").attr('selected');
+    if (firstVal == 'selected') {
+      $('#sideOptionFind .select_type').children("option[value='metacode']").removeAttr('disabled');
+      $('#sideOptionFind .select_type').children("option[value='map (by name)']").removeAttr('disabled');
+      $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").removeAttr('disabled');
+      $('.find').css('display','none');
+      $('.find_topic_by_name').css('display','block');
+      $('#topic_by_name_input').focus();
+    }
+    else if ( secondVal == 'selected' ) {
+      if ( $("#sideOptionFind .select_type").val() != "name") { 
+        $("#sideOptionFind .select_type").val('name');
+        $('#sideOptionFind').animate({
+          width: '305px',
+          height: '76px'
+        }, 300, function() {
+          // Animation complete.
+        });
+      }
+      $('#sideOptionFind .select_type').children("option[value='metacode']").attr('disabled','disabled');
+      $('#sideOptionFind .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
+      $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
+      $('.find').css('display','none');
+      $('.find_map_by_name').css('display','block');
+      $('#map_by_name_input').focus();
+    }
+    else if ( thirdVal == 'selected' ) {
+      $("#sideOptionFind .select_type").val('name');
+      $('#sideOptionFind .select_type').children("option[value='metacode']").attr('disabled','disabled');
+      $('#sideOptionFind .select_type').children("option[value='map (by name)']").attr('disabled','disabled');
+      $('#sideOptionFind .select_type').children("option[value='mapper (by name)']").attr('disabled','disabled');
+      $('.find').css('display','none');
+      $('.find_mapper_by_name').css('display','block');
+      $('#mapper_by_name_input').focus();
+    }
+  });
+   
+  $('#sideOptionFind .select_type').change(function() {
+    firstVal = $(this).children("option[value='name']").attr('selected');
+    secondVal = $(this).children("option[value='metacode']").attr('selected');
+    thirdVal = $(this).children("option[value='map (by name)']").attr('selected');
+    fourthVal = $(this).children("option[value='mapper (by name)']").attr('selected');
+    if (firstVal === 'selected') {
+      $('.find').fadeOut('fast', function() {
+        showAll();
+        $('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
+        for (var catVis in categoryVisible) {
+          categoryVisible[catVis] = true;
+        }
+        $('#sideOptionFind').animate({
+          width: '305px',
+          height: '76px'
+        }, 300, function() {
+          $('.find_topic_by_name').css('display','block');
+          $('#topic_by_name_input').focus();
+        });
+      });
+    }
+    else if ( secondVal === 'selected' ) {
+      $('.find').fadeOut('fast', function() {
+        $('#sideOptionFind').animate({
+          width: '380px',
+          height: '463px'
+        }, 300, function() {
+          $('.find_topic_by_metacode').fadeIn('fast');
+        }); 
+      });
+    }
+    else if ( thirdVal === 'selected' ) {
+      $('.find').fadeOut('fast', function() {
+        $('#sideOptionFind').animate({
+          width: '305px',
+          height: '76px'
+        }, 300, function() {
+          $('.find_map_by_name').css('display','block'); 
+          $('#map_by_name_input').focus();
+        });  
+      });
+    }
+    else if ( fourthVal === 'selected' ) {
+      $('.find').fadeOut('fast', function() {
+        $('#sideOptionFind').animate({
+          width: '305px',
+          height: '76px'
+        }, 300, function() {
+          $('.find_mapper_by_name').css('display','block'); 
+          $('#mapper_by_name_input').focus();
+        });  
+      });
+    }
+  });
+   
+  $('.find_topic_by_name #topic_by_name_input').bind('railsAutocomplete.select', function(event, data) {
+    /* Do something here */
+    if (data.item.id != undefined) {
+      window.open("/topics/" + data.item.id)
+    }
+    $('.find_topic_by_name #topic_by_name_input').val('');
+  });
     
-    $('.find_map_by_name').bind('submit', function(event, data){
-      event.preventDefault();
-    });
+  $('.find_topic_by_name').bind('submit', function(event, data) {
+    event.preventDefault();
+  });
 	
-	$('.find_mapper_by_name #mapper_by_name_input').bind('railsAutocomplete.select', function(event, data){
-          firstVal = $('#sideOptionFind .select_content').children("option[value='topics']").attr('selected');
-		  secondVal = $('#sideOptionFind .select_content').children("option[value='maps']").attr('selected');
-		  thirdVal = $('#sideOptionFind .select_content').children("option[value='mappers']").attr('selected');
-		  if ( firstVal == 'selected') {
-			 // grab the checkboxes to see if the search is on the canvas, in the commons, or both
-			  firstNewVal = $("#onCanvas").attr('checked');
-			  secondNewVal = $("#inCommons").attr('checked');
-			  
-			  // only have the autocomplete enabled if they are searching in the commons
-			  
-			  if (firstNewVal == "checked" && secondNewVal == "checked"){ 
+  $('.find_map_by_name #map_by_name_input').bind('railsAutocomplete.select', function(event, data) {
+    firstVal = $('#sideOptionFind .select_content').children("option[value='topics']").attr('selected');
+    secondVal = $('#sideOptionFind .select_content').children("option[value='maps']").attr('selected');
+    thirdVal = $('#sideOptionFind .select_content').children("option[value='mappers']").attr('selected');
+    if (firstVal == 'selected') {
+      // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+      firstNewVal = $("#onCanvas").attr('checked');
+      secondNewVal = $("#inCommons").attr('checked');
+
+      // only have the autocomplete enabled if they are searching in the commons
+      if (firstNewVal == "checked" && secondNewVal == "checked") {
+        setTimeout(function(){onCanvasSearch(null,data.item.id,null);},0);
+        $('#topicsByMap').val(data.item.id);
+        $('#topicsByUser').val("");
+        $('#topicsByName').val("");
+        $('#get_topics_form').submit(); 
+      }
+      else if (firstNewVal == "checked") {
+        setTimeout(function(){onCanvasSearch(null,data.item.id,null);},0); 
+      }
+      else if (secondNewVal == "checked"){
+        //hideAll();
+        $('#topicsByMap').val(data.item.id);
+        $('#topicsByUser').val("");
+        $('#topicsByName').val("");
+        $('#get_topics_form').submit(); 
+      }
+      else {
+        alert('You either need to have searching On Your Canvas or In the Commons enabled'); 
+      }
+    }
+    else if ( secondVal == 'selected' ) {
+      if (data.item.id != undefined) {
+        window.open("/maps/" + data.item.id);
+      }
+      $('.find_map_by_name #map_by_name_input').val('');
+    }
+    else if ( thirdVal == 'selected' ) {
+      //nothing
+    }
+  });
+    
+  $('.find_map_by_name').bind('submit', function(event, data){
+    event.preventDefault();
+  });
+	
+  $('.find_mapper_by_name #mapper_by_name_input').bind('railsAutocomplete.select', function(event, data){
+    firstVal = $('#sideOptionFind .select_content').children("option[value='topics']").attr('selected');
+    secondVal = $('#sideOptionFind .select_content').children("option[value='maps']").attr('selected');
+    thirdVal = $('#sideOptionFind .select_content').children("option[value='mappers']").attr('selected');
+    if ( firstVal == 'selected') {
+      // grab the checkboxes to see if the search is on the canvas, in the commons, or both
+      firstNewVal = $("#onCanvas").attr('checked');
+      secondNewVal = $("#inCommons").attr('checked');
+
+      // only have the autocomplete enabled if they are searching in the commons
+      if (firstNewVal == "checked" && secondNewVal == "checked"){ 
         setTimeout(function(){onCanvasSearch(null,null,data.item.id.toString());},0);        
-				$('#topicsByUser').val(data.item.id);
-				$('#topicsByMap').val("");
+        $('#topicsByUser').val(data.item.id);
+        $('#topicsByMap').val("");
         $('#topicsByName').val("");
-				$('#get_topics_form').submit(); 
-			  }
-			  else if (firstNewVal == "checked"){
-				setTimeout(function(){onCanvasSearch(null,null,data.item.id.toString());},0); 
-			  }
-			  else if (secondNewVal == "checked"){
-				//hideAll();
-				$('#topicsByUser').val(data.item.id);
-				$('#topicsByMap').val("");
+        $('#get_topics_form').submit(); 
+      }
+      else if (firstNewVal == "checked"){
+        setTimeout(function(){onCanvasSearch(null,null,data.item.id.toString());},0); 
+      }
+      else if (secondNewVal == "checked"){
+        //hideAll();
+        $('#topicsByUser').val(data.item.id);
+        $('#topicsByMap').val("");
         $('#topicsByName').val("");
-				$('#get_topics_form').submit(); 
-			  }
-			  else {
-				 alert('You either need to have searching On Your Canvas or In the Commons enabled'); 
-			  }
-		  }
-		  else if ( secondVal == 'selected' ) {
-			 
-		  }
-		  else if ( thirdVal == 'selected' ) {
-			 if (data.item.id != undefined) {
-                window.open("/users/" + data.item.id);
-             }
-             $('.find_mapper_by_name #mapper_by_name_input').val('');
-		  }
-    });
+        $('#get_topics_form').submit(); 
+      }
+      else {
+        alert('You either need to have searching On Your Canvas or In the Commons enabled'); 
+      }
+    }
+    else if ( secondVal == 'selected' ) {
+      //nothing
+    }
+    else if ( thirdVal == 'selected' ) {
+      if (data.item.id != undefined) {
+        window.open("/users/" + data.item.id);
+      }
+      $('.find_mapper_by_name #mapper_by_name_input').val('');
+    }
+  });
     
-    $('.find_mapper_by_name').bind('submit', function(event, data){
-      event.preventDefault();
-    });
+  $('.find_mapper_by_name').bind('submit', function(event, data){
+    event.preventDefault();
+  });
 
-	// toggle visibility of topics with metacodes based on status in the filters list
-	$('.find_topic_by_metacode ul li').click(function(event) {
-		obj = document.getElementById('container');
+  // toggle visibility of topics with metacodes based on status in the filters list
+  $('.find_topic_by_metacode ul li').click(function(event) {
+    obj = document.getElementById('container');
         
-		var switchAll = $(this).attr('id');
-		
-		if ( switchAll === "showAll" || switchAll === "hideAll") {
-			if (switchAll == "showAll") {
-				showAll();
-				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
-				for (var catVis in categoryVisible) {
-					categoryVisible[catVis] = true;
-				}
-			}
-			else if (switchAll == "hideAll") {
-				hideAll();
-				$('.find_topic_by_metacode ul li').not('#hideAll, #showAll').addClass('toggledOff');
-				for (var catVis in categoryVisible) {
-					categoryVisible[catVis] = false;
-				}
-			}
-		}
-		else {
-			var category = $(this).children('img').attr('alt');
-			switchVisible(category);
-
-			// toggle the image and the boolean array value
-			if (categoryVisible[category] == true) {
-				$(this).addClass('toggledOff');
-				categoryVisible[category] = false;
-			}
-			else if (categoryVisible[category] == false) {
-				$(this).removeClass('toggledOff');
-				categoryVisible[category] = true;
-			}
-		}
-	});
+    var switchAll = $(this).attr('id');
+    if ( switchAll === "showAll" || switchAll === "hideAll") {
+      if (switchAll == "showAll") {
+        showAll();
+        $('.find_topic_by_metacode ul li').not('#hideAll, #showAll').removeClass('toggledOff');
+        for (var catVis in categoryVisible) {
+          categoryVisible[catVis] = true;
+        }
+      }
+      else if (switchAll == "hideAll") {
+        hideAll();
+        $('.find_topic_by_metacode ul li').not('#hideAll, #showAll').addClass('toggledOff');
+        for (var catVis in categoryVisible) {
+          categoryVisible[catVis] = false;
+        }
+      }
+    }
+    else {
+      var category = $(this).children('img').attr('alt');
+      switchVisible(category);
+  
+      // toggle the image and the boolean array value
+      if (categoryVisible[category] == true) {
+        $(this).addClass('toggledOff');
+        categoryVisible[category] = false;
+      }
+      else if (categoryVisible[category] == false) {
+        $(this).removeClass('toggledOff');
+        categoryVisible[category] = true;
+      }
+    }
+  });
 });
-
+  
 function openFind() {
   findOpen = true;
   if (analyzeOpen) closeAnalyze();
