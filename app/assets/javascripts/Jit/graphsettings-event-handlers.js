@@ -28,9 +28,38 @@ function selectEdgeOnClickHandler(adj, e) {
   Mconsole.plot();
 }//selectEdgeOnClickHandler
 
-function selectNodeOnClickHandler(node, e) {
+function nodeDoubleClickHandler(node, e) {
+  node.setData('onCanvas', true);
+  node.setData('inCommons', false);
+  console.log("Here's the node you clicked:");
+  console.log(node);
+  //if ($('.maps.onMap').length > 0 && node.getData('mappingid')) {
+  //  //TODO
+  //  var mappingId = createAMapping(alert('unimp'));
+  //  node.setData('mappingid', mappingId);
+  //}
+}//doubleClickNodeHandler
 
+function nodeWasDoubleClicked() {
+   //grab the timestamp of the click 
+   var storedTime = MetamapsModel.lastNodeClick;
+   var now = Date.now(); //not compatible with IE8 FYI 
+   MetamapsModel.lastNodeClick = now;
+ 
+   if (now - storedTime < MetamapsModel.DOUBLE_CLICK_TOLERANCE) { 
+     return true;
+   } else {
+     return false;
+   }
+}//nodeWasDoubleClicked;
+
+function selectNodeOnClickHandler(node, e) {
   if (Mconsole.busy) return;
+
+  if (nodeWasDoubleClicked()) {
+    nodeDoubleClickHandler(node, e);
+    return;
+  }
   
   if (gType != "centered") {
       //set final styles
@@ -70,13 +99,12 @@ function selectNodeOnClickHandler(node, e) {
 }//selectNodeOnClickHandler
 
 function canvasDoubleClickHandler(canvasLoc,e) { 
-   var DOUBLE_CLICK_TOLERANCE = 300; //0.3 seconds 
- 
    //grab the location and timestamp of the click 
    var storedTime = MetamapsModel.lastCanvasClick;
    var now = Date.now(); //not compatible with IE8 FYI 
+   MetamapsModel.lastCanvasClick = now;
  
-   if (now - storedTime < DOUBLE_CLICK_TOLERANCE) { 
+   if (now - storedTime < MetamapsModel.DOUBLE_CLICK_TOLERANCE) { 
       //pop up node creation :) 
       $('#topic_grabTopic').val("null"); 
       $('#topic_addSynapse').val("false"); 
@@ -89,7 +117,6 @@ function canvasDoubleClickHandler(canvasLoc,e) {
       addMetacode(); 
       $('#topic_name').focus(); 
    } else { 
-      MetamapsModel.lastCanvasClick = now;
       $('#new_topic').fadeOut('fast'); 
       $('#new_synapse').fadeOut('fast'); 
       tempInit = false; 

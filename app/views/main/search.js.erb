@@ -66,7 +66,7 @@ var even = true;
     var temp1 = null, temp2 = null;
     temp1 = Mconsole.graph.getNode(<%= synapse.topic1.id %>);
     temp2 = Mconsole.graph.getNode(<%= synapse.topic2.id %>);
-    if (!(temp1 == undefined || temp2 == undefined)) {
+    if (temp1 != undefined && temp2 != undefined) {
       Mconsole.graph.addAdjacence(temp1, temp2, {});
       temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
       temp.setDataset('start', {  
