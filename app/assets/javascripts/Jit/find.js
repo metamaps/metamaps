@@ -75,19 +75,11 @@ function showCategory(category, duration) {
 	});	
 }
 
-
-
-
 // Define the Find/Filters possibilities
-
 var findTopics = ['name','metacode', 'mapper (by name)', 'map (by name)']
 var findSynapses = ['topics (by name)', 'directionality', 'mapper (by name)', 'map (by name)']
 var findMaps = ['name', 'topic (by name)', 'mapper (by name)', 'synapse (by topics)']
 var findMappers = ['name', 'topic (by name)', 'map (by name)', 'synapse (by topics)']
-
-
-
-
 
 // These functions toggle ALL nodes and synapses on the page
 function hideAll(duration) {
@@ -121,47 +113,38 @@ function showAll(duration) {
 	});	
 }
 
-
-
-
 /// Traverse the Graph and only show the searched for nodes
-
-function onCanvasSearch(name,mapID,mapperID) {
-
-	Mconsole.graph.eachNode( function (n) {
-		  if (name != null) {
-		     if (n.name.indexOf(name) !== -1 && name != "") {
-				 n.setData('onCanvas', true);
-				 //$('.name.topic_' + n.id).css('display','block');
-		     }
-			 else {
-				 n.setData('onCanvas', false);
-				 //$('.name.topic_' + n.id).css('display','none'); 
-			 }
-		  }
-		  else if (mapID != null) {
-		     if (n.getData('inmaps').indexOf(parseInt(mapID)) !== -1) {
-				 n.setData('onCanvas', true);
-				 //$('.name.topic_' + n.id).css('display','block');
-		     }
-			 else {
-				 n.setData('onCanvas', false);
-				 //$('.name.topic_' + n.id).css('display','none'); 
-			 }
-		  }
-		  else if (mapperID != null) {
-		     if (n.getData('userid').toString() == mapperID) {
-			    n.setData('onCanvas', true);
-				 //$('.name.topic_' + n.id).css('display','block');
-			 }
-			 else {
-				 n.setData('onCanvas', false);
-				 //$('.name.topic_' + n.id).css('display','none'); 
-			 }
-		  }
-		  Mconsole.plot();
-	});
-}
+function onCanvasSearch(searchQuery, mapID, mapperID) {
+  searchQuery = name.toLowerCase();
+  Mconsole.graph.eachNode(function (n) {
+    nodeName = n.name.toLowerCase();
+    if (name != null) {
+      if (nodeName.indexOf(searchQuery) !== -1 && searchQuery != "") {
+        n.setData('onCanvas', true);
+      }
+      else {
+        n.setData('onCanvas', false);
+      }
+    }
+    else if (mapID != null) {
+      if (n.getData('inmaps').indexOf(parseInt(mapID)) !== -1) {
+        n.setData('onCanvas', true);
+      }
+      else {
+        n.setData('onCanvas', false);
+      }
+    }
+    else if (mapperID != null) {
+      if (n.getData('userid').toString() == mapperID) {
+        n.setData('onCanvas', true);
+      }
+      else {
+        n.setData('onCanvas', false);
+      }
+    }
+    Mconsole.plot();
+  });
+}//onCanvasSearch
 
 function clearCanvas() {
   Mconsole.graph.eachNode(function(n) {
@@ -201,13 +184,11 @@ function clearFoundData() {
 
 
 
-////
-////
-////
-//// Define all the dynamic interactions for the FIND/FILTER using Jquery
+/**
+ * Define all the dynamic interactions for the FIND/FILTER using Jquery
+ */
 
 $(document).ready(function() {
-   
    // this sets up the initial opening of the find box
    $('#sideOptionFind').bind('click',function(){
 	   if (!findOpen) openFind();  
