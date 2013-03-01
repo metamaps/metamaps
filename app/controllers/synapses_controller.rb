@@ -70,7 +70,6 @@ class SynapsesController < ApplicationController
   
   # POST synapses
   def create
-	
     @user = current_user
     @synapse = Synapse.new()
     @synapse.desc = params[:synapse][:desc]
@@ -82,20 +81,20 @@ class SynapsesController < ApplicationController
     @synapse.user = @user	
     @synapse.save   
 	
-	  if params[:synapse][:map]
-		  @map = Map.find(params[:synapse][:map])
-      
+    if params[:synapse][:map]
+      @map = Map.find(params[:synapse][:map])
       @mapping = Mapping.new()
-		  @mapping.category = "Synapse"
-		  @mapping.user = @user
-		  @mapping.map = @map
-		  @mapping.synapse = @synapse
-		  @mapping.save
+      @mapping.category = "Synapse"
+      @mapping.user = @user
+      @mapping.map = @map
+      @mapping.synapse = @synapse
+      @mapping.save
       
-      # set the permission of the synapse to whatever the permission of the map is
+      # set the permission of the synapse to whatever the permission of the 
+      #map is
       @synapse.permission = @map.permission
       @synapse.save
-	  end
+	end
     
     respond_to do |format|
       format.html { respond_with(@user, location: synapse_url(@synapse)) }
