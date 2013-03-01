@@ -29,15 +29,14 @@ function selectEdgeOnClickHandler(adj, e) {
 }//selectEdgeOnClickHandler
 
 function nodeDoubleClickHandler(node, e) {
-  node.setData('onCanvas', true);
   node.setData('inCommons', false);
+  deselectNode(node);
   console.log("Here's the node you clicked:");
   console.log(node);
-  //if ($('.maps.onMap').length > 0 && node.getData('mappingid')) {
-  //  //TODO
-  //  var mappingId = createAMapping(alert('unimp'));
-  //  node.setData('mappingid', mappingId);
-  //}
+  if ($('.maps.onMap').length > 0) {
+    //TODO  var mappingId = createAMapping(alert('unimp'));
+    //node.setData('mappingid', mappingId);
+  }
 }//doubleClickNodeHandler
 
 function nodeWasDoubleClicked() {
