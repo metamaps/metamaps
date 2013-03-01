@@ -31,11 +31,18 @@ function selectEdgeOnClickHandler(adj, e) {
 function nodeDoubleClickHandler(node, e) {
   node.setData('inCommons', false);
   deselectNode(node);
-  console.log("Here's the node you clicked:");
-  console.log(node);
-  if ($('.maps.onMap').length > 0) {
-    //TODO  var mappingId = createAMapping(alert('unimp'));
-    //node.setData('mappingid', mappingId);
+  if (window.mapid) {
+    $.post('/mappings',
+           {
+             topic: {id: node.id},
+             map: {id: window.mapid},
+             xloc: node.pos.x,
+             yloc: node.pos.y
+           },
+           function(data, textStatus, jqXHR) {
+             console.log(data);
+             node.setData('mappingid', data.id);
+           });
   }
 }//doubleClickNodeHandler
 
