@@ -1,4 +1,6 @@
 class MappingsController < ApplicationController
+  respond_to :js, :html
+
   # GET mappings
   def index
   end
@@ -12,9 +14,13 @@ class MappingsController < ApplicationController
 
   # POST mappings
   def create
-    @user = current_user
     @mapping = Mapping.new()
-    @mapping.user = @user
+
+    //TODO authenticate and put a user
+
+    @mapping.xloc = params[:xloc] if params[:xloc]
+    @mapping.yloc = params[:yloc] if params[:yloc]
+
     if params[:map]
       if params[:map][:id]
         @map = Map.find(params[:map][:id])
@@ -25,13 +31,16 @@ class MappingsController < ApplicationController
       if params[:topic][:id]
         @topic = Topic.find(params[:topic][:id])
         @mapping.topic = @topic
+        @mapping.category = "Topic"
       end
     elsif params[:synapse]
       if params[:synapse][:id]
         @topic = Synapse.find(params[:synapse][:id])
         @mapping.synapse = @synapse
+        @mapping.category = "Synapse"
       end
     end
+    @mapping.save()
   end
 
   # GET /mappings/:id
