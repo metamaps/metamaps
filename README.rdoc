@@ -5,6 +5,7 @@ Here are the important folders/files:
 config/database.yml: This file is your database configuration. If it doesn't exist, copy it from config/database.yml.default and then get it set up. config/database.yml is in .gitignore
 
 app/assets/javascripts/application.js: Global Javascript
+
 app/assets/javascripts/Jit/*: These files handle all code that uses the Javascript Infovis Toolkit, so realistically, most code for laying stuff out is in here.
 
 app/assets/controllers/*: These files define actions you can do on the different database objects. So for instance, what happens when you edit a Synapse? Check in app/assets/controllers/synapse_controller.rb, in the edit block
