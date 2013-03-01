@@ -33,6 +33,10 @@ function nodeDoubleClickHandler(node, e) {
     return;
   }
 
+  if (userid == null) {
+    return;
+  }
+
   node.setData('inCommons', false);
   deselectNode(node);
   if (window.mapid) {

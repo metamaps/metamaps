@@ -528,16 +528,13 @@ function openFind() {
 }
 
 function closeFind() {
+  clearFoundData();
+
   findOpen = false;
-  Mconsole.graph.eachNode( function (n) {
-    n.setData('inCommons', false);
-    n.setData('onCanvas', false);
-   });
-   Mconsole.plot();
-   $('#closeFind, #findWhere').css('display','none');
-   $('#sideOptionFind').css('cursor','pointer');
-   $('#sideOptionFind').animate({
-     width: '45px',
-     height: '32px'
-     }, 100);
-}
+  $('#closeFind, #findWhere').css('display','none');
+  $('#sideOptionFind').css('cursor','pointer');
+  $('#sideOptionFind').animate({
+    width: '45px',
+    height: '32px'
+    }, 100);
+}//closeFind
