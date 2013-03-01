@@ -29,6 +29,10 @@ function selectEdgeOnClickHandler(adj, e) {
 }//selectEdgeOnClickHandler
 
 function nodeDoubleClickHandler(node, e) {
+  if (node.getData('inCommons') == false) {
+    return;
+  }
+
   node.setData('inCommons', false);
   deselectNode(node);
   if (window.mapid) {
