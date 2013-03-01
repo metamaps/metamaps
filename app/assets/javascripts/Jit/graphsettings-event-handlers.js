@@ -29,16 +29,21 @@ function selectEdgeOnClickHandler(adj, e) {
 }//selectEdgeOnClickHandler
 
 function nodeDoubleClickHandler(node, e) {
-  if (node.getData('inCommons') == false) {
-    return;
-  }
-
   if (userid == null) {
     return;
   }
 
+  if (node.getData('inCommons') == false) {
+    return;
+  }
+
+  //this line adds it to the console if you close seek
   node.setData('inCommons', false);
+
+  //this is just aesthetic
   deselectNode(node);
+
+  //this adds the node to the map, if it's a map
   if (window.mapid) {
     $.post('/mappings',
            {
@@ -52,6 +57,7 @@ function nodeDoubleClickHandler(node, e) {
              node.setData('mappingid', data.id);
            });
   }
+    
 }//doubleClickNodeHandler
 
 function nodeWasDoubleClicked() {
