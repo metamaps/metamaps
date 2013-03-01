@@ -39,6 +39,8 @@ ISSAD::Application.routes.draw do
     resources :synapses, :only => [:index]
 	  resources :maps, :only => [:index]
   end
+
+  resources :mappings
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
