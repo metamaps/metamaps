@@ -1,4 +1,4 @@
-class MappingController < ApplicationController
+class MappingsController < ApplicationController
   # GET mappings
   def index
   end
@@ -26,7 +26,7 @@ class MappingController < ApplicationController
         @topic = Topic.find(params[:topic][:id])
         @mapping.topic = @topic
       end
-    else if params[:synapse]
+    elsif params[:synapse]
       if params[:synapse][:id]
         @topic = Synapse.find(params[:synapse][:id])
         @mapping.synapse = @synapse
