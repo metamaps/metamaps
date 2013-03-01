@@ -28,7 +28,8 @@ if ( Mconsole != null) {
       category: '<%= @synapse.category %>',
       id: '<%= @synapse.id %>',
       userid: '<%= @synapse.user.id %>',
-      username: '<%= @synapse.user.name %>'					
+      username: '<%= @synapse.user.name %>',			
+      permission: '<%= @synapse.permission %>'
       });
     temp.data.$direction = d;
     Mconsole.fx.plotLine(temp, Mconsole.canvas);
