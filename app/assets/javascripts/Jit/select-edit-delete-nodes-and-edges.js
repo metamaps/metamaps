@@ -91,7 +91,6 @@ function add_perms_form(edge) {
       }, 300);
     });
     $('#edit_synapse .permActivator').bind('mouseout', function () {
-        return; //devin
         clearTimeout(MetamapsModel.edgePermTimer1);
         that = this;
         MetamapsModel.edgePermTimer2 = setTimeout(function() {
