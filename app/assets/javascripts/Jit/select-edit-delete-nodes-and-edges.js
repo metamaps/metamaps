@@ -29,10 +29,7 @@ function editEdge(edge, e) {
 }
 
 function populateEditEdgeForm(edge) {
-  //disabled for now since permissions are complicated
-  //TODO: figure out why permissions are "0" in edge objects
-  //instead of being "commons" or "public", etc
-  //add_perms_form(edge);
+  add_perms_form(edge);
   add_direction_form(edge);
   add_name_form(edge);
 }
@@ -45,7 +42,6 @@ function add_name_form(edge) {
   $('#edit_synapse_name').attr('data-object', 'synapse');
   $('#edit_synapse_name').attr('data-attribute', 'desc');
   $('#edit_synapse_name').attr('data-type', 'input');
-  //TODO how to get blank data-nil
   $('#edit_synapse_name').attr('data-nil', data_nil);
   $('#edit_synapse_name').attr('data-url', '/synapses/' + edge.getData("id"));
   $('#edit_synapse_name').html(edge.getData("desc"));
@@ -200,6 +196,7 @@ function updateEdgeDisplay(edge, dir, dirCat) {
 }
 
 function best_in_place_perms(edge) {
+  console.log(edge);
   var output = 
   '<span class="best_in_place best_in_place_permission"                       \
         id="best_in_place_topic_$_id_$_permission"                            \
@@ -219,7 +216,7 @@ function best_in_place_perms(edge) {
   output = output.replace(/\$_permission_choices_\$/g, permission_choices);
   output = output.replace(/\$_id_\$/g, edge.getData('id'));
   output = output.replace(/\$_current_$\$/g, edge.getData('permission'));
-  output = output.replace(/\$_perm_\$/g, mk_permission(edge));
+  output = output.replace(/\$_perm_\$/g, edge.getData('permission'));
   return output;
 }//best_in_place_perms
 
