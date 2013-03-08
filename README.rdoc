@@ -13,3 +13,23 @@ app/assets/controllers/*: These files define actions you can do on the different
 app/assets/views/*.html.erb: Files in here define either html that is displayed when a certain action is called (like edit, or create) on a thing. E.G. app/assets/views/topic/new.html.erb would have a form for creating a new topic. We don't use that way very much anymore though. "Partial" views can be called elsewhere in ruby code and are prefixed with an underscore. So we focus more on the files starting with an underscore. Read through the comments at the top of each file to understand what they all do.
 
 app/assets/views/*.js.erb: Javascript that is called in response to, e.g., editing or creating a topic, synapse, etc.
+
+Setting up the database:
+
+1) Copy database.yml.default to database.yml
+  - Then you'll need to figure out how to configure it to work with Postgresql (which you need to install - try Herokuapp's exe or app)
+2) In a terminal:
+  $ rake db:create
+  $ rake db:migrate
+  $ rake db:fixtures:load
+
+Running the server:
+
+$rails s #runs the server
+$rails c #gives you an interactive console
+
+==Installing on Ubuntu
+
+I had a lot of trouble installing on Ubuntu
+I had to install postgresql and libpq-dev. I had to do $rvm reinstall ruby-1.9.3-p125
+execjs complained there was no runtime, so I added gem 'therubyracer' to the Gemfile
