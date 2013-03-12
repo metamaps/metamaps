@@ -287,29 +287,6 @@ function deleteSelectedEdges() {
   MetamapsModel.selectedEdges = new Array();
 }
 
-function selectNode(node) {
-  node.selected = true;
-  node.setData('dim', 30, 'current');
-  node.setData('onCanvas',true);
-  node.eachAdjacency(function (adj) {
-    selectEdge(adj);
-  });
-  MetamapsModel.selectedNodes.push(node);
-}
-
-function deselectNode(node) {
-  delete node.selected;
-  node.setData('onCanvas', false);
-  node.eachAdjacency(function(adj) {
-    deselectEdge(adj);
-  });
-  node.setData('dim', 25, 'current');
-
-  //remove the node
-  MetamapsModel.selectedNodes.splice(
-    MetamapsModel.selectedNodes.indexOf(node), 1);
-}
-
 function selectEdge(edge) {
   var showDesc = edge.getData("showDesc");
   if (! showDesc) {

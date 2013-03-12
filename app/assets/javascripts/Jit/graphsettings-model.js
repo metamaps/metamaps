@@ -9,9 +9,8 @@ var MetamapsModel = new Object();
 
 MetamapsModel.embed = false;
 
-//array of all selected edges, same for nodes
+//array of all selected edges
 MetamapsModel.selectedEdges = new Array();
-MetamapsModel.selectedNodes = new Array();
 
 //is any showcard open right now? which one?
 MetamapsModel.showcardInUse = null;
