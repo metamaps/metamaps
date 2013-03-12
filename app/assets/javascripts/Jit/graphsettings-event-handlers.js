@@ -132,6 +132,28 @@ function canvasDoubleClickHandler(canvasLoc,e) {
    } 
 }//canvasDoubleClickHandler 
 
+function handleSelectionBeforeDragging(node, e) {
+  // four cases:
+  // 1 nothing is selected, so pretend you aren't selecting
+  // 2 others are selected only and shift, so additionally select this one
+  // 3 others are selected only, no shift: drag only this one
+  // 4 this node and others were selected, so drag them (just return false)
+  //return value: deselect node again after?
+  if (MetamapsModel.selectedNodes.length == 0) {
+    selectNode(node);
+    return 'deselect';
+  }
+  if (MetamapsModel.selectedNodes.indexOf(node) == -1) {
+    if (e.shiftKey) {
+      selectNode(node);
+      return 'nothing';
+    } else {
+      return 'only-drag-this-one';
+    }
+  }
+  return 'nothing'; //case 4?
+}
+
 function onDragMoveTopicHandler(node, eventInfo, e) {
     if (node && !node.nodeFrom) {
        $('#new_synapse').fadeOut('fast');
@@ -139,24 +161,35 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        var pos = eventInfo.getPos();
        // if it's a left click, move the node
        if (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined)) {
-           var len = MetamapsModel.selectedNodes.length;
+           //if the node dragged isn't already selected, select it
+           var whatToDo = handleSelectionBeforeDragging(node, e);
+           if (whatToDo == 'only-drag-this-one') {
+             node.pos.setc(pos.x, pos.y);
+             node.setData('xloc', pos.x);
+             node.setData('yloc', pos.y);
+           } else {
+             var len = MetamapsModel.selectedNodes.length;
 
-           //first define offset for each node
-           var xOffset = new Array();
-           var yOffset = new Array();
-           for (var i = 0; i < len; i += 1) {
-             n = MetamapsModel.selectedNodes[i];
-             xOffset[i] = n.getData('xloc') - node.getData('xloc');
-             yOffset[i] = n.getData('yloc') - node.getData('yloc');
+             //first define offset for each node
+             var xOffset = new Array();
+             var yOffset = new Array();
+             for (var i = 0; i < len; i += 1) {
+               n = MetamapsModel.selectedNodes[i];
+               xOffset[i] = n.getData('xloc') - node.getData('xloc');
+               yOffset[i] = n.getData('yloc') - node.getData('yloc');
+             }//for
+
+             for (var i = 0; i < len; i += 1) {
+               n = MetamapsModel.selectedNodes[i];
+               n.pos.setc(pos.x + xOffset[i], pos.y + yOffset[i]);
+               n.setData('xloc', pos.x + xOffset[i]);
+               n.setData('yloc', pos.y + yOffset[i]);
+             }//for
+           }//if
+
+           if (whatToDo == 'deselect') {
+             deselectNode(node);
            }
-
-           for (var i = 0; i < len; i += 1) {
-             n = MetamapsModel.selectedNodes[i];
-             n.pos.setc(pos.x + xOffset[i], pos.y + yOffset[i]);
-             n.setData('xloc', pos.x + xOffset[i]);
-             n.setData('yloc', pos.y + yOffset[i]);
-           }
-
            dragged = node.id;
            Mconsole.plot();
        }

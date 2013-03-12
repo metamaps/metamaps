@@ -288,6 +288,7 @@ function deleteSelectedEdges() {
 }
 
 function selectNode(node) {
+  if (MetamapsModel.selectedNodes.indexOf(node) != -1) return;
   node.selected = true;
   node.setData('dim', 30, 'current');
   node.setData('onCanvas',true);
@@ -311,6 +312,7 @@ function deselectNode(node) {
 }
 
 function selectEdge(edge) {
+  if (MetamapsModel.selectedEdges.indexOf(edge) != -1) return;
   var showDesc = edge.getData("showDesc");
   if (! showDesc) {
     edge.setData('showDesc', true, 'current');
