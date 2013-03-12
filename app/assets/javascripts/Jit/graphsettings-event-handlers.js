@@ -73,24 +73,6 @@ function nodeWasDoubleClicked() {
    }
 }//nodeWasDoubleClicked;
 
-function selectNode(node) {
-  node.selected = true;
-  node.setData('dim', 30, 'current');
-  node.setData('onCanvas',true);
-  node.eachAdjacency(function (adj) {
-    selectEdge(adj);
-  });
-}
-
-function deselectNode(node) {
-  delete node.selected;
-  node.setData('onCanvas', false);
-  node.eachAdjacency(function(adj) {
-    deselectEdge(adj);
-  });
-  node.setData('dim', 25, 'current');
-}
-
 function selectNodeOnClickHandler(node, e) {
   if (Mconsole.busy) return;
 
@@ -157,10 +139,25 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        var pos = eventInfo.getPos();
        // if it's a left click, move the node
        if (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined)) {
+           var len = MetamapsModel.selectedNodes.length;
+
+           //first define offset for each node
+           var xOffset = new Array();
+           var yOffset = new Array();
+           for (var i = 0; i < len; i += 1) {
+             n = MetamapsModel.selectedNodes[i];
+             xOffset[i] = n.getData('xloc') - node.getData('xloc');
+             yOffset[i] = n.getData('yloc') - node.getData('yloc');
+           }
+
+           for (var i = 0; i < len; i += 1) {
+             n = MetamapsModel.selectedNodes[i];
+             n.pos.setc(pos.x + xOffset[i], pos.y + yOffset[i]);
+             n.setData('xloc', pos.x + xOffset[i]);
+             n.setData('yloc', pos.y + yOffset[i]);
+           }
+
            dragged = node.id;
-           node.pos.setc(pos.x, pos.y);
-           node.data.$xloc = pos.x;
-           node.data.$yloc = pos.y;
            Mconsole.plot();
        }
        // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
