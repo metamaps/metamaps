@@ -480,6 +480,7 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     tempNode2 = null;
     tempInit = false;
   } else if (dragged != 0 && goRealtime) {
+    //TODO: dragged is invalid if multiple nodes were dragged
     saveLayout(dragged); 
   }
 }//onDragEndTopicHandler
