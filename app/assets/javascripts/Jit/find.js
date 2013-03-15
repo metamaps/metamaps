@@ -149,7 +149,9 @@ function onCanvasSearch(searchQuery, mapID, mapperID) {
 function clearCanvas() {
   Mconsole.graph.eachNode(function(n) {
     Mconsole.graph.removeNode(n.id);
-    Mconsole.labels.disposeLabel(n.id);
+    //TODO shouldn't we use disposeLabel? Yes, but it breaks things so it's
+    //hide for now
+    Mconsole.labels.hideLabel(n.id);
   });
   Mconsole.plot();
 }
@@ -164,8 +166,7 @@ function clearCanvasExceptRoot() {
   ids.forEach(function(id, index) {
     if (id != root.id) {
       Mconsole.graph.removeNode(id);
-      //don't use disposeLabel or they'll never come back!
-      //maybe there's a better way that recreates the labels later??
+      //TODO is hideLabel correct? Maybe it is...
       Mconsole.labels.hideLabel(id);
       $('#topic_' + id + '_label').hide();
     }
@@ -177,7 +178,9 @@ function clearFoundData() {
   Mconsole.graph.eachNode( function(n) { 
     if (n.getData('greenCircle') === true) {
       Mconsole.graph.removeNode(n.id);
-      Mconsole.labels.disposeLabel(n.id);
+      //TODO is hideLabel correct? Maybe it is...
+      Mconsole.labels.hideLabel(n.id);
+      $('#topic_' + n.id + '_label').hide();
     }
   });
   Mconsole.plot();
