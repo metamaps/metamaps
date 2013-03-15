@@ -235,12 +235,12 @@ var nodeSettings = {
 			  var pos = node.pos.getc(true),
 			  dim = node.getData('dim'),
 			  cat = node.getData('metacode'),
-			  inCommons = node.getData('inCommons'),
-			  onCanvas = node.getData('onCanvas'),
+			  greenCircle = node.getData('greenCircle'),
+			  whiteCircle = node.getData('whiteCircle'),
 			  ctx = canvas.getCtx();
 			  
 			  // if the topic is from the Commons draw a green circle around it
-			  if (inCommons) {
+			  if (greenCircle) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
 				  ctx.strokeStyle = '#67be5f'; // green
@@ -248,7 +248,7 @@ var nodeSettings = {
 				  ctx.stroke();
 			  }
 			  // if the topic is on the Canvas draw a white circle around it
-			  if (onCanvas) {
+			  if (whiteCircle) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
           if (! MetamapsModel.embed) ctx.strokeStyle = 'white';

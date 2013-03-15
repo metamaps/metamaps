@@ -33,12 +33,13 @@ function nodeDoubleClickHandler(node, e) {
     return;
   }
 
-  if (node.getData('inCommons') == false) {
+  //greenCircle being true denotes it's actually "in the commons" still
+  if (node.getData('greenCircle') == false) {
     return;
   }
 
   //this line adds it to the console if you close seek
-  node.setData('inCommons', false);
+  node.setData('greenCircle', false);
 
   //this is just aesthetic
   deselectNode(node);

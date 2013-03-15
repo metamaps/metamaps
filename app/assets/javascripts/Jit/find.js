@@ -85,7 +85,7 @@ var findMappers = ['name', 'topic (by name)', 'map (by name)', 'synapse (by topi
 function hideAll(duration) {
     if (duration == null) duration = 500;
 	Mconsole.graph.eachNode( function (n) {
-		  if (!(n.getData('inCommons') || n.getData('onCanvas'))) {
+		  if (!(n.getData('greenCircle') || n.getData('whiteCircle'))) {
         n.setData('alpha', 0.4, 'end');
         n.eachAdjacency(function(adj) {  
         adj.setData('alpha', 0.4, 'end');  
@@ -120,26 +120,26 @@ function onCanvasSearch(searchQuery, mapID, mapperID) {
     nodeName = n.name.toLowerCase();
     if (name != null) {
       if (nodeName.indexOf(searchQuery) !== -1 && searchQuery != "") {
-        n.setData('onCanvas', true);
+        n.setData('whiteCircle', true);
       }
       else {
-        n.setData('onCanvas', false);
+        n.setData('whiteCircle', false);
       }
     }
     else if (mapID != null) {
       if (n.getData('inmaps').indexOf(parseInt(mapID)) !== -1) {
-        n.setData('onCanvas', true);
+        n.setData('whiteCircle', true);
       }
       else {
-        n.setData('onCanvas', false);
+        n.setData('whiteCircle', false);
       }
     }
     else if (mapperID != null) {
       if (n.getData('userid').toString() == mapperID) {
-        n.setData('onCanvas', true);
+        n.setData('whiteCircle', true);
       }
       else {
-        n.setData('onCanvas', false);
+        n.setData('whiteCircle', false);
       }
     }
     Mconsole.plot();
@@ -175,7 +175,7 @@ function clearCanvasExceptRoot() {
 
 function clearFoundData() {
   Mconsole.graph.eachNode( function(n) { 
-    if (n.getData('inCommons') === true) {
+    if (n.getData('greenCircle') === true) {
       Mconsole.graph.removeNode(n.id);
       Mconsole.labels.disposeLabel(n.id);
     }

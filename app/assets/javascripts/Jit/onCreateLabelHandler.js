@@ -323,6 +323,7 @@ function bindCallbacks(showCard, nameContainer, node) {
   $(showCard).find('.best_in_place_name').bind("ajax:success", function() {
     var name = $(this).html();
     $(nameContainer).find('.label').html(name);
+    node.name = name;
   });
 
   $(showCard).find('.best_in_place_desc').bind("ajax:success", function() {
