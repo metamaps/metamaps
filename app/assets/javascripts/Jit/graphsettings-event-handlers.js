@@ -61,6 +61,9 @@ function nodeDoubleClickHandler(node, e) {
     
 }//doubleClickNodeHandler
 
+/*
+ * Returns a boolean saying if the node was double clicked in our understanding of the word
+ */
 function nodeWasDoubleClicked() {
    //grab the timestamp of the click 
    var storedTime = MetamapsModel.lastNodeClick;
