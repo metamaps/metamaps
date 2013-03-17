@@ -287,7 +287,32 @@ function deleteSelectedEdges() {
   MetamapsModel.selectedEdges = new Array();
 }
 
+function selectNode(node) {
+  if (MetamapsModel.selectedNodes.indexOf(node) != -1) return;
+  node.selected = true;
+  node.setData('dim', 30, 'current');
+  node.setData('whiteCircle',true);
+  node.eachAdjacency(function (adj) {
+    selectEdge(adj);
+  });
+  MetamapsModel.selectedNodes.push(node);
+}
+
+function deselectNode(node) {
+  delete node.selected;
+  node.setData('whiteCircle', false);
+  node.eachAdjacency(function(adj) {
+    deselectEdge(adj);
+  });
+  node.setData('dim', 25, 'current');
+
+  //remove the node
+  MetamapsModel.selectedNodes.splice(
+    MetamapsModel.selectedNodes.indexOf(node), 1);
+}
+
 function selectEdge(edge) {
+  if (MetamapsModel.selectedEdges.indexOf(edge) != -1) return;
   var showDesc = edge.getData("showDesc");
   if (! showDesc) {
     edge.setData('showDesc', true, 'current');
@@ -348,6 +373,8 @@ function hideNode(nodeid) {
     alert("You can't hide this topic, it is the root of your graph.");
     return;
   }
+
+  deselectNode(node);
   
   node.setData('alpha', 0, 'end');  
   node.eachAdjacency(function(adj) {  
@@ -361,15 +388,18 @@ function hideNode(nodeid) {
   Mconsole.graph.removeNode(nodeid);
   Mconsole.labels.disposeLabel(nodeid);
 }
+
 function hideSelectedNodes() {
   Mconsole.graph.eachNode( function (n) {
-      if (n.data.$onCanvas == true) {
+      if (n.getData('whiteCircle') == true) {
           hideNode(n.id);
       }
   });
 }
 
 function removeNode(nodeid) {
+  var node = Mconsole.graph.getNode(nodeid);
+  deselectNode(node);
   if (mapperm) {
     $.ajax({
       type: "POST",
@@ -380,7 +410,7 @@ function removeNode(nodeid) {
 function removeSelectedNodes() {
  if (mapperm) {
     Mconsole.graph.eachNode( function (n) {
-      if (n.data.$onCanvas == true) {
+      if (n.getData('whiteCircle') == true) {
           removeNode(n.id);
       }
     });
@@ -399,7 +429,7 @@ function deleteNode(nodeid) {
 }
 function deleteSelectedNodes() {
   Mconsole.graph.eachNode( function (n) {
-      if (n.data.$onCanvas == true) {
+      if (n.getData('whiteCircle') == true) {
         deleteNode(n.id);
       }
   });

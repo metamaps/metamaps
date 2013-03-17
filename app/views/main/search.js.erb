@@ -19,8 +19,8 @@ var even = true;
     var temp = Mconsole.graph.getNode('<%= topic.id %>');
     temp.setData('dim', 1, 'start');
     temp.setData('dim', 25, 'end');
-    temp.setData('inCommons',true);
-    temp.setData('onCanvas',false);
+    temp.setData('greenCircle',true);
+    temp.setData('whiteCircle',false);
     temp.setPos(new $jit.Complex(myX, myY), 'current');
     temp.setPos(new $jit.Complex(myX, myY), 'start');
     temp.setPos(new $jit.Complex(myX, myY), 'end');
@@ -28,17 +28,16 @@ var even = true;
     Mconsole.labels.plotLabel(Mconsole.canvas, temp, Mconsole.config);
     myX += 100;
     even = !even;
-  }
-  else {
+  } else {
     var temp = Mconsole.graph.getNode('<%= topic.id %>');
-    if (temp == null || temp.getData('inCommons')) {
+    if (temp == undefined) {
       var newnode = <%= topic.self_as_json.html_safe %>;
       Mconsole.graph.addNode(newnode);
       var temp = Mconsole.graph.getNode('<%= topic.id %>');
       temp.setData('dim', 1, 'start');
       temp.setData('dim', 25, 'end');
-      temp.setData('inCommons',true);
-      temp.setData('onCanvas',false);
+      temp.setData('greenCircle',true);
+      temp.setData('whiteCircle',false);
       if (myX > (w-100)) {
         myX = -w + 400;
         myY += 200;
@@ -85,7 +84,7 @@ var even = true;
         username: '<%= synapse.user.name %>',					
         permission: '<%= synapse.permission %>'
       });
-      temp.data.$direction = d;
+      temp.setData('direction', d);
       Mconsole.fx.plotLine(temp, Mconsole.canvas);
     }
 <% end %>

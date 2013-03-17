@@ -58,7 +58,7 @@ function graphSettings(type, embed) {
       },
       //Update node positions when dragged
       onDragMove: function (node, eventInfo, e) {
-        onDragMoveTopicHandler(node, eventInfo, e);
+        onDragMoveTopicHandler(node, eventInfo, e); 
       },
       onDragEnd: function(node, eventInfo, e) {
         onDragEndTopicHandler(node, eventInfo, e, false);
@@ -67,16 +67,45 @@ function graphSettings(type, embed) {
         onDragCancelHandler(node, eventInfo, e, false);
       },
       //Implement the same handler for touchscreens
+      onTouchStart: function (node, eventInfo, e) {
+        //$jit.util.event.stop(e); //stop default touchmove event
+        //Mconsole.events.onMouseDown(e, null, eventInfo);
+        Mconsole.events.touched = true;
+        touchPos = eventInfo.getPos();
+        var canvas = Mconsole.canvas,
+        ox = canvas.translateOffsetX;
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY;
+        touchPos.x *= sx;
+        touchPos.y *= sy;
+        touchPos.x += ox;
+        touchPos.y += oy;
+          
+        touchDragNode = node;
+      },
+      //Implement the same handler for touchscreens
       onTouchMove: function (node, eventInfo, e) {
-        $jit.util.event.stop(e); //stop default touchmove event
-        this.onDragMove(node, eventInfo, e);
+        if (touchDragNode) onDragMoveTopicHandler(touchDragNode, eventInfo, e);
+        else {
+          touchPanZoomHandler(eventInfo, e); 
+          Mconsole.labels.hideLabel(Mconsole.graph.getNode(MetamapsModel.showcardInUse));
+        }
+      },
+      //Implement the same handler for touchscreens
+      onTouchEnd: function (node, eventInfo, e) {
+        
+      },
+      //Implement the same handler for touchscreens
+      onTouchCancel: function (node, eventInfo, e) {
+        
       },
       //Add also a click handler to nodes
       onClick: function (node, eventInfo, e) {
         if (e.target.id != "infovis-canvas") return false;
 
         //topic and synapse editing cards
-        hideCards();
+        if (!Mconsole.events.moved) hideCards();
 
         //clicking on a node, or clicking on blank part of canvas?
         if (node.nodeFrom) {
@@ -84,6 +113,8 @@ function graphSettings(type, embed) {
         } else if (node && !node.nodeFrom) {
           selectNodeOnClickHandler(node, e);
         } else {
+          //topic and synapse editing cards
+          if (!Mconsole.events.moved) hideCards();
           canvasDoubleClickHandler(eventInfo.getPos(), e);
         }//if
       }
@@ -235,12 +266,12 @@ var nodeSettings = {
 			  var pos = node.pos.getc(true),
 			  dim = node.getData('dim'),
 			  cat = node.getData('metacode'),
-			  inCommons = node.getData('inCommons'),
-			  onCanvas = node.getData('onCanvas'),
+			  greenCircle = node.getData('greenCircle'),
+			  whiteCircle = node.getData('whiteCircle'),
 			  ctx = canvas.getCtx();
 			  
 			  // if the topic is from the Commons draw a green circle around it
-			  if (inCommons) {
+			  if (greenCircle) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
 				  ctx.strokeStyle = '#67be5f'; // green
@@ -248,7 +279,7 @@ var nodeSettings = {
 				  ctx.stroke();
 			  }
 			  // if the topic is on the Canvas draw a white circle around it
-			  if (onCanvas) {
+			  if (whiteCircle) {
 				  ctx.beginPath();
 				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
           if (! MetamapsModel.embed) ctx.strokeStyle = 'white';
@@ -480,6 +511,7 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     tempNode2 = null;
     tempInit = false;
   } else if (dragged != 0 && goRealtime) {
+    //TODO: dragged is invalid if multiple nodes were dragged
     saveLayout(dragged); 
   }
 }//onDragEndTopicHandler
@@ -499,18 +531,28 @@ function onDragCancelHandler(node, eventInfo, e, centred) {
 }
 
 function onPlaceLabelHandler(domElement, node) {
-  var style = domElement.style;
-  var left = parseInt(style.left);
-  var top = parseInt(style.top);
-  var w = domElement.offsetWidth;
-  style.left = (left - w / 2 + 107) + 'px';
-  style.top = (top-165) + 'px';
-  style.display = ''; 
-  var label = document.getElementById('topic_' + node.id + '_label');
-  $(label).show(); 
-  w = label.offsetWidth;
-  style = label.style;
-  style.left = (-(w / 2 + 106)) + 'px';    
+    var style = domElement.style;  
+    var left = parseInt(style.left);  
+    var top = parseInt(style.top);  
+    var w = $('#topic_' + node.id + '_label').width();
+    style.left = (left - w / 2) + 'px';  
+    style.top = (top+20) + 'px';  
+    style.display = '';
+    
+    // now position the showcard
+    if (MetamapsModel.showcardInUse != null) {
+        top = $('#' + MetamapsModel.showcardInUse).css('top');
+        left = parseInt($('#' + MetamapsModel.showcardInUse).css('left'));
+        if (0 != $('#topic_' + MetamapsModel.showcardInUse + '_label').width()) {
+            MetamapsModel.widthOfLabel = $('#topic_' + MetamapsModel.showcardInUse + '_label').width();
+        }
+        w = MetamapsModel.widthOfLabel/2;
+        left = (left + w) + 'px';
+        $('#showcard').css('top', top);
+        $('#showcard').css('left', left);
+        
+        Mconsole.labels.hideLabel(Mconsole.graph.getNode(MetamapsModel.showcardInUse));
+    } 
 }
 
 // thanks to http://stackoverflow.com/questions/4338963/

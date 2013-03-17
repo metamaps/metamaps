@@ -33,12 +33,13 @@ function nodeDoubleClickHandler(node, e) {
     return;
   }
 
-  if (node.getData('inCommons') == false) {
+  //greenCircle being true denotes it's actually "in the commons" still
+  if (node.getData('greenCircle') == false) {
     return;
   }
 
   //this line adds it to the console if you close seek
-  node.setData('inCommons', false);
+  node.setData('greenCircle', false);
 
   //this is just aesthetic
   deselectNode(node);
@@ -60,6 +61,9 @@ function nodeDoubleClickHandler(node, e) {
     
 }//doubleClickNodeHandler
 
+/*
+ * Returns a boolean saying if the node was double clicked in our understanding of the word
+ */
 function nodeWasDoubleClicked() {
    //grab the timestamp of the click 
    var storedTime = MetamapsModel.lastNodeClick;
@@ -72,24 +76,6 @@ function nodeWasDoubleClicked() {
      return false;
    }
 }//nodeWasDoubleClicked;
-
-function selectNode(node) {
-  node.selected = true;
-  node.setData('dim', 30, 'current');
-  node.setData('onCanvas',true);
-  node.eachAdjacency(function (adj) {
-    selectEdge(adj);
-  });
-}
-
-function deselectNode(node) {
-  delete node.selected;
-  node.setData('onCanvas', false);
-  node.eachAdjacency(function(adj) {
-    deselectEdge(adj);
-  });
-  node.setData('dim', 25, 'current');
-}
 
 function selectNodeOnClickHandler(node, e) {
   if (Mconsole.busy) return;
@@ -150,17 +136,65 @@ function canvasDoubleClickHandler(canvasLoc,e) {
    } 
 }//canvasDoubleClickHandler 
 
+function handleSelectionBeforeDragging(node, e) {
+  // four cases:
+  // 1 nothing is selected, so pretend you aren't selecting
+  // 2 others are selected only and shift, so additionally select this one
+  // 3 others are selected only, no shift: drag only this one
+  // 4 this node and others were selected, so drag them (just return false)
+  //return value: deselect node again after?
+  if (MetamapsModel.selectedNodes.length == 0) {
+    selectNode(node);
+    return 'deselect';
+  }
+  if (MetamapsModel.selectedNodes.indexOf(node) == -1) {
+    if (e.shiftKey) {
+      selectNode(node);
+      return 'nothing';
+    } else {
+      return 'only-drag-this-one';
+    }
+  }
+  return 'nothing'; //case 4?
+}
+
 function onDragMoveTopicHandler(node, eventInfo, e) {
     if (node && !node.nodeFrom) {
        $('#new_synapse').fadeOut('fast');
        $('#new_topic').fadeOut('fast');
        var pos = eventInfo.getPos();
-       // if it's a left click, move the node
-       if (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined)) {
+       // if it's a left click, or a touch, move the node
+       if ( e.touches || (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
+           //if the node dragged isn't already selected, select it
+           var whatToDo = handleSelectionBeforeDragging(node, e);
+           if (whatToDo == 'only-drag-this-one') {
+             node.pos.setc(pos.x, pos.y);
+             node.setData('xloc', pos.x);
+             node.setData('yloc', pos.y);
+           } else {
+             var len = MetamapsModel.selectedNodes.length;
+
+             //first define offset for each node
+             var xOffset = new Array();
+             var yOffset = new Array();
+             for (var i = 0; i < len; i += 1) {
+               n = MetamapsModel.selectedNodes[i];
+               xOffset[i] = n.getData('xloc') - node.getData('xloc');
+               yOffset[i] = n.getData('yloc') - node.getData('yloc');
+             }//for
+
+             for (var i = 0; i < len; i += 1) {
+               n = MetamapsModel.selectedNodes[i];
+               n.pos.setc(pos.x + xOffset[i], pos.y + yOffset[i]);
+               n.setData('xloc', pos.x + xOffset[i]);
+               n.setData('yloc', pos.y + yOffset[i]);
+             }//for
+           }//if
+
+           if (whatToDo == 'deselect') {
+             deselectNode(node);
+           }
            dragged = node.id;
-           node.pos.setc(pos.x, pos.y);
-           node.data.$xloc = pos.x;
-           node.data.$yloc = pos.y;
            Mconsole.plot();
        }
        // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
@@ -203,4 +237,64 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
            }
        }
    }
+}
+
+var lastDist = 0;
+
+function getDistance(p1, p2) {
+  return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2));
+}
+
+function touchPanZoomHandler(eventInfo, e) {
+    if (e.touches.length == 1) {
+        var thispos = touchPos, 
+        currentPos = eventInfo.getPos(),
+        canvas = Mconsole.canvas,
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY;
+        currentPos.x *= sx;
+        currentPos.y *= sy;
+        currentPos.x += ox;
+        currentPos.y += oy;
+        //var x = currentPos.x - thispos.x,
+        //    y = currentPos.y - thispos.y;
+        var x = currentPos.x - thispos.x,
+            y = currentPos.y - thispos.y;
+        touchPos = currentPos;
+        Mconsole.canvas.translate(x * 1/sx, y * 1/sy);
+    }
+    else if (e.touches.length == 2) {
+        var touch1 = e.touches[0];
+        var touch2 = e.touches[1];
+
+          var dist = getDistance({
+            x: touch1.clientX,
+            y: touch1.clientY
+          }, {
+            x: touch2.clientX,
+            y: touch2.clientY
+          });
+    
+          if(!lastDist) {
+            lastDist = dist;
+          }
+    
+          var scale = dist / lastDist;
+            
+          console.log(scale);
+          
+            if (8 >= Mconsole.canvas.scaleOffsetX*scale && Mconsole.canvas.scaleOffsetX*scale >= 1) {
+              Mconsole.canvas.scale(scale, scale);
+            }
+            if (Mconsole.canvas.scaleOffsetX < 0.5) {
+                Mconsole.canvas.viz.labels.hideLabels(true);
+            }
+            else if (Mconsole.canvas.scaleOffsetX > 0.5) {
+                Mconsole.canvas.viz.labels.hideLabels(false);
+            }
+            lastDist = dist;
+    }
+    
 }

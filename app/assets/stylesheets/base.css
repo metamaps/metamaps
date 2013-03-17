@@ -7,6 +7,9 @@
 }
 
 .showcard, #showcard {
+    position:absolute;
+    display:none;
+    margin-top: -181px;
     width:216px;
 	height:320px;
     color:#FFF;

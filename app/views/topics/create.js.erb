@@ -25,8 +25,8 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   var temp = Mconsole.graph.getNode('<%= @topic.id %>');
   temp.setData('dim', 1, 'start');
   temp.setData('dim', 40, 'end');
-  temp.setData('onCanvas', false);
-  temp.setData('inCommons', false);
+  temp.setData('whiteCircle', false);
+  temp.setData('greenCircle', false);
   
   if (gType == "centered") {
     var tempPos = new $jit.Complex(x, y);
@@ -72,7 +72,7 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
         modes: ['node-property:dim'],  
         duration: 500,
         onComplete: function() {
-            selectNodeOnClickHandler(temp);
+            selectNode(temp);
         }
       });
       
@@ -84,8 +84,8 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   var temp = Mconsole.graph.getNode('<%= @topic.id %>');
   temp.setData('dim', 1, 'start');
   temp.setData('dim', 25, 'end');
-  temp.setData('onCanvas', false);
-  temp.setData('inCommons', false);
+  temp.setData('whiteCircle', false);
+  temp.setData('greenCircle', false);
   if (gType == "arranged" || gType == "chaotic") {
     <% if not @mapping.nil? %>
       temp.setData('mappingid', <%= @mapping.id %>);
@@ -101,7 +101,7 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
         modes: ['node-property:dim'],  
         duration: 500,
         onComplete: function() {
-            selectNodeOnClickHandler(temp);
+            selectNode(temp);
         }
       });
 }
