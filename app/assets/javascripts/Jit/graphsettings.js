@@ -89,19 +89,12 @@ function graphSettings(type, embed) {
         if (touchDragNode) onDragMoveTopicHandler(touchDragNode, eventInfo, e);
         else {
           touchPanZoomHandler(eventInfo, e); 
-          $('#topic_' + MetamapsModel.showcardInUse + '_label').hide();
+          Mconsole.labels.hideLabel(Mconsole.graph.getNode(MetamapsModel.showcardInUse));
         }
       },
       //Implement the same handler for touchscreens
       onTouchEnd: function (node, eventInfo, e) {
-        //clicking on a node, or clicking on blank part of canvas?
-        if (node.nodeFrom) {
-          selectEdgeOnClickHandler(node, e);  
-        } else if (node && !node.nodeFrom) {
-          selectNodeOnClickHandler(node, e);
-        } else {
-          canvasDoubleClickHandler(eventInfo.getPos(), e);
-        }//if
+        
       },
       //Implement the same handler for touchscreens
       onTouchCancel: function (node, eventInfo, e) {
@@ -538,18 +531,28 @@ function onDragCancelHandler(node, eventInfo, e, centred) {
 }
 
 function onPlaceLabelHandler(domElement, node) {
-  var style = domElement.style;
-  var left = parseInt(style.left);
-  var top = parseInt(style.top);
-  var w = domElement.offsetWidth;
-  style.left = (left - w / 2 + 107) + 'px';
-  style.top = (top-165) + 'px';
-  style.display = ''; 
-  var label = document.getElementById('topic_' + node.id + '_label');
-  $(label).show(); 
-  w = label.offsetWidth;
-  style = label.style;
-  style.left = (-(w / 2 + 106)) + 'px';    
+    var style = domElement.style;  
+    var left = parseInt(style.left);  
+    var top = parseInt(style.top);  
+    var w = $('#topic_' + node.id + '_label').width();
+    style.left = (left - w / 2) + 'px';  
+    style.top = (top+20) + 'px';  
+    style.display = '';
+    
+    // now position the showcard
+    if (MetamapsModel.showcardInUse != null) {
+        top = $('#' + MetamapsModel.showcardInUse).css('top');
+        left = parseInt($('#' + MetamapsModel.showcardInUse).css('left'));
+        if (0 != $('#topic_' + MetamapsModel.showcardInUse + '_label').width()) {
+            MetamapsModel.widthOfLabel = $('#topic_' + MetamapsModel.showcardInUse + '_label').width();
+        }
+        w = MetamapsModel.widthOfLabel/2;
+        left = (left + w) + 'px';
+        $('#showcard').css('top', top);
+        $('#showcard').css('left', left);
+        
+        Mconsole.labels.hideLabel(Mconsole.graph.getNode(MetamapsModel.showcardInUse));
+    } 
 }
 
 // thanks to http://stackoverflow.com/questions/4338963/
