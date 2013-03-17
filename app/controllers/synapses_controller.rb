@@ -5,7 +5,17 @@ class SynapsesController < ApplicationController
     
   respond_to :html, :js, :json
   
-  autocomplete :synapse, :desc, :full => true
+  def autocomplete_synapse_desc
+    term = params[:term]
+    if term && !term.empty?
+      items = Synapse.select('DISTINCT "desc"').
+        where('LOWER("desc") like ?', term.downcase + '%').
+        limit(10).order('"desc"')
+    else
+      items = {}
+    end
+    render :json => json_for_autocomplete(items, :desc)
+  end
   
   # GET synapses
   # or GET users/:user_id/synapses
