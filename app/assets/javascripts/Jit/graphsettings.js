@@ -58,7 +58,7 @@ function graphSettings(type, embed) {
       },
       //Update node positions when dragged
       onDragMove: function (node, eventInfo, e) {
-        onDragMoveTopicHandler(node, eventInfo, e);
+        onDragMoveTopicHandler(node, eventInfo, e); 
       },
       onDragEnd: function(node, eventInfo, e) {
         onDragEndTopicHandler(node, eventInfo, e, false);
@@ -67,16 +67,52 @@ function graphSettings(type, embed) {
         onDragCancelHandler(node, eventInfo, e, false);
       },
       //Implement the same handler for touchscreens
+      onTouchStart: function (node, eventInfo, e) {
+        //$jit.util.event.stop(e); //stop default touchmove event
+        //Mconsole.events.onMouseDown(e, null, eventInfo);
+        Mconsole.events.touched = true;
+        touchPos = eventInfo.getPos();
+        var canvas = Mconsole.canvas,
+        ox = canvas.translateOffsetX;
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY;
+        touchPos.x *= sx;
+        touchPos.y *= sy;
+        touchPos.x += ox;
+        touchPos.y += oy;
+          
+        touchDragNode = node;
+      },
+      //Implement the same handler for touchscreens
       onTouchMove: function (node, eventInfo, e) {
-        $jit.util.event.stop(e); //stop default touchmove event
-        this.onDragMove(node, eventInfo, e);
+        if (touchDragNode) onDragMoveTopicHandler(touchDragNode, eventInfo, e);
+        else {
+          touchPanZoomHandler(eventInfo, e); 
+          $('#topic_' + MetamapsModel.showcardInUse + '_label').hide();
+        }
+      },
+      //Implement the same handler for touchscreens
+      onTouchEnd: function (node, eventInfo, e) {
+        //clicking on a node, or clicking on blank part of canvas?
+        if (node.nodeFrom) {
+          selectEdgeOnClickHandler(node, e);  
+        } else if (node && !node.nodeFrom) {
+          selectNodeOnClickHandler(node, e);
+        } else {
+          canvasDoubleClickHandler(eventInfo.getPos(), e);
+        }//if
+      },
+      //Implement the same handler for touchscreens
+      onTouchCancel: function (node, eventInfo, e) {
+        
       },
       //Add also a click handler to nodes
       onClick: function (node, eventInfo, e) {
         if (e.target.id != "infovis-canvas") return false;
 
         //topic and synapse editing cards
-        hideCards();
+        if (!Mconsole.events.moved) hideCards();
 
         //clicking on a node, or clicking on blank part of canvas?
         if (node.nodeFrom) {
@@ -84,6 +120,8 @@ function graphSettings(type, embed) {
         } else if (node && !node.nodeFrom) {
           selectNodeOnClickHandler(node, e);
         } else {
+          //topic and synapse editing cards
+          if (!Mconsole.events.moved) hideCards();
           canvasDoubleClickHandler(eventInfo.getPos(), e);
         }//if
       }

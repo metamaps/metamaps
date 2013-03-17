@@ -118,6 +118,25 @@ function initialize(type, loadLater, embed){
 		else if ( type == "arranged" || type == "chaotic") {
 			Mconsole.animate(chooseAnimate);
 		}
+          
+         // prevent touch events on the canvas from default behaviour
+        $("#infovis-canvas").bind('touchstart', function(event) {
+          event.preventDefault();
+          Mconsole.events.touched = true;
+        });
+         
+         // prevent touch events on the canvas from default behaviour
+        $("#infovis-canvas").bind('touchmove', function(event) {
+          //touchPanZoomHandler(event);
+        });
+         
+         // prevent touch events on the canvas from default behaviour
+        $("#infovis-canvas").bind('touchend touchcancel', function(event) {
+          lastDist = 0;
+          if (!Mconsole.events.touchMoved && !touchDragNode) hideCurrentCard();
+          Mconsole.events.touched = Mconsole.events.touchMoved = false;
+          touchDragNode = false;
+        });
 	  });
 	  // end
   }// if not loadLater

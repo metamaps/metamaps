@@ -2591,6 +2591,7 @@ Extras.Classes.Navigation = new Class({
     $.event.stop($.event.get(e, win));
     var val = this.config.zooming / 1000,
         ans = 1 + scroll * val;
+    // START METAMAPS CODE
 	if (ans > 1) {
        if (5 >= this.canvas.scaleOffsetX) {
 		 this.canvas.scale(ans, ans);
@@ -2607,6 +2608,8 @@ Extras.Classes.Navigation = new Class({
 	else if (this.canvas.scaleOffsetX > 0.5) {
 		this.canvas.viz.labels.hideLabels(false);
 	}
+    // END METAMAPS CODE
+    // ORIGINAL CODE this.canvas.scale(ans, ans);
   },
   
   onMouseDown: function(e, win, eventInfo) {

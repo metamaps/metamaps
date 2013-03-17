@@ -290,15 +290,13 @@ function bindCallbacks(showCard, nameContainer, node) {
 
   // add some events to the label
   $(nameContainer).find('.label').click(function(e){
-    $('.name').css('display','block');
-    $('.name.topic_' + node.id).css('display','none');
+    hideCurrentCard();
     $('.showcard.topic_' + node.id).fadeIn('fast');
     $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar("update");
     node.setData('dim', 1, 'current');
-
-    hideCurrentCard();
     MetamapsModel.showcardInUse = node.id;
     Mconsole.plot();
+    $('#topic_' + node.id + '_label').hide();
   });
 
   nameContainer.onmouseover = function(){
