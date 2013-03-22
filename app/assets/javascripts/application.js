@@ -286,3 +286,9 @@ function MconsoleReset() {
 	Mconsole.canvas.scale((1/mX),(1/mY));
 	
 }
+
+$('*').keypress(function(e) {
+  if (e.which == 13) {
+    enterKeyHandler();
+  }
+});

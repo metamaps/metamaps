@@ -29,6 +29,20 @@ function selectEdgeOnClickHandler(adj, e) {
 }//selectEdgeOnClickHandler
 
 function nodeDoubleClickHandler(node, e) {
+  keepFromCommons(node);
+}
+
+function enterKeyHandler() {
+  var selectedNodesCopy = MetamapsModel.selectedNodes.slice(0);
+  var len = selectedNodesCopy.length;
+  for (var i = 0; i < len; i += 1) { 
+    n = selectedNodesCopy[i]; 
+    keepFromCommons(n);
+  }//for
+  Mconsole.plot();
+}//enterKeyHandler
+
+function keepFromCommons(node) {
   if (userid == null) {
     return;
   }
