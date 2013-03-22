@@ -20,6 +20,10 @@ MetamapsModel.widthOfLabel = null;
 //is the mouse hovering over an edge? which one?
 MetamapsModel.edgeHoveringOver = false;
 
+//coordinates of shift click for using box select
+MetamapsModel.boxStartCoordinates = false;
+MetamapsModel.boxEndCoordinates = false;
+
 //double clicking of nodes or canvas
 MetamapsModel.lastNodeClick = 0;
 MetamapsModel.lastCanvasClick = 0;

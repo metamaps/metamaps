@@ -230,9 +230,18 @@ function best_in_place_perms(edge) {
 }//best_in_place_perms
 
 function deselectAllEdges() {
-  for (var i = 0; i < MetamapsModel.selectedEdges.length; i += 1) {
+  var l = MetamapsModel.selectedEdges.length;
+  for (var i = l-1; i >= 0; i -= 1) {
     var edge = MetamapsModel.selectedEdges[i];
     deselectEdge(edge);
+  }
+}
+
+function deselectAllNodes() {
+  var l = MetamapsModel.selectedNodes.length;
+  for (var i = l-1; i >= 0; i -= 1) {
+    var node = MetamapsModel.selectedNodes[i];
+    deselectNode(node);
   }
 }
 
@@ -261,7 +270,8 @@ function hideEdge(edge) {
 }
 
 function hideSelectedEdges() {
-  for (var i = 0; i < MetamapsModel.selectedEdges.length; i += 1) {
+  var l = MetamapsModel.selectedEdges.length;
+  for (var i = l-1; i >= 0; i -= 1) {
     var edge = MetamapsModel.selectedEdges[i];
     hideEdge(edge);
   }
@@ -269,7 +279,8 @@ function hideSelectedEdges() {
 }
 
 function removeSelectedEdges() {
-  for (var i = 0; i < MetamapsModel.selectedEdges.length; i += 1) {
+  var l = MetamapsModel.selectedEdges.length;
+  for (var i = l-1; i >= 0; i -= 1) {
     if (mapid != null) {
       var edge = MetamapsModel.selectedEdges[i];
       var id = edge.getData("id");
@@ -285,7 +296,8 @@ function removeSelectedEdges() {
 }
 
 function deleteSelectedEdges() {
-  for (var i = 0; i < MetamapsModel.selectedEdges.length; i += 1) {
+  var l = MetamapsModel.selectedEdges.length;
+  for (var i = l-1; i >= 0; i -= 1) {
     var edge = MetamapsModel.selectedEdges[i];
     var id = edge.getData("id");
     $.ajax({
@@ -400,11 +412,11 @@ function hideNode(nodeid) {
 }
 
 function hideSelectedNodes() {
-  Mconsole.graph.eachNode( function (n) {
-      if (n.getData('whiteCircle') == true) {
-          hideNode(n.id);
-      }
-  });
+  var l = MetamapsModel.selectedNodes.length;
+  for (var i = l-1; i >= 0; i -= 1) {
+    var node = MetamapsModel.selectedNodes[i];
+    hideNode(node.id);
+  }
 }
 
 function removeNode(nodeid) {
@@ -419,11 +431,11 @@ function removeNode(nodeid) {
 }
 function removeSelectedNodes() {
  if (mapperm) {
-    Mconsole.graph.eachNode( function (n) {
-      if (n.getData('whiteCircle') == true) {
-          removeNode(n.id);
-      }
-    });
+    var l = MetamapsModel.selectedNodes.length;
+    for (var i = l-1; i >= 0; i -= 1) {
+      var node = MetamapsModel.selectedNodes[i];
+      removeNode(node.id);
+    }
   }
 }
 
@@ -438,9 +450,9 @@ function deleteNode(nodeid) {
   });
 }
 function deleteSelectedNodes() {
-  Mconsole.graph.eachNode( function (n) {
-      if (n.getData('whiteCircle') == true) {
-        deleteNode(n.id);
-      }
-  });
+  var l = MetamapsModel.selectedNodes.length;
+  for (var i = l-1; i >= 0; i -= 1) {
+    var node = MetamapsModel.selectedNodes[i];
+    deleteNode(node.id);
+  }
 }

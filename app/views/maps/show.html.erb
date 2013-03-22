@@ -9,7 +9,7 @@
     <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; } else if (goRealtime) { this.innerHTML = 'Start Realtime'; } goRealtime = !goRealtime;">Start Realtime</button>
     <% end %>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
-    <button onclick="enterKeyPressed();">Keep Selected</button>
+    <button onclick="enterKeyHandler();">Keep Selected</button>
     <% if authenticated? %>
       <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
         <button onclick="removeSelectedEdges();removeSelectedNodes();">Remove Selected From Map</button>
