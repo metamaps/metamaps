@@ -75,6 +75,16 @@ function add_perms_form(edge) {
     $('#edit_synapse .click-to-edit').attr('title', 'Click to Edit');
     $('#edit_synapse .click-to-edit').append(best_in_place_perms(edge));
     $('#edit_synapse .editSettings').append('<div class="clearfloat" />');
+
+    $('#edit_synapse').find('.best_in_place_permission').bind("ajax:success", function() {
+      var permission = $(this).html();
+      switch(permission) {
+        case 'commons': $('#edit_synapse .mapPerm').html('co'); break;
+        case 'public': $('#edit_synapse .mapPerm').html('pu'); break;
+        case 'private': $('#edit_synapse .mapPerm').html('pr'); break;
+      }//switch
+    });
+ 
     $('#edit_synapse .permActivator').bind('mouseover', function() {
       clearTimeout(MetamapsModel.edgePermTimer2);
       that = this;
