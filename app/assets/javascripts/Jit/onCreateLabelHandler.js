@@ -15,22 +15,6 @@
  */
 
 function onCreateLabelHandler(domElement, node) {
-  var html = generateShowcardHTML();
-  html = replaceVariables(html, node);
-  
-  var showCard = document.createElement('div');
-  showCard.className = 'showcard topic_' + node.id;
-  if (authorizeToEdit(node)) {
-    var perm = document.createElement('div');
-    perm.className = 'permission canEdit';
-    perm.innerHTML = html;
-    showCard.appendChild(perm);
-  } else {
-    showCard.innerHTML = html;
-  }
-  showCard.style.display = "none";
-  domElement.appendChild(showCard);
-
   // Create a 'name' button and add it to the main node label
   var nameContainer = document.createElement('span'),
   style = nameContainer.style;
@@ -42,7 +26,7 @@ function onCreateLabelHandler(domElement, node) {
   style.fontSize = "0.9em";
   style.color = "#222222";
 
-  bindCallbacks(showCard, nameContainer, node);
+  bindNameContainerCallbacks(nameContainer, node);
 }
 
 function generateShowcardHTML() {
@@ -273,41 +257,41 @@ function hideCard(node) {
 
   $(card).fadeOut('fast', function(){
     node.setData('dim', 25, 'current');
-    $('.name.topic_' + node.id).show();
+    Mconsole.labels.hideLabel(Mconsole.graph.getNode(node.id), true)
     Mconsole.plot();
   });
 
   MetamapsModel.showcardInUse = null;
 }
 
-function bindCallbacks(showCard, nameContainer, node) {
-   // add some events to the label
-  $(showCard).find('img.icon').click(function(){
-    hideCard(node);
-  });
-
-  $(showCard).find('.scroll').mCustomScrollbar(); 
+function bindNameContainerCallbacks(nameContainer, node) {
+   nameContainer.onmouseover = function(){
+     $('.name.topic_' + node.id + ' .nodeOptions').css('display','block');
+   }
+ 
+   nameContainer.onmouseout = function(){
+     $('.name.topic_' + node.id + ' .nodeOptions').css('display','none');
+   }
+    
+    var showCard = document.getElementById('showcard');
 
   // add some events to the label
   $(nameContainer).find('.label').click(function(e){
-    $('.name').css('display','block');
-    $('.name.topic_' + node.id).css('display','none');
-    $('.showcard.topic_' + node.id).fadeIn('fast');
-    $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar("update");
-    node.setData('dim', 1, 'current');
-
     hideCurrentCard();
-    MetamapsModel.showcardInUse = node.id;
-    Mconsole.plot();
-  });
-
-  nameContainer.onmouseover = function(){
-    $('.name.topic_' + node.id + ' .nodeOptions').css('display','block');
-  }
- 
-  nameContainer.onmouseout = function(){
-    $('.name.topic_' + node.id + ' .nodeOptions').css('display','none');
-  }
+    showCard.innerHTML = '';
+      
+    var html = generateShowcardHTML();
+    html = replaceVariables(html, node);
+      
+    showCard.className = 'showcard topic_' + node.id;
+    if (authorizeToEdit(node)) {
+      var perm = document.createElement('div');
+      perm.className = 'permission canEdit';
+      perm.innerHTML = html;
+      showCard.appendChild(perm);
+    } else {
+      showCard.innerHTML = html;
+    }
 
   //bind best_in_place ajax callbacks
   $(showCard).find('.best_in_place_metacode').bind("ajax:success", function() {
@@ -378,5 +362,25 @@ function bindCallbacks(showCard, nameContainer, node) {
     if (permission == "commons") el.html("co");
     else if (permission == "public") el.html("pu");
     else if (permission == "private") el.html("pr");
+  });
+  
+  var top = $('#' + node.id).css('top');
+  var left = parseInt($('#' + node.id).css('left'));
+  var w = $('#topic_' + node.id + '_label').width();
+  w = w/2;
+  left = (left + w) + 'px';
+  $('#showcard').css('top', top);
+  $('#showcard').css('left', left);   
+
+  $('.showcard.topic_' + node.id).fadeIn('fast');
+    $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar();
+    node.setData('dim', 1, 'current');
+    MetamapsModel.showcardInUse = node.id;
+    Mconsole.plot();
+    Mconsole.labels.hideLabel(Mconsole.graph.getNode(node.id))
+    // add some events to the label
+    $(showCard).find('img.icon').click(function(){
+      hideCard(node);
+    });
   });
 }

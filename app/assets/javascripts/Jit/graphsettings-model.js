@@ -15,6 +15,7 @@ MetamapsModel.selectedNodes = new Array();
 
 //is any showcard open right now? which one?
 MetamapsModel.showcardInUse = null;
+MetamapsModel.widthOfLabel = null;
 
 //is the mouse hovering over an edge? which one?
 MetamapsModel.edgeHoveringOver = false;

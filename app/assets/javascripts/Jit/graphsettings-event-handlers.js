@@ -177,8 +177,8 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        $('#new_synapse').fadeOut('fast');
        $('#new_topic').fadeOut('fast');
        var pos = eventInfo.getPos();
-       // if it's a left click, move the node
-       if (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined)) {
+       // if it's a left click, or a touch, move the node
+       if ( e.touches || (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
            //if the node dragged isn't already selected, select it
            var whatToDo = handleSelectionBeforeDragging(node, e);
            if (whatToDo == 'only-drag-this-one') {
@@ -251,4 +251,64 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
            }
        }
    }
+}
+
+var lastDist = 0;
+
+function getDistance(p1, p2) {
+  return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2));
+}
+
+function touchPanZoomHandler(eventInfo, e) {
+    if (e.touches.length == 1) {
+        var thispos = touchPos, 
+        currentPos = eventInfo.getPos(),
+        canvas = Mconsole.canvas,
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY;
+        currentPos.x *= sx;
+        currentPos.y *= sy;
+        currentPos.x += ox;
+        currentPos.y += oy;
+        //var x = currentPos.x - thispos.x,
+        //    y = currentPos.y - thispos.y;
+        var x = currentPos.x - thispos.x,
+            y = currentPos.y - thispos.y;
+        touchPos = currentPos;
+        Mconsole.canvas.translate(x * 1/sx, y * 1/sy);
+    }
+    else if (e.touches.length == 2) {
+        var touch1 = e.touches[0];
+        var touch2 = e.touches[1];
+
+          var dist = getDistance({
+            x: touch1.clientX,
+            y: touch1.clientY
+          }, {
+            x: touch2.clientX,
+            y: touch2.clientY
+          });
+    
+          if(!lastDist) {
+            lastDist = dist;
+          }
+    
+          var scale = dist / lastDist;
+            
+          console.log(scale);
+          
+            if (8 >= Mconsole.canvas.scaleOffsetX*scale && Mconsole.canvas.scaleOffsetX*scale >= 1) {
+              Mconsole.canvas.scale(scale, scale);
+            }
+            if (Mconsole.canvas.scaleOffsetX < 0.5) {
+                Mconsole.canvas.viz.labels.hideLabels(true);
+            }
+            else if (Mconsole.canvas.scaleOffsetX > 0.5) {
+                Mconsole.canvas.viz.labels.hideLabels(false);
+            }
+            lastDist = dist;
+    }
+    
 }

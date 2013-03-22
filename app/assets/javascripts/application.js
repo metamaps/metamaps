@@ -21,7 +21,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode;
 
  $(document).ready(function() {
  
@@ -69,11 +69,25 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 					height: '0px'
 				  }, 300, function() {
 					sliding1 = false;
+                    menuIsOpen = false;
 				  });
 			  } 
 		  },800); 
         } 
     );
+    
+    var menuIsOpen = false;
+    $("#mainTitle a").bind('touchend', function(evt) {
+      if (!menuIsOpen) {
+          menuIsOpen = true;
+          var listLength = $('.logo .menu li').length * 28;          
+              $('.footer .menu').animate({
+              height: listLength + 'px'
+              }, 300);
+          evt.preventDefault(); 
+          evt.stopPropogation(); 
+      }
+    });              
   
   addHoverForSettings();
   
@@ -99,7 +113,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 	  saveLayoutAll();
 	});
 	
-});
+});  // end document.ready
 
 function addHoverForSettings() {
   // controls the sliding hover of the settings for cards
