@@ -193,8 +193,8 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
              var yOffset = new Array();
              for (var i = 0; i < len; i += 1) {
                n = MetamapsModel.selectedNodes[i];
-               xOffset[i] = n.getData('xloc') - node.getData('xloc');
-               yOffset[i] = n.getData('yloc') - node.getData('yloc');
+                 xOffset[i] = n.pos.x - node.pos.x;
+                 yOffset[i] = n.pos.y - node.pos.y;
              }//for
 
              for (var i = 0; i < len; i += 1) {
