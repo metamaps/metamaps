@@ -302,7 +302,9 @@ function MconsoleReset() {
 }
 
 $('*').keypress(function(e) {
-  if (e.which == 13) {
-    enterKeyHandler();
+  switch(e.which) {
+    case 13: enterKeyHandler(); break;
+    case 27: escKeyHandler(); break;
+    default: //alert(e.which); break;
   }
 });

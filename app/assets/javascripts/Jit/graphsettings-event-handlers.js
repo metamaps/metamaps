@@ -42,6 +42,11 @@ function enterKeyHandler() {
   Mconsole.plot();
 }//enterKeyHandler
 
+function escKeyHandler() {
+  deselectAllEdges();
+  deselectAllNodes();
+}//escKeyHandler
+
 function keepFromCommons(node) {
   if (userid == null) {
     return;
