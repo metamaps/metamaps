@@ -300,3 +300,11 @@ function MconsoleReset() {
 	Mconsole.canvas.scale((1/mX),(1/mY));
 	
 }
+
+$('*').keypress(function(e) {
+  switch(e.which) {
+    case 13: enterKeyHandler(); break;
+    case 27: escKeyHandler(); break;
+    default: //alert(e.which); break;
+  }
+});

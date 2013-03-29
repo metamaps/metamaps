@@ -105,7 +105,11 @@ function graphSettings(type, embed) {
         if (e.target.id != "infovis-canvas") return false;
 
         //topic and synapse editing cards
-        if (!Mconsole.events.moved) hideCards();
+        if (!Mconsole.events.moved && !node) {
+          hideCards();
+          deselectAllNodes();
+          deselectAllEdges();
+        }
 
         //clicking on a node, or clicking on blank part of canvas?
         if (node.nodeFrom) {
@@ -427,10 +431,65 @@ var nodeSettings = {
 	  }  
 	}
 
+function drawSelectBox(eventInfo, e) {
+  var ctx=Mconsole.canvas.getCtx();
+  
+  var startX = MetamapsModel.boxStartCoordinates.x,
+      startY = MetamapsModel.boxStartCoordinates.y,
+      currX = eventInfo.getPos().x,
+      currY = eventInfo.getPos().y;
+  
+  Mconsole.plot();
+  ctx.moveTo(startX,startY);
+  ctx.lineTo(startX,currY);
+  ctx.stroke();
+  ctx.lineTo(currX,currY);
+  ctx.stroke();
+  ctx.lineTo(currX,startY);
+  ctx.stroke();
+  ctx.lineTo(startX,startY);
+  ctx.stroke();
+}
+
+function selectNodesWithBox() {
+  
+  var sX = MetamapsModel.boxStartCoordinates.x,
+      sY = MetamapsModel.boxStartCoordinates.y,
+      eX = MetamapsModel.boxEndCoordinates.x,
+      eY = MetamapsModel.boxEndCoordinates.y;
+  
+  
+  Mconsole.graph.eachNode(function (n) {
+		var x = n.pos.x, y = n.pos.y;
+    
+    if ((sX < x && x < eX && sY < y && y < eY) || (sX > x && x > eX && sY > y && y > eY) || (sX > x && x > eX && sY < y && y < eY) || (sX < x && x < eX && sY > y && y > eY)) {
+      selectNode(n);
+    }
+  });
+
+  MetamapsModel.boxStartCoordinates = false;
+  MetamapsModel.boxEndCoordinates = false;
+  Mconsole.plot();
+}
 
 function onMouseMoveHandler(node, eventInfo, e) {
   
   if (Mconsole.busy) return;
+  
+  if (!MetamapsModel.boxStartCoordinates && e.shiftKey) {
+    MetamapsModel.boxStartCoordinates = eventInfo.getPos();
+    return;
+  }
+  if (MetamapsModel.boxStartCoordinates && e.shiftKey) {
+    drawSelectBox(eventInfo,e);
+    return;
+  }
+  if (MetamapsModel.boxStartCoordinates && !e.shiftKey) {
+    MetamapsModel.boxEndCoordinates = eventInfo.getPos();
+    Mconsole.plot();
+    selectNodesWithBox();
+    return;
+  }
 
   var node = eventInfo.getNode();
   var edge = eventInfo.getEdge();
