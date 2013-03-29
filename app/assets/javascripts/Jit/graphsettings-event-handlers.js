@@ -1,5 +1,4 @@
 function selectEdgeOnClickHandler(adj, e) {
-  
   if (Mconsole.busy) return;
   
   //editing overrides everything else
@@ -42,6 +41,10 @@ function enterKeyHandler() {
   Mconsole.plot();
 }//enterKeyHandler
 
+/*
+ * Make a node "in the commons" (with a green circle) lose its
+ * green circle so it stays on the console/map/...
+ */
 function keepFromCommons(node) {
   if (userid == null) {
     return;
@@ -72,7 +75,6 @@ function keepFromCommons(node) {
              node.setData('mappingid', data.id);
            });
   }
-    
 }//doubleClickNodeHandler
 
 /*
@@ -181,7 +183,11 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        if ( e.touches || (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
            //if the node dragged isn't already selected, select it
            var whatToDo = handleSelectionBeforeDragging(node, e);
-           if (whatToDo == 'only-drag-this-one') {
+           if (node.pos.rho || node.pos.rho === 0) {
+               var rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y);
+               var theta = Math.atan2(pos.y, pos.x);
+               node.pos.setp(theta, rho);
+           } else if (whatToDo == 'only-drag-this-one') {
              node.pos.setc(pos.x, pos.y);
              node.setData('xloc', pos.x);
              node.setData('yloc', pos.y);
@@ -192,16 +198,18 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
              var xOffset = new Array();
              var yOffset = new Array();
              for (var i = 0; i < len; i += 1) {
-               n = MetamapsModel.selectedNodes[i];
-                 xOffset[i] = n.pos.x - node.pos.x;
-                 yOffset[i] = n.pos.y - node.pos.y;
+               var n = MetamapsModel.selectedNodes[i];
+               xOffset[i] = n.pos.x - node.pos.x;
+               yOffset[i] = n.pos.y - node.pos.y;
              }//for
 
              for (var i = 0; i < len; i += 1) {
-               n = MetamapsModel.selectedNodes[i];
-               n.pos.setc(pos.x + xOffset[i], pos.y + yOffset[i]);
-               n.setData('xloc', pos.x + xOffset[i]);
-               n.setData('yloc', pos.y + yOffset[i]);
+               var n = MetamapsModel.selectedNodes[i];
+               var x = pos.x + xOffset[i];
+               var y = pos.y + yOffset[i];
+               n.pos.setc(x, y);
+               n.setData('xloc', x);
+               n.setData('yloc', y);
              }//for
            }//if
 
