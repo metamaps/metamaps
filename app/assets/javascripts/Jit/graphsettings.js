@@ -102,6 +102,13 @@ function graphSettings(type, embed) {
       },
       //Add also a click handler to nodes
       onClick: function (node, eventInfo, e) {
+        if (MetamapsModel.boxStartCoordinates) {
+          Mconsole.busy = false;
+          MetamapsModel.boxEndCoordinates = eventInfo.getPos();
+          selectNodesWithBox();
+          return;
+        }
+        
         if (e.target.id != "infovis-canvas") return false;
 
         //topic and synapse editing cards
@@ -111,7 +118,7 @@ function graphSettings(type, embed) {
           deselectAllEdges();
         }
 
-        //clicking on a node, or clicking on blank part of canvas?
+        //clicking on a edge, node, or clicking on blank part of canvas?
         if (node.nodeFrom) {
           selectEdgeOnClickHandler(node, e);  
         } else if (node && !node.nodeFrom) {
@@ -432,6 +439,7 @@ var nodeSettings = {
 	}
 
 function drawSelectBox(eventInfo, e) {
+  Mconsole.plot();
   var ctx=Mconsole.canvas.getCtx();
   
   var startX = MetamapsModel.boxStartCoordinates.x,
@@ -475,21 +483,6 @@ function selectNodesWithBox() {
 function onMouseMoveHandler(node, eventInfo, e) {
   
   if (Mconsole.busy) return;
-  
-  if (!MetamapsModel.boxStartCoordinates && e.shiftKey) {
-    MetamapsModel.boxStartCoordinates = eventInfo.getPos();
-    return;
-  }
-  if (MetamapsModel.boxStartCoordinates && e.shiftKey) {
-    drawSelectBox(eventInfo,e);
-    return;
-  }
-  if (MetamapsModel.boxStartCoordinates && !e.shiftKey) {
-    MetamapsModel.boxEndCoordinates = eventInfo.getPos();
-    Mconsole.plot();
-    selectNodesWithBox();
-    return;
-  }
 
   var node = eventInfo.getNode();
   var edge = eventInfo.getEdge();

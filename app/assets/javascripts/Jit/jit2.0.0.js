@@ -2616,6 +2616,11 @@ Extras.Classes.Navigation = new Class({
     if(!this.config.panning) return;
     if(this.config.panning == 'avoid nodes' && eventInfo.getNode()) return;
     this.pressed = true;
+    //START METAMAPS CODE
+    if (!MetamapsModel.boxStartCoordinates && e.shiftKey) {
+      MetamapsModel.boxStartCoordinates = eventInfo.getPos();
+    }
+    // END METAMAPS CODE
     this.pos = eventInfo.getPos();
     var canvas = this.canvas,
         ox = canvas.translateOffsetX,
@@ -2632,12 +2637,22 @@ Extras.Classes.Navigation = new Class({
     if(!this.config.panning) return;
     if(!this.pressed) return;
     if(this.config.panning == 'avoid nodes' && eventInfo.getNode()) return;
-	// START METAMAPS CODE
-	if (e.target.id != 'infovis-canvas') { 
-        this.pressed = false; 
-        return;
-	}
-	// END METAMAPS CODE
+    // START METAMAPS CODE
+    if (!MetamapsModel.boxStartCoordinates && e.shiftKey) {
+      Mconsole.busy = true;
+      MetamapsModel.boxStartCoordinates = eventInfo.getPos();
+      return;
+    }
+    if (MetamapsModel.boxStartCoordinates && e.shiftKey) { 
+      Mconsole.busy = true;
+      drawSelectBox(eventInfo,e);
+      return;
+    }
+    if (e.target.id != 'infovis-canvas') { 
+      this.pressed = false;
+      return;
+    }
+    // END METAMAPS CODE
     var thispos = this.pos, 
         currentPos = eventInfo.getPos(),
         canvas = this.canvas,

@@ -21,7 +21,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode, mouseIsDown = false;
 
  $(document).ready(function() {
  
