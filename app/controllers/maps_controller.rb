@@ -166,6 +166,7 @@ class MapsController < ApplicationController
   
   # PUT maps/:id/savelayout
   def savelayout
+    @user = current_user
     @map = Map.find(params[:id])
   
     if params[:map][:coordinates]
@@ -178,32 +179,14 @@ class MapsController < ApplicationController
           @mapping.xloc = topic[1]
           @mapping.yloc = topic[2]
           @mapping.save
+          
+          #push realtime update for location on map
+          @mapping.message 'update',@user.id
         end
       end
       @map.arranged = true
       @map.save
     end	
-  end
-  
-  # GET maps/:id/realtime
-  def realtime
-  	@current = current_user
-	  @map = Map.find(params[:id])
-		
-    @time = params[:map][:time]
-    @time = @time.to_i - 10
-    
-    @topics = Array.new()
-    @synapses = Array.new()
-    @mappings = Array.new()
-    # add code for finding deleted topics and sending the ids of those back to the client here
-    @topics = @map.topics.select{|t| t.updated_at.to_i > @time}
-    @synapses = @map.synapses.select{|t| t.updated_at.to_i > @time}
-    @mappings = @map.mappings.select{|t| t.updated_at.to_i > @time && t.category == "Topic"}
-	  
-	  respond_to do |format|
-      format.js { respond_with(@map,@topics,@synapses,@mappings) }
-    end
   end
   
   # DELETE maps/:id

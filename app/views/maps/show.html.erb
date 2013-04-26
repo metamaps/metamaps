@@ -5,9 +5,7 @@
   #%>
 
 <div class="headertop">
-    <% if false %>
     <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; } else if (goRealtime) { this.innerHTML = 'Start Realtime'; } goRealtime = !goRealtime;">Start Realtime</button>
-    <% end %>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
     <button onclick="enterKeyHandler();">Keep Selected</button>
     <% if authenticated? %>
@@ -52,13 +50,6 @@
   <%= render :partial => 'newsynapse' %>
   <%= render :partial => 'maps/new' %>
 <% end %>
-
-<% if false %>
-<%= form_for @map, :url => realtime_path(@map), :method => "GET", :html => { :id => "MapRealtime"}, remote: true do |form| %>
-    <%= form.hidden_field :time, :value => Time.now.to_i %>
-    <%= form.hidden_field :ids, :value => 0 %>
-<% end %>
-<% end %>
   
 <script>
   var dragged = 0;
@@ -66,14 +57,7 @@
   <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
     mapperm = true;
   <% end %>
-  /*var int = setInterval(function(){
-      if (goRealtime) {
-        $('#MapRealtime').submit();
-      }
-    },4000);*/
-</script>
-
-<script>
+  
   viewMode = "graph";
 	json = <%= @mapjson %>;
 	if (json.length > 0) {
@@ -90,6 +74,47 @@
 				initialize("chaotic", true);
 		});
 	}
+  
+  function subscribeToRooms() {
+    window.app.socket.on('maps-' + mapid, function(data) {
+      //as long as you weren't the origin of the changes, update your map
+      if (data.origin != userid && goRealtime) {
+        if (data.resource == 'Topic') {
+          topic = $.parseJSON(data.obj);
+          
+          if (data.action == 'create') {
+            window.app.addTopicToMap(topic);
+          }
+          else if (data.action == 'update' && Mconsole.graph.getNode(topic.id) != 'undefined') {
+            window.app.updateTopicOnMap(topic);
+          }
+          else if (data.action == 'destroy' && Mconsole.graph.getNode(topic.id) != 'undefined') {
+            hideNode(topic.id)
+          }
+          
+          return;
+        }
+        else if (data.resource == 'Synapse') {
+          synapse = $.parseJSON(data.obj);
+          
+          if (data.action == 'create') {
+            window.app.addSynapseToMap(synapse);
+          }
+          else if (data.action == 'update' && 
+                   Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {
+            window.app.updateSynapseOnMap(synapse);
+          }
+          else if (data.action == 'destroy' && 
+                   Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {
+            var edge = Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']);
+            hideEdge(edge);
+          }
+          
+          return;
+        }
+      }
+    });
+  }
 </script>
 
 <%= render :partial => 'main/find' %>

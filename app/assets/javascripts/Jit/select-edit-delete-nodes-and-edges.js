@@ -1,6 +1,8 @@
 function editEdge(edge, e) {
   if (authorizeToEdit(edge)) {
-    //reset so we don't interfere with other edges
+    //reset so we don't interfere with other edges, but first, save its x and y 
+    var myX = $('#edit_synapse').css('left');
+    var myY = $('#edit_synapse').css('top');
     $('#edit_synapse').remove();
 
     //so label is missing while editing
@@ -17,11 +19,19 @@ function editEdge(edge, e) {
 
     //drop it in the right spot, activate it
     $('#edit_synapse').css('position', 'absolute');
-    $('#edit_synapse').css('left', e.clientX);
-    $('#edit_synapse').css('top', e.clientY);
+    if (e) {
+      $('#edit_synapse').css('left', e.clientX);
+      $('#edit_synapse').css('top', e.clientY);
+    }
+    else {
+      $('#edit_synapse').css('left', myX);
+      $('#edit_synapse').css('top', myY);
+    }
     //$('#edit_synapse_name').click(); //required in case name is empty
     //$('#edit_synapse_name input').focus();
     $('#edit_synapse').show();
+    
+    MetamapsModel.edgecardInUse = edge.data.$id;
   }
   else if ((! authorizeToEdit(edge)) && userid) {
     alert("You don't have the permissions to edit this synapse.");
@@ -335,53 +345,48 @@ function deselectNode(node) {
 
 function selectEdge(edge) {
   if (MetamapsModel.selectedEdges.indexOf(edge) != -1) return;
-  var showDesc = edge.getData("showDesc");
-  if (! showDesc) {
-    edge.setData('showDesc', true, 'current');
-    if ( ! MetamapsModel.embed) {
-      edge.setDataset('end', {
-        lineWidth: 4,
-        color: '#FFFFFF',
-        alpha: 1
-      });
-    } else if (MetamapsModel.embed) {
-      edge.setDataset('end', {
-        lineWidth: 4,
-        color: '#999',
-        alpha: 1
-      });
-    }
-    Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color:alpha'],
-      duration: 100
+  edge.setData('showDesc', true, 'current');
+  if ( ! MetamapsModel.embed) {
+    edge.setDataset('end', {
+      lineWidth: 4,
+      color: '#FFFFFF',
+      alpha: 1
+    });
+  } else if (MetamapsModel.embed) {
+    edge.setDataset('end', {
+      lineWidth: 4,
+      color: '#999',
+      alpha: 1
     });
   }
+  Mconsole.fx.animate({
+    modes: ['edge-property:lineWidth:color:alpha'],
+    duration: 100
+  });
   MetamapsModel.selectedEdges.push(edge);
 }
 
 function deselectEdge(edge) {
-  var showDesc = edge.getData("showDesc");
-  if (showDesc) {
-    edge.setData('showDesc', false, 'current');
+  edge.setData('showDesc', false, 'current');
+  edge.setDataset('end', {
+    lineWidth: 2,
+    color: '#222222',
+    alpha: 0.4
+  });
+
+  if (MetamapsModel.edgeHoveringOver == edge) {
+    edge.setData('showDesc', true, 'current');
     edge.setDataset('end', {
-      lineWidth: 2,
+      lineWidth: 4,
       color: '#222222',
-      alpha: 0.4
-    });
-
-    if (MetamapsModel.edgeHoveringOver == edge) {
-      edge.setDataset('end', {
-        lineWidth: 4,
-        color: '#222222',
-        alpha: 1
-      });
-    }
-
-    Mconsole.fx.animate({
-      modes: ['edge-property:lineWidth:color:alpha'],
-      duration: 100
+      alpha: 1
     });
   }
+
+  Mconsole.fx.animate({
+    modes: ['edge-property:lineWidth:color:alpha'],
+    duration: 100
+  });
 
   //remove the edge
   MetamapsModel.selectedEdges.splice(
@@ -409,6 +414,7 @@ function hideNode(nodeid) {
   });
   Mconsole.graph.removeNode(nodeid);
   Mconsole.labels.disposeLabel(nodeid);
+  delete Mconsole.labels.labels["" + nodeid]
 }
 
 function hideSelectedNodes() {

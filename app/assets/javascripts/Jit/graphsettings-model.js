@@ -13,9 +13,16 @@ MetamapsModel.embed = false;
 MetamapsModel.selectedEdges = new Array();
 MetamapsModel.selectedNodes = new Array();
 
+//this stores a value that indicates whether the user panned or simply clicked without panning
+// used for purposes of knowing whether to close the open card or not (don't if panned)
+MetamapsModel.didPan = false;
+
 //is any showcard open right now? which one?
 MetamapsModel.showcardInUse = null;
 MetamapsModel.widthOfLabel = null;
+
+//is an edge card open right now? which one (the id)?
+MetamapsModel.edgecardInUse = null;
 
 //is the mouse hovering over an edge? which one?
 MetamapsModel.edgeHoveringOver = false;

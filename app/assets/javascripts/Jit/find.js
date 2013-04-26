@@ -149,9 +149,8 @@ function onCanvasSearch(searchQuery, mapID, mapperID) {
 function clearCanvas() {
   Mconsole.graph.eachNode(function(n) {
     Mconsole.graph.removeNode(n.id);
-    //TODO shouldn't we use disposeLabel? Yes, but it breaks things so it's
-    //hide for now
-    Mconsole.labels.hideLabel(n.id);
+    Mconsole.labels.disposeLabel(n.id);
+    delete Mconsole.labels.labels["" + n.id]
   });
   Mconsole.plot();
 }

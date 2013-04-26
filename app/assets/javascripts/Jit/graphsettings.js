@@ -17,7 +17,7 @@ function graphSettings(type, embed) {
        //Enable panning events only if we're dragging the empty
        //canvas (and not a node).
        panning: 'avoid nodes',
-       zooming: 15 //zoom speed. higher is more sensible
+       zooming: 28 //zoom speed. higher is more sensible
     },
     // Change node and edge styles such as
     // color and width.
@@ -111,13 +111,6 @@ function graphSettings(type, embed) {
         
         if (e.target.id != "infovis-canvas") return false;
 
-        //topic and synapse editing cards
-        if (!Mconsole.events.moved && !node) {
-          hideCards();
-          deselectAllNodes();
-          deselectAllEdges();
-        }
-
         //clicking on a edge, node, or clicking on blank part of canvas?
         if (node.nodeFrom) {
           selectEdgeOnClickHandler(node, e);  
@@ -125,7 +118,9 @@ function graphSettings(type, embed) {
           selectNodeOnClickHandler(node, e);
         } else {
           //topic and synapse editing cards
-          if (!Mconsole.events.moved) hideCards();
+          if (!MetamapsModel.didPan) {
+            hideCards();
+          }
           canvasDoubleClickHandler(eventInfo.getPos(), e);
         }//if
       }
@@ -199,6 +194,7 @@ function graphSettings(type, embed) {
 
 function hideCards() {
   $('#edit_synapse').hide();
+  MetamapsModel.edgecardInUse = null;
   hideCurrentCard();
 }
 
@@ -471,7 +467,10 @@ function selectNodesWithBox() {
 		var x = n.pos.x, y = n.pos.y;
     
     if ((sX < x && x < eX && sY < y && y < eY) || (sX > x && x > eX && sY > y && y > eY) || (sX > x && x > eX && sY < y && y < eY) || (sX < x && x < eX && sY > y && y > eY)) {
-      selectNode(n);
+      var nodeIsSelected = MetamapsModel.selectedNodes.indexOf(n);
+      if (nodeIsSelected == -1) selectNode(n); // the node is not selected, so select it
+      else if (nodeIsSelected != -1) deselectNode(n); // the node is selected, so deselect it
+      
     }
   });
 
@@ -513,12 +512,13 @@ function onMouseMoveHandler(node, eventInfo, e) {
 
 function onMouseEnter(edge) {
   $('canvas').css('cursor', 'pointer');
-  var showDesc = edge.getData("showDesc");
-  if (!showDesc) {
+  var edgeIsSelected = MetamapsModel.selectedEdges.indexOf(edge);
+  //following if statement only executes if the edge being hovered over is not selected
+  if (edgeIsSelected == -1) {
+    edge.setData('showDesc', true, 'current');
     edge.setDataset('end', {
-      lineWidth: 4,
-      color: '#222222',
-      alpha: 1
+        lineWidth: 4,
+        alpha: 1
     });
     Mconsole.fx.animate({
       modes: ['edge-property:lineWidth:color:alpha'],
@@ -530,11 +530,12 @@ function onMouseEnter(edge) {
 
 function onMouseLeave(edge) {
   $('canvas').css('cursor', 'default');
-  var showDesc = edge.getData("showDesc");
-  if (!showDesc) {
+  var edgeIsSelected = MetamapsModel.selectedEdges.indexOf(edge);
+  //following if statement only executes if the edge being hovered over is not selected
+  if (edgeIsSelected == -1) {
+    edge.setData('showDesc', false, 'current');
     edge.setDataset('end', {
       lineWidth: 2,
-      color: '#222222',
       alpha: 0.4
     });
     Mconsole.fx.animate({
@@ -563,8 +564,10 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     tempNode2 = null;
     tempInit = false;
   } else if (dragged != 0 && goRealtime) {
-    //TODO: dragged is invalid if multiple nodes were dragged
-    saveLayout(dragged); 
+      saveLayout(dragged);
+	  for (var i = 0; i < MetamapsModel.selectedNodes.length; i++) {
+	    saveLayout(MetamapsModel.selectedNodes[i].id);
+	  }
   }
 }//onDragEndTopicHandler
 

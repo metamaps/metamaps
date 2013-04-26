@@ -25,6 +25,8 @@ if (Mconsole != null) {
   });
   Mconsole.graph.removeNode(<%= @topic.id %>);
   Mconsole.labels.disposeLabel(<%= @topic.id %>);
+  delete Mconsole.labels.labels['<%= @topic.id %>']
+  
 }
 else {
   $('#<%= dom_id(@topic) %>').fadeOut('slow');

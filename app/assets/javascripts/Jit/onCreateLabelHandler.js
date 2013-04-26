@@ -272,12 +272,41 @@ function bindNameContainerCallbacks(nameContainer, node) {
    nameContainer.onmouseout = function(){
      $('.name.topic_' + node.id + ' .nodeOptions').css('display','none');
    }
-    
-    var showCard = document.getElementById('showcard');
 
   // add some events to the label
   $(nameContainer).find('.label').click(function(e){
-    hideCurrentCard();
+    
+    // set the diameter to full again for whatever node had its topic card showing
+    if ( MetamapsModel.showcardInUse != null ) {
+      currentOpenNode = Mconsole.graph.getNode(MetamapsModel.showcardInUse)
+      currentOpenNode.setData('dim', 25, 'current');
+      Mconsole.labels.hideLabel(currentOpenNode, true)
+      Mconsole.plot();
+    }
+    
+    //populate the card that's about to show with the right topics data
+    populateShowCard(node);
+  
+    // positions the card in the right place
+    var top = $('#' + node.id).css('top');
+    var left = parseInt($('#' + node.id).css('left'));
+    var w = $('#topic_' + node.id + '_label').width();
+    w = w/2;
+    left = (left + w) + 'px';
+    $('#showcard').css('top', top);
+    $('#showcard').css('left', left);   
+
+    $('.showcard.topic_' + node.id).fadeIn('fast');
+    node.setData('dim', 1, 'current');
+    MetamapsModel.showcardInUse = node.id;
+    Mconsole.plot();
+    Mconsole.labels.hideLabel(Mconsole.graph.getNode(node.id));
+  });
+}
+
+function populateShowCard(node) {
+  var showCard = document.getElementById('showcard');
+
     showCard.innerHTML = '';
       
     var html = generateShowcardHTML();
@@ -306,17 +335,20 @@ function bindNameContainerCallbacks(nameContainer, node) {
 
   $(showCard).find('.best_in_place_name').bind("ajax:success", function() {
     var name = $(this).html();
-    $(nameContainer).find('.label').html(name);
+    $('#topic_' + node.id + '_label').find('.label').html(name);
     node.name = name;
   });
 
   $(showCard).find('.best_in_place_desc').bind("ajax:success", function() {
     $(showCard).find('.scroll').mCustomScrollbar("update");
+    var desc = $(this).html();
+    node.setData("desc", desc);
   });
 
   $(showCard).find('.best_in_place_link').bind("ajax:success", function() {
     var link = $(this).html();
     $(showCard).find('.go-link').attr('href', link);
+    node.setData("link", link);
   });
   
   $(showCard).find(".permActivator").bind('mouseover', 
@@ -362,25 +394,13 @@ function bindNameContainerCallbacks(nameContainer, node) {
     if (permission == "commons") el.html("co");
     else if (permission == "public") el.html("pu");
     else if (permission == "private") el.html("pr");
+    node.setData("permission", permission);
   });
   
-  var top = $('#' + node.id).css('top');
-  var left = parseInt($('#' + node.id).css('left'));
-  var w = $('#topic_' + node.id + '_label').width();
-  w = w/2;
-  left = (left + w) + 'px';
-  $('#showcard').css('top', top);
-  $('#showcard').css('left', left);   
-
-  $('.showcard.topic_' + node.id).fadeIn('fast');
-    $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar();
-    node.setData('dim', 1, 'current');
-    MetamapsModel.showcardInUse = node.id;
-    Mconsole.plot();
-    Mconsole.labels.hideLabel(Mconsole.graph.getNode(node.id))
-    // add some events to the label
-    $(showCard).find('img.icon').click(function(){
-      hideCard(node);
-    });
+  $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar();
+  
+  // add some events to the label
+  $('.showcard').find('img.icon').click(function(){
+    hideCard(node);
   });
 }

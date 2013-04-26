@@ -11,7 +11,6 @@ ISSAD::Application.routes.draw do
   match 'search', to: 'main#search', via: :get, as: :search
   
   match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
-  match 'maps/:id/realtime', to: 'maps#realtime', via: :get, as: :realtime
   match 'topics/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :post, as: :removefrommap
   match 'synapses/:map_id/:synapse_id/removefrommap', to: 'synapses#removefrommap', via: :post, as: :removefrommap
 

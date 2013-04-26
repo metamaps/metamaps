@@ -8,6 +8,25 @@ belongs_to :topic2, :class_name => "Topic", :foreign_key => "node2_id"
 has_many :mappings
 has_many :maps, :through => :mappings
 
+  # sends push updates through redis to websockets for realtime updates
+  def message action, origin_user_id
+  
+    return if self.permission == "private" and action == "create"
+    
+    #get array of all maps topic appears in
+    @maps = self.maps
+    #sends update to all maps that topic appears in who have realtime on
+    @maps.each do |map|
+      msg = { origin: origin_user_id,
+          mapid: map.id,
+          resource: 'Synapse',
+          action: action,
+          id: self.id,
+          obj: self.self_as_json.html_safe }
+      $redis.publish 'maps', msg.to_json
+    end 
+  end
+
   ##### JSON ######
 
   def self_as_json

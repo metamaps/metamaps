@@ -42,6 +42,9 @@ class MappingsController < ApplicationController
         end
       end
       @mapping.save()
+      
+      #push add to map to realtime viewers of the map
+      @mapping.message 'create',@user.id
     end
   end
 

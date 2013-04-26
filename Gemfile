@@ -5,6 +5,7 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+gem 'redis'
 gem 'pg'
 gem 'authlogic'
 gem 'cancan'
@@ -13,8 +14,8 @@ gem 'formtastic'
 gem 'json'
 gem 'rails3-jquery-autocomplete'
 gem 'best_in_place'
-gem 'therubyracer' #optional
-gem 'rb-readline'
+#gem 'therubyracer' #optional
+#gem 'rb-readline'
 
 # Gems used only for assets and not required
 # in production environments by default.

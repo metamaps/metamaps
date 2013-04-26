@@ -2614,12 +2614,17 @@ Extras.Classes.Navigation = new Class({
   
   onMouseDown: function(e, win, eventInfo) {
     if(!this.config.panning) return;
-    if(this.config.panning == 'avoid nodes' && eventInfo.getNode()) return;
+    
+    //START METAMAPS CODE
+    if((this.config.panning == 'avoid nodes' && eventInfo.getNode()) || eventInfo.getEdge()) return;
+    // END METAMAPS CODE
+    // ORIGINAl CODE if(this.config.panning == 'avoid nodes' && eventInfo.getNode()) return;
     this.pressed = true;
     //START METAMAPS CODE
     if (!MetamapsModel.boxStartCoordinates && e.shiftKey) {
       MetamapsModel.boxStartCoordinates = eventInfo.getPos();
     }
+    MetamapsModel.didPan = false;
     // END METAMAPS CODE
     this.pos = eventInfo.getPos();
     var canvas = this.canvas,
@@ -2652,6 +2657,7 @@ Extras.Classes.Navigation = new Class({
       this.pressed = false;
       return;
     }
+    MetamapsModel.didPan = true;
     // END METAMAPS CODE
     var thispos = this.pos, 
         currentPos = eventInfo.getPos(),
