@@ -151,8 +151,8 @@ WebSocketMain.swf: WebSocketMain-0de980edb45e36785bf9d862baa032bb.swf
 WebSocketMain/index.swf: WebSocketMain-0de980edb45e36785bf9d862baa032bb.swf
 WebSocketMainInsecure.swf: WebSocketMainInsecure-c4377647e57e58cacc692c8a51afc9f8.swf
 WebSocketMainInsecure/index.swf: WebSocketMainInsecure-c4377647e57e58cacc692c8a51afc9f8.swf
-application.js: application-6e0b3ba315101f0bf5cb76f5e8fc83d6.js
-application/index.js: application-6e0b3ba315101f0bf5cb76f5e8fc83d6.js
+application.js: application-40bb181301f9f4d45accef23fc2bdcc4.js
+application/index.js: application-40bb181301f9f4d45accef23fc2bdcc4.js
 scroll/mCSB_buttons.png: scroll/mCSB_buttons-0642ce29bb568932e832d150141614e6.png
 scroll/mCSB_buttons/index.png: scroll/mCSB_buttons-0642ce29bb568932e832d150141614e6.png
 application.css: application-29a4cde7de3558ba88029e406f16f1d2.css

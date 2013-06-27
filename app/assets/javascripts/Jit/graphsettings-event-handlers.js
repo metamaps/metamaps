@@ -196,7 +196,12 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
                var theta = Math.atan2(pos.y, pos.x);
                node.pos.setp(theta, rho);
            } else if (whatToDo == 'only-drag-this-one') {
-             node.pos.setc(pos.x, pos.y);
+             newPos = new $jit.Complex()
+             newPos.x = pos.x
+             newPos.y = pos.y
+             node.setPos(newPos, 'start')
+             node.setPos(newPos, 'current')
+             node.setPos(newPos, 'end')
              node.setData('xloc', pos.x);
              node.setData('yloc', pos.y);
            } else {
@@ -215,7 +220,12 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
                var n = MetamapsModel.selectedNodes[i];
                var x = pos.x + xOffset[i];
                var y = pos.y + yOffset[i];
-               n.pos.setc(x, y);
+               newPos = new $jit.Complex()
+               newPos.x = x
+               newPos.y = y
+               n.setPos(newPos, 'start')
+               n.setPos(newPos, 'current')
+               n.setPos(newPos, 'end')
                n.setData('xloc', x);
                n.setData('yloc', y);
              }//for
