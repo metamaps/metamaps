@@ -5,6 +5,12 @@
   # TODO: What URL accesses this view?
   #%>
 
+<% if @user %><%= @user.name %>'s <% end %>
+  <% content_for :title, @user.name + "'s Topics | Metamaps" %>
+<% else %>
+  <% content_for :title, "Topics | Metamaps" %>
+<% end %> 
+  
 <h1 class="index"><% if @user %><%= @user.name %>'s <% end %>Topics</h1>
 
 <div class="topics" id="cards">

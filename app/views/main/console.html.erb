@@ -5,7 +5,11 @@
   # so it's kind of like a workspace. You can then save to map, etc.
   # Emphasis is on pulling in and creating data.
   #%>
+  
+<% content_for :title, "Console | Metamaps" %>  
+  
   <div class="headertop">
+    <div class="hidelabels checked" onclick="hideLabels()">Show Labels</div>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
     <button onclick="enterKeyHandler();">Keep Selected</button>
     <% if authenticated? %>

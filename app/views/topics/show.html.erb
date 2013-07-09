@@ -14,7 +14,10 @@
   #
   #%>
 
+<% content_for :title, @topic.name + " | Metamaps" %>  
+  
 <div class="headertop">
+  <div class="hidelabels checked" onclick="hideLabels()">Show Labels</div>
   <button onclick="enterKeyPressed();">Keep Selected</button>
   <% if authenticated? %>
     <button onclick="saveToMap();">Save to Map</button>

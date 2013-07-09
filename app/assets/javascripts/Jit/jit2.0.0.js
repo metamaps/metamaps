@@ -2602,12 +2602,6 @@ Extras.Classes.Navigation = new Class({
 		 this.canvas.scale(ans, ans);
 	   }
 	}
-	if (this.canvas.scaleOffsetX < 0.5) {
-		this.canvas.viz.labels.hideLabels(true);
-	}
-	else if (this.canvas.scaleOffsetX > 0.5) {
-		this.canvas.viz.labels.hideLabels(false);
-	}
     // END METAMAPS CODE
     // ORIGINAL CODE this.canvas.scale(ans, ans);
   },
@@ -3162,7 +3156,7 @@ var Canvas;
       this.viz = viz;
       this.config = $.merge({
         idSuffix: '-bkcanvas',
-        levelDistance: 200,
+        levelDistance: 400,
         numberOfCircles: 4,
         CanvasStyles: {},
         offset: 0

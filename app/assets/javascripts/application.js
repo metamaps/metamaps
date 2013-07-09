@@ -301,6 +301,17 @@ function MconsoleReset() {
 	
 }
 
+function hideLabels() {
+  if (Mconsole.labels.labelsHidden) {
+    Mconsole.labels.hideLabels();
+    $('.hidelabels').addClass('checked');
+  }
+  else if (!Mconsole.labels.labelsHidden) {
+    Mconsole.labels.hideLabels(true);
+    $('.hidelabels').removeClass('checked');
+  }
+}
+
 $('*').keypress(function(e) {
   switch(e.which) {
     case 13: enterKeyHandler(); break;

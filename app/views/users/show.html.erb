@@ -4,24 +4,8 @@
   # TODO: What URL?
   # TODO: Is this code used?
   #%>
-<!--<div class="focus">
-	<div class="focusleft">
-		<p># of Topics: <%= @user.topics.count %></p>
-		<p># of Synapses: <%= @user.synapses.count %></p>
-		<p># of Maps: <%= @user.maps.count %></p>
-	</div>
-	<div class="focusmiddle">
-		<h1 class="title"><%= @user.name %></h1>
-		<div class="desc">
-			<p><%= link_to "View their topics", user_topics_path(@user)%></p>
-			<p><%= link_to "View their synapses", user_synapses_path(@user)%></p>
-			<p><%= link_to "View their maps", user_maps_path(@user) %></p>
-		</div>
-	</div>
-	<div class="focusright">
-	</div>
-</div>
-<div class="clearfloat nodemargin"></div>-->
+
+<% content_for :title, @user.name + "'s Profile | Metamaps" %>
 
 <div class="profile">
 

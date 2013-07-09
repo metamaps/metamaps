@@ -3,6 +3,13 @@
   # Shows a list of all maps, or just a user's maps.
   # TODO: What url is this accessible at?
   #%>
+  
+<% if @user %>  
+  <% content_for :title, @user.name + "'s Maps | Metamaps" %> 
+<% else %>
+  <% content_for :title, "All Maps | Metamaps" %>
+<% end %>
+  
 <h1 class="index"><% if @user %><%= @user.name %>'s<% end %> Maps</h1>
 
 <div class="maps" id="cards">

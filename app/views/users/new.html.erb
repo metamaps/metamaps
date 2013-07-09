@@ -3,6 +3,9 @@
   # Located at /users/new
   # New user form
   #%>
+  
+<% content_for :title, "Create Account | Metamaps" %>  
+  
 <%= formula_form_for @user, url: users_url do |form| %>
   <h3>Create Account</h3>
   <%= form.input :name, label: "Name", class: "name" %>

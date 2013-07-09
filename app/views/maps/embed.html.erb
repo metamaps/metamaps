@@ -4,6 +4,8 @@
   # /maps/:id
   #%>
 
+<% content_for :title, @map.name + " | Metamaps" %>   
+  
 <div class="headertop">
     <% if authenticated? %>
       <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>

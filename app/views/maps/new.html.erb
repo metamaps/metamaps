@@ -3,6 +3,9 @@
   # Form to create a new map.
   # Accessible from /maps/new. Still in use.
   #%>
+  
+<% content_for :title, "New Map | Metamaps" %>  
+  
 <div class="nothidden">
 <%= form_for @map || Map.new, url: maps_url do |form|%>
   <h3>Add Map</h3>

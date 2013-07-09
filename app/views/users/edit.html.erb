@@ -3,6 +3,9 @@
   # /users/:id/edit
   # User edit form
   #%>
+  
+<% content_for :title, @user.name + "'s Settings | Metamaps" %>  
+  
 <%= formula_form_for @user, url: user_url do |form| %>
   <h3>Choose Active Metacodes</h3>
   <div class="allMetacodes"><span id="showAll">Show All</span><span id="hideAll">Hide All</span></div>

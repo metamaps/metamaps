@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Metamaps</title>
+  <title><%=h yield(:title) %></title>
   <% if authenticated? %>
     <script type="text/javascript">
       var userid = <%= user.id %>;

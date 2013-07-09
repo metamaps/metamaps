@@ -3,6 +3,9 @@
   # Form for editing a map
   # Located at addresses /maps/:id/edit. In use.
   #%>
+  
+<% content_for :title, "Edit " + @map.name + " | Metamaps" %>   
+  
 <%= form_for @map, url: map_url(@map) do |form| %>
   <h3>Edit Map</h3>
   <label for="map_name">Name</label>

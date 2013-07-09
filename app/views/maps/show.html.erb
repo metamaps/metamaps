@@ -3,8 +3,11 @@
   # Code to display a map
   # /maps/:id
   #%>
+  
+<% content_for :title, @map.name + " | Metamaps" %>
 
 <div class="headertop">
+    <div class="hidelabels checked" onclick="hideLabels()">Show Labels</div>
     <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; } else if (goRealtime) { this.innerHTML = 'Start Realtime'; } goRealtime = !goRealtime;">Start Realtime</button>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
     <button onclick="enterKeyHandler();">Keep Selected</button>

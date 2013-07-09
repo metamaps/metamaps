@@ -17,6 +17,18 @@
  *= require jquery-ui
 */
 
+@font-face {
+    font-family: 'LatoLight';
+    src: url('/assets/Fonts/Lato-Lig-webfont.eot');
+    src: url('/assets/Fonts/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/assets/Fonts/Lato-Lig-webfont.woff') format('woff'),
+         url('/assets/Fonts/Lato-Lig-webfont.ttf') format('truetype'),
+         url('/assets/Fonts/Lato-Lig-webfont.svg#LatoLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 /* clear styles */
 html, body, div, h1, h2, h3, h4, h5, h6, 
 ul, ol, dl, li, dt, dd, p, blockquote,
@@ -47,7 +59,8 @@ html {
 
 body {
   background:#031924 url(background2-for-repeating.jpg) repeat 0 0;
-  font-family: 'katarine-web', sans-serif;
+  /* font-family: 'katarine-web', sans-serif; */
+  font-family: 'LatoLight', sans-serif;
   background-attachment:fixed;
   color:#FFF;
 }
@@ -261,25 +274,46 @@ input[type="submit"] {
   top:0;
   right:0;
   z-index:10;
-  width:auto;
-  border-radius:15px;
-  margin:10px;
+  width:218px;
+  border-radius:10px;
+  margin: 10px 0px 10px 10px;
+  background:#FFF;
+  padding:5px 10px;
+  border:1px solid #000;
+  box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
 .headertop button, .headertop input {
-  float:left;
+  float:right;
   height: 30px;
-  border-radius: 12px;
-  background: url('black_bg.png');
-  color: #FFF;
+  border-radius: 3px;
+  background: #FFF;
+  color: #111;
   font-family: 'katarine-web';
   font-size: 18px;
   border: 1px solid #000;
   cursor: pointer;	
+  margin:3px 0;
+  clear:both;
 }
 
 .headertop button:hover, .headertop input:hover {
-  background: #000;	
+  background: #EEE;	
+}
+
+.hidelabels {
+width: 80px;
+height: 25px;
+float: right;
+background: url('labelCheckbox.png') no-repeat 0px -36px;
+display: block;
+padding-left: 34px;
+padding-top:6px;
+cursor:pointer;
+color:#111;
+}
+.hidelabels.checked {
+background: url('labelCheckbox.png') no-repeat 0px 0px;
 }
 
 .wrapper {
@@ -427,7 +461,7 @@ input[type="submit"] {
   left:0px;
   display:block;
   height:32px;
-  background: url('bg.png') repeat 0 0;
+  background: #FFF;
   padding:0 0 0 15px;
   border-bottom-right-radius:10px;
   border-top-right-radius:10px;
@@ -435,6 +469,7 @@ input[type="submit"] {
   border:1px solid #000;
   overflow:hidden;
   cursor:pointer;
+  box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
 #sideOptionFind {
@@ -586,6 +621,7 @@ input[type="submit"] {
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   z-index: 15000;
+  border:1px solid #000;
 }
 
 .logo {
@@ -623,7 +659,7 @@ input[type="submit"] {
   display:block;
   position:absolute;
   border:none;
-  bottom:40px;
+  bottom:42px;
   left:10px;
   height:0px;
   z-index:12;
@@ -643,6 +679,8 @@ input[type="submit"] {
   -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
   -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
   background: url('black_bg.png') repeat 0 0;
+  border-left:1px solid #000;
+  border-right:1px solid #000;
 }
 
 .footer ul li {
