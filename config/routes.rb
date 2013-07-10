@@ -13,8 +13,6 @@ ISSAD::Application.routes.draw do
   match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
   match 'topics/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :post, as: :removefrommap
   match 'synapses/:map_id/:synapse_id/removefrommap', to: 'synapses#removefrommap', via: :post, as: :removefrommap
-
-  resource :session
   
   resources :topics do
     get :autocomplete_topic_name, :on => :collection
@@ -32,6 +30,7 @@ ISSAD::Application.routes.draw do
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
   match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json
   
+  devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
   resources :users do
     get :autocomplete_user_name, :on => :collection
 	  resources :topics, :only => [:index]

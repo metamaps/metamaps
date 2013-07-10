@@ -11,7 +11,39 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125210014) do
+ActiveRecord::Schema.define(:version => 20130709212556) do
+
+  create_table "entities", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "fields", :force => true do |t|
+    t.integer  "entity_id"
+    t.integer  "field_id"
+    t.integer  "mkey_id"
+    t.binary   "binary_val"
+    t.boolean  "boolean_val"
+    t.date     "date_val"
+    t.datetime "datetime_val"
+    t.decimal  "decimal_val"
+    t.float    "float_val"
+    t.integer  "integer_val"
+    t.string   "string_val"
+    t.text     "text_val"
+    t.time     "time_val"
+    t.integer  "references_val_id"
+    t.datetime "datetimeedit"
+    t.integer  "user_id"
+    t.integer  "useredit_id"
+  end
+
+  add_index "fields", ["entity_id"], :name => "index_fields_on_entity_id"
+  add_index "fields", ["field_id"], :name => "index_fields_on_field_id"
+  add_index "fields", ["mkey_id"], :name => "index_fields_on_mkey_id"
+  add_index "fields", ["references_val_id"], :name => "index_fields_on_references_val_id"
+  add_index "fields", ["user_id"], :name => "index_fields_on_user_id"
+  add_index "fields", ["useredit_id"], :name => "index_fields_on_useredit_id"
 
   create_table "mappings", :force => true do |t|
     t.text     "category"
@@ -68,15 +100,27 @@ ActiveRecord::Schema.define(:version => 20130125210014) do
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.string   "code",              :limit => 8
-    t.string   "joinedwithcode",    :limit => 8
+    t.text     "settings"
+    t.string   "code",                   :limit => 8
+    t.string   "joinedwithcode",         :limit => 8
     t.string   "crypted_password"
     t.string   "password_salt"
     t.string   "persistence_token"
     t.string   "perishable_token"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.text     "settings"
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => ""
+    t.string   "remember_token"
+    t.datetime "remember_created_at"
+    t.string   "reset_password_token"
+    t.datetime "last_sign_in_at"
+    t.string   "last_sign_in_ip"
+    t.integer  "sign_in_count",                         :default => 0
+    t.datetime "current_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.datetime "reset_password_sent_at"
   end
+
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
 end

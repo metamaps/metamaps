@@ -36,6 +36,14 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+
+  <% if notice %>
+  <p class="notice metamaps"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+  <p class="alert metamaps"><%= alert %></p>
+  <% end %>
+       
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
     <div class="wrapper" id="wrapper">
@@ -52,7 +60,7 @@
               <% if Topic.exists?(260) %>
                 <li><%= link_to "Tour", "/topics/260" %></li>
               <% end %>
-              <li class="last"><%= link_to "Login", new_session_path, id: "Login" %></li>
+              <li class="last"><%= link_to "Login", new_user_session_path, id: "Login" %></li>
             </ul>
           <% end %>
           <% if authenticated? %>
@@ -68,7 +76,7 @@
                 <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
                   <li><%= link_to "Feedback", map_path(Map.find(7)) %></li>
                 <% end %>
-                <li class="last"><%= link_to "Logout", session_path, method: 'delete', id: "Login" %></li>
+                <li class="last"><%= link_to "Logout", destroy_user_session_path, method: 'delete', id: "Login" %></li>
             </ul>
           <% end %>
           <h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1><div id="beta">beta</div>

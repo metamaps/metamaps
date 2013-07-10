@@ -59,8 +59,7 @@ html {
 
 body {
   background:#031924 url(background2-for-repeating.jpg) repeat 0 0;
-  /* font-family: 'katarine-web', sans-serif; */
-  font-family: 'LatoLight', sans-serif;
+  font-family: 'katarine-web', sans-serif;
   background-attachment:fixed;
   color:#FFF;
 }
@@ -142,9 +141,10 @@ a {
   margin:200px 0 0 -195px;
   background: url('bg.png');
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 5px;
   color: #000;
-  border:2px solid #000;
+  border:1px solid #000;
+  box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
 .edit_user{
@@ -268,52 +268,64 @@ input[type="submit"] {
 }
 
 /* --- top options --*/
+
+.passwordnotice {
+  background: #612127;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.notice.metamaps, .alert.metamaps {
+position: absolute;
+margin: 20px;
+background: url(/assets/black_bg.png);
+padding: 10px;
+border-radius: 5px;
+box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
+  border:1px solid #000;
+}
+
 .headertop {
   display:block;
   position:fixed;
-  top:0;
-  right:0;
+  top:20px;
   z-index:10;
-  width:218px;
-  border-radius:10px;
+  border-radius:5px;
   margin: 10px 0px 10px 10px;
-  background:#FFF;
+  background:#111614;
   padding:5px 10px;
-  border:1px solid #000;
   box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
+.headertop .tab  {
+  background: url(tab.png) no-repeat 0 0;
+  position:absolute;
+  top:-11px;
+  right:-2px;
+  display:block;
+  width:45px;
+  height:15px;
+  cursor:move;
+}
+
 .headertop button, .headertop input {
-  float:right;
   height: 30px;
-  border-radius: 3px;
-  background: #FFF;
-  color: #111;
-  font-family: 'katarine-web';
-  font-size: 18px;
-  border: 1px solid #000;
+  background: none;
+  color: #717474;
+  font-family: 'LatoLight';
+  font-size: 17px;
+  border: none;
+  border-right:1px solid #717474;
   cursor: pointer;	
   margin:3px 0;
   clear:both;
+  float:right;
 }
 
 .headertop button:hover, .headertop input:hover {
-  background: #EEE;	
-}
-
-.hidelabels {
-width: 80px;
-height: 25px;
-float: right;
-background: url('labelCheckbox.png') no-repeat 0px -36px;
-display: block;
-padding-left: 34px;
-padding-top:6px;
-cursor:pointer;
-color:#111;
-}
-.hidelabels.checked {
-background: url('labelCheckbox.png') no-repeat 0px 0px;
+  border-right: 1px solid #6d7310;
+  color: #6d7310;
 }
 
 .wrapper {
@@ -329,12 +341,15 @@ background: url('labelCheckbox.png') no-repeat 0px 0px;
   z-index: 9999;
   width: auto;
   background: url('black_bg.png');
-  padding: 0px 10px 0px 20px;
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
-  height: 38px;
+  padding: 1px 10px 0px 20px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  text-transform:uppercase;
+  font-style:italic;
+  height: 35px;
   font-size: 30px;
   line-height: 38px;
+  border:1px solid #000;
 }
 
 .nodemargin {

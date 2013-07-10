@@ -42,6 +42,12 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     });
 	
 	$(".scroll").mCustomScrollbar();
+  
+  $('.headertop').draggable();
+  var positionLeft = $(window).width() - $('.headertop').width() - 50;
+  $('.headertop').css('left', positionLeft + 'px');
+  $('.notice.metamaps').delay(10000).fadeOut('fast');
+  $('.alert.metamaps').delay(10000).fadeOut('fast');
 	
 	//$('.nodemargin').css('padding-top',$('.focus').css('height'));	
 	
@@ -304,11 +310,11 @@ function MconsoleReset() {
 function hideLabels() {
   if (Mconsole.labels.labelsHidden) {
     Mconsole.labels.hideLabels();
-    $('.hidelabels').addClass('checked');
+    $('.hidelabels').html('Hide Labels');
   }
   else if (!Mconsole.labels.labelsHidden) {
     Mconsole.labels.hideLabels(true);
-    $('.hidelabels').removeClass('checked');
+    $('.hidelabels').html('Show Labels');
   }
 }
 

@@ -9,6 +9,11 @@ class UsersController < ApplicationController
   
   # GET /user/new
   def new
+  
+    flash[:notice] = "Account creation is temporarily disabled."
+    redirect_to root_url
+    return
+  
     @user = User.new
     
     respond_with(@user)
@@ -36,6 +41,9 @@ class UsersController < ApplicationController
   
   # POST /user
   def create
+  
+    # update this code
+  
     @session = Session.create(params[:user])
     
     redirect_to(root_url) and return if @session.valid?

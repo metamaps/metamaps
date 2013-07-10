@@ -12,7 +12,8 @@
   <%= form.input :email, label: "Email", class: "email" %>
   <%= form.input :password, label: "Password", class: "password" %>
   <%= form.input :joinedwithcode, label: "Access Code", class: "joinedwithcode" %>
-  <%= form.submit "Create Account", class: "add" %>  
+  <%= form.submit "Create Account", class: "add" %>
+  <%= link_to "Sign in", new_session_path("user") %>  
 <% end %>
 
 

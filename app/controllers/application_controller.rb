@@ -22,16 +22,6 @@ private
     end
   end
   
-  def current_user
-    return @current_user if defined?(@current_user)
-    @current_user = current_session && current_session.user
-  end
-  
-  def current_session
-    return @current_session if defined?(@current_session) 
-    @current_session = Session.find
-  end
-  
   def user
     current_user
   end
@@ -39,16 +29,6 @@ private
     
   def authenticated?
     current_user
-  end
-  
-  def store
-    session[:location] = request.fullpath
-  end
-  
-  def restore(options)
-    location = session[:location] || options[:default]
-    session[:location] = nil
-    return location
   end
   
 end

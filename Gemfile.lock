@@ -29,9 +29,6 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     arel (3.0.2)
-    authlogic (3.1.0)
-      activerecord (>= 3.0.7)
-      activerecord (>= 3.0.7)
     bcrypt-ruby (3.0.1-x86-mingw32)
     best_in_place (2.0.2)
       jquery-rails
@@ -131,7 +128,6 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  authlogic
   best_in_place
   cancan
   coffee-rails (~> 3.2.1)
