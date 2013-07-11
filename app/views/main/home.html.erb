@@ -16,9 +16,12 @@
 <span class="blue">Metamaps</span> is a platform for visioning, magic making, productive conversation, understanding something, innovation, free style weaving and all night brainstorming. Metamaps is a game for making the world a better place.
 </div>
 <div class="clearfloat"></div>
+
+<% if not authenticated? %>
 <div class="passwordnotice">
   Due to upgrading our authentication process, all users will have to reset their password before signing in. Follow the standard <%= link_to 'forgot password', new_user_password_path %> process to see this through. Thanks!
 </div>
+<% end %>
 <h2>Recently Created Maps <%= link_to "see all", maps_url%></h2>
 <div class="centeredProfile">
 <% @maps.each do |map| %>

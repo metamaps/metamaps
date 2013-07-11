@@ -9,11 +9,12 @@
 <% content_for :title, "Console | Metamaps" %>  
   
   <div class="headertop">
-    <div class="hidelabels checked" onclick="hideLabels()">Show Labels</div>
+    <div class="tab"></div>
+    <button class="hidelabels" onclick="hideLabels();">Hide Labels</button>
     <button onclick="hideSelectedEdges();hideSelectedNodes();">Hide Selected</button>
     <button onclick="enterKeyHandler();">Keep Selected</button>
     <% if authenticated? %>
-      <button onclick="var r=confirm('Are you sure you want to permanently delete selected objects?!'); if (r == true) {deleteSelectedEdges();deleteSelectedNodes();}">Permanently Delete Selected</button>
+      <button onclick="var r=confirm('Are you sure you want to permanently delete selected objects?!'); if (r == true) {deleteSelectedEdges();deleteSelectedNodes();}">Delete Selected</button>
       <button onclick="saveToMap();">Save to Map</button>      
     <% end %>
     <button onclick='clearCanvas();'>Clear Canvas</button>

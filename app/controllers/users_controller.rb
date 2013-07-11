@@ -1,23 +1,11 @@
 class UsersController < ApplicationController
 
-  before_filter :require_no_user, only: [:new, :create]
   before_filter :require_user, only: [:edit, :update]
     
   respond_to :html, :json
   
   autocomplete :user, :name, :full => true
-  
-  # GET /user/new
-  def new
-  
-    flash[:notice] = "Account creation is temporarily disabled."
-    redirect_to root_url
-    return
-  
-    @user = User.new
-    
-    respond_with(@user)
-  end
+ 
   
   # GET /user/edit
   def edit
@@ -37,33 +25,6 @@ class UsersController < ApplicationController
     @maps = @maps.slice(0,3)
     
     respond_with(@user, @topics, @synapses, @maps) 
-  end
-  
-  # POST /user
-  def create
-  
-    # update this code
-  
-    @session = Session.create(params[:user])
-    
-    redirect_to(root_url) and return if @session.valid?
-    
-    @user = User.create(params[:user])
-	
-	  #generate a random 8 letter/digit code that they can use to invite people
-	  @user.code = rand(36**8).to_s(36)	
-    @user.save
-	
-	  # direct them straight to the metamaps manual topic 'Click Me'
-    @topic = Topic.exists?(260)
-        
-    if @topic
-      respond_with(@user, location: topic_url(260)) do |format|
-      end
-    else
-      respond_with(@user, location: root_url) do |format|
-      end
-    end
   end
   
   # PUT /user

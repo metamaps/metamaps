@@ -7,19 +7,20 @@ has_many :synapses
 has_many :maps
 has_many :mappings
 
-   devise :database_authenticatable, :recoverable, :rememberable, :trackable  #  :registerable
+before_create :generate_code
 
-  #acts_as_authentic do |configuration| 
-  #  configuration.session_class = Session
-	#configuration.require_password_confirmation = false
-    
-  #  configuration.merge_validates_format_of_email_field_options unless: Proc.new { |user| user.email.blank? and user.authed? }
-  #  configuration.merge_validates_length_of_email_field_options unless: Proc.new { |user| user.email.blank? and user.authed? }
-  #end
-  
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
+
   serialize :settings, UserPreference
 	
+  validates_uniqueness_of :name # done by devise
+  validates_uniqueness_of :email # done by devise
   validates :joinedwithcode, :presence => true, :inclusion => { :in => User.all.map(&:code), :message => "%{value} is not a valid code" }, :on => :create
+  
+  def generate_code
+    #generate a random 8 letter/digit code that they can use to invite people
+	  self.code = rand(36**8).to_s(36)
+  end
   
   def settings
     # make sure we always return a UserPreference instance

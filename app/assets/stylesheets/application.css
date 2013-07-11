@@ -109,6 +109,19 @@ a {
  * Layout stuffs
  */
  
+#error_explanation {
+  background: #612127;
+  padding: 30px;
+  color: #FFF;
+}
+#error_explanation h2 {
+  display:none;
+}
+
+#error_explanation ul {
+  list-style:none;
+}
+ 
 .profile {
   overflow-y:scroll;
   height:100%;
@@ -633,8 +646,8 @@ box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
   bottom: 9px;
   height: 38px;
   background: url('black_bg.png');
-  border-bottom-right-radius: 15px;
-  border-top-right-radius: 15px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
   z-index: 15000;
   border:1px solid #000;
 }

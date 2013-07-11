@@ -445,14 +445,13 @@ function drawSelectBox(eventInfo, e) {
       currY = eventInfo.getPos().y;
   
   Mconsole.plot();
-  ctx.moveTo(startX,startY);
-  ctx.lineTo(startX,currY);
-  ctx.stroke();
-  ctx.lineTo(currX,currY);
-  ctx.stroke();
-  ctx.lineTo(currX,startY);
-  ctx.stroke();
-  ctx.lineTo(startX,startY);
+  ctx.beginPath();
+  ctx.moveTo(startX, startY);
+  ctx.lineTo(startX, currY);
+  ctx.lineTo(currX, currY);
+  ctx.lineTo(currX, startY);
+  ctx.lineTo(startX, startY);
+  ctx.strokeStyle = "black";
   ctx.stroke();
 }
 
