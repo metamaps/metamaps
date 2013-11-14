@@ -19,11 +19,9 @@
 <div class="headertop">
   <div class="tab"></div>
   <button class="hidelabels" onclick="hideLabels();">Hide Labels</button>
-  <button onclick="enterKeyPressed();">Keep Selected</button>
   <% if authenticated? %>
     <button onclick="saveToMap();">Save to Map</button>
   <% end %>
-  <button onclick='clearCanvasExceptRoot();'>Clear Canvas</button>
 </div>
 <div class="clearfloat"></div>
 
@@ -46,10 +44,6 @@
 		initialize("centered");
 	});
 </script>
-
-<!-- <%= render :partial => 'main/find' %> -->
-<%= render :partial => 'main/analyze' %>
-<%= render :partial => 'main/organize' %>
 
 <% if authenticated? %>
   <%= render :partial => 'topics/new' %>

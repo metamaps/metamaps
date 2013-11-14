@@ -132,7 +132,7 @@ function graphSettings(type, embed) {
     // Add text to the labels. This method is only triggered
     // on label creation and only for DOM labels (not native canvas ones).
     onCreateLabel: function (domElement, node) {
-      onCreateLabelHandler(domElement, node);
+      onCreateLabelHandler(type, domElement, node);
     },
     // Change node styles when DOM labels are placed or moved.
     onPlaceLabel: function (domElement, node) {
@@ -161,7 +161,7 @@ function graphSettings(type, embed) {
       //different because we're centred
       onDragCancelHandler(node, eventInfo, e, true);
     };
-    t.Events.onClick = function(node, eventInfo, e) {
+    /*t.Events.onClick = function(node, eventInfo, e) {
       //this is handled mostly differently than in arranged/chaotic
       if (e.target.id != "infovis-canvas") return false;
 
@@ -173,21 +173,12 @@ function graphSettings(type, embed) {
           selectEdgeOnClickHandler(node, e);  
       } else if (node && !node.nodeFrom) {
         //node is actually a node :)
-        if (!Mconsole.busy) {
-          $('h1.index').html('Viewing Topic: ' + node.name);
-          window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
-          Mconsole.onClick(node.id, {  
-            hideLabels: false,
-            duration: 1000,
-            onComplete: function() {
-              fetchRelatives(node);
-            }            
-          });
-        }
+        selectNodeOnClickHandler(node, e);
+        
       } else {
         canvasDoubleClickHandler(eventInfo.getPos(), e);
       }
-    };
+    };*/
   }//if
 
   return t;
@@ -464,7 +455,8 @@ function selectNodesWithBox() {
   
   
   Mconsole.graph.eachNode(function (n) {
-		var x = n.pos.x, y = n.pos.y;
+		var x = gType == "centered" ? n.pos.toComplex().x : n.pos.x, 
+        y = gType == "centered" ? n.pos.toComplex().y : n.pos.y;
     
     if ((sX < x && x < eX && sY < y && y < eY) || (sX > x && x > eX && sY > y && y > eY) || (sX > x && x > eX && sY < y && y < eY) || (sX < x && x < eX && sY > y && y > eY)) {
       var nodeIsSelected = MetamapsModel.selectedNodes.indexOf(n);

@@ -15,7 +15,12 @@ before_create :generate_code
 	
   validates_uniqueness_of :name # done by devise
   validates_uniqueness_of :email # done by devise
-  validates :joinedwithcode, :presence => true, :inclusion => { :in => User.all.map(&:code), :message => "%{value} is not a valid code" }, :on => :create
+  if Object.const_defined?('User') 
+    codes = User.all.map(&:code)
+  else
+    codes = []
+  end
+  validates :joinedwithcode, :presence => true, :inclusion => { :in => codes, :message => "%{value} is not a valid code" }, :on => :create
   
   def generate_code
     #generate a random 8 letter/digit code that they can use to invite people

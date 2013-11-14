@@ -1,3 +1,18 @@
+function centerOn(nodeid) {
+  if (!Mconsole.busy) {
+          var node = Mconsole.graph.getNode(nodeid);
+          $('h1.index').html('Viewing Topic: ' + node.name);
+          window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
+          Mconsole.onClick(node.id, {  
+            hideLabels: false,
+            duration: 1000,
+            onComplete: function() {
+              fetchRelatives(node);
+            }            
+          });
+        }
+}
+
 function editEdge(edge, e) {
   if (authorizeToEdit(edge)) {
     //reset so we don't interfere with other edges, but first, save its x and y 

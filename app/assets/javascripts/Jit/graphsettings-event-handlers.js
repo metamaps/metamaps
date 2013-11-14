@@ -109,7 +109,6 @@ function selectNodeOnClickHandler(node, e) {
     return;
   }
   
-  if (gType != "centered") {
       //set final styles
       if (!e.shiftKey) {
           Mconsole.graph.eachNode(function (n) {
@@ -129,7 +128,6 @@ function selectNodeOnClickHandler(node, e) {
         duration: 500
       });
       Mconsole.plot();
-  }
 }//selectNodeOnClickHandler
 
 function canvasDoubleClickHandler(canvasLoc,e) { 
@@ -191,19 +189,17 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        if ( e.touches || (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
            //if the node dragged isn't already selected, select it
            var whatToDo = handleSelectionBeforeDragging(node, e);
-           if (node.pos.rho || node.pos.rho === 0) {
+           if (whatToDo == 'only-drag-this-one' || whatToDo == 'deselect') {
+             if (gType == "centered") {
                var rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y);
                var theta = Math.atan2(pos.y, pos.x);
                node.pos.setp(theta, rho);
-           } else if (whatToDo == 'only-drag-this-one') {
-             newPos = new $jit.Complex()
-             newPos.x = pos.x
-             newPos.y = pos.y
-             node.setPos(newPos, 'start')
-             node.setPos(newPos, 'current')
-             node.setPos(newPos, 'end')
-             node.setData('xloc', pos.x);
-             node.setData('yloc', pos.y);
+             }
+             else {
+               node.pos.setc(pos.x,pos.y);
+               node.setData('xloc', pos.x);
+               node.setData('yloc', pos.y);
+             }
            } else {
              var len = MetamapsModel.selectedNodes.length;
 
@@ -212,20 +208,32 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
              var yOffset = new Array();
              for (var i = 0; i < len; i += 1) {
                var n = MetamapsModel.selectedNodes[i];
-               xOffset[i] = n.pos.x - node.pos.x;
-               yOffset[i] = n.pos.y - node.pos.y;
+               if (gType == "centered") {
+                 xOffset[i] = n.pos.toComplex().x - node.pos.toComplex().x;
+                 yOffset[i] = n.pos.toComplex().y - node.pos.toComplex().y;
+               }
+               else {
+                 xOffset[i] = n.pos.x - node.pos.x;
+                 yOffset[i] = n.pos.y - node.pos.y;
+               }
              }//for
 
              for (var i = 0; i < len; i += 1) {
                var n = MetamapsModel.selectedNodes[i];
-               var x = pos.x + xOffset[i];
-               var y = pos.y + yOffset[i];
-               newPos = new $jit.Complex()
-               newPos.x = x
-               newPos.y = y
-               n.setPos(newPos, 'start')
-               n.setPos(newPos, 'current')
-               n.setPos(newPos, 'end')
+               if (gType == "centered") {
+                 var x = pos.x + xOffset[i];
+                 var y = pos.y + yOffset[i];
+                 var rho = Math.sqrt(x * x + y * y);
+                 var theta = Math.atan2(y, x);
+                 n.pos.setp(theta, rho);
+               }
+               else {
+                 var x = pos.x + xOffset[i];
+                 var y = pos.y + yOffset[i];
+                 n.pos.setc(x,y);
+                 n.setData('xloc', pos.x);
+                 n.setData('yloc', pos.y);
+               }
                n.setData('xloc', x);
                n.setData('yloc', y);
              }//for

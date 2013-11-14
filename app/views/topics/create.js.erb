@@ -34,6 +34,7 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
     temp.setPos(tempPos, 'current');
     temp.setPos(tempPos, 'start');
     temp.setPos(tempPos, 'end');
+    temp._depth = tempNode._depth + 1;
   }
   else if (gType == "arranged" || gType == "chaotic") {
     temp.setData('xloc',0);
@@ -52,6 +53,7 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
     $('#synapse_topic1id').val(tempNode.id);
     $('#synapse_topic2id').val(temp.id);
     $('#synapse_desc').autocomplete('enable');
+    $('#synapse_desc').val("");
     $('#new_synapse').fadeIn('fast');
     $('#synapse_desc').focus();
     Mconsole.fx.animate({  

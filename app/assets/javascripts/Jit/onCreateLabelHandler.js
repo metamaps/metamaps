@@ -14,20 +14,27 @@
  * expression is substituted in later (for html, in a separate function).
  */
 
-function onCreateLabelHandler(domElement, node) {
+function onCreateLabelHandler(type, domElement, node) {
   // Create a 'name' button and add it to the main node label
   var nameContainer = document.createElement('span'),
   style = nameContainer.style;
   nameContainer.className = 'name topic_' + node.id;
   nameContainer.id = 'topic_' + node.id + '_label';
 
-  nameContainer.innerHTML = generateLittleHTML (node);
+  if (type == "centered") {
+    nameContainer.innerHTML = generateCenteredLittleHTML (node);
+  }
+  else {
+    nameContainer.innerHTML = generateLittleHTML (node);
+  }
+  
   domElement.appendChild(nameContainer);
   style.fontSize = "0.9em";
   style.color = "#222222";
 
   bindNameContainerCallbacks(nameContainer, node);
 }
+
 
 function generateShowcardHTML() {
   return '                                                                    \
@@ -237,6 +244,23 @@ function generateLittleHTML(node) {
   littleHTML += '</div>';
   littleHTML = littleHTML.replace(/\$_id_\$/g, node.id);
   littleHTML = littleHTML.replace(/\$_mapid_\$/g, mapid);
+  littleHTML = littleHTML.replace(/\$_name_\$/g, node.name);
+
+  return littleHTML;
+}
+
+function generateCenteredLittleHTML(node) {
+  var littleHTML = '                                                          \
+    <div class="label">$_name_$</div>                                         \
+      <div class="nodeOptions">';
+
+  littleHTML += '                                                           \
+        <span class="centerOn"                                        \
+              onclick="centerOn($_id_$)"                              \
+              title="Move this topic to center">                      \
+        </span>';
+  littleHTML += '</div>';
+  littleHTML = littleHTML.replace(/\$_id_\$/g, node.id);
   littleHTML = littleHTML.replace(/\$_name_\$/g, node.name);
 
   return littleHTML;
