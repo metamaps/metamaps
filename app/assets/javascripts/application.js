@@ -56,7 +56,8 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
 	var lT;
     $(".logo").hover( 
         function () { 
-		  clearTimeout(lT);
+          $('.menuflag').hide();
+		      clearTimeout(lT);
           if (! sliding1) { 
             sliding1 = true;
             var listLength = $('.logo .menu li').length * 28;          

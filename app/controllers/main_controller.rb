@@ -7,7 +7,7 @@ class MainController < ApplicationController
   
   def home
     @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
-    @maps = @maps.slice(0,3)
+    @maps = @maps.slice(0,5)
     
     respond_with(@maps) 
   end

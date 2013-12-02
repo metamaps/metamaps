@@ -8,29 +8,22 @@
   
 <div class="home_bg">
 <p class="contact">
-  To get in touch, follow or tweet at us! <a target="_blank" href="https://twitter.com/metamapps">@metamapps</a>.
+  To get in touch, follow or tweet <a target="_blank" href="https://twitter.com/metamapps">@metamapps</a>, or join our <a target="_blank" href="https://plus.google.com/u/0/communities/115060009262157699234">Google+ community</a>.
 </p>
 
 <div class="home_content">
 <div class="home_desc">
-<span class="blue">Metamaps</span> is a platform for visioning, magic making, productive conversation, understanding something, innovation, free style weaving and all night brainstorming. Metamaps is a game for making the world a better place.
+<span class="blue">Metamaps</span> is a platform for visioning, magic making, productive conversation, understanding something, innovation, free style weaving and all night brainstorming.
 </div>
 <div class="clearfloat"></div>
 
-<% if not authenticated? %>
-<div class="passwordnotice">
-  Due to upgrading our authentication process, all users will have to reset their password before signing in. Follow the standard <%= link_to 'forgot password', new_user_password_path %> process to see this through. Thanks!
-</div>
-<% end %>
-<h2>Recently Created Maps <%= link_to "see all", maps_url%></h2>
 <div class="centeredProfile">
-<% @maps.each do |map| %>
-    <%= render map %>
-<% end %>
+  <div id="homeMap"></div>
 </div>
-<div class="clearfloat leaveSpace"></div>
+<div class="clearfloat"></div>
 <p class="contact">
-  Creative designs by <a target="_blank" href="http://gavinkeech.com">Gavin Keech</a>.
+  Status: INVITE-ONLY BETA <br>
+  <a href="/request">request invite</a> : <a href="http://blog.metamaps.cc">visit the blog</a>
 </p>
 </div>
 <div class="clearfloat"></div>
@@ -39,3 +32,158 @@
   Welcome
 </h1>
 </div>
+
+<div class="menuflag">
+  <div class="menuarrow"></div>
+  <span class="menutext">MENU!</span>
+</div>
+
+<script>
+var image1 = new Image(); 
+image1.src = '/assets/map.png';
+var image2 = new Image(); 
+image2.src = '/assets/person.png';
+var image3 = new Image(); 
+image3.src = '/assets/problem.png';
+var image4 = new Image(); 
+image4.src = '/assets/futuredev.png';
+var image5 = new Image(); 
+image5.src = '/assets/knowledge.png';
+var image6 = new Image(); 
+image6.src = '/assets/implication.png';
+var rgraph;
+
+$(window).load(function() {
+var json = {  
+    id: "x",  
+    name: "explore maps",
+    data: {
+      t: "map"
+    },
+    children: [
+    <% @maps.each_with_index do |map, index| %>
+      { id: <%= map.id %>,
+        name: "<%= map.name.truncate(20) %>",
+        data: {
+          t: <%= index + 1 %>
+        }
+      },
+    <% end %>
+    ]
+    };
+$jit.RGraph.Plot.NodeTypes.implement({
+	  'customNode': {  
+		  'render': function (node, canvas) {		  			  
+			  var pos = node.pos.getc(true),
+			  dim = node.getData('dim'),
+        type = node.data.t,
+			  ctx = canvas.getCtx();
+			  
+        console.log(type);
+        if (type == "map") {
+			    ctx.drawImage(image1, pos.x - dim, pos.y - dim, dim*2, dim*2);
+        } else if (type == 1) {
+			    ctx.drawImage(image2, pos.x - dim, pos.y - dim, dim*2, dim*2);
+        } else if (type == 2) {
+			    ctx.drawImage(image3, pos.x - dim, pos.y - dim, dim*2, dim*2);
+        } else if (type == 3) {
+			    ctx.drawImage(image4, pos.x - dim, pos.y - dim, dim*2, dim*2);
+        } else if (type == 4) {
+			    ctx.drawImage(image5, pos.x - dim, pos.y - dim, dim*2, dim*2);
+        } else if (type == 5) {
+			    ctx.drawImage(image6, pos.x - dim, pos.y - dim, dim*2, dim*2);
+        }
+		  },
+		  'contains': function(node, pos) {
+			var npos = node.pos.getc(true), 
+			dim = node.getData('dim');
+			return this.nodeHelper.circle.contains(npos, pos, dim);
+		  }
+	  }
+  });
+rgraph = new $jit.RGraph({  
+    //Where to append the visualization  
+    injectInto: 'homeMap',  
+    //Optional: create a background canvas that plots  
+    //concentric circles.  
+    background: {  
+      CanvasStyles: {
+        strokeStyle: '#36bbe8',
+        lineWidth: 1
+      }  
+    },  
+    //Add navigation capabilities:  
+    //zooming by scrolling and panning.  
+    Navigation: {  
+      enable: true,  
+      panning: true,  
+      zooming: 10  
+    },  
+    //Set Node and Edge styles.  
+    Node: {  
+        type: 'customNode',
+        dim: 20        
+    },  
+      
+    Edge: {  
+      color: '#000',  
+      lineWidth: 0.2  
+    }, 
+    levelDistance: 150,    
+  
+    onBeforeCompute: function(node){  
+        //Log.write("centering " + node.name + "...");  
+        //Add the relation list in the right column.  
+        //This list is taken from the data property of each JSON node.  
+        //$jit.id('inner-details').innerHTML = node.data.relation;  
+    },  
+      
+    //Add the name of the node in the correponding label  
+    //and a click handler to move the graph.  
+    //This method is called once, on label creation.  
+    onCreateLabel: function(domElement, node){  
+        domElement.innerHTML = node.name;  
+        domElement.onclick = function(){
+          if (node.data.t == "map") {
+            window.location = "/maps";
+          } else {          
+            window.location = "/maps/" + node.id;
+          }            
+        };
+    },  
+    //Change some label dom properties.  
+    //This method is called each time a label is plotted.  
+    onPlaceLabel: function(domElement, node){  
+        var style = domElement.style;  
+        style.display = '';  
+        style.cursor = 'pointer';  
+  
+        if (node._depth == 0) {  
+            style.fontSize = "1.2em";  
+            style.color = "#FFF";
+        } else if(node._depth == 1){  
+            style.fontSize = "1.6em";  
+            style.color = "#FFF";
+        }
+  
+        var left = parseInt(style.left);  
+        var w = domElement.offsetWidth;  
+        style.left = (left - w / 2 + 8) + 'px';
+        var top = parseInt(style.top);
+        style.top = (top + 10) + 'px';        
+    }  
+});  
+//load JSON data  
+rgraph.loadJSON(json);  
+//trigger small animation  
+rgraph.graph.eachNode(function(n) {  
+  var pos = n.getPos();  
+  pos.setc(-200, -200);  
+});  
+rgraph.compute('end');  
+rgraph.fx.animate({  
+  modes:['polar'],  
+  duration: 2000  
+}); 
+});
+</script>

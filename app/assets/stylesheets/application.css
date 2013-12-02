@@ -282,13 +282,6 @@ input[type="submit"] {
 
 /* --- top options --*/
 
-.passwordnotice {
-  background: #612127;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
 .notice.metamaps, .alert.metamaps {
 position: absolute;
 margin: 20px;
@@ -732,11 +725,48 @@ box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
   display:block;
 }
 
+
+.menuflag {
+position: absolute;
+left: 71px;
+bottom: 52px;
+width: 100px;
+height: 54px;
+}
+.menuflag .menuarrow {
+background: url('white-curved-arrow.png') no-repeat;
+background-size: contain;
+width: 40px;
+height: 40px;
+float: left;
+margin-top: 12px;
+margin-right: 4px;
+}
+.menuflag .menutext {
+float: left;
+font-size: 21px;
+}
+
 .home_bg {
-  background: url('home_bg.png') no-repeat;
   overflow-y:scroll;
   display:block;
   height:100%;
+}
+
+#homeMap {
+height: 350px;
+width: 510px;
+margin: 0 auto;
+transform: rotate(18deg);
+-ms-transform: rotate(18deg);
+-webkit-transform: rotate(18deg);
+}
+#homeMap-label div.node{
+transform: rotate(-18deg);
+-ms-transform: rotate(-18deg);
+-webkit-transform: rotate(-18deg);
+font-family: 'vinyl';
+text-transform: uppercase;
 }
 
 .home_content {
@@ -753,8 +783,9 @@ font-style: oblique;
 text-transform: uppercase;
 font-family: 'vinyl';
 font-size: 40px;
-margin: 20px;
+margin: 40px 20px 25px;
 text-align:center;
+background: url('home_bg2.png') no-repeat center -46px;
 }
 
 .contact {
