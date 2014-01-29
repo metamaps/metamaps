@@ -33,7 +33,7 @@ private
   def require_user
     unless authenticated?
       flash[:warning] = "You must be logged in."
-      store and redirect_to new_session_path
+      store_location and redirect_to new_user_session_path
       return false
     end
   end

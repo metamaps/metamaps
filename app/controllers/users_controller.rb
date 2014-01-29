@@ -2,10 +2,7 @@ class UsersController < ApplicationController
 
   before_filter :require_user, only: [:edit, :update]
     
-  respond_to :html, :json
-  
-  autocomplete :user, :name, :full => true
- 
+  respond_to :html, :json 
   
   # GET /user/edit
   def edit
@@ -24,7 +21,7 @@ class UsersController < ApplicationController
     
     @user.save
     
-    respond_with(@user, location: user_url(@user)) do |format|
+    respond_with(@user, location: session[:previous_url]) do |format|
     end
   end
 
