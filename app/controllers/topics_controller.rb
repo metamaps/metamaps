@@ -1,10 +1,24 @@
 class TopicsController < ApplicationController
+  include TopicsHelper
+
   before_filter :require_user, only: [:new, :create, :edit, :update, :removefrommap, :destroy]
     
   respond_to :html, :js, :json
   
-  autocomplete :topic, :name, :full => true, :extra_data => [:user_id], :display_value => :topic_autocomplete_method
+  #autocomplete :topic, :name, :full => true, :extra_data => [:user_id], :display_value => :topic_autocomplete_method
   
+  # GET /topics/autocomplete_topic
+  def autocomplete_topic
+    @current = current_user
+    term = params[:term]
+    if term && !term.empty?
+      t = Topic.where('LOWER("name") like ?', term.downcase + '%').
+        limit(10).order('"name"').visibleToUser(@current,nil)
+    else
+      t = []
+    end
+    render json: autocomplete_array_json(t)
+  end
   
   # GET topics
   # or GET /users/:user_id/topics

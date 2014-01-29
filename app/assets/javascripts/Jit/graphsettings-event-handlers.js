@@ -1,12 +1,11 @@
 function selectEdgeOnClickHandler(adj, e) {
   if (Mconsole.busy) return;
   
-  //editing overrides everything else
-  if (e.altKey) {
-    //in select-edit-delete-nodes-and-edges.js
-    editEdge(adj, e);
+  if (synapseWasDoubleClicked()) {
+    synapseDoubleClickHandler(adj, e);
     return;
   }
+
 
   var edgeIsSelected = MetamapsModel.selectedEdges.indexOf(adj);
   if (edgeIsSelected == -1) edgeIsSelected = false;
@@ -30,18 +29,48 @@ function selectEdgeOnClickHandler(adj, e) {
   Mconsole.plot();
 }//selectEdgeOnClickHandler
 
+function synapseDoubleClickHandler(adj, e) {
+  editEdge(adj, e);
+}
+
+/*
+ * Returns a boolean saying if the synapse was double clicked in our understanding of the word
+ */
+function synapseWasDoubleClicked() {
+   //grab the timestamp of the click 
+   var storedTime = MetamapsModel.lastSynapseClick;
+   var now = Date.now(); //not compatible with IE8 FYI 
+   MetamapsModel.lastSynapseClick = now;
+ 
+   if (now - storedTime < MetamapsModel.DOUBLE_CLICK_TOLERANCE) { 
+     return true;
+   } else {
+     return false;
+   }
+}//synapseWasDoubleClicked;
+
 function nodeDoubleClickHandler(node, e) {
-  keepFromCommons(node);
+  openNodeShowcard(node);
 }
 
 function enterKeyHandler() {
-  var selectedNodesCopy = MetamapsModel.selectedNodes.slice(0);
-  var len = selectedNodesCopy.length;
-  for (var i = 0; i < len; i += 1) { 
-    n = selectedNodesCopy[i]; 
-    keepFromCommons(n);
-  }//for
-  Mconsole.plot();
+  
+  // if the metacode spinner is open, create topic when enter is pressed
+  if ( $('.new_topic').css('display') != 'none' ) {
+    $('.new_topic').submit();
+  }
+  // if the metacode spinner is open, create topic when enter is pressed
+  else if ( $('.new_synapse').css('display') != 'none' ) {
+    $('.new_synapse').submit();
+  }
+  
+  //var selectedNodesCopy = MetamapsModel.selectedNodes.slice(0);
+  //var len = selectedNodesCopy.length;
+  //for (var i = 0; i < len; i += 1) { 
+  //  n = selectedNodesCopy[i]; 
+  //  keepFromCommons(n);
+  //}//for
+  //Mconsole.plot();
 }//enterKeyHandler
 
 function escKeyHandler() {
@@ -53,36 +82,16 @@ function escKeyHandler() {
  * Make a node "in the commons" (with a green circle) lose its
  * green circle so it stays on the console/map/...
  */
-function keepFromCommons(node) {
+function keepFromCommons(id) {
   if (userid == null) {
     return;
   }
 
-  //greenCircle being true denotes it's actually "in the commons" still
-  if (node.getData('greenCircle') == false) {
-    return;
-  }
-
-  //this line adds it to the console if you close seek
-  node.setData('greenCircle', false);
-
-  //this is just aesthetic
-  deselectNode(node);
-
-  //this adds the node to the map, if it's a map
-  if (window.mapid) {
-    $.post('/mappings',
-           {
-             topic: {id: node.id},
-             map: {id: window.mapid},
-             xloc: node.pos.x,
-             yloc: node.pos.y
-           },
-           function(data, textStatus, jqXHR) {
-             console.log(data);
-             node.setData('mappingid', data.id);
-           });
-  }
+  $('#topic_addSynapse').val("false");
+  $('#topic_x').val(0); 
+  $('#topic_y').val(0); 
+  $('#topic_grabTopic').val(id);
+	$('.new_topic').submit();
 }//doubleClickNodeHandler
 
 /*
@@ -143,14 +152,20 @@ function canvasDoubleClickHandler(canvasLoc,e) {
       $('#new_topic').css('left', e.clientX + "px"); 
       $('#new_topic').css('top', e.clientY + "px"); 
       $('#topic_x').val(canvasLoc.x); 
-      $('#topic_y').val(canvasLoc.y);
-      $('#topic_name').autocomplete('enable');      
+      $('#topic_y').val(canvasLoc.y);      
       $('#new_topic').fadeIn('fast'); 
       addMetacode(); 
       $('#topic_name').focus(); 
    } else { 
       $('#new_topic').fadeOut('fast'); 
       $('#new_synapse').fadeOut('fast'); 
+      // reset the draw synapse positions to false
+      MetamapsModel.synapseStartCoord = false;
+      MetamapsModel.synapseEndCoord = false;
+      // set all node dimensions back to normal
+       Mconsole.graph.eachNode(function (n) {
+          n.setData('dim', 25, 'current');
+       });
       tempInit = false; 
       tempNode = null; 
       tempNode2 = null; 
@@ -250,13 +265,25 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
            if (tempInit == false) {
               tempNode = node;
               tempInit = true;
+              // set the draw synapse start position
+              MetamapsModel.synapseStartCoord = {
+                x: node.pos.getc().x,
+                y: node.pos.getc().y
+              };
            }
            //
            temp = eventInfo.getNode();
            if (temp != false && temp.id != node.id) { // this means a Node has been returned
               tempNode2 = temp;
+              
+              // set the draw synapse end position
+              MetamapsModel.synapseEndCoord = {
+                x: temp.pos.getc().x,
+                y: temp.pos.getc().y
+              };
+              
               Mconsole.plot();
-              renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: temp.pos.getc().x, y: temp.pos.getc().y }, 13, false, Mconsole.canvas);
+              
               // before making the highlighted one bigger, make sure all the others are regular size
               Mconsole.graph.eachNode(function (n) {
                   n.setData('dim', 25, 'current');
@@ -279,8 +306,12 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
               $('#new_synapse').css('top',myY + "px");
               $('#topic_x').val(eventInfo.getPos().x);
               $('#topic_y').val(eventInfo.getPos().y);
+              // set the draw synapse end position
+              MetamapsModel.synapseEndCoord = {
+                x: eventInfo.getPos().x,
+                y: eventInfo.getPos().y
+              };
               Mconsole.plot();
-              renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: pos.x, y: pos.y }, 13, false, Mconsole.canvas);
               Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
            }
        }

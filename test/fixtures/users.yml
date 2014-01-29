@@ -3,39 +3,29 @@
 connor:
   name: Connor Turland
   email: connorturland@gmail.com
-  password_salt: i9vWzlSSPA3uIaer5jk
-  crypted_password: a5cfab00b857a0c0c82a007a5fe3a6599f60bbccb9f12eef5a3b919c22d77412b5fa2af3e18bb98d40f29d5bf28deca305320ca102adb48795d91450af3ba972
-  persistence_token: 
-  perishable_token: 90282eaaf66e43fcff6db3c169ca20ea877adfab86c9bfe4df5f29a138ae901226195b9628d31a6ece65162814c5a3fc49c62e37f64382439473f787bdcb58cc
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
 
 devin:
   name: Devin Howard
   email: devin@callysto.com
-  password_salt: i9vWzlSSPA3uIaer5jk
-  crypted_password: a5cfab00b857a0c0c82a007a5fe3a6599f60bbccb9f12eef5a3b919c22d77412b5fa2af3e18bb98d40f29d5bf28deca305320ca102adb48795d91450af3ba972
-  persistence_token: 
-  perishable_token: 90282eaaf66e43fcff6db3c169ca20ea877adfab86c9bfe4df5f29a138ae901226195b9628d31a6ece65162814c5a3fc49c62e37f64382439473f787bdcb58cc
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
 
 ishan:
   name: Ishan Shapiro
   email: ishanshapiro@gmail.com
-  password_salt: i9vWzlSSPA3uIaer5jk
-  crypted_password: a5cfab00b857a0c0c82a007a5fe3a6599f60bbccb9f12eef5a3b919c22d77412b5fa2af3e18bb98d40f29d5bf28deca305320ca102adb48795d91450af3ba972
-  persistence_token: 
-  perishable_token: 90282eaaf66e43fcff6db3c169ca20ea877adfab86c9bfe4df5f29a138ae901226195b9628d31a6ece65162814c5a3fc49c62e37f64382439473f787bdcb58cc
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
   
 robert:
   name: Robert Best
   email: chessscholar@gmail.com
-  password_salt: i9vWzlSSPA3uIaer5jk
-  crypted_password: a5cfab00b857a0c0c82a007a5fe3a6599f60bbccb9f12eef5a3b919c22d77412b5fa2af3e18bb98d40f29d5bf28deca305320ca102adb48795d91450af3ba972
-  persistence_token: 
-  perishable_token: 90282eaaf66e43fcff6db3c169ca20ea877adfab86c9bfe4df5f29a138ae901226195b9628d31a6ece65162814c5a3fc49c62e37f64382439473f787bdcb58cc
-
-naomi:
-  name: Naomi Hemsley
-  email: naomihemsley@gmail.com
-  password_salt: i9vWzlSSPA3uIaer5jk
-  crypted_password: a5cfab00b857a0c0c82a007a5fe3a6599f60bbccb9f12eef5a3b919c22d77412b5fa2af3e18bb98d40f29d5bf28deca305320ca102adb48795d91450af3ba972
-  persistence_token: 
-  perishable_token: 90282eaaf66e43fcff6db3c169ca20ea877adfab86c9bfe4df5f29a138ae901226195b9628d31a6ece65162814c5a3fc49c62e37f64382439473f787bdcb58cc
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
+  
+ben:
+  name: Ben Brownell
+  email: solaureum@gmail.com
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
+  
+marija:
+  name: Marija Coneva
+  email: marija.coneva@gmail.com
+  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW

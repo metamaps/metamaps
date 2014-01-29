@@ -1,0 +1,88 @@
+<%#
+  # @file
+  # templates for the upper right autocomplete results
+  #%>
+
+<div class="templates">
+
+<div class="topicTemplate">
+  <img class="icon" src="{{typeImageURL}}">
+  <span class="tip metacodeTip">{{type}}</span>
+  <div class="resultText">
+    <p class="resultTitle">{{value}}</p>
+    <p class="resultDesc">{{description}}</p>
+  </div>
+  <div class="autoOptions">
+    
+    <% if controller_name == 'maps' && action_name == 'show' && @map.authorize_to_edit(@current) %>
+    <button class="addToMap" onclick="keepFromCommons({{id}})"></button>
+    <span class="tip">add to map</span>
+    <% end %>
+    <a href="/topics/{{id}}" target="_blank" class="goTo">
+      <span class="tip">open in new tab</span>
+    </a>
+    <div class="mapCount">
+      <span class="tip">appears on maps</span>
+      {{mapCount}}
+    </div>
+    <div class="synapseCount">
+      <span class="tip"># of synapses</span>
+      {{synapseCount}}
+    </div>
+    <div class="topicOriginatorIcon">
+      <span class="tip topicOriginator">{{originator}}</span>
+    </div>
+    <div class="topicPermission {{permission}}">
+      <span class="tip">permission: {{permission}}</span>
+    </div>
+  </div>
+  <div class="clearfloat"></div>
+</div>
+
+<div class="mapTemplate">
+  <img class="icon" src="/assets/map.png">
+  <div class="resultText">
+    <p class="resultTitle">{{value}}</p>
+    <p class="resultDesc">{{description}}</p>
+  </div>
+  <div class="autoOptions">
+    <a href="/maps/{{id}}" target="_blank" class="goTo">
+      <span class="tip">open in new tab</span>
+    </a>
+    <div class="topicCount">
+      <span class="tip">has topics</span>
+      {{topicCount}}
+    </div>
+    <div class="synapseCount">
+      <span class="tip">has synapses</span>
+      {{synapseCount}}
+    </div>
+    <div class="mapContributorsIcon">
+      <span class="tip mapContributors">{{contributorList}}</span>
+      {{contributorCount}}
+    </div>
+    <div class="mapPermission {{permission}}">
+      <span class="tip">permission: {{permission}}</span>
+    </div>
+  </div>
+  <div class="clearfloat"></div>
+</div>
+
+<div class="mapperTemplate">
+  <img class="icon" width="28" height="28" src="/assets/MMCCicon_mapper.png">
+  <div class="resultText">
+    <p class="resultTitle">{{value}}</p>
+  </div>
+  <div class="autoOptions">
+    <a href="/maps/mappers/{{id}}" target="_blank" class="goTo">
+      <span class="tip">open in new tab</span>
+    </a>
+    <div class="mapCount">
+      <span class="tip"># of maps</span>
+      {{mapCount}}
+    </div>
+  </div>
+  <div class="clearfloat"></div>
+</div>
+
+</div>

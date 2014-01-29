@@ -31,7 +31,12 @@ MetamapsModel.edgeHoveringOver = false;
 MetamapsModel.boxStartCoordinates = false;
 MetamapsModel.boxEndCoordinates = false;
 
+//coordinates for drawing edge that's not created yet
+MetamapsModel.synapseStartCoord = false;
+MetamapsModel.synapseEndCoord = false;
+
 //double clicking of nodes or canvas
+MetamapsModel.lastSynapseClick = 0;
 MetamapsModel.lastNodeClick = 0;
 MetamapsModel.lastCanvasClick = 0;
 MetamapsModel.DOUBLE_CLICK_TOLERANCE = 300;

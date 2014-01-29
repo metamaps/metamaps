@@ -13,7 +13,6 @@ function graphSettings(type, embed) {
      //by scrolling and DnD
      Navigation: {
        enable: true,
-       type: 'HTML',
        //Enable panning events only if we're dragging the empty
        //canvas (and not a node).
        panning: 'avoid nodes',
@@ -39,8 +38,11 @@ function graphSettings(type, embed) {
     },
     //Native canvas text styling
     Label: {
-       type: 'HTML', //Native or HTML
+       type: 'Native', //Native or HTML
        size: 20,
+       family: 'LatoLight',
+       textBaseline: 'hanging',
+       color:'#000'
        //style: 'bold'
     },
     //Add Tips
@@ -52,7 +54,6 @@ function graphSettings(type, embed) {
     Events: {
       enable: true,
       enableForEdges: true,
-      type: 'HTML',
       onMouseMove: function(node, eventInfo, e) {
         onMouseMoveHandler(node, eventInfo, e);
       },
@@ -123,6 +124,17 @@ function graphSettings(type, embed) {
           }
           canvasDoubleClickHandler(eventInfo.getPos(), e);
         }//if
+      },
+      onRightClick: function (node, eventInfo, e) {
+        if (node && !node.nodeFrom) { 
+          // open right click menu
+        }
+        else if (node && node.nodeFrom) { // the variable 'node' is actually an edge/adjacency
+          // open right click menu
+        }
+        else {
+          // right click on open canvas, options here?
+        }
       }
     },
     //Number of iterations for the FD algorithm
@@ -131,13 +143,13 @@ function graphSettings(type, embed) {
     levelDistance: 200,
     // Add text to the labels. This method is only triggered
     // on label creation and only for DOM labels (not native canvas ones).
-    onCreateLabel: function (domElement, node) {
-      onCreateLabelHandler(type, domElement, node);
-    },
+    //onCreateLabel: function (domElement, node) {
+     // onCreateLabelHandler(type, domElement, node);
+    //},
     // Change node styles when DOM labels are placed or moved.
-    onPlaceLabel: function (domElement, node) {
-      onPlaceLabelHandler(domElement, node);
-    }
+    //onPlaceLabel: function (domElement, node) {
+    //  onPlaceLabelHandler(domElement, node);
+    //}
   };
 
   if (embed) {
@@ -191,7 +203,7 @@ function hideCards() {
 }
 
 // defining code to draw edges with arrows pointing in one direction
-var renderMidArrow = function(from, to, dim, swap, canvas){ 
+var renderMidArrow = function(from, to, dim, swap, canvas, placement, newSynapse){ 
         var ctx = canvas.getCtx(); 
         // invert edge direction 
         if (swap) { 
@@ -204,7 +216,10 @@ var renderMidArrow = function(from, to, dim, swap, canvas){
         // scale it 
         vect.$scale(dim / vect.norm()); 
         // compute the midpoint of the edge line 
-        var midPoint = new $jit.Complex((to.x + from.x) / 2, (to.y + from.y) / 2); 
+        var newX = (to.x - from.x) * placement + from.x;
+        var newY = (to.y - from.y) * placement + from.y;
+        var midPoint = new $jit.Complex(newX, newY); 
+        
         // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
         var arrowPoint = new $jit.Complex((vect.x / 0.7) + midPoint.x, (vect.y / 0.7) + midPoint.y);
         // compute the tail intersection point with the edge line 
@@ -213,44 +228,16 @@ var renderMidArrow = function(from, to, dim, swap, canvas){
         var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
         var v1 = intermediatePoint.add(normal); 
         var v2 = intermediatePoint.$add(normal.$scale(-1)); 
-
-        //ctx.strokeStyle = "#222222";
+        
+        if (newSynapse) {
+          ctx.strokeStyle = "#222222";
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = 0.4;
+        }
         ctx.beginPath(); 
         ctx.moveTo(from.x, from.y); 
         ctx.lineTo(to.x, to.y); 
         ctx.stroke(); 
-        ctx.beginPath(); 
-        ctx.moveTo(v1.x, v1.y); 
-        ctx.lineTo(arrowPoint.x, arrowPoint.y); 
-        ctx.lineTo(v2.x, v2.y); 
-        ctx.stroke(); 
-};
-// defining code to draw edges with arrows pointing in both directions
-var renderMidArrows = function(from, to, dim, swap, canvas){ 
-        var ctx = canvas.getCtx(); 
-        // invert edge direction 
-        if (swap) { 
-              var tmp = from; 
-              from = to; 
-              to = tmp; 
-        } 
-        // vect represents a line from tip to tail of the arrow 
-        var vect = new $jit.Complex(to.x - from.x, to.y - from.y); 
-        // scale it 
-        vect.$scale(dim / vect.norm()); 
-        // compute the midpoint of the edge line 
-        var midPoint = new $jit.Complex((to.x + from.x) / 2, (to.y + from.y) / 2); 
-        // move midpoint by half the "length" of the arrow so the arrow is centered on the midpoint 
-        var arrowPoint = new $jit.Complex((vect.x / 0.7) + midPoint.x, (vect.y / 0.7) + midPoint.y);
-        // compute the tail intersection point with the edge line 
-        var intermediatePoint = new $jit.Complex(arrowPoint.x - vect.x, 
-arrowPoint.y - vect.y); 
-        // vector perpendicular to vect 
-        var normal = new $jit.Complex(-vect.y / 2, vect.x / 2); 
-        var v1 = intermediatePoint.add(normal); 
-        var v2 = intermediatePoint.$add(normal.$scale(-1)); 
-
-        //ctx.strokeStyle = "#222222";
         ctx.beginPath(); 
         ctx.moveTo(v1.x, v1.y); 
         ctx.lineTo(arrowPoint.x, arrowPoint.y); 
@@ -309,13 +296,14 @@ var nodeSettings = {
       edgeHelper.line.render({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, canvas);
     }
     else if (directionCat == "both") {
-      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, true, canvas);
-      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, false, canvas);
+      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, true, canvas, 0.7);
+      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, false, canvas, 0.7);
     }
     else if (directionCat == "from-to") {
       var direction = adj.data.$direction;
       var inv = (direction && direction.length > 1 && direction[0] != adj.nodeFrom.id);
-      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, inv, canvas);
+      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, inv, canvas, 0.7);
+      renderMidArrow({ x: pos.x, y: pos.y }, { x: posChild.x, y: posChild.y }, 13, inv, canvas, 0.3);
     }
   }//renderEdgeArrow
 
@@ -549,7 +537,6 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     $('#topic_addSynapse').val("false");
     $('#synapse_topic1id').val(tempNode.id);
     $('#synapse_topic2id').val(tempNode2.id);
-    $('#synapse_desc').autocomplete('enable');
     $('#new_synapse').fadeIn('fast');
     $('#synapse_desc').focus();
     tempNode = null;

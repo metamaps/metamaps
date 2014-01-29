@@ -21,6 +21,17 @@ def mk_permission
     "pr"
   end
 end
+
+  #return an array of the contributors to the map
+  def contributors
+    contributors = []
+    
+    self.mappings.each do |m|
+      contributors.push(m.user) if !contributors.include?(m.user)
+    end
+    
+    return contributors
+  end
   
   
   ###### JSON ######

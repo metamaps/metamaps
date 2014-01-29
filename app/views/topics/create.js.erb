@@ -2,10 +2,8 @@
  * @file
  * This javascript is returned and executed when you create a new node.
  */
-$('#topic_name').autocomplete('disable');
-$('.ui-autocomplete.ui-widget').fadeOut('fast');
 $('#new_topic').fadeOut('fast');
-$('#topic_name').attr('value','');
+$('#topic_name').typeahead('setQuery','');
 $('#topic_grabTopic').attr('value','null');
 $('#topic_addSynapse').attr('value','false');
 
@@ -52,7 +50,6 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
   if ( '<%= @synapse %>' == "true" ) {
     $('#synapse_topic1id').val(tempNode.id);
     $('#synapse_topic2id').val(temp.id);
-    $('#synapse_desc').autocomplete('enable');
     $('#synapse_desc').val("");
     $('#new_synapse').fadeIn('fast');
     $('#synapse_desc').focus();
@@ -60,7 +57,10 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
       modes: ['node-property:dim'],  
       duration: 500,
       onComplete: function() {
-        renderMidArrow({ x: tempNode.pos.getc().x, y: tempNode.pos.getc().y }, { x: temp.pos.getc().x, y: temp.pos.getc().y }, 13, false, Mconsole.canvas);
+        setTimeout(function (){
+          temp.setData('dim', 25, 'current');
+          Mconsole.plot();
+        }, 3000);
         Mconsole.fx.plotNode(tempNode, Mconsole.canvas);
         Mconsole.fx.plotNode(temp, Mconsole.canvas);
         tempNode = null;
@@ -74,7 +74,10 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
         modes: ['node-property:dim'],  
         duration: 500,
         onComplete: function() {
-            selectNode(temp);
+            setTimeout(function (){
+              temp.setData('dim', 25, 'current');
+              Mconsole.plot();
+            }, 3000);
         }
       });
       
@@ -103,7 +106,10 @@ if (!$.isEmptyObject(Mconsole.graph.nodes)) {
         modes: ['node-property:dim'],  
         duration: 500,
         onComplete: function() {
-            selectNode(temp);
+            setTimeout(function (){
+              temp.setData('dim', 25, 'current');
+              Mconsole.plot();
+            }, 3000);
         }
       });
 }

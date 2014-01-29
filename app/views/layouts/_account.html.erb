@@ -1,0 +1,40 @@
+<%#
+  # @file
+  # The inner HTML of the account box that comes up in the bottom left
+  #%>
+
+<% if authenticated? %>
+  <% account = current_user %>
+  <h3 class="accountHeader">Hello <%= account.name.split[0...1][0] %>!</h3>
+  <ul>
+    <li class="accountIcon accountMaps"><%= link_to "My Maps", user_maps_url(user) %></li>
+    <li class="accountIcon accountSettings"><%= link_to "Settings", edit_user_url(account) %></li>
+    <li class="accountIcon accountInvite"><%= link_to "Share Invite", invite_path %></li>
+    <li class="accountIcon accountLogout"><%= link_to "Logout", "/sign_out", id: "Logout" %></li>
+  </ul>
+<% else %>
+  <h3 class="accountHeader">Sign In</h3>
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { class: "loginAnywhere" }) do |f| %>
+        <div>
+          <%= f.label :email %>
+          <%= f.email_field :email, :autofocus => true %>
+        </div>
+        <div>
+          <%= f.label :password %>
+          <%= f.password_field :password %>
+        </div>
+        <% if devise_mapping.rememberable? -%>
+        <div><%= f.check_box :remember_me %> <%= f.label :remember_me %><div class="clearfloat"></div></div>
+        <% end -%>
+        <div>
+          <%= f.submit "Sign in" %><br>
+          
+        </div>
+  <% end %>
+  <div class="links">
+    <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+      <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+    <% end -%>
+    <a href="/request">Request Invite</a>
+  </div>
+<% end %>

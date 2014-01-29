@@ -18,7 +18,7 @@ has_many :maps, :through => :mappings
   
   def relatives
      topics1 + topics2
-  end 
+  end
 
 belongs_to :metacode
 

@@ -1,7 +1,9 @@
+<h1 class="index">Sign Up</h1>
+
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
   
-  <h3>Sign up</h3>
+  <h3>Sign Up</h3>
 
   <div><%= f.label :name %>
   <%= f.text_field :name, :autofocus => true %></div>
@@ -20,7 +22,7 @@
 
   <div><%= f.submit "Sign up" %></div>
   
-  <%= render "devise/shared/links" %>
+  <div>Don't have an access code? <a href="/request">Request an Invite</a></div>
 <% end %>
 
 

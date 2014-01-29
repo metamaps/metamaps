@@ -11,7 +11,7 @@
       <img class="cloudcarousel" width="40" height="40" src="/assets/<%= metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>"/>
     <% end %>
   </div> 
-  <%= form.autocomplete_field :name, autocomplete_topic_name_topics_path, :placeholder => "What is the name of your topic?" %>
+  <%= form.text_field :name, :placeholder => "title..." %>
   <%= form.hidden_field :metacode, :value => "Action" %>
   <%= form.hidden_field :x, :value => 0 %>
   <%= form.hidden_field :y, :value => 0 %>

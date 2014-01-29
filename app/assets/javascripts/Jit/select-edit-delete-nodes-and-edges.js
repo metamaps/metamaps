@@ -230,7 +230,6 @@ function updateEdgeDisplay(edge, dir, dirCat) {
 }
 
 function best_in_place_perms(edge) {
-  console.log(edge);
   var output = 
   '<span class="best_in_place best_in_place_permission"                       \
         id="best_in_place_topic_$_id_$_permission"                            \

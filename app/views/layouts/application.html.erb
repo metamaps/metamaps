@@ -47,43 +47,50 @@
   <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
     <div class="wrapper" id="wrapper">
+      <div class="sidebarSearch">
+        <div class="sidebarSearchIcon"></div>
+        <input type="text" class="sidebarSearchField" placeholder="Search..."></input>
+        <div class="clearfloat"></div>
+        <%= render :partial => 'layouts/searchtemplates' %>
+      </div>
+      <div class="sidebarAccount">
+        <div class="sidebarAccountIcon"></div>
+        <div class="sidebarAccountBox <%= authenticated? ? 'loggedin' : 'loggedout' %>">
+          <%= render :partial => 'layouts/account' %>
+        </div>
+      </div>
 			<%= yield %>
 		</div>
 		
 		<div class="footer">
       <div class="logo">
-          <% unless authenticated? %>
-            <ul class="menu">
-              <li class="first"><a href="http://blog.metamaps.cc" target="_blank">About</a></li>
-              <li><a href="/request">Request Invite</a></li>
-              <li><%= link_to "Explore Maps", maps_url %></li>
-              <% if Topic.exists?(260) %>
-                <li><%= link_to "Tour", "/topics/260" %></li>
-              <% end %>
-              <li class="last"><%= link_to "Login", new_user_session_path, id: "Login" %></li>
-            </ul>
-          <% end %>
-          <% if authenticated? %>
-            <ul class="menu">
-                <li class="first"><a href="http://blog.metamaps.cc" target="_blank">About</a></li>
-                <li><%= link_to "Send Invite", invite_path %></li>
-                <li><%= link_to "Explore Maps", maps_url %></li>
-                <li><%= link_to "Create Map", new_map_url %></li>
-                <li><%= link_to "My Maps", user_maps_url(user) %></li>
-                <li><%= link_to "My Profile", user_url(user) %></li>
-                <li><%= link_to "Settings", edit_user_url(user) %></li>
-                <li><%= link_to "Console", console_url %></li>
-                <% unless Map.first(:conditions => [ "id = ?", 7]).nil? %>
-                  <li><%= link_to "Feedback", map_path(Map.find(7)) %></li>
-                <% end %>
-                <li class="last"><%= link_to "Logout", destroy_user_session_path, method: 'delete', id: "Login" %></li>
-            </ul>
-          <% end %>
-          <h1 id="mainTitle"><%= link_to "metamaps", root_url %></h1><div id="beta">beta</div>
+          <ul class="menu">
+                <li class="meta">
+                  <a href="#" class="button" target="_blank">about</a>
+                </li>
+                <li class="beta">
+                    <div class="inBeta">beta</div>
+                    <button onclick="BAROMETER.show();">feedback!</button>
+                </li>
+                <li class="tutorial"><a href="#" target="_blank">tutorial</a></li>
+                <li class="exploreMaps"><%= link_to "explore maps", maps_url %></li>
+          </ul>
+          <div id="mainTitle"><%= link_to "metamaps", root_url %></div><!--<div id="beta">beta</div>-->
       </div>
     </div>
     
   <% end %>
   <%= render :partial => 'layouts/ga' if Rails.env.production? %>
+  
+  <% if authenticated? %>
+    <style type='text/css'>@import url('http://getbarometer.s3.amazonaws.com/assets/barometer/css/barometer.css');</style>
+    <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
+    <script type="text/javascript" charset="utf-8">
+      BAROMETER.load('6FWffBApknnjr7p3Oxf2L');
+    </script>
+    <style>
+      
+    </style>
+  <% end %>
 </body>
 </html>

@@ -7040,6 +7040,19 @@ Graph.Plot = {
             !animating && opt.onAfterPlotLine(adj);
           }
         });
+        
+            //START METAMAPS CODE
+            if (MetamapsModel.synapseStartCoord) {
+                ctx.save();
+                var X = MetamapsModel.synapseStartCoord.x;
+                var Y = MetamapsModel.synapseStartCoord.y;
+                var X2 = MetamapsModel.synapseEndCoord.x;
+                var Y2 = MetamapsModel.synapseEndCoord.y;
+                renderMidArrow({ x: X, y: Y }, { x: X2, y: Y2 }, 13, false, canvas, 0.5, true);
+                ctx.restore();
+              }
+            //END METAMAPS CODE
+        
         ctx.save();
         if(node.drawn) {
           !animating && opt.onBeforePlotNode(node);
@@ -7213,8 +7226,32 @@ Graph.Label.Native = new Class({
 
       ctx.font = node.getLabelData('style') + ' ' + node.getLabelData('size') + 'px ' + node.getLabelData('family');
       ctx.textAlign = node.getLabelData('textAlign');
-      ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
+      // ORIGINAL CODE ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
       ctx.textBaseline = node.getLabelData('textBaseline');
+      
+      //START METAMAPS CODE
+      //render background
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            var margin = 5;
+            var height = 16 + margin; //font size + margin
+            var CURVE = height / 2; //offset for curvy corners
+            var width = ctx.measureText(node.name).width + 2 * margin - 2 * CURVE;
+            var labelX = (pos.x - width/2) - margin + CURVE/2;
+            var labelY = pos.y + node.getData("height"); // - height + margin;
+            ctx.fillRect(labelX, labelY, width, height);
+
+            //curvy corners woo - circles in place of last CURVE pixels of rect
+            ctx.beginPath();
+            ctx.arc(labelX, labelY + CURVE, CURVE, 0.5 * Math.PI, 1.5 * Math.PI, false);
+            ctx.closePath();
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(labelX + width, labelY + CURVE, CURVE, 1.5 * Math.PI, 0.5 * Math.PI, false);
+            ctx.closePath();
+            ctx.fill();
+       
+       ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
+       // END METAMAPS CODE
 
       this.renderLabel(canvas, node, controller);
     },
@@ -7235,7 +7272,10 @@ Graph.Label.Native = new Class({
     renderLabel: function(canvas, node, controller) {
       var ctx = canvas.getCtx();
       var pos = node.pos.getc(true);
-      ctx.fillText(node.name, pos.x, pos.y + node.getData("height") / 2);
+      //ctx.fillText(node.name, pos.x, pos.y + node.getData("height") / 2);
+      // START METAMAPS CODE
+      ctx.fillText(node.name, pos.x, pos.y + node.getData("height"));
+      // END METAMAPS CODE
     },
 
     hideLabel: $.empty,

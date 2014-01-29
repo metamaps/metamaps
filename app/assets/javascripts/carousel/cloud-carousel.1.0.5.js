@@ -7,6 +7,40 @@
 //
 // Please retain this copyright header in all versions of the software
 //////////////////////////////////////////////////////////////////////////////////
+var matched, browser;
+
+jQuery.uaMatch = function( ua ) {
+    ua = ua.toLowerCase();
+
+    var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+        /(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+        /(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+        /(msie) ([\w.]+)/.exec( ua ) ||
+        ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+        [];
+
+    return {
+        browser: match[ 1 ] || "",
+        version: match[ 2 ] || "0"
+    };
+};
+
+matched = jQuery.uaMatch( navigator.userAgent );
+browser = {};
+
+if ( matched.browser ) {
+    browser[ matched.browser ] = true;
+    browser.version = matched.version;
+}
+
+// Chrome is Webkit, but Webkit is also Safari.
+if ( browser.chrome ) {
+    browser.webkit = true;
+} else if ( browser.webkit ) {
+    browser.safari = true;
+}
+
+jQuery.browser = browser;
 
 (function($) {
 
@@ -206,6 +240,8 @@
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
             // METAMAPS CODE
 			$('#topic_metacode').val($(items[this.frontIndex].image).attr('title'));
+      $('img.cloudcarousel').css({"background":"none", "width":"","height":""});
+      $(items[this.frontIndex].image).css({"width":"45px","height":"45px"});
 			// NOT METAMAPS CODE
 			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
 			$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				
@@ -285,11 +321,11 @@
 				if (item.imageOK)
 				{
 					var	img = item.image;
-					w = img.width = item.orgWidth * scale;					
+					img.style.zIndex = "" + (scale * 100)>>0;	// >>0 = Math.foor(). Firefox doesn't like fractional decimals in z-index.
+          w = img.width = item.orgWidth * scale;					
 					h = img.height = item.orgHeight * scale;
 					img.style.left = x + px ;
 					img.style.top = y + px;
-					img.style.zIndex = "" + (scale * 100)>>0;	// >>0 = Math.foor(). Firefox doesn't like fractional decimals in z-index.
 					if (item.reflection !== null)
 					{																										
 						reflHeight = options.reflHeight * scale;						

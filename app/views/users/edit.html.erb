@@ -5,6 +5,8 @@
   #%>
   
 <% content_for :title, @user.name + "'s Settings | Metamaps" %>  
+
+<h1 class="index">Your Settings</h1>
   
 <%= formula_form_for @user, url: user_url do |form| %>
   <h3>Choose Active Metacodes</h3>

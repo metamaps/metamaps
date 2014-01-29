@@ -25,9 +25,13 @@
 </div>
 <div class="clearfloat"></div>
 
-<h1 class="index">
-  Viewing Topic: <%= @topic.name %>
-</h1>
+<div class="index">
+  <div class="openCheatsheet"></div>
+  <span><img width="35" height="35" src="/assets/<%= @topic.metacode.icon %>"></span>
+  <span class="mapName"><%= @topic.name %></span>
+  <span class="mapInfo"></span>
+  <div class="clearfloat"></div>
+</div>
 
 <div class="relatives" id="container">
   <div id="center-container">
@@ -40,7 +44,7 @@
 <script>
 	json = <%= @relatives %>;
 	console.log(json);
-	$(document).ready(function() {
+	$(window).load(function() {
 		initialize("centered");
 	});
 </script>

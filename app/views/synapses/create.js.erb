@@ -4,28 +4,32 @@
  */
 $('#new_synapse').fadeOut('fast');
 $('#synapse_desc').attr('value','');
-$('.ui-autocomplete.ui-widget').fadeOut('fast');
-$('#synapse_desc').autocomplete('disable');
 $('#synapse_topic1id').attr('value','0');
 $('#synapse_topic2id').attr('value','0');
+// reset the draw synapse positions to false
+MetamapsModel.synapseStartCoord = false;
+MetamapsModel.synapseEndCoord = false;
 
 var temp1, temp2, temp;	
 		 
 if ( Mconsole != null) {
     temp1 = Mconsole.graph.getNode(<%= @synapse.topic1.id %>);
     temp2 = Mconsole.graph.getNode(<%= @synapse.topic2.id %>);
+    temp2.setData('dim', 25, 'current');
     Mconsole.graph.addAdjacence(temp1, temp2, {});
     temp = Mconsole.graph.getAdjacence(temp1.id, temp2.id);
     temp.setDataset('start', {  
-      lineWidth: 0.4  
+      lineWidth: 0.4,
+      alpha: 0.1      
       });
     temp.setDataset('end', {
-      lineWidth: 2
+      lineWidth: 2,
+      alpha: 1
     });
     var d = new Array(<%= @synapse.node1_id.to_s() %>, <%= @synapse.node2_id.to_s() %>);
     temp.setDataset('current', {  
       desc: '<%= @synapse.desc %>',  
-      showDesc: false, //will be changed by selectEdge
+      showDesc: true, //will be changed by selectEdge
       category: '<%= @synapse.category %>',
       id: '<%= @synapse.id %>',
       userid: '<%= @synapse.user.id %>',
@@ -33,8 +37,16 @@ if ( Mconsole != null) {
       permission: '<%= @synapse.permission %>'
       });
     temp.data.$direction = d;
-    Mconsole.fx.plotLine(temp, Mconsole.canvas);
-    selectEdge(temp);
+    Mconsole.fx.animate({
+      modes: ['edge-property:lineWidth:alpha'],
+      duration: 100,
+      onComplete: function() {
+        setTimeout(function (){
+          temp.setData('showDesc', false);
+          Mconsole.plot();
+        }, 3000);
+      } 
+    });
 }
 else {
   json = <%= @synapse.selfplusnodes_as_json.html_safe %>
