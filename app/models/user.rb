@@ -7,9 +7,11 @@ has_many :synapses
 has_many :maps
 has_many :mappings
 
-before_create :generate_code
+  before_create :generate_code
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
+  
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me
 
   serialize :settings, UserPreference
 	
