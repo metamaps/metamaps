@@ -127,7 +127,7 @@ class TopicsController < ApplicationController
       @mapping.save
       
       #push add to map to realtime viewers of the map
-      @mapping.message 'create',@user.id
+      #@mapping.message 'create',@user.id
     end
     
     respond_to do |format|
@@ -170,11 +170,11 @@ class TopicsController < ApplicationController
       #push notify to anyone viewing this topic on a map in realtime (see mapping.rb to understand the 'message' action)
       # if the topic was private and is being switched to PU or CO it is the same as being created for other viewers
       if @permissionBefore == "private" and @permissionAfter != "private"
-        @topic.message 'create',@current.id
+        #@topic.message 'create',@current.id
       elsif @permissionBefore != "private" and @permissionAfter == "private"
-        @topic.message 'destroy',@current.id
+        #@topic.message 'destroy',@current.id
       else 
-        @topic.message 'update',@current.id
+        #@topic.message 'update',@current.id
       end
     end
 
@@ -198,14 +198,14 @@ class TopicsController < ApplicationController
     @mappings.each do |m|
     
       #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-      m.message 'destroy',@current.id
+      #m.message 'destroy',@current.id
       
       m.delete
     end
     
     
     #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-    @mapping.message 'destroy',@current.id
+    #@mapping.message 'destroy',@current.id
     
     @mapping.delete
       
@@ -226,7 +226,7 @@ class TopicsController < ApplicationController
       @synapses.each do |synapse| 
         synapse.mappings.each do |m|
           #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-          m.message 'destroy',@current.id
+          #m.message 'destroy',@current.id
         
           m.delete
         end
@@ -236,7 +236,7 @@ class TopicsController < ApplicationController
     
       @mappings.each do |mapping| 
         #push notify to anyone viewing a map with this topic in realtime (see mapping.rb to understand the 'message' action)
-        mapping.message 'destroy',@current.id
+        #mapping.message 'destroy',@current.id
       
         mapping.delete
       end
