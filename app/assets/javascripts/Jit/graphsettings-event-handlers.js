@@ -139,6 +139,80 @@ function selectNodeOnClickHandler(node, e) {
       Mconsole.plot();
 }//selectNodeOnClickHandler
 
+  function selectNodeOnRightClickHandler(node, e) {
+    // the 'node' variable is a JIT node, the one that was clicked on
+    // the 'e' variable is the click event
+    
+    
+    if (Mconsole.busy) return;
+    
+    // delete old right click menu
+    $('.rightclickmenu').remove();
+    // create new menu for clicked on node
+    var rightclickmenu = document.createElement("div");
+    rightclickmenu.className = "rightclickmenu";
+    
+    // add the proper options to the menu
+    var menustring = '<ul>';
+    
+    menustring += '<li class="rc-delete">Delete</li>';
+    if (mapid) menustring += '<li class="rc-remove">Remove from Map</li>';
+    menustring += '<li class="rc-hide">Hide until refresh</li>';
+    
+    menustring += '<li class="rc-popout">Open In New Tab</li>';
+    
+    menustring += '</ul>';
+    rightclickmenu.innerHTML = menustring;
+    
+    // position the menu where the click happened
+    $(rightclickmenu).css({
+      left: e.clientX,
+      top: e.clientY
+    });
+    //add the menu to the page
+    $('#wrapper').append(rightclickmenu);
+    
+    // attach events to clicks on the list items
+    
+    // delete the selected things from the database
+    $('.rc-delete').click(function() {
+      $('.rightclickmenu').remove();
+      var n = MetamapsModel.selectedNodes.length;
+      var e = MetamapsModel.selectedEdges.length;
+      var ntext = n == 1 ? "1 topic" : n + " topics";
+      var etext = e == 1 ? "1 synapse" : e + " synapses";
+      var text = "You have " + ntext + " and " + etext + " selected. ";
+      
+      var r=confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on."); 
+      if (r == true) {
+        deleteSelectedEdges();
+        deleteSelectedNodes();
+      }
+    });
+    
+    // remove the selected things from the map
+    $('.rc-remove').click(function() {
+      $('.rightclickmenu').remove();
+      hideSelectedEdges();
+      hideSelectedNodes();
+    });
+    
+    // hide selected nodes and synapses until refresh
+    $('.rc-hide').click(function() {
+      $('.rightclickmenu').remove();
+      hideSelectedEdges();
+      hideSelectedNodes();
+    });
+    
+    // open the entity in a new tab
+    $('.rc-popout').click(function() {
+      $('.rightclickmenu').remove();
+      var win=window.open('/topics/' + node.id, '_blank');
+      win.focus();
+    });
+      
+  } //selectNodeOnRightClickHandler
+
 function canvasDoubleClickHandler(canvasLoc,e) { 
    //grab the location and timestamp of the click 
    var storedTime = MetamapsModel.lastCanvasClick;

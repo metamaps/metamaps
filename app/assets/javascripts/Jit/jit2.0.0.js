@@ -7232,23 +7232,25 @@ Graph.Label.Native = new Class({
       //START METAMAPS CODE
       //render background
             ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            var margin = 5;
-            var height = 16 + margin; //font size + margin
-            var CURVE = height / 2; //offset for curvy corners
-            var width = ctx.measureText(node.name).width + 2 * margin - 2 * CURVE;
-            var labelX = (pos.x - width/2) - margin + CURVE/2;
-            var labelY = pos.y + node.getData("height"); // - height + margin;
-            ctx.fillRect(labelX, labelY, width, height);
-
-            //curvy corners woo - circles in place of last CURVE pixels of rect
-            ctx.beginPath();
-            ctx.arc(labelX, labelY + CURVE, CURVE, 0.5 * Math.PI, 1.5 * Math.PI, false);
-            ctx.closePath();
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(labelX + width, labelY + CURVE, CURVE, 1.5 * Math.PI, 0.5 * Math.PI, false);
-            ctx.closePath();
-            ctx.fill();
+            var height = 25; //font size + margin
+            var width = ctx.measureText(node.name).width + 8;
+            var x = pos.x - width/2;
+            var y = pos.y + node.getData("height") + 5;
+            var radius = 3;
+            
+              ctx.beginPath();
+              ctx.moveTo(x + radius, y);
+              ctx.lineTo(x + width - radius, y);
+              ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+              ctx.lineTo(x + width, y + height - radius);
+              ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+              ctx.lineTo(x + radius, y + height);
+              ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+              ctx.lineTo(x, y + radius);
+              ctx.quadraticCurveTo(x, y, x + radius, y);
+              ctx.closePath();
+              ctx.stroke();
+              ctx.fill();
        
        ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
        // END METAMAPS CODE
@@ -7274,7 +7276,7 @@ Graph.Label.Native = new Class({
       var pos = node.pos.getc(true);
       //ctx.fillText(node.name, pos.x, pos.y + node.getData("height") / 2);
       // START METAMAPS CODE
-      ctx.fillText(node.name, pos.x, pos.y + node.getData("height"));
+      ctx.fillText(node.name, pos.x, pos.y + node.getData("height") + 5);
       // END METAMAPS CODE
     },
 

@@ -2,21 +2,32 @@
  * @file
  * Javascript run on creation of a new map
  */
+
+ 
 $('#map_name').val('');
 $('#map_desc').val('');
 $('#map_permission').val('commons');
-$('#map_topicsToMap').val('0');
 
-var tempForm = $('#new_map').html();
+<% if @forked %>
+  $('#map_topicsToMap').val('0');
+  $('#map_synapsesToMap').val('0');
+  
+  var form = $('#fork_map');
+<% else %>
+  var form = $('#new_map');
+<% end %>
+
+
+var tempForm = form.html();
 if (mapid == null) {
-  $('#new_map').html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='javascript:closeIt(); event.preventDefault();'>Stay on the Console?</a>");
+  form.html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='javascript:closeIt(); event.preventDefault();'>Stay on this page?</a>");
 }
 else if (mapid != null) {
-  $('#new_map').html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='javascript:closeIt(); event.preventDefault();'>Stay on this map?</a>");
+  form.html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='javascript:closeIt(); event.preventDefault();'>Stay on this map?</a>");
 }
 
 function closeIt() {
-  $('#new_map').fadeOut('fast', function(){
-    $('#new_map').html(tempForm);
+  form.fadeOut('fast', function(){
+    form.html(tempForm);
   }); 
 }

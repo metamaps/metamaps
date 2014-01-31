@@ -91,7 +91,10 @@ class MapsController < ApplicationController
     @map.permission = params[:map][:permission]
     @map.user = @user
     @map.arranged = false    
-    @map.save    
+    @map.save   
+
+    #this variable specifies to the js file whether it's a brand new map or a forked one
+    @forked = false    
 	  
     if params[:map][:topicsToMap]
       @all = params[:map][:topicsToMap]
@@ -123,14 +126,13 @@ class MapsController < ApplicationController
 
       @map.arranged = true
       @map.save
-      respond_to do |format|
-        format.js { respond_with(@map) }
-      end
-    else
-      respond_to do |format|
-        format.html { respond_with(@user, location: map_path(@map)) }
-      end
-    end	
+      
+      @forked = true
+    end
+    
+    respond_to do |format|
+      format.js { respond_with(@map, @forked) }
+    end
   end
   
   # GET maps/:id/edit

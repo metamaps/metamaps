@@ -6,22 +6,26 @@
   
 <% content_for :title, @map.name + " | Metamaps" %>
 
-<!-- <div class="headertop">
-    <div class="tab"></div>
-    <button class="hidelabels" onclick="hideLabels();">Hide Labels</button>
-    <button onclick="if (!goRealtime) { this.innerHTML = 'Stop Realtime'; } else if (goRealtime) { this.innerHTML = 'Start Realtime'; } goRealtime = !goRealtime;">Start Realtime</button>
-    <% if authenticated? %>
-      <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
-			  <%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
-				  <%= form.hidden_field "coordinates", :value => "" %>
-				  <%= form.submit "Save Layout", class: "saveLayout", id: "saveLayout" %>
-			  <% end %>
-		  <% end %>
-      <button onclick="saveToMap();">Save to New Map</button>
-    <% end %>
-    <button onclick='clearCanvas();'>Clear Canvas</button>
+<% if authenticated? %>
+
+<div class="sidebarCollaborate">
+  <div class="sidebarCollaborateIcon"></div>
+  <div class="sidebarCollaborateBox">
+    
+  </div>
 </div>
-<div class="clearfloat"></div> -->
+
+<div class="sidebarWand">
+  <div class="sidebarWandIcon"></div>
+  <div class="sidebarWandBox">
+    <ul>
+      <li class="wandIcon wandSaveLayout">Save Layout</li>
+      <li class="wandIcon wandForkMap">Save To New Map</li>
+      <li class="wandIcon wandFilter">Filter By Metacode</li>
+    </ul>
+  </div>
+</div>
+<% end %>
 
 <div class="index">
   <div class="openCheatsheet"></div>
@@ -42,10 +46,70 @@
 <% if authenticated? %>
   <%= render :partial => 'newtopic' %>
   <%= render :partial => 'newsynapse' %>
-  <%= render :partial => 'maps/new' %>
+  <%= render :partial => 'maps/fork' %>
+  
+  <% # for saving layouts %>
+  <% if @map.permission == "commons" || @map.user == user %>
+	  <%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
+	    <%= form.hidden_field "coordinates", :value => "" %>
+	  <% end %>
+  <% end %>
 <% end %>
   
 <script>
+  $(document).ready(function() {
+    function bindWandHover() {
+      
+      var wandIsOpen = false
+      
+      // controls the sliding hover of the bottom left menu
+      var sliding1 = false; 
+      var lT;
+      
+      var closeWand = function() {
+        lT = setTimeout(function() { 
+            if (! sliding1) { 
+              sliding1 = true;
+              $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.7)');
+              $('.sidebarWandBox').fadeOut(200, function() {
+                sliding1 = false;
+                wandIsOpen = false; 
+              });
+            } 
+          },300); 
+      }
+      
+      var openWand = function() {
+        clearTimeout(lT);
+        if (! sliding1) { 
+            sliding1 = true;
+            $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.9)');
+            $('.sidebarWandBox').fadeIn(200, function() {
+                 sliding1 = false;
+                 wandIsOpen = true;
+            });
+        }
+      }
+        // bind the hover events
+        $(".sidebarWand").hover(openWand, closeWand);
+        
+        // attach events for clicking on wand actions
+        $('li.wandSaveLayout').click(function() {
+          saveLayoutAll();
+        });
+        $('li.wandForkMap').click(function() {
+          saveToMap();
+          closeWand();
+        });
+        $('li.wandFilter').click(function() {
+          return;
+        });
+        
+   } // end bindAccountHover
+   bindWandHover();
+  });
+  
+  
   var dragged = 0;
   mapid = <%= @map.id %>;
   <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>

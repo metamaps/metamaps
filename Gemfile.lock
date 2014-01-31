@@ -134,12 +134,12 @@ DEPENDENCIES
   devise
   formtastic
   formula
-  jbuilder
+  jbuilder (= 0.8.2)
   jquery-rails (= 2.1.2)
   json
   pg
   rails (= 3.2.11)
   rails3-jquery-autocomplete
   redis
-  sass-rails (= 3.2.3)
+  sass-rails
   uglifier (>= 1.0.3)

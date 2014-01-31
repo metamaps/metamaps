@@ -14,7 +14,7 @@
   </div>
   <div class="autoOptions">
     
-    <% if controller_name == 'maps' && action_name == 'show' && @map.authorize_to_edit(@current) %>
+    <% if controller_name == 'maps' && action_name == 'show' && authenticated? && @map.authorize_to_edit(@current) %>
     <button class="addToMap" onclick="keepFromCommons({{id}})"></button>
     <span class="tip">add to map</span>
     <% end %>

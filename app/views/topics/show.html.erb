@@ -16,14 +16,17 @@
 
 <% content_for :title, @topic.name + " | Metamaps" %>  
   
-<div class="headertop">
-  <div class="tab"></div>
-  <button class="hidelabels" onclick="hideLabels();">Hide Labels</button>
-  <% if authenticated? %>
-    <button onclick="saveToMap();">Save to Map</button>
-  <% end %>
+<% if authenticated? %>
+<div class="sidebarWand topicView">
+  <div class="sidebarWandIcon"></div>
+  <div class="sidebarWandBox">
+    <ul>
+      <li class="wandIcon wandForkMap">Save As Map</li>
+      <li class="wandIcon wandFilter">Filter By Metacode</li>
+    </ul>
+  </div>
 </div>
-<div class="clearfloat"></div>
+<% end %>
 
 <div class="index">
   <div class="openCheatsheet"></div>
@@ -42,8 +45,57 @@
 <div class="clearfloat"></div>
 
 <script>
-	json = <%= @relatives %>;
-	console.log(json);
+	$(document).ready(function() {
+    function bindWandHover() {
+      
+      var wandIsOpen = false
+      
+      // controls the sliding hover of the bottom left menu
+      var sliding1 = false; 
+      var lT;
+      
+      var closeWand = function() {
+        lT = setTimeout(function() { 
+            if (! sliding1) { 
+              sliding1 = true;
+              $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.7)');
+              $('.sidebarWandBox').fadeOut(200, function() {
+                sliding1 = false;
+                wandIsOpen = false; 
+              });
+            } 
+          },300); 
+      }
+      
+      var openWand = function() {
+        clearTimeout(lT);
+        if (! sliding1) { 
+            sliding1 = true;
+            $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.9)');
+            $('.sidebarWandBox').fadeIn(200, function() {
+                 sliding1 = false;
+                 wandIsOpen = true;
+            });
+        }
+      }
+        // bind the hover events
+        $(".sidebarWand").hover(openWand, closeWand);
+        
+        // attach events for clicking on wand actions
+       $('li.wandForkMap').click(function() {
+          saveToMap();
+          closeWand();
+        });
+        $('li.wandFilter').click(function() {
+          return;
+        });
+        
+   } // end bindAccountHover
+   bindWandHover();
+  });
+  
+  
+  json = <%= @relatives %>;
 	$(window).load(function() {
 		initialize("centered");
 	});
@@ -52,6 +104,6 @@
 <% if authenticated? %>
   <%= render :partial => 'topics/new' %>
   <%= render :partial => 'synapses/new' %>
-  <%= render :partial => 'maps/new' %>
+  <%= render :partial => 'maps/fork' %>
 <% end %>
 

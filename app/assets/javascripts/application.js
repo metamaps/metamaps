@@ -24,14 +24,209 @@ var viewMode = "list";
 var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode, mouseIsDown = false;
 
  $(document).ready(function() {
- 
-  var menuIsOpen = false, searchIsOpen = false, accountIsOpen = false;
- 
+  
+  function bindMainMenuHover() {
+      
+      var menuIsOpen = false
+      
+      // controls the sliding hover of the bottom left menu
+      var sliding1 = false; 
+      var lT;
+      
+      var closeMenu = function() {
+        lT = setTimeout(function() { 
+            if (! sliding1) { 
+              sliding1 = true; 
+              // $('.footer .menu').animate({
+                // height: '0px'
+              // }, 300, function() {
+                // sliding1 = false;
+                // menuIsOpen = false;
+              // });
+              $('.footer').css('border-top-right-radius','5px');
+              $('.logo').animate({
+                'background-position-x':'-10px'
+              }, 200);
+              $('.footer .menu').fadeOut(200, function() {
+                sliding1 = false;
+                menuIsOpen = false;
+              });
+            } 
+          },500); 
+      }
+      
+      var openMenu = function() {
+        clearTimeout(lT);
+        if (! sliding1) { 
+          sliding1 = true;
+                    
+            // $('.footer .menu').animate({
+            // height: listLength + 'px'
+            // }, 300, function() {
+            // sliding1 = false;
+            // });
+            $('.footer').css('border-top-right-radius','0');
+            $('.logo').animate({
+                'background-position-x':'-7px'
+            }, 200);
+            $('.footer .menu').fadeIn(200, function() {
+             sliding1 = false;
+            });
+        }
+      }
+        // bind the hover events
+        $(".logo").hover(openMenu, closeMenu);
+        
+        // when on touch screen, make touching on the logo do what hovering does on desktop
+        $("#mainTitle a").bind('touchend', function(evt) {
+          if (!menuIsOpen) {
+              openMenu();
+              evt.preventDefault(); 
+              evt.stopPropagation(); 
+          }
+        }); 
+   }
+   
+   function bindSearchHover() {
+      
+      var searchIsOpen = false
+      
+      // controls the sliding hover of the search
+      var sliding1 = false; 
+      var lT;
+      
+      var openSearch = function() {
+        clearTimeout(lT);
+        if (!sliding1 && !searchIsOpen) {
+          hideCards();
+          sliding1 = true;
+          $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
+              width: '200px'
+             }, 200, function() {
+               $('.sidebarSearchField, .sidebarSearch .tt-hint').css({padding:'5px 10px', width:'180px'});
+               $('.sidebarSearchField').focus();
+               sliding1 = false
+               searchIsOpen = true;
+          });
+        }
+      }
+      var closeSearch = function(closeAfter) {
+        lT = setTimeout(function() { 
+            if (!sliding1 && searchIsOpen) { 
+              sliding1 = true;
+              $('.sidebarSearchField, .sidebarSearch .tt-hint').css({padding:'5px 0', width:'200px'});
+              $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
+                  width: '0'
+                }, 200, function() {
+                $('.sidebarSearchField').typeahead('setQuery','');
+                sliding1 = false;
+                searchIsOpen = false; 
+              });
+            } 
+          },closeAfter);
+      }
+
+      // bind the hover events
+      $(".sidebarSearch").hover(function(){ openSearch() }, function() { closeSearch(800) });
+      
+      $('.sidebarSearch').click(function(e) {
+        e.stopPropagation();
+      });
+      $('body').click(function(e) {
+        closeSearch(0);
+      });
+      
+      // if the search is closed and user hits SHIFT+S
+      $('body').bind('keyup', function(e) {
+        switch(e.which) {
+          case 83:
+            if (e.shiftKey && !searchIsOpen) {
+              openSearch();
+            }
+            break;
+          default: break; //console.log(e.which);
+        }
+      });
+        
+      // initialize the search box autocomplete results
+      $('.sidebarSearchField').typeahead([
+             {
+                name: 'topics',
+                template: $('.topicTemplate').html(),
+                remote: {
+                    url: '/search/topics?term=%QUERY'
+                },
+                engine: Hogan,
+                header: '<h3 class="search-header">Topics</h3>'
+              },
+              {
+                name: 'maps',
+                template: $('.mapTemplate').html(),
+                remote: {
+                    url: '/search/maps?term=%QUERY'
+                },
+                engine: Hogan,
+                header: '<h3 class="search-header">Maps</h3>'
+              },
+              {
+                name: 'mappers',
+                template: $('.mapperTemplate').html(),
+                remote: {
+                    url: '/search/mappers?term=%QUERY'
+                },
+                engine: Hogan,
+                header: '<h3 class="search-header">Mappers</h3>'
+              }
+      ]);
+   }  // end bindSearchHover
+   
+   function bindAccountHover() {
+      
+      var accountIsOpen = false
+      
+      // controls the sliding hover of the bottom left menu
+      var sliding1 = false; 
+      var lT;
+      
+      var closeAccount = function() {
+        lT = setTimeout(function() { 
+            if (! sliding1) { 
+              sliding1 = true;
+              $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.7)');
+              $('.sidebarAccountBox').fadeOut(200, function() {
+                sliding1 = false;
+                accountIsOpen = false; 
+              });
+            } 
+          },300); 
+      }
+      
+      var openAccount = function() {
+        clearTimeout(lT);
+        if (! sliding1) { 
+            sliding1 = true;
+            $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.9)');
+            $('.sidebarAccountBox').fadeIn(200, function() {
+                 sliding1 = false;
+                 accountIsOpen = true;
+            });
+        }
+      }
+        // bind the hover events
+        $(".sidebarAccount").hover(openAccount, closeAccount);
+   } // end bindAccountHover
+  
+  // bind hover events  
+  bindMainMenuHover();
+  bindSearchHover();
+  bindAccountHover();
+  
+  // disable right click events on the new topic and new synapse input fields
   $('#new_topic, #new_synapse').bind('contextmenu', function(e){
 		return false;
 	});
-	
-	/// this is for the topic creation autocomplete field
+  
+  // initialize the autocomplete results for the metacode spinner
   $('#topic_name').typeahead([
          {
             name: 'topic_autocomplete',
@@ -42,6 +237,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
             engine: Hogan
           }
   ]);
+  // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
   $('#topic_name').bind('typeahead:selected', function (event, datum, dataset) {
         $('#topic_grabTopic').val(datum.id);
 		    $('.new_topic').submit();
@@ -49,179 +245,16 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
         event.stopPropagation();
   });
 	
+  // when either form submits, don't leave the page
 	$('.new_topic, .new_synapse').bind('submit', function(event, data){
       event.preventDefault();
   });
     
-  // this is for the search box
-  $('.sidebarSearchField').typeahead([
-         {
-            name: 'topics',
-            template: $('.topicTemplate').html(),
-            remote: {
-                url: '/search/topics?term=%QUERY'
-            },
-            engine: Hogan,
-            header: '<h3 class="search-header">Topics</h3>'
-          },
-          {
-            name: 'maps',
-            template: $('.mapTemplate').html(),
-            remote: {
-                url: '/search/maps?term=%QUERY'
-            },
-            engine: Hogan,
-            header: '<h3 class="search-header">Maps</h3>'
-          },
-          {
-            name: 'mappers',
-            template: $('.mapperTemplate').html(),
-            remote: {
-                url: '/search/mappers?term=%QUERY'
-            },
-            engine: Hogan,
-            header: '<h3 class="search-header">Mappers</h3>'
-          }
-  ]);
   
+  $(".scroll").mCustomScrollbar();
   
-	
-	$(".scroll").mCustomScrollbar();
-  
-  $('.headertop').draggable();
-  var positionLeft = $(window).width() - $('.headertop').width() - 50;
-  $('.headertop').css('left', positionLeft + 'px');
   $('.notice.metamaps').delay(10000).fadeOut('fast');
   $('.alert.metamaps').delay(10000).fadeOut('fast');
-	
-	//$('.nodemargin').css('padding-top',$('.focus').css('height'));	
-	
-	// controls the sliding hover of the menus at the top
-  var sliding1 = false; 
-	var lT;
-  
-  var closeMenu = function() {
-    lT = setTimeout(function() { 
-			  if (! sliding1) { 
-				  sliding1 = true; 
-				  // $('.footer .menu').animate({
-					  // height: '0px'
-				  // }, 300, function() {
-					  // sliding1 = false;
-            // menuIsOpen = false;
-				  // });
-          $('.footer').css('border-top-right-radius','5px');
-          $('.logo').animate({
-            'background-position-x':'-10px'
-          }, 300);
-          $('.footer .menu').fadeOut(300, function() {
-					  sliding1 = false;
-            menuIsOpen = false;
-				  });
-			  } 
-		  },800); 
-  }
-  
-  var openMenu = function() {
-    //closeAccount();
-    //closeSearch();
-    $('.menuflag').hide();
-    clearTimeout(lT);
-    if (! sliding1) { 
-      sliding1 = true;
-                
-        // $('.footer .menu').animate({
-        // height: listLength + 'px'
-        // }, 300, function() {
-        // sliding1 = false;
-        // });
-        $('.footer').css('border-top-right-radius','0');
-        $('.logo').animate({
-            'background-position-x':'-7px'
-        }, 300);
-        $('.footer .menu').fadeIn(300, function() {
-         sliding1 = false;
-        });
-    }
-  }
-    // bind the hover events
-	  $(".logo").hover(openMenu, closeMenu);
-    
-    // when on touch screen, make touching on the logo do what hovering does on desktop
-    $("#mainTitle a").bind('touchend', function(evt) {
-      if (!menuIsOpen) {
-          openMenu();
-          evt.preventDefault(); 
-          evt.stopPropagation(); 
-      }
-    });   
-
-    
-  // start account section
-  $('.sidebarAccountIcon').click(function(e) {
-    if (!accountIsOpen) openAccount();
-    else if (accountIsOpen) closeAccount();
-    e.stopPropagation();
-  });
-  $('.sidebarAccountBox').click(function(e) {
-    e.stopPropagation();
-  });
-  
-  function openAccount() {
-    //closeMenu();
-    //closeSearch();
-    if (!accountIsOpen) {
-    $('.sidebarAccountBox').fadeIn(300, function() {
-         //$('.sidebarSearchField').css({padding:'5px 10px', width:'180px'}).focus();
-         accountIsOpen = true;
-    });
-    }
-  }
-  function closeAccount() {
-    if (accountIsOpen) {
-    $('.sidebarAccountBox').fadeOut(300, function() {
-      accountIsOpen = false; 
-    });
-    }
-  }
-  // end account section
-  
-  // start search section
-  $('.sidebarSearchIcon').click(function(e) {
-    if (!searchIsOpen) openSearch();
-    else if (searchIsOpen) closeSearch();
-    e.stopPropagation();
-  });
-  $('.sidebarSearch .twitter-typeahead').click(function(e) {
-    e.stopPropagation();
-  });
-  
-  function openSearch() {
-    hideCards();
-    $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
-        width: '200px'
-       }, 300, function() {
-         $('.sidebarSearchField, .sidebarSearch .tt-hint').css({padding:'5px 10px', width:'180px'});
-         $('.sidebarSearchField').focus();
-         searchIsOpen = true;
-    });
-  }
-  function closeSearch() {
-    if (searchIsOpen) {
-    $('.sidebarSearchField, .sidebarSearch .tt-hint').css({padding:'5px 0', width:'200px'});
-    $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
-        width: '0'
-      }, 300, function() {
-      searchIsOpen = false; 
-    });
-    }
-  }
-  // end search section
-  
-  $('body').click(function() {
-    closeSearch();
-    closeAccount();
-  });
   
   addHoverForSettings();
   
@@ -240,12 +273,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     var link = $(this).html();
     $(this).parents('.CardOnGraph').find('.go-link').attr('href', link);
   });
-    
-	// this is to save the layout of maps when you're on a map page
-	$("#saveLayout").click(function(event) {
-	  event.preventDefault();
-	  saveLayoutAll();
-	});
+  
+  $('.addMap').click(function(event) {
+    createNewMap();
+  });
   
   // bind keyboard handlers
   $('body').bind('keyup', function(e) {
@@ -313,6 +344,7 @@ function addHoverForSettings() {
 
 // this is to save the layout of a map
 function saveLayoutAll() {
+  $('.wandSaveLayout').html('Saving...');
   var coor = "";
   if (gType == "arranged" || gType == "chaotic") {
     Mconsole.graph.eachNode(function(n) {
@@ -330,8 +362,8 @@ function saveLayout(id) {
   $('#map_coordinates').val(n.getData("mappingid") + '/' + n.pos.x + '/' + n.pos.y);
   $('#saveMapLayout').submit();
   dragged = 0;
-  $('#saveLayout').attr('value','Saved!');
-  setTimeout(function(){$('#saveLayout').attr('value','Save Layout')},1500);
+  $('.wandSaveLayout').html('Saved!');
+  setTimeout(function(){$('.wandSaveLayout').html('Save Layout')},1500);
 }
 
 // this is to save your console to a map
@@ -368,6 +400,10 @@ function saveToMap() {
 
   $('#map_topicsToMap').val(nodes_data);
   $('#map_synapsesToMap').val(synapses_data);
+  $('#fork_map').fadeIn('fast');
+}
+
+function createNewMap() {
   $('#new_map').fadeIn('fast');
 }
 

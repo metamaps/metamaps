@@ -149,6 +149,10 @@ box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
 #barometer_tab {
   display:none;
 }
+
+#saveMapLayout {
+  display:none;
+}
  
 #error_explanation {
   background: #612127;
@@ -429,13 +433,16 @@ box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
   position:absolute;
   top:0;
   left:-45px;
-  background: rgba(0,0,0,0.7) url('MMCCicon_help.png') no-repeat center center;
+  background: rgba(0,0,0,0.3) url('MMCCicon_help.png') no-repeat center center;
   background-size: 32px 32px;
   border:1px solid #000;
   border-radius:5px;
   height:36px;
   width:36px;
   cursor:pointer;
+}
+.wrapper div.index .openCheatsheet:hover {
+  background-color: rgba(0,0,0,0.5);
 }
 .wrapper div.index span {
   float:left;
@@ -480,7 +487,7 @@ box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 .sidebarAccount {
 position:absolute;
 top:5px;
-right:5px;
+right:0;
 z-index:200;
 width: 35px;
 height:35px;
@@ -490,7 +497,7 @@ height:35px;
 position:absolute;
 width: 35px;
 height: 35px;
-background: #69a3a4 url('MMCCicon_mapper.png') no-repeat center center;
+background: rgba(0,0,0,0.7) url('MMCCicon_mapper.png') no-repeat center center;
 background-size: 28px 28px;
 cursor:pointer;
 }
@@ -498,8 +505,8 @@ cursor:pointer;
   position:absolute;
   display:none;
   height:auto;
-  background: rgba(0,0,0,0.7);
-  top: 36px;
+  background: rgba(0,0,0,0.9);
+  top: 35px;
   right:0;
   padding: 10px;
   border: 1px solid black;
@@ -522,12 +529,15 @@ cursor:pointer;
  list-style:none;
 }
 .sidebarAccountBox li.accountIcon {
-padding: 6px 0 6px 25px;
+padding: 0;
 background-size: 18px 18px;
 background-repeat: no-repeat;
 background-position: 0px 6px;
 font-size: 18px;
 line-height: 20px;
+}
+li.accountIcon:hover {
+background-position: 4px 6px;
 }
 li.accountMaps {
   background-image: url('MMCCicon_map.png');
@@ -543,6 +553,7 @@ li.accountLogout {
 }
 li.accountIcon a {
   display:block;
+  padding: 6px 0 6px 25px;
 }
 
 .sidebarAccountBox a {
@@ -584,12 +595,115 @@ text-align: start;
   margin-top:5px;
 }
 
+/* collaborate */
+
+.sidebarCollaborate {
+position:absolute;
+top:5px;
+right:35px;
+z-index:200;
+width: 35px;
+height:35px;
+border-right:1px solid black;
+}
+
+.sidebarCollaborateIcon {
+position:absolute;
+width: 35px;
+height: 35px;
+background: rgba(0,0,0,0.7) url('MMCCicon_realtime_junto.png') no-repeat -3px -1px;
+background-size: 40px 40px;
+cursor:pointer;
+}
+.sidebarCollaborateBox {
+  position:absolute;
+  display:none;
+  height:auto;
+  width:auto;
+  background: rgba(0,0,0,0.9);
+  top: 36px;
+  right:0;
+  padding: 10px;
+  border: 1px solid black;
+  min-width:120px;
+  font-family: 'LatoLight', helvetica, sans-serif;
+}
+
+/* end collaborate */
+
+/* wand */
+
+.sidebarWand {
+position:absolute;
+top:5px;
+right:71px;
+z-index:200;
+width: 35px;
+height:35px;
+border-right:1px solid black;
+}
+.sidebarWand.topicView {
+  right:35px;
+}
+.sidebarWand.topicView .sidebarWandBox {
+  right:-36px;
+}
+
+.sidebarWandIcon {
+position:absolute;
+width: 35px;
+height: 35px;
+background: rgba(0,0,0,0.7) url('MMCCicon_wand.png') no-repeat center center;
+background-size: 28px 28px;
+cursor:pointer;
+}
+.sidebarWandBox {
+  position:absolute;
+  display:none;
+  height:auto;
+  width:169px;
+  background: rgba(0,0,0,0.9);
+  top: 35px;
+  right:-72px;
+  padding: 10px;
+  border: 1px solid black;
+  min-width:120px;
+  font-family: 'LatoLight', helvetica, sans-serif;
+}
+.sidebarWandBox ul {
+ list-style:none;
+}
+.sidebarWandBox li.wandIcon {
+padding: 6px 0 6px 25px;
+background-size: 18px 18px;
+background-repeat: no-repeat;
+background-position: 0px 6px;
+font-size: 18px;
+line-height: 20px;
+color:white;
+cursor:pointer;
+}
+li.wandIcon:hover {
+background-position: 4px 6px;
+}
+li.wandSaveLayout {
+  background-image: url('MMCCicon_save_layout.png');
+}
+li.wandForkMap {
+  background-image: url('MMCCicon_save_new_map.png');
+}
+li.wandFilter{
+  background-image: url('MMCCicon_filter.png');
+}
+
+/* end wand */
+
 /* search */
 
 .sidebarSearch {
 position:absolute;
 top:5px;
-left:5px;
+left:0;
 height: 35px;
 z-index:200;
 }
@@ -598,7 +712,7 @@ z-index:200;
 float:left;
 width: 35px;
 height: 35px;
-background: #cf8e88 url('search_icon_32x32.png') no-repeat center center;
+background: rgba(0,0,0,0.7) url('search_icon_32x32.png') no-repeat center center;
 background-size: 25px 25px;
 cursor:pointer;
 }
@@ -831,6 +945,32 @@ left: 84px;
   margin-left:50px;	
 }
 
+/* right click menu */
+
+.rightclickmenu {
+ position:absolute;
+ background:white;
+ z-index: 20;
+ border-radius: 2px;
+ color: black;
+}
+
+.rightclickmenu ul li {
+ list-style: none;
+ padding: 2px 7px;
+}
+
+.rightclickmenu ul li:hover {
+ background: #e4e4e4;
+ cursor:pointer;
+}
+
+.rightclickmenu p {
+  padding:7px;
+}
+
+/* end right click menu */
+
 /* --- styling the logo button ---*/
 /*.footer {
   width: 188px;
@@ -867,6 +1007,23 @@ left: 84px;
   border-top-right-radius:5px;
 }
 
+.addMap {
+position: absolute;
+right: -50px;
+top: -1px;
+width: 44px;
+height: 35px;
+background: rgba(185,182,237,0.3) url('MMCCicon_add_map.png') no-repeat 3px -4px;
+background-size: 40px 40px;
+border-left: 1px solid rgba(255,255,255,0.6);
+border-radius: 5px;
+border: 1px solid black;
+cursor:pointer;
+}
+.addMap:hover {
+background-color: rgba(185,182,237,0.5);
+}
+
 .logo {
   z-index:12;
   display:block;
@@ -896,7 +1053,7 @@ background-size: 22px 20px;
   border:none;
   bottom:36px;
   left:-1px;
-  height:142px;
+  height:124px;
   z-index:12;
   width:151px;
   color: #67AF9F;
@@ -927,13 +1084,7 @@ background-size: 22px 20px;
   text-align:center;
 }
 
-li.meta .button {
-  background: #89aa7b;
-  margin:7px;
-}
-
 li.beta {
-  margin: 4px 0 0 !important;
 border-top: 1px solid black;
 border-bottom: 1px solid black;
 position: relative;
@@ -963,45 +1114,22 @@ font-size: 12px;
 margin: 0;
 }
 
-li.tutorial, li.exploreMaps {
+li.meta, li.tutorial, li.exploreMaps {
   height:30px;
   line-height:30px;
   font-size:20px;
 }
 
-li.tutorial a, li.exploreMaps a {
+li.meta a, li.tutorial a, li.exploreMaps a {
   display:block;
 }
 
-li.exploreMaps {
+li.tutorial, li.exploreMaps {
   border-top:1px solid white;
 }
 
 .footer ul li a {
   color: #FFF;
-}
-
-
-
-.menuflag {
-position: absolute;
-left: 71px;
-bottom: 52px;
-width: 100px;
-height: 54px;
-}
-.menuflag .menuarrow {
-background: url('white-curved-arrow.png') no-repeat;
-background-size: contain;
-width: 40px;
-height: 40px;
-float: left;
-margin-top: 12px;
-margin-right: 4px;
-}
-.menuflag .menutext {
-float: left;
-font-size: 21px;
 }
 
 .home_bg {

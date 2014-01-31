@@ -3,8 +3,14 @@
   # Partial view, renders a form that creates a new map.
   #%>
 <div class="onConsole">
-<%= form_for Map.new, url: maps_url, remote: true, html: { class: "new_map", id: "new_map" } do |form|%>
-  <h3>Create A New Map</h3>
+<%= form_for Map.new, url: maps_url, remote: true, html: { class: "new_map", id: "fork_map" } do |form|%>
+  
+  <% if controller_name == "maps" %>
+    <h3>Save To New Map</h3>
+  <% elsif controller_name == "topics" %>
+    <h3>Save As New Map</h3>
+  <% end %>
+  
   <label for="map_name">Name</label>
   <%= form.text_field :name %>
   <label for="map_desc">Description</label>
@@ -12,8 +18,10 @@
   <label for="map_permission">Permission</label>     
   <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
   <p>Topics and synapses you create newly on this map will be set by default to the permissions of your map.</p>
+  <%= form.hidden_field :topicsToMap, :value => 0 %>
+  <%= form.hidden_field :synapsesToMap, :value => 0 %>
   <%= form.submit "Save", class: "add" %>
-  <button class="button" onclick="$('#new_map').fadeOut('fast'); event.preventDefault();">Cancel</button>
+  <button class="button" onclick="$('#fork_map').fadeOut('fast'); event.preventDefault();">Cancel</button>
   <div class="clearfloat"></div>
 <% end %>
 </div>

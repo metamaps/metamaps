@@ -40,7 +40,7 @@ function graphSettings(type, embed) {
     Label: {
        type: 'Native', //Native or HTML
        size: 20,
-       family: 'LatoLight',
+       family: 'arial',
        textBaseline: 'hanging',
        color:'#000'
        //style: 'bold'
@@ -127,7 +127,7 @@ function graphSettings(type, embed) {
       },
       onRightClick: function (node, eventInfo, e) {
         if (node && !node.nodeFrom) { 
-          // open right click menu
+          selectNodeOnRightClickHandler(node, e);
         }
         else if (node && node.nodeFrom) { // the variable 'node' is actually an edge/adjacency
           // open right click menu
