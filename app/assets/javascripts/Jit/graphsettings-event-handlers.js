@@ -146,6 +146,8 @@ function selectNodeOnClickHandler(node, e) {
     
     if (Mconsole.busy) return;
     
+    selectNode(node);
+    
     // delete old right click menu
     $('.rightclickmenu').remove();
     // create new menu for clicked on node
@@ -155,8 +157,8 @@ function selectNodeOnClickHandler(node, e) {
     // add the proper options to the menu
     var menustring = '<ul>';
     
-    menustring += '<li class="rc-delete">Delete</li>';
-    if (mapid) menustring += '<li class="rc-remove">Remove from Map</li>';
+    if (userid != null) menustring += '<li class="rc-delete">Delete</li>';
+    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from Map</li>';
     menustring += '<li class="rc-hide">Hide until refresh</li>';
     
     menustring += '<li class="rc-popout">Open In New Tab</li>';

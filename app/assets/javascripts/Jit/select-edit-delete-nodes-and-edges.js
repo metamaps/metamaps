@@ -427,8 +427,6 @@ function hideNode(nodeid) {
 	duration: 1000  
   });
   Mconsole.graph.removeNode(nodeid);
-  Mconsole.labels.disposeLabel(nodeid);
-  delete Mconsole.labels.labels["" + nodeid]
 }
 
 function hideSelectedNodes() {

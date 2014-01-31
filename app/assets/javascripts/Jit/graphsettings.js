@@ -126,6 +126,9 @@ function graphSettings(type, embed) {
         }//if
       },
       onRightClick: function (node, eventInfo, e) {
+        e.preventDefault();
+        e.stopPropagation();
+      
         if (node && !node.nodeFrom) { 
           selectNodeOnRightClickHandler(node, e);
         }
@@ -200,6 +203,8 @@ function hideCards() {
   $('#edit_synapse').hide();
   MetamapsModel.edgecardInUse = null;
   hideCurrentCard();
+  // delete right click menu
+  $('.rightclickmenu').remove();
 }
 
 // defining code to draw edges with arrows pointing in one direction

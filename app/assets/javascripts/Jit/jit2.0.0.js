@@ -7230,10 +7230,22 @@ Graph.Label.Native = new Class({
       ctx.textBaseline = node.getLabelData('textBaseline');
       
       //START METAMAPS CODE
+      
+      // helper function to determine how many lines are needed
+      // Line Splitter Function
+      // copyright Stephen Chapman, 19th April 2006
+      // you may copy this code but please keep the copyright notice as well
+      function splitLine(st,n) {var b = ''; var s = st;while (s.length > n) {var c = s.substring(0,n);var d = c.lastIndexOf(' ');var e =c.lastIndexOf('\n');if (e != -1) d = e; if (d == -1) d = n; b +=       c.substring(0,d) + '\n';s = s.substring(d+1);}return b+s;}
+      var arrayOfLabelLines = splitLine(node.name,30).split('\n');
       //render background
             ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            var height = 25; //font size + margin
-            var width = ctx.measureText(node.name).width + 8;
+            var height = 25 * arrayOfLabelLines.length; //font size + margin
+            
+            var index, lineWidths = [];
+            for (index = 0; index < arrayOfLabelLines.length; ++index) {
+              lineWidths.push( ctx.measureText( arrayOfLabelLines[index] ).width )
+            }
+            var width = Math.max.apply(null, lineWidths) + 8;
             var x = pos.x - width/2;
             var y = pos.y + node.getData("height") + 5;
             var radius = 3;
@@ -7276,7 +7288,15 @@ Graph.Label.Native = new Class({
       var pos = node.pos.getc(true);
       //ctx.fillText(node.name, pos.x, pos.y + node.getData("height") / 2);
       // START METAMAPS CODE
-      ctx.fillText(node.name, pos.x, pos.y + node.getData("height") + 5);
+      // Line Splitter Function
+      // copyright Stephen Chapman, 19th April 2006
+      // you may copy this code but please keep the copyright notice as well
+      function splitLine(st,n) {var b = ''; var s = st;while (s.length > n) {var c = s.substring(0,n);var d = c.lastIndexOf(' ');var e =c.lastIndexOf('\n');if (e != -1) d = e; if (d == -1) d = n; b +=       c.substring(0,d) + '\n';s = s.substring(d+1);}return b+s;}
+      var arrayOfLabelLines = splitLine(node.name,30).split('\n');
+      var index;
+      for (index = 0; index < arrayOfLabelLines.length; ++index) {
+        ctx.fillText(arrayOfLabelLines[index], pos.x, pos.y + node.getData("height") + 5 + (25*index));
+      }
       // END METAMAPS CODE
     },
 

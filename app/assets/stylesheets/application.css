@@ -955,14 +955,36 @@ left: 84px;
  color: black;
 }
 
-.rightclickmenu ul li {
- list-style: none;
- padding: 2px 7px;
+.rightclickmenu > ul {
+  padding: 2px;
 }
 
+.rightclickmenu ul li {
+ list-style: none;
+padding: 3px 45px 3px 30px;
+font-family: arial, sans-serif;
+font-size: 17px;
+line-height: 17px;
+background-repeat: no-repeat;
+background-size: 20px 20px;
+background-position: 5px 2px;
+}
 .rightclickmenu ul li:hover {
- background: #e4e4e4;
+ background-color: #e4e4e4;
+ background-position: 7px 2px;
  cursor:pointer;
+}
+.rightclickmenu .rc-delete {
+  background-image: url(MMCCicon_delete_black.png);
+}
+.rightclickmenu .rc-remove {
+  background-image: url(MMCCicon_remove_from_map_black.png);
+}
+.rightclickmenu .rc-hide {
+  background-image: url(MMCCicon_hide.png);
+}
+.rightclickmenu .rc-popout {
+  background-image: url(MMCCicon_pop-out_black.png);
 }
 
 .rightclickmenu p {
