@@ -183,7 +183,7 @@ class MapsController < ApplicationController
           @mapping.save
           
           #push realtime update for location on map
-          @mapping.message 'update',@user.id
+          #@mapping.message 'update',@user.id
         end
       end
       @map.arranged = true
