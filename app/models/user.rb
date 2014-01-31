@@ -11,7 +11,7 @@ has_many :mappings
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
   
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :name, :email, :password, :password_confirmation, :code, :joinedwithcode, :remember_me
 
   serialize :settings, UserPreference
 	
