@@ -1,7 +1,9 @@
 function centerOn(nodeid) {
   if (!Mconsole.busy) {
           var node = Mconsole.graph.getNode(nodeid);
-          $('h1.index').html('Viewing Topic: ' + node.name);
+          $('div.index img').attr('src', imgArray[node.getData('metacode')].src);
+          $('div.index .mapName').html(node.name);
+          $(document).attr('title', node.name + ' | Metamaps');
           window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
           Mconsole.onClick(node.id, {  
             hideLabels: false,

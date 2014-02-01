@@ -71,6 +71,7 @@ end
 		  @topicdata['$link'] = topic.link
 		  @topicdata['$metacode'] = topic.metacode.name
       @topicdata['$inmaps'] = @inmaps
+      @topicdata['$synapseCount'] = topic.synapses.count
 		  @topicdata['$userid'] = topic.user.id
 		  @topicdata['$username'] = topic.user.name
 		  @mapping = Mapping.find_by_topic_id_and_map_id(topic.id,self.id)

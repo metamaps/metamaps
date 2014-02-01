@@ -1,6 +1,6 @@
 <%#
   # Partial rendering form for a new topic on a map
-  # TODO: Where is this code used?
+  # This code is called when viewing a metamap in show.html.erb in the views/maps folder
   #%>
 <div class="anypage">
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
@@ -11,7 +11,7 @@
       <img class="cloudcarousel" width="40" height="40" src="/assets/<%= metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>"/>
     <% end %>
   </div> 
-  <%= form.text_field :name, :placeholder => "title..." %>
+  <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>
   <%= form.hidden_field :metacode, :value => "Action" %>
   <%= form.hidden_field :x, :value => 0 %>
   <%= form.hidden_field :y, :value => 0 %>
@@ -20,9 +20,7 @@
   <% end %>
   <%= form.hidden_field :grabTopic, :value => "null" %>
   <%= form.hidden_field :addSynapse, :value => false %>
-  <!--<input id="left-but"  type="button" value="Left" />-->
   <div id="metacodeImgTitle"></div>
-  <!--<input id="right-but" type="button" value="Right" />-->
   <div class="clearfloat"></div>
 <% end %>
 </div>

@@ -244,13 +244,16 @@ box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
 }
 
 .anypage .new_topic {
+  /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
+  top:-1000px;
+  left:-1000px;
+  display: block;
+  position: absolute;
   width:300px;	
   margin:-40px 0 0 -50px;
 }
-
-.anypage .new_topic,
 .anypage .new_synapse {
-  display: block;
+  display: none;
   position: absolute;
 }
 
@@ -595,12 +598,162 @@ text-align: start;
   margin-top:5px;
 }
 
+/* wand */
+
+.sidebarWand {
+position:absolute;
+top:5px;
+right:35px;
+z-index:200;
+width: 35px;
+height:35px;
+border-right:1px solid black;
+}
+
+.sidebarWandIcon {
+position:absolute;
+width: 35px;
+height: 35px;
+background: rgba(0,0,0,0.7) url('MMCCicon_wand.png') no-repeat center center;
+background-size: 28px 28px;
+cursor:pointer;
+}
+.sidebarWandBox {
+  position:absolute;
+  display:none;
+  height:auto;
+  width:182px;
+  background: rgba(0,0,0,0.9);
+  top: 35px;
+  right:-36px;
+  padding: 10px;
+  border: 1px solid black;
+  font-family: 'LatoLight', helvetica, sans-serif;
+}
+.sidebarWandBox ul {
+ list-style:none;
+}
+.sidebarWandBox li.wandIcon {
+padding: 6px 0 6px 25px;
+background-size: 18px 18px;
+background-repeat: no-repeat;
+background-position: 0px 6px;
+font-size: 18px;
+line-height: 20px;
+color:white;
+cursor:pointer;
+}
+li.wandIcon:hover {
+background-position: 4px 6px;
+}
+li.wandSaveLayout {
+  background-image: url('MMCCicon_save_layout.png');
+}
+li.wandForkMap {
+  background-image: url('MMCCicon_save_new_map.png');
+}
+
+/* end wand */
+
+/* wand */
+
+.sidebarFilter {
+position:absolute;
+top:5px;
+right:71px;
+z-index:200;
+width: 35px;
+height:35px;
+border-right:1px solid black;
+}
+.sidebarFilter.loggedout {
+  right:35px;
+}
+
+.sidebarFilterIcon {
+position:absolute;
+width: 35px;
+height: 35px;
+background: rgba(0,0,0,0.7) url('MMCCicon_filter.png') no-repeat center center;
+background-size: 28px 28px;
+cursor:pointer;
+}
+
+/* we set a few of these params off screen to begin with, so that when we initialize the scroll bar it works, but then 
+   we hide the element and position it correctly */
+.sidebarFilterBox {
+  position:fixed; 
+  top: -1000px;
+  right:-1000px;
+  display:block;
+  /*
+  position:absolute; 
+  top: 35px;
+  right:-72px;
+  display:none;
+  */
+  height:auto;
+  width:260px;
+  background: rgba(0,0,0,0.9);
+  padding: 10px;
+  border: 1px solid black;
+  font-family: 'LatoLight', helvetica, sans-serif;
+  text-align:center;
+}
+
+h3.filterByMetacode {
+margin-bottom: 10px;
+text-align: left;
+float:left;
+}
+.sidebarFilterBox span {
+float: left;
+background: #17AFBD;
+padding: 1px 4px;
+border-radius: 2px;
+margin-left: 5px;
+cursor: pointer;
+}
+
+.sidebarFilterBox #filter_by_metacode {
+  height:270px;
+  overflow:hidden;
+}
+.sidebarFilterBox ul {
+  list-style:none;
+}
+.sidebarFilterBox li {
+  float:left;
+  width:61px;
+  height:70px;
+  cursor:pointer;
+}
+.sidebarFilterBox li:hover {
+background-color: rgba(255,255,255,0.1);
+}
+.sidebarFilterBox li img {
+  width:45px;
+  height:45px;
+  margin:0 auto;
+}
+.sidebarFilterBox li p {
+  font-size:11px;
+  line-height:11px;
+  font-family:arial, sans-serif;
+}
+
+.sidebarFilterBox li.toggledOff {
+  opacity: 0.4;
+}
+
+/* end filter by metacode */
+
 /* collaborate */
 
 .sidebarCollaborate {
 position:absolute;
 top:5px;
-right:35px;
+right:106px;
 z-index:200;
 width: 35px;
 height:35px;
@@ -630,73 +783,6 @@ cursor:pointer;
 }
 
 /* end collaborate */
-
-/* wand */
-
-.sidebarWand {
-position:absolute;
-top:5px;
-right:71px;
-z-index:200;
-width: 35px;
-height:35px;
-border-right:1px solid black;
-}
-.sidebarWand.topicView {
-  right:35px;
-}
-.sidebarWand.topicView .sidebarWandBox {
-  right:-36px;
-}
-
-.sidebarWandIcon {
-position:absolute;
-width: 35px;
-height: 35px;
-background: rgba(0,0,0,0.7) url('MMCCicon_wand.png') no-repeat center center;
-background-size: 28px 28px;
-cursor:pointer;
-}
-.sidebarWandBox {
-  position:absolute;
-  display:none;
-  height:auto;
-  width:169px;
-  background: rgba(0,0,0,0.9);
-  top: 35px;
-  right:-72px;
-  padding: 10px;
-  border: 1px solid black;
-  min-width:120px;
-  font-family: 'LatoLight', helvetica, sans-serif;
-}
-.sidebarWandBox ul {
- list-style:none;
-}
-.sidebarWandBox li.wandIcon {
-padding: 6px 0 6px 25px;
-background-size: 18px 18px;
-background-repeat: no-repeat;
-background-position: 0px 6px;
-font-size: 18px;
-line-height: 20px;
-color:white;
-cursor:pointer;
-}
-li.wandIcon:hover {
-background-position: 4px 6px;
-}
-li.wandSaveLayout {
-  background-image: url('MMCCicon_save_layout.png');
-}
-li.wandForkMap {
-  background-image: url('MMCCicon_save_new_map.png');
-}
-li.wandFilter{
-  background-image: url('MMCCicon_filter.png');
-}
-
-/* end wand */
 
 /* search */
 

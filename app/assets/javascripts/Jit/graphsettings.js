@@ -536,7 +536,6 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
   if (tempInit && tempNode2 == null) {
     $('#topic_addSynapse').val("true");
     $('#new_topic').fadeIn('fast');
-    addMetacode();
     $('#topic_name').focus();
   } else if (tempInit && tempNode2 != null) {
     $('#topic_addSynapse').val("false");
@@ -547,7 +546,7 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     tempNode = null;
     tempNode2 = null;
     tempInit = false;
-  } else if (dragged != 0 && goRealtime) {
+  } else if (dragged && dragged != 0 && goRealtime) {
       saveLayout(dragged);
 	  for (var i = 0; i < MetamapsModel.selectedNodes.length; i++) {
 	    saveLayout(MetamapsModel.selectedNodes[i].id);

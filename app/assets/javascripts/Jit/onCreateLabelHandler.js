@@ -14,67 +14,30 @@
  * expression is substituted in later (for html, in a separate function).
  */
 
-function onCreateLabelHandler(type, domElement, node) {
-  // Create a 'name' button and add it to the main node label
-  var nameContainer = document.createElement('span'),
-  style = nameContainer.style;
-  nameContainer.className = 'name topic_' + node.id;
-  nameContainer.id = 'topic_' + node.id + '_label';
-
-  if (type == "centered") {
-    nameContainer.innerHTML = generateCenteredLittleHTML (node);
-  }
-  else {
-    nameContainer.innerHTML = generateLittleHTML (node);
-  }
-  
-  domElement.appendChild(nameContainer);
-  style.fontSize = "0.9em";
-  style.color = "#222222";
-
-  bindNameContainerCallbacks(nameContainer, node);
-}
-
-
 function generateShowcardHTML() {
   return '                                                                    \
   <div class="CardOnGraph"                                                    \
          id="topic_$_id_$">                                                   \
-      <p class="type best_in_place best_in_place_metacode"                    \
-         data-url="/topics/$_id_$"                                            \
-         data-object="topic"                                                  \
-         data-collection=$_metacode_choices_$                                 \
-         data-attribute="metacode"                                            \
-         data-type="select">$_metacode_$</p>                                  \
-      <img alt="$_metacode_$"                                                 \
-           class="icon"                                                       \
-           title="Click to hide card"                                         \
-           height="50"                                                        \
-           width="50"                                                         \
-           src="$_imgsrc_$" />                                                \
-        <div class="cardSettings">                                            \
-          <div class="mapPerm"                                                \
-               title="$_permission_$">                                        \
-               $_mk_permission_$                                              \
-          </div>                                                              \
-          $_edit_permission_$                                                 \
-        </div>                                                                \
         <span class="title">                                                  \
           <span class="best_in_place best_in_place_name"                      \
                 data-url="/topics/$_id_$"                                     \
                 data-object="topic"                                           \
                 data-attribute="name"                                         \
                 data-type="input">$_name_$</span>                             \
-          <a href="/topics/$_id_$" class="topic-go-arrow" target="_blank">    \
-            <img class="topic-go-arrow"                                       \
-                 title="Explore Topic"                                        \
-                 src="/assets/go-arrow.png" />                                \
-          </a>                                                                \
-          <div class="clearfloat"></div>                                      \
         </span>                                                               \
-        <div class="contributor">                                             \
-          Added by: <a href="/users/$_userid_$" target="_blank">$_username_$  \
-          </a>                                                                \
+        <div class="links">                                                   \
+           <img alt="$_metacode_$"                                                 \
+           class="linkItem icon"                                                       \
+           title="click and drag to move card"                                         \
+           height="40"                                                        \
+           width="40"                                                         \
+           src="$_imgsrc_$" />                                                \
+           <div class="linkItem contributor"></div>                                    \
+           <div class="linkItem mapCount">$_map_count_$</div>                                    \
+           <div class="linkItem synapseCount">$_synapse_count_$</div>                                    \
+           <div class="linkItem mapPerm $_mk_permission_$"></div>                      \
+           <a href="/topics/$_id_$" class="linkItem topicPopout" title="Open Topic in New Tab" target="_blank"></a>\
+           <div class="clearfloat"></div>                                     \
         </div>                                                                \
       <div class="scroll">                                                    \
         <div class="desc">                                                    \
@@ -88,13 +51,13 @@ function generateShowcardHTML() {
         </div>                                                                \
       </div>                                                                  \
       <div class="link">                                                      \
-      $_go_link_$                                                             \
       $_a_tag_$<span class="best_in_place best_in_place_link"                 \
             data-url="/topics/$_id_$"                                         \
             data-object="topic"                                               \
             data-nil="$_link_nil_$"                                            \
             data-attribute="link"                                             \
             data-type="input">$_link_$</span>$_close_a_tag_$                  \
+      $_go_link_$                                                             \
       </div>                                                                  \
       <div class="clearfloat"></div>                                          \
     </div>';
@@ -106,7 +69,7 @@ function replaceVariables(html, node) {
   if (! authorizeToEdit(node)) {
     go_link = '';
     if (node.getData("link") != "") {
-      a_tag = '<a href="' + node.getData("link") + '">';
+      a_tag = '<a href="' + node.getData("link") + '" target="_blank">';
       close_a_tag = '</a>';
     }
     else {
@@ -142,8 +105,8 @@ function replaceVariables(html, node) {
   metacode_choices = metacode_choices.slice(0, -1);
   metacode_choices += "]'";
 
-  var desc_nil = "<span class='gray'>Click to add description.</span>";
-  var link_nil = "<span class='gray'>Click to add link.</span>";
+  var desc_nil = "<span class='gray'>Click to add description...</span>";
+  var link_nil = "<span class='gray'>Click to add link...</span>";
   
   var edit_perm = '';
   if (userid == node.getData("userid")) {
@@ -180,6 +143,8 @@ function replaceVariables(html, node) {
   html = html.replace(/\$_edit_permission_\$/g, edit_perm);
   html = html.replace(/\$_permission_\$/g, node.getData("permission"));
   html = html.replace(/\$_mk_permission_\$/g, mk_permission(node));
+  html = html.replace(/\$_map_count_\$/g, node.getData("inmaps").length);
+  html = html.replace(/\$_synapse_count_\$/g, node.getData("synapseCount"));
   html = html.replace(/\$_id_\$/g, node.id);
   html = html.replace(/\$_metacode_\$/g, node.getData("metacode"));
   html = html.replace(/\$_imgsrc_\$/g, imgArray[node.getData("metacode")].src);
@@ -203,67 +168,10 @@ function replaceVariables(html, node) {
     //logged in but desc isn't there so it's invisible
     html = html.replace(/\$_desc_\$/g, desc_nil);
   } else {
+    //html = html.replace(/\$_desc_\$/g, node.getData("desc").replace(/\n/g, '<br />'));
     html = html.replace(/\$_desc_\$/g, node.getData("desc"));
   }
   return html;
-}
-
-function generateLittleHTML(node) {
-  var littleHTML = '                                                          \
-    <div class="label">$_name_$</div>                                         \
-      <div class="nodeOptions">';
-
-  if (userid == null || mapid == null || !mapperm) {
-    //unauthenticated, not on a map: can remove from canvas
-    littleHTML += '                                                           \
-        <span class="removeFromCanvas"                                        \
-              onclick="hideNode($_id_$)"                              \
-              title="Click to remove topic from canvas">                      \
-        </span>';
-  } else if (mapperm) {
-    //permission to remove nodes from the map
-    littleHTML += '                                                           \
-        <span class="removeFromCanvas"                                        \
-                 onclick="hideNode($_id_$)"                                   \
-                 title="Click to remove topic from canvas">                   \
-        </span>                                                               \
-        <span class="removeFromMap"                                           \
-                 onclick="removeNode($_id_$)"                                 \
-                 title="Click to remove topic from map">                      \
-        </span>';
-  }
-
-  if (userid == node.getData('userid')) {
-    //logged in, and owner of the topic, thus permission to delete
-    littleHTML += '                                                          \
-        <span class="deleteTopic"                                            \
-                 onclick="var t = confirm(\'Are you sure you want to permanently delete this node and all synapses linking to it?\'); if (t) deleteNode($_id_$)"                                       \
-                 title="Click to delete this topic">                         \
-        </span>';
-  }
-  littleHTML += '</div>';
-  littleHTML = littleHTML.replace(/\$_id_\$/g, node.id);
-  littleHTML = littleHTML.replace(/\$_mapid_\$/g, mapid);
-  littleHTML = littleHTML.replace(/\$_name_\$/g, node.name);
-
-  return littleHTML;
-}
-
-function generateCenteredLittleHTML(node) {
-  var littleHTML = '                                                          \
-    <div class="label">$_name_$</div>                                         \
-      <div class="nodeOptions">';
-
-  littleHTML += '                                                           \
-        <span class="centerOn"                                        \
-              onclick="centerOn($_id_$)"                              \
-              title="Move this topic to center">                      \
-        </span>';
-  littleHTML += '</div>';
-  littleHTML = littleHTML.replace(/\$_id_\$/g, node.id);
-  littleHTML = littleHTML.replace(/\$_name_\$/g, node.name);
-
-  return littleHTML;
 }
 
 function hideCurrentCard() {
@@ -275,75 +183,33 @@ function hideCurrentCard() {
 
 function hideCard(node) {
   var card = '.showcard';
-  if (node != null) {
-    card += '.topic_' + node.id;
-  }
 
   $(card).fadeOut('fast', function(){
-    node.setData('dim', 25, 'current');
-    Mconsole.labels.hideLabel(Mconsole.graph.getNode(node.id), true)
+    //node.setData('dim', 25, 'current');
     Mconsole.plot();
   });
 
   MetamapsModel.showcardInUse = null;
 }
 
-function bindNameContainerCallbacks(nameContainer, node) {
-   nameContainer.onmouseover = function(){
-     $('.name.topic_' + node.id + ' .nodeOptions').css('display','block');
-   }
- 
-   nameContainer.onmouseout = function(){
-     $('.name.topic_' + node.id + ' .nodeOptions').css('display','none');
-   }
-
-  // add some events to the label
-  $(nameContainer).find('.label').click(function(e){
-    
-    // set the diameter to full again for whatever node had its topic card showing
-    if ( MetamapsModel.showcardInUse != null ) {
-      currentOpenNode = Mconsole.graph.getNode(MetamapsModel.showcardInUse)
-      currentOpenNode.setData('dim', 25, 'current');
-      Mconsole.labels.hideLabel(currentOpenNode, true)
-      Mconsole.plot();
-    }
-    
-    //populate the card that's about to show with the right topics data
-    populateShowCard(node);
-  
-    // positions the card in the right place
-    var top = $('#' + node.id).css('top');
-    var left = parseInt($('#' + node.id).css('left'));
-    var w = $('#topic_' + node.id + '_label').width();
-    w = w/2;
-    left = (left + w) + 'px';
-    $('#showcard').css('top', top);
-    $('#showcard').css('left', left);   
-
-    $('.showcard.topic_' + node.id).fadeIn('fast');
-    node.setData('dim', 1, 'current');
-    MetamapsModel.showcardInUse = node.id;
-    Mconsole.plot();
-    Mconsole.labels.hideLabel(Mconsole.graph.getNode(node.id));
-  });
-}
-
 function populateShowCard(node) {
   var showCard = document.getElementById('showcard');
 
-    showCard.innerHTML = '';
+    $(showCard).find('.permission').remove();
       
     var html = generateShowcardHTML();
     html = replaceVariables(html, node);
       
-    showCard.className = 'showcard topic_' + node.id;
     if (authorizeToEdit(node)) {
       var perm = document.createElement('div');
       perm.className = 'permission canEdit';
       perm.innerHTML = html;
       showCard.appendChild(perm);
     } else {
-      showCard.innerHTML = html;
+      var perm = document.createElement('div');
+      perm.className = 'permission cannotEdit';
+      perm.innerHTML = html;
+      showCard.appendChild(perm);
     }
 
   //bind best_in_place ajax callbacks
@@ -359,11 +225,11 @@ function populateShowCard(node) {
 
   $(showCard).find('.best_in_place_name').bind("ajax:success", function() {
     var name = $(this).html();
-    $('#topic_' + node.id + '_label').find('.label').html(name);
     node.name = name;
   });
 
   $(showCard).find('.best_in_place_desc').bind("ajax:success", function() {
+    this.innerHTML = this.innerHTML.replace(/\r/g, '')
     $(showCard).find('.scroll').mCustomScrollbar("update");
     var desc = $(this).html();
     node.setData("desc", desc);
@@ -421,10 +287,6 @@ function populateShowCard(node) {
     node.setData("permission", permission);
   });
   
-  $('.showcard.topic_' + node.id).find('.scroll').mCustomScrollbar();
+  $('.showcard').find('.scroll').mCustomScrollbar();
   
-  // add some events to the label
-  $('.showcard').find('img.icon').click(function(){
-    hideCard(node);
-  });
 }

@@ -80,6 +80,7 @@ belongs_to :metacode
       @topicdata['$link'] = self.link
 		  @topicdata['$metacode'] = self.metacode.name
       @topicdata['$inmaps'] = @inmaps
+      @topicdata['$synapseCount'] = self.synapses.count
 		  @topicdata['$userid'] = self.user.id
 		  @topicdata['$username'] = self.user.name
       @topicdata['$permission'] = self.permission
@@ -101,6 +102,7 @@ belongs_to :metacode
 		  @topicdata['$link'] = self.link
 		  @topicdata['$metacode'] = self.metacode.name
       @topicdata['$inmaps'] = @inmaps
+      @topicdata['$synapseCount'] = self.synapses.count
 		  @topicdata['$userid'] = self.user.id
 		  @topicdata['$username'] = self.user.name
       @mapping = Mapping.find_by_topic_id_and_map_id(self.id,mapid)
@@ -149,6 +151,7 @@ belongs_to :metacode
         @topicdata['$link'] = topic.link
         @topicdata['$metacode'] = topic.metacode.name
         @topicdata['$inmaps'] = @inmaps
+        @topicdata['$synapseCount'] = topic.synapses.count
 			  @topicdata['$userid'] = topic.user.id
 			  @topicdata['$username'] = topic.user.name
         @topicdata['$permission'] = topic.permission
@@ -168,6 +171,7 @@ belongs_to :metacode
           @topicdata['$link'] = topic.link
           @topicdata['$metacode'] = topic.metacode.name
           @topicdata['$inmaps'] = @inmaps
+          @topicdata['$synapseCount'] = topic.synapses.count
           @topicdata['$userid'] = topic.user.id
           @topicdata['$username'] = topic.user.name
           @topicdata['$permission'] = topic.permission

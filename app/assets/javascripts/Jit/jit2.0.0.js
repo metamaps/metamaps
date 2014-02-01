@@ -7248,7 +7248,7 @@ Graph.Label.Native = new Class({
             var width = Math.max.apply(null, lineWidths) + 8;
             var x = pos.x - width/2;
             var y = pos.y + node.getData("height") + 5;
-            var radius = 3;
+            var radius = 5;
             
               ctx.beginPath();
               ctx.moveTo(x + radius, y);

@@ -13,6 +13,7 @@
 // require autocomplete-rails-uncompressed
 //
 //= require jquery
+//= require jquery-ui
 //= require jquery.purr
 //= require best_in_place
 //= require jquery_ujs
@@ -205,6 +206,13 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
         clearTimeout(lT);
         if (! sliding1) { 
             sliding1 = true;
+            
+            // hide the other two
+            $('.sidebarFilterBox').hide();
+            $('.sidebarWandBox').hide();
+            $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.7)');
+            $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.7)');
+            
             $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.9)');
             $('.sidebarAccountBox').fadeIn(200, function() {
                  sliding1 = false;
@@ -253,8 +261,34 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   
   $(".scroll").mCustomScrollbar();
   
+  // initialize scroll bar for filter by metacode, then hide it and position it correctly again
+  $("#filter_by_metacode").mCustomScrollbar();
+  var filterPosition = userid ? '-72px' : '-36px';
+  $('.sidebarFilterBox').hide().css({
+    position:'absolute',
+    top: '35px',
+    right: filterPosition
+  });
+  
+  // initialize metacode spinner and then hide it
+  $("#metacodeImg").CloudCarousel( {
+			titleBox: $('#metacodeImgTitle'),
+			yRadius:40,
+			xPos: 150,
+			yPos: 40,
+			speed:0.3,
+			mouseWheel:true, 
+			bringToFront: true
+	});
+  $('.new_topic').hide();
+  
+  
   $('.notice.metamaps').delay(10000).fadeOut('fast');
   $('.alert.metamaps').delay(10000).fadeOut('fast');
+  
+  $('#center-container').bind('contextmenu', function(e){
+		  return false;
+	  });
   
   addHoverForSettings();
   
@@ -407,23 +441,6 @@ function createNewMap() {
   $('#new_map').fadeIn('fast');
 }
 
-function addMetacode() {
-	// code from http://www.professorcloud.com/mainsite/carousel-integration.htm
-  //mouseWheel:true,
-	if (!metacodeIMGinit) {		
-		$("#metacodeImg").CloudCarousel( {
-			titleBox: $('#metacodeImgTitle'),
-			yRadius:40,
-			xPos: 150,
-			yPos: 40,
-			speed:0.3,
-			mouseWheel:true, 
-			bringToFront: true
-		});
-		metacodeIMGinit = true;
-	}
-}
-
 function fetchRelatives(node) {
   var myA = $.ajax({
     type: "Get",
@@ -481,13 +498,9 @@ function MconsoleReset() {
 
 function openNodeShowcard(node) {
   //populate the card that's about to show with the right topics data
-  populateShowCard(node);
+  populateShowCard(node);  
 
-  // positions the card in the right place
-  $('#showcard').css('top', '250px');
-  $('#showcard').css('left', '100px');   
-
-  $('.showcard.topic_' + node.id).fadeIn('fast');
+  $('.showcard').fadeIn('fast');
   //node.setData('dim', 1, 'current');
   MetamapsModel.showcardInUse = node.id;
 }

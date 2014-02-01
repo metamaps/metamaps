@@ -1,0 +1,23 @@
+<%#
+  # @file
+  # this code generates the list of icons in the filter by metacode box in the upper right menu area
+  #%>
+  
+<script>
+ //  keep an array of which metacodes are currently visible.
+ var categoryVisible = new Object();
+
+<% @list = '' %>
+<% Metacode.order("name").all.each_with_index do |m, index| %>
+  <% @list += '<li><img src="/assets/' + m.icon + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p></li>' %>
+     
+  categoryVisible['<%= m.name %>'] = true;   
+<% end %>
+</script>
+
+<div id="filter_by_metacode">
+  <ul>
+    <%= @list.html_safe %>
+  </ul>
+  <div class="clearfloat"></div>
+</div>

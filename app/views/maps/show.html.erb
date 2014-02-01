@@ -7,25 +7,31 @@
 <% content_for :title, @map.name + " | Metamaps" %>
 
 <% if authenticated? %>
-
-<div class="sidebarCollaborate">
-  <div class="sidebarCollaborateIcon"></div>
-  <div class="sidebarCollaborateBox">
-    
-  </div>
-</div>
-
 <div class="sidebarWand">
   <div class="sidebarWandIcon"></div>
   <div class="sidebarWandBox">
     <ul>
       <li class="wandIcon wandSaveLayout">Save Layout</li>
       <li class="wandIcon wandForkMap">Save To New Map</li>
-      <li class="wandIcon wandFilter">Filter By Metacode</li>
+      <li class="wandIcon wandChangeMetacodes">Switch Metacode Set</li>
     </ul>
   </div>
 </div>
+<div class="sidebarCollaborate">
+  <div class="sidebarCollaborateIcon"></div>
+  <div class="sidebarCollaborateBox">
+    
+  </div>
+</div>
 <% end %>
+<div class="sidebarFilter">
+  <div class="sidebarFilterIcon"></div>
+  <div class="sidebarFilterBox">
+    <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
+    <div class="clearfloat"></div>
+    <%= render :partial => 'main/filterbymetacode' %>
+  </div>
+</div>
 
 <div class="index">
   <div class="openCheatsheet"></div>
@@ -83,6 +89,13 @@
         clearTimeout(lT);
         if (! sliding1) { 
             sliding1 = true;
+            
+            // hide the other two
+            $('.sidebarAccountBox').hide();
+            $('.sidebarFilterBox').hide();
+            $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.7)');
+            $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.7)');
+            
             $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.9)');
             $('.sidebarWandBox').fadeIn(200, function() {
                  sliding1 = false;
@@ -105,8 +118,66 @@
           return;
         });
         
-   } // end bindAccountHover
+   } // end bindWandHover
+   
+   function bindFilterHover() {
+      
+      var filterIsOpen = false
+      
+      // controls the sliding hover of the bottom left menu
+      var sliding1 = false; 
+      var lT;
+      
+      var closeFilter = function() {
+        lT = setTimeout(function() { 
+            if (! sliding1) { 
+              sliding1 = true;
+              $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.7)');
+              $('.sidebarFilterBox').fadeOut(200, function() {
+                sliding1 = false;
+                filterIsOpen = false; 
+              });
+            } 
+          },300); 
+      }
+      
+      var openFilter = function() {
+        clearTimeout(lT);
+        if (! sliding1) { 
+            sliding1 = true;
+            
+            // hide the other two
+            $('.sidebarAccountBox').hide();
+            $('.sidebarWandBox').hide();
+            $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.7)');
+            $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.7)');
+            
+            $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.9)');
+            $('.sidebarFilterBox').fadeIn(200, function() {
+                 sliding1 = false;
+                 filterIsOpen = true;
+            });
+        }
+      }
+        // bind the hover events
+        $(".sidebarFilter").hover(openFilter, closeFilter);
+        
+   } // end bindFilterHover
    bindWandHover();
+   bindFilterHover();
+   
+   $('.showcard').draggable({ handle: ".icon" });
+   $('#showcard').resizable({
+     maxHeight: 500,
+     maxWidth: 500,
+     minHeight: 320,
+     minWidth: 226
+   }).css({
+     display: 'none',
+     top: '300px',
+     left: '100px'
+   });
+   
   });
   
   

@@ -8,14 +8,19 @@
 
 .showcard, #showcard {
     position:absolute;
-    display:none;
+    display:block;
+    top:-1000px;
+    left:-1000px;
     margin-top: -181px;
-    width:216px;
-	height:320px;
+    width:226px;
+	  height:320px;
     color:#FFF;
     text-align: left;
     overflow: visible;
-	z-index:14000;
+	  z-index:14000;
+    background: #FFF;
+    border-radius:5px;
+    box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
 #showcard .contributor {
@@ -34,23 +39,23 @@
   overflow:hidden;
 }
 
+.showcard .permission {
+  width:100%;
+  height:100%;
+}
+
 .CardOnGraph {
   display:block;
   position:relative;
-  width:175px;
-  height:300px;
-  padding:10px 5px 10px 35px;
-  background: #FFF;
-  border-radius:10px;
+  width:100%;
+  height:100%;
   color:#000;
   z-index: 25;
-  border:1px solid #000;
-  box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
 .CardOnGraph .scroll {
    display:block;
-   height:230px;
+   padding:5px 10px;
 }
  
 .CardOnGraph .type {
@@ -63,50 +68,50 @@
   line-height: 24px;
 }
 
-.CardOnGraph .icon {
-  position:absolute;
-  top:135px;
-  left:-25px;
-}
-
 .CardOnGraph .title {
   font-size:22px;
   line-height:25px;
   display:block;
-  border-bottom:2px solid #000;
-  padding-bottom:5px;
+  padding:5px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .best_in_place_name {
-  width:150px;
-  float:left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.best_in_place_name:hover {
-  width: 150px;
-  float: left;
-  text-overflow: none;
-  white-space: normal;
-  overflow: visible;
-  position: absolute;
-  background: #ddd;
-  border-radius: 10px;
-  padding: 5px;
-  opacity: 0.98;
-  box-shadow: 4px 4px 5px #888888;
-  border: 1px solid #AAA;
-  z-index: 5;
+  
 }
 
 .best_in_place_name input{
-  max-width:130px;
+height: 15px;
+padding: 5px 0;
+width: 100%;
+margin: 0;
+border: 0;
+outline: none;
+font-size: 22px;
+font-weight:bold;
+line-height: 25px;
+background: white;
+color: black;
+text-align:center;
+font-family: 'LatoLight';
 }
 
 .desc {
   font-size:15px;
-  font-family:Arial, Helvetica, sans-serif;
+  line-height:19px;
+}
+.best_in_place_desc textarea {
+padding: 0;
+width: 100%;
+margin: 0;
+border: 0;
+outline: none;
+font-size: 15px;
+line-height: 19px;
+background: white;
+color: black;
+font-family: 'LatoLight';
 }
 
 .desc h3 {
@@ -121,7 +126,6 @@
 }
 
 .best_in_place_desc {
-  width:155px;
   display:block;
   margin-top:2px;	
 }
@@ -130,22 +134,76 @@
   width: auto;
 }
 
-.best_in_place_desc  textarea{
-  width:150px;
-  display:block;	
+.CardOnGraph .links {
+  position:relative;
+  border-bottom: 1px solid #AAAAAA;
+  border-top: 1px solid #AAAAAA;
+}
+
+.CardOnGraph .linkItem {
+  float:left;
+  min-width:40px;
+  height:40px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 27px 27px;
+}
+
+.CardOnGraph .icon {
+  position:absolute;
+  left:-20px;
+  cursor:move;
+}
+.linkItem.contributor {
+  background-image: url(MMCCicon_mapper_black.png);
+  margin-left:20px;
+}
+.linkItem.mapCount {
+  background-image: url(MMCCicon_map_black.png);
+  background-size: 22px 22px;
+background-position: 0px center;
+line-height: 40px;
+min-width: 16px;
+padding-left: 24px;
+}
+.linkItem.synapseCount {
+  background-image: url(MMCCicon_synapse_black.png);
+  background-size: 22px 22px;
+background-position: 0px center;
+line-height: 40px;
+min-width: 16px;
+padding-left: 24px;
+}
+.linkItem.mapPerm {
+
+}
+.linkItem.mapPerm.co {
+  background-image: url(MMCCicon_commons.png);
+}
+.linkItem.mapPerm.pu {
+  background-image: url(MMCCicon_public.png);
+}
+.linkItem.mapPerm.pr {
+  background-image: url(MMCCicon_private.png);
+}
+.linkItem.topicPopout {
+  background-image: url(MMCCicon_pop-out_black.png);
 }
 
 .CardOnGraph .link {
   position:absolute;
-  width:170px;
-  top:293px;
+  bottom:5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  border-top: 1px solid #AAAAAA;
+  padding-top:8px;
+  width:100%;
+  height:25px;
 }
 
 .CardOnGraph .best_in_place_link { 
-  width: 135px;
+  width: 80%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -153,15 +211,26 @@
   float: left;
   padding-left: 5px; 
   padding-top:2px;
+  font-size: 16px;
+  line-height: 16px;
 }
 
-.CardOnGraph .best_in_place_link input {
-  width:130px;
-  margin-top:-2px;	
+.best_in_place_link input{
+height: 16px;
+margin: -1px 0 0 0;
+border: 0;
+outline: none;
+font-size: 16px;
+line-height: 16px;
+line-height: 16px;
+background: white;
+color: black;
+font-family: 'LatoLight';
 }
 
 .CardOnGraph .go-link {
-  float:left;	
+  float: right;
+  margin: 3px 5px 0 0;	
 }
 
 .cardSettings {
@@ -197,18 +266,6 @@
   top: 30px;
 }
 
-.mapPerm {
-  background: #fff;
-  padding: 0 4px 4px 4px;
-  border-radius: 15px;
-  border: 1px solid #AAA;
-  position: absolute;
-  left: -7px;
-  top: 0px;
-  width:16px;
-  text-align:center;
-}
-
 #edit_synapse .mapPerm,
 #edit_synapse .permActivator {
   position: static;
@@ -227,8 +284,8 @@
 }
 
 #edit_synapse {
-  background: url(bg.png);
-  border-radius: 0.5em;
+  background: white;
+  border-radius: 5px;
   padding: 5px;
   color: #000;
 }

@@ -59,10 +59,6 @@ function enterKeyHandler() {
   if ( $('.new_topic').css('display') != 'none' ) {
     $('.new_topic').submit();
   }
-  // if the metacode spinner is open, create topic when enter is pressed
-  else if ( $('.new_synapse').css('display') != 'none' ) {
-    $('.new_synapse').submit();
-  }
   
   //var selectedNodesCopy = MetamapsModel.selectedNodes.slice(0);
   //var len = selectedNodesCopy.length;
@@ -143,6 +139,8 @@ function selectNodeOnClickHandler(node, e) {
     // the 'node' variable is a JIT node, the one that was clicked on
     // the 'e' variable is the click event
     
+    e.preventDefault();
+    e.stopPropagation();
     
     if (Mconsole.busy) return;
     
@@ -161,6 +159,7 @@ function selectNodeOnClickHandler(node, e) {
     if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from Map</li>';
     menustring += '<li class="rc-hide">Hide until refresh</li>';
     
+    if (!mapid) menustring += '<li class="rc-center">Center This Topic</li>';
     menustring += '<li class="rc-popout">Open In New Tab</li>';
     
     menustring += '</ul>';
@@ -172,7 +171,8 @@ function selectNodeOnClickHandler(node, e) {
       top: e.clientY
     });
     //add the menu to the page
-    $('#wrapper').append(rightclickmenu);
+    $('#center-container').append(rightclickmenu);
+    
     
     // attach events to clicks on the list items
     
@@ -206,6 +206,12 @@ function selectNodeOnClickHandler(node, e) {
       hideSelectedNodes();
     });
     
+    // when in radial, center on the topic you picked
+    $('.rc-center').click(function() {
+      $('.rightclickmenu').remove();
+      centerOn(node.id);
+    });
+    
     // open the entity in a new tab
     $('.rc-popout').click(function() {
       $('.rightclickmenu').remove();
@@ -229,8 +235,7 @@ function canvasDoubleClickHandler(canvasLoc,e) {
       $('#new_topic').css('top', e.clientY + "px"); 
       $('#topic_x').val(canvasLoc.x); 
       $('#topic_y').val(canvasLoc.y);      
-      $('#new_topic').fadeIn('fast'); 
-      addMetacode(); 
+      $('#new_topic').fadeIn('fast');
       $('#topic_name').focus(); 
    } else { 
       $('#new_topic').fadeOut('fast'); 
