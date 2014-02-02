@@ -36,6 +36,7 @@ class MainController < ApplicationController
     @current = current_user
     
     term = params[:term]
+    user = params[:user] ? params[:user] : false
     
     if term && !term.empty? && term.downcase[0..3] != "map:" && term.downcase[0..6] != "mapper:" && term.downcase != "topic:"
       
@@ -59,13 +60,20 @@ class MainController < ApplicationController
           @topics = []
         else
           search = '%' + term.downcase + '%'
-          @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).
-            where('metacode_id = ?', filterByMetacode.id).limit(10).order('"name"').visibleToUser(@current,nil)
+          
+          if !user
+            @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).where('metacode_id = ?', filterByMetacode.id).order('"name"')
+          elsif user
+            @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).where('metacode_id = ?', filterByMetacode.id).where('user_id = ?', user).order('"name"')
+          end
         end
       else
         search = '%' + term.downcase + '%'
-        @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).
-          limit(10).order('"name"').visibleToUser(@current,nil)
+        if !user
+          @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).order('"name"')
+        elsif
+          @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).where('user_id = ?', user).order('"name"')
+        end
       end
     else
       @topics = []
@@ -87,14 +95,19 @@ class MainController < ApplicationController
     @current = current_user
     
     term = params[:term]
+    user = params[:user] ? params[:user] : nil
+    
     if term && !term.empty? && term.downcase[0..5] != "topic:" && term.downcase[0..6] != "mapper:" && term.downcase != "map:"
     
       #remove "map:" if appended at beginning
       term = term[4..-1] if term.downcase[0..3] == "map:"
       
       search = '%' + term.downcase + '%'
-      @maps = Map.where('LOWER("name") like ? OR LOWER("desc") like ?', search, search).
-        limit(10).order('"name"').visibleToUser(@current,nil)
+      if !user
+        @maps = Map.where('LOWER("name") like ? OR LOWER("desc") like ?', search, search).order('"name"')
+      elsif user
+        @maps = Map.where('LOWER("name") like ? OR LOWER("desc") like ?', search, search).where('user_id = ?', user).order('"name"')
+      end
     else
       @maps = []
     end

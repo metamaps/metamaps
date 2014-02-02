@@ -78,7 +78,7 @@ function escKeyHandler() {
  * Make a node "in the commons" (with a green circle) lose its
  * green circle so it stays on the console/map/...
  */
-function keepFromCommons(id) {
+function keepFromCommons(event, id) {
   if (userid == null) {
     return;
   }
@@ -88,6 +88,10 @@ function keepFromCommons(id) {
   $('#topic_y').val(0); 
   $('#topic_grabTopic').val(id);
 	$('.new_topic').submit();
+  
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
 }//doubleClickNodeHandler
 
 /*

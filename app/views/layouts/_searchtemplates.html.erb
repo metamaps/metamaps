@@ -6,6 +6,7 @@
 <div class="templates">
 
 <div class="topicTemplate">
+<div class="result{{rtype}}">
   <img class="icon" src="{{typeImageURL}}">
   <span class="tip metacodeTip">{{type}}</span>
   <div class="resultText">
@@ -15,7 +16,7 @@
   <div class="autoOptions">
     
     <% if controller_name == 'maps' && action_name == 'show' && authenticated? && @map.authorize_to_edit(@current) %>
-    <button class="addToMap" onclick="keepFromCommons({{id}})"></button>
+    <button class="addToMap" onclick="return keepFromCommons(event, {{id}})"></button>
     <span class="tip">add to map</span>
     <% end %>
     <a href="/topics/{{id}}" target="_blank" class="goTo">
@@ -38,8 +39,10 @@
   </div>
   <div class="clearfloat"></div>
 </div>
+</div>
 
 <div class="mapTemplate">
+<div class="result{{rtype}}">
   <img class="icon" src="/assets/map.png">
   <div class="resultText">
     <p class="resultTitle">{{value}}</p>
@@ -67,8 +70,10 @@
   </div>
   <div class="clearfloat"></div>
 </div>
+</div>
 
 <div class="mapperTemplate">
+<div class="result{{rtype}}">
   <img class="icon" width="28" height="28" src="/assets/MMCCicon_mapper.png">
   <div class="resultText">
     <p class="resultTitle">{{value}}</p>
@@ -83,6 +88,7 @@
     </div>
   </div>
   <div class="clearfloat"></div>
+</div>
 </div>
 
 </div>

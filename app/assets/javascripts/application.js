@@ -155,30 +155,151 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                 name: 'topics',
                 template: $('.topicTemplate').html(),
                 remote: {
-                    url: '/search/topics?term=%QUERY'
+                    url: '/search/topics?term=%QUERY',
+                    replace: function () {
+                        var q = '/search/topics?term=' + $('.sidebarSearchField').val();
+                        if ($("#limitTopicsToMe").is(':checked')) {
+                            q += "&user=" + userid.toString();
+                        }
+                        return q;
+                    },
+                    filter: function(dataset) {
+                      if (dataset.length == 0) {
+                        dataset.push({
+                          value: "No results",
+                          typeImageURL: "/assets/wildcard.png",
+                          rtype: "noresult"                          
+                        });
+                      }
+                      return dataset;
+                    }
                 },
                 engine: Hogan,
-                header: '<h3 class="search-header">Topics</h3>'
+                header: '<h3 class="search-header">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>'
               },
               {
                 name: 'maps',
                 template: $('.mapTemplate').html(),
                 remote: {
-                    url: '/search/maps?term=%QUERY'
+                    url: '/search/maps?term=%QUERY',
+                    replace: function () {
+                        var q = '/search/maps?term=' + $('.sidebarSearchField').val();
+                        if ($("#limitMapsToMe").is(':checked')) {
+                            q += "&user=" + userid.toString();
+                        }
+                        return q;
+                    },
+                    filter: function(dataset) {
+                      if (dataset.length == 0) {
+                        dataset.push({
+                          value: "No results",
+                          rtype: "noresult" 
+                        });
+                      }
+                      return dataset;
+                    }
                 },
                 engine: Hogan,
-                header: '<h3 class="search-header">Maps</h3>'
+                header: '<h3 class="search-header">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>'
               },
               {
                 name: 'mappers',
                 template: $('.mapperTemplate').html(),
                 remote: {
-                    url: '/search/mappers?term=%QUERY'
+                    url: '/search/mappers?term=%QUERY',
+                    filter: function(dataset) {
+                      if (dataset.length == 0) {
+                        dataset.push({
+                          value: "No results",
+                          rtype: "noresult"
+                        });
+                      }
+                      return dataset;
+                    }
                 },
                 engine: Hogan,
-                header: '<h3 class="search-header">Mappers</h3>'
+                header: '<h3 class="search-header">Mappers</h3><div class="minimizeResults minimizeMapperResults"></div><div class="clearfloat"></div>'
               }
       ]);
+      // tell the autocomplete to launch a new tab with the topic, map, or mapper you clicked on
+      $('.sidebarSearchField').bind('typeahead:selected', function (event, datum, dataset) {
+          console.log(event);
+          if (datum.rtype != "noresult") {
+            var win;
+            if (dataset == "topics") {
+              win=window.open('/topics/' + datum.id, '_blank');
+            }
+            else if (dataset == "maps") {
+              win=window.open('/maps/' + datum.id, '_blank');
+            }
+            else if (dataset == "mappers") {
+              win=window.open('/maps/mappers/' + datum.id, '_blank');
+            }
+            win.focus();
+            closeSearch(0);
+          }
+      });
+      
+      
+      var checkboxChangeInit = false, minimizeInit = false;
+      
+      $('.sidebarSearchField').bind('keyup', function () {
+          
+          // when the user selects 'added by me' resend the query with their userid attached
+          if (!checkboxChangeInit) {
+            $('.limitToMe').bind("change", function(e) {
+              // set the value of the search equal to itself to retrigger the autocomplete event
+              searchIsOpen = false;
+              $('.sidebarSearchField').typeahead('setQuery',$('.sidebarSearchField').val());
+              setTimeout(function() { searchIsOpen = true; }, 2000);
+            });
+            checkboxChangeInit = true;
+          }
+          
+          // when the user clicks minimize section, hide the results for that section
+          if (!minimizeInit) {
+            $('.minimizeMapperResults').click(function(e) {
+              var s = $('.tt-dataset-mappers .tt-suggestions');
+              console.log(s.css('height'));
+              if (s.css('height') == '0px') {
+                $('.tt-dataset-mappers .tt-suggestions').css('height','auto');
+                $(this).removeClass('maximizeResults').addClass('minimizeResults');
+              } else {
+                $('.tt-dataset-mappers .tt-suggestions').css('height','0');
+                $(this).removeClass('minimizeResults').addClass('maximizeResults');
+              }
+            });
+            $('.minimizeTopicResults').click(function(e) {
+              var s = $('.tt-dataset-topics .tt-suggestions');
+              console.log(s.css('height'));
+              if (s.css('height') == '0px') {
+                s.css({'height':'auto','border-top':'none'});
+                $(this).removeClass('maximizeResults').addClass('minimizeResults');
+              } else {
+                s.css({'height':'0','border-top':'1px solid #222'});
+                $(this).removeClass('minimizeResults').addClass('maximizeResults');
+              }
+            });
+            $('.minimizeMapResults').click(function(e) {
+              var s = $('.tt-dataset-maps .tt-suggestions');
+              console.log(s.css('height'));
+              if (s.css('height') == '0px') {
+                s.css({'height':'auto','border-top':'none'});
+                $(this).removeClass('maximizeResults').addClass('minimizeResults');
+              } else {
+                s.css({'height':'0','border-top':'1px solid #222'});
+                $(this).removeClass('minimizeResults').addClass('maximizeResults');
+              }
+            });
+            minimizeInit = true;
+          }
+      });
+      
+      //
+      
+      $('.sidebarSearch button.addToMap').click(function(event){
+        event.stopPropagation();
+      });
    }  // end bindSearchHover
    
    function bindAccountHover() {

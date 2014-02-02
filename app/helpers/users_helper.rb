@@ -9,6 +9,7 @@ module UsersHelper
       user['label'] = u.name
       user['value'] = u.name
       user['mapCount'] = u.maps.count
+      user['rtype'] = "mapper"
       
       temp.push user
     end

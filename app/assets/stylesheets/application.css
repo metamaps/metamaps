@@ -835,11 +835,42 @@ border: 1px solid black;
   font-size:20px;
   line-height:20px;
   margin: 10px 0 3px 10px;
+  float:left;
 }
+.sidebarSearch .tt-dropdown-menu .limitToMe {
+  float:left;
+  width: 15px;
+  height: 15px;
+  margin-top: 11px;
+  margin-left: 15px;
+}
+.sidebarSearch .tt-dropdown-menu .limitToMeLabel {
+  float:left;
+  margin-top: 11px;
+}
+.sidebarSearch .tt-dropdown-menu .minimizeResults {
+  float:right;
+  width:35px;
+  height:35px;
+  background: url('/assets/MMCCicon_minimize_arrow.png') no-repeat center center;
+  background-size: 25px 25px;
+  cursor:pointer;
+}
+.sidebarSearch .tt-dropdown-menu .maximizeResults {
+  float:right;
+  width:35px;
+  height:35px;
+  background: url('/assets/MMCCicon_maximize_arrow.png') no-repeat center center;
+  background-size: 25px 25px;
+  cursor:pointer;
+}
+
 
 .sidebarSearch .tt-suggestions {
   font-family:'LatoLight', helvetica, sans-serif;
+  overflow:hidden;
 }
+
 
 .sidebarSearch .tt-suggestion {
 background: rgba(0,0,0,0.5);
@@ -848,6 +879,10 @@ border: 1px solid black;
 
 .sidebarSearch .tt-is-under-cursor {
   background:black;
+}
+
+.sidebarSearch .tt-dataset-maps .tt-is-under-cursor .resultmap, .sidebarSearch .tt-dataset-topics .tt-is-under-cursor .resulttopic {
+  min-height: 57px;
 }
 
 .sidebarSearch .tt-suggestion .icon {
@@ -863,7 +898,7 @@ border: 1px solid black;
 }
 
 .sidebarSearch .resultText {
-  width: 280px;
+  width: 275px;
   display: block;
   float: left;
 }
@@ -888,13 +923,16 @@ border: 1px solid black;
 }
 
 .sidebarSearch div.autoOptions {
-  width: 117px;
+  width: 122px;
   float: left;
   position:relative;
   display:none;
 }
 .sidebarSearch .tt-is-under-cursor .autoOptions {
   display:block;
+}
+.sidebarSearch .tt-suggestion .resultnoresult .autoOptions {
+  display:none;
 }
 
 .sidebarSearch .autoOptions button, .sidebarSearch .autoOptions a, .sidebarSearch .autoOptions div {
@@ -906,21 +944,22 @@ border: 1px solid black;
 }
 
 .sidebarSearch button.addToMap {
-  width: 20px;
-  height: 20px;
-  background: url(/assets/MMCCicon_add.png) no-repeat center center;
-  background-size: 15px 15px;
-  top: 10px;
-  left: 0px;
+width: 20px;
+height: 20px;
+background: url(/assets/MMCCicon_add.png) no-repeat center center;
+background-size: 18px 18px;
+top: 30px;
+left: 84px;
+cursor: pointer;
 }
 
 .sidebarSearch a.goTo {
 width: 20px;
 height: 20px;
 background: url(/assets/MMCCicon_pop-out.png) no-repeat center center;
-background-size: 15px 15px;
-top: 11px;
-left: 22px;
+background-size: 18px 18px;
+top: 7px;
+left: 84px;
 }
 
 .sidebarSearch div.mapCount {
@@ -928,8 +967,8 @@ width: 20px;
 height: 20px;
 background: url(/assets/MMCCicon_map.png) no-repeat 0px center;
 background-size: 14px 14px;
-top: 0px;
-left: 50px;
+top: 7px;
+left: 39px;
 padding-left: 18px;
 font-size: 12px;
 line-height: 20px;
@@ -940,8 +979,8 @@ width: 20px;
 height: 20px;
 background: url(/assets/MMCCicon_topic.png) no-repeat 0px center;
 background-size: 14px 14px;
-top: 0px;
-left: 50px;
+top: 7px;
+left: 39px;
 padding-left: 18px;
 font-size: 12px;
 line-height: 20px;
@@ -951,10 +990,10 @@ line-height: 20px;
 width: 20px;
 height: 20px;
 background: url(/assets/MMCCicon_synapse.png) no-repeat 0px center;
-background-size: 14px 14px;
-top: 0px;
-left: 83px;
-padding-left: 15px;
+background-size: 15px 15px;
+top: 30px;
+left: 38px;
+padding-left: 19px;
 font-size: 12px;
 line-height: 20px;
 }
@@ -963,29 +1002,29 @@ line-height: 20px;
   width: 20px;
   height: 20px;
   background: url(/assets/MMCCicon_mapper.png) no-repeat center center;
-  background-size: 16px 16px;
-  top: 21px;
-  left: 52px;
+  background-size: 17px 17px;
+  top: 7px;
+  left: 13px;
 }
 
 .sidebarSearch div.mapContributorsIcon {
-  width: 20px;
-  height: 20px;
-  background: url(/assets/MMCCicon_mapper.png) no-repeat 0px center;
-  background-size: 16px 16px;
-  top: 21px;
-  left: 50px;
-  padding-left: 18px;
-  font-size: 12px;
-  line-height: 20px;
+height: 20px;
+background: url(/assets/MMCCicon_mapper.png) no-repeat 0px center;
+background-size: 17px 17px;
+top: 7px;
+right: 85px;
+padding-left: 19px;
+font-size: 12px;
+line-height: 20px;
+padding-right: 5px;
 }
 
 .sidebarSearch div.topicPermission, .sidebarSearch div.mapPermission {
 width: 20px;
 height: 20px;
-background-size: 20px 20px !important;
-top: 20px;
-left: 84px;
+background-size: 19px 19px !important;
+top: 30px;
+left: 13px;
 }
 .sidebarSearch div.topicPermission.commons, .sidebarSearch div.mapPermission.commons {
   background: url(/assets/MMCCicon_commons.png) no-repeat center center;

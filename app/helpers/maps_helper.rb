@@ -13,6 +13,7 @@ module MapsHelper
       map['topicCount'] = m.topics.count
       map['synapseCount'] = m.synapses.count
       map['contributorCount'] = m.contributors.count
+      map['rtype'] = "map"
       
       contributorList = ''
       if m.contributors.count > 0 
