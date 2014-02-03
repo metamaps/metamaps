@@ -147,12 +147,14 @@ font-family: 'LatoLight';
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 27px 27px;
+  z-index: 2;
+position: relative;
 }
 
 .CardOnGraph .icon {
   position:absolute;
-  left:-20px;
-  cursor:move;
+  width:100%;
+  z-index:1;
 }
 .linkItem.contributor {
   background-image: url(MMCCicon_mapper_black.png);
@@ -190,6 +192,32 @@ padding-left: 24px;
   background-image: url(MMCCicon_pop-out_black.png);
 }
 
+.CardOnGraph .metacodeTitle {
+  font-style: italic;
+  font-family: 'vinyl';
+  text-transform: uppercase;
+  position: absolute;
+  line-height: 36px;
+  font-size: 20px;
+  display: none;
+  width: 90%;
+  padding-left: 10%;
+  padding-top: 4px;
+  background-color: crimson;
+}
+.CardOnGraph .metacodeImage {
+  cursor:move;
+  width:50px;
+  height:50px;
+  position:absolute;
+  left:-25px;
+  top:-5px;
+  background-size:50px 50px;
+  background-position:0 0;
+  background-repeat:no-repeat;
+}
+
+
 .CardOnGraph .link {
   position:absolute;
   bottom:5px;
@@ -200,6 +228,8 @@ padding-left: 24px;
   padding-top:8px;
   width:100%;
   height:25px;
+  background: url(MMCCicon_link.png) no-repeat 6px 6px;
+  background-size:24px 24px;
 }
 
 .CardOnGraph .best_in_place_link { 
@@ -209,7 +239,7 @@ padding-left: 24px;
   text-overflow: ellipsis;
   display: block;
   float: left;
-  padding-left: 5px; 
+  padding-left: 40px; 
   padding-top:2px;
   font-size: 16px;
   line-height: 16px;
@@ -229,8 +259,13 @@ font-family: 'LatoLight';
 }
 
 .CardOnGraph .go-link {
-  float: right;
-  margin: 3px 5px 0 0;	
+  position: absolute;
+  width: 34px;
+  height: 36px;
+  background: url(MMCCicon_go.png) no-repeat center center;
+  background-size: 20px 20px;
+  top: 0;
+  right: 12px;
 }
 
 .cardSettings {

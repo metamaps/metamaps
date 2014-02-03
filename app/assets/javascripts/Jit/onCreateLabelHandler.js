@@ -26,16 +26,17 @@ function generateShowcardHTML() {
                 data-type="input">$_name_$</span>                             \
         </span>                                                               \
         <div class="links">                                                   \
-           <img alt="$_metacode_$"                                                 \
-           class="linkItem icon"                                                       \
-           title="click and drag to move card"                                         \
-           height="40"                                                        \
-           width="40"                                                         \
-           src="$_imgsrc_$" />                                                \
-           <div class="linkItem contributor"></div>                                    \
-           <div class="linkItem mapCount">$_map_count_$</div>                                    \
-           <div class="linkItem synapseCount">$_synapse_count_$</div>                                    \
-           <div class="linkItem mapPerm $_mk_permission_$"></div>                      \
+           <div                                                               \
+           class="linkItem icon"                                              \
+           title="click and drag to move card">                               \
+              <div class="metacodeTitle">$_metacode_$</div>                   \
+              <div class="metacodeImage"                                      \
+                   style="background-image:url($_imgsrc_$);"></div>           \
+           </div>                                                             \
+           <div class="linkItem contributor"></div>                           \
+           <div class="linkItem mapCount">$_map_count_$</div>                 \
+           <div class="linkItem synapseCount">$_synapse_count_$</div>         \
+           <div class="linkItem mapPerm $_mk_permission_$"></div>             \
            <a href="/topics/$_id_$" class="linkItem topicPopout" title="Open Topic in New Tab" target="_blank"></a>\
            <div class="clearfloat"></div>                                     \
         </div>                                                                \
@@ -78,7 +79,7 @@ function replaceVariables(html, node) {
     }
   } else {
     go_link = '<a href="' + node.getData("link") + '" ' +
-              '   class="go-link" target="_blank">[go]</a>';
+              '   class="go-link" target="_blank"></a>';
     a_tag = '';
     close_a_tag = '';
   }
@@ -212,6 +213,17 @@ function populateShowCard(node) {
       showCard.appendChild(perm);
     }
 
+    
+  // attach the listener that shows the metacode title when you hover over the image
+  $('.showcard .metacodeImage').hover(function(){
+    $('.showcard .icon').css('z-index','3');
+    $('.showcard .metacodeTitle').show();
+  },
+  function() {
+    $('.showcard .metacodeTitle').hide();
+    $('.showcard .icon').css('z-index','1');
+  });
+  
   //bind best_in_place ajax callbacks
   $(showCard).find('.best_in_place_metacode').bind("ajax:success", function() {
     var metacode = $(this).html();

@@ -150,6 +150,8 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       });
         
       // initialize the search box autocomplete results
+      var mapheader = userid ? '<h3 class="search-header">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>';
+      var topicheader = userid ? '<h3 class="search-header">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>';
       $('.sidebarSearchField').typeahead([
              {
                 name: 'topics',
@@ -175,7 +177,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                     }
                 },
                 engine: Hogan,
-                header: '<h3 class="search-header">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>'
+                header: topicheader
               },
               {
                 name: 'maps',
@@ -200,7 +202,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                     }
                 },
                 engine: Hogan,
-                header: '<h3 class="search-header">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>'
+                header: mapheader
               },
               {
                 name: 'mappers',
@@ -262,10 +264,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
               var s = $('.tt-dataset-mappers .tt-suggestions');
               console.log(s.css('height'));
               if (s.css('height') == '0px') {
-                $('.tt-dataset-mappers .tt-suggestions').css('height','auto');
+                $('.tt-dataset-mappers .tt-suggestions').css({'height':'auto','overflow':'visible'});
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
               } else {
-                $('.tt-dataset-mappers .tt-suggestions').css('height','0');
+                $('.tt-dataset-mappers .tt-suggestions').css({'height':'0','overflow':'hidden'});
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
               }
             });
@@ -273,10 +275,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
               var s = $('.tt-dataset-topics .tt-suggestions');
               console.log(s.css('height'));
               if (s.css('height') == '0px') {
-                s.css({'height':'auto','border-top':'none'});
+                s.css({'height':'auto','border-top':'none','overflow':'visible'});
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
               } else {
-                s.css({'height':'0','border-top':'1px solid #222'});
+                s.css({'height':'0','border-top':'1px solid #222','overflow':'hidden'});
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
               }
             });
@@ -284,10 +286,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
               var s = $('.tt-dataset-maps .tt-suggestions');
               console.log(s.css('height'));
               if (s.css('height') == '0px') {
-                s.css({'height':'auto','border-top':'none'});
+                s.css({'height':'auto','border-top':'none','overflow':'visible'});
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
               } else {
-                s.css({'height':'0','border-top':'1px solid #222'});
+                s.css({'height':'0','border-top':'1px solid #222','overflow':'hidden'});
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
               }
             });

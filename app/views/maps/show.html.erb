@@ -24,7 +24,7 @@
   </div>
 </div>
 <% end %>
-<div class="sidebarFilter">
+<div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
   <div class="sidebarFilterIcon"></div>
   <div class="sidebarFilterBox">
     <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
@@ -166,7 +166,7 @@
    bindWandHover();
    bindFilterHover();
    
-   $('.showcard').draggable({ handle: ".icon" });
+   $('.showcard').draggable({ handle: ".metacodeImage" });
    $('#showcard').resizable({
      maxHeight: 500,
      maxWidth: 500,

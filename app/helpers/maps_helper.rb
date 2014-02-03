@@ -15,13 +15,16 @@ module MapsHelper
       map['contributorCount'] = m.contributors.count
       map['rtype'] = "map"
       
-      contributorList = ''
+      contributorList = m.user.name + ' created this map. '
       if m.contributors.count > 0 
-        contributorList += '<ul>'
-          m.contributors.each do |c|
-            contributorList += '<li>' + c.name + '</li>'
+          m.contributors.each_with_index do |c, index|
+            comma = (index+1) == m.contributors.count ? '' : ', '
+            contributorList += c.name + comma
           end
-        contributorList += '</ul>'      
+          contributorList += ' has worked on it.' if m.contributors.count == 1
+          contributorList += ' have worked on it.' if m.contributors.count > 1
+      else
+        contributorList += 'No one has added anything yet.'      
       end
       map['contributorList'] = contributorList
       

@@ -652,6 +652,9 @@ li.wandSaveLayout {
 li.wandForkMap {
   background-image: url('MMCCicon_save_new_map.png');
 }
+li.wandChangeMetacodes {
+  background-image: url('MMCCicon_metacode_set.png');
+}
 
 /* end wand */
 
@@ -868,7 +871,7 @@ border: 1px solid black;
 
 .sidebarSearch .tt-suggestions {
   font-family:'LatoLight', helvetica, sans-serif;
-  overflow:hidden;
+  overflow:visible;
 }
 
 
@@ -891,6 +894,33 @@ border: 1px solid black;
   height:36px;
   margin-right:5px;
 }
+.sidebarSearch .topicMetacode {
+  float:left;
+  margin-right:5px;
+  max-width:70px;
+}
+.sidebarSearch .tt-dataset-topics .topicIcon {
+  width:36px;
+  height:36px;
+}
+.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .topicIcon {
+  margin:0 auto;
+  padding-left:2px
+}
+.sidebarSearch .tt-dataset-topics .metacodeTip {
+  display:none;
+}
+.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip {
+  display: block;
+  font-family: 'vinyl';
+  text-transform: uppercase;
+  font-style: italic;
+  font-size: 13px;
+  margin: 0 5px 0 2px;
+  text-align: center;
+}
+
+
 .sidebarSearch .tt-dataset-mappers .tt-suggestion .icon {
   width:28px;
   height:28px;
@@ -898,7 +928,7 @@ border: 1px solid black;
 }
 
 .sidebarSearch .resultText {
-  width: 275px;
+  width: 240px;
   display: block;
   float: left;
 }
@@ -924,7 +954,7 @@ border: 1px solid black;
 
 .sidebarSearch div.autoOptions {
   width: 122px;
-  float: left;
+  float: right;
   position:relative;
   display:none;
 }
@@ -1005,6 +1035,33 @@ line-height: 20px;
   background-size: 17px 17px;
   top: 7px;
   left: 13px;
+}
+.sidebarSearch .tip {
+ position: absolute;
+ background: white;
+ width: auto;
+ top: 0;
+ right: 23px;
+ color: black;
+ white-space: nowrap;
+ border-radius: 4px;
+ font-size:15px !important;
+ font-family:'LatoLight';
+ line-height:17px;
+ padding: 3px 5px 2px;
+ border: 1px solid black;
+ z-index:100;
+}
+.sidebarSearch .mapCount .tip,.sidebarSearch .synapseCount .tip, .sidebarSearch .topicCount .tip  {
+ right:40px;
+}
+.sidebarSearch .hoverForTip:hover .tip {
+  display:block;
+}
+.sidebarSearch .mapContributorsIcon .mapContributors {
+  right:40px;
+  white-space:normal;
+  width:200px;
 }
 
 .sidebarSearch div.mapContributorsIcon {
