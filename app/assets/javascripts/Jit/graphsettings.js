@@ -42,7 +42,7 @@ function graphSettings(type, embed) {
        size: 20,
        family: 'arial',
        textBaseline: 'hanging',
-       color:'#000'
+       color:'#DDD'
        //style: 'bold'
     },
     //Add Tips

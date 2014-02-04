@@ -1,0 +1,39 @@
+<%#
+  # Partial rendering form for a new topic on a map
+  # This code is called when viewing a metamap in show.html.erb in the views/maps folder
+  #%>
+<div class="mapInfoBox permission <%= @map.user == user ? "canEdit" : "cannotEdit" %>">
+  
+  <div class="mapInfoName"><%= best_in_place @map, :name, :type => :input, :classes => 'best_in_place_name' %></div>
+  
+  <div class="mapInfoStat">
+    <div class="infoStatIcon mapContributors">
+      <%= @map.contributors.count %>
+    </div>
+    <div class="infoStatIcon mapTopics">
+      <%= @map.topics.count %>
+    </div>
+    <div class="infoStatIcon mapSynapses">
+      <%= @map.synapses.count %>
+    </div>
+    <div class="infoStatIcon mapPermission <%= @map.permission %>"></div>
+    <div class="clearfloat"></div>
+  </div>
+  
+  <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
+  <div class="mapInfoDesc">
+    <%= best_in_place @map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>", :classes => 'best_in_place_desc' %>
+  </div>
+  <% end %>
+  
+  <div class="mapInfoMeta">
+    <p>Created by <%= @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
+    <p>Last edited <%= @map.last_edited.strftime("%m/%d/%Y") %></p>
+  </div>
+  
+  <div class="mapInfoDelete">
+    <% if @map.user == user %>
+      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, :remote => true %>
+    <% end %>
+  </div>
+</div>

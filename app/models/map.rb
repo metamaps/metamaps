@@ -33,6 +33,20 @@ end
     return contributors
   end
   
+  #return the date of the last edit (mapping updated) to the map
+  def last_edited
+    date = nil
+    self.mappings.each do |m|
+      if date == nil
+        date = m.updated_at
+      elsif m.updated_at > date
+        date = m.updated_at
+      end
+    end
+    
+    return date
+  end
+  
   
   ###### JSON ######
   #build a json object of a map

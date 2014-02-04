@@ -7238,7 +7238,8 @@ Graph.Label.Native = new Class({
       function splitLine(st,n) {var b = ''; var s = st;while (s.length > n) {var c = s.substring(0,n);var d = c.lastIndexOf(' ');var e =c.lastIndexOf('\n');if (e != -1) d = e; if (d == -1) d = n; b +=       c.substring(0,d) + '\n';s = s.substring(d+1);}return b+s;}
       var arrayOfLabelLines = splitLine(node.name,30).split('\n');
       //render background
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.fillStyle = 'rgba(24,32,46, 0.8)';
+            ctx.strokeStyle = 'rgba(24,32,46, 1)';
             var height = 25 * arrayOfLabelLines.length; //font size + margin
             
             var index, lineWidths = [];

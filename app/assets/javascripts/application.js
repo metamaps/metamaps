@@ -361,13 +361,17 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   $('#topic_name').typeahead([
          {
             name: 'topic_autocomplete',
-            template: '<p>{{value}}</p><div class="type">{{type}}</div><img width="20" height="20" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}"/>',
+            template: '<img class="autocompleteSection topicType" width="22" height="22" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}"/><p class="autocompleteSection topicTitle">{{value}}</p><div class="autocompleteSection topicPermission {{permission}}"></div><div class="autocompleteSection topicOriginatorIcon hoverForTip"><span class="tip topicOriginator">{{originator}}</span></div><div class="clearfloat"></div>',
             remote: {
                 url: '/topics/autocomplete_topic?term=%QUERY'
             },
             engine: Hogan
           }
   ]);
+  $('#topic_name').bind('typeahead:autocompleted', function (event, datum, dataset) {
+        event.preventDefault();
+        event.stopPropagation();
+  });
   // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
   $('#topic_name').bind('typeahead:selected', function (event, datum, dataset) {
         $('#topic_grabTopic').val(datum.id);

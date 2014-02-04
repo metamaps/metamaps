@@ -21,8 +21,8 @@ module MapsHelper
             comma = (index+1) == m.contributors.count ? '' : ', '
             contributorList += c.name + comma
           end
-          contributorList += ' has worked on it.' if m.contributors.count == 1
-          contributorList += ' have worked on it.' if m.contributors.count > 1
+          contributorList += ' has edited it.' if m.contributors.count == 1
+          contributorList += ' have edited it.' if m.contributors.count > 1
       else
         contributorList += 'No one has added anything yet.'      
       end
