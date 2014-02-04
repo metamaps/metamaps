@@ -1,4 +1,5 @@
-window.app.addTopicToMap = (topic) ->
+window.realtime = {}
+window.realtime.addTopicToMap = (topic) ->
   Mconsole.graph.addNode(topic)
   tempForT = Mconsole.graph.getNode(topic.id)
   tempForT.setData('dim', 1, 'start')
@@ -12,12 +13,11 @@ window.app.addTopicToMap = (topic) ->
   Mconsole.fx.plotNode(tempForT, Mconsole.canvas)
   Mconsole.labels.plotLabel(Mconsole.canvas, tempForT, Mconsole.config)
     
-window.app.updateTopicOnMap = (topic) ->
+window.realtime.updateTopicOnMap = (topic) ->
   tempForT = Mconsole.graph.getNode(topic.id)
   
   tempForT.data = topic.data
   tempForT.name = topic.name
-  $('#topic_' + topic.id + '_label').find('.label').html(topic.name);
   
   if MetamapsModel.showcardInUse == topic.id 
     populateShowCard(tempForT)
@@ -35,7 +35,7 @@ window.app.updateTopicOnMap = (topic) ->
     duration: 500    
   })
 
-window.app.addSynapseToMap = (synapse) ->
+window.realtime.addSynapseToMap = (synapse) ->
   Node1 = Mconsole.graph.getNode(synapse.data.$direction[0])
   Node2 = Mconsole.graph.getNode(synapse.data.$direction[1])
   Mconsole.graph.addAdjacence(Node1, Node2, {})
@@ -54,7 +54,7 @@ window.app.addSynapseToMap = (synapse) ->
     duration: 500    
   })
   
-window.app.updateSynapseOnMap = (synapse) ->
+window.realtime.updateSynapseOnMap = (synapse) ->
   tempForS = Mconsole.graph.getAdjacence(synapse.data.$direction[0], synapse.data.$direction[1])
   
   wasShowDesc = tempForS.data.$showDesc

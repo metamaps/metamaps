@@ -205,6 +205,9 @@
    bindFilterHover();
    bindInfoHover();
    
+   // initialize best_in_place editing
+   $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
+   
    $('.showcard').draggable({ handle: ".metacodeImage" });
    $('#showcard').resizable({
      maxHeight: 500,
@@ -242,19 +245,23 @@
 				initialize("chaotic", true);
 		});
 	}
-  
+  window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
+  window.realtime.socket.on('connect', function() {
+      subscribeToRooms();
+      console.log('socket connected');
+  });
   function subscribeToRooms() {
-    window.app.socket.on('maps-' + mapid, function(data) {
+    window.realtime.socket.on('maps-' + mapid, function(data) {
       //as long as you weren't the origin of the changes, update your map
       if (data.origin != userid && goRealtime) {
         if (data.resource == 'Topic') {
           topic = $.parseJSON(data.obj);
           
           if (data.action == 'create') {
-            window.app.addTopicToMap(topic);
+            window.realtime.addTopicToMap(topic);
           }
           else if (data.action == 'update' && Mconsole.graph.getNode(topic.id) != 'undefined') {
-            window.app.updateTopicOnMap(topic);
+            window.realtime.updateTopicOnMap(topic);
           }
           else if (data.action == 'destroy' && Mconsole.graph.getNode(topic.id) != 'undefined') {
             hideNode(topic.id)
@@ -266,11 +273,11 @@
           synapse = $.parseJSON(data.obj);
           
           if (data.action == 'create') {
-            window.app.addSynapseToMap(synapse);
+            window.realtime.addSynapseToMap(synapse);
           }
           else if (data.action == 'update' && 
                    Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {
-            window.app.updateSynapseOnMap(synapse);
+            window.realtime.updateSynapseOnMap(synapse);
           }
           else if (data.action == 'destroy' && 
                    Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {

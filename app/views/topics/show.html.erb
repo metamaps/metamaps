@@ -155,6 +155,9 @@
    bindWandHover();
    bindFilterHover();
    
+   // initialize best_in_place editing
+   $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
+   
    $('.showcard').draggable({ handle: ".icon" });
    $('#showcard').resizable({
      maxHeight: 500,
