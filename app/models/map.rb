@@ -35,11 +35,9 @@ end
   
   #return the date of the last edit (mapping updated) to the map
   def last_edited
-    date = nil
+    date = self.created_at
     self.mappings.each do |m|
-      if date == nil
-        date = m.updated_at
-      elsif m.updated_at > date
+      if m.updated_at > date
         date = m.updated_at
       end
     end
