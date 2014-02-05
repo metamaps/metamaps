@@ -15,12 +15,12 @@ ISSAD::Application.routes.draw do
   match 'topics/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :post, as: :removefrommap
   match 'synapses/:map_id/:synapse_id/removefrommap', to: 'synapses#removefrommap', via: :post, as: :removefrommap
   
-  resources :topics do
+  resources :topics, except: :index do
     get :autocomplete_topic, :on => :collection
   end
   match 'topics/:id/:format', to: 'topics#json', via: :get, as: :json
   
-  resources :synapses
+  resources :synapses, except: :index
   match 'synapses/:id/:format', to: 'synapses#json', via: :get, as: :json
   
   resources :maps
@@ -32,11 +32,7 @@ ISSAD::Application.routes.draw do
     get "sign_out", :to => "devise/sessions#destroy"
   end
   
-  resources :users, except: :show do
-	  resources :topics, :only => [:index]
-    resources :synapses, :only => [:index]
-	  resources :maps, :only => [:index]
-  end
+  resources :users, except: :show
 
   resources :mappings
   

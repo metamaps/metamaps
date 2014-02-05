@@ -21,7 +21,7 @@ module SynapsesHelper
       synapse = {}
       synapse['id'] = s.id
       synapse['label'] = s.desc
-      synapse['value'] = s.id
+      synapse['value'] = s.desc
       synapse['permission'] = s.permission
       synapse['mapCount'] = s.maps.count
       synapse['originator'] = s.user.name

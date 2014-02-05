@@ -5,26 +5,6 @@ class SynapsesController < ApplicationController
     
   respond_to :html, :js, :json
   
-  # GET synapses
-  # or GET users/:user_id/synapses
-  def index
-    @current = current_user
-    
-    if params[:user_id]
-      @user = User.find(params[:user_id])
-  	  @synapses = Synapse.visibleToUser(@current, @user)
-    elsif
-      @synapses = Synapse.visibleToUser(@current, nil)
-    end
-	  
-	  @synapsesjson = synapses_as_json(@current, @synapses).html_safe
-
-    respond_to do |format|
-      format.html 
-      format.json { respond_with(@synapsesjson) }
-    end
-  end
-  
   # Get synapses/new
   def new
   	@synapse = Synapse.new

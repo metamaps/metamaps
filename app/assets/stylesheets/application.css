@@ -801,7 +801,8 @@ background-size: 40px 40px;
 cursor:pointer;
 }
 .sidebarCollaborateIcon.blue {
-background: rgba(0,0,0,0.7) url('MMCCicon_realtime_blue.png') no-repeat -3px -1px;
+background: rgba(0,0,0,0.7) url('MMCCicon_realtime_blue.png') no-repeat center center;
+background-size: 29px 29px;
 }
 .sidebarCollaborateBox {
   position:absolute;
@@ -1411,7 +1412,30 @@ line-height: 27px;
 background-image: url(MMCCicon_mapper.png);
 background-position: 16px 6px;
 background-size: 27px 27px;
+position:relative;
 }
+.mapContributors .tip {
+display: none; 
+position: absolute;
+background: white;
+min-width: 180px;
+max-width:250px;
+text-align:center;
+top: 38px;
+left: 6px;
+color: black;
+border-radius: 4px;
+font-size: 15px !important;
+font-family: 'LatoLight';
+line-height: 17px;
+padding: 3px 5px 2px;
+border: 1px solid black;
+z-index: 100;
+}
+.mapInfoBox .hoverForTip:hover .tip {
+  display:block;
+}
+
 .mapTopics {
 background-image: url(MMCCicon_topic.png);
 background-position: 16px 6px;

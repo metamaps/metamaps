@@ -365,17 +365,15 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   bindAccountHover();
   
   // disable right click events on the new topic and new synapse input fields
-  //$('#new_topic, #new_synapse').bind('contextmenu', function(e){
-	//	return false;
-	//});
+  $('#new_topic, #new_synapse').bind('contextmenu', function(e){
+		return false;
+	});
   
   // initialize the autocomplete results for the metacode spinner
   $('#topic_name').typeahead([
          {
             name: 'topic_autocomplete',
-            dupChecker: function (datum1,datum2) {
-                  return false;
-                },
+            limit: 8,
             template: '<img class="autocompleteSection topicType" width="22" height="22" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}"/><p class="autocompleteSection topicTitle">{{label}}</p><div class="autocompleteSection topicPermission {{permission}}"></div><div class="autocompleteSection topicOriginatorIcon hoverForTip"><span class="tip topicOriginator">{{originator}}</span></div><div class="clearfloat"></div>',
             remote: {
                 url: '/topics/autocomplete_topic?term=%QUERY'

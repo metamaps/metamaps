@@ -22,21 +22,6 @@ class TopicsController < ApplicationController
     render json: autocomplete_array_json(@topics)
   end
   
-  # GET topics
-  # or GET /users/:user_id/topics
-  def index
-    @current = current_user
-    
-    if params[:user_id]
-      @user = User.find(params[:user_id])
-  	  @topics = Topic.order("name ASC").visibleToUser(@current, @user)
-    elsif      
-      @topics = Topic.order("name ASC").visibleToUser(@current, nil)
-    end
-     
-    respond_with(@user,@topics)
-  end
-  
   # Get topics/new
   def new
   	@topic = Topic.new

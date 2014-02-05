@@ -7,7 +7,7 @@ module UsersHelper
       user = {}
       user['id'] = u.id
       user['label'] = u.name
-      user['value'] = u.id
+      user['value'] = u.name
       user['mapCount'] = u.maps.count
       user['rtype'] = "mapper"
       

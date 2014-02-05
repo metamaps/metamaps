@@ -7,7 +7,7 @@ module MapsHelper
       map = {}
       map['id'] = m.id
       map['label'] = m.name
-      map['value'] = m.id
+      map['value'] = m.name
       map['description'] = m.desc.truncate(30)
       map['permission'] = m.permission
       map['topicCount'] = m.topics.count

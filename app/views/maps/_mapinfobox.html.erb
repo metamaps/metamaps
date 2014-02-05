@@ -7,8 +7,14 @@
   <div class="mapInfoName"><%= best_in_place @map, :name, :type => :input, :classes => 'best_in_place_name' %></div>
   
   <div class="mapInfoStat">
-    <div class="infoStatIcon mapContributors">
+    <div class="infoStatIcon mapContributors hoverForTip">
       <%= @map.contributors.count %>
+      <% contributorList = ''
+         @map.contributors.each_with_index do |c, index|
+            comma = (index+1) == @map.contributors.count ? '' : ', '
+            contributorList += c.name + comma
+         end %>
+      <div class="tip"><%= contributorList %></div>
     </div>
     <div class="infoStatIcon mapTopics">
       <%= @map.topics.count %>
