@@ -205,6 +205,11 @@
    bindFilterHover();
    bindInfoHover();
    
+   $(".sidebarCollaborateIcon").click(function(event) {
+      goRealtime = !goRealtime; 
+      $(".sidebarCollaborateIcon").toggleClass("blue");
+   });
+   
    // initialize best_in_place editing
    $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
    

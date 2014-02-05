@@ -3,9 +3,10 @@
  * Javascript called when you create a new synapse.
  */
 $('#new_synapse').fadeOut('fast');
-$('#synapse_desc').attr('value','');
+$('#synapse_desc').typeahead('setQuery','');
 $('#synapse_topic1id').attr('value','0');
 $('#synapse_topic2id').attr('value','0');
+$('#synapse_grabSynapse').attr('value','null');
 // reset the draw synapse positions to false
 MetamapsModel.synapseStartCoord = false;
 MetamapsModel.synapseEndCoord = false;

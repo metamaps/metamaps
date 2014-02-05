@@ -53,12 +53,7 @@ function nodeDoubleClickHandler(node, e) {
   openNodeShowcard(node);
 }
 
-function enterKeyHandler() {
-  
-  // if the metacode spinner is open, create topic when enter is pressed
-  if ( $('.new_topic').css('display') != 'none' ) {
-    $('.new_topic').submit();
-  }
+function enterKeyHandler(event) {
   
   //var selectedNodesCopy = MetamapsModel.selectedNodes.slice(0);
   //var len = selectedNodesCopy.length;

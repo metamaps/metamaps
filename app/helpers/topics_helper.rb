@@ -7,7 +7,7 @@ module TopicsHelper
       topic = {}
       topic['id'] = t.id
       topic['label'] = t.name
-      topic['value'] = t.name
+      topic['value'] = t.id
       topic['description'] = t.desc.truncate(35) # make this return matched results
       topic['type'] = t.metacode.name
       topic['typeImageURL'] = '/assets/' + t.metacode.icon

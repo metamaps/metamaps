@@ -155,6 +155,9 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       $('.sidebarSearchField').typeahead([
              {
                 name: 'topics',
+                dupChecker: function (datum1,datum2) {
+                  return false;
+                },
                 template: $('.topicTemplate').html(),
                 remote: {
                     url: '/search/topics?term=%QUERY',
@@ -169,6 +172,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                       if (dataset.length == 0) {
                         dataset.push({
                           value: "No results",
+                          label: "No results",
                           typeImageURL: "/assets/wildcard.png",
                           rtype: "noresult"                          
                         });
@@ -181,6 +185,9 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
               },
               {
                 name: 'maps',
+                dupChecker: function (datum1,datum2) {
+                  return false;
+                },
                 template: $('.mapTemplate').html(),
                 remote: {
                     url: '/search/maps?term=%QUERY',
@@ -195,6 +202,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                       if (dataset.length == 0) {
                         dataset.push({
                           value: "No results",
+                          label: "No results",
                           rtype: "noresult" 
                         });
                       }
@@ -206,6 +214,9 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
               },
               {
                 name: 'mappers',
+                dupChecker: function (datum1,datum2) {
+                  return false;
+                },
                 template: $('.mapperTemplate').html(),
                 remote: {
                     url: '/search/mappers?term=%QUERY',
@@ -213,6 +224,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                       if (dataset.length == 0) {
                         dataset.push({
                           value: "No results",
+                          label: "No results",
                           rtype: "noresult"
                         });
                       }
@@ -353,31 +365,81 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   bindAccountHover();
   
   // disable right click events on the new topic and new synapse input fields
-  $('#new_topic, #new_synapse').bind('contextmenu', function(e){
-		return false;
-	});
+  //$('#new_topic, #new_synapse').bind('contextmenu', function(e){
+	//	return false;
+	//});
   
   // initialize the autocomplete results for the metacode spinner
   $('#topic_name').typeahead([
          {
             name: 'topic_autocomplete',
-            template: '<img class="autocompleteSection topicType" width="22" height="22" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}"/><p class="autocompleteSection topicTitle">{{value}}</p><div class="autocompleteSection topicPermission {{permission}}"></div><div class="autocompleteSection topicOriginatorIcon hoverForTip"><span class="tip topicOriginator">{{originator}}</span></div><div class="clearfloat"></div>',
+            dupChecker: function (datum1,datum2) {
+                  return false;
+                },
+            template: '<img class="autocompleteSection topicType" width="22" height="22" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}"/><p class="autocompleteSection topicTitle">{{label}}</p><div class="autocompleteSection topicPermission {{permission}}"></div><div class="autocompleteSection topicOriginatorIcon hoverForTip"><span class="tip topicOriginator">{{originator}}</span></div><div class="clearfloat"></div>',
             remote: {
                 url: '/topics/autocomplete_topic?term=%QUERY'
             },
             engine: Hogan
           }
   ]);
-  $('#topic_name').bind('typeahead:autocompleted', function (event, datum, dataset) {
-        event.preventDefault();
-        event.stopPropagation();
-  });
   // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
   $('#topic_name').bind('typeahead:selected', function (event, datum, dataset) {
         $('#topic_grabTopic').val(datum.id);
-		    $('.new_topic').submit();
+		    event.preventDefault();
+        event.stopPropagation();
+  });
+  // bind keyboard handlers
+  $('#topic_name').bind('keyup', function(e) {
+    switch(e.which) {
+      case 13: 
+        $('.new_topic').submit();
+        break;
+      default: break; 
+    }
+  });
+  
+  // initialize the autocomplete results for the metacode spinner
+  $('#synapse_desc').typeahead([
+         {
+                name: 'synapse_autocomplete',
+                template: "{{label}}",
+                remote: {
+                    url: '/search/synapses?term=%QUERY'
+                },
+                engine: Hogan
+              },
+              {
+                name: 'existing_synapses',
+                limit: 50,
+                template: $('.synapseTemplate').html(),
+                remote: {
+                    url: '/search/synapses',
+                    replace: function () {
+                        var q = '/search/synapses?topic1id=' + $('#synapse_topic1id').val() + '&topic2id=' + $('#synapse_topic2id').val();
+                        return q;
+                    }
+                },
+                engine: Hogan,
+                header: "<h3>Existing Synapses</h3>"
+              },
+  ]);
+  // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
+  $('#synapse_desc').bind('typeahead:selected', function (event, datum, dataset) {
+        if (datum.id) { // if they clicked on an existing synapse get it
+          $('#synapse_grabSynapse').val(datum.id);
+		    }
         event.preventDefault();
         event.stopPropagation();
+  });
+  // bind keyboard handlers
+  $('#synapse_desc').bind('keyup', function(e) {
+    switch(e.which) {
+      case 13: 
+        $('.new_synapse').submit();
+        break;
+      default: break; 
+    }
   });
 	
   // when either form submits, don't leave the page
@@ -442,7 +504,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   // bind keyboard handlers
   $('body').bind('keyup', function(e) {
     switch(e.which) {
-      case 13: enterKeyHandler(); break;
+      case 13: enterKeyHandler(e); break;
       case 27: escKeyHandler(); break;
       default: break; //console.log(e.which);
     }

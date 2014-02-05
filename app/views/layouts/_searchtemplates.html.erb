@@ -12,7 +12,7 @@
     <span class="metacodeTip">{{type}}</span>
   </div>
   <div class="resultText">
-    <p class="resultTitle">{{value}}</p>
+    <p class="resultTitle">{{label}}</p>
     <p class="resultDesc">{{description}}</p>
   </div>
   <div class="autoOptions">
@@ -48,7 +48,7 @@
 <div class="result{{rtype}}">
   <img class="icon" src="/assets/map.png">
   <div class="resultText">
-    <p class="resultTitle">{{value}}</p>
+    <p class="resultTitle">{{label}}</p>
     <p class="resultDesc">{{description}}</p>
   </div>
   <div class="autoOptions">
@@ -79,7 +79,7 @@
 <div class="result{{rtype}}">
   <img class="icon" width="28" height="28" src="/assets/MMCCicon_mapper.png">
   <div class="resultText">
-    <p class="resultTitle">{{value}}</p>
+    <p class="resultTitle">{{label}}</p>
   </div>
   <div class="autoOptions">
     <a href="/maps/mappers/{{id}}" target="_blank" class="goTo hoverForTip">
@@ -92,6 +92,17 @@
   </div>
   <div class="clearfloat"></div>
 </div>
+</div>
+
+<div class="synapseTemplate">
+  <div class="result{{rtype}}">
+  <p class="autocompleteSection synapseDesc">{{label}}</p>
+  <div class="autocompleteSection synapsePermission {{permission}}"></div>
+  <div class="autocompleteSection synapseOriginatorIcon hoverForTip">
+    <span class="tip synapseOriginator">{{originator}}</span>
+  </div>
+  <div class="clearfloat"></div>
+  </div>
 </div>
 
 </div>

@@ -2,6 +2,7 @@ class MainController < ApplicationController
   include TopicsHelper
   include MapsHelper
   include UsersHelper
+  include SynapsesHelper
 
   before_filter :require_user, only: [:invite] 
    
@@ -43,6 +44,20 @@ class MainController < ApplicationController
       #remove "topic:" if appended at beginning
       term = term[6..-1] if term.downcase[0..5] == "topic:"
       
+      #if desc: search desc instead
+      desc = false
+      if term.downcase[0..4] == "desc:"
+        term = term[5..-1] 
+        desc = true
+      end
+      
+      #if link: search link instead
+      link = false
+      if term.downcase[0..4] == "link:"
+        term = term[5..-1] 
+        link = true
+      end
+      
       #check whether there's a filter by metacode as part of the query
       filterByMetacode = false
       Metacode.all.each do |m|
@@ -59,35 +74,48 @@ class MainController < ApplicationController
         if term == ""
           @topics = []
         else
-          search = '%' + term.downcase + '%'
+          search = term.downcase + '%'
           
           if !user
-            @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).where('metacode_id = ?', filterByMetacode.id).order('"name"')
+            @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
+            #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
+            @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
           elsif user
-            @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).where('metacode_id = ?', filterByMetacode.id).where('user_id = ?', user).order('"name"')
+            @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
+            #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
+            @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
           end
         end
-      else
+      elsif desc
         search = '%' + term.downcase + '%'
         if !user
-          @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).order('"name"')
-        elsif
-          @topics = Topic.where('LOWER("name") like ? OR LOWER("desc") like ? OR LOWER("link") like ?', search, search, search).where('user_id = ?', user).order('"name"')
+          @topics = Topic.where('LOWER("desc") like ?', search).order('"name"')
+        elsif user
+          @topics = Topic.where('LOWER("desc") like ?', search).where('user_id = ?', user).order('"name"')
+        end
+      elsif link
+        search = '%' + term.downcase + '%'
+        if !user
+          @topics = Topic.where('LOWER("link") like ?', search).order('"name"')
+        elsif user
+          @topics = Topic.where('LOWER("link") like ?', search).where('user_id = ?', user).order('"name"')
+        end
+      else #regular case, just search the name
+        search = term.downcase + '%'
+        if !user
+          @topics = Topic.where('LOWER("name") like ?', search).order('"name"')
+        elsif user
+          @topics = Topic.where('LOWER("name") like ?', search).where('user_id = ?', user).order('"name"')
         end
       end
     else
       @topics = []
     end
+    
+    #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
+    @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+    
     render json: autocomplete_array_json(@topics)
-    #if params[:topics_by_user_id] != ""
-    #  @user = User.find(params[:topics_by_user_id])
-    #  @topics = @topics | Topic.visibleToUser(@current, @user)
-    #end
-    #if params[:topics_by_map_id] != ""
-    #  @map = Map.find(params[:topics_by_map_id])
-    #  @topics = @topics | @map.topics.delete_if{|topic| not topic.authorize_to_view(@current)}
-    #end
-    #@topics.sort! { |a,b| a.name.downcase <=> b.name.downcase }
   end
   
   # get /search/maps?term=SOMETERM
@@ -102,25 +130,28 @@ class MainController < ApplicationController
       #remove "map:" if appended at beginning
       term = term[4..-1] if term.downcase[0..3] == "map:"
       
-      search = '%' + term.downcase + '%'
+      #if desc: search desc instead
+      desc = false
+      if term.downcase[0..4] == "desc:"
+        term = term[5..-1] 
+        desc = true
+      end
+      
+      search = term.downcase + '%'
+      query = desc ?  'LOWER("desc") like ?' : 'LOWER("name") like ?'
       if !user
-        @maps = Map.where('LOWER("name") like ? OR LOWER("desc") like ?', search, search).order('"name"')
+        @maps = Map.where(query, search).limit(5).order('"name"')
       elsif user
-        @maps = Map.where('LOWER("name") like ? OR LOWER("desc") like ?', search, search).where('user_id = ?', user).order('"name"')
+        @maps = Map.where(query, search).where('user_id = ?', user).limit(5).order('"name"')
       end
     else
       @maps = []
     end
+    
+    #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
+    @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
+    
     render json: autocomplete_map_array_json(@maps)
-    #if params[:topics_by_user_id] != ""
-    #  @user = User.find(params[:topics_by_user_id])
-    #  @topics = @topics | Topic.visibleToUser(@current, @user)
-    #end
-    #if params[:topics_by_map_id] != ""
-    #  @map = Map.find(params[:topics_by_map_id])
-    #  @topics = @topics | @map.topics.delete_if{|topic| not topic.authorize_to_view(@current)}
-    #end
-    #@topics.sort! { |a,b| a.name.downcase <=> b.name.downcase }
   end
   
   # get /search/mappers?term=SOMETERM
@@ -133,21 +164,42 @@ class MainController < ApplicationController
       #remove "mapper:" if appended at beginning
       term = term[7..-1] if term.downcase[0..6] == "mapper:"
       
-      @mappers = User.where('LOWER("name") like ?', '%' + term.downcase + '%').
-        limit(10).order('"name"')
+      @mappers = User.where('LOWER("name") like ?', term.downcase + '%').limit(5).order('"name"')
     else
       @mappers = []
     end
     render json: autocomplete_user_array_json(@mappers)
-    #if params[:topics_by_user_id] != ""
-    #  @user = User.find(params[:topics_by_user_id])
-    #  @topics = @topics | Topic.visibleToUser(@current, @user)
-    #end
-    #if params[:topics_by_map_id] != ""
-    #  @map = Map.find(params[:topics_by_map_id])
-    #  @topics = @topics | @map.topics.delete_if{|topic| not topic.authorize_to_view(@current)}
-    #end
-    #@topics.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+  end 
+  
+  # get /search/synapses?term=SOMETERM OR
+  # get /search/synapses?topic1id=SOMEID&topic2id=SOMEID
+  def searchsynapses
+    @current = current_user
+    
+    term = params[:term]
+    topic1id = params[:topic1id]
+    topic2id = params[:topic2id]
+    
+    if term && !term.empty?
+      @synapses = Synapse.select('DISTINCT "desc"').
+        where('LOWER("desc") like ?', term.downcase + '%').limit(5).order('"desc"')
+      
+      render json: autocomplete_synapse_generic_json(@synapses)
+      
+    elsif topic1id && !topic1id.empty?
+      @one = Synapse.where('node1_id = ? AND node2_id = ?', topic1id, topic2id)
+      @two = Synapse.where('node2_id = ? AND node1_id = ?', topic1id, topic2id)
+      @synapses = @one + @two
+      @synapses.sort! {|s1,s2| s1.desc <=> s2.desc }
+      
+      #read this next line as 'delete a synapse if its private and you're either 1. logged out or 2. logged in but not the synapse creator
+      @synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+    
+      render json: autocomplete_synapse_array_json(@synapses)
+    else
+      @synapses = []
+      render json: autocomplete_synapse_array_json(@synapses)
+    end
   end 
 
 end

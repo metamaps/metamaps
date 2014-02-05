@@ -5,18 +5,6 @@ class SynapsesController < ApplicationController
     
   respond_to :html, :js, :json
   
-  def autocomplete_synapse_desc
-    term = params[:term]
-    if term && !term.empty?
-      items = Synapse.select('DISTINCT "desc"').
-        where('LOWER("desc") like ?', term.downcase + '%').
-        limit(10).order('"desc"')
-    else
-      items = {}
-    end
-    render :json => json_for_autocomplete(items, :desc)
-  end
-  
   # GET synapses
   # or GET users/:user_id/synapses
   def index
@@ -81,15 +69,22 @@ class SynapsesController < ApplicationController
   # POST synapses
   def create
     @user = current_user
-    @synapse = Synapse.new()
-    @synapse.desc = params[:synapse][:desc]
-    @synapse.topic1 = Topic.find(params[:synapse][:topic1id])
-    @synapse.topic2 = Topic.find(params[:synapse][:topic2id])
-    @synapse.permission = "commons"
-    @synapse.category = "from-to"
-    @synapse.weight = 5
-    @synapse.user = @user	
-    @synapse.save   
+    
+    # if the topic exists grab it and return it
+    if params[:synapse][:grabSynapse] != "null"
+        @synapse = Synapse.find(params[:synapse][:grabSynapse])
+    # if not selecting an existing synapse, create it
+    else
+      @synapse = Synapse.new()
+      @synapse.desc = params[:synapse][:desc]
+      @synapse.topic1 = Topic.find(params[:synapse][:topic1id])
+      @synapse.topic2 = Topic.find(params[:synapse][:topic2id])
+      @synapse.permission = "commons"
+      @synapse.category = "from-to"
+      @synapse.weight = 5
+      @synapse.user = @user	
+      @synapse.save  
+    end     
 	
     if params[:synapse][:map]
       @map = Map.find(params[:synapse][:map])

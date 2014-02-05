@@ -293,6 +293,36 @@ font-family: 'LatoLight';
   margin-left:90px;
 }
 
+/* synapse autocomplete */
+
+.new_topic #topic_name, .new_topic .tt-hint {
+width: 190px;
+background: rgba(0,0,0,0.8);
+height: 25px;
+margin: 0;
+padding: 5px 5px;
+border: 1px solid black;
+outline: none;
+font-size: 25px;
+line-height: 35px;
+color: rgba(255,255,255,0.7);
+font-family: 'LatoLight';
+}
+
+.new_synapse #synapse_desc, .new_synapse .tt-hint {
+width: 200px;
+background: rgba(0,0,0,0.8);
+height: 18px;
+margin: 0;
+padding: 5px 5px;
+border: 1px solid black;
+outline: none;
+font-size: 18px;
+line-height: 20px;
+color: rgba(255,255,255,0.7);
+font-family: 'LatoLight';
+}
+
 label, select, input, textarea {
   display:block;
 }
@@ -770,6 +800,9 @@ background: rgba(0,0,0,0.7) url('MMCCicon_realtime_junto.png') no-repeat -3px -1
 background-size: 40px 40px;
 cursor:pointer;
 }
+.sidebarCollaborateIcon.blue {
+background: rgba(0,0,0,0.7) url('MMCCicon_realtime_blue.png') no-repeat -3px -1px;
+}
 .sidebarCollaborateBox {
   position:absolute;
   display:none;
@@ -1241,6 +1274,89 @@ background:rgba(0,0,0,0.7);
  padding: 2px 5px 2px;
  border: 1px solid black;
  z-index:100;
+}
+
+/* topic autocomplete */
+
+#new_synapse .tt-dropdown-menu {
+  width: 212px;
+  background:rgba(0,0,0,0.7);
+}
+
+#new_synapse .tt-dropdown-menu h3 {
+font-family: 'vinyl',helvetica,sans-serif;
+text-transform: uppercase;
+font-style: italic;
+font-size: 14pxpx;
+line-height: 16px;
+margin: 3px;
+}
+
+#new_synapse .tt-suggestion.tt-is-under-cursor {
+  background: black;
+}
+
+#new_synapse .tt-suggestion {
+  padding: 5px;
+  font-family: 'LatoLight';
+}
+
+#new_synapse .autocompleteSection {
+  float:left;
+}
+
+#new_synapse .synapseDesc {
+  width:162px;
+  line-height:22px;
+}
+#new_synapse .synapsePermission {
+  width:20px;
+  height:20px;
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size:16px 16px;
+}
+#new_synapse .synapsePermission.commons {
+  background-image:url(MMCCicon_commons.png);
+}
+#new_synapse .synapsePermission.public {
+  background-image:url(MMCCicon_public.png);
+}
+#new_synapse .synapsePermission.private {
+  background-image:url(MMCCicon_private.png);
+}
+#new_synapse .synapseOriginatorIcon {
+  position:relative;
+  width:20px;
+  height:20px;
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size:16px 16px;
+  background-image:url(MMCCicon_mapper.png);
+}
+#new_synapse .synapseOriginatorIcon:hover .tip {
+  display:block;
+}
+#new_synapse .tip {
+ display:none;
+ position: absolute;
+ background: white;
+ width: auto;
+ top: 0;
+ left: 23px;
+ color: black;
+ white-space: nowrap;
+ border-radius: 4px;
+ font-size:13px !important;
+ font-family:'LatoLight';
+ line-height:14px;
+ padding: 2px 5px 2px;
+ border: 1px solid black;
+ z-index:100;
+}
+
+#new_synapse .tt-suggestion .resultnoresult .synapsePermission, #new_synapse .tt-suggestion .resultnoresult .synapseOriginatorIcon  {
+  display:none;
 }
 
 

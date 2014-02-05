@@ -9,6 +9,7 @@ ISSAD::Application.routes.draw do
   match '/search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
   match '/search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps
   match '/search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers
+  match '/search/synapses', to: 'main#searchsynapses', via: :get, as: :searchsynapses
   
   match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
   match 'topics/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :post, as: :removefrommap
@@ -19,14 +20,10 @@ ISSAD::Application.routes.draw do
   end
   match 'topics/:id/:format', to: 'topics#json', via: :get, as: :json
   
-  resources :synapses do
-    get :autocomplete_synapse_desc, :on => :collection
-  end
+  resources :synapses
   match 'synapses/:id/:format', to: 'synapses#json', via: :get, as: :json
   
-  resources :maps do
-    get :autocomplete_map_name, :on => :collection
-  end
+  resources :maps
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
   match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json
   
@@ -36,7 +33,6 @@ ISSAD::Application.routes.draw do
   end
   
   resources :users, except: :show do
-    get :autocomplete_user_name, :on => :collection
 	  resources :topics, :only => [:index]
     resources :synapses, :only => [:index]
 	  resources :maps, :only => [:index]
