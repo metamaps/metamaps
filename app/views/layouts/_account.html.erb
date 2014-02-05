@@ -7,7 +7,7 @@
   <% account = current_user %>
   <h3 class="accountHeader">Hello <%= account.name.split[0...1][0] %>!</h3>
   <ul>
-    <li class="accountIcon accountMaps"><%= link_to "My Maps", user_maps_url(user) %></li>
+    <li class="accountIcon accountMaps"><a href="/maps/mappers/<%= account.id %>">My Maps</a></li>
     <li class="accountIcon accountSettings"><%= link_to "Settings", edit_user_url(account) %></li>
     <li class="accountIcon accountInvite"><%= link_to "Share Invite", invite_path %></li>
     <li class="accountIcon accountLogout"><%= link_to "Logout", "/sign_out", id: "Logout" %></li>
