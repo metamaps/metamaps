@@ -495,11 +495,6 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     $(this).parents('.CardOnGraph').find('.go-link').attr('href', link);
   });
   
-  // when you click the addmap button
-  $('.addMap').click(function(event) {
-    createNewMap();
-  });
-  
   //bind lightbox clicks
   $('.openLightbox').click(function() {
     openLightbox($(this).attr('data-open'));
@@ -627,11 +622,7 @@ function saveToMap() {
 
   $('#map_topicsToMap').val(nodes_data);
   $('#map_synapsesToMap').val(synapses_data);
-  $('#fork_map').fadeIn('fast');
-}
-
-function createNewMap() {
-  $('#new_map').fadeIn('fast');
+  openLightbox('forkmap');
 }
 
 function fetchRelatives(node) {
@@ -701,6 +692,13 @@ function openNodeShowcard(node) {
 function openLightbox(which) {
   $('.lightboxContent').hide();
   $('#' + which).show();
+  
+  if (which == "forkmap" || which == "newmap") {
+    $('#lightbox_content').css('background','white');
+  } else {
+    $('#lightbox_content').css('background','silver');
+  }
+  
   $('#lightbox_overlay').show();
   $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px' );
 }

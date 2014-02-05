@@ -1,36 +1,9 @@
 class SynapsesController < ApplicationController
   include TopicsHelper
 
-  before_filter :require_user, only: [:new, :create, :edit, :update, :removefrommap, :destroy]
+  before_filter :require_user, only: [:create, :update, :removefrommap, :destroy]
     
   respond_to :html, :js, :json
-  
-  # Get synapses/new
-  def new
-  	@synapse = Synapse.new
-    @user = current_user
-    
-    respond_with(@synapse)
-  end
-  
-  # GET synapses/:id
-  def show
-  	@current = current_user
-    @synapse = Synapse.find(params[:id]).authorize_to_show(@current)
-	  @topic1 = @synapse.topic1.authorize_to_show(@current)
-	  @topic2 = @synapse.topic2.authorize_to_show(@current)
-	
-	  if @synapse && @topic1 && @topic2
-		  @synapsejson = @synapse.selfplusnodes_as_json.html_safe
-	  else
-		  redirect_to root_url and return
-	  end
-	
-	  respond_to do |format|
-      format.html
-      format.json { respond_with(@synapsejson) }
-    end
-  end
   
   # GET synapses/:id/json
   def json
@@ -89,20 +62,6 @@ class SynapsesController < ApplicationController
       format.js { respond_with(@synapse) }
     end
     
-  end
-  
-  # GET synapses/:id/edit
-  def edit
-    @current = current_user
-    @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
-	
-    if @synapse 
-      @topics = Topic.visibleToUser(@current, nil)
-    elsif not @synapse
-      redirect_to root_url and return
-    end
-  
-	  respond_with(@synapse, @topics)
   end
   
   # PUT synapses/:id

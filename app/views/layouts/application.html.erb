@@ -76,15 +76,10 @@
           <div id="mainTitle"><%= link_to "metamaps", root_url %></div><!--<div id="beta">beta</div>-->
       </div>
       <% if authenticated? %>
-        <div class="addMap"></div>
+        <div class="addMap openLightbox" data-open="newmap"></div>
       <% end %>
     </div>
     
-  <% end %>
-  
-  <% if authenticated? %>
-    <% # this is the create new map form %>
-    <%= render :partial => 'maps/new' %>
   <% end %>
   
     <style type='text/css'>@import url('http://getbarometer.s3.amazonaws.com/assets/barometer/css/barometer.css');</style>

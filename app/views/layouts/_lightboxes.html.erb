@@ -6,15 +6,20 @@
 
 <div id="lightbox_overlay">
   <div id="lightbox_main">
-    <a id="lightbox_close" onclick="document.getElementById('lightbox_overlay').style.display = 'none';return false" href="#"></a>
+    <a id="lightbox_close" onclick="$('#lightbox_overlay').hide();return false" href="#"></a>
     <div id="lightbox_content">
       
       <div class="lightboxContent" id="about">
         <h3>About Metamaps.cc</h3>
         
         <p>
-         (not going to be this text) 
-          METAMAPS IS A PLATFORM FOR VISIONING, MAGIC MAKING, PRODUCTIVE CONVERSATION, UNDERSTANDING SOMETHING, INNOVATION, FREE STYLE WEAVING AND ALL NIGHT BRAINSTORMING.
+         Metamaps is an online interface for communities to build and visualize their shared knowledge. It is a tool to connect people, resources, and ideas in 'big picture' views without losing context or detail. 
+        </p>
+        <p>
+        Metamaps provide a natural window into complex systems, sparking insights, creative opportunities, and social synergy. The platform is evolving to meet a growing range of application scenarios.
+        </p>
+        <p>
+        The Metamaps project is a collaborative venture powered by a passionate network of peers, dedicated to the wealth of knowledge we find in common.
         </p>
         
         <ul>
@@ -56,8 +61,21 @@
         </div>
       </div>
       
+      <% if authenticated? %>
+        <% # this is the create new map form %>
+        <div class="lightboxContent" id="newmap">  
+          <%= render :partial => 'maps/new' %>
+        </div>
+      
+        <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
+        <div class="lightboxContent" id="forkmap">  
+          <%= render :partial => 'maps/fork' %>
+        </div>
+        <% end %>
+      <% end %>
+      
     </div>
   </div>
-  <div id="lightbox_screen" onclick="document.getElementById('lightbox_overlay').style.display = 'none';return false" style="height: 100%;"></div>
+  <div id="lightbox_screen" onclick="$('#lightbox_overlay').hide();return false" style="height: 100%;"></div>
 </div>
 

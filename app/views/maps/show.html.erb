@@ -11,7 +11,9 @@
   <div class="sidebarWandIcon"></div>
   <div class="sidebarWandBox">
     <ul>
+      <% if @map.permission == "commons" || @map.user == user %>
       <li class="wandIcon wandSaveLayout">Save Layout</li>
+      <% end %>
       <li class="wandIcon wandForkMap">Save To New Map</li>
       <!--<li class="wandIcon wandChangeMetacodes">Switch Metacode Set</li>-->
     </ul>
@@ -53,7 +55,6 @@
 <% if authenticated? %>
   <%= render :partial => 'newtopic' %>
   <%= render :partial => 'newsynapse' %>
-  <%= render :partial => 'maps/fork' %>
   
   <% # for saving layouts %>
   <% if @map.permission == "commons" || @map.user == user %>

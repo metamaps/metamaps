@@ -37,7 +37,7 @@
 </div>
 
 <div class="index">
-  <div class="openCheatsheet"></div>
+  <div class="openCheatsheet openLightbox" data-open="cheatsheet"></div>
   <span><img width="35" height="35" src="/assets/<%= @topic.metacode.icon %>"></span>
   <span class="mapName"><%= @topic.name %></span>
   <div class="clearfloat"></div>
@@ -182,6 +182,5 @@
 <% if authenticated? %>
   <%= render :partial => 'topics/new' %>
   <%= render :partial => 'synapses/new' %>
-  <%= render :partial => 'maps/fork' %>
 <% end %>
 

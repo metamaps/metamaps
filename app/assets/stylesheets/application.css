@@ -185,10 +185,6 @@ box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
 
 .new_session, 
 .new_user,
-.new_map,
-.edit_topic,
-.edit_synapse,
-.edit_map,
 .invite {
   display: block;
   width: 350px;
@@ -216,15 +212,6 @@ box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
   border-radius: 15px;
   color: #000;
   border:2px solid #000;
-}
-
-.onConsole .new_map {
-  display:none;	
-}
-
-.onConsole .new_map button, .onConsole .new_map input.add {
-  float:left;
-  margin-top:5px;	
 }
 
 .invite p {
@@ -1558,6 +1545,13 @@ border: solid 2px #000;
   cursor:pointer;
 }
 
+#about > p {
+ color: #000;
+ font-size: 16px;
+ line-height: 20px;
+ margin:10px 0;
+}
+
 #about ul {
   list-style:none;
 }
@@ -1567,6 +1561,15 @@ border: solid 2px #000;
 }
 #about li a {
   color:#097A51;
+}
+
+/* new map */
+.new_map {
+  color:black;
+}
+.onConsole .new_map button, .onConsole .new_map input.add {
+  float:left;
+  margin-top:5px;	
 }
 
 /* --- styling the logo button ---*/

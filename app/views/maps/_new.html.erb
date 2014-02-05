@@ -9,11 +9,12 @@
   <%= form.text_field :name %>
   <label for="map_desc">Description</label>
   <%= form.text_area :desc, class: "description", :rows => 5 %>
-  <label for="map_permission">Permission</label>     
-  <%= form.select(:permission, options_for_select(['commons', 'public', 'private'])) %>
+  <label for="map_permission">Permission</label>    
+    
+  <%= form.hidden_field :permission, :value => "commons" %>
   <p>Topics and synapses you create newly on this map will be set by default to the permissions of your map.</p>
   <%= form.submit "Save", class: "add" %>
-  <button class="button" onclick="$('#new_map').fadeOut('fast'); event.preventDefault();">Cancel</button>
+  <button class="button" onclick="$('#lightbox_overlay').hide();return false">Cancel</button>
   <div class="clearfloat"></div>
 <% end %>
 </div>

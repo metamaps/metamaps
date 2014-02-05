@@ -1,12 +1,10 @@
 class TopicsController < ApplicationController
   include TopicsHelper
 
-  before_filter :require_user, only: [:new, :create, :edit, :update, :removefrommap, :destroy]
+  before_filter :require_user, only: [:create, :update, :removefrommap, :destroy]
     
   respond_to :html, :js, :json
-  
-  #autocomplete :topic, :name, :full => true, :extra_data => [:user_id], :display_value => :topic_autocomplete_method
-  
+    
   # GET /topics/autocomplete_topic
   def autocomplete_topic
     @current = current_user
@@ -20,14 +18,6 @@ class TopicsController < ApplicationController
       @topics = []
     end
     render json: autocomplete_array_json(@topics)
-  end
-  
-  # Get topics/new
-  def new
-  	@topic = Topic.new
-    @user = current_user
-    
-    respond_with(@topic)
   end
   
   # GET topics/:id
@@ -121,18 +111,6 @@ class TopicsController < ApplicationController
       format.html { respond_with(@user, location: topic_url(@topic)) }
       format.js { respond_with(@topic, @mapping, @synapse, @position) }
     end
-  end
-  
-  # GET topics/:id/edit
-  def edit
-	  @current = current_user
-	  @topic = Topic.find(params[:id]).authorize_to_edit(@current)
-	
-	  if not @topic
-		  redirect_to root_url and return
-	  end
-  
-	  respond_with(@topic)
   end
   
   # PUT topics/:id
