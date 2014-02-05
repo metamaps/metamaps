@@ -69,10 +69,8 @@
                     <div class="inBeta">beta</div>
                     <button class="button" onclick="BAROMETER.show();">feedback!</button>
                 </li>
-                <li class="meta">
-                  <a href="#" target="_blank">about</a>
-                </li>
-                <li class="tutorial"><a href="#" target="_blank">tutorial</a></li>
+                <li class="meta openLightbox" data-open="about">about</li>
+                <li class="tutorial openLightbox" data-open="tutorial">tutorial</li>
                 <li class="exploreMaps"><%= link_to "explore maps", maps_url %></li>
           </ul>
           <div id="mainTitle"><%= link_to "metamaps", root_url %></div><!--<div id="beta">beta</div>-->
@@ -89,12 +87,12 @@
     <%= render :partial => 'maps/new' %>
   <% end %>
   
-  <%= render :partial => 'layouts/ga' if Rails.env.production? %>
-  
     <style type='text/css'>@import url('http://getbarometer.s3.amazonaws.com/assets/barometer/css/barometer.css');</style>
     <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
     <script type="text/javascript" charset="utf-8">
       BAROMETER.load('Scqak8nyHdFEkezKMNeQp');
     </script>
+  <%= render :partial => 'layouts/lightboxes' %>
+  <%= render :partial => 'layouts/ga' if Rails.env.production? %>
 </body>
 </html>

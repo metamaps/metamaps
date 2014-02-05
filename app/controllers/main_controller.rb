@@ -137,7 +137,7 @@ class MainController < ApplicationController
         desc = true
       end
       
-      search = term.downcase + '%'
+      search = desc ?  '%' + term.downcase + '%' : term.downcase + '%'
       query = desc ?  'LOWER("desc") like ?' : 'LOWER("name") like ?'
       if !user
         @maps = Map.where(query, search).limit(5).order('"name"')

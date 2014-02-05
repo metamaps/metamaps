@@ -34,7 +34,7 @@
 </div>
 
 <div class="index">
-  <div class="openCheatsheet"></div>
+  <div class="openCheatsheet openLightbox" data-open="cheatsheet"></div>
   <span><img width="35" height="35" src="/assets/map.png"></span>
   <span class="mapName"><%= @map.name %></span>
   <span class="mapInfo"></span>
@@ -187,7 +187,7 @@
       
       var openInfo = function(event) {
         clearTimeout(lT);
-        if (! sliding1 && event.srcElement.className != "openCheatsheet") { 
+        if (! sliding1 && event.srcElement.className != "openCheatsheet openLightbox") { 
             sliding1 = true;
             
             $('.mapInfoBox').fadeIn(200, function() {

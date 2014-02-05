@@ -495,8 +495,14 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     $(this).parents('.CardOnGraph').find('.go-link').attr('href', link);
   });
   
+  // when you click the addmap button
   $('.addMap').click(function(event) {
     createNewMap();
+  });
+  
+  //bind lightbox clicks
+  $('.openLightbox').click(function() {
+    openLightbox($(this).attr('data-open'));
   });
   
   // bind keyboard handlers
@@ -690,4 +696,11 @@ function openNodeShowcard(node) {
   $('.showcard').fadeIn('fast');
   //node.setData('dim', 1, 'current');
   MetamapsModel.showcardInUse = node.id;
+}
+
+function openLightbox(which) {
+  $('.lightboxContent').hide();
+  $('#' + which).show();
+  $('#lightbox_overlay').show();
+  $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px' );
 }

@@ -1476,6 +1476,99 @@ background-size: 30px 30px;
 }
 
 
+
+
+/* lightboxes */
+
+#lightbox_overlay {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1000000;
+  display:none;
+}
+
+#lightbox_main {
+  width: 550px;
+  height: auto;
+  margin: 0 auto;
+  z-index: 2;
+  position: relative;
+  top:50%;
+  background-color: transparent;
+}
+
+#lightbox_screen {
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  position: absolute;
+  background-color: #000;
+  opacity: 0.42;
+  filter: alpha(opacity=42);
+  -moz-opacity: 0.42;
+}
+
+#lightbox_overlay #lightbox_main #lightbox_header {
+padding: 6px 5px 1px 0;
+background-color: #333;
+font-weight: bold;
+height: 18px;
+border: solid 2px #000;
+}
+
+#lightbox_overlay #lightbox_main a#lightbox_close {
+  /*background-image: url(../images/barometer_close.png);*/
+  cursor: pointer;
+  height: 42px;
+  outline-color: -moz-use-text-color;
+  outline-style: none;
+  outline-width: medium;
+  overflow: hidden;
+  position: absolute;
+  top: -23px;
+  right: -22px;
+  width: 42px;
+  z-index: 4;
+  border: none;
+}
+
+#lightbox_content {
+  background: silver;
+  padding: 20px;
+}
+
+.lightboxContent h3 {
+ font-style: italic;
+ text-transform: uppercase;
+ font-family: 'vinyl';
+ font-size: 30px;
+ line-height:35px;
+ color:black;
+}
+
+.lightboxContent {
+  display:none;
+}
+
+.openLightbox {
+  cursor:pointer;
+}
+
+#about ul {
+  list-style:none;
+}
+#about ul li {
+  display:inline-block;
+  padding:5px;
+}
+#about li a {
+  color:#097A51;
+}
+
 /* --- styling the logo button ---*/
 /*.footer {
   width: 188px;
@@ -1561,7 +1654,7 @@ background-size: 22px 20px;
   height:124px;
   z-index:12;
   width:151px;
-  color: #67AF9F;
+  color: white;
   white-space: nowrap;
   text-align: center;
   font-size: 16px;
