@@ -500,6 +500,13 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     openLightbox($(this).attr('data-open'));
   });
   
+  // bind permission changer events
+  $('.permIcon').click(function() {
+    $(this).siblings('#map_permission').val( $(this).attr('data-permission') );
+    $(this).siblings('.permIcon').find('.mapPermIcon').removeClass('selected');
+    $(this).find('.mapPermIcon').addClass('selected');
+  });
+  
   // bind keyboard handlers
   $('body').bind('keyup', function(e) {
     switch(e.which) {
@@ -701,4 +708,24 @@ function openLightbox(which) {
   
   $('#lightbox_overlay').show();
   $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px' );
+}
+
+function cancelMapCreate(id) {
+
+ $('#lightbox_overlay').hide();
+ 
+ var form = $('#' + id);
+
+ form.find('#map_name').val('');
+ form.find('#map_desc').val('');
+ form.find('#map_permission').val('commons');
+
+ if (id == "fork_map") {
+  form.find('#map_topicsToMap').val('0');
+  form.find('#map_synapsesToMap').val('0');
+ }
+ form.find('.mapPermIcon').removeClass('selected');
+ form.find('.mapCommonsIcon').addClass('selected');
+ 
+ return false;
 }

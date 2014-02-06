@@ -609,6 +609,14 @@ display: inline-block;
 text-align: start;
 }
 
+.sidebarAccountBox input[type="email"]:hover, .sidebarAccountBox input[type="password"]:hover {
+  border: 1px solid #b9b9b9;
+  border-top: 1px solid #a0a0a0;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
 .sidebarAccountBox .links a {
   display:block;
   margin-top:5px;
@@ -1536,6 +1544,9 @@ border: solid 2px #000;
  line-height:35px;
  color:black;
 }
+.lightboxContent h3.forCreateMap {
+  text-align:center;
+}
 
 .lightboxContent {
   display:none;
@@ -1567,9 +1578,162 @@ border: solid 2px #000;
 .new_map {
   color:black;
 }
-.onConsole .new_map button, .onConsole .new_map input.add {
+
+.new_map .inputGroup {
+  margin: 15px 0 5px;
+}
+
+.new_map label {
   float:left;
-  margin-top:5px;	
+  width: 100px;
+  text-align: right;
+  margin-right: 15px;
+}
+
+.new_map input[type="text"] {
+width: 336px;
+height: 32px;
+font-size: 15px;
+direction: ltr;
+-webkit-appearance: none;
+appearance: none;
+display: inline-block;
+margin: 0;
+padding: 0 8px;
+background: #fff;
+border: 1px solid #d9d9d9;
+border-top: 1px solid #c0c0c0;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+-webkit-border-radius: 1px;
+-moz-border-radius: 1px;
+border-radius: 1px;
+font: -webkit-small-control;
+color: initial;
+letter-spacing: normal;
+word-spacing: normal;
+text-transform: none;
+text-indent: 0px;
+text-shadow: none;
+display: inline-block;
+text-align: start;
+font-family:arial;
+}
+.new_map input[type="text"]:hover, .new_map textarea:hover {
+  border: 1px solid #b9b9b9;
+  border-top: 1px solid #a0a0a0;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.new_map textarea {
+  padding:8px;
+  border: 1px solid #d9d9d9;
+  border-top: 1px solid #c0c0c0;
+  resize:none;
+  font: -webkit-small-control;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  text-align: start;
+  font-family:arial;
+  font-size:15px;
+  line-height:17px;
+}
+
+.new_map .permIcon {
+  float:left;
+  width:92px;
+  height: 85px;
+  position:relative;
+}
+.new_map .mapPermIcon {
+  width:60px;
+  height:60px;
+  background-size: 48px 48px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  margin:0 auto;
+  cursor:pointer;
+}
+.new_map .mapCommonsIcon {
+  background-image: url(MMCCicon_commons.png);
+}
+.new_map .mapPublicIcon {
+  background-image: url(MMCCicon_public.png);
+}
+.new_map .mapPrivateIcon {
+  background-image: url(MMCCicon_private.png);
+}
+.new_map .mapCommonsIcon.selected, .new_map .mapCommonsIcon:hover {
+  background-image: url(MMCCicon_commons_black.png);
+}
+.new_map .mapPublicIcon.selected, .new_map .mapPublicIcon:hover {
+  background-image: url(MMCCicon_public_black.png);
+}
+.new_map .mapPrivateIcon.selected, .new_map .mapPrivateIcon:hover {
+  background-image: url(MMCCicon_private_black.png);
+}
+
+.new_map .permIcon h4 {
+  font-style:italic;
+  font-family: 'Vinyl';
+  text-transform:uppercase;
+  font-size:18px;
+  line-height:20px;
+  color:black;
+  text-align:center;
+}
+
+.new_map .tip {
+  display:none;
+   position: absolute;
+ background: white;
+ width: 150px;
+ top: 85px;
+ left: -32px;
+ color: black;
+ border-radius: 4px;
+ font-size:15px !important;
+ font-family:'LatoLight';
+ line-height:17px;
+ padding: 3px 5px 2px;
+ border: 1px solid black;
+ z-index:100;
+}
+.new_map .hoverForTip:hover .tip {
+  display:block;
+}
+
+.permText {
+  width: 360px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.buttonWrapper {
+  margin: 10px auto 0;
+  width: 252px;
+}
+
+.onConsole .new_map button {
+  margin-right: 20px;
+}
+
+.onConsole .new_map button, .onConsole .new_map input.add {
+  float: left;
+  margin-top: 5px;
+  background: #15bad4;
+  height: 40px;
+  font-family: 'LatoLight';
+  font-size: 16px;
+  font-style: italic;
+  width: auto;
+  padding: 0 30px;
 }
 
 /* --- styling the logo button ---*/

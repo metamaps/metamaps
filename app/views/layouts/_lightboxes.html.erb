@@ -6,20 +6,23 @@
 
 <div id="lightbox_overlay">
   <div id="lightbox_main">
-    <a id="lightbox_close" onclick="$('#lightbox_overlay').hide();return false" href="#"></a>
+    <a id="lightbox_close" onclick="cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" href="#"></a>
     <div id="lightbox_content">
       
       <div class="lightboxContent" id="about">
         <h3>About Metamaps.cc</h3>
         
         <p>
-         Metamaps is an online interface for communities to build and visualize their shared knowledge. It is a tool to connect people, resources, and ideas in 'big picture' views without losing context or detail. 
+         Metamaps is an online interface for communities to build and visualize their shared knowledge. 
+         It is a tool to connect people, resources, and ideas in 'big picture' views without losing context or detail. 
         </p>
         <p>
-        Metamaps provide a natural window into complex systems, sparking insights, creative opportunities, and social synergy. The platform is evolving to meet a growing range of application scenarios.
+        Metamaps provide a natural window into complex systems, sparking insights, creative opportunities, and social synergy. 
+        The platform is evolving to meet a growing range of application scenarios.
         </p>
         <p>
-        The Metamaps project is a collaborative venture powered by a passionate network of peers, dedicated to the wealth of knowledge we find in common.
+        The Metamaps project is a collaborative venture powered by a passionate network of peers, 
+        dedicated to the wealth of knowledge we find in common.
         </p>
         
         <ul>
@@ -76,6 +79,6 @@
       
     </div>
   </div>
-  <div id="lightbox_screen" onclick="$('#lightbox_overlay').hide();return false" style="height: 100%;"></div>
+  <div id="lightbox_screen" onclick="cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" style="height: 100%;"></div>
 </div>
 
