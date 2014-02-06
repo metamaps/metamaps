@@ -78,7 +78,7 @@
         lT = setTimeout(function() { 
             if (! sliding1) { 
               sliding1 = true;
-              $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.7)');
+              $('.sidebarWandIcon').css('background-color','#0F1519');
               $('.sidebarWandBox').fadeOut(200, function() {
                 sliding1 = false;
                 wandIsOpen = false; 
@@ -95,10 +95,10 @@
             // hide the other two
             $('.sidebarAccountBox').hide();
             $('.sidebarFilterBox').hide();
-            $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.7)');
-            $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.7)');
+            $('.sidebarFilterIcon').css('background-color','#0F1519');
+            $('.sidebarAccountIcon').css('background-color','#0F1519');
             
-            $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.9)');
+            $('.sidebarWandIcon').css('background-color','#000');
             $('.sidebarWandBox').fadeIn(200, function() {
                  sliding1 = false;
                  wandIsOpen = true;
@@ -134,7 +134,7 @@
         lT = setTimeout(function() { 
             if (! sliding1) { 
               sliding1 = true;
-              $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.7)');
+              $('.sidebarFilterIcon').css('background-color','#0F1519');
               $('.sidebarFilterBox').fadeOut(200, function() {
                 sliding1 = false;
                 filterIsOpen = false; 
@@ -151,10 +151,10 @@
             // hide the other two
             $('.sidebarAccountBox').hide();
             $('.sidebarWandBox').hide();
-            $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.7)');
-            $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.7)');
+            $('.sidebarAccountIcon').css('background-color','#0F1519');
+            $('.sidebarWandIcon').css('background-color','#0F1519');
             
-            $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.9)');
+            $('.sidebarFilterIcon').css('background-color','#000');
             $('.sidebarFilterBox').fadeIn(200, function() {
                  sliding1 = false;
                  filterIsOpen = true;
@@ -188,7 +188,7 @@
       
       var openInfo = function(event) {
         clearTimeout(lT);
-        if (! sliding1 && event.srcElement.className != "openCheatsheet openLightbox") { 
+        if (! sliding1 && event.target.className != "openCheatsheet openLightbox") { 
             sliding1 = true;
             
             $('.mapInfoBox').fadeIn(200, function() {

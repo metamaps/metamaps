@@ -113,7 +113,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       }
       var closeSearch = function(closeAfter) {
         lT = setTimeout(function() { 
-            if (!sliding1 && searchIsOpen) { 
+            if (!sliding1 && searchIsOpen && $('.sidebarSearchField').val() == '') { 
               sliding1 = true;
               $('.sidebarSearchField, .sidebarSearch .tt-hint').css({padding:'5px 0', width:'200px'});
               $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
@@ -130,6 +130,9 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       // bind the hover events
       $(".sidebarSearch").hover(function(){ openSearch() }, function() { closeSearch(800) });
       
+      $('.sidebarSearchIcon').click(function(e) {
+        $('.sidebarSearchField').focus();
+      });
       $('.sidebarSearch').click(function(e) {
         e.stopPropagation();
       });
@@ -328,7 +331,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
         lT = setTimeout(function() { 
             if (! sliding1) { 
               sliding1 = true;
-              $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.7)');
+              $('.sidebarAccountIcon').css('background-color','#0F1519');
               $('.sidebarAccountBox').fadeOut(200, function() {
                 sliding1 = false;
                 accountIsOpen = false; 
@@ -345,10 +348,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
             // hide the other two
             $('.sidebarFilterBox').hide();
             $('.sidebarWandBox').hide();
-            $('.sidebarFilterIcon').css('background-color','rgba(0,0,0,0.7)');
-            $('.sidebarWandIcon').css('background-color','rgba(0,0,0,0.7)');
+            $('.sidebarFilterIcon').css('background-color','#0F1519');
+            $('.sidebarWandIcon').css('background-color','#0F1519');
             
-            $('.sidebarAccountIcon').css('background-color','rgba(0,0,0,0.9)');
+            $('.sidebarAccountIcon').css('background-color','#000');
             $('.sidebarAccountBox').fadeIn(200, function() {
                  sliding1 = false;
                  accountIsOpen = true;
