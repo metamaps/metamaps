@@ -65,6 +65,16 @@
       </div>
       
       <% if authenticated? %>
+        <div class="lightboxContent" id="invite">
+          <h3>Send Invites</h3>
+          <p>You can invite others to the Metamaps platform.<br> Just send them the link to</p>
+          <p class="green">http://metamaps.cc/users/sign_up</p>
+          <p>and give them the access code shown below.</p>
+          <% mapper = current_user %>
+          <p class="green"><%= mapper.code %></p>
+          <p>We invite you to be conscious as to who you invite to this platform, because much of the collaborative editing is based on trust. We want to cultivate a community here that is fun, wise, creative, and flourishing. Can you help us build a community like that?</p>
+        </div>
+      
         <% # this is the create new map form %>
         <div class="lightboxContent" id="newmap">  
           <%= render :partial => 'maps/new' %>

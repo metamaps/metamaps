@@ -63,6 +63,10 @@ body {
   background-attachment:fixed;
   color:#FFF;
 }
+body.bodyFAQ {
+background: #031924 url(mushroom.jpg) no-repeat center center;
+background-size: cover;
+}
 
 h1,h2,h3,h4,h5,h6 {
   font-weight:normal;
@@ -184,8 +188,7 @@ box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
 }
 
 .new_session, 
-.new_user,
-.invite {
+.new_user {
   display: block;
   width: 350px;
   position:absolute;
@@ -214,14 +217,6 @@ box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
   border:2px solid #000;
 }
 
-.invite p {
-  margin:10px 0;
-}
-.invite strong {
-  text-align:center;
-  display:block;
-  color:#67AF9F;
-}
 
 #closenewtopic,
 #closenewsynapse {
@@ -572,6 +567,11 @@ li.accountLogout {
 }
 li.accountIcon a {
   display:block;
+  padding: 6px 0 6px 25px;
+}
+
+li.accountInvite span {
+  display: block;
   padding: 6px 0 6px 25px;
 }
 
@@ -1574,6 +1574,22 @@ border: solid 2px #000;
   color:#097A51;
 }
 
+/* invite */
+
+#invite {
+  color:black;
+}
+
+#invite p {
+  margin:10px 0;
+}
+
+#invite .green {
+  text-align:center;
+  display:block;
+  color:#097A51;
+}
+
 /* new map */
 .new_map {
   color:black;
@@ -1643,6 +1659,7 @@ font-family:arial;
   font-family:arial;
   font-size:15px;
   line-height:17px;
+  width:318px;
 }
 
 .new_map .permIcon {
@@ -1735,6 +1752,61 @@ font-family:arial;
   width: auto;
   padding: 0 30px;
 }
+
+/* FAQ */
+
+#wrapper > div.FAQ {
+width: 530px;
+margin: -275px auto 0;
+padding: 20px 0 20px 20px;
+background: rgba(0,0,0,0.4);
+color: white;
+height: 510px;
+overflow: hidden;
+position: relative;
+left: 130px;
+top: 50%;
+border-radius: 5px;
+}
+
+.FAQ .question {
+display: block;
+background: rgba(0,0,0,0.4);
+padding: 10px 45px 10px 10px;
+font-weight: bold;
+margin-bottom: 10px;
+margin-right: 20px;
+line-height:24px;
+position:relative;
+cursor:pointer;
+}
+
+.FAQ .answer {
+padding: 0 30px;
+margin-bottom: 20px;
+line-height: 24px;
+margin-right: 20px;
+}
+.FAQ .answer.off {
+  display:none;
+}
+
+.FAQ .switch {
+position:absolute;
+top:0;
+right:0;
+width: 35px;
+height: 44px;
+background-repeat: no-repeat;
+background-position:center center;
+background-image: url('/assets/MMCCicon_maximize_arrow.png');
+background-size: 25px 25px;
+cursor: pointer;
+}
+.FAQ .minimizeAnswer {
+background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
+}
+
 
 /* --- styling the logo button ---*/
 /*.footer {

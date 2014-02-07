@@ -21,33 +21,36 @@
   <div class="inputGroup">
     <label for="map_permission">Permission: </label>    
     
-    <div class="permIcon hoverForTip" data-permission="commons">
-      <div class="mapCommonsIcon mapPermIcon selected"></div>
+    <div class="permIcon" data-permission="commons">
+      <div class="mapCommonsIcon mapPermIcon selected hoverForTip">
+        <div class="tip">
+          Collaborate with other mappers on editing this map. Those without accounts can view this map.
+        </div>
+      </div>
       <h4>COMMONS</h4>
-      <div class="tip">
-        Collaborate with other mappers on editing this map. Those without accounts can view this map.
-      </div>
     </div>
-    <div class="permIcon hoverForTip" data-permission="public">
-      <div class="mapPublicIcon mapPermIcon"></div>
+    <div class="permIcon" data-permission="public">
+      <div class="mapPublicIcon mapPermIcon hoverForTip">
+        <div class="tip">
+          Anyone, with or without an account, can view this map but not edit anything.
+        </div>
+      </div>
       <h4>PUBLIC</h4>
-      <div class="tip">
-        Anyone, with or without an account, can view this map but not edit anything.
-      </div>
     </div>
-    <div class="permIcon hoverForTip" data-permission="private">
-      <div class="mapPrivateIcon mapPermIcon"></div>
-      <h4>PRIVATE</h4>
-      <div class="tip">
-        Only you can view or edit this map.
+    <div class="permIcon" data-permission="private">
+      <div class="mapPrivateIcon mapPermIcon hoverForTip">
+        <div class="tip">
+          Only you can view or edit this map.
+        </div>
       </div>
+      <h4>PRIVATE</h4>
     </div>
     
     <%= form.hidden_field :permission, :value => "commons" %>
     <div class="clearfloat"></div>
   </div>
   
-  <p class="permText">*topics and synapses you create newly on this map will be set by default to the permissions of your map</p>
+  <p class="permText">*new topics and synapses take on the same permission as the map they are created on</p>
   
   <div class="buttonWrapper">
     <button class="button" onclick="cancelMapCreate('new_map'); return false;">Cancel</button>
