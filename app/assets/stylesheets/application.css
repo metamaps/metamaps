@@ -1493,6 +1493,7 @@ background-size: 30px 30px;
   position: relative;
   top:50%;
   background-color: transparent;
+  color:black;
 }
 
 #lightbox_screen {
@@ -1532,8 +1533,9 @@ border: solid 2px #000;
 }
 
 #lightbox_content {
-  background: silver;
+  background: white;
   padding: 20px;
+  border-radius:5px;
 }
 
 .lightboxContent h3 {
@@ -1559,7 +1561,7 @@ border: solid 2px #000;
 #about > p {
  color: #000;
  font-size: 16px;
- line-height: 20px;
+ line-height: 24px;
  margin:10px 0;
 }
 
@@ -1582,6 +1584,7 @@ border: solid 2px #000;
 
 #invite p {
   margin:10px 0;
+  line-height:24px;
 }
 
 #invite .green {
@@ -1751,6 +1754,12 @@ font-family:arial;
   font-style: italic;
   width: auto;
   padding: 0 30px;
+  cursor:pointer;
+}
+.onConsole .new_map button:hover, .onConsole .new_map input.add:hover {
+  background: #19C8E4;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 /* FAQ */

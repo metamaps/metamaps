@@ -4,7 +4,7 @@ ISSAD::Application.routes.draw do
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request
   match 'invite', to: 'main#invite', via: :get, as: :invite
-  match 'faq', to: 'main#faq', via: :get, as: :faq
+  match 'paq', to: 'main#paq', via: :get, as: :paq
   
   match '/search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
   match '/search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps

@@ -703,12 +703,6 @@ function openLightbox(which) {
   $('.lightboxContent').hide();
   $('#' + which).show();
   
-  if (which == "forkmap" || which == "newmap") {
-    $('#lightbox_content').css('background','white');
-  } else {
-    $('#lightbox_content').css('background','silver');
-  }
-  
   $('#lightbox_overlay').show();
   $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px' );
 }
