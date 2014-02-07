@@ -35,7 +35,7 @@
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <%= csrf_meta_tags %>
 </head>
-<body class="<%= action_name == "paq" ? "bodyFAQ" : "" %>" >
+<body class="<%= (action_name == "paq" || action_name=="requestinvite") ? "bodyFAQ" : "" %>" >
 
   <% if notice %>
   <p class="notice metamaps"><%= notice %></p>

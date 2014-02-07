@@ -21,15 +21,6 @@ class MainController < ApplicationController
 	  
   end
   
-  # /invite
-  def invite	
-	@user = current_user
-	
-	respond_to do |format|
-      format.html { respond_with(@user) }
-    end
-  end
-  
   ### SEARCHING ###
   
   # get /search/topics?term=SOMETERM

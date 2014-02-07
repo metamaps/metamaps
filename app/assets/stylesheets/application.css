@@ -1816,6 +1816,22 @@ cursor: pointer;
 background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
 }
 
+/* request */
+
+#wrapper .requestInvite {
+  width: 510px;
+  margin: -275px auto 0;
+  padding: 20px;
+  background: rgba(0,0,0,0.4);
+  color: white;
+  height: 510px;
+  overflow: hidden;
+  position: relative;
+  left: 130px;
+  top: 50%;
+  border-radius: 5px;
+}
+
 
 /* --- styling the logo button ---*/
 /*.footer {

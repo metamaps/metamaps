@@ -3,7 +3,6 @@ ISSAD::Application.routes.draw do
   root to: 'main#home', via: :get
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request
-  match 'invite', to: 'main#invite', via: :get, as: :invite
   match 'paq', to: 'main#paq', via: :get, as: :paq
   
   match '/search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
