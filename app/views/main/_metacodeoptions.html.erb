@@ -1,0 +1,16 @@
+<%#
+  # @file
+  # this code generates the list of icons that will drop down in the metacode select list on the topic card
+  #%>
+  
+<div id="metacodeOptions">
+<ul>
+<% Metacode.order("name").all.each do |m| %>
+  <li>
+    <img width="30" height="30" src="/assets/<%= m.icon %>" alt="<%= m.name %>" />
+    <span class="mSelectName"><%= m.name %></span>
+    <div class="clearfloat"></div>
+  </li>
+<% end %>
+</ul>
+</div>

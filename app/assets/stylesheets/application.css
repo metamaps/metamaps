@@ -642,6 +642,9 @@ background: #0F1519 url('MMCCicon_save_new_map.png') no-repeat center center;
 background-size: 28px 28px;
 cursor:pointer;
 }
+.sidebarForkIcon:hover {
+  background-color: black;
+}
 .sidebarForkBox {
   position:absolute;
   display:none;
@@ -676,6 +679,9 @@ height: 35px;
 background: #0F1519 url('MMCCicon_save_layout.png') no-repeat center center;
 background-size: 22px 22px;
 cursor:pointer;
+}
+.sidebarSaveIcon:hover {
+  background-color: black;
 }
 .sidebarSaveBox {
   position:absolute;
@@ -712,6 +718,9 @@ height: 35px;
 background: #0F1519 url('MMCCicon_filter2.png') no-repeat center center;
 background-size: 28px 28px;
 cursor:pointer;
+}
+.sidebarFilterIcon:hover {
+  background-color: black;
 }
 
 /* we set a few of these params off screen to begin with, so that when we initialize the scroll bar it works, but then 
@@ -802,6 +811,9 @@ height: 35px;
 background: #0F1519 url('MMCCicon_realtime_junto.png') no-repeat 0px 1px;
 background-size: 36px 36px;
 cursor:pointer;
+}
+.sidebarCollaborateIcon:hover, .sidebarCollaborateIcon.blue:hover{
+background-color: black;
 }
 .sidebarCollaborateIcon.blue {
 background: #0F1519 url('MMCCicon_realtime_blue.png') no-repeat center center;
@@ -1955,7 +1967,7 @@ background-size: 22px 20px;
   border:none;
   bottom:36px;
   left:-1px;
-  height:124px;
+  height:123px;
   z-index:12;
   width:121px;
   color: white;
@@ -1965,7 +1977,7 @@ background-size: 22px 20px;
   overflow: hidden;
   padding: 0 0 0 30px;
   margin: 0;
-  background: #0F1519;/*url('black_bg.png'); */
+  background: #0F1519 url(beta_gen002.png) no-repeat 6px 12px;
   border-left:1px solid #000;
   border-right:1px solid #000;
 }

@@ -203,8 +203,18 @@ padding-left: 24px;
   width: 90%;
   padding-left: 10%;
   padding-top: 4px;
-  background-color: crimson;
+  background-color: #64BC61;
 }
+.permission.canEdit .metacodeTitle {
+  cursor:pointer;
+  background-image: url(MMCCicon_maximize_arrow_black.png);
+  background-repeat:no-repeat;
+  background-position: right center;
+}
+.permission.canEdit .metacodeTitle.minimize {
+  background-image: url(MMCCicon_minimize_arrow_black.png);
+}
+
 .CardOnGraph .metacodeImage {
   cursor:move;
   width:50px;
@@ -216,6 +226,47 @@ padding-left: 24px;
   background-position:0 0;
   background-repeat:no-repeat;
 }
+
+#metacodeOptions {
+  display:none;
+}
+.CardOnGraph .metacodeSelect {
+  display:none;
+  width:100%;
+  z-index: 2;
+  position: absolute;
+  background: #EAEAEA;
+  height: 150px;
+}
+.CardOnGraph .metacodeSelect ul {
+font-style: italic;
+font-family: 'vinyl';
+text-transform: uppercase;
+position: absolute;
+line-height: 36px;
+font-size: 20px;
+display:block;
+width: 100%;
+margin:0;
+padding: 0;
+list-style:none;
+height:150px;
+overflow:hidden;
+}
+.CardOnGraph .metacodeSelect ul li {
+background-color: #EAEAEA;
+width:100%;
+border-bottom:1px solid #AAAAAA;
+cursor:pointer;
+}
+.CardOnGraph .metacodeSelect ul li:hover {
+background-color: #F8F8F8;
+}
+.CardOnGraph .metacodeSelect ul li img, .CardOnGraph .metacodeSelect ul li .mSelectName {
+float:left;
+}
+
+
 
 
 .CardOnGraph .link {

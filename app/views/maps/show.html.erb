@@ -53,6 +53,7 @@
 <% if authenticated? %>
   <%= render :partial => 'newtopic' %>
   <%= render :partial => 'newsynapse' %>
+  <%= render :partial => 'main/metacodeoptions' %>
   
   <% # for saving layouts %>
   <% if @map.permission == "commons" || @map.user == user %>

@@ -46,6 +46,12 @@
 </div>
 <div class="clearfloat"></div>
 
+<% if authenticated? %>
+  <%= render :partial => 'topics/new' %>
+  <%= render :partial => 'synapses/new' %>
+  <%= render :partial => 'main/metacodeoptions' %>
+<% end %>
+
 <script>
 	$(document).ready(function() {
     function bindWandHover() {
@@ -173,9 +179,3 @@
 		initialize("centered");
 	});
 </script>
-
-<% if authenticated? %>
-  <%= render :partial => 'topics/new' %>
-  <%= render :partial => 'synapses/new' %>
-<% end %>
-

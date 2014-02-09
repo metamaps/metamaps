@@ -142,8 +142,10 @@ class TopicsController < ApplicationController
         @topic.message 'update',@current.id
       end
     end
-
-    respond_with @topic
+    
+    respond_to do |format|
+      format.js { render :json => @topic.self_as_json }
+    end
   end
   
   # GET mappings/:map_id/:topic_id/removefrommap

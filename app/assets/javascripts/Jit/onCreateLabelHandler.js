@@ -27,11 +27,11 @@ function generateShowcardHTML() {
         </span>                                                               \
         <div class="links">                                                   \
            <div                                                               \
-           class="linkItem icon"                                              \
-           title="click and drag to move card">                               \
+           class="linkItem icon">                                             \
               <div class="metacodeTitle">$_metacode_$</div>                   \
               <div class="metacodeImage"                                      \
-                   style="background-image:url($_imgsrc_$);"></div>           \
+                   style="background-image:url($_imgsrc_$);"                  \
+                   title="click and drag to move card"></div>                 \
            </div>                                                             \
            <div class="linkItem contributor"></div>                           \
            <div class="linkItem mapCount">$_map_count_$</div>                 \
@@ -40,6 +40,7 @@ function generateShowcardHTML() {
            <a href="/topics/$_id_$" class="linkItem topicPopout" title="Open Topic in New Tab" target="_blank"></a>\
            <div class="clearfloat"></div>                                     \
         </div>                                                                \
+      <div class="metacodeSelect">$_metacode_select_$</div>                   \
       <div class="scroll">                                                    \
         <div class="desc">                                                    \
           <span class="best_in_place best_in_place_desc"                      \
@@ -83,28 +84,6 @@ function replaceVariables(html, node) {
     a_tag = '';
     close_a_tag = '';
   }
-
-  //create metacode_choices array from imgArray
-  var metacodes = new Array();
-  for (var key in imgArray) {
-    if (imgArray.hasOwnProperty(key)) {
-      if (key != node.getData("metacode")) {
-        metacodes.push(key);
-      }
-    }
-  }
-
-  //Arrange it how we want it
-  metacodes.sort();
-  metacodes.unshift(node.getData("metacode"));
-
-  var metacode_choices = "'[";
-  for (var i in metacodes) {
-    metacode_choices += '["' + metacodes[i] + '","' + metacodes[i] + '"],';
-  }
-  //remove trailing comma and add ]
-  metacode_choices = metacode_choices.slice(0, -1);
-  metacode_choices += "]'";
 
   var desc_nil = "<span class='gray'>Click to add description...</span>";
   var link_nil = "<span class='gray'>Click to add link...</span>";
@@ -152,7 +131,7 @@ function replaceVariables(html, node) {
   html = html.replace(/\$_name_\$/g, node.name);
   html = html.replace(/\$_userid_\$/g, node.getData("userid"));
   html = html.replace(/\$_username_\$/g, node.getData("username"));
-  html = html.replace(/\$_metacode_choices_\$/g, metacode_choices);
+  html = html.replace(/\$_metacode_select_\$/g, $('#metacodeOptions').html());
   html = html.replace(/\$_go_link_\$/g, go_link);
   html = html.replace(/\$_a_tag_\$/g, a_tag);
   html = html.replace(/\$_close_a_tag_\$/g, close_a_tag);
@@ -213,28 +192,42 @@ function populateShowCard(node) {
       showCard.appendChild(perm);
     }
 
-    
+  var selectingMetacode = false;
   // attach the listener that shows the metacode title when you hover over the image
-  $('.showcard .metacodeImage').hover(function(){
+  $('.showcard .metacodeImage').mouseenter(function(){
     $('.showcard .icon').css('z-index','3');
     $('.showcard .metacodeTitle').show();
-  },
-  function() {
-    $('.showcard .metacodeTitle').hide();
-    $('.showcard .icon').css('z-index','1');
+  });
+  $('.showcard .linkItem.icon').mouseleave(function() {
+    if ( !selectingMetacode ) {
+      $('.showcard .metacodeTitle').hide();
+      $('.showcard .icon').css('z-index','1');
+    }
+  });
+  
+  $('.showcard .metacodeTitle').click(function() {
+    if (!selectingMetacode) {  
+      selectingMetacode = true;
+      $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
+      $('.metacodeSelect').show();
+      // add the scroll bar to the list of metacode select options if it isn't already there
+      if ( !$('.metacodeSelect ul').hasClass('mCustomScrollbar') ) {
+        $('.metacodeSelect ul').mCustomScrollbar();
+        
+        $('.metacodeSelect li').click(function() {
+          selectingMetacode = false;
+          var metacodeName = $(this).find('.mSelectName').text();
+          updateMetacode(node, metacodeName);
+        });
+      }
+    } else {
+      selectingMetacode = false;
+      $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+      $('.metacodeSelect').hide();
+    }
   });
   
   //bind best_in_place ajax callbacks
-  $(showCard).find('.best_in_place_metacode').bind("ajax:success", function() {
-    var metacode = $(this).html();
-    //changing img alt, img src for top card (topic view page)
-    //and on-canvas card. Also changing image of node
-    $(showCard).find('img.icon').attr('alt', metacode);
-    $(showCard).find('img.icon').attr('src', imgArray[metacode].src);
-    node.setData("metacode", metacode);
-    Mconsole.plot();
-  });
-
   $(showCard).find('.best_in_place_name').bind("ajax:success", function() {
     var name = $(this).html();
     node.name = name;

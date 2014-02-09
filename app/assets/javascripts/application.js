@@ -482,13 +482,6 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   addHoverForSettings();
   
   //bind best_in_place ajax callbacks
-  $('.best_in_place_metacode').bind("ajax:success", function() {
-    var metacode = $(this).html();
-    //changing img alt, img src for top card (topic view page)
-    //and on-canvas card. Also changing image of node
-    $(this).parents('.CardOnGraph').find('img.icon').attr('alt', metacode);
-    $(this).parents('.CardOnGraph').find('img.icon').attr('src', imgArray[metacode].src);
-  });
   $('.best_in_place_desc').bind("ajax:success", function() {
     $(this).parents('.CardOnGraph').find('.scroll').mCustomScrollbar("update");
   });
@@ -674,6 +667,30 @@ function fetchRelatives(node) {
     },
     error: function(){
       alert('failure');
+    }
+  });
+}
+
+// @param node = JIT node object
+// @param metacode = STRING like "Idea", "Action", etc.
+function updateMetacode(node, metacode) {
+  var mdata = { "topic": { "metacode": metacode } };
+  $.ajax({
+    type: "PUT",
+    dataType: 'json',
+    url: "/topics/" + node.id,
+    data: mdata,
+    success: function(data) {
+      $('.CardOnGraph').find('.metacodeTitle').text(metacode);
+      $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + imgArray[metacode].src + ')');
+      node.setData("metacode", metacode);
+      Mconsole.plot();
+      $('.metacodeTitle').removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+      $('.metacodeSelect').hide();
+      setTimeout(function() { $('.metacodeTitle').hide(); $('.showcard .icon').css('z-index','1'); }, 500);
+    },
+    error: function(){
+      alert('failed to update metacode');
     }
   });
 }
