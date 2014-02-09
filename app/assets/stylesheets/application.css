@@ -512,7 +512,7 @@ position:absolute;
 width: 35px;
 height: 35px;
 background: #0F1519 url('MMCCicon_mapper.png') no-repeat center center;
-background-size: 28px 28px;
+background-size: 24px 24px;
 cursor:pointer;
 }
 .sidebarAccountBox {
@@ -622,27 +622,27 @@ text-align: start;
   margin-top:5px;
 }
 
-/* wand */
+/* Save To New Map */
 
-.sidebarWand {
+.sidebarFork {
 position:absolute;
 top:5px;
-right:35px;
+right:71px;
 z-index:200;
 width: 35px;
 height:35px;
 border-right:1px solid black;
 }
 
-.sidebarWandIcon {
+.sidebarForkIcon {
 position:absolute;
 width: 35px;
 height: 35px;
-background: #0F1519 url('MMCCicon_wand.png') no-repeat center center;
+background: #0F1519 url('MMCCicon_save_new_map.png') no-repeat center center;
 background-size: 28px 28px;
 cursor:pointer;
 }
-.sidebarWandBox {
+.sidebarForkBox {
   position:absolute;
   display:none;
   height:auto;
@@ -654,40 +654,48 @@ cursor:pointer;
   border: 1px solid black;
   font-family: 'LatoLight', helvetica, sans-serif;
 }
-.sidebarWandBox ul {
- list-style:none;
+
+/* end Save To New Map */
+
+/* Save Layout */
+
+.sidebarSave{
+position:absolute;
+top:5px;
+right:107px;
+z-index:200;
+width: 35px;
+height:35px;
+border-right:1px solid black;
 }
-.sidebarWandBox li.wandIcon {
-padding: 6px 0 6px 25px;
-background-size: 18px 18px;
-background-repeat: no-repeat;
-background-position: 0px 6px;
-font-size: 18px;
-line-height: 20px;
-color:white;
+
+.sidebarSaveIcon {
+position:absolute;
+width: 35px;
+height: 35px;
+background: #0F1519 url('MMCCicon_save_layout.png') no-repeat center center;
+background-size: 22px 22px;
 cursor:pointer;
 }
-li.wandIcon:hover {
-background-position: 4px 6px;
-}
-li.wandSaveLayout {
-  background-image: url('MMCCicon_save_layout.png');
-}
-li.wandForkMap {
-  background-image: url('MMCCicon_save_new_map.png');
-}
-li.wandChangeMetacodes {
-  background-image: url('MMCCicon_metacode_set.png');
+.sidebarSaveBox {
+  position:absolute;
+  display:none;
+  height:auto;
+  width:182px;
+  background: #000;
+  top: 35px;
+  right:-36px;
+  padding: 10px;
+  border: 1px solid black;
+  font-family: 'LatoLight', helvetica, sans-serif;
 }
 
-/* end wand */
-
-/* wand */
+/* Filter */
 
 .sidebarFilter {
 position:absolute;
 top:5px;
-right:71px;
+right:35px;
 z-index:200;
 width: 35px;
 height:35px;
@@ -701,7 +709,7 @@ border-right:1px solid black;
 position:absolute;
 width: 35px;
 height: 35px;
-background: #0F1519 url('MMCCicon_filter.png') no-repeat center center;
+background: #0F1519 url('MMCCicon_filter2.png') no-repeat center center;
 background-size: 28px 28px;
 cursor:pointer;
 }
@@ -780,7 +788,7 @@ background-color: rgba(255,255,255,0.1);
 .sidebarCollaborate {
 position:absolute;
 top:5px;
-right:107px;
+right:143px;
 z-index:200;
 width: 35px;
 height:35px;
@@ -791,13 +799,13 @@ border-right:1px solid black;
 position:absolute;
 width: 35px;
 height: 35px;
-background: #0F1519 url('MMCCicon_realtime_junto.png') no-repeat -3px -1px;
-background-size: 40px 40px;
+background: #0F1519 url('MMCCicon_realtime_junto.png') no-repeat 0px 1px;
+background-size: 36px 36px;
 cursor:pointer;
 }
 .sidebarCollaborateIcon.blue {
 background: #0F1519 url('MMCCicon_realtime_blue.png') no-repeat center center;
-background-size: 29px 29px;
+background-size: 26px 25px;
 }
 .sidebarCollaborateBox {
   position:absolute;
@@ -1762,6 +1770,38 @@ font-family:arial;
   box-shadow: none;
 }
 
+/* Cheatsheet */
+
+.cheatsheetColumn {
+ float:left;
+ width:245px;
+ line-height: 17px;
+font-size: 12px;
+font-family: arial;
+}
+.cheatsheetColumn.cOne {
+ margin-right:10px;
+}
+
+#cheatsheet h4 {
+text-decoration: underline;
+font-size: 20px;
+font-family: 'vinyl';
+margin-top: 15px;
+font-style: italic;
+}
+
+#cheatsheet .csItem {
+margin: 5px 0;
+}
+
+#cheatsheet .csTitle {
+font-weight: bold;
+}
+
+
+
+
 /* FAQ */
 
 #wrapper > div.FAQ {
@@ -1917,20 +1957,14 @@ background-size: 22px 20px;
   left:-1px;
   height:124px;
   z-index:12;
-  width:151px;
+  width:121px;
   color: white;
   white-space: nowrap;
   text-align: center;
   font-size: 16px;
   overflow: hidden;
-  padding: 0;
+  padding: 0 0 0 30px;
   margin: 0;
-  /*border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
-  -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;
-  -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05), 0 -2px rgba(0, 0, 0, 0.05) inset;*/
   background: #0F1519;/*url('black_bg.png'); */
   border-left:1px solid #000;
   border-right:1px solid #000;
@@ -1944,53 +1978,22 @@ background-size: 22px 20px;
   display:block;
   padding:0;
   text-align:center;
-}
-
-li.beta {
-border-top: 1px solid black;
-border-bottom: 1px solid black;
-position: relative;
-height: 30px;
-}
-.inBeta {
-  background: rgba(0,0,0,0.6);
-display: inline-block;
-color: white;
-height: 30px;
-padding: 0 5px;
-font-family: 'LatoLight';
-font-size: 30px;
-position: absolute;
-top: 0;
-left: 0;
-line-height: 30px;
-}
-
-li.beta button {
-position: absolute;
-top: 0;
-right: 0;
-width: 84px;
-border-radius: 0;
-font-size: 12px;
-margin: 0;
-cursor:pointer;
-}
-li.beta button:hover {
-  background: #6FA9AA;
-}
-
-li.meta, li.tutorial, li.exploreMaps {
+  font-family:'vinyl';
+  font-style:italic;
   height:30px;
-  line-height:30px;
-  font-size:20px;
+  line-height:34px;
+  font-size:17px;
+  cursor:pointer;
+}
+.footer ul li:hover {
+  background:black;
 }
 
 li.meta a, li.tutorial a, li.exploreMaps a {
   display:block;
 }
 
-li.tutorial, li.exploreMaps {
+li.meta, li.tutorial, li.exploreMaps {
   border-top:1px solid white;
 }
 

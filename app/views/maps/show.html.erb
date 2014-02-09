@@ -7,17 +7,15 @@
 <% content_for :title, @map.name + " | Metamaps" %>
 
 <% if authenticated? %>
-<div class="sidebarWand">
-  <div class="sidebarWandIcon"></div>
-  <div class="sidebarWandBox">
-    <ul>
-      <% if @map.permission == "commons" || @map.user == user %>
-      <li class="wandIcon wandSaveLayout">Save Layout</li>
-      <% end %>
-      <li class="wandIcon wandForkMap">Save To New Map</li>
-      <!--<li class="wandIcon wandChangeMetacodes">Switch Metacode Set</li>-->
-    </ul>
-  </div>
+  <% if @map.permission == "commons" || @map.user == user %>
+      <div class="sidebarSave">
+        <div class="sidebarSaveIcon"></div>
+        <div class="sidebarSaveBox"></div>
+      </div>
+  <% end %>
+<div class="sidebarFork">
+  <div class="sidebarForkIcon"></div>
+  <div class="sidebarForkBox"></div>
 </div>
 <div class="sidebarCollaborate">
   <div class="sidebarCollaborateIcon"></div>
@@ -251,11 +249,11 @@
 				initialize("chaotic", true);
 		});
 	}
-  window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
+  /*window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
   window.realtime.socket.on('connect', function() {
       subscribeToRooms();
       console.log('socket connected');
-  });
+  });*/
   function subscribeToRooms() {
     window.realtime.socket.on('maps-' + mapid, function(data) {
       //as long as you weren't the origin of the changes, update your map

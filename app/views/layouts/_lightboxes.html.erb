@@ -43,32 +43,13 @@
       </div>
       
       <div class="lightboxContent" id="cheatsheet">
-        <h3>Quick Reference Guide</h3>
-        
-        <div class="cheatsheetBox">
-        
-        </div>
-        <div class="cheatsheetBox">
-        
-        </div>
-        <div class="cheatsheetBox">
-        
-        </div>
-        <div class="cheatsheetBox">
-        
-        </div>
-        <div class="cheatsheetBox">
-        
-        </div>
-        <div class="cheatsheetBox">
-        
-        </div>
+        <%= render :partial => 'layouts/cheatsheet' %>
       </div>
       
       <% if authenticated? %>
         <div class="lightboxContent" id="invite">
           <h3>Send Invites</h3>
-          <p>You can invite others to the Metamaps platform.<br> Just send them the link to</p>
+          <p>You can invite others to the Metamaps platform. Send them this link</p>
           <p class="green">http://metamaps.cc/users/sign_up</p>
           <p>and give them the access code shown below.</p>
           <% mapper = current_user %>

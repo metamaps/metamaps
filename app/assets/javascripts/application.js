@@ -453,11 +453,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   
   // initialize scroll bar for filter by metacode, then hide it and position it correctly again
   $("#filter_by_metacode").mCustomScrollbar();
-  var filterPosition = userid ? '-72px' : '-36px';
   $('.sidebarFilterBox').hide().css({
     position:'absolute',
     top: '35px',
-    right: filterPosition
+    right: '-36px'
   });
   
   // initialize metacode spinner and then hide it

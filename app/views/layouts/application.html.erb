@@ -65,13 +65,12 @@
 		<div class="footer">
       <div class="logo">
           <ul class="menu">
-                <li class="beta">
-                    <div class="inBeta">beta</div>
-                    <button class="button" onclick="BAROMETER.show();">feedback!</button>
+                <li class="beta" onclick="BAROMETER.show();">
+                    FEEDBACK!
                 </li>
-                <li class="meta openLightbox" data-open="about">about</li>
-                <li class="tutorial openLightbox" data-open="tutorial">tutorial</li>
-                <li class="exploreMaps"><%= link_to "explore maps", maps_url %></li>
+                <li class="meta openLightbox" data-open="about">ABOUT</li>
+                <li class="tutorial openLightbox" data-open="tutorial">TUTORIAL</li>
+                <li class="exploreMaps"><%= link_to "EXPLORE MAPS", maps_url %></li>
           </ul>
           <div id="mainTitle"><%= link_to "metamaps", root_url %></div><!--<div id="beta">beta</div>-->
       </div>

@@ -17,14 +17,9 @@
 <% content_for :title, @topic.name + " | Metamaps" %>  
   
 <% if authenticated? %>
-<div class="sidebarWand topicView">
-  <div class="sidebarWandIcon"></div>
-  <div class="sidebarWandBox">
-    <ul>
-      <li class="wandIcon wandForkMap">Save As Map</li>
-      <!--<li class="wandIcon wandChangeMetacodes">Switch Metacode Set</li>-->
-    </ul>
-  </div>
+<div class="sidebarFork">
+  <div class="sidebarForkIcon"></div>
+  <div class="sidebarForkBox"></div>
 </div>
 <% end %>
 <div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
