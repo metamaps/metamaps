@@ -250,11 +250,12 @@
 				initialize("chaotic", true);
 		});
 	}
-  /*window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
+  //window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
+  window.realtime.socket = io.connect('http://metamaps.cc:5001');
   window.realtime.socket.on('connect', function() {
       subscribeToRooms();
       console.log('socket connected');
-  });*/
+  });
   function subscribeToRooms() {
     window.realtime.socket.on('maps-' + mapid, function(data) {
       //as long as you weren't the origin of the changes, update your map
