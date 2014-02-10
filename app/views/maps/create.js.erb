@@ -22,10 +22,10 @@ form.find('.mapCommonsIcon').addClass('selected');
 
 var tempForm = form.html();
 if (mapid == null) {
-  form.html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='javascript:closeIt(); return false;'>Stay on this page?</a>");
+  form.html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='#' onclick='closeIt(); return false;'>Stay on this page?</a>");
 }
 else if (mapid != null) {
-  form.html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='javascript:closeIt(); return false;'>Stay on this map?</a>");
+  form.html("Success! Do you want to <br> <a href='/maps/" + '<%= @map.id %>' + "'>Go to your new map?</a><br>or<br><a href='#' onclick='closeIt(); return false;'>Stay on this map?</a>");
 }
 $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px' );
 

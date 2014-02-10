@@ -368,12 +368,10 @@ input[type="submit"] {
 
 .notice.metamaps, .alert.metamaps {
 position: absolute;
-margin: 20px;
-background: url(/assets/black_bg.png);
+margin: 5px 0 0 45px;
+background: #0F1519;
 padding: 10px;
 border-radius: 5px;
-box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
-  border:1px solid #000;
 }
 
 .headertop {
@@ -2033,7 +2031,6 @@ font-family: 'vinyl';
 font-size: 40px;
 margin: 40px 20px 25px;
 text-align:center;
-background: url('home_bg2.png') no-repeat center -46px;
 }
 
 .home_content .request {
