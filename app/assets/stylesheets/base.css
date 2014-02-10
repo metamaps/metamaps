@@ -140,7 +140,7 @@ font-family: 'LatoLight';
   border-top: 1px solid #AAAAAA;
 }
 
-.CardOnGraph .linkItem {
+.linkItem {
   float:left;
   min-width:40px;
   height:40px;
@@ -382,4 +382,86 @@ font-family: 'LatoLight';
 
 #edit_synapse .click-to-edit {
   margin-left: 0.3em;
+}
+
+
+
+/* Map Cards */
+
+.map {
+    float:left;
+    display:block;
+    width:226px;
+	  height:320px;
+    color:#FFF;
+    text-align: left;
+    overflow: visible;
+    background: #FFF;
+    border-radius:5px;
+    box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
+    margin:16px;
+}
+
+.mapCard {
+  display:block;
+  position:relative;
+  width:100%;
+  height:100%;
+  color:#000;
+  z-index: 25;
+}
+
+.mapCard .metacodeImage {
+width: 50px;
+height: 50px;
+position: absolute;
+left: -25px;
+top: -5px;
+background-size: 50px 50px;
+background-position: 0 0;
+background-repeat: no-repeat;
+}
+
+.mapCard .scroll {
+   display:block;
+   padding:5px 10px;
+}
+ 
+.mapCard .type {
+  position: absolute;
+  color: white;
+  top: -22px;
+  right: 0;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.mapCard .title {
+  font-size:22px;
+  line-height:25px;
+  display:block;
+  padding:5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.mapCard .links {
+  position:relative;
+  border-bottom: 1px solid #AAAAAA;
+  border-top: 1px solid #AAAAAA;
+}
+
+.mapCard .icon {
+  position:absolute;
+  width:100%;
+  z-index:1;
+}
+.linkItem.topicCount {
+  background-image: url(MMCCicon_topic.png);
+  background-size: 22px 22px;
+background-position: 0px center;
+line-height: 40px;
+min-width: 16px;
+padding-left: 24px;
 }

@@ -7,7 +7,7 @@
 <% content_for :title, "Possibly Asked Questions | Metamaps" %>   
   
 <h1 class="index">
-  PAQ
+  P(ossibly)AQ
 </h1>  
   
 <div class="FAQ">
@@ -48,15 +48,12 @@
 <div class="question">Someone else changed my cool map (or favorite topic) without asking me...sad face :( <div class="switch"></div></div>
 <p class="answer off">If your map / topic was set to Commons permission for editing, than any other logged-in user on the site will be able to make changes. We consider this a feature, not a bug, which encourages collaborative maps and an evolving collective knowledge garden. You can easily avoid unwanted changes by setting your permissions to Public, which others may still view and copy to another version if they wish. Courtesy, care, and the benefit of the doubt will go a long ways towards maintaining a happy, healthy, and productive communal atmosphere on Metamaps.cc</p>
 
-<div class="question">How do I "_________" on metamaps? <div class="switch"></div></div>
-<p class="answer off">Link to our cheatsheet stuff...and manual.</p>
-
 </div>
 
 <script>
 
 $(document).ready(function() {
-  $('.FAQ').mCustomScrollbar();
+  $('.FAQ').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar();
   
   $('.FAQ .question').click(function() {
     

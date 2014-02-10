@@ -22,6 +22,11 @@ ISSAD::Application.routes.draw do
   resources :synapses, except: [:index, :new, :edit, :show]
   match 'synapses/:id/:format', to: 'synapses#json', via: :get, as: :json
   
+  match 'maps/active', to: 'maps#index', via: :get, as: :activemaps
+  match 'maps/featured', to: 'maps#index', via: :get, as: :featuredmaps
+  match 'maps/new', to: 'maps#index', via: :get, as: :newmaps
+  match 'maps/mappers/:id', to: 'maps#index', via: :get, as: :usermaps
+  
   resources :maps, except: [:new, :edit]
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
   match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json

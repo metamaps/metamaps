@@ -4,46 +4,33 @@
   # Any list of maps uses this rendering.
   #%>
 <%= div_for map do %>
-  <% if map.authorize_to_edit(user) %>
-    <div class="permission canEdit">  
-  <% end %>
+  <div class="permission <%= map.authorize_to_edit(user) ? "canEdit" : "cannotEdit" %>">  
   
-	<% if map.user == user %><%= link_to 'Delete', map_path(map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, :remote => true %><% end %>
-  <p class="type">Map</p>
-  <%= image_tag 'map.png', :class => 'icon', :size => '50x50' %>
-  <div class="cardSettings">
-    <div class="mapPerm" title="<%= map.permission %>"><%= map.mk_permission %></div>
-    <% if map.user == user %>
-      <div class="permActivator">
-        <div class="editSettings">        
-          <span>Permissions:&nbsp;</span>
-          <span title="Click to Edit"><%= best_in_place map, :permission, :type => :select, :collection => [['commons', 'commons'], ['public','public'], ['private','private']], :classes => 'best_in_place_permission' %></span>
-          <div class="clearfloat"></div>
-        </div>
-      </div>
-    <% end %>
+	  <div class="mapCard">                                                   
+      <span class="title">                                                  
+        <%= best_in_place map, :name, :type => :input, :classes => 'best_in_place_name' %>                             
+      </span>                                                              
+      <div class="links">                                                   
+         <div class="linkItem icon">                                             
+            <div class="metacodeImage" style="background-image:url(/assets/map.png);"></div>                 
+         </div>                                                             
+         <div class="linkItem contributor">
+           
+         </div>                           
+         <div class="linkItem topicCount"><%= map.topics.count %></div>                 
+         <div class="linkItem synapseCount"><%= map.synapses.count %></div>         
+         <div class="linkItem mapPerm <%= map.mk_permission %>"></div>             
+         <a href="/maps/<%= map.id %>" class="linkItem topicPopout" title="Open Map in New Tab" target="_blank"></a>
+         <div class="clearfloat"></div>                                     
+      </div>                                                                
+      <div class="scroll">                                                    
+        <div class="desc">                                                    
+          <%= best_in_place map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>", :classes => 'best_in_place_desc' %>                          
+          <div class="clearfloat"></div>                                
+        </div>                                                                
+      </div>                                                                  
+      <div class="clearfloat"></div>                                          
+    </div>
+  
   </div>
-  <span class="title">                                                  
-          <span><%= best_in_place map, :name, :type => :input, :classes => 'best_in_place_name' %></span>                             
-          <a href="/maps/<%=map.id %>" class="topic-go-arrow">    
-            <img class="topic-go-arrow"                                       
-                 title="Go to map"                                        
-                 src="/assets/go-arrow.png" />                                
-          </a>                                                                
-          <div class="clearfloat"></div>                                      
-  </span>                                                               
-  <div class="contributor">                                             
-      Added by: <a href="/users/<%=map.user.id %>" target="_blank"><%=map.user.name %>  
-      </a>                                                                
-  </div> 
-  <div class="scroll">
-		<div class="desc">
-      <p class="mapdata"><%= map.topics.count %> topics and <%= map.synapses.count %> synapses</p>
-      <p><%= best_in_place map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>", :classes => 'best_in_place_desc' %></p>
-    </div>
-	</div>
-  
-  <% if map.authorize_to_edit(user) %>
-    </div>
-  <% end %>
 <% end %>

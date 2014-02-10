@@ -8,12 +8,34 @@
   
 <h1 class="index">Explore Maps</h1>
 
+
+  <div class="mapOrder">
+    <span class="displaying">Displaying:</span>
+    <div class="whichMaps">
+      <% if @request == "other" %>
+        <a href="/maps/mappers/<%= @user.id %>" class="active">By <%= @user.name %></a> /
+      <% end %>
+      <a href="/maps/active" class="<%= @request == "active" ? "active" : "" %>">Recently Active</a> /
+      <a href="/maps/featured" class="<%= @request == "featured" ? "active" : "" %>">Featured</a> /
+      <a href="/maps/new" class="<%= @request == "new" ? "active" : "" %>">Newest First</a>
+      <% if authenticated? %>
+         / <a href="/maps/mappers/<%= @current.id %>" class="<%= @request == "you" ? "active" : "" %>">Yours</a>
+      <% end %>
+    </div>
+    <div class="clearfloat"></div>
+  </div>
+
 <div class="maps" id="cards">
   <% @maps.each do |map| %>
     <%= render map %>
   <% end %>
-  <% if @maps.empty? %>
-	 <p class="empty"><br>Shucks, there are no maps. <% if authenticated? %><%= link_to "Create one if you want.", new_map_url %><% end %></p>
-  <% end %>
+  <div class="clearfloat"></div>
 </div>
-<div class="clearfloat"></div>
+
+<script>
+$(document).ready(function() {
+  $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
+
+  $('.maps').height( (parseInt($('body').height()) - 54) ); /*.mCustomScrollbar();*/
+});
+</script>

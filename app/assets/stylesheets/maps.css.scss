@@ -1,56 +1,39 @@
 // Place all the styles related to the maps controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+// explore maps page
 
-.white_bg { 
-  background: white !important;
+
+.mapOrder {
+  display: block;
+  background: #0F1519;
+  padding:5px 15px;
+  margin:5px auto 0;
+  font-weight: bold;
+  line-height: 24px;
+  position: relative;
+  width:770px;
+  height:25px;
 }
 
-.mapdata {
-  color: #1A1;
-  font-style: italic;
+.mapOrder .displaying, .mapOrder .whichMaps {
+  float:left;
 }
 
-#MapRealtime { 
-  display:none;
+.whichMaps a {
+  color: white;
+  text-decoration: underline;
+  padding: 0 10px;
+  cursor:default;
+  font-weight:normal;
+}
+.whichMaps a.active {
+  text-decoration: none;
+  font-weight:bold;
+}
+.whichMaps a:hover {
+  text-decoration: none;
 }
 
-.map { display:block; float:left; position:relative; width:175px; height:300px; padding:10px 5px 10px 35px; background: url('bg.png'); border-radius:15px; margin:30px 0 30px 50px; color:#000; }
-
-.map .delete {position: absolute;
-top: -14px;
-left: 0px;
-background: none;
-border: 0;
-color: white;
-border: none;
-font-size: 14px;
-margin: 0;
-padding: 0;
-cursor:pointer;
-}
-
-.map .scroll { display:block; height:250px; }
-
-.map .type {position: absolute;
-color: white;
-top: -22px;
-right: 0;
-font-weight: bold;
-font-size: 20px;
-line-height: 24px;}
-
-.map .icon { position:absolute; top:135px; left:-25px; }
-
-.map .title { font-size:22px; line-height:27px; display:block; border-bottom:2px solid #000; padding-bottom:5px; }
-
-.map .desc { font-size:15px; font-family:Arial, Helvetica, sans-serif; }
-.map .desc h3 { font-style:normal; margin-top:5px; }
-
-.map .link { position:absolute; width:170px; top:295px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 
-
-// add topic on maps pages
-.selecttype { border:1px solid #000; margin-top: 20px; border-radius:15px; }
-.mapspages .new_topic h3 { padding: 10px 26px; display: block; cursor: pointer; color: #2d6a5d; float:left; }

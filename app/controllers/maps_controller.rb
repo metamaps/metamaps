@@ -6,20 +6,42 @@ class MapsController < ApplicationController
   
   autocomplete :map, :name, :full => true, :extra_data => [:user_id]
   
-  # GET /maps
-  # or GET /users/:user_id/maps
+  # GET /maps/recent
+  # GET /maps/featured
+  # GET /maps/new
+  # GET /maps/mappers/:id
   def index
     
-    @current = current_user
-    
-    if params[:user_id]
-      @user = User.find(params[:user_id])
-      @maps = Map.order("name ASC").visibleToUser(@current, @user)
-    elsif 
-      @maps = Map.order("name ASC").visibleToUser(@current, nil)
+    if request.path == "/maps"
+      redirect_to activemaps_url and return
     end
     
-	  respond_with(@maps,@user)
+    @current = current_user
+    @user = nil
+    
+    if request.path =="/maps/active"
+      @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.last_edited <=> a.last_edited }
+      @maps = @maps.slice(0,20)
+      @request = "active"
+      
+    elsif request.path =="/maps/featured"
+      @maps = Map.order("name ASC").find_all_by_featured(true)
+      @request = "featured"
+      
+    elsif request.path =="/maps/new"
+      @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
+      @maps = @maps.slice(0,20)
+      @request = "new"
+      
+    elsif params[:id]  # looking for maps by a mapper
+      @user = User.find(params[:id])
+      @maps = Map.order("name ASC").visibleToUser(@current, @user)
+      @request = "you" if authenticated? && @user == @current
+      @request = "other" if authenticated? && @user != @current
+      
+    end
+    
+	  respond_with(@maps, @request, @user)
   end
   
   # GET maps/new

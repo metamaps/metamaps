@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130709212556) do
+ActiveRecord::Schema.define(:version => 20140210031525) do
 
   create_table "mappings", :force => true do |t|
     t.text     "category"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20130709212556) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.boolean  "featured"
   end
 
   create_table "metacodes", :force => true do |t|
@@ -87,6 +88,7 @@ ActiveRecord::Schema.define(:version => 20130709212556) do
     t.datetime "current_sign_in_at"
     t.string   "current_sign_in_ip"
     t.datetime "reset_password_sent_at"
+    t.boolean  "admin"
   end
 
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true

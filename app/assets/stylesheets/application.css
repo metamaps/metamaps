@@ -63,9 +63,10 @@ body {
   background-attachment:fixed;
   color:#FFF;
 }
+
 body.bodyFAQ {
-background: #031924 url(mushroom.jpg) no-repeat center center;
-background-size: cover;
+/*background: #031924 url(mushroom.jpg) no-repeat center center;
+background-size: cover;*/
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -1170,7 +1171,10 @@ left: 13px;
 }
 
 #cards {
-  height:100%;	
+  height:100%;
+  width:800px;
+  margin:0 auto;
+  overflow-y:scroll;
 }
 
 #cards p.empty {
@@ -1817,17 +1821,14 @@ font-weight: bold;
 /* FAQ */
 
 #wrapper > div.FAQ {
-width: 530px;
-margin: -275px auto 0;
+width: 700px;
+margin: 0 auto;
 padding: 20px 0 20px 20px;
 background: rgba(0,0,0,0.4);
 color: white;
-height: 510px;
+height: 100%;
 overflow: hidden;
 position: relative;
-left: 130px;
-top: 50%;
-border-radius: 5px;
 }
 
 .FAQ .question {
@@ -1871,17 +1872,13 @@ background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
 /* request */
 
 #wrapper .requestInvite {
-  width: 510px;
-  margin: -275px auto 0;
+  width: 700px;
+  margin: 0 auto;
   padding: 20px;
   background: rgba(0,0,0,0.4);
   color: white;
-  height: 510px;
+  height: 100%;
   overflow: hidden;
-  position: relative;
-  left: 130px;
-  top: 50%;
-  border-radius: 5px;
 }
 
 
