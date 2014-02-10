@@ -399,7 +399,7 @@ font-family: 'LatoLight';
     background: #FFF;
     border-radius:5px;
     box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
-    margin:16px;
+    margin:16px 16px 16px 19px;
 }
 
 .mapCard {
