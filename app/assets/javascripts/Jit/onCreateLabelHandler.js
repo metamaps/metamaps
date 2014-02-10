@@ -33,7 +33,9 @@ function generateShowcardHTML() {
                    style="background-image:url($_imgsrc_$);"                  \
                    title="click and drag to move card"></div>                 \
            </div>                                                             \
-           <div class="linkItem contributor"></div>                           \
+           <div class="linkItem contributor hoverForTip"> \
+             <div class="tip">Created by $_username_$ on $_date_$</div>   \
+           </div>                           \
            <div class="linkItem mapCount">$_map_count_$</div>                 \
            <div class="linkItem synapseCount">$_synapse_count_$</div>         \
            <div class="linkItem mapPerm $_mk_permission_$"></div>             \
@@ -131,6 +133,7 @@ function replaceVariables(html, node) {
   html = html.replace(/\$_name_\$/g, node.name);
   html = html.replace(/\$_userid_\$/g, node.getData("userid"));
   html = html.replace(/\$_username_\$/g, node.getData("username"));
+  html = html.replace(/\$_date_\$/g, node.getData("date"));
   html = html.replace(/\$_metacode_select_\$/g, $('#metacodeOptions').html());
   html = html.replace(/\$_go_link_\$/g, go_link);
   html = html.replace(/\$_a_tag_\$/g, a_tag);
@@ -142,7 +145,7 @@ function replaceVariables(html, node) {
   } else {
     html = html.replace(/\$_link_\$/g, node.getData("link"));
   }
-
+  
   html = html.replace(/\$_desc_nil_\$/g, desc_nil);
   if (node.getData("desc") == "" && authorizeToEdit(node)) {
     //logged in but desc isn't there so it's invisible
@@ -195,7 +198,7 @@ function populateShowCard(node) {
   var selectingMetacode = false;
   // attach the listener that shows the metacode title when you hover over the image
   $('.showcard .metacodeImage').mouseenter(function(){
-    $('.showcard .icon').css('z-index','3');
+    $('.showcard .icon').css('z-index','4');
     $('.showcard .metacodeTitle').show();
   });
   $('.showcard .linkItem.icon').mouseleave(function() {

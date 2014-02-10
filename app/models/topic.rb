@@ -84,6 +84,7 @@ belongs_to :metacode
 		  @topicdata['$userid'] = self.user.id
 		  @topicdata['$username'] = self.user.name
       @topicdata['$permission'] = self.permission
+      @topicdata['$date'] = self.created_at.strftime("%m/%d/%Y")
 		  json.data @topicdata
 		  json.id self.id
 		  json.name self.name
@@ -110,6 +111,7 @@ belongs_to :metacode
 		  @topicdata['$yloc'] = @mapping.yloc
 		  @topicdata['$mappingid'] = @mapping.id
       @topicdata['$permission'] = self.permission
+      @topicdata['$date'] = self.created_at.strftime("%m/%d/%Y")
 		  json.data @topicdata
 		  json.id self.id
 		  json.name self.name
@@ -155,6 +157,7 @@ belongs_to :metacode
 			  @topicdata['$userid'] = topic.user.id
 			  @topicdata['$username'] = topic.user.name
         @topicdata['$permission'] = topic.permission
+        @topicdata['$date'] = topic.created_at.strftime("%m/%d/%Y")
 			  json.data @topicdata
 			  json.id topic.id
 			  json.name topic.name
@@ -175,6 +178,7 @@ belongs_to :metacode
           @topicdata['$userid'] = topic.user.id
           @topicdata['$username'] = topic.user.name
           @topicdata['$permission'] = topic.permission
+          @topicdata['$date'] = topic.created_at.strftime("%m/%d/%Y")
           json.data @topicdata
           json.id topic.id
           json.name topic.name

@@ -159,6 +159,7 @@ position: relative;
 .linkItem.contributor {
   background-image: url(MMCCicon_mapper_black.png);
   margin-left:20px;
+  z-index:3;
 }
 .linkItem.mapCount {
   background-image: url(MMCCicon_map_black.png);
@@ -266,7 +267,25 @@ background-color: #F8F8F8;
 float:left;
 }
 
-
+.CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip {
+  display:block;
+}
+.CardOnGraph .tip, .mapCard .tip {
+ display:none;
+ position: absolute;
+ background: white;
+ width: 155px;
+ bottom: 0;
+ left: 38px;
+ color: black;
+ border-radius: 4px;
+ font-size:15px !important;
+ font-family:'LatoLight';
+ line-height:17px;
+ padding: 3px 5px 2px;
+ border: 1px solid black;
+ z-index:100;
+}
 
 
 .CardOnGraph .link {

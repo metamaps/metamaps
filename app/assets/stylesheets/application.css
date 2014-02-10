@@ -2015,21 +2015,7 @@ li.meta, li.tutorial, li.exploreMaps {
   height:100%;
 }
 
-#homeMap {
-height: 350px;
-width: 510px;
-margin: 0 auto;
-transform: rotate(18deg);
--ms-transform: rotate(18deg);
--webkit-transform: rotate(18deg);
-}
-#homeMap-label div.node{
-transform: rotate(-18deg);
--ms-transform: rotate(-18deg);
--webkit-transform: rotate(-18deg);
-font-family: 'vinyl';
-text-transform: uppercase;
-}
+
 
 .home_content {
   width: 830px;
@@ -2048,6 +2034,29 @@ font-size: 40px;
 margin: 40px 20px 25px;
 text-align:center;
 background: url('home_bg2.png') no-repeat center -46px;
+}
+
+.home_content .request {
+margin: 5px auto;
+background: #15bad4;
+height: 40px;
+font-family: 'LatoLight';
+font-size: 16px;
+font-style: italic;
+width: auto;
+padding: 0 30px;
+cursor: pointer;
+color:white;
+line-height:40px;
+}
+.home_content .request:hover{
+background: #19C8E4;
+-webkit-box-shadow: none;
+box-shadow: none;
+}
+
+#homeMap {
+  margin-left:23px;
 }
 
 .contact {

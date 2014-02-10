@@ -91,6 +91,7 @@ end
 		  @topicdata['$yloc'] = @mapping.yloc
 		  @topicdata['$mappingid'] = @mapping.id
       @topicdata['$permission'] = topic.permission
+      @topicdata['$date'] = topic.created_at.strftime("%m/%d/%Y")
 		  json.data @topicdata
 		  json.id topic.id
 		  json.name topic.name

@@ -14,8 +14,8 @@
          <div class="linkItem icon">                                             
             <div class="metacodeImage" style="background-image:url(/assets/map.png);"></div>                 
          </div>                                                             
-         <div class="linkItem contributor">
-           
+         <div class="linkItem contributor hoverForTip">
+           <div class="tip">Created by <%= map.user.name %> on <%= map.created_at.strftime("%m/%d/%Y") %></div>
          </div>                           
          <div class="linkItem topicCount"><%= map.topics.count %></div>                 
          <div class="linkItem synapseCount"><%= map.synapses.count %></div>         

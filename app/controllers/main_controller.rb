@@ -10,8 +10,8 @@ class MainController < ApplicationController
   
   # home page
   def home
-    @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
-    @maps = @maps.slice(0,5)
+    @maps = Map.find_all_by_featured(true).shuffle!
+    @maps = @maps.slice(0,3)
     
     respond_with(@maps) 
   end
