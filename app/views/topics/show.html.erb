@@ -54,61 +54,6 @@
 
 <script>
 	$(document).ready(function() {
-    function bindWandHover() {
-      
-      var wandIsOpen = false
-      
-      // controls the sliding hover of the bottom left menu
-      var sliding1 = false; 
-      var lT;
-      
-      var closeWand = function() {
-        lT = setTimeout(function() { 
-            if (! sliding1) { 
-              sliding1 = true;
-              $('.sidebarWandIcon').css('background-color','#0F1519');
-              $('.sidebarWandBox').fadeOut(200, function() {
-                sliding1 = false;
-                wandIsOpen = false; 
-              });
-            } 
-          },300); 
-      }
-      
-      var openWand = function() {
-        clearTimeout(lT);
-        if (! sliding1) { 
-            sliding1 = true;
-            
-            // hide the other two
-            $('.sidebarAccountBox').hide();
-            $('.sidebarFilterBox').hide();
-            $('.sidebarFilterIcon').css('background-color','#0F1519');
-            $('.sidebarAccountIcon').css('background-color','#0F1519');
-            
-            $('.sidebarWandIcon').css('background-color','#000');
-            $('.sidebarWandBox').fadeIn(200, function() {
-                 sliding1 = false;
-                 wandIsOpen = true;
-            });
-        }
-      }
-        // bind the hover events
-        $(".sidebarWand").hover(openWand, closeWand);
-        
-        // attach events for clicking on wand actions
-        $('li.wandSaveLayout').click(function() {
-          saveLayoutAll();
-        });
-        $('li.wandForkMap').click(function() {
-          saveToMap();
-          closeWand();
-        });
-        $('li.wandFilter').click(function() {
-          return;
-        });
-        
-   } // end bindWandHover
    
    function bindFilterHover() {
       
@@ -153,8 +98,11 @@
         $(".sidebarFilter").hover(openFilter, closeFilter);
         
    } // end bindFilterHover
-   bindWandHover();
    bindFilterHover();
+   
+   $('.sidebarFork').click(function() {
+    saveToMap();
+  });
    
    // initialize best_in_place editing
    $('.authenticated div.permission.canEdit .best_in_place').best_in_place();

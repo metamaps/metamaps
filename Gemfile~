@@ -5,21 +5,22 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+gem 'devise'
+gem 'redis'
 gem 'pg'
-gem 'authlogic'
 gem 'cancan'
 gem 'formula'
 gem 'formtastic'
 gem 'json'
 gem 'rails3-jquery-autocomplete'
 gem 'best_in_place'
-gem 'therubyracer' #optional
-gem 'rb-readline'
+#gem 'therubyracer' #optional
+#gem 'rb-readline'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '3.2.3'
+  gem 'sass-rails'
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -34,7 +35,7 @@ gem 'jquery-rails', '2.1.2'
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
- gem 'jbuilder'
+ gem 'jbuilder', '0.8.2'
 
 # Use unicorn as the web server
 # gem 'unicorn'

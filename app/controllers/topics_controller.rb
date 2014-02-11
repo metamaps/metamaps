@@ -145,6 +145,7 @@ class TopicsController < ApplicationController
     
     respond_to do |format|
       format.js { render :json => @topic.self_as_json }
+      format.json { render :json => @topic.self_as_json }
     end
   end
   
