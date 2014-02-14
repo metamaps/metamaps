@@ -10,6 +10,7 @@ class TopicsController < ApplicationController
     @current = current_user
     term = params[:term]
     if term && !term.empty?
+    	# !connor term here needs to have .downcase
       @topics = Topic.where('LOWER("name") like ?', term + '%').order('"name"')
       
       #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
