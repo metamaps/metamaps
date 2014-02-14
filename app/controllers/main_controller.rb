@@ -159,7 +159,7 @@ class MainController < ApplicationController
     
       #remove "mapper:" if appended at beginning
       term = term[7..-1] if term.downcase[0..6] == "mapper:"
-      #!connor same question as above
+      # !connor same question as above
       @mappers = User.where('LOWER("name") like ?', term.downcase + '%').limit(5).order('"name"')
     else
       @mappers = []
@@ -178,7 +178,7 @@ class MainController < ApplicationController
     
     if term && !term.empty?
       @synapses = Synapse.select('DISTINCT "desc"').
-       #!connor this should likely also have the preceeding %
+       # !connor this should likely also have the preceeding %
         where('LOWER("desc") like ?', term.downcase + '%').limit(5).order('"desc"')
       
       render json: autocomplete_synapse_generic_json(@synapses)
