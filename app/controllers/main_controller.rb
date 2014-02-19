@@ -62,12 +62,10 @@ class MainController < ApplicationController
       end
       
       if filterByMetacode
-      	# !connor : Shouldn't this be checked for all cases, not just metacodes?
         if term == ""
           @topics = []
         else
-          # !connor add % to the frontof this one too? why not?
-          search = term.downcase + '%'
+          search = '%' + term.downcase + '%'
           
           if !user
             @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
@@ -90,8 +88,7 @@ class MainController < ApplicationController
           @topics = Topic.where('LOWER("link") like ?', search).where('user_id = ?', user).order('"name"')
         end
       else #regular case, just search the name
-        # !connor : Definitely add the % out front here.
-        search = term.downcase + '%'
+        search = '%' + term.downcase + '%'
         if !user
           @topics = Topic.where('LOWER("name") like ?', search).order('"name"')
         elsif user
@@ -113,7 +110,6 @@ class MainController < ApplicationController
     @current = current_user
     
     term = params[:term]
-    #!connor is nil the same as false? why is it done different here?
     user = params[:user] ? params[:user] : nil
     
     if term && !term.empty? && term.downcase[0..5] != "topic:" && term.downcase[0..6] != "mapper:" && term.downcase != "map:"
@@ -127,8 +123,7 @@ class MainController < ApplicationController
         term = term[5..-1] 
         desc = true
       end
-      # !connor make the search always '%' : term.downcase + '%'
-      search = desc ?  '%' + term.downcase + '%' : term.downcase + '%'
+      search = '%' + term.downcase + '%'
       query = desc ?  'LOWER("desc") like ?' : 'LOWER("name") like ?'
       if !user
       	# !connor why is the limit 5 done here and not above? also, why not limit after sorting alphabetically?
@@ -155,7 +150,6 @@ class MainController < ApplicationController
     
       #remove "mapper:" if appended at beginning
       term = term[7..-1] if term.downcase[0..6] == "mapper:"
-      # !connor same question as above
       @mappers = User.where('LOWER("name") like ?', term.downcase + '%').limit(5).order('"name"')
     else
       @mappers = []
@@ -174,8 +168,7 @@ class MainController < ApplicationController
     
     if term && !term.empty?
       @synapses = Synapse.select('DISTINCT "desc"').
-       # !connor this should likely also have the preceeding %
-        where('LOWER("desc") like ?', term.downcase + '%').limit(5).order('"desc"')
+        where('LOWER("desc") like ?', '%' + term.downcase + '%').limit(5).order('"desc"')
       
       render json: autocomplete_synapse_generic_json(@synapses)
       
