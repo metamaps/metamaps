@@ -71,12 +71,8 @@ class MainController < ApplicationController
           
           if !user
             @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
-            #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
-            @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
           elsif user
             @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
-            #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
-            @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
           end
         end
       elsif desc
