@@ -65,12 +65,26 @@ class MainController < ApplicationController
         if term == ""
           @topics = []
         else
-          search = '%' + term.downcase + '%'
+          search = term.downcase + '%'
           
           if !user
             @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
+            @topics2 = Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
+            @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
+            @topics4 = Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
+            @topics = @topics + (@topics2 - @topics)
+            @topics = @topics + (@topics3 - @topics)
+            @topics = @topics + (@topics4 - @topics)
+            
           elsif user
             @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
+            @topics2 = Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
+            @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
+            @topics4 = Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
+            @topics = @topics + (@topics2 - @topics)
+            @topics = @topics + (@topics3 - @topics)
+            @topics = @topics + (@topics4 - @topics)
+            
           end
         end
       elsif desc
@@ -88,11 +102,23 @@ class MainController < ApplicationController
           @topics = Topic.where('LOWER("link") like ?', search).where('user_id = ?', user).order('"name"')
         end
       else #regular case, just search the name
-        search = '%' + term.downcase + '%'
+        search = term.downcase + '%'
         if !user
           @topics = Topic.where('LOWER("name") like ?', search).order('"name"')
+          @topics2 = Topic.where('LOWER("name") like ?', '%' + search).order('"name"')
+          @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).order('"name"')
+          @topics4 = Topic.where('LOWER("link") like ?', '%' + search).order('"name"')
+          @topics = @topics + (@topics2 - @topics)
+          @topics = @topics + (@topics3 - @topics)
+          @topics = @topics + (@topics4 - @topics)
         elsif user
           @topics = Topic.where('LOWER("name") like ?', search).where('user_id = ?', user).order('"name"')
+          @topics2 = Topic.where('LOWER("name") like ?', '%' + search).where('user_id = ?', user).order('"name"')
+          @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).where('user_id = ?', user).order('"name"')
+          @topics4 = Topic.where('LOWER("link") like ?', '%' + search).where('user_id = ?', user).order('"name"')
+          @topics = @topics + (@topics2 - @topics)
+          @topics = @topics + (@topics3 - @topics)
+          @topics = @topics + (@topics4 - @topics)
         end
       end
     else
