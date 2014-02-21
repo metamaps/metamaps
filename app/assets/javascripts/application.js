@@ -449,7 +449,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   });
     
   
-  $(".scroll").mCustomScrollbar();
+  //$(".scroll").mCustomScrollbar();
   
   // initialize scroll bar for filter by metacode, then hide it and position it correctly again
   $("#filter_by_metacode").mCustomScrollbar();
@@ -568,7 +568,7 @@ function addHoverForSettings() {
 
 // this is to save the layout of a map
 function saveLayoutAll() {
-  $('.wandSaveLayout').html('Saving...');
+  $('.sidebarSave .tip').html('Saving...');
   var coor = "";
   if (gType == "arranged" || gType == "chaotic") {
     Mconsole.graph.eachNode(function(n) {
@@ -586,8 +586,8 @@ function saveLayout(id) {
   $('#map_coordinates').val(n.getData("mappingid") + '/' + n.pos.x + '/' + n.pos.y);
   $('#saveMapLayout').submit();
   dragged = 0;
-  $('.wandSaveLayout').html('Saved!');
-  setTimeout(function(){$('.wandSaveLayout').html('Save Layout')},1500);
+  //$('.wandSaveLayout').html('Saved!');
+  //setTimeout(function(){$('.wandSaveLayout').html('Save Layout')},1500);
 }
 
 // this is to save your console to a map
@@ -711,6 +711,8 @@ function openNodeShowcard(node) {
   populateShowCard(node);  
 
   $('.showcard').fadeIn('fast');
+  var s = $('.showcard').find('.scroll');
+  s.height( s.height() ).mCustomScrollbar();
   //node.setData('dim', 1, 'current');
   MetamapsModel.showcardInUse = node.id;
 }

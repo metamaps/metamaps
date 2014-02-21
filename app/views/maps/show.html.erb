@@ -9,16 +9,22 @@
 <% if authenticated? %>
   <% if @map.permission == "commons" || @map.user == user %>
       <div class="sidebarSave">
-        <div class="sidebarSaveIcon"></div>
+        <div class="sidebarSaveIcon hoverForTip">
+          <div class="tip">Save Layout</div>
+        </div>
         <div class="sidebarSaveBox"></div>
       </div>
   <% end %>
 <div class="sidebarFork">
-  <div class="sidebarForkIcon"></div>
+  <div class="sidebarForkIcon hoverForTip">
+    <div class="tip">Save To New Map</div>
+  </div>
   <div class="sidebarForkBox"></div>
 </div>
 <div class="sidebarCollaborate">
-  <div class="sidebarCollaborateIcon"></div>
+  <div class="sidebarCollaborateIcon hoverForTip">
+    <div class="tip">Start Realtime Collaboration</div>
+  </div>
   <div class="sidebarCollaborateBox">
     
   </div>
@@ -157,7 +163,12 @@
   });
    
    $(".sidebarCollaborateIcon").click(function(event) {
-      goRealtime = !goRealtime; 
+      if (!goRealtime) {
+        $('.sidebarCollaborate .tip').html('Stop Realtime Collaboration');
+      } else {
+        $('.sidebarCollaborate .tip').html('Start Realtime Collaboration');
+      }
+      goRealtime = !goRealtime;      
       $(".sidebarCollaborateIcon").toggleClass("blue");
    });
    
@@ -169,7 +180,11 @@
      maxHeight: 500,
      maxWidth: 500,
      minHeight: 320,
-     minWidth: 226
+     minWidth: 226,
+     resize: function( event, ui ) {
+       var p = $('#showcard').find('.scroll');
+       p.height( p.height() ).mCustomScrollbar('update');
+     }
    }).css({
      display: 'none',
      top: '300px',

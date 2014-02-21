@@ -71,8 +71,11 @@ belongs_to :metacode
   def self_as_json
     Jbuilder.encode do |json|
 		  @inmaps = Array.new
-      self.maps.each do |map|
+      @mapsString = ""
+      self.maps.each_with_index do |map, index|
         @inmaps.push(map.id)
+        @mapsString += map.name
+        @mapsString += (index+1) == self.maps.count ? "" : ", "
       end
       
 		  @topicdata = Hash.new
@@ -80,6 +83,7 @@ belongs_to :metacode
       @topicdata['$link'] = self.link
 		  @topicdata['$metacode'] = self.metacode.name
       @topicdata['$inmaps'] = @inmaps
+      @topicdata['$inmapsString'] = @mapsString
       @topicdata['$synapseCount'] = self.synapses.count
 		  @topicdata['$userid'] = self.user.id
 		  @topicdata['$username'] = self.user.name
@@ -94,8 +98,11 @@ belongs_to :metacode
   def selfonmap_as_json(mapid)
     Jbuilder.encode do |json|
 		  @inmaps = Array.new
-      self.maps.each do |map|
+      @mapsString = ""
+      self.maps.each_with_index do |map, index|
         @inmaps.push(map.id)
+        @mapsString += map.name
+        @mapsString += (index+1) == self.maps.count ? "" : ", "
       end
       
 		  @topicdata = Hash.new
@@ -103,6 +110,7 @@ belongs_to :metacode
 		  @topicdata['$link'] = self.link
 		  @topicdata['$metacode'] = self.metacode.name
       @topicdata['$inmaps'] = @inmaps
+      @topicdata['$inmapsString'] = @mapsString
       @topicdata['$synapseCount'] = self.synapses.count
 		  @topicdata['$userid'] = self.user.id
 		  @topicdata['$username'] = self.user.name
@@ -144,8 +152,11 @@ belongs_to :metacode
 			  end
 			  
 			  @inmaps = Array.new
-        topic.maps.each do |map|
+        @mapsString = ""
+        topic.maps.each_with_index do |map, index|
           @inmaps.push(map.id)
+          @mapsString += map.name
+          @mapsString += (index+1) == topic.maps.count ? "" : ", "
         end
         
         @topicdata = Hash.new
@@ -153,6 +164,7 @@ belongs_to :metacode
         @topicdata['$link'] = topic.link
         @topicdata['$metacode'] = topic.metacode.name
         @topicdata['$inmaps'] = @inmaps
+        @topicdata['$inmapsString'] = @mapsString
         @topicdata['$synapseCount'] = topic.synapses.count
 			  @topicdata['$userid'] = topic.user.id
 			  @topicdata['$username'] = topic.user.name
@@ -165,8 +177,11 @@ belongs_to :metacode
 		elsif @topics.count == 1
 		    json.array!(@topics) do |topic|
           @inmaps = Array.new
-          topic.maps.each do |map|
+          @mapsString = ""
+          topic.maps.each_with_index do |map, index|
             @inmaps.push(map.id)
+            @mapsString += map.name
+            @mapsString += (index+1) == topic.maps.count ? "" : ", "
           end
           
           @topicdata = Hash.new
@@ -174,6 +189,7 @@ belongs_to :metacode
           @topicdata['$link'] = topic.link
           @topicdata['$metacode'] = topic.metacode.name
           @topicdata['$inmaps'] = @inmaps
+          @topicdata['$inmapsString'] = @mapsString
           @topicdata['$synapseCount'] = topic.synapses.count
           @topicdata['$userid'] = topic.user.id
           @topicdata['$username'] = topic.user.name

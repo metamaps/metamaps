@@ -134,6 +134,7 @@ function graphSettings(type, embed) {
         }
         else if (node && node.nodeFrom) { // the variable 'node' is actually an edge/adjacency
           // open right click menu
+          selectEdgeOnRightClickHandler(node, e);
         }
         else {
           // right click on open canvas, options here?

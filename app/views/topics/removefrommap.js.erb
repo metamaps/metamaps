@@ -24,6 +24,4 @@ if (Mconsole != null) {
 	duration: 1000  
   });
   Mconsole.graph.removeNode(<%= @mapping.topic_id %>);
-  Mconsole.labels.disposeLabel(<%= @mapping.topic_id %>);
-  delete Mconsole.labels.labels['<%= @mapping.topic_id %>']
 }

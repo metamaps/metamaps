@@ -13,6 +13,9 @@
          @map.contributors.each_with_index do |c, index|
             comma = (index+1) == @map.contributors.count ? '' : ', '
             contributorList += c.name + comma
+         end 
+         if @map.contributors.count == 0
+           contributorList = 'No one has added anything yet.'
          end %>
       <div class="tip"><%= contributorList %></div>
     </div>
@@ -39,7 +42,7 @@
   
   <div class="mapInfoDelete">
     <% if @map.user == user %>
-      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, :remote => true %>
+      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete %>
     <% end %>
   </div>
 </div>

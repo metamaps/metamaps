@@ -26,6 +26,8 @@ ISSAD::Application.routes.draw do
   match 'maps/featured', to: 'maps#index', via: :get, as: :featuredmaps
   match 'maps/new', to: 'maps#index', via: :get, as: :newmaps
   match 'maps/mappers/:id', to: 'maps#index', via: :get, as: :usermaps
+  match 'maps/topics/:id', to: 'maps#index', via: :get, as: :topicmaps
+  
   
   resources :maps, except: [:new, :edit]
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed

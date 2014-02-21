@@ -36,10 +36,13 @@ function generateShowcardHTML() {
            <div class="linkItem contributor hoverForTip"> \
              <div class="tip">Created by $_username_$ on $_date_$</div>   \
            </div>                           \
-           <div class="linkItem mapCount">$_map_count_$</div>                 \
+           <a href="/maps/topics/$_id_$" class="linkItem mapCount hoverForTip" \
+              title="Click to see which maps topic appears on" target="_blank">                  \
+             $_map_count_$                                                    \
+           </a>                                                             \
            <div class="linkItem synapseCount">$_synapse_count_$</div>         \
            <div class="linkItem mapPerm $_mk_permission_$"></div>             \
-           <a href="/topics/$_id_$" class="linkItem topicPopout" title="Open Topic in New Tab" target="_blank"></a>\
+           <a href="/topics/$_id_$" class="linkItem topicPopout" title="Open topic in new tab" target="_blank"></a>\
            <div class="clearfloat"></div>                                     \
         </div>                                                                \
       <div class="metacodeSelect">$_metacode_select_$</div>                   \
@@ -230,15 +233,31 @@ function populateShowCard(node) {
     }
   });
   
+  
+  // when you're typing a description, resize the scroll box to have space
+  $('.best_in_place_desc textarea').bind('keyup', function() {
+    var s = $('.showcard').find('.scroll');
+    s.height( s.height() ).mCustomScrollbar('update');
+    console.log('working');
+  });
+  
   //bind best_in_place ajax callbacks
   $(showCard).find('.best_in_place_name').bind("ajax:success", function() {
+    
+    var s = $('.showcard').find('.scroll');
+    s.height( s.height() ).mCustomScrollbar('update');
+    
     var name = $(this).html();
     node.name = name;
+    Mconsole.plot();
   });
 
   $(showCard).find('.best_in_place_desc').bind("ajax:success", function() {
     this.innerHTML = this.innerHTML.replace(/\r/g, '')
-    $(showCard).find('.scroll').mCustomScrollbar("update");
+    
+    var s = $('.showcard').find('.scroll');
+    s.height( s.height() ).mCustomScrollbar('update');
+    
     var desc = $(this).html();
     node.setData("desc", desc);
   });
@@ -294,7 +313,5 @@ function populateShowCard(node) {
     else if (permission == "private") el.html("pr");
     node.setData("permission", permission);
   });
-  
-  $('.showcard').find('.scroll').mCustomScrollbar();
-  
+    
 }

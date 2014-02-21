@@ -74,8 +74,11 @@ end
 		  end
 		  
 		  @inmaps = Array.new
-      topic.maps.each do |map|
+      @mapsString = ""
+      topic.maps.each_with_index do |map, index|
         @inmaps.push(map.id)
+        @mapsString += map.name
+        @mapsString += (index+1) == topic.maps.count ? "" : ", "
       end
       
 		  @topicdata = Hash.new
@@ -83,6 +86,7 @@ end
 		  @topicdata['$link'] = topic.link
 		  @topicdata['$metacode'] = topic.metacode.name
       @topicdata['$inmaps'] = @inmaps
+      @topicdata['$inmapsString'] = @mapsString
       @topicdata['$synapseCount'] = topic.synapses.count
 		  @topicdata['$userid'] = topic.user.id
 		  @topicdata['$username'] = topic.user.name

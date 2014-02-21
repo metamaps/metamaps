@@ -20,26 +20,34 @@ class MapsController < ApplicationController
     @user = nil
     
     if request.path =="/maps/active"
-      @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.last_edited <=> a.last_edited }
-      @maps = @maps.slice(0,20)
+      @maps = Map.order("updated_at DESC").limit(20)
       @request = "active"
       
     elsif request.path =="/maps/featured"
       @maps = Map.order("name ASC").find_all_by_featured(true)
       @request = "featured"
       
-    elsif request.path =="/maps/new"
-      @maps = Map.visibleToUser(@current, nil).sort! { |a,b| b.created_at <=> a.created_at }
-      @maps = @maps.slice(0,20)
+    elsif request.path == "/maps/new"
+      @maps = Map.order("created_at DESC").limit(20)
       @request = "new"
       
-    elsif params[:id]  # looking for maps by a mapper
+    elsif request.path.index('/maps/mappers/') != nil  # looking for maps by a mapper
       @user = User.find(params[:id])
-      @maps = Map.order("name ASC").visibleToUser(@current, @user)
+      @maps = Map.order("name ASC").find_all_by_user_id(@user.id)
       @request = "you" if authenticated? && @user == @current
       @request = "other" if authenticated? && @user != @current
       
+    elsif request.path.index('/maps/topics/') != nil  # looking for maps by a certain topic they include
+      @topic = Topic.find(params[:id]).authorize_to_show(@current)
+      if !@topic
+        redirect_to featuredmaps_url, notice: "Access denied." and return
+      end
+      @maps = @topic.maps
+      @request = "topic"
     end
+    
+    #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
+    @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
     
 	  respond_with(@maps, @request, @user)
   end
@@ -215,6 +223,8 @@ class MapsController < ApplicationController
   
   # DELETE maps/:id
   def destroy
+    @current = current_user
+  
 	  @map = Map.find(params[:id])
 	
 	  @mappings = @map.mappings
@@ -226,7 +236,7 @@ class MapsController < ApplicationController
 	  @map.delete
 	
 	  respond_to do |format|
-        format.js
+        format.html { redirect_to "/maps/mappers/" + @current.id.to_s }
     end
   end
 end

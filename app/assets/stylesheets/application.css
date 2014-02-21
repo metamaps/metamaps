@@ -657,6 +657,29 @@ cursor:pointer;
   font-family: 'LatoLight', helvetica, sans-serif;
 }
 
+.sidebarFork .hoverForTip:hover .tip {
+  display:block;
+}
+
+.sidebarFork .tip {
+display: none;
+position: absolute;
+background: white;
+min-width: 180px;
+max-width: 250px;
+text-align: center;
+top: 36px;
+right: 0;
+color: black;
+border-radius: 4px;
+font-size: 15px !important;
+font-family: 'LatoLight';
+line-height: 17px;
+padding: 3px 5px 2px;
+border: 1px solid black;
+z-index: 100;
+}
+
 /* end Save To New Map */
 
 /* Save Layout */
@@ -693,6 +716,29 @@ cursor:pointer;
   padding: 10px;
   border: 1px solid black;
   font-family: 'LatoLight', helvetica, sans-serif;
+}
+
+.sidebarSave .hoverForTip:hover .tip {
+  display:block;
+}
+
+.sidebarSave .tip {
+display: none;
+position: absolute;
+background: white;
+min-width: 180px;
+max-width: 250px;
+text-align: center;
+top: 36px;
+right: 0;
+color: black;
+border-radius: 4px;
+font-size: 15px !important;
+font-family: 'LatoLight';
+line-height: 17px;
+padding: 3px 5px 2px;
+border: 1px solid black;
+z-index: 100;
 }
 
 /* Filter */
@@ -830,6 +876,29 @@ background-size: 26px 25px;
   border: 1px solid black;
   min-width:120px;
   font-family: 'LatoLight', helvetica, sans-serif;
+}
+
+.sidebarCollaborate .hoverForTip:hover .tip {
+  display:block;
+}
+
+.sidebarCollaborate .tip {
+display: none;
+position: absolute;
+background: white;
+min-width: 180px;
+max-width: 250px;
+text-align: center;
+top: 36px;
+right: 0;
+color: black;
+border-radius: 4px;
+font-size: 15px !important;
+font-family: 'LatoLight';
+line-height: 17px;
+padding: 3px 5px 2px;
+border: 1px solid black;
+z-index: 100;
 }
 
 /* end collaborate */
@@ -1758,8 +1827,8 @@ font-family:arial;
 }
 
 .buttonWrapper {
-  margin: 10px auto 0;
-  width: 252px;
+  margin: 10px 0 0 131px;
+  width: 254px;
 }
 
 .onConsole .new_map button {
