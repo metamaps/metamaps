@@ -30,6 +30,42 @@
 
 }
 
+@font-face {
+    font-family: 'LatoRegular';
+    src: url('/assets/Fonts/Lato-Reg-webfont.eot');
+    src: url('/assets/Fonts/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/assets/Fonts/Lato-Reg-webfont.woff') format('woff'),
+         url('/assets/Fonts/Lato-Reg-webfont.ttf') format('truetype'),
+         url('/assets/Fonts/Lato-Reg-webfont.svg#LatoRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'LatoItalic';
+    src: url('/assets/Fonts/Lato-RegIta-webfont.eot');
+    src: url('/assets/Fonts/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/assets/Fonts/Lato-RegIta-webfont.woff') format('woff'),
+         url('/assets/Fonts/Lato-RegIta-webfont.ttf') format('truetype'),
+         url('/assets/Fonts/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'LatoBold';
+    src: url('/assets/Fonts/Lato-Bol-webfont.eot');
+    src: url('/assets/Fonts/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/assets/Fonts/Lato-Bol-webfont.woff') format('woff'),
+         url('/assets/Fonts/Lato-Bol-webfont.ttf') format('truetype'),
+         url('/assets/Fonts/Lato-Bol-webfont.svg#LatoBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 /* clear styles */
 html, body, div, h1, h2, h3, h4, h5, h6, 
 ul, ol, dl, li, dt, dd, p, blockquote,
@@ -689,19 +725,16 @@ cursor:pointer;
 .sidebarFork .tip {
 display: none;
 position: absolute;
-background: white;
-min-width: 180px;
-max-width: 250px;
+background: black;
 text-align: center;
 top: 36px;
 right: 0;
-color: black;
+color: white;
 border-radius: 4px;
 font-size: 15px !important;
-font-family: 'LatoLight';
+font-family: 'LatoRegular';
 line-height: 17px;
 padding: 3px 5px 2px;
-border: 1px solid black;
 z-index: 100;
 }
 
@@ -750,19 +783,16 @@ cursor:pointer;
 .sidebarSave .tip {
 display: none;
 position: absolute;
-background: white;
-min-width: 180px;
-max-width: 250px;
+background: black;
 text-align: center;
 top: 36px;
 right: 0;
-color: black;
+color: white;
 border-radius: 4px;
 font-size: 15px !important;
-font-family: 'LatoLight';
+font-family: 'LatoRegular';
 line-height: 17px;
 padding: 3px 5px 2px;
-border: 1px solid black;
 z-index: 100;
 }
 
@@ -910,19 +940,16 @@ background-size: 26px 25px;
 .sidebarCollaborate .tip {
 display: none;
 position: absolute;
-background: white;
-min-width: 180px;
-max-width: 250px;
+background: black;
 text-align: center;
 top: 36px;
 right: 0;
-color: black;
+color: white;
 border-radius: 4px;
 font-size: 15px !important;
-font-family: 'LatoLight';
+font-family: 'LatoRegular';
 line-height: 17px;
 padding: 3px 5px 2px;
-border: 1px solid black;
 z-index: 100;
 }
 
@@ -2082,7 +2109,7 @@ background-size: 22px 20px;
   cursor:pointer;
 }
 .footer ul li:hover {
-  background:black;
+  
 }
 
 li.meta a, li.tutorial a, li.exploreMaps a {
@@ -2104,6 +2131,13 @@ li.meta, li.tutorial, li.exploreMaps {
 
 
 /* home page */
+
+div#preloaded-images {
+   position: absolute;
+   overflow: hidden;
+   left: -9999px; 
+   top: -9999px;
+}
 
 .home_content {
   width: 830px;
@@ -2160,6 +2194,13 @@ box-shadow: none;
 
 #homeMapImage {
   margin:5px auto;
+}
+
+.featuredMaps {
+  margin: 15px 0;
+  font-size:20px;
+  line-height:20px;
+  text-align:center;
 }
 
 #homeMap {
@@ -2241,15 +2282,40 @@ border-radius:5px;
 }
 
 #homeFigure figure:hover .littleOverlay { 
-  top: 0; 
+  /*top: 0; 
   background: rgba(255,255,255, 0.9); 
-  bottom: 0; 
+  bottom: 0; */
 }
 
 
 #homeMap .map, #homeMap .mapCard {
   height:226px;
 }
+
+.socialIcons {
+  position:fixed;
+  bottom: 9px;
+  height: 35px;
+  right:11px;
+}
+.socialIcons a {
+  float:left;
+  height:35px;
+  width:35px;
+  margin-right:5px;
+  background-repeat:no-repeat;
+  background-size:30px 30px;
+}
+.socialIcons .twitter {
+  background-image: url('MM Social-51.png');
+}
+.socialIcons .google {
+  background-image: url('MM Social-52.png');
+}
+.socialIcons .wordpress {
+  background-image: url('MM Social-53.png');
+}
+
 
 .contact {
   text-align: center;

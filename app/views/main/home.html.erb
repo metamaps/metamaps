@@ -6,6 +6,11 @@
   
 <% content_for :title, "Home | Metamaps" %>   
   
+  
+<div id="preloaded-images">
+   <img src="/assets/metacodes75ms300x300.gif" width="128 height="128" alt="Image 01" />
+</div>  
+  
 <div class="home_bg">
 
 <div class="home_content">
@@ -34,9 +39,7 @@
 <p class="contact">
   <a href="/request" class="request button">Request Invite</a>
   <a href="#" class="learnmore button openLightbox" data-open="about">Learn More</a>
-  <br>
-  <br>
-  explore what experienced metamappers are creating
+  <div class="featuredMaps">explore featured maps from our community</div>
 </p>
 
 <div class="centeredProfile">
@@ -52,6 +55,13 @@
 </div>
 <div class="clearfloat"></div>
 
+<div class="socialIcons">
+  <a class="twitter" href="https://twitter.com/metamapps" target="_blank"></a>
+  <a class="google" href="https://plus.google.com/u/0/communities/115060009262157699234" target="_blank"></a>
+  <a class="wordpress" href="http://blog.metamaps.cc" target="_blank"></a>
+  <div class="clearfloat"></div>
+</div>
+
 </div>
 
 
@@ -66,11 +76,12 @@ $(document).ready(function() {
        minDisplayTime: 2000
   });
   
-  
-  /*$("#homeMap").mCustomScrollbar({
-    horizontalScroll:true,
-    scrollButtons: { enable: true }
-  }).mCustomScrollbar('scrollTo',300);*/
+  $('#homeMapImage').hover(function() {
+    $(this).attr('src','/assets/metacodes75ms300x300.gif');
+  }, function() {
+    $(this).attr('src','/assets/metamap128x128.png');
+  });
+
 });
 
 
