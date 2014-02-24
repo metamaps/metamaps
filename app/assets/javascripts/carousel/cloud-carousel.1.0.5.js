@@ -318,10 +318,11 @@ jQuery.browser = browser;
 				x = this.xCentre + (( (funcCos(radians) * this.xRadius) - (item.orgWidth*0.5)) * scale);
 				y = this.yCentre + (( (sinVal * this.yRadius)  ) * scale);		
 		
-				if (item.imageOK)
+        if (item.imageOK)
 				{
 					var	img = item.image;
-					img.style.zIndex = "" + (scale * 100)>>0;	// >>0 = Math.foor(). Firefox doesn't like fractional decimals in z-index.
+          
+          img.style.zIndex = "" + (scale * 100)>>0;	// >>0 = Math.foor(). Firefox doesn't like fractional decimals in z-index.
           w = img.width = item.orgWidth * scale;					
 					h = img.height = item.orgHeight * scale;
 					img.style.left = x + px ;

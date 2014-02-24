@@ -14,8 +14,8 @@ gem 'formtastic'
 gem 'json'
 gem 'rails3-jquery-autocomplete'
 gem 'best_in_place'
-gem 'therubyracer' #optional
-gem 'rb-readline'
+#gem 'therubyracer' #optional
+#gem 'rb-readline'
 
 # Gems used only for assets and not required
 # in production environments by default.

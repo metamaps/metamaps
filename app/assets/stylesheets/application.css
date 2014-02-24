@@ -15,6 +15,7 @@
  *= require ForceDirected
  *= require jquery.mCustomScrollbar
  *= require jquery-ui
+ *= require animate
 */
 
 @font-face {
@@ -58,15 +59,48 @@ html {
 }
 
 body {
-  background:#031924 url(background2-for-repeating.jpg) repeat 0 0;
+  /* IE10 Consumer Preview */ 
+  background-image: -ms-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* Mozilla Firefox */ 
+  background-image: -moz-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* Opera */ 
+  background-image: -o-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* Webkit (Safari/Chrome 10) */
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #C199FB), color-stop(1, #E4D9F5));
+
+  /* Webkit (Chrome 11+) */ 
+  background-image: -webkit-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* W3C Markup, IE10 Release Preview */ 
+  background-image: linear-gradient(to top, #C199FB 0%, #E4D9F5 100%);
+  background: url(fresnel-mountainous-landscape-002.png) no-repeat;
+  background-size:cover;
   font-family: 'LatoLight', helvetica, sans-serif;
   background-attachment:fixed;
   color:#FFF;
 }
 
-body.bodyFAQ {
-/*background: #031924 url(mushroom.jpg) no-repeat center center;
-background-size: cover;*/
+body.mapBody {
+  /* IE10 Consumer Preview */ 
+  background-image: -ms-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* Mozilla Firefox */ 
+  background-image: -moz-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* Opera */ 
+  background-image: -o-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* Webkit (Safari/Chrome 10) */
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #C199FB), color-stop(1, #E4D9F5));
+
+  /* Webkit (Chrome 11+) */ 
+  background-image: -webkit-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
+
+  /* W3C Markup, IE10 Release Preview */ 
+  background-image: linear-gradient(to top, #C199FB 0%, #E4D9F5 100%);
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -106,14 +140,11 @@ padding: 0 0;
 width: 60px;
 -webkit-box-shadow: none;
 box-shadow: none;
-background: #69a3a4;
-background: -webkit-linear-gradient(top,#69a3a4,#69a3aF);
-background: linear-gradient(top,#4387fd,#4683ea);
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4387fd,endColorstr=#4683ea,GradientType=1);
+background: #AEA9FD;
 vertical-align: top;
-color: #fff;
+color: black;
 margin: 0px;
-cursor: default;
+cursor: pointer;
 display: inline-block;
 font-weight: bold;
 line-height: 29px;
@@ -126,8 +157,7 @@ border-radius: 2px;
 }
  
 button.button:hover, a.button:hover, input[type="submit"]:hover {
--webkit-box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
-box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
+  background: #B6B2FD;
 }
 
 /*
@@ -180,7 +210,7 @@ box-shadow: 0 1px 0 rgba(0,0,0,.15),0 1px 2px rgba(0,0,0,.2);
 .centeredProfile {
   margin:0 auto;
   display: block;
-  width: 845px;	
+  width: 830px;	
 }
 
 .requestInvite {
@@ -431,14 +461,12 @@ border-radius: 5px;
   right: 0px;
   z-index: 9999;
   width: auto;
-  background: #0F1519;
   padding: 1px 10px 0px 10px;
   font-family: "vinyl",sans-serif;
   font-style:italic;
   height: 35px;
   font-size: 30px;
   line-height: 38px;
-  border:1px solid #000;
   border-right:none;
   border-bottom-left-radius:5px;
   border-top-left-radius:5px;
@@ -446,17 +474,16 @@ border-radius: 5px;
 .wrapper div.index .openCheatsheet {
   position:absolute;
   top:0;
-  left:-45px;
-  background: #0F1519 url('MMCCicon_help.png') no-repeat center center;
+  left:-30px;
+  background: url('MMCCicon_help.png') no-repeat center center;
   background-size: 32px 32px;
-  border:1px solid #000;
   border-radius:5px;
   height:36px;
   width:36px;
   cursor:pointer;
 }
 .wrapper div.index .openCheatsheet:hover {
-  background-color: #161E24;
+  
 }
 .wrapper div.index span {
   float:left;
@@ -482,14 +509,12 @@ border-radius: 5px;
   right: 0;
   z-index: 9999;
   width: auto;
-  background: #0F1519;
   padding: 1px 10px 0px 20px;
   text-transform:uppercase;
   font-style:italic;
   height: 35px;
   font-size: 30px;
   line-height: 38px;
-  border:1px solid #000;
   border-right:none;
   border-bottom-left-radius:5px;
   border-top-left-radius:5px;
@@ -1624,7 +1649,7 @@ border: solid 2px #000;
 }
 
 #lightbox_content {
-  background: white;
+  background: white url(metacode-watermark.png) 443px -30px no-repeat;
   padding: 20px;
   border-radius:5px;
 }
@@ -1980,33 +2005,30 @@ background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
   bottom: 9px;
   height: 35px;
   z-index: 15000;
-  border:1px solid #000;
   border-bottom-right-radius:5px;
   border-top-right-radius:5px;
 }
 
 .addMap {
 position: absolute;
-right: -50px;
+right: -40px;
 top: -1px;
 width: 44px;
-height: 35px;
-background: #69a3a4 url('MMCCicon_add_map.png') no-repeat 3px -4px;
+height: 37px;
+background: url('MMCCicon_add_map.png') no-repeat 3px -4px;
 background-size: 40px 40px;
-border-left: 1px solid rgba(255,255,255,0.6);
 border-radius: 5px;
-border: 1px solid black;
 cursor:pointer;
 }
 .addMap:hover {
-background-color: #6FA9AA;
+
 }
 
 .logo {
   z-index:12;
   display:block;
   width: 136px;
-background: #0F1519 url(menu_icon_32.png) no-repeat -10px 8px;
+background: url(menu_icon_32.png) no-repeat -10px 8px;
 padding: 5px 0px 1px 15px;
 background-size: 22px 20px;
 }
@@ -2041,9 +2063,7 @@ background-size: 22px 20px;
   overflow: hidden;
   padding: 0 0 0 30px;
   margin: 0;
-  background: #0F1519 url(beta_gen002.png) no-repeat 6px 12px;
-  border-left:1px solid #000;
-  border-right:1px solid #000;
+  background: url(beta_gen002.png) no-repeat 6px 12px;
 }
 
 .footer ul li {
@@ -2083,6 +2103,7 @@ li.meta, li.tutorial, li.exploreMaps {
 }
 
 
+/* home page */
 
 .home_content {
   width: 830px;
@@ -2094,35 +2115,140 @@ span.blue {
 }
 
 .home_desc {
-font-style: oblique;
-text-transform: uppercase;
-font-family: 'vinyl';
-font-size: 40px;
+font-family: 'LatoLight';
+font-size: 32px;
 margin: 40px 20px 25px;
 text-align:center;
 }
+.home_desc .welcomeTo {
+  text-transform: uppercase;
+  font-size: 50px;
+  font-family: 'Vinyl';
+  font-style: italic;
+}
 
 .home_content .request {
-margin: 5px auto;
-background: #15bad4;
-height: 40px;
-font-family: 'LatoLight';
-font-size: 16px;
-font-style: italic;
-width: auto;
-padding: 0 30px;
-cursor: pointer;
-color:white;
-line-height:40px;
+  margin-right:17px !important;
 }
-.home_content .request:hover{
-background: #19C8E4;
+.home_content .request, .home_content .learnmore {
+margin: 5px auto;
+background: white;
+height: 40px;
+font-family: 'Vinyl';
+font-size: 18px;
+font-style: italic;
+width: 135px;
+padding: 0 15px;
+cursor: pointer;
+color:black;
+line-height:44px;
+font-weight: normal;
+text-transform: uppercase;
+}
+.home_content .request:hover, .home_content .learnmore:hover {
+background: white;
 -webkit-box-shadow: none;
 box-shadow: none;
 }
 
+.metamapsIs {
+
+}
+.metamapsIs .swapWord {
+  display: block;
+}
+
+#homeMapImage {
+  margin:5px auto;
+}
+
 #homeMap {
-  margin-left:23px;
+  width:738px;
+  margin: 0 auto;
+  height:265px;
+  position:relative;
+  overflow:hidden;
+}
+#homeFigure { 
+  height: 265px; 
+  width:1290px;
+  margin:0;
+} 
+#homeFigure figure { 
+  float:left;
+  margin:10px !important;
+  overflow:hidden;
+}
+
+#homeMap .mapPerm {
+height: 40px;
+background-repeat: no-repeat;
+background-position: 7px center;
+background-size: 27px 27px;
+position: relative;
+padding-left:40px;
+line-height:40px;
+}
+#homeMap .mapPerm.co {
+background-image: url(MMCCicon_commons.png);
+}
+#homeMap .mapPerm.pu {
+background-image: url(MMCCicon_public.png);
+}
+#homeMap .mapPerm.pr {
+background-image: url(MMCCicon_private.png);
+}
+
+.mapContains {
+  position:absolute;
+  height:40px;
+  line-height:40px;
+  bottom:0;
+  width:100%;
+}
+.mapContains span {
+  display:inline-block;
+  text-align:left;
+  padding-left: 27px; 
+}
+
+.mapContains .topicCount {
+  background-image: url(MMCCicon_topic.png);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+background-position: 5px center;
+line-height: 40px;
+width:72px;
+}
+.mapContains .synapseCount {
+  background-image: url(MMCCicon_synapse_black.png);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+background-position: 5px center;
+line-height: 40px;
+width:95px;
+}
+
+
+#homeFigure figure .littleOverlay { 
+position: absolute; 
+top: 100%; 
+width: 100%;  
+z-index: 2; 
+background: rgba(255, 255, 255, 0); 
+transition: .6s; 
+border-radius:5px;
+}
+
+#homeFigure figure:hover .littleOverlay { 
+  top: 0; 
+  background: rgba(255,255,255, 0.9); 
+  bottom: 0; 
+}
+
+
+#homeMap .map, #homeMap .mapCard {
+  height:226px;
 }
 
 .contact {

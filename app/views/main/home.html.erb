@@ -10,26 +10,68 @@
 
 <div class="home_content">
 <div class="home_desc">
-<span class="blue">Metamaps</span> is a platform for visioning, magic making, productive conversation, understanding something, innovation, free style weaving and all night brainstorming.
+  <div class="welcomeTo">Welcome to Metamaps</div>
+  <img id="homeMapImage" src="/assets/metamap128x128.png" width="128" height="128" />
+  <div class="metamapsIs">
+    a home on the web for <span class="swapWord">
+      <ul class="texts">
+      <li>building shared knowledge</li>
+      <li>learning</li>
+      <li>visioning</li>
+      <li>conversing</li>
+      <li>collaborating</li>
+      <li>sensemaking</li>
+      <li>innovating</li>
+      <li>designing</li>
+      <li>playing</li>
+      <li>exploring</li>
+      </ul>
+    </span>
+  </div>
 </div>
 <div class="clearfloat"></div>
 
 <p class="contact">
   <a href="/request" class="request button">Request Invite</a>
+  <a href="#" class="learnmore button openLightbox" data-open="about">Learn More</a>
+  <br>
+  <br>
+  explore what experienced metamappers are creating
 </p>
 
 <div class="centeredProfile">
   <div id="homeMap">
-    <% @maps.each do |map| %>
-      <%= render map %>
+    <figure id="homeFigure">
+    <% @maps.each_with_index do |map, index| %>
+      <% first = index == 0 ? true : false %>
+      <%= render :partial => 'maps/homemap', :locals => { :map => map, :first => first } %>
     <% end %>
+    </figure>
   </div>
 </div>
-<div class="clearfloat"></div>
 </div>
 <div class="clearfloat"></div>
 
-<h1 class="index">
-  Welcome!
-</h1>
 </div>
+
+
+<script>
+
+$(document).ready(function() {
+  // flip through these words on the homepage
+  $('.swapWord').textillate({ 
+       in: { effect: 'fadeIn', delay: 20 },
+       out: { effect: 'fadeOut', sync: true }, 
+       loop: true,
+       minDisplayTime: 2000
+  });
+  
+  
+  /*$("#homeMap").mCustomScrollbar({
+    horizontalScroll:true,
+    scrollButtons: { enable: true }
+  }).mCustomScrollbar('scrollTo',300);*/
+});
+
+
+</script>

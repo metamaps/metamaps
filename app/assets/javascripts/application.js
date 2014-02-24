@@ -15,6 +15,9 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery.purr
+//= require jquery.lettering
+//= require jquery.textillate
+//= require jquery.roundabout.min
 //= require best_in_place
 //= require jquery_ujs
 //= require_tree .
@@ -491,8 +494,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   });
   
   //bind lightbox clicks
-  $('.openLightbox').click(function() {
+  $('.openLightbox').click(function(event) {
     openLightbox($(this).attr('data-open'));
+    event.preventDefault();
+    return false;  
   });
   
   // bind permission changer events
