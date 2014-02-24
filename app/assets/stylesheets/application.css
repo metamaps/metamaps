@@ -493,7 +493,7 @@ border-radius: 5px;
 
 .wrapper div.index {
   position: fixed;
-  bottom: 9px;
+  bottom: 0px;
   right: 0px;
   z-index: 9999;
   width: auto;
@@ -512,7 +512,7 @@ border-radius: 5px;
   top:0;
   left:-30px;
   background: url('MMCCicon_help.png') no-repeat center center;
-  background-size: 32px 32px;
+  background-size: 27px 27px;
   border-radius:5px;
   height:36px;
   width:36px;
@@ -541,7 +541,7 @@ border-radius: 5px;
 
 .wrapper h1.index {
   position: fixed;
-  bottom: 9px;
+  bottom: 0px;
   right: 0;
   z-index: 9999;
   width: auto;
@@ -1890,17 +1890,14 @@ font-family:arial;
 .onConsole .new_map button, .onConsole .new_map input.add {
   float: left;
   margin-top: 5px;
-  background: #15bad4;
   height: 40px;
-  font-family: 'LatoLight';
-  font-size: 16px;
-  font-style: italic;
+  font-family: 'LatoItalic';
+  font-size: 17px;
   width: auto;
   padding: 0 30px;
   cursor:pointer;
 }
 .onConsole .new_map button:hover, .onConsole .new_map input.add:hover {
-  background: #19C8E4;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -2029,7 +2026,7 @@ background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
 .footer {
   display: block;
   position: fixed;
-  bottom: 9px;
+  bottom: 0px;
   height: 35px;
   z-index: 15000;
   border-bottom-right-radius:5px;
@@ -2294,15 +2291,15 @@ border-radius:5px;
 
 .socialIcons {
   position:fixed;
-  bottom: 9px;
-  height: 35px;
-  right:11px;
+  bottom: 0px;
+  height: 37px;
+  right:0px;
 }
 .socialIcons a {
   float:left;
-  height:35px;
-  width:35px;
-  margin-right:5px;
+  height:30px;
+  width:30px;
+  margin: 0 7px 7px 0px;
   background-repeat:no-repeat;
   background-size:30px 30px;
 }
