@@ -409,8 +409,7 @@ font-family: 'LatoLight';
 /* Map Cards */
 
 .map {
-    float:left;
-    display:block;
+    display:inline-block;
     width:226px;
 	  height:320px;
     color:#FFF;

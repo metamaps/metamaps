@@ -1291,9 +1291,8 @@ left: 13px;
 
 #cards {
   height:100%;
-  width:800px;
+  width:820px;
   margin:0 auto;
-  overflow-y:scroll;
 }
 
 #cards p.empty {
@@ -1896,6 +1895,7 @@ font-family:arial;
   width: auto;
   padding: 0 30px;
   cursor:pointer;
+  font-weight:normal;
 }
 .onConsole .new_map button:hover, .onConsole .new_map input.add:hover {
   -webkit-box-shadow: none;

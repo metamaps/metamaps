@@ -31,11 +31,13 @@
     <div class="clearfloat"></div>
   </div>
 
-<div class="maps" id="cards">
-  <% @maps.each do |map| %>
-    <%= render map %>
-  <% end %>
-  <div class="clearfloat"></div>
+<div class="mapsWrapper">
+  <div class="maps" id="cards">
+    <% @maps.each do |map| %>
+      <%= render map %>
+    <% end %>
+    <div class="clearfloat"></div>
+  </div>
 </div>
 
 <script>
@@ -58,6 +60,8 @@ $(document).ready(function() {
     s.height( s.height() ).mCustomScrollbar('update');
   });
 
-  $('.maps').height( (parseInt($('body').height()) - 54) );
+  $('.mapsWrapper').height( (parseInt($('body').height()) - 39) );
+  var s = $('.maps');
+  s.height( s.height() ).mCustomScrollbar();
 });
 </script>
