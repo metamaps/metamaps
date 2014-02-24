@@ -91,6 +91,11 @@ body,
   overflow:hidden;
 }
 
+/* scrollbar override */
+.mCSB_container {
+  margin-right: 15px !important;
+}
+
 html {
 }
 
@@ -1291,7 +1296,7 @@ left: 13px;
 
 #cards {
   height:100%;
-  width:820px;
+  width:805px;
   margin:0 auto;
 }
 
