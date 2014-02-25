@@ -117,8 +117,10 @@ body {
 
   /* W3C Markup, IE10 Release Preview */ 
   background-image: linear-gradient(to top, #C199FB 0%, #E4D9F5 100%);
-  background: url(fresnel-mountainous-landscape-002.png) no-repeat;
-  background-size:cover;
+  
+  /*background: url(fresnel-mountainous-landscape-002.png) no-repeat;
+  background-size:cover;*/
+  background-image: -webkit-linear-gradient(top, rgba(47, 70, 84, 0.4), rgba(54, 88, 43, 0.4)), url("/assets/fresh_snow.png");
   font-family: 'LatoLight', helvetica, sans-serif;
   background-attachment:fixed;
   color:#FFF;
@@ -142,6 +144,8 @@ body.mapBody {
 
   /* W3C Markup, IE10 Release Preview */ 
   background-image: linear-gradient(to top, #C199FB 0%, #E4D9F5 100%);
+  
+  background-image: -webkit-linear-gradient(top, rgba(47, 70, 84, 0.4), rgba(54, 88, 43, 0.4)), url("/assets/fresh_snow.png");
 }
 
 h1,h2,h3,h4,h5,h6 {
