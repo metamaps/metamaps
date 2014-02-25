@@ -195,6 +195,53 @@ padding-left: 24px;
 .linkItem.mapPerm.pr {
   background-image: url(MMCCicon_private.png);
 }
+
+.showcard .yourTopic .mapPerm:hover {
+  background-image: url(/assets/MMCCicon_maximize_arrow_black.png);
+  background-size: 31px 25px;
+  background-position-x: 8px;
+  cursor:pointer;
+}
+.showcard .yourTopic .mapPerm.minimize {
+ background-image: url(MMCCicon_minimize_arrow_black.png) !important;
+ background-size: 31px 25px;
+background-position-x: 8px;
+cursor: pointer;
+}
+.mapPerm .permissionSelect {
+  list-style: none;
+  width: 40px;
+  height: 80px;
+  position: relative;
+  top: 40px;
+}
+.mapPerm .permissionSelect li {
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 27px 27px;
+  background-color:white;
+}
+.mapPerm .permissionSelect .commons {
+  background-image: url(MMCCicon_commons.png);
+}
+.mapPerm .permissionSelect .public {
+  background-image: url(MMCCicon_public.png);
+}
+.mapPerm .permissionSelect .private {
+  background-image: url(MMCCicon_private.png);
+}
+.mapPerm .permissionSelect .commons:hover {
+  background-image: url(MMCCicon_commons_black.png);
+}
+.mapPerm .permissionSelect .public:hover {
+  background-image: url(MMCCicon_public_black.png);
+}
+.mapPerm .permissionSelect .private:hover {
+  background-image: url(MMCCicon_private_black.png);
+}
+
 .linkItem.topicPopout {
   background-image: url(MMCCicon_pop-out_black.png);
 }

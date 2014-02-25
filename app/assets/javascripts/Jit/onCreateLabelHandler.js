@@ -188,7 +188,10 @@ function populateShowCard(node) {
       
     if (authorizeToEdit(node)) {
       var perm = document.createElement('div');
-      perm.className = 'permission canEdit';
+      
+      var string = 'permission canEdit';
+      if (userid == node.data.$userid) string += ' yourTopic';
+      perm.className = string;
       perm.innerHTML = html;
       showCard.appendChild(perm);
     } else {
@@ -234,6 +237,34 @@ function populateShowCard(node) {
   });
   
   
+  // ability to change permission
+  var selectingPermission = false;
+  if (userid == node.data.$userid ) {
+   $('.showcard .yourTopic .mapPerm').click(function() {
+    if (!selectingPermission) {  
+      selectingPermission = true;
+      $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
+      if ( $(this).hasClass('co') ) {
+        $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
+      } else if ( $(this).hasClass('pu') ) {
+        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
+      } else if ( $(this).hasClass('pr') ) {
+        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
+      }
+      $('.permissionSelect li').click(function(event) {
+        selectingPermission = false;
+        var permission = $(this).attr('class');
+        updateTopicPermission(node, permission);
+        event.stopPropagation();
+      });
+    } else {
+      selectingPermission = false;
+      $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+      $('.permissionSelect').remove();
+    }
+   });
+  }
+  
   // when you're typing a description, resize the scroll box to have space
   $('.best_in_place_desc textarea').bind('keyup', function() {
     var s = $('.showcard').find('.scroll');
@@ -266,52 +297,6 @@ function populateShowCard(node) {
     var link = $(this).html();
     $(showCard).find('.go-link').attr('href', link);
     node.setData("link", link);
-  });
-  
-  $(showCard).find(".permActivator").bind('mouseover', 
-        function () { 
-          clearTimeout(MetamapsModel.topicPermTimer2);
-          that = this;       
-          MetamapsModel.topicPermTimer1 = setTimeout(function() {
-            if (! MetamapsModel.topicPermSliding) { 
-              MetamapsModel.topicPermSliding = true;            
-                $(that).animate({
-                  width: '203px',
-                  height: '37px'
-                }, 300, function() {
-                  MetamapsModel.topicPermSliding = false;
-                });
-            } 
-          }, 300);
-        });
-    
-    $(showCard).find(".permActivator").bind('mouseout',    
-        function () {
-          clearTimeout(MetamapsModel.topicPermTimer1);
-          that = this;        
-          MetamapsModel.topicPermTimer2 = setTimeout(function() { 
-			      if (! MetamapsModel.topicPermSliding) { 
-				      MetamapsModel.topicPermSliding = true; 
-				      $(that).animate({
-					      height: '16px',
-                width: '16px'
-				      }, 300, function() {
-					      MetamapsModel.topicPermSliding = false;
-				      });
-			      } 
-		      },800); 
-        } 
-    );
-    
-  //bind best_in_place ajax callbacks
-  $(showCard).find('.best_in_place_permission').bind("ajax:success", function() {
-    var permission = $(this).html();
-    var el = $(this).parents('.cardSettings').find('.mapPerm');
-    el.attr('title', permission);
-    if (permission == "commons") el.html("co");
-    else if (permission == "public") el.html("pu");
-    else if (permission == "private") el.html("pr");
-    node.setData("permission", permission);
   });
     
 }

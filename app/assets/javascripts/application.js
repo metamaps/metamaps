@@ -700,6 +700,24 @@ function updateMetacode(node, metacode) {
   });
 }
 
+function updateTopicPermission(node, permission) {
+  var mdata = { "topic": { "permission": permission } };
+  $.ajax({
+    type: "PUT",
+    dataType: 'json',
+    url: "/topics/" + node.id,
+    data: mdata,
+    success: function(data) {
+      $('.showcard .mapPerm').removeClass('co pu pr minimize').addClass( permission.substring(0,2) );
+      $('.permissionSelect').remove();
+      node.setData("permission", permission);
+    },
+    error: function(){
+      alert('failed to update permission');
+    }
+  });
+}
+
 function MconsoleReset() {
 	
 	var tX = Mconsole.canvas.translateOffsetX;
