@@ -1,6 +1,6 @@
 <h1 class="index">Password Reset</h1>
 
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "new_user forgotPassword" }) do |f| %>
   <%= devise_error_messages! %>
   
   <h3>Forgot your password?</h3>

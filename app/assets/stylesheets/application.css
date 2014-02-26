@@ -99,6 +99,12 @@ body,
   margin-right: 15px !important;
 }
 
+/* forgot password fix */
+.forgotPassword input[type="submit"] {
+  padding: 0 5px;
+  width: auto;
+}
+
 html {
 }
 
