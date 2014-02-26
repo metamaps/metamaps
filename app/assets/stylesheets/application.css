@@ -100,52 +100,14 @@ html {
 }
 
 body {
-  /* IE10 Consumer Preview */ 
-  background-image: -ms-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
-
-  /* Mozilla Firefox */ 
-  background-image: -moz-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
-
-  /* Opera */ 
-  background-image: -o-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
-
-  /* Webkit (Safari/Chrome 10) */
-  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #C199FB), color-stop(1, #E4D9F5));
-
-  /* Webkit (Chrome 11+) */ 
-  background-image: -webkit-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
-
-  /* W3C Markup, IE10 Release Preview */ 
-  background-image: linear-gradient(to top, #C199FB 0%, #E4D9F5 100%);
+  background: url(background2-for-repeating.jpg);
   
-  /*background: url(fresnel-mountainous-landscape-002.png) no-repeat;
-  background-size:cover;*/
-  background-image: -webkit-linear-gradient(top, rgba(47, 70, 84, 0.4), rgba(54, 88, 43, 0.4)), url("/assets/fresh_snow.png");
   font-family: 'LatoLight', helvetica, sans-serif;
-  background-attachment:fixed;
   color:#FFF;
 }
 
 body.mapBody {
-  /* IE10 Consumer Preview */ 
-  background-image: -ms-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
 
-  /* Mozilla Firefox */ 
-  background-image: -moz-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
-
-  /* Opera */ 
-  background-image: -o-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
-
-  /* Webkit (Safari/Chrome 10) */
-  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #C199FB), color-stop(1, #E4D9F5));
-
-  /* Webkit (Chrome 11+) */ 
-  background-image: -webkit-linear-gradient(bottom, #C199FB 0%, #E4D9F5 100%);
-
-  /* W3C Markup, IE10 Release Preview */ 
-  background-image: linear-gradient(to top, #C199FB 0%, #E4D9F5 100%);
-  
-  background-image: -webkit-linear-gradient(top, rgba(47, 70, 84, 0.4), rgba(54, 88, 43, 0.4)), url("/assets/fresh_snow.png");
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -445,7 +407,7 @@ input[type="submit"] {
 position: absolute;
 margin: 5px 0 0 45px;
 background: #0F1519;
-padding: 10px;
+padding: 10px 10px 9px 10px;
 border-radius: 5px;
 }
 
@@ -502,7 +464,7 @@ border-radius: 5px;
 
 .wrapper div.index {
   position: fixed;
-  bottom: 0px;
+  bottom: 5px;
   right: 0px;
   z-index: 9999;
   width: auto;
@@ -515,12 +477,13 @@ border-radius: 5px;
   border-right:none;
   border-bottom-left-radius:5px;
   border-top-left-radius:5px;
+  background: #0F1519;
 }
 .wrapper div.index .openCheatsheet {
   position:absolute;
   top:0;
-  left:-30px;
-  background: url('MMCCicon_help.png') no-repeat center center;
+  left:-41px;
+  background: #0F1519 url('MMCCicon_help.png') no-repeat center center;
   background-size: 27px 27px;
   border-radius:5px;
   height:36px;
@@ -550,7 +513,7 @@ border-radius: 5px;
 
 .wrapper h1.index {
   position: fixed;
-  bottom: 0px;
+  bottom: 5px;
   right: 0;
   z-index: 9999;
   width: auto;
@@ -563,6 +526,7 @@ border-radius: 5px;
   border-right:none;
   border-bottom-left-radius:5px;
   border-top-left-radius:5px;
+  background: #0F1519;
 }
 
 /* account */
@@ -1516,7 +1480,6 @@ margin: 3px;
   right:3px;
   background:#0F1519;
   border-radius:5px;
-  border:1px solid black;
   width:320px;
   height:auto;
   padding:10px;
@@ -2008,53 +1971,31 @@ background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
 
 
 /* --- styling the logo button ---*/
-/*.footer {
-  width: 188px;
-  display: block;
-  position: fixed;
-  bottom: 9px;
-  height: 38px;
-  background: rgba(0,0,0,0.5);
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
-  z-index: 15000;
-  border:1px solid #000;
-}
 
-.logo {
-  position:fixed;
-  bottom:6px;
-  left:10px;
-  z-index:12;
-  display:block;
-  width:auto;
-  padding: 3px 8px;
-  margin: -0.75em 0 0;
-}
-*/
 .footer {
   display: block;
   position: fixed;
-  bottom: 0px;
+  bottom: 5px;
   height: 35px;
   z-index: 15000;
   border-bottom-right-radius:5px;
   border-top-right-radius:5px;
+  background: #0F1519;
 }
 
 .addMap {
 position: absolute;
-right: -40px;
-top: -1px;
+right: -49px;
+top: 0px;
 width: 44px;
-height: 37px;
-background: url('MMCCicon_add_map.png') no-repeat 3px -4px;
+height: 35px;
+background: #0F1519 url('MMCCicon_add_map.png') no-repeat 3px -4px;
 background-size: 40px 40px;
 border-radius: 5px;
 cursor:pointer;
 }
 .addMap:hover {
-
+ 
 }
 
 .logo {
@@ -2084,11 +2025,11 @@ background-size: 22px 20px;
   display:none;
   position:absolute;
   border:none;
-  bottom:36px;
+  bottom:35px;
   left:-1px;
   height:123px;
   z-index:12;
-  width:121px;
+  width:122px;
   color: white;
   white-space: nowrap;
   text-align: center;
@@ -2096,7 +2037,7 @@ background-size: 22px 20px;
   overflow: hidden;
   padding: 0 0 0 30px;
   margin: 0;
-  background: url(beta_gen002.png) no-repeat 6px 12px;
+  background: #0F1519 url(beta_gen002.png) no-repeat 6px 12px;
 }
 
 .footer ul li {
