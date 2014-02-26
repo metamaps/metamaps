@@ -179,30 +179,35 @@ function nodeWasDoubleClicked() {
 function selectNodeOnClickHandler(node, e) {
   if (Mconsole.busy) return;
 
-  if (nodeWasDoubleClicked()) {
+  var check = nodeWasDoubleClicked();
+  if (check) {
     nodeDoubleClickHandler(node, e);
     return;
+  } else {
+    // wait a certain length of time, then check again, then run this code
+    setTimeout(function() {
+      if (!nodeWasDoubleClicked()) {
+        if (!e.shiftKey) {
+            Mconsole.graph.eachNode(function (n) {
+              if (n.id != node.id) {
+                deselectNode(n);
+              }
+            });
+        }
+        if (node.selected) {
+          deselectNode(node);
+        } else {
+          selectNode(node);
+        }
+        //trigger animation to final styles
+        Mconsole.fx.animate({
+          modes: ['edge-property:lineWidth:color:alpha'],
+          duration: 500
+        });
+        Mconsole.plot();
+      }
+    }, MetamapsModel.DOUBLE_CLICK_TOLERANCE);
   }
-  
-      //set final styles
-      if (!e.shiftKey) {
-          Mconsole.graph.eachNode(function (n) {
-            if (n.id != node.id) {
-              deselectNode(n);
-            }
-          });
-      }
-      if (node.selected) {
-        deselectNode(node);
-      } else {
-        selectNode(node);
-      }
-      //trigger animation to final styles
-      Mconsole.fx.animate({
-        modes: ['edge-property:lineWidth:color:alpha'],
-        duration: 500
-      });
-      Mconsole.plot();
 }//selectNodeOnClickHandler
 
   function selectNodeOnRightClickHandler(node, e) {
