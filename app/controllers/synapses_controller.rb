@@ -41,6 +41,8 @@ class SynapsesController < ApplicationController
 	
     if params[:synapse][:map]
       @map = Map.find(params[:synapse][:map])
+      @map.touch(:updated_at)
+      
       @mapping = Mapping.new()
       @mapping.category = "Synapse"
       @mapping.user = @user
@@ -104,11 +106,13 @@ class SynapsesController < ApplicationController
     end
   end
 
-  # POST mappings/:map_id/:synapse_id/removefrommap
+  # POST synapses/:map_id/:synapse_id/removefrommap
   def removefrommap
     @user = current_user
    
     @mapping = Mapping.find_by_synapse_id_and_map_id(params[:synapse_id],params[:map_id])
+    
+    Map.find(params[:map_id]).touch(:updated_at)
     
     #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
     @mapping.message 'destroy',@user.id
@@ -126,6 +130,9 @@ class SynapsesController < ApplicationController
     @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
 
     @synapse.mappings.each do |m|
+    
+      m.map.touch(:updated_at)
+      
       #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
       m.message 'destroy',@current.id
     

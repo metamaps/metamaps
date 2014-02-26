@@ -217,6 +217,7 @@ class MapsController < ApplicationController
         end
       end
       @map.arranged = true
+      @map.touch(:updated_at)
       @map.save
     end	
   end

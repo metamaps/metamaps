@@ -37,7 +37,7 @@
   
   <div class="mapInfoMeta">
     <p>Created by <%= @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
-    <p>Last edited <%= @map.last_edited.strftime("%m/%d/%Y") %></p>
+    <p>Last edited <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
   </div>
   
   <div class="mapInfoDelete">

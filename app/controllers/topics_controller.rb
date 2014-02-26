@@ -94,6 +94,7 @@ class TopicsController < ApplicationController
     @mapping = nil
     if params[:topic][:map]
       @map = Map.find(params[:topic][:map])
+      @map.touch(:updated_at)
       
       @mapping = Mapping.new()
       @mapping.category = "Topic"
@@ -150,12 +151,13 @@ class TopicsController < ApplicationController
     end
   end
   
-  # GET mappings/:map_id/:topic_id/removefrommap
+  # POST topics/:map_id/:topic_id/removefrommap
   def removefrommap
 	  @current = current_user
 	  @mapping = Mapping.find_by_topic_id_and_map_id(params[:topic_id],params[:map_id])
 	  
     @map = Map.find(params[:map_id])
+    @map.touch(:updated_at)
     @topic = Topic.find(params[:topic_id])
     @mappings = @map.mappings.select{|m| 
       if m.synapse != nil
@@ -194,6 +196,10 @@ class TopicsController < ApplicationController
     
       @synapses.each do |synapse| 
         synapse.mappings.each do |m|
+        
+          @map = m.map
+          @map.touch(:updated_at)
+        
           #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
           m.message 'destroy',@current.id
         
@@ -204,6 +210,10 @@ class TopicsController < ApplicationController
       end
     
       @mappings.each do |mapping| 
+      
+        @map = mapping.map
+        @map.touch(:updated_at)
+        
         #push notify to anyone viewing a map with this topic in realtime (see mapping.rb to understand the 'message' action)
         mapping.message 'destroy',@current.id
       

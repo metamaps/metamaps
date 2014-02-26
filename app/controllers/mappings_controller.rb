@@ -25,6 +25,7 @@ class MappingsController < ApplicationController
       if params[:map]
         if params[:map][:id]
           @map = Map.find(params[:map][:id])
+          @map.touch(:updated_at)
           @mapping.map = @map
         end
       end

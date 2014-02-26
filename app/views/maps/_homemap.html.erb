@@ -22,7 +22,7 @@
             <%= best_in_place map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>", :classes => 'best_in_place_desc' %>                          
           </div>                                                                
         </div>
-        <span><%= pluralize(map.contributors.count, 'contributor') %></span><span>Last edit <%= time_ago_in_words( map.last_edited ) %> ago</span>
+        <span><%= pluralize(map.contributors.count, 'contributor') %></span><span>Last edit <%= time_ago_in_words( map.updated_at ) %> ago</span>
       </div>      
     </div>
   
