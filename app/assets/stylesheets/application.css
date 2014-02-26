@@ -92,6 +92,9 @@ body,
 }
 
 /* scrollbar override */
+.maps > div > div.mCS_no_scrollbar {
+  padding-right: 0px !important;
+}
 .mCSB_container {
   margin-right: 15px !important;
 }

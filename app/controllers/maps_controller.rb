@@ -236,7 +236,7 @@ class MapsController < ApplicationController
 	  @map.delete
 	
 	  respond_to do |format|
-        format.html { redirect_to "/maps/mappers/" + @current.id.to_s }
+        format.html { redirect_to "/maps/mappers/" + @current.id.to_s, notice: "Map deleted." }
     end
   end
 end
