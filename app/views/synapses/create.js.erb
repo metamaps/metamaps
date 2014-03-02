@@ -33,7 +33,7 @@ if ( Mconsole != null) {
       showDesc: true, //will be changed by selectEdge
       category: '<%= @synapse.category %>',
       id: '<%= @synapse.id %>',
-      userid: '<%= @synapse.user.id %>',
+      userid: <%= @synapse.user.id %>,
       username: '<%= @synapse.user.name %>',			
       permission: '<%= @synapse.permission %>'
       });

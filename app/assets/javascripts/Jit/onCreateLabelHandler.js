@@ -279,7 +279,7 @@ function populateShowCard(node) {
     s.height( s.height() ).mCustomScrollbar('update');
     
     var name = $(this).html();
-    node.name = name;
+    node.name = decodeEntities(name);
     Mconsole.plot();
   });
 

@@ -494,9 +494,12 @@ function onMouseMoveHandler(node, eventInfo, e) {
     if (MetamapsModel.edgeHoveringOver) {
       onMouseLeave(MetamapsModel.edgeHoveringOver);
     }
+    $('canvas').css('cursor', 'pointer');
     return;
+  } else {
+    $('canvas').css('cursor', 'default');
   }
-
+  
   if (edge == false && MetamapsModel.edgeHoveringOver != false) {
     //mouse not on an edge, but we were on an edge previously
     onMouseLeave(MetamapsModel.edgeHoveringOver);
