@@ -418,6 +418,7 @@ margin: 5px 0 0 45px;
 background: #0F1519;
 padding: 10px 10px 9px 10px;
 border-radius: 5px;
+z-index: 1;
 }
 
 .headertop {
