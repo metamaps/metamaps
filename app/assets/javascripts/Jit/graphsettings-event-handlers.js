@@ -52,6 +52,14 @@ function selectEdgeOnRightClickHandler(adj, e) {
     if (userid != null) menustring += '<li class="rc-delete">Delete</li>';
     if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from Map</li>';
     menustring += '<li class="rc-hide">Hide until refresh</li>';
+    if (userid) {
+      var options = '<ul><li class="changeP toCommons">commons</li> \
+                         <li class="changeP toPublic">public</li> \
+                         <li class="changeP toPrivate">private</li> \
+                     </ul>';
+      
+      menustring += '<li class="rc-permission">Change permissions' + options + '</li>';
+    }
     
     menustring += '</ul>';
     rightclickmenu.innerHTML = menustring;
@@ -95,6 +103,13 @@ function selectEdgeOnRightClickHandler(adj, e) {
       $('.rightclickmenu').remove();
       hideSelectedEdges();
       hideSelectedNodes();
+    });
+    
+    // change the permission of all the selected nodes and synapses that you were the originator of
+    $('.rc-permission li').click(function() {
+      $('.rightclickmenu').remove();
+      // $(this).text() will be 'commons' 'public' or 'private'
+      updateSelectedPermissions( $(this).text() );
     });
       
   } //selectEdgeOnRightClickHandler
@@ -236,6 +251,14 @@ function selectNodeOnClickHandler(node, e) {
     
     if (!mapid) menustring += '<li class="rc-center">Center This Topic</li>';
     menustring += '<li class="rc-popout">Open In New Tab</li>';
+    if (userid) {
+      var options = '<ul><li class="changeP toCommons">commons</li> \
+                         <li class="changeP toPublic">public</li> \
+                         <li class="changeP toPrivate">private</li> \
+                     </ul>';
+      
+      menustring += '<li class="rc-permission">Change permissions' + options + '</li>';
+    }
     
     menustring += '</ul>';
     rightclickmenu.innerHTML = menustring;
@@ -292,6 +315,13 @@ function selectNodeOnClickHandler(node, e) {
       $('.rightclickmenu').remove();
       var win=window.open('/topics/' + node.id, '_blank');
       win.focus();
+    });
+    
+    // change the permission of all the selected nodes and synapses that you were the originator of
+    $('.rc-permission li').click(function() {
+      $('.rightclickmenu').remove();
+      // $(this).text() will be 'commons' 'public' or 'private'
+      updateSelectedPermissions( $(this).text() );
     });
       
   } //selectNodeOnRightClickHandler
@@ -532,4 +562,46 @@ function touchPanZoomHandler(eventInfo, e) {
             lastDist = dist;
     }
     
+}
+
+function updateSelectedPermissions(permission) {
+  
+  
+  if ( $('.notice.metamaps').length == 0 ) {
+    $('body').prepend('<div class="notice metamaps" />');
+  }
+  $('.notice.metamaps').hide().html('Working...').fadeIn('fast');
+  
+  // variables to keep track of how many nodes and synapses you had the ability to change the permission of
+  var nCount = 0, sCount = 0;
+  
+  // change the permission of the selected synapses, if logged in user is the original creator
+  var l = MetamapsModel.selectedEdges.length;
+  for (var i = l-1; i >= 0; i -= 1) {
+    var edge = MetamapsModel.selectedEdges[i];
+    
+    if (edge.getData('userid') == userid) {
+      updateSynapsePermission(edge,permission);
+      sCount++;
+    }
+  }
+  
+  // change the permission of the selected topics, if logged in user is the original creator
+  var l = MetamapsModel.selectedNodes.length;
+  for (var i = l-1; i >= 0; i -= 1) {
+    var node = MetamapsModel.selectedNodes[i];
+    
+    if (node.getData('userid') == userid) {
+      updateTopicPermission(node,permission);
+      nCount++;
+    }
+  }
+  
+  var nString = nCount == 1 ? (nCount.toString() + ' topic and ') : (nCount.toString() + ' topics and ');
+  var sString = sCount == 1 ? (sCount.toString() + ' synapse') : (sCount.toString() + ' synapses');
+  
+  $('.notice.metamaps').html(nString + sString + ' you created updated to ' + permission)
+  setTimeout( function() {
+    $('.notice.metamaps').fadeOut('fast');
+  }, 8000);
 }
