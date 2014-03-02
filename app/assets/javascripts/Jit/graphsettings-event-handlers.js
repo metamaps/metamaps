@@ -193,6 +193,12 @@ function nodeWasDoubleClicked() {
 
 function selectNodeOnClickHandler(node, e) {
   if (Mconsole.busy) return;
+  
+  // catch right click on mac, which is often like ctrl+click
+  if (navigator.platform.indexOf("Mac")!=-1 && e.ctrlKey) {
+    selectNodeOnRightClickHandler(node, e)
+    return;
+  }
 
   var check = nodeWasDoubleClicked();
   if (check) {
