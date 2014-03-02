@@ -496,8 +496,6 @@ function onMouseMoveHandler(node, eventInfo, e) {
     }
     $('canvas').css('cursor', 'pointer');
     return;
-  } else {
-    $('canvas').css('cursor', 'default');
   }
   
   if (edge == false && MetamapsModel.edgeHoveringOver != false) {
@@ -514,6 +512,10 @@ function onMouseMoveHandler(node, eventInfo, e) {
 
   //could be false
   MetamapsModel.edgeHoveringOver = edge;
+  
+  if (!node && !edge) {
+    $('canvas').css('cursor', 'default');
+  }
 }
 
 function onMouseEnter(edge) {
