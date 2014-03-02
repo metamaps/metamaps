@@ -7238,8 +7238,9 @@ Graph.Label.Native = new Class({
       function splitLine(st,n) {var b = ''; var s = st;while (s.length > n) {var c = s.substring(0,n);var d = c.lastIndexOf(' ');var e =c.lastIndexOf('\n');if (e != -1) d = e; if (d == -1) d = n; b +=       c.substring(0,d) + '\n';s = s.substring(d+1);}return b+s;}
       var arrayOfLabelLines = splitLine(node.name,30).split('\n');
       //render background
-            ctx.fillStyle = 'rgba(24,32,46, 0.8)';
-            ctx.strokeStyle = 'rgba(24,32,46, 1)';
+            ctx.fillStyle = 'rgba(24,32,46, 1)';
+            ctx.strokeStyle = node.getData('whiteCircle') ? '#FFF' : 'rgba(24,32,46, 1)';
+            ctx.lineWidth = 2;
             var height = 25 * arrayOfLabelLines.length; //font size + margin
             
             var index, lineWidths = [];
@@ -7262,13 +7263,14 @@ Graph.Label.Native = new Class({
               ctx.lineTo(x, y + radius);
               ctx.quadraticCurveTo(x, y, x + radius, y);
               ctx.closePath();
-              ctx.stroke();
               ctx.fill();
+              ctx.stroke();
        
        ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
-       // END METAMAPS CODE
 
-      this.renderLabel(canvas, node, controller);
+      this.renderLabel(arrayOfLabelLines, canvas, node, controller);
+      // END METAMAPS CODE
+      // ORIGINAL CODE  this.renderLabel(canvas, node, controller);
     },
 
     /*
@@ -7284,19 +7286,14 @@ Graph.Label.Native = new Class({
        node - A <Graph.Node>.
        controller - A configuration object. See also <Hypertree>, <RGraph>, <ST>.
     */
-    renderLabel: function(canvas, node, controller) {
+    renderLabel: function(customLabel, canvas, node, controller) {
       var ctx = canvas.getCtx();
       var pos = node.pos.getc(true);
       //ctx.fillText(node.name, pos.x, pos.y + node.getData("height") / 2);
       // START METAMAPS CODE
-      // Line Splitter Function
-      // copyright Stephen Chapman, 19th April 2006
-      // you may copy this code but please keep the copyright notice as well
-      function splitLine(st,n) {var b = ''; var s = st;while (s.length > n) {var c = s.substring(0,n);var d = c.lastIndexOf(' ');var e =c.lastIndexOf('\n');if (e != -1) d = e; if (d == -1) d = n; b +=       c.substring(0,d) + '\n';s = s.substring(d+1);}return b+s;}
-      var arrayOfLabelLines = splitLine(node.name,30).split('\n');
       var index;
-      for (index = 0; index < arrayOfLabelLines.length; ++index) {
-        ctx.fillText(arrayOfLabelLines[index], pos.x, pos.y + node.getData("height") + 5 + (25*index));
+      for (index = 0; index < customLabel.length; ++index) {
+        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 5 + (25*index));
       }
       // END METAMAPS CODE
     },

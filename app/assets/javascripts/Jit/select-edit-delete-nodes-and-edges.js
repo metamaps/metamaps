@@ -16,7 +16,6 @@ function centerOn(nodeid) {
 }
 
 function editEdge(edge, e) {
-  if (authorizeToEdit(edge)) {
     //reset so we don't interfere with other edges, but first, save its x and y 
     var myX = $('#edit_synapse').css('left');
     var myY = $('#edit_synapse').css('top');
@@ -29,7 +28,12 @@ function editEdge(edge, e) {
     //classes to make best_in_place happy
     var edit_div = document.createElement('div');
     edit_div.setAttribute('id', 'edit_synapse');
-    edit_div.className = 'permission canEdit';
+    if (authorizeToEdit(edge)) {
+      edit_div.className = 'permission canEdit';
+      edit_div.className += edge.getData('userid') === userid ? ' yourEdge' : '';
+    } else {
+      edit_div.className = 'permission cannotEdit';
+    }
     $('.main .wrapper').append(edit_div);
 
     populateEditEdgeForm(edge);
@@ -49,16 +53,15 @@ function editEdge(edge, e) {
     $('#edit_synapse').show();
     
     MetamapsModel.edgecardInUse = edge.data.$id;
-  }
-  else if ((! authorizeToEdit(edge)) && userid) {
-    alert("You don't have the permissions to edit this synapse.");
-  }
 }
 
 function populateEditEdgeForm(edge) {
-  add_perms_form(edge);
-  add_direction_form(edge);
   add_name_form(edge);
+  add_user_info(edge);
+  add_perms_form(edge);
+  if (authorizeToEdit(edge)) {
+    add_direction_form(edge);
+  }
 }
 
 function add_name_form(edge) {
@@ -68,7 +71,7 @@ function add_name_form(edge) {
   $('#edit_synapse_name').attr('class', 'best_in_place best_in_place_desc');
   $('#edit_synapse_name').attr('data-object', 'synapse');
   $('#edit_synapse_name').attr('data-attribute', 'desc');
-  $('#edit_synapse_name').attr('data-type', 'input');
+  $('#edit_synapse_name').attr('data-type', 'textarea');
   $('#edit_synapse_name').attr('data-nil', data_nil);
   $('#edit_synapse_name').attr('data-url', '/synapses/' + edge.getData("id"));
   $('#edit_synapse_name').html(edge.getData("desc"));
@@ -90,59 +93,40 @@ function add_name_form(edge) {
   });
 }
 
+function add_user_info(edge) {
+  $('#edit_synapse').append('<div id="edgeUser" class="hoverForTip"><div class="tip">Created by ' + edge.getData("username") + '</div></div>');
+}
+
 function add_perms_form(edge) {
   //permissions - if owner, also allow permission editing
-  $('#edit_synapse').append('<div class="mapPerm"></div>');
-  $('#edit_synapse .mapPerm').html(mk_permission(edge));
+  $('#edit_synapse').append('<div class="mapPerm ' + mk_permission(edge) + '"></div>');
+  
+  // ability to change permission
+  var selectingPermission = false;
   if (userid == edge.getData('userid')) {
-    $('#edit_synapse').append('<div class="permActivator" />');
-    $('#edit_synapse .permActivator').append('<div class="editSettings" />');
-    $('#edit_synapse .editSettings').append('<span>Permissions:</span>');
-    $('#edit_synapse .editSettings').append('<span class="click-to-edit" />');
-    $('#edit_synapse .click-to-edit').attr('title', 'Click to Edit');
-    $('#edit_synapse .click-to-edit').append(best_in_place_perms(edge));
-    $('#edit_synapse .editSettings').append('<div class="clearfloat" />');
-
-    $('#edit_synapse').find('.best_in_place_permission').bind("ajax:success", function() {
-      var permission = $(this).html();
-      switch(permission) {
-        case 'commons': $('#edit_synapse .mapPerm').html('co'); break;
-        case 'public': $('#edit_synapse .mapPerm').html('pu'); break;
-        case 'private': $('#edit_synapse .mapPerm').html('pr'); break;
-      }//switch
-    });
- 
-    $('#edit_synapse .permActivator').bind('mouseover', function() {
-      clearTimeout(MetamapsModel.edgePermTimer2);
-      that = this;
-      MetamapsModel.edgePermTimer1 = setTimeout(function() {
-        if (! MetamapsModel.edgePermSliding) {
-          MetamapsModel.edgePermSliding = true;
-            $(that).animate({
-              width: '203px',
-              height: '37px'
-            }, 300, function() {
-              MetamapsModel.edgePermSliding = false;
-            });
-        }
-      }, 300);
-    });
-    $('#edit_synapse .permActivator').bind('mouseout', function () {
-        clearTimeout(MetamapsModel.edgePermTimer1);
-        that = this;
-        MetamapsModel.edgePermTimer2 = setTimeout(function() {
-          if (! MetamapsModel.edgePermSliding) {
-            MetamapsModel.edgePermSliding = true;
-            $(that).animate({
-              height: '16px',
-              width: '16px'
-            }, 300, function() {
-              MetamapsModel.edgePermSliding = false;
-            });
-          }
-        },800);
+    $('#edit_synapse.yourEdge .mapPerm').click(function() {
+    if (!selectingPermission) {  
+      selectingPermission = true;
+      $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
+      if ( $(this).hasClass('co') ) {
+        $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
+      } else if ( $(this).hasClass('pu') ) {
+        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
+      } else if ( $(this).hasClass('pr') ) {
+        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
       }
-    );
+      $('#edit_synapse .permissionSelect li').click(function(event) {
+        selectingPermission = false;
+        var permission = $(this).attr('class');
+        updateSynapsePermission(edge, permission);
+        event.stopPropagation();
+      });
+    } else {
+      selectingPermission = false;
+      $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+      $('#edit_synapse .permissionSelect').remove();
+    }
+   });
   }
 }//add_perms_form
 

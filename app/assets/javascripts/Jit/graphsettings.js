@@ -334,30 +334,47 @@ var nodeSettings = {
 
             //now adjust the label placement 
             var ctx = canvas.getCtx();
-			var radius = canvas.getSize(); 
-			var x = parseInt((pos.x + posChild.x - (desc.length * 5)) /2); 
-			var y = parseInt((pos.y + posChild.y) /2); 
-			ctx.font = 'bold 14px arial';
+            ctx.font = '14px arial';
+            ctx.fillStyle = '#222222';
+            ctx.textBaseline = 'hanging';
+            
+            // helper function to determine how many lines are needed
+            // Line Splitter Function
+            // copyright Stephen Chapman, 19th April 2006
+            // you may copy this code but please keep the copyright notice as well
+            function splitLine(st,n) {var b = ''; var s = st;while (s.length > n) {var c = s.substring(0,n);var d = c.lastIndexOf(' ');var e =c.lastIndexOf('\n');if (e != -1) d = e; if (d == -1) d = n; b +=       c.substring(0,d) + '\n';s = s.substring(d+1);}return b+s;}
+            var arrayOfLabelLines = splitLine(desc,30).split('\n');
+            var index, lineWidths = [];
+            for (index = 0; index < arrayOfLabelLines.length; ++index) {
+              lineWidths.push( ctx.measureText( arrayOfLabelLines[index] ).width )
+            }
+            var width = Math.max.apply(null, lineWidths) + 8;
+            var height = (16 * arrayOfLabelLines.length) + 8;
+            
+			      var x = (pos.x + posChild.x - width)/2;
+            var y = ((pos.y + posChild.y) /2) - height/2;
+            var radius = 5; 
 
             //render background
-            ctx.fillStyle = '#FFF';
-            var margin = 5;
-            var height = 14 + margin; //font size + margin
-            var CURVE = height / 2; //offset for curvy corners
-            var width = ctx.measureText(desc).width + 2 * margin - 2 * CURVE
-            var labelX = x - margin + CURVE;
-            var labelY = y - height + margin;
-            ctx.fillRect(labelX, labelY, width, height);
-
-            //curvy corners woo - circles in place of last CURVE pixels of rect
             ctx.beginPath();
-            ctx.arc(labelX, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
-            ctx.arc(labelX + width, labelY + CURVE, CURVE, 0, 2 * Math.PI, false);
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
             ctx.fill();
             
             //render text
-			ctx.fillStyle = '#000';
-			ctx.fillText(desc, x, y); 
+            ctx.fillStyle = '#FFF';
+            ctx.textAlign = 'center';
+            for (index = 0; index < arrayOfLabelLines.length; ++index) {
+              ctx.fillText(arrayOfLabelLines[index], x + (width/2), y + 5 + (16*index));
+            }
 		  }
 		}, 'contains' : function(adj, pos) { 
 				var from = adj.nodeFrom.pos.getc(true), 

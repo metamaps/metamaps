@@ -718,6 +718,24 @@ function updateTopicPermission(node, permission) {
   });
 }
 
+function updateSynapsePermission(edge, permission) {
+  var mdata = { "synapse": { "permission": permission } };
+  $.ajax({
+    type: "PUT",
+    dataType: 'json',
+    url: "/synapses/" + edge.data.$id,
+    data: mdata,
+    success: function(data) {
+      $('#edit_synapse .mapPerm').removeClass('co pu pr minimize').addClass( permission.substring(0,2) );
+      $('#edit_synapse .permissionSelect').remove();
+      edge.setData("permission", permission);
+    },
+    error: function(){
+      alert('failed to update permission');
+    }
+  });
+}
+
 function MconsoleReset() {
 	
 	var tX = Mconsole.canvas.translateOffsetX;

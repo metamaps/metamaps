@@ -15,6 +15,7 @@
 
   <div><%= f.submit "Sign in" %></div>
   
+  <br>
   <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
     <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
   <% end -%>
