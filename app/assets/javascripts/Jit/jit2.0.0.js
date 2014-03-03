@@ -8321,7 +8321,7 @@ Layouts.ForceDirected = new Class({
     if(incremental) {
       (function iter() {
         for(var total=incremental.iter, j=0; j<total; j++) {
-          opt.t = opt.tstart * (1 - i++/(times -1));
+          opt.t = opt.tstart * (1 - (i++)/(times -1));
           that.computePositionStep(property, opt);
           if(i >= times) {
             incremental.onComplete();

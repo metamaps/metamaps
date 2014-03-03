@@ -33,12 +33,12 @@ ISSAD::Application.routes.draw do
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
   match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json
   
-  devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
+  devise_for :users, :controllers => { :registrations => "registrations" }, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
   devise_scope :user do
     get "sign_out", :to => "devise/sessions#destroy"
   end
   
-  resources :users, except: :show
+  resources :users, except: [:show, :index]
 
   resources :mappings
   
