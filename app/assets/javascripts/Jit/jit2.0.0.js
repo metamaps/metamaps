@@ -3156,7 +3156,7 @@ var Canvas;
       this.viz = viz;
       this.config = $.merge({
         idSuffix: '-bkcanvas',
-        levelDistance: 400,
+        levelDistance: 280,
         numberOfCircles: 4,
         CanvasStyles: {},
         offset: 0

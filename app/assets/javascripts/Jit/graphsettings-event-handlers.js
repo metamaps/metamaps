@@ -1,11 +1,16 @@
 function selectEdgeOnClickHandler(adj, e) {
   if (Mconsole.busy) return;
   
+  // catch right click on mac, which is often like ctrl+click
+  if (navigator.platform.indexOf("Mac")!=-1 && e.ctrlKey) {
+    selectEdgeOnRightClickHandler(adj, e)
+    return;
+  }
+  
   if (synapseWasDoubleClicked()) {
     synapseDoubleClickHandler(adj, e);
     return;
   }
-
 
   var edgeIsSelected = MetamapsModel.selectedEdges.indexOf(adj);
   if (edgeIsSelected == -1) edgeIsSelected = false;
@@ -50,7 +55,7 @@ function selectEdgeOnRightClickHandler(adj, e) {
     var menustring = '<ul>';
     
     if (userid != null) menustring += '<li class="rc-delete">Delete</li>';
-    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from Map</li>';
+    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from map</li>';
     menustring += '<li class="rc-hide">Hide until refresh</li>';
     if (userid) {
       var options = '<ul><li class="changeP toCommons">commons</li> \
@@ -252,11 +257,11 @@ function selectNodeOnClickHandler(node, e) {
     var menustring = '<ul>';
     
     if (userid != null) menustring += '<li class="rc-delete">Delete</li>';
-    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from Map</li>';
+    if (mapid && userid != null) menustring += '<li class="rc-remove">Remove from map</li>';
     menustring += '<li class="rc-hide">Hide until refresh</li>';
     
-    if (!mapid) menustring += '<li class="rc-center">Center This Topic</li>';
-    menustring += '<li class="rc-popout">Open In New Tab</li>';
+    if (!mapid) menustring += '<li class="rc-center">Center this topic</li>';
+    menustring += '<li class="rc-popout">Open in new tab</li>';
     if (userid) {
       var options = '<ul><li class="changeP toCommons">commons</li> \
                          <li class="changeP toPublic">public</li> \

@@ -167,7 +167,7 @@ function graphSettings(type, embed) {
         lineWidth: 1.5
       }
     };
-    t.levelDistance = 400;
+    t.levelDistance = 280;
     t.Events.enableForEdges = true;
     t.Events.onDragEnd = function(node, eventInfo, e) {
       //different because we can't go realtime

@@ -1326,6 +1326,9 @@ background-position: 5px 2px;
 .rightclickmenu .rc-hide {
   background-image: url(MMCCicon_hide.png);
 }
+.rightclickmenu .rc-center {
+  background-image: url(MMCCicon_center.png);
+}
 .rightclickmenu .rc-popout {
   background-image: url(MMCCicon_pop-out_black.png);
 }
