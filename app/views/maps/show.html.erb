@@ -15,20 +15,22 @@
         <div class="sidebarSaveBox"></div>
       </div>
   <% end %>
-<div class="sidebarFork">
-  <div class="sidebarForkIcon hoverForTip">
-    <div class="tip">Save To New Map</div>
+  <div class="sidebarFork">
+    <div class="sidebarForkIcon hoverForTip">
+      <div class="tip">Save To New Map</div>
+    </div>
+    <div class="sidebarForkBox"></div>
   </div>
-  <div class="sidebarForkBox"></div>
-</div>
-<div class="sidebarCollaborate">
-  <div class="sidebarCollaborateIcon hoverForTip">
-    <div class="tip">Start Realtime Collaboration</div>
-  </div>
-  <div class="sidebarCollaborateBox">
-    
-  </div>
-</div>
+  <% if @map.permission == "commons" || @map.user == user %>
+    <div class="sidebarCollaborate">
+      <div class="sidebarCollaborateIcon hoverForTip">
+        <div class="tip">Start Realtime Collaboration</div>
+      </div>
+      <div class="sidebarCollaborateBox">
+        
+      </div>
+    </div>
+  <% end %>
 <% end %>
 <div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
   <div class="sidebarFilterIcon"></div>
@@ -57,8 +59,10 @@
 <div class="clearfloat"></div>
 
 <% if authenticated? %>
-  <%= render :partial => 'newtopic' %>
-  <%= render :partial => 'newsynapse' %>
+  <% if @map.permission == "commons" || @map.user == user %>
+    <%= render :partial => 'newtopic' %>
+    <%= render :partial => 'newsynapse' %>
+  <% end %>
   <%= render :partial => 'main/metacodeoptions' %>
   
   <% # for saving layouts %>

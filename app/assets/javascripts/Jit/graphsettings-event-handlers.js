@@ -338,36 +338,41 @@ function selectNodeOnClickHandler(node, e) {
   } //selectNodeOnRightClickHandler
 
 function canvasDoubleClickHandler(canvasLoc,e) { 
+
    //grab the location and timestamp of the click 
    var storedTime = MetamapsModel.lastCanvasClick;
    var now = Date.now(); //not compatible with IE8 FYI 
    MetamapsModel.lastCanvasClick = now;
  
-   if (now - storedTime < MetamapsModel.DOUBLE_CLICK_TOLERANCE) { 
-      //pop up node creation :) 
-      $('#topic_grabTopic').val("null"); 
-      $('#topic_addSynapse').val("false"); 
-      $('#new_topic').css('left', e.clientX + "px"); 
-      $('#new_topic').css('top', e.clientY + "px"); 
-      $('#topic_x').val(canvasLoc.x); 
-      $('#topic_y').val(canvasLoc.y);      
-      $('#new_topic').fadeIn('fast');
-      $('#topic_name').focus(); 
-   } else { 
-      $('#new_topic').fadeOut('fast'); 
-      $('#new_synapse').fadeOut('fast'); 
-      // reset the draw synapse positions to false
-      MetamapsModel.synapseStartCoord = false;
-      MetamapsModel.synapseEndCoord = false;
-      // set all node dimensions back to normal
-       Mconsole.graph.eachNode(function (n) {
-          n.setData('dim', 25, 'current');
-       });
-      tempInit = false; 
-      tempNode = null; 
-      tempNode2 = null; 
-      Mconsole.plot(); 
-   } 
+   // if on a public map, disable topic creation
+   if (userid && (mapperm || !mapid) ) {
+     if (now - storedTime < MetamapsModel.DOUBLE_CLICK_TOLERANCE) {  
+        //pop up node creation :) 
+        $('#topic_grabTopic').val("null"); 
+        $('#topic_addSynapse').val("false"); 
+        $('#new_topic').css('left', e.clientX + "px"); 
+        $('#new_topic').css('top', e.clientY + "px"); 
+        $('#topic_x').val(canvasLoc.x); 
+        $('#topic_y').val(canvasLoc.y);      
+        $('#new_topic').fadeIn('fast');
+        $('#topic_name').typeahead('setQuery','').focus(); 
+        return;
+     }
+    }
+    
+    $('#new_topic').fadeOut('fast'); 
+    $('#new_synapse').fadeOut('fast'); 
+    // reset the draw synapse positions to false
+    MetamapsModel.synapseStartCoord = false;
+    MetamapsModel.synapseEndCoord = false;
+    // set all node dimensions back to normal
+     Mconsole.graph.eachNode(function (n) {
+        n.setData('dim', 25, 'current');
+     });
+    tempInit = false; 
+    tempNode = null; 
+    tempNode2 = null; 
+    Mconsole.plot();  
 }//canvasDoubleClickHandler 
 
 function handleSelectionBeforeDragging(node, e) {
@@ -459,6 +464,10 @@ function onDragMoveTopicHandler(node, eventInfo, e) {
        }
        // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
        else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && userid != null) {
+       
+           // if on a public map, disable synapse creation
+           if (mapid && !mapperm) return;
+       
            if (tempInit == false) {
               tempNode = node;
               tempInit = true;
