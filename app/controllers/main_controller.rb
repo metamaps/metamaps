@@ -10,10 +10,16 @@ class MainController < ApplicationController
   
   # home page
   def home
-    @maps = Map.find_all_by_featured(true).shuffle!
-    @maps = @maps.slice(0,3)
+    @current = current_user
     
-    respond_with(@maps) 
+    if !authenticated?
+      @maps = Map.find_all_by_featured(true).shuffle!
+      @maps = @maps.slice(0,3)
+    elsif authenticated?
+      @maps = Map.order("updated_at DESC").limit(3)
+    end
+    
+    respond_with(@maps, @current) 
   end
   
   # /request

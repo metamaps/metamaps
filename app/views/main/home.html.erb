@@ -15,31 +15,48 @@
 
 <div class="home_content">
 <div class="home_desc">
-  <div class="welcomeTo">Welcome to Metamaps</div>
-  <img id="homeMapImage" src="/assets/metamap128x128.png" width="128" height="128" />
-  <div class="metamapsIs">
-    a home on the web for <span class="swapWord">
-      <ul class="texts">
-      <li>building shared knowledge</li>
-      <li>learning</li>
-      <li>visioning</li>
-      <li>conversing</li>
-      <li>collaborating</li>
-      <li>sensemaking</li>
-      <li>innovating</li>
-      <li>designing</li>
-      <li>playing</li>
-      <li>exploring</li>
-      </ul>
-    </span>
+  <div class="welcomeTo">
+    <% if !authenticated? %>  
+      Welcome to Metamaps
+    <% elsif authenticated? %>
+      Welcome back, <%= @current.name.split[0...1][0] %>!
+    <% end %>
   </div>
+  <img id="homeMapImage" src="/assets/metamap128x128.png" width="128" height="128" />
+  
+  <% if !authenticated? %>
+    <div class="metamapsIs">
+      a home on the web for <span class="swapWord">
+        <ul class="texts">
+        <li>building shared knowledge</li>
+        <li>learning</li>
+        <li>visioning</li>
+        <li>conversing</li>
+        <li>collaborating</li>
+        <li>sensemaking</li>
+        <li>innovating</li>
+        <li>designing</li>
+        <li>playing</li>
+        <li>exploring</li>
+        </ul>
+      </span>
+    </div>
+  <% end %>
 </div>
 <div class="clearfloat"></div>
 
 <p class="contact">
-  <a href="/request" class="request button">Request Invite</a>
-  <a href="#" class="learnmore button openLightbox" data-open="about">Learn More</a>
-  <div class="featuredMaps">explore featured maps from our community</div>
+  <% if !authenticated? %>
+    <a href="/request" class="request button">Request Invite</a>
+    <a href="#" class="learnmore button openLightbox" data-open="about">Learn More</a>
+  <% end %>
+  <div class="featuredMaps">
+    <% if !authenticated? %>
+      explore featured maps from our community
+    <% elsif authenticated? %>
+      explore recently active maps
+    <% end %>
+  </div>
 </p>
 
 <div class="centeredProfile">
