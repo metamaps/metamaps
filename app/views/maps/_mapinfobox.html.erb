@@ -2,7 +2,7 @@
   # Partial rendering form for a new topic on a map
   # This code is called when viewing a metamap in show.html.erb in the views/maps folder
   #%>
-<div class="mapInfoBox permission <%= @map.user == user ? "canEdit" : "cannotEdit" %>">
+<div class="mapInfoBox permission <%= @map.user == user ? " yourMap" : "" %><%= @map.authorize_to_edit(user) ? " canEdit" : "" %>">
   
   <div class="mapInfoName"><%= best_in_place @map, :name, :type => :input, :classes => 'best_in_place_name' %></div>
   
@@ -25,7 +25,11 @@
     <div class="infoStatIcon mapSynapses">
       <%= @map.synapses.count %>
     </div>
-    <div class="infoStatIcon mapPermission <%= @map.permission %>"></div>
+    <div class="infoStatIcon mapPermission <%= @map.permission %> hoverForTip">
+      <% if @map.user == user %>
+        <div class="tip">As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>
+      <% end %>
+    </div>
     <div class="clearfloat"></div>
   </div>
   

@@ -8,7 +8,7 @@
   <div class="permission <%= map.authorize_to_edit(user) ? "canEdit" : "cannotEdit" %>">  
   
 	  <div class="mapCard"> 
-      <div class="mapPerm <%= map.mk_permission %>"> help build this map </div>    
+      <div class="mapPerm <%= map.mk_permission %>"></div>    
       <span class="title">                                                  
         <%= best_in_place map, :name, :type => :input, :classes => 'best_in_place_name' %>                             
       </span> 

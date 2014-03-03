@@ -1569,23 +1569,28 @@ background-position: 16px 6px;
 background-size: 27px 27px;
 position:relative;
 }
-.mapContributors .tip {
+.infoStatIcon .tip {
 display: none; 
 position: absolute;
 background: white;
 min-width: 180px;
 max-width:250px;
 text-align:center;
-top: 38px;
-left: 6px;
 color: black;
 border-radius: 4px;
 font-size: 15px !important;
-font-family: 'LatoLight';
+font-family: 'LatoRegular';
 line-height: 17px;
 padding: 3px 5px 2px;
-border: 1px solid black;
 z-index: 100;
+}
+.mapContributors .tip {
+  top: 38px;
+  left: 6px;
+}
+.mapPermission .tip {
+  top: 0;
+  right: 32px;
 }
 .mapInfoBox .hoverForTip:hover .tip {
   display:block;
@@ -1602,8 +1607,13 @@ background-position: 18px 6px;
 background-size: 27px 27px;
 }
 .mapPermission {
-background-position: 10px center;
+background-position: 0 center;
 background-size: 30px 30px;
+width: 30px;
+height: 30px;
+padding: 0;
+margin: 5px 30px 5px 10px;
+position: relative;
 }
 .mapPermission.commons {
   background-image:url(MMCCicon_commons.png);
@@ -1613,6 +1623,47 @@ background-size: 30px 30px;
 }
 .mapPermission.private {
   background-image:url(MMCCicon_private.png);
+}
+
+.yourMap .mapPermission:hover {
+  background-image: url(/assets/MMCCicon_maximize_arrow.png);
+  cursor:pointer;
+}
+.yourMap .mapPermission.minimize {
+ background-image: url(MMCCicon_minimize_arrow.png) !important;
+ cursor: pointer;
+}
+.mapPermission .permissionSelect {
+  list-style: none;
+  width: 30px;
+  height: 60px;
+  position: relative;
+  top: 30px;
+}
+.mapPermission .permissionSelect li {
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 30px 30px;
+}
+.mapPermission .permissionSelect .commons {
+  background-image: url(MMCCicon_commons.png);
+}
+.mapPermission .permissionSelect .public {
+  background-image: url(MMCCicon_public.png);
+}
+.mapPermission .permissionSelect .private {
+  background-image: url(MMCCicon_private.png);
+}
+.mapPermission .permissionSelect .commons:hover {
+  background-image: url(MMCCicon_commons_black.png);
+}
+.mapPermission .permissionSelect .public:hover {
+  background-image: url(MMCCicon_public_black.png);
+}
+.mapPermission .permissionSelect .private:hover {
+  background-image: url(MMCCicon_private_black.png);
 }
 
 .mapInfoBox .mapInfoDesc {

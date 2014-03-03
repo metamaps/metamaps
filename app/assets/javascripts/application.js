@@ -736,6 +736,23 @@ function updateSynapsePermission(edge, permission) {
   });
 }
 
+function updateMapPermission(mapid, permission) {
+  var mdata = { "map": { "permission": permission } };
+  $.ajax({
+    type: "PUT",
+    dataType: 'json',
+    url: "/maps/" + mapid,
+    data: mdata,
+    success: function(data) {
+      $('.mapPermission').removeClass('commons public private minimize').addClass( permission );
+      $('.mapPermission .permissionSelect').remove();
+    },
+    error: function(){
+      alert('failed to update permission');
+    }
+  });
+}
+
 function MconsoleReset() {
 	
 	var tX = Mconsole.canvas.translateOffsetX;
