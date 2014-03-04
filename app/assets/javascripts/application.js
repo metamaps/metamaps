@@ -25,7 +25,7 @@
 // other options are 'graph'
 var viewMode = "list";
 
-var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, findOpen = false, analyzeOpen = false, organizeOpen = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode, mouseIsDown = false;
+var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode, mouseIsDown = false;
 
  $(document).ready(function() {
   
@@ -296,7 +296,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                 s.css({'height':'auto','border-top':'none','overflow':'visible'});
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
               } else {
-                s.css({'height':'0','border-top':'1px solid #222','overflow':'hidden'});
+                s.css({'height':'0','border-top':'1px solid rgb(56, 56, 56)','overflow':'hidden'});
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
               }
             });
@@ -307,7 +307,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
                 s.css({'height':'auto','border-top':'none','overflow':'visible'});
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
               } else {
-                s.css({'height':'0','border-top':'1px solid #222','overflow':'hidden'});
+                s.css({'height':'0','border-top':'1px solid rgb(56, 56, 56)','overflow':'hidden'});
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
               }
             });

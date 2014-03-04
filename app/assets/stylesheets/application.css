@@ -315,11 +315,12 @@ font-family: 'LatoLight';
 }
 
 #metacodeImgTitle {
-  color:#000;
+  color:#FFF;
   float:left;
   width:120px;
   text-align:center;
   margin-left:90px;
+  font-family: 'LatoRegular';
 }
 
 /* synapse autocomplete */
@@ -332,10 +333,10 @@ margin: 0;
 padding: 5px 5px;
 border: 1px solid black;
 outline: none;
-font-size: 25px;
+font-size: 18px;
 line-height: 35px;
-color: rgba(255,255,255,0.7);
-font-family: 'LatoLight';
+color: white;
+font-family: 'LatoRegular';
 }
 
 .new_synapse #synapse_desc, .new_synapse .tt-hint {
@@ -346,10 +347,10 @@ margin: 0;
 padding: 5px 5px;
 border: 1px solid black;
 outline: none;
-font-size: 18px;
+font-size: 16px;
 line-height: 20px;
 color: rgba(255,255,255,0.7);
-font-family: 'LatoLight';
+font-family: 'LatoRegular';
 }
 
 label, select, input, textarea {
@@ -968,18 +969,17 @@ cursor:pointer;
   margin: 0;
   border: 0;
   outline: none;
-  font-size: 25px;
+  font-size: 18px;
   line-height:35px;
   background:#0F1519;
   color: rgba(255,255,255,0.6);
-  font-family: 'LatoLight';
+  font-family: 'LatoRegular';
 }
 
 .sidebarSearch .tt-dropdown-menu {
 left:-35px !important;
 background: #0F1519;
 min-width: 440px;
-border: 1px solid black;
 }
 
 .sidebarSearch .tt-dropdown-menu h3 {
@@ -1027,12 +1027,11 @@ border: 1px solid black;
 
 
 .sidebarSearch .tt-suggestion {
-background: rgba(0,0,0,0.5);
-border: 1px solid black;
+  background: #2A343C;
 }
 
 .sidebarSearch .tt-is-under-cursor {
-  background:black;
+  background:#0E161D;
 }
 
 .sidebarSearch .tt-dataset-maps .tt-is-under-cursor .resultmap, .sidebarSearch .tt-dataset-topics .tt-is-under-cursor .resulttopic {
@@ -1079,24 +1078,25 @@ border: 1px solid black;
 }
 
 .sidebarSearch .resultText {
-  width: 240px;
+  width: 250px;
   display: block;
   float: left;
 }
 
 .sidebarSearch .resultTitle {
-  font-weight:bold;
-  font-size:20px;
+  font-weight:normal;
+  font-family: 'LatoRegular';
+  font-size:18px;
   line-height:22px;
   width:100%;
   padding-top:8px;
 }
 .sidebarSearch .resultDesc {
-  font-style:italic;
-  font-size:16px;
+  font-family: 'LatoItalic';
+  font-size:14px;
   line-height:16px;
   width:100%;
-  padding: 6px 0;
+  padding: 3px 0 6px 0;
 }
 
 .sidebarSearch .tip {
@@ -1197,10 +1197,9 @@ line-height: 20px;
  white-space: nowrap;
  border-radius: 4px;
  font-size:15px !important;
- font-family:'LatoLight';
+ font-family:'LatoRegular';
  line-height:17px;
  padding: 3px 5px 2px;
- border: 1px solid black;
  z-index:100;
 }
 .sidebarSearch .mapCount .tip,.sidebarSearch .synapseCount .tip, .sidebarSearch .topicCount .tip  {
@@ -1369,13 +1368,13 @@ background-position: 5px 2px;
 /* topic autocomplete */
 
 #new_topic .tt-suggestion.tt-is-under-cursor {
-background: black;
+background: #0E161D;
 }
 
 #new_topic .tt-suggestion {
 padding: 5px;
 font-family: 'LatoLight';
-background:#0F1519;
+background: #2A343C;
 }
 
 #new_topic .autocompleteSection {
@@ -1425,11 +1424,10 @@ background:#0F1519;
  color: black;
  white-space: nowrap;
  border-radius: 4px;
- font-size:13px !important;
- font-family:'LatoLight';
- line-height:14px;
+ font-size:15px !important;
+ font-family:'LatoRegular';
+ line-height:15px;
  padding: 2px 5px 2px;
- border: 1px solid black;
  z-index:100;
 }
 
@@ -1437,7 +1435,7 @@ background:#0F1519;
 
 #new_synapse .tt-dropdown-menu {
   width: 212px;
-  background:#0F1519;
+  background:#2A343C;
 }
 
 #new_synapse .tt-dropdown-menu h3 {
@@ -1450,7 +1448,7 @@ margin: 3px;
 }
 
 #new_synapse .tt-suggestion.tt-is-under-cursor {
-  background: black;
+  background: #0E161D;
 }
 
 #new_synapse .tt-suggestion {
@@ -1504,11 +1502,10 @@ margin: 3px;
  color: black;
  white-space: nowrap;
  border-radius: 4px;
- font-size:13px !important;
- font-family:'LatoLight';
- line-height:14px;
+ font-size:15px !important;
+ font-family:'LatoRegular';
+ line-height:15px;
  padding: 2px 5px 2px;
- border: 1px solid black;
  z-index:100;
 }
 
@@ -1588,7 +1585,7 @@ z-index: 100;
   top: 38px;
   left: 6px;
 }
-.mapPermission .tip {
+.mapInfoBox .mapPermission .tip {
   top: 0;
   right: 32px;
 }
@@ -1606,7 +1603,7 @@ background-image: url(MMCCicon_synapse.png);
 background-position: 18px 6px;
 background-size: 27px 27px;
 }
-.mapPermission {
+.mapInfoBox .mapPermission {
 background-position: 0 center;
 background-size: 30px 30px;
 width: 30px;
@@ -1615,13 +1612,13 @@ padding: 0;
 margin: 5px 30px 5px 10px;
 position: relative;
 }
-.mapPermission.commons {
+.mapInfoBox .mapPermission.commons {
   background-image:url(MMCCicon_commons.png);
 }
-.mapPermission.public {
+.mapInfoBox .mapPermission.public {
   background-image:url(MMCCicon_public.png);
 }
-.mapPermission.private {
+.mapInfoBox .mapPermission.private {
   background-image:url(MMCCicon_private.png);
 }
 
@@ -1633,36 +1630,36 @@ position: relative;
  background-image: url(MMCCicon_minimize_arrow.png) !important;
  cursor: pointer;
 }
-.mapPermission .permissionSelect {
+.mapInfoBox .mapPermission .permissionSelect {
   list-style: none;
   width: 30px;
   height: 60px;
   position: relative;
   top: 30px;
 }
-.mapPermission .permissionSelect li {
+.mapInfoBox .mapPermission .permissionSelect li {
   width: 30px;
   height: 30px;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 30px 30px;
 }
-.mapPermission .permissionSelect .commons {
+.mapInfoBox .mapPermission .permissionSelect .commons {
   background-image: url(MMCCicon_commons.png);
 }
-.mapPermission .permissionSelect .public {
+.mapInfoBox .mapPermission .permissionSelect .public {
   background-image: url(MMCCicon_public.png);
 }
-.mapPermission .permissionSelect .private {
+.mapInfoBox .mapPermission .permissionSelect .private {
   background-image: url(MMCCicon_private.png);
 }
-.mapPermission .permissionSelect .commons:hover {
+.mapInfoBox .mapPermission .permissionSelect .commons:hover {
   background-image: url(MMCCicon_commons_black.png);
 }
-.mapPermission .permissionSelect .public:hover {
+.mapInfoBox .mapPermission .permissionSelect .public:hover {
   background-image: url(MMCCicon_public_black.png);
 }
-.mapPermission .permissionSelect .private:hover {
+.mapInfoBox .mapPermission .permissionSelect .private:hover {
   background-image: url(MMCCicon_private_black.png);
 }
 
@@ -1923,18 +1920,18 @@ font-family:arial;
 .new_map .tip {
   display:none;
    position: absolute;
- background: white;
+ background: black;
  width: 150px;
  top: 85px;
- left: -32px;
- color: black;
+ left: -29px;
+ color: white;
  border-radius: 4px;
  font-size:15px !important;
- font-family:'LatoLight';
+ font-family:'LatoRegular';
  line-height:17px;
  padding: 3px 5px 2px;
- border: 1px solid black;
  z-index:100;
+ text-align:center;
 }
 .new_map .hoverForTip:hover .tip {
   display:block;

@@ -334,8 +334,8 @@ var nodeSettings = {
 
             //now adjust the label placement 
             var ctx = canvas.getCtx();
-            ctx.font = '14px arial';
-            ctx.fillStyle = '#222222';
+            ctx.font = 'bold 14px arial';
+            ctx.fillStyle = '#FFF';
             ctx.textBaseline = 'hanging';
             
             // helper function to determine how many lines are needed
@@ -370,7 +370,7 @@ var nodeSettings = {
             ctx.fill();
             
             //render text
-            ctx.fillStyle = '#FFF';
+            ctx.fillStyle = '#222222';
             ctx.textAlign = 'center';
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
               ctx.fillText(arrayOfLabelLines[index], x + (width/2), y + 5 + (16*index));
@@ -565,7 +565,7 @@ function onDragEndTopicHandler(node, eventInfo, e, allowRealtime) {
     $('#synapse_topic1id').val(tempNode.id);
     $('#synapse_topic2id').val(tempNode2.id);
     $('#new_synapse').fadeIn('fast');
-    $('#synapse_desc').focus();
+    $('#synapse_desc').typeahead('setQuery','').focus();
     tempNode = null;
     tempNode2 = null;
     tempInit = false;

@@ -348,17 +348,15 @@ float:left;
 .CardOnGraph .tip, .mapCard .tip {
  display:none;
  position: absolute;
- background: white;
- width: 155px;
+ background: black;
  top: 35px;
  left: 0;
- color: black;
+ color: white;
  border-radius: 4px;
  font-size:15px !important;
- font-family:'LatoLight';
+ font-family:'LatoRegular';
  line-height:17px;
  padding: 3px 5px 2px;
- border: 1px solid black;
  z-index:100;
 }
 

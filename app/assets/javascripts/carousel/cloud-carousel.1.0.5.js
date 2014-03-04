@@ -240,8 +240,8 @@ jQuery.browser = browser;
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
             // METAMAPS CODE
 			$('#topic_metacode').val($(items[this.frontIndex].image).attr('title'));
-      $('img.cloudcarousel').css({"background":"none", "width":"","height":""});
-      $(items[this.frontIndex].image).css({"width":"45px","height":"45px"});
+        //$('img.cloudcarousel').css({"background":"none", "width":"","height":""});
+        //$(items[this.frontIndex].image).css({"width":"45px","height":"45px"});
 			// NOT METAMAPS CODE
 			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
 			$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				

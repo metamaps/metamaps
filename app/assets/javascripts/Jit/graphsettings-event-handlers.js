@@ -360,19 +360,19 @@ function canvasDoubleClickHandler(canvasLoc,e) {
      }
     }
     
-    $('#new_topic').fadeOut('fast'); 
-    $('#new_synapse').fadeOut('fast'); 
-    // reset the draw synapse positions to false
-    MetamapsModel.synapseStartCoord = false;
-    MetamapsModel.synapseEndCoord = false;
-    // set all node dimensions back to normal
-     Mconsole.graph.eachNode(function (n) {
-        n.setData('dim', 25, 'current');
-     });
-    tempInit = false; 
-    tempNode = null; 
-    tempNode2 = null; 
-    Mconsole.plot();  
+    if (!MetamapsModel.didPan) {
+      $('#new_topic').fadeOut('fast'); 
+      $('#new_synapse').fadeOut('fast'); 
+      $('.rightclickmenu').remove();
+      // reset the draw synapse positions to false
+      MetamapsModel.synapseStartCoord = false;
+      MetamapsModel.synapseEndCoord = false;
+      deselectAllNodes();
+      tempInit = false; 
+      tempNode = null; 
+      tempNode2 = null; 
+      Mconsole.plot(); 
+    }
 }//canvasDoubleClickHandler 
 
 function handleSelectionBeforeDragging(node, e) {
