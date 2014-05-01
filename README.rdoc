@@ -23,6 +23,9 @@ Navigate to the folder that you want to download the metamaps files to and run (
   
 Now you're in the main directory. 
 
+Install all the gems needed for Metamaps by running
+  $ bundle install
+
 Setting up the database:
 
 1) Copy database.yml.default to database.yml
