@@ -1,3 +1,14 @@
+== Metamaps
+Metamaps is a free and open source technology for changemakers, innovators, educators and students. It enables individuals and communities to build and visualize their shared knowledge and unlock their collective intelligence. You can find out about more about the project at http://blog.metamaps.cc.
+
+You can find a version of this software running at http://metamaps.cc, where the technology is being beta tested in a private beta, if you're not up to the task of running your own version. 
+
+Metamaps is created and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. You can get in touch with us at team@metamaps.cc or @metamapps on twitter. 
+
+To get connected with the community interested in Metamaps, join our G+ community. https://plus.google.com/u/0/communities/115060009262157699234
+
+To contribute to Metamaps, fork this repository, and submit a pull request!
+
 ==How to code in Metamaps
 
 First off, Metamaps runs on Ruby On Rails. Ruby 1.9.3 and Rails 3.2. You'll need to get Ruby and Rails installed on your computer if you don't already have it. We recommend using the Rails Installer, which you can download from Mac or Windows at http://railsinstaller.org/en (see the notes below about Ubuntu). This will get you set up perfectly with the right versions of Ruby, and Rails for running your local version of Metamaps.
@@ -6,7 +17,7 @@ It uses postgreSQL 9.2 as a database. You can install that for your computer fro
 
 Once you install those, open a 'command prompt with ruby and rails'. 
 
-Navigate to the folder that you want to download the metamaps files to and run
+Navigate to the folder that you want to download the metamaps files to and run (use your forked git repository address if it's different than this repo.)
   git clone git@github.com:Connoropolous/metamaps_gen002.git
   cd metamaps_gen002
   
@@ -62,7 +73,12 @@ app/assets/views/*.html.erb: Files in here define either html that is displayed 
 app/assets/views/*.js.erb: Javascript that is called in response to, e.g., editing or creating a topic, synapse, etc.
 
 
-==License
+== Contact
+
+With any questions or comments, contact Ishan Shapiro and Connor Turland at team@metamaps.cc.
+
+
+== Licensing Information
 Metamaps.cc, a visual knowledge communication engine.
 Copyright (C) 2014 Topos FFO
 
@@ -71,5 +87,3 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with this program.  If not, see [http://www.gnu.org/licenses/].
-
-With any questions or comments, contact Ishan Shapiro and Connor Turland at team@metamaps.cc.
