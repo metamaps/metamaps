@@ -1,31 +1,15 @@
 #password: toolsplusconsciousness
 
-connor:
-  name: Connor Turland
-  email: connorturland@gmail.com
+user:
+  name: user
+  email: user@user.com
   encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
+  code: qwertyui
+  admin: false
 
-devin:
-  name: Devin Howard
-  email: devin@callysto.com
+admin:
+  name: admin
+  email: admin@admin.com
   encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
-
-ishan:
-  name: Ishan Shapiro
-  email: ishanshapiro@gmail.com
-  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
-  
-robert:
-  name: Robert Best
-  email: chessscholar@gmail.com
-  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
-  
-ben:
-  name: Ben Brownell
-  email: solaureum@gmail.com
-  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
-  
-marija:
-  name: Marija Coneva
-  email: marija.coneva@gmail.com
-  encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
+  code: iuytrewq
+  admin: true
