@@ -1,18 +1,16 @@
 ==How to code in Metamaps
 
-Here are the important folders/files:
+First off, Metamaps runs on Ruby On Rails. Ruby 1.9.3 and Rails 3.2. You'll need to get Ruby and Rails installed on your computer if you don't already have it. We recommend using the Rails Installer, which you can download from Mac or Windows at http://railsinstaller.org/en (see the notes below about Ubuntu). This will get you set up perfectly with the right versions of Ruby, and Rails for running your local version of Metamaps.
 
-config/database.yml: This file is your database configuration. If it doesn't exist, copy it from config/database.yml.default and then get it set up. config/database.yml is in .gitignore
+It uses postgreSQL 9.2 as a database. You can install that for your computer from here: http://www.enterprisedb.com/products-services-training/pgdownload
 
-app/assets/javascripts/application.js: Global Javascript
+Once you install those, open a 'command prompt with ruby and rails'. 
 
-app/assets/javascripts/Jit/*: These files handle all code that uses the Javascript Infovis Toolkit, so realistically, most code for laying stuff out is in here.
-
-app/assets/controllers/*: These files define actions you can do on the different database objects. So for instance, what happens when you edit a Synapse? Check in app/assets/controllers/synapse_controller.rb, in the edit block
-
-app/assets/views/*.html.erb: Files in here define either html that is displayed when a certain action is called (like edit, or create) on a thing. E.G. app/assets/views/topic/new.html.erb would have a form for creating a new topic. We don't use that way very much anymore though. "Partial" views can be called elsewhere in ruby code and are prefixed with an underscore. So we focus more on the files starting with an underscore. Read through the comments at the top of each file to understand what they all do.
-
-app/assets/views/*.js.erb: Javascript that is called in response to, e.g., editing or creating a topic, synapse, etc.
+Navigate to the folder that you want to download the metamaps files to and run
+  git clone git@github.com:Connoropolous/metamaps_gen002.git
+  cd metamaps_gen002
+  
+Now you're in the main directory. 
 
 Setting up the database:
 
@@ -26,13 +24,13 @@ Setting up the database:
 Running the server:
 
   $rails s #runs the server
-  $
-  $rails c #gives you an interactive console 
   
 Navigate your browser to localhost:3000 once you have the server running
 
 Sign in with the default account
+
 email: user@user.com
+
 password: toolsplusconsciousness
 
 OR create a new account at /users/sign_up, and use access code 'qwertyui'
@@ -42,6 +40,23 @@ OR create a new account at /users/sign_up, and use access code 'qwertyui'
 I had a lot of trouble installing on Ubuntu
 I had to install postgresql and libpq-dev. I had to do $rvm reinstall ruby-1.9.3-p125
 execjs complained there was no runtime, so I added gem 'therubyracer' to the Gemfile
+
+
+== The Important Files
+
+Here are the important folders/files:
+
+config/database.yml: This file is your database configuration. If it doesn't exist, copy it from config/database.yml.default and then get it set up. config/database.yml is in .gitignore
+
+app/assets/javascripts/application.js: Global Javascript
+
+app/assets/javascripts/Jit/*: These files handle all code that uses the Javascript Infovis Toolkit, so realistically, most code for laying stuff out is in here.
+
+app/assets/controllers/*: These files define actions you can do on the different database objects. So for instance, what happens when you edit a Synapse? Check in app/assets/controllers/synapse_controller.rb, in the edit block
+
+app/assets/views/*.html.erb: Files in here define either html that is displayed when a certain action is called (like edit, or create) on a thing. E.G. app/assets/views/topic/new.html.erb would have a form for creating a new topic. We don't use that way very much anymore though. "Partial" views can be called elsewhere in ruby code and are prefixed with an underscore. So we focus more on the files starting with an underscore. Read through the comments at the top of each file to understand what they all do.
+
+app/assets/views/*.js.erb: Javascript that is called in response to, e.g., editing or creating a topic, synapse, etc.
 
 
 ==License
