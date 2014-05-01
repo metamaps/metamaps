@@ -15,7 +15,7 @@ Now you're in the main directory.
 Setting up the database:
 
 1) Copy database.yml.default to database.yml
- - Then you'll need to figure out how to configure it to work with Postgresql (which you need to install - try Herokuapp's exe or app)
+ 
 2) In a terminal:
   $ rake db:create
   $ rake db:schema:load
@@ -34,6 +34,9 @@ email: user@user.com
 password: toolsplusconsciousness
 
 OR create a new account at /users/sign_up, and use access code 'qwertyui'
+
+Start mapping and programming!
+
 
 ==Installing on Ubuntu
 
