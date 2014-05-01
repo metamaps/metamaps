@@ -20,14 +20,16 @@ Setting up the database:
  - Then you'll need to figure out how to configure it to work with Postgresql (which you need to install - try Herokuapp's exe or app)
 2) In a terminal:
   $ rake db:create
-  $ rake db:migrate
+  $ rake db:schema:load
   $ rake db:fixtures:load
 
 Running the server:
 
   $rails s #runs the server
   $
-  $rails c #gives you an interactive console
+  $rails c #gives you an interactive console 
+  
+Navigate your browser to localhost:3000 once you have the server running
 
 ==Installing on Ubuntu
 
