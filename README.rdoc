@@ -31,6 +31,12 @@ Running the server:
   
 Navigate your browser to localhost:3000 once you have the server running
 
+Sign in with the default account
+email: user@user.com
+password: toolsplusconsciousness
+
+OR create a new account at /users/sign_up, and use access code 'qwertyui'
+
 ==Installing on Ubuntu
 
 I had a lot of trouble installing on Ubuntu
