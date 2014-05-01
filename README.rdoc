@@ -51,12 +51,17 @@ Start mapping and programming!
 
 ==Installing on Ubuntu
 
-I had a lot of trouble installing on Ubuntu
-I had to install postgresql and libpq-dev. I had to do $rvm reinstall ruby-1.9.3-p125
-execjs complained there was no runtime, so I added gem 'therubyracer' to the Gemfile
+There can be trouble installing on Ubuntu
+
+Try installing postgresql and libpq-dev. 
+
+It's also recommended using Ruby Version Manager (rvm)
+  $rvm reinstall ruby-1.9.3-p125
+
+execjs might complain there is no runtime, if so add gem 'therubyracer' to the Gemfile
 
 
-== The Important Files
+== Finding Your Way Around The Code
 
 Here are the important folders/files:
 
@@ -74,13 +79,8 @@ app/assets/views/*.js.erb: Javascript that is called in response to, e.g., editi
 
 
 == Licensing Information
-Metamaps, a visual knowledge communication engine.
-
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License along with this program.  If not, see [http://www.gnu.org/licenses/].
-
-
-Copyright (C) 2014 Topos FFO
+You should have received a copy of the GNU Affero General Public License along with this program.  If not, see http://www.gnu.org/licenses.
