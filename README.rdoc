@@ -9,7 +9,7 @@ To get connected with the community interested in Metamaps, join our G+ communit
 
 To contribute to Metamaps, fork this repository, and submit a pull request!
 
-==How to code in Metamaps
+==Running Metamaps On Your Local Machine
 
 First off, Metamaps runs on Ruby On Rails. Ruby 1.9.3 and Rails 3.2. You'll need to get Ruby and Rails installed on your computer if you don't already have it. We recommend using the Rails Installer, which you can download from Mac or Windows at http://railsinstaller.org/en (see the notes below about Ubuntu). This will get you set up perfectly with the right versions of Ruby, and Rails for running your local version of Metamaps.
 
