@@ -28,7 +28,7 @@ Install all the gems needed for Metamaps by running
 
 Setting up the database:
 
-1) Copy database.yml.default to database.yml
+1) Copy /config/database.yml.default and rename the copy to /config/database.yml
  
 2) In a terminal:
   $ rake db:create
