@@ -17,11 +17,13 @@ has_many :mappings
 	
   validates_uniqueness_of :name # done by devise
   validates_uniqueness_of :email # done by devise
-  if Object.const_defined?('User') 
-    codes = User.all.map(&:code)
-  else
+    
+  if ActiveRecord::Base.connection.table_exists? 'users' 
+    codes =  ActiveRecord::Base.connection.execute("SELECT code FROM users").map {|user| user["code"] }
+  else 
     codes = []
   end
+  
   validates :joinedwithcode, :presence => true, :inclusion => { :in => codes, :message => "%{value} is not a valid code" }, :on => :create
   
   def generate_code
