@@ -252,7 +252,7 @@ button.button:hover, a.button:hover, input[type="submit"]:hover {
 
 .edit_user{
   display: block;
-  width: 225px;
+  width: 200px;
   position:absolute;
   left:70%;
   top:25%;
