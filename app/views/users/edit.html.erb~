@@ -5,7 +5,7 @@
   #%>
   
 <% content_for :title, @user.name + "'s Settings | Metamaps" %>  
-
+<%= formula_form_for @user, url: user_url do |form| %>
 <h1 class="index">Your Settings</h1>
   
 
@@ -16,5 +16,4 @@
   <%= hidden_field(:metacodes, :value, {:value => 0}) %>
   <%= form.submit "Update", class: "update" %>  
 <% end %>
-
 
