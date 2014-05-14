@@ -455,7 +455,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
   //$(".scroll").mCustomScrollbar();
   
   // initialize scroll bar for filter by metacode, then hide it and position it correctly again
-  $("#filter_by_metacode").mCustomScrollbar({advanced: { updateOnContentResize: true }});
+  $("#filter_by_metacode").mCustomScrollbar();
   $('.sidebarFilterBox').hide().css({
     position:'absolute',
     top: '35px',
