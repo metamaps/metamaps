@@ -144,10 +144,10 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       });
       
       // if the search is closed and user hits SHIFT+S
-      $('body').bind('keyup', function(e) {
+      $('body').bind('keydown', function(e) {
         switch(e.which) {
-          case 83:
-            if (e.shiftKey && !searchIsOpen) {
+          case 191:
+            if (e.ctrlKey && !searchIsOpen) {
               openSearch();
             }
             break;
