@@ -13,7 +13,7 @@
   <%= form.input :name, label: "Name", class: "name" %>
   <%= form.input :email, label: "Email", class: "email" %>
   <%= form.input :password, label: "Password", class: "password" %>
-  <%= hidden_field(:metacodes, :value, {:value => 0}) %>
   <%= form.submit "Update", class: "update" %>  
+  <%  :bypass=>true to sign_in(@user) %>
 <% end %>
 

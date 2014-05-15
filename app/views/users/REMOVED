@@ -95,3 +95,7 @@ $(document).ready(function() {
 
 });
 </script>
+
+FROM USERS CONTROLLER>
+@m = params[:metacodes][:value]
+    @user.settings.metacodes=@m.split(',')
