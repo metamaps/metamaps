@@ -13,7 +13,7 @@ Devise.setup do |config|
   if Rails.env.development?
     #config.secret_key = 'f71c467e526f23d614b3b08866cad4788c502bed869c282f06e73ee6c94675b62fe1f6d52fa7ba8196b33031f0d2f3b67e27ea07693c52ecebccb01700cad614'
   end
-  if Rails.env.production?
+  if Rails.env.production?  # this is for the heroku staging environment
     config.secret_key = 'd91ba0da95749174ee2b8922034783cbde4945409ed28b13383e18e72844beb74467f8199e9e216f0687cd2290c6e46bf74da24486d14bba3671d76c5b10c753'
   end
     

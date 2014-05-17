@@ -254,8 +254,10 @@
 				initialize("chaotic", true);
 		});
 	}
-  //window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
-  window.realtime.socket = io.connect('http://metamaps.cc:5001');
+  window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); // this is for the heroku staging environment
+  //window.realtime.socket = io.connect('http://metamaps.cc:5001'); // this is for metamaps.cc
+  //window.realtime.socket = io.connect('http://localhost:5001'); // this is for localhost development
+    
   window.realtime.socket.on('connect', function() {
       subscribeToRooms();
       console.log('socket connected');
