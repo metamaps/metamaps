@@ -7,7 +7,7 @@
 <ul>
 <% Metacode.order("name").all.each do |m| %>
   <li>
-    <img width="30" height="30" src="/assets/<%= m.icon %>" alt="<%= m.name %>" />
+    <img width="30" height="30" src="<%= m.icon %>" alt="<%= m.name %>" />
     <span class="mSelectName"><%= m.name %></span>
     <div class="clearfloat"></div>
   </li>

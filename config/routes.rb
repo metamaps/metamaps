@@ -1,5 +1,9 @@
 ISSAD::Application.routes.draw do
 
+  resources :in_metacode_sets
+  resources :metacode_sets, :except => [:show]
+  resources :metacodes, :except => [:show, :destroy]
+
   root to: 'main#home', via: :get
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request

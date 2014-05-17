@@ -9,7 +9,7 @@
 
 <% @list = '' %>
 <% Metacode.order("name").all.each_with_index do |m, index| %>
-  <% @list += '<li><img src="/assets/' + m.icon + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p></li>' %>
+  <% @list += '<li><img src="' + m.icon + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p></li>' %>
      
   categoryVisible['<%= m.name %>'] = true;   
 <% end %>

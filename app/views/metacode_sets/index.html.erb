@@ -1,0 +1,41 @@
+<h1 class='index'>
+    Metacode Sets
+</h1>
+
+<div class='blackBox'>
+<%= render :partial => 'admin/adminpanel' %>
+<br />
+<table>
+  <tr>
+    <th>Name</th>
+    <th class='metacodeSetsDescription'>Description</th>
+    <th>Metacodes</th>
+  </tr>
+
+<% @metacode_sets.each do |metacode_set| %>
+  <tr>
+    <td>
+      <%= metacode_set.name %><br />
+      <%= link_to 'Edit', edit_metacode_set_path(metacode_set) %><br />
+      <%= link_to 'Delete', metacode_set, method: :delete, data: { confirm: 'Are you sure?' } %>
+    </td>
+    <td><%= metacode_set.desc %></td>
+    <td style='position:relative;'>
+      <% metacode_set.metacodes.each_with_index do |metacode, index| %>
+        <img width='40' style='float:left;' src='<%= metacode.icon %>' />
+        <% if (index+1)%4 == 0 %>
+        <div class='clearfloat'></div>
+        <% end %>
+      <% end %>
+      <div class='clearfloat'></div>
+    </td>
+  </tr>
+<% end %>
+</table>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('.blackBox').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar({ advanced: { updateOnContentResize: true }});
+});
+</script>

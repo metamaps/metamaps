@@ -1,0 +1,31 @@
+<h1 class='index'>
+  Metacodes
+</h1>
+
+<div class='blackBox'>
+<%= render :partial => 'admin/adminpanel' %>
+<br />
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Icon</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @metacodes.each do |metacode| %>
+  <tr>
+    <td><%= metacode.name %></td>
+    <td><%= metacode.icon %></td>
+    <td><img width='40' src='<%= metacode.icon %>' /></td>
+    <td><%= link_to 'Edit', edit_metacode_path(metacode) %></td>
+  </tr>
+<% end %>
+</table>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('.blackBox').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar({ advanced: { updateOnContentResize: true }});
+});
+</script>

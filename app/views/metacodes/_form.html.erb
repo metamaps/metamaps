@@ -1,0 +1,28 @@
+<%= form_for(@metacode) do |f| %>
+  <% if @metacode.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@metacode.errors.count, "error") %> prohibited this metacode from being saved:</h2>
+
+      <ul>
+      <% @metacode.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <div class="clearfloat"></div>
+  </div>
+  <div class="field">
+    <%= f.label :icon %>
+    <%= f.text_field :icon %>
+    <div class="clearfloat"></div>
+  </div>
+  <div class="actions">
+    <%= link_to 'Cancel', metacodes_path, { :class => 'button' }%>
+    <%= f.submit :class => 'add' %>
+  </div>
+<% end %>

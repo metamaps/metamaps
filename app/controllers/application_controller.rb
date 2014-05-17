@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   
   helper_method :user
   helper_method :authenticated?
+  helper_method :admin?
   
   after_filter :store_location
 
@@ -33,6 +34,13 @@ private
       return false
     end
   end
+    
+  def require_admin
+    unless authenticated? && user.admin
+      redirect_to root_url, notice: "You need to be an admin for that."
+      return false
+    end
+  end
   
   def user
     current_user
@@ -41,6 +49,10 @@ private
     
   def authenticated?
     current_user
+  end
+    
+  def admin?
+    current_user && current_user.admin
   end
   
 end

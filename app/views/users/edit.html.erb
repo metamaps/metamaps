@@ -18,7 +18,7 @@
        <% @m = Metacode.order("name").all %>
        <% while $i < (Metacode.all.length / 4) do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].hasSelected(@user) %>class="toggledOff"<% end %> >
-              <img src="/assets/<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>
@@ -28,7 +28,7 @@
       <ul id="filters-two">
        <% while $i < (Metacode.all.length / 4 * 2) do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].hasSelected(@user) %>class="toggledOff"<% end %> >
-              <img src="/assets/<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>
@@ -38,7 +38,7 @@
       <ul id="filters-three">         
        <% while $i < (Metacode.all.length / 4 * 3) do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].hasSelected(@user) %>class="toggledOff"<% end %> >
-              <img src="/assets/<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>
@@ -48,7 +48,7 @@
       <ul id="filters-four">         
        <% while $i < Metacode.all.length do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].hasSelected(@user) %>class="toggledOff"<% end %> >
-              <img src="/assets/<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>

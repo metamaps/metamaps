@@ -24,7 +24,7 @@
     var imgArray = new Object();
     
     <% Metacode.all.each do |m| %>
-      imgArray['<%= m.name %>'] = new Image(); imgArray['<%= m.name %>'].src = '/assets/<%= m.icon %>';
+      imgArray['<%= m.name %>'] = new Image(); imgArray['<%= m.name %>'].src = '<%= m.icon %>';
     <% end %>
   </script>
   <%= stylesheet_link_tag    "application", :media => "all" %>

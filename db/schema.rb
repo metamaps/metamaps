@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140210031525) do
+ActiveRecord::Schema.define(:version => 20140517115841) do
+
+  create_table "in_metacode_sets", :force => true do |t|
+    t.integer  "metacode_id"
+    t.integer  "metacode_set_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "in_metacode_sets", ["metacode_id"], :name => "index_in_metacode_sets_on_metacode_id"
+  add_index "in_metacode_sets", ["metacode_set_id"], :name => "index_in_metacode_sets_on_metacode_set_id"
 
   create_table "mappings", :force => true do |t|
     t.text     "category"
@@ -35,6 +45,17 @@ ActiveRecord::Schema.define(:version => 20140210031525) do
     t.datetime "updated_at", :null => false
     t.boolean  "featured"
   end
+
+  create_table "metacode_sets", :force => true do |t|
+    t.string   "name"
+    t.text     "desc"
+    t.integer  "user_id"
+    t.boolean  "mapperContributed"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "metacode_sets", ["user_id"], :name => "index_metacode_sets_on_user_id"
 
   create_table "metacodes", :force => true do |t|
     t.text     "name"

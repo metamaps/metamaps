@@ -6,160 +6,160 @@
 #
 one: 
   name: Action  
-  icon: action.png
+  icon: /assets/icons/action.png
 
 two: 
   name: Activity  
-  icon: activity.png
+  icon: /assets/icons/activity.png
 
 three: 
   name: Bizarre  
-  icon: bizarre.png
+  icon: /assets/icons/bizarre.png
 
 four: 
   name: Catalyst  
-  icon: catalyst.png
+  icon: /assets/icons/catalyst.png
 
 five: 
   name: Closed  
-  icon: closed.png
+  icon: /assets/icons/closed.png
 
 six: 
   name: Experience  
-  icon: experience.png
+  icon: /assets/icons/experience.png
 
 seven: 
   name: Future Dev  
-  icon: futuredev.png
+  icon: /assets/icons/futuredev.png
 
 eight:
   name: Group  
-  icon: group.png
+  icon: /assets/icons/group.png
 
 nine:
   name: Idea  
-  icon: idea.png
+  icon: /assets/icons/idea.png
 
 ten:
   name: Implication  
-  icon: implication.png
+  icon: /assets/icons/implication.png
 
 eleven:
   name: Insight  
-  icon: insight.png
+  icon: /assets/icons/insight.png
 
 twelve:
   name: Intention  
-  icon: intention.png
+  icon: /assets/icons/intention.png
 
 thirteen:
   name: Knowledge  
-  icon: knowledge.png
+  icon: /assets/icons/knowledge.png
 
 fourteen:
   name: Location  
-  icon: location.png
+  icon: /assets/icons/location.png
 
 fifteen:
   name: Open Issue  
-  icon: openissue.png
+  icon: /assets/icons/openissue.png
 
 sixteen:
   name: Opinion  
-  icon: opinion.png
+  icon: /assets/icons/opinion.png
 
 seventeen:
   name: Opportunity  
-  icon: opportunity.png
+  icon: /assets/icons/opportunity.png
 
 eighteen:
   name: Person  
-  icon: person.png
+  icon: /assets/icons/person.png
 
 nineteen:
   name: Platform  
-  icon: platform.png
+  icon: /assets/icons/platform.png
 
 twenty:
   name: Problem  
-  icon: problem.png
+  icon: /assets/icons/problem.png
 
 twenty-one:
   name: Question  
-  icon: question.png
+  icon: /assets/icons/question.png
 
 twenty-two:
   name: Reference  
-  icon: reference.png
+  icon: /assets/icons/reference.png
 
 twenty-three:
   name: Requirement  
-  icon: requirement.png
+  icon: /assets/icons/requirement.png
 
 twenty-four:
   name: Resource  
-  icon: resource.png 
+  icon: /assets/icons/resource.png 
 
 twenty-five:
   name: Role  
-  icon: role.png
+  icon: /assets/icons/role.png
 
 twenty-six:
   name: Task  
-  icon: task.png
+  icon: /assets/icons/task.png
 
 twenty-seven:
   name: Tool	  
-  icon: tool.png 
+  icon: /assets/icons/tool.png 
 
 twenty-eight:
   name: Trajectory  
-  icon: trajectory.png
+  icon: /assets/icons/trajectory.png
   
 twenty-nine:
   name: Argument  
-  icon: argument.png
+  icon: /assets/icons/argument.png
   
 thirty:
   name: Con  
-  icon: con_icon.png
+  icon: /assets/icons/con_icon.png
   
 thirty-one:
   name: Decision  
-  icon: decision.png
+  icon: /assets/icons/decision.png
   
 thirty-two:
   name: Example  
-  icon: example.png
+  icon: /assets/icons/example.png
   
 thirty-three:
   name: Foresight  
-  icon: foresight.png
+  icon: /assets/icons/foresight.png
   
 thirty-four:
   name: Good Practice  
-  icon: goodpractice.png
+  icon: /assets/icons/goodpractice.png
   
 thirty-five:
   name: List  
-  icon: list.png
+  icon: /assets/icons/list.png
   
 thirty-six:
   name: Movie Map  
-  icon: moviemap.png
+  icon: /assets/icons/moviemap.png
   
 thirty-seven:
   name: Note  
-  icon: note.png
+  icon: /assets/icons/note.png
   
 thirty-eight:
   name: Pro  
-  icon: pro.png
+  icon: /assets/icons/pro.png
   
 thirty-nine:
   name: Research  
-  icon: research.png
+  icon: /assets/icons/research.png
   
 forty:
   name: Wildcard  
-  icon: wildcard.png
+  icon: /assets/icons/wildcard.png
