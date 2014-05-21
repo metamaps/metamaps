@@ -7,13 +7,12 @@
 <% content_for :title, @user.name + "'s Settings | Metamaps" %>  
 <%= formula_form_for @user, url: user_url do |form| %>
 <h1 class="index">Your Settings</h1>
-  
 
   <h3>Edit Account</h3>
   <%= form.input :name, label: "Name", class: "name" %>
   <%= form.input :email, label: "Email", class: "email" %>
   <%= form.input :password, label: "Password", class: "password" %>
-  <%= form.submit "Update", class: "update" %>  
+  <%= form.submit "Update", class: "update" %>
   
 <% end %>
 

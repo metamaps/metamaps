@@ -354,7 +354,7 @@ font-family: 'LatoRegular';
 
 label, select, input, textarea {
   display:block;
-}
+  }
 
 label {
   margin-top:10px;
