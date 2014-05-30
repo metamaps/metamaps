@@ -16,11 +16,13 @@ class UsersController < ApplicationController
     @user = current_user
     @user.attributes = params[:user]
     
-    @m = params[:metacodes][:value]
-    @user.settings.metacodes=@m.split(',')
+    #@m = params[:metacodes][:value]
+    #@user.settings.metacodes=@m.split(',')
     
     @user.save
-    
+
+    sign_in(@user, :bypass => true)
+       
     respond_with(@user, location: session[:previous_url]) do |format|
     end
   end
