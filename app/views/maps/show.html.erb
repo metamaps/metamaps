@@ -77,7 +77,7 @@
   $(document).ready(function() {   
    function bindFilterHover() {
       
-      var filterIsOpen = false
+      var filterIsOpen = false;
       
       // controls the sliding hover of the bottom left menu
       var sliding1 = false; 
@@ -121,7 +121,7 @@
    
    function bindInfoHover() {
       
-      var infoIsOpen = false
+      var infoIsOpen = false;
       
       // controls the sliding hover of the bottom left menu
       var sliding1 = false; 
@@ -254,9 +254,9 @@
 				initialize("chaotic", true);
 		});
 	}
-  window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); // this is for the heroku staging environment
+  //window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); // this is for the heroku staging environment
   //window.realtime.socket = io.connect('http://metamaps.cc:5001'); // this is for metamaps.cc
-  //window.realtime.socket = io.connect('http://localhost:5001'); // this is for localhost development
+  window.realtime.socket = io.connect('http://localhost:5001'); // this is for localhost development
     
   window.realtime.socket.on('connect', function() {
       subscribeToRooms();

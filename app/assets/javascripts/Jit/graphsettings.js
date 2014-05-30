@@ -144,16 +144,7 @@ function graphSettings(type, embed) {
     //Number of iterations for the FD algorithm
     iterations: 200,
     //Edge length
-    levelDistance: 200,
-    // Add text to the labels. This method is only triggered
-    // on label creation and only for DOM labels (not native canvas ones).
-    //onCreateLabel: function (domElement, node) {
-     // onCreateLabelHandler(type, domElement, node);
-    //},
-    // Change node styles when DOM labels are placed or moved.
-    //onPlaceLabel: function (domElement, node) {
-    //  onPlaceLabelHandler(domElement, node);
-    //}
+    levelDistance: 200
   };
 
   if (embed) {
@@ -177,24 +168,6 @@ function graphSettings(type, embed) {
       //different because we're centred
       onDragCancelHandler(node, eventInfo, e, true);
     };
-    /*t.Events.onClick = function(node, eventInfo, e) {
-      //this is handled mostly differently than in arranged/chaotic
-      if (e.target.id != "infovis-canvas") return false;
-
-      //hide synapse and topic editing dialog
-      hideCards();
-
-      //clicking on an edge, a node, or clicking on blank part of canvas?
-      if (node.nodeFrom) {
-          selectEdgeOnClickHandler(node, e);  
-      } else if (node && !node.nodeFrom) {
-        //node is actually a node :)
-        selectNodeOnClickHandler(node, e);
-        
-      } else {
-        canvasDoubleClickHandler(eventInfo.getPos(), e);
-      }
-    };*/
   }//if
 
   return t;
@@ -258,18 +231,9 @@ var nodeSettings = {
 			  var pos = node.pos.getc(true),
 			  dim = node.getData('dim'),
 			  cat = node.getData('metacode'),
-			  greenCircle = node.getData('greenCircle'),
 			  whiteCircle = node.getData('whiteCircle'),
 			  ctx = canvas.getCtx();
 			  
-			  // if the topic is from the Commons draw a green circle around it
-			  if (greenCircle) {
-				  ctx.beginPath();
-				  ctx.arc(pos.x, pos.y, dim+3, 0, 2 * Math.PI, false);
-				  ctx.strokeStyle = '#67be5f'; // green
-				  ctx.lineWidth = 2;
-				  ctx.stroke();
-			  }
 			  // if the topic is on the Canvas draw a white circle around it
 			  if (whiteCircle) {
 				  ctx.beginPath();
@@ -591,31 +555,6 @@ function onDragCancelHandler(node, eventInfo, e, centred) {
   Mconsole.plot();
 }
 
-function onPlaceLabelHandler(domElement, node) {
-    var style = domElement.style;  
-    var left = parseInt(style.left);  
-    var top = parseInt(style.top);  
-    var w = $('#topic_' + node.id + '_label').width();
-    style.left = (left - w / 2) + 'px';  
-    style.top = (top+20) + 'px';  
-    style.display = '';
-    
-    // now position the showcard
-    if (MetamapsModel.showcardInUse != null) {
-        top = $('#' + MetamapsModel.showcardInUse).css('top');
-        left = parseInt($('#' + MetamapsModel.showcardInUse).css('left'));
-        if (0 != $('#topic_' + MetamapsModel.showcardInUse + '_label').width()) {
-            MetamapsModel.widthOfLabel = $('#topic_' + MetamapsModel.showcardInUse + '_label').width();
-        }
-        w = MetamapsModel.widthOfLabel/2;
-        left = (left + w) + 'px';
-        $('#showcard').css('top', top);
-        $('#showcard').css('left', left);
-        
-        Mconsole.labels.hideLabel(Mconsole.graph.getNode(MetamapsModel.showcardInUse));
-    } 
-}
-
 // thanks to http://stackoverflow.com/questions/4338963/
 // convert-html-character-entities-back-to-regular-text-using-javascript
 function decodeEntities(desc) {
@@ -625,4 +564,3 @@ function decodeEntities(desc) {
   temp = null; //delete the element;
   return str;
 }//decodeEntities
-
