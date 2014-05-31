@@ -17,7 +17,7 @@ It uses postgreSQL 9.2 as a database. You can install that for your computer fro
 
 Once you install those, open a 'command prompt with ruby and rails'. 
 
-Navigate to the folder that you want to download the metamaps files to and run (use your forked git repository address if it's different than this repo.)
+Navigate to the folder that you want to download the metamaps files to and run (use your forked git repository address if it's different than this repo.) (You will also need to go to your Github account settings and add the SSH key that was placed in your clipboard earlier)
   git clone git@github.com:Connoropolous/metamaps_gen002.git
   cd metamaps_gen002
   
