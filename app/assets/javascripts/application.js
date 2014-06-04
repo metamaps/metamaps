@@ -316,6 +316,7 @@ function cancelMetacodeSetSwitch() {
         MetamapsModel.newSelectedMetacodes = MetamapsModel.selectedMetacodes.slice(0);
     }
     $('#metacodeSwitchTabs').tabs("select", MetamapsModel.selectedMetacodeSetIndex);
+    $('#topic_name').focus();
 }
 
 function MconsoleReset() {
@@ -346,17 +347,26 @@ function openLightbox(which) {
     $('#lightbox_overlay').show();
     $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
     
-    //if (MetamapsModel.selectedMetacodeSet == "metacodeset-custom" && !MetamapsModel.metacodeScrollerInit) {
     if (!MetamapsModel.metacodeScrollerInit) {
-        //$('.customMetacodeList').mCustomScrollbar();
         $('.customMetacodeList, .metacodeSetList').mCustomScrollbar({advanced: { updateOnContentResize: true }});
         MetamapsModel.metacodeScrollerInit = true;
+    }
+    if (which == "switchMetacodes") {
+        MetamapsModel.isSwitchingSet = true;
+    }
+}
+
+function closeLightbox() {
+    $('#lightbox_overlay').hide();
+    cancelMapCreate('fork_map');
+    cancelMapCreate('new_map');
+    if (MetamapsModel.isSwitchingSet) {
+        cancelMetacodeSetSwitch();
+        MetamapsModel.isSwitchingSet = false;
     }
 }
 
 function cancelMapCreate(id) {
-
-    $('#lightbox_overlay').hide();
 
     var form = $('#' + id);
 
@@ -373,3 +383,4 @@ function cancelMapCreate(id) {
 
     return false;
 }
+

@@ -132,12 +132,6 @@ $(document).ready(function () {
         // recenter the lightbox when you switch tabs
         $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
     });
-    /*$("#metacodeSetCustom").click(function () {
-        if (!MetamapsModel.metacodeScrollerInit) {
-            $('.customMetacodeList, .metacodeSetList').mCustomScrollbar({advanced: { updateOnContentResize: true }});
-            MetamapsModel.metacodeScrollerInit = true;
-        }
-    });*/
     $('.customMetacodeList li').click(function () {
         if ($(this).attr('class') != 'toggledOff') {
             $(this).addClass('toggledOff');
