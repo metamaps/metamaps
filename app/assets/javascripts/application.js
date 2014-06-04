@@ -276,6 +276,7 @@ function updateMetacodeSet(set, index, custom) {
     });
     
     $('#lightbox_overlay').hide();
+    $('#topic_name').focus();
 
     var mdata = {
         "metacodes": {
@@ -288,14 +289,10 @@ function updateMetacodeSet(set, index, custom) {
         url: "/user/updatemetacodes",
         data: mdata,
         success: function (data) {
-            console.log('success updating metacodes');
-            //setTimeout(function () {
-            //    $('.metacodeTitle').hide();
-            //    $('.showcard .icon').css('z-index', '1');
-            //}, 500);
+            console.log('selected metacodes saved');
         },
         error: function () {
-            alert('failed to update metacodes');
+            console.log('failed to save selected metacodes');
         }
     });
 }
