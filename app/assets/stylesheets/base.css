@@ -103,7 +103,7 @@
   
 }
 
-.best_in_place_name input{
+.best_in_place_name textarea, .best_in_place_name input {
 height: 15px;
 padding: 5px 0;
 width: 100%;

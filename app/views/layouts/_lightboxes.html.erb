@@ -6,7 +6,7 @@
 
 <div id="lightbox_overlay">
   <div id="lightbox_main">
-    <a id="lightbox_close" onclick="cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" href="#"></a>
+    <a id="lightbox_close" onclick="cancelMetacodeSetSwitch();cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" href="#"></a>
     <div id="lightbox_content">
       
       <div class="lightboxContent" id="about">
@@ -36,7 +36,7 @@
       
       <div class="lightboxContent" id="cheatsheet">
         <%= render :partial => 'layouts/cheatsheet' %>
-      </div>
+      </div>    
       
       <% if authenticated? %>
         <div class="lightboxContent" id="invite">
@@ -58,11 +58,15 @@
         <div class="lightboxContent" id="forkmap">  
           <%= render :partial => 'maps/fork' %>
         </div>
+
+        <div class="lightboxContent" id="switchMetacodes">
+          <%= render :partial => 'layouts/switchmetacodes' %>
+        </div>
         <% end %>
       <% end %>
       
     </div>
   </div>
-  <div id="lightbox_screen" onclick="cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" style="height: 100%;"></div>
+  <div id="lightbox_screen" onclick="cancelMetacodeSetSwitch();cancelMapCreate('fork_map');cancelMapCreate('new_map');return false;" style="height: 100%;"></div>
 </div>
 

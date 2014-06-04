@@ -8,7 +8,7 @@
   <h3 class="accountHeader">Hello <%= account.name.split[0...1][0] %>!</h3>
   <ul>
     <li class="accountIcon accountMaps"><a href="/maps/mappers/<%= account.id %>">My Maps</a></li>
-    <li class="accountIcon accountSettings"><%= link_to "Settings", edit_user_url(account) %></li>
+    <li class="accountIcon accountSettings"><%= link_to "Account", edit_user_url(account) %></li>
     <% if account.admin %>
       <li class="accountIcon accountSettings"><%= link_to "Admin", metacodes_path %></li>
     <% end %>

@@ -59,247 +59,63 @@
 <div class="clearfloat"></div>
 
 <% if authenticated? %>
+
+  <% # add these if you have edit permissions on the map %>
   <% if @map.permission == "commons" || @map.user == user %>
+    
+    <% # for creating and pulling in topics and synapses %>
     <%= render :partial => 'newtopic' %>
     <%= render :partial => 'newsynapse' %>
-  <% end %>
-  <%= render :partial => 'main/metacodeoptions' %>
-  
-  <% # for saving layouts %>
-  <% if @map.permission == "commons" || @map.user == user %>
-	  <%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
+
+    <% # for saving the layout of the map %>
+    <%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
 	    <%= form.hidden_field "coordinates", :value => "" %>
-	  <% end %>
-  <% end %>
-<% end %>
-  
-<script>
-  $(document).ready(function() {   
-   function bindFilterHover() {
-      
-      var filterIsOpen = false;
-      
-      // controls the sliding hover of the bottom left menu
-      var sliding1 = false; 
-      var lT;
-      
-      var closeFilter = function() {
-        lT = setTimeout(function() { 
-            if (! sliding1) { 
-              sliding1 = true;
-              $('.sidebarFilterIcon').css('background-color','#0F1519');
-              $('.sidebarFilterBox').fadeOut(200, function() {
-                sliding1 = false;
-                filterIsOpen = false; 
-              });
-            } 
-          },300); 
-      }
-      
-      var openFilter = function() {
-        clearTimeout(lT);
-        if (! sliding1) { 
-            sliding1 = true;
-            
-            // hide the other two
-            $('.sidebarAccountBox').hide();
-            $('.sidebarWandBox').hide();
-            $('.sidebarAccountIcon').css('background-color','#0F1519');
-            $('.sidebarWandIcon').css('background-color','#0F1519');
-            
-            $('.sidebarFilterIcon').css('background-color','#000');
-            $('.sidebarFilterBox').fadeIn(200, function() {
-                 sliding1 = false;
-                 filterIsOpen = true;
-            });
-        }
-      }
-        // bind the hover events
-        $(".sidebarFilter").hover(openFilter, closeFilter);
-        
-   } // end bindFilterHover
-   
-   function bindInfoHover() {
-      
-      var infoIsOpen = false;
-      
-      // controls the sliding hover of the bottom left menu
-      var sliding1 = false; 
-      var lT;
-      
-      var closeInfo = function() {
-        lT = setTimeout(function() { 
-            if (! sliding1) { 
-              sliding1 = true;
-              $('.mapInfoBox').fadeOut(200, function() {
-                sliding1 = false;
-                infoIsOpen = false; 
-              });
-            } 
-          },300); 
-      }
-      
-      var openInfo = function(event) {
-        clearTimeout(lT);
-        if (! sliding1 && event.target.className != "openCheatsheet openLightbox") { 
-            sliding1 = true;
-            
-            $('.mapInfoBox').fadeIn(200, function() {
-                 sliding1 = false;
-                 infoIsOpen = true;
-            });
-        }
-      }
-        // bind the hover events
-        $("div.index").hover(openInfo, closeInfo);
-        
-        
-   } // end bindInfoHover
-  
-   bindFilterHover();
-   bindInfoHover();
-   
-  $('.sidebarSave').click(function() {
-    saveLayoutAll();
-  });
-  $('.sidebarFork').click(function() {
-    saveToMap();
-  });
-   
-   $(".sidebarCollaborateIcon").click(function(event) {
-      if (!goRealtime) {
-        $('.sidebarCollaborate .tip').html('Stop Realtime Collaboration');
-      } else {
-        $('.sidebarCollaborate .tip').html('Start Realtime Collaboration');
-      }
-      goRealtime = !goRealtime;      
-      $(".sidebarCollaborateIcon").toggleClass("blue");
-   });
-   
-   // initialize best_in_place editing
-   $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
-   
-   <% if @map.user == user %>
-     // ability to change permission
-    var selectingPermission = false;
-     $('.yourMap .mapPermission').click(function() {
-      if (!selectingPermission) {  
-        selectingPermission = true;
-        $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
-        if ( $(this).hasClass('commons') ) {
-          $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
-        } else if ( $(this).hasClass('public') ) {
-          $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
-        } else if ( $(this).hasClass('private') ) {
-          $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
-        }
-        $('.mapPermission .permissionSelect li').click(function(event) {
-          selectingPermission = false;
-          var permission = $(this).attr('class');
-          updateMapPermission(mapid, permission);
-          event.stopPropagation();
-        });
-      } else {
-        selectingPermission = false;
-        $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
-        $('.mapPermission .permissionSelect').remove();
-      }
-     });
     <% end %>
-   
-   //bind best_in_place ajax callbacks
-    $('.mapInfoName .best_in_place_name').bind("ajax:success", function() {
-      var name = $(this).html();
-      $('.mapName').html(name);
-    });
-   
-   $('.showcard').draggable({ handle: ".metacodeImage" });
-   $('#showcard').resizable({
-     maxHeight: 500,
-     maxWidth: 500,
-     minHeight: 320,
-     minWidth: 226,
-     resize: function( event, ui ) {
-       var p = $('#showcard').find('.scroll');
-       p.height( p.height() ).mCustomScrollbar('update');
-     }
-   }).css({
-     display: 'none',
-     top: '300px',
-     left: '100px'
-   });
-   
-  });
-  
-  
-  var dragged = 0;
-  mapid = <%= @map.id %>;
-  <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
-    mapperm = true;
+
   <% end %>
-  
-  viewMode = "graph";
-	json = <%= @mapjson %>;
-	if (json.length > 0) {
-		$(window).load(function() {
-			<% if (@map.arranged) %>
-				initialize("arranged");
-			<% else %>
-				initialize("chaotic");
-			<% end %>
-		});
-	}
-  else {
-		$(window).load(function() {
-				initialize("chaotic", true);
-		});
-	}
-  //window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); // this is for the heroku staging environment
-  //window.realtime.socket = io.connect('http://metamaps.cc:5001'); // this is for metamaps.cc
-  window.realtime.socket = io.connect('http://localhost:5001'); // this is for localhost development
-    
-  window.realtime.socket.on('connect', function() {
-      subscribeToRooms();
-      console.log('socket connected');
-  });
-  function subscribeToRooms() {
-    window.realtime.socket.on('maps-' + mapid, function(data) {
-      //as long as you weren't the origin of the changes, update your map
-      if (data.origin != userid && goRealtime) {
-        if (data.resource == 'Topic') {
-          topic = $.parseJSON(data.obj);
-          
-          if (data.action == 'create') {
-            window.realtime.addTopicToMap(topic);
-          }
-          else if (data.action == 'update' && Mconsole.graph.getNode(topic.id) != 'undefined') {
-            window.realtime.updateTopicOnMap(topic);
-          }
-          else if (data.action == 'destroy' && Mconsole.graph.getNode(topic.id) != 'undefined') {
-            hideNode(topic.id)
-          }
-          
-          return;
-        }
-        else if (data.resource == 'Synapse') {
-          synapse = $.parseJSON(data.obj);
-          
-          if (data.action == 'create') {
-            window.realtime.addSynapseToMap(synapse);
-          }
-          else if (data.action == 'update' && 
-                   Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {
-            window.realtime.updateSynapseOnMap(synapse);
-          }
-          else if (data.action == 'destroy' && 
-                   Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {
-            var edge = Mconsole.graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']);
-            hideEdge(edge);
-          }
-          
-          return;
-        }
-      }
+
+  <% # for populating the change metacode list on the topic card %>
+  <%= render :partial => 'main/metacodeoptions' %>
+<% end %>
+
+
+<script>
+var dragged = 0;
+mapid = <%= @map.id %>; 
+<% if (@map.permission == "commons" && authenticated? ) || @map.user == user %>
+    mapperm = true; 
+<% end %>
+
+viewMode = "graph";
+json = <%= @mapjson %>;
+if (json.length > 0) {
+    $(window).load(function () { 
+        <% if (@map.arranged) %>
+            initialize("arranged"); 
+        <% else %>
+            initialize("chaotic");
+        <% end %>
     });
-  }
+} else {
+    $(window).load(function () {
+        initialize("chaotic", true);
+    });
+}
+    
+<% if authenticated? && (@map.permission == "commons" || @map.user == user) %>
+// this is for the heroku staging environment
+//window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
+    
+// this is for metamaps.cc
+//window.realtime.socket = io.connect('http://metamaps.cc:5001'); 
+    
+// this is for localhost development    
+window.realtime.socket = io.connect('http://localhost:5001'); 
+
+window.realtime.socket.on('connect', function () {
+    console.log('socket connected');
+    window.realtime.setupSocket();
+});
+<% end %>
+    
 </script>

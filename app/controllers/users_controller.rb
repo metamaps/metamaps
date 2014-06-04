@@ -26,5 +26,19 @@ class UsersController < ApplicationController
     respond_with(@user, location: session[:previous_url]) do |format|
     end
   end
+    
+  # PUT /user/updatemetacodes
+  def updatemetacodes
+    @user = current_user
+    
+    @m = params[:metacodes][:value]
+    @user.settings.metacodes=@m.split(',')
+    
+    @user.save
+
+    respond_to do |format|
+      format.json { render json: @user }
+    end
+  end
 
 end

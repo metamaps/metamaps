@@ -20,7 +20,6 @@ $(document).ready(function() {
   $('#metacodes_value').val(selectMetacodes.toString());
   
   $('.editMetacodes li').click(function() {
-    console.log($(this).attr('class'));
     if ($(this).attr('class') != 'toggledOff') {
       $(this).addClass('toggledOff');
       var value_to_remove = $(this).attr('id');

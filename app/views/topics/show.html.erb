@@ -35,7 +35,7 @@
 
 <div class="index">
   <div class="openCheatsheet openLightbox" data-open="cheatsheet"></div>
-  <span><img width="35" height="35" src="/assets/<%= @topic.metacode.icon %>"></span>
+  <span><img width="35" height="35" src="<%= @topic.metacode.icon %>"></span>
   <span class="mapName"><%= @topic.name %></span>
   <div class="clearfloat"></div>
 </div>
@@ -55,76 +55,7 @@
 <% end %>
 
 <script>
-	$(document).ready(function() {
-   
-   function bindFilterHover() {
-      
-      var filterIsOpen = false
-      
-      // controls the sliding hover of the bottom left menu
-      var sliding1 = false; 
-      var lT;
-      
-      var closeFilter = function() {
-        lT = setTimeout(function() { 
-            if (! sliding1) { 
-              sliding1 = true;
-              $('.sidebarFilterIcon').css('background-color','#0F1519');
-              $('.sidebarFilterBox').fadeOut(200, function() {
-                sliding1 = false;
-                filterIsOpen = false; 
-              });
-            } 
-          },300); 
-      }
-      
-      var openFilter = function() {
-        clearTimeout(lT);
-        if (! sliding1) { 
-            sliding1 = true;
-            
-            // hide the other two
-            $('.sidebarAccountBox').hide();
-            $('.sidebarWandBox').hide();
-            $('.sidebarAccountIcon').css('background-color','#0F1519');
-            $('.sidebarWandIcon').css('background-color','#0F1519');
-            
-            $('.sidebarFilterIcon').css('background-color','#000');
-            $('.sidebarFilterBox').fadeIn(200, function() {
-                 sliding1 = false;
-                 filterIsOpen = true;
-            });
-        }
-      }
-        // bind the hover events
-        $(".sidebarFilter").hover(openFilter, closeFilter);
-        
-   } // end bindFilterHover
-   bindFilterHover();
-   
-   $('.sidebarFork').click(function() {
-    saveToMap();
-  });
-   
-   // initialize best_in_place editing
-   $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
-   
-   $('.showcard').draggable({ handle: ".icon" });
-   $('#showcard').resizable({
-     maxHeight: 500,
-     maxWidth: 500,
-     minHeight: 320,
-     minWidth: 226
-   }).css({
-     display: 'none',
-     top: '300px',
-     left: '100px'
-   });
-   
-  });
-  
-  
-  json = <%= @relatives %>;
+	json = <%= @relatives %>;
 	$(window).load(function() {
 		initialize("centered");
 	});

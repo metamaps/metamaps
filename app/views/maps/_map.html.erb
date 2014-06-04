@@ -8,7 +8,7 @@
   
 	  <div class="mapCard">                                                   
       <span class="title">                                                  
-        <%= best_in_place map, :name, :type => :input, :classes => 'best_in_place_name' %>                             
+        <%= best_in_place map, :name, :type => :textarea, :classes => 'best_in_place_name' %>                             
       </span>                                                              
       <div class="links">                                                   
          <div class="linkItem icon">                                             
@@ -25,7 +25,7 @@
       </div>                                                                
       <div class="scroll">                                                    
         <div class="desc">                                                    
-          <%= best_in_place map, :desc, :type => :textarea, :nil => "<span class='gray'>Click to add description.</span>", :classes => 'best_in_place_desc' %>                          
+          <%= best_in_place map, :desc, :type => :textarea, :nil => "Click to add description.", :classes => 'best_in_place_desc' %>                          
           <div class="clearfloat"></div>                                
         </div>                                                                
       </div>                                                                  

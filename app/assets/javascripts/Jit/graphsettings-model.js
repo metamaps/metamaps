@@ -9,6 +9,18 @@ var MetamapsModel = new Object();
 
 MetamapsModel.embed = false;
 
+
+MetamapsModel.metacodeScrollerInit = false; // indicates whether the scrollbar in the custom metacode set space has been init
+
+MetamapsModel.selectedMetacodeSet = null;
+MetamapsModel.selectedMetacodeSetIndex = null;
+
+MetamapsModel.selectedMetacodeNames = new Array();
+MetamapsModel.newSelectedMetacodeNames = new Array();
+
+MetamapsModel.selectedMetacodes = new Array();
+MetamapsModel.newSelectedMetacodes = new Array();
+
 //array of all selected edges, same for nodes
 MetamapsModel.selectedEdges = new Array();
 MetamapsModel.selectedNodes = new Array();

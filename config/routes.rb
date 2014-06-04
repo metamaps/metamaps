@@ -41,6 +41,7 @@ ISSAD::Application.routes.draw do
   devise_scope :user do
     get "sign_out", :to => "devise/sessions#destroy"
   end
+  match 'user/updatemetacodes', to: 'users#updatemetacodes', via: :post, as: :updatemetacodes
   
   resources :users, except: [:show, :index]
 

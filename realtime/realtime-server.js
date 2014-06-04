@@ -30,14 +30,48 @@ function start() {
   redis.subscribe('maps');
 
   io.on('connection', function(socket){
+      
+    // this will ping everyone on a map with updates to the map
     redis.on('message', function(channel, message){
       console.log(message);
       var m = JSON.parse(message);
-      var room;
-      room = 'maps-' + m.mapid;
+      var room = 'maps-' + m.mapid;
     
       socket.emit(room, m);
     });
+      
+    // this will ping a new person with awareness of who's already on the map
+    socket.on('updateNewMapperList', function(data) {
+        var existingUser = { userid: data.userid, username: data.username };
+        socket.broadcast.emit(data.userToNotify + '-' + data.mapid + '-UpdateMapperList', existingUser);
+    });
+      
+    // this will ping everyone on a map that there's a person just joined the map
+    socket.on('newMapperNotify', function (data) {
+        socket.set('mapid', data.mapid);
+        socket.set('userid', data.userid);
+        socket.set('username', data.username);
+        
+        var newUser = { userid: data.userid, username: data.username };
+        
+        socket.broadcast.emit('maps-' + data.mapid + '-newmapper',  newUser);
+    });
+      
+    // this will ping everyone on a map that there's a person just left the map
+    socket.on('disconnect', function () {
+        var socketUserName, socketUserID;
+        socket.get('userid', function (err, id) {
+            socketUserID = id;
+        });
+        socket.get('username', function (err, name) {
+            socketUserName = name;
+        });
+        var data = { username: socketUserName, userid: socketUserID };
+        socket.get('mapid', function (err, mapid) {
+            socket.broadcast.emit('maps-' + mapid + '-lostmapper',  data);
+        });
+    });
+      
   });
 }
 
