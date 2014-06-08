@@ -45,6 +45,7 @@ function buildCardWithHogan(node) {
     nodeValues.synapse_count = node.getData("synapseCount");
     nodeValues.id = node.id;
     nodeValues.metacode = node.getData("metacode");
+    nodeValues.metacode_class = 'mbg' + node.getData("metacode").replace(/\s/g,'');
     nodeValues.imgsrc = imgArray[node.getData("metacode")].src;
     nodeValues.name = node.name;
     nodeValues.userid = node.getData("userid");

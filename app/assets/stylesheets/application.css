@@ -1993,6 +1993,10 @@ div.mapInfoStat {
 .blackBox td {
     padding: 10px;
 }
+.blackBox td.iconURL {
+     max-width: 415px;
+     word-wrap: break-word; 
+}
 .blackBox .field {
     margin: 15px 0 5px;
 }

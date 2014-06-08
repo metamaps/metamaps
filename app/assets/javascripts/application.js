@@ -147,7 +147,8 @@ function updateMetacode(node, metacode) {
         url: "/topics/" + node.id,
         data: mdata,
         success: function (data) {
-            $('.CardOnGraph').find('.metacodeTitle').text(metacode);
+            $('.CardOnGraph').find('.metacodeTitle').text(metacode)
+                .attr('class', 'metacodeTitle mbg' + metacode.replace(/\s/g,''));
             $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + imgArray[metacode].src + ')');
             node.setData("metacode", metacode);
             Mconsole.plot();

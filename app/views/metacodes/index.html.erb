@@ -16,7 +16,7 @@
 <% @metacodes.each do |metacode| %>
   <tr>
     <td><%= metacode.name %></td>
-    <td><%= metacode.icon %></td>
+    <td class="iconURL"><%= metacode.icon %></td>
     <td><img width='40' src='<%= metacode.icon %>' /></td>
     <td><%= link_to 'Edit', edit_metacode_path(metacode) %></td>
   </tr>
