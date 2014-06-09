@@ -18,7 +18,7 @@
 //= require jquery.lettering
 //= require jquery.textillate
 //= require jquery.roundabout.min
-//= require best_in_place
+//= require bip
 //= require jquery_ujs
 //= require_tree .
 
