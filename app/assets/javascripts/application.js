@@ -264,14 +264,14 @@ function updateMetacodeSet(set, index, custom) {
     $('#metacodeImg').removeData('cloudcarousel');
     var newMetacodes = "";
     for (var i = 0; i < codesToSwitchTo.length; i++) {
-        newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + imgArray[codesToSwitchTo[i]].src + '" title="' + codesToSwitchTo[i] + '"/>';
+        newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + imgArray[codesToSwitchTo[i]].src + '" title="' + codesToSwitchTo[i] + '" alt="' + codesToSwitchTo[i] + '"/>';
     };
     $('#metacodeImg').empty().append(newMetacodes).CloudCarousel({
         titleBox: $('#metacodeImgTitle'),
         yRadius: 40,
         xPos: 150,
         yPos: 40,
-        speed: 0.15,
+        speed: 0.3,
         mouseWheel: true,
         bringToFront: true
     });

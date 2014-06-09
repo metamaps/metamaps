@@ -566,7 +566,9 @@
             var that = this;
             utils.bindAll(this);
             this.specialKeyCodeMap = {
-                9: "tab",
+                // START METAMAPS CODE
+                //9: "tab",
+                // END METAMAPS CODE
                 27: "esc",
                 37: "left",
                 39: "right",
@@ -714,11 +716,19 @@
             },
             _handleMouseleave: function() {
                 this.isMouseOverDropdown = false;
+                
+                // START METAMAPS CODE
+                this._getSuggestions().removeClass("tt-is-under-cursor");
+                this._getSuggestions().removeClass("tt-is-under-mouse-cursor");
+                // END METAMAPS CODE
             },
             _handleMouseover: function($e) {
                 var $suggestion = $($e.currentTarget);
                 this._getSuggestions().removeClass("tt-is-under-cursor");
-                $suggestion.addClass("tt-is-under-cursor");
+                // START METAMAPS CODE
+                this._getSuggestions().removeClass("tt-is-under-mouse-cursor");
+                $suggestion.addClass("tt-is-under-mouse-cursor");
+                // ORIGINAL CODE $suggestion.addClass("tt-is-under-cursor");
             },
             _handleSelection: function($e) {
                 var $suggestion = $($e.currentTarget);

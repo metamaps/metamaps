@@ -163,18 +163,15 @@ jQuery.browser = browser;
 		
 		// Add code that makes tab and shift+tab scroll through metacodes
 		$('.new_topic').bind('keydown',this,function(event){
-			if (event.keyCode == 9 || (event.keyCode == 9 && event.shiftKey)) {
-				event.preventDefault();
-			}
-		});
-		$('.new_topic').bind('keyup',this,function(event){
-			//console.log(event);
-			/*key navigation through elements*/
-			if (event.keyCode == 9 && event.shiftKey) {
+            if (event.keyCode == 9 && event.shiftKey) {
 				event.data.rotate(-1);
+                event.preventDefault();
+                event.stopPropagation();
 			} else if (event.keyCode == 9) {
 				event.data.rotate(1);
-			}
+                event.preventDefault();
+                event.stopPropagation();
+            }
 		});
 		
 		// You will need this plugin for the mousewheel to work: http://plugins.jquery.com/project/mousewheel

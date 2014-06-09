@@ -25,19 +25,25 @@ $(document).ready(function () {
             engine: Hogan
           }
   ]);
-
+    
+    var topicTypeahead = false;
     // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
     $('#topic_name').bind('typeahead:selected', function (event, datum, dataset) {
         $('#topic_grabTopic').val(datum.id);
         event.preventDefault();
         event.stopPropagation();
+        $('.new_topic').submit();
+        topicTypeahead = true;
+    });
+    $('#topic_name').bind('typeahead:opened', function () {
+        topicTypeahead = false;
     });
 
     // bind keyboard handlers
     $('#topic_name').bind('keyup', function (e) {
         switch (e.which) {
         case 13:
-            $('.new_topic').submit();
+            if (!topicTypeahead) $('.new_topic').submit();
             break;
         default:
             break;
@@ -65,7 +71,7 @@ $(document).ready(function () {
     $('#synapse_desc').typeahead([
         {
             name: 'synapse_autocomplete',
-            template: "{{label}}",
+            template: "<div>{{label}}</div>",
             remote: {
                 url: '/search/synapses?term=%QUERY'
             },
@@ -86,6 +92,8 @@ $(document).ready(function () {
             header: "<h3>Existing Synapses</h3>"
               },
   ]);
+    
+    var synapseTypeahead = false;
     // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
     $('#synapse_desc').bind('typeahead:selected', function (event, datum, dataset) {
         if (datum.id) { // if they clicked on an existing synapse get it
@@ -93,12 +101,17 @@ $(document).ready(function () {
         }
         event.preventDefault();
         event.stopPropagation();
+        $('.new_synapse').submit();
+        synapseTypeahead = true;
+    });
+    $('#synapse_desc').bind('typeahead:opened', function () {
+        synapseTypeahead = false;
     });
     // bind keyboard handlers
     $('#synapse_desc').bind('keyup', function (e) {
         switch (e.which) {
         case 13:
-            $('.new_synapse').submit();
+            if (!synapseTypeahead) $('.new_synapse').submit();
             break;
         default:
             break;
