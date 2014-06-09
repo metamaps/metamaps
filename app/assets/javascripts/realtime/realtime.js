@@ -6,7 +6,7 @@ window.realtime.notifyUser = function (message) {
         $('body').prepend('<div class="notice metamaps" />');
     }
     $('.notice.metamaps').hide().html(message).fadeIn('fast');
-    
+
     clearTimeout(window.realtime.notifyTimeOut);
     window.realtime.notifyTimeOut = setTimeout(function () {
         $('.notice.metamaps').fadeOut('fast');
@@ -34,9 +34,9 @@ window.realtime.setupSocket = function () {
         // data.userid
         // data.username
 
-        window.realtime.notifyUser(data.username + ' just came online');
+        window.realtime.notifyUser(data.username + ' just joined the map');
 
-        // send this new mapper back your details, and the awareness that you're online
+        // send this new mapper back your details, and the awareness that you've loaded the map
         var update = {
             userToNotify: data.userid,
             username: username,
@@ -45,12 +45,28 @@ window.realtime.setupSocket = function () {
         };
         socket.emit('updateNewMapperList', update);
     });
+    
+    // receive word that there's a mapper turned on realtime
+    socket.on('maps-' + mapid + '-newrealtime', function (data) {
+        // data.userid
+        // data.username
+
+        window.realtime.notifyUser(data.username + ' just turned on realtime');
+    });
+    
+    // receive word that there's a mapper turned on realtime
+    socket.on('maps-' + mapid + '-lostrealtime', function (data) {
+        // data.userid
+        // data.username
+
+        window.realtime.notifyUser(data.username + ' just turned off realtime');
+    });
 
     socket.on('maps-' + mapid + '-lostmapper', function (data) {
         // data.userid
         // data.username
 
-        window.realtime.notifyUser(data.username + ' just went offline');
+        window.realtime.notifyUser(data.username + ' just left the map');
     });
 
     socket.on('maps-' + mapid, function (data) {
@@ -90,6 +106,26 @@ window.realtime.setupSocket = function () {
         }
     });
 };
+
+window.realtime.sendRealtimeOn = function () {
+    // send this new mapper back your details, and the awareness that you're online
+    var update = {
+        username: username,
+        userid: userid,
+        mapid: mapid
+    };
+    window.realtime.socket.emit('notifyStartRealtime', update);
+}
+
+window.realtime.sendRealtimeOff = function () {
+    // send this new mapper back your details, and the awareness that you're online
+    var update = {
+        username: username,
+        userid: userid,
+        mapid: mapid
+    };
+    window.realtime.socket.emit('notifyStopRealtime', update);
+}
 
 window.realtime.addTopicToMap = function (topic) {
     var newPos, tempForT;

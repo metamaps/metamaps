@@ -10,8 +10,10 @@ $(document).ready(function () {
     // because anyone who can edit the map can collaborate on it in realtime
     $(".sidebarCollaborateIcon").click(function (event) {
         if (!goRealtime) {
+            window.realtime.sendRealtimeOn();
             $('.sidebarCollaborate .tip').html('Stop Realtime Collaboration');
         } else {
+            window.realtime.sendRealtimeOff();
             $('.sidebarCollaborate .tip').html('Start Realtime Collaboration');
         }
         goRealtime = !goRealtime;

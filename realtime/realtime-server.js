@@ -80,6 +80,26 @@ function start() {
                 socket.broadcast.emit('maps-' + mapid + '-lostmapper', data);
             });
         });
+        
+        // this will ping everyone on a map that someone just turned on realtime
+        socket.on('notifyStartRealtime', function (data) {
+            var newUser = {
+                userid: data.userid,
+                username: data.username
+            };
+
+            socket.broadcast.emit('maps-' + data.mapid + '-newrealtime', newUser);
+        });
+        
+        // this will ping everyone on a map that someone just turned on realtime
+        socket.on('notifyStopRealtime', function (data) {
+            var newUser = {
+                userid: data.userid,
+                username: data.username
+            };
+
+            socket.broadcast.emit('maps-' + data.mapid + '-lostrealtime', newUser);
+        });
 
     });
 }
