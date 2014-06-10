@@ -76,6 +76,7 @@ $(document).ready(function () {
     
     // initialize scroll bar for filter by metacode, then hide it and position it correctly again
     $("#filter_by_metacode").mCustomScrollbar({
+        mouseWheelPixels: 200,
         advanced: {
             updateOnContentResize: true
         }

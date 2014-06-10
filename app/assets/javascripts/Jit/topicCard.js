@@ -45,7 +45,7 @@ function buildCardWithHogan(node) {
     nodeValues.synapse_count = node.getData("synapseCount");
     nodeValues.id = node.id;
     nodeValues.metacode = node.getData("metacode");
-    nodeValues.metacode_class = 'mbg' + node.getData("metacode").replace(/\s/g,'');
+    nodeValues.metacode_class = 'mbg' + node.getData("metacode").replace(/\s/g, '');
     nodeValues.imgsrc = imgArray[node.getData("metacode")].src;
     nodeValues.name = node.name;
     nodeValues.userid = node.getData("userid");
@@ -127,7 +127,12 @@ function populateShowCard(node) {
             $('.metacodeSelect').show();
             // add the scroll bar to the list of metacode select options if it isn't already there
             if (!$('.metacodeSelect ul').hasClass('mCustomScrollbar')) {
-                $('.metacodeSelect ul').mCustomScrollbar();
+                $('.metacodeSelect ul').mCustomScrollbar({
+                    mouseWheelPixels: 200,
+                    advanced: {
+                        updateOnContentResize: true
+                    }
+                });
 
                 $('.metacodeSelect li').click(function () {
                     selectingMetacode = false;

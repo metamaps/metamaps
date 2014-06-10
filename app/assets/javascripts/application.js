@@ -148,7 +148,7 @@ function updateMetacode(node, metacode) {
         data: mdata,
         success: function (data) {
             $('.CardOnGraph').find('.metacodeTitle').text(metacode)
-                .attr('class', 'metacodeTitle mbg' + metacode.replace(/\s/g,''));
+                .attr('class', 'metacodeTitle mbg' + metacode.replace(/\s/g, ''));
             $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + imgArray[metacode].src + ')');
             node.setData("metacode", metacode);
             Mconsole.plot();
@@ -231,16 +231,16 @@ function updateMapPermission(mapid, permission) {
 }
 
 function updateMetacodeSet(set, index, custom) {
-    
+
     if (custom && MetamapsModel.newSelectedMetacodes.length == 0) {
         alert('Please select at least one metacode to use!');
         return false;
     }
-    
+
     var codesToSwitchTo;
     MetamapsModel.selectedMetacodeSetIndex = index;
     MetamapsModel.selectedMetacodeSet = "metacodeset-" + set;
-    
+
     if (!custom) {
         codesToSwitchTo = $('#metacodeSwitchTabs' + set).attr('data-metacodes').split(',');
         $('.customMetacodeList li').addClass('toggledOff');
@@ -259,7 +259,7 @@ function updateMetacodeSet(set, index, custom) {
     // sort by name
     codesToSwitchTo.sort();
     codesToSwitchTo.reverse();
-    
+
     $('#metacodeImg, #metacodeImgTitle').empty();
     $('#metacodeImg').removeData('cloudcarousel');
     var newMetacodes = "";
@@ -275,7 +275,7 @@ function updateMetacodeSet(set, index, custom) {
         mouseWheel: true,
         bringToFront: true
     });
-    
+
     $('#lightbox_overlay').hide();
     $('#topic_name').focus();
 
@@ -305,8 +305,7 @@ function cancelMetacodeSetSwitch() {
         MetamapsModel.selectedMetacodeNames = [];
         MetamapsModel.newSelectedMetacodes = [];
         MetamapsModel.newSelectedMetacodeNames = [];
-    }
-    else { // custom set is selected
+    } else { // custom set is selected
         // reset it to the current actual selection
         $('.customMetacodeList li').addClass('toggledOff');
         for (var i = 0; i < MetamapsModel.selectedMetacodes.length; i++) {
@@ -337,7 +336,12 @@ function openNodeShowcard(node) {
 
     $('.showcard').fadeIn('fast');
     var s = $('.showcard').find('.scroll');
-    s.height(s.height()).mCustomScrollbar();
+    s.height(s.height()).mCustomScrollbar({
+        mouseWheelPixels: 200,
+        advanced: {
+            updateOnContentResize: true
+        }
+    });
     MetamapsModel.showcardInUse = node.id;
 }
 
@@ -347,9 +351,14 @@ function openLightbox(which) {
 
     $('#lightbox_overlay').show();
     $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
-    
+
     if (!MetamapsModel.metacodeScrollerInit) {
-        $('.customMetacodeList, .metacodeSetList').mCustomScrollbar({advanced: { updateOnContentResize: true }});
+        $('.customMetacodeList, .metacodeSetList').mCustomScrollbar({
+            mouseWheelPixels: 200,
+            advanced: {
+                updateOnContentResize: true
+            }
+        });
         MetamapsModel.metacodeScrollerInit = true;
     }
     if (which == "switchMetacodes") {
@@ -384,4 +393,3 @@ function cancelMapCreate(id) {
 
     return false;
 }
-

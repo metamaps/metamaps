@@ -60,7 +60,12 @@
 <script>
 
 $(document).ready(function() {
-  $('.FAQ').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar();
+  $('.FAQ').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar({
+            mouseWheelPixels: 200,
+            advanced: {
+                updateOnContentResize: true
+            }
+        });
   
   $('.FAQ .question').click(function() {
     
