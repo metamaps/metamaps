@@ -260,7 +260,7 @@ button.button:hover, a.button:hover, input[type="submit"]:hover {
   padding: 20px;
   border-radius: 15px;
   color: #000;
-  border:2px solid #000;
+  border:2px solid #000; 
 }
 
 
@@ -979,6 +979,9 @@ cursor:pointer;
 left:-35px !important;
 background: #0F1519;
 min-width: 440px;
+width: 440px;
+overflow-y: scroll;
+overflow-x: hidden;
 }
 
 .sidebarSearch .tt-dropdown-menu h3 {
@@ -1077,7 +1080,7 @@ min-width: 440px;
 }
 
 .sidebarSearch .resultText {
-  width: 250px;
+  width: 125px;
   display: block;
   float: left;
 }
@@ -1104,7 +1107,7 @@ min-width: 440px;
 
 .sidebarSearch div.autoOptions {
   width: 122px;
-  float: right;
+  float: left;
   position:relative;
   display:none;
 }
@@ -1148,7 +1151,7 @@ height: 20px;
 background: url(/assets/MMCCicon_map.png) no-repeat 0px center;
 background-size: 14px 14px;
 top: 7px;
-left: 39px;
+left: 38px;
 padding-left: 18px;
 font-size: 12px;
 line-height: 20px;
@@ -1191,7 +1194,7 @@ line-height: 20px;
  background: white;
  width: auto;
  bottom: 0;
- left: 23px;
+ left: 35px;
  color: black;
  white-space: nowrap;
  border-radius: 4px;

@@ -28,6 +28,7 @@ var viewMode = "list";
 var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, gType, tempNode = null, tempInit = false, tempNode2 = null, metacodeIMGinit = false, goRealtime = false, mapid = null, mapperm = false, touchPos, touchDragNode, mouseIsDown = false;
 
  $(document).ready(function() {
+
   
   function bindMainMenuHover() {
       
@@ -59,6 +60,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
           },500); 
       }
       
+
       var openMenu = function() {
         clearTimeout(lT);
         if (! sliding1) { 
@@ -95,6 +97,8 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       
       var searchIsOpen = false
       
+  
+
       // controls the sliding hover of the search
       var sliding1 = false; 
       var lT;
@@ -114,6 +118,8 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
           });
         }
       }
+
+
       var closeSearch = function(closeAfter) {
         lT = setTimeout(function() { 
             if (!sliding1 && searchIsOpen && $('.sidebarSearchField').val() == '') { 
@@ -161,6 +167,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
       $('.sidebarSearchField').typeahead([
              {
                 name: 'topics',
+                limit: 9999,
                 dupChecker: function (datum1,datum2) {
                   return false;
                 },
@@ -403,6 +410,8 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     }
   });
   
+
+
   // initialize the autocomplete results for the metacode spinner
   $('#synapse_desc').typeahead([
          {
@@ -461,8 +470,7 @@ var labelType, useGradients, nativeTextSupport, animate, json, Mconsole = null, 
     top: '35px',
     right: '-36px'
   });
-  
-  // initialize metacode spinner and then hide it
+    // initialize metacode spinner and then hide it
   $("#metacodeImg").CloudCarousel( {
 			titleBox: $('#metacodeImgTitle'),
 			yRadius:40,
@@ -782,6 +790,24 @@ function openLightbox(which) {
   $('#lightbox_overlay').show();
   $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px' );
 }
+
+//Set max height of the search results box to prevent it from covering bottom left footer
+  
+$(function(){
+
+    $(window).ready(function(){
+           var h = $(window).height();
+        $(".tt-dropdown-menu").css('max-height', h - 100);
+   });
+});
+
+$(function(){
+
+    $(window).resize(function(){
+           var h = $(window).height();
+        $(".tt-dropdown-menu").css('max-height', h - 100);
+   });
+});
 
 function cancelMapCreate(id) {
 
