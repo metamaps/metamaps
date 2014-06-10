@@ -1,6 +1,8 @@
+<% content_for :title, "Sign In | Metamaps" %>
+
 <h1 class="index">Sign In</h1>
 
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :method => :post, :class => "new_user centerGreyForm" }) do |f| %>
   <h3>Sign in</h3>
 
   <div><%= f.label :email %>
@@ -15,11 +17,12 @@
 
   <div><%= f.submit "Sign in" %></div>
   
-  <br>
+  <br />
   <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
     <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
   <% end -%>
-  <div>Don't have an account? <a href="/request">Request an Invite</a></div>
+  <br />
+  <div>Don't have an account?<br /><a href="/request">Request an Invite</a></div>
 <% end %>
 
 

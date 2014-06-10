@@ -218,31 +218,61 @@ input[type="submit"]:hover {
     margin: -720px auto 0;
 }
 .new_session,
-.new_user {
+.new_user,
+.edit_user,
+.forgotPassword {
     display: block;
-    width: 350px;
+    width: 250px;
     position: absolute;
     left: 50%;
     top: 0;
-    margin: 200px 0 0 -195px;
-    background: url('bg.png');
+    margin: 100px 0 0 -145px;
+    background: url(bg.png);
     padding: 20px;
     border-radius: 5px;
-    color: #000;
+    color: black;
     border: 1px solid #000;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
 }
-.edit_user {
-    display: block;
-    width: 225px;
-    position: absolute;
-    left: 70%;
-    top: 25%;
-    margin: 50px 0 0 -420px;
-    padding: 20px;
-    border-radius: 15px;
-    color: #000;
-    border: 2px solid #000;
+.centerGreyForm input[type="text"],
+.centerGreyForm input[type="email"],
+.centerGreyForm input[type="password"] {
+    width: 250px;
+    height: 32px;
+    font-size: 15px;
+    direction: ltr;
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0 8px;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-top: 1px solid #c0c0c0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+    font: -webkit-small-control;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+}
+.centerGreyForm input[type="text"]:hover,
+.centerGreyForm input[type="email"]:hover,
+.centerGreyForm input[type="password"]:hover {
+    border: 1px solid #b9b9b9;
+    border-top: 1px solid #a0a0a0;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 #closenewtopic,
 #closenewsynapse {
@@ -1676,35 +1706,35 @@ div.mapInfoStat {
     width: 55em;
 }
 .ui-tabs-vertical .ui-tabs-nav {
-    padding: .2em .1em .2em .2em !important;
     float: left;
-    width: 120px;
+    width: 93px;
+    background: none;
+    border: none;
+    font-size: 15px;
+    padding: 0 !important;
 }
 .ui-tabs-vertical .ui-tabs-nav li {
     clear: left;
     width: 100%;
-    border-bottom-width: 1px !important;
-    border-right-width: 0 !important;
-    margin: 0 -1px .2em 0 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-bottom: none !important;
+    background: none !important;
+    margin: 0 0 .2em 0 !important;
+    white-space: normal !important;
+}
+.ui-tabs-vertical .ui-tabs-nav li.ui-state-active, .ui-tabs-vertical .ui-tabs-nav li.ui-state-hover {
+    border-right:1px solid #000;
 }
 .ui-tabs-vertical .ui-tabs-nav li a {
     display: block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 113px;
-    padding: 2px 4px !important;
-}
-.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
-    padding-bottom: 0;
-    padding-right: .1em;
-    border-right-width: 1px;
-    border-right-width: 1px;
+    width: 92%;
+    padding: 4% !important;
 }
 .ui-tabs-vertical .ui-tabs-panel {
     padding: 5px !important;
     float: right;
-    width: 365px;
+    width: 400px;
 }
 /* switch metacode set */
 
@@ -1713,20 +1743,18 @@ div.mapInfoStat {
     font-family: LatoLight, Arial, Sans-Serif;
     font-size: 17px;
     line-height: 21px;
+    border: none;
 }
 #metacodeSwitchTabs .setTitle {
     font-family: Lato, Arial, sans-serif;
 }
-.metacodeSetList {
-    max-height: 167px;
-    overflow: hidden;
-    margin: 10px 0;
-    border-bottom: 1px solid #BBB;
+#metacodeSwitchTabs .setDesc {
+    margin-bottom:5px;
 }
-.customMetacodeList {
+.customMetacodeList, .metacodeSetList {
     height: 301px;
     overflow: hidden;
-    margin: 15px 0;
+    margin: 5px 0 15px 0;
     border-bottom: 1px solid #BBB;
 }
 .customMetacodeList ul li {
@@ -1736,7 +1764,7 @@ div.mapInfoStat {
     list-style-type: none;
     display: block;
     padding: 0px;
-    width: 110px;
+    width: 93px;
     height: 70px;
     float: left;
     text-align: center;
