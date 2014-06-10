@@ -204,8 +204,12 @@ function selectNodeOnClickHandler(node, e) {
         selectNodeOnRightClickHandler(node, e)
         return;
     }
-
-    console.log(e);
+    
+    // if on a topic page, let alt+click center you on a new topic
+    if (!mapid && e.altKey) {
+        centerOn(node.id);
+        return;
+    }
     
     var check = nodeWasDoubleClicked();
     if (check) {
