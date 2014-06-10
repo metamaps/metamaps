@@ -205,6 +205,8 @@ function selectNodeOnClickHandler(node, e) {
         return;
     }
 
+    console.log(e);
+    
     var check = nodeWasDoubleClicked();
     if (check) {
         nodeDoubleClickHandler(node, e);
