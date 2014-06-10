@@ -10,7 +10,7 @@
   <h3>Edit Account</h3>
   <%= form.input :name, label: "Name", class: "name" %>
   <%= form.input :email, label: "Email", class: "email" %>
-  <%= form.input :password, label: "Password", class: "password" %>
+  <%= form.input :password, label: "Password", class: "password", :autocomplete => :off %>
   <%= form.submit "Update", class: "update" %>  
   
 <% end %>

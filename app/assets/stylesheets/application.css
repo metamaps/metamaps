@@ -1707,7 +1707,7 @@ div.mapInfoStat {
 }
 .ui-tabs-vertical .ui-tabs-nav {
     float: left;
-    width: 93px;
+    width: 100px;
     background: none;
     border: none;
     font-size: 15px;
@@ -1734,7 +1734,7 @@ div.mapInfoStat {
 .ui-tabs-vertical .ui-tabs-panel {
     padding: 5px !important;
     float: right;
-    width: 400px;
+    width: 388px;
 }
 /* switch metacode set */
 
