@@ -26,6 +26,9 @@
 
 <script>
 $(document).ready(function() {
-  $('.blackBox').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar({ advanced: { updateOnContentResize: true }});
+  $('.blackBox').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar({ 
+      mouseWheelPixels: 200,
+      advanced: { updateOnContentResize: true }
+  });
 });
 </script>

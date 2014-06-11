@@ -2025,6 +2025,18 @@ div.mapInfoStat {
 .blackBox .metacodeSetsDescription {
     width: 314px;
 }
+.blackBox td.metacodeSetDesc {
+     width: 314px;
+     word-wrap: break-word;
+}
+.blackBox .metacodeSetImage {
+    width:40px;
+    height:40px;
+    float:left;
+}
+.blackBox tr {
+    display:table-row;
+}
 .blackBox tr:nth-child(odd) {
     background: rgba(0, 0, 0, 0.2);
 }

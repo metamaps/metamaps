@@ -19,10 +19,10 @@
       <%= link_to 'Edit', edit_metacode_set_path(metacode_set) %><br />
       <%= link_to 'Delete', metacode_set, method: :delete, data: { confirm: 'Are you sure?' } %>
     </td>
-    <td><%= metacode_set.desc %></td>
-    <td style='position:relative;'>
+    <td class='metacodeSetDesc'><%= metacode_set.desc %></td>
+    <td>
       <% metacode_set.metacodes.each_with_index do |metacode, index| %>
-        <img width='40' style='float:left;' src='<%= metacode.icon %>' />
+        <img class='metacodeSetImage' src='<%= metacode.icon %>' />
         <% if (index+1)%4 == 0 %>
         <div class='clearfloat'></div>
         <% end %>
@@ -36,6 +36,9 @@
 
 <script>
 $(document).ready(function() {
-  $('.blackBox').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar({ advanced: { updateOnContentResize: true }});
+  $('.blackBox').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar({ 
+      mouseWheelPixels: 200,
+      advanced: { updateOnContentResize: true }
+  });
 });
 </script>
