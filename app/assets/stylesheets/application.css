@@ -90,6 +90,9 @@ body,
     height: 100%;
     overflow: hidden;
 }
+.unauthenticated .wrapper.homePage {
+    overflow: auto;
+}
 /* scrollbar override */
 
 .maps > div > div.mCS_no_scrollbar {
