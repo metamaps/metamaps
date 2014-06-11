@@ -31,25 +31,6 @@ function selectEdgeOnClickHandler(adj, e) {
         selectEdge(adj);
     }
 
-    var edgeIsSelected = MetamapsModel.selectedEdges.indexOf(adj);
-    if (edgeIsSelected == -1) edgeIsSelected = false;
-    else if (edgeIsSelected != -1) edgeIsSelected = true;
-
-    if (edgeIsSelected && e.shiftKey) {
-        //deselecting an edge with shift
-        deselectEdge(adj);
-    } else if (!edgeIsSelected && e.shiftKey) {
-        //selecting an edge with shift
-        selectEdge(adj);
-    } else if (edgeIsSelected && !e.shiftKey) {
-        //deselecting an edge without shift - unselect all
-        deselectAllEdges();
-    } else if (!edgeIsSelected && !e.shiftKey) {
-        //selecting an edge without shift - unselect all but new one
-        deselectAllEdges();
-        selectEdge(adj);
-    }
-
     Mconsole.plot();
 } //selectEdgeOnClickHandler
 
