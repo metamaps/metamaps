@@ -101,6 +101,7 @@ $(document).ready(function () {
                         width: '0'
                     }, 200, function () {
                         $('.sidebarSearchField').typeahead('setQuery', '');
+                        $('.sidebarSearchField').blur();
                         sliding1 = false;
                         searchIsOpen = false;
                     });
