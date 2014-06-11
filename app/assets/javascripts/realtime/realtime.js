@@ -35,9 +35,8 @@ window.realtime.setupSocket = function () {
         
         var onOff = data.userrealtime ? "On" : "Off";
         var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRt' + onOff + '">' + data.username + '</li>';
+        $('#mapper' + data.userid).remove();
         $('.realtimeMapperList ul').append(mapperListItem);
-        
-        //alert(data.username + ' is already online');
     });
 
     // receive word that there's a new mapper on the map
@@ -51,6 +50,7 @@ window.realtime.setupSocket = function () {
         };
         
         var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOff">' + data.username + '</li>';
+        $('#mapper' + data.userid).remove();
         $('.realtimeMapperList ul').append(mapperListItem);
 
         window.realtime.notifyUser(data.username + ' just joined the map');
