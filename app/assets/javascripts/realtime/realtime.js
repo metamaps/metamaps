@@ -26,6 +26,17 @@ window.realtime.setupSocket = function () {
     socket.on(userid + '-' + mapid + '-UpdateMapperList', function (data) {
         // data.userid
         // data.username
+        // data.userrealtime
+        
+        MetamapsModel.mappersOnMap[data.userid] = {
+            name: data.username,
+            realtime: data.userrealtime
+        };
+        
+        var onOff = data.userrealtime ? "On" : "Off";
+        var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRt' + onOff + '">' + data.username + '</li>';
+        $('.realtimeMapperList ul').append(mapperListItem);
+        
         //alert(data.username + ' is already online');
     });
 
@@ -33,6 +44,14 @@ window.realtime.setupSocket = function () {
     socket.on('maps-' + mapid + '-newmapper', function (data) {
         // data.userid
         // data.username
+        
+        MetamapsModel.mappersOnMap[data.userid] = {
+            name: data.username,
+            realtime: false
+        };
+        
+        var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOff">' + data.username + '</li>';
+        $('.realtimeMapperList ul').append(mapperListItem);
 
         window.realtime.notifyUser(data.username + ' just joined the map');
 
@@ -41,15 +60,32 @@ window.realtime.setupSocket = function () {
             userToNotify: data.userid,
             username: username,
             userid: userid,
+            userrealtime: goRealtime,
             mapid: mapid
         };
         socket.emit('updateNewMapperList', update);
+    });
+    
+    // receive word that a mapper left the map
+    socket.on('maps-' + mapid + '-lostmapper', function (data) {
+        // data.userid
+        // data.username
+        
+        delete MetamapsModel.mappersOnMap[data.userid];
+        
+        $('#mapper' + data.userid).remove();
+
+        window.realtime.notifyUser(data.username + ' just left the map');
     });
     
     // receive word that there's a mapper turned on realtime
     socket.on('maps-' + mapid + '-newrealtime', function (data) {
         // data.userid
         // data.username
+        
+        MetamapsModel.mappersOnMap[data.userid].realtime = true;
+        
+        $('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn');
 
         window.realtime.notifyUser(data.username + ' just turned on realtime');
     });
@@ -59,14 +95,11 @@ window.realtime.setupSocket = function () {
         // data.userid
         // data.username
 
+        MetamapsModel.mappersOnMap[data.userid].realtime = false;
+        
+        $('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff');
+        
         window.realtime.notifyUser(data.username + ' just turned off realtime');
-    });
-
-    socket.on('maps-' + mapid + '-lostmapper', function (data) {
-        // data.userid
-        // data.username
-
-        window.realtime.notifyUser(data.username + ' just left the map');
     });
 
     socket.on('maps-' + mapid, function (data) {

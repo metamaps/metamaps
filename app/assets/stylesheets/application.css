@@ -887,17 +887,15 @@ h3.filterByMetacode {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_realtime_junto.png') no-repeat 0px 1px;
+    background-image: url('MMCCicon_realtime_junto.png');
     background-size: 36px 36px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #0F1519;
     cursor: pointer;
 }
-.sidebarCollaborateIcon:hover,
-.sidebarCollaborateIcon.blue:hover {
-    background-color: black;
-}
 .sidebarCollaborateIcon.blue {
-    background: #0F1519 url('MMCCicon_realtime_blue.png') no-repeat center center;
-    background-size: 26px 25px;
+    background-image: url('MMCCicon_realtime_blue.png');
 }
 .sidebarCollaborateBox {
     position: absolute;
@@ -905,30 +903,55 @@ h3.filterByMetacode {
     height: auto;
     width: auto;
     background: #000;
-    top: 36px;
+    top: 35px;
     right: 0;
     padding: 10px;
     border: 1px solid black;
-    min-width: 120px;
+    min-width: 135px;
     font-family: 'LatoLight', helvetica, sans-serif;
 }
-.sidebarCollaborate .hoverForTip:hover .tip {
-    display: block;
+h3.realtimeBoxTitle {
+    margin-bottom: 10px;
+    text-align: left;
+    float: left;
+    font-family: 'Lato', helvetica, sans-serif;
 }
-.sidebarCollaborate .tip {
-    display: none;
-    position: absolute;
-    background: black;
+.sidebarCollaborateBox .realtimeOnOff {
+    float: left;
+    padding: 4px;
+    border-radius: 2px;
+    margin-left: 12px;
+    cursor: pointer;
+    width: 31px;
     text-align: center;
-    top: 36px;
-    right: 0;
+}
+.sidebarCollaborateBox .rtOff {
+    background: white;
+    color: black;
+}
+.sidebarCollaborateBox .rtOff:hover {
+    padding: 3px;
+    border: 1px solid #15bad4;
+}
+.sidebarCollaborateBox .rtOn {
+    background: #15bad4;
     color: white;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
+}
+.realtimeMapperList .rtMapper {
+    list-style-type: none;
+    white-space: nowrap;
+    padding: 2px 5px 2px 30px;
+    display: block;
+    background-size: 26px 26px;
+    background-repeat: no-repeat;
+    background-position: 4px center;
+    margin-bottom: 5px;
+}
+.realtimeMapperList .littleRtOff {
+    background-image: url('/assets/MMCCicon_realtime_junto.png');
+}
+.realtimeMapperList .littleRtOn {
+    background-image: url('/assets/MMCCicon_realtime_blue.png');
 }
 /* end collaborate */
 

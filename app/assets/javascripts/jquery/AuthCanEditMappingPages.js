@@ -9,6 +9,23 @@ this code adds required jQuery for creating, or pulling in, topics and synapses
 
 $(document).ready(function () {
 
+    function bindForkHover() {
+        var closeFork = function () {
+
+        }
+
+        var openFork = function () {
+                // hide the other three
+                $('.sidebarFilterBox, .sidebarAccountBox, .sidebarCollaborateBox').hide();
+                $('.sidebarFilterIcon, .sidebarAccountIcon, .sidebarCollaborateIcon').css('background-color', '#0F1519');
+            }
+        // bind the hover events
+        $(".sidebarFork").hover(openFork, closeFork);
+    } // end bindForkHover
+
+    // bind hover events  
+    bindForkHover();
+    
     //////
     //////
     //// TOPIC CREATION

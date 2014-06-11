@@ -6,6 +6,11 @@
   
 <% content_for :title, @map.name + " | Metamaps" %>
 
+<div id="preloaded-images">
+   <img src="/assets/MMCCicon_realtime_blue.png" />
+</div>
+                                                                                     
+                                                                                     
 <% if authenticated? %>
   <% if @map.permission == "commons" || @map.user == user %>
       <div class="sidebarSave">
@@ -23,11 +28,18 @@
   </div>
   <% if @map.permission == "commons" || @map.user == user %>
     <div class="sidebarCollaborate">
-      <div class="sidebarCollaborateIcon hoverForTip">
-        <div class="tip">Start Realtime Collaboration</div>
-      </div>
+      <div class="sidebarCollaborateIcon"></div>
       <div class="sidebarCollaborateBox">
-        
+        <h3 class="realtimeBoxTitle">Realtime: </h3>
+        <span class="realtimeOnOff rtOff">OFF</span>
+        <div class="clearfloat"></div>
+        <div class="realtimeMapperList">
+            <ul>
+                <li class="rtMapper littleRtOff rtMapperSelf">
+                    <%= user.name %> (me)
+                </li>
+            </ul>
+        </div>
       </div>
     </div>
   <% end %>

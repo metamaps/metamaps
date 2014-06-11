@@ -44,7 +44,8 @@ function start() {
         socket.on('updateNewMapperList', function (data) {
             var existingUser = {
                 userid: data.userid,
-                username: data.username
+                username: data.username,
+                userrealtime: data.userrealtime
             };
             socket.broadcast.emit(data.userToNotify + '-' + data.mapid + '-UpdateMapperList', existingUser);
         });

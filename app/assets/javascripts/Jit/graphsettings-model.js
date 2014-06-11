@@ -9,6 +9,10 @@ var MetamapsModel = new Object();
 
 MetamapsModel.embed = false;
 
+// if you're on a map, this will be an object that has a reference to each user that has loaded the map, and whether they are
+// in realtime or not
+MetamapsModel.mappersOnMap = {};
+
 
 MetamapsModel.metacodeScrollerInit = false; // indicates whether the scrollbar in the custom metacode set space has been init
 

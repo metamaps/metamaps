@@ -56,9 +56,9 @@ $(document).ready(function () {
 
                     // hide the other two
                     $('.sidebarAccountBox').hide();
-                    $('.sidebarWandBox').hide();
+                    $('.sidebarCollaborateBox').hide();
                     $('.sidebarAccountIcon').css('background-color', '#0F1519');
-                    $('.sidebarWandIcon').css('background-color', '#0F1519');
+                    $('.sidebarCollaborateIcon').css('background-color', '#0F1519');
 
                     $('.sidebarFilterIcon').css('background-color', '#000');
                     $('.sidebarFilterBox').fadeIn(200, function () {

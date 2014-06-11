@@ -371,9 +371,9 @@ $(document).ready(function () {
 
                     // hide the other two
                     $('.sidebarFilterBox').hide();
-                    $('.sidebarWandBox').hide();
+                    $('.sidebarCollaborateBox').hide();
                     $('.sidebarFilterIcon').css('background-color', '#0F1519');
-                    $('.sidebarWandIcon').css('background-color', '#0F1519');
+                    $('.sidebarCollaborateIcon').css('background-color', '#0F1519');
 
                     $('.sidebarAccountIcon').css('background-color', '#000');
                     $('.sidebarAccountBox').fadeIn(200, function () {
