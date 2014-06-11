@@ -964,9 +964,12 @@ h3.filterByMetacode {
     font-family: 'LatoRegular';
 }
 .sidebarSearch .tt-dropdown-menu {
-    left: -35px !important;
-    background: #0F1519;
-    min-width: 440px;
+left:-35px !important;
+background: #0F1519;
+min-width: 440px;
+width: 440px;
+overflow-y: scroll;
+overflow-x: hidden;
 }
 .sidebarSearch .tt-dropdown-menu h3 {
     font-family: 'vinyl', helvetica, sans-serif;
@@ -1011,11 +1014,13 @@ h3.filterByMetacode {
 .sidebarSearch .tt-suggestion {
     background: #2A343C;
 }
-.sidebarSearch .tt-is-under-cursor {
+.sidebarSearch .tt-is-under-cursor, .sidebarSearch .tt-is-under-mouse-cursor {
     background: #0E161D;
 }
 .sidebarSearch .tt-dataset-maps .tt-is-under-cursor .resultmap,
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .resulttopic {
+.sidebarSearch .tt-dataset-maps .tt-is-under-mouse-cursor .resultmap,
+.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .resulttopic,
+.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .resulttopic {
     min-height: 57px;
 }
 .sidebarSearch .tt-suggestion .icon {
@@ -1033,14 +1038,16 @@ h3.filterByMetacode {
     width: 36px;
     height: 36px;
 }
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .topicIcon {
+.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .topicIcon,
+.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .topicIcon {
     margin: 0 auto;
     padding-left: 2px
 }
 .sidebarSearch .tt-dataset-topics .metacodeTip {
     display: none;
 }
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip {
+.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip, 
+.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .metacodeTip {
     display: block;
     font-family: 'vinyl';
     text-transform: uppercase;
@@ -1055,9 +1062,10 @@ h3.filterByMetacode {
     padding: 4px;
 }
 .sidebarSearch .resultText {
-    width: 250px;
+    width: 225px;
     display: block;
     float: left;
+    word-wrap: break-word;
 }
 .sidebarSearch .resultTitle {
     font-weight: normal;
@@ -1083,7 +1091,8 @@ h3.filterByMetacode {
     position: relative;
     display: none;
 }
-.sidebarSearch .tt-is-under-cursor .autoOptions {
+.sidebarSearch .tt-is-under-cursor .autoOptions,
+.sidebarSearch .tt-is-under-mouse-cursor .autoOptions {
     display: block;
 }
 .sidebarSearch .tt-suggestion .resultnoresult .autoOptions {
@@ -1121,7 +1130,7 @@ h3.filterByMetacode {
     background: url(/assets/MMCCicon_map.png) no-repeat 0px center;
     background-size: 14px 14px;
     top: 7px;
-    left: 39px;
+    left: 38px;
     padding-left: 18px;
     font-size: 12px;
     line-height: 20px;
@@ -1157,34 +1166,32 @@ h3.filterByMetacode {
     left: 13px;
 }
 .sidebarSearch .tip {
-    position: absolute;
-    background: white;
-    width: auto;
-    bottom: 0;
-    left: 23px;
-    color: black;
-    white-space: nowrap;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
+ position: absolute;
+ background: white;
+ width: auto;
+ bottom: 0;
+ right: 25px;
+ color: black;
+ white-space: nowrap;
+ border-radius: 4px;
+ font-size:15px !important;
+ font-family:'LatoRegular';
+ line-height:17px;
+ padding: 3px 5px 2px;
+ z-index:100;
 }
-.sidebarSearch .mapCount .tip,
-.sidebarSearch .synapseCount .tip,
-.sidebarSearch .topicCount .tip {
-    left: -3px;
-    bottom: 24px;
+.sidebarSearch .mapCount .tip,.sidebarSearch .synapseCount .tip, .sidebarSearch .topicCount .tip  {
+ right:-3px;
+ bottom:24px;
 }
 .sidebarSearch .hoverForTip:hover .tip {
     display: block;
 }
 .sidebarSearch .mapContributorsIcon .mapContributors {
-    left: 0;
-    bottom: 21px;
-    white-space: normal;
-    width: 200px;
+  right:0;
+  bottom:21px;
+  white-space:normal;
+  width:200px;
 }
 .sidebarSearch div.mapContributorsIcon {
     height: 20px;
