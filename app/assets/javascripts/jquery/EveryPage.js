@@ -89,9 +89,9 @@ $(document).ready(function () {
                 });
             }
         }
-        var closeSearch = function (closeAfter) {
+        var closeSearch = function (closeAfter, bypass) {
             lT = setTimeout(function () {
-                if (!sliding1 && searchIsOpen && $('.sidebarSearchField').val() == '') {
+                if (!sliding1 && searchIsOpen && (bypass || $('.sidebarSearchField').val() == '')) {
                     sliding1 = true;
                     $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
                         padding: '5px 0',
@@ -112,7 +112,7 @@ $(document).ready(function () {
         $(".sidebarSearch").hover(function () {
             openSearch()
         }, function () {
-            closeSearch(800)
+            closeSearch(800, false)
         });
 
         $('.sidebarSearchIcon').click(function (e) {
@@ -122,10 +122,11 @@ $(document).ready(function () {
             e.stopPropagation();
         });
         $('body').click(function (e) {
-            closeSearch(0);
+            closeSearch(0, false);
         });
 
-        // if the search is closed and user hits SHIFT+S
+        // if the search is closed and user hits ctrl+/
+        // close if they hit ESC
         $('body').bind('keydown', function (e) {
             switch (e.which) {
             case 191:
@@ -133,6 +134,11 @@ $(document).ready(function () {
                     openSearch();
                 }
                 break;
+            case 27:
+                if (searchIsOpen) {
+                    closeSearch(0, true);
+                }
+                break;     
             default:
                 break; //console.log(e.which);
             }

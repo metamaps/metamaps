@@ -1,10 +1,8 @@
 ISSAD::Application.routes.draw do
 
-  resources :in_metacode_sets
-  resources :metacode_sets, :except => [:show]
-  resources :metacodes, :except => [:show, :destroy]
-
   root to: 'main#home', via: :get
+    
+  get '/join', to: redirect('/users/sign_up')
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request
   match 'paq', to: 'main#paq', via: :get, as: :paq
@@ -18,6 +16,9 @@ ISSAD::Application.routes.draw do
   match 'topics/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :post, as: :removefrommap
   match 'synapses/:map_id/:synapse_id/removefrommap', to: 'synapses#removefrommap', via: :post, as: :removefrommap
   
+  resources :in_metacode_sets
+  resources :metacode_sets, :except => [:show]
+  resources :metacodes, :except => [:show, :destroy]
   resources :topics, except: [:index, :new, :edit] do
     get :autocomplete_topic, :on => :collection
   end
