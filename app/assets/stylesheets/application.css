@@ -1080,7 +1080,7 @@ overflow-x: hidden;
 }
 
 .sidebarSearch .resultText {
-  width: 125px;
+  width: 250px;
   display: block;
   float: left;
 }
@@ -1194,7 +1194,7 @@ line-height: 20px;
  background: white;
  width: auto;
  bottom: 0;
- left: 35px;
+ right: 20px;
  color: black;
  white-space: nowrap;
  border-radius: 4px;
@@ -1205,14 +1205,14 @@ line-height: 20px;
  z-index:100;
 }
 .sidebarSearch .mapCount .tip,.sidebarSearch .synapseCount .tip, .sidebarSearch .topicCount .tip  {
- left:-3px;
+ right:-3px;
  bottom:24px;
 }
 .sidebarSearch .hoverForTip:hover .tip {
   display:block;
 }
 .sidebarSearch .mapContributorsIcon .mapContributors {
-  left:0;
+  right:0;
   bottom:21px;
   white-space:normal;
   width:200px;
