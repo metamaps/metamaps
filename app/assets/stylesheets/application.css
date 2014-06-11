@@ -321,7 +321,7 @@ input[type="submit"]:hover {
     height: 20px;
     width: 20px;
     background-image: url('MMCCicon_metacode_set_change.png');
-    background-size:contain;
+    background-size: contain;
     position: absolute;
     z-index: 2;
     top: 20px;
@@ -964,12 +964,12 @@ h3.filterByMetacode {
     font-family: 'LatoRegular';
 }
 .sidebarSearch .tt-dropdown-menu {
-left:-35px !important;
-background: #0F1519;
-min-width: 440px;
-width: 440px;
-overflow-y: scroll;
-overflow-x: hidden;
+    left: -35px !important;
+    background: #0F1519;
+    min-width: 440px;
+    width: 440px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 .sidebarSearch .tt-dropdown-menu h3 {
     font-family: 'vinyl', helvetica, sans-serif;
@@ -1014,7 +1014,8 @@ overflow-x: hidden;
 .sidebarSearch .tt-suggestion {
     background: #2A343C;
 }
-.sidebarSearch .tt-is-under-cursor, .sidebarSearch .tt-is-under-mouse-cursor {
+.sidebarSearch .tt-is-under-cursor,
+.sidebarSearch .tt-is-under-mouse-cursor {
     background: #0E161D;
 }
 .sidebarSearch .tt-dataset-maps .tt-is-under-cursor .resultmap,
@@ -1046,7 +1047,7 @@ overflow-x: hidden;
 .sidebarSearch .tt-dataset-topics .metacodeTip {
     display: none;
 }
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip, 
+.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip,
 .sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .metacodeTip {
     display: block;
     font-family: 'vinyl';
@@ -1166,32 +1167,34 @@ overflow-x: hidden;
     left: 13px;
 }
 .sidebarSearch .tip {
- position: absolute;
- background: white;
- width: auto;
- bottom: 0;
- right: 25px;
- color: black;
- white-space: nowrap;
- border-radius: 4px;
- font-size:15px !important;
- font-family:'LatoRegular';
- line-height:17px;
- padding: 3px 5px 2px;
- z-index:100;
+    position: absolute;
+    background: white;
+    width: auto;
+    bottom: 0;
+    right: 25px;
+    color: black;
+    white-space: nowrap;
+    border-radius: 4px;
+    font-size: 15px !important;
+    font-family: 'LatoRegular';
+    line-height: 17px;
+    padding: 3px 5px 2px;
+    z-index: 100;
 }
-.sidebarSearch .mapCount .tip,.sidebarSearch .synapseCount .tip, .sidebarSearch .topicCount .tip  {
- right:-3px;
- bottom:24px;
+.sidebarSearch .mapCount .tip,
+.sidebarSearch .synapseCount .tip,
+.sidebarSearch .topicCount .tip {
+    right: -3px;
+    bottom: 24px;
 }
 .sidebarSearch .hoverForTip:hover .tip {
     display: block;
 }
 .sidebarSearch .mapContributorsIcon .mapContributors {
-  right:0;
-  bottom:21px;
-  white-space:normal;
-  width:200px;
+    right: 0;
+    bottom: 21px;
+    white-space: normal;
+    width: 200px;
 }
 .sidebarSearch div.mapContributorsIcon {
     height: 20px;
@@ -1334,13 +1337,15 @@ overflow-x: hidden;
 
 /* topic autocomplete */
 
-#new_topic .tt-suggestion.tt-is-under-cursor, #new_topic .tt-suggestion.tt-is-under-mouse-cursor {
+#new_topic .tt-suggestion.tt-is-under-cursor,
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor {
     background: #0E161D;
 }
 #new_topic .tt-suggestion {
     padding: 5px;
     font-family: 'LatoLight';
-    background: rgba(42, 52, 60, 0.9);;
+    background: rgba(42, 52, 60, 0.9);
+    ;
 }
 #new_topic .autocompleteSection {
     float: left;
@@ -1407,7 +1412,8 @@ overflow-x: hidden;
     line-height: 16px;
     margin: 3px;
 }
-#new_synapse .tt-suggestion.tt-is-under-cursor, #new_synapse .tt-suggestion.tt-is-under-mouse-cursor {
+#new_synapse .tt-suggestion.tt-is-under-cursor,
+#new_synapse .tt-suggestion.tt-is-under-mouse-cursor {
     background: #0E161D;
 }
 #new_synapse .tt-suggestion {
@@ -1730,8 +1736,9 @@ div.mapInfoStat {
     margin: 0 0 .2em 0 !important;
     white-space: normal !important;
 }
-.ui-tabs-vertical .ui-tabs-nav li.ui-state-active, .ui-tabs-vertical .ui-tabs-nav li.ui-state-hover {
-    border-right:1px solid #000;
+.ui-tabs-vertical .ui-tabs-nav li.ui-state-active,
+.ui-tabs-vertical .ui-tabs-nav li.ui-state-hover {
+    border-right: 1px solid #000;
 }
 .ui-tabs-vertical .ui-tabs-nav li a {
     display: block;
@@ -1756,9 +1763,10 @@ div.mapInfoStat {
     font-family: Lato, Arial, sans-serif;
 }
 #metacodeSwitchTabs .setDesc {
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
-.customMetacodeList, .metacodeSetList {
+.customMetacodeList,
+.metacodeSetList {
     height: 301px;
     overflow: hidden;
     margin: 5px 0 15px 0;
@@ -1767,7 +1775,8 @@ div.mapInfoStat {
 .customMetacodeList ul li {
     cursor: pointer;
 }
-.customMetacodeList ul li, .metacodeSetList ul li {
+.customMetacodeList ul li,
+.metacodeSetList ul li {
     list-style-type: none;
     display: block;
     padding: 0px;
@@ -1779,12 +1788,14 @@ div.mapInfoStat {
 .customMetacodeList li.toggledOff {
     opacity: 0.4;
 }
-.customMetacodeList ul img, .metacodeSetList ul img {
+.customMetacodeList ul img,
+.metacodeSetList ul img {
     width: 40px;
     height: 40px;
     margin: 0 auto;
 }
-.customMetacodeList ul p, .metacodeSetList ul p {
+.customMetacodeList ul p,
+.metacodeSetList ul p {
     display: block;
     margin: 0;
     background: none;
@@ -1797,7 +1808,6 @@ div.mapInfoStat {
     padding: 0 10px;
     font-weight: normal;
 }
-
 /* about */
 
 #about > p {
@@ -2033,16 +2043,16 @@ div.mapInfoStat {
     width: 314px;
 }
 .blackBox td.metacodeSetDesc {
-     width: 314px;
-     word-wrap: break-word;
+    width: 314px;
+    word-wrap: break-word;
 }
 .blackBox .metacodeSetImage {
-    width:36px;
-    height:36px;
-    float:left;
+    width: 36px;
+    height: 36px;
+    float: left;
 }
 .blackBox tr {
-    display:table-row;
+    display: table-row;
 }
 .blackBox tr:nth-child(odd) {
     background: rgba(0, 0, 0, 0.2);
@@ -2055,8 +2065,8 @@ div.mapInfoStat {
     padding: 10px;
 }
 .blackBox td.iconURL {
-     max-width: 415px;
-     word-wrap: break-word; 
+    max-width: 415px;
+    word-wrap: break-word;
 }
 .blackBox .field {
     margin: 15px 0 5px;
@@ -2363,27 +2373,57 @@ span.blue {
 #homeMap {
     width: 738px;
     margin: 0 auto;
-    height: 265px;
+    height: 340px;
     position: relative;
     overflow: hidden;
 }
 #homeFigure {
-    height: 265px;
-    width: 1290px;
+    height: 335px;
+    width: 738px;
     margin: 0;
 }
 #homeFigure figure {
     float: left;
     margin: 10px !important;
     overflow: hidden;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+#homeMap .links {
+    font-size: 14px;
+    font-family: Lato;
+    flex: none;
+}
+#homeMap .title {
+    margin: 10px;
+    flex: none;
+}
+#homeMap .linkItem.contributor {
+    background-position: 5px center;
+    background-size: 20px 20px;
+    position: relative;
+    padding-left: 28px;
+    line-height: 40px;
+    margin-left: 0px;
+    padding-right: 2px;
 }
 #homeMap .mapPerm {
     height: 40px;
     background-repeat: no-repeat;
-    background-position: 7px center;
-    background-size: 27px 27px;
+    background-position: 5px center;
+    background-size: 20px 20px;
     position: relative;
-    padding-left: 40px;
+    padding-left: 28px;
     line-height: 40px;
 }
 #homeMap .mapPerm.co {
@@ -2395,12 +2435,27 @@ span.blue {
 #homeMap .mapPerm.pr {
     background-image: url(MMCCicon_private.png);
 }
+#homeMap .desc {
+    color: #555555;
+    padding: 15px 5px 0 15px;
+    overflow: hidden;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
 .mapContains {
-    position: absolute;
-    height: 40px;
+    max-height: 40px;
     line-height: 40px;
     bottom: 0;
     width: 100%;
+    border-top: 1px solid #AAAAAA;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
 }
 .mapContains span {
     display: inline-block;
@@ -2439,7 +2494,7 @@ span.blue {
 }
 #homeMap .map,
 #homeMap .mapCard {
-    height: 226px;
+    height: 315px;
 }
 .socialIcons {
     position: fixed;

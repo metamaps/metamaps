@@ -5,25 +5,26 @@
   #%>
 <figure class="map <%= first ? "current" : "" %>">
   <a href="/maps/<%= map.id %>">
-  <div class="permission <%= map.authorize_to_edit(user) ? "canEdit" : "cannotEdit" %>">  
+  <div>
   
 	  <div class="mapCard"> 
-      <div class="mapPerm <%= map.mk_permission %>"></div>    
       <span class="title">                                                  
         <%= map.name %>  
-      </span> 
+      </span>
+      <div class="links">                                                   
+         <div class="linkItem contributor">
+             <%= pluralize(map.contributors.count, 'contributor') %>
+         </div>
+         <div class="linkItem mapPerm <%= map.mk_permission %>"><%= map.permission.capitalize %></div>
+         <div class="clearfloat"></div>                                     
+      </div> 
+      <div class="desc">                                                    
+        <%= map.desc %>                          
+      </div>
       <div class="mapContains">      
         <span class="topicCount"><%= pluralize(map.topics.count, 'topic') %></span>                 
         <span class="synapseCount"><%= pluralize(map.synapses.count, 'synapse') %></span>
-      </div>
-      <div class="littleOverlay">      
-        <div class="scroll">                                                    
-          <div class="desc">                                                    
-            <%= map.desc %>                          
-          </div>                                                                
-        </div>
-        <span><%= pluralize(map.contributors.count, 'contributor') %></span><span>Last edit <%= time_ago_in_words( map.updated_at ) %> ago</span>
-      </div>      
+      </div>     
     </div>
   
   </div>

@@ -98,6 +98,11 @@ $(document).ready(function() {
   }, function() {
     $(this).attr('src','/assets/metamap128x128.png');
   });
+                         
+  var s = $('#homeMap .desc');
+  s.height(s.height()).mCustomScrollbar({
+    mouseWheelPixels: 200
+  });
 
 });
 
