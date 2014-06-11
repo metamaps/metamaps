@@ -161,7 +161,7 @@ class MainController < ApplicationController
       	# !connor why is the limit 5 done here and not above? also, why not limit after sorting alphabetically?
         @maps = Map.where(query, search).limit(5).order('"name"')
       elsif user
-        @maps = Map.where(query, search).where('user_id = ?', user).limit(5).order('"name"')
+        @maps = Map.where(query, search).where('user_id = ?', user).order('"name"')
       end
     else
       @maps = []
@@ -182,7 +182,7 @@ class MainController < ApplicationController
     
       #remove "mapper:" if appended at beginning
       term = term[7..-1] if term.downcase[0..6] == "mapper:"
-      @mappers = User.where('LOWER("name") like ?', term.downcase + '%').limit(5).order('"name"')
+      @mappers = User.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
     else
       @mappers = []
     end

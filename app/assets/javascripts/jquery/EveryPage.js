@@ -144,6 +144,7 @@ $(document).ready(function () {
         $('.sidebarSearchField').typeahead([
             {
                 name: 'topics',
+                limit: 9999,
                 dupChecker: function (datum1, datum2) {
                     return false;
                 },
@@ -174,6 +175,7 @@ $(document).ready(function () {
               },
             {
                 name: 'maps',
+                limit: 9999,
                 dupChecker: function (datum1, datum2) {
                     return false;
                 },
@@ -203,6 +205,7 @@ $(document).ready(function () {
               },
             {
                 name: 'mappers',
+                limit: 9999,
                 dupChecker: function (datum1, datum2) {
                     return false;
                 },
@@ -224,6 +227,18 @@ $(document).ready(function () {
                 header: '<h3 class="search-header">Mappers</h3><div class="minimizeResults minimizeMapperResults"></div><div class="clearfloat"></div>'
               }
       ]);
+
+        //Set max height of the search results box to prevent it from covering bottom left footer
+        $('.sidebarSearchField').bind('typeahead:opened', function (event) {
+            var h = $(window).height();
+            $(".tt-dropdown-menu").css('max-height', h - 100);
+        });
+        $(window).resize(function () {
+            var h = $(window).height();
+            $(".tt-dropdown-menu").css('max-height', h - 100);
+        });
+
+
         // tell the autocomplete to launch a new tab with the topic, map, or mapper you clicked on
         $('.sidebarSearchField').bind('typeahead:selected', function (event, datum, dataset) {
             console.log(event);
