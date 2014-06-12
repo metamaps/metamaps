@@ -99,9 +99,10 @@ $(document).ready(function() {
     $(this).attr('src','/assets/metamap128x128.png');
   });
                          
-  var s = $('#homeMap .desc');
-  s.height(s.height()).mCustomScrollbar({
-    mouseWheelPixels: 200
+  $('#homeMap .desc').each(function() {
+    $(this).height($(this).height()).mCustomScrollbar({
+      mouseWheelPixels: 200
+    });
   });
 
 });

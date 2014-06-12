@@ -93,6 +93,9 @@ body,
 .unauthenticated .wrapper.homePage {
     overflow: auto;
 }
+.wrapper.homePage {
+    background: url('mm-homepage-bg-image.png') no-repeat center -249px;
+}
 /* scrollbar override */
 
 .maps > div > div.mCS_no_scrollbar {
