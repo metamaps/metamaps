@@ -158,10 +158,6 @@ $(document).ready(function () {
         selected: MetamapsModel.selectedMetacodeSetIndex
     }).addClass("ui-tabs-vertical ui-helper-clearfix");
     $("#metacodeSwitchTabs .ui-tabs-nav li").removeClass("ui-corner-top").addClass("ui-corner-left");
-    $("#metacodeSwitchTabs .ui-tabs-nav li a").click(function(){
-        // recenter the lightbox when you switch tabs
-        $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
-    });
     $('.customMetacodeList li').click(function () {
         if ($(this).attr('class') != 'toggledOff') {
             $(this).addClass('toggledOff');

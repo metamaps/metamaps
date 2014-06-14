@@ -91,4 +91,8 @@ $(document).ready(function () {
     $('#center-container').bind('contextmenu', function (e) {
         return false;
     });
+    
+    // tab the cheatsheet
+    $('#cheatSheet').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+    $("#cheatSheet .ui-tabs-nav li").removeClass("ui-corner-top").addClass("ui-corner-left");
 }); // end document.ready

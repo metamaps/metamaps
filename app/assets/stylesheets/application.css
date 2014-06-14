@@ -2032,29 +2032,32 @@ div.mapInfoStat {
     box-shadow: none;
 }
 /* Cheatsheet */
+#cheatSheet {
+    width: 100%;
+    font-family: LatoLight, Arial, Sans-Serif;
+    font-size: 17px;
+    line-height: 21px;
+    border: none;
+}
 
-.cheatsheetColumn {
-    float: left;
-    width: 245px;
-    line-height: 17px;
-    font-size: 12px;
-    font-family: arial;
+#cheatSheet .sectionTitle {
+    font-family: Lato, Arial, sans-serif;
+    font-weight:bold;
 }
-.cheatsheetColumn.cOne {
-    margin-right: 10px;
-}
-#cheatsheet h4 {
-    text-decoration: underline;
-    font-size: 20px;
-    font-family: 'vinyl';
-    margin-top: 15px;
-    font-style: italic;
-}
-#cheatsheet .csItem {
+#cheatSheet .csItem {
     margin: 5px 0;
+    font-size:15px;
+    line-height:18px;
 }
-#cheatsheet .csTitle {
-    font-weight: bold;
+#cheatSheet .csItem img {
+    display: inline-block;
+    margin: 0 2px;
+}
+#cheatSheet .csTitle {
+    font-family: Lato, Arial, sans-serif;
+}
+#cheatSheet .indented {
+    margin-left:15px;
 }
 /* Admin Pages */
 
