@@ -7,7 +7,9 @@
 
 <div id="cheatSheet">
   <ul>
+    <% if controller_name == "topics" && action_name == "show" %>
     <li><a href="#csTopicView">Topic View</a></li>
+    <% end %>
     <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
     <li><a href="#csCreatingTopics">Creating Topics</a></li>
     <li><a href="#csEditingTopics">Editing Topics</a></li>
@@ -19,8 +21,7 @@
     <li><a href="#csSelection">Selection</a></li>
     <% end %>
     <li><a href="#csSearch">Search</a></li>
-    <% if controller_name == "topics" && action_name == "show" %>
-    <% end %>
+    
   </ul>
 
   <% if controller_name == "topics" && action_name == "show" %>
