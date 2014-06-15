@@ -2034,6 +2034,7 @@ div.mapInfoStat {
 /* Cheatsheet */
 #cheatSheet {
     width: 100%;
+    height: 350px;
     font-family: LatoLight, Arial, Sans-Serif;
     font-size: 17px;
     line-height: 21px;

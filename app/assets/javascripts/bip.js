@@ -531,6 +531,9 @@ BestInPlaceEditor.forms = {
         this.element.find("input[type='button']").bind('click', {editor: this}, BestInPlaceEditor.forms.textarea.cancelButtonHandler);
       }
       this.element.find("textarea").bind('blur', {editor: this}, BestInPlaceEditor.forms.textarea.blurHandler);
+      // START METAMAPS CODE
+      this.element.find("textarea").bind('keydown', {editor: this}, BestInPlaceEditor.forms.textarea.keydownHandler);  
+      // END METAMAPS CODE
       this.element.find("textarea").bind('keyup', {editor: this}, BestInPlaceEditor.forms.textarea.keyupHandler);
       this.blurTimer = null;
       this.userClicked = false;
@@ -573,14 +576,26 @@ BestInPlaceEditor.forms = {
       event.data.editor.abortIfConfirm();
       event.stopPropagation(); // Without this, click isn't handled
     },
-
+      
+    // START METAMAPS CODE
+    keydownHandler : function(event) {
+      if (event.keyCode == 13 && !event.shiftKey) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+    },
+    // END METAMAPS CODE
+      
     keyupHandler : function(event) {
       if (event.keyCode == 27) {
         event.data.editor.abortIfConfirm();
       }
+      // START METAMAPS CODE
       else if (event.keyCode == 13 && !event.shiftKey) {
         event.data.editor.update();
       }
+      // END METAMAPS CODE
     }
   }
 };

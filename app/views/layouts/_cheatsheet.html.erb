@@ -10,10 +10,16 @@
     <% if controller_name == "topics" && action_name == "show" %>
     <li><a href="#csTopicView">Topic View</a></li>
     <% end %>
-    <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
+    <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
     <li><a href="#csCreatingTopics">Creating Topics</a></li>
+    <% end %>
+    <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
     <li><a href="#csEditingTopics">Editing Topics</a></li>
+    <% end %>
+    <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
     <li><a href="#csCreatingSynapses">Creating Synapses</a></li>
+    <% end %>
+    <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
     <li><a href="#csEditingSynapses">Editing Synapses</a></li>
     <% end %>
     <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
@@ -32,7 +38,7 @@
   </div>
   <% end %>
   
-  <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
+  <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
   <div id="csCreatingTopics">    
     <p class="sectionTitle">Creating Topics</p>
     <div class="csItem"><span class="csTitle">Double-click on canvas:</span> Bring up the metacode spinner on the canvas.</div>
@@ -43,7 +49,9 @@
     <div class="csItem indented"><span class="csTitle">Enter:</span> create a new topic</div>
     <div class="csItem indented"><span class="csTitle">Gear Icon:</span> open up metacode settings</div>
   </div>
-                
+  <% end %>
+
+  <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
   <div id="csEditingTopics">    
     <p class="sectionTitle">Editing Topics</p>
     <div class="csItem">
@@ -75,7 +83,9 @@
     </div>
     <div class="csItem indented">*Hide/Remove/Delete topic within context menu</div>
   </div>
+  <% end %>
 
+  <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
   <div id="csCreatingSynapses">    
     <p class="sectionTitle">Creating Synapses</p>
     <div class="csItem"><span class="csTitle">Right-click & drag from one topic to another:</span> open create synapse prompt</div>
@@ -85,7 +95,9 @@
     <div class="csItem indented"><span class="csTitle">Enter:</span> Create topic</div>
     <div class="csItem indented"><span class="csTitle">Enter:</span> Create synapse</div>
   </div>
+  <% end %>
 
+  <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
   <div id="csEditingSynapses">    
     <p class="sectionTitle">Editing Synapses</p>
     <div class="csItem"><span class="csTitle">Double-click on synapse:</span> open synapse card</div>
