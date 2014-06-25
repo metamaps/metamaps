@@ -128,7 +128,7 @@ function fetchRelatives(node) {
             }
         },
         error: function () {
-            alert('failure');
+            console.log('failed to recenter');
         }
     });
 }
