@@ -160,7 +160,7 @@ function updateMetacode(node, metacode) {
             }, 500);
         },
         error: function () {
-            alert('failed to update metacode');
+            console.log('failed to update metacode');
         }
     });
 }
@@ -182,7 +182,7 @@ function updateTopicPermission(node, permission) {
             node.setData("permission", permission);
         },
         error: function () {
-            alert('failed to update permission');
+            console.log('failed to update permission');
         }
     });
 }
@@ -204,7 +204,7 @@ function updateSynapsePermission(edge, permission) {
             edge.setData("permission", permission);
         },
         error: function () {
-            alert('failed to update permission');
+            console.log('failed to update permission');
         }
     });
 }
@@ -225,7 +225,7 @@ function updateMapPermission(mapid, permission) {
             $('.mapPermission .permissionSelect').remove();
         },
         error: function () {
-            alert('failed to update permission');
+            console.log('failed to update permission');
         }
     });
 }
