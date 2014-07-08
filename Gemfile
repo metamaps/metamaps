@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '1.9.3'
 
 gem 'rails', '3.2.17'
 
@@ -14,6 +15,10 @@ gem 'formtastic'
 gem 'json'
 gem 'rails3-jquery-autocomplete'
 gem 'best_in_place'
+
+gem 'paperclip'
+gem 'aws-sdk'
+
 #gem 'therubyracer' #optional
 #gem 'rb-readline'
 
@@ -27,6 +32,10 @@ group :assets do
   # gem 'therubyracer'
 
   gem 'uglifier', '>= 1.0.3'
+end
+
+group :production do #this is used on heroku
+ gem 'rmagick'
 end
 
 gem 'jquery-rails', '2.1.2'

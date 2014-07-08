@@ -69,7 +69,7 @@ class TopicsController < ApplicationController
       @topic.permission = 'commons'
       @topic.metacode = Metacode.find_by_name(params[:topic][:metacode])
       @topic.user = @user
-      
+        
       #if being created on a map, set topic by default to whatever permissions the map is
       if params[:topic][:map]
         @map = Map.find(params[:topic][:map])
