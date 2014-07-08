@@ -23,7 +23,9 @@ has_many :mappings
    :thumb => ['100x100>', :png],
    :square => ['200x200#', :png],
    :round => ['200x200#', :png]
-  }, :convert_options => {:round => Proc.new{self.convert_options}}
+  }
+    
+  #, :convert_options => {:round => Proc.new{self.convert_options}}
 
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
