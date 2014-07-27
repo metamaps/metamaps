@@ -44,7 +44,7 @@ ISSAD::Application.routes.draw do
   end
   match 'user/updatemetacodes', to: 'users#updatemetacodes', via: :post, as: :updatemetacodes
   
-  resources :users, except: [:show, :index]
+  resources :users, except: [:index]
 
   resources :mappings
   

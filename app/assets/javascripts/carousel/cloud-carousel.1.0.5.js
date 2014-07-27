@@ -198,7 +198,7 @@ jQuery.browser = browser;
 				{
                     $(options.titleBox).html( ($(event.target).attr('title') ));
 				    // METAMAPS CODE
-			        $('#topic_metacode').val($(event.target).attr('title'));
+			        Metamaps.Create.newTopic.metacode = $(event.target).attr('title');
 			        // NOT METAMAPS CODE
 					var	idx = $(event.target).data('itemIndex');	
 					var	frontIndex = event.data.frontIndex;
@@ -236,7 +236,7 @@ jQuery.browser = browser;
 		{	
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
             // METAMAPS CODE
-			$('#topic_metacode').val($(items[this.frontIndex].image).attr('title'));
+			Metamaps.Create.newTopic.metacode = $(items[this.frontIndex].image).attr('title');
         //$('img.cloudcarousel').css({"background":"none", "width":"","height":""});
         //$(items[this.frontIndex].image).css({"width":"45px","height":"45px"});
 			// NOT METAMAPS CODE

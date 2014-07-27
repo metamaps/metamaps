@@ -569,10 +569,15 @@ label[for="user_remember_me"] {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_mapper.png') no-repeat center center;
+    /*background: #0F1519 url('MMCCicon_mapper.png') no-repeat center center;*/
     background-size: 24px 24px;
     cursor: pointer;
 }
+
+.sidebarAccountIcon img {
+    border-radius: 17px;
+}
+
 .sidebarAccountBox {
     position: absolute;
     display: none;

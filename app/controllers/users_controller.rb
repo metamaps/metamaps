@@ -1,9 +1,16 @@
 class UsersController < ApplicationController
 
-  before_filter :require_user, only: [:edit, :update]
+  before_filter :require_user, only: [:edit, :update, :updatemetacodes]
     
   respond_to :html, :json 
   
+  # GET /users/1.json
+  def show
+    @user = User.find(params[:id])
+
+    render json: @user
+  end    
+    
   # GET /user/edit
   def edit
     @user = current_user

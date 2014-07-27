@@ -38,8 +38,8 @@ end
   #build a json object of a map
   def self_as_json(current)
     Jbuilder.encode do |json|
-	  @topics = self.topics
-	  @synapses = self.synapses
+	  @topics = self.topics.dup
+	  @synapses = self.synapses.dup
 	  
 	  json.array!(@topics.delete_if{|topic| not topic.authorize_to_view(current)}) do |topic|
 		
@@ -57,7 +57,9 @@ end
 				@synapsedata['$userid'] = synapse.user.id
 				@synapsedata['$username'] = synapse.user.name
 				@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
-        @synapsedata['$permission'] = synapse.permission
+                @synapsedata['$permission'] = synapse.permission
+                @mapping = Mapping.find_by_synapse_id_and_map_id(synapse.id,self.id)
+                @synapsedata['$mappingid'] = @mapping.id
 				json.data @synapsedata
 		  end
 		  
@@ -73,19 +75,20 @@ end
 		  @topicdata['$desc'] = topic.desc
 		  @topicdata['$link'] = topic.link
 		  @topicdata['$metacode'] = topic.metacode.name
-      @topicdata['$inmaps'] = @inmaps
-      @topicdata['$inmapsString'] = @mapsString
-      @topicdata['$synapseCount'] = topic.synapses.count
+          @topicdata['$inmaps'] = @inmaps
+          @topicdata['$inmapsString'] = @mapsString
+          @topicdata['$synapseCount'] = topic.synapses.count
 		  @topicdata['$userid'] = topic.user.id
 		  @topicdata['$username'] = topic.user.name
 		  @mapping = Mapping.find_by_topic_id_and_map_id(topic.id,self.id)
 		  @topicdata['$xloc'] = @mapping.xloc
 		  @topicdata['$yloc'] = @mapping.yloc
 		  @topicdata['$mappingid'] = @mapping.id
-      @topicdata['$permission'] = topic.permission
-      @topicdata['$date'] = topic.created_at.strftime("%m/%d/%Y")
+          @topicdata['$permission'] = topic.permission
+          @topicdata['$date'] = topic.created_at.strftime("%m/%d/%Y")
+          @topicdata['$id'] = topic.id
 		  json.data @topicdata
-		  json.id topic.id
+		  json.id @mapping.id
 		  json.name topic.name
 	  end	
     end

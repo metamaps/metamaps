@@ -20,7 +20,17 @@
 //= require jquery.roundabout.min
 //= require bip
 //= require jquery_ujs
-//= require_tree .
+//= require hogan-2.0.0
+//= require socket.io
+//= require typeahead
+//= require underscore
+//= require backbone
+//= require_directory ./carousel
+// require_directory ./Jit
+//= require_directory ./jquery
+//= require_directory ./realtime
+//= require_directory ./scroll
+//= require_directory ./typing
 
 // other options are 'graph'
 var viewMode = "list";
@@ -165,70 +175,6 @@ function updateMetacode(node, metacode) {
     });
 }
 
-function updateTopicPermission(node, permission) {
-    var mdata = {
-        "topic": {
-            "permission": permission
-        }
-    };
-    $.ajax({
-        type: "PUT",
-        dataType: 'json',
-        url: "/topics/" + node.id,
-        data: mdata,
-        success: function (data) {
-            $('.showcard .mapPerm').removeClass('co pu pr minimize').addClass(permission.substring(0, 2));
-            $('.permissionSelect').remove();
-            node.setData("permission", permission);
-        },
-        error: function () {
-            alert('failed to update permission');
-        }
-    });
-}
-
-function updateSynapsePermission(edge, permission) {
-    var mdata = {
-        "synapse": {
-            "permission": permission
-        }
-    };
-    $.ajax({
-        type: "PUT",
-        dataType: 'json',
-        url: "/synapses/" + edge.data.$id,
-        data: mdata,
-        success: function (data) {
-            $('#edit_synapse .mapPerm').removeClass('co pu pr minimize').addClass(permission.substring(0, 2));
-            $('#edit_synapse .permissionSelect').remove();
-            edge.setData("permission", permission);
-        },
-        error: function () {
-            alert('failed to update permission');
-        }
-    });
-}
-
-function updateMapPermission(mapid, permission) {
-    var mdata = {
-        "map": {
-            "permission": permission
-        }
-    };
-    $.ajax({
-        type: "PUT",
-        dataType: 'json',
-        url: "/maps/" + mapid,
-        data: mdata,
-        success: function (data) {
-            $('.mapPermission').removeClass('commons public private minimize').addClass(permission);
-            $('.mapPermission .permissionSelect').remove();
-        },
-        error: function () {
-            alert('failed to update permission');
-        }
-    });
-}
 
 function updateMetacodeSet(set, index, custom) {
 
@@ -328,21 +274,6 @@ function MconsoleReset() {
     var mX = Mconsole.canvas.scaleOffsetX;
     var mY = Mconsole.canvas.scaleOffsetY;
     Mconsole.canvas.scale((1 / mX), (1 / mY));
-}
-
-function openNodeShowcard(node) {
-    //populate the card that's about to show with the right topics data
-    populateShowCard(node);
-
-    $('.showcard').fadeIn('fast');
-    var s = $('.showcard').find('.scroll');
-    s.height(s.height()).mCustomScrollbar({
-        mouseWheelPixels: 200,
-        advanced: {
-            updateOnContentResize: true
-        }
-    });
-    MetamapsModel.showcardInUse = node.id;
 }
 
 function openLightbox(which) {

@@ -37,7 +37,7 @@ $(document).ready(function () {
                     $('.sidebarFilterBox').hide();
                     $('.sidebarAccountBox').hide();
                     $('.sidebarFilterIcon').css('background-color', '#0F1519');
-                    $('.sidebarAccountIcon').css('background-color', '#0F1519');
+                    //$('.sidebarAccountIcon').css('background-color', '#0F1519');
 
                     $('.sidebarCollaborateIcon').css('background-color', '#000');
                     $('.sidebarCollaborateBox').fadeIn(200, function () {
@@ -58,7 +58,7 @@ $(document).ready(function () {
         var openSave = function () {
                 // hide the other three
                 $('.sidebarFilterBox, .sidebarAccountBox, .sidebarCollaborateBox').hide();
-                $('.sidebarFilterIcon, .sidebarAccountIcon, .sidebarCollaborateIcon').css('background-color', '#0F1519');
+                $('.sidebarFilterIcon, .sidebarCollaborateIcon').css('background-color', '#0F1519');
             }
         // bind the hover events
         $(".sidebarSave").hover(openSave, closeSave);

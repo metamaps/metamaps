@@ -362,7 +362,7 @@ $(document).ready(function () {
             lT = setTimeout(function () {
                 if (!sliding1) {
                     sliding1 = true;
-                    $('.sidebarAccountIcon').css('background-color', '#0F1519');
+                    //$('.sidebarAccountIcon').css('background-color', '#0F1519');
                     $('.sidebarAccountBox').fadeOut(200, function () {
                         sliding1 = false;
                         accountIsOpen = false;
@@ -382,7 +382,7 @@ $(document).ready(function () {
                     $('.sidebarFilterIcon').css('background-color', '#0F1519');
                     $('.sidebarCollaborateIcon').css('background-color', '#0F1519');
 
-                    $('.sidebarAccountIcon').css('background-color', '#000');
+                    //$('.sidebarAccountIcon').css('background-color', '#000');
                     $('.sidebarAccountBox').fadeIn(200, function () {
                         sliding1 = false;
                         accountIsOpen = true;
@@ -407,20 +407,6 @@ $(document).ready(function () {
         openLightbox($(this).attr('data-open'));
         event.preventDefault();
         return false;
-    });
-
-    // bind keyboard handlers
-    $('body').bind('keyup', function (e) {
-        switch (e.which) {
-        case 13:
-            enterKeyHandler(e);
-            break;
-        case 27:
-            escKeyHandler();
-            break;
-        default:
-            break; //console.log(e.which);
-        }
     });
 
 }); // end document.ready

@@ -92,42 +92,9 @@
 
 
 <script>
-var dragged = 0;
-mapid = <%= @map.id %>; 
-<% if (@map.permission == "commons" && authenticated? ) || @map.user == user %>
-    mapperm = true; 
-<% end %>
-
-viewMode = "graph";
-json = <%= @mapjson %>;
-if (json.length > 0) {
-    $(window).load(function () { 
-        <% if (@map.arranged) %>
-            initialize("arranged"); 
-        <% else %>
-            initialize("chaotic");
-        <% end %>
-    });
-} else {
-    $(window).load(function () {
-        initialize("chaotic", true);
-    });
-}
-    
-<% if authenticated? && (@map.permission == "commons" || @map.user == user) %>
-// this is for the heroku staging environment
-window.realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
-    
-// this is for metamaps.cc
-//window.realtime.socket = io.connect('http://metamaps.cc:5001'); 
-    
-// this is for localhost development    
-//window.realtime.socket = io.connect('http://localhost:5001'); 
-
-window.realtime.socket.on('connect', function () {
-    console.log('socket connected');
-    window.realtime.setupSocket();
-});
-<% end %>
-    
+Metamaps.Active.Map = <%= @map.to_json.html_safe %>;
+Metamaps.Metacodes = <%= @allmetacodes.to_json.html_safe %>;
+Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
+Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;
+Metamaps.Mappings = <%= @allmappings.to_json.html_safe %>;
 </script>

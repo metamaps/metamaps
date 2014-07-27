@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+#ruby '1.9.3'
 
 gem 'rails', '3.2.17'
 
@@ -35,7 +35,7 @@ group :assets do
 end
 
 group :production do #this is used on heroku
- gem 'rmagick'
+ #gem 'rmagick'
 end
 
 gem 'jquery-rails', '2.1.2'

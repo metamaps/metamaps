@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   include TopicsHelper
 
-  before_filter :require_user, only: [:create, :update, :removefrommap, :destroy]
+  before_filter :require_user, only: [:create, :update, :destroy]
     
   respond_to :html, :js, :json
     
@@ -34,7 +34,8 @@ class TopicsController < ApplicationController
 	
     respond_to do |format|
       format.html { respond_with(@topic, @user) }
-      format.json { respond_with(@relatives) }
+      #format.json { respond_with(@relatives) }
+      format.json { render :json => @topic }
     end
   end
   
@@ -48,140 +49,36 @@ class TopicsController < ApplicationController
     end
 	
     respond_to do |format|
-      format.json { render :json => @topic.self_as_json }
+      #format.json { render :json => @topic.self_as_json }
+      format.json { render :json => @topic.to_json }
     end
   end
 
-  # POST topics
+  # POST /topics
+  # POST /topics.json
   def create
-    
-    @user = current_user
-    
-    # if the topic exists grab it and return it
-    if params[:topic][:grabTopic] != "null"
-        @topic = Topic.find(params[:topic][:grabTopic])
-    # if the topic doesn't exist yet, create it
-    else
-      @topic = Topic.new()
-      @topic.name = params[:topic][:name]
-      @topic.desc = ""
-      @topic.link = ""
-      @topic.permission = 'commons'
-      @topic.metacode = Metacode.find_by_name(params[:topic][:metacode])
-      @topic.user = @user
-        
-      #if being created on a map, set topic by default to whatever permissions the map is
-      if params[:topic][:map]
-        @map = Map.find(params[:topic][:map])
-        @topic.permission = @map.permission
-      end 
+    @topic = Topic.new(params[:topic])
 
-      @topic.save
-    end
-
-    # pass on to the topic create js whether it's being created with a synapse
-    @synapse = "false"
-    if params[:topic][:addSynapse] == "true"
-      @synapse = "true" 
-    end
-
-    # also create an object to return the position to the canvas
-    @position = Hash.new()
-    @position['x'] = params[:topic][:x]
-    @position['y'] = params[:topic][:y]
-    
-    # set this for the case where the topic is being created on a map.
-    @mapping = nil
-    if params[:topic][:map]
-      @map = Map.find(params[:topic][:map])
-      @map.touch(:updated_at)
-      
-      @mapping = Mapping.new()
-      @mapping.category = "Topic"
-      @mapping.user = @user
-      @mapping.map = @map
-      @mapping.topic = @topic
-      @mapping.xloc = params[:topic][:x]
-      @mapping.yloc = params[:topic][:y]
-      @mapping.save
-      
-      #push add to map to realtime viewers of the map
-      @mapping.message 'create',@user.id
-    end
-    
     respond_to do |format|
-      format.html { respond_with(@user, location: topic_url(@topic)) }
-      format.js { respond_with(@topic, @mapping, @synapse, @position) }
-    end
-  end
-  
-  # PUT topics/:id
-  def update
-	  @current = current_user
-	  @topic = Topic.find(params[:id]).authorize_to_edit(@current)
-    
-	  if @topic 
-        if params[:topic]
-          @permissionBefore = @topic.permission
-        
-          @topic.name = params[:topic][:name] if params[:topic][:name]
-		      @topic.desc = params[:topic][:desc] if params[:topic][:desc]
-		      @topic.link = params[:topic][:link] if params[:topic][:link]
-		      @topic.permission = params[:topic][:permission] if params[:topic][:permission]
-          @topic.metacode = Metacode.find_by_name(params[:topic][:metacode]) if params[:topic][:metacode]
-          
-          @permissionAfter = @topic.permission
-        end
-	    @topic.save
-      
-      #push notify to anyone viewing this topic on a map in realtime (see mapping.rb to understand the 'message' action)
-      # if the topic was private and is being switched to PU or CO it is the same as being created for other viewers
-      if @permissionBefore == "private" and @permissionAfter != "private"
-        @topic.message 'create',@current.id
-      elsif @permissionBefore != "private" and @permissionAfter == "private"
-        @topic.message 'destroy',@current.id
-      else 
-        @topic.message 'update',@current.id
-      end
-    end
-    
-    respond_to do |format|
-      format.js { render :json => @topic.self_as_json }
-      format.json { render :json => @topic.self_as_json }
-    end
-  end
-  
-  # POST topics/:map_id/:topic_id/removefrommap
-  def removefrommap
-	  @current = current_user
-	  @mapping = Mapping.find_by_topic_id_and_map_id(params[:topic_id],params[:map_id])
-	  
-    @map = Map.find(params[:map_id])
-    @map.touch(:updated_at)
-    @topic = Topic.find(params[:topic_id])
-    @mappings = @map.mappings.select{|m| 
-      if m.synapse != nil
-        m.synapse.topic1 == @topic || m.synapse.topic2 == @topic 
+      if @topic.save
+        format.json { render json: @topic, status: :created }
       else
-        false
+        format.json { render json: @topic.errors, status: :unprocessable_entity }
       end
-    }
-    @mappings.each do |m|
-    
-      #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-      m.message 'destroy',@current.id
-      
-      m.delete
     end
-    
-    
-    #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-    #@mapping.message 'destroy',@current.id
-    
-    @mapping.delete
-      
-	  respond_to do |format|
-      format.js
+  end
+  
+  # PUT /topics/1
+  # PUT /topics/1.json
+  def update
+    @topic = Topic.find(params[:id])
+
+    respond_to do |format|
+      if @topic.update_attributes(params[:topic])
+        format.json { head :no_content }
+      else
+        format.json { render json: @topic.errors, status: :unprocessable_entity }
+      end
     end
   end
   
@@ -223,8 +120,8 @@ class TopicsController < ApplicationController
       @topic.delete
     end
       
-	  respond_to do |format|
-      format.js
+    respond_to do |format|
+      format.js { render :json => "success" }
     end
   end
 end

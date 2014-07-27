@@ -29,11 +29,15 @@
   </script>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <% if controller_name == "maps" && action_name == "show" %>
+    <%= javascript_include_tag "map" %>
+  <% end %>
   <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <script type="text/javascript" src="//use.typekit.net/obp7wss.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
 </head>
 <body class="<%= (action_name == "show") ? "mapBody" : "" %>" >
 
@@ -54,7 +58,9 @@
         <%= render :partial => 'layouts/templates' %>
       </div>
       <div class="sidebarAccount">
-        <div class="sidebarAccountIcon"></div>
+        <div class="sidebarAccountIcon">
+          <% if user && user.image %><%= image_tag user.image.url(:thumb), :size => "35x35" %><% end %>  
+        </div>
         <div class="sidebarAccountBox <%= authenticated? ? 'loggedin' : 'loggedout' %>">
           <%= render :partial => 'layouts/account' %>
         </div>

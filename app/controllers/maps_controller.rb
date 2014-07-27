@@ -69,12 +69,18 @@ class MapsController < ApplicationController
 	  if not @map
 	    redirect_to root_url and return
 	  end
-		
+      		
 	  @mapjson = @map.self_as_json(@current).html_safe
-	
+      
+      @alltopics = @map.topics # should limit to topics visible to user
+      @allsynapses = @map.synapses # should also be limited
+      @allmappings = @map.mappings
+      @allmetacodes = Metacode.all
+      
 	  respond_to do |format|
-      format.html { respond_with(@map, @user) }
-      format.json { respond_with(@mapjson) }
+      format.html { respond_with(@allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
+      #format.json { respond_with(@mapjson) }
+      format.json { render json: @topics }
     end
   end
   
