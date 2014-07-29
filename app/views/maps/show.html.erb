@@ -12,14 +12,6 @@
                                                                                      
                                                                                      
 <% if authenticated? %>
-  <% if @map.permission == "commons" || @map.user == user %>
-      <div class="sidebarSave">
-        <div class="sidebarSaveIcon hoverForTip">
-          <div class="tip">Save Layout</div>
-        </div>
-        <div class="sidebarSaveBox"></div>
-      </div>
-  <% end %>
   <div class="sidebarFork">
     <div class="sidebarForkIcon hoverForTip">
       <div class="tip">Save To New Map</div>
@@ -28,14 +20,14 @@
   </div>
   <% if @map.permission == "commons" || @map.user == user %>
     <div class="sidebarCollaborate">
-      <div class="sidebarCollaborateIcon"></div>
+      <div class="sidebarCollaborateIcon blue"></div>
       <div class="sidebarCollaborateBox">
         <h3 class="realtimeBoxTitle">Realtime: </h3>
-        <span class="realtimeOnOff rtOff">OFF</span>
+        <span class="realtimeOnOff rtOn">ON</span>
         <div class="clearfloat"></div>
         <div class="realtimeMapperList">
             <ul>
-                <li class="rtMapper littleRtOff rtMapperSelf">
+                <li class="rtMapper littleRtOn rtMapperSelf">
                     <%= user.name %> (me)
                 </li>
             </ul>
@@ -73,17 +65,10 @@
 <% if authenticated? %>
 
   <% # add these if you have edit permissions on the map %>
-  <% if @map.permission == "commons" || @map.user == user %>
-    
+  <% if @map.permission == "commons" || @map.user == user %>   
     <% # for creating and pulling in topics and synapses %>
     <%= render :partial => 'newtopic' %>
     <%= render :partial => 'newsynapse' %>
-
-    <% # for saving the layout of the map %>
-    <%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
-	    <%= form.hidden_field "coordinates", :value => "" %>
-    <% end %>
-
   <% end %>
 
   <% # for populating the change metacode list on the topic card %>

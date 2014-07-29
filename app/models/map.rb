@@ -33,67 +33,6 @@ end
     return contributors
   end
   
-  
-  ###### JSON ######
-  #build a json object of a map
-  def self_as_json(current)
-    Jbuilder.encode do |json|
-	  @topics = self.topics.dup
-	  @synapses = self.synapses.dup
-	  
-	  json.array!(@topics.delete_if{|topic| not topic.authorize_to_view(current)}) do |topic|
-		
-		#json.adjacencies topic.synapses2.delete_if{|synapse| (not @topics.include?(synapse.topic1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.topic1.authorize_to_view(current)) } do |json, synapse|
-		
-	      json.adjacencies topic.synapses1.delete_if{|synapse| (not @synapses.include?(synapse)) || (not @topics.include?(synapse.topic2)) || (not synapse.authorize_to_view(current)) || (not synapse.topic2.authorize_to_view(current)) } do |json, synapse|
-				json.nodeTo synapse.node2_id
-				json.nodeFrom synapse.node1_id
-				
-				@synapsedata = Hash.new
-				@synapsedata['$desc'] = synapse.desc
-				@synapsedata['$showDesc'] = false
-				@synapsedata['$category'] = synapse.category
-				@synapsedata['$id'] = synapse.id
-				@synapsedata['$userid'] = synapse.user.id
-				@synapsedata['$username'] = synapse.user.name
-				@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
-                @synapsedata['$permission'] = synapse.permission
-                @mapping = Mapping.find_by_synapse_id_and_map_id(synapse.id,self.id)
-                @synapsedata['$mappingid'] = @mapping.id
-				json.data @synapsedata
-		  end
-		  
-		  @inmaps = Array.new
-      @mapsString = ""
-      topic.maps.each_with_index do |map, index|
-        @inmaps.push(map.id)
-        @mapsString += map.name
-        @mapsString += (index+1) == topic.maps.count ? "" : ", "
-      end
-      
-		  @topicdata = Hash.new
-		  @topicdata['$desc'] = topic.desc
-		  @topicdata['$link'] = topic.link
-		  @topicdata['$metacode'] = topic.metacode.name
-          @topicdata['$inmaps'] = @inmaps
-          @topicdata['$inmapsString'] = @mapsString
-          @topicdata['$synapseCount'] = topic.synapses.count
-		  @topicdata['$userid'] = topic.user.id
-		  @topicdata['$username'] = topic.user.name
-		  @mapping = Mapping.find_by_topic_id_and_map_id(topic.id,self.id)
-		  @topicdata['$xloc'] = @mapping.xloc
-		  @topicdata['$yloc'] = @mapping.yloc
-		  @topicdata['$mappingid'] = @mapping.id
-          @topicdata['$permission'] = topic.permission
-          @topicdata['$date'] = topic.created_at.strftime("%m/%d/%Y")
-          @topicdata['$id'] = topic.id
-		  json.data @topicdata
-		  json.id @mapping.id
-		  json.name topic.name
-	  end	
-    end
-  end
-  
   ##### PERMISSIONS ######
   
   scope :visibleToUser, lambda { |current, user|  
@@ -134,16 +73,6 @@ end
 		return false
 	end
 	return true
-  end
-  
-  # returns Boolean based on whether user has permissions to edit or not
-  def authorize_linkto_edit(user)
-    if (self.user == user)
-		return true
-    elsif (self.permission == "commons")
-		return true
-	end
-	return false
   end
 
 end

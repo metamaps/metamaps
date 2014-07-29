@@ -38,21 +38,6 @@ class TopicsController < ApplicationController
       format.json { render :json => @topic }
     end
   end
-  
-  # GET topics/:id/json
-  def json
-    @current = current_user
-    @topic = Topic.find(params[:id]).authorize_to_show(@current)
-	
-    if not @topic
-	    redirect_to root_url and return
-    end
-	
-    respond_to do |format|
-      #format.json { render :json => @topic.self_as_json }
-      format.json { render :json => @topic.to_json }
-    end
-  end
 
   # POST /topics
   # POST /topics.json

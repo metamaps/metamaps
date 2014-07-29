@@ -1,3 +1,69 @@
+function fetchRelatives(node) {
+    var myA = $.ajax({
+        type: "Get",
+        url: "/topics/" + node.id + "?format=json",
+        success: function (data) {
+            if (gType == "centered") {
+                Mconsole.busy = true;
+                Mconsole.op.sum(data, {
+                    type: 'fade',
+                    duration: 500,
+                    hideLabels: false
+                });
+                Mconsole.graph.eachNode(function (n) {
+                    n.eachAdjacency(function (a) {
+                        if (!a.getData('showDesc')) {
+                            a.setData('alpha', 0.4, 'start');
+                            a.setData('alpha', 0.4, 'current');
+                            a.setData('alpha', 0.4, 'end');
+                        }
+                    });
+                });
+                Mconsole.busy = false;
+            } else {
+                Mconsole.op.sum(data, {
+                    type: 'nothing',
+                });
+                Mconsole.plot();
+            }
+        },
+        error: function () {
+            alert('failure');
+        }
+    });
+}
+
+function centerOn(nodeid) {
+    if (!Mconsole.busy) {
+        var node = Mconsole.graph.getNode(nodeid);
+        $('div.index img').attr('src', imgArray[node.getData('metacode')].src);
+        $('div.index .mapName').html(node.name);
+        $(document).attr('title', node.name + ' | Metamaps');
+        window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
+        Mconsole.onClick(node.id, {
+            hideLabels: false,
+            duration: 1000,
+            onComplete: function () {
+                fetchRelatives(node);
+            }
+        });
+    }
+}
+
+
+
+function MconsoleReset() {
+
+    var tX = Mconsole.canvas.translateOffsetX;
+    var tY = Mconsole.canvas.translateOffsetY;
+    Mconsole.canvas.translate(-tX, -tY);
+
+    var mX = Mconsole.canvas.scaleOffsetX;
+    var mY = Mconsole.canvas.scaleOffsetY;
+    Mconsole.canvas.scale((1 / mX), (1 / mY));
+}
+
+
 // create filters for maps
 
 function switchVisible(category, duration) {
@@ -121,63 +187,3 @@ function filterTopicsByName(searchQuery) {
 	  });	
   }); 
 } // filterTopicsByName
-
-function clearCanvas() {
-  Mconsole.graph.eachNode(function(n) {
-    Mconsole.graph.removeNode(n.id);
-  });
-  Mconsole.plot();
-}
-
-function clearCanvasExceptRoot() {
-  var ids = new Array();
-  Mconsole.graph.eachNode(function(n) {
-    ids.push(n.id);
-  });
-
-  var root = Mconsole.graph.nodes[Mconsole.root];
-  ids.forEach(function(id, index) {
-    if (id != root.id) {
-      Mconsole.graph.removeNode(id);
-    }
-  });
-  fetchRelatives(root); //also runs Mconsole.plot()
-}
-
-/**
- * Define all the dynamic interactions for the Filter By Metacode using Jquery
- */
-  
-$(document).ready(function() {
-  $('.sidebarFilterBox .showAll').click(function(e) {
-        showAll();
-        $('#filter_by_metacode ul li').removeClass('toggledOff');
-        for (var catVis in categoryVisible) {
-          categoryVisible[catVis] = true;
-        }
-  });
-  $('.sidebarFilterBox .hideAll').click(function(e) {
-        hideAll();
-        $('#filter_by_metacode ul li').addClass('toggledOff');
-        for (var catVis in categoryVisible) {
-          categoryVisible[catVis] = false;
-        }
-  });
-  
-  // toggle visibility of topics with metacodes based on status in the filters list
-  $('#filter_by_metacode ul li').click(function(event) {
-      
-      var category = $(this).children('img').attr('alt');
-      switchVisible(category);
-  
-      // toggle the image and the boolean array value
-      if (categoryVisible[category] == true) {
-        $(this).addClass('toggledOff');
-        categoryVisible[category] = false;
-      }
-      else if (categoryVisible[category] == false) {
-        $(this).removeClass('toggledOff');
-        categoryVisible[category] = true;
-      }
-  });
-});

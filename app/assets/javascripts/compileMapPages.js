@@ -10,5 +10,10 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require ./metamaps/metamapsJIT
-//= require ./metamaps/metamaps
+//= require socket.io
+//= require underscore
+//= require backbone
+//= require_directory ./carousel
+//= require ./metamaps/JIT
+//= require ./metamaps/Metamaps
+//= require ./metamaps/Metamaps.JIT

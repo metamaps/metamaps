@@ -6,7 +6,7 @@
 
 <div id="lightbox_overlay">
   <div id="lightbox_main">
-    <a id="lightbox_close" onclick="closeLightbox(); return false;" href="#"></a>
+    <a id="lightbox_close" onclick="Metamaps.GlobalUI.closeLightbox(); return false;" href="#"></a>
     <div id="lightbox_content">
       
       <div class="lightboxContent" id="about">
@@ -42,7 +42,7 @@
         <div class="lightboxContent" id="invite">
           <h3>Send Invites</h3>
           <p>You can invite others to the Metamaps platform. Send them this link</p>
-          <p class="green">http://metamaps.cc/users/sign_up</p>
+          <p class="green">http://metamaps.cc/join</p>
           <p>and give them the access code shown below.</p>
           <% mapper = current_user %>
           <p class="green"><%= mapper.code %></p>
@@ -67,6 +67,6 @@
       
     </div>
   </div>
-  <div id="lightbox_screen" onclick="closeLightbox();return false;" style="height: 100%;"></div>
+  <div id="lightbox_screen" onclick="Metamaps.GlobalUI.closeLightbox();return false;" style="height: 100%;"></div>
 </div>
 

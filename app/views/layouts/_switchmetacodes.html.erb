@@ -36,7 +36,9 @@
       </ul>
       <div class="clearfloat"></div>
     </div>
-    <button class="button" onclick="updateMetacodeSet(<%= m.id %>, <%= localindex %>, false);">Switch to Set</button>
+    <button class="button" onclick="Metamaps.Create.updateMetacodeSet(<%= m.id %>, <%= localindex %>, false);">
+        Switch to Set
+    </button>
   </div>
   <% end %>
     <div id="metacodeSwitchTabsCustom">
@@ -57,13 +59,15 @@
           </ul>
           <div class="clearfloat"></div>
         </div>
-        <button class="button" onclick="updateMetacodeSet('custom', <%= allMetacodeSets.length %>, true);">Switch to Custom Set</button>
+        <button class="button" onclick="Metamaps.Create.updateMetacodeSet('custom', <%= allMetacodeSets.length %>, true);">
+            Switch to Custom Set
+        </button>
     </div>
 </div>
 
 <div class="clearfloat"></div>
 
 <script>
-Metamaps.Settings.selectedMetacodeSet = "metacodeset-<%= selectedSet %>";
-Metamaps.Settings.selectedMetacodeSetIndex = <%= index %>;
+Metamaps.Create.selectedMetacodeSet = "metacodeset-<%= selectedSet %>";
+Metamaps.Create.selectedMetacodeSetIndex = <%= index %>;
 </script>

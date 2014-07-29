@@ -1,6 +1,6 @@
 class MapsController < ApplicationController
   
-  before_filter :require_user, only: [:new, :create, :edit, :update, :savelayout, :destroy]
+  before_filter :require_user, only: [:create, :update, :destroy]
     
   respond_to :html, :js, :json
   
@@ -52,14 +52,6 @@ class MapsController < ApplicationController
 	  respond_with(@maps, @request, @user)
   end
   
-  # GET maps/new
-  def new
-  	@map = Map.new
-    @user = current_user
-    
-    respond_with(@map)
-  end
-  
   # GET maps/:id
   def show
       
@@ -69,8 +61,6 @@ class MapsController < ApplicationController
 	  if not @map
 	    redirect_to root_url and return
 	  end
-      		
-	  @mapjson = @map.self_as_json(@current).html_safe
       
       @alltopics = @map.topics # should limit to topics visible to user
       @allsynapses = @map.synapses # should also be limited
@@ -78,43 +68,29 @@ class MapsController < ApplicationController
       @allmetacodes = Metacode.all
       
 	  respond_to do |format|
-      format.html { respond_with(@allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
-      #format.json { respond_with(@mapjson) }
-      format.json { render json: @topics }
-    end
+        format.html { respond_with(@allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
+        format.json { render json: @map }
+      end
   end
   
   # GET maps/:id/embed
   def embed
-  	
-	  @current = current_user
+  	  @current = current_user
 	  @map = Map.find(params[:id]).authorize_to_show(@current)
 	
 	  if not @map
 	    redirect_to root_url and return
 	  end
-		
-	  @mapjson = @map.self_as_json(@current).html_safe
-	
+      
+      @alltopics = @map.topics # should limit to topics visible to user
+      @allsynapses = @map.synapses # should also be limited
+      @allmappings = @map.mappings
+      @allmetacodes = Metacode.all
+      
 	  respond_to do |format|
-      format.html { respond_with(@map, @user) }
-      format.json { respond_with(@mapjson) }
-    end
-  end
-  
-  # GET maps/:id/json
-  def json
-  	
-	  @current = current_user
-	  @map = Map.find(params[:id]).authorize_to_show(@current)
-	
-	  if not @map
-	    redirect_to root_url and return
-	  end
-		
-	  respond_to do |format|
-      format.json { render :json => @map.self_as_json(@current) }
-    end
+        format.html { respond_with(@allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
+        format.json { render json: @map }
+      end
   end
   
   # POST maps
@@ -171,20 +147,6 @@ class MapsController < ApplicationController
     end
   end
   
-  # GET maps/:id/edit
-  def edit
-	  @current = current_user
-	  @map = Map.find(params[:id]).authorize_to_edit(@current)
-	
-	  if not @map
-	    redirect_to root_url and return
-	  end
-	
-	  @outtopics = @map.topics.order("name ASC").delete_if{|topic| not topic.authorize_to_view(@current)}
-  
-	  respond_with(@user, @map, @outtopics)
-  end
-  
   # PUT maps/:id
   def update
 	  @current = current_user
@@ -200,32 +162,6 @@ class MapsController < ApplicationController
     end
 
     respond_with @map
-  end
-  
-  # PUT maps/:id/savelayout
-  def savelayout
-    @user = current_user
-    @map = Map.find(params[:id])
-  
-    if params[:map][:coordinates]
-      @all = params[:map][:coordinates]
-      @all = @all.split(',')
-      @all.each do |topic|
-        topic = topic.split('/')
-        @mapping = Mapping.find(topic[0])
-        if @mapping
-          @mapping.xloc = topic[1]
-          @mapping.yloc = topic[2]
-          @mapping.save
-          
-          #push realtime update for location on map
-          @mapping.message 'update',@user.id
-        end
-      end
-      @map.arranged = true
-      @map.touch(:updated_at)
-      @map.save
-    end	
   end
   
   # DELETE maps/:id

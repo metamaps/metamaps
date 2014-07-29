@@ -12,20 +12,14 @@ ISSAD::Application.routes.draw do
   match '/search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers
   match '/search/synapses', to: 'main#searchsynapses', via: :get, as: :searchsynapses
   
-  match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
-  match 'topics/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :post, as: :removefrommap
-  match 'synapses/:map_id/:synapse_id/removefrommap', to: 'synapses#removefrommap', via: :post, as: :removefrommap
-  
   resources :in_metacode_sets
   resources :metacode_sets, :except => [:show]
   resources :metacodes, :except => [:show, :destroy]
   resources :topics, except: [:index, :new, :edit] do
     get :autocomplete_topic, :on => :collection
   end
-  match 'topics/:id/:format', to: 'topics#json', via: :get, as: :json
   
-  resources :synapses, except: [:index, :new, :edit, :show]
-  match 'synapses/:id/:format', to: 'synapses#json', via: :get, as: :json
+  resources :synapses, except: [:index, :new, :edit]
   
   match 'maps/active', to: 'maps#index', via: :get, as: :activemaps
   match 'maps/featured', to: 'maps#index', via: :get, as: :featuredmaps
@@ -36,7 +30,6 @@ ISSAD::Application.routes.draw do
   
   resources :maps, except: [:new, :edit]
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
-  match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json
   
   devise_for :users, :controllers => { :registrations => "registrations" }, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
   devise_scope :user do
@@ -46,6 +39,6 @@ ISSAD::Application.routes.draw do
   
   resources :users, except: [:index]
 
-  resources :mappings
+  resources :mappings, except: [:index, :new, :edit]
   
 end

@@ -3,20 +3,19 @@ class SynapsesController < ApplicationController
 
   before_filter :require_user, only: [:create, :update, :destroy]
     
-  respond_to :js, :json
+  respond_to :json
   
-  # GET synapses/:id/json
-  def json
-    @current = current_user
-    @synapse = Synapse.find(params[:id]).authorize_to_show(@current)
+  # GET /synapses/1.json
+  def show
+    @synapse = Synapse.find(params[:id])
+
+    #.authorize_to_show(@current)
 	
-    if not @synapse
-	    redirect_to root_url and return
-    end
-	
-    respond_to do |format|
-      format.json { render :json => @synapse.selfplusnodes_as_json }
-    end
+    #if not @synapse
+    #  redirect_to root_url and return
+    #end
+      
+    render json: @synapse
   end
   
   # POST /synapses
@@ -65,7 +64,7 @@ class SynapsesController < ApplicationController
     @synapse.delete if @synapse
       
     respond_to do |format|
-      format.js { render :json => "success" }
+      format.json { render :json => "success" }
     end
   end
 end

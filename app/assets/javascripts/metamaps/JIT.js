@@ -2475,7 +2475,9 @@ Extras.Classes.Navigation = new Class({
     this.pressed = true;
     
     //START METAMAPS CODE
-    if (!Metamaps.Mouse.boxStartCoordinates && e.shiftKey) {
+    var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey); 
+    // TODO make sure this works across browsers  
+    if (!Metamaps.Mouse.boxStartCoordinates && (e.shiftKey || rightClick)) {
       Metamaps.Mouse.boxStartCoordinates = eventInfo.getPos();
     }
     Metamaps.Mouse.didPan = false;
@@ -2499,12 +2501,13 @@ Extras.Classes.Navigation = new Class({
     if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
     
     // START METAMAPS CODE
-    if (!Metamaps.Mouse.boxStartCoordinates && e.shiftKey) {
+    var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey);
+    if (!Metamaps.Mouse.boxStartCoordinates && (e.shiftKey || rightClick)) {
       Metamaps.Visualize.mGraph.busy = true;
       Metamaps.boxStartCoordinates = eventInfo.getPos();
       return;
     }
-    if (Metamaps.Mouse.boxStartCoordinates && e.shiftKey) { 
+    if (Metamaps.Mouse.boxStartCoordinates && (e.shiftKey || rightClick)) { 
       Metamaps.Visualize.mGraph.busy = true;
       Metamaps.JIT.drawSelectBox(eventInfo,e);
       return;

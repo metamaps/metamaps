@@ -514,7 +514,7 @@ label[for="user_remember_me"] {
     position: absolute;
     top: 0;
     left: -41px;
-    background: #0F1519 url('MMCCicon_help.png') no-repeat center center;
+    background: url('MMCCicon_help.png') no-repeat center center;
     background-size: 27px 27px;
     border-radius: 5px;
     height: 36px;
@@ -692,18 +692,17 @@ li.accountInvite span {
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarForkIcon {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_save_new_map.png') no-repeat center center;
+    background: url('MMCCicon_save_new_map.png') no-repeat center center;
     background-size: 28px 28px;
     cursor: pointer;
 }
 .sidebarForkIcon:hover {
-    background-color: black;
+    
 }
 .sidebarForkBox {
     position: absolute;
@@ -746,18 +745,17 @@ li.accountInvite span {
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarSaveIcon {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_save_layout.png') no-repeat center center;
+    background: url('MMCCicon_save_layout.png') no-repeat center center;
     background-size: 22px 22px;
     cursor: pointer;
 }
 .sidebarSaveIcon:hover {
-    background-color: black;
+    
 }
 .sidebarSaveBox {
     position: absolute;
@@ -798,7 +796,6 @@ li.accountInvite span {
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarFilter.loggedout {
     right: 35px;
@@ -807,12 +804,12 @@ li.accountInvite span {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_filter2.png') no-repeat center center;
+    background: url('MMCCicon_filter2.png') no-repeat center center;
     background-size: 28px 28px;
     cursor: pointer;
 }
 .sidebarFilterIcon:hover {
-    background-color: black;
+    
 }
 /* we set a few of these params off screen to begin with, so that when we initialize the scroll bar it works, but then 
    we hide the element and position it correctly */
@@ -889,7 +886,6 @@ h3.filterByMetacode {
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarCollaborateIcon {
     position: absolute;
@@ -899,7 +895,6 @@ h3.filterByMetacode {
     background-size: 36px 36px;
     background-position: center center;
     background-repeat: no-repeat;
-    background-color: #0F1519;
     cursor: pointer;
 }
 .sidebarCollaborateIcon.blue {
@@ -2269,7 +2264,7 @@ div.mapInfoStat {
     top: 0px;
     width: 44px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_add_map.png') no-repeat 3px -4px;
+    background: url('MMCCicon_add_map.png') no-repeat 3px -4px;
     background-size: 40px 40px;
     border-radius: 5px;
     cursor: pointer;
