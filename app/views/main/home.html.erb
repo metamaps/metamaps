@@ -64,7 +64,7 @@
     <figure id="homeFigure">
     <% @maps.each_with_index do |map, index| %>
       <% first = index == 0 ? true : false %>
-      <%= render :partial => 'maps/homemap', :locals => { :map => map, :first => first } %>
+      <%= render :partial => 'main/homemap', :locals => { :map => map, :first => first } %>
     <% end %>
     </figure>
   </div>

@@ -75,6 +75,8 @@ Metamaps.GlobalUI = {
             event.preventDefault();
             return false;
         });
+        
+        $('#lightbox_screen, #lightbox_close').click(self.closeLightbox);
 
         // hide notices after 10 seconds
         $('.notice.metamaps').delay(10000).fadeOut('fast');
@@ -105,9 +107,10 @@ Metamaps.GlobalUI = {
         }
     },
 
-    closeLightbox: function () {
+    closeLightbox: function (event) {
         var self = Metamaps.GlobalUI;
         
+        if (event) event.preventDefault();
         $('#lightbox_overlay').hide();
         
         if (self.lightbox === 'forkmap') Metamaps.GlobalUI.CreateMap.reset('fork_map');

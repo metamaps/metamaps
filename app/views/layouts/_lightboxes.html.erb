@@ -6,7 +6,7 @@
 
 <div id="lightbox_overlay">
   <div id="lightbox_main">
-    <a id="lightbox_close" onclick="Metamaps.GlobalUI.closeLightbox(); return false;" href="#"></a>
+    <a id="lightbox_close" href="#"></a>
     <div id="lightbox_content">
       
       <div class="lightboxContent" id="about">
@@ -35,7 +35,7 @@
       </div>
       
       <div class="lightboxContent" id="cheatsheet">
-        <%= render :partial => 'layouts/cheatsheet' %>
+        <%= render :partial => 'shared/cheatsheet' %>
       </div>    
       
       <% if authenticated? %>
@@ -51,22 +51,22 @@
       
         <% # this is the create new map form %>
         <div class="lightboxContent" id="newmap">  
-          <%= render :partial => 'maps/new' %>
+          <%= render :partial => 'layouts/newmap' %>
         </div>
       
         <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
         <div class="lightboxContent" id="forkmap">  
-          <%= render :partial => 'maps/fork' %>
+          <%= render :partial => 'shared/forkmap' %>
         </div>
 
         <div class="lightboxContent" id="switchMetacodes">
-          <%= render :partial => 'layouts/switchmetacodes' %>
+          <%= render :partial => 'shared/switchmetacodes' %>
         </div>
         <% end %>
       <% end %>
       
     </div>
   </div>
-  <div id="lightbox_screen" onclick="Metamaps.GlobalUI.closeLightbox();return false;" style="height: 100%;"></div>
+  <div id="lightbox_screen" style="height: 100%;"></div>
 </div>
 
