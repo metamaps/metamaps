@@ -23,14 +23,14 @@ class MetacodesController < ApplicationController
   ### SHOW IS CURRENTLY DISABLED
   # GET /metacodes/1
   # GET /metacodes/1.json
-  def show
-    @metacode = Metacode.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @metacode }
-    end
-  end
+#  def show
+#    @metacode = Metacode.find(params[:id])
+#
+#    respond_to do |format|
+#      format.html # show.html.erb
+#      format.json { render json: @metacode }
+#    end
+#  end
 
   # GET /metacodes/new
   # GET /metacodes/new.json
@@ -84,13 +84,13 @@ class MetacodesController < ApplicationController
   ### DESTROY IS CURRENTLY DISABLED
   # DELETE /metacodes/1
   # DELETE /metacodes/1.json
-  def destroy
-    @metacode = Metacode.find(params[:id])
-    @metacode.destroy
-
-    respond_to do |format|
-      format.html { redirect_to metacodes_url }
-      format.json { head :no_content }
-    end
-  end
+#  def destroy
+#    @metacode = Metacode.find(params[:id])
+#    @metacode.destroy
+#
+#    respond_to do |format|
+#      format.html { redirect_to metacodes_url }
+#      format.json { head :no_content }
+#    end
+#  end
 end

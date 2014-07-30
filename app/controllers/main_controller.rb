@@ -3,10 +3,8 @@ class MainController < ApplicationController
   include MapsHelper
   include UsersHelper
   include SynapsesHelper
-
-  before_filter :require_user, only: [:invite] 
    
-  respond_to :html, :js, :json
+  respond_to :html, :json
   
   # home page
   def home
@@ -20,11 +18,6 @@ class MainController < ApplicationController
     end
     
     respond_with(@maps, @current) 
-  end
-  
-  # /request
-  def requestinvite
-	  
   end
   
   ### SEARCHING ###

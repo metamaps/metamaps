@@ -16,14 +16,14 @@ class MetacodeSetsController < ApplicationController
   ### SHOW IS NOT CURRENTLY IN USE
   # GET /metacode_sets/1
   # GET /metacode_sets/1.json
-  def show
-    @metacode_set = MetacodeSet.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @metacode_set }
-    end
-  end
+#  def show
+#    @metacode_set = MetacodeSet.find(params[:id])
+#
+#    respond_to do |format|
+#      format.html # show.html.erb
+#      format.json { render json: @metacode_set }
+#    end
+#  end
 
   # GET /metacode_sets/new
   # GET /metacode_sets/new.json
