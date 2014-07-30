@@ -2,22 +2,22 @@ var Metamaps = {}; // this variable declaration defines a Javascript object that
 /*
 
 * unless you are on a page with the Javascript InfoVis Toolkit (Topic or Map) the only section in the metamaps 
-* object will be this one
+* object will be these
 GlobalUI
+Active
+Maps
+Mappers
+Backbone
 
 * all these get added when you are on a page with the Javascript Infovis Toolkit
 Settings
 Touch
 Mouse
-Active
 Selected
-Maps
-Mappers
 Metacodes
 Topics
 Synapses
 Mappings
-Backbone
 Create
 TopicCard
 SynapseCard
@@ -28,18 +28,25 @@ Control
 Filter
 Listeners
 Organize
-Topic
-Synapse
 Map
 Mapper
+Topic
+Synapse
 JIT 
 */
 
+Metamaps.Active = {
+    Map: null,
+    Topic: null,
+    Mapper: null
+};
+Metamaps.Maps = {}; // will be initialized in Metamaps.Backbone.js as a MapCollection
+Metamaps.Mappers = {}; // will be initialized in Metamaps.Backbone.js as a MapperCollection
 
 $(document).ready(function () {
 
     for (var prop in Metamaps) {
-        
+
         // this runs the init function within each sub-object on the Metamaps one
         if (Metamaps.hasOwnProperty(prop) &&
             Metamaps[prop].hasOwnProperty('init') &&
@@ -49,13 +56,11 @@ $(document).ready(function () {
         }
     }
 
-    //Metamaps.Visualize.type = "ForceDirected3D";
-    // this line could maybe go at the end of the Metamaps.JIT init function
-    if (Metamaps.JIT) Metamaps.JIT.prepareVizData();
 });
 
 Metamaps.GlobalUI = {
     notifyTimeout: null,
+    lightbox: null,
     init: function () {
         var self = Metamaps.GlobalUI;
 
@@ -76,8 +81,12 @@ Metamaps.GlobalUI = {
         $('.alert.metamaps').delay(10000).fadeOut('fast');
     },
     openLightbox: function (which) {
+        var self = Metamaps.GlobalUI;
+        
         $('.lightboxContent').hide();
         $('#' + which).show();
+        
+        self.lightbox = which;
 
         $('#lightbox_overlay').show();
         $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
@@ -97,16 +106,20 @@ Metamaps.GlobalUI = {
     },
 
     closeLightbox: function () {
+        var self = Metamaps.GlobalUI;
+        
         $('#lightbox_overlay').hide();
-        Metamaps.GlobalUI.CreateMap.reset('fork_map');
-        Metamaps.GlobalUI.CreateMap.reset('new_map');
+        
+        if (self.lightbox === 'forkmap') Metamaps.GlobalUI.CreateMap.reset('fork_map');
+        if (self.lightbox === 'newmap') Metamaps.GlobalUI.CreateMap.reset('new_map');
         if (Metamaps.Create && Metamaps.Create.isSwitchingSet) {
             Metamaps.Create.cancelMetacodeSetSwitch();
         }
+        self.lightbox = null;
     },
     notifyUser: function (message) {
         var self = Metamaps.GlobalUI;
-        
+
         if ($('.notice.metamaps').length == 0) {
             $('body').prepend('<div class="notice metamaps" />');
         }
@@ -186,33 +199,102 @@ Metamaps.GlobalUI.MainMenu = {
 
 
 Metamaps.GlobalUI.CreateMap = {
+    newMap: null,
+    emptyMapForm: "",
+    emptyForkMapForm: "",
+    topicsToMap: [],
+    synapsesToMap: [],
     init: function () {
+        var self = Metamaps.GlobalUI.CreateMap;
+
+        self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' });
+
+        self.bindFormEvents();
+
+        self.emptyMapForm = $('#new_map').html();
+
+    },
+    bindFormEvents: function () {
+        var self = Metamaps.GlobalUI.CreateMap;
+        
+        $('.new_map button.cancel').unbind().bind('click', function (event) {
+            event.preventDefault();
+            Metamaps.GlobalUI.closeLightbox();
+        });
+        $('.new_map button.submitMap').unbind().bind('click', self.submit);
         
         // bind permission changer events on the createMap form
-        $('.permIcon').click(function () {
-            $(this).siblings('#map_permission').val($(this).attr('data-permission'));
-            $(this).siblings('.permIcon').find('.mapPermIcon').removeClass('selected');
-            $(this).find('.mapPermIcon').addClass('selected');
-        });
-        
+        $('.permIcon').unbind().bind('click', self.switchPermission);
     },
-    reset: function (id) {
+    generateSuccessMessage: function (id) {
+        var stringStart = "Success! Do you want to <br> <a href='/maps/";
+        stringStart += id;
+        stringStart += "'>Go to your new map?</a>";
+        stringStart += "<br>or<br><a href='#' onclick='Metamaps.GlobalUI.closeLightbox(); return false;'>Stay on this ";
+        var page = Metamaps.Active.Map ? 'map' : 'page';
+        var stringEnd = "?</a>";
+        return stringStart + page + stringEnd;
+    },
+    switchPermission: function () {
+        var self = Metamaps.GlobalUI.CreateMap;
+        
+        self.newMap.set('permission', $(this).attr('data-permission'));
+        $(this).siblings('.permIcon').find('.mapPermIcon').removeClass('selected');
+        $(this).find('.mapPermIcon').addClass('selected');
+    },
+    submit: function (event) {
+        event.preventDefault();
+        
+        var self = Metamaps.GlobalUI.CreateMap;
 
-        var form = $('#' + id);
-
-        form.find('#map_name').val('');
-        form.find('#map_desc').val('');
-        form.find('#map_permission').val('commons');
-
-        if (id == "fork_map") {
-            form.find('#map_topicsToMap').val('0');
-            form.find('#map_synapsesToMap').val('0');
+        if (Metamaps.GlobalUI.lightbox === 'forkmap') {
+            self.newMap.set('topicsToMap', self.topicsToMap);
+            self.newMap.set('synapsesToMap', self.synapsesToMap);
         }
 
-        // remove a selected state from all three of them
-        form.find('.mapPermIcon').removeClass('selected');
-        // add a selected state back to commons permission, the default
-        form.find('.mapCommonsIcon').addClass('selected');
+        var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
+        var form = $(formId);
+
+        self.newMap.set('name', form.find('#map_name').val());
+        self.newMap.set('desc', form.find('#map_desc').val());
+
+        // TODO validate map attributes
+        
+        self.newMap.save(null, {
+            success: self.success
+            // TODO add error message
+        });
+        
+        if (Metamaps.GlobalUI.lightbox === 'forkmap') {
+            form.html('Working...');
+        }
+    },
+    success: function (model) {
+        var self = Metamaps.GlobalUI.CreateMap;
+        
+        var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
+        var form = $(formId);
+        
+        form.html(self.generateSuccessMessage(model.id));
+        
+        $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
+    },
+    reset: function (id) {
+        var self = Metamaps.GlobalUI.CreateMap;
+
+        var form = $('#' + id);
+                
+        if (id === "fork_map") {
+            self.topicsToMap = [];
+            self.synapsesToMap = [];
+            form.html(self.emptyForkMapForm);
+        }
+        else {
+            form.html(self.emptyMapForm);
+        }
+        
+        self.bindFormEvents();
+        self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' });
 
         return false;
     },
@@ -300,7 +382,7 @@ Metamaps.GlobalUI.Search = {
                 break; //console.log(e.which);
             }
         });
-        
+
         self.startTypeahead();
     },
     open: function () {

@@ -2011,7 +2011,7 @@ div.mapInfoStat {
     margin: 10px 0 0 131px;
     width: 254px;
 }
-.onConsole .new_map button {
+.onConsole .new_map button.cancel {
     margin-right: 20px;
 }
 .onConsole .new_map button,

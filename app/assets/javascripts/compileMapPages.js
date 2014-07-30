@@ -10,10 +10,11 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require socket.io
-//= require underscore
-//= require backbone
-//= require_directory ./carousel
+//
+// can't use require directory because underscore needs to come before backbone
+//
+//= require ./librariesForMapPages/cloudcarousel
+//= require ./librariesForMapPages/socket.io
 //= require ./metamaps/JIT
 //= require ./metamaps/Metamaps
 //= require ./metamaps/Metamaps.JIT

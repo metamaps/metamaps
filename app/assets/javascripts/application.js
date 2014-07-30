@@ -10,18 +10,11 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //  
-// require autocomplete-rails-uncompressed
-//
 //= require jquery
 //= require jquery-ui
-//= require jquery.purr
-//= require jquery.lettering
-//= require jquery.textillate
-//= require jquery.roundabout.min
-//= require bip
 //= require jquery_ujs
-//= require typeahead
-//= require hogan-2.0.0
-//= require_directory ./scroll
-//= require_directory ./typing
+//= require ./orderedLibraries/underscore
+//= require ./orderedLibraries/backbone
+//= require_directory ./librariesForAllPages
 //= require ./metamaps/Metamaps.GlobalUI
+//= require ./metamaps/Metamaps.Backbone

@@ -98,18 +98,15 @@ class MapsController < ApplicationController
     
     @user = current_user
     @map = Map.new()
-    @map.name = params[:map][:name]
-    @map.desc = params[:map][:desc]
-    @map.permission = params[:map][:permission]
+    @map.name = params[:name]
+    @map.desc = params[:desc]
+    @map.permission = params[:permission]
     @map.user = @user
-    @map.arranged = false    
-    @map.save   
-
-    #this variable specifies to the js file whether it's a brand new map or a forked one
-    @forked = false    
+    @map.arranged = false 
+    @map.save     
 	  
-    if params[:map][:topicsToMap]
-      @all = params[:map][:topicsToMap]
+    if params[:topicsToMap]
+      @all = params[:topicsToMap]
       @all = @all.split(',')
       @all.each do |topic|
         topic = topic.split('/')
@@ -123,8 +120,8 @@ class MapsController < ApplicationController
         @mapping.save
       end
 
-      if params[:map][:synapsesToMap]
-        @synAll = params[:map][:synapsesToMap]
+      if params[:synapsesToMap]
+        @synAll = params[:synapsesToMap]
         @synAll = @synAll.split(',')
         @synAll.each do |synapse_id|
           @mapping = Mapping.new()
@@ -137,13 +134,11 @@ class MapsController < ApplicationController
       end
 
       @map.arranged = true
-      @map.save
-      
-      @forked = true
+      @map.save      
     end
     
     respond_to do |format|
-      format.js { respond_with(@map, @forked) }
+      format.json { render :json => @map }
     end
   end
   
@@ -153,15 +148,15 @@ class MapsController < ApplicationController
 	  @map = Map.find(params[:id]).authorize_to_edit(@current)
     
 	  if @map 
-        if params[:map]
-          @map.name = params[:map][:name] if params[:map][:name]
-		      @map.desc = params[:map][:desc] if params[:map][:desc]
-		      @map.permission = params[:map][:permission] if params[:map][:permission]
-        end
+        @map.name = params[:name] if params[:name]
+        @map.desc = params[:desc] if params[:desc]
+        @map.permission = params[:permission] if params[:permission]
 	    @map.save
-    end
+      end
 
-    respond_with @map
+    respond_to do |format|
+      format.json { render :json => @map }
+    end
   end
   
   # DELETE maps/:id

@@ -59,19 +59,11 @@ Metamaps.Mouse = {
     DOUBLE_CLICK_TOLERANCE: 300
 };
 
-Metamaps.Active = {
-    Map: null,
-    Topic: null,
-    Mapper: null
-};
-
 Metamaps.Selected = {
     Nodes: [],
     Edges: []
 };
 
-Metamaps.Maps = {}; // will be initialized in Metamaps.Backbone.init as a MapCollection
-Metamaps.Mappers = {}; // will be initialized in Metamaps.Backbone.init as a MapperCollection
 Metamaps.Metacodes = {}; // will be initialized in Metamaps.Backbone.init as a MetacodeCollection
 Metamaps.Topics = {}; // will be initialized in Metamaps.Backbone.init as a TopicCollection
 Metamaps.Synapses = {}; // will be initialized in Metamaps.Backbone.init as a SynapseCollection
@@ -79,270 +71,242 @@ Metamaps.Mappings = {}; // will be initialized in Metamaps.Backbone.init as a Ma
 
 
 /*
-*
-*   BACKBONE
-*
-*/
-Metamaps.Backbone = {
-    init: function () {
-        var self = Metamaps.Backbone;
+ *
+ *   BACKBONE
+ *
+ */
+Metamaps.Backbone.init = function () {
+    var self = Metamaps.Backbone;
 
-        self.Metacode = Backbone.Model.extend({});
-        self.MetacodeCollection = Backbone.Collection.extend({
-            model: this.Metacode,
-            url: '/metacodes'
-        });
+    self.Metacode = Backbone.Model.extend({});
+    self.MetacodeCollection = Backbone.Collection.extend({
+        model: this.Metacode,
+        url: '/metacodes'
+    });
 
-        self.Topic = Backbone.Model.extend({
-            urlRoot: '/topics',
-            blacklist: ['node', 'created_at', 'updated_at'],
-            toJSON: function (options) {
-                return _.omit(this.attributes, this.blacklist);
-            },
-            initialize: function () {
-                if (this.isNew()) {
-                    this.set({
-                        "user_id": Metamaps.Active.Mapper.id,
-                        "desc": '',
-                        "link": '',
-                        "permission": Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons'
-                    });
-                }
-            },
-            authorizeToEdit: function (mapper) {
-                if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
-                else return false;
-            },
-            authorizePermissionChange: function (mapper) {
-                if (mapper && this.get('user_id') === mapper.get('id')) return true;
-                else return false;
-            },
-            getDate: function () {
-
-            },
-            getUser: function () {
-                return Metamaps.Mapper.get(this.get('user_id'));
-            },
-            getMetacode: function () {
-                return Metamaps.Metacodes.get(this.get('metacode_id'));
-            },
-            getMapping: function () {
-                return Metamaps.Mappings.findWhere({
-                    map_id: Metamaps.Active.Map.id,
-                    topic_id: this.isNew() ? this.cid : this.id
+    self.Topic = Backbone.Model.extend({
+        urlRoot: '/topics',
+        blacklist: ['node', 'created_at', 'updated_at'],
+        toJSON: function (options) {
+            return _.omit(this.attributes, this.blacklist);
+        },
+        initialize: function () {
+            if (this.isNew()) {
+                this.set({
+                    "user_id": Metamaps.Active.Mapper.id,
+                    "desc": '',
+                    "link": '',
+                    "permission": Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons'
                 });
-            },
-            updateMapping: function () {
-                var mapping = this.getMapping();
-
-                if (mapping) {
-                    mapping.set('topic_id', this.id);
-                }
-            },
-            createNode: function () {
-                var mapping = this.getMapping();
-                var node = {
-                    adjacencies: [],
-                    data: {
-                        $mapping: null,
-                        $mappingID: mapping ? mapping.id : null
-                    },
-                    id: this.isNew() ? this.cid : this.id,
-                    name: this.get('name')
-                };
-                return node;
-            },
-            updateNode: function () {
-                var mapping = this.getMapping();
-                var node = this.get('node');
-                node.setData('topic', this);
-                node.setData('mapping', mapping);
-                node.id = this.isNew() ? this.cid : this.id;
-                return node;
-            },
-        });
-
-        self.TopicCollection = Backbone.Collection.extend({
-            model: self.Topic,
-            url: '/topics',
-            comparator: function (a, b) {
-                a = a.get('name').toLowerCase();
-                b = b.get('name').toLowerCase();
-                return a > b ? 1 : a < b ? -1 : 0;
             }
-        });
+        },
+        authorizeToEdit: function (mapper) {
+            if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
+            else return false;
+        },
+        authorizePermissionChange: function (mapper) {
+            if (mapper && this.get('user_id') === mapper.get('id')) return true;
+            else return false;
+        },
+        getDate: function () {
 
-        self.Synapse = Backbone.Model.extend({
-            urlRoot: '/synapses',
-            blacklist: ['edge', 'created_at', 'updated_at'],
-            toJSON: function (options) {
-                return _.omit(this.attributes, this.blacklist);
-            },
-            initialize: function () {
-                if (this.isNew()) {
-                    this.set({
-                        "user_id": Metamaps.Active.Mapper.id,
-                        "permission": Metamaps.Active.Map.get('permission'),
-                        "category": "from-to"
-                    });
-                }
-            },
-            authorizeToEdit: function (mapper) {
-                if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
-                else return false;
-            },
-            authorizePermissionChange: function (mapper) {
-                if (mapper && this.get('user_id') === mapper.get('id')) return true;
-                else return false;
-            },
-            getUser: function () {
-                return Metamaps.Mapper.get(this.get('user_id'));
-            },
-            getTopic1: function () {
-                return Metamaps.Topic.get(this.get('node1_id'));
-            },
-            getTopic2: function () {
-                return Metamaps.Topic.get(this.get('node2_id'));
-            },
-            getDirection: function () {
-                return [
+        },
+        getUser: function () {
+            return Metamaps.Mapper.get(this.get('user_id'));
+        },
+        getMetacode: function () {
+            return Metamaps.Metacodes.get(this.get('metacode_id'));
+        },
+        getMapping: function () {
+            return Metamaps.Mappings.findWhere({
+                map_id: Metamaps.Active.Map.id,
+                topic_id: this.isNew() ? this.cid : this.id
+            });
+        },
+        updateMapping: function () {
+            var mapping = this.getMapping();
+
+            if (mapping) {
+                mapping.set('topic_id', this.id);
+            }
+        },
+        createNode: function () {
+            var mapping = this.getMapping();
+            var node = {
+                adjacencies: [],
+                data: {
+                    $mapping: null,
+                    $mappingID: mapping ? mapping.id : null
+                },
+                id: this.isNew() ? this.cid : this.id,
+                name: this.get('name')
+            };
+            return node;
+        },
+        updateNode: function () {
+            var mapping = this.getMapping();
+            var node = this.get('node');
+            node.setData('topic', this);
+            node.setData('mapping', mapping);
+            node.id = this.isNew() ? this.cid : this.id;
+            return node;
+        },
+    });
+
+    self.TopicCollection = Backbone.Collection.extend({
+        model: self.Topic,
+        url: '/topics',
+        comparator: function (a, b) {
+            a = a.get('name').toLowerCase();
+            b = b.get('name').toLowerCase();
+            return a > b ? 1 : a < b ? -1 : 0;
+        }
+    });
+
+    self.Synapse = Backbone.Model.extend({
+        urlRoot: '/synapses',
+        blacklist: ['edge', 'created_at', 'updated_at'],
+        toJSON: function (options) {
+            return _.omit(this.attributes, this.blacklist);
+        },
+        initialize: function () {
+            if (this.isNew()) {
+                this.set({
+                    "user_id": Metamaps.Active.Mapper.id,
+                    "permission": Metamaps.Active.Map.get('permission'),
+                    "category": "from-to"
+                });
+            }
+        },
+        authorizeToEdit: function (mapper) {
+            if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
+            else return false;
+        },
+        authorizePermissionChange: function (mapper) {
+            if (mapper && this.get('user_id') === mapper.get('id')) return true;
+            else return false;
+        },
+        getUser: function () {
+            return Metamaps.Mapper.get(this.get('user_id'));
+        },
+        getTopic1: function () {
+            return Metamaps.Topic.get(this.get('node1_id'));
+        },
+        getTopic2: function () {
+            return Metamaps.Topic.get(this.get('node2_id'));
+        },
+        getDirection: function () {
+            return [
                     this.get('node1_id'),
                     this.get('node2_id')
                 ];
-            },
-            getMapping: function () {
-                return Metamaps.Mappings.findWhere({
-                    map_id: Metamaps.Active.Map.id,
-                    synapse_id: this.isNew() ? this.cid : this.id
+        },
+        getMapping: function () {
+            return Metamaps.Mappings.findWhere({
+                map_id: Metamaps.Active.Map.id,
+                synapse_id: this.isNew() ? this.cid : this.id
+            });
+        },
+        updateMapping: function () {
+            var mapping = this.getMapping();
+
+            if (mapping) {
+                mapping.set('synapse_id', this.id);
+            }
+        },
+        createEdge: function () {
+            var mapping = this.getMapping();
+            var mappingID = mapping.isNew() ? mapping.cid : mapping.id;
+            var synapseID = this.isNew() ? this.cid : this.id;
+
+            var edge = {
+                nodeFrom: this.get('node1_id'),
+                nodeTo: this.get('node2_id'),
+                data: {
+                    $mappings: [],
+                    $mappingIDs: [mappingID],
+                    $synapses: [],
+                    $synapseIDs: [synapseID],
+                }
+            };
+            return edge;
+        },
+        updateEdge: function () {
+            var mapping = this.getMapping();
+            var edge = this.get('edge');
+            edge.getData('mappings').push(mapping);
+            edge.getData('synapses').push(this);
+            return edge;
+        },
+    });
+
+    self.SynapseCollection = Backbone.Collection.extend({
+        model: self.Synapse,
+        url: '/synapses'
+    });
+
+    self.Mapping = Backbone.Model.extend({
+        urlRoot: '/mappings',
+        blacklist: ['created_at', 'updated_at'],
+        toJSON: function (options) {
+            return _.omit(this.attributes, this.blacklist);
+        },
+        initialize: function () {
+            if (this.isNew()) {
+                this.set({
+                    "user_id": Metamaps.Active.Mapper.id,
+                    "map_id": Metamaps.Active.Map ? Metamaps.Active.Map.id : null
                 });
-            },
-            updateMapping: function () {
-                var mapping = this.getMapping();
-
-                if (mapping) {
-                    mapping.set('synapse_id', this.id);
-                }
-            },
-            createEdge: function () {
-                var mapping = this.getMapping();
-                var mappingID = mapping.isNew() ? mapping.cid : mapping.id;
-                var synapseID = this.isNew() ? this.cid : this.id;
-
-                var edge = {
-                    nodeFrom: this.get('node1_id'),
-                    nodeTo: this.get('node2_id'),
-                    data: {
-                        $mappings: [],
-                        $mappingIDs: [mappingID],
-                        $synapses: [],
-                        $synapseIDs: [synapseID],
-                    }
-                };
-                return edge;
-            },
-            updateEdge: function () {
-                var mapping = this.getMapping();
-                var edge = this.get('edge');
-                edge.getData('mappings').push(mapping);
-                edge.getData('synapses').push(this);
-                return edge;
-            },
-        });
-
-        self.SynapseCollection = Backbone.Collection.extend({
-            model: self.Synapse,
-            url: '/synapses'
-        });
-
-        self.Mapping = Backbone.Model.extend({
-            urlRoot: '/mappings',
-            blacklist: ['created_at', 'updated_at'],
-            toJSON: function (options) {
-                return _.omit(this.attributes, this.blacklist);
-            },
-            initialize: function () {
-                if (this.isNew()) {
-                    this.set({
-                        "user_id": Metamaps.Active.Mapper.id,
-                        "map_id": Metamaps.Active.Map ? Metamaps.Active.Map.id : null
-                    });
-                }
-            },
-            getUser: function () {
-                return Metamaps.Mapper.get(this.get('user_id'));
-            },
-            getMap: function () {
-                return Metamaps.Map.get(this.get('map_id'));
-            },
-            getTopic: function () {
-                if (this.get('category') === 'Topic') return Metamaps.Topic.get(this.get('topic_id'));
-                else return false;
-            },
-            getSynapse: function () {
-                if (this.get('category') === 'Synapse') return Metamaps.Synapse.get(this.get('synapse_id'));
-                else return false;
             }
-        });
+        },
+        getUser: function () {
+            return Metamaps.Mapper.get(this.get('user_id'));
+        },
+        getMap: function () {
+            return Metamaps.Map.get(this.get('map_id'));
+        },
+        getTopic: function () {
+            if (this.get('category') === 'Topic') return Metamaps.Topic.get(this.get('topic_id'));
+            else return false;
+        },
+        getSynapse: function () {
+            if (this.get('category') === 'Synapse') return Metamaps.Synapse.get(this.get('synapse_id'));
+            else return false;
+        }
+    });
 
-        self.MappingCollection = Backbone.Collection.extend({
-            model: self.Mapping,
-            url: '/mappings'
-        });
+    self.MappingCollection = Backbone.Collection.extend({
+        model: self.Mapping,
+        url: '/mappings'
+    });
 
-        self.Map = Backbone.Model.extend({
-            urlRoot: '/maps',
-            blacklist: ['created_at', 'updated_at'],
-            toJSON: function (options) {
-                return _.omit(this.attributes, this.blacklist);
-            },
-            authorizeToEdit: function (mapper) {
-                if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
-                else return false;
-            }
-        });
-        self.MapsCollection = Backbone.Collection.extend({
-            model: self.Map,
-            url: '/maps'
-        });
+    Metamaps.Metacodes = new self.MetacodeCollection(Metamaps.Metacodes);
 
-        self.Mapper = Backbone.Model.extend({
-            urlRoot: '/users',
-            blacklist: ['created_at', 'updated_at'],
-            toJSON: function (options) {
-                return _.omit(this.attributes, this.blacklist);
-            },
-        });
-        self.MapperCollection = Backbone.Collection.extend({
-            model: self.Mapper,
-            url: '/users'
-        });
+    Metamaps.Topics = new self.TopicCollection(Metamaps.Topics);
 
-        Metamaps.Metacodes = new self.MetacodeCollection(Metamaps.Metacodes);
+    Metamaps.Synapses = new self.SynapseCollection(Metamaps.Synapses);
 
-        Metamaps.Active.Mapper = new self.Mapper({
-            id: userid,
-            name: username
-        });
-        Metamaps.Mappers = new self.MapperCollection([Metamaps.Active.Mapper]);
+    Metamaps.Mappings = new self.MappingCollection(Metamaps.Mappings);
 
-        Metamaps.Topics = new self.TopicCollection(Metamaps.Topics);
-
-        Metamaps.Synapses = new self.SynapseCollection(Metamaps.Synapses);
-
-        Metamaps.Mappings = new self.MappingCollection(Metamaps.Mappings);
-
-        Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
-        Metamaps.Maps = new self.MapsCollection([Metamaps.Active.Map]);
-    }
-}; // end Metamaps.Backbone
+    Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
+    Metamaps.Maps.add(Metamaps.Active.Map);
+}; // end Metamaps.Backbone.init
 
 
 /*
-*
-*   CREATE
-*
-*/
+ *
+ *   CREATE
+ *
+ */
 Metamaps.Create = {
+    isSwitchingSet: false, // indicates whether the metacode set switch lightbox is open
+    metacodeScrollerInit: false, // indicates whether the scrollbar in the custom metacode set space has been init
+    selectedMetacodeSet: null,
+    selectedMetacodeSetIndex: null,
+    selectedMetacodeNames: [],
+    newSelectedMetacodeNames: [],
+    selectedMetacodes: [],
+    newSelectedMetacodes: [],
     init: function () {
         var self = Metamaps.Create;
         self.newTopic.init();
@@ -356,28 +320,23 @@ Metamaps.Create = {
             selected: self.selectedMetacodeSetIndex
         }).addClass("ui-tabs-vertical ui-helper-clearfix");
         $("#metacodeSwitchTabs .ui-tabs-nav li").removeClass("ui-corner-top").addClass("ui-corner-left");
-        $('.customMetacodeList li').click(function () {
-            if ($(this).attr('class') != 'toggledOff') {
-                $(this).addClass('toggledOff');
-                var value_to_remove = $(this).attr('id');
-                var name_to_remove = $(this).attr('data-name');
-                self.newSelectedMetacodes.splice(self.newSelectedMetacodes.indexOf(value_to_remove), 1);
-                self.newSelectedMetacodeNames.splice(self.newSelectedMetacodeNames.indexOf(name_to_remove), 1);
-            } else if ($(this).attr('class') == 'toggledOff') {
-                $(this).removeClass('toggledOff');
-                self.newSelectedMetacodes.push($(this).attr('id'));
-                self.newSelectedMetacodeNames.push($(this).attr('data-name'));
-            }
-        });
+        $('.customMetacodeList li').click(self.toggleMetacodeSelected); // within the custom metacode set tab
     },
-    isSwitchingSet: false, // indicates whether the metacode set switch lightbox is open
-    metacodeScrollerInit: false, // indicates whether the scrollbar in the custom metacode set space has been init
-    selectedMetacodeSet: null,
-    selectedMetacodeSetIndex: null,
-    selectedMetacodeNames: [],
-    newSelectedMetacodeNames: [],
-    selectedMetacodes: [],
-    newSelectedMetacodes: [],
+    toggleMetacodeSelected: function () {
+        var self = Metamaps.Create;
+
+        if ($(this).attr('class') != 'toggledOff') {
+            $(this).addClass('toggledOff');
+            var value_to_remove = $(this).attr('id');
+            var name_to_remove = $(this).attr('data-name');
+            self.newSelectedMetacodes.splice(self.newSelectedMetacodes.indexOf(value_to_remove), 1);
+            self.newSelectedMetacodeNames.splice(self.newSelectedMetacodeNames.indexOf(name_to_remove), 1);
+        } else if ($(this).attr('class') == 'toggledOff') {
+            $(this).removeClass('toggledOff');
+            self.newSelectedMetacodes.push($(this).attr('id'));
+            self.newSelectedMetacodeNames.push($(this).attr('data-name'));
+        }
+    },
     updateMetacodeSet: function (set, index, custom) {
 
         if (custom && Metamaps.Create.newSelectedMetacodes.length == 0) {
@@ -606,10 +565,10 @@ Metamaps.Create = {
 
 
 /*
-*
-*   TOPICCARD
-*
-*/
+ *
+ *   TOPICCARD
+ *
+ */
 Metamaps.TopicCard = {
     openTopicCard: null, //stores the JIT local ID of the topic with the topic card open 
     init: function () {
@@ -864,10 +823,10 @@ Metamaps.TopicCard = {
 
 
 /*
-*
-*   SYNAPSECARD
-*
-*/
+ *
+ *   SYNAPSECARD
+ *
+ */
 Metamaps.SynapseCard = {
     openSynapseCard: null,
     showCard: function (edge, e) {
@@ -1080,10 +1039,10 @@ Metamaps.SynapseCard = {
 
 
 /*
-*
-*   VISUALIZE
-*
-*/
+ *
+ *   VISUALIZE
+ *
+ */
 Metamaps.Visualize = {
     mGraph: {}, // a reference to the graph object.
     cameraPosition: null, // stores the camera position when using a 3D visualization
@@ -1219,10 +1178,10 @@ Metamaps.Visualize = {
 
 
 /*
-*
-*   UTIL
-*
-*/
+ *
+ *   UTIL
+ *
+ */
 Metamaps.Util = {
     // helper function to determine how many lines are needed
     // Line Splitter Function
@@ -1271,10 +1230,10 @@ Metamaps.Util = {
 
 
 /*
-*
-*   REALTIME
-*
-*/
+ *
+ *   REALTIME
+ *
+ */
 Metamaps.Realtime = {
     // this is for the heroku staging environment
     //Metamaps.Realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
@@ -1524,7 +1483,7 @@ Metamaps.Realtime = {
         }
     },
     addTopicToMap: function (topic) {
-        
+
         // TODO
         var newPos, tempForT;
         Metamaps.Visualize.mGraph.graph.addNode(topic);
@@ -1540,7 +1499,7 @@ Metamaps.Realtime = {
         Metamaps.Visualize.mGraph.fx.plotNode(tempForT, Metamaps.Visualize.mGraph.canvas);
     },
     updateTopicOnMap: function (topic) {
-        
+
         // TODO
         var newPos, tempForT;
         tempForT = Metamaps.Visualize.mGraph.graph.getNode(topic.id);
@@ -1562,7 +1521,7 @@ Metamaps.Realtime = {
         });
     },
     addSynapseToMap: function (synapse) {
-        
+
         // TODO
         var Node1, Node2, tempForS;
         Node1 = Metamaps.Visualize.mGraph.graph.getNode(synapse.data.$direction[0]);
@@ -1584,7 +1543,7 @@ Metamaps.Realtime = {
         });
     },
     updateSynapseOnMap: function (synapse) {
-        
+
         // TODO
         var k, tempForS, v, wasShowDesc, _ref;
         tempForS = Metamaps.Visualize.mGraph.graph.getAdjacence(synapse.data.$direction[0], synapse.data.$direction[1]);
@@ -1600,14 +1559,14 @@ Metamaps.Realtime = {
         }
         return Metamaps.Visualize.mGraph.plot();
     }
-};  // end Metamaps.Realtime
+}; // end Metamaps.Realtime
 
 
 /*
-*
-*   CONTROL
-*
-*/
+ *
+ *   CONTROL
+ *
+ */
 Metamaps.Control = {
     init: function () {
 
@@ -1874,10 +1833,10 @@ Metamaps.Control = {
 
 
 /*
-*
-*   FILTER
-*
-*/
+ *
+ *   FILTER
+ *
+ */
 Metamaps.Filter = {
     filters: {
         name: "",
@@ -2008,10 +1967,10 @@ Metamaps.Filter = {
 
 
 /*
-*
-*   LISTENERS
-*
-*/
+ *
+ *   LISTENERS
+ *
+ */
 Metamaps.Listeners = {
 
     init: function () {
@@ -2038,10 +1997,10 @@ Metamaps.Listeners = {
 
 
 /*
-*
-*   ORGANIZE
-*
-*/
+ *
+ *   ORGANIZE
+ *
+ */
 Metamaps.Organize = {
     init: function () {
 
@@ -2167,10 +2126,10 @@ Metamaps.Organize = {
 
 
 /*
-*
-*   TOPIC
-*
-*/
+ *
+ *   TOPIC
+ *
+ */
 Metamaps.Topic = {
     // this function is to retrieve a topic JSON object from the database
     // @param id = the id of the topic to retrieve
@@ -2347,10 +2306,10 @@ Metamaps.Topic = {
 
 
 /*
-*
-*   SYNAPSE
-*
-*/
+ *
+ *   SYNAPSE
+ *
+ */
 Metamaps.Synapse = {
     // this function is to retrieve a synapse JSON object from the database
     // @param id = the id of the synapse to retrieve
@@ -2486,10 +2445,10 @@ Metamaps.Synapse = {
 
 
 /*
-*
-*   MAP
-*
-*/
+ *
+ *   MAP
+ *
+ */
 Metamaps.Map = {
     init: function () {
         var self = Metamaps.Map;
@@ -2502,6 +2461,8 @@ Metamaps.Map = {
         $('.sidebarFork').click(function () {
             self.fork();
         });
+
+        Metamaps.GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html();
 
         self.InfoBox.init();
         self.CheatSheet.init();
@@ -2570,17 +2531,17 @@ Metamaps.Map = {
         synapses_data = synapses_array.join();
         nodes_data = nodes_data.slice(0, -1);
 
-        $('#map_topicsToMap').val(nodes_data);
-        $('#map_synapsesToMap').val(synapses_data);
+        Metamaps.GlobalUI.CreateMap.topicsToMap = nodes_data;
+        Metamaps.GlobalUI.CreateMap.synapsesToMap = synapses_data;
     }
 };
 
 
 /*
-*
-*   CHEATSHEET
-*
-*/
+ *
+ *   CHEATSHEET
+ *
+ */
 Metamaps.Map.CheatSheet = {
     init: function () {
         // tab the cheatsheet
@@ -2591,10 +2552,10 @@ Metamaps.Map.CheatSheet = {
 
 
 /*
-*
-*   INFOBOX
-*
-*/
+ *
+ *   INFOBOX
+ *
+ */
 Metamaps.Map.InfoBox = {
     isOpen: false,
     timeOut: null,
@@ -2675,10 +2636,10 @@ Metamaps.Map.InfoBox = {
 
 
 /*
-*
-*   MAPPER
-*
-*/
+ *
+ *   MAPPER
+ *
+ */
 Metamaps.Mapper = {
     // this function is to retrieve a mapper JSON object from the database
     // @param id = the id of the mapper to retrieve
@@ -2709,4 +2670,4 @@ Metamaps.Mapper = {
             }
         }
     },
-};  // end Metamaps.Mapper
+}; // end Metamaps.Mapper

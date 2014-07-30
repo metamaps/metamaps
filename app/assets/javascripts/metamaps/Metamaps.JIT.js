@@ -7,7 +7,7 @@ Metamaps.JIT = {
     init: function () {
         var self = Metamaps.JIT;
 
-
+        self.prepareVizData();
     },
     /**
      * convert our topic JSON into something JIT can use
