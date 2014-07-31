@@ -15,7 +15,7 @@ Metamaps.JIT = {
     prepareVizData: function () {
         var self = Metamaps.JIT;
         var topic;
-
+        var mapping;
         var node;
         var nodes = {};
         var existingEdge;
@@ -32,19 +32,19 @@ Metamaps.JIT = {
             existingEdge = _.findWhere(edges, {
                 nodeFrom: edge.nodeFrom,
                 nodeTo: edge.nodeTo
-            });
-            // also try the opposite
-            if (!existingEdge) {
-                existingEdge = _.findWhere(edges, {
+            }) ||
+                _.findWhere(edges, {
                     nodeFrom: edge.nodeTo,
                     nodeTo: edge.nodeFrom
                 });
-            }
 
             if (existingEdge) {
                 // for when you're dealing with multiple relationships between the same two topics
-                existingEdge['$mappingIDs'].push(m.isNew() ? m.cid : m.id);
-                existingEdge['$synapseIDs'].push(m.get('synapse_id'));
+                if (Metamaps.Active.Map) {
+                    mapping = s.getMapping();
+                    existingEdge['$mappingIDs'].push(mapping.isNew() ? mapping.cid : mapping.id);
+                }
+                existingEdge['$synapseIDs'].push(s.id);
             } else {
                 // for when you're dealing with a topic that has relationships to many different nodes
                 nodes[edge.nodeFrom].adjacencies.push(edge);
@@ -358,7 +358,7 @@ Metamaps.JIT = {
                     var pos = node.pos.getc(true),
                         dim = node.getData('dim'),
                         topic = node.getData('topic'),
-                        cat = topic ? topic.getMetacode().get('name') : false,
+                        metacode = topic ? topic.getMetacode() : false,
                         ctx = canvas.getCtx();
 
                     // if the topic is selected draw a circle around it
@@ -370,13 +370,17 @@ Metamaps.JIT = {
                         ctx.stroke();
                     }
 
-                    if (!cat || !imgArray[cat].complete || (typeof imgArray[cat].naturalWidth !== "undefined" && imgArray[cat].naturalWidth === 0)) {
+                    if (!metacode ||
+                        !metacode.get('image') ||
+                        !metacode.get('image').complete ||
+                        (typeof metacode.get('image').naturalWidth !== "undefined" &&
+                            metacode.get('image').naturalWidth === 0)) {
                         ctx.beginPath();
                         ctx.arc(pos.x, pos.y, dim, 0, 2 * Math.PI, false);
                         ctx.fillStyle = '#B6B2FD';
                         ctx.fill();
                     } else {
-                        ctx.drawImage(imgArray[cat], pos.x - dim, pos.y - dim, dim * 2, dim * 2);
+                        ctx.drawImage(metacode.get('image'), pos.x - dim, pos.y - dim, dim * 2, dim * 2);
                     }
                 },
                 'contains': function (node, pos) {
@@ -413,27 +417,6 @@ Metamaps.JIT = {
                         to = adj.nodeTo.pos.getc(true);
 
                     return $jit.Graph.Plot.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon);
-                }
-            }
-        },
-        embed: {
-            graphSettings: {
-
-            },
-            nodeSettings: {
-
-            },
-            edgeSettings: {
-                'customEdge': {
-                    'render': function (adj, canvas) {
-                        Metamaps.JIT.edgeRenderEmbed(adj, canvas)
-                    },
-                    'contains': function (adj, pos) {
-                        var from = adj.nodeFrom.pos.getc(true),
-                            to = adj.nodeTo.pos.getc(true);
-
-                        return this.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon);
-                    }
                 }
             }
         }
@@ -525,17 +508,6 @@ Metamaps.JIT = {
         },
         edgeSettings: {
 
-        },
-        embed: {
-            graphSettings: {
-
-            },
-            nodeSettings: {
-
-            },
-            edgeSettings: {
-
-            }
         }
     }, // ForceDirected3D
     RGraph: {
@@ -546,205 +518,18 @@ Metamaps.JIT = {
                 Metamaps.Visualize.mGraph.busy = false;
             }
         },
-        graphSettings: {
-            //id of the visualization container
-            injectInto: 'infovis',
-            //Enable zooming and panning
-            //by scrolling and DnD
-            Navigation: {
-                enable: true,
-                type: 'HTML',
-                //Enable panning events only if we're dragging the empty
-                //canvas (and not a node).
-                panning: 'avoid nodes',
-                zooming: 28 //zoom speed. higher is more sensible
-            },
-            background: {
-                type: 'Metamaps',
+        // this will just be used to patch the ForceDirected graphsettings with the few things which actually differ
+        background: {
+                //type: 'Metamaps',
+                levelDistance: 200,
+                numberOfCircles: 4,
                 CanvasStyles: {
                     strokeStyle: '#333',
                     lineWidth: 1.5
                 }
-            },
-            //NodeStyles: {  
-            //  enable: true,  
-            //  type: 'Native',  
-            //  stylesHover: {  
-            //    dim: 30  
-            //  },  
-            //  duration: 300  
-            //},
-            // Change node and edge styles such as
-            // color and width.
-            // These properties are also set per node
-            // with dollar prefixed data-properties in the
-            // JSON structure.
-            Node: {
-                overridable: true,
-                color: '#2D6A5D',
-                type: 'customNode',
-                dim: 25
-            },
-            Edge: {
-                overridable: true,
-                color: '#222222',
-                type: 'customEdge',
-                lineWidth: 2,
-                alpha: 0.4
-            },
-            //Native canvas text styling
-            Label: {
-                type: 'HTML', //Native or HTML
-                size: 20,
-                //style: 'bold'
-            },
-            //Add Tips
-            Tips: {
-                enable: false,
-                onShow: function (tip, node) {}
-            },
-            // Add node events
-            Events: {
-                enable: true,
-                enableForEdges: true,
-                type: 'HTML',
-                onMouseMove: function (node, eventInfo, e) {
-                    Metamaps.JIT.onMouseMoveHandler(node, eventInfo, e);
-                },
-                //Update node positions when dragged
-                onDragMove: function (node, eventInfo, e) {
-                    Metamaps.JIT.onDragMoveTopicHandler(node, eventInfo, e);
-                },
-                onDragEnd: function (node, eventInfo, e) {
-                    Metamaps.JIT.onDragEndTopicHandler(node, eventInfo, e, false);
-                },
-                onDragCancel: function (node, eventInfo, e) {
-                    Metamaps.JIT.onDragCancelHandler(node, eventInfo, e, false);
-                },
-                //Implement the same handler for touchscreens
-                onTouchStart: function (node, eventInfo, e) {
-                    //$jit.util.event.stop(e); //stop default touchmove event
-                    //Metamaps.Visualize.mGraph.events.onMouseDown(e, null, eventInfo);
-                    Metamaps.Visualize.mGraph.events.touched = true;
-                    Metamaps.Touch.touchPos = eventInfo.getPos();
-                    var canvas = Metamaps.Visualize.mGraph.canvas,
-                        ox = canvas.translateOffsetX;
-                    oy = canvas.translateOffsetY,
-                    sx = canvas.scaleOffsetX,
-                    sy = canvas.scaleOffsetY;
-                    Metamaps.Touch.touchPos.x *= sx;
-                    Metamaps.Touch.touchPos.y *= sy;
-                    Metamaps.Touch.touchPos.x += ox;
-                    Metamaps.Touch.touchPos.y += oy;
-
-                    touchDragNode = node;
-                },
-                //Implement the same handler for touchscreens
-                onTouchMove: function (node, eventInfo, e) {
-                    if (Metamaps.Touch.touchDragNode) Metamaps.JIT.onDragMoveTopicHandler(Metamaps.Touch.touchDragNode, eventInfo, e);
-                    else {
-                        Metamaps.JIT.touchPanZoomHandler(eventInfo, e);
-                        Metamaps.Visualize.mGraph.labels.hideLabel(Metamaps.Visualize.mGraph.graph.getNode(Metamaps.TopicCard.openTopicCard));
-                    }
-                },
-                //Implement the same handler for touchscreens
-                onTouchEnd: function (node, eventInfo, e) {
-
-                },
-                //Implement the same handler for touchscreens
-                onTouchCancel: function (node, eventInfo, e) {
-
-                },
-                //Add also a click handler to nodes
-                onClick: function (node, eventInfo, e) {
-
-                    if (Metamaps.Mouse.boxStartCoordinates) {
-                        Metamaps.Visualize.mGraph.busy = false;
-                        Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.selectNodesWithBox();
-                        return;
-                    }
-
-                    if (e.target.id != "infovis-canvas") return false;
-
-                    //clicking on a edge, node, or clicking on blank part of canvas?
-                    if (node.nodeFrom) {
-                        Metamaps.JIT.selectEdgeOnClickHandler(node, e);
-                    } else if (node && !node.nodeFrom) {
-                        Metamaps.JIT.selectNodeOnClickHandler(node, e);
-                    } else {
-                        Metamaps.JIT.canvasClickHandler(eventInfo.getPos(), e);
-                    } //if
-                }
-            },
-            //Number of iterations for the FD algorithm
-            iterations: 200,
-            //Edge length
-            levelDistance: 200,
         },
-        nodeSettings: {
-            'customNode': {
-                'render': function (node, canvas) {
-                    var pos = node.pos.getc(true),
-                        dim = node.getData('dim'),
-                        cat = node.getData('metacode'),
-                        ctx = canvas.getCtx();
-                    // if the topic is on the Canvas draw a white circle around it
-                    if (node.selected) {
-                        ctx.beginPath();
-                        ctx.arc(pos.x, pos.y, dim + 3, 0, 2 * Math.PI, false);
-                        ctx.strokeStyle = Metamaps.Settings.colors.topics.selected;
-                        ctx.lineWidth = 2;
-                        ctx.stroke();
-                    }
-                    try {
-                        ctx.drawImage(imgArray[cat], pos.x - dim, pos.y - dim, dim * 2, dim * 2);
-                    } catch (e) {
-                        alert("You've got an topic causing an issue! It's ->this-> one: " + cat);
-                    }
-                },
-                'contains': function (node, pos) {
-                    var npos = node.pos.getc(true),
-                        dim = node.getData('dim');
-                    return this.nodeHelper.circle.contains(npos, pos, dim);
-                }
-            }
-        },
-        edgeSettings: {
-            'customEdge': {
-                'render': function (adj, canvas) {
-                    Metamaps.JIT.edgeRender(adj, canvas)
-                },
-                'contains': function (adj, pos) {
-                    var from = adj.nodeFrom.pos.getc(true),
-                        to = adj.nodeTo.pos.getc(true);
-
-                    return this.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon);
-                }
-            }
-        },
-        embed: {
-            graphSettings: {
-
-            },
-            nodeSettings: {
-
-            },
-            edgeSettings: {
-                'customEdge': {
-                    'render': function (adj, canvas) {
-                        Metamaps.JIT.edgeRenderEmbed(adj, canvas)
-                    },
-                    'contains': function (adj, pos) {
-                        var from = adj.nodeFrom.pos.getc(true),
-                            to = adj.nodeTo.pos.getc(true);
-
-                        return this.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon);
-                    }
-                }
-            }
-        }
-    }, // RGraph
+        levelDistance: 200
+    },
     onMouseEnter: function (edge) {
 
         $('canvas').css('cursor', 'pointer');
@@ -928,7 +713,7 @@ Metamaps.JIT = {
                 Metamaps.Visualize.mGraph.plot();
             }
             // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
-            else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && userid != null) {
+            else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Metamaps.Active.Mapper) {
                 if (tempInit == false) {
                     tempNode = node;
                     tempInit = true;
@@ -1070,7 +855,7 @@ Metamaps.JIT = {
     }, // nodeDoubleClickHandler
     edgeDoubleClickHandler: function (adj, e) {
 
-        Metamaps.SynapseCard.showCard(adj, e); 
+        Metamaps.SynapseCard.showCard(adj, e);
 
     }, // nodeDoubleClickHandler
     nodeWasDoubleClicked: function () {
@@ -1212,13 +997,13 @@ Metamaps.JIT = {
         // add the proper options to the menu
         var menustring = '<ul>';
 
-        if (userid != null) menustring += '<li class="rc-delete">Delete</li>';
-        if (Metamaps.Active.Map.id && userid != null) menustring += '<li class="rc-remove">Remove from map</li>';
+        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete">Delete</li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove">Remove from map</li>';
         menustring += '<li class="rc-hide">Hide until refresh</li>';
 
         if (!Metamaps.Active.Map) menustring += '<li class="rc-center">Center this topic</li>';
         menustring += '<li class="rc-popout">Open in new tab</li>';
-        if (userid) {
+        if (Metamaps.Active.Mapper) {
             var options = '<ul><li class="changeP toCommons">commons</li> \
                          <li class="changeP toPublic">public</li> \
                          <li class="changeP toPrivate">private</li> \
@@ -1329,8 +1114,8 @@ Metamaps.JIT = {
         // the 'node' variable is a JIT node, the one that was clicked on
         // the 'e' variable is the click event
 
-        var authorized; 
-        
+        var authorized;
+
         e.preventDefault();
         e.stopPropagation();
 

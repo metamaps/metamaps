@@ -193,9 +193,9 @@ input[type="submit"]:hover {
  * Layout stuffs
  */
 
-#barometer_tab {
+/*#barometer_tab {
     display: none;
-}
+}*/
 #saveMapLayout {
     display: none;
 }
@@ -508,7 +508,6 @@ label[for="user_remember_me"] {
     border-right: none;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
-    background: #0F1519;
 }
 .wrapper div.index .openCheatsheet {
     position: absolute;
@@ -559,8 +558,8 @@ label[for="user_remember_me"] {
 
 .sidebarAccount {
     position: absolute;
-    top: 5px;
-    right: 0;
+    top: 10px;
+    right: 10px;
     z-index: 200;
     width: 35px;
     height: 35px;
@@ -573,17 +572,15 @@ label[for="user_remember_me"] {
     background-size: 24px 24px;
     cursor: pointer;
 }
-
 .sidebarAccountIcon img {
     border-radius: 17px;
 }
-
 .sidebarAccountBox {
     position: absolute;
     display: none;
     height: auto;
     background: #000;
-    top: 35px;
+    top: 45px;
     right: 0;
     padding: 10px;
     border: 1px solid black;
@@ -687,8 +684,8 @@ li.accountInvite span {
 
 .sidebarFork {
     position: absolute;
-    top: 5px;
-    right: 71px;
+    top: 10px;
+    right: 120px;
     z-index: 200;
     width: 35px;
     height: 35px;
@@ -701,10 +698,7 @@ li.accountInvite span {
     background-size: 28px 28px;
     cursor: pointer;
 }
-.sidebarForkIcon:hover {
-    
-}
-.sidebarForkBox {
+.sidebarForkIcon:hover {} .sidebarForkBox {
     position: absolute;
     display: none;
     height: auto;
@@ -754,10 +748,7 @@ li.accountInvite span {
     background-size: 22px 22px;
     cursor: pointer;
 }
-.sidebarSaveIcon:hover {
-    
-}
-.sidebarSaveBox {
+.sidebarSaveIcon:hover {} .sidebarSaveBox {
     position: absolute;
     display: none;
     height: auto;
@@ -791,8 +782,8 @@ li.accountInvite span {
 
 .sidebarFilter {
     position: absolute;
-    top: 5px;
-    right: 35px;
+    top: 10px;
+    right: 160px;
     z-index: 200;
     width: 35px;
     height: 35px;
@@ -808,9 +799,7 @@ li.accountInvite span {
     background-size: 28px 28px;
     cursor: pointer;
 }
-.sidebarFilterIcon:hover {
-    
-}
+.sidebarFilterIcon:hover {}
 /* we set a few of these params off screen to begin with, so that when we initialize the scroll bar it works, but then 
    we hide the element and position it correctly */
 
@@ -881,8 +870,8 @@ h3.filterByMetacode {
 
 .sidebarCollaborate {
     position: absolute;
-    top: 5px;
-    right: 143px;
+    top: 10px;
+    right: 200px;
     z-index: 200;
     width: 35px;
     height: 35px;
@@ -906,7 +895,7 @@ h3.filterByMetacode {
     height: auto;
     width: auto;
     background: #000;
-    top: 35px;
+    top: 45px;
     right: 0;
     padding: 10px;
     border: 1px solid black;
@@ -962,16 +951,17 @@ h3.realtimeBoxTitle {
 
 .sidebarSearch {
     position: absolute;
-    top: 5px;
-    left: 0;
+    top: 10px;
+    left: 10px;
     height: 35px;
     z-index: 200;
 }
 .sidebarSearchIcon {
     float: left;
-    width: 35px;
+    width: 80px;
+    border-radius: 2px;
     height: 35px;
-    background: #0F1519 url('search_icon_32x32.png') no-repeat center center;
+    background: #00BCD4 url('search_icon_32x32.png') no-repeat center center;
     background-size: 25px 25px;
     cursor: pointer;
 }
@@ -1691,9 +1681,9 @@ div.mapInfoStat {
     width: 100%;
     position: absolute;
     background-color: #000;
-    opacity: 0.42;
-    filter: alpha(opacity=42);
-    -moz-opacity: 0.42;
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0.0;
 }
 #lightbox_overlay #lightbox_main #lightbox_header {
     padding: 6px 5px 1px 0;
@@ -2032,6 +2022,7 @@ div.mapInfoStat {
     box-shadow: none;
 }
 /* Cheatsheet */
+
 #cheatSheet {
     width: 100%;
     height: 350px;
@@ -2040,15 +2031,14 @@ div.mapInfoStat {
     line-height: 21px;
     border: none;
 }
-
 #cheatSheet .sectionTitle {
     font-family: Lato, Arial, sans-serif;
-    font-weight:bold;
+    font-weight: bold;
 }
 #cheatSheet .csItem {
     margin: 5px 0;
-    font-size:15px;
-    line-height:18px;
+    font-size: 15px;
+    line-height: 18px;
 }
 #cheatSheet .csItem img {
     display: inline-block;
@@ -2058,7 +2048,7 @@ div.mapInfoStat {
     font-family: Lato, Arial, sans-serif;
 }
 #cheatSheet .indented {
-    margin-left:15px;
+    margin-left: 15px;
 }
 /* Admin Pages */
 
@@ -2246,41 +2236,32 @@ div.mapInfoStat {
     height: 100%;
     overflow: hidden;
 }
+
+
+.addMap {
+    display: block;
+    position: fixed;
+    right: 55px;
+    top: 10px;
+    width: 55px;
+    height: 35px;
+    background: #00BCD4 url('MMCCicon_add_map.png') no-repeat 3px -4px;
+    background-size: 40px 40px;
+    cursor: pointer;
+    z-index: 2;
+    border-radius: 2px;
+}
 /* --- styling the logo button ---*/
 
 .footer {
     display: block;
     position: fixed;
-    bottom: 5px;
-    height: 35px;
+    bottom: 10px;
+    left:50%;
+    margin-left:-55px;
     z-index: 15000;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
-    background: #0F1519;
 }
-.addMap {
-    position: absolute;
-    right: -49px;
-    top: 0px;
-    width: 44px;
-    height: 35px;
-    background: url('MMCCicon_add_map.png') no-repeat 3px -4px;
-    background-size: 40px 40px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.addMap:hover {} .logo {
-    z-index: 12;
-    display: block;
-    width: 136px;
-    background: url(menu_icon_32.png) no-repeat -10px 8px;
-    padding: 5px 0px 1px 15px;
-    background-size: 22px 20px;
-}
-#mainTitle {
-    padding: 0 5px;
-}
-#mainTitle a {
+#logo a {
     color: #FFF;
     font-family: "vinyl", sans-serif;
     font-style: italic;
@@ -2288,52 +2269,6 @@ div.mapInfoStat {
     font-weight: 400;
     font-size: 30px;
     line-height: 30px;
-}
-.footer .menu {
-    display: none;
-    position: absolute;
-    border: none;
-    bottom: 35px;
-    left: -1px;
-    height: 123px;
-    z-index: 12;
-    width: 122px;
-    color: white;
-    white-space: nowrap;
-    text-align: center;
-    font-size: 16px;
-    overflow: hidden;
-    padding: 0 0 0 30px;
-    margin: 0;
-    background: #0F1519 url(beta_gen002.png) no-repeat 6px 12px;
-}
-.footer ul li {
-    margin: 0;
-    clear: both;
-    float: none;
-    list-style-type: none;
-    display: block;
-    padding: 0;
-    text-align: center;
-    font-family: 'vinyl';
-    font-style: italic;
-    height: 30px;
-    line-height: 34px;
-    font-size: 17px;
-    cursor: pointer;
-}
-.footer ul li:hover {} li.meta a,
-li.tutorial a,
-li.exploreMaps a {
-    display: block;
-}
-li.meta,
-li.tutorial,
-li.exploreMaps {
-    border-top: 1px solid white;
-}
-.footer ul li a {
-    color: #FFF;
 }
 .home_bg {
     display: block;

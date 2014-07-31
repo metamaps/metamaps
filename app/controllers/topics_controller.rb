@@ -1,112 +1,115 @@
 class TopicsController < ApplicationController
-  include TopicsHelper
+    include TopicsHelper
 
-  before_filter :require_user, only: [:create, :update, :destroy]
-    
-  respond_to :html, :js, :json
-    
-  # GET /topics/autocomplete_topic
-  def autocomplete_topic
-    @current = current_user
-    term = params[:term]
-    if term && !term.empty?
-    	# !connor term here needs to have .downcase
-      @topics = Topic.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
-      
-      #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
-      @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-    else
-      @topics = []
-    end
-    render json: autocomplete_array_json(@topics)
-  end
-  
-  # GET topics/:id
-  def show
-    @current = current_user
-    @topic = Topic.find(params[:id]).authorize_to_show(@current)
-	
-    if @topic
-	  @relatives = @topic.network_as_json(@current).html_safe
-    else
-	  redirect_to root_url and return
-    end
-	
-    respond_to do |format|
-      format.html { respond_with(@topic, @user) }
-      #format.json { respond_with(@relatives) }
-      format.json { render :json => @topic }
-    end
-  end
+    before_filter :require_user, only: [:create, :update, :destroy]
 
-  # POST /topics
-  # POST /topics.json
-  def create
-    @topic = Topic.new(params[:topic])
+    respond_to :html, :js, :json
 
-    respond_to do |format|
-      if @topic.save
-        format.json { render json: @topic, status: :created }
-      else
-        format.json { render json: @topic.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-  
-  # PUT /topics/1
-  # PUT /topics/1.json
-  def update
-    @topic = Topic.find(params[:id])
+    # GET /topics/autocomplete_topic
+    def autocomplete_topic
+        @current = current_user
+        term = params[:term]
+        if term && !term.empty?
+            # !connor term here needs to have .downcase
+            @topics = Topic.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
 
-    respond_to do |format|
-      if @topic.update_attributes(params[:topic])
-        format.json { head :no_content }
-      else
-        format.json { render json: @topic.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-  
-  # DELETE topics/:id
-  def destroy
-	  @current = current_user
-	  @topic = Topic.find(params[:id]).authorize_to_edit(@current)
-	  
-    if @topic 
-      @synapses = @topic.synapses
-      @mappings = @topic.mappings
-    
-      @synapses.each do |synapse| 
-        synapse.mappings.each do |m|
-        
-          @map = m.map
-          @map.touch(:updated_at)
-        
-          #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-          m.message 'destroy',@current.id
-        
-          m.delete
+            #read this next line as 'delete a topic if its private and you're either 
+            #1. logged out or 2. logged in but not the topic creator
+            @topics.delete_if {|t| t.permission == "private" && 
+                (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        else
+            @topics = []
         end
-        
-        synapse.delete
-      end
-    
-      @mappings.each do |mapping| 
-      
-        @map = mapping.map
-        @map.touch(:updated_at)
-        
-        #push notify to anyone viewing a map with this topic in realtime (see mapping.rb to understand the 'message' action)
-        mapping.message 'destroy',@current.id
-      
-        mapping.delete
-      end
-    
-      @topic.delete
+        render json: autocomplete_array_json(@topics)
     end
-      
-    respond_to do |format|
-      format.js { render :json => "success" }
+
+    # GET topics/:id
+    def show
+        @current = current_user
+        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+
+        if not @topic
+            redirect_to root_url and return
+        end
+
+        @alltopics = [@topic] + @topic.relatives # should limit to topics visible to user
+        @allsynapses = @topic.synapses # should also be limited
+        @allmetacodes = Metacode.all
+
+        respond_to do |format|
+            format.html { respond_with(@allmetacodes, @allsynapses, @alltopics, @topic, @user) }
+            format.json { render json: @topic }
+        end
     end
-  end
+
+    # POST /topics
+    # POST /topics.json
+    def create
+        @topic = Topic.new(params[:topic])
+
+        respond_to do |format|
+            if @topic.save
+                format.json { render json: @topic, status: :created }
+            else
+                format.json { render json: @topic.errors, status: :unprocessable_entity }
+            end
+        end
+    end
+
+    # PUT /topics/1
+    # PUT /topics/1.json
+    def update
+        @topic = Topic.find(params[:id])
+
+        respond_to do |format|
+            if @topic.update_attributes(params[:topic])
+                format.json { head :no_content }
+            else
+                format.json { render json: @topic.errors, status: :unprocessable_entity }
+            end
+        end
+    end
+
+    # DELETE topics/:id
+    def destroy
+        @current = current_user
+        @topic = Topic.find(params[:id]).authorize_to_edit(@current)
+
+        if @topic 
+            @synapses = @topic.synapses
+            @mappings = @topic.mappings
+
+            @synapses.each do |synapse| 
+                synapse.mappings.each do |m|
+
+                    @map = m.map
+                    @map.touch(:updated_at)
+
+                    #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
+                    m.message 'destroy',@current.id
+
+                    m.delete
+                end
+
+                synapse.delete
+            end
+
+            @mappings.each do |mapping| 
+
+                @map = mapping.map
+                @map.touch(:updated_at)
+
+                #push notify to anyone viewing a map with this topic in realtime (see mapping.rb to understand the 'message' action)
+                mapping.message 'destroy',@current.id
+
+                mapping.delete
+            end
+
+            @topic.delete
+        end
+
+        respond_to do |format|
+            format.js { render :json => "success" }
+        end
+    end
 end

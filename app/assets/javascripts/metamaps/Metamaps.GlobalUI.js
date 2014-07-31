@@ -65,7 +65,6 @@ Metamaps.GlobalUI = {
         var self = Metamaps.GlobalUI;
 
         self.Search.init();
-        self.MainMenu.init();
         self.CreateMap.init();
         self.Account.init();
 
@@ -81,6 +80,11 @@ Metamaps.GlobalUI = {
         // hide notices after 10 seconds
         $('.notice.metamaps').delay(10000).fadeOut('fast');
         $('.alert.metamaps').delay(10000).fadeOut('fast');
+        
+        // initialize global backbone models and collections
+        Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
+        Metamaps.Mappers = new Metamaps.Backbone.MapperCollection([Metamaps.Active.Mapper]);
+        Metamaps.Maps = new Metamaps.Backbone.MapsCollection();
     },
     openLightbox: function (which) {
         var self = Metamaps.GlobalUI;
@@ -91,7 +95,18 @@ Metamaps.GlobalUI = {
         self.lightbox = which;
 
         $('#lightbox_overlay').show();
-        $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
+        
+        var heightOfContent = '-' + ($('#lightbox_main').height() / 2) + 'px';
+        // animate the content in from the bottom
+        $('#lightbox_main').animate({
+                'top': '50%',
+                'margin-top': heightOfContent
+        }, 200, 'easeOutCubic');
+        
+        // fade the black overlay in
+        $('#lightbox_screen').animate({
+                    'opacity': '0.42'
+        }, 200);
 
         if (Metamaps.Create && !Metamaps.Create.metacodeScrollerInit) {
             $('.customMetacodeList, .metacodeSetList').mCustomScrollbar({
@@ -111,7 +126,19 @@ Metamaps.GlobalUI = {
         var self = Metamaps.GlobalUI;
         
         if (event) event.preventDefault();
-        $('#lightbox_overlay').hide();
+        
+        // animate the lightbox content offscreen
+        $('#lightbox_main').animate({
+                'top': '100%',
+                'margin-top': '0'
+        }, 200, 'easeInCubic');
+        
+        // fade the black overlay out
+        $('#lightbox_screen').animate({
+                    'opacity': '0.0'
+        }, 200, function () {
+            $('#lightbox_overlay').hide();   
+        });
         
         if (self.lightbox === 'forkmap') Metamaps.GlobalUI.CreateMap.reset('fork_map');
         if (self.lightbox === 'newmap') Metamaps.GlobalUI.CreateMap.reset('new_map');
@@ -134,72 +161,6 @@ Metamaps.GlobalUI = {
         }, 8000);
     }
 };
-
-Metamaps.GlobalUI.MainMenu = {
-    isOpen: false,
-    timeOut: null,
-    changing: false,
-    init: function () {
-        var self = Metamaps.GlobalUI.MainMenu;
-
-        $(".logo").hover(self.open, self.close);
-
-        // when on touch screen, make touching on the logo do what hovering does on desktop
-        $("#mainTitle a").bind('touchend', function (evt) {
-            if (!self.isOpen) {
-                self.openMenu();
-                evt.preventDefault();
-                evt.stopPropagation();
-            }
-        });
-    },
-    open: function () {
-        var self = Metamaps.GlobalUI.MainMenu;
-
-        clearTimeout(self.timeOut);
-        if (!self.isOpen && !self.changing) {
-            self.changing = true;
-
-            // toggle the upper right rounded corner off
-            $('.footer').css('border-top-right-radius', '0');
-
-            // move the hamburger menu icon a little bit further out
-            $('.logo').animate({
-                'background-position-x': '-7px'
-            }, 200);
-
-            // fade the main part of the menu in
-            $('.footer .menu').fadeIn(200, function () {
-                self.changing = false;
-                self.isOpen = true;
-            });
-        }
-    },
-    close: function () {
-        var self = Metamaps.GlobalUI.MainMenu;
-
-        self.timeOut = setTimeout(function () {
-            if (!self.changing) {
-                self.changing = true;
-
-                // set back to having a rounder upper right corner
-                $('.footer').css('border-top-right-radius', '5px');
-
-                // move the hamburger menu icon further to the left, more hidden again
-                $('.logo').animate({
-                    'background-position-x': '-10px'
-                }, 200);
-
-                // fade out the main menu
-                $('.footer .menu').fadeOut(200, function () {
-                    self.changing = false;
-                    self.isOpen = false;
-                });
-            }
-        }, 500);
-    }
-};
-
 
 Metamaps.GlobalUI.CreateMap = {
     newMap: null,
@@ -431,9 +392,8 @@ Metamaps.GlobalUI.Search = {
     startTypeahead: function () {
         var self = Metamaps.GlobalUI.Search;
 
-        // TODO stop using userid
-        var mapheader = userid ? '<h3 class="search-header">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>';
-        var topicheader = userid ? '<h3 class="search-header">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>';
+        var mapheader = Metamaps.Active.Mapper ? '<h3 class="search-header">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>';
+        var topicheader = Metamaps.Active.Mapper ? '<h3 class="search-header">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>';
         var mapperheader = '<h3 class="search-header">Mappers</h3><div class="minimizeResults minimizeMapperResults"></div><div class="clearfloat"></div>';
 
         var topics = {
@@ -447,8 +407,8 @@ Metamaps.GlobalUI.Search = {
                 url: '/search/topics?term=%QUERY',
                 replace: function () {
                     var q = '/search/topics?term=' + $('.sidebarSearchField').val();
-                    if ($("#limitTopicsToMe").is(':checked')) {
-                        q += "&user=" + userid.toString();
+                    if (Metamaps.Active.Mapper && $("#limitTopicsToMe").is(':checked')) {
+                        q += "&user=" + Metamaps.Active.Mapper.id.toString();
                     }
                     return q;
                 },
@@ -479,8 +439,8 @@ Metamaps.GlobalUI.Search = {
                 url: '/search/maps?term=%QUERY',
                 replace: function () {
                     var q = '/search/maps?term=' + $('.sidebarSearchField').val();
-                    if ($("#limitMapsToMe").is(':checked')) {
-                        q += "&user=" + userid.toString();
+                    if (Metamaps.Active.Mapper && $("#limitMapsToMe").is(':checked')) {
+                        q += "&user=" + Metamaps.Active.Mapper.id.toString();
                     }
                     return q;
                 },

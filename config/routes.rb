@@ -5,7 +5,6 @@ Metamaps::Application.routes.draw do
   get '/join', to: redirect('/users/sign_up')
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request
-  match 'paq', to: 'main#paq', via: :get, as: :paq
   
   match '/search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
   match '/search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps

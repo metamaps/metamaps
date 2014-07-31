@@ -26,9 +26,3 @@ Metamaps.Backbone.MapperCollection = Backbone.Collection.extend({
     model: Metamaps.Backbone.Mapper,
     url: '/users'
 });
-Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper({
-    id: userid,
-    name: username
-});
-Metamaps.Mappers = new Metamaps.Backbone.MapperCollection([Metamaps.Active.Mapper]);
-Metamaps.Maps = new Metamaps.Backbone.MapsCollection();

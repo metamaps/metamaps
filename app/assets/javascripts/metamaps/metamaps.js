@@ -78,10 +78,16 @@ Metamaps.Mappings = {}; // will be initialized in Metamaps.Backbone.init as a Ma
 Metamaps.Backbone.init = function () {
     var self = Metamaps.Backbone;
 
-    self.Metacode = Backbone.Model.extend({});
+    self.Metacode = Backbone.Model.extend({
+        initialize: function () {
+            var image = new Image();
+            image.src = this.get('icon');
+            this.set('image',image);
+        }
+    });
     self.MetacodeCollection = Backbone.Collection.extend({
         model: this.Metacode,
-        url: '/metacodes'
+        url: '/metacodes',
     });
 
     self.Topic = Backbone.Model.extend({
@@ -118,6 +124,9 @@ Metamaps.Backbone.init = function () {
             return Metamaps.Metacodes.get(this.get('metacode_id'));
         },
         getMapping: function () {
+            
+            if (!Metamaps.Active.Map) return false;
+            
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
                 topic_id: this.isNew() ? this.cid : this.id
@@ -131,24 +140,34 @@ Metamaps.Backbone.init = function () {
             }
         },
         createNode: function () {
-            var mapping = this.getMapping();
+            var mapping;
             var node = {
                 adjacencies: [],
-                data: {
-                    $mapping: null,
-                    $mappingID: mapping ? mapping.id : null
-                },
                 id: this.isNew() ? this.cid : this.id,
                 name: this.get('name')
             };
+            
+            if (Metamaps.Active.Map) {
+                mapping = this.getMapping();
+                node.data = {
+                    $mapping: null,
+                    $mappingID: mapping.id
+                };
+            }
+            
             return node;
         },
         updateNode: function () {
-            var mapping = this.getMapping();
+            var mapping;
             var node = this.get('node');
             node.setData('topic', this);
-            node.setData('mapping', mapping);
             node.id = this.isNew() ? this.cid : this.id;
+            
+            if (Metamaps.Active.Map) {
+                mapping = this.getMapping();
+                node.setData('mapping', mapping);
+            }
+            
             return node;
         },
     });
@@ -173,7 +192,7 @@ Metamaps.Backbone.init = function () {
             if (this.isNew()) {
                 this.set({
                     "user_id": Metamaps.Active.Mapper.id,
-                    "permission": Metamaps.Active.Map.get('permission'),
+                    "permission": Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons',
                     "category": "from-to"
                 });
             }
@@ -202,6 +221,9 @@ Metamaps.Backbone.init = function () {
                 ];
         },
         getMapping: function () {
+            
+            if (!Metamaps.Active.Map) return false;
+            
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
                 synapse_id: this.isNew() ? this.cid : this.id
@@ -215,27 +237,37 @@ Metamaps.Backbone.init = function () {
             }
         },
         createEdge: function () {
-            var mapping = this.getMapping();
-            var mappingID = mapping.isNew() ? mapping.cid : mapping.id;
+            var mapping, mappingID;
             var synapseID = this.isNew() ? this.cid : this.id;
 
             var edge = {
                 nodeFrom: this.get('node1_id'),
                 nodeTo: this.get('node2_id'),
                 data: {
-                    $mappings: [],
-                    $mappingIDs: [mappingID],
                     $synapses: [],
                     $synapseIDs: [synapseID],
                 }
             };
+            
+            if (Metamaps.Active.Map) {
+                mapping = this.getMapping();
+                mappingID = mapping.isNew() ? mapping.cid : mapping.id;
+                edge.data.$mappings = [];
+                edge.data.$mappingIDs = [mappingID];
+            }
+            
             return edge;
         },
         updateEdge: function () {
-            var mapping = this.getMapping();
+            var mapping;
             var edge = this.get('edge');
-            edge.getData('mappings').push(mapping);
             edge.getData('synapses').push(this);
+            
+            if (Metamaps.Active.Map) {
+                mapping = this.getMapping();
+                edge.getData('mappings').push(mapping);
+            }
+            
             return edge;
         },
     });
@@ -288,8 +320,12 @@ Metamaps.Backbone.init = function () {
 
     Metamaps.Mappings = new self.MappingCollection(Metamaps.Mappings);
 
-    Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
-    Metamaps.Maps.add(Metamaps.Active.Map);
+    if (Metamaps.Active.Map) {
+        Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
+        Metamaps.Maps.add(Metamaps.Active.Map);
+    }
+    
+    if (Metamaps.Active.Topic) Metamaps.Active.Topic = new self.Topic(Metamaps.Active.Topic);
 }; // end Metamaps.Backbone.init
 
 
@@ -370,8 +406,10 @@ Metamaps.Create = {
         $('#metacodeImg, #metacodeImgTitle').empty();
         $('#metacodeImg').removeData('cloudcarousel');
         var newMetacodes = "";
+        var metacode;
         for (var i = 0; i < codesToSwitchTo.length; i++) {
-            newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + imgArray[codesToSwitchTo[i]].src + '" title="' + codesToSwitchTo[i] + '" alt="' + codesToSwitchTo[i] + '"/>';
+            metacode = Metamaps.Metacodes.findWhere({ name: codesToSwitchTo[i] });
+            newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + metacode.get('icon') + '" title="' + metacode.get('name') + '" alt="' + metacode.get('name') + '"/>';
         };
         $('#metacodeImg').empty().append(newMetacodes).CloudCarousel({
             titleBox: $('#metacodeImgTitle'),
@@ -383,7 +421,7 @@ Metamaps.Create = {
             bringToFront: true
         });
 
-        $('#lightbox_overlay').hide();
+        Metamaps.GlobalUI.closeLightbox();
         $('#topic_name').focus();
 
         var mdata = {
@@ -656,7 +694,7 @@ Metamaps.TopicCard = {
                         });
                         $('.CardOnGraph').find('.metacodeTitle').text(metacodeName)
                             .attr('class', 'metacodeTitle mbg' + metacodeName.replace(/\s/g, ''));
-                        $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + imgArray[metacodeName].src + ')');
+                        $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + metacode.get('icon') + ')');
                         topic.save({
                             metacode_id: metacode.id
                         });
@@ -1088,6 +1126,19 @@ Metamaps.Visualize = {
 
         if (self.type == "RGraph") {
             self.mGraph.graph.eachNode(function (n) {
+                topic = Metamaps.Topics.get(n.id);
+                topic.set('node', n);
+                topic.updateNode();
+
+                n.eachAdjacency(function (edge) {
+                    l = edge.getData('synapseIDs').length;
+                    for (i = 0; i < l; i++) {
+                        synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
+                        synapse.set('edge', edge);
+                        synapse.updateEdge();
+                    }
+                });
+                
                 var pos = n.getPos();
                 pos.setc(-200, -200);
             });
@@ -1102,7 +1153,7 @@ Metamaps.Visualize = {
                 mapping = topic.getMapping();
 
                 n.eachAdjacency(function (edge) {
-                    l = edge.getData('mappingIDs').length;
+                    l = edge.getData('synapseIDs').length;
                     for (i = 0; i < l; i++) {
                         synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
                         synapse.set('edge', edge);
@@ -1125,37 +1176,25 @@ Metamaps.Visualize = {
      * @param vizData a json structure containing the data to be rendered.
      */
     __buildGraph: function (vizData) {
-        var self = Metamaps.Visualize;
+        var self = Metamaps.Visualize
+            RGraphSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings);
 
-        // normally this will be true, and will enter into this first scenario
-        if (!Metamaps.Settings.embed) {
-            if (self.type == "RGraph") {
-                $jit.RGraph.Plot.NodeTypes.implement(Metamaps.JIT.RGraph.nodeSettings);
-                $jit.RGraph.Plot.EdgeTypes.implement(Metamaps.JIT.RGraph.edgeSettings);
-                self.mGraph = new $jit.RGraph(Metamaps.JIT.RGraph.graphSettings);
-            } else if (self.type == "ForceDirected") {
-                $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
-                $jit.ForceDirected.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
-                self.mGraph = new $jit.ForceDirected(Metamaps.JIT.ForceDirected.graphSettings);
-            } else if (self.type == "ForceDirected3D") {
-                // init ForceDirected3D
-                self.mGraph = new $jit.ForceDirected3D(Metamaps.JIT.ForceDirected3D.graphSettings);
-                self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position;
-            }
-        } else { // in the case where these visualizations are to be embedded in other sites  TODO
-            if (self.type == "RGraph") {
-                $jit.RGraph.Plot.NodeTypes.implement(Metamaps.JIT.RGraph.embed.nodeSettings);
-                $jit.RGraph.Plot.EdgeTypes.implement(Metamaps.JIT.RGraph.embed.edgeSettings);
-                self.mGraph = new $jit.RGraph(Metamaps.JIT.RGraph.embed.graphSettings);
-            } else if (self.type == "ForceDirected") {
-                $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.embed.nodeSettings);
-                $jit.ForceDirected.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.embed.edgeSettings);
-                self.mGraph = new $jit.ForceDirected(Metamaps.JIT.ForceDirected.embed.graphSettings);
-            } else if (self.type == "ForceDirected3D") {
-                // init ForceDirected3D
-                self.mGraph = new $jit.ForceDirected3D(Metamaps.JIT.ForceDirected3D.embed.graphSettings);
-                self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position;
-            }
+        if (self.type == "RGraph") {
+            $jit.RGraph.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
+            $jit.RGraph.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
+            
+            RGraphSettings.background = Metamaps.JIT.RGraph.background;
+            RGraphSettings.levelDistance = Metamaps.JIT.RGraph.levelDistance;
+            
+            self.mGraph = new $jit.RGraph(RGraphSettings);
+        } else if (self.type == "ForceDirected") {
+            $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
+            $jit.ForceDirected.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
+            self.mGraph = new $jit.ForceDirected(Metamaps.JIT.ForceDirected.graphSettings);
+        } else if (self.type == "ForceDirected3D") {
+            // init ForceDirected3D
+            self.mGraph = new $jit.ForceDirected3D(Metamaps.JIT.ForceDirected3D.graphSettings);
+            self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position;
         }
 
         // load JSON data, if it's not empty
@@ -1167,8 +1206,7 @@ Metamaps.Visualize = {
             if (self.type == "RGraph") {
                 self.mGraph.fx.animate(Metamaps.JIT.RGraph.animate);
             } else if (self.type == "ForceDirected" && self.savedLayout) {
-                return Metamaps.Organize.loadSavedLayout();
-                //self.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout);
+                Metamaps.Organize.loadSavedLayout();
             } else if (self.type == "ForceDirected3D" || !self.savedLayout) {
                 self.mGraph.animate(Metamaps.JIT.ForceDirected.animateFDLayout);
             }
@@ -1228,7 +1266,6 @@ Metamaps.Util = {
     }
 }; // end Metamaps.Util
 
-
 /*
  *
  *   REALTIME
@@ -1254,7 +1291,7 @@ Metamaps.Realtime = {
 
         $(".sidebarCollaborate").hover(self.open, self.close);
 
-        var mapperm = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+        var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
         if (mapperm) {
             self.socket = io.connect('http://localhost:5001');
@@ -1307,15 +1344,16 @@ Metamaps.Realtime = {
     setupSocket: function () {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
-
+        var myId = Metamaps.Active.Mapper.id;
+        
         socket.emit('newMapperNotify', {
-            userid: Metamaps.Active.Mapper.id,
+            userid: myId,
             username: Metamaps.Active.Mapper.get("name"),
             mapid: Metamaps.Active.Map.id
         });
 
         // if you're the 'new guy' update your list with who's already online
-        socket.on(userid + '-' + Metamaps.Active.Map.id + '-UpdateMapperList', self.updateMapperList);
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-UpdateMapperList', self.updateMapperList);
 
         // receive word that there's a new mapper on the map
         socket.on('maps-' + Metamaps.Active.Map.id + '-newmapper', self.newPeerOnMap);
@@ -1861,7 +1899,7 @@ Metamaps.Filter = {
         });
         $('.sidebarFilterBox').hide().css({
             position: 'absolute',
-            top: '35px',
+            top: '45px',
             right: '-36px'
         });
 
