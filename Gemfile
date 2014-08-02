@@ -7,7 +7,7 @@ gem 'rails', '3.2.17'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'devise'
-gem 'redis'
+gem 'redis', '2.2.2'
 gem 'pg'
 gem 'cancan'
 gem 'formula'

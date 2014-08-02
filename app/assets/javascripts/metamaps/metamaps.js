@@ -2261,8 +2261,8 @@ Metamaps.Topic = {
         } else {
             Metamaps.Visualize.mGraph.loadJSON(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            mapping.set('node', nodeOnViz);
-            mapping.updateNode(); // links the topic and the mapping to the node 
+            topic.set('node', nodeOnViz);
+            topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
             nodeOnViz.setData("dim", 25, "end");
