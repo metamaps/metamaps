@@ -34,7 +34,11 @@
     <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
 
         <div class="wrapper <%= controller_name == "main" && action_name == "home" ? "homePage" : "" %>" id="wrapper">
-
+            
+            <div class="homeButton">
+                <a href="/"></a>    
+            </div>
+            
             <div class="sidebarSearch">
                 <div class="sidebarSearchIcon"></div>
                 <input type="text" class="sidebarSearchField"></input>
@@ -58,7 +62,7 @@
         </div>
 
         <div class="footer">
-            <div id="logo"><%= link_to "metamaps", root_url %></div>
+            <div id="logo">METAMAPS</div>
         </div>
 
     <% end %>

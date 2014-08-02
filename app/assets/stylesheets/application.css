@@ -88,13 +88,15 @@ body,
 .wrapper,
 #container {
     height: 100%;
-    overflow: hidden;
 }
 .unauthenticated .wrapper.homePage {
     overflow: auto;
 }
 .wrapper.homePage {
     background: url('mm-homepage-bg-image.png') no-repeat center -249px;
+}
+body.mapBody {
+    overflow: hidden;
 }
 /* scrollbar override */
 
@@ -111,7 +113,7 @@ body,
     width: auto;
 }
 html {} body {
-    background: url(background2-for-repeating.jpg);
+    background: #E5E5E5;
     font-family: 'LatoLight', helvetica, sans-serif;
     color: #FFF;
 }
@@ -196,6 +198,7 @@ input[type="submit"]:hover {
 /*#barometer_tab {
     display: none;
 }*/
+
 #saveMapLayout {
     display: none;
 }
@@ -557,7 +560,7 @@ label[for="user_remember_me"] {
 /* account */
 
 .sidebarAccount {
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 10px;
     z-index: 200;
@@ -683,7 +686,7 @@ li.accountInvite span {
 /* Save To New Map */
 
 .sidebarFork {
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 120px;
     z-index: 200;
@@ -869,7 +872,7 @@ h3.filterByMetacode {
 /* collaborate */
 
 .sidebarCollaborate {
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 200px;
     z-index: 200;
@@ -949,17 +952,36 @@ h3.realtimeBoxTitle {
 
 /* search */
 
-.sidebarSearch {
-    position: absolute;
+.homeButton {
+    position: fixed;
     top: 10px;
     left: 10px;
+    width: 35px;
+    height: 35px;
+    z-index: 200;
+    background: white;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.homeButton a {
+    display:block;
+    width: 35px;
+    height: 35px;
+}
+
+.sidebarSearch {
+    position: fixed;
+    top: 10px;
+    left: 45px;
     height: 35px;
     z-index: 200;
 }
 .sidebarSearchIcon {
     float: left;
     width: 80px;
-    border-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
     height: 35px;
     background: #00BCD4 url('search_icon_32x32.png') no-repeat center center;
     background-size: 25px 25px;
@@ -1269,7 +1291,7 @@ h3.realtimeBoxTitle {
 }
 #cards {
     height: 100%;
-    width: 805px;
+    width: 90%;
     margin: 0 auto;
 }
 #cards p.empty {
@@ -2236,8 +2258,6 @@ div.mapInfoStat {
     height: 100%;
     overflow: hidden;
 }
-
-
 .addMap {
     display: block;
     position: fixed;
@@ -2257,12 +2277,12 @@ div.mapInfoStat {
     display: block;
     position: fixed;
     bottom: 10px;
-    left:50%;
-    margin-left:-55px;
+    left: 50%;
+    margin-left: -55px;
     z-index: 15000;
 }
-#logo a {
-    color: #FFF;
+#logo {
+    color: #6B6B6B;
     font-family: "vinyl", sans-serif;
     font-style: italic;
     text-transform: uppercase;

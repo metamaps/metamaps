@@ -17,4 +17,5 @@
 //= require ./orderedLibraries/backbone
 //= require_directory ./librariesForAllPages
 //= require ./metamaps/Metamaps.GlobalUI
+//= require ./metamaps/Metamaps.Router
 //= require ./metamaps/Metamaps.Backbone

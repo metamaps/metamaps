@@ -3083,7 +3083,7 @@ var Canvas;
       ctx.fillStyle = Metamaps.Settings.colors.background;
       var xPoint = (-(canvas.width/scale)/2) - (base.translateOffsetX/scale),
         yPoint = (-(canvas.height/scale)/2) - (base.translateOffsetY/scale);
-      ctx.fillRect(xPoint,yPoint,canvas.width/scale,canvas.height/scale);
+      //ctx.fillRect(xPoint,yPoint,canvas.width/scale,canvas.height/scale);
     }
   });
   // END METAMAPS CODE
@@ -6302,13 +6302,15 @@ var EdgeHelper = {
             maxPosX = max(posFrom.x, posTo.x),
             minPosY = min(posFrom.y, posTo.y),
             maxPosY = max(posFrom.y, posTo.y);
-        
+          
         if(pos.x >= minPosX && pos.x <= maxPosX 
             && pos.y >= minPosY && pos.y <= maxPosY) {
           if(Math.abs(posTo.x - posFrom.x) <= epsilon) {
+            
             return true;
           }
           var dist = (posTo.y - posFrom.y) / (posTo.x - posFrom.x) * (pos.x - posFrom.x) + posFrom.y;
+            
           return Math.abs(dist - pos.y) <= epsilon;
         }
         return false;

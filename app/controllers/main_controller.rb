@@ -14,7 +14,8 @@ class MainController < ApplicationController
       @maps = Map.find_all_by_featured(true).shuffle!
       @maps = @maps.slice(0,3)
     elsif authenticated?
-      @maps = Map.order("updated_at DESC").where("permission != ?", "private").limit(3)
+      #@maps = Map.order("updated_at DESC").where("permission != ?", "private").limit(3)
+      @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
     end
     
     respond_with(@maps, @current) 

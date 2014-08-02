@@ -413,9 +413,14 @@ Metamaps.JIT = {
                     Metamaps.JIT.edgeRender(adj, canvas)
                 },
                 'contains': function (adj, pos) {
-                    var from = adj.nodeFrom.pos.getc(true),
-                        to = adj.nodeTo.pos.getc(true);
-
+                    var from = adj.nodeFrom.pos.getc(),
+                        to = adj.nodeTo.pos.getc();
+                    
+                    // this fixes an issue where when edges are perfectly horizontal or perfectly vertical
+                    // it becomes incredibly difficult to hover over them
+                    if (-1 < pos.x && pos.x < 1) pos.x = 0;
+                    if (-1 < pos.y && pos.y < 1) pos.y = 0;
+                    
                     return $jit.Graph.Plot.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon);
                 }
             }
@@ -808,12 +813,14 @@ Metamaps.JIT = {
             tempInit = false;
         } else if (!tempInit && node && !node.nodeFrom) {
             // this means you dragged an existing node, autosave that to the database
-            mapping = node.getData('mapping');
-            mapping.set({
-                xloc: node.getPos().x,
-                yloc: node.getPos().y
-            });
-            mapping.save();
+            if (Metamaps.Active.Map) {
+                mapping = node.getData('mapping');
+                mapping.set({
+                    xloc: node.getPos().x,
+                    yloc: node.getPos().y
+                });
+                mapping.save();
+            }
         }
     }, //onDragEndTopicHandler
     canvasClickHandler: function (canvasLoc, e) {
