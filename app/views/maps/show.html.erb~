@@ -38,6 +38,8 @@
 <div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
     <div class="sidebarFilterIcon"></div>
     <div class="sidebarFilterBox">
+        <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
+        <div class="clearfloat"></div>
         <%= render :partial => 'shared/filterBox' %>
     </div>
 </div>

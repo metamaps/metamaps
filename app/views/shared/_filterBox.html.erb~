@@ -1,0 +1,42 @@
+<%#
+  # @file
+  # this code generates the list of icons in the filter by metacode box in the upper right menu area
+  #%>
+  
+<% 
+  @mappers = []
+  @synapses = []
+  @metacodes = []
+  @metacodelist = ''
+  @mapperlist = ''
+  @synapselist = ''
+  @map.topics.each_with_index do |topic, index| 
+    if @metacodes.index(topic.metacode_id) == nil
+      @metacodes.push(topic.metacode_id)
+      @metacodelist += '<li><img src="' + topic.metacode.icon + '" alt="' + topic.metacode.id.to_s + '" /><p>' + topic.metacode.name.downcase + '</p></li>'
+    end
+  end 
+
+  @map.synapses.each_with_index do |synapses, index| 
+    if @synapses.index(synapses.synapse_id) == nil
+      @synapses.push(synapses.synapse_id)
+      @synapselist += '<li><img src="/assets/images/icons/synapsevisualize.png" alt="' + synapse.id.to_s + '" /><p>' + synapse.name.downcase + '</p></li>'
+    end 
+    
+  end 
+%>
+
+<h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
+        <div class="clearfloat"></div>
+<div id="filter_by_metacode">
+  <ul>
+    <%= @metacodelist.html_safe %>
+  </ul>
+  <div class="clearfloat"></div>
+
+  <div id="filter_by_synapse">
+  <ul>
+    <%= @synapselist.html_safe %>
+  </ul>
+  <div class="clearfloat"></div>
+</div>
