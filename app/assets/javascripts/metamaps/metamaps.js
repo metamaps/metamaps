@@ -132,13 +132,6 @@ Metamaps.Backbone.init = function () {
                 topic_id: this.isNew() ? this.cid : this.id
             });
         },
-        updateMapping: function () {
-            var mapping = this.getMapping();
-
-            if (mapping) {
-                mapping.set('topic_id', this.id);
-            }
-        },
         createNode: function () {
             var mapping;
             var node = {
@@ -228,13 +221,6 @@ Metamaps.Backbone.init = function () {
                 map_id: Metamaps.Active.Map.id,
                 synapse_id: this.isNew() ? this.cid : this.id
             });
-        },
-        updateMapping: function () {
-            var mapping = this.getMapping();
-
-            if (mapping) {
-                mapping.set('synapse_id', this.id);
-            }
         },
         createEdge: function () {
             var mapping, mappingID;
@@ -2261,8 +2247,8 @@ Metamaps.Topic = {
         } else {
             Metamaps.Visualize.mGraph.loadJSON(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            mapping.set('node', nodeOnViz);
-            mapping.updateNode(); // links the topic and the mapping to the node 
+            topic.set('node', nodeOnViz);
+            topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
             nodeOnViz.setData("dim", 25, "end");
@@ -2283,9 +2269,8 @@ Metamaps.Topic = {
             if (topic.isNew()) {
                 topic.save(null, {
                     success: function (topicModel, response) {
-                        topicModel.updateMapping();
                         if (Metamaps.Active.Map) {
-                            mapping.save();
+                            mapping.save({ topic_id: topicModel.id });
                         }
                     },
                     error: function (model, response) {
@@ -2401,9 +2386,8 @@ Metamaps.Synapse = {
             if (synapse.isNew()) {
                 synapse.save(null, {
                     success: function (synapseModel, response) {
-                        synapseModel.updateMapping();
                         if (Metamaps.Active.Map) {
-                            mapping.save();
+                            mapping.save({ synapse_id: synapseModel.id });
                         }
                     },
                     error: function (model, response) {

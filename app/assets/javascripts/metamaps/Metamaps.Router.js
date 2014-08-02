@@ -14,7 +14,7 @@
     });
     Metamaps.Router = new Router();
     Metamaps.Router.init = function () {
-        Backbone.history.start({
+        /*Backbone.history.start({
             pushState: true,
             root: ''
         });
@@ -30,6 +30,6 @@
                 evt.preventDefault();
                 Backbone.history.navigate(href.attr, true);
             }
-        });
+        });*/
     }
 })();
