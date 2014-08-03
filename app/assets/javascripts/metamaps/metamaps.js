@@ -1595,13 +1595,16 @@ Metamaps.Control = {
     init: function () {
 
     },
-    selectNode: function (node) {
+    selectNode: function (node,e) {
         if (Metamaps.Selected.Nodes.indexOf(node) != -1) return;
         node.selected = true;
         node.setData('dim', 30, 'current');
-        node.eachAdjacency(function (adj) {
-            Metamaps.Control.selectEdge(adj);
-        });
+		if(!(e.ctrlKey) && !(e.altKey)){
+			node.eachAdjacency(function (adj) {
+				Metamaps.Control.selectEdge(adj);
+			});
+		}
+		
         Metamaps.Selected.Nodes.push(node);
     },
     deselectAllNodes: function () {
@@ -1614,9 +1617,11 @@ Metamaps.Control = {
     },
     deselectNode: function (node) {
         delete node.selected;
+		/*
         node.eachAdjacency(function (adj) {
             Metamaps.Control.deselectEdge(adj);
         });
+		*/
         node.setData('dim', 25, 'current');
 
         //remove the node

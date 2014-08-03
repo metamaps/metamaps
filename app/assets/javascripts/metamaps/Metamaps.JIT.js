@@ -307,7 +307,7 @@ Metamaps.JIT = {
                     if (Metamaps.Mouse.boxStartCoordinates) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.selectNodesWithBox();
+                        Metamaps.JIT.selectNodesWithBox(e);
                         return;
                     }
 
@@ -331,7 +331,7 @@ Metamaps.JIT = {
                     if (Metamaps.Mouse.boxStartCoordinates) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.selectNodesWithBox();
+                        Metamaps.JIT.selectNodesWithBox(e);
                         return;
                     }
 
@@ -885,12 +885,11 @@ Metamaps.JIT = {
         // 4 this node and others were selected, so drag them (just return false)
         //return value: deselect node again after?
         if (Metamaps.Selected.Nodes.length == 0) {
-            Metamaps.Control.selectNode(node);
-            return 'deselect';
+		     return 'only-drag-this-one';
         }
         if (Metamaps.Selected.Nodes.indexOf(node) == -1) {
             if (e.shiftKey) {
-                Metamaps.Control.selectNode(node);
+                Metamaps.Control.selectNode(node,e);
                 return 'nothing';
             } else {
                 return 'only-drag-this-one';
@@ -898,26 +897,131 @@ Metamaps.JIT = {
         }
         return 'nothing'; //case 4?
     }, //  handleSelectionBeforeDragging
-    selectNodesWithBox: function () {
+    selectNodesWithBox: function (e) {
 
         var sX = Metamaps.Mouse.boxStartCoordinates.x,
             sY = Metamaps.Mouse.boxStartCoordinates.y,
             eX = Metamaps.Mouse.boxEndCoordinates.x,
             eY = Metamaps.Mouse.boxEndCoordinates.y;
+		
+		if(!(e.shiftKey) && !(e.ctrlKey)){
+			Metamaps.Control.deselectAllNodes();
+			Metamaps.Control.deselectAllEdges();
+		}
 
-
+		//select all nodes, and their edges, that are within the box
         Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
             var x = n.pos.x,
                 y = n.pos.y;
 
             if ((sX < x && x < eX && sY < y && y < eY) || (sX > x && x > eX && sY > y && y > eY) || (sX > x && x > eX && sY < y && y < eY) || (sX < x && x < eX && sY > y && y > eY)) {
-                var nodeIsSelected = Metamaps.Selected.Nodes.indexOf(n);
-                if (nodeIsSelected == -1) Metamaps.Control.selectNode(n); // the node is not selected, so select it
-                else if (nodeIsSelected != -1) Metamaps.Control.deselectNode(n); // the node is selected, so deselect it
-
+                if(e.ctrlKey){
+					if(n.selected){
+						Metamaps.Control.deselectNode(n);
+					}
+					else{
+						Metamaps.Control.selectNode(n,e);
+					}
+				}
+				else{
+					Metamaps.Control.selectNode(n,e);
+				}
             }
         });
 
+		//Convert selection box coordinates to traditional coordinates (+,+) in upper right
+		sY = -1 * sY;
+		eY = -1 * eY
+
+		Metamaps.Synapses.each(function(synapse) {
+			var fromNodeX = synapse.get('edge').nodeFrom.pos.x;
+			var fromNodeY = -1 * synapse.get('edge').nodeFrom.pos.y;
+			var toNodeX = synapse.get('edge').nodeTo.pos.x;
+			var toNodeY = -1 * synapse.get('edge').nodeTo.pos.y;
+			
+			var maxX = fromNodeX;
+			var maxY = fromNodeY;
+			var minX = fromNodeX;
+			var minY = fromNodeY;
+			
+			//Correct maxX, MaxY values
+			(toNodeX > maxX) ? (maxX = toNodeX):(minX = toNodeX);
+			(toNodeY > maxY) ? (maxY = toNodeY):(minY = toNodeY);
+			
+			var maxBoxX = sX;
+			var maxBoxY = sY;
+			var minBoxX = sX;
+			var minBoxY = sY;
+			
+			//Correct maxBoxX, maxBoxY values
+			(eX > maxBoxX) ? (maxBoxX = eX):(minBoxX = eX);
+			(eY > maxBoxY) ? (maxBoxY = eY):(minBoxY = eY);
+			
+			//Fins the slopes from the synapse fromNode to the 4 corners of the selection box
+			var slopes = [];
+			slopes.push( (sY - fromNodeY) / (sX - fromNodeX) );
+			slopes.push( (sY - fromNodeY) / (eX - fromNodeX) );
+			slopes.push( (eY - fromNodeY) / (eX - fromNodeX) );
+			slopes.push( (eY - fromNodeY) / (sX - fromNodeX) );
+			
+			var minSlope = slopes[0];
+			var maxSlope = slopes[0];
+			slopes.forEach(function(entry){
+				if(entry > maxSlope) maxSlope = entry;
+				if(entry < minSlope) minSlope = entry;					
+			});
+			
+			//Find synapse-in-question's slope
+			var synSlope = (toNodeY - fromNodeY) / (toNodeX - fromNodeX);
+			var b = fromNodeY - synSlope * fromNodeX;
+			
+			var selectTest = false;
+			
+			//if the synapse slope is within a range that would intersect with the selection box
+			if (synSlope <= maxSlope && synSlope >= minSlope){
+				var testX = sX;
+				var testY = synSlope * testX + b;
+				
+				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testY >= minBoxY && testY <= maxBoxY){
+					selectTest = true;
+				}
+				
+				testX = eX;
+				testY = synSlope * testX + b;
+				
+				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testY >= minBoxY && testY <= maxBoxY){
+					selectTest = true;
+				}
+				
+				testY = sY;
+				testX = (testY - b)/synSlope;
+				
+				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testX >= minBoxX && testY <= maxBoxX){
+					selectTest = true;
+				}
+				
+				testY = eY;
+				testX = (testY - b)/synSlope;
+				
+				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testX >= minBoxX && testY <= maxBoxX){
+					selectTest = true;
+				}				
+			}
+			//The test synapse was selected!
+			if(selectTest){
+				if(e.ctrlKey){
+					if(Metamaps.Selected.Edges.indexOf(synapse.get('edge')) != -1 ){
+						Metamaps.Control.deselectEdge(synapse.get('edge'));
+					}
+					else{
+						Metamaps.Control.selectEdge(synapse.get('edge'));
+					}
+				}
+				else{
+					Metamaps.Control.selectEdge(synapse.get('edge'));
+				}
+			}
+		});
         Metamaps.Mouse.boxStartCoordinates = false;
         Metamaps.Mouse.boxEndCoordinates = false;
         Metamaps.Visualize.mGraph.plot();
@@ -974,7 +1078,7 @@ Metamaps.JIT = {
                     if (node.selected) {
                         Metamaps.Control.deselectNode(node);
                     } else {
-                        Metamaps.Control.selectNode(node);
+                        Metamaps.Control.selectNode(node,e);
                     }
                     //trigger animation to final styles
                     Metamaps.Visualize.mGraph.fx.animate({
