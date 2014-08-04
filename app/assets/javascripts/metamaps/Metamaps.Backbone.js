@@ -21,6 +21,14 @@ Metamaps.Backbone.Mapper = Backbone.Model.extend({
     toJSON: function (options) {
         return _.omit(this.attributes, this.blacklist);
     },
+    prepareLiForFilter: function () {
+        var li = '';
+        li += '<li data-id="' + this.id.toString() + '">';      
+        li += '<img src="/assets/icons/person.png" data-id="' + this.id.toString() + '"';
+        li += ' alt="' + this.get('name') + '" />';      
+        li += '<p>' + this.get('name') + '</p></li>';
+        return li;
+    }
 });
 Metamaps.Backbone.MapperCollection = Backbone.Collection.extend({
     model: Metamaps.Backbone.Mapper,

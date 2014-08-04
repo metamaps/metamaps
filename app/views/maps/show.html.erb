@@ -73,6 +73,7 @@
 
 <script>
     Metamaps.Active.Map = <%= @map.to_json.html_safe %>;
+    Metamaps.Mappers = <%= @allmappers.to_json.html_safe %>;
     Metamaps.Metacodes = <%= @allmetacodes.to_json.html_safe %>;
     Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
     Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;

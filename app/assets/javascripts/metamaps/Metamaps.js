@@ -83,11 +83,25 @@ Metamaps.Backbone.init = function () {
             var image = new Image();
             image.src = this.get('icon');
             this.set('image',image);
+        },
+        prepareLiForFilter: function () {
+            var li = '';
+            li += '<li data-id="' + this.id.toString() + '">';      
+            li += '<img src="' + this.get('icon') + '" data-id="' + this.id.toString() + '"';
+            li += ' alt="' + this.get('name') + '" />';      
+            li += '<p>' + this.get('name').toLowerCase() + '</p></li>';
+            return li;
         }
+
     });
     self.MetacodeCollection = Backbone.Collection.extend({
         model: this.Metacode,
         url: '/metacodes',
+        comparator: function (a, b) {
+            a = a.get('name').toLowerCase();
+            b = b.get('name').toLowerCase();
+            return a > b ? 1 : a < b ? -1 : 0;
+        }
     });
 
     self.Topic = Backbone.Model.extend({
@@ -105,6 +119,8 @@ Metamaps.Backbone.init = function () {
                     "permission": Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons'
                 });
             }
+            
+            this.on('change:metacode_id', Metamaps.Filter.checkMetacodes, this);
         },
         authorizeToEdit: function (mapper) {
             if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
@@ -131,13 +147,6 @@ Metamaps.Backbone.init = function () {
                 map_id: Metamaps.Active.Map.id,
                 topic_id: this.isNew() ? this.cid : this.id
             });
-        },
-        updateMapping: function () {
-            var mapping = this.getMapping();
-
-            if (mapping) {
-                mapping.set('topic_id', this.id);
-            }
         },
         createNode: function () {
             var mapping;
@@ -196,6 +205,15 @@ Metamaps.Backbone.init = function () {
                     "category": "from-to"
                 });
             }
+            this.on('change:desc', Metamaps.Filter.checkSynapses, this);
+        },
+        prepareLiForFilter: function () {
+            var li = '';
+            li += '<li data-id="' + this.get('desc') + '">';      
+            li += '<img src="/assets/synapsevisualize.png"';
+            li += ' alt="synapse icon" />';      
+            li += '<p>' + this.get('desc') + '</p></li>';
+            return li;
         },
         authorizeToEdit: function (mapper) {
             if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
@@ -228,13 +246,6 @@ Metamaps.Backbone.init = function () {
                 map_id: Metamaps.Active.Map.id,
                 synapse_id: this.isNew() ? this.cid : this.id
             });
-        },
-        updateMapping: function () {
-            var mapping = this.getMapping();
-
-            if (mapping) {
-                mapping.set('synapse_id', this.id);
-            }
         },
         createEdge: function () {
             var mapping, mappingID;
@@ -316,11 +327,28 @@ Metamaps.Backbone.init = function () {
 
     Metamaps.Topics = new self.TopicCollection(Metamaps.Topics);
 
+    Metamaps.Topics.on("add remove", function(topic){
+        Metamaps.Filter.checkMetacodes();
+        Metamaps.Filter.checkMappers();
+    });
+
     Metamaps.Synapses = new self.SynapseCollection(Metamaps.Synapses);
 
-    Metamaps.Mappings = new self.MappingCollection(Metamaps.Mappings);
+    Metamaps.Synapses.on("add remove", function(synapse){
+        Metamaps.Filter.checkSynapses();
+        Metamaps.Filter.checkMappers();
+    });
+
+    Metamaps.Mappers = new self.MapperCollection(Metamaps.Mappers)
 
     if (Metamaps.Active.Map) {
+        Metamaps.Mappings = new self.MappingCollection(Metamaps.Mappings);
+
+        Metamaps.Mappings.on("add remove", function(synapse){
+            Metamaps.Filter.checkMetacodes();
+            Metamaps.Filter.checkMappers();
+        });
+
         Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
         Metamaps.Maps.add(Metamaps.Active.Map);
     }
@@ -1707,6 +1735,8 @@ Metamaps.Control = {
         setTimeout(function () {
             Metamaps.Visualize.mGraph.graph.removeNode(nodeid);
         }, 500);
+        Metamaps.Filter.checkMetacodes();
+        Metamaps.Filter.checkMappers();
     },
     selectEdge: function (edge) {
         if (Metamaps.Selected.Edges.indexOf(edge) != -1) return;
@@ -1822,6 +1852,8 @@ Metamaps.Control = {
         setTimeout(function () {
             Metamaps.Visualize.mGraph.graph.removeAdjacence(from, to);
         }, 500);
+        Metamaps.Filter.checkSynapses();
+        Metamaps.Filter.checkMappers();
     },
     updateSelectedPermissions: function (permission) {
 
@@ -1878,9 +1910,14 @@ Metamaps.Control = {
 Metamaps.Filter = {
     filters: {
         name: "",
-        metacode: [],
+        metacodes: [],
         mappers: [],
-        synapseTypes: []
+        synapses: []
+    },
+    visible: {
+        metacodes: [],
+        mappers: [],
+        synapses: []
     },
     isOpen: false,
     timeOut: null,
@@ -1890,24 +1927,19 @@ Metamaps.Filter = {
 
         $(".sidebarFilter").hover(self.open, self.close);
 
-        // initialize scroll bar for filter by metacode, then hide it and position it correctly again
-        $("#filter_by_metacode").mCustomScrollbar({
-            mouseWheelPixels: 200,
-            advanced: {
-                updateOnContentResize: true
-            }
-        });
-        $('.sidebarFilterBox').hide().css({
-            position: 'absolute',
-            top: '45px',
-            right: '-36px'
-        });
-
-        $('.sidebarFilterBox .showAll').click(self.filterNoMetacodes);
-        $('.sidebarFilterBox .hideAll').click(self.filterAllMetacodes);
+        $('.sidebarFilterBox .showAllMetacodes').click(self.filterNoMetacodes);
+        $('.sidebarFilterBox .showAllSynapses').click(self.filterNoSynapses);
+        $('.sidebarFilterBox .showAllMappers').click(self.filterNoMappers);
+        $('.sidebarFilterBox .hideAllMetacodes').click(self.filterAllMetacodes);
+        $('.sidebarFilterBox .hideAllSynapses').click(self.filterAllSynapses);
+        $('.sidebarFilterBox .hideAllMappers').click(self.filterAllMappers);
 
         // toggle visibility of topics with metacodes based on status in the filters list
         $('#filter_by_metacode ul li').click(self.toggleMetacode);
+        $('#filter_by_mapper ul li').click(self.toggleMapper);
+        $('#filter_by_synapse ul li').click(self.toggleSynapse);
+
+	    self.getFilterData();
     },
     open: function () {
         var self = Metamaps.Filter;
@@ -1936,72 +1968,280 @@ Metamaps.Filter = {
             }
         }, 500);
     },
-    filterNoMetacodes: function (e) {
-
-        $('#filter_by_metacode ul li').removeClass('toggledOff');
-
-        // TODO
-        /*
-        showAll();
-        
-        for (var catVis in categoryVisible) {
-            categoryVisible[catVis] = true;
+    checkMetacodes: function () {
+    	var self = Metamaps.Filter;
+    	
+    	var newMetacodeList = [];
+    	var removedMetacodes = [];
+    	var addedMetacodes = [];
+    	
+    	Metamaps.Topics.each(function(topic) {
+    		if (newMetacodeList.indexOf(topic.get('metacode_id')) === -1) {
+    			newMetacodeList.push(topic.get('metacode_id').toString());
+    		}
+    	});
+    	
+    	removedMetacodes = _.difference(self.filters.metacodes, newMetacodeList);
+    	addedMetacodes = _.difference(newMetacodeList, self.filters.metacodes);
+    	
+    	_.each(removedMetacodes, function(metacode_id) {
+    		$('#filter_by_metacode li[data-id="' + metacode_id + '"]').fadeOut('fast',function(){
+				$(this).remove();
+			});
+    	});
+    	
+          var synapse, li, jQueryLi;
+        function sortAlpha(a,b){
+            console.log(a.childNodes);
+            return a.childNodes[1].innerText.toLowerCase() > b.childNodes[1].innerText.toLowerCase() ? 1 : -1;  
         }
-        */
+        _.each(addedMetacodes, function(metacode_id) {
+           metacode = Metamaps.Metacodes.get(metacode_id);
+           li = metacode.prepareLiForFilter();
+           jQueryLi = $(li).hide();
+            $('li', '#filter_by_metacode ul').add(jQueryLi.fadeIn("fast"))
+                .sort(sortAlpha).appendTo('#filter_by_metacode ul');    
+        });
+        self.filters.metacodes = newMetacodeList;
+    },
+    checkMappers: function () {
+        var self = Metamaps.Filter;
+        
+        var newMappersList = [];
+        var removedMappersList = [];
+        var addedMappers = [];
+        
+        Metamaps.Topics.each(function(topic) {
+            if (newMappersList.indexOf(topic.get('user_id')) === -1) {
+                newMappersList.push(topic.get('user_id').toString());
+            }
+        });
+        Metamaps.Synapses.each(function(synapse) {
+            if (newMappersList.indexOf(synapse.get('user_id')) === -1) {
+                newMappersList.push(synapse.get('user_id').toString());
+            }
+        });
+        
+
+        removedMappersList = _.difference(self.filters.mappers, newMappersList);
+        addedMappers = _.difference(newMappersList, self.filters.mappers);
+        
+        _.each(removedMappersList, function(user_id) {
+            $('#filter_by_mapper li[data-id="' + user_id + '"]').fadeOut('fast',function(){
+                $(this).remove();
+            });
+        });
+        
+          var mapper, li, jQueryLi;
+        function sortAlpha(a,b){  
+            return a.childNodes[1].innerText.toLowerCase() > b.childNodes[1].innerText.toLowerCase() ? 1 : -1;  
+        }
+        _.each(addedMappers, function(user_id) {
+           mapper = Metamaps.Mapper.get(user_id);
+           li = mapper.prepareLiForFilter();
+           jQueryLi = $(li).hide();
+            $('li', '#filter_by_mapper ul').add(jQueryLi.fadeIn("fast"))
+                .sort(sortAlpha).appendTo('#filter_by_mapper ul');    
+        });
+
+        self.filters.mappers = newMappersList;
+
+    },
+    checkSynapses: function () {
+        var self = Metamaps.Filter;
+        
+        var newSynapsesList = [];
+        var removedSynapses = [];
+        var addedSynapses = [];
+        
+        Metamaps.Synapses.each(function(synapse) {
+            if (newSynapsesList.indexOf(synapse.get('desc')) === -1) {
+                newSynapsesList.push(synapse.get('desc').toString());
+            }
+        });
+        
+        removedSynapses = _.difference(self.filters.synapses, newSynapsesList);
+        addedSynapses = _.difference(newSynapsesList, self.filters.synapses);
+        
+        _.each(removedSynapses, function(synapse_desc) {
+            $('#filter_by_synapse li[data-id="' + synapse_desc + '"]').fadeOut('fast',function(){
+                $(this).remove();
+            });
+        });
+        
+        var synapse, li, jQueryLi;
+        function sortAlpha(a,b){  
+            return a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase() ? 1 : -1;  
+        }
+        _.each(addedSynapses, function(synapse_desc) {
+           synapse = Metamaps.Synapses.findWhere({desc:synapse_desc});
+           li = synapse.prepareLiForFilter();
+           jQueryLi = $(li).hide();
+            $('li', '#filter_by_synapse ul').add(jQueryLi.fadeIn("fast"))
+                .sort(sortAlpha).appendTo('#filter_by_synapse ul');    
+        });
+
+        self.filters.synapses = newSynapsesList;
     },
     filterAllMetacodes: function (e) {
-
+        var self = Metamaps.Filter;
         $('#filter_by_metacode ul li').addClass('toggledOff');
+        self.visible.metacodes = [];
+        self.passFilters();
+    },
+    filterNoMetacodes: function (e) {
+        var self = Metamaps.Filter;
+        $('#filter_by_metacode ul li').removeClass('toggledOff');
+        self.visible.metacodes = self.filters.metacodes.slice();
+        self.passFilters();
+    },
+    filterAllMappers: function (e) {
+        var self = Metamaps.Filter;
+        $('#filter_by_mapper ul li').addClass('toggledOff');
+        self.visible.mappers = [];
+        self.passFilters();       
+    },
+    filterNoMappers: function (e) {
+        var self = Metamaps.Filter;
+        $('#filter_by_mapper ul li').removeClass('toggledOff');
+        self.visible.mappers = self.filters.mappers.slice();
+        self.passFilters();
+    },
+    filterAllSynapses: function (e) {
+        var self = Metamaps.Filter;
+        $('#filter_by_synapse ul li').addClass('toggledOff');
+        self.visible.synapses = [];
+        self.passFilters();
+    },
+    filterNoSynapses: function (e) {
+        var self = Metamaps.Filter;
+        $('#filter_by_synapse ul li').removeClass('toggledOff');
+        self.visible.synapses = self.filters.synapses.slice();
+        self.passFilters();
 
-        // TODO
-        /*
-        hideAll();
-        for (var catVis in categoryVisible) {
-            categoryVisible[catVis] = false;
-        }
-        */
+        
+    },
+	/*	
+   	Most of this data essentially depends on the ruby function which are happening for filter inside view filterBox
+    But what these function do is load this data into three accessible array within java : metacodes, mappers and synapses
+    */
+    getFilterData: function () {
+        var self = Metamaps.Filter;
+
+        var metacode, mapper, synapse;
+
+        $('#filter_by_metacode li').each(function() {
+            metacode = $( this ).find('img').attr('data-id');
+            self.filters.metacodes.push(metacode);
+            self.visible.metacodes.push(metacode);
+        });	
+
+        $('#filter_by_mapper li').each(function()  {
+            mapper = ($( this ).find('img').attr('data-id'));
+            self.filters.mappers.push(mapper);
+            self.visible.mappers.push(mapper);
+        });
+
+        $('#filter_by_synapse li').each(function()  {
+            synapse = ($( this ).find('p').text());	
+            self.filters.synapses.push(synapse);
+            self.visible.synapses.push(synapse);
+        });
     },
     toggleMetacode: function () {
+        var self = Metamaps.Filter, index;
 
-        var category = $(this).children('img').attr('alt');
-
-        // TODO
-        /*switchVisible(category);
-
-        // toggle the image and the boolean array value
-        if (categoryVisible[category] == true) {
-            $(this).addClass('toggledOff');
-            categoryVisible[category] = false;
-        } else if (categoryVisible[category] == false) {
+        var metacode_id = $(this).attr("data-id");
+        if (self.visible.metacodes.indexOf(metacode_id) == -1) {
+            self.visible.metacodes.push(metacode_id);
             $(this).removeClass('toggledOff');
-            categoryVisible[category] = true;
-        }*/
+        }
+        else {
+            index = self.visible.metacodes.indexOf(metacode_id);
+            self.visible.metacodes.splice(index, 1);
+            $(this).addClass('toggledOff');
+        }
+        self.passFilters();
     },
-    passFilters: function (topic) {
-        var self = Metamaps.Find;
-        var filters = self.filters;
+    toggleMapper: function () {
+        var self = Metamaps.Filter, index;
 
-        var passesName = filters.name == "" ? true : false,
-            passesType = filters.type == [] ? true : false;
-
-        //filter by name
-        if (topic.get('1')[1][0].toLowerCase().indexOf(filters.name) !== -1) {
-            passesName = true;
+        var user_id = $(this).attr("data-id");
+        if (self.visible.mappers.indexOf(user_id) == -1) {
+            self.visible.mappers.push(user_id);
+            $(this).removeClass('toggledOff');
         }
-        // filter by type
-        if (!filters.type == []) {
-            // get the array of types that your topic 'is'
-            var metacodes = topic.get('2') ? topic.get('2')[1] : [];
-            if (_.intersection(filters.type, metacodes).length == 0) passesType = true;
+        else {
+            index = self.visible.mappers.indexOf(user_id);
+            self.visible.mappers.splice(index, 1);
+            $(this).addClass('toggledOff');
         }
+        self.passFilters();
+    },
+    toggleSynapse: function () {
+        var self = Metamaps.Filter, index;
 
-        if (passesName && passesType) {
-            return true;
-        } else {
-            return false;
+        var synapse_desc = $(this).attr("data-id");
+        if (self.visible.synapses.indexOf(synapse_desc) == -1) {
+            self.visible.synapses.push(synapse_desc);
+            $(this).removeClass('toggledOff');
         }
-    
+        else {
+            index = self.visible.synapses.indexOf(synapse_desc);
+            self.visible.synapses.splice(index, 1);
+            $(this).addClass('toggledOff');
+        }
+        self.passFilters();
+    },
+    passFilters: function () {        
+        var self = Metamaps.Filter;
+        var visible = self.visible;
 
+        var passesMetacode, passesMapper, passesSynapse;       
+
+        Metamaps.Topics.each(function(topic) {
+            var n = topic.get('node');
+            var metacode_id = topic.get("metacode_id").toString();
+            var user_id = topic.get("user_id").toString();
+
+            if (visible.metacodes.indexOf(metacode_id) == -1) passesMetacode = false;
+            else passesMetacode = true;
+
+            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+            else passesMapper = true;
+
+            if (passesMetacode && passesMapper) {
+                n.setData('alpha', 1, 'end');
+            }
+            else {
+                n.setData('alpha', 0.0, 'end');
+            }
+        });
+        Metamaps.Synapses.each(function(synapse) {
+           var e = synapse.get('edge');
+           var desc = synapse.get("desc");
+           var user_id = synapse.get("user_id").toString();
+
+            if (visible.synapses.indexOf(desc) == -1) passesSynapse = false;
+            else passesSynapse = true;
+
+            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+            else passesMapper = true;
+
+            if (passesSynapse && passesMapper) {
+                e.setData('alpha', 1, 'end');
+            }
+            else {
+                e.setData('alpha', 0.0, 'end');
+            } 
+        });
+            
+        // run the animation
+        Metamaps.Visualize.mGraph.fx.animate({  
+          modes: ['node-property:alpha',  
+                'edge-property:alpha'],  
+          duration: 500  
+        });
     }
 }; // end Metamaps.Filter
 
@@ -2264,7 +2504,7 @@ Metamaps.Topic = {
             Metamaps.Visualize.mGraph.loadJSON(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
             topic.set('node', nodeOnViz);
-            topic.updateNode(); // links the topic and the mapping to the node  
+            topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
             nodeOnViz.setData("dim", 25, "end");
@@ -2285,9 +2525,8 @@ Metamaps.Topic = {
             if (topic.isNew()) {
                 topic.save(null, {
                     success: function (topicModel, response) {
-                        topicModel.updateMapping();
                         if (Metamaps.Active.Map) {
-                            mapping.save();
+                            mapping.save({ topic_id: topicModel.id });
                         }
                     },
                     error: function (model, response) {
@@ -2403,9 +2642,8 @@ Metamaps.Synapse = {
             if (synapse.isNew()) {
                 synapse.save(null, {
                     success: function (synapseModel, response) {
-                        synapseModel.updateMapping();
                         if (Metamaps.Active.Map) {
-                            mapping.save();
+                            mapping.save({ synapse_id: synapseModel.id });
                         }
                     },
                     error: function (model, response) {

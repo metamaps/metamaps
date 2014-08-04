@@ -83,7 +83,6 @@ Metamaps.GlobalUI = {
         
         // initialize global backbone models and collections
         Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
-        Metamaps.Mappers = new Metamaps.Backbone.MapperCollection([Metamaps.Active.Mapper]);
         Metamaps.Maps = new Metamaps.Backbone.MapsCollection();
     },
     openLightbox: function (which) {

@@ -64,13 +64,14 @@ class MapsController < ApplicationController
             redirect_to root_url and return
         end
 
+        @allmappers = @map.contributors
         @alltopics = @map.topics # should limit to topics visible to user
         @allsynapses = @map.synapses # should also be limited
         @allmappings = @map.mappings
         @allmetacodes = Metacode.all
 
         respond_to do |format|
-            format.html { respond_with(@allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
+            format.html { respond_with(@allmappers, @allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
             format.json { render json: @map }
         end
     end
