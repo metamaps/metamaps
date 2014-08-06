@@ -1997,7 +1997,6 @@ Metamaps.Filter = {
     	
           var synapse, li, jQueryLi;
         function sortAlpha(a,b){
-            console.log(a.childNodes);
             return a.childNodes[1].innerText.toLowerCase() > b.childNodes[1].innerText.toLowerCase() ? 1 : -1;  
         }
         _.each(addedMetacodes, function(metacode_id) {
