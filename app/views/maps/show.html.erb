@@ -38,11 +38,14 @@
 <div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
     <div class="sidebarFilterIcon"></div>
     <div class="sidebarFilterBox">
-        <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
-        <div class="clearfloat"></div>
-        <%= render :partial => 'shared/filterbymetacode' %>
+        <%= render :partial => 'shared/filterBox' %>
     </div>
 </div>
+
+<div class="zoomIn">+</div>
+<div class="zoomOut">-</div>
+<div class="centerMap">C</div>
+<div class="zoomExtents">E</div>
 
 <div class="index">
     <div class="openCheatsheet openLightbox" data-open="cheatsheet"></div>
@@ -75,6 +78,7 @@
 
 <script>
     Metamaps.Active.Map = <%= @map.to_json.html_safe %>;
+    Metamaps.Mappers = <%= @allmappers.to_json.html_safe %>;
     Metamaps.Metacodes = <%= @allmetacodes.to_json.html_safe %>;
     Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
     Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;

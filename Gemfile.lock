@@ -117,7 +117,7 @@ GEM
     rake (10.3.2)
     rdoc (3.12.2)
       json (~> 1.4)
-    redis (3.0.7)
+    redis (2.2.2)
     sass (3.3.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -160,6 +160,6 @@ DEPENDENCIES
   pg
   rails (= 3.2.17)
   rails3-jquery-autocomplete
-  redis
+  redis (= 2.2.2)
   sass-rails
   uglifier (>= 1.0.3)
