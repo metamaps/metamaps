@@ -17,12 +17,12 @@
       <% end %>
       
       <% if @request != "topic" %>
-      <a href="/maps/active" class="<%= @request == "active" ? "active" : "" %>">Recently Active</a> /
-      <a href="/maps/featured" class="<%= @request == "featured" ? "active" : "" %>">Featured</a> /
-      <a href="/maps/new" class="<%= @request == "new" ? "active" : "" %>">Newest First</a>
       <% if authenticated? %>
-         / <a href="/maps/mappers/<%= @current.id %>" class="<%= @request == "you" ? "active" : "" %>">Yours</a>
+         <a href="/maps/mappers/<%= @current.id %>" class="<%= @request == "you" ? "active" : "" %>">My Maps</a> /
       <% end %>
+      <a href="/explore/active" class="<%= @request == "active" ? "active" : "" %>">Recently Active</a> /
+      <a href="/explore/featured" class="<%= @request == "featured" ? "active" : "" %>">Featured</a> /
+      <a href="/explore/new" class="<%= @request == "new" ? "active" : "" %>">Newest First</a>
       <% end %>
     </div>
     <div class="clearfloat"></div>

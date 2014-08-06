@@ -1632,9 +1632,8 @@ Metamaps.Control = {
     },
     deleteNode: function (nodeid) { // refers to deleting topics permanently
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
-        var id = node.getData('id');
         Metamaps.Control.deselectNode(node);
-        Metamaps.Topics.get(id).destroy();
+        Metamaps.Topics.get(nodeid).destroy();
         Metamaps.Control.hideNode(nodeid);
     },
     removeSelectedNodes: function () { // refers to removing topics permanently from a map
@@ -1653,11 +1652,10 @@ Metamaps.Control = {
     removeNode: function (nodeid) { // refers to removing topics permanently from a map
         var mapperm = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
-        var mappingid = node.getData("mapping").id;
 
         if (mapperm) {
             Metamaps.Control.deselectNode(node);
-            Metamaps.Mappings.get(mappingid).destroy();
+            node.getData('mapping').destroy();
             Metamaps.Control.hideNode(nodeid);
         }
     },

@@ -82,9 +82,13 @@ Metamaps.GlobalUI = {
         $('.alert.metamaps').delay(10000).fadeOut('fast');
         
         // initialize global backbone models and collections
-        Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
+        if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
         Metamaps.Mappers = new Metamaps.Backbone.MapperCollection([Metamaps.Active.Mapper]);
-        Metamaps.Maps = new Metamaps.Backbone.MapsCollection();
+        Metamaps.Maps = {}; 
+        Metamps.Maps.Mine = new Metamaps.Backbone.MapsCollection();
+        Metamps.Maps.Featured = new Metamaps.Backbone.MapsCollection();
+        Metamps.Maps.Active = new Metamaps.Backbone.MapsCollection();
+        Metamps.Maps.New = new Metamaps.Backbone.MapsCollection();
     },
     openLightbox: function (which) {
         var self = Metamaps.GlobalUI;
