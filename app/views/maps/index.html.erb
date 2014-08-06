@@ -5,9 +5,6 @@
   #%>
   
 <% content_for :title, "Explore Maps | Metamaps" %>
-  
-<h1 class="index">Explore Maps</h1>
-
 
   <div class="mapOrder">
     <span class="displaying">Displaying:</span>
@@ -59,9 +56,5 @@ $(document).ready(function() {
     var s = $(this).parents('.scroll');
     s.height( s.height() ).mCustomScrollbar('update');
   });
-
-  $('.mapsWrapper').height( (parseInt($('body').height()) - 39) );
-  var s = $('.maps');
-  s.height( s.height() ).mCustomScrollbar();
 });
 </script>

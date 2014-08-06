@@ -8,6 +8,9 @@
 <h1 class="index">Your Settings</h1>
 <%= formula_form_for @user, url: user_url do |form| %>
   <h3>Edit Account</h3>
+  <label for="user_image">Profile Picture</label>
+  <% if @user.image %><%= image_tag @user.image.url(:round), :size => "48x48" %><% end %>
+  <%= form.file_field :image %>
   <%= form.input :name, label: "Name", class: "name" %>
   <%= form.input :email, label: "Email", class: "email" %>
   <%= form.input :password, label: "Password", class: "password", :autocomplete => :off %>

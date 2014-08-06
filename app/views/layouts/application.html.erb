@@ -1,92 +1,94 @@
 <%#
-  # @file
-  # Main application file. Holds scaffolding present on every page.
-  # Then a certain non-partial view (no _ preceding filename) will be
-  # displayed within, based on URL
-  #%>
+# @file
+# Main application file. Holds scaffolding present on every page.
+# Then a certain non-partial view (no _ preceding filename) will be
+# displayed within, based on URL
+#%>
 
 <!DOCTYPE html>
-<html>
-<head>
-  <title><%=h yield(:title) %></title>
-  <% if authenticated? %>
-    <script type="text/javascript">
-      var userid = <%= user.id %>;
-      var username = "<%= user.name %>";
-    </script>
-  <% else %>
-    <script type="text/javascript">
-      var userid = null;
-      var username = null;
-    </script>  
-  <% end %>
-  <script>
-    var imgArray = new Object();
-    
-    <% Metacode.all.each do |m| %>
-      imgArray['<%= m.name %>'] = new Image(); imgArray['<%= m.name %>'].src = '<%= m.icon %>';
-    <% end %>
-  </script>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-  <script type="text/javascript" src="//use.typekit.net/obp7wss.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-  <%= csrf_meta_tags %>
+    <html>
+    <head>
+    <title><%=h yield(:title) %></title>
+<%= stylesheet_link_tag    "application", :media => "all" %>
+<%= javascript_include_tag "application" %>
+<% if (controller_name == "maps" && action_name == "show" || action_name == "embed") || 
+    (controller_name == "topics" && action_name == "show") %>
+<%= javascript_include_tag "compileMapPages" %>
+<% end %>
+<script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript" src="//use.typekit.net/obp7wss.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<%= csrf_meta_tags %>
+<meta name="viewport" content="width=device-width, user-scalable=no">
 </head>
 <body class="<%= (action_name == "show") ? "mapBody" : "" %>" >
 
-  <% if notice %>
-  <p class="notice metamaps"><%= notice %></p>
-  <% end %>
-  <% if alert %>
-  <p class="alert metamaps"><%= alert %></p>
-  <% end %>
-       
-  <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
+    <% if notice %>
+    <p class="notice metamaps"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+    <p class="alert metamaps"><%= alert %></p>
+    <% end %>
 
-    <div class="wrapper <%= controller_name == "main" && action_name == "home" ? "homePage" : "" %>" id="wrapper">
-      <div class="sidebarSearch">
-        <div class="sidebarSearchIcon"></div>
-        <input type="text" class="sidebarSearchField"></input>
-        <div class="clearfloat"></div>
-        <%= render :partial => 'layouts/templates' %>
-      </div>
-      <div class="sidebarAccount">
-        <div class="sidebarAccountIcon"></div>
-        <div class="sidebarAccountBox <%= authenticated? ? 'loggedin' : 'loggedout' %>">
-          <%= render :partial => 'layouts/account' %>
+    <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
+
+        <div class="wrapper <%= controller_name == "main" && action_name == "home" ? "homePage" : "" %>" id="wrapper">
+            
+            <div class="homeButton">
+                <a href="/"></a>    
+            </div>
+            
+            <div class="sidebarSearch">
+                <div class="sidebarSearchIcon"></div>
+                <input type="text" class="sidebarSearchField"></input>
+                <div class="clearfloat"></div>
+            </div>
+
+            <div class="sidebarAccount">
+                <div class="sidebarAccountIcon">
+                    <% if user && user.image %><%= image_tag user.image.url(:thumb), :size => "35x35" %><% end %>  
+                </div>
+                <div class="sidebarAccountBox <%= authenticated? ? 'loggedin' : 'loggedout' %>">
+                    <%= render :partial => 'layouts/account' %>
+                </div>
+            </div>
+
+            <% if authenticated? %>
+                <div class="addMap openLightbox" data-open="newmap"></div>
+            <% end %>
+
+            <%= yield %>
         </div>
-      </div>
-			<%= yield %>
-		</div>
-		
-		<div class="footer">
-      <div class="logo">
-          <ul class="menu">
-                <li class="beta" onclick="BAROMETER.show();">
-                    FEEDBACK!
-                </li>
-                <li class="meta openLightbox" data-open="about">ABOUT</li>
-                <li class="tutorial openLightbox" data-open="tutorial">TUTORIAL</li>
-                <li class="exploreMaps"><%= link_to "EXPLORE MAPS", featuredmaps_url %></li>
-          </ul>
-          <div id="mainTitle"><%= link_to "metamaps", root_url %></div><!--<div id="beta">beta</div>-->
-      </div>
-      <% if authenticated? %>
-        <div class="addMap openLightbox" data-open="newmap"></div>
-      <% end %>
-    </div>
-    
-  <% end %>
-  
-    <style type='text/css'>@import url('http://getbarometer.s3.amazonaws.com/assets/barometer/css/barometer.css');</style>
-    <script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' type='text/javascript'></script>
-    <script type="text/javascript" charset="utf-8">
-      BAROMETER.load('Scqak8nyHdFEkezKMNeQp');
-    </script>
-  <%= render :partial => 'layouts/lightboxes' %>
-  <%= render :partial => 'layouts/ga' if Rails.env.production? %>
+
+        <div class="footer">
+            <div id="logo">METAMAPS</div>
+        </div>
+
+    <% end %>
+
+<%= render :partial => 'layouts/lightboxes' %>
+<%= render :partial => 'layouts/templates' %>
+
+<style type='text/css'>@import url('http://getbarometer.s3.amazonaws.com/assets/barometer/css/barometer.css');</style>
+<script src='http://getbarometer.s3.amazonaws.com/assets/barometer/javascripts/barometer.js' 
+        type='text/javascript'></script>
+<script type="text/javascript" charset="utf-8">
+    BAROMETER.load('Scqak8nyHdFEkezKMNeQp');
+
+    <% if authenticated? %>
+        Metamaps.Active.Mapper = <%= user.to_json.html_safe %>
+        <% else %>
+        Metamaps.Active.Mapper = null;
+    <% end %>
+
+        var imgArray = new Object();
+
+    <% Metacode.all.each do |m| %>
+        imgArray['<%= m.name %>'] = new Image(); imgArray['<%= m.name %>'].src = '<%= m.icon %>';
+    <% end %>
+</script>
+
+<%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>
 </body>
 </html>

@@ -88,13 +88,15 @@ body,
 .wrapper,
 #container {
     height: 100%;
-    overflow: hidden;
 }
 .unauthenticated .wrapper.homePage {
     overflow: auto;
 }
 .wrapper.homePage {
     background: url('mm-homepage-bg-image.png') no-repeat center -249px;
+}
+body.mapBody {
+    overflow: hidden;
 }
 /* scrollbar override */
 
@@ -111,7 +113,7 @@ body,
     width: auto;
 }
 html {} body {
-    background: url(background2-for-repeating.jpg);
+    background: #E5E5E5;
     font-family: 'LatoLight', helvetica, sans-serif;
     color: #FFF;
 }
@@ -193,9 +195,10 @@ input[type="submit"]:hover {
  * Layout stuffs
  */
 
-#barometer_tab {
+/*#barometer_tab {
     display: none;
-}
+}*/
+
 #saveMapLayout {
     display: none;
 }
@@ -508,13 +511,12 @@ label[for="user_remember_me"] {
     border-right: none;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
-    background: #0F1519;
 }
 .wrapper div.index .openCheatsheet {
     position: absolute;
     top: 0;
     left: -41px;
-    background: #0F1519 url('MMCCicon_help.png') no-repeat center center;
+    background: url('MMCCicon_help.png') no-repeat center center;
     background-size: 27px 27px;
     border-radius: 5px;
     height: 36px;
@@ -558,9 +560,9 @@ label[for="user_remember_me"] {
 /* account */
 
 .sidebarAccount {
-    position: absolute;
-    top: 5px;
-    right: 0;
+    position: fixed;
+    top: 10px;
+    right: 10px;
     z-index: 200;
     width: 35px;
     height: 35px;
@@ -569,16 +571,19 @@ label[for="user_remember_me"] {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_mapper.png') no-repeat center center;
+    /*background: #0F1519 url('MMCCicon_mapper.png') no-repeat center center;*/
     background-size: 24px 24px;
     cursor: pointer;
+}
+.sidebarAccountIcon img {
+    border-radius: 17px;
 }
 .sidebarAccountBox {
     position: absolute;
     display: none;
     height: auto;
     background: #000;
-    top: 35px;
+    top: 45px;
     right: 0;
     padding: 10px;
     border: 1px solid black;
@@ -681,26 +686,22 @@ li.accountInvite span {
 /* Save To New Map */
 
 .sidebarFork {
-    position: absolute;
-    top: 5px;
-    right: 71px;
+    position: fixed;
+    top: 10px;
+    right: 120px;
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarForkIcon {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_save_new_map.png') no-repeat center center;
+    background: url('MMCCicon_save_new_map.png') no-repeat center center;
     background-size: 28px 28px;
     cursor: pointer;
 }
-.sidebarForkIcon:hover {
-    background-color: black;
-}
-.sidebarForkBox {
+.sidebarForkIcon:hover {} .sidebarForkBox {
     position: absolute;
     display: none;
     height: auto;
@@ -741,20 +742,16 @@ li.accountInvite span {
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarSaveIcon {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_save_layout.png') no-repeat center center;
+    background: url('MMCCicon_save_layout.png') no-repeat center center;
     background-size: 22px 22px;
     cursor: pointer;
 }
-.sidebarSaveIcon:hover {
-    background-color: black;
-}
-.sidebarSaveBox {
+.sidebarSaveIcon:hover {} .sidebarSaveBox {
     position: absolute;
     display: none;
     height: auto;
@@ -788,12 +785,11 @@ li.accountInvite span {
 
 .sidebarFilter {
     position: absolute;
-    top: 5px;
-    right: 35px;
+    top: 10px;
+    right: 160px;
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarFilter.loggedout {
     right: 35px;
@@ -802,13 +798,11 @@ li.accountInvite span {
     position: absolute;
     width: 35px;
     height: 35px;
-    background: #0F1519 url('MMCCicon_filter2.png') no-repeat center center;
+    background: url('MMCCicon_filter2.png') no-repeat center center;
     background-size: 28px 28px;
     cursor: pointer;
 }
-.sidebarFilterIcon:hover {
-    background-color: black;
-}
+.sidebarFilterIcon:hover {}
 /* we set a few of these params off screen to begin with, so that when we initialize the scroll bar it works, but then 
    we hide the element and position it correctly */
 
@@ -816,37 +810,32 @@ li.accountInvite span {
     position: fixed;
     top: -1000px;
     right: -1000px;
-    display: block;
-    /*
-  position:absolute; 
-  top: 35px;
-  right:-72px;
-  display:none;
-  */
-    height: auto;
-    width: 260px;
-    background: #000;
+    position:absolute; 
+    top: 35px;
+    right:-150px;
+    display:none;
+    height: 400px;
+    width: 320px;
+    background: #f5f5f5;
     padding: 10px;
     border: 1px solid black;
     font-family: 'LatoLight', helvetica, sans-serif;
     text-align: center;
+    color:#3e3e3e;
+    overflow: scroll;
+
 }
-h3.filterByMetacode {
-    margin-bottom: 10px;
+h3.filterBox {
     text-align: left;
     float: left;
 }
 .sidebarFilterBox span {
-    float: left;
+    float: right;
     background: #15bad4;
     padding: 1px 4px;
     border-radius: 2px;
     margin-left: 5px;
     cursor: pointer;
-}
-.sidebarFilterBox #filter_by_metacode {
-    height: 270px;
-    overflow: hidden;
 }
 .sidebarFilterBox ul {
     list-style: none;
@@ -858,9 +847,10 @@ h3.filterByMetacode {
     cursor: pointer;
 }
 .sidebarFilterBox li:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background: #000;
 }
 .sidebarFilterBox li img {
+    background-color: rgba(255, 255, 255, 0.1);
     width: 45px;
     height: 45px;
     margin: 0 auto;
@@ -873,18 +863,33 @@ h3.filterByMetacode {
 .sidebarFilterBox li.toggledOff {
     opacity: 0.4;
 }
+.sidebarFilterBox h3 {
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+#filter_by_metacode {
+    border-bottom: 1px solid black;
+    margin: 5px;
+}
+#filter_by_mapper {
+    margin: 5px auto;
+}
+#filter_by_synapse {
+    margin: 5px auto;
+    border-bottom: 1px solid black;
+}
 /* end filter by metacode */
 
 /* collaborate */
 
 .sidebarCollaborate {
-    position: absolute;
-    top: 5px;
-    right: 143px;
+    position: fixed;
+    top: 10px;
+    right: 200px;
     z-index: 200;
     width: 35px;
     height: 35px;
-    border-right: 1px solid black;
 }
 .sidebarCollaborateIcon {
     position: absolute;
@@ -894,7 +899,6 @@ h3.filterByMetacode {
     background-size: 36px 36px;
     background-position: center center;
     background-repeat: no-repeat;
-    background-color: #0F1519;
     cursor: pointer;
 }
 .sidebarCollaborateIcon.blue {
@@ -906,7 +910,7 @@ h3.filterByMetacode {
     height: auto;
     width: auto;
     background: #000;
-    top: 35px;
+    top: 45px;
     right: 0;
     padding: 10px;
     border: 1px solid black;
@@ -960,18 +964,38 @@ h3.realtimeBoxTitle {
 
 /* search */
 
+.homeButton {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 35px;
+    height: 35px;
+    z-index: 200;
+    background: white;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.homeButton a {
+    display:block;
+    width: 35px;
+    height: 35px;
+}
+
 .sidebarSearch {
-    position: absolute;
-    top: 5px;
-    left: 0;
+    position: fixed;
+    top: 10px;
+    left: 45px;
     height: 35px;
     z-index: 200;
 }
 .sidebarSearchIcon {
     float: left;
-    width: 35px;
+    width: 80px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
     height: 35px;
-    background: #0F1519 url('search_icon_32x32.png') no-repeat center center;
+    background: #00BCD4 url('search_icon_32x32.png') no-repeat center center;
     background-size: 25px 25px;
     cursor: pointer;
 }
@@ -1279,7 +1303,7 @@ h3.realtimeBoxTitle {
 }
 #cards {
     height: 100%;
-    width: 805px;
+    width: 90%;
     margin: 0 auto;
 }
 #cards p.empty {
@@ -1691,9 +1715,9 @@ div.mapInfoStat {
     width: 100%;
     position: absolute;
     background-color: #000;
-    opacity: 0.42;
-    filter: alpha(opacity=42);
-    -moz-opacity: 0.42;
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0.0;
 }
 #lightbox_overlay #lightbox_main #lightbox_header {
     padding: 6px 5px 1px 0;
@@ -2011,7 +2035,7 @@ div.mapInfoStat {
     margin: 10px 0 0 131px;
     width: 254px;
 }
-.onConsole .new_map button {
+.onConsole .new_map button.cancel {
     margin-right: 20px;
 }
 .onConsole .new_map button,
@@ -2032,6 +2056,7 @@ div.mapInfoStat {
     box-shadow: none;
 }
 /* Cheatsheet */
+
 #cheatSheet {
     width: 100%;
     height: 350px;
@@ -2040,15 +2065,14 @@ div.mapInfoStat {
     line-height: 21px;
     border: none;
 }
-
 #cheatSheet .sectionTitle {
     font-family: Lato, Arial, sans-serif;
-    font-weight:bold;
+    font-weight: bold;
 }
 #cheatSheet .csItem {
     margin: 5px 0;
-    font-size:15px;
-    line-height:18px;
+    font-size: 15px;
+    line-height: 18px;
 }
 #cheatSheet .csItem img {
     display: inline-block;
@@ -2058,7 +2082,7 @@ div.mapInfoStat {
     font-family: Lato, Arial, sans-serif;
 }
 #cheatSheet .indented {
-    margin-left:15px;
+    margin-left: 15px;
 }
 /* Admin Pages */
 
@@ -2246,94 +2270,37 @@ div.mapInfoStat {
     height: 100%;
     overflow: hidden;
 }
+.addMap {
+    display: block;
+    position: fixed;
+    right: 55px;
+    top: 10px;
+    width: 55px;
+    height: 35px;
+    background: #00BCD4 url('MMCCicon_add_map.png') no-repeat 3px -4px;
+    background-size: 40px 40px;
+    cursor: pointer;
+    z-index: 2;
+    border-radius: 2px;
+}
 /* --- styling the logo button ---*/
 
 .footer {
     display: block;
     position: fixed;
-    bottom: 5px;
-    height: 35px;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -55px;
     z-index: 15000;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
-    background: #0F1519;
 }
-.addMap {
-    position: absolute;
-    right: -49px;
-    top: 0px;
-    width: 44px;
-    height: 35px;
-    background: #0F1519 url('MMCCicon_add_map.png') no-repeat 3px -4px;
-    background-size: 40px 40px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.addMap:hover {} .logo {
-    z-index: 12;
-    display: block;
-    width: 136px;
-    background: url(menu_icon_32.png) no-repeat -10px 8px;
-    padding: 5px 0px 1px 15px;
-    background-size: 22px 20px;
-}
-#mainTitle {
-    padding: 0 5px;
-}
-#mainTitle a {
-    color: #FFF;
+#logo {
+    color: #6B6B6B;
     font-family: "vinyl", sans-serif;
     font-style: italic;
     text-transform: uppercase;
     font-weight: 400;
     font-size: 30px;
     line-height: 30px;
-}
-.footer .menu {
-    display: none;
-    position: absolute;
-    border: none;
-    bottom: 35px;
-    left: -1px;
-    height: 123px;
-    z-index: 12;
-    width: 122px;
-    color: white;
-    white-space: nowrap;
-    text-align: center;
-    font-size: 16px;
-    overflow: hidden;
-    padding: 0 0 0 30px;
-    margin: 0;
-    background: #0F1519 url(beta_gen002.png) no-repeat 6px 12px;
-}
-.footer ul li {
-    margin: 0;
-    clear: both;
-    float: none;
-    list-style-type: none;
-    display: block;
-    padding: 0;
-    text-align: center;
-    font-family: 'vinyl';
-    font-style: italic;
-    height: 30px;
-    line-height: 34px;
-    font-size: 17px;
-    cursor: pointer;
-}
-.footer ul li:hover {} li.meta a,
-li.tutorial a,
-li.exploreMaps a {
-    display: block;
-}
-li.meta,
-li.tutorial,
-li.exploreMaps {
-    border-top: 1px solid white;
-}
-.footer ul li a {
-    color: #FFF;
 }
 .home_bg {
     display: block;

@@ -3,10 +3,8 @@ class MainController < ApplicationController
   include MapsHelper
   include UsersHelper
   include SynapsesHelper
-
-  before_filter :require_user, only: [:invite] 
    
-  respond_to :html, :js, :json
+  respond_to :html, :json
   
   # home page
   def home
@@ -16,15 +14,11 @@ class MainController < ApplicationController
       @maps = Map.find_all_by_featured(true).shuffle!
       @maps = @maps.slice(0,3)
     elsif authenticated?
-      @maps = Map.order("updated_at DESC").where("permission != ?", "private").limit(3)
+      #@maps = Map.order("updated_at DESC").where("permission != ?", "private").limit(3)
+      @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
     end
     
     respond_with(@maps, @current) 
-  end
-  
-  # /request
-  def requestinvite
-	  
   end
   
   ### SEARCHING ###

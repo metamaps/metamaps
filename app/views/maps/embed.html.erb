@@ -1,63 +1,83 @@
 <%#
-  # @file
-  # Code to display a map
-  # /maps/:id
-  #%>
+# @file
+# Code to display a map
+# /maps/:id
+#%>
 
-<% content_for :title, @map.name + " | Metamaps" %>   
-  
-<div class="headertop">
-    <% if authenticated? %>
-      <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
-        <button onclick="removeSelectedEdges();removeSelectedNodes();">Remove Selected From Map</button>
-      <% end %>
-      <button onclick="var r=confirm('Are you sure you want to permanently delete selected objects?!'); if (r == true) {deleteSelectedEdges();deleteSelectedNodes();}">Permanently Delete Selected</button>
-      <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
-			  <%= form_for @map, :url => savelayout_path(@map), :html => { :class => "saveMapLayout", :id => "saveMapLayout"}, remote: true do |form| %>
-				  <%= form.hidden_field "coordinates", :value => "" %>
-				  <%= form.submit "Save Layout", class: "saveLayout", id: "saveLayout" %>
-			  <% end %>
-		  <% end %>
-    <% end %>
+<% content_for :title, @map.name + " | Metamaps" %>
+
+<div id="preloaded-images">
+    <img src="/assets/MMCCicon_realtime_blue.png" />
 </div>
-<div class="clearfloat"></div>
 
-<div class="maps onMap white_bg" id="container">
-  <div id="center-container">
-    <div id="infovis"></div>    
-  </div>
+
+<% if authenticated? %>
+<div class="sidebarFork">
+    <div class="sidebarForkIcon">
+    </div>
+    <div class="sidebarForkBox"></div>
+</div>
+<% if @map.permission == "commons" || @map.user == user %>
+<div class="sidebarCollaborate">
+    <div class="sidebarCollaborateIcon blue"></div>
+    <div class="sidebarCollaborateBox">
+        <h3 class="realtimeBoxTitle">Realtime: </h3>
+        <span class="realtimeOnOff rtOn">ON</span>
+        <div class="clearfloat"></div>
+        <div class="realtimeMapperList">
+            <ul>
+                <li class="rtMapper littleRtOn rtMapperSelf">
+                    <%= user.name %> (me)
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<% end %>
+<% end %>
+<div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
+    <div class="sidebarFilterIcon"></div>
+    <div class="sidebarFilterBox">
+        <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
+        <div class="clearfloat"></div>
+        <%= render :partial => 'shared/filterbymetacode' %>
+    </div>
+</div>
+
+<div class="index">
+    <div class="openCheatsheet openLightbox" data-open="cheatsheet"></div>
+    <span class="mapInfo"></span>
+    <div class="clearfloat"></div>
+    <%= render :partial => 'maps/mapinfobox' %>
+</div>
+
+<div class="maps onMap" id="container">
+    <div id="center-container">
+        <div id="infovis"></div>    
+    </div>
+    <div class="showcard" id="showcard"></div>
 </div>
 <div class="clearfloat"></div>
 
 <% if authenticated? %>
-  <%= render :partial => 'newtopic' %>
-  <%= render :partial => 'newsynapse' %>
+
+<% # add these if you have edit permissions on the map %>
+<% if @map.permission == "commons" || @map.user == user %>   
+<% # for creating and pulling in topics and synapses %>
+<%= render :partial => 'newtopic' %>
+<%= render :partial => 'newsynapse' %>
 <% end %>
-  
-<script>
-  var dragged = 0;
-  mapid = <%= @map.id %>;
-  <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
-    mapperm = true;
-  <% end %>
-</script>
+
+<% # for populating the change metacode list on the topic card %>
+<%= render :partial => 'shared/metacodeoptions' %>
+<% end %>
+
 
 <script>
-  viewMode = "graph";
-	json = <%= @mapjson %>;
-	if (json.length > 0) {
-		$(document).ready(function() {
-			<% if (@map.arranged) %>
-				initialize("arranged", false, true);
-			<% else %>
-				initialize("chaotic", false, true);
-			<% end %>
-		});
-	}
-  else {
-		$(document).ready(function() {
-				initialize("chaotic", true, true);
-		});
-	}
-  MetamapsModel.embed = true;
+    Metamaps.Active.Map = <%= @map.to_json.html_safe %>;
+    Metamaps.Metacodes = <%= @allmetacodes.to_json.html_safe %>;
+    Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
+    Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;
+    Metamaps.Mappings = <%= @allmappings.to_json.html_safe %>;
+    Metamaps.Settings.embed = true;
 </script>
