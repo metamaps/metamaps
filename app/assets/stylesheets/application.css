@@ -791,6 +791,47 @@ li.accountInvite span {
     width: 35px;
     height: 35px;
 }
+
+.zoomIn {
+    position: absolute;
+    bottom: 100px;
+    right: 20px;
+    z-index: 200;
+    width: 35px;
+    height: 35px;
+    background: blue;
+}
+
+.zoomOut {
+    position: absolute;
+    bottom: 60px;
+    right: 20px;
+    z-index: 200;
+    width: 35px;
+    height: 35px;
+    background: blue;
+}
+
+.centerMap {
+    position: absolute;
+    bottom: 140px;
+    right: 20px;
+    z-index: 200;
+    width: 35px;
+    height: 35px;
+    background: blue;
+}
+
+.zoomExtents {
+    position: absolute;
+    bottom: 180px;
+    right: 20px;
+    z-index: 200;
+    width: 35px;
+    height: 35px;
+    background: blue;
+}
+
 .sidebarFilter.loggedout {
     right: 35px;
 }

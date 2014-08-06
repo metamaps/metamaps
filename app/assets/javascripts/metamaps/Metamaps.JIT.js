@@ -8,6 +8,10 @@ Metamaps.JIT = {
         var self = Metamaps.JIT;
 
         self.prepareVizData();
+        $(".zoomIn").click(self.zoomIn);
+        $(".zoomOut").click(self.zoomOut);
+        $(".centerMap").click(self.centerMap);
+        $(".zoomExtents").click(self.zoomExtents);
     },
     /**
      * convert our topic JSON into something JIT can use
@@ -307,7 +311,7 @@ Metamaps.JIT = {
                     if (Metamaps.Mouse.boxStartCoordinates) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.selectNodesWithBox(e);
+                        Metamaps.JIT.selectWithBox(e);
                         return;
                     }
 
@@ -331,7 +335,7 @@ Metamaps.JIT = {
                     if (Metamaps.Mouse.boxStartCoordinates) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.selectNodesWithBox(e);
+                        Metamaps.JIT.selectWithBox(e);
                         return;
                     }
 
@@ -897,7 +901,7 @@ Metamaps.JIT = {
         }
         return 'nothing'; //case 4?
     }, //  handleSelectionBeforeDragging
-    selectNodesWithBox: function (e) {
+    selectWithBox: function (e) {
 
         var sX = Metamaps.Mouse.boxStartCoordinates.x,
             sY = Metamaps.Mouse.boxStartCoordinates.y,
@@ -1025,7 +1029,7 @@ Metamaps.JIT = {
         Metamaps.Mouse.boxStartCoordinates = false;
         Metamaps.Mouse.boxEndCoordinates = false;
         Metamaps.Visualize.mGraph.plot();
-    }, // selectNodesWithBox
+    }, // selectWithBox
     drawSelectBox: function (eventInfo, e) {
         var ctx = Metamaps.Visualize.mGraph.canvas.getCtx();
 
@@ -1425,5 +1429,91 @@ Metamaps.JIT = {
                 y: posChild.y
             }, 13, inv, canvas, 0.3);
         }
-    } //renderEdgeArrows
+    }, //renderEdgeArrows
+    zoomIn: function () {
+        Metamaps.Visualize.mGraph.canvas.scale(1.25,1.25);
+    },
+    zoomOut: function () {
+        Metamaps.Visualize.mGraph.canvas.scale(0.8,0.8);
+    },
+    centerMap: function () {
+        var canvas = Metamaps.Visualize.mGraph.canvas;
+        var offsetScale = canvas.scaleOffsetX;
+                
+        canvas.scale(1/offsetScale,1/offsetScale);
+
+        var offsetX = canvas.translateOffsetX;
+        var offsetY = canvas.translateOffsetY;
+
+        canvas.translate(-1*offsetX,-1*offsetY);
+    },
+    zoomExtents: function () {
+        Metamaps.JIT.centerMap();
+        var height = $(document).height(),
+            width = $(document).width(),
+            maxX, minX, maxY, minY, counter = 0;
+
+        var nodes = Metamaps.Visualize.mGraph.graph;
+
+        
+        if(Object.keys(nodes).length >1){
+
+
+            nodes.eachNode(function (n) {
+                var x = n.pos.x,
+                    y = n.pos.y;
+
+                if (counter == 0){
+                    maxX = x;
+                    minX = x; 
+                    maxY = y;
+                    minY = y; 
+                }
+
+                maxX = Math.max(x,maxX);
+                maxY = Math.max(y,maxY);
+                minX = Math.min(x,minX);
+                minY = Math.min(y,minY);
+
+                counter++;
+            });
+
+            var spanX = maxX - minX;
+            var spanY = maxY - minY;
+            var ratioX = spanX / width;
+            var ratioY = spanY / height;
+
+            var newRatio = Math.max(ratioX,ratioY);
+
+            var canvas = Metamaps.Visualize.mGraph.canvas;
+
+            canvas.scale(1/newRatio*0.9,1/newRatio*0.9);
+
+            counter = 0;
+
+            nodes.eachNode(function (n) {
+                var x = n.pos.x,
+                    y = n.pos.y;
+
+                if (counter == 0){
+                    maxX = x;
+                    minX = x; 
+                    maxY = y;
+                    minY = y; 
+                }
+
+                maxX = Math.max(x,maxX);
+                maxY = Math.max(y,maxY);
+                minX = Math.min(x,minX);
+                minY = Math.min(y,minY);
+
+                counter++;
+            });
+
+            var cogX = (maxX + minX)/2;
+            var cogY = (maxY + minY)/2;
+
+            canvas.translate(-1* cogX, -1* cogY);
+        }
+    }
 };

@@ -12,22 +12,22 @@ class MapsController < ApplicationController
     # GET /maps/mappers/:id
     def index
 
-        if request.path == "/maps"
+        if request.path == "/explore"
             redirect_to activemaps_url and return
         end
 
         @current = current_user
         @user = nil
 
-        if request.path =="/maps/active"
+        if request.path =="/explore/active"
             @maps = Map.order("updated_at DESC").limit(20)
             @request = "active"
 
-        elsif request.path =="/maps/featured"
+        elsif request.path =="/explore/featured"
             @maps = Map.order("name ASC").find_all_by_featured(true)
             @request = "featured"
 
-        elsif request.path == "/maps/new"
+        elsif request.path == "/explore/new"
             @maps = Map.order("created_at DESC").limit(20)
             @request = "new"
 

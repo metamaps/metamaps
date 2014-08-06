@@ -19,9 +19,9 @@ Metamaps::Application.routes.draw do
     get :autocomplete_topic, :on => :collection
   end
   
-  match 'maps/active', to: 'maps#index', via: :get, as: :activemaps
-  match 'maps/featured', to: 'maps#index', via: :get, as: :featuredmaps
-  match 'maps/new', to: 'maps#index', via: :get, as: :newmaps
+  match 'explore/active', to: 'maps#index', via: :get, as: :activemaps
+  match 'explore/featured', to: 'maps#index', via: :get, as: :featuredmaps
+  match 'explore/new', to: 'maps#index', via: :get, as: :newmaps
   match 'maps/mappers/:id', to: 'maps#index', via: :get, as: :usermaps
   match 'maps/topics/:id', to: 'maps#index', via: :get, as: :topicmaps
   resources :maps, except: [:new, :edit]
