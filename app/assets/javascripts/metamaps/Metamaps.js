@@ -2060,7 +2060,7 @@ Metamaps.Filter = {
         var addedSynapses = [];
         
         Metamaps.Synapses.each(function(synapse) {
-            if (newSynapsesList.indexOf(synapse.get('desc')) === -1) {
+            if (synapse.get('desc') && newSynapsesList.indexOf(synapse.get('desc')) === -1) {
                 newSynapsesList.push(synapse.get('desc').toString());
             }
         });
