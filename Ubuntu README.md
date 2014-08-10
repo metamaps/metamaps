@@ -70,13 +70,13 @@ alright now we need to make sure your postgres password is the same as it is lis
 
 Select postgres like this
 
-"\password postgres"
+"\password postgres;"
 
 set the password to 3112
 
 Then to quit
 
-"\q"
+"\q;"
 
 now we can run the rake install and db creation
 
