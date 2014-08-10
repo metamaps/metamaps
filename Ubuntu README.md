@@ -56,7 +56,7 @@ Install the specific version of ruby needed this will take some time *Note you w
 
 "rvm install ruby-1.9.3-p125"
 
-Now we also need to rename your database file which is in ./config/database.default.yml to database.yml
+Now we also need to rename your database file which is in ./config/database.yml.default to database.yml
 
 now run inside your metamaps_gen002 folder
 
