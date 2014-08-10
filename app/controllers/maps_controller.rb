@@ -19,17 +19,24 @@ class MapsController < ApplicationController
         @current = current_user
         @user = nil
 
-        if request.path =="/explore/active"
+        if request.path.index("/explore/active") != nil
             @maps = Map.order("updated_at DESC").limit(20)
             @request = "active"
 
-        elsif request.path =="/explore/featured"
+        elsif request.path.index("/explore/featured") != nil
             @maps = Map.order("name ASC").find_all_by_featured(true)
             @request = "featured"
 
-        elsif request.path == "/explore/new"
+        elsif request.path.index("/explore/new") != nil
             @maps = Map.order("created_at DESC").limit(20)
             @request = "new"
+
+        elsif request.path.index('/explore/mine') != nil  # looking for maps by me
+            if !authenticated?
+                redirect_to activemaps_url and return
+            end
+            @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
+            @request = "you"
 
         elsif request.path.index('/maps/mappers/') != nil  # looking for maps by a mapper
             @user = User.find(params[:id])
@@ -37,7 +44,7 @@ class MapsController < ApplicationController
             @request = "you" if authenticated? && @user == @current
             @request = "other" if authenticated? && @user != @current
 
-        elsif request.path.index('/maps/topics/') != nil  # looking for maps by a certain topic they include
+        elsif request.path.index('/explore/topics/') != nil  # looking for maps by a certain topic they include
             @topic = Topic.find(params[:id]).authorize_to_show(@current)
             if !@topic
                 redirect_to featuredmaps_url, notice: "Access denied." and return
@@ -47,10 +54,15 @@ class MapsController < ApplicationController
         end
 
         #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
-        @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
+        if @maps
+            @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
+        else
+            @maps = []
+        end
 
         respond_to do |format|
             format.html { respond_with(@maps, @request, @user) }
+            format.json { render json: @maps }
         end
     end
 
@@ -68,11 +80,17 @@ class MapsController < ApplicationController
         @alltopics = @map.topics # should limit to topics visible to user
         @allsynapses = @map.synapses # should also be limited
         @allmappings = @map.mappings
-        @allmetacodes = Metacode.all
+
+        @json = Hash.new()
+        @json['map'] = @map
+        @json['topics'] = @alltopics
+        @json['synapses'] = @allsynapses
+        @json['mappings'] = @allmappings
+        @json['mappers'] = @allmappers
 
         respond_to do |format|
-            format.html { respond_with(@allmappers, @allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
-            format.json { render json: @map }
+            format.html { respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map, @user) }
+            format.json { render json: @json }
         end
     end
 

@@ -64,12 +64,6 @@ Metamaps.Selected = {
     Edges: []
 };
 
-Metamaps.Metacodes = {}; // will be initialized in Metamaps.Backbone.init as a MetacodeCollection
-Metamaps.Topics = {}; // will be initialized in Metamaps.Backbone.init as a TopicCollection
-Metamaps.Synapses = {}; // will be initialized in Metamaps.Backbone.init as a SynapseCollection
-Metamaps.Mappings = {}; // will be initialized in Metamaps.Backbone.init as a MappingCollection
-
-
 /*
  *
  *   BACKBONE
@@ -323,26 +317,24 @@ Metamaps.Backbone.init = function () {
         url: '/mappings'
     });
 
-    Metamaps.Metacodes = new self.MetacodeCollection(Metamaps.Metacodes);
+    Metamaps.Metacodes = Metamaps.Metacodes ? new self.MetacodeCollection(Metamaps.Metacodes) : new self.MetacodeCollection();
 
-    Metamaps.Topics = new self.TopicCollection(Metamaps.Topics);
-
+    Metamaps.Topics = Metamaps.Topics ? new self.TopicCollection(Metamaps.Topics) : new self.TopicCollection();
     Metamaps.Topics.on("add remove", function(topic){
         Metamaps.Filter.checkMetacodes();
         Metamaps.Filter.checkMappers();
     });
 
-    Metamaps.Synapses = new self.SynapseCollection(Metamaps.Synapses);
-
+    Metamaps.Synapses = Metamaps.Synapses ? new self.SynapseCollection(Metamaps.Synapses) : new self.SynapseCollection();
     Metamaps.Synapses.on("add remove", function(synapse){
         Metamaps.Filter.checkSynapses();
         Metamaps.Filter.checkMappers();
     });
 
-    Metamaps.Mappers = new self.MapperCollection(Metamaps.Mappers)
+    Metamaps.Mappers = Metamaps.Mappers ? new self.MapperCollection(Metamaps.Mappers) : new self.MapperCollection();
 
     if (Metamaps.Active.Map) {
-        Metamaps.Mappings = new self.MappingCollection(Metamaps.Mappings);
+        Metamaps.Mappings = Metamaps.Mappings ? new self.MappingCollection(Metamaps.Mappings) : new self.MappingCollection();
 
         Metamaps.Mappings.on("add remove", function(synapse){
             Metamaps.Filter.checkMetacodes();
@@ -350,7 +342,6 @@ Metamaps.Backbone.init = function () {
         });
 
         Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
-        Metamaps.Maps.add(Metamaps.Active.Map);
     }
     
     if (Metamaps.Active.Topic) Metamaps.Active.Topic = new self.Topic(Metamaps.Active.Topic);
@@ -1110,12 +1101,10 @@ Metamaps.SynapseCard = {
  *
  */
 Metamaps.Visualize = {
-    mGraph: {}, // a reference to the graph object.
+    mGraph: null, // a reference to the graph object.
     cameraPosition: null, // stores the camera position when using a 3D visualization
     type: "ForceDirected", // the type of graph we're building, could be "RGraph", "ForceDirected", or "ForceDirected3D"
-    savedLayout: true, // indicates whether the map has a saved layout or not
     loadLater: false, // indicates whether there is JSON that should be loaded right in the offset, or whether to wait till the first topic is created
-    target: null, // the selector representing the location to render the graph
     init: function () {
         var self = Metamaps.Visualize;
         // disable awkward dragging of the canvas element that would sometimes happen
@@ -1142,12 +1131,6 @@ Metamaps.Visualize = {
             Metamaps.Touch.touchDragNode = false;
         });
     },
-    render: function (targetID, vizData) {
-        var self = Metamaps.Visualize;
-        self.mGraph = {};
-        self.target = targetID;
-        self.__buildGraph(vizData);
-    },
     computePositions: function () {
         var self = Metamaps.Visualize,
             mapping;
@@ -1171,7 +1154,7 @@ Metamaps.Visualize = {
                 pos.setc(-200, -200);
             });
             self.mGraph.compute('end');
-        } else if (self.type == "ForceDirected" && self.savedLayout) {
+        } else if (self.type == "ForceDirected") {
             var i, l, startPos, endPos, topic, synapse;
 
             self.mGraph.graph.eachNode(function (n) {
@@ -1194,51 +1177,78 @@ Metamaps.Visualize = {
                 n.setPos(startPos, 'start');
                 n.setPos(endPos, 'end');
             });
-        } else if (self.type == "ForceDirected3D" || !self.savedLayout) {
+        } else if (self.type == "ForceDirected3D") {
             self.mGraph.compute();
         }
     },
     /**
-     * __buildGraph does the heavy lifting of creating the engine that renders the graph with the properties we desire
+     * render does the heavy lifting of creating the engine that renders the graph with the properties we desire
      *
      * @param vizData a json structure containing the data to be rendered.
      */
-    __buildGraph: function (vizData) {
-        var self = Metamaps.Visualize
+    render: function () {
+        var self = Metamaps.Visualize, RGraphSettings, FDSettings;
+
+        if (self.type == "RGraph" && !self.mGraph) {
+
             RGraphSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings);
 
-        if (self.type == "RGraph") {
             $jit.RGraph.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
             $jit.RGraph.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
             
+            RGraphSettings.width = $(document).width();
+            RgraphSettings.height = $(document).height();
             RGraphSettings.background = Metamaps.JIT.RGraph.background;
             RGraphSettings.levelDistance = Metamaps.JIT.RGraph.levelDistance;
             
             self.mGraph = new $jit.RGraph(RGraphSettings);
-        } else if (self.type == "ForceDirected") {
+
+        } else if (self.type == "ForceDirected" && !self.mGraph) {
+
+            FDSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings);
+
             $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
             $jit.ForceDirected.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
-            self.mGraph = new $jit.ForceDirected(Metamaps.JIT.ForceDirected.graphSettings);
-        } else if (self.type == "ForceDirected3D") {
+            
+            FDSettings.width = $(document).width();
+            FDSettings.height = $(document).height();
+
+            self.mGraph = new $jit.ForceDirected(FDSettings);
+
+        } else if (self.type == "ForceDirected3D" && !self.mGraph) {
             // init ForceDirected3D
             self.mGraph = new $jit.ForceDirected3D(Metamaps.JIT.ForceDirected3D.graphSettings);
             self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position;
         }
+        else {
+            self.mGraph.graph.empty();
+        }
 
+        Metamaps.Loading.loader.hide();
         // load JSON data, if it's not empty
         if (!self.loadLater) {
             //load JSON data.
-            self.mGraph.loadJSON(vizData);
+            self.mGraph.loadJSON(Metamaps.JIT.vizData);
             //compute positions and plot.
             self.computePositions();
             if (self.type == "RGraph") {
-                self.mGraph.fx.animate(Metamaps.JIT.RGraph.animate);
-            } else if (self.type == "ForceDirected" && self.savedLayout) {
-                Metamaps.Organize.loadSavedLayout();
-            } else if (self.type == "ForceDirected3D" || !self.savedLayout) {
+                self.mGraph.animate(Metamaps.JIT.RGraph.animate);
+            } else if (self.type == "ForceDirected") {
+                self.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout);
+            } else if (self.type == "ForceDirected3D") {
                 self.mGraph.animate(Metamaps.JIT.ForceDirected.animateFDLayout);
             }
         }
+
+        // update the url now that the map is ready
+        setTimeout(function(){
+            var m = Metamaps.Active.Map;
+
+            if (m && window.location.pathname !== "/maps/" + m.id) {
+                Metamaps.Router.navigate("/maps/" + m.id);
+            }
+        }, 800);
+
     }
 }; // end Metamaps.Visualize
 
@@ -1347,6 +1357,9 @@ Metamaps.Realtime = {
     open: function () {
         var self = Metamaps.Realtime;
 
+        Metamaps.GlobalUI.Account.close(true);
+        Metamaps.Filter.close(true);
+
         clearTimeout(self.timeOut);
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -1356,8 +1369,10 @@ Metamaps.Realtime = {
             });
         }
     },
-    close: function () {
+    close: function (force) {
         var self = Metamaps.Realtime;
+
+        var time = force ? 0 : 500;
 
         self.timeOut = setTimeout(function () {
             if (!self.changing) {
@@ -1367,7 +1382,7 @@ Metamaps.Realtime = {
                     self.isOpen = false;
                 });
             }
-        }, 500);
+        }, time);
     },
     setupSocket: function () {
         var self = Metamaps.Realtime;
@@ -1742,6 +1757,7 @@ Metamaps.Control = {
         Metamaps.Filter.checkMappers();
     },
     selectEdge: function (edge) {
+        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
         if (Metamaps.Selected.Edges.indexOf(edge) != -1) return;
         edge.setData('showDesc', true, 'current');
         if (!Metamaps.Settings.embed) {
@@ -1772,6 +1788,7 @@ Metamaps.Control = {
         Metamaps.Visualize.mGraph.plot();
     },
     deselectEdge: function (edge) {
+        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
         edge.setData('showDesc', false, 'current');
         edge.setDataset('end', {
             lineWidth: 2,
@@ -1937,15 +1954,14 @@ Metamaps.Filter = {
         $('.sidebarFilterBox .hideAllSynapses').click(self.filterAllSynapses);
         $('.sidebarFilterBox .hideAllMappers').click(self.filterAllMappers);
 
-        // toggle visibility of topics with metacodes based on status in the filters list
-        $('#filter_by_metacode ul li').click(self.toggleMetacode);
-        $('#filter_by_mapper ul li').click(self.toggleMapper);
-        $('#filter_by_synapse ul li').click(self.toggleSynapse);
-
+        self.bindLiClicks();
 	    self.getFilterData();
     },
     open: function () {
         var self = Metamaps.Filter;
+
+        Metamaps.GlobalUI.Account.close(true);
+        Metamaps.Realtime.close(true);
 
         clearTimeout(self.timeOut);
         if (!self.isOpen && !self.changing) {
@@ -1957,8 +1973,10 @@ Metamaps.Filter = {
             });
         }
     },
-    close: function () {
+    close: function (force) {
         var self = Metamaps.Filter;
+
+        var time = force ? 0 : 500;
 
         self.timeOut = setTimeout(function () {
             if (!self.changing) {
@@ -1969,121 +1987,110 @@ Metamaps.Filter = {
                     self.isOpen = false;
                 });
             }
-        }, 500);
+        }, time);
     },
-    checkMetacodes: function () {
-    	var self = Metamaps.Filter;
-    	
-    	var newMetacodeList = [];
-    	var removedMetacodes = [];
-    	var addedMetacodes = [];
-    	
-    	Metamaps.Topics.each(function(topic) {
-    		if (newMetacodeList.indexOf(topic.get('metacode_id')) === -1) {
-    			newMetacodeList.push(topic.get('metacode_id').toString());
-    		}
-    	});
-    	
-    	removedMetacodes = _.difference(self.filters.metacodes, newMetacodeList);
-    	addedMetacodes = _.difference(newMetacodeList, self.filters.metacodes);
-    	
-    	_.each(removedMetacodes, function(metacode_id) {
-    		$('#filter_by_metacode li[data-id="' + metacode_id + '"]').fadeOut('fast',function(){
-				$(this).remove();
-			});
-    	});
-    	
-          var synapse, li, jQueryLi;
+    /*  
+    Most of this data essentially depends on the ruby function which are happening for filter inside view filterBox
+    But what these function do is load this data into three accessible array within java : metacodes, mappers and synapses
+    */
+    getFilterData: function () {
+        var self = Metamaps.Filter;
+
+        var metacode, mapper, synapse;
+
+        $('#filter_by_metacode li').each(function() {
+            metacode = $( this ).attr('data-id');
+            self.filters.metacodes.push(metacode);
+            self.visible.metacodes.push(metacode);
+        }); 
+
+        $('#filter_by_mapper li').each(function()  {
+            mapper = ($( this ).attr('data-id'));
+            self.filters.mappers.push(mapper);
+            self.visible.mappers.push(mapper);
+        });
+
+        $('#filter_by_synapse li').each(function()  {
+            synapse = ($( this ).attr('data-id'));  
+            self.filters.synapses.push(synapse);
+            self.visible.synapses.push(synapse);
+        });
+    },
+    bindLiClicks: function () {
+        var self = Metamaps.Filter;
+        $('#filter_by_metacode ul li').unbind().click(self.toggleMetacode);
+        $('#filter_by_mapper ul li').unbind().click(self.toggleMapper);
+        $('#filter_by_synapse ul li').unbind().click(self.toggleSynapse);
+    },
+    // an abstraction function for checkMetacodes, checkMappers, checkSynapses to reduce
+    // code redundancy
+    /*
+    @param 
+    */
+    updateFilters: function (topicsSynapsesOrBoth, propertyToCheck, correlatedModel, filtersToUse, listToModify) {
+        var self = Metamaps.Filter;
+        
+        var newList = [];
+        var removed = [];
+        var added = [];
+        
+        var check = function (topicsOrSynapses) {
+            Metamaps[topicsOrSynapses].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+        }
+        if (topicsSynapsesOrBoth === "both") {
+            check('Synapses');
+            check('Topics');    
+        }
+        else check(topicsSynapsesOrBoth);
+        
+        removed = _.difference(self.filters[filtersToUse], newList);
+        added = _.difference(newList, self.filters[filtersToUse]);
+        
+        // remove the list items for things no longer present on the map
+        _.each(removed, function(identifier) {
+            $('#filter_by_' + listToModify + ' li[data-id="' + identifier + '"]').fadeOut('fast',function(){
+                $(this).remove();
+            });
+        });
+        
+        var model, li, jQueryLi;
         function sortAlpha(a,b){
             return a.childNodes[1].innerText.toLowerCase() > b.childNodes[1].innerText.toLowerCase() ? 1 : -1;  
         }
-        _.each(addedMetacodes, function(metacode_id) {
-           metacode = Metamaps.Metacodes.get(metacode_id);
-           li = metacode.prepareLiForFilter();
-           jQueryLi = $(li).hide();
-            $('li', '#filter_by_metacode ul').add(jQueryLi.fadeIn("fast"))
-                .sort(sortAlpha).appendTo('#filter_by_metacode ul');    
+        // for each new filter to be added, create a list item for it and fade it in
+        _.each(added, function (identifier) {
+            model = Metamaps[correlatedModel].get(identifier) || 
+                Metamaps[correlatedModel].find(function (model) {
+                    return model.get(propertyToCheck) === identifier;
+                });
+            li = model.prepareLiForFilter();
+            jQueryLi = $(li).hide();
+            $('li', '#filter_by_' + listToModify + ' ul').add(jQueryLi.fadeIn("fast"))
+                .sort(sortAlpha).appendTo('#filter_by_' + listToModify + ' ul');    
         });
-        self.filters.metacodes = newMetacodeList;
+
+        // update the list of filters with the new list we just generated
+        self.filters[filtersToUse] = newList;
+
+        // make sure clicks on list items still trigger the right events
+        self.bindLiClicks();
+    },
+    checkMetacodes: function () {
+        var self = Metamaps.Filter;
+        self.updateFilters('Topics', 'metacode_id', 'Metacodes', 'metacodes', 'metacode');
     },
     checkMappers: function () {
         var self = Metamaps.Filter;
-        
-        var newMappersList = [];
-        var removedMappersList = [];
-        var addedMappers = [];
-        
-        Metamaps.Topics.each(function(topic) {
-            if (newMappersList.indexOf(topic.get('user_id')) === -1) {
-                newMappersList.push(topic.get('user_id').toString());
-            }
-        });
-        Metamaps.Synapses.each(function(synapse) {
-            if (newMappersList.indexOf(synapse.get('user_id')) === -1) {
-                newMappersList.push(synapse.get('user_id').toString());
-            }
-        });
-        
-
-        removedMappersList = _.difference(self.filters.mappers, newMappersList);
-        addedMappers = _.difference(newMappersList, self.filters.mappers);
-        
-        _.each(removedMappersList, function(user_id) {
-            $('#filter_by_mapper li[data-id="' + user_id + '"]').fadeOut('fast',function(){
-                $(this).remove();
-            });
-        });
-        
-          var mapper, li, jQueryLi;
-        function sortAlpha(a,b){  
-            return a.childNodes[1].innerText.toLowerCase() > b.childNodes[1].innerText.toLowerCase() ? 1 : -1;  
-        }
-        _.each(addedMappers, function(user_id) {
-           mapper = Metamaps.Mapper.get(user_id);
-           li = mapper.prepareLiForFilter();
-           jQueryLi = $(li).hide();
-            $('li', '#filter_by_mapper ul').add(jQueryLi.fadeIn("fast"))
-                .sort(sortAlpha).appendTo('#filter_by_mapper ul');    
-        });
-
-        self.filters.mappers = newMappersList;
-
+        self.updateFilters('both', 'user_id', 'Mapper', 'mappers', 'mapper');
     },
     checkSynapses: function () {
         var self = Metamaps.Filter;
-        
-        var newSynapsesList = [];
-        var removedSynapses = [];
-        var addedSynapses = [];
-        
-        Metamaps.Synapses.each(function(synapse) {
-            if (synapse.get('desc') && newSynapsesList.indexOf(synapse.get('desc')) === -1) {
-                newSynapsesList.push(synapse.get('desc').toString());
-            }
-        });
-        
-        removedSynapses = _.difference(self.filters.synapses, newSynapsesList);
-        addedSynapses = _.difference(newSynapsesList, self.filters.synapses);
-        
-        _.each(removedSynapses, function(synapse_desc) {
-            $('#filter_by_synapse li[data-id="' + synapse_desc + '"]').fadeOut('fast',function(){
-                $(this).remove();
-            });
-        });
-        
-        var synapse, li, jQueryLi;
-        function sortAlpha(a,b){  
-            return a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase() ? 1 : -1;  
-        }
-        _.each(addedSynapses, function(synapse_desc) {
-           synapse = Metamaps.Synapses.findWhere({desc:synapse_desc});
-           li = synapse.prepareLiForFilter();
-           jQueryLi = $(li).hide();
-            $('li', '#filter_by_synapse ul').add(jQueryLi.fadeIn("fast"))
-                .sort(sortAlpha).appendTo('#filter_by_synapse ul');    
-        });
-
-        self.filters.synapses = newSynapsesList;
+        self.updateFilters('Synapses', 'desc', 'Synapses', 'synapses', 'synapse');
     },
     filterAllMetacodes: function (e) {
         var self = Metamaps.Filter;
@@ -2120,80 +2127,37 @@ Metamaps.Filter = {
         $('#filter_by_synapse ul li').removeClass('toggledOff');
         self.visible.synapses = self.filters.synapses.slice();
         self.passFilters();
-
-        
     },
-	/*	
-   	Most of this data essentially depends on the ruby function which are happening for filter inside view filterBox
-    But what these function do is load this data into three accessible array within java : metacodes, mappers and synapses
-    */
-    getFilterData: function () {
-        var self = Metamaps.Filter;
-
-        var metacode, mapper, synapse;
-
-        $('#filter_by_metacode li').each(function() {
-            metacode = $( this ).find('img').attr('data-id');
-            self.filters.metacodes.push(metacode);
-            self.visible.metacodes.push(metacode);
-        });	
-
-        $('#filter_by_mapper li').each(function()  {
-            mapper = ($( this ).find('img').attr('data-id'));
-            self.filters.mappers.push(mapper);
-            self.visible.mappers.push(mapper);
-        });
-
-        $('#filter_by_synapse li').each(function()  {
-            synapse = ($( this ).find('p').text());	
-            self.filters.synapses.push(synapse);
-            self.visible.synapses.push(synapse);
-        });
+    // an abstraction function for toggleMetacode, toggleMapper, toggleSynapse
+    // to reduce code redundancy
+    // gets called in the context of a list item in a filter box
+    toggleLi: function (whichToFilter) {
+        var self = Metamaps.Filter, index;
+        var id = $(this).attr("data-id");
+        if (self.visible[whichToFilter].indexOf(id) == -1) {
+            self.visible[whichToFilter].push(id);
+            $(this).removeClass('toggledOff');
+        }
+        else {
+            index = self.visible[whichToFilter].indexOf(id);
+            self.visible[whichToFilter].splice(index, 1);
+            $(this).addClass('toggledOff');
+        }
+        self.passFilters();
     },
     toggleMetacode: function () {
-        var self = Metamaps.Filter, index;
-
-        var metacode_id = $(this).attr("data-id");
-        if (self.visible.metacodes.indexOf(metacode_id) == -1) {
-            self.visible.metacodes.push(metacode_id);
-            $(this).removeClass('toggledOff');
-        }
-        else {
-            index = self.visible.metacodes.indexOf(metacode_id);
-            self.visible.metacodes.splice(index, 1);
-            $(this).addClass('toggledOff');
-        }
-        self.passFilters();
+        var self = Metamaps.Filter;
+        self.toggleLi.call(this, 'metacodes');
     },
     toggleMapper: function () {
-        var self = Metamaps.Filter, index;
+        var self = Metamaps.Filter;
 
-        var user_id = $(this).attr("data-id");
-        if (self.visible.mappers.indexOf(user_id) == -1) {
-            self.visible.mappers.push(user_id);
-            $(this).removeClass('toggledOff');
-        }
-        else {
-            index = self.visible.mappers.indexOf(user_id);
-            self.visible.mappers.splice(index, 1);
-            $(this).addClass('toggledOff');
-        }
-        self.passFilters();
+        self.toggleLi.call(this, 'mappers');
     },
     toggleSynapse: function () {
-        var self = Metamaps.Filter, index;
+        var self = Metamaps.Filter;
 
-        var synapse_desc = $(this).attr("data-id");
-        if (self.visible.synapses.indexOf(synapse_desc) == -1) {
-            self.visible.synapses.push(synapse_desc);
-            $(this).removeClass('toggledOff');
-        }
-        else {
-            index = self.visible.synapses.indexOf(synapse_desc);
-            self.visible.synapses.splice(index, 1);
-            $(this).addClass('toggledOff');
-        }
-        self.passFilters();
+        self.toggleLi.call(this, 'synapses');
     },
     passFilters: function () {        
         var self = Metamaps.Filter;
@@ -2216,7 +2180,7 @@ Metamaps.Filter = {
                 n.setData('alpha', 1, 'end');
             }
             else {
-                n.setData('alpha', 0.0, 'end');
+                n.setData('alpha', 0, 'end');
             }
         });
         Metamaps.Synapses.each(function(synapse) {
@@ -2234,7 +2198,7 @@ Metamaps.Filter = {
                 e.setData('alpha', 1, 'end');
             }
             else {
-                e.setData('alpha', 0.0, 'end');
+                e.setData('alpha', 0, 'end');
             } 
         });
             
@@ -2260,11 +2224,11 @@ Metamaps.Listeners = {
         $(document).on('keydown', function (e) {
             switch (e.which) {
             case 13:
-                Metamaps.JIT.enterKeyHandler();
+                if (Metamaps.Active.Map) Metamaps.JIT.enterKeyHandler();
                 e.preventDefault();
                 break;
             case 27:
-                Metamaps.JIT.escKeyHandler();
+                if (Metamaps.Active.Map) Metamaps.JIT.escKeyHandler();
                 break;
             default:
                 break; //alert(e.which);
@@ -2399,11 +2363,7 @@ Metamaps.Organize = {
             var newOriginY = (lowY + highY) / 2;
 
         } else alert('please call function with a valid layout dammit!');
-    },
-    loadSavedLayout: function (id) {
-        Metamaps.Visualize.computePositions();
-        Metamaps.Visualize.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout);
-    },
+    }
 }; // end Metamaps.Organize
 
 
@@ -2747,34 +2707,28 @@ Metamaps.Map = {
         self.InfoBox.init();
         self.CheatSheet.init();
     },
-    // this function is to retrieve a map JSON object from the database
-    // @param id = the id of the map to retrieve
-    get: function (id, callback) {
-        // if the desired topic is not yet in the local topic repository, fetch it
-        if (Metamaps.Maps.get(id) == undefined) {
-            if (!callback) {
-                var e = $.ajax({
-                    url: "/maps/" + id + ".json",
-                    async: false
-                });
-                Metamaps.Maps.add($.parseJSON(e.responseText));
-                return Metamaps.Maps.get(id);
-            } else {
-                return $.ajax({
-                    url: "/users/" + id + ".json",
-                    success: function (data) {
-                        Metamaps.Maps.add(data);
-                        callback(Metamaps.Maps.get(id));
-                    }
-                });
-            }
-        } else {
-            if (!callback) {
-                return Metamaps.Maps.get(id);
-            } else {
-                return callback(Metamaps.Maps.get(id));
-            }
+    launch: function (id) {
+        var bb = Metamaps.Backbone;
+        var start = function (data) {
+            Metamaps.Active.Map = new bb.Map(data.map);
+            Metamaps.Mappers = new bb.MapperCollection(data.mappers);
+            Metamaps.Topics = new bb.TopicCollection(data.topics);
+            Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
+            Metamaps.Mappings = new bb.MappingCollection(data.mappings);
+
+            // build and render the visualization
+            Metamaps.JIT.prepareVizData();
+
+            // update filters
+            Metamaps.Filter.checkMappers();
+            Metamaps.Filter.checkMetacodes();
+            Metamaps.Filter.checkSynapses();
         }
+
+        $.ajax({
+            url: "/maps/" + id + ".json",
+            success: start
+        });
     },
     fork: function () {
         Metamaps.GlobalUI.openLightbox('forkmap');
@@ -2853,13 +2807,13 @@ Metamaps.Map.InfoBox = {
 
         $('.yourMap .mapPermission').click(self.onPermissionClick);
 
-        $("div.index").hover(self.open, self.close);
+        $(".mapInfo").hover(self.open, self.close);
     },
     open: function (event) {
         var self = Metamaps.GlobalUI.Account;
 
         clearTimeout(self.timeOut);
-        if (!self.isOpen && !self.changing && event.target.className != "openCheatsheet openLightbox") {
+        if (!self.isOpen && !self.changing && event.target.className.indexOf("openCheatsheet") === -1) {
             self.changing = true;
             $('.mapInfoBox').fadeIn(200, function () {
                 self.changing = false;

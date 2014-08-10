@@ -40,8 +40,7 @@ Metamaps.Active = {
     Topic: null,
     Mapper: null
 };
-Metamaps.Maps = {}; // will be initialized in Metamaps.Backbone.js as a MapCollection
-Metamaps.Mappers = {}; // will be initialized in Metamaps.Backbone.js as a MapperCollection
+Metamaps.Maps = {};
 
 $(document).ready(function () {
 
@@ -83,12 +82,16 @@ Metamaps.GlobalUI = {
         
         // initialize global backbone models and collections
         if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
-        Metamaps.Mappers = new Metamaps.Backbone.MapperCollection([Metamaps.Active.Mapper]);
-        Metamaps.Maps = {}; 
-        Metamps.Maps.Mine = new Metamaps.Backbone.MapsCollection();
-        Metamps.Maps.Featured = new Metamaps.Backbone.MapsCollection();
-        Metamps.Maps.Active = new Metamaps.Backbone.MapsCollection();
-        Metamps.Maps.New = new Metamaps.Backbone.MapsCollection();
+        Metamaps.Mappers = new Metamaps.Backbone.MapperCollection([Metamaps.Active.Mapper]); 
+
+        var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
+        var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : [];
+        var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : [];
+        var newCollection = Metamaps.Maps.New ? Metamaps.Maps.New : [];
+        Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'name'});
+        Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'name'});
+        Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, {id: 'active', sortBy: 'updated_at'});
+        Metamaps.Maps.New = new Metamaps.Backbone.MapsCollection(newCollection, {id: 'new', sortBy: 'created_at'});
     },
     openLightbox: function (which) {
         var self = Metamaps.GlobalUI;
@@ -151,18 +154,23 @@ Metamaps.GlobalUI = {
         }
         self.lightbox = null;
     },
-    notifyUser: function (message) {
+    notifyUser: function (message, leaveOpen) {
         var self = Metamaps.GlobalUI;
 
-        if ($('.notice.metamaps').length == 0) {
-            $('body').prepend('<div class="notice metamaps" />');
+        Metamaps.Famous.toast.surf.setContent(message);
+        Metamaps.Famous.toast.show();
+        clearTimeout(self.notifyTimeOut);
+        if (!leaveOpen) {
+            self.notifyTimeOut = setTimeout(function () {
+                Metamaps.Famous.toast.hide();
+            }, 8000);
         }
-        $('.notice.metamaps').hide().html(message).fadeIn('fast');
+    },
+    clearNotify: function() {
+        var self = Metamaps.GlobalUI;
 
         clearTimeout(self.notifyTimeOut);
-        self.notifyTimeOut = setTimeout(function () {
-            $('.notice.metamaps').fadeOut('fast');
-        }, 8000);
+        Metamaps.Famous.toast.hide();
     }
 };
 
@@ -281,6 +289,9 @@ Metamaps.GlobalUI.Account = {
     open: function () {
         var self = Metamaps.GlobalUI.Account;
 
+        Metamaps.Realtime.close(true);
+        Metamaps.Filter.close(true);
+
         clearTimeout(self.timeOut);
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -290,8 +301,10 @@ Metamaps.GlobalUI.Account = {
             });
         }
     },
-    close: function () {
+    close: function (force) {
         var self = Metamaps.GlobalUI.Account;
+
+        var time = force ? 0 : 500;
 
         self.timeOut = setTimeout(function () {
             if (!self.changing) {
@@ -301,13 +314,14 @@ Metamaps.GlobalUI.Account = {
                     self.isOpen = false;
                 });
             }
-        }, 500);
+        }, time);
     }
 };
 
 
 
 Metamaps.GlobalUI.Search = {
+    locked: false,
     isOpen: false,
     timeOut: null,
     changing: false,
@@ -337,7 +351,7 @@ Metamaps.GlobalUI.Search = {
         $('body').bind('keydown', function (e) {
             switch (e.which) {
             case 191:
-                if (e.ctrlKey && !self.isOpen) {
+                if ((e.ctrlKey && !self.isOpen) || (e.ctrlKey && self.locked)) {
                     self.open();
                 }
                 break;
@@ -353,38 +367,47 @@ Metamaps.GlobalUI.Search = {
 
         self.startTypeahead();
     },
+    lock: function() {
+        var self = Metamaps.GlobalUI.Search;
+        self.locked = true;
+    },
+    unlock: function() {
+        var self = Metamaps.GlobalUI.Search;
+        self.locked = false;
+    },
     open: function () {
         var self = Metamaps.GlobalUI.Search;
 
         clearTimeout(self.timeOut);
-        if (!self.isOpen && !self.changing) {
+        if (!self.isOpen && !self.changing && !self.locked) {
             self.changing = true;
             $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
-                width: '200px'
-            }, 200, function () {
+                width: '400px'
+            }, 300, function () {
                 $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
-                    padding: '5px 10px',
-                    width: '180px'
+                    padding: '10px 10px 0 10px',
+                    width: '380px'
                 });
                 $('.sidebarSearchField').focus();
                 self.changing = false;
                 self.isOpen = true;
             });
         }
+        else if (self.locked) $('.sidebarSearchField').focus();
     },
     close: function (closeAfter, bypass) {
         var self = Metamaps.GlobalUI.Search;
 
         self.timeOut = setTimeout(function () {
-            if (!self.changing && self.isOpen && (bypass || $('.sidebarSearchField').val() == '')) {
+            if (!self.locked && !self.changing && self.isOpen && (bypass || $('.sidebarSearchField').val() == '')) {
                 self.changing = true;
                 $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
-                    padding: '5px 0',
-                    width: '200px'
+                    padding: '10px 0 0 0',
+                    width: '400px'
                 });
                 $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
                     width: '0'
-                }, 200, function () {
+                }, 300, function () {
                     $('.sidebarSearchField').typeahead('setQuery', '');
                     $('.sidebarSearchField').blur();
                     self.changing = false;
@@ -392,6 +415,11 @@ Metamaps.GlobalUI.Search = {
                 });
             }
         }, closeAfter);
+        
+        if (self.locked) {
+            $('.sidebarSearchField').typeahead('setQuery', '');
+            $('.sidebarSearchField').blur();
+        }
     },
     startTypeahead: function () {
         var self = Metamaps.GlobalUI.Search;

@@ -32,11 +32,8 @@
 }
 
 #infovis {
-  position:relative;
   width:100%;
   height:100%;
-  margin:0;
-  overflow:hidden;
 }
 
 .showcard .permission {
@@ -174,8 +171,8 @@ font-family: 'LatoLight';
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 27px 27px;
-  z-index: 2;
-position: relative;
+  z-index: 1;
+  position: relative;
 }
 
 .CardOnGraph .icon {
@@ -186,7 +183,7 @@ position: relative;
 .linkItem.contributor {
   background-image: url(MMCCicon_mapper_black.png);
   margin-left:20px;
-  z-index:3;
+  z-index:1;
 }
 .linkItem.mapCount {
   background-image: url(MMCCicon_map_black.png);
@@ -600,7 +597,6 @@ font-family: 'LatoLight';
   width:100%;
   height:320px;
   color:#000;
-  z-index: 25;
 }
 
 .mapCard .metacodeImage {

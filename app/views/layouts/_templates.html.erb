@@ -7,7 +7,6 @@
     
     
     <script type="text/template" id="mapCardTemplate">
-<div class="map" id="{{id}}">
   <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
 	  <div class="mapCard">                                                   
       <span class="title">                                                  
@@ -21,7 +20,7 @@
            <div class="tip">Created by {{username}} on {{createdAt}}</div>
          </div>                           
          <div class="linkItem topicCount">{{topicCount}}</div>                 
-         <div class="linkItem synapseCount">[{synapseCount}}</div>         
+         <div class="linkItem synapseCount">{{synapseCount}}</div>         
          <div class="linkItem mapPerm {{mkPermission}}"></div>             
          <a href="/maps/{{id}}" class="linkItem topicPopout"></a>
          <div class="clearfloat"></div>                                     
@@ -35,7 +34,6 @@
       <div class="clearfloat"></div>                                          
     </div>
   </div>
-</div>
     </script>
         
     <script type="text/template" id="topicSearchTemplate">

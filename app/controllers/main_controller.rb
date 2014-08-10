@@ -17,8 +17,10 @@ class MainController < ApplicationController
       #@maps = Map.order("updated_at DESC").where("permission != ?", "private").limit(3)
       @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
     end
-    
-    respond_with(@maps, @current) 
+   
+    respond_to do |format|
+        format.html { respond_with(@maps, @current) }
+    end
   end
   
   ### SEARCHING ###

@@ -1,8 +1,3 @@
-<%#
-  # Partial rendering form for a new topic on a map
-  # This code is called when viewing a metamap in show.html.erb in the views/maps folder
-  #%>
-<div class="anypage">
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
   <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes"></div>
   <div id="metacodeImg">
@@ -35,4 +30,3 @@
 <% end %> 
 </script>
 <% end %>
-</div>

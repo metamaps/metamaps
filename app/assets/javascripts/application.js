@@ -19,3 +19,4 @@
 //= require ./metamaps/Metamaps.GlobalUI
 //= require ./metamaps/Metamaps.Router
 //= require ./metamaps/Metamaps.Backbone
+//= require ./metamaps/Metamaps.Views

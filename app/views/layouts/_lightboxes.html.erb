@@ -54,7 +54,6 @@
           <%= render :partial => 'layouts/newmap' %>
         </div>
       
-        <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
         <div class="lightboxContent" id="forkmap">  
           <%= render :partial => 'shared/forkmap' %>
         </div>
@@ -62,7 +61,6 @@
         <div class="lightboxContent" id="switchMetacodes">
           <%= render :partial => 'shared/switchmetacodes' %>
         </div>
-        <% end %>
       <% end %>
       
     </div>

@@ -1,13 +1,11 @@
 Metamaps.JIT = {
     vizData: [], // contains the visualization-compatible graph
-    graphRendered: false, // flag indicates if we have rendered the data so we don't bother doing it again wastefully
     /**
      * This method will bind the event handlers it is interested and initialize the class.
      */
     init: function () {
         var self = Metamaps.JIT;
 
-        self.prepareVizData();
         $(".zoomIn").click(self.zoomIn);
         $(".zoomOut").click(self.zoomOut);
         $(".centerMap").click(self.centerMap);
@@ -25,6 +23,10 @@ Metamaps.JIT = {
         var existingEdge;
         var edge;
         var edges = [];
+
+        // reset/empty vizData
+        self.vizData = [];
+        Metamaps.Visualize.loadLater = false;
 
         Metamaps.Topics.each(function (t) {
             node = t.createNode();
@@ -62,7 +64,7 @@ Metamaps.JIT = {
             Metamaps.Visualize.loadLater = true;
         }
 
-        Metamaps.Visualize.render("infovis", self.vizData);
+        Metamaps.Visualize.render();
     }, // prepareVizData
     edgeRender: function (adj, canvas) {
         //get nodes cartesian coordinates 
@@ -193,7 +195,7 @@ Metamaps.JIT = {
         animateFDLayout: {
             modes: ['linear'],
             transition: $jit.Trans.Elastic.easeOut,
-            duration: 2500,
+            duration: 800,
             onComplete: function () {
                 Metamaps.Visualize.mGraph.busy = false;
             }
@@ -210,9 +212,9 @@ Metamaps.JIT = {
                 panning: 'avoid nodes',
                 zooming: 28 //zoom speed. higher is more sensible
             },
-            background: {
-                type: 'Metamaps'
-            },
+            //background: {
+            //    type: 'Metamaps'
+            //},
             //NodeStyles: {  
             //  enable: true,  
             //  type: 'Native',  
@@ -522,7 +524,7 @@ Metamaps.JIT = {
     RGraph: {
         animate: {
             modes: ['polar'],
-            duration: 2000,
+            duration: 800,
             onComplete: function () {
                 Metamaps.Visualize.mGraph.busy = false;
             }
@@ -540,7 +542,7 @@ Metamaps.JIT = {
         levelDistance: 200
     },
     onMouseEnter: function (edge) {
-
+        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
         $('canvas').css('cursor', 'pointer');
         var edgeIsSelected = Metamaps.Selected.Edges.indexOf(edge);
         //following if statement only executes if the edge being hovered over is not selected
@@ -558,6 +560,7 @@ Metamaps.JIT = {
         }
     }, // onMouseEnter
     onMouseLeave: function (edge) {
+        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
         $('canvas').css('cursor', 'default');
         var edgeIsSelected = Metamaps.Selected.Edges.indexOf(edge);
         //following if statement only executes if the edge being hovered over is not selected
@@ -1228,6 +1231,8 @@ Metamaps.JIT = {
     selectEdgeOnRightClickHandler: function (adj, e) {
         // the 'node' variable is a JIT node, the one that was clicked on
         // the 'e' variable is the click event
+
+        if (adj.getData('alpha') === 0) return; // don't do anything if the edge is filtered
 
         var authorized;
 

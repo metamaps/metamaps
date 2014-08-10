@@ -18,34 +18,6 @@
  *= require animate
 */
 
-@font-face {
-    font-family: 'LatoLight';
-    src: url('/assets/Fonts/Lato-Lig-webfont.eot');
-    src: url('/assets/Fonts/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-Lig-webfont.woff') format('woff'), url('/assets/Fonts/Lato-Lig-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-Lig-webfont.svg#LatoLight') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'LatoRegular';
-    src: url('/assets/Fonts/Lato-Reg-webfont.eot');
-    src: url('/assets/Fonts/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-Reg-webfont.woff') format('woff'), url('/assets/Fonts/Lato-Reg-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-Reg-webfont.svg#LatoRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'LatoItalic';
-    src: url('/assets/Fonts/Lato-RegIta-webfont.eot');
-    src: url('/assets/Fonts/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-RegIta-webfont.woff') format('woff'), url('/assets/Fonts/Lato-RegIta-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'LatoBold';
-    src: url('/assets/Fonts/Lato-Bol-webfont.eot');
-    src: url('/assets/Fonts/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-Bol-webfont.woff') format('woff'), url('/assets/Fonts/Lato-Bol-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-Bol-webfont.svg#LatoBold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
 /* clear styles */
 
 html,
@@ -85,22 +57,18 @@ img {
 html,
 body,
 .main,
-.wrapper,
-#container {
+.wrapper {
     height: 100%;
 }
-.unauthenticated .wrapper.homePage {
-    overflow: auto;
-}
 .wrapper.homePage {
-    background: url('mm-homepage-bg-image.png') no-repeat center -249px;
+    /*background: url('mm-homepage-bg-image.png') no-repeat center -249px;*/
 }
-body.mapBody {
+.wrapper.mapPage {
     overflow: hidden;
 }
 /* scrollbar override */
 
-.maps > div > div.mCS_no_scrollbar {
+.mCS_no_scrollbar {
     padding-right: 0px !important;
 }
 .mCSB_container {
@@ -112,12 +80,17 @@ body.mapBody {
     padding: 0 5px;
     width: auto;
 }
-html {} body {
-    background: #E5E5E5;
-    font-family: 'LatoLight', helvetica, sans-serif;
-    color: #FFF;
+html {
+
+} 
+body {
+    background: #d8d9da;
+    font-family: 'din-medium', helvetica, sans-serif;
+    color: #424242;
 }
-body.mapBody {} h1,
+
+
+h1,
 h2,
 h3,
 h4,
@@ -139,7 +112,7 @@ h2 {
     line-height: 35px;
 }
 a {
-    color: #69a3a4;
+    color: #424242;
     text-decoration: none;
 }
 button.button,
@@ -199,9 +172,6 @@ input[type="submit"]:hover {
     display: none;
 }*/
 
-#saveMapLayout {
-    display: none;
-}
 #error_explanation {
     background: #612127;
     padding: 30px;
@@ -289,7 +259,7 @@ input[type="submit"]:hover {
     top: 3px;
     right: 3px;
 }
-.anypage .new_topic {
+.new_topic {
     /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
     top: -1000px;
     left: -1000px;
@@ -298,7 +268,7 @@ input[type="submit"]:hover {
     width: 300px;
     margin: -40px 0 0 -50px;
 }
-.anypage .new_synapse {
+.new_synapse {
     display: none;
     position: absolute;
 }
@@ -311,8 +281,8 @@ input[type="submit"]:hover {
     height: 37px;
     font-family: ':atp';
 }
-.anypage #topic_name,
-.anypage .tt-hint {
+.new_topic #topic_name,
+.new_topic .tt-hint {
     width: 190px;
     background: rgba(0, 0, 0, 0.8);
     height: 25px;
@@ -340,7 +310,6 @@ input[type="submit"]:hover {
     height: 120px;
 }
 #metacodeImgTitle {
-    color: #FFF;
     float: left;
     width: 120px;
     text-align: center;
@@ -440,15 +409,6 @@ label[for="user_remember_me"] {
 }
 /* --- top options --*/
 
-.notice.metamaps,
-.alert.metamaps {
-    position: absolute;
-    margin: 5px 0 0 45px;
-    background: #0F1519;
-    padding: 10px 10px 9px 10px;
-    border-radius: 5px;
-    z-index: 1;
-}
 .headertop {
     display: block;
     position: fixed;
@@ -494,106 +454,50 @@ label[for="user_remember_me"] {
     height: 100%;
     margin: 0 0;
 }
-/* bottom right corner stuffs */
 
-.wrapper div.index {
-    position: fixed;
-    bottom: 5px;
-    right: 0px;
-    z-index: 9999;
-    width: auto;
-    padding: 1px 10px 0px 10px;
-    font-family: "vinyl", sans-serif;
-    font-style: italic;
-    height: 35px;
-    font-size: 30px;
-    line-height: 38px;
-    border-right: none;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-}
-.wrapper div.index .openCheatsheet {
-    position: absolute;
-    top: 0;
-    left: -41px;
-    background: url('MMCCicon_help.png') no-repeat center center;
-    background-size: 27px 27px;
-    border-radius: 5px;
-    height: 36px;
-    width: 36px;
-    cursor: pointer;
-}
-.wrapper div.index .openCheatsheet:hover {} .wrapper div.index span {
-    float: left;
-}
-.wrapper div.index span.mapName {
-    text-transform: uppercase;
-    margin-right: 9px;
-}
-.wrapper div.index span.mapInfo {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    margin-top: 5px;
-    font-size: 27px;
-    background: url('MMCCicon_info.png') no-repeat center center;
-    background-size: 19px 19px;
-}
-.wrapper h1.index {
-    position: fixed;
-    bottom: 5px;
-    right: 0;
-    z-index: 9999;
-    width: auto;
-    padding: 1px 10px 0px 20px;
-    text-transform: uppercase;
-    font-style: italic;
-    height: 35px;
-    font-size: 30px;
-    line-height: 38px;
-    border-right: none;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-    background: #0F1519;
-}
 /* account */
 
 .sidebarAccount {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
+}
+.unauthenticated .sidebarAccount {
+    width: 84px;
+    box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    border-radius: 2px;
 }
 .sidebarAccountIcon {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    /*background: #0F1519 url('MMCCicon_mapper.png') no-repeat center center;*/
-    background-size: 24px 24px;
     cursor: pointer;
+}
+.authenticated .sidebarAccountIcon {
+    height: 32px;
+    width: 32px;
+}
+.unauthenticated .sidebarAccountIcon {
+    width: 66px;
+    height: 14px;
+    padding: 9px;
+    border-radius: 2px;
+    background-color: #E0E0E0;
+    color: #424242;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 14px;
+    line-height: 14px; 
 }
 .sidebarAccountIcon img {
     border-radius: 17px;
 }
 .sidebarAccountBox {
-    position: absolute;
     display: none;
     height: auto;
-    background: #000;
-    top: 45px;
-    right: 0;
     padding: 10px;
-    border: 1px solid black;
     min-width: 120px;
-    font-family: 'LatoLight', helvetica, sans-serif;
 }
-.sidebarAccountBox.loggedin {
+.authenticated .sidebarAccountBox {
     width: auto;
 }
-.sidebarAccountBox.loggedout {
+.unauthenticated .sidebarAccountBox {
     width: 200px;
 }
 .sidebarAccountBox h3 {
@@ -639,7 +543,7 @@ li.accountInvite span {
     padding: 6px 0 6px 25px;
 }
 .sidebarAccountBox a {
-    color: white;
+
 }
 .sidebarAccountBox input[type="email"],
 .sidebarAccountBox input[type="password"] {
@@ -686,10 +590,6 @@ li.accountInvite span {
 /* Save To New Map */
 
 .sidebarFork {
-    position: fixed;
-    top: 10px;
-    right: 120px;
-    z-index: 200;
     width: 35px;
     height: 35px;
 }
@@ -733,108 +633,13 @@ li.accountInvite span {
 }
 /* end Save To New Map */
 
-/* Save Layout */
-
-.sidebarSave {
-    position: absolute;
-    top: 5px;
-    right: 107px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-}
-.sidebarSaveIcon {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    background: url('MMCCicon_save_layout.png') no-repeat center center;
-    background-size: 22px 22px;
-    cursor: pointer;
-}
-.sidebarSaveIcon:hover {} .sidebarSaveBox {
-    position: absolute;
-    display: none;
-    height: auto;
-    width: 182px;
-    background: #000;
-    top: 35px;
-    right: -36px;
-    padding: 10px;
-    border: 1px solid black;
-    font-family: 'LatoLight', helvetica, sans-serif;
-}
-.sidebarSave .hoverForTip:hover .tip {
-    display: block;
-}
-.sidebarSave .tip {
-    display: none;
-    position: absolute;
-    background: black;
-    text-align: center;
-    top: 36px;
-    right: 0;
-    color: white;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
-}
 /* Filter */
 
 .sidebarFilter {
-    position: absolute;
-    top: 10px;
-    right: 160px;
-    z-index: 200;
     width: 35px;
     height: 35px;
 }
 
-.zoomIn {
-    position: absolute;
-    bottom: 100px;
-    right: 20px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    background: blue;
-}
-
-.zoomOut {
-    position: absolute;
-    bottom: 60px;
-    right: 20px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    background: blue;
-}
-
-.centerMap {
-    position: absolute;
-    bottom: 140px;
-    right: 20px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    background: blue;
-}
-
-.zoomExtents {
-    position: absolute;
-    bottom: 180px;
-    right: 20px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    background: blue;
-}
-
-.sidebarFilter.loggedout {
-    right: 35px;
-}
 .sidebarFilterIcon {
     position: absolute;
     width: 35px;
@@ -843,28 +648,17 @@ li.accountInvite span {
     background-size: 28px 28px;
     cursor: pointer;
 }
-.sidebarFilterIcon:hover {}
-/* we set a few of these params off screen to begin with, so that when we initialize the scroll bar it works, but then 
-   we hide the element and position it correctly */
+.sidebarFilterIcon:hover {
+
+}
 
 .sidebarFilterBox {
-    position: fixed;
-    top: -1000px;
-    right: -1000px;
-    position:absolute; 
-    top: 35px;
-    right:-150px;
     display:none;
     height: 400px;
     width: 320px;
-    background: #f5f5f5;
     padding: 10px;
-    border: 1px solid black;
-    font-family: 'LatoLight', helvetica, sans-serif;
     text-align: center;
-    color:#3e3e3e;
-    overflow: scroll;
-
+    overflow-y: scroll;
 }
 h3.filterBox {
     text-align: left;
@@ -925,10 +719,6 @@ h3.filterBox {
 /* collaborate */
 
 .sidebarCollaborate {
-    position: fixed;
-    top: 10px;
-    right: 200px;
-    z-index: 200;
     width: 35px;
     height: 35px;
 }
@@ -946,17 +736,11 @@ h3.filterBox {
     background-image: url('MMCCicon_realtime_blue.png');
 }
 .sidebarCollaborateBox {
-    position: absolute;
     display: none;
     height: auto;
     width: auto;
-    background: #000;
-    top: 45px;
-    right: 0;
     padding: 10px;
-    border: 1px solid black;
-    min-width: 135px;
-    font-family: 'LatoLight', helvetica, sans-serif;
+    min-width: 180px;
 }
 h3.realtimeBoxTitle {
     margin-bottom: 10px;
@@ -1003,332 +787,6 @@ h3.realtimeBoxTitle {
 }
 /* end collaborate */
 
-/* search */
-
-.homeButton {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    width: 35px;
-    height: 35px;
-    z-index: 200;
-    background: white;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-}
-
-.homeButton a {
-    display:block;
-    width: 35px;
-    height: 35px;
-}
-
-.sidebarSearch {
-    position: fixed;
-    top: 10px;
-    left: 45px;
-    height: 35px;
-    z-index: 200;
-}
-.sidebarSearchIcon {
-    float: left;
-    width: 80px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    height: 35px;
-    background: #00BCD4 url('search_icon_32x32.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
-}
-.sidebarSearch .twitter-typeahead {
-    float: left;
-}
-.sidebarSearchField,
-.sidebarSearch .tt-hint {
-    height: 25px;
-    padding: 5px 0;
-    width: 0px;
-    margin: 0;
-    border: 0;
-    outline: none;
-    font-size: 18px;
-    line-height: 35px;
-    background: #0F1519;
-    color: rgba(255, 255, 255, 0.6);
-    font-family: 'LatoRegular';
-}
-.sidebarSearch .tt-dropdown-menu {
-    left: -35px !important;
-    background: #0F1519;
-    min-width: 440px;
-    width: 440px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.sidebarSearch .tt-dropdown-menu h3 {
-    font-family: 'vinyl', helvetica, sans-serif;
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 20px;
-    line-height: 20px;
-    margin: 10px 0 3px 10px;
-    float: left;
-}
-.sidebarSearch .tt-dropdown-menu .limitToMe {
-    float: left;
-    width: 15px;
-    height: 15px;
-    margin-top: 11px;
-    margin-left: 15px;
-}
-.sidebarSearch .tt-dropdown-menu .limitToMeLabel {
-    float: left;
-    margin-top: 11px;
-}
-.sidebarSearch .tt-dropdown-menu .minimizeResults {
-    float: right;
-    width: 35px;
-    height: 35px;
-    background: url('/assets/MMCCicon_minimize_arrow.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
-}
-.sidebarSearch .tt-dropdown-menu .maximizeResults {
-    float: right;
-    width: 35px;
-    height: 35px;
-    background: url('/assets/MMCCicon_maximize_arrow.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
-}
-.sidebarSearch .tt-suggestions {
-    font-family: 'LatoLight', helvetica, sans-serif;
-    overflow: visible;
-}
-.sidebarSearch .tt-suggestion {
-    background: #2A343C;
-}
-.sidebarSearch .tt-is-under-cursor,
-.sidebarSearch .tt-is-under-mouse-cursor {
-    background: #0E161D;
-}
-.sidebarSearch .tt-dataset-maps .tt-is-under-cursor .resultmap,
-.sidebarSearch .tt-dataset-maps .tt-is-under-mouse-cursor .resultmap,
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .resulttopic,
-.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .resulttopic {
-    min-height: 57px;
-}
-.sidebarSearch .tt-suggestion .icon {
-    float: left;
-    width: 36px;
-    height: 36px;
-    margin-right: 5px;
-}
-.sidebarSearch .topicMetacode {
-    float: left;
-    margin-right: 5px;
-    max-width: 70px;
-}
-.sidebarSearch .tt-dataset-topics .topicIcon {
-    width: 36px;
-    height: 36px;
-}
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .topicIcon,
-.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .topicIcon {
-    margin: 0 auto;
-    padding-left: 2px
-}
-.sidebarSearch .tt-dataset-topics .metacodeTip {
-    display: none;
-}
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip,
-.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .metacodeTip {
-    display: block;
-    font-family: 'vinyl';
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 13px;
-    margin: 0 5px 0 2px;
-    text-align: center;
-}
-.sidebarSearch .tt-dataset-mappers .tt-suggestion .icon {
-    width: 28px;
-    height: 28px;
-    padding: 4px;
-}
-.sidebarSearch .resultText {
-    width: 225px;
-    display: block;
-    float: left;
-    word-wrap: break-word;
-}
-.sidebarSearch .resultTitle {
-    font-weight: normal;
-    font-family: 'LatoRegular';
-    font-size: 18px;
-    line-height: 22px;
-    width: 100%;
-    padding-top: 8px;
-}
-.sidebarSearch .resultDesc {
-    font-family: 'LatoItalic';
-    font-size: 14px;
-    line-height: 16px;
-    width: 100%;
-    padding: 3px 0 6px 0;
-}
-.sidebarSearch .tip {
-    display: none;
-}
-.sidebarSearch div.autoOptions {
-    width: 122px;
-    float: right;
-    position: relative;
-    display: none;
-}
-.sidebarSearch .tt-is-under-cursor .autoOptions,
-.sidebarSearch .tt-is-under-mouse-cursor .autoOptions {
-    display: block;
-}
-.sidebarSearch .tt-suggestion .resultnoresult .autoOptions {
-    display: none;
-}
-.sidebarSearch .autoOptions button,
-.sidebarSearch .autoOptions a,
-.sidebarSearch .autoOptions div {
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    border: none;
-    outline: none;
-}
-.sidebarSearch button.addToMap {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_add.png) no-repeat center center;
-    background-size: 18px 18px;
-    top: 30px;
-    left: 84px;
-    cursor: pointer;
-}
-.sidebarSearch div.goTo {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_pop-out.png) no-repeat center center;
-    background-size: 18px 18px;
-    top: 7px;
-    left: 84px;
-}
-.sidebarSearch div.mapCount {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_map.png) no-repeat 0px center;
-    background-size: 14px 14px;
-    top: 7px;
-    left: 38px;
-    padding-left: 18px;
-    font-size: 12px;
-    line-height: 20px;
-}
-.sidebarSearch div.topicCount {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_topic.png) no-repeat 0px center;
-    background-size: 14px 14px;
-    top: 7px;
-    left: 39px;
-    padding-left: 18px;
-    font-size: 12px;
-    line-height: 20px;
-}
-.sidebarSearch div.synapseCount {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_synapse.png) no-repeat 0px center;
-    background-size: 15px 15px;
-    top: 30px;
-    left: 38px;
-    padding-left: 19px;
-    font-size: 12px;
-    line-height: 20px;
-}
-.sidebarSearch div.topicOriginatorIcon {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_mapper.png) no-repeat center center;
-    background-size: 17px 17px;
-    top: 7px;
-    left: 13px;
-}
-.sidebarSearch .tip {
-    position: absolute;
-    background: white;
-    width: auto;
-    bottom: 0;
-    right: 25px;
-    color: black;
-    white-space: nowrap;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
-}
-.sidebarSearch .mapCount .tip,
-.sidebarSearch .synapseCount .tip,
-.sidebarSearch .topicCount .tip {
-    right: -3px;
-    bottom: 24px;
-}
-.sidebarSearch .hoverForTip:hover .tip {
-    display: block;
-}
-.sidebarSearch .mapContributorsIcon .mapContributors {
-    right: 0;
-    bottom: 21px;
-    white-space: normal;
-    width: 200px;
-}
-.sidebarSearch div.mapContributorsIcon {
-    height: 20px;
-    background: url(/assets/MMCCicon_mapper.png) no-repeat 0px center;
-    background-size: 17px 17px;
-    top: 7px;
-    right: 85px;
-    padding-left: 19px;
-    font-size: 12px;
-    line-height: 20px;
-    padding-right: 5px;
-}
-.sidebarSearch div.topicPermission,
-.sidebarSearch div.mapPermission {
-    width: 20px;
-    height: 20px;
-    background-size: 19px 19px !important;
-    top: 30px;
-    left: 13px;
-}
-.sidebarSearch div.topicPermission.commons,
-.sidebarSearch div.mapPermission.commons {
-    background: url(/assets/MMCCicon_commons.png) no-repeat center center;
-}
-.sidebarSearch div.topicPermission.public,
-.sidebarSearch div.mapPermission.public {
-    background: url(/assets/MMCCicon_public.png) no-repeat center center;
-}
-.sidebarSearch div.topicPermission.private,
-.sidebarSearch div.mapPermission.private {
-    background: url(/assets/MMCCicon_private.png) no-repeat center center;
-}
-.sidebarSearch .tt-dataset-mappers a.goTo {
-    top: 7px;
-}
-.sidebarSearch .tt-dataset-mappers div.mapCount {
-    top: 8px;
-}
-/* end search */
-
 .nodemargin {
     padding-top: 120px;
 }
@@ -1341,14 +799,6 @@ h3.realtimeBoxTitle {
 }
 #menus {
     margin: 0 7px;
-}
-#cards {
-    height: 100%;
-    width: 90%;
-    margin: 0 auto;
-}
-#cards p.empty {
-    margin-left: 50px;
 }
 /* right click menu */
 
@@ -2313,16 +1763,13 @@ div.mapInfoStat {
 }
 .addMap {
     display: block;
-    position: fixed;
-    right: 55px;
-    top: 10px;
-    width: 55px;
-    height: 35px;
-    background: #00BCD4 url('MMCCicon_add_map.png') no-repeat 3px -4px;
-    background-size: 40px 40px;
+    width: 45px;
+    height: 32px;
+    background: #4fb5c0 url('MMCCicon_add_map.png') no-repeat center center;
+    background-size: 32px 32px;
     cursor: pointer;
-    z-index: 2;
     border-radius: 2px;
+    margin-right: 10px;
 }
 /* --- styling the logo button ---*/
 
@@ -2333,15 +1780,6 @@ div.mapInfoStat {
     left: 50%;
     margin-left: -55px;
     z-index: 15000;
-}
-#logo {
-    color: #6B6B6B;
-    font-family: "vinyl", sans-serif;
-    font-style: italic;
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 30px;
 }
 .home_bg {
     display: block;

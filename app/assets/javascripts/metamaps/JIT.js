@@ -1888,7 +1888,12 @@ var MouseEventsManager = new Class({
         for(var id in graph.nodes) {
           var n = graph.nodes[id],
               geom = n && ntypes[n.getData('type')],
-              contains = geom && geom.contains && geom.contains.call(fx, n, this.getPos());
+              
+              // START METAMAPS CODE
+              contains = n.getData('alpha') !== 0 && geom && geom.contains && geom.contains.call(fx, n, this.getPos());
+              // END METAMAPS CODE
+              // ORIGINAL CODE contains = geom && geom.contains && geom.contains.call(fx, n, this.getPos());
+
           if(contains) {
             this.contains = contains;
             return that.node = this.node = n;
@@ -1907,7 +1912,11 @@ var MouseEventsManager = new Class({
             if(edgeId in hashset) continue;
             var e = edgeFrom[edgeId],
                 geom = e && etypes[e.getData('type')],
-                contains = geom && geom.contains && geom.contains.call(fx, e, this.getPos());
+
+                // START METAMAPS CODE
+                contains = e.getData('alpha') !== 0 && geom && geom.contains && geom.contains.call(fx, e, this.getPos());
+                // END METAMAPS CODE
+                // ORIGINAL CODE contains = geom && geom.contains && geom.contains.call(fx, n, this.getPos());
             if(contains) {
               this.contains = contains;
               return that.edge = this.edge = e;
@@ -2645,9 +2654,12 @@ var Canvas;
           opt.injectInto:opt.injectInto.id,
           type = opt.type,
           idLabel = id + "-label", 
-          wrapper = $(id),
-          width = opt.width || wrapper.offsetWidth,
-          height = opt.height || wrapper.offsetHeight;
+          // ORIGINAL CODE wrapper = $(id),
+          // START METAMAPS CODE
+          //wrapper = Metamaps.Famous.viz.surf,
+          // END METAMAPS CODE
+          width = opt.width, // || wrapper.offsetWidth,
+          height = opt.height; // || wrapper.offsetHeight;
       this.id = id;
       //canvas options
       var canvasOptions = {
@@ -2692,7 +2704,16 @@ var Canvas;
         }
       }
       this.element.appendChild(this.labelContainer);
-      wrapper.appendChild(this.element);
+
+      // START METAMAPS CODE
+      var m = Metamaps.Famous.viz.surf;
+      m.setContent(this.element);
+      m.deploy(m._currTarget);
+
+      // END METAMAPS CODE
+      // ORIGINAL CODE wrapper.appendChild(this.element);
+
+
       //Update canvas position when the page is scrolled.
       var timer = null, that = this;
       $.addEvent(window, 'scroll', function() {
