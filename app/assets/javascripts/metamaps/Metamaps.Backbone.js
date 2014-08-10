@@ -30,7 +30,7 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
             name: this.get('name'),
             desc: this.get('desc'),
             username: this.getUser().get('name'),
-            mkPermission: this.get("permission").substring(0, 2),
+            mkPermission: this.get("permission") ? this.get("permission").substring(0, 2) : "commons",
             editPermission: this.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEdit' : 'cannotEdit',
             topicCount: this.getTopics().length,
             synapseCount: this.getSynapses().length,
@@ -52,8 +52,8 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
         a = a.get(this.sortBy);
         b = b.get(this.sortBy);
         if (this.sortBy === 'name') {
-            a = a.toLowerCase();
-            b = b.toLowerCase();
+            a = a ? a.toLowerCase() : "";
+            b = b ? b.toLowerCase() : "";
         }
         return a > b ? 1 : a < b ? -1 : 0;
     },
