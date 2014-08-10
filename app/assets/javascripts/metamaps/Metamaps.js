@@ -1265,7 +1265,7 @@ Metamaps.Util = {
     // you may copy this code but please keep the copyright notice as well
     splitLine: function (st, n) {
         var b = '';
-        var s = st;
+        var s = st ? st : '';
         while (s.length > n) {
             var c = s.substring(0, n);
             var d = c.lastIndexOf(' ');
