@@ -229,13 +229,24 @@ Metamaps.GlobalUI.CreateMap = {
         }
 
         var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
-        var form = $(formId);
+        var form = $(formId)
 
         self.newMap.set('name', form.find('#map_name').val());
         self.newMap.set('desc', form.find('#map_desc').val());
 
         // TODO validate map attributes
-        
+        if (self.newMap.get('name').length===0){
+            console.log('Empty map name.');
+            Metamaps.GlobalUI.notifyUser('map name is mandatory.');
+            return;
+
+        } else if (self.newMap.get('name').length>140){
+            console.log('map name cannot exceed 140 characteres.');
+            Metamaps.GlobalUI.notifyUser('map name cannot exceed 140 characteres.');
+            return;
+        }
+        //console.log('self.newMap.get("name").length='+self.newMap.get("name").length.toString());
+
         self.newMap.save(null, {
             success: self.success
             // TODO add error message
