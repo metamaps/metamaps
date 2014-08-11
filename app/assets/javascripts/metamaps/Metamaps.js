@@ -639,20 +639,6 @@ Metamaps.TopicCard = {
         $('.showcard').draggable({
             handle: ".metacodeImage"
         });
-        $('#showcard').resizable({
-            maxHeight: 500,
-            maxWidth: 500,
-            minHeight: 320,
-            minWidth: 226,
-            resize: function (event, ui) {
-                var p = $('#showcard').find('.scroll');
-                p.height(p.height()).mCustomScrollbar('update');
-            }
-        }).css({
-            display: 'none',
-            top: '300px',
-            left: '100px'
-        });
     },
     fadeInShowCard: function (topic) {
         $('.showcard').fadeIn('fast');
@@ -677,6 +663,38 @@ Metamaps.TopicCard = {
     bindShowCardListeners: function (topic) {
         var self = Metamaps.TopicCard;
         var showCard = document.getElementById('showcard');
+
+
+        // starting embed.ly
+        if (false && topic.get('link')) {
+            $('.showcard .attachments a').embedly({
+                query: {maxwidth: 300},
+                key: '7983300f4c1f48569ca242e3d6bff1e9'
+            });
+        }
+
+        var addLinkFunc = function () {
+            var addLinkDiv ='';
+            var addLinkDesc ='Enter or paste a link';
+            addLinkDiv+='<div class="addLink"><div id="addLinkBack"></div>';
+            addLinkDiv+='<div id="addLinkInput"><input placeholder="' + addLinkDesc + '"></input>';
+            addLinkDiv+='<div id="addLinkReset"></div></div></div>';
+            $('.addAttachment').hide();
+            $('.attachments').append(addLinkDiv);
+            $('.showcard #addLinkBack').click(backFunc);
+            $('.showcard #addLinkReset').click(resetFunc);
+        };
+        var backFunc = function () {
+            $('.addLink').remove();
+            $('.addAttachment').show();
+        };
+        var resetFunc = function () {
+            $('#addLinkInput input').val('');
+            $('#addLinkInput input').focus();
+        };
+
+        $('.showcard #addlink').click(addLinkFunc);
+
 
         var selectingMetacode = false;
         // attach the listener that shows the metacode title when you hover over the image
@@ -792,12 +810,6 @@ Metamaps.TopicCard = {
             var desc = $(this).html();
             topic.set("desc", desc);
         });
-
-        $(showCard).find('.best_in_place_link').bind("ajax:success", function () {
-            var link = $(this).html();
-            $(showCard).find('.go-link').attr('href', link);
-            topic.set("link", link);
-        });
     },
     populateShowCard: function (topic) {
         var self = Metamaps.TopicCard;
@@ -806,7 +818,8 @@ Metamaps.TopicCard = {
 
         $(showCard).find('.permission').remove();
 
-        var html = self.generateShowcardHTML.render(self.buildObject(topic));
+        var topicForTemplate = self.buildObject(topic);
+        var html = self.generateShowcardHTML.render(topicForTemplate);
 
         if (topic.authorizeToEdit(Metamaps.Active.Mapper)) {
             var perm = document.createElement('div');
@@ -828,29 +841,29 @@ Metamaps.TopicCard = {
     generateShowcardHTML: null, // will be initialized into a Hogan template within init function
     //generateShowcardHTML
     buildObject: function (topic) {
+        
         var nodeValues = {};
+        
         var authorized = topic.authorizeToEdit(Metamaps.Active.Mapper);
 
-        //link is rendered differently if user is logged out or in
-        var go_link, a_tag, close_a_tag;
         if (!authorized) {
-            go_link = '';
-            if (topic.get("link") != "") {
-                a_tag = '<a href="' + topic.get("link") + '" target="_blank">';
-                close_a_tag = '</a>';
-            } else {
-                a_tag = '';
-                close_a_tag = '';
-            }
+            
         } else {
-            go_link = '<a href="' + topic.get("link") + '" ' +
-                '   class="go-link" target="_blank"></a>';
-            a_tag = '';
-            close_a_tag = '';
+            
         }
 
         var desc_nil = "Click to add description...";
-        var link_nil = "Click to add link...";
+
+        if (false && topic.get('link')) {
+            nodeValues.attachments = '<a href="'+topic.get('link')+'">'+topic.get('link')+'</a>';
+        }
+        else {
+            nodeValues.attachments = '<div class="addAttachment">';
+            nodeValues.attachments+= '<div id="addphoto">photo</div>';
+            nodeValues.attachments+= '<div id="addlink">link</div>';
+            nodeValues.attachments+= '<div id="addaudio">audio</div>';
+            nodeValues.attachments+= '<div id="addupload">upload</div> </div>';
+        }
 
         nodeValues.permission = topic.get("permission");
         nodeValues.mk_permission = topic.get("permission").substring(0, 2);
@@ -864,14 +877,8 @@ Metamaps.TopicCard = {
         nodeValues.userid = topic.get("user_id");
         nodeValues.username = topic.getUser().get("name");
         nodeValues.date = topic.getDate();
-
         // the code for this is stored in /views/main/_metacodeOptions.html.erb
         nodeValues.metacode_select = $('#metacodeOptions').html();
-        nodeValues.go_link = go_link;
-        nodeValues.a_tag = a_tag;
-        nodeValues.close_a_tag = close_a_tag;
-        nodeValues.link_nil = link_nil;
-        nodeValues.link = (topic.get("link") == "" && authorized) ? link_nil : topic.get("link");
         nodeValues.desc_nil = desc_nil;
         nodeValues.desc = (topic.get("desc") == "" && authorized) ? desc_nil : topic.get("desc");
         return nodeValues;

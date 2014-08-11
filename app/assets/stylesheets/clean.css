@@ -46,6 +46,9 @@
 .mapPage .mapElement {
 	display: block;
 }
+.mapPage .mapElementHidden {
+    display:none;
+}
 
 /* loading */
 

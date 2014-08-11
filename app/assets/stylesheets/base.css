@@ -6,24 +6,24 @@
     color:#444;
 }
 
-.showcard, #showcard {
+.showcard {
     position:absolute;
-    display:block;
-    top:-1000px;
-    left:-1000px;
+    display:none;
+    top:300px;
+    left:100px;
     margin-top: -181px;
-    width:226px;
-	  height:320px;
+    width:300px;
+	  height:360px;
     color:#FFF;
     text-align: left;
     overflow: visible;
 	  z-index:14000;
     background: #FFF;
-    border-radius:5px;
+    border-radius:2px;
     box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
 }
 
-#showcard .contributor {
+.showcard .contributor {
   font-size:14px;
 }
 
@@ -358,7 +358,7 @@ float:left;
 }
 
 
-.CardOnGraph .link {
+.CardOnGraph .attachments {
   -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
   -moz-box-flex: 1;         /* OLD - Firefox 19- */
   -webkit-flex: 1;          /* Chrome */
@@ -378,12 +378,10 @@ float:left;
   flex-direction: row;
   border-top: 1px solid #AAAAAA;
   width:100%;
-  max-height:34px;
-  background: url(MMCCicon_link.png) no-repeat 6px 5px;
-  background-size:24px 24px;
+  max-height:48px;
 }
 
-.CardOnGraph .best_in_place_link { 
+.attachments a {
   -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
   -moz-box-flex: 1;         /* OLD - Firefox 19- */
   -webkit-flex: 1;          /* Chrome */
@@ -399,30 +397,58 @@ float:left;
   line-height: 16px;
 }
 
-.best_in_place_link input{
+.addAttachment div {
+  display: inline-block;
+  width: 72px;
+  height: 23px;
+  text-align: center; 
+  padding-top: 25px;
+  font-size: 12px;
+  color: #9e9e9e;
+  cursor: pointer;
+}
+
+.addAttachment div:hover {
+  color: #616161;
+}
+
+.addLink div {
+  display: inline-block;
+}
+
+#addLinkBack {
+  height: 48px;
+  width: 48px;
+  cursor: pointer;
+}
+#addLinkInput {
+  height: 32px;
+  width: 236px;
+  padding: 8px 16px 8px 0;
+  position: relative;
+}
+
+#addLinkInput input{
+padding: 7px 31px 7px 31px;
 height: 16px;
-margin: -1px 0 0 0;
-border: 0;
+width: 172px;
+margin: 0 0 0 0;
+border: 1px solid #EFEFEF;
 outline: none;
 font-size: 16px;
-line-height: 16px;
 line-height: 16px;
 background: white;
 color: black;
 font-family: 'LatoLight';
 }
 
-.CardOnGraph .go-link {
-  max-width: 34px;
-  height: 34px;
-  background: url(MMCCicon_go.png) no-repeat center center;
-  background-size: 20px 20px;
-  -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  margin-right:12px;
+#addLinkReset {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
 }
 
 .cardSettings {
