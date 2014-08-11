@@ -545,12 +545,13 @@ Metamaps.GlobalUI.Search = {
             var win;
             if (dataset == "topics") {
                 win = window.open('/topics/' + datum.id, '_blank');
+                win.focus();
             } else if (dataset == "maps") {
-                win = window.open('/maps/' + datum.id, '_blank');
+                Metamaps.Router.maps(datum.id);
             } else if (dataset == "mappers") {
                 win = window.open('/maps/mappers/' + datum.id, '_blank');
+                win.focus();
             }
-            win.focus();
         }
     },
     initSearchOptions: function () {
