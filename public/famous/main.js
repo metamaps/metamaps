@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             Metamaps.JIT.prepareVizData();
             f.viz.surf.removeListener('deploy',prepare);
     };
-    if (Metamaps.currentSection === "map") {
+    if (Metamaps.currentSection === "map" || Metamaps.currentSection === "topic") {
         f.viz.surf.on('deploy', prepare);
     }
     f.viz.mod = new Modifier({
@@ -56,6 +56,57 @@ define(function(require, exports, module) {
     };
     f.mainContext.add(f.viz.mod).add(f.viz.surf);
 
+    
+    // CONTENT / OTHER PAGES
+    f.yield = {};
+    f.yield.surf = new Surface({
+        size: [true, true],
+        classes: [],
+        properties: {
+            display: 'none'
+        }
+    });
+    var loadYield = function () {
+            f.loadYield();
+            f.yield.surf.removeListener('deploy',loadYield);
+    };
+    if (!(Metamaps.currentSection === "map" ||
+            Metamaps.currentSection === "topic" ||
+            Metamaps.currentSection === "explore" ||
+            (Metamaps.currentSection === "" && Metamaps.Active.Mapper) )) {
+        f.yield.surf.on('deploy', loadYield);
+    }
+    f.yield.mod = new Modifier({
+        origin: [0.5, 0.5],
+        opacity: 0
+    });
+    f.yield.show = function () {
+        f.yield.surf.setProperties({ "display":"block" });
+        f.yield.mod.setOpacity(
+            1,
+            { duration: 300 }
+        );
+    };
+    f.yield.hide = function () {
+        f.yield.mod.setOpacity(
+            0, 
+            { duration: 300 }, 
+            function() {
+                f.yield.surf.setProperties({"display": "none"});
+            }
+        );
+    };
+    f.mainContext.add(f.yield.mod).add(f.yield.surf);
+    
+    f.loadYield = function () {
+        Metamaps.Loading.loader.hide();
+        var yield = document.getElementById('yield').innerHTML;
+        f.yield.surf.setContent(yield);
+        f.yield.surf.deploy(f.yield.surf._currTarget);
+        f.yield.show();
+    };
+    
+    
     // EXPLORE MAPS BAR
     f.explore = {};
     f.explore.surf = new Surface({
@@ -119,6 +170,14 @@ define(function(require, exports, module) {
         content: '',
         classes: ['toast']
     });
+    initialToast = function () {
+        var message = document.getElementById('toast') ? document.getElementById('toast').innerHTML : false;
+        if (message) {
+            Metamaps.GlobalUI.notifyUser(message);
+            f.toast.surf.deploy(f.toast.surf._currTarget);
+        }
+    };
+    f.toast.surf.on('deploy', initialToast);
     f.toast.mod = new Modifier({
         origin: [0, 1],
         opacity: 0,

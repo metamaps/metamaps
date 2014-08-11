@@ -76,6 +76,29 @@ class MapsController < ApplicationController
             redirect_to root_url and return
         end
 
+        respond_to do |format|
+            format.html { 
+                @allmappers = @map.contributors
+                @alltopics = @map.topics # should limit to topics visible to user
+                @allsynapses = @map.synapses # should also be limited
+                @allmappings = @map.mappings
+
+                respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
+            }
+            format.json { render json: @map }
+        end
+    end
+
+    # GET maps/:id/contains
+    def contains
+
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_show(@current)
+
+        if not @map
+            redirect_to root_url and return
+        end
+
         @allmappers = @map.contributors
         @alltopics = @map.topics # should limit to topics visible to user
         @allsynapses = @map.synapses # should also be limited
@@ -89,10 +112,10 @@ class MapsController < ApplicationController
         @json['mappers'] = @allmappers
 
         respond_to do |format|
-            format.html { respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map, @user) }
             format.json { render json: @json }
         end
     end
+
 
     # GET maps/:id/embed
     def embed

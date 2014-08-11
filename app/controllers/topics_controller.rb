@@ -32,13 +32,36 @@ class TopicsController < ApplicationController
             redirect_to root_url and return
         end
 
-        @alltopics = [@topic] + @topic.relatives # should limit to topics visible to user
+        respond_to do |format|
+            format.html { 
+                @alltopics = [@topic] + @topic.relatives # should limit to topics visible to user
+                @allsynapses = @topic.synapses # should also be limited
+
+                respond_with(@allsynapses, @alltopics, @topic) 
+            }
+            format.json { render json: @topic }
+        end
+    end
+
+    # GET topics/:id/network
+    def network
+        @current = current_user
+        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+
+        if not @topic
+            redirect_to root_url and return
+        end
+
+        @alltopics = @topic.relatives # should limit to topics visible to user
         @allsynapses = @topic.synapses # should also be limited
-        @allmetacodes = Metacode.all
+
+        @json = Hash.new()
+        @json['topic'] = @topic
+        @json['relatives'] = @alltopics
+        @json['synapses'] = @allsynapses
 
         respond_to do |format|
-            format.html { respond_with(@allmetacodes, @allsynapses, @alltopics, @topic, @user) }
-            format.json { render json: @topic }
+            format.json { render json: @json }
         end
     end
 

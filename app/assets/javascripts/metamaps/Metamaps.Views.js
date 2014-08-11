@@ -46,6 +46,9 @@ Metamaps.Views.init = function () {
             this.listenTo(this.collection, 'errorOnFetch', this.handleError);
         },
         render: function () {
+            
+            Metamaps.Loading.loader.hide();
+            
             var that = this;
             this.$el.empty();
 
@@ -56,7 +59,6 @@ Metamaps.Views.init = function () {
             });
         },
         handleSuccess: function () {
-            Metamaps.Loading.loader.hide();
             this.render();
         },
         handleError: function () {

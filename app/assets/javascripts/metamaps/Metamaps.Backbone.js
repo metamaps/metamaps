@@ -1,7 +1,7 @@
 Metamaps.Backbone = {};
 Metamaps.Backbone.Map = Backbone.Model.extend({
     urlRoot: '/maps',
-    blacklist: ['created_at', 'updated_at', 'map', 'topics', 'synapses', 'mappings', 'mappers'],
+    blacklist: ['created_at', 'updated_at', 'topics', 'synapses', 'mappings', 'mappers'],
     toJSON: function (options) {
         return _.omit(this.attributes, this.blacklist);
     },
@@ -12,17 +12,44 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     getUser: function () {
         return Metamaps.Mapper.get(this.get('user_id'));
     },
+    fetchContained: function () {
+        var bb = Metamaps.Backbone;
+        var start = function (data) {
+            this.set('mappers', new bb.MapperCollection(data.mappers));
+            this.set('topics', new bb.TopicCollection(data.topics));
+            this.set('synapses', new bb.SynapseCollection(data.synapses));
+            this.set('mappings', new bb.MappingCollection(data.mappings));
+        }
+
+        $.ajax({
+            url: "/maps/" + this.id + "/contains",
+            success: start,
+            async: false
+        });
+    },
     getTopics: function () {
         if (!this.get('topics')) {
-            this.fetch({async: false});
+            this.fetchContained();
         }
         return this.get('topics');
     },
     getSynapses: function () {
         if (!this.get('synapses')) {
-            this.fetch({async: false});
+            this.fetchContained();
         }
         return this.get('synapses');
+    },
+    getMappings: function () {
+        if (!this.get('mappings')) {
+            this.fetchContained();
+        }
+        return this.get('mappings');
+    },
+    getMappers: function () {
+        if (!this.get('mappers')) {
+            this.fetchContained();
+        }
+        return this.get('mappers');
     },
     attrForCards: function () {
         var obj = {
@@ -30,7 +57,7 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
             name: this.get('name'),
             desc: this.get('desc'),
             username: this.getUser().get('name'),
-            mkPermission: this.get("permission").substring(0, 2),
+            mkPermission: this.get("permission") ? this.get("permission").substring(0, 2) : "commons",
             editPermission: this.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEdit' : 'cannotEdit',
             topicCount: this.getTopics().length,
             synapseCount: this.getSynapses().length,
@@ -52,8 +79,8 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
         a = a.get(this.sortBy);
         b = b.get(this.sortBy);
         if (this.sortBy === 'name') {
-            a = a.toLowerCase();
-            b = b.toLowerCase();
+            a = a ? a.toLowerCase() : "";
+            b = b ? b.toLowerCase() : "";
         }
         return a > b ? 1 : a < b ? -1 : 0;
     },
