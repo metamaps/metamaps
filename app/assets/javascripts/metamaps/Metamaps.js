@@ -177,12 +177,7 @@ Metamaps.Backbone.init = function () {
 
     self.TopicCollection = Backbone.Collection.extend({
         model: self.Topic,
-        url: '/topics',
-        comparator: function (a, b) {
-            a = a.get('name').toLowerCase();
-            b = b.get('name').toLowerCase();
-            return a > b ? 1 : a < b ? -1 : 0;
-        }
+        url: '/topics'
     });
 
     self.Synapse = Backbone.Model.extend({
@@ -1189,7 +1184,7 @@ Metamaps.Visualize = {
     render: function () {
         var self = Metamaps.Visualize, RGraphSettings, FDSettings;
 
-        if (self.type == "RGraph" && !self.mGraph) {
+        if (self.type == "RGraph" && (!self.mGraph || self.mGraph instanceof $jit.ForceDirected)) {
 
             RGraphSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings);
 
@@ -1197,13 +1192,13 @@ Metamaps.Visualize = {
             $jit.RGraph.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
             
             RGraphSettings.width = $(document).width();
-            RgraphSettings.height = $(document).height();
+            RGraphSettings.height = $(document).height();
             RGraphSettings.background = Metamaps.JIT.RGraph.background;
             RGraphSettings.levelDistance = Metamaps.JIT.RGraph.levelDistance;
             
             self.mGraph = new $jit.RGraph(RGraphSettings);
 
-        } else if (self.type == "ForceDirected" && !self.mGraph) {
+        } else if (self.type == "ForceDirected" && (!self.mGraph || self.mGraph instanceof $jit.RGraph)) {
 
             FDSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings);
 
@@ -1228,11 +1223,18 @@ Metamaps.Visualize = {
         // load JSON data, if it's not empty
         if (!self.loadLater) {
             //load JSON data.
-            self.mGraph.loadJSON(Metamaps.JIT.vizData);
+            var rootIndex = 0;
+            if (Metamaps.Active.Topic) {
+                var node = _.find(Metamaps.JIT.vizData, function(node){
+                    return node.id === Metamaps.Active.Topic.id;
+                });
+                rootIndex = _.indexOf(Metamaps.JIT.vizData, node);
+            }
+            self.mGraph.loadJSON(Metamaps.JIT.vizData, rootIndex);
             //compute positions and plot.
             self.computePositions();
             if (self.type == "RGraph") {
-                self.mGraph.animate(Metamaps.JIT.RGraph.animate);
+                self.mGraph.fx.animate(Metamaps.JIT.RGraph.animate);
             } else if (self.type == "ForceDirected") {
                 self.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout);
             } else if (self.type == "ForceDirected3D") {
@@ -1243,9 +1245,13 @@ Metamaps.Visualize = {
         // update the url now that the map is ready
         setTimeout(function(){
             var m = Metamaps.Active.Map;
+            var t = Metamaps.Active.Topic;
 
             if (m && window.location.pathname !== "/maps/" + m.id) {
                 Metamaps.Router.navigate("/maps/" + m.id);
+            }
+            else if (t && window.location.pathname !== "/topics/" + t.id) {
+                Metamaps.Router.navigate("/topics/" + t.id);
             }
         }, 800);
 
@@ -2433,7 +2439,32 @@ Metamaps.Topic = {
             }
         }
     },
+    launch: function (id) {
+        var bb = Metamaps.Backbone;
+        var start = function (data) {
+            Metamaps.Active.Topic = new bb.Topic(data.topic);
+            Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives));
+            Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
 
+            // build and render the visualization
+            Metamaps.Visualize.type = "RGraph";
+            Metamaps.JIT.prepareVizData();
+
+            // update filters
+            Metamaps.Filter.reset(); 
+            Metamaps.Filter.initializeFilterData(); // this sets all the visible filters to true
+
+            // these three update the actual filter box with the right list items
+            Metamaps.Filter.checkMetacodes();
+            Metamaps.Filter.checkSynapses();
+            Metamaps.Filter.checkMappers();
+        }
+
+        $.ajax({
+            url: "/topics/" + id + "/network.json",
+            success: start
+        });
+    },
     /*
      *
      *
@@ -2747,6 +2778,7 @@ Metamaps.Map = {
             Metamaps.Mappings = new bb.MappingCollection(data.mappings);
 
             // build and render the visualization
+            Metamaps.Visualize.type = "ForceDirected";
             Metamaps.JIT.prepareVizData();
 
             // update filters
@@ -2760,7 +2792,7 @@ Metamaps.Map = {
         }
 
         $.ajax({
-            url: "/maps/" + id + ".json",
+            url: "/maps/" + id + "/contains.json",
             success: start
         });
     },

@@ -15,48 +15,11 @@
 #%>
 
 <% content_for :title, @topic.name + " | Metamaps" %>  
-
-<% if authenticated? %>
-<div class="sidebarFork">
-    <div class="sidebarForkIcon">
-    </div>
-    <div class="sidebarForkBox"></div>
-</div>
-<% end %>
-<div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
-    <div class="sidebarFilterIcon"></div>
-    <div class="sidebarFilterBox">
-        <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
-        <div class="clearfloat"></div>
-        <%= render :partial => 'shared/filterbymetacode' %>
-    </div>
-</div>
-
-<div class="index">
-    <div class="openCheatsheet openLightbox" data-open="cheatsheet"></div>
-    <span class="mapInfo"></span>
-    <div class="clearfloat"></div>
-</div>
-
-<div class="relatives" id="container">
-    <div id="center-container">
-        <div id="infovis"></div>    
-    </div>
-    <div class="showcard" id="showcard"></div>
-</div>
-<div class="clearfloat"></div>
-
-<% if authenticated? %>
-<%= render :partial => 'topics/new' %>
-<%= render :partial => 'synapses/new' %>
-<%= render :partial => 'shared/metacodeoptions' %>
-<% end %>
-
 <script>
+    Metamaps.currentSection = "topic";
+    Metamaps.currentPage = <%= @topic.id.to_s %>;
     Metamaps.Active.Topic = <%= @topic.to_json.html_safe %>;
-    Metamaps.Metacodes = <%= @allmetacodes.to_json.html_safe %>;
     Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
     Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;
-    Metamaps.Mappings = null;
     Metamaps.Visualize.type = "RGraph";
 </script>

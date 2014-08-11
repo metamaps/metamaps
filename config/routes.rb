@@ -18,6 +18,7 @@ Metamaps::Application.routes.draw do
   resources :topics, except: [:index, :new, :edit] do
     get :autocomplete_topic, :on => :collection
   end
+  match 'topics/:id/network', to: 'topics#network', via: :get, as: :network
   
   match 'explore/active', to: 'maps#index', via: :get, as: :activemaps
   match 'explore/featured', to: 'maps#index', via: :get, as: :featuredmaps
@@ -27,6 +28,7 @@ Metamaps::Application.routes.draw do
   match 'maps/topics/:id', to: 'maps#index', via: :get, as: :topicmaps
   resources :maps, except: [:new, :edit]
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
+  match 'maps/:id/contains', to: 'maps#contains', via: :get, as: :contains
   
   devise_for :users, :controllers => { :registrations => "registrations" }, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
   devise_scope :user do

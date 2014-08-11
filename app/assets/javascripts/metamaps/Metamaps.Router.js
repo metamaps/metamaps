@@ -56,6 +56,7 @@
 
             Metamaps.Famous.viz.hide();
             Metamaps.Active.Map = null;
+            Metamaps.Active.Topic = null;
 
             setTimeout(function(){
                 Metamaps.Router.navigate("");
@@ -93,6 +94,7 @@
 
             Metamaps.Famous.viz.hide();
             Metamaps.Active.Map = null;
+            Metamaps.Active.Topic = null;
 
             setTimeout(function(){
                 Metamaps.Router.navigate("/explore/" + section);
@@ -119,11 +121,40 @@
                 Metamaps.JIT.centerMap();
             }
             Metamaps.Famous.viz.show();
+            Metamaps.Active.Topic = null;
 
             Metamaps.GlobalUI.Search.unlock();
             Metamaps.GlobalUI.Search.close(0, true);
 
             Metamaps.Map.launch(id);
+        },
+        topics: function (id) {
+            
+            document.title = 'Topic ' + id + ' | Metamaps';
+            
+            Metamaps.currentSection = "topic";
+            Metamaps.currentPage = id;
+
+            $('.wrapper').removeClass('homePage explorePage');
+            $('.wrapper').addClass('mapPage');
+
+            Metamaps.Famous.yield.hide();
+            $('.mapsWrapper').fadeOut(300);
+            Metamaps.Famous.explore.hide();
+
+            // clear the visualization, if there was one, before showing its div again
+            if (Metamaps.Visualize.mGraph) {
+                Metamaps.Visualize.mGraph.graph.empty();
+                Metamaps.Visualize.mGraph.plot();
+                Metamaps.JIT.centerMap();
+            }
+            Metamaps.Famous.viz.show();
+            Metamaps.Active.Map = null;
+
+            Metamaps.GlobalUI.Search.unlock();
+            Metamaps.GlobalUI.Search.close(0, true);
+
+            Metamaps.Topic.launch(id);
         }
     });
     

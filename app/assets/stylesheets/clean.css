@@ -26,6 +26,10 @@
     display:none;
 }
 
+#toast {
+    display: none;
+}
+
 /*.animations {
    -webkit-transition-duration: .5s;
   -moz-transition-duration: .5s;

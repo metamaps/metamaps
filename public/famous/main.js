@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             Metamaps.JIT.prepareVizData();
             f.viz.surf.removeListener('deploy',prepare);
     };
-    if (Metamaps.currentSection === "map") {
+    if (Metamaps.currentSection === "map" || Metamaps.currentSection === "topic") {
         f.viz.surf.on('deploy', prepare);
     }
     f.viz.mod = new Modifier({
@@ -71,6 +71,7 @@ define(function(require, exports, module) {
             f.yield.surf.removeListener('deploy',loadYield);
     };
     if (!(Metamaps.currentSection === "map" ||
+            Metamaps.currentSection === "topic" ||
             Metamaps.currentSection === "explore" ||
             (Metamaps.currentSection === "" && Metamaps.Active.Mapper) )) {
         f.yield.surf.on('deploy', loadYield);
@@ -169,6 +170,14 @@ define(function(require, exports, module) {
         content: '',
         classes: ['toast']
     });
+    initialToast = function () {
+        var message = document.getElementById('toast') ? document.getElementById('toast').innerHTML : false;
+        if (message) {
+            Metamaps.GlobalUI.notifyUser(message);
+            f.toast.surf.deploy(f.toast.surf._currTarget);
+        }
+    };
+    f.toast.surf.on('deploy', initialToast);
     f.toast.mod = new Modifier({
         origin: [0, 1],
         opacity: 0,

@@ -42,10 +42,7 @@
 <body>
 
     <% if notice %>
-    <p class="notice metamaps"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-    <p class="alert metamaps"><%= alert %></p>
+    <p id="toast"><%= notice %></p>
     <% end %>
 
     <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>

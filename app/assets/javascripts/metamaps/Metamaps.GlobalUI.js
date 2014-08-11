@@ -544,8 +544,7 @@ Metamaps.GlobalUI.Search = {
             self.close(0, true);
             var win;
             if (dataset == "topics") {
-                win = window.open('/topics/' + datum.id, '_blank');
-                win.focus();
+                Metamaps.Router.topics(datum.id);
             } else if (dataset == "maps") {
                 Metamaps.Router.maps(datum.id);
             } else if (dataset == "mappers") {
