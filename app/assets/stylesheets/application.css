@@ -83,7 +83,7 @@ html {
 
 } 
 body {
-    background: #d8d9da;
+    background: #d8d9da url(/assets/shattered_@2X.png);
     font-family: 'din-medium', helvetica, sans-serif;
     color: #424242;
 }
