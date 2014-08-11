@@ -5,100 +5,31 @@
   #%>  
   
 <% if !authenticated? %>
-
-<% content_for :title, "Home | Metamaps" %> 
-
-<div id="preloaded-images">
-   <img src="/assets/metacodes75ms300x300.gif" width="128 height="128" alt="Image 01" />
-</div>  
-  
-<div class="home_bg">
-
-<div class="home_content">
-<div class="home_desc">
-  <div class="welcomeTo">
-      Welcome to Metamaps
-  </div>
-  <img id="homeMapImage" src="/assets/metamap128x128.png" width="128" height="128" />
-  
-    <div class="metamapsIs">
-      a home on the web for <span class="swapWord">
-        <ul class="texts">
-        <li>building shared knowledge</li>
-        <li>learning</li>
-        <li>visioning</li>
-        <li>conversing</li>
-        <li>collaborating</li>
-        <li>sensemaking</li>
-        <li>innovating</li>
-        <li>designing</li>
-        <li>playing</li>
-        <li>exploring</li>
-        </ul>
-      </span>
-    </div>
-</div>
-<div class="clearfloat"></div>
-
-<p class="contact">
-    <a href="/request" class="request button" data-bypass="true">Request Invite</a>
-    <a href="/explore/featured" class="learnmore button">Explore Featured</a>
-  <div class="featuredMaps">
-      explore featured maps from our community
-  </div>
-</p>
-
-<div class="centeredProfile">
-  <div id="homeMap">
-    <figure id="homeFigure">
-    <% @maps.each_with_index do |map, index| %>
-      <% first = index == 0 ? true : false %>
-      <%= render :partial => 'main/homemap', :locals => { :map => map, :first => first } %>
-    <% end %>
-    </figure>
-  </div>
-</div>
-</div>
-<div class="clearfloat"></div>
-</div>
-                         
-<script>
-
-  Metamaps.currentSection = "";
-  Metamaps.currentPage = "";
-
-$(document).ready(function() {
-  // flip through these words on the homepage
-  $('.swapWord').textillate({ 
-       in: { effect: 'fadeIn', delay: 20 },
-       out: { effect: 'fadeOut', sync: true }, 
-       loop: true,
-       minDisplayTime: 2000
-  });
-  
-  $('#homeMapImage').hover(function() {
-    $(this).attr('src','/assets/metacodes75ms300x300.gif');
-  }, function() {
-    $(this).attr('src','/assets/metamap128x128.png');
-  });
-                         
-  $('#homeMap .desc').each(function() {
-    $(this).height($(this).height()).mCustomScrollbar({
-      mouseWheelPixels: 200
-    });
-  });
-
-});
-</script>
-
+    <% content_for :title, "Home | Metamaps" %> 
+    <div id="yield">
+        <div class="homeWrapper">
+            <div class="homeTitle">EXPERIENCE METAMAPS</div>
+            <div class="homeIntro">
+            <span class="green">metamaps.cc</span> is a free and open source platform. It enables individuals, communities, and organizations to build and visualize their shared knowledge and unlock their collective intelligence...
+            </div>
+            <iframe class="homeVideo" src="//player.vimeo.com/video/100118167" width="560" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <div class="callToAction">
+                <a href="/request" class="requestInviteCTA" data-bypass="true">REQUEST INVITE</a>
+                <a href="/explore/featured" class="exploreFeaturedCTA">EXPLORE FEATURED MAPS</a>
+            </div>
+        </div>
+    </div><!-- end yield -->                        
+    <script>
+    Metamaps.currentSection = "";
+    Metamaps.currentPage = "";
+    </script>
 <% elsif authenticated? %>
-  <% content_for :title, "My Maps | Metamaps" %> 
-
-  <script>
+    <% content_for :title, "My Maps | Metamaps" %> 
+    <script>
     Metamaps.Maps.Mine = <%= @maps.to_json.html_safe %>;
     Metamaps.currentSection = "";
     Metamaps.currentPage = "";
     Metamaps.GlobalUI.Search.isOpen = true;
     Metamaps.GlobalUI.Search.lock();
-  </script>
+    </script>
 <% end %>

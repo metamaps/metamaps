@@ -22,10 +22,12 @@
 
             // all this only for the logged in home page
             if (Metamaps.Active.Mapper) {
+                
+                Metamaps.Famous.yield.hide();
+                
                 Metamaps.Famous.explore.set('mine');
                 Metamaps.Famous.explore.show();
 
-                $('.yield').fadeOut(300);
                 $('.mapsWrapper').fadeIn(300);
 
                 Metamaps.GlobalUI.Search.open();
@@ -41,12 +43,14 @@
             }
             // logged out home page
             else {
+                
+                Metamaps.Famous.yield.show();
+                
                 Metamaps.Famous.explore.hide();
 
                 Metamaps.GlobalUI.Search.unlock();
                 Metamaps.GlobalUI.Search.close(0, true);
 
-                $('.yield').fadeIn(300);
                 $('.mapsWrapper').fadeOut(300);
             }
 
@@ -79,8 +83,9 @@
 
             Metamaps.GlobalUI.Search.open();
             Metamaps.GlobalUI.Search.lock();
-
-            $('.yield').fadeOut(300);
+            
+            Metamaps.Famous.yield.hide();
+            
             $('.mapsWrapper').fadeIn(300);
 
             Metamaps.Famous.explore.set(section);
@@ -103,9 +108,8 @@
             $('.wrapper').removeClass('homePage explorePage');
             $('.wrapper').addClass('mapPage');
 
-            $('.yield').fadeOut(300);
+            Metamaps.Famous.yield.hide();
             $('.mapsWrapper').fadeOut(300);
-
             Metamaps.Famous.explore.hide();
 
             // clear the visualization, if there was one, before showing its div again

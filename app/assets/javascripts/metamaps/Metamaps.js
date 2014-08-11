@@ -1265,7 +1265,7 @@ Metamaps.Util = {
     // you may copy this code but please keep the copyright notice as well
     splitLine: function (st, n) {
         var b = '';
-        var s = st;
+        var s = st ? st : '';
         while (s.length > n) {
             var c = s.substring(0, n);
             var d = c.lastIndexOf(' ');
@@ -1332,7 +1332,7 @@ Metamaps.Realtime = {
         var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
         if (mapperm) {
-            self.socket = io.connect('http://localhost:5001');
+            self.socket = io.connect('http://localhost:5001'); 
             self.socket.on('connect', function () {
                 console.log('socket connected');
                 self.setupSocket();

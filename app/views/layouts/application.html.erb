@@ -34,7 +34,7 @@
 
         <!-- app code -->
         <script type="text/javascript">
-            require.config({baseUrl: '/assets/src/'});
+            require.config({baseUrl: '/famous/'});
             require(['main']);
         </script>
 </head>
@@ -61,7 +61,7 @@
             <%= render :partial => 'layouts/upperelements' %>
             <%= render :partial => 'layouts/exploremaps' %>
 
-            <div class="yield"><%= yield %></div>
+            <%= yield %>
 
             <!--<div class="mapElement" id="infovis"></div> <!-- where map visualizations get rendered -->
             <div class="showcard mapElement mapElementHidden" id="showcard"></div> <!-- the topic card -->
