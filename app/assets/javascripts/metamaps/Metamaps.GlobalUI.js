@@ -75,10 +75,6 @@ Metamaps.GlobalUI = {
         });
         
         $('#lightbox_screen, #lightbox_close').click(self.closeLightbox);
-
-        // hide notices after 10 seconds
-        $('.notice.metamaps').delay(10000).fadeOut('fast');
-        $('.alert.metamaps').delay(10000).fadeOut('fast');
         
         // initialize global backbone models and collections
         if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);

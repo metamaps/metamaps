@@ -1,7 +1,6 @@
 <% content_for :title, "Sign Up | Metamaps" %>
 
-<h1 class="index">Sign Up</h1>
-
+<div id="yield">
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :post, :class => "new_user centerGreyForm" }) do |f| %>
   <%= devise_error_messages! %>
   
@@ -24,7 +23,7 @@
 
   <div><%= f.submit "Sign up" %></div>
   
-  <div><br />Don't have an access code?<br /><a href="/request">Request an Invite</a></div>
+  <div><br />Don't have an access code?<br /><a href="/request" data-bypass="true">Request an Invite</a></div>
 <% end %>
-
+</div>
 

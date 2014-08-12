@@ -363,7 +363,7 @@ float:left;
 }
 
 .addLink div {
-  display: inline-block;
+  float: left;
 }
 
 #addLinkBack {
@@ -383,7 +383,7 @@ padding: 7px 31px 7px 31px;
 height: 16px;
 width: 172px;
 margin: 0 0 0 0;
-border: 1px solid #EFEFEF;
+border: 1px solid #BDBDBD;
 outline: none;
 font-size: 16px;
 line-height: 16px;
@@ -399,6 +399,7 @@ font-family: 'LatoLight';
   width: 32px;
   height: 32px;
   cursor: pointer;
+  float:none;
 }
 
 .cardSettings {

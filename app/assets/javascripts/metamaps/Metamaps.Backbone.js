@@ -1,7 +1,7 @@
 Metamaps.Backbone = {};
 Metamaps.Backbone.Map = Backbone.Model.extend({
     urlRoot: '/maps',
-    blacklist: ['created_at', 'updated_at', 'topics', 'synapses', 'mappings', 'mappers'],
+    blacklist: ['created_at', 'updated_at', 'user_name', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
     toJSON: function (options) {
         return _.omit(this.attributes, this.blacklist);
     },
@@ -14,15 +14,16 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     },
     fetchContained: function () {
         var bb = Metamaps.Backbone;
+        var that = this;
         var start = function (data) {
-            this.set('mappers', new bb.MapperCollection(data.mappers));
-            this.set('topics', new bb.TopicCollection(data.topics));
-            this.set('synapses', new bb.SynapseCollection(data.synapses));
-            this.set('mappings', new bb.MappingCollection(data.mappings));
+            that.set('mappers', new bb.MapperCollection(data.mappers));
+            that.set('topics', new bb.TopicCollection(data.topics));
+            that.set('synapses', new bb.SynapseCollection(data.synapses));
+            that.set('mappings', new bb.MappingCollection(data.mappings));
         }
 
         $.ajax({
-            url: "/maps/" + this.id + "/contains",
+            url: "/maps/" + this.id + "/contains.json",
             success: start,
             async: false
         });
@@ -56,11 +57,11 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
             id: this.id,
             name: this.get('name'),
             desc: this.get('desc'),
-            username: this.getUser().get('name'),
-            mkPermission: this.get("permission") ? this.get("permission").substring(0, 2) : "commons",
+            username: this.get('user_name'),
+            mkPermission: this.get("permission") ? this.get("permission").substring(0, 2) : "co",
             editPermission: this.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEdit' : 'cannotEdit',
-            topicCount: this.getTopics().length,
-            synapseCount: this.getSynapses().length,
+            topicCount: this.get('topic_count'),
+            synapseCount: this.get('synapse_count'),
             createdAt: this.get('created_at')
         };
         return obj;
@@ -78,15 +79,20 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
     comparator: function (a, b) {
         a = a.get(this.sortBy);
         b = b.get(this.sortBy);
+        var temp;
         if (this.sortBy === 'name') {
             a = a ? a.toLowerCase() : "";
             b = b ? b.toLowerCase() : "";
         }
+        else {
+            // this is for updated_at and created_at
+            temp = a;
+            a = b;
+            b = temp;
+        }
         return a > b ? 1 : a < b ? -1 : 0;
     },
     getMaps: function () {
-
-        Metamaps.Loading.loader.show();
 
         var self = this;
 

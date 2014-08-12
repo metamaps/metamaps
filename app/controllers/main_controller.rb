@@ -9,17 +9,9 @@ class MainController < ApplicationController
   # home page
   def home
     @current = current_user
-    
-    if !authenticated?
-      @maps = Map.find_all_by_featured(true).shuffle!
-      @maps = @maps.slice(0,3)
-    elsif authenticated?
-      #@maps = Map.order("updated_at DESC").where("permission != ?", "private").limit(3)
-      @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
-    end
    
     respond_to do |format|
-        format.html { respond_with(@maps, @current) }
+        format.html { respond_with(@current) }
     end
   end
   

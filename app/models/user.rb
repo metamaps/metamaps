@@ -38,6 +38,14 @@ has_many :mappings
     trans << '( +clone -flop ) -compose multiply -composite '
     trans << ') -alpha off -compose copy_opacity -composite '
   end
+
+  def as_json(options={})
+    { :id => self.id,
+      :name => self.name,
+      :email => self.email,
+      :image => self.image.url
+    }
+  end
     
   if ActiveRecord::Base.connection.table_exists? 'users' 
     codes =  ActiveRecord::Base.connection.execute("SELECT code FROM users").map {|user| user["code"] }

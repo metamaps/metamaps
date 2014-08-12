@@ -4,7 +4,8 @@
   # User edit form
   #%>
   
-<% content_for :title, @user.name + "'s Settings | Metamaps" %>  
+<% content_for :title, @user.name + "'s Settings | Metamaps" %> 
+<div id="yield">
 <%= formula_form_for @user, url: user_url do |form| %>
   <h3>Edit Account</h3>
   <label for="user_image">Profile Picture</label>
@@ -15,4 +16,5 @@
   <%= form.input :password, label: "Password", class: "password", :autocomplete => :off %>
   <%= form.submit "Update", class: "update" %>
 <% end %>
+</div>
 
