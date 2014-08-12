@@ -622,7 +622,9 @@ Metamaps.Create = {
  *
  */
 Metamaps.TopicCard = {
-    openTopicCard: null, //stores the JIT local ID of the topic with the topic card open 
+    openTopicCard: null, //stores the JIT local ID of the topic with the topic card open
+    linkActionsString: '<div class="linkActions"><div id="linkshare">share</div><div id="linkremove">remove</div> </div>',
+
     init: function () {
 
         // initialize best_in_place editing
@@ -661,13 +663,6 @@ Metamaps.TopicCard = {
 
 
         // starting embed.ly
-        if (false && topic.get('link')) {
-            $('.showcard .attachments a').embedly({
-                query: {maxwidth: 300},
-                key: '7983300f4c1f48569ca242e3d6bff1e9'
-            });
-        }
-
         var addLinkFunc = function () {
             var addLinkDiv ='';
             var addLinkDesc ='Enter or paste a link';
@@ -678,6 +673,9 @@ Metamaps.TopicCard = {
             $('.attachments').append(addLinkDiv);
             $('.showcard #addLinkBack').click(backFunc);
             $('.showcard #addLinkReset').click(resetFunc);
+            $('.showcard #addLinkInput input').bind("paste keyup",inputEmbedFunc);
+
+            $('#addLinkInput input').focus();
         };
         var backFunc = function () {
             $('.addLink').remove();
@@ -687,7 +685,52 @@ Metamaps.TopicCard = {
             $('#addLinkInput input').val('');
             $('#addLinkInput input').focus();
         };
-
+        var inputEmbedFunc = function (event) {
+            
+            var element = this;
+            setTimeout(function () {
+                var text = $(element).val();
+                if (event.type=="paste" || (event.type=="keyup" && event.which==13)){
+                    topic.save({
+                        link: text
+                    });
+                    var  embedlyEl = $('<a/>', {
+                        id: 'embedlyLink',
+                        href: text
+                    });
+                    embedlyEl.embedly({
+                        query: {maxwidth: 300},
+                        key: '7983300f4c1f48569ca242e3d6bff1e9'
+                    });
+                    $('.addLink').remove();
+                    $('.embeds').append(embedlyEl);
+                    $('.attachments').append(self.linkActionsString);
+                    bindLinkActionListeners();
+                }
+            }, 100);
+        };
+        var shareLinkFunc = function () {
+        
+        };
+        var removeLinkFunc = function () {
+            topic.save({
+                link: null
+            });
+            $('.embeds').empty();
+            $('.linkActions').remove();
+            $('.addAttachment').show();
+        };
+        var bindLinkActionListeners = function () {
+            $('#linkremove').click(removeLinkFunc);
+            $('#linkshare').click(shareLinkFunc);
+        };
+        if (topic.get('link')) {
+            $('#embedlyLink').embedly({
+                query: {maxwidth: 300},
+                key: '7983300f4c1f48569ca242e3d6bff1e9'
+            });
+            bindLinkActionListeners();
+        }
         $('.showcard #addlink').click(addLinkFunc);
 
 
@@ -836,7 +879,8 @@ Metamaps.TopicCard = {
     generateShowcardHTML: null, // will be initialized into a Hogan template within init function
     //generateShowcardHTML
     buildObject: function (topic) {
-        
+        var self=Metamaps.TopicCard;
+
         var nodeValues = {};
         
         var authorized = topic.authorizeToEdit(Metamaps.Active.Mapper);
@@ -848,17 +892,24 @@ Metamaps.TopicCard = {
         }
 
         var desc_nil = "Click to add description...";
+        var addAttachmentHidden='';
 
-        if (false && topic.get('link')) {
-            nodeValues.attachments = '<a href="'+topic.get('link')+'">'+topic.get('link')+'</a>';
+        nodeValues.attachments = '';
+        if (topic.get('link') && topic.get('link')!=='') {
+            nodeValues.embeds = '<a href="' + topic.get('link') + '" id="embedlyLink" target="_blank">';
+            nodeValues.embeds += topic.get('link');
+            nodeValues.embeds += '</a>';
+            addAttachmentHidden='hidden';
+            nodeValues.attachments += self.linkActionsString;
         }
         else {
-            nodeValues.attachments = '<div class="addAttachment">';
-            nodeValues.attachments+= '<div id="addphoto">photo</div>';
-            nodeValues.attachments+= '<div id="addlink">link</div>';
-            nodeValues.attachments+= '<div id="addaudio">audio</div>';
-            nodeValues.attachments+= '<div id="addupload">upload</div> </div>';
+            nodeValues.embeds = '';
         }
+        nodeValues.attachments += '<div class="addAttachment ' +addAttachmentHidden+ '">';
+        nodeValues.attachments+= '<div id="addphoto">photo</div>';
+        nodeValues.attachments+= '<div id="addlink">link</div>';
+        nodeValues.attachments+= '<div id="addaudio">audio</div>';
+        nodeValues.attachments+= '<div id="addupload">upload</div> </div>';
 
         nodeValues.permission = topic.get("permission");
         nodeValues.mk_permission = topic.get("permission").substring(0, 2);
