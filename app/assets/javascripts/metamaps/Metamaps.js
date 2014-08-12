@@ -127,9 +127,6 @@ Metamaps.Backbone.init = function () {
         getDate: function () {
 
         },
-        getUser: function () {
-            return Metamaps.Mapper.get(this.get('user_id'));
-        },
         getMetacode: function () {
             return Metamaps.Metacodes.get(this.get('metacode_id'));
         },
@@ -212,9 +209,6 @@ Metamaps.Backbone.init = function () {
             if (mapper && this.get('user_id') === mapper.get('id')) return true;
             else return false;
         },
-        getUser: function () {
-            return Metamaps.Mapper.get(this.get('user_id'));
-        },
         getTopic1: function () {
             return Metamaps.Topic.get(this.get('node1_id'));
         },
@@ -290,9 +284,6 @@ Metamaps.Backbone.init = function () {
                     "map_id": Metamaps.Active.Map ? Metamaps.Active.Map.id : null
                 });
             }
-        },
-        getUser: function () {
-            return Metamaps.Mapper.get(this.get('user_id'));
         },
         getMap: function () {
             return Metamaps.Map.get(this.get('map_id'));
@@ -921,7 +912,7 @@ Metamaps.TopicCard = {
         nodeValues.imgsrc = topic.getMetacode().get("icon");
         nodeValues.name = topic.get("name");
         nodeValues.userid = topic.get("user_id");
-        nodeValues.username = topic.getUser().get("name");
+        nodeValues.username = topic.get("user_name");
         nodeValues.date = topic.getDate();
         // the code for this is stored in /views/main/_metacodeOptions.html.erb
         nodeValues.metacode_select = $('#metacodeOptions').html();
@@ -1033,7 +1024,7 @@ Metamaps.SynapseCard = {
 
     add_user_info: function (synapse) {
         var u = '<div id="edgeUser" class="hoverForTip">';
-        u += '<div class="tip">Created by ' + synapse.getUser().get("name") + '</div></div>';
+        u += '<div class="tip">Created by ' + synapse.get("user_name") + '</div></div>';
         $('#edit_synapse').append(u);
     },
 
@@ -2180,7 +2171,7 @@ Metamaps.Filter = {
     },
     checkMappers: function () {
         var self = Metamaps.Filter;
-        self.updateFilters('both', 'user_id', 'Mapper', 'mappers', 'mapper');
+        self.updateFilters('both', 'user_id', 'Mappers', 'mappers', 'mapper');
     },
     checkSynapses: function () {
         var self = Metamaps.Filter;

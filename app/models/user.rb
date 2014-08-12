@@ -40,7 +40,8 @@ has_many :mappings
   end
 
   def as_json(options={})
-    { :name =>self.name,
+    { :id => self.id,
+      :name => self.name,
       :email => self.email,
       :image => self.image.url
     }

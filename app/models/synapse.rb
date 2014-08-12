@@ -8,6 +8,18 @@ belongs_to :topic2, :class_name => "Topic", :foreign_key => "node2_id"
 has_many :mappings
 has_many :maps, :through => :mappings
 
+  def user_name
+    self.user.name
+  end
+
+  def user_image
+    self.user.image.url
+  end
+
+  def as_json(options={})
+    super(:methods =>[:user_name, :user_image])
+  end
+  
   # sends push updates through redis to websockets for realtime updates
   def message action, origin_user_id
   

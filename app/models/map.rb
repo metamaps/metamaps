@@ -45,8 +45,12 @@ end
     self.user.name
   end
 
+  def user_image
+    self.user.image.url
+  end
+
   def as_json(options={})
-    super(:methods =>[:user_name, :topic_count, :synapse_count])
+    super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count])
   end
   
   ##### PERMISSIONS ######
