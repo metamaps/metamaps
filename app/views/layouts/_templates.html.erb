@@ -7,23 +7,19 @@
     
     
     <script type="text/template" id="mapCardTemplate">
+  <a href="/maps/{{id}}">
   <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
 	  <div class="mapCard">                                                   
       <span class="title">                                                  
         <span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea">{{name}}</span>
       </span>                                                              
-      <div class="links">                                                   
-         <div class="linkItem icon">                                             
-            <div class="metacodeImage" style="background-image:url(/assets/map.png);"></div>                 
-         </div>                                                             
+      <div class="links">
          <div class="linkItem contributor hoverForTip">
            <div class="tip">Created by {{username}} on {{createdAt}}</div>
          </div>                           
          <div class="linkItem topicCount">{{topicCount}}</div>                 
          <div class="linkItem synapseCount">{{synapseCount}}</div>         
-         <div class="linkItem mapPerm {{mkPermission}}"></div>             
-         <a href="/maps/{{id}}" class="linkItem topicPopout"></a>
-         <div class="clearfloat"></div>                                     
+         <div class="linkItem mapPerm {{mkPermission}}"></div>                                  
       </div>                                                                
       <div class="scroll">                                                    
         <div class="desc">                                                    
@@ -34,6 +30,7 @@
       <div class="clearfloat"></div>                                          
     </div>
   </div>
+  </a>
     </script>
         
     <script type="text/template" id="topicSearchTemplate">

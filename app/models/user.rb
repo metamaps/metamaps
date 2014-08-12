@@ -2,10 +2,10 @@ require 'open-uri'
 
 class User < ActiveRecord::Base
 
-has_many :topics
-has_many :synapses
-has_many :maps
-has_many :mappings
+  has_many :topics
+  has_many :synapses
+  has_many :maps
+  has_many :mappings
 
   before_create :generate_code
 
@@ -42,7 +42,6 @@ has_many :mappings
   def as_json(options={})
     { :id => self.id,
       :name => self.name,
-      :email => self.email,
       :image => self.image.url
     }
   end

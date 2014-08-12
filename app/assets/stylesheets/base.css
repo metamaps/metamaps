@@ -546,13 +546,14 @@ font-family: 'LatoLight';
 
 .map {
     display:inline-block;
-    width:226px;
-	  height:320px;
+    width:220px;
+	  height:308px;
+    padding: 16px 0;
     color:#FFF;
     text-align: left;
     overflow: visible;
-    background: #FFF;
-    border-radius:5px;
+    background: #424242;
+    border-radius:2px;
     box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
     margin:16px 16px 16px 19px;
 }

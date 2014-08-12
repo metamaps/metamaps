@@ -71,6 +71,11 @@
 
 
 /* logo */
+
+.footer {
+    z-index: 3;
+}
+
 .logo {
     color: #6B6B6B;
     font-family: "vinyl", sans-serif;
@@ -653,8 +658,7 @@
 }
 
 .exploreMapsCenter {
-	width: 700px;
-	margin: 0 auto;
+    z-index: 3;
 }
 
 .exploreMapsCenter a {
@@ -664,9 +668,9 @@
 	font-family: 'din-medium';
 	font-size: 14px;
 	height: 14px;
-	padding-top: 16px;
+	padding: 14px;
 	display: inline-block;
-	padding-bottom: 12px;
+    cursor: pointer;
 }
 .exploreMapsCenter a.active {
   text-decoration: none;
@@ -680,6 +684,7 @@
 .mapsWrapper {
 	margin: 100px 60px 0 60px;
     display: none;
+    z-index: 1;
 }
 .explorePage .mapsWrapper {
     display:block;

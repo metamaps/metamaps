@@ -78,7 +78,7 @@
                 Metamaps.Loading.loader.show();
                 setTimeout(function(){
                     Metamaps.Maps[capitalize].getMaps(); // this will trigger an explore maps render
-                }, 1000); // wait 500 milliseconds till the other animations are done to do the fetch 
+                }, 300); // wait 300 milliseconds till the other animations are done to do the fetch 
             }
             else {
                 Metamaps.Views.exploreMaps.render();

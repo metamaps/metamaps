@@ -11,10 +11,8 @@
  *= require_self
  *= require_tree .
  *= require base
- *= require ForceDirected
  *= require jquery.mCustomScrollbar
  *= require jquery-ui
- *= require animate
 */
 
 /* clear styles */
@@ -1767,14 +1765,6 @@ div.mapInfoStat {
 }
 /* --- styling the logo button ---*/
 
-.footer {
-    display: block;
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
-    margin-left: -55px;
-    z-index: 15000;
-}
 .home_bg {
     display: block;
     height: 100%;

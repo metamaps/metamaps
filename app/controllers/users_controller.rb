@@ -9,16 +9,16 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     render json: @user
-  end    
+  end  
     
-  # GET /user/edit
+  # GET /users/:id/edit
   def edit
     @user = current_user
     
     respond_with(@user)  
   end
   
-  # PUT /user
+  # PUT /users/:id
   def update
     @user = current_user
     @user.attributes = params[:user]

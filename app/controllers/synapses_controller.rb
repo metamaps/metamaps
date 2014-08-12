@@ -64,7 +64,7 @@ class SynapsesController < ApplicationController
     @synapse.delete if @synapse
       
     respond_to do |format|
-      format.json { render :json => "success" }
+      format.json { head :no_content }
     end
   end
 end

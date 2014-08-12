@@ -112,11 +112,17 @@ define(function(require, exports, module) {
     // EXPLORE MAPS BAR
     f.explore = {};
     f.explore.surf = new Surface({
-        size: [undefined, 94],
+        size: [true, 42],
         content: templates.mineContent,
+        classes: ['exploreMapsCenter']
+    });
+    f.explore.surfBg = new Surface({
+        size: [undefined, 94],
+        content: '<div class="exploreMapsMenu"></div>',
         classes: ['exploreMapsBar', 'exploreElement']
     });
     f.explore.mod = new Modifier({
+        size: [undefined, 94],
         origin: [0.5, 0],
         transform: Transform.translate(0, -94, 0)
     });
@@ -136,14 +142,22 @@ define(function(require, exports, module) {
         var loggedIn = Metamaps.Active.Mapper ? 'Auth' : '';
         f.explore.surf.setContent(templates[section + loggedIn + 'Content']);
     };
-    f.mainContext.add(f.explore.mod).add(f.explore.surf);
+    var exploreMod = f.mainContext.add(f.explore.mod);
+    exploreMod.add(new Modifier({
+        size: [undefined, 42],
+        origin: [0.5, 1]
+    })).add(new Modifier({
+        origin: [0.5, 1]
+    })).add(f.explore.surf);
+    exploreMod.add(f.explore.surfBg);
+
 
     // LOGO
     f.logo = {};
     f.logo.surf = new Surface({
         size: [258, 56],
         content: templates.logoContent,
-        classes: []
+        classes: ['footer']
     });
 
     f.logo.mod = new Modifier({

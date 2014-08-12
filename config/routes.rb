@@ -2,14 +2,16 @@ Metamaps::Application.routes.draw do
 
   root to: 'main#home', via: :get
     
-  get '/join', to: redirect('/users/sign_up')
+  devise_scope :user do 
+    get "join" => "devise/registrations#new" 
+  end
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request
   
-  match '/search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
-  match '/search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps
-  match '/search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers
-  match '/search/synapses', to: 'main#searchsynapses', via: :get, as: :searchsynapses
+  match 'search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
+  match 'search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps
+  match 'search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers
+  match 'search/synapses', to: 'main#searchsynapses', via: :get, as: :searchsynapses
   
   resources :mappings, except: [:index, :new, :edit]
   resources :metacode_sets, :except => [:show]
