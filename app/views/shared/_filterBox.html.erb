@@ -21,16 +21,15 @@
       if @metacodes.index(topic.metacode) == nil
         @metacodes.push(topic.metacode)
       end
-      if @mappers.index(topic.user) == nil
-        @mappers.push(topic.user)
-      end
     end 
     @map.synapses.each_with_index do |synapse, index| 
       if @synapses.index{|s| s.desc == synapse.desc} == nil
         @synapses.push(synapse)
-      end 
-      if @mappers.index(synapse.user) == nil
-        @mappers.push(synapse.user)
+      end
+    end
+    @map.mappings.each_with_index do |mapping, index|
+      if @mappers.index(mapping.user) == nil
+        @mappers.push(mapping.user)
       end
     end
 

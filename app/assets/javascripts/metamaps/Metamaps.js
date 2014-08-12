@@ -2073,8 +2073,7 @@ Metamaps.Filter = {
             });
         };
         check('metacodes', 'Topics', 'metacode_id');
-        check('mappers', 'Topics', 'user_id');
-        check('mappers', 'Synapses', 'user_id');
+        check('mappers', 'Mappings', 'user_id');
         check('synapses', 'Synapses', 'desc');
     },
     /*  
@@ -2115,26 +2114,19 @@ Metamaps.Filter = {
     /*
     @param 
     */
-    updateFilters: function (topicsSynapsesOrBoth, propertyToCheck, correlatedModel, filtersToUse, listToModify) {
+    updateFilters: function (collection, propertyToCheck, correlatedModel, filtersToUse, listToModify) {
         var self = Metamaps.Filter;
         
         var newList = [];
         var removed = [];
         var added = [];
         
-        var check = function (topicsOrSynapses) {
-            Metamaps[topicsOrSynapses].each(function(model) {
-                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-                if (prop && newList.indexOf(prop) === -1) {
-                    newList.push(prop);
-                }
-            });
-        }
-        if (topicsSynapsesOrBoth === "both") {
-            check('Synapses');
-            check('Topics');    
-        }
-        else check(topicsSynapsesOrBoth);
+        Metamaps[collection].each(function(model) {
+            var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+            if (prop && newList.indexOf(prop) === -1) {
+                newList.push(prop);
+            }
+        });
         
         removed = _.difference(self.filters[filtersToUse], newList);
         added = _.difference(newList, self.filters[filtersToUse]);
@@ -2174,7 +2166,7 @@ Metamaps.Filter = {
     },
     checkMappers: function () {
         var self = Metamaps.Filter;
-        self.updateFilters('both', 'user_id', 'Mappers', 'mappers', 'mapper');
+        self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper');
     },
     checkSynapses: function () {
         var self = Metamaps.Filter;
@@ -2251,18 +2243,26 @@ Metamaps.Filter = {
         var self = Metamaps.Filter;
         var visible = self.visible;
 
-        var passesMetacode, passesMapper, passesSynapse;       
+        var passesMetacode, passesMapper, passesSynapse;
+        var onMap;
+
+        if (Metamaps.Active.Map) {
+            onMap = true;
+            passesMapper = true;
+        }      
 
         Metamaps.Topics.each(function(topic) {
             var n = topic.get('node');
             var metacode_id = topic.get("metacode_id").toString();
-            var user_id = topic.get("user_id").toString();
 
             if (visible.metacodes.indexOf(metacode_id) == -1) passesMetacode = false;
             else passesMetacode = true;
 
-            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
-            else passesMapper = true;
+            if (onMap) {
+                var user_id = topic.getMapping().get("user_id").toString();
+                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+                else passesMapper = true;
+            }
 
             if (passesMetacode && passesMapper) {
                 n.setData('alpha', 1, 'end');
@@ -2279,8 +2279,11 @@ Metamaps.Filter = {
             if (visible.synapses.indexOf(desc) == -1) passesSynapse = false;
             else passesSynapse = true;
 
-            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
-            else passesMapper = true;
+            if (onMap) {
+                var user_id = synapse.getMapping().get("user_id").toString();
+                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+                else passesMapper = true;
+            }
 
             if (passesSynapse && passesMapper) {
                 e.setData('alpha', 1, 'end');
