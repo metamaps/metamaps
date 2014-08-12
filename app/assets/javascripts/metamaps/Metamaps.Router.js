@@ -52,15 +52,14 @@
                 Metamaps.GlobalUI.Search.close(0, true);
 
                 $('.mapsWrapper').fadeOut(300);
+                setTimeout(function(){
+                    Metamaps.Router.navigate("");
+                }, 500);
             }
 
             Metamaps.Famous.viz.hide();
             Metamaps.Active.Map = null;
             Metamaps.Active.Topic = null;
-
-            setTimeout(function(){
-                Metamaps.Router.navigate("");
-            }, 500);
         },
         explore: function (section) {
             
@@ -95,10 +94,6 @@
             Metamaps.Famous.viz.hide();
             Metamaps.Active.Map = null;
             Metamaps.Active.Topic = null;
-
-            setTimeout(function(){
-                Metamaps.Router.navigate("/explore/" + section);
-            }, 500);
         },
         maps: function (id) {
             

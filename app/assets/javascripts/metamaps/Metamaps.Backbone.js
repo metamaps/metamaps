@@ -14,15 +14,16 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     },
     fetchContained: function () {
         var bb = Metamaps.Backbone;
+        var that = this;
         var start = function (data) {
-            this.set('mappers', new bb.MapperCollection(data.mappers));
-            this.set('topics', new bb.TopicCollection(data.topics));
-            this.set('synapses', new bb.SynapseCollection(data.synapses));
-            this.set('mappings', new bb.MappingCollection(data.mappings));
+            that.set('mappers', new bb.MapperCollection(data.mappers));
+            that.set('topics', new bb.TopicCollection(data.topics));
+            that.set('synapses', new bb.SynapseCollection(data.synapses));
+            that.set('mappings', new bb.MappingCollection(data.mappings));
         }
 
         $.ajax({
-            url: "/maps/" + this.id + "/contains",
+            url: "/maps/" + this.id + "/contains.json",
             success: start,
             async: false
         });
@@ -78,9 +79,16 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
     comparator: function (a, b) {
         a = a.get(this.sortBy);
         b = b.get(this.sortBy);
+        var temp;
         if (this.sortBy === 'name') {
             a = a ? a.toLowerCase() : "";
             b = b ? b.toLowerCase() : "";
+        }
+        else {
+            // this is for updated_at and created_at
+            temp = a;
+            a = b;
+            b = temp;
         }
         return a > b ? 1 : a < b ? -1 : 0;
     },

@@ -47,8 +47,6 @@ Metamaps.Views.init = function () {
         },
         render: function () {
             
-            Metamaps.Loading.loader.hide();
-            
             var that = this;
             this.$el.empty();
 
@@ -57,12 +55,18 @@ Metamaps.Views.init = function () {
 
                 that.$el.append( view.render().el );
             });
+
+            Metamaps.Loading.loader.hide();
+            setTimeout(function(){
+                var path = Metamaps.currentSection == "" ? "" : "/explore/" + Metamaps.currentPage; 
+                Metamaps.Router.navigate(path);
+            }, 500);
         },
         handleSuccess: function () {
             this.render();
         },
         handleError: function () {
-            alert('error!');
+            console.log('error loading maps!'); //TODO 
         }
     });
 
