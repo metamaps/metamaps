@@ -1,7 +1,7 @@
 Metamaps.Backbone = {};
 Metamaps.Backbone.Map = Backbone.Model.extend({
     urlRoot: '/maps',
-    blacklist: ['created_at', 'updated_at', 'topics', 'synapses', 'mappings', 'mappers'],
+    blacklist: ['created_at', 'updated_at', 'user_name', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
     toJSON: function (options) {
         return _.omit(this.attributes, this.blacklist);
     },
@@ -57,11 +57,11 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
             id: this.id,
             name: this.get('name'),
             desc: this.get('desc'),
-            username: this.getUser().get('name'),
-            mkPermission: this.get("permission") ? this.get("permission").substring(0, 2) : "commons",
+            username: this.get('user_name'),
+            mkPermission: this.get("permission") ? this.get("permission").substring(0, 2) : "co",
             editPermission: this.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEdit' : 'cannotEdit',
-            topicCount: this.getTopics().length,
-            synapseCount: this.getSynapses().length,
+            topicCount: this.get('topic_count'),
+            synapseCount: this.get('synapse_count'),
             createdAt: this.get('created_at')
         };
         return obj;

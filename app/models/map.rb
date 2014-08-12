@@ -32,6 +32,22 @@ end
     
     return contributors
   end
+
+  def topic_count
+    self.topics.length
+  end
+
+  def synapse_count
+    self.synapses.length
+  end
+
+  def user_name
+    self.user.name
+  end
+
+  def as_json(options={})
+    super(:methods =>[:user_name, :topic_count, :synapse_count])
+  end
   
   ##### PERMISSIONS ######
   

@@ -100,10 +100,12 @@ define(function(require, exports, module) {
     
     f.loadYield = function () {
         Metamaps.Loading.loader.hide();
-        var yield = document.getElementById('yield').innerHTML;
-        f.yield.surf.setContent(yield);
-        f.yield.surf.deploy(f.yield.surf._currTarget);
-        f.yield.show();
+        var yield = document.getElementById('yield') ? document.getElementById('yield').innerHTML : false;
+        if (yield) {
+            f.yield.surf.setContent(yield);
+            f.yield.surf.deploy(f.yield.surf._currTarget);
+            f.yield.show();
+        }
     };
     
     

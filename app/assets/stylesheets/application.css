@@ -201,15 +201,10 @@ input[type="submit"]:hover {
 .forgotPassword {
     display: block;
     width: 250px;
-    position: absolute;
-    left: 50%;
-    top: 0;
-    margin: 100px 0 0 -145px;
-    background: url(bg.png);
+    background-color: #E0E0E0;
     padding: 20px;
     border-radius: 5px;
     color: black;
-    border: 1px solid #000;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
 }
 .centerGreyForm input[type="text"],

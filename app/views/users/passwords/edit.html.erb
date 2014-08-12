@@ -1,7 +1,6 @@
 <% content_for :title, "Change Password | Metamaps" %>
 
-<h1 class="index">Change Password</h1>
-
+<div id="yield">
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "forgotPassword centerGreyForm" }) do |f| %>
   <%= devise_error_messages! %>
   <%= f.hidden_field :reset_password_token %>
@@ -17,5 +16,5 @@
   <div><%= f.submit "Change my password" %></div>
   
 <% end %>
-
+</div>
 
