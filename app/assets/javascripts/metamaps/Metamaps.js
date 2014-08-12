@@ -2248,8 +2248,8 @@ Metamaps.Filter = {
 
         if (Metamaps.Active.Map) {
             onMap = true;
-            passesMapper = true;
-        }      
+        }
+        else passesMapper = true; // for when you're on a topic page
 
         Metamaps.Topics.each(function(topic) {
             var n = topic.get('node');

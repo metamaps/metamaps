@@ -11,7 +11,14 @@ class MainController < ApplicationController
     @current = current_user
    
     respond_to do |format|
-        format.html { respond_with(@current) }
+        format.html { 
+          if authenticated?
+            @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
+            respond_with(@maps, @current) 
+          else 
+            respond_with(@current) 
+          end
+        }
     end
   end
   
