@@ -9,11 +9,10 @@
 .showcard {
     position:absolute;
     display:none;
-    top:300px;
+    top:100px;
     left:100px;
-    margin-top: -181px;
     width:300px;
-	  height:360px;
+    min-height:360px;
     color:#FFF;
     text-align: left;
     overflow: visible;
@@ -48,28 +47,11 @@
   height:100%;
   color:#000;
   z-index: 25;
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -moz-box-direction: normal;
-  -ms-flex-direction: column;
-  -webkit-flex-direction: column;
-  flex-direction: column;
 }
 
 .CardOnGraph .scroll {
    display:block;
-   padding:5px 0 0 10px;
-   -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+   padding:5px 0 10px 10px;
 }
  
 .CardOnGraph .type {
@@ -89,11 +71,6 @@
   padding:5px;
   font-weight: bold;
   text-align: center;
-  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: none;         /* OLD - Firefox 19- */
-  -webkit-flex: none;          /* Chrome */
-  -ms-flex: none;              /* IE 10 */
-  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
 
 .best_in_place_name {
@@ -157,11 +134,6 @@ font-family: 'LatoLight';
   position:relative;
   border-bottom: 1px solid #AAAAAA;
   border-top: 1px solid #AAAAAA;
-  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: none;         /* OLD - Firefox 19- */
-  -webkit-flex: none;          /* Chrome */
-  -ms-flex: none;              /* IE 10 */
-  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
 
 .linkItem {
@@ -359,34 +331,12 @@ float:left;
 
 
 .CardOnGraph .attachments {
-  -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  -webkit-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -moz-box-direction: normal;
-  -ms-flex-direction: row;
-  -webkit-flex-direction: row;
-  flex-direction: row;
   border-top: 1px solid #AAAAAA;
   width:100%;
-  max-height:48px;
+  height:48px;
 }
 
 .attachments a {
-  -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

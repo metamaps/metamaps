@@ -691,6 +691,9 @@ Metamaps.TopicCard = {
             setTimeout(function () {
                 var text = $(element).val();
                 if (event.type=="paste" || (event.type=="keyup" && event.which==13)){
+                    if (text.slice(0, 4) !== 'http') {
+                        text='http://'+text;
+                    }
                     topic.save({
                         link: text
                     });
