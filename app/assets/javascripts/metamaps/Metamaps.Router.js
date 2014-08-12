@@ -28,7 +28,7 @@
                 Metamaps.Famous.explore.set('mine');
                 Metamaps.Famous.explore.show();
 
-                $('.mapsWrapper').fadeIn(300);
+                Metamaps.Famous.maps.show();
 
                 Metamaps.GlobalUI.Search.open();
                 Metamaps.GlobalUI.Search.lock();
@@ -51,7 +51,7 @@
                 Metamaps.GlobalUI.Search.unlock();
                 Metamaps.GlobalUI.Search.close(0, true);
 
-                $('.mapsWrapper').fadeOut(300);
+                Metamaps.Famous.maps.hide();
                 setTimeout(function(){
                     Metamaps.Router.navigate("");
                 }, 500);
@@ -88,9 +88,8 @@
             Metamaps.GlobalUI.Search.lock();
             
             Metamaps.Famous.yield.hide();
-            
-            $('.mapsWrapper').fadeIn(300);
 
+            Metamaps.Famous.maps.show();
             Metamaps.Famous.explore.set(section);
             Metamaps.Famous.explore.show();
 
@@ -109,7 +108,7 @@
             $('.wrapper').addClass('mapPage');
 
             Metamaps.Famous.yield.hide();
-            $('.mapsWrapper').fadeOut(300);
+            Metamaps.Famous.maps.hide();
             Metamaps.Famous.explore.hide();
 
             // clear the visualization, if there was one, before showing its div again
@@ -137,7 +136,7 @@
             $('.wrapper').addClass('mapPage');
 
             Metamaps.Famous.yield.hide();
-            $('.mapsWrapper').fadeOut(300);
+            Metamaps.Famous.maps.hide();
             Metamaps.Famous.explore.hide();
 
             // clear the visualization, if there was one, before showing its div again

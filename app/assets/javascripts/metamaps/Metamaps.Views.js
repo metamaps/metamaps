@@ -34,8 +34,6 @@ Metamaps.Views.init = function () {
 
     var mapsWrapper = Backbone.View.extend({
 
-        el: '.mapsWrapper',
-
         initialize: function (opts) {
             
         },
@@ -48,13 +46,20 @@ Metamaps.Views.init = function () {
         render: function () {
             
             var that = this;
-            this.$el.empty();
+
+            this.el.innerHTML = "";
 
             this.collection.each(function (map) {
                 var view = new Metamaps.Views.MapCard({ model: map });
 
-                that.$el.append( view.render().el );
+                that.el.appendChild( view.render().el );
             });
+            var m = Metamaps.Famous.maps.surf;
+            m.setContent(this.el);
+            if (!Metamaps.initialized) {
+                m.deploy(m._currTarget);
+                Metamaps.initialized = true;
+            }
 
             Metamaps.Loading.loader.hide();
             setTimeout(function(){

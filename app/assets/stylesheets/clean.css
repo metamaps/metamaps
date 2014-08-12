@@ -682,12 +682,7 @@
 }
 
 .mapsWrapper {
-	margin: 100px 60px 0 60px;
-    display: none;
-    z-index: 1;
-}
-.explorePage .mapsWrapper {
-    display:block;
+	overflow-y: scroll;
 }
 
 /* end explore maps */

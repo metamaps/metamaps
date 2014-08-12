@@ -107,6 +107,72 @@ define(function(require, exports, module) {
             f.yield.show();
         }
     };
+
+
+    // CONTENT / OTHER PAGES
+    f.maps = {};
+    f.maps.surf = new Surface({
+        classes: ['mapsWrapper'],
+        properties: {
+            display: 'none'
+        }
+    });
+    var loadMaps = function () {
+            f.loadMaps();
+            f.maps.surf.removeListener('deploy',loadMaps);
+    };
+    if (Metamaps.currentSection === "explore" ||
+            (Metamaps.currentSection === "" && Metamaps.Active.Mapper)) {
+        f.maps.surf.on('deploy', loadMaps);
+    }
+    f.maps.mod = new Modifier({
+        origin: [0.5, 1],
+        opacity: 0
+    });
+    f.maps.mod.sizeFrom(function(){
+        return [window.innerWidth, window.innerHeight - 94];
+    });
+    f.maps.show = function () {
+        f.maps.surf.setProperties({ "display":"block" });
+        f.maps.mod.setOpacity(
+            1,
+            { duration: 300 }
+        );
+    };
+    f.maps.hide = function () {
+        f.maps.mod.setOpacity(
+            0, 
+            { duration: 300 }, 
+            function() {
+                f.maps.surf.setProperties({"display": "none"});
+            }
+        );
+    };
+    f.mainContext.add(f.maps.mod).add(f.maps.surf);
+    
+    f.loadMaps = function () {
+        if (Metamaps.currentSection === "explore") {
+            var capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1);
+
+            Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
+            Metamaps.Views.exploreMaps.render();
+            f.maps.show();
+            f.explore.set(Metamaps.currentPage);
+            f.explore.show();
+        }
+        else if (Metamaps.currentSection === "") {
+            Metamaps.Loading.loader.hide();
+            if (Metamaps.Active.Mapper) {
+
+                Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Mine );
+                Metamaps.Views.exploreMaps.render();
+                f.maps.show();
+                f.explore.set('mine');
+                f.explore.show();
+            }
+            else f.explore.set('featured');
+        }
+    };
     
     
     // EXPLORE MAPS BAR
@@ -214,17 +280,4 @@ define(function(require, exports, module) {
     f.mainContext.add(f.toast.mod).add(f.toast.surf);
 
     f.logo.show();
-    if (Metamaps.currentSection === "explore") {
-        Metamaps.Loading.loader.hide();
-        f.explore.set(Metamaps.currentPage);
-        f.explore.show();
-    }
-    else if (Metamaps.currentSection === "") {
-        Metamaps.Loading.loader.hide();
-        if (Metamaps.Active.Mapper) {
-            f.explore.set('mine');
-            f.explore.show();
-        }
-        else f.explore.set('featured');
-    }
 });
