@@ -75,7 +75,10 @@
 
             Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
             if (Metamaps.Maps[capitalize].length === 0) {
-                Metamaps.Maps[capitalize].getMaps(); // this will trigger an explore maps render
+                Metamaps.Loading.loader.show();
+                setTimeout(function(){
+                    Metamaps.Maps[capitalize].getMaps(); // this will trigger an explore maps render
+                }, 1000); // wait 500 milliseconds till the other animations are done to do the fetch 
             }
             else {
                 Metamaps.Views.exploreMaps.render();

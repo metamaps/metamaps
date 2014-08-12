@@ -94,8 +94,6 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
     },
     getMaps: function () {
 
-        Metamaps.Loading.loader.show();
-
         var self = this;
 
         this.fetch({
