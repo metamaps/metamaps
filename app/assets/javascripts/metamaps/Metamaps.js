@@ -2265,10 +2265,16 @@ Metamaps.Filter = {
             }
 
             if (passesMetacode && passesMapper) {
-                n.setData('alpha', 1, 'end');
+                if (n) {
+                    n.setData('alpha', 1, 'end');
+                }
+                else console.log(topic);
             }
             else {
-                n.setData('alpha', 0, 'end');
+                if (n) {
+                    n.setData('alpha', 0, 'end');
+                }
+                else console.log(topic);
             }
         });
         Metamaps.Synapses.each(function(synapse) {
@@ -2286,10 +2292,16 @@ Metamaps.Filter = {
             }
 
             if (passesSynapse && passesMapper) {
-                e.setData('alpha', 1, 'end');
+                if (e) {
+                    e.setData('alpha', 1, 'end');
+                }
+                else console.log(synapse);
             }
             else {
-                e.setData('alpha', 0, 'end');
+                if (e) {
+                    e.setData('alpha', 0, 'end');
+                }
+                else console.log(synapse);
             } 
         });
             
