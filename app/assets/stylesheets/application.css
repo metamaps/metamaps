@@ -582,29 +582,19 @@ li.accountInvite span {
 /* Save To New Map */
 
 .sidebarFork {
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
 }
 .sidebarForkIcon {
     position: absolute;
-    width: 35px;
-    height: 35px;
-    background: url('MMCCicon_save_new_map.png') no-repeat center center;
-    background-size: 28px 28px;
+    width: 32px;
+    height: 32px;
+    background: url('fork.png') no-repeat center center;
+    background-size: 32px 32px;
     cursor: pointer;
 }
-.sidebarForkIcon:hover {} .sidebarForkBox {
-    position: absolute;
-    display: none;
-    height: auto;
-    width: 182px;
-    background: #000;
-    top: 35px;
-    right: -36px;
-    padding: 10px;
-    border: 1px solid black;
-    font-family: 'LatoLight', helvetica, sans-serif;
-}
+.sidebarForkIcon:hover {} 
+
 .sidebarFork .hoverForTip:hover .tip {
     display: block;
 }
@@ -628,16 +618,16 @@ li.accountInvite span {
 /* Filter */
 
 .sidebarFilter {
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
 }
 
 .sidebarFilterIcon {
     position: absolute;
-    width: 35px;
-    height: 35px;
-    background: url('MMCCicon_filter2.png') no-repeat center center;
-    background-size: 28px 28px;
+    width: 32px;
+    height: 32px;
+    background: url('filter.png') no-repeat center center;
+    background-size: 32px 32px;
     cursor: pointer;
 }
 .sidebarFilterIcon:hover {
@@ -711,21 +701,21 @@ h3.filterBox {
 /* collaborate */
 
 .sidebarCollaborate {
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
 }
 .sidebarCollaborateIcon {
     position: absolute;
-    width: 35px;
-    height: 35px;
-    background-image: url('MMCCicon_realtime_junto.png');
-    background-size: 36px 36px;
+    width: 32px;
+    height: 32px;
+    background-image: url('junto.png');
+    background-size: 32px 32px;
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer;
 }
 .sidebarCollaborateIcon.blue {
-    background-image: url('MMCCicon_realtime_blue.png');
+    background-image: url('junto.png');
 }
 .sidebarCollaborateBox {
     display: none;
@@ -1755,9 +1745,9 @@ div.mapInfoStat {
 }
 .addMap {
     display: block;
-    width: 45px;
+    width: 32px;
     height: 32px;
-    background: #4fb5c0 url('MMCCicon_add_map.png') no-repeat center center;
+    background: url('new.png') no-repeat center center;
     background-size: 32px 32px;
     cursor: pointer;
     border-radius: 2px;
