@@ -1,4 +1,4 @@
-<div class="mapControls mapElement animations">
+<div class="mapControls mapElement">
 	<div class="zoomExtents mapControl">E</div>
 	<div class="centerMap mapControl">C</div>
 	<div class="zoomIn mapControl">+</div>
@@ -6,9 +6,8 @@
 </div>
 
 <div class="infoAndHelp">
-    <div class="mapInfo infoElement mapElement animations">
-    	<%= render :partial => 'maps/mapinfobox' %>
-    </div>
+	<%= render :partial => 'maps/mapinfobox' %>
+    <div class="mapInfoIcon infoElement mapElement"></div>
     <div class="openCheatsheet openLightbox infoElement" data-open="cheatsheet"></div>
     <div class="clearfloat"></div>
 </div>

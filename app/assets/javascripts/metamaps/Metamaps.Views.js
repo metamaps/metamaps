@@ -1,5 +1,7 @@
 (function () {
     Metamaps.Views = {};
+
+    var initialized = false;
     
 Metamaps.Views.init = function () {
 
@@ -56,9 +58,9 @@ Metamaps.Views.init = function () {
             });
             var m = Metamaps.Famous.maps.surf;
             m.setContent(this.el);
-            if (!Metamaps.initialized) {
+            if (!initialized) {
                 m.deploy(m._currTarget);
-                Metamaps.initialized = true;
+                initialized = true;
             }
 
             Metamaps.Loading.loader.hide();

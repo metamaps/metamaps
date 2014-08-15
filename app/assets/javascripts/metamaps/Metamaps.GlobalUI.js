@@ -87,7 +87,6 @@ Metamaps.GlobalUI = {
         Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'name'});
         Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'name'});
         Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, {id: 'active', sortBy: 'updated_at'});
-        Metamaps.Maps.New = new Metamaps.Backbone.MapsCollection(newCollection, {id: 'new', sortBy: 'created_at'});
     },
     openLightbox: function (which) {
         var self = Metamaps.GlobalUI;
@@ -286,20 +285,30 @@ Metamaps.GlobalUI.CreateMap = {
 
 Metamaps.GlobalUI.Account = {
     isOpen: false,
-    timeOut: null,
     changing: false,
     init: function () {
         var self = Metamaps.GlobalUI.Account;
 
-        $(".sidebarAccount").hover(self.open, self.close);
+        $('.sidebarAccountIcon').click(self.toggleBox);
+        $('.sidebarAccountBox').click(function(event){ 
+            event.stopPropagation();
+        });
+        $('body').click(self.close);
+    },
+    toggleBox: function (event) {
+        var self = Metamaps.GlobalUI.Account;
+
+        if (self.isOpen) self.close();
+        else self.open();
+
+        event.stopPropagation();
     },
     open: function () {
         var self = Metamaps.GlobalUI.Account;
 
-        Metamaps.Realtime.close(true);
-        Metamaps.Filter.close(true);
+        Metamaps.Realtime.close();
+        Metamaps.Filter.close();
 
-        clearTimeout(self.timeOut);
         if (!self.isOpen && !self.changing) {
             self.changing = true;
             $('.sidebarAccountBox').fadeIn(200, function () {
@@ -308,20 +317,16 @@ Metamaps.GlobalUI.Account = {
             });
         }
     },
-    close: function (force) {
+    close: function () {
         var self = Metamaps.GlobalUI.Account;
 
-        var time = force ? 0 : 500;
-
-        self.timeOut = setTimeout(function () {
-            if (!self.changing) {
-                self.changing = true;
-                $('.sidebarAccountBox').fadeOut(200, function () {
-                    self.changing = false;
-                    self.isOpen = false;
-                });
-            }
-        }, time);
+        if (!self.changing) {
+            self.changing = true;
+            $('.sidebarAccountBox').fadeOut(200, function () {
+                self.changing = false;
+                self.isOpen = false;
+            });
+        }
     }
 };
 

@@ -47,7 +47,8 @@
   
   <div class="mapInfoDelete">
     <% if @map.user == user %>
-      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete %>
+      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, 
+      :data => { :bypass => 'true'}  %>
     <% end %>
   </div>
 </div>

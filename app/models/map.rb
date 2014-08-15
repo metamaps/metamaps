@@ -8,6 +8,15 @@ class Map < ActiveRecord::Base
   has_many :topics, :through => :topicmappings
   has_many :synapses, :through => :synapsemappings
 
+  # This method associates the attribute ":image" with a file attachment
+  has_attached_file :screenshot, :styles => {
+   :thumb => ['188x126#', :png],
+   :full => ['1880x1260#', :png]
+  }
+    
+  # Validate the attached image is image/jpg, image/png, etc
+  validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
+
   def mappings 
   	topicmappings + synapsemappings
   end
@@ -49,8 +58,12 @@ class Map < ActiveRecord::Base
     self.user.image.url
   end
 
+  def contributor_count 
+    self.contributors.length
+  end
+
   def as_json(options={})
-    super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count])
+    super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count])
   end
   
   ##### PERMISSIONS ######

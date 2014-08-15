@@ -100,7 +100,7 @@ Metamaps.Backbone.init = function () {
 
     self.Topic = Backbone.Model.extend({
         urlRoot: '/topics',
-        blacklist: ['node', 'created_at', 'updated_at'],
+        blacklist: ['node', 'created_at', 'updated_at', 'user_name', 'user_image', 'map_count', 'synapse_count'],
         toJSON: function (options) {
             return _.omit(this.attributes, this.blacklist);
         },
@@ -900,15 +900,13 @@ Metamaps.TopicCard = {
             nodeValues.embeds = '';
         }
         nodeValues.attachments += '<div class="addAttachment ' +addAttachmentHidden+ '">';
-        nodeValues.attachments+= '<div id="addphoto">photo</div>';
-        nodeValues.attachments+= '<div id="addlink">link</div>';
-        nodeValues.attachments+= '<div id="addaudio">audio</div>';
-        nodeValues.attachments+= '<div id="addupload">upload</div> </div>';
+        nodeValues.attachments+= '<div id="addlink">Attach a link</div>';
+        nodeValues.attachments+= '<div id="addupload">Upload a file</div> </div>';
 
         nodeValues.permission = topic.get("permission");
         nodeValues.mk_permission = topic.get("permission").substring(0, 2);
-        //nodeValues.map_count = topic.get("inmaps").length;
-        //nodeValues.synapse_count = topic.get("synapseCount");
+        nodeValues.map_count = topic.get("map_count").toString();
+        nodeValues.synapse_count = topic.get("synapse_count").toString();
         nodeValues.id = topic.isNew() ? topic.cid : topic.id;
         nodeValues.metacode = topic.getMetacode().get("name");
         nodeValues.metacode_class = 'mbg' + topic.getMetacode().get("name").replace(/\s/g, '');
@@ -1376,7 +1374,6 @@ Metamaps.Realtime = {
     //Metamaps.Realtime.socket = io.connect('http://localhost:5001'); 
     socket: null,
     isOpen: false,
-    timeOut: null,
     changing: false,
     mappersOnMap: {},
     status: true, // stores whether realtime is True/On or False/Off
@@ -1385,7 +1382,11 @@ Metamaps.Realtime = {
 
         $(".realtimeOnOff").click(self.toggle);
 
-        $(".sidebarCollaborate").hover(self.open, self.close);
+        $('.sidebarCollaborateIcon').click(self.toggleBox);
+        $('.sidebarCollaborateBox').click(function(event){ 
+            event.stopPropagation();
+        });
+        $('body').click(self.close);
 
         var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
@@ -1394,6 +1395,39 @@ Metamaps.Realtime = {
             self.socket.on('connect', function () {
                 console.log('socket connected');
                 self.setupSocket();
+            });
+        }
+    },
+    toggleBox: function (event) {
+        var self = Metamaps.Realtime;
+
+        if (self.isOpen) self.close();
+        else self.open();
+
+        event.stopPropagation();
+    },
+    open: function () {
+        var self = Metamaps.Realtime;
+
+        Metamaps.GlobalUI.Account.close();
+        Metamaps.Filter.close();
+
+        if (!self.isOpen && !self.changing) {
+            self.changing = true;
+            $('.sidebarCollaborateBox').fadeIn(200, function () {
+                self.changing = false;
+                self.isOpen = true;
+            });
+        }
+    },
+    close: function () {
+        var self = Metamaps.Realtime;
+
+        if (!self.changing) {
+            self.changing = true;
+            $('.sidebarCollaborateBox').fadeOut(200, function () {
+                self.changing = false;
+                self.isOpen = false;
             });
         }
     },
@@ -1411,36 +1445,6 @@ Metamaps.Realtime = {
         }
         self.status = !self.status;
         $(".sidebarCollaborateIcon").toggleClass("blue");
-    },
-    open: function () {
-        var self = Metamaps.Realtime;
-
-        Metamaps.GlobalUI.Account.close(true);
-        Metamaps.Filter.close(true);
-
-        clearTimeout(self.timeOut);
-        if (!self.isOpen && !self.changing) {
-            self.changing = true;
-            $('.sidebarCollaborateBox').fadeIn(200, function () {
-                self.changing = false;
-                self.isOpen = true;
-            });
-        }
-    },
-    close: function (force) {
-        var self = Metamaps.Realtime;
-
-        var time = force ? 0 : 500;
-
-        self.timeOut = setTimeout(function () {
-            if (!self.changing) {
-                self.changing = true;
-                $('.sidebarCollaborateBox').fadeOut(200, function () {
-                    self.changing = false;
-                    self.isOpen = false;
-                });
-            }
-        }, time);
     },
     setupSocket: function () {
         var self = Metamaps.Realtime;
@@ -1998,12 +2002,15 @@ Metamaps.Filter = {
         synapses: []
     },
     isOpen: false,
-    timeOut: null,
     changing: false,
     init: function () {
         var self = Metamaps.Filter;
 
-        $(".sidebarFilter").hover(self.open, self.close);
+        $('.sidebarFilterIcon').click(self.toggleBox);
+        $('.sidebarFilterBox').click(function(event){ 
+            event.stopPropagation();
+        });
+        $('body').click(self.close);
 
         $('.sidebarFilterBox .showAllMetacodes').click(self.filterNoMetacodes);
         $('.sidebarFilterBox .showAllSynapses').click(self.filterNoSynapses);
@@ -2015,13 +2022,20 @@ Metamaps.Filter = {
         self.bindLiClicks();
 	    self.getFilterData();
     },
+    toggleBox: function (event) {
+        var self = Metamaps.Filter;
+
+        if (self.isOpen) self.close();
+        else self.open();
+
+        event.stopPropagation();
+    },
     open: function () {
         var self = Metamaps.Filter;
 
-        Metamaps.GlobalUI.Account.close(true);
-        Metamaps.Realtime.close(true);
+        Metamaps.GlobalUI.Account.close();
+        Metamaps.Realtime.close();
 
-        clearTimeout(self.timeOut);
         if (!self.isOpen && !self.changing) {
             self.changing = true;
 
@@ -2031,21 +2045,17 @@ Metamaps.Filter = {
             });
         }
     },
-    close: function (force) {
+    close: function () {
         var self = Metamaps.Filter;
 
-        var time = force ? 0 : 500;
+        if (!self.changing) {
+            self.changing = true;
 
-        self.timeOut = setTimeout(function () {
-            if (!self.changing) {
-                self.changing = true;
-
-                $('.sidebarFilterBox').fadeOut(200, function () {
-                    self.changing = false;
-                    self.isOpen = false;
-                });
-            }
-        }, time);
+            $('.sidebarFilterBox').fadeOut(200, function () {
+                self.changing = false;
+                self.isOpen = false;
+            });
+        }
     },
     reset: function () {
         var self = Metamaps.Filter;
@@ -2925,7 +2935,6 @@ Metamaps.Map.CheatSheet = {
  */
 Metamaps.Map.InfoBox = {
     isOpen: false,
-    timeOut: null,
     changing: false,
     selectingPermission: false,
     init: function () {
@@ -2940,13 +2949,24 @@ Metamaps.Map.InfoBox = {
 
         $('.yourMap .mapPermission').click(self.onPermissionClick);
 
-        $(".mapInfo").hover(self.open, self.close);
+        $('.mapInfoIcon').click(self.toggleBox);
+        $('.mapInfoBox').click(function(event){ 
+            event.stopPropagation();
+        });
+        $('body').click(self.close);
     },
-    open: function (event) {
-        var self = Metamaps.GlobalUI.Account;
+    toggleBox: function (event) {
+        var self = Metamaps.Map.InfoBox;
 
-        clearTimeout(self.timeOut);
-        if (!self.isOpen && !self.changing && event.target.className.indexOf("openCheatsheet") === -1) {
+        if (self.isOpen) self.close();
+        else self.open();
+
+        event.stopPropagation();
+    },
+    open: function () {
+        var self = Metamaps.Map.InfoBox;
+
+        if (!self.isOpen && !self.changing) {
             self.changing = true;
             $('.mapInfoBox').fadeIn(200, function () {
                 self.changing = false;
@@ -2955,17 +2975,15 @@ Metamaps.Map.InfoBox = {
         }
     },
     close: function () {
-        var self = Metamaps.GlobalUI.Account;
+        var self = Metamaps.Map.InfoBox;
 
-        self.timeOut = setTimeout(function () {
-            if (!self.changing) {
-                self.changing = true;
-                $('.mapInfoBox').fadeOut(200, function () {
-                    self.changing = false;
-                    self.isOpen = false;
-                });
-            }
-        }, 500);
+        if (!self.changing) {
+            self.changing = true;
+            $('.mapInfoBox').fadeOut(200, function () {
+                self.changing = false;
+                self.isOpen = false;
+            });
+        }
     },
     onPermissionClick: function () {
         var self = Metamaps.Map.InfoBox;

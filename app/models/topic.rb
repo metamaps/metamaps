@@ -46,8 +46,16 @@ class Topic < ActiveRecord::Base
     self.user.image.url
   end
 
+  def map_count
+    self.maps.count
+  end
+
+  def synapse_count
+    self.synapses.count
+  end
+
   def as_json(options={})
-    super(:methods =>[:user_name, :user_image])
+    super(:methods =>[:user_name, :user_image, :map_count, :synapse_count])
   end
 
   # sends push updates through redis to websockets for realtime updates

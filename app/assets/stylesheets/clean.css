@@ -8,6 +8,16 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: 'din-regular';
+    src: url('/assets/Fonts/din-reg.eot');
+    src: url('/assets/Fonts/din-reg.eot?#iefix') format('embedded-opentype'),
+         url('/assets/Fonts/din-reg.woff') format('woff'),
+         url('/assets/Fonts/din-reg.ttf') format('truetype'),
+         url('/assets/Fonts/din-reg.svg#din-reg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 
 .backface-visible {
 	-webkit-backface-visibility: visible !important;
@@ -473,7 +483,7 @@
 
 .upperRightBox {
 	position: fixed;
-	top:42px;
+	top:52px;
 	right:24px;
 	background-color: #E5E5E5;
 	border-radius: 4px;
@@ -579,22 +589,15 @@
     background-size: 27px 27px;
 }
 
-.mapInfo {
+.mapInfoIcon {
 	position: relative;
 	top: 56px; /* puts it just offscreen */
     background: url('MMCCicon_info.png') no-repeat center center;
     background-size: 19px 19px;
 }
-.mapPage .mapInfo {
+.mapPage .mapInfoIcon {
 	top: 0;
 }
-/*.mapInfo.animations {
-  -webkit-transition-property: top;
-  -moz-transition-property: top;
-  -o-transition-property: top;
-  -ms-transition-property: top;
-  transition-property: top;
-}*/
 
 /* end infoAndHelp */
 
@@ -655,6 +658,7 @@
   margin-top:52px;
   height:42px;
   background-color:#EEEEEE;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
 .exploreMapsCenter {
@@ -682,7 +686,7 @@
 }
 
 .mapsWrapper {
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 /* end explore maps */

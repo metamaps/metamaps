@@ -27,10 +27,6 @@ class MapsController < ApplicationController
             @maps = Map.order("name ASC").find_all_by_featured(true)
             @request = "featured"
 
-        elsif request.path.index("/explore/new") != nil
-            @maps = Map.order("created_at DESC").limit(20)
-            @request = "new"
-
         elsif request.path.index('/explore/mine') != nil  # looking for maps by me
             if !authenticated?
                 redirect_to activemaps_url and return
@@ -41,8 +37,11 @@ class MapsController < ApplicationController
         elsif request.path.index('/maps/mappers/') != nil  # looking for maps by a mapper
             @user = User.find(params[:id])
             @maps = Map.order("name ASC").find_all_by_user_id(@user.id)
-            @request = "you" if authenticated? && @user == @current
-            @request = "other" if authenticated? && @user != @current
+            if authenticated? && @user == @current
+                @request = "you"
+            else 
+                @request = "other"
+            end
 
         elsif request.path.index('/explore/topics/') != nil  # looking for maps by a certain topic they include
             @topic = Topic.find(params[:id]).authorize_to_show(@current)
@@ -61,7 +60,13 @@ class MapsController < ApplicationController
         end
 
         respond_to do |format|
-            format.html { respond_with(@maps, @request, @user) }
+            format.html { 
+                if @request == "you"
+                    redirect_to root_url and return
+                else
+                    respond_with(@maps, @request, @user) 
+                end
+            }
             format.json { render json: @maps }
         end
     end

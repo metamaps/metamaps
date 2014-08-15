@@ -650,7 +650,7 @@ li.accountInvite span {
     width: 320px;
     padding: 10px;
     text-align: center;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 h3.filterBox {
     text-align: left;

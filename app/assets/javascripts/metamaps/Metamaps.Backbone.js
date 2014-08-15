@@ -1,7 +1,7 @@
 Metamaps.Backbone = {};
 Metamaps.Backbone.Map = Backbone.Model.extend({
     urlRoot: '/maps',
-    blacklist: ['created_at', 'updated_at', 'user_name', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
+    blacklist: ['created_at', 'updated_at', 'user_name', 'contributor_count', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
     toJSON: function (options) {
         return _.omit(this.attributes, this.blacklist);
     },
@@ -53,16 +53,21 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
         return this.get('mappers');
     },
     attrForCards: function () {
+        function capitalize(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
         var obj = {
             id: this.id,
             name: this.get('name'),
             desc: this.get('desc'),
-            username: this.get('user_name'),
-            mkPermission: this.get("permission") ? this.get("permission").substring(0, 2) : "co",
+            permission: this.get("permission") ? capitalize(this.get("permission")) : "Commons",
             editPermission: this.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEdit' : 'cannotEdit',
-            topicCount: this.get('topic_count'),
-            synapseCount: this.get('synapse_count'),
-            createdAt: this.get('created_at')
+            contributor_count_number: '<span class="cCountColor">' + this.get('contributor_count') + '</span>',
+            contributor_count_string: this.get('contributor_count') == 1 ? ' contributor' : ' contributors',
+            topic_count_number: '<span class="tCountColor">' + this.get('topic_count') + '</span>',
+            topic_count_string: this.get('topic_count')  == 1 ? ' topic' : ' topics',
+            synapse_count_number: '<span class="sCountColor">' + this.get('synapse_count') + '</span>',
+            synapse_count_string: this.get('synapse_count') == 1 ? ' synapse' : ' synapses',
         };
         return obj;
     }
