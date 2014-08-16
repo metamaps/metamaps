@@ -1461,119 +1461,102 @@ Metamaps.JIT = {
         
         if (Metamaps.Selected.Nodes.length > 0) {
             var nodes = Metamaps.Selected.Nodes;
+        }
+        else {
+            var nodes = _.values(Metamaps.Visualize.mGraph.graph.nodes);
+        }
 
-            if(nodes.length > 1){
-                nodes.forEach(function (n) {
-                    var x = n.pos.x,
-                        y = n.pos.y;
+        if(nodes.length > 1){
+            nodes.forEach(function (n) {
+                var x = n.pos.x,
+                    y = n.pos.y;
 
-                    if (counter == 0){
-                        maxX = x;
-                        minX = x; 
-                        maxY = y;
-                        minY = y; 
-                    }
+                if (counter == 0){
+                    maxX = x;
+                    minX = x; 
+                    maxY = y;
+                    minY = y; 
+                }
 
-                    maxX = Math.max(x,maxX);
-                    maxY = Math.max(y,maxY);
-                    minX = Math.min(x,minX);
-                    minY = Math.min(y,minY);
+                var arrayOfLabelLines = Metamaps.Util.splitLine(n.name, 30).split('\n'),
+                    dim = n.getData('dim'),
+                    ctx = Metamaps.Visualize.mGraph.canvas.getCtx();
 
-                    counter++;
-                });
+                console.log(dim);
 
-                var spanX = maxX - minX;
-                var spanY = maxY - minY;
-                var ratioX = spanX / width;
-                var ratioY = spanY / height;
+                var height = 25 * arrayOfLabelLines.length;
 
-                var newRatio = Math.max(ratioX,ratioY);
+                var index, lineWidths = [];
+                for (index = 0; index < arrayOfLabelLines.length; ++index) {
+                    lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
+                }
+                var width = Math.max.apply(null, lineWidths) + 8;
 
-                var canvas = Metamaps.Visualize.mGraph.canvas;
+                maxX = Math.max(x + width /2,maxX);
+                maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
+                minX = Math.min(x - width /2,minX);
+                minY = Math.min(y - dim,minY);
 
-                canvas.scale(1/newRatio*0.8,1/newRatio*0.8);
+                counter++;
+            });
 
-                counter = 0;
+            var spanX = maxX - minX;
+            var spanY = maxY - minY;
+            var ratioX = spanX / width;
+            var ratioY = spanY / height;
 
-                nodes.forEach(function (n) {
-                    var x = n.pos.x,
-                        y = n.pos.y;
+            var newRatio = Math.max(ratioX,ratioY);
+            var scaleMultiplier = 1/newRatio*0.9;
 
-                    if (counter == 0){
-                        maxX = x;
-                        minX = x; 
-                        maxY = y;
-                        minY = y; 
-                    }
-
-                    maxX = Math.max(x,maxX);
-                    maxY = Math.max(y,maxY);
-                    minX = Math.min(x,minX);
-                    minY = Math.min(y,minY);
-
-                    counter++;
-                });
+            var canvas = Metamaps.Visualize.mGraph.canvas;
+            if(canvas.scaleOffsetX *scaleMultiplier<= 3 && canvas.scaleOffsetX*scaleMultiplier >= 0.2){
+                canvas.scale(scaleMultiplier,scaleMultiplier);
             }
+            else if(canvas.scaleOffsetX * scaleMultiplier > 3){
+                scaleMultiplier = 3/ canvas.scaleOffsetX;
+                canvas.scale(scaleMultiplier,scaleMultiplier);
+            }
+            else{
+                scaleMultiplier = 0.2/ canvas.scaleOffsetX;
+                canvas.scale(scaleMultiplier,scaleMultiplier);
+            }
+            
+
+            counter = 0;
+
+            nodes.forEach(function (n) {
+                var x = n.pos.x,
+                    y = n.pos.y;
+
+                if (counter == 0){
+                    maxX = x;
+                    minX = x; 
+                    maxY = y;
+                    minY = y; 
+                }
+
+                var arrayOfLabelLines = Metamaps.Util.splitLine(n.name, 30).split('\n'),
+                    dim = n.getData('dim'),
+                    ctx = Metamaps.Visualize.mGraph.canvas.getCtx();
+
+                console.log(dim);
+
+                var height = 25 * arrayOfLabelLines.length;
+
+                var index, lineWidths = [];
+                for (index = 0; index < arrayOfLabelLines.length; ++index) {
+                    lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
+                }
+                var width = Math.max.apply(null, lineWidths) + 8;
+
+                maxX = Math.max(x + width /2,maxX);
+                maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
+                minX = Math.min(x - width /2,minX);
+                minY = Math.min(y - dim,minY);
+
+                counter++;
+            });
         }
-        else{
-            var nodes = Metamaps.Visualize.mGraph.graph;
-
-            if(Object.keys(nodes).length >1){
-                nodes.eachNode(function (n) {
-                    var x = n.pos.x,
-                        y = n.pos.y;
-
-                    if (counter == 0){
-                        maxX = x;
-                        minX = x; 
-                        maxY = y;
-                        minY = y; 
-                    }
-
-                    maxX = Math.max(x,maxX);
-                    maxY = Math.max(y,maxY);
-                    minX = Math.min(x,minX);
-                    minY = Math.min(y,minY);
-
-                    counter++;
-                });
-
-                var spanX = maxX - minX;
-                var spanY = maxY - minY;
-                var ratioX = spanX / width;
-                var ratioY = spanY / height;
-
-                var newRatio = Math.max(ratioX,ratioY);
-
-                var canvas = Metamaps.Visualize.mGraph.canvas;
-
-                canvas.scale(1/newRatio*0.8,1/newRatio*0.8);
-
-                counter = 0;
-
-                nodes.eachNode(function (n) {
-                    var x = n.pos.x,
-                        y = n.pos.y;
-
-                    if (counter == 0){
-                        maxX = x;
-                        minX = x; 
-                        maxY = y;
-                        minY = y; 
-                    }
-
-                    maxX = Math.max(x,maxX);
-                    maxY = Math.max(y,maxY);
-                    minX = Math.min(x,minX);
-                    minY = Math.min(y,minY);
-
-                    counter++;
-                });
-            }   
-        }
-
-        
-        
 
         var cogX = (maxX + minX)/2;
         var cogY = (maxY + minY)/2;
