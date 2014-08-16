@@ -6,8 +6,8 @@ gem 'rails', '3.2.17'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'watir'
-gem 'phantomjs'
+#gem 'watir'
+#gem 'phantomjs'
 
 gem 'devise'
 gem 'redis', '2.2.2'
