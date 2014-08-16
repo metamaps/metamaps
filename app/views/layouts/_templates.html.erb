@@ -4,7 +4,36 @@
   #%>
 
 <div class="templates">
-
+    
+    
+    <script type="text/template" id="mapCardTemplate">
+  <a href="/maps/{{id}}">
+  <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
+	  <div class="mapCard">                                                   
+      <span class="title">                                                  
+        <span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea">{{name}}</span>
+      </span>  
+      <div class="mapScreenshot">
+        <img src="https://dl.dropboxusercontent.com/u/13307147/map%20screengrab%20blur-02.png">
+      </div>                                                           
+      <div class="scroll">                                                    
+        <div class="desc">                                                    
+          <span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description." data-type="textarea">{{desc}}</span>
+          <div class="clearfloat"></div>                                
+        </div>                                                                
+      </div>
+      <div class="mapMetadata">
+         <div class="metadataSection">{{{contributor_count_number}}}{{contributor_count_string}}</div>
+         <div class="metadataSection">{{{topic_count_number}}}{{topic_count_string}}</div>         
+         <div class="metadataSection mapPermission">{{permission}}</div> 
+         <div class="metadataSection">{{{synapse_count_number}}}{{synapse_count_string}}</div>         
+         <div class="clearfloat"></div>                               
+      </div>                                         
+    </div>
+  </div>
+  </a>
+    </script>
+        
     <script type="text/template" id="topicSearchTemplate">
     <div class="result{{rtype}}">
       <div class="topicMetacode">
@@ -130,15 +159,16 @@
                 <div class="metacodeTitle {{metacode_class}}">{{metacode}}</div>
                 <div class="metacodeImage" style="background-image:url({{imgsrc}});" title="click and drag to move card"></div>
             </div>
-            <div class="linkItem contributor hoverForTip">
-                <div class="tip">Created by {{username}} on {{date}}</div>
+            <div class="linkItem contributor">
+                {{username}}
             </div>
-            <a href="/maps/topics/{{id}}" class="linkItem mapCount hoverForTip" title="Click to see which maps topic appears on" target="_blank">                  
+            <a href="/expore/topics/{{id}}" class="linkItem mapCount hoverForTip" title="Click to see which maps topic appears on">                  
                  {{map_count}}                                                    
                </a> 
-            <div class="linkItem synapseCount">{{synapse_count}}</div>
+            <a href="/topics/{{id}}" class="linkItem synapseCount" title="Click to see this topics synapses">
+              {{synapse_count}}
+            </a>
             <div class="linkItem mapPerm {{mk_permission}}"></div>
-            <a href="/topics/{{id}}" class="linkItem topicPopout" title="Open topic in new tab" target="_blank"></a>
             <div class="clearfloat"></div>
         </div>
         <div class="metacodeSelect">{{{metacode_select}}}</div>
@@ -148,8 +178,11 @@
                 <div class="clearfloat"></div>
             </div>
         </div>
-        <div class="link">
-            {{a_tag}}<span class="best_in_place best_in_place_link" data-url="/topics/{{id}}" data-object="topic" data-nil="{{link_nil}}" data-attribute="link" data-type="input">{{link}}</span>{{close_a_tag}} {{{go_link}}}
+        <div class="embeds">
+           {{{embeds}}}
+        </div>
+        <div class="attachments">
+            {{{attachments}}}
         </div>
         <div class="clearfloat"></div>
     </div>

@@ -5,15 +5,17 @@
 
 <% if authenticated? %>
   <% account = current_user %>
-  <h3 class="accountHeader">Hello <%= account.name.split[0...1][0] %>!</h3>
+  <h3 class="accountHeader"><%= account.name.split[0...1][0] %></h3>
   <ul>
-    <li class="accountIcon accountMaps"><a href="/maps/mappers/<%= account.id %>">My Maps</a></li>
-    <li class="accountIcon accountSettings"><%= link_to "Account", edit_user_url(account) %></li>
+    <li class="accountIcon accountSettings"><%= link_to "Account", edit_user_url(account), 
+      :data => { :bypass => 'true'} %></li>
     <% if account.admin %>
-      <li class="accountIcon accountAdmin"><%= link_to "Admin", metacodes_path %></li>
+      <li class="accountIcon accountAdmin"><%= link_to "Admin", metacodes_path, 
+      :data => { :bypass => 'true'} %></li>
     <% end %>
     <li class="accountIcon accountInvite openLightbox" data-open="invite"><span>Share Invite</span></li>
-    <li class="accountIcon accountLogout"><%= link_to "Logout", "/sign_out", id: "Logout" %></li>
+    <li class="accountIcon accountLogout"><%= link_to "Logout", "/sign_out", id: "Logout", 
+      :data => { :bypass => 'true'} %></li>
   </ul>
 <% else %>
   <h3 class="accountHeader">Sign In</h3>
@@ -36,8 +38,9 @@
   <% end %>
   <div class="links">
     <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-      <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+      <%= link_to "Forgot your password?", new_password_path(resource_name), 
+        :data => { :bypass => 'true'} %>
     <% end -%>
-    <a href="/request">Request Invite</a>
+    <a href="/request" data-bypass="true">Request Invite</a>
   </div>
 <% end %>

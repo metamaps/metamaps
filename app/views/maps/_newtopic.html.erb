@@ -1,8 +1,3 @@
-<%#
-  # Partial rendering form for a new topic on a map
-  # This code is called when viewing a metamap in show.html.erb in the views/maps folder
-  #%>
-<div class="anypage">
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
   <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes"></div>
   <div id="metacodeImg">
@@ -22,25 +17,16 @@
     <% end %>
   </div> 
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>
-  <%= form.hidden_field :metacode, :value => "Action" %>
-  <%= form.hidden_field :x, :value => 0 %>
-  <%= form.hidden_field :y, :value => 0 %>
-  <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
-    <%= form.hidden_field :map, :value => @map.id %>
-  <% end %>
-  <%= form.hidden_field :grabTopic, :value => "null" %>
-  <%= form.hidden_field :addSynapse, :value => false %>
   <div id="metacodeImgTitle"></div>
   <div class="clearfloat"></div>
 <script>
 <% @metacodes.each do |metacode| %>
   <% if !set %>
-    MetamapsModel.selectedMetacodes.push("<%= metacode.id %>");
-    MetamapsModel.newSelectedMetacodes.push("<%= metacode.id %>");
-    MetamapsModel.selectedMetacodeNames.push("<%= metacode.name %>");
-    MetamapsModel.newSelectedMetacodeNames.push("<%= metacode.name %>");
+    Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
+    Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
+    Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
+    Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
   <% end %>
 <% end %> 
 </script>
 <% end %>
-</div>

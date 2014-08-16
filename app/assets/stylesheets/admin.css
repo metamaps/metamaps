@@ -1,0 +1,63 @@
+
+
+.allMetacodes {
+  float:left;
+}
+
+.allMetacodes span {
+  margin:4px 8px;
+  color:#67AF9F;
+}
+
+.editMetacodes {
+  z-index:12;
+  width:auto;
+  color: #67AF9F;
+  padding:10px;
+  float:left;
+}
+
+.editMetacodes ul {
+  display:block;
+}
+
+.editMetacodes ul li {
+  clear:both;
+  list-style-type:none;
+  display:block;
+  padding:3px;
+}
+
+.editMetacodes ul img {
+  width:40px;
+  height:40px;
+  float:left;
+}
+
+.editMetacodes ul p {
+  float:left;
+  display: block;
+  margin: 0;
+  background: none;
+  padding: 10px 4px 2px 4px;
+}
+
+.editMetacodes #filters-one {
+  float:left;
+}
+
+.editMetacodes #filters-two {
+  float:left;
+}
+
+.editMetacodes #filters-three {
+  float:left;
+}
+
+.editMetacodes #filters-four {
+  float:left;
+}
+
+.editMetacodes li.toggledOff {
+  opacity: 0.4;
+}
