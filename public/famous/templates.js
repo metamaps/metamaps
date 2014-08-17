@@ -11,24 +11,24 @@ t.logoContent += '<li class="openLightbox" data-open="getInvolved">Get Involved!
 t.logoContent += '</ul>';
 
 /* logged out explore maps bars */
-  t.activeContent = '<a href="/explore/active" class="active">Recently Active Maps</a>';
-  t.activeContent += '<a href="/explore/featured">Featured Maps</a>';
+  t.activeContent = '<a href="/explore/active" class="active myMaps">Recently Active Maps</a>';
+  t.activeContent += '<a href="/explore/featured" class="featuredMaps">Featured Maps</a>';
 
-  t.featuredContent = '<a href="/explore/active">Recently Active Maps</a>';
-  t.featuredContent += '<a href="/explore/featured" class="active">Featured Maps</a>';
+  t.featuredContent = '<a href="/explore/active" class="activeMaps">Recently Active Maps</a>';
+  t.featuredContent += '<a href="/explore/featured" class="active featuredMaps">Featured Maps</a>';
 
 /* logged in explore maps bars */
-  t.mineAuthContent = '<a href="/" class="active">My Maps</a>';
-  t.mineAuthContent += '<a href="/explore/active">Recently Active</a>';
-  t.mineAuthContent += '<a href="/explore/featured">Featured</a>';
+  t.mineAuthContent = '<a href="/" class="active myMaps">My Maps</a>';
+  t.mineAuthContent += '<a href="/explore/active" class="activeMaps">Recently Active</a>';
+  t.mineAuthContent += '<a href="/explore/featured" class="featuredMaps">Featured</a>';
 
-  t.activeAuthContent = '<a href="/">My Maps</a>';
-  t.activeAuthContent += '<a href="/explore/active" class="active">Recently Active</a>';
-  t.activeAuthContent += '<a href="/explore/featured">Featured</a>';
+  t.activeAuthContent = '<a href="/" class="myMaps">My Maps</a>';
+  t.activeAuthContent += '<a href="/explore/active" class="active activeMaps">Recently Active</a>';
+  t.activeAuthContent += '<a href="/explore/featured" class="featuredMaps">Featured</a>';
 
-  t.featuredAuthContent = '<a href="/">My Maps</a>';
-  t.featuredAuthContent += '<a href="/explore/active">Recently Active</a>';
-  t.featuredAuthContent += '<a href="/explore/featured" class="active">Featured</a>';
+  t.featuredAuthContent = '<a href="/" class="myMaps">My Maps</a>';
+  t.featuredAuthContent += '<a href="/explore/active" class="activeMaps">Recently Active</a>';
+  t.featuredAuthContent += '<a href="/explore/featured" class="active featuredMaps">Featured</a>';
 
     module.exports = t;
 });

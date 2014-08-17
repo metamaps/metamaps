@@ -81,7 +81,7 @@ html {
 
 } 
 body {
-    background: #d8d9da url(/assets/shattered_@2X.png);
+    background: #d8d9da url(shattered_@2X.png);
     font-family: 'din-medium', helvetica, sans-serif;
     color: #424242;
 }
@@ -708,14 +708,14 @@ h3.filterBox {
     position: absolute;
     width: 32px;
     height: 32px;
-    background-image: url('junto.png');
+    background-image: url('junto32.png');
     background-size: 32px 32px;
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer;
 }
 .sidebarCollaborateIcon.blue {
-    background-image: url('junto.png');
+    background-image: url('junto32.png');
 }
 .sidebarCollaborateBox {
     display: none;
@@ -762,10 +762,10 @@ h3.realtimeBoxTitle {
     margin-bottom: 5px;
 }
 .realtimeMapperList .littleRtOff {
-    background-image: url('/assets/MMCCicon_realtime_junto.png');
+    background-image: url('junto24.png');
 }
 .realtimeMapperList .littleRtOn {
-    background-image: url('/assets/MMCCicon_realtime_blue.png');
+    background-image: url('junto24.png');
 }
 /* end collaborate */
 
@@ -1747,238 +1747,20 @@ div.mapInfoStat {
     display: block;
     width: 32px;
     height: 32px;
-    background: url('new.png') no-repeat center center;
+    background: url('newmap.png') no-repeat center center;
     background-size: 32px 32px;
     cursor: pointer;
     border-radius: 2px;
     margin-right: 10px;
 }
-/* --- styling the logo button ---*/
+
 
 .home_bg {
     display: block;
     height: 100%;
 }
-/* home page */
 
-div#preloaded-images {
-    position: absolute;
-    overflow: hidden;
-    left: -9999px;
-    top: -9999px;
-}
-.home_content {
-    width: 830px;
-    margin: 0 auto;
-}
-span.blue {
-    color: #36bbe8;
-}
-.home_desc {
-    font-family: 'LatoLight';
-    font-size: 32px;
-    margin: 40px 20px 25px;
-    text-align: center;
-}
-.home_desc .welcomeTo {
-    text-transform: uppercase;
-    font-size: 50px;
-    font-family: 'Vinyl';
-    font-style: italic;
-}
-.home_content .request {
-    margin-right: 17px !important;
-}
-.home_content .request,
-.home_content .learnmore {
-    margin: 5px auto;
-    background: white;
-    height: 40px;
-    font-family: 'Vinyl';
-    font-size: 18px;
-    font-style: italic;
-    width: 135px;
-    padding: 0 15px;
-    cursor: pointer;
-    color: black;
-    line-height: 44px;
-    font-weight: normal;
-    text-transform: uppercase;
-}
-.home_content .request:hover,
-.home_content .learnmore:hover {
-    background: white;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-.metamapsIs {} .metamapsIs .swapWord {
-    display: block;
-}
-#homeMapImage {
-    margin: 5px auto;
-}
-.featuredMaps {
-    margin: 15px 0;
-    font-size: 20px;
-    line-height: 20px;
-    text-align: center;
-}
-#homeMap {
-    width: 738px;
-    margin: 0 auto;
-    height: 340px;
-    position: relative;
-    overflow: hidden;
-}
-#homeFigure {
-    height: 335px;
-    width: 738px;
-    margin: 0;
-}
-#homeFigure figure {
-    float: left;
-    margin: 10px !important;
-    overflow: hidden;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-}
-#homeMap .links {
-    font-size: 14px;
-    font-family: Lato;
-    flex: none;
-}
-#homeMap .title {
-    margin: 10px;
-    flex: none;
-}
-#homeMap .linkItem.contributor {
-    background-position: 5px center;
-    background-size: 20px 20px;
-    position: relative;
-    padding-left: 28px;
-    line-height: 40px;
-    margin-left: 0px;
-    padding-right: 2px;
-}
-#homeMap .mapPerm {
-    height: 40px;
-    background-repeat: no-repeat;
-    background-position: 5px center;
-    background-size: 20px 20px;
-    position: relative;
-    padding-left: 28px;
-    line-height: 40px;
-}
-#homeMap .mapPerm.co {
-    background-image: url(MMCCicon_commons.png);
-}
-#homeMap .mapPerm.pu {
-    background-image: url(MMCCicon_public.png);
-}
-#homeMap .mapPerm.pr {
-    background-image: url(MMCCicon_private.png);
-}
-#homeMap .desc {
-    color: #555555;
-    padding: 15px 5px 0 15px;
-    overflow: hidden;
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-}
-.mapContains {
-    max-height: 40px;
-    line-height: 40px;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid #AAAAAA;
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-}
-.mapContains span {
-    display: inline-block;
-    text-align: left;
-    padding-left: 27px;
-}
-.mapContains .topicCount {
-    background-image: url(MMCCicon_topic.png);
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: 5px center;
-    line-height: 40px;
-    width: 72px;
-}
-.mapContains .synapseCount {
-    background-image: url(MMCCicon_synapse_black.png);
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: 5px center;
-    line-height: 40px;
-    width: 95px;
-}
-#homeFigure figure .littleOverlay {
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    z-index: 2;
-    background: rgba(255, 255, 255, 0);
-    transition: .6s;
-    border-radius: 5px;
-}
-#homeFigure figure:hover .littleOverlay {
-    /*top: 0; 
-  background: rgba(255,255,255, 0.9); 
-  bottom: 0; */
-}
-#homeMap .map,
-#homeMap .mapCard {
-    height: 315px;
-}
-.socialIcons {
-    position: fixed;
-    bottom: 0px;
-    height: 37px;
-    right: 0px;
-}
-.socialIcons a {
-    float: left;
-    height: 30px;
-    width: 30px;
-    margin: 0 7px 7px 0px;
-    background-repeat: no-repeat;
-    background-size: 30px 30px;
-}
-.socialIcons .twitter {
-    background-image: url('MMSocial-51.png');
-}
-.socialIcons .google {
-    background-image: url('MMSocial-52.png');
-}
-.socialIcons .wordpress {
-    background-image: url('MMSocial-53.png');
-}
-.contact {
-    text-align: center;
-    margin: 1em 0 1em 0;
-}
-.contact a {
-    color: #36bbe8;
-}
+
 #edit_synapse label,
 #edit_synapse_left,
 #edit_synapse_right {

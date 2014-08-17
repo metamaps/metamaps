@@ -87,7 +87,7 @@
 }
 
 .logo {
-    color: #6B6B6B;
+    color: #9E9E9E;
     font-family: "vinyl", sans-serif;
     font-style: italic;
     text-transform: uppercase;
@@ -131,7 +131,7 @@
 .homeButton {
 	width: 40px;
     height: 32px;
-    background: #757575;
+    background: #757575 url(home.png) no-repeat center center;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
     float:left;
@@ -158,8 +158,8 @@
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
     height: 32px;
-    background: #4fb5c0 url('search_icon_32x32.png') no-repeat center center;
-    background-size: 25px 25px;
+    background: #4fb5c0 url('search.png') no-repeat center center;
+    background-size: 32px 32px;
     cursor: pointer;
 }
 .sidebarSearch .twitter-typeahead, .sidebarSearch .sidebarSearchField {
@@ -585,15 +585,12 @@
     cursor: pointer;
 }
 .openCheatsheet {
-    background: url('MMCCicon_help.png') no-repeat center center;
-    background-size: 27px 27px;
+    background: url('help.png') no-repeat center center;
 }
-
 .mapInfoIcon {
 	position: relative;
 	top: 56px; /* puts it just offscreen */
-    background: url('MMCCicon_info.png') no-repeat center center;
-    background-size: 19px 19px;
+    background: url('mapinfo.png') no-repeat center center;
 }
 .mapPage .mapInfoIcon {
 	top: 0;
@@ -626,17 +623,25 @@
 	width:32px;
 	height:32px;
 	background-color: #424242;
+    background-repeat: no-repeat;
+    background-position: center center;
 	cursor:pointer;
 }
-.centerMap, .zoomExtents {
+.zoomExtents {
+
 	margin-bottom:5px;
 	border-radius: 2px;
 }
+.zoomExtents {
+    background-image: url(zoomextents.png);
+}
 .zoomIn {
+    background-image: url(zoomin.png);
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
 .zoomOut {
+    background-image: url(zoomout.png);
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 }
@@ -672,17 +677,24 @@
 	font-family: 'din-medium';
 	font-size: 14px;
 	height: 14px;
-	padding: 14px;
+	padding: 14px 16px 12px 40px;
+    border-bottom: 2px solid rgba(0,0,0,0);
 	display: inline-block;
     cursor: pointer;
 }
-.exploreMapsCenter a.active {
-  text-decoration: none;
-  color:#424242;
-}
-.exploreMapsCenter a:hover {
+.exploreMapsCenter a:hover, .exploreMapsCenter a.active {
   text-decoration: none;
   color: #424242;
+  border-bottom: 2px solid #00BCD4;
+}
+.exploreMapsCenter .myMaps {
+    background: url(metamap.png) no-repeat 0 center;
+}
+.exploreMapsCenter .activeMaps {
+    background: url(activity.png) no-repeat 0 center;
+}
+.exploreMapsCenter .featuredMaps {
+    background: url(featured.png) no-repeat 0 center;
 }
 
 .mapsWrapper {
