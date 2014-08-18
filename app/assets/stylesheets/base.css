@@ -540,7 +540,7 @@ font-family: 'LatoLight';
     overflow: visible;
     background: #424242;
     border-radius:2px;
-    margin:16px 16px 16px 19px;
+    margin:0 12px 12px 0;
 }
 
 .mapCard {
