@@ -834,7 +834,14 @@ h3.realtimeBoxTitle {
     background-image: url(MMCCicon_edit_permission_black.png);
     position: relative;
 }
-.rightclickmenu .rc-permission ul {
+.rightclickmenu .rc-metacode {
+    background-image: url(blank.png);
+    position: relative;
+}
+.rc-metacode li img {
+float: left;
+}
+.rightclickmenu .rc-permission ul, .rightclickmenu .rc-metacode ul  {
     display: none;
     background: white;
     top: 0;
@@ -844,7 +851,7 @@ h3.realtimeBoxTitle {
     border-bottom-right-radius: 2px;
     border-top-right-radius: 2px;
 }
-.rightclickmenu .rc-permission:hover ul {
+.rightclickmenu .rc-permission:hover ul, .rightclickmenu .rc-metacode:hover ul {
     display: block;
 }
 .rightclickmenu .rc-permission .toCommons {

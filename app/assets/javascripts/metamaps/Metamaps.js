@@ -1391,7 +1391,7 @@ Metamaps.Realtime = {
         var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
         if (mapperm) {
-            self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
+            self.socket = io.connect('http://localhost:5001'); 
             self.socket.on('connect', function () {
                 console.log('socket connected');
                 self.setupSocket();
@@ -1980,6 +1980,37 @@ Metamaps.Control = {
 
         var message = nString + sString + ' you created updated to ' + permission;
         Metamaps.GlobalUI.notifyUser(message);
+    },
+    updateSelectedMetacodes: function (metacode_id) {
+
+        var node, topic;
+
+        Metamaps.GlobalUI.notifyUser('Working...');
+
+        var metacode = Metamaps.Metacodes.get(metacode_id);
+
+        // variables to keep track of how many nodes and synapses you had the ability to change the permission of
+        var nCount = 0;
+
+        // change the permission of the selected topics, if logged in user is the original creator
+        var l = Metamaps.Selected.Nodes.length;
+        for (var i = l - 1; i >= 0; i -= 1) {
+            node = Metamaps.Selected.Nodes[i];
+            topic = node.getData('topic');
+
+            if (topic.authorizeToEdit(Metamaps.Active.Mapper)) {
+                topic.save({
+                    'metacode_id': metacode_id
+                });
+                nCount++;
+            }
+        }
+
+        var nString = nCount == 1 ? (nCount.toString() + ' topic') : (nCount.toString() + ' topics');
+
+        var message = nString + ' you can edit updated to ' + metacode.get('name');
+        Metamaps.GlobalUI.notifyUser(message);
+        Metamaps.Visualize.mGraph.plot();
     },
 }; // end Metamaps.Control
 

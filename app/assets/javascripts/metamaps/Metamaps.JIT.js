@@ -1128,6 +1128,10 @@ Metamaps.JIT = {
                      </ul>';
 
             menustring += '<li class="rc-permission">Change permissions' + options + '</li>';
+
+            var metacodeOptions = $('#metacodeOptions').html();
+
+            menustring += '<li class="rc-metacode">Change metacode' + metacodeOptions + '</li>';
         }
 
         menustring += '</ul>';
@@ -1139,7 +1143,7 @@ Metamaps.JIT = {
             top: e.clientY
         });
         //add the menu to the page
-        $('#center-container').append(rightclickmenu);
+        $('#wrapper').append(rightclickmenu);
 
 
         // attach events to clicks on the list items
@@ -1192,6 +1196,13 @@ Metamaps.JIT = {
             $('.rightclickmenu').remove();
             // $(this).text() will be 'commons' 'public' or 'private'
             Metamaps.Control.updateSelectedPermissions($(this).text());
+        });
+
+        // change the metacode of all the selected nodes that you have edit permission for
+        $('.rc-metacode li').click(function () {
+            $('.rightclickmenu').remove();
+            //
+            Metamaps.Control.updateSelectedMetacodes($(this).attr('data-id'));
         });
 
     }, //selectNodeOnRightClickHandler
@@ -1258,12 +1269,12 @@ Metamaps.JIT = {
         }
         menustring += '<li class="rc-hide">Hide until refresh</li>';
         if (Metamaps.Active.Mapper) {
-            var options = '<ul><li class="changeP toCommons">commons</li> \
+            var permOptions = '<ul><li class="changeP toCommons">commons</li> \
                          <li class="changeP toPublic">public</li> \
                          <li class="changeP toPrivate">private</li> \
                      </ul>';
 
-            menustring += '<li class="rc-permission">Change permissions' + options + '</li>';
+            menustring += '<li class="rc-permission">Change permissions' + permOptions + '</li>';
         }
 
         menustring += '</ul>';
@@ -1275,7 +1286,7 @@ Metamaps.JIT = {
             top: e.clientY
         });
         //add the menu to the page
-        $('#center-container').append(rightclickmenu);
+        $('#wrapper').append(rightclickmenu);
 
 
         // attach events to clicks on the list items

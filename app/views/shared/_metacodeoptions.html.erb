@@ -6,8 +6,8 @@
 <div id="metacodeOptions">
 <ul>
 <% Metacode.order("name").all.each do |m| %>
-  <li>
-    <img width="30" height="30" src="<%= m.icon %>" alt="<%= m.name %>" />
+  <li data-id="<%= m.id.to_s %>">
+    <img width="16" height="16" src="<%= m.icon %>" alt="<%= m.name %>" />
     <span class="mSelectName"><%= m.name %></span>
     <div class="clearfloat"></div>
   </li>
