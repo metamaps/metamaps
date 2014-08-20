@@ -83,10 +83,9 @@ Metamaps.GlobalUI = {
         var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
         var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : [];
         var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : [];
-        var newCollection = Metamaps.Maps.New ? Metamaps.Maps.New : [];
-        Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'name'});
-        Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'name'});
-        Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, {id: 'active', sortBy: 'updated_at'});
+        Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'name' });
+        Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'name' });
+        Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, {id: 'active', sortBy: 'updated_at' });
     },
     openLightbox: function (which) {
         var self = Metamaps.GlobalUI;

@@ -532,7 +532,7 @@ font-family: 'LatoLight';
 /* Map Cards */
 
 .map {
-    display:inline-block;
+    float:left;
     width:220px;
 	  height:340px;
     font-size: 12px;

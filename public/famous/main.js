@@ -5,6 +5,9 @@ define(function(require, exports, module) {
     var Transform = require('famous/core/Transform');
     var Surface = require('famous/core/Surface');
     var Timer = require('famous/utilities/Timer');
+    var Scrollview = require('famous/views/Scrollview');
+    var ContainerSurface = require('famous/surfaces/ContainerSurface');
+    var RenderNode = require('famous/core/RenderNode');
 
     var templates = require('templates');
 
@@ -112,9 +115,13 @@ define(function(require, exports, module) {
     // CONTENT / OTHER PAGES
     f.maps = {};
     f.maps.surf = new Surface({
+        size: [undefined, true], // this will get set to a specific height later in order to work
         classes: ['mapsWrapper'],
+    });
+    var mapsContainer = new ContainerSurface({
+        size: [undefined, undefined],
         properties: {
-            display: 'none'
+            overflow: 'hidden',
         }
     });
     var loadMaps = function () {
@@ -126,29 +133,53 @@ define(function(require, exports, module) {
         f.maps.surf.on('deploy', loadMaps);
     }
     f.maps.mod = new Modifier({
-        origin: [0.5, 1],
-        opacity: 0
+        origin: [0.5, 0],
+        opacity: 0,
+        transform: Transform.translate(window.innerWidth,94,0)
     });
     f.maps.mod.sizeFrom(function(){
         return [window.innerWidth, window.innerHeight - 94];
     });
     f.maps.show = function () {
-        f.maps.surf.setProperties({ "display":"block" });
+        // set into the correct position and then fade in
+        f.maps.mod.setTransform(Transform.translate(0, 94, 0));
         f.maps.mod.setOpacity(
             1,
             { duration: 300 }
         );
     };
     f.maps.hide = function () {
+        // fade out and then position it offscreen
         f.maps.mod.setOpacity(
             0, 
             { duration: 300 }, 
             function() {
-                f.maps.surf.setProperties({"display": "none"});
+                f.maps.mod.setTransform(Transform.translate(window.innerWidth, 94, 0));
             }
         );
     };
-    f.mainContext.add(f.maps.mod).add(f.maps.surf);
+    var mapsScroll = new Scrollview();
+    mapsScroll._scroller.on('edgeHit', function(data){
+        if (data.position > 0 && 
+            Metamaps.Views && 
+            Metamaps.Views.exploreMaps && 
+            Metamaps.Views.exploreMaps.collection &&
+            Metamaps.Views.exploreMaps.collection.page != "loadedAll") {
+                Metamaps.Views.exploreMaps.collection.getMaps();
+        }
+    });
+    f.maps.resetScroll = function() {
+        // set the scrollView back to the top
+        mapsScroll._physicsEngine.detachAll();
+        mapsScroll.setVelocity(0);
+        mapsScroll.setPosition(0);
+    };
+    mapsScroll.sequenceFrom([f.maps.surf]);
+    f.maps.surf.pipe(mapsScroll);
+    mapsContainer.add(mapsScroll);
+    var mapsNode = new RenderNode(f.maps.mod);
+    mapsNode.add(mapsContainer);
+    f.mainContext.add(mapsNode);
     
     f.loadMaps = function () {
         if (Metamaps.currentSection === "explore") {

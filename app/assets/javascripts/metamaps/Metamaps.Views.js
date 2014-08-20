@@ -17,12 +17,6 @@ Metamaps.Views.init = function () {
             return this.model.id;
         },
 
-        events: {
-            "click .icon": "open",
-            "click .button.edit": "openEditDialog",
-            "click .button.delete": "destroy"
-        },
-
         initialize: function () {
             this.listenTo(this.model, "change", this.render);
         },
@@ -56,11 +50,21 @@ Metamaps.Views.init = function () {
 
                 that.el.appendChild( view.render().el );
             });
+            this.$el.append('<div class="clearfloat"></div>');
             var m = Metamaps.Famous.maps.surf;
             m.setContent(this.el);
+            setTimeout(function(){ 
+                var height = $(that.el).height() + 32 + 56;
+                m.setSize([undefined, height]);
+            }, 100);
+
             if (!initialized) {
                 m.deploy(m._currTarget);
                 initialized = true;
+                setTimeout(function(){
+                    var height = $(that.el).height() + 32 + 56;
+                    m.setSize([undefined, height]);
+                }, 100);
             }
 
             Metamaps.Loading.loader.hide();

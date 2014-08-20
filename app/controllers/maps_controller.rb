@@ -18,45 +18,42 @@ class MapsController < ApplicationController
 
         @current = current_user
         @user = nil
+        @maps = []
+
+        if !params[:page] 
+            page = 1
+        else 
+            page = params[:page]
+        end
 
         if request.path.index("/explore/active") != nil
-            @maps = Map.order("updated_at DESC").limit(20)
+            @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
             @request = "active"
 
         elsif request.path.index("/explore/featured") != nil
-            @maps = Map.order("name ASC").find_all_by_featured(true)
+            @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private").order("name ASC").page(page).per(20)
             @request = "featured"
 
         elsif request.path.index('/explore/mine') != nil  # looking for maps by me
             if !authenticated?
                 redirect_to activemaps_url and return
             end
-            @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
+            # don't need to exclude private maps because they all belong to you
+            @maps = Map.where("maps.user_id = ?", @current.id).order("name ASC").page(page).per(20)
             @request = "you"
 
-        elsif request.path.index('/maps/mappers/') != nil  # looking for maps by a mapper
+        elsif request.path.index('/explore/mappers/') != nil  # looking for maps by a mapper
             @user = User.find(params[:id])
-            @maps = Map.order("name ASC").find_all_by_user_id(@user.id)
-            if authenticated? && @user == @current
-                @request = "you"
-            else 
-                @request = "other"
-            end
+            @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("name ASC").page(page).per(20)
+            @request = "other"
 
         elsif request.path.index('/explore/topics/') != nil  # looking for maps by a certain topic they include
             @topic = Topic.find(params[:id]).authorize_to_show(@current)
             if !@topic
                 redirect_to featuredmaps_url, notice: "Access denied." and return
             end
-            @maps = @topic.maps
+            @maps = @topic.maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
             @request = "topic"
-        end
-
-        #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
-        if @maps
-            @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
-        else
-            @maps = []
         end
 
         respond_to do |format|

@@ -13,7 +13,7 @@ class MainController < ApplicationController
     respond_to do |format|
         format.html { 
           if authenticated?
-            @maps = Map.order("name ASC").find_all_by_user_id(@current.id)
+            @maps = Map.where("maps.user_id = ?", @current.id).order("name ASC").page(1).per(20)
             respond_with(@maps, @current) 
           else 
             respond_with(@current) 

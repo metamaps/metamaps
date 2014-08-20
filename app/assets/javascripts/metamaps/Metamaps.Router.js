@@ -26,6 +26,7 @@
                 Metamaps.Famous.yield.hide();
                 
                 Metamaps.Famous.explore.set('mine');
+                Metamaps.Famous.maps.resetScroll(); // sets the scroll back to the top
                 Metamaps.Famous.explore.show();
 
                 Metamaps.Famous.maps.show();
@@ -89,6 +90,7 @@
             
             Metamaps.Famous.yield.hide();
 
+            Metamaps.Famous.maps.resetScroll(); // sets the scroll back to the top
             Metamaps.Famous.maps.show();
             Metamaps.Famous.explore.set(section);
             Metamaps.Famous.explore.show();

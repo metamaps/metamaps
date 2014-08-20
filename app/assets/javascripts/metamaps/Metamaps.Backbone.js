@@ -77,6 +77,9 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
     initialize: function(models, options) {
         this.id = options.id;
         this.sortBy = options.sortBy;
+
+        // this.page represents the NEXT page to fetch
+        this.page = models.length > 0 ? (models.length < 20 ? "loadedAll" : 2) : 1;
     },
     url: function() {
         return '/explore/' + this.id + '.json';
@@ -101,17 +104,23 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
 
         var self = this;
 
-        this.fetch({
-            reset: true,
-            success: function (collection, response, options) {
-                // you can pass additional options to the event you trigger here as well
-                self.trigger('successOnFetch');
-            },
-            error: function (collection, response, options) {
-                // you can pass additional options to the event you trigger here as well
-                self.trigger('errorOnFetch');
-            }
-        });
+        if (this.page != "loadedAll") {
+            var numBefore = this.length;
+            this.fetch({
+                remove: false,
+                data: { page: this.page },
+                success: function (collection, response, options) {
+                    // you can pass additional options to the event you trigger here as well
+                    if (collection.length - numBefore < 20) self.page = "loadedAll";
+                    else self.page += 1;
+                    self.trigger('successOnFetch');
+                },
+                error: function (collection, response, options) {
+                    // you can pass additional options to the event you trigger here as well
+                    self.trigger('errorOnFetch');
+                }
+            });
+        }
     }
 });
 
