@@ -63,8 +63,8 @@ define(function(require, exports, module) {
     // CONTENT / OTHER PAGES
     f.yield = {};
     f.yield.surf = new Surface({
-        size: [true, true],
-        classes: [],
+        size: [undefined, undefined],
+        classes: ['famousYield'],
         properties: {
             display: 'none'
         }

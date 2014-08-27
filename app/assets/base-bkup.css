@@ -121,7 +121,6 @@ background: none;
   position:relative;
   border-bottom: 1px solid #BDBDBD;
   border-top: 1px solid #BDBDBD;
-  background-color: #e0e0e0;
 }
 
 .linkItem {
@@ -156,12 +155,12 @@ background: none;
   padding:17px 0 17px 28px;
 }
 .linkItem.mapCount {
-  background-image: url(metamap32.png);
+  background-image: url(MMCCicon_map_black.png);
   min-width: 16px;
   padding:17px 0 17px 28px;
 }
 .linkItem.synapseCount {
-  background-image: url(synapse32tmcard.png);
+  background-image: url(MMCCicon_synapse_black.png);
   min-width: 16px;
   padding:17px 0 17px 28px;
 }
@@ -169,23 +168,23 @@ background: none;
 
 }
 .linkItem.mapPerm.co {
-  background-image: url(CO32.png);
+  background-image: url(MMCCicon_commons.png);
 }
 .linkItem.mapPerm.pu {
-  background-image: url(PU32.png);
+  background-image: url(MMCCicon_public.png);
 }
 .linkItem.mapPerm.pr {
-  background-image: url(PR32.png);
+  background-image: url(MMCCicon_private.png);
 }
 
 .showcard .yourTopic .mapPerm:hover {
-  background-image: url(arrowexpand.png);
+  background-image: url(/assets/MMCCicon_maximize_arrow_black.png);
   background-size: 31px 25px;
   background-position-x: 8px;
   cursor:pointer;
 }
 .showcard .yourTopic .mapPerm.minimize {
- background-image: url(arrowcollapse.png) !important;
+ background-image: url(MMCCicon_minimize_arrow_black.png) !important;
  background-size: 31px 25px;
 background-position-x: 8px;
 cursor: pointer;
@@ -206,22 +205,22 @@ cursor: pointer;
   background-color: #F5F5F5;
 }
 .mapPerm .permissionSelect .commons {
-  background-image: url(CO32.png);
+  background-image: url(MMCCicon_commons.png);
 }
 .mapPerm .permissionSelect .public {
-  background-image: url(PU32.png);
+  background-image: url(MMCCicon_public.png);
 }
 .mapPerm .permissionSelect .private {
-  background-image: url(PR32.png);
+  background-image: url(MMCCicon_private.png);
 }
 .mapPerm .permissionSelect .commons:hover {
-  background-image: url(CO32b.png);
+  background-image: url(MMCCicon_commons_black.png);
 }
 .mapPerm .permissionSelect .public:hover {
-  background-image: url(PU32b.png);
+  background-image: url(MMCCicon_public_black.png);
 }
 .mapPerm .permissionSelect .private:hover {
-  background-image: url(PR32b.png);
+  background-image: url(MMCCicon_private_black.png);
 }
 
 .CardOnGraph .metacodeTitle {
@@ -438,13 +437,13 @@ font-family: 'LatoLight';
   margin: 10px 12px 0 12px;
 }
 #edit_synapse .mapPerm.co {
-  background-image: url("CO32.png");
+  background-image: url("/assets/MMCCicon_commons.png");
 }
 #edit_synapse .mapPerm.pu {
-  background-image: url("PU32.png");
+  background-image: url("/assets/MMCCicon_public.png");
 }
 #edit_synapse .mapPerm.pr {
-  background-image: url("PR32.png");
+  background-image: url("/assets/MMCCicon_private.png");
 }
 
 #edit_synapse .permActivator {
@@ -453,7 +452,7 @@ font-family: 'LatoLight';
 }
 
 #edit_synapse {
-  background: url("synapse32tmcard.png") no-repeat scroll 0 center / 30px 30px #FFFFFF;
+  background: url("/assets/MMCCicon_synapse_black.png") no-repeat scroll 0 center / 30px 30px #FFFFFF;
   border-radius: 5px;
   padding: 5px 5px 5px 30px;
   color: #000;
@@ -501,7 +500,7 @@ font-family: 'LatoLight';
 }
 
 #edit_synapse.yourEdge .mapPerm:hover {
-  background-image: url(MMCCicon_maximize_arrow_black.png);
+  background-image: url(/assets/MMCCicon_maximize_arrow_black.png);
   background-size: 24px 17px;
   background-position: 0px 2px;
   cursor:pointer;
@@ -533,7 +532,7 @@ font-family: 'LatoLight';
 /* Map Cards */
 
 .map {
-    display:inline-block;
+    float:left;
     width:220px;
 	  height:340px;
     font-size: 12px;
@@ -541,7 +540,7 @@ font-family: 'LatoLight';
     overflow: visible;
     background: #424242;
     border-radius:2px;
-    margin:16px 16px 16px 19px;
+    margin:0 12px 12px 0;
 }
 
 .mapCard {

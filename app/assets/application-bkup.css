@@ -116,36 +116,36 @@ button.button,
 a.button,
 input[type="submit"] {
     border: none;
-    height: 32px;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    border: none;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    height: 30px;
     outline: none;
-    padding: 0 18px;
+    padding: 0 0;
+    width: 60px;
     -webkit-box-shadow: none;
     box-shadow: none;
-    background: #4FC059;
+    background: #AEA9FD;
     vertical-align: top;
-    color: #FFF;
+    color: black;
     margin: 0px;
     cursor: pointer;
     display: inline-block;
-    text-transform: uppercase;
-    font-size: 14px;
-    line-height: 16px;
+    font-weight: bold;
+    line-height: 29px;
+    min-width: 54px;
     text-align: center;
     text-decoration: none;
     -webkit-border-radius: 2px;
     border-radius: 2px;
     -webkit-user-select: none;
-    font-family: 'din-medium', helvetica, sans-serif;
 }
 button.button:hover,
 a.button:hover,
 input[type="submit"]:hover {
-    background: #49AD4E;
-}
-button.button:active,
-a.button:active,
-input[type="submit"]:active {
-    background: #429B46;
+    background: #B6B2FD;
 }
 /*
  * Utility
@@ -184,7 +184,7 @@ input[type="submit"]:active {
     height: 100%;
     margin-bottom: 50px;
 }
-.centeedProfile {
+.centeredProfile {
     margin: 0 auto;
     display: block;
     width: 830px;
@@ -358,6 +358,16 @@ label {
     margin-top: 10px;
     margin-bottom: 4px;
 }
+input[type="submit"] {
+    margin-top: 5px;
+}
+#user_remember_me {
+    margin-top: 11px;
+}
+#user_remember_me,
+label[for="user_remember_me"] {
+    float: left;
+}
 .contentarea p,
 .contentarea ul,
 .contentarea ol,
@@ -463,147 +473,99 @@ label {
     background-color: #E0E0E0;
     color: #424242;
     text-transform: uppercase;
-    text-align: left;
+    text-align: center;
     font-size: 14px;
     line-height: 14px; 
-    position:relative;
-}
-.accountInnerArrow {
-    width:16px;
-    height:16px;
-    background-image: url(arrowdown_sprite.png);
-    background-repeat: no-repeat;
-    position:absolute;
-    top: 8px;
-    right:6px;
-}
-.unauthenticated .sidebarAccountIcon:hover .accountInnerArrow {
-    background-position: 0px -16px;
 }
 .sidebarAccountIcon img {
-    border-radius: 16px;
+    border-radius: 17px;
 }
 .sidebarAccountBox {
     display: none;
     height: auto;
+    padding: 10px;
+    min-width: 120px;
 }
 .authenticated .sidebarAccountBox {
-    width: 138px;
-    padding: 16px;
+    width: auto;
 }
 .unauthenticated .sidebarAccountBox {
-    width: 270px;
-    height: 280px;
-}
-.sidebarAccountImage {
-    width:48px;
-    height:48px;
-    margin: 0 auto;
-    border-radius: 24px;
+    width: 200px;
 }
 .sidebarAccountBox h3 {
+    font-family: 'vinyl', helvetica, sans-serif;
     text-transform: uppercase;
-    color:#424242;
-    font-size:14px;
-    line-height:14px;
-    margin-top:8px;
-    text-align:center;
-    max-width:138px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-style: italic;
 }
 .sidebarAccountBox ul {
     list-style: none;
-    margin-top:10px;
 }
-.sidebarAccountBox .accountListItem {
+.sidebarAccountBox li.accountIcon {
     padding: 0;
     background-size: 18px 18px;
     background-repeat: no-repeat;
     background-position: 0px 6px;
-    font-size: 14px;
-    line-height: 14px;
-    color: #757575;
+    font-size: 18px;
+    line-height: 20px;
 }
-.accountListItem:hover {
-    color: #424242;
+li.accountIcon:hover {
+    background-position: 4px 6px;
 }
-.accountListItem .accountIcon {
-    width:32px;
-    height:32px;
-    position:absolute;
-    pointer-events:none;
-    background-repeat:no-repeat;
-    background-image: url(user_sprite.png);
+li.accountMaps {
+    background-image: url('MMCCicon_map.png');
 }
-.accountSettings .accountIcon {
-    background-position: 0 0;
+li.accountSettings {
+    background-image: url('usersettings.png');
 }
-.accountAdmin .accountIcon {
-    background-position: 0 -32px;
+li.accountAdmin {
+    background-image: url('MMCCicon_admin.png');
 }
-.accountInvite .accountIcon {
-    background-position: 0 -64px;
+li.accountInvite {
+    background-image: url('MMCCicon_invite.png');
 }
-.accountLogout .accountIcon {
-    background-position: 0 -96px;
+li.accountLogout {
+    background-image: url('MMCCicon_logout.png');
 }
-.accountListItem a {
+li.accountIcon a {
     display: block;
-    padding: 9px 0 9px 62px;
-    color: #757575;
-}
-.accountListItem:hover a {
-    color: #424242;
-}
-.accountListItem:hover .accountIcon {
-    background-position-x: -32px;
+    padding: 6px 0 6px 25px;
 }
 li.accountInvite span {
     display: block;
-    padding: 9px 0 9px 62px;
+    padding: 6px 0 6px 25px;
 }
-.accountImage {
-    background-image: url(user.png);
-    background-repeat: no-repeat;
-    height:84px;
-    width:84px;
-    margin: 24px auto;
-}
-.accountInput {
-    margin: 0 35px 10px;
+.sidebarAccountBox a {
+
 }
 .sidebarAccountBox input[type="email"],
 .sidebarAccountBox input[type="password"] {
     width: 200px;
     height: 32px;
-    font-size: 14px;
+    font-size: 15px;
     direction: ltr;
-    outline:none;
     -webkit-appearance: none;
     appearance: none;
     display: inline-block;
     margin: 0;
-    padding: 0 10px;
+    padding: 0 8px;
     background: #fff;
     border: 1px solid #d9d9d9;
     border-top: 1px solid #c0c0c0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
     font: -webkit-small-control;
-    color: #BDBDBD;
+    color: initial;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
     text-indent: 0px;
     text-shadow: none;
+    display: inline-block;
     text-align: start;
-    font-family: 'din-medium', helvetica, sans-serif;
 }
 .sidebarAccountBox input[type="email"]:hover,
 .sidebarAccountBox input[type="password"]:hover {
@@ -613,40 +575,25 @@ li.accountInvite span {
     -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-.accountSubmit {
-    margin-left: 35px;
-    float:left;
+.sidebarAccountBox .links a {
+    display: block;
+    margin-top: 5px;
 }
-.accountRememberMe {
-    float:right;
-    margin-right: 35px;
-}
-#user_remember_me {
-    margin-top: 11px;
-}
-#user_remember_me,
-label[for="user_remember_me"] {
-    float: left;
-    font-size: 12px;
-    color: #424242;
-}
-.accountForgotPass {
-    margin: 8px 0 0 35px;
-    font-size: 12px;
-}
-.accountForgotPass a {
-    color: #757575;
-}
-.accountForgotPass a:hover {
-    color: #424242;
-}
-
 /* Save To New Map */
 
 .sidebarFork {
     width: 32px;
     height: 32px;
 }
+.sidebarForkIcon {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: url('fork.png') no-repeat center center;
+    background-size: 32px 32px;
+    cursor: pointer;
+}
+.sidebarForkIcon:hover {} 
 
 .sidebarFork .hoverForTip:hover .tip {
     display: block;
@@ -673,6 +620,18 @@ label[for="user_remember_me"] {
 .sidebarFilter {
     width: 32px;
     height: 32px;
+}
+
+.sidebarFilterIcon {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: url('filter.png') no-repeat center center;
+    background-size: 32px 32px;
+    cursor: pointer;
+}
+.sidebarFilterIcon:hover {
+
 }
 
 .sidebarFilterBox {
@@ -744,6 +703,19 @@ h3.filterBox {
 .sidebarCollaborate {
     width: 32px;
     height: 32px;
+}
+.sidebarCollaborateIcon {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-image: url('junto32.png');
+    background-size: 32px 32px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+.sidebarCollaborateIcon.blue {
+    background-image: url('junto32.png');
 }
 .sidebarCollaborateBox {
     display: none;
@@ -883,13 +855,13 @@ float: left;
     display: block;
 }
 .rightclickmenu .rc-permission .toCommons {
-    background-image: url(CO64.png);
+    background-image: url(MMCCicon_commons.png);
 }
 .rightclickmenu .rc-permission .toPublic {
-    background-image: url(PU64.png);
+    background-image: url(MMCCicon_public.png);
 }
 .rightclickmenu .rc-permission .toPrivate {
-    background-image: url(PR64.png);
+    background-image: url(MMCCicon_private.png);
 }
 .rightclickmenu p {
     padding: 7px;
@@ -923,13 +895,13 @@ float: left;
     background-size: 16px 16px;
 }
 #new_topic .topicPermission.commons {
-    background-image: url(CO64.png);
+    background-image: url(MMCCicon_commons.png);
 }
 #new_topic .topicPermission.public {
-    background-image: url(PU64.png);
+    background-image: url(MMCCicon_public.png);
 }
 #new_topic .topicPermission.private {
-    background-image: url(PR64.png);
+    background-image: url(MMCCicon_private.png);
 }
 #new_topic .topicOriginatorIcon {
     position: relative;
@@ -996,13 +968,13 @@ float: left;
     background-size: 16px 16px;
 }
 #new_synapse .synapsePermission.commons {
-    background-image: url(CO64.png);
+    background-image: url(MMCCicon_commons.png);
 }
 #new_synapse .synapsePermission.public {
-    background-image: url(PU64.png);
+    background-image: url(MMCCicon_public.png);
 }
 #new_synapse .synapsePermission.private {
-    background-image: url(PR64.png);
+    background-image: url(MMCCicon_private.png);
 }
 #new_synapse .synapseOriginatorIcon {
     position: relative;
@@ -1036,7 +1008,6 @@ float: left;
 #new_synapse .tt-suggestion .resultnoresult .synapseOriginatorIcon {
     display: none;
 }
-/* map info box */
 /* map info box */
 
 .wrapper div.mapInfoBox {
@@ -1193,7 +1164,6 @@ float: left;
     font-size: 12px;
     color: #F5F5F5;
 }
-
 /* lightboxes */
 
 #lightbox_overlay {
@@ -1206,7 +1176,7 @@ float: left;
     display: none;
 }
 #lightbox_main {
-    width: 770px;
+    width: 550px;
     height: auto;
     margin: 0 auto;
     z-index: 2;
@@ -1249,114 +1219,27 @@ float: left;
     border: none;
 }
 #lightbox_content {
-/*    background: white url(metacode-watermark.png) 443px -30px no-repeat;
+    background: white url(metacode-watermark.png) 443px -30px no-repeat;
     padding: 20px;
-    border-radius: 5px;*/
-    width: 552px;
-    height: 434px;
-    background-color: #e0e0e0;
-    padding: 64px 124px 64px 124px;
-    border-radius: 2px;
+    border-radius: 5px;
 }
 .lightboxContent h3 {
-/*    font-style: italic;
+    font-style: italic;
     text-transform: uppercase;
     font-family: 'vinyl';
     font-size: 30px;
     line-height: 35px;
-    color: black;*/
-    font-family: 'din-medium';
-    font-size: 24px;
-    text-transform: uppercase;
-    color: #424242;
-    text-align: left;
-    padding: 0 0 0 0;
+    color: black;
 }
 .lightboxContent h3.forCreateMap {
     text-align: center;
 }
-#svi {
-    padding-top: 56px;
-    padding-left: 162px;
-    margin: 0 auto;
-}
-#svi1 {
-    font-family: 'din-medium';
-    font-size: 14px;
-    font-color: #424242;
-    text-transform: uppercase;
-    text-align: left;
-    display: inline-block;
-}
-#svi2 {
-    font-family: 'din-medium';
-    font-size: 14px;
-    font-color: #424242;
-    text-transform: uppercase;
-    text-align: left;
-    display: inline-block;
-}
-
-#svi1 > p, #svi2 > p {
-    width: 150px;    
-}
 .lightboxContent {
-    font-family: 'din-regular';
-    font-size: 14px;
-    color: #424242;
-    text-align: left;
+    display: none;
 }
 .openLightbox {
     cursor: pointer;
 }
-.lightbox_links a {
-    height: 70px;
-    width: 104px;
-    border-radius: 2px;
-    padding-bottom: 0;
-    font-family: 'din-medium';
-    font-size: 14px;
-    text-transform: uppercase;
-    color: #757575;
-    text-align: center;
-    display: block;
-    cursor: pointer;
-    position:relative;
-
-}
-.lightbox_links a:hover {
-    color: #424242;
-}
-.lightbox_links a:active {
-    color: #00bcd4;
-}
-.lightbox_links .lightboxAboutIcon {
-    background-image: url(about_sprite.png);
-    background-repeat: no-repeat;
-    width:32px;
-    height:32px;
-    margin:10px auto;
-    background-position: 0 0;
-}
-.lightbox_links a:hover .lightboxAboutIcon {
-    background-position-y: -32px;
-}
-#lightbox_metamapps .lightboxAboutIcon {
-    background-position-x: 0;
-}
-#lightbox_community .lightboxAboutIcon {
-    background-position-x: -32px;
-}
-#lightbox_source .lightboxAboutIcon {
-    background-position-x: -64px;
-}
-#lightbox_blog .lightboxAboutIcon {
-    background-position-x: -96px;
-}
-#lightbox_term .lightboxAboutIcon {
-    background-position-x: -128px;
-}
-
 /* jquery ui tabs */
 
 .ui-tabs-hide {
@@ -1458,16 +1341,20 @@ float: left;
 /* about */
 
 #about > p {
-/*    color: #000;
-    font-size: 16px;*/
-    margin: 10px 0;
+    color: #000;
+    font-size: 16px;
     line-height: 24px;
+    margin: 10px 0;
 }
 #about ul {
     list-style: none;
 }
 #about ul li {
     display: inline-block;
+    padding: 5px;
+}
+#about li a {
+    color: #097A51;
 }
 /* invite */
 
@@ -1568,25 +1455,25 @@ float: left;
     cursor: pointer;
 }
 .new_map .mapCommonsIcon {
-    background-image: url(CO64.png);
+    background-image: url(MMCCicon_commons.png);
 }
 .new_map .mapPublicIcon {
-    background-image: url(PU64.png);
+    background-image: url(MMCCicon_public.png);
 }
 .new_map .mapPrivateIcon {
-    background-image: url(PR64.png);
+    background-image: url(MMCCicon_private.png);
 }
 .new_map .mapCommonsIcon.selected,
 .new_map .mapCommonsIcon:hover {
-    background-image: url(CO64b.png);
+    background-image: url(MMCCicon_commons_black.png);
 }
 .new_map .mapPublicIcon.selected,
 .new_map .mapPublicIcon:hover {
-    background-image: url(PU64b.png);
+    background-image: url(MMCCicon_public_black.png);
 }
 .new_map .mapPrivateIcon.selected,
 .new_map .mapPrivateIcon:hover {
-    background-image: url(PR64b.png);
+    background-image: url(MMCCicon_private_black.png);
 }
 .new_map .permIcon h4 {
     font-style: italic;
@@ -1802,7 +1689,53 @@ float: left;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+/* FAQ */
 
+#wrapper > div.FAQ {
+    width: 700px;
+    margin: 0 auto;
+    padding: 20px 0 20px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.FAQ .question {
+    display: block;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 45px 10px 10px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    line-height: 24px;
+    position: relative;
+    cursor: pointer;
+}
+.FAQ .answer {
+    padding: 0 30px;
+    margin-bottom: 20px;
+    line-height: 24px;
+    margin-right: 20px;
+}
+.FAQ .answer.off {
+    display: none;
+}
+.FAQ .switch {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35px;
+    height: 44px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('/assets/MMCCicon_maximize_arrow.png');
+    background-size: 25px 25px;
+    cursor: pointer;
+}
+.FAQ .minimizeAnswer {
+    background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
+}
 /* request */
 
 #wrapper .requestInvite {
@@ -1814,6 +1747,17 @@ float: left;
     height: 100%;
     overflow: hidden;
 }
+.addMap {
+    display: block;
+    width: 32px;
+    height: 32px;
+    background: url('newmap.png') no-repeat center center;
+    background-size: 32px 32px;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-right: 10px;
+}
+
 
 .home_bg {
     display: block;

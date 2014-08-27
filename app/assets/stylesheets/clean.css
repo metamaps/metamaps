@@ -104,6 +104,7 @@
 }
 .bottomLinks li {
 	display: inline-block;
+    cursor:pointer;
 }
 .bottomLinks li a {
 	color: #9e9e9e;
@@ -131,10 +132,16 @@
 .homeButton {
 	width: 40px;
     height: 32px;
-    background: #757575 url(home.png) no-repeat center center;
+    background-color: #757575;
+    background-image: url(home_light.png);
+    background-repeat: no-repeat;
+    background-position: center center;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
     float:left;
+}
+.homeButton:hover {
+    background-image: url(home_light.png);
 }
 .homeButton a {
     display:block;
@@ -174,7 +181,7 @@
 .explorePage .sidebarSearchField,
 .explorePage .sidebarSearch .tt-hint {
 	width: 380px;
-	padding: 10px 10px 0 10px;
+	padding: 7px 10px 3px 10px;
 }
 
 .sidebarSearchField,
@@ -184,7 +191,7 @@
     border-bottom: 1px solid #BDBDBD;
     border-left: none;
     border-right: none;
-    padding: 10px 0 0 0;
+    padding: 7px 0 3px 0;
     width: 0px;
     margin: 0;
     outline: none;
@@ -192,7 +199,7 @@
     line-height: 14px;
     background: #FFFFFF; 
     color: #BDBDBD; 
-    font-family: 'LatoRegular';
+    font-family: 'din-medium', helvetica, sans-serif;
 }
 .sidebarSearch .tt-dropdown-menu {
     left: -35px !important;
@@ -485,8 +492,8 @@
 	position: fixed;
 	top:52px;
 	right:24px;
-	background-color: #E5E5E5;
-	border-radius: 4px;
+	background-color: #E0E0E0;
+	border-radius: 2px;
 	box-shadow: 0 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
@@ -497,22 +504,49 @@
 .mapPage .upperRightMapButtons {
 	top: 0;
 }
-/*.upperRightMapButtons.animations {
-  -webkit-transition-property: top;
-  -moz-transition-property: top;
-  -o-transition-property: top;
-  -ms-transition-property: top;
-  transition-property: top;
-}*/
+
+.upperRightIcon {
+    width: 32px;
+    height: 32px;
+    background-image: url('topright_sprite.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+.upperRightIcon:hover {
+    background-position-y: -32px;
+}
+.sidebarCollaborateIcon.blue {
+    background-position-x: -32px;
+}
+.sidebarCollaborateIcon {
+    background-position-x: 0;
+}
+.sidebarFilterIcon {
+    background-position-x: -64px;
+}
+.sidebarForkIcon {
+    background-position-x: -96px;
+}
+.addMap {
+    background-position-x: -128px;
+    margin-right:10px;
+}
+
 
 /* end upperRightUI */
 
+
+/* yield */
+
+.famousYield {
+    overflow-y:auto;
+}
 
 /* homepage */
 
 .homeWrapper {
     width: 560px;
-    margin: 0 auto;
+    margin: 56px auto 72px;
     color: #424242;
 }
 
@@ -585,12 +619,20 @@
     cursor: pointer;
 }
 .openCheatsheet {
-    background: url('help.png') no-repeat center center;
+    background-image: url('help_sprite.png');
+    background-repeat:no-repeat;
+}
+.openCheatsheet:hover {
+    background-position-y: -32px;
 }
 .mapInfoIcon {
 	position: relative;
 	top: 56px; /* puts it just offscreen */
-    background: url('mapinfo.png') no-repeat center center;
+    background-image: url('mapinfo_sprite.png');
+    background-repeat:no-repeat;
+}
+.mapInfoIcon:hover {
+    background-position-y: -32px;
 }
 .mapPage .mapInfoIcon {
 	top: 0;
@@ -624,24 +666,26 @@
 	height:32px;
 	background-color: #424242;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: 0 0;
 	cursor:pointer;
 }
-.zoomExtents {
-
-	margin-bottom:5px;
-	border-radius: 2px;
+.mapControl:hover {
+    background-position-x: -32px;
 }
 .zoomExtents {
-    background-image: url(zoomextents.png);
+    margin-bottom:5px;
+    border-radius: 2px;
+    background-image: url(extents_sprite.png);
 }
 .zoomIn {
-    background-image: url(zoomin.png);
+    background-image: url(zoom_sprite.png);
+    background-position: 0 0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
 .zoomOut {
-    background-image: url(zoomout.png);
+    background-image: url(zoom_sprite.png);
+    background-position:0 -32px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 }
@@ -670,7 +714,7 @@
     z-index: 3;
 }
 
-.exploreMapsCenter a {
+.exploreMapsButton {
     color: #757575;
 	cursor: default;
 	font-weight: normal;
@@ -681,20 +725,37 @@
     border-bottom: 2px solid rgba(0,0,0,0);
 	display: inline-block;
     cursor: pointer;
+    position:relative;
 }
-.exploreMapsCenter a:hover, .exploreMapsCenter a.active {
+.exploreMapsButton:hover, .exploreMapsButton.active {
   text-decoration: none;
   color: #424242;
   border-bottom: 2px solid #00BCD4;
 }
-.exploreMapsCenter .myMaps {
-    background: url(metamap.png) no-repeat 0 center;
+
+.exploreMapsButton .exploreMapsIcon {
+    background-repeat: no-repeat;
+    width:32px;
+    height:32px;
+    position:absolute;
+    top:5px;
+    left:5px;
+    background-position-y: 0;
 }
-.exploreMapsCenter .activeMaps {
-    background: url(activity.png) no-repeat 0 center;
+.exploreMapsCenter .myMaps .exploreMapsIcon {
+    background-image: url(exploremaps_sprite.png);
+    background-position-x: 0;
 }
-.exploreMapsCenter .featuredMaps {
-    background: url(featured.png) no-repeat 0 center;
+.exploreMapsCenter .activeMaps .exploreMapsIcon {
+    background-image: url(exploremaps_sprite.png);
+    background-position-x: -32px;
+}
+.exploreMapsCenter .featuredMaps .exploreMapsIcon {
+    background-image: url(exploremaps_sprite.png);
+    background-position-x: -64px;
+}
+.exploreMapsButton:hover .exploreMapsIcon, .exploreMapsButton.active .exploreMapsIcon {
+    background-position-y: -32px;
 }
 
 .mapsWrapper {
@@ -721,7 +782,8 @@
 
 /* feedback */
 body a#barometer_tab {
-background-image: url(feedback.png);
+background-image: url(feedback_sprite.png);
+background-position: 0 0;
 background-color: transparent;
 height: 110px;
 margin-left:0;
@@ -731,4 +793,8 @@ width: 22px;
 border-top-right-radius: 2px;
 border-bottom-right-radius: 2px;
 box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+}
+
+body a#barometer_tab:hover {
+  background-position: 0 -110px;
 }

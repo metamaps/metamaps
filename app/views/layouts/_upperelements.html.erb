@@ -9,7 +9,7 @@
 
     <!-- search box -->
     <div class="sidebarSearch">
-        <input type="text" class="sidebarSearchField"></input>
+        <input type="text" class="sidebarSearchField" placeholder="Search for topics, maps, and mappers..."></input>
         <div class="sidebarSearchIcon"></div>
         <div class="clearfloat"></div>
     </div> <!-- end sidebarSearch -->
@@ -17,11 +17,11 @@
 </div><!-- end upperLeftUI -->
 
 <div class="upperRightUI">
-    <div class="mapElement upperRightEl upperRightMapButtons animations">
+    <div class="mapElement upperRightEl upperRightMapButtons">
         <% if authenticated? %>
             <!-- Realtime -->
             <div class="sidebarCollaborate upperRightEl">
-                <div class="sidebarCollaborateIcon blue"></div>
+                <div class="sidebarCollaborateIcon upperRightIcon blue"></div>
                 <div class="sidebarCollaborateBox upperRightBox">
                     <h3 class="realtimeBoxTitle">Realtime: </h3>
                     <span class="realtimeOnOff rtOn">ON</span>
@@ -39,7 +39,7 @@
 
         <!-- filtering -->
         <div class="sidebarFilter upperRightEl">
-            <div class="sidebarFilterIcon"></div>
+            <div class="sidebarFilterIcon upperRightIcon"></div>
             <div class="sidebarFilterBox upperRightBox">
                 <%= render :partial => 'shared/filterBox' %>
             </div>
@@ -48,7 +48,7 @@
         <% if authenticated? %>
         <!-- fork map -->
         <div class="sidebarFork upperRightEl">
-            <div class="sidebarForkIcon"></div>
+            <div class="sidebarForkIcon upperRightIcon"></div>
         </div> <!-- end sidebarFork -->
         <% end %>
 
@@ -57,7 +57,7 @@
 
     <% if authenticated? %>
     <!-- create new map -->
-    <div class="addMap openLightbox upperRightEl" data-open="newmap">
+    <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap">
     </div><!-- end addMap -->
     <% end %>
 
@@ -68,6 +68,7 @@
               <%= image_tag user.image.url(:thumb), :size => "32x32" %>
             <% elsif !authenticated? %>
               SIGN IN
+              <div class="accountInnerArrow"></div>
             <% end %>
         </div>
         <div class="sidebarAccountBox upperRightBox">

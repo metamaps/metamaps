@@ -62,8 +62,19 @@ class Map < ActiveRecord::Base
     self.contributors.length
   end
 
+  def created_at_str
+    self.created_at.strftime("%m/%d/%Y")
+  end
+
+  def updated_at_str
+    self.updated_at.strftime("%m/%d/%Y")
+  end
+
   def as_json(options={})
-    super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count])
+    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count], :except => [:created_at, :updated_at])
+    json[:created_at] = self.created_at_str
+    json[:updated_at] = self.updated_at_str
+    json
   end
   
   ##### PERMISSIONS ######

@@ -313,6 +313,7 @@ Metamaps.GlobalUI.Account = {
             $('.sidebarAccountBox').fadeIn(200, function () {
                 self.changing = false;
                 self.isOpen = true;
+                $('.sidebarAccountBox #user_email').focus();
             });
         }
     },
@@ -321,6 +322,7 @@ Metamaps.GlobalUI.Account = {
 
         if (!self.changing) {
             self.changing = true;
+            $('.sidebarAccountBox #user_email').blur();
             $('.sidebarAccountBox').fadeOut(200, function () {
                 self.changing = false;
                 self.isOpen = false;
@@ -396,7 +398,7 @@ Metamaps.GlobalUI.Search = {
                 width: '400px'
             }, 300, function () {
                 $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
-                    padding: '10px 10px 0 10px',
+                    padding: '7px 10px 3px 10px',
                     width: '380px'
                 });
                 $('.sidebarSearchField').focus();
@@ -413,7 +415,7 @@ Metamaps.GlobalUI.Search = {
             if (!self.locked && !self.changing && self.isOpen && (bypass || $('.sidebarSearchField').val() == '')) {
                 self.changing = true;
                 $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
-                    padding: '10px 0 0 0',
+                    padding: '7px 0 3px 0',
                     width: '400px'
                 });
                 $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({

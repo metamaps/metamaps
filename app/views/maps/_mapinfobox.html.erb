@@ -2,9 +2,9 @@
   # Partial rendering form for a new topic on a map
   # This code is called when viewing a metamap in show.html.erb in the views/maps folder
   #%>
-<% if @map %>
-<div class="mapInfoBox mapElement mapElementHidden permission <%= @map.user == user ? " yourMap" : "" %><%= @map.authorize_to_edit(user) ? " canEdit" : "" %>">
+<div class="mapInfoBox mapElement mapElementHidden permission <%= @map && @map.user == user ? " yourMap" : "" %><%= @map && @map.authorize_to_edit(user) ? " canEdit" : "" %>">
   
+  <% if @map %>
   <div class="mapInfoName"><%= best_in_place @map, :name, :type => :input, :classes => 'best_in_place_name' %></div>
   
   <div class="mapInfoStat">
@@ -51,40 +51,5 @@
       :data => { :bypass => 'true'}  %>
     <% end %>
   </div>
+  <% end %>
 </div>
-
-<% else %>
-<div class="mapInfoBox mapElement mapElementHidden permission {{canEdit}}">
-  
-  <div class="mapInfoName">{{name}}</div>
-  
-  <div class="mapInfoStat">
-    <div class="infoStatIcon mapContributors hoverForTip">
-      {{contributor_count}}
-      <div class="tip">{{contributor_list}}</div>
-    </div>
-    <div class="infoStatIcon mapTopics">
-      {{topic_count}}
-    </div>
-    <div class="infoStatIcon mapSynapses">
-      {{synapse_count}}
-    </div>
-    <div class="infoStatIcon mapPermission {{permission}} hoverForTip">
-      {{map_creator_tip}}
-    </div>
-    <div class="clearfloat"></div>
-  </div>
-  <div class="mapInfoDesc">
-    {{desc}}
-  </div>
-  
-  <div class="mapInfoMeta">
-    <p>Created by {{user_name}} on {{created_at}}</p>
-    <p>Last edited {{updated_at}}</p>
-  </div>
-  
-  <div class="mapInfoDelete">
-    {{delete}}
-  </div>
-</div>
-<% end %>

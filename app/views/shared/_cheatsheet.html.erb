@@ -7,38 +7,22 @@
 
 <div id="cheatSheet">
   <ul>
-    <% if controller_name == "topics" && action_name == "show" %>
     <li><a href="#csTopicView">Topic View</a></li>
-    <% end %>
-    <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
     <li><a href="#csCreatingTopics">Creating Topics</a></li>
-    <% end %>
-    <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
     <li><a href="#csEditingTopics">Editing Topics</a></li>
-    <% end %>
-    <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
     <li><a href="#csCreatingSynapses">Creating Synapses</a></li>
-    <% end %>
-    <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
     <li><a href="#csEditingSynapses">Editing Synapses</a></li>
-    <% end %>
-    <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
     <li><a href="#csNavigation">Navigation</a></li>
     <li><a href="#csSelection">Selection</a></li>
-    <% end %>
     <li><a href="#csSearch">Search</a></li>
-    
   </ul>
 
-  <% if controller_name == "topics" && action_name == "show" %>
   <div id="csTopicView">    
     <p class="sectionTitle">Topic View</p>
     <div class="csItem"><span class="csTitle">Alt + click on topic icon:</span> recenter topics around chosen topic</div>
     <div class="csItem"><span class="csTitle">Right-click + 'center this topic':</span> recenter topics around chosen topic</div> 
   </div>
-  <% end %>
   
-  <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
   <div id="csCreatingTopics">    
     <p class="sectionTitle">Creating Topics</p>
     <div class="csItem"><span class="csTitle">Double-click on canvas:</span> Bring up the metacode spinner</div>
@@ -49,9 +33,7 @@
     <div class="csItem indented"><span class="csTitle">Enter:</span> create a new topic</div>
     <div class="csItem indented"><span class="csTitle">Gear Icon:</span> open up metacode settings</div>
   </div>
-  <% end %>
 
-  <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
   <div id="csEditingTopics">    
     <p class="sectionTitle">Editing Topics</p>
     <div class="csItem">
@@ -83,9 +65,7 @@
     </div>
     <div class="csItem indented">*Hide/Remove/Delete topic within context menu</div>
   </div>
-  <% end %>
 
-  <% if authenticated? && controller_name == "maps" && action_name == "show"  %>
   <div id="csCreatingSynapses">    
     <p class="sectionTitle">Creating Synapses</p>
     <div class="csItem"><span class="csTitle">Right-click & drag from one topic to another:</span> open create synapse prompt</div>
@@ -95,9 +75,7 @@
     <div class="csItem indented"><span class="csTitle">Enter:</span> Create topic</div>
     <div class="csItem indented"><span class="csTitle">Enter:</span> Create synapse</div>
   </div>
-  <% end %>
 
-  <% if authenticated? && (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
   <div id="csEditingSynapses">    
     <p class="sectionTitle">Editing Synapses</p>
     <div class="csItem"><span class="csTitle">Open synapse card:</span>double-click on synapse </div>
@@ -108,9 +86,7 @@
     <div class="csItem"><span class="csTitle">Right-click on synapse:</span> open context menu</div>
     <div class="csItem indented">*Hide/Remove/Delete synapse within context menu</div>
   </div>
-  <% end %>  
 
-  <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
   <div id="csNavigation">    
     <p class="sectionTitle">Navigation</p>
     <div class="csItem"><span class="csTitle">Click + drag:</span> move around canvas</div>
@@ -130,7 +106,6 @@
     <div class="csItem"><span class="csTitle">Click on background:</span> deselect all topics & synapses</div>
     <div class="csItem"><span class="csTitle">Esc:</span> deselect all topics & synapses</div>
   </div>
-  <% end %>
 
   <div id="csSearch">    
     <p class="sectionTitle">Search</p>

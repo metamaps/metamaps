@@ -5,6 +5,38 @@
 
 <div class="templates">
     
+    <script type="text/template" id="mapInfoBoxTemplate">
+  <div class="mapInfoName">{{name}}</div>
+  
+  <div class="mapInfoStat">
+    <div class="infoStatIcon mapContributors hoverForTip">
+      {{contributor_count}}
+      <div class="tip">{{contributor_list}}</div>
+    </div>
+    <div class="infoStatIcon mapTopics">
+      {{topic_count}}
+    </div>
+    <div class="infoStatIcon mapSynapses">
+      {{synapse_count}}
+    </div>
+    <div class="infoStatIcon mapPermission {{permission}} hoverForTip">
+      {{map_creator_tip}}
+    </div>
+    <div class="clearfloat"></div>
+  </div>
+  <div class="mapInfoDesc">
+    {{desc}}
+  </div>
+  
+  <div class="mapInfoMeta">
+    <p>Created by {{user_name}} on {{created_at}}</p>
+    <p>Last edited {{updated_at}}</p>
+  </div>
+  
+  <div class="mapInfoDelete">
+    {{delete}}
+  </div>
+    </script>
     
     <script type="text/template" id="mapCardTemplate">
   <a href="/maps/{{id}}">
