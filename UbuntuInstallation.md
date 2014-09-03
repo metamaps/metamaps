@@ -95,3 +95,15 @@ navigate to ./realtime and run
     nodejs realtime-server.js
 
 Now you're all set enjoy your personal server of metamaps :)
+
+Navigate your browser to localhost:3000 once you have the server running
+
+Sign in with the default account
+
+email: user@user.com
+
+password: toolsplusconsciousness
+
+OR create a new account at /join, and use access code 'qwertyui'
+
+Start mapping and programming!
