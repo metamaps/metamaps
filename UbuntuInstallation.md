@@ -84,7 +84,8 @@ now we can run the rake install and db creation
  
     rake db:fixtures:load
 
-Execute the server : 
+Execute the server: 
+    
     rails s
 
 and dont forget to run realtime too open a new terminal
