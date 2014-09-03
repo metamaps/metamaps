@@ -1412,7 +1412,7 @@ Metamaps.Realtime = {
         var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
         if (mapperm) {
-            self.socket = io.connect('http://localhost:5001'); 
+            self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
             self.socket.on('connect', function () {
                 console.log('socket connected');
                 self.setupSocket();
