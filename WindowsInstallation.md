@@ -37,6 +37,6 @@ email: user@user.com
 
 password: toolsplusconsciousness
 
-OR create a new account at /users/sign_up, and use access code 'qwertyui'
+OR create a new account at /join, and use access code 'qwertyui'
 
 Start mapping and programming!
