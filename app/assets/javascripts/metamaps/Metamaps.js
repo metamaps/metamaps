@@ -196,7 +196,7 @@ Metamaps.Backbone.init = function () {
         prepareLiForFilter: function () {
             var li = '';
             li += '<li data-id="' + this.get('desc') + '">';      
-            li += '<img src="/assets/synapsevisualize.png"';
+            li += '<img src="/assets/synapse16.png"';
             li += ' alt="synapse icon" />';      
             li += '<p>' + this.get('desc') + '</p></li>';
             return li;
@@ -306,31 +306,44 @@ Metamaps.Backbone.init = function () {
     Metamaps.Metacodes = Metamaps.Metacodes ? new self.MetacodeCollection(Metamaps.Metacodes) : new self.MetacodeCollection();
 
     Metamaps.Topics = Metamaps.Topics ? new self.TopicCollection(Metamaps.Topics) : new self.TopicCollection();
-    Metamaps.Topics.on("add remove", function(topic){
-        Metamaps.Filter.checkMetacodes();
-        Metamaps.Filter.checkMappers();
-    });
 
     Metamaps.Synapses = Metamaps.Synapses ? new self.SynapseCollection(Metamaps.Synapses) : new self.SynapseCollection();
-    Metamaps.Synapses.on("add remove", function(synapse){
-        Metamaps.Filter.checkSynapses();
-        Metamaps.Filter.checkMappers();
-    });
 
     Metamaps.Mappers = Metamaps.Mappers ? new self.MapperCollection(Metamaps.Mappers) : new self.MapperCollection();
 
     if (Metamaps.Active.Map) {
         Metamaps.Mappings = Metamaps.Mappings ? new self.MappingCollection(Metamaps.Mappings) : new self.MappingCollection();
 
-        Metamaps.Mappings.on("add remove", function(synapse){
-            Metamaps.Filter.checkMetacodes();
-            Metamaps.Filter.checkMappers();
-        });
-
         Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
     }
     
     if (Metamaps.Active.Topic) Metamaps.Active.Topic = new self.Topic(Metamaps.Active.Topic);
+
+    //attach collection event listeners
+    self.attachCollectionEvents = function () {
+        
+        Metamaps.Topics.on("add remove", function(topic){
+            Metamaps.Map.InfoBox.updateNumbers();
+            Metamaps.Filter.checkMetacodes();
+            Metamaps.Filter.checkMappers();
+        });
+
+        Metamaps.Synapses.on("add remove", function(synapse){
+            Metamaps.Map.InfoBox.updateNumbers();
+            Metamaps.Filter.checkSynapses();
+            Metamaps.Filter.checkMappers();
+        });
+        
+        if (Metamaps.Active.Map) {
+            Metamaps.Mappings.on("add remove", function(mapping){
+                Metamaps.Map.InfoBox.updateNumbers();
+                Metamaps.Filter.checkSynapses();
+                Metamaps.Filter.checkMetacodes();
+                Metamaps.Filter.checkMappers();
+            });
+        }
+    }
+    self.attachCollectionEvents();
 }; // end Metamaps.Backbone.init
 
 
@@ -615,7 +628,6 @@ Metamaps.Create = {
 Metamaps.TopicCard = {
     openTopicCard: null, //stores the JIT local ID of the topic with the topic card open
     linkActionsString: '<div class="linkActions"><div id="linkshare">share</div><div id="linkremove">remove</div> </div>',
-
     init: function () {
 
         // initialize best_in_place editing
@@ -1333,6 +1345,14 @@ Metamaps.Util = {
         }
         return b + s;
     },
+    nowDateFormatted: function () {
+        var date = new Date(Date.now());
+        var month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+        var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        var year = date.getFullYear();
+
+        return month + '/' + day + '/' + year;
+    },
     decodeEntities: function (desc) {
         var str, temp = document.createElement('p');
         temp.innerHTML = desc; //browser handles the topics
@@ -1380,7 +1400,8 @@ Metamaps.Realtime = {
     init: function () {
         var self = Metamaps.Realtime;
 
-        $(".realtimeOnOff").click(self.toggle);
+        $(".rtOn").click(self.turnOn);
+        $(".rtOff").click(self.turnOff);
 
         $('.sidebarCollaborateIcon').click(self.toggleBox);
         $('.sidebarCollaborateBox').click(function(event){ 
@@ -1391,7 +1412,7 @@ Metamaps.Realtime = {
         var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
         if (mapperm) {
-            self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
+            self.socket = io.connect('http://localhost:5001'); 
             self.socket.on('connect', function () {
                 console.log('socket connected');
                 self.setupSocket();
@@ -1431,20 +1452,25 @@ Metamaps.Realtime = {
             });
         }
     },
-    toggle: function () {
+    turnOn: function () {
         var self = Metamaps.Realtime;
 
         if (!self.status) {
             self.sendRealtimeOn();
-            $(this).html('ON').removeClass('rtOff').addClass('rtOn');
             $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
-        } else {
-            self.sendRealtimeOff();
-            $(this).html('OFF').removeClass('rtOn').addClass('rtOff');
-            $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
+            self.status = true;
+            $(".sidebarCollaborateIcon").addClass("blue");
         }
-        self.status = !self.status;
-        $(".sidebarCollaborateIcon").toggleClass("blue");
+    },
+    turnOff: function () {
+        var self = Metamaps.Realtime;
+
+        if (self.status) {
+            self.sendRealtimeOff();
+            $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
+            self.status = false;
+            $(".sidebarCollaborateIcon").removeClass("blue");
+        }
     },
     setupSocket: function () {
         var self = Metamaps.Realtime;
@@ -1454,6 +1480,7 @@ Metamaps.Realtime = {
         socket.emit('newMapperNotify', {
             userid: myId,
             username: Metamaps.Active.Mapper.get("name"),
+            userimage: Metamaps.Active.Mapper.get("image"),
             mapid: Metamaps.Active.Map.id
         });
 
@@ -1504,6 +1531,7 @@ Metamaps.Realtime = {
 
         // data.userid
         // data.username
+        // data.userimage
         // data.userrealtime
 
         self.mappersOnMap[data.userid] = {
@@ -1516,7 +1544,11 @@ Metamaps.Realtime = {
         mapperListItem += data.userid;
         mapperListItem += '" class="rtMapper littleRt';
         mapperListItem += onOff;
-        mapperListItem += '">' + data.username + '</li>';
+        mapperListItem += '">';
+        mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
+        mapperListItem += data.username;
+        mapperListItem += '<div class="littleJuntoIcon"></div>';
+        mapperListItem += '</li>';
 
         $('#mapper' + data.userid).remove();
         $('.realtimeMapperList ul').append(mapperListItem);
@@ -1527,13 +1559,19 @@ Metamaps.Realtime = {
 
         // data.userid
         // data.username
+        // data.userimage
 
         self.mappersOnMap[data.userid] = {
             name: data.username,
             realtime: true
         };
 
-        var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">' + data.username + '</li>';
+        var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
+        mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
+        mapperListItem += data.username;
+        mapperListItem += '<div class="littleJuntoIcon"></div>';
+        mapperListItem += '</li>';
+
         $('#mapper' + data.userid).remove();
         $('.realtimeMapperList ul').append(mapperListItem);
 
@@ -1543,6 +1581,7 @@ Metamaps.Realtime = {
         var update = {
             userToNotify: data.userid,
             username: Metamaps.Active.Mapper.get("name"),
+            userimage: Metamaps.Active.Mapper.get("image"),
             userid: Metamaps.Active.Mapper.id,
             userrealtime: self.status,
             mapid: Metamaps.Active.Map.id
@@ -2070,7 +2109,8 @@ Metamaps.Filter = {
         if (!self.isOpen && !self.changing) {
             self.changing = true;
 
-            $('.sidebarFilterBox').fadeIn(200, function () {
+            var height = $(document).height() - 108;
+            $('.sidebarFilterBox').css('max-height', height + 'px').fadeIn(200, function () {
                 self.changing = false;
                 self.isOpen = true;
             });
@@ -2177,6 +2217,8 @@ Metamaps.Filter = {
             $('#filter_by_' + listToModify + ' li[data-id="' + identifier + '"]').fadeOut('fast',function(){
                 $(this).remove();
             });
+            index = self.visible[filtersToUser].indexOf(identifier);
+            self.visible[filtersToUse].splice(index, 1);
         });
         
         var model, li, jQueryLi;
@@ -2192,7 +2234,8 @@ Metamaps.Filter = {
             li = model.prepareLiForFilter();
             jQueryLi = $(li).hide();
             $('li', '#filter_by_' + listToModify + ' ul').add(jQueryLi.fadeIn("fast"))
-                .sort(sortAlpha).appendTo('#filter_by_' + listToModify + ' ul');    
+                .sort(sortAlpha).appendTo('#filter_by_' + listToModify + ' ul');
+            self.visible[filtersToUse].push(identifier);
         });
 
         // update the list of filters with the new list we just generated
@@ -2272,12 +2315,10 @@ Metamaps.Filter = {
     },
     toggleMapper: function () {
         var self = Metamaps.Filter;
-
         self.toggleLi.call(this, 'mappers');
     },
     toggleSynapse: function () {
         var self = Metamaps.Filter;
-
         self.toggleLi.call(this, 'synapses');
     },
     passFilters: function () {        
@@ -2313,6 +2354,7 @@ Metamaps.Filter = {
             }
             else {
                 if (n) {
+                    // TODO quick deselect node
                     n.setData('alpha', 0, 'end');
                 }
                 else console.log(topic);
@@ -2334,12 +2376,13 @@ Metamaps.Filter = {
 
             if (passesSynapse && passesMapper) {
                 if (e) {
-                    e.setData('alpha', 1, 'end');
+                    e.setData('alpha', 0.4, 'end');
                 }
                 else console.log(synapse);
             }
             else {
                 if (e) {
+                    // TODO quick deselect edge
                     e.setData('alpha', 0, 'end');
                 }
                 else console.log(synapse);
@@ -2350,7 +2393,7 @@ Metamaps.Filter = {
         Metamaps.Visualize.mGraph.fx.animate({  
           modes: ['node-property:alpha',  
                 'edge-property:alpha'],  
-          duration: 500  
+          duration: 200  
         });
     }
 }; // end Metamaps.Filter
@@ -2553,6 +2596,7 @@ Metamaps.Topic = {
             Metamaps.Active.Topic = new bb.Topic(data.topic);
             Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives));
             Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
+            Metamaps.Backbone.attachCollectionEvents();
 
             // build and render the visualization
             Metamaps.Visualize.type = "RGraph";
@@ -2884,6 +2928,7 @@ Metamaps.Map = {
             Metamaps.Topics = new bb.TopicCollection(data.topics);
             Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
             Metamaps.Mappings = new bb.MappingCollection(data.mappings);
+            Metamaps.Backbone.attachCollectionEvents();
 
             // build and render the visualization
             Metamaps.Visualize.type = "ForceDirected";
@@ -2892,6 +2937,9 @@ Metamaps.Map = {
             // update filters
             Metamaps.Filter.reset(); 
             Metamaps.Filter.initializeFilterData(); // this sets all the visible filters to true
+
+            // set the proper mapinfobox content
+            Metamaps.Map.InfoBox.load();
 
             // these three update the actual filter box with the right list items
             Metamaps.Filter.checkMetacodes();
@@ -2968,23 +3016,22 @@ Metamaps.Map.InfoBox = {
     isOpen: false,
     changing: false,
     selectingPermission: false,
+    changePermissionText: "<div class='tip'>As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>",
+    nameHTML: '<span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="input">{{name}}</span>',
+    descHTML: '<span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description." data-type="textarea">{{desc}}</span>',
+    deleteHTML: "<a href='/maps/{{id}}' class='delete' data-bypass='true' data-confirm='Delete this map (nodes and synapses will remain)?' data-method='delete' rel='nofollow'>Delete</a>",
     init: function () {
         var self = Metamaps.Map.InfoBox;
-
-        // because anyone who can edit the map can change the map title
-        $('.mapInfoName .best_in_place_name').bind("ajax:success", function () {
-            var name = $(this).html();
-            $('.mapName').html(name);
-            Metamaps.Active.Map.set('name', name);
-        });
-
-        $('.yourMap .mapPermission').click(self.onPermissionClick);
 
         $('.mapInfoIcon').click(self.toggleBox);
         $('.mapInfoBox').click(function(event){ 
             event.stopPropagation();
         });
         $('body').click(self.close);
+
+        self.attachEventListeners();
+
+        self.generateBoxHTML = Hogan.compile($('#mapInfoBoxTemplate').html());
     },
     toggleBox: function (event) {
         var self = Metamaps.Map.InfoBox;
@@ -3015,6 +3062,66 @@ Metamaps.Map.InfoBox = {
                 self.isOpen = false;
             });
         }
+    },
+    load: function () {
+        var self = Metamaps.Map.InfoBox;
+
+        var map = Metamaps.Active.Map;
+
+        var obj = map.pick("permission","contributor_count","topic_count","synapse_count","created_at","updated_at");
+
+        var isCreator = map.authorizePermissionChange(Metamaps.Active.Mapper);
+        var canEdit = map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        obj["name"] = canEdit ? Hogan.compile(self.nameHTML).render({id: map.id, name: map.get("name")}) : map.get("name");
+        obj["desc"] = canEdit ? Hogan.compile(self.descHTML).render({id: map.id, desc: map.get("desc")}) : map.get("desc");
+        obj["map_creator_tip"] = isCreator ? self.changePermissionText : "";
+        obj["delete"] = isCreator ? Hogan.compile(self.deleteHTML).render({id: map.id}) : "";
+        obj["contributor_list"] = self.createContributorList();
+        obj["user_name"] = isCreator ? "you" : map.get("user_name");
+
+        var classes = isCreator ? "yourMap" : "";
+        classes += canEdit ? " canEdit" : "";
+        $(".mapInfoBox").removeClass("yourMap canEdit")
+            .addClass(classes)
+            .html(self.generateBoxHTML.render(obj));
+
+        self.attachEventListeners();
+    },
+    attachEventListeners: function () {
+        var self = Metamaps.Map.InfoBox;
+
+        $('.mapInfoBox .best_in_place').best_in_place();
+
+        // because anyone who can edit the map can change the map title
+        $('.mapInfoName .best_in_place_name').unbind("ajax:success").bind("ajax:success", function () {
+            var name = $(this).html();
+            $('.mapName').html(name);
+            Metamaps.Active.Map.set('name', name);
+        });
+
+        $('.yourMap .mapPermission').unbind().click(self.onPermissionClick);
+    },
+    createContributorList: function () {
+        var self = Metamaps.Map.InfoBox;
+
+        var mapperNames = Metamaps.Mappers.pluck("name");
+
+        return mapperNames.length > 0 ? mapperNames.join(", ") : "No one has added anything yet.";
+    },
+    updateNumbers: function () {
+        var self = Metamaps.Map.InfoBox;
+        var mapper = Metamaps.Active.Mapper;
+
+        if (mapper && Metamaps.Mappers.get(mapper.id) === undefined) {
+            Metamaps.Mappers.add(mapper); 
+        }
+        $('.mapContributors').text(Metamaps.Mappers.length)
+            .append('<div class="tip">' + self.createContributorList() + '</div>');
+        $('.mapTopics').text(Metamaps.Topics.length);
+        $('.mapSynapses').text(Metamaps.Synapses.length);
+
+        $('.mapEditedAt').html('Last edited ' + Metamaps.Util.nowDateFormatted());
     },
     onPermissionClick: function () {
         var self = Metamaps.Map.InfoBox;

@@ -6,7 +6,7 @@
 <div class="templates">
     
     <script type="text/template" id="mapInfoBoxTemplate">
-  <div class="mapInfoName">{{name}}</div>
+  <div class="mapInfoName">{{{name}}}</div>
   
   <div class="mapInfoStat">
     <div class="infoStatIcon mapContributors hoverForTip">
@@ -20,21 +20,21 @@
       {{synapse_count}}
     </div>
     <div class="infoStatIcon mapPermission {{permission}} hoverForTip">
-      {{map_creator_tip}}
+      {{{map_creator_tip}}}
     </div>
     <div class="clearfloat"></div>
   </div>
   <div class="mapInfoDesc">
-    {{desc}}
+    {{{desc}}}
   </div>
   
   <div class="mapInfoMeta">
-    <p>Created by {{user_name}} on {{created_at}}</p>
-    <p>Last edited {{updated_at}}</p>
+    <p class="mapCreatedAt">Created by {{user_name}} on {{created_at}}</p>
+    <p class="mapEditedAt">Last edited {{updated_at}}</p>
   </div>
   
   <div class="mapInfoDelete">
-    {{delete}}
+    {{{delete}}}
   </div>
     </script>
     
@@ -43,15 +43,15 @@
   <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
 	  <div class="mapCard">                                                   
       <span class="title">                                                  
-        <span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea">{{name}}</span>
+        {{name}}
       </span>  
       <div class="mapScreenshot">
         <img src="https://dl.dropboxusercontent.com/u/13307147/map%20screengrab%20blur-02.png">
       </div>                                                           
       <div class="scroll">                                                    
         <div class="desc">                                                    
-          <span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description." data-type="textarea">{{desc}}</span>
-          <div class="clearfloat"></div>                                
+          {{desc}}
+          <div class="clearfloat"></div>                              
         </div>                                                                
       </div>
       <div class="mapMetadata">
@@ -107,7 +107,7 @@
 
     <script type="text/template" id="mapSearchTemplate">
     <div class="result{{rtype}}">
-      <img class="icon" src="/assets/map.png">
+      <img class="icon" src="/assets/metamap32c.png">
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
         <p class="resultDesc">{{description}}</p>
@@ -138,7 +138,7 @@
 
     <script type="text/template" id="mapperSearchTemplate">
     <div class="result{{rtype}}">
-      <img class="icon" width="28" height="28" src="/assets/MMCCicon_mapper.png">
+      <img class="icon" width="32" height="32" src="{{profile}}">
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
       </div>
