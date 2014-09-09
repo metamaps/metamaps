@@ -18,6 +18,9 @@ define(function(require, exports, module) {
     var f = Metamaps.Famous;
 
     f.mainContext = Engine.createContext(famous);
+    f.Surface = Surface;
+    f.Modifier = Modifier;
+    f.Transform = Transform;
 
 
     // INFOVIS
@@ -102,7 +105,7 @@ define(function(require, exports, module) {
     f.mainContext.add(f.yield.mod).add(f.yield.surf);
     
     f.loadYield = function () {
-        Metamaps.Loading.loader.hide();
+        Metamaps.Loading.hide();
         var yield = document.getElementById('yield') ? document.getElementById('yield').innerHTML : false;
         if (yield) {
             f.yield.surf.setContent(yield);
@@ -192,7 +195,7 @@ define(function(require, exports, module) {
             f.explore.show();
         }
         else if (Metamaps.currentSection === "") {
-            Metamaps.Loading.loader.hide();
+            Metamaps.Loading.hide();
             if (Metamaps.Active.Mapper) {
 
                 Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Mine );
@@ -309,6 +312,9 @@ define(function(require, exports, module) {
         );
     };
     f.mainContext.add(f.toast.mod).add(f.toast.surf);
+
+    // an object for the realtime mapper compasses surfaces
+    f.compasses = {};
 
     f.logo.show();
 });

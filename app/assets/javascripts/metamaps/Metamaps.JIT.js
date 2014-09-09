@@ -586,6 +586,10 @@ Metamaps.JIT = {
         var node = eventInfo.getNode();
         var edge = eventInfo.getEdge();
 
+        if (Metamaps.Active.Map && Metamaps.Realtime.status) {
+            Metamaps.Realtime.sendCoords(eventInfo.getPos());
+        }
+
         //if we're on top of a node object, act like there aren't edges under it
         if (node != false) {
             if (Metamaps.Mouse.edgeHoveringOver) {

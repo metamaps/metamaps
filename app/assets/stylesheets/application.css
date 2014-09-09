@@ -270,7 +270,6 @@ input[type="submit"]:active {
     font-size: 25px;
     line-height: 35px;
     color: rgba(255, 255, 255, 0.7);
-    font-family: 'LatoLight';
 }
 .openMetacodeSwitcher {
     display: block;
@@ -291,7 +290,6 @@ input[type="submit"]:active {
     width: 120px;
     text-align: center;
     margin-left: 90px;
-    font-family: 'LatoRegular';
 }
 /* synapse autocomplete */
 
@@ -312,7 +310,6 @@ input[type="submit"]:active {
     outline: none;
     font-size: 18px;
     line-height: 35px;
-    font-family: 'LatoRegular';
 }
 .new_synapse #synapse_desc {
     color: rgba(255, 255, 255, 0.7);
@@ -331,7 +328,6 @@ input[type="submit"]:active {
     outline: none;
     font-size: 16px;
     line-height: 20px;
-    font-family: 'LatoRegular';
 }
 label,
 select,
@@ -402,7 +398,6 @@ label {
     height: 30px;
     background: none;
     color: #717474;
-    font-family: 'LatoLight';
     font-size: 17px;
     border: none;
     border-right: 1px solid #717474;
@@ -646,7 +641,6 @@ label[for="user_remember_me"] {
     color: white;
     border-radius: 4px;
     font-size: 15px !important;
-    font-family: 'LatoRegular';
     line-height: 17px;
     padding: 3px 5px 2px;
     z-index: 100;
@@ -926,7 +920,6 @@ float: left;
 }
 #new_topic .tt-suggestion {
     padding: 5px;
-    font-family: 'LatoLight';
     background: rgba(42, 52, 60, 0.9);
     ;
 }
@@ -976,7 +969,6 @@ float: left;
     white-space: nowrap;
     border-radius: 4px;
     font-size: 15px !important;
-    font-family: 'LatoRegular';
     line-height: 15px;
     padding: 2px 5px 2px;
     z-index: 100;
@@ -1001,7 +993,6 @@ float: left;
 }
 #new_synapse .tt-suggestion {
     padding: 5px;
-    font-family: 'LatoLight';
 }
 #new_synapse .autocompleteSection {
     float: left;
@@ -1049,7 +1040,6 @@ float: left;
     white-space: nowrap;
     border-radius: 4px;
     font-size: 15px !important;
-    font-family: 'LatoRegular';
     line-height: 15px;
     padding: 2px 5px 2px;
     z-index: 100;
@@ -1160,14 +1150,14 @@ float: left;
     background-position: -32px 0;
 }
 .yourMap .mapPermission:hover {
-    background-image: url(arrowdown_sprite.png);
+    background-image: url(arrowperms_sprite.png);
     cursor: pointer;
-    background-position: center -11px;
+    background-position: -32px 0;
 }
 .yourMap .mapPermission.minimize {
-    background-image: url(arrowdown_sprite.png) !important;
+    background-image: url(arrowperms_sprite.png) !important;
     cursor: pointer;
-    background-position: center -11px;
+    background-position: 0 0;
 }
 .mapInfoBox .mapPermission .permissionSelect {
     list-style: none;
@@ -1427,13 +1417,12 @@ float: left;
 
 #metacodeSwitchTabs {
     width: 100%;
-    font-family: LatoLight, Arial, Sans-Serif;
     font-size: 17px;
     line-height: 21px;
     border: none;
 }
 #metacodeSwitchTabs .setTitle {
-    font-family: Lato, Arial, sans-serif;
+    
 }
 #metacodeSwitchTabs .setDesc {
     margin-bottom: 5px;
@@ -1474,7 +1463,6 @@ float: left;
     background: none;
     font-size: 14px;
     line-height: 14px;
-    font-family: Lato;
 }
 #metacodeSwitchTabs button.button {
     width: auto !important;
@@ -1633,7 +1621,6 @@ float: left;
     color: white;
     border-radius: 4px;
     font-size: 15px !important;
-    font-family: 'LatoRegular';
     line-height: 17px;
     padding: 3px 5px 2px;
     z-index: 100;
@@ -1659,7 +1646,6 @@ float: left;
     float: left;
     margin-top: 5px;
     height: 40px;
-    font-family: 'LatoItalic';
     font-size: 17px;
     width: auto;
     padding: 0 30px;
@@ -1676,13 +1662,11 @@ float: left;
 #cheatSheet {
     width: 100%;
     height: 350px;
-    font-family: LatoLight, Arial, Sans-Serif;
     font-size: 17px;
     line-height: 21px;
     border: none;
 }
 #cheatSheet .sectionTitle {
-    font-family: Lato, Arial, sans-serif;
     font-weight: bold;
 }
 #cheatSheet .csItem {
@@ -1695,7 +1679,7 @@ float: left;
     margin: 0 2px;
 }
 #cheatSheet .csTitle {
-    font-family: Lato, Arial, sans-serif;
+
 }
 #cheatSheet .indented {
     margin-left: 15px;
@@ -1816,7 +1800,6 @@ float: left;
     float: left;
     margin-top: 5px;
     height: 40px;
-    font-family: 'LatoItalic';
     font-size: 17px;
     width: auto;
     padding: 0 30px;

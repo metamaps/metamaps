@@ -178,13 +178,15 @@
 
 
     <script type="text/template" id="topicCardTemplate">
-    <div class="CardOnGraph" id="topic_{{id}}">
-        <span class="title">                                                  
+    <div class="CardOnGraph {{hasAttachment}}" id="topic_{{id}}">
+        <span class="title"> 
+            <div class="titleWrapper">                                                 
               <span class="best_in_place best_in_place_name"                      
                     data-url="/topics/{{id}}"                                     
                     data-object="topic"                                           
                     data-attribute="name"                                         
-                    data-type="textarea">{{name}}</span> 
+                    data-type="textarea">{{name}}</span>
+            </div> 
         </span>
         <div class="links">
             <div class="linkItem icon">
@@ -192,15 +194,18 @@
                 <div class="metacodeImage" style="background-image:url({{imgsrc}});" title="click and drag to move card"></div>
             </div>
             <div class="linkItem contributor">
+                <img src="/assets/user.png" class="contributorIcon" width="32" height="32" />
                 {{username}}
             </div>
-            <a href="/expore/topics/{{id}}" class="linkItem mapCount hoverForTip" title="Click to see which maps topic appears on">                  
-                 {{map_count}}                                                    
+            <a href="/explore/topics/{{id}}" class="linkItem mapCount" title="Click to see which maps topic appears on">                  
+                 <div class="mapCountIcon"></div>
+                 {{map_count}}                                                 
                </a> 
             <a href="/topics/{{id}}" class="linkItem synapseCount" title="Click to see this topics synapses">
+              <div class="synapseCountIcon"></div>
               {{synapse_count}}
             </a>
-            <div class="linkItem mapPerm {{mk_permission}}"></div>
+            <div class="linkItem mapPerm {{mk_permission}}" title="{{permission}}"></div>
             <div class="clearfloat"></div>
         </div>
         <div class="metacodeSelect">{{{metacode_select}}}</div>

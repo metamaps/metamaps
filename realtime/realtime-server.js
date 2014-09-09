@@ -104,6 +104,15 @@ function start() {
             socket.broadcast.emit('maps-' + data.mapid + '-lostrealtime', newUser);
         });
 
+        socket.on('updateMapperCoords', function (data) {
+            var peer = {
+                userid: data.userid,
+                usercoords: data.usercoords
+            };
+
+            socket.broadcast.emit('maps-' + data.mapid + '-updatePeerCoords', peer);
+        });
+
     });
 }
 

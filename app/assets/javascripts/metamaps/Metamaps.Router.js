@@ -76,7 +76,7 @@
 
             Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
             if (Metamaps.Maps[capitalize].length === 0) {
-                Metamaps.Loading.loader.show();
+                Metamaps.Loading.show();
                 setTimeout(function(){
                     Metamaps.Maps[capitalize].getMaps(); // this will trigger an explore maps render
                 }, 300); // wait 300 milliseconds till the other animations are done to do the fetch 
