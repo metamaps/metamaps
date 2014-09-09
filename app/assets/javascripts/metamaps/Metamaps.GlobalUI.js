@@ -78,7 +78,6 @@ Metamaps.GlobalUI = {
         
         // initialize global backbone models and collections
         if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
-        Metamaps.Mappers = new Metamaps.Backbone.MapperCollection([Metamaps.Active.Mapper]); 
 
         var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
         var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : [];
@@ -440,9 +439,9 @@ Metamaps.GlobalUI.Search = {
     startTypeahead: function () {
         var self = Metamaps.GlobalUI.Search;
 
-        var mapheader = Metamaps.Active.Mapper ? '<h3 class="search-header">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div>';
-        var topicheader = Metamaps.Active.Mapper ? '<h3 class="search-header">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>' : '<h3 class="search-header">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div>';
-        var mapperheader = '<h3 class="search-header">Mappers</h3><div class="minimizeResults minimizeMapperResults"></div><div class="clearfloat"></div>';
+        var mapheader = Metamaps.Active.Mapper ? '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>' : '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>';
+        var topicheader = Metamaps.Active.Mapper ? '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>' : '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>';
+        var mapperheader = '<div class="searchMappersHeader searchHeader"><h3 class="search-heading">Mappers</h3><div class="minimizeResults minimizeMapperResults"></div><div class="clearfloat"></div></div>';
 
         var topics = {
             name: 'topics',
@@ -519,6 +518,7 @@ Metamaps.GlobalUI.Search = {
                 filter: function (dataset) {
                     if (dataset.length == 0) {
                         dataset.push({
+                            profile: "/assets/user.png",
                             value: "No results",
                             label: "No results",
                             rtype: "noresult"

@@ -8,6 +8,7 @@ module UsersHelper
       user['id'] = u.id
       user['label'] = u.name
       user['value'] = u.name
+      user['profile'] = u.image.url(:thumb)
       user['mapCount'] = u.maps.count
       user['rtype'] = "mapper"
       

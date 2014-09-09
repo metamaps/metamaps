@@ -85,8 +85,6 @@ body {
     font-family: 'din-medium', helvetica, sans-serif;
     color: #424242;
 }
-
-
 h1,
 h2,
 h3,
@@ -94,19 +92,6 @@ h4,
 h5,
 h6 {
     font-weight: normal;
-}
-h1 {
-    display: block;
-    text-align: left;
-    font-family: "vinyl", sans-serif;
-}
-h2 {
-    display: block;
-    text-align: center;
-    font-family: "katarine-web", sans-serif;
-    background: url('black_bg.png');
-    font-size: 24px;
-    line-height: 35px;
 }
 a {
     color: #424242;
@@ -677,10 +662,8 @@ label[for="user_remember_me"] {
 
 .sidebarFilterBox {
     display:none;
-    height: 400px;
-    width: 320px;
-    padding: 10px;
-    text-align: center;
+    width: 304px;
+    padding: 16px 0;
     overflow-y: auto;
 }
 h3.filterBox {
@@ -689,53 +672,78 @@ h3.filterBox {
 }
 .sidebarFilterBox span {
     float: right;
-    background: #15bad4;
     padding: 1px 4px;
     border-radius: 2px;
-    margin-left: 5px;
+    margin-right: 5px;
     cursor: pointer;
+    font-size:12px;
+}
+.sidebarFilterBox span:hover {
+    color: #00BCD4;
 }
 .sidebarFilterBox ul {
     list-style: none;
 }
 .sidebarFilterBox li {
     float: left;
-    width: 61px;
-    height: 70px;
+    width: 72px;
+    height: 72px;
     cursor: pointer;
+    text-align: center;
 }
 .sidebarFilterBox li:hover {
-    background: #000;
+    
 }
-.sidebarFilterBox li img {
-    background-color: rgba(255, 255, 255, 0.1);
-    width: 45px;
-    height: 45px;
-    margin: 0 auto;
+#filter_by_mapper li img {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    margin: 8px auto;
+}
+#filter_by_metacode li img {
+    width: 40px;
+    height: 40px;
+    margin: 8px auto;
+}
+#filter_by_synapse li img {
+    width: 16px;
+    height: 16px;
+    margin: 8px auto;
 }
 .sidebarFilterBox li p {
     font-size: 11px;
     line-height: 11px;
-    font-family: arial, sans-serif;
+    font-family: 'din-regular', helvetica, sans-serif;
 }
 .sidebarFilterBox li.toggledOff {
     opacity: 0.4;
 }
+.sidebarFilterBox h2 {
+    font-size: 18px;
+    margin-left: 16px;
+    line-height: 18px;
+}
 .sidebarFilterBox h3 {
     text-align: left;
     text-transform: uppercase;
-    font-weight: bold;
+    font-size:14px;
+    float:left;
+}
+.filterBySection {
+    margin-left:16px;
+    width: 288px;
+    border-top: 1px solid #BDBDBD;
+    padding-top:8px;
+    margin-top:8px;
 }
 #filter_by_metacode {
-    border-bottom: 1px solid black;
-    margin: 5px;
+    
 }
 #filter_by_mapper {
-    margin: 5px auto;
+    
 }
 #filter_by_synapse {
-    margin: 5px auto;
-    border-bottom: 1px solid black;
+    
 }
 /* end filter by metacode */
 
@@ -748,52 +756,66 @@ h3.filterBox {
 .sidebarCollaborateBox {
     display: none;
     height: auto;
-    width: auto;
-    padding: 10px;
-    min-width: 180px;
+    padding: 16px;
+    width: 238px;
 }
 h3.realtimeBoxTitle {
     margin-bottom: 10px;
     text-align: left;
     float: left;
-    font-family: 'Lato', helvetica, sans-serif;
+    font-size:18px;
+    line-height:18px;
 }
 .sidebarCollaborateBox .realtimeOnOff {
-    float: left;
+    float: right;
     padding: 4px;
     border-radius: 2px;
     margin-left: 12px;
     cursor: pointer;
-    width: 31px;
     text-align: center;
+    font-size:12px;
+}
+.sidebarCollaborateBox .realtimeOnOff:hover {
+    color: #00bcd4;
 }
 .sidebarCollaborateBox .rtOff {
-    background: white;
-    color: black;
-}
-.sidebarCollaborateBox .rtOff:hover {
-    padding: 3px;
-    border: 1px solid #15bad4;
+    
 }
 .sidebarCollaborateBox .rtOn {
-    background: #15bad4;
-    color: white;
+
 }
 .realtimeMapperList .rtMapper {
     list-style-type: none;
     white-space: nowrap;
-    padding: 2px 5px 2px 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 9px 32px;
     display: block;
-    background-size: 26px 26px;
-    background-repeat: no-repeat;
-    background-position: 4px center;
-    margin-bottom: 5px;
+    height: 14px;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 14px;
+    position: relative;
 }
-.realtimeMapperList .littleRtOff {
-    background-image: url('junto24.png');
+.rtUserImage {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    border-radius: 12px;
 }
-.realtimeMapperList .littleRtOn {
-    background-image: url('junto24.png');
+.littleJuntoIcon {
+    width: 24px;
+    height:24px;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    background-image: url('junto24_sprite.png');
+}
+.realtimeMapperList .littleRtOff  .littleJuntoIcon {
+    background-position: 0 0;
+}
+.realtimeMapperList .littleRtOn .littleJuntoIcon {
+    background-position: -24px 0;
 }
 /* end collaborate */
 
@@ -1089,7 +1111,7 @@ float: left;
     background-position: 13px center;
 }
 .mapSynapses {
-    background-image: url(synapse32tmcard.png);
+    background-image: url(synapse32.png);
     background-position: 13px center;
 }
 .mapInfoBox .mapPermission {
@@ -1099,14 +1121,26 @@ float: left;
     padding: 0;
     margin: 8px 30px 8px 10px;
     position: relative;
+    background-image: url(permissions32_sprite.png);
+}
+.mapInfoBox .mapPermission.commons {
+    background-position: 0 0;
+}
+.mapInfoBox .mapPermission.public {
+    background-position: -64px 0;
+}
+.mapInfoBox .mapPermission.private {
+    background-position: -32px 0;
 }
 .yourMap .mapPermission:hover {
-    background-image: url(arrowexpand.png);
+    background-image: url(arrowdown_sprite.png);
     cursor: pointer;
+    background-position: center -11px;
 }
 .yourMap .mapPermission.minimize {
-    background-image: url(arrowcollapse.png) !important;
+    background-image: url(arrowdown_sprite.png) !important;
     cursor: pointer;
+    background-position: center -11px;
 }
 .mapInfoBox .mapPermission .permissionSelect {
     list-style: none;
@@ -1119,7 +1153,25 @@ float: left;
     width: 32px;
     height: 32px;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-image: url(permissions32_sprite.png);
+}
+.mapInfoBox .mapPermission .permissionSelect .commons {
+    background-position: 0 0;
+}
+.mapInfoBox .mapPermission .permissionSelect .public {
+    background-position: -64px 0;
+}
+.mapInfoBox .mapPermission .permissionSelect .private {
+    background-position: -32px 0;
+}
+.mapInfoBox .mapPermission .permissionSelect .commons:hover {
+    background-position: 0 -32px;
+}
+.mapInfoBox .mapPermission .permissionSelect .public:hover {
+    background-position: -64px -32px;
+}
+.mapInfoBox .mapPermission .permissionSelect .private:hover {
+    background-position: -32px -32px;
 }
 .mapInfoBox .mapInfoDesc {
     font-family: helvetica, sans-serif;
@@ -1128,6 +1180,7 @@ float: left;
     height: 106px;
     font-size: 14px;
     line-height: 16px;
+    overflow-y: auto;
 }
 .mapInfoBox .mapInfoMeta {
     height: 35px;

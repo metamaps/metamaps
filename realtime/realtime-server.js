@@ -45,7 +45,8 @@ function start() {
             var existingUser = {
                 userid: data.userid,
                 username: data.username,
-                userrealtime: data.userrealtime
+                userrealtime: data.userrealtime,
+                userimage: data.userimage
             };
             socket.broadcast.emit(data.userToNotify + '-' + data.mapid + '-UpdateMapperList', existingUser);
         });
@@ -58,7 +59,8 @@ function start() {
 
             var newUser = {
                 userid: data.userid,
-                username: data.username
+                username: data.username,
+                userimage: data.userimage
             };
 
             socket.broadcast.emit('maps-' + data.mapid + '-newmapper', newUser);

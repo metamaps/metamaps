@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
    :thumb => ['100x100>', :png],
    :square => ['200x200#', :png],
    :round => ['200x200#', :png]
-  }
+  },
+  :default_url => "/assets/user.png"
     
   #, :convert_options => {:round => Proc.new{self.convert_options}}
 
