@@ -210,6 +210,9 @@ Metamaps.GlobalUI.CreateMap = {
         self.newMap.set('permission', $(this).attr('data-permission'));
         $(this).siblings('.permIcon').find('.mapPermIcon').removeClass('selected');
         $(this).find('.mapPermIcon').addClass('selected');
+        
+        var permText = $(this).find('.tip').html();
+        $(this).parents('.new_map').find('.permText').html(permText);
     },
     submit: function (event) {
         event.preventDefault();

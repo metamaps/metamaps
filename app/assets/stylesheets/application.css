@@ -898,15 +898,6 @@ float: left;
 .rightclickmenu .rc-permission:hover ul, .rightclickmenu .rc-metacode:hover ul {
     display: block;
 }
-.rightclickmenu .rc-permission .toCommons {
-    background-image: url(CO64.png);
-}
-.rightclickmenu .rc-permission .toPublic {
-    background-image: url(PU64.png);
-}
-.rightclickmenu .rc-permission .toPrivate {
-    background-image: url(PR64.png);
-}
 .rightclickmenu p {
     padding: 7px;
 }
@@ -936,15 +927,6 @@ float: left;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 16px 16px;
-}
-#new_topic .topicPermission.commons {
-    background-image: url(CO64.png);
-}
-#new_topic .topicPermission.public {
-    background-image: url(PU64.png);
-}
-#new_topic .topicPermission.private {
-    background-image: url(PR64.png);
 }
 #new_topic .topicOriginatorIcon {
     position: relative;
@@ -1007,15 +989,6 @@ float: left;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 16px 16px;
-}
-#new_synapse .synapsePermission.commons {
-    background-image: url(CO64.png);
-}
-#new_synapse .synapsePermission.public {
-    background-image: url(PU64.png);
-}
-#new_synapse .synapsePermission.private {
-    background-image: url(PR64.png);
 }
 #new_synapse .synapseOriginatorIcon {
     position: relative;
@@ -1289,7 +1262,7 @@ float: left;
     padding: 0 0 0 0;
 }
 .lightboxContent h3.forCreateMap {
-    text-align: center;
+    text-align: left;
 }
 #svi {
     padding-top: 56px;
@@ -1370,6 +1343,28 @@ float: left;
     background-position-x: -96px;
 }
 #lightbox_term .lightboxAboutIcon {
+    background-position-x: -128px;
+}
+
+
+.permIcon .mapCrePermIcon  {
+    background-image: url(permissions64sprite.png);
+    background-repeat: no-repeat;
+    width:64px;
+    height:64px;
+    margin:10px auto;
+    background-position: 0 0;
+}
+.mapCrePermIcon:hover {
+    background-position-y: -64px;
+}
+#map_CO {
+    background-position-x: 0;
+}
+#map_PU {
+    background-position-x: -64px;
+}
+#map_PR {
     background-position-x: -128px;
 }
 
@@ -1504,17 +1499,22 @@ float: left;
 }
 .new_map .inputGroup {
     margin: 15px 0 5px;
+    position: relative;
 }
 .new_map label {
     float: left;
     width: 100px;
-    text-align: right;
+    text-align: left;
     margin-right: 15px;
+    font-size: 18px;
+    color: #424242;
+    font-family: 'din-regular', helvetica, sans-serif;
 }
 .new_map input[type="text"] {
-    width: 336px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    width: 400px;
     height: 32px;
-    font-size: 15px;
+    font-size: 14px;
     direction: ltr;
     -webkit-appearance: none;
     appearance: none;
@@ -1529,9 +1529,8 @@ float: left;
     box-sizing: border-box;
     -webkit-border-radius: 1px;
     -moz-border-radius: 1px;
-    border-radius: 1px;
-    font: -webkit-small-control;
-    color: initial;
+    border-radius: 2px;
+    color: #424242;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
@@ -1539,7 +1538,7 @@ float: left;
     text-shadow: none;
     display: inline-block;
     text-align: start;
-    font-family: arial;
+    float: right;
 }
 .new_map input[type="text"]:hover,
 .new_map textarea:hover {
@@ -1550,93 +1549,100 @@ float: left;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .new_map textarea {
+    color: #424242;
     padding: 8px;
     border: 1px solid #d9d9d9;
     border-top: 1px solid #c0c0c0;
     resize: none;
-    font: -webkit-small-control;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
     text-indent: 0px;
     text-shadow: none;
     text-align: start;
-    font-family: arial;
-    font-size: 15px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    font-size: 14px;
     line-height: 17px;
-    width: 318px;
+    width: 400px;
+    box-sizing: border-box;
+    float: right;
+    border-radius: 2px;
+}
+
+.permHelper {
+    position: absolute;
+    width: 128px;
+    top: 36px;
+    color: #424242;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.permIconWrapper {
+    width: 276px;
+    padding: 0 62px;
+    float: right;
 }
 .new_map .permIcon {
     float: left;
     width: 92px;
-    height: 85px;
+    height: 102px;
     position: relative;
 }
 .new_map .mapPermIcon {
-    width: 60px;
+    background-image: url(permissions64sprite.png);
+    background-repeat: no-repeat;
+    width:64px;
+    height:64px;
+    margin:10px auto 0;
+    background-position: 0 0;
+/*    width: 60px;
     height: 60px;
     background-size: 48px 48px;
     background-position: center center;
     background-repeat: no-repeat;
     margin: 0 auto;
-    cursor: pointer;
+    cursor: pointer;*/
 }
-.new_map .mapCommonsIcon {
-    background-image: url(CO64.png);
+.mapPermIcon:hover, .mapPermIcon.selected {
+    background-position-y: -64px;
 }
-.new_map .mapPublicIcon {
-    background-image: url(PU64.png);
+#newmap_co {
+    background-position-x: 0;
 }
-.new_map .mapPrivateIcon {
-    background-image: url(PR64.png);
+#newmap_pu {
+    background-position-x: -64px;
 }
-.new_map .mapCommonsIcon.selected,
-.new_map .mapCommonsIcon:hover {
-    background-image: url(CO64b.png);
+#newmap_pr {
+    background-position-x: -128px;
 }
-.new_map .mapPublicIcon.selected,
-.new_map .mapPublicIcon:hover {
-    background-image: url(PU64b.png);
-}
-.new_map .mapPrivateIcon.selected,
-.new_map .mapPrivateIcon:hover {
-    background-image: url(PR64b.png);
-}
+
+
 .new_map .permIcon h4 {
     font-style: italic;
     font-family: 'Vinyl';
     text-transform: uppercase;
     font-size: 18px;
     line-height: 20px;
-    color: black;
+    color: #424242 ;
     text-align: center;
 }
 .new_map .tip {
     display: none;
-    position: absolute;
-    background: black;
-    width: 150px;
-    top: 85px;
-    left: -29px;
-    color: white;
-    border-radius: 4px;
-    font-size: 15px !important;
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
-    text-align: center;
-}
-.new_map .hoverForTip:hover .tip {
-    display: block;
 }
 .permText {
     width: 360px;
-    margin: 0 auto;
+    margin: 16px 20px 0;
     text-align: center;
+    float: right;
+    color: #424242;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
 }
 .buttonWrapper {
-    margin: 10px 0 0 131px;
-    width: 254px;
+    width: 274px;
+    float:right;
+    margin: 16px 0 0 0;
 }
 .onConsole .new_map button.cancel {
     margin-right: 20px;
