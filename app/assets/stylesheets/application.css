@@ -1476,9 +1476,9 @@ float: left;
     padding: 0 10px;
     font-weight: normal;
 }
-/* about */
+/* about, getInvolved */
 
-#about > p {
+#about > p, #getInvolved > p {
 /*    color: #000;
     font-size: 16px;*/
     margin: 10px 0;
