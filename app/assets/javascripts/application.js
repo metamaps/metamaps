@@ -20,3 +20,8 @@
 //= require ./metamaps/Metamaps.Router
 //= require ./metamaps/Metamaps.Backbone
 //= require ./metamaps/Metamaps.Views
+//= require ./librariesForMapPages/cloudcarousel
+//= require ./librariesForMapPages/socket.io
+//= require ./metamaps/JIT
+//= require ./metamaps/Metamaps
+//= require ./metamaps/Metamaps.JIT

@@ -14,7 +14,6 @@
 
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
-  <%= javascript_include_tag "compileMapPages" %>
   <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <script type="text/javascript" src="//use.typekit.net/obp7wss.js"></script>
@@ -92,13 +91,22 @@
     Metamaps.Metacodes = <%= Metacode.all.to_json.html_safe %>;
 
     Metamaps.Loading = {
-        loader: new CanvasLoader('loading')
+        loader: new CanvasLoader('loading'),
+        hide: function () {
+          $('#loading').hide();
+        },
+        show: function () {
+          $('#loading').show();
+        }
     };
     Metamaps.Loading.loader.setColor('#4fb5c0'); // default is '#000000'
     Metamaps.Loading.loader.setDiameter(28); // default is 40
     Metamaps.Loading.loader.setDensity(41); // default is 40
     Metamaps.Loading.loader.setRange(0.9); // default is 1.3
     Metamaps.Loading.loader.show(); // Hidden by default
+
+    // embedly
+    !function(a){var b="embedly-platform",c="script";if(!a.getElementById(b)){var d=a.createElement(c);d.id=b,d.src=("https:"===document.location.protocol?"https":"http")+"://cdn.embedly.com/widgets/platform.js";var e=document.getElementsByTagName(c)[0];e.parentNode.insertBefore(d,e)}}(document);
 </script>
 
 <%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>

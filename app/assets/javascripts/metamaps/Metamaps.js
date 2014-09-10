@@ -115,6 +115,12 @@ Metamaps.Backbone.init = function () {
             }
             
             this.on('change:metacode_id', Metamaps.Filter.checkMetacodes, this);
+
+            var updateName = function () {
+                if (this.get('node')) this.get('node').name = this.get('name');
+                if (Metamaps.Visualize) Metamaps.Visualize.mGraph.plot();
+            };
+            this.on('change:name', updateName, this);
         },
         authorizeToEdit: function (mapper) {
             if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
@@ -627,7 +633,7 @@ Metamaps.Create = {
  */
 Metamaps.TopicCard = {
     openTopicCard: null, //stores the JIT local ID of the topic with the topic card open
-    linkActionsString: '<div class="linkActions"><div id="linkshare">share</div><div id="linkremove">remove</div> </div>',
+    linkActionsString: '<div class="linkActions"><div id="linkremove">Remove</div></div>',
     init: function () {
 
         // initialize best_in_place editing
@@ -664,29 +670,30 @@ Metamaps.TopicCard = {
         var self = Metamaps.TopicCard;
         var showCard = document.getElementById('showcard');
 
+        // get mapper image
+        var setMapperImage = function (mapper) {
+            console.log(mapper);
+            $('.contributorIcon').attr('src', mapper.get('image'));
+        };
+        Metamaps.Mapper.get(topic.get('user_id'), setMapperImage)
 
         // starting embed.ly
         var addLinkFunc = function () {
             var addLinkDiv ='';
             var addLinkDesc ='Enter or paste a link';
-            addLinkDiv+='<div class="addLink"><div id="addLinkBack"></div>';
+            addLinkDiv+='<div class="addLink"><div id="addLinkIcon"></div>';
             addLinkDiv+='<div id="addLinkInput"><input placeholder="' + addLinkDesc + '"></input>';
             addLinkDiv+='<div id="addLinkReset"></div></div></div>';
             $('.addAttachment').hide();
             $('.attachments').append(addLinkDiv);
-            $('.showcard #addLinkBack').click(backFunc);
             $('.showcard #addLinkReset').click(resetFunc);
             $('.showcard #addLinkInput input').bind("paste keyup",inputEmbedFunc);
 
             $('#addLinkInput input').focus();
         };
-        var backFunc = function () {
+        var resetFunc = function () {
             $('.addLink').remove();
             $('.addAttachment').show();
-        };
-        var resetFunc = function () {
-            $('#addLinkInput input').val('');
-            $('#addLinkInput input').focus();
         };
         var inputEmbedFunc = function (event) {
             
@@ -700,23 +707,24 @@ Metamaps.TopicCard = {
                     topic.save({
                         link: text
                     });
-                    var  embedlyEl = $('<a/>', {
+                    var embedlyEl = $('<a/>', {
                         id: 'embedlyLink',
+                        'data-card-chrome': '0',
+                        'data-card-description': '0',
                         href: text
-                    });
-                    embedlyEl.embedly({
-                        query: {maxwidth: 300},
-                        key: '7983300f4c1f48569ca242e3d6bff1e9'
-                    });
+                    }).html(text);
+                    //embedlyEl.embedly({
+                    //    query: {maxwidth: 300},
+                    //    key: '7983300f4c1f48569ca242e3d6bff1e9'
+                    //});
                     $('.addLink').remove();
                     $('.embeds').append(embedlyEl);
+                    embedly('card', document.getElementById('embedlyLink'));
+                    $('.CardOnGraph').addClass('hasAttachment');
                     $('.attachments').append(self.linkActionsString);
                     bindLinkActionListeners();
                 }
             }, 100);
-        };
-        var shareLinkFunc = function () {
-        
         };
         var removeLinkFunc = function () {
             topic.save({
@@ -725,16 +733,17 @@ Metamaps.TopicCard = {
             $('.embeds').empty();
             $('.linkActions').remove();
             $('.addAttachment').show();
+            $('.CardOnGraph').removeClass('hasAttachment');
         };
         var bindLinkActionListeners = function () {
             $('#linkremove').click(removeLinkFunc);
-            $('#linkshare').click(shareLinkFunc);
         };
         if (topic.get('link')) {
-            $('#embedlyLink').embedly({
-                query: {maxwidth: 300},
-                key: '7983300f4c1f48569ca242e3d6bff1e9'
-            });
+            //$('#embedlyLink').embedly({
+            //    query: {maxwidth: 300},
+            //    key: '7983300f4c1f48569ca242e3d6bff1e9'
+            //});
+            embedly('card', document.getElementById('embedlyLink'));
             bindLinkActionListeners();
         }
         $('.showcard #addlink').click(addLinkFunc);
@@ -836,21 +845,12 @@ Metamaps.TopicCard = {
 
         //bind best_in_place ajax callbacks
         $(showCard).find('.best_in_place_name').bind("ajax:success", function () {
-
-            var s = $('.showcard').find('.scroll');
-            s.height(s.height()).mCustomScrollbar('update');
-
-            var name = $(this).html();
-            topic.set("name", Metamaps.Util.decodeEntities(name));
-            Metamaps.Visualize.mGraph.plot();
+            var name = Metamaps.Util.decodeEntities($(this).html());
+            topic.set("name", name);
         });
 
         $(showCard).find('.best_in_place_desc').bind("ajax:success", function () {
             this.innerHTML = this.innerHTML.replace(/\r/g, '')
-
-            var s = $('.showcard').find('.scroll');
-            s.height(s.height()).mCustomScrollbar('update');
-
             var desc = $(this).html();
             topic.set("desc", desc);
         });
@@ -902,18 +902,20 @@ Metamaps.TopicCard = {
 
         nodeValues.attachments = '';
         if (topic.get('link') && topic.get('link')!=='') {
-            nodeValues.embeds = '<a href="' + topic.get('link') + '" id="embedlyLink" target="_blank">';
+            nodeValues.embeds = '<a href="' + topic.get('link') + '" id="embedlyLink" target="_blank" data-card-chrome="0" data-card-description="0">';
             nodeValues.embeds += topic.get('link');
             nodeValues.embeds += '</a>';
             addAttachmentHidden='hidden';
             nodeValues.attachments += self.linkActionsString;
+            nodeValues.hasAttachment = "hasAttachment";
         }
         else {
             nodeValues.embeds = '';
+            nodeValues.hasAttachment = '';
         }
         nodeValues.attachments += '<div class="addAttachment ' +addAttachmentHidden+ '">';
-        nodeValues.attachments+= '<div id="addlink">Attach a link</div>';
-        nodeValues.attachments+= '<div id="addupload">Upload a file</div> </div>';
+        nodeValues.attachments+= '<div id="addlink"><div id="linkIcon" class="attachmentIcon"></div>Attach a link</div>';
+        nodeValues.attachments+= '<div id="addupload"><div id="uploadIcon" class="attachmentIcon"></div>Upload a file</div></div>';
 
         nodeValues.permission = topic.get("permission");
         nodeValues.mk_permission = topic.get("permission").substring(0, 2);
@@ -1281,7 +1283,7 @@ Metamaps.Visualize = {
             self.mGraph.graph.empty();
         }
 
-        Metamaps.Loading.loader.hide();
+        Metamaps.Loading.hide();
         // load JSON data, if it's not empty
         if (!self.loadLater) {
             //load JSON data.
@@ -1400,7 +1402,10 @@ Metamaps.Realtime = {
     init: function () {
         var self = Metamaps.Realtime;
 
-        $(".rtOn").click(self.turnOn);
+        var turnOn = function () {
+            self.turnOn(true);
+        }
+        $(".rtOn").click(turnOn);
         $(".rtOff").click(self.turnOff);
 
         $('.sidebarCollaborateIcon').click(self.toggleBox);
@@ -1409,15 +1414,8 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
-
-        if (mapperm) {
-            self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
-            self.socket.on('connect', function () {
-                console.log('socket connected');
-                self.setupSocket();
-            });
-        }
+        self.socket = io.connect('http://localhost:5001');  
+        self.startActiveMap();
     },
     toggleBox: function (event) {
         var self = Metamaps.Realtime;
@@ -1452,14 +1450,43 @@ Metamaps.Realtime = {
             });
         }
     },
-    turnOn: function () {
+    startActiveMap: function () {
+        var self = Metamaps.Realtime;
+
+        var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        var start = function() {
+            if (mapperm) {
+                self.turnOn();
+                self.setupSocket();
+            }
+        }
+
+        if (!self.socket.connected) {
+            self.socket.socket.connect();
+        }
+        self.socket.on('connect', function () {
+            start();
+        });
+    },
+    endActiveMap: function () {
+        var self = Metamaps.Realtime;
+
+        $(document).off(Metamaps.JIT.events.mouseMove);
+        self.socket.disconnect();
+        self.socket.removeAllListeners();
+        $(".collabCompass").remove();
+        self.status = false;
+    },
+    turnOn: function (notify) {
         var self = Metamaps.Realtime;
 
         if (!self.status) {
-            self.sendRealtimeOn();
+            if (notify) self.sendRealtimeOn();
             $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
             self.status = true;
             $(".sidebarCollaborateIcon").addClass("blue");
+            $(".collabCompass").show();
         }
     },
     turnOff: function () {
@@ -1470,6 +1497,7 @@ Metamaps.Realtime = {
             $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
             self.status = false;
             $(".sidebarCollaborateIcon").removeClass("blue");
+            $(".collabCompass").hide();
         }
     },
     setupSocket: function () {
@@ -1500,6 +1528,14 @@ Metamaps.Realtime = {
         socket.on('maps-' + Metamaps.Active.Map.id + '-lostrealtime', self.lostCollaborator);
 
         socket.on('maps-' + Metamaps.Active.Map.id, self.contentUpdate);
+
+        // update mapper compass position
+        socket.on('maps-' + Metamaps.Active.Map.id + '-updatePeerCoords', self.updatePeerCoords);
+    
+        var sendCoords = function (event, coords) {
+            self.sendCoords(coords);
+        }
+        $(document).on(Metamaps.JIT.events.mouseMove, sendCoords);
     },
     sendRealtimeOn: function () {
         var self = Metamaps.Realtime;
@@ -1536,6 +1572,7 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid] = {
             name: data.username,
+            image: data.userimage,
             realtime: data.userrealtime
         };
 
@@ -1552,6 +1589,14 @@ Metamaps.Realtime = {
 
         $('#mapper' + data.userid).remove();
         $('.realtimeMapperList ul').append(mapperListItem);
+
+        // create a div for the collaborators compass
+        $('#compass' + data.userid).remove();
+        $('<div/>', {
+            id: 'compass' + data.userid,
+            text: data.username,
+            class: 'collabCompass'
+        }).appendTo('#wrapper');
     },
     newPeerOnMap: function (data) {
         var self = Metamaps.Realtime;
@@ -1560,20 +1605,29 @@ Metamaps.Realtime = {
         // data.userid
         // data.username
         // data.userimage
+        // data.coords
 
         self.mappersOnMap[data.userid] = {
             name: data.username,
             realtime: true
         };
 
+        // create an item for them in the realtime box
         var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
         mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
         mapperListItem += data.username;
         mapperListItem += '<div class="littleJuntoIcon"></div>';
         mapperListItem += '</li>';
-
         $('#mapper' + data.userid).remove();
         $('.realtimeMapperList ul').append(mapperListItem);
+
+        // create a div for the collaborators compass
+        $('#compass' + data.userid).remove();
+        $('<div/>', {
+            id: 'compass' + data.userid,
+            text: data.username,
+            class: 'collabCompass'
+        }).appendTo('#wrapper');
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
 
@@ -1598,6 +1652,7 @@ Metamaps.Realtime = {
         delete self.mappersOnMap[data.userid];
 
         $('#mapper' + data.userid).remove();
+        $('#compass' + data.userid).remove();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just left the map');
     },
@@ -1611,6 +1666,7 @@ Metamaps.Realtime = {
         self.mappersOnMap[data.userid].realtime = true;
 
         $('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn');
+        $('#compass' + data.userid).show();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just turned on realtime');
     },
@@ -1624,8 +1680,46 @@ Metamaps.Realtime = {
         self.mappersOnMap[data.userid].realtime = false;
 
         $('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff');
+        $('#compass' + data.userid).hide();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just turned off realtime');
+    },
+    updatePeerCoords: function (data) {
+        var self = Metamaps.Realtime;
+        var socket = Metamaps.Realtime.socket;
+
+        var c = data.usercoords,
+            canvas = Metamaps.Visualize.mGraph.canvas,
+            s = canvas.getSize(),
+            p = canvas.getPos(),
+            ox = canvas.translateOffsetX,
+            oy = canvas.translateOffsetY,
+            sx = canvas.scaleOffsetX,
+            sy = canvas.scaleOffsetY;
+        var pixels = {
+          x: (c.x / (1/sx)) + p.x + s.width/2 + ox,
+          y: (c.y / (1/sy)) + p.y + s.height/2 + oy
+        };
+        $('#compass' + data.userid).css({
+            left: pixels.x + 'px',
+            top: pixels.y + 'px'
+        });
+    },
+    sendCoords: function (coords) {
+        var self = Metamaps.Realtime;
+        var socket = Metamaps.Realtime.socket;
+
+        var map = Metamaps.Active.Map;
+        var mapper = Metamaps.Active.Mapper;
+
+        if (self.status && map.authorizeToEdit(mapper) && socket) {
+            var update = {
+                usercoords: coords,
+                userid: Metamaps.Active.Mapper.id,
+                mapid: Metamaps.Active.Map.id
+            };
+            socket.emit('updateMapperCoords', update);
+        }
     },
     contentUpdate: function (data) {
         var self = Metamaps.Realtime;
@@ -2617,6 +2711,13 @@ Metamaps.Topic = {
             success: start
         });
     },
+    end: function () {
+        if (Metamaps.Active.Topic) {
+            $('.rightclickmenu').remove();
+            Metamaps.TopicCard.hideCard();
+            Metamaps.SynapseCard.hideCard();
+        }
+    },
     /*
      *
      *
@@ -2945,12 +3046,22 @@ Metamaps.Map = {
             Metamaps.Filter.checkMetacodes();
             Metamaps.Filter.checkSynapses();
             Metamaps.Filter.checkMappers();
+
+            Metamaps.Realtime.startActiveMap();
         }
 
         $.ajax({
             url: "/maps/" + id + "/contains.json",
             success: start
         });
+    },
+    end: function () {
+        if (Metamaps.Active.Map) {
+            $('.rightclickmenu').remove();
+            Metamaps.TopicCard.hideCard();
+            Metamaps.SynapseCard.hideCard();
+            Metamaps.Realtime.endActiveMap();
+        }
     },
     fork: function () {
         Metamaps.GlobalUI.openLightbox('forkmap');
@@ -3167,30 +3278,11 @@ Metamaps.Mapper = {
     // this function is to retrieve a mapper JSON object from the database
     // @param id = the id of the mapper to retrieve
     get: function (id, callback) {
-        // if the desired topic is not yet in the local topic repository, fetch it
-        if (Metamaps.Mappers.get(id) == undefined) {
-            if (!callback) {
-                var e = $.ajax({
-                    url: "/users/" + id + ".json",
-                    async: false
-                });
-                Metamaps.Mappers.add($.parseJSON(e.responseText));
-                return Metamaps.Mappers.get(id);
-            } else {
-                return $.ajax({
-                    url: "/users/" + id + ".json",
-                    success: function (data) {
-                        Metamaps.Mappers.add(data);
-                        callback(Metamaps.Mappers.get(id));
-                    }
-                });
+        return $.ajax({
+            url: "/users/" + id + ".json",
+            success: function (data) {
+                callback(new Metamaps.Backbone.Mapper(data));
             }
-        } else {
-            if (!callback) {
-                return Metamaps.Mappers.get(id);
-            } else {
-                return callback(Metamaps.Mappers.get(id));
-            }
-        }
-    },
+        });
+    }
 }; // end Metamaps.Mapper

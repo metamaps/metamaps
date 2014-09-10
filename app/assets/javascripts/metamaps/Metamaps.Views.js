@@ -67,7 +67,7 @@ Metamaps.Views.init = function () {
                 }, 100);
             }
 
-            Metamaps.Loading.loader.hide();
+            Metamaps.Loading.hide();
             setTimeout(function(){
                 var path = Metamaps.currentSection == "" ? "" : "/explore/" + Metamaps.currentPage; 
                 Metamaps.Router.navigate(path);

@@ -1,4 +1,7 @@
 Metamaps.JIT = {
+    events: {
+        mouseMove: 'Metamaps:JIT:events:mouseMove'
+    },
     vizData: [], // contains the visualization-compatible graph
     /**
      * This method will bind the event handlers it is interested and initialize the class.
@@ -35,25 +38,27 @@ Metamaps.JIT = {
         Metamaps.Synapses.each(function (s) {
             edge = s.createEdge();
 
-            existingEdge = _.findWhere(edges, {
-                nodeFrom: edge.nodeFrom,
-                nodeTo: edge.nodeTo
-            }) ||
-                _.findWhere(edges, {
-                    nodeFrom: edge.nodeTo,
-                    nodeTo: edge.nodeFrom
-                });
+            if (nodes[edge.nodeFrom] && nodes[edge.nodeTo]) {
+                existingEdge = _.findWhere(edges, {
+                    nodeFrom: edge.nodeFrom,
+                    nodeTo: edge.nodeTo
+                }) ||
+                    _.findWhere(edges, {
+                        nodeFrom: edge.nodeTo,
+                        nodeTo: edge.nodeFrom
+                    });
 
-            if (existingEdge) {
-                // for when you're dealing with multiple relationships between the same two topics
-                if (Metamaps.Active.Map) {
-                    mapping = s.getMapping();
-                    existingEdge['$mappingIDs'].push(mapping.isNew() ? mapping.cid : mapping.id);
+                if (existingEdge) {
+                    // for when you're dealing with multiple relationships between the same two topics
+                    if (Metamaps.Active.Map) {
+                        mapping = s.getMapping();
+                        existingEdge['$mappingIDs'].push(mapping.isNew() ? mapping.cid : mapping.id);
+                    }
+                    existingEdge['$synapseIDs'].push(s.id);
+                } else {
+                    // for when you're dealing with a topic that has relationships to many different nodes
+                    nodes[edge.nodeFrom].adjacencies.push(edge);
                 }
-                existingEdge['$synapseIDs'].push(s.id);
-            } else {
-                // for when you're dealing with a topic that has relationships to many different nodes
-                nodes[edge.nodeFrom].adjacencies.push(edge);
             }
         });
         _.each(nodes, function (node) {
@@ -613,6 +618,9 @@ Metamaps.JIT = {
         if (!node && !edge) {
             $('canvas').css('cursor', 'default');
         }
+
+        var pos = eventInfo.getPos();
+        $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
     }, // onMouseMoveHandler
     enterKeyHandler: function () {
         // this is to submit new topic creation
