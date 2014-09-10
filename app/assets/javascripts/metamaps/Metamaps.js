@@ -1414,7 +1414,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
+        self.socket = io.connect('http://localhost:5001');  
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -1462,15 +1462,12 @@ Metamaps.Realtime = {
             }
         }
 
-        if (!self.socket) {
-            self.socket.on('connect', function () {
-                start();
-            });
-        }
-        else if (self.socket) {
+        if (!self.socket.connected) {
             self.socket.socket.connect();
-            start();
         }
+        self.socket.on('connect', function () {
+            start();
+        });
     },
     endActiveMap: function () {
         var self = Metamaps.Realtime;
