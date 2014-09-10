@@ -1414,7 +1414,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://localhost:5001');  
+        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');   
         self.startActiveMap();
     },
     toggleBox: function (event) {
