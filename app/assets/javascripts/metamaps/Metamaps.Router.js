@@ -15,7 +15,7 @@
 
             Metamaps.currentSection = "";
             Metamaps.currentPage = "";
-            $('.wrapper').removeClass('mapPage');
+            $('.wrapper').removeClass('mapPage topicPage');
 
             var classes = Metamaps.Active.Mapper ? "homePage explorePage" : "homePage";
             $('.wrapper').addClass(classes);
@@ -59,6 +59,8 @@
             }
 
             Metamaps.Famous.viz.hide();
+            Metamaps.Map.end();
+            Metamaps.Topic.end();
             Metamaps.Active.Map = null;
             Metamaps.Active.Topic = null;
         },
@@ -68,7 +70,7 @@
             
             document.title = 'Explore ' + capitalize + ' Maps | Metamaps';
 
-            $('.wrapper').removeClass('homePage mapPage');
+            $('.wrapper').removeClass('homePage mapPage topicPage');
             $('.wrapper').addClass('explorePage');
             
             Metamaps.currentSection = "explore";
@@ -96,6 +98,8 @@
             Metamaps.Famous.explore.show();
 
             Metamaps.Famous.viz.hide();
+            Metamaps.Map.end();
+            Metamaps.Topic.end();
             Metamaps.Active.Map = null;
             Metamaps.Active.Topic = null;
         },
@@ -106,7 +110,7 @@
             Metamaps.currentSection = "map";
             Metamaps.currentPage = id;
 
-            $('.wrapper').removeClass('homePage explorePage');
+            $('.wrapper').removeClass('homePage explorePage topicPage');
             $('.wrapper').addClass('mapPage');
 
             Metamaps.Famous.yield.hide();
@@ -120,11 +124,13 @@
                 Metamaps.JIT.centerMap();
             }
             Metamaps.Famous.viz.show();
+            Metamaps.Topic.end();
             Metamaps.Active.Topic = null;
 
             Metamaps.GlobalUI.Search.unlock();
             Metamaps.GlobalUI.Search.close(0, true);
 
+            Metamaps.Map.end();
             Metamaps.Map.launch(id);
         },
         topics: function (id) {
@@ -134,8 +140,8 @@
             Metamaps.currentSection = "topic";
             Metamaps.currentPage = id;
 
-            $('.wrapper').removeClass('homePage explorePage');
-            $('.wrapper').addClass('mapPage');
+            $('.wrapper').removeClass('homePage explorePage mapPage');
+            $('.wrapper').addClass('topicPage');
 
             Metamaps.Famous.yield.hide();
             Metamaps.Famous.maps.hide();
@@ -148,11 +154,13 @@
                 Metamaps.JIT.centerMap();
             }
             Metamaps.Famous.viz.show();
+            Metamaps.Map.end();
             Metamaps.Active.Map = null;
 
             Metamaps.GlobalUI.Search.unlock();
             Metamaps.GlobalUI.Search.close(0, true);
 
+            Metamaps.Topic.end();
             Metamaps.Topic.launch(id);
         }
     });

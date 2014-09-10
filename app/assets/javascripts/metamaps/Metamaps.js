@@ -1402,7 +1402,10 @@ Metamaps.Realtime = {
     init: function () {
         var self = Metamaps.Realtime;
 
-        $(".rtOn").click(self.turnOn);
+        var turnOn = function () {
+            self.turnOn(true);
+        }
+        $(".rtOn").click(turnOn);
         $(".rtOff").click(self.turnOff);
 
         $('.sidebarCollaborateIcon').click(self.toggleBox);
@@ -1411,15 +1414,8 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
-
-        if (mapperm) {
-            self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
-            self.socket.on('connect', function () {
-                console.log('socket connected');
-                self.setupSocket();
-            });
-        }
+        self.socket = io.connect('http://localhost:5001');
+        self.startActiveMap();
     },
     toggleBox: function (event) {
         var self = Metamaps.Realtime;
@@ -1454,11 +1450,42 @@ Metamaps.Realtime = {
             });
         }
     },
-    turnOn: function () {
+    startActiveMap: function () {
+        var self = Metamaps.Realtime;
+
+        var mapperm = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        var start = function() {
+            if (mapperm) {
+                self.turnOn();
+                self.setupSocket();
+            }
+        }
+
+        if (!self.socket) {
+            self.socket.on('connect', function () {
+                start();
+            });
+        }
+        else if (self.socket) {
+            self.socket.socket.connect();
+            start();
+        }
+    },
+    endActiveMap: function () {
+        var self = Metamaps.Realtime;
+
+        $(document).off(Metamaps.JIT.events.mouseMove);
+        self.socket.disconnect();
+        self.socket.removeAllListeners();
+        $(".collabCompass").remove();
+        self.status = false;
+    },
+    turnOn: function (notify) {
         var self = Metamaps.Realtime;
 
         if (!self.status) {
-            self.sendRealtimeOn();
+            if (notify) self.sendRealtimeOn();
             $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
             self.status = true;
             $(".sidebarCollaborateIcon").addClass("blue");
@@ -1507,6 +1534,11 @@ Metamaps.Realtime = {
 
         // update mapper compass position
         socket.on('maps-' + Metamaps.Active.Map.id + '-updatePeerCoords', self.updatePeerCoords);
+    
+        var sendCoords = function (event, coords) {
+            self.sendCoords(coords);
+        }
+        $(document).on(Metamaps.JIT.events.mouseMove, sendCoords);
     },
     sendRealtimeOn: function () {
         var self = Metamaps.Realtime;
@@ -1623,6 +1655,7 @@ Metamaps.Realtime = {
         delete self.mappersOnMap[data.userid];
 
         $('#mapper' + data.userid).remove();
+        $('#compass' + data.userid).remove();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just left the map');
     },
@@ -1679,12 +1712,17 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
 
-        var update = {
-            usercoords: coords,
-            userid: Metamaps.Active.Mapper.id,
-            mapid: Metamaps.Active.Map.id
-        };
-        socket.emit('updateMapperCoords', update);
+        var map = Metamaps.Active.Map;
+        var mapper = Metamaps.Active.Mapper;
+
+        if (self.status && map.authorizeToEdit(mapper) && socket) {
+            var update = {
+                usercoords: coords,
+                userid: Metamaps.Active.Mapper.id,
+                mapid: Metamaps.Active.Map.id
+            };
+            socket.emit('updateMapperCoords', update);
+        }
     },
     contentUpdate: function (data) {
         var self = Metamaps.Realtime;
@@ -2676,6 +2714,13 @@ Metamaps.Topic = {
             success: start
         });
     },
+    end: function () {
+        if (Metamaps.Active.Topic) {
+            $('.rightclickmenu').remove();
+            Metamaps.TopicCard.hideCard();
+            Metamaps.SynapseCard.hideCard();
+        }
+    },
     /*
      *
      *
@@ -3004,12 +3049,22 @@ Metamaps.Map = {
             Metamaps.Filter.checkMetacodes();
             Metamaps.Filter.checkSynapses();
             Metamaps.Filter.checkMappers();
+
+            Metamaps.Realtime.startActiveMap();
         }
 
         $.ajax({
             url: "/maps/" + id + "/contains.json",
             success: start
         });
+    },
+    end: function () {
+        if (Metamaps.Active.Map) {
+            $('.rightclickmenu').remove();
+            Metamaps.TopicCard.hideCard();
+            Metamaps.SynapseCard.hideCard();
+            Metamaps.Realtime.endActiveMap();
+        }
     },
     fork: function () {
         Metamaps.GlobalUI.openLightbox('forkmap');

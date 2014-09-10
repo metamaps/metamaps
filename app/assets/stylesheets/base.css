@@ -540,7 +540,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 #edit_synapse {
-  background: url("synapse32tmcard.png") no-repeat scroll 0 center / 30px 30px #FFFFFF;
+  background: url("synapse32.png") no-repeat scroll 0 center / 30px 30px #FFFFFF;
   border-radius: 5px;
   padding: 5px 5px 5px 30px;
   color: #000;
