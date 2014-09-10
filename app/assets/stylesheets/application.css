@@ -1466,11 +1466,26 @@ float: left;
 }
 /* about, getInvolved */
 
-#about > p, #getInvolved > p {
+#aboutParms {
+    margin: 30px auto;
+    width: 215px;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+#leftAboutParms {
+    text-align: left;
+    float: left;
+    margin-right: 30px;
+}
+#rightAboutParms {
+    text-align: left;
+    float: left;
+}
+
+#about > p, #getInvolved > p, #invite > p {
 /*    color: #000;
     font-size: 16px;*/
     margin: 10px 0;
-    line-height: 24px;
+    line-height: 20px;
 }
 #about ul {
     list-style: none;
@@ -1478,19 +1493,17 @@ float: left;
 #about ul li {
     display: inline-block;
 }
+
 /* invite */
 
-#invite {
-    color: black;
-}
-#invite p {
-    margin: 10px 0;
-    line-height: 24px;
-}
-#invite .green {
+.joinCodes {
     text-align: center;
     display: block;
-    color: #097A51;
+    color: #424242;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+#joinCodesBox {
+    margin-top: 30px;
 }
 /* new map */
 
