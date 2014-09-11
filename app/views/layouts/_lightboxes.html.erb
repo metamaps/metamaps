@@ -11,7 +11,23 @@
       
       <div class="lightboxContent" id="about">
         <h3>About Metamaps.cc</h3>
-        
+            <div id="aboutParms">
+            <div id="leftAboutParms">
+                <p>STATUS: </p>
+                <p>VERSION:</p>
+                <p>LAST UPDATE:</p>
+            </div> 
+                
+            <div id="rightAboutParms">
+                <p>PRIVATE BETA</p>
+                <p>2.6</p>
+                <p>Aug 31, 2014</p>
+            </div>  
+            <div class="clearfloat">  
+            </div>  
+            </div>  
+
+                
         <p>Metamaps.cc is a free and open source web platform for changemakers, innovators, educators and students. It enables individuals and communities to build and visualize their shared knowledge and unlock their collective intelligence.</p>
 
 <p>We're creating tools to help connect people, resources and ideas with rich detail and weave those relationships into actionable insights and stories. The platform is evolving for a range of applications amidst a growing network of designers, developers, practitioners, entrepreneurs, and artists.</p>
@@ -52,6 +68,21 @@
         </ul>
         <div class="clearfloat"></div>
       </div>
+
+    <div class="lightboxContent" id="getInvolved">
+        <h3>GET INVOLVED!</h3>
+<div class="leaveSpace"></div>  
+        
+        <p>Want to help is with design, code, marketing and management for Metamaps? We are an open value network, which for us means that we want to invite and empower peers to participate in creating value together.</p>
+
+        <p>We welcome contributions in many forms. One of the easiest and best things you can do is to keep on mapping your ideas into the commons on the platform!</p>
+
+        <p>We welcome people of all skillsets to contribute to the project in different ways. Designers, researchers, academics, strategists, and facilitators can get in touch about opportunities to contribute to the project. If you're a developer, help us advance the code and take a look around out Github.</p>
+
+        <p>Financial contributions are greatly appreciated in support of our work. All financial contributions are transparently governed and recorded in our value account system.</p>
+
+        <div class="clearfloat"></div>
+      </div>
       
       <div class="lightboxContent" id="tutorial">
         <h3>Tutorial</h3>
@@ -64,13 +95,17 @@
       
       <% if authenticated? %>
         <div class="lightboxContent" id="invite">
-          <h3>Send Invites</h3>
-          <p>You can invite others to the Metamaps platform. Send them this link</p>
-          <p class="green">http://metamaps.cc/join</p>
-          <p>and give them the access code shown below.</p>
-          <% mapper = current_user %>
-          <p class="green"><%= mapper.code %></p>
-          <p>We invite you to be conscious as to who you invite to this platform, because much of the collaborative editing is based on trust. We want to cultivate a community here that is fun, wise, creative, and flourishing. Can you help us build a community like that?</p>
+          <h3>SHARE INVITE</h3>
+            
+<div class="leaveSpace"></div>  
+<p>The Metamaps platform is currently in an invite-only beta with the express purpose of creating a high value knowledge ecosystem, as well as buidling a community of contributers. As a valued beta tester, you have the ability to invite your peer, colleagues and collaborators onto the platform.</p>
+<p>Copy and send the link + access code below, or enter an email to send an invite. The access code below is your personal code and can be used multiple times.</p>
+            <div id="joinCodesBox">
+          <p class="joinCodes">HTTP://METAMAPS.CC/JOIN</p>
+        <% mapper = current_user %>
+          <p class="joinCodes">ACCESS CODE: <%= mapper.code %></p>
+            </div>
+            
         </div>
       
         <% # this is the create new map form %>
