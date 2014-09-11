@@ -193,15 +193,14 @@ class MapsController < ApplicationController
         @current = current_user
         @map = Map.find(params[:id]).authorize_to_edit(@current)
 
-        if @map 
-            @map.name = params[:name] if params[:name]
-            @map.desc = params[:desc] if params[:desc]
-            @map.permission = params[:permission] if params[:permission]
-            @map.save
-        end
-
         respond_to do |format|
-            format.json { render :json => @map }
+            if !@map 
+                format.json { render json: "unauthorized" }
+            elsif @map.update_attributes(params[:map])
+                format.json { head :no_content }
+            else
+                format.json { render json: @map.errors, status: :unprocessable_entity }
+            end
         end
     end
 
