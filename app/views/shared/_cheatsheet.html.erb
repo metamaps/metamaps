@@ -3,9 +3,16 @@
   # The inner HTML of the cheatsheet
   #%>
 
-<h3>Quick Reference Guide</h3>
-
+<h3>HELP</h3>
+ 
 <div id="cheatSheet">
+<ul id="helpWrapper">
+    <li><a href="#quickReference">QUICK REFERENCES</a></li>
+    <li><a href="#tutorials">TUTORIALS</a></li>
+    <li><a href="#moreResources">MORE RESOURCES</a></li>
+</ul>
+    
+<div id="quickReference">
   <ul>
     <li><a href="#csTopicView">Topic View</a></li>
     <li><a href="#csCreatingTopics">Creating Topics</a></li>
@@ -18,13 +25,11 @@
   </ul>
 
   <div id="csTopicView">    
-    <p class="sectionTitle">Topic View</p>
     <div class="csItem"><span class="csTitle">Alt + click on topic icon:</span> recenter topics around chosen topic</div>
     <div class="csItem"><span class="csTitle">Right-click + 'center this topic':</span> recenter topics around chosen topic</div> 
   </div>
   
   <div id="csCreatingTopics">    
-    <p class="sectionTitle">Creating Topics</p>
     <div class="csItem"><span class="csTitle">Double-click on canvas:</span> Bring up the metacode spinner</div>
     <div class="csItem indented"><span class="csTitle">Scroll:</span> change metacode spinner selection</div>
     <div class="csItem indented"><span class="csTitle">Tab:</span> rotate spinner counter-clockwise</div>
@@ -35,7 +40,6 @@
   </div>
 
   <div id="csEditingTopics">    
-    <p class="sectionTitle">Editing Topics</p>
     <div class="csItem">
             <span class="csTitle">Open topic card:</span> double-click on topic icon
     </div>
@@ -67,7 +71,6 @@
   </div>
 
   <div id="csCreatingSynapses">    
-    <p class="sectionTitle">Creating Synapses</p>
     <div class="csItem"><span class="csTitle">Right-click & drag from one topic to another:</span> open create synapse prompt</div>
     <div class="csItem indented"><span class="csTitle">Enter:</span> Create synapse</div>
     <div class="csItem indented">*You do not have to add a description</div>
@@ -77,7 +80,6 @@
   </div>
 
   <div id="csEditingSynapses">    
-    <p class="sectionTitle">Editing Synapses</p>
     <div class="csItem"><span class="csTitle">Open synapse card:</span>double-click on synapse </div>
     <div class="csItem indented"><span class="csTitle">Edit synapse description:</span> click on current description text</div>
     <div class="csItem indented"><span class="csTitle">Save synapse description:</span> hit enter</div>
@@ -88,14 +90,12 @@
   </div>
 
   <div id="csNavigation">    
-    <p class="sectionTitle">Navigation</p>
     <div class="csItem"><span class="csTitle">Click + drag:</span> move around canvas</div>
     <div class="csItem"><span class="csTitle">Scroll:</span> zoom in/out</div>
     <div class="csItem"><span class="csTitle">Refresh page:</span> center map</div>
   </div>
 
   <div id="csSelection">    
-    <p class="sectionTitle">Selection</p>
     <div class="csItem"><span class="csTitle">Click on topic icon:</span> select/deselect topic</div>
     <div class="csItem"><span class="csTitle">Click on synapse:</span> select/deselect synapse</div>
     <div class="csItem"><span class="csTitle">Shift + click:</span> select multiple topics / synapses</div>
@@ -108,7 +108,6 @@
   </div>
 
   <div id="csSearch">    
-    <p class="sectionTitle">Search</p>
     <div class="csItem"><span class="csTitle">Ctrl + /:</span> open search prompt</div>
     <div class="csItem"><span class="csTitle">Esc:</span> close search prompt</div>  
     <div class="csItem"><span class="csTitle">Type into the search prompt:</span> search for topics, maps, & mappers</div>
@@ -122,4 +121,12 @@
   </div>
 </div>
 
-<div class="clearfloat"></div>
+<div id="tutorials">
+    <iframe id="tutorialVideo" src="//player.vimeo.com/video/88334167" width="552" height="326" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <div class="tutorialItem active" id="gettingStarted">1. GETTING STARTED</div>
+    <div class="tutorialItem" id="upYourSkillz">2. UP YOUR SKILLZ</div>
+    <div class="tutorialItem" id="advancedMapping">3. ADVANCED MAPPING</div>
+</div>
+
+
+</div>
