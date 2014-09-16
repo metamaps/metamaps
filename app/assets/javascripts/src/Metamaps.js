@@ -1591,16 +1591,18 @@ Metamaps.Realtime = {
         mapperListItem += '<div class="littleJuntoIcon"></div>';
         mapperListItem += '</li>';
 
-        $('#mapper' + data.userid).remove();
-        $('.realtimeMapperList ul').append(mapperListItem);
+        if (data.userid !== Metamaps.Active.Mapper.id) {
+            $('#mapper' + data.userid).remove();
+            $('.realtimeMapperList ul').append(mapperListItem);
 
-        // create a div for the collaborators compass
-        $('#compass' + data.userid).remove();
-        $('<div/>', {
-            id: 'compass' + data.userid,
-            text: data.username,
-            class: 'collabCompass'
-        }).appendTo('#wrapper');
+            // create a div for the collaborators compass
+            $('#compass' + data.userid).remove();
+            $('<div/>', {
+                id: 'compass' + data.userid,
+                text: data.username,
+                class: 'collabCompass'
+            }).appendTo('#wrapper');
+        }
     },
     newPeerOnMap: function (data) {
         var self = Metamaps.Realtime;
@@ -1617,34 +1619,36 @@ Metamaps.Realtime = {
         };
 
         // create an item for them in the realtime box
-        var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
-        mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
-        mapperListItem += data.username;
-        mapperListItem += '<div class="littleJuntoIcon"></div>';
-        mapperListItem += '</li>';
-        $('#mapper' + data.userid).remove();
-        $('.realtimeMapperList ul').append(mapperListItem);
+        if (data.userid !== Metamaps.Active.Mapper.id) {
+            var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
+            mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
+            mapperListItem += data.username;
+            mapperListItem += '<div class="littleJuntoIcon"></div>';
+            mapperListItem += '</li>';
+            $('#mapper' + data.userid).remove();
+            $('.realtimeMapperList ul').append(mapperListItem);
 
-        // create a div for the collaborators compass
-        $('#compass' + data.userid).remove();
-        $('<div/>', {
-            id: 'compass' + data.userid,
-            text: data.username,
-            class: 'collabCompass'
-        }).appendTo('#wrapper');
+            // create a div for the collaborators compass
+            $('#compass' + data.userid).remove();
+            $('<div/>', {
+                id: 'compass' + data.userid,
+                text: data.username,
+                class: 'collabCompass'
+            }).appendTo('#wrapper');
 
-        Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
+            Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
 
-        // send this new mapper back your details, and the awareness that you've loaded the map
-        var update = {
-            userToNotify: data.userid,
-            username: Metamaps.Active.Mapper.get("name"),
-            userimage: Metamaps.Active.Mapper.get("image"),
-            userid: Metamaps.Active.Mapper.id,
-            userrealtime: self.status,
-            mapid: Metamaps.Active.Map.id
-        };
-        socket.emit('updateNewMapperList', update);
+            // send this new mapper back your details, and the awareness that you've loaded the map
+            var update = {
+                userToNotify: data.userid,
+                username: Metamaps.Active.Mapper.get("name"),
+                userimage: Metamaps.Active.Mapper.get("image"),
+                userid: Metamaps.Active.Mapper.id,
+                userrealtime: self.status,
+                mapid: Metamaps.Active.Map.id
+            };
+            socket.emit('updateNewMapperList', update);
+        }
     },
     lostPeerOnMap: function (data) {
         var self = Metamaps.Realtime;
