@@ -1,57 +1,14 @@
-<h1 class='index'>
-  Edit
-</h1>  
-
-<div class='blackBox'>
-<%= render 'form' %>
+<div id="yield">
+  <div class='blackBox'>
+  <%= render 'form' %>
+  </div>
 </div>
 
 <script>
-var selectMetacodes = new Array;
-var allMetacodes = new Array;
 <% Metacode.all.each do |m| %>
   <% if m.inMetacodeSet(@metacode_set) %>
-    selectMetacodes.push("<%= m.id %>");
+    Metamaps.Admin.selectMetacodes.push("<%= m.id %>");
   <% end %>
-  allMetacodes.push("<%= m.id %>");
+  Metamaps.Admin.allMetacodes.push("<%= m.id %>");
 <% end %>
-$(document).ready(function() {
-  
-  $('#metacodes_value').val(selectMetacodes.toString());
-  
-  $('.editMetacodes li').click(function() {
-    if ($(this).attr('class') != 'toggledOff') {
-      $(this).addClass('toggledOff');
-      var value_to_remove = $(this).attr('id');
-      selectMetacodes.splice(selectMetacodes.indexOf(value_to_remove), 1);
-      $('#metacodes_value').val(selectMetacodes.toString());
-    }
-    else if ($(this).attr('class') == 'toggledOff') {
-      $(this).removeClass('toggledOff');
-      selectMetacodes.push($(this).attr('id'));
-      $('#metacodes_value').val(selectMetacodes.toString());
-    }
-  });
-  
-  $('#showAll').click(function() {
-    $('.editMetacodes li').removeClass('toggledOff');
-    selectMetacodes = allMetacodes;
-    $('#metacodes_value').val(selectMetacodes.toString());
-  });
-  
-  $('#hideAll').click(function() {
-    $('.editMetacodes li').addClass('toggledOff');
-    selectMetacodes = [];
-    $('#metacodes_value').val(0);
-  });
-  
-  $('.edit_metacode_set').bind('submit', function(event) {
-    if (selectMetacodes.length == 0) {
-      alert('Would you pretty please select at least one metacode for the set?');
-      return false;
-    }
-  });
-
-  $('.blackBox').height( (parseInt($('body').height()) - 40) ).mCustomScrollbar();
-});
 </script>

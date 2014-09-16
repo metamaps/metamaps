@@ -5,12 +5,31 @@
   
 <div id="metacodeOptions">
 <ul>
-<% Metacode.order("name").all.each do |m| %>
-  <li data-id="<%= m.id.to_s %>">
-    <img width="16" height="16" src="<%= m.icon %>" alt="<%= m.name %>" />
-    <span class="mSelectName"><%= m.name %></span>
-    <div class="clearfloat"></div>
+  <% MetacodeSet.order("name").all.each do |set| %>
+  <li>
+    <span><%= set.name %></span>
+    <ul>
+    	<% set.metacodes.sort { |a, b| a.name <=> b.name }.each do |m| %>
+		  <li data-id="<%= m.id.to_s %>">
+		    <img width="16" height="16" src="<%= m.icon %>" alt="<%= m.name %>" />
+		    <span class="mSelectName"><%= m.name %></span>
+		    <div class="clearfloat"></div>
+		  </li>
+		<% end %>
+    </ul>
   </li>
-<% end %>
+  <% end %>
+  <li>
+  	<span>All</span>
+  	<ul>
+  		<% Metacode.order("name").all.each do |m| %>
+		  <li data-id="<%= m.id.to_s %>">
+		    <img width="16" height="16" src="<%= m.icon %>" alt="<%= m.name %>" />
+		    <span class="mSelectName"><%= m.name %></span>
+		    <div class="clearfloat"></div>
+		  </li>
+		<% end %>
+  	</ul>
+  </li>
 </ul>
 </div>

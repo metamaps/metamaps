@@ -50,16 +50,23 @@
   font-size: 18px;
   line-height: 22px;
   display: table;
-  padding: 8px 16px;
+  padding: 8px 0 16px;
   height: 80px;
   text-align: center;
   font-family: 'din-regular', sans-serif;
-  width: 268px;
+  width: 300px;
+  position: relative;
 }
 
 .CardOnGraph .titleWrapper {
   display: table-cell;
   vertical-align: middle;
+  padding: 0 16px;
+}
+.canEdit #titleActivator:hover {
+  background-image: url(edit.png);
+  background-repeat: no-repeat;
+  background-position: bottom right;
 }
 
 .best_in_place_name textarea, .best_in_place_name input {
@@ -67,19 +74,29 @@
   color: #424242;
   font-size: 18px;
   line-height: 22px;
-height: 15px;
-padding: 5px 0;
-width: 100%;
-margin: 0;
-border: 0;
-outline: none;
-background: none;
-text-align:center;
+  height: 15px;
+  padding: 5px 0;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  text-align:center;
+  resize: none;
+}
+.titleCounter {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  font-size: 11px;
+  font-family: helvetica;
+  color: #727272;
+  line-height: 11px;
 }
 
 .CardOnGraph .scroll {
    display:block;
-   padding: 8px 16px;
+   padding: 8px 0 8px 16px;
    height: 152px;
    font-size: 12px;
    line-height:15px;
@@ -109,15 +126,16 @@ background: none;
   margin-top:5px;
 }
 
-.CardOnGraph .best_in_place_desc input {
-  float: right;
-  margin: 2px 0px 0px 2px;
-  padding: 1px 5px;	
-}
-
 .CardOnGraph .best_in_place_desc {
   display:block;
   margin-top:2px;	
+  padding-right: 18px;
+  margin-right: 8px;
+}
+.canEdit .CardOnGraph .best_in_place_desc:hover {
+  background-image: url(edit.png);
+  background-position: top right;
+  background-repeat: no-repeat;
 }
 
 #edit_synapse .best_in_place_desc {
@@ -155,7 +173,7 @@ background: none;
 .linkItem.contributor {
   margin-left:32px;
   z-index:1;
-  padding:17px 16px 17px 40px;
+  padding:17px 16px 17px 32px;
   position: relative;
 }
 .contributor .contributorIcon {
@@ -163,6 +181,9 @@ background: none;
   top: 8px;
   left: 0;
   border-radius: 16px;
+}
+.contributorName {
+  display:none;
 }
 .linkItem.mapCount {
   width: 24px;

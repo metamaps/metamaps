@@ -22,7 +22,7 @@
     <div class="clearfloat"></div>
   </div>
   <div class="actions">
-    <%= link_to 'Cancel', metacodes_path, { :class => 'button' }%>
+    <%= link_to 'Cancel', metacodes_path, { :class => 'button', 'data-bypass' => 'true' } %>
     <%= f.submit :class => 'add' %>
   </div>
 <% end %>

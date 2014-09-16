@@ -106,11 +106,15 @@ define(function(require, exports, module) {
     
     f.loadYield = function () {
         Metamaps.Loading.hide();
-        var yield = document.getElementById('yield') ? document.getElementById('yield').innerHTML : false;
+
+        var y = document.getElementById('yield');
+        var yield = y ? y.innerHTML : false;
         if (yield) {
             f.yield.surf.setContent(yield);
             f.yield.surf.deploy(f.yield.surf._currTarget);
             f.yield.show();
+
+            y.parentNode.removeChild(y);
         }
     };
 

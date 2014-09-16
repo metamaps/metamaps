@@ -180,11 +180,12 @@
     <script type="text/template" id="topicCardTemplate">
     <div class="CardOnGraph {{hasAttachment}}" id="topic_{{id}}">
         <span class="title"> 
-            <div class="titleWrapper">                                                 
+            <div class="titleWrapper" id="titleActivator">      
               <span class="best_in_place best_in_place_name"                      
                     data-url="/topics/{{id}}"                                     
                     data-object="topic"                                           
-                    data-attribute="name"                                         
+                    data-attribute="name"
+                    data-activator="#titleActivator"           
                     data-type="textarea">{{name}}</span>
             </div> 
         </span>
@@ -195,7 +196,7 @@
             </div>
             <div class="linkItem contributor">
                 <img src="/assets/user.png" class="contributorIcon" width="32" height="32" />
-                {{username}}
+                <div class="contributorName">{{username}}</div>
             </div>
             <a href="/explore/topics/{{id}}" class="linkItem mapCount" title="Click to see which maps topic appears on">                  
                  <div class="mapCountIcon"></div>

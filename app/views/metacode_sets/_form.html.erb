@@ -25,14 +25,18 @@
   <br />
 
   <p>Choose Metacodes</p>
-  <div class="allMetacodes"><span id="showAll">Select All</span><span id="hideAll">Unselect All</span></div>
-  <div class="clearfloat"></div>
+  <div class="allMetacodes">
+    <span id="showAll" onclick="Metamaps.Admin.selectAll();">Select All</span>
+    <span id="hideAll" onclick="Metamaps.Admin.deselectAll();">Unselect All</span>
+  </div>
+    <div class="clearfloat"></div>
   <div class="editMetacodes">
       <ul id="filters-one">
        <% $i = 0 %>
        <% @m = Metacode.order("name").all %>
        <% while $i < (Metacode.all.length / 4) do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %> >
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %> 
+              onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
@@ -42,7 +46,8 @@
       </ul>
       <ul id="filters-two">
        <% while $i < (Metacode.all.length / 4 * 2) do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %> >
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
+              onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
@@ -52,7 +57,8 @@
       </ul>
       <ul id="filters-three">         
        <% while $i < (Metacode.all.length / 4 * 3) do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %> >
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
+              onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
@@ -62,7 +68,8 @@
       </ul>
       <ul id="filters-four">         
        <% while $i < Metacode.all.length do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %> >
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
+              onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
@@ -75,7 +82,8 @@
   <div class="clearfloat"></div>
   
   <div class="actions">
-    <%= link_to 'Cancel', metacode_sets_path, { :class => 'button' }%>
-    <%= f.submit :class => 'add' %>
+    <%= link_to 'Cancel', metacode_sets_path, 
+        { :class => 'button', 'data-bypass' => 'true' } %>
+    <%= f.submit :class => 'add', :onclick => "return Metamaps.Admin.validate();" %>
   </div>
 <% end %>
