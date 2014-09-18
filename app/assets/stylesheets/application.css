@@ -1429,6 +1429,7 @@ float: left;
 }
 #metacodeSwitchTabs > ul li {
     font-size: 14px;
+    text-transform: uppercase;
 }
 #metacodeSwitchTabs li.ui-state-active a {
     color: #00BCD4;
