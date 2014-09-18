@@ -1413,6 +1413,7 @@ float: left;
     font-size: 17px;
     line-height: 21px;
     border: none;
+    background: none;
 }
 #metacodeSwitchTabs .setTitle {
     
@@ -1420,12 +1421,24 @@ float: left;
 #metacodeSwitchTabs .setDesc {
     margin-bottom: 5px;
 }
+#switchMetacodes > p {
+    margin: 16px 0 16px 0;
+}
+#metacodeSwitchTabs > ul {
+    width: 130px;
+}
+#metacodeSwitchTabs > ul li {
+    font-size: 14px;
+}
+#metacodeSwitchTabs li.ui-state-active a {
+    color: #00BCD4;
+}
 .customMetacodeList,
 .metacodeSetList {
     height: 301px;
     overflow: hidden;
     margin: 5px 0 15px 0;
-    border-bottom: 1px solid #BBB;
+    /*  border-bottom: 1px solid #BBB;*/
 }
 .customMetacodeList ul li {
     cursor: pointer;
@@ -1461,6 +1474,7 @@ float: left;
     width: auto !important;
     padding: 0 10px;
     font-weight: normal;
+    float: right;
 }
 /* about, getInvolved */
 
