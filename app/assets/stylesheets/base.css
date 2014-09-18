@@ -322,38 +322,45 @@ cursor: pointer;
 }
 .CardOnGraph .metacodeSelect {
   display:none;
-  width:100%;
+  width:200px;
   z-index: 2;
   position: absolute;
   background: #EAEAEA;
-  height: 150px;
+  left: 300px;
 }
 .CardOnGraph .metacodeSelect ul {
-font-style: italic;
-font-family: 'vinyl';
-text-transform: uppercase;
-position: absolute;
-line-height: 36px;
-font-size: 20px;
-display:block;
-width: 100%;
-margin:0;
-padding: 0;
-list-style:none;
-height:150px;
-overflow:hidden;
+  position: relative; 
+  line-height: 14px;
+  font-size: 14px;
+  display:block;
+  width: 100%;
+  margin:0;
+  padding: 0;
+  list-style:none;
+  border: 1px solid #BDBDBD;
 }
 .CardOnGraph .metacodeSelect ul li {
-background-color: #EAEAEA;
-width:100%;
-border-bottom:1px solid #AAAAAA;
+background-color: #F5F5F5;
 cursor:pointer;
+position: relative;
+padding: 9px 12px;
 }
 .CardOnGraph .metacodeSelect ul li:hover {
-background-color: #F8F8F8;
+background-color: #E0E0E0;
 }
 .CardOnGraph .metacodeSelect ul li img, .CardOnGraph .metacodeSelect ul li .mSelectName {
 float:left;
+}
+.CardOnGraph .metacodeSelect ul ul {
+  display:none;
+  position: absolute;
+  left: 200px;
+  top: 0;
+  max-height: 270px;
+  overflow-y: auto;
+}
+.CardOnGraph .metacodeSelect li:hover ul {
+  display: block;
 }
 
 .CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip {

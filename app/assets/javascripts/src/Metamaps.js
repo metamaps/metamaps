@@ -766,7 +766,7 @@ Metamaps.TopicCard = {
                 selectingMetacode = true;
                 $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
                 $('.metacodeSelect').show();
-                $('.metacodeSelect li').click(function () {
+                $('.metacodeSelect li li').click(function () {
                     selectingMetacode = false;
                     var metacodeName = $(this).find('.mSelectName').text();
                     var metacode = Metamaps.Metacodes.findWhere({
