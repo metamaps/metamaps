@@ -191,7 +191,10 @@
         </span>
         <div class="links">
             <div class="linkItem icon">
-                <div class="metacodeTitle {{metacode_class}}">{{metacode}}</div>
+                <div class="metacodeTitle {{metacode_class}}">
+                  {{metacode}}
+                  <div class="expandMetacodeSelect"></div>
+                </div>
                 <div class="metacodeImage" style="background-image:url({{imgsrc}});" title="click and drag to move card"></div>
                 <div class="metacodeSelect">{{{metacode_select}}}</div>
             </div>
@@ -219,7 +222,7 @@
         <div class="embeds">
            {{{embeds}}}
         </div>
-        <div class="attachments">
+        <div class="attachments {{attachmentsHidden}}">
             {{{attachments}}}
         </div>
         <div class="clearfloat"></div>

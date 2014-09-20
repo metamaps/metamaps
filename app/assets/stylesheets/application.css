@@ -273,14 +273,16 @@ input[type="submit"]:active {
 }
 .openMetacodeSwitcher {
     display: block;
-    height: 20px;
-    width: 20px;
-    background-image: url('MMCCicon_metacode_set_change.png');
-    background-size: contain;
+    height: 16px;
+    width: 16px;
+    background-image: url(metacodesettings_sprite.png);
     position: absolute;
     z-index: 2;
     top: 20px;
     left: 30px;
+}
+.openMetacodeSwitcher:hover {
+    background-position: -16px 0;
 }
 #metacodeImg {
     height: 120px;
@@ -1195,7 +1197,7 @@ float: left;
     display: none;
 }
 #lightbox_main {
-    width: 770px;
+    width: 800px;
     height: auto;
     margin: 0 auto;
     z-index: 2;
@@ -1223,24 +1225,22 @@ float: left;
     border: solid 2px #000;
 }
 #lightbox_overlay #lightbox_main a#lightbox_close {
-    /*background-image: url(../images/barometer_close.png);*/
+    background-image: url(xlightbox.png);
     cursor: pointer;
-    height: 42px;
-    outline-color: -moz-use-text-color;
+    height: 32px;
     outline-style: none;
     outline-width: medium;
     overflow: hidden;
     position: absolute;
-    top: -23px;
-    right: -22px;
-    width: 42px;
+    top: -8px;
+    right: -32px;
+    width: 32px;
     z-index: 4;
     border: none;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 #lightbox_content {
-/*    background: white url(metacode-watermark.png) 443px -30px no-repeat;
-    padding: 20px;
-    border-radius: 5px;*/
     width: 552px;
     height: 434px;
     background-color: #e0e0e0;
@@ -1658,6 +1658,7 @@ float: left;
 }
 .permText {
     width: 360px;
+    height: 32px;
     margin: 16px 20px 0;
     text-align: center;
     float: right;
@@ -1735,6 +1736,9 @@ float: left;
 #helpWrapper li:hover, #helpWrapper li.ui-state-active {
     border-bottom: 2px solid #00BCD4;
 }
+#helpWrapper li.ui-state-active a, #helpWrapper li.ui-state-hover a {
+  color: #424242;
+}
 #helpWrapper li a {
     padding: 0;
     font-family: 'din-medium', helvetica, sans-serif;
@@ -1742,6 +1746,9 @@ float: left;
 }
 #quickReference {
     padding: 32px 0 0 0;
+}
+#quickReference .ui-widget-content {
+  color: #424242;
 }
 #quickReference ul {
     width: 150px;
@@ -1769,6 +1776,35 @@ float: left;
 #upYourSkillz {
     margin: 0 68px;
 }
+#moreResources {
+    padding: 16px 0 0 0;
+    font-size: 14px;
+    line-height: 18px;
+    color: #424242;
+}
+.resourcesColumn {
+    margin-top: 32px;
+    width: 273px;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+}
+.resourcesColumn ul {
+    list-style: none;
+}
+.resourcesColumn li {
+    margin-top: 16px;
+}
+.resourcesColumn a.button {
+    background-color: #00BCD4;
+    color: #FFF;
+    padding-top: 8px;
+    height: 24px;
+}
+.resourcesColumn li a {
+    color: #424242;
+}
+
 /* Admin Pages */
 
 .blackBox {

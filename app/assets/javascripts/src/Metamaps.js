@@ -632,9 +632,10 @@ Metamaps.Create = {
  *
  */
 Metamaps.TopicCard = {
-    openTopicCard: null, //stores the JIT local ID of the topic with the topic card open
-    linkActionsString: '<div class="linkActions"><div id="linkremove">Remove</div></div>',
+    openTopicCard: null, //stores the topic that's currently open
+    authorizedToEdit: false, // stores boolean for edit permission for open topic card
     init: function () {
+        var self = Metamaps.TopicCard;
 
         // initialize best_in_place editing
         $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
@@ -645,30 +646,56 @@ Metamaps.TopicCard = {
         $('.showcard').draggable({
             handle: ".metacodeImage"
         });
-    },
-    fadeInShowCard: function (topic) {
-        $('.showcard').fadeIn('fast');
-        Metamaps.TopicCard.openTopicCard = topic.isNew() ? topic.cid : topic.id;
+
+        embedly('on', 'card.rendered', self.embedlyCardRendered);
     },
     /**
      * Will open the Topic Card for the node that it's passed
      * @param {$jit.Graph.Node} node
      */
     showCard: function (node) {
+        var self = Metamaps.TopicCard;
 
         var topic = node.getData('topic');
 
+        self.openTopicCard = topic;
+        self.authorizedToEdit = topic.authorizeToEdit(Metamaps.Active.Mapper);
         //populate the card that's about to show with the right topics data
-        Metamaps.TopicCard.populateShowCard(topic);
-        Metamaps.TopicCard.fadeInShowCard(topic);
+        self.populateShowCard(topic);
+        $('.showcard').fadeIn('fast');
     },
     hideCard: function () {
+        var self = Metamaps.TopicCard;
+
         $('.showcard').fadeOut('fast');
-        Metamaps.TopicCard.openTopicCard = null;
+        self.openTopicCard = null;
+        self.authorizedToEdit = false;
+    },
+    embedlyCardRendered: function (iframe) {
+        var self = Metamaps.TopicCard;
+
+        $('#embedlyLinkLoader').hide();
+        $('#embedlyLink').fadeIn('fast');
+        if (self.authorizedToEdit) {
+            $('.embeds').append('<div id="linkremove"></div>');
+            $('#linkremove').click(self.removeLink);
+        }
+    },
+    removeLink: function () {
+        var self = Metamaps.TopicCard;
+        self.openTopicCard.save({
+            link: null
+        });
+        $('.embeds').empty();
+        $('.attachments').removeClass('hidden');
+        $('.addAttachment').show();
+        $('.CardOnGraph').removeClass('hasAttachment');
     },
     bindShowCardListeners: function (topic) {
         var self = Metamaps.TopicCard;
         var showCard = document.getElementById('showcard');
+
+        var authorized = self.authorizedToEdit;
 
         // get mapper image
         var setMapperImage = function (mapper) {
@@ -687,7 +714,6 @@ Metamaps.TopicCard = {
             $('.attachments').append(addLinkDiv);
             $('.showcard #addLinkReset').click(resetFunc);
             $('.showcard #addLinkInput input').bind("paste keyup",inputEmbedFunc);
-
             $('#addLinkInput input').focus();
         };
         var resetFunc = function () {
@@ -712,38 +738,31 @@ Metamaps.TopicCard = {
                         'data-card-description': '0',
                         href: text
                     }).html(text);
-                    //embedlyEl.embedly({
-                    //    query: {maxwidth: 300},
-                    //    key: '7983300f4c1f48569ca242e3d6bff1e9'
-                    //});
                     $('.addLink').remove();
+                    $('.attachments').addClass('hidden');
                     $('.embeds').append(embedlyEl);
+                    $('.embeds').append('<div id="embedlyLinkLoader"></div>');
+                    var loader = new CanvasLoader('embedlyLinkLoader');
+                    loader.setColor('#4fb5c0'); // default is '#000000'
+                    loader.setDiameter(28); // default is 40
+                    loader.setDensity(41); // default is 40
+                    loader.setRange(0.9); // default is 1.3
+                    loader.show(); // Hidden by default
                     embedly('card', document.getElementById('embedlyLink'));
                     $('.CardOnGraph').addClass('hasAttachment');
-                    $('.attachments').append(self.linkActionsString);
-                    bindLinkActionListeners();
                 }
             }, 100);
         };
-        var removeLinkFunc = function () {
-            topic.save({
-                link: null
-            });
-            $('.embeds').empty();
-            $('.linkActions').remove();
-            $('.addAttachment').show();
-            $('.CardOnGraph').removeClass('hasAttachment');
-        };
-        var bindLinkActionListeners = function () {
-            $('#linkremove').click(removeLinkFunc);
-        };
-        if (topic.get('link')) {
-            //$('#embedlyLink').embedly({
-            //    query: {maxwidth: 300},
-            //    key: '7983300f4c1f48569ca242e3d6bff1e9'
-            //});
+
+        // initialize the link card, if there is a link
+        if (topic.get('link') && topic.get('link') !== '') {
+            var loader = new CanvasLoader('embedlyLinkLoader');
+            loader.setColor('#4fb5c0'); // default is '#000000'
+            loader.setDiameter(28); // default is 40
+            loader.setDensity(41); // default is 40
+            loader.setRange(0.9); // default is 1.3
+            loader.show(); // Hidden by default
             embedly('card', document.getElementById('embedlyLink'));
-            bindLinkActionListeners();
         }
         $('.showcard #addlink').click(addLinkFunc);
 
@@ -761,38 +780,79 @@ Metamaps.TopicCard = {
             }
         });
 
-        $('.showcard .metacodeTitle').click(function () {
+        var metacodeLiClick = function () {
+            selectingMetacode = false;
+            var metacodeName = $(this).find('.mSelectName').text();
+            var metacode = Metamaps.Metacodes.findWhere({
+                name: metacodeName
+            });
+            $('.CardOnGraph').find('.metacodeTitle').html(metacodeName)
+                .append('<div class="expandMetacodeSelect"></div>')
+                .attr('class', 'metacodeTitle mbg' + metacodeName.replace(/\s/g, ''));
+            $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + metacode.get('icon') + ')');
+            topic.save({
+                metacode_id: metacode.id
+            });
+            Metamaps.Visualize.mGraph.plot();
+            $('.metacodeSelect').hide();
+            $('.metacodeTitle').hide();
+            $('.showcard .icon').css('z-index', '1');
+        };
+
+        var openMetacodeSelect = function (event) {
             if (!selectingMetacode) {
                 selectingMetacode = true;
-                $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
                 $('.metacodeSelect').show();
-                $('.metacodeSelect li li').click(function () {
-                    selectingMetacode = false;
-                    var metacodeName = $(this).find('.mSelectName').text();
-                    var metacode = Metamaps.Metacodes.findWhere({
-                        name: metacodeName
-                    });
-                    $('.CardOnGraph').find('.metacodeTitle').text(metacodeName)
-                        .attr('class', 'metacodeTitle mbg' + metacodeName.replace(/\s/g, ''));
-                    $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + metacode.get('icon') + ')');
-                    topic.save({
-                        metacode_id: metacode.id
-                    });
-                    Metamaps.Visualize.mGraph.plot();
-                    $('.metacodeTitle').removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
-                    $('.metacodeSelect').hide();
-                    setTimeout(function () {
-                        $('.metacodeTitle').hide();
-                        $('.showcard .icon').css('z-index', '1');
-                    }, 500);
-                });
-            } else {
-                selectingMetacode = false;
-                $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
-                $('.metacodeSelect').hide();
+                event.stopPropagation();
             }
-        });
+        };
 
+        var hideMetacodeSelect = function () {
+            selectingMetacode = false;
+            $('.metacodeSelect').hide();
+            $('.metacodeTitle').hide();
+            $('.showcard .icon').css('z-index', '1');
+        };
+
+        if (authorized) {
+            $('.showcard .metacodeTitle').click(openMetacodeSelect);
+            $('.showcard').click(hideMetacodeSelect);
+            $('.metacodeSelect > ul li').click(function (event){
+                event.stopPropagation();
+            });
+            $('.metacodeSelect li li').click(metacodeLiClick);
+
+            var bipName = $(showCard).find('.best_in_place_name');
+            bipName.best_in_place();
+            bipName.bind("best_in_place:activate", function () {
+                var $el = bipName.find('textarea');
+                var el = $el[0];
+
+                $el.attr('maxlength', '140');
+
+                $('.showcard .title').append('<div class="titleCounter"></div>');
+
+                var callback = function (data) {
+                    $('.titleCounter').html(data.all + '/140');
+                };
+                Countable.live(el, callback);
+            });
+            bipName.bind("best_in_place:deactivate", function () {
+                $('.titleCounter').remove();
+            });
+
+            //bind best_in_place ajax callbacks
+            bipName.bind("ajax:success", function () {
+                var name = Metamaps.Util.decodeEntities($(this).html());
+                topic.set("name", name);
+            });
+
+            $(showCard).find('.best_in_place_desc').bind("ajax:success", function () {
+                this.innerHTML = this.innerHTML.replace(/\r/g, '')
+                var desc = $(this).html();
+                topic.set("desc", desc);
+            });
+        }
 
         // ability to change permission
         var selectingPermission = false;
@@ -823,39 +883,6 @@ Metamaps.TopicCard = {
                     $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
                     $('.permissionSelect').remove();
                 }
-            });
-        }
-
-        if (topic.authorizeToEdit(Metamaps.Active.Mapper)) {
-            var bipName = $(showCard).find('.best_in_place_name');
-            bipName.best_in_place();
-            bipName.bind("best_in_place:activate", function () {
-                var $el = bipName.find('textarea');
-                var el = $el[0];
-
-                $el.attr('maxlength', '140');
-
-                $('.showcard .title').append('<div class="titleCounter"></div>');
-
-                var callback = function (data) {
-                    $('.titleCounter').html(data.all + '/140');
-                };
-                Countable.live(el, callback);
-            });
-            bipName.bind("best_in_place:deactivate", function () {
-                $('.titleCounter').remove();
-            });
-
-            //bind best_in_place ajax callbacks
-            bipName.bind("ajax:success", function () {
-                var name = Metamaps.Util.decodeEntities($(this).html());
-                topic.set("name", name);
-            });
-
-            $(showCard).find('.best_in_place_desc').bind("ajax:success", function () {
-                this.innerHTML = this.innerHTML.replace(/\r/g, '')
-                var desc = $(this).html();
-                topic.set("desc", desc);
             });
         }
     },
@@ -902,24 +929,28 @@ Metamaps.TopicCard = {
         }
 
         var desc_nil = "Click to add description...";
-        var addAttachmentHidden='';
 
-        nodeValues.attachments = '';
-        if (topic.get('link') && topic.get('link')!=='') {
+        nodeValues.attachmentsHidden = '';
+        if (topic.get('link') && topic.get('link')!== '') {
             nodeValues.embeds = '<a href="' + topic.get('link') + '" id="embedlyLink" target="_blank" data-card-chrome="0" data-card-description="0">';
             nodeValues.embeds += topic.get('link');
-            nodeValues.embeds += '</a>';
-            addAttachmentHidden='hidden';
-            nodeValues.attachments += self.linkActionsString;
+            nodeValues.embeds += '</a><div id="embedlyLinkLoader"></div>';
+            nodeValues.attachmentsHidden = 'hidden';
             nodeValues.hasAttachment = "hasAttachment";
         }
         else {
             nodeValues.embeds = '';
             nodeValues.hasAttachment = '';
         }
-        nodeValues.attachments += '<div class="addAttachment ' +addAttachmentHidden+ '">';
-        nodeValues.attachments+= '<div id="addlink"><div id="linkIcon" class="attachmentIcon"></div>Attach a link</div>';
-        nodeValues.attachments+= '<div id="addupload"><div id="uploadIcon" class="attachmentIcon"></div>Upload a file</div></div>';
+
+        if (authorized) {
+            nodeValues.attachments = '<div class="addAttachment">';
+            nodeValues.attachments += '<div id="addlink"><div id="linkIcon" class="attachmentIcon"></div>Attach a link</div>';
+            nodeValues.attachments += '<div id="addupload"><div id="uploadIcon" class="attachmentIcon"></div>Upload a file</div></div>';
+        } else {
+            nodeValues.attachmentsHidden = 'hidden';
+            nodeValues.attachments = '';
+        }
 
         nodeValues.permission = topic.get("permission");
         nodeValues.mk_permission = topic.get("permission").substring(0, 2);
