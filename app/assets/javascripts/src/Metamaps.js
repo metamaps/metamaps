@@ -360,7 +360,6 @@ Metamaps.Backbone.init = function () {
  */
 Metamaps.Create = {
     isSwitchingSet: false, // indicates whether the metacode set switch lightbox is open
-    metacodeScrollerInit: false, // indicates whether the scrollbar in the custom metacode set space has been init
     selectedMetacodeSet: null,
     selectedMetacodeSetIndex: null,
     selectedMetacodeNames: [],
@@ -438,7 +437,8 @@ Metamaps.Create = {
         $('#metacodeImg').empty().append(newMetacodes).CloudCarousel({
             titleBox: $('#metacodeImgTitle'),
             yRadius: 40,
-            xPos: 150,
+            xRadius: 190,
+            xPos: 170,
             yPos: 40,
             speed: 0.3,
             mouseWheel: true,
@@ -522,7 +522,8 @@ Metamaps.Create = {
             $("#metacodeImg").CloudCarousel({
                 titleBox: $('#metacodeImgTitle'),
                 yRadius: 40,
-                xPos: 150,
+                xRadius: 190,
+                xPos: 170,
                 yPos: 40,
                 speed: 0.3,
                 mouseWheel: true,
@@ -611,6 +612,8 @@ Metamaps.Create = {
             Metamaps.Create.newTopic.addSynapse = false;
             Metamaps.Create.newSynapse.topic1id = 0;
             Metamaps.Create.newSynapse.topic2id = 0;
+            Metamaps.Mouse.synapseStartCoordinates = [];
+            Metamaps.Visualize.mGraph.plot();
         },
         getSearchQuery: function () {
             var self = Metamaps.Create.newSynapse;
@@ -1400,6 +1403,20 @@ Metamaps.Util = {
     getDistance: function (p1, p2) {
         return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2));
     },
+    coordsToPixels: function (coords) {
+        var canvas = Metamaps.Visualize.mGraph.canvas,
+            s = canvas.getSize(),
+            p = canvas.getPos(),
+            ox = canvas.translateOffsetX,
+            oy = canvas.translateOffsetY,
+            sx = canvas.scaleOffsetX,
+            sy = canvas.scaleOffsetY;
+        var pixels = {
+          x: (coords.x / (1/sx)) + p.x + s.width/2 + ox,
+          y: (coords.y / (1/sy)) + p.y + s.height/2 + oy
+        };
+        return pixels;
+    },
     generateOptionsList: function (data) {
         var newlist = "";
         for (var i = 0; i < data.length; i++) {
@@ -1727,18 +1744,7 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
 
-        var c = data.usercoords,
-            canvas = Metamaps.Visualize.mGraph.canvas,
-            s = canvas.getSize(),
-            p = canvas.getPos(),
-            ox = canvas.translateOffsetX,
-            oy = canvas.translateOffsetY,
-            sx = canvas.scaleOffsetX,
-            sy = canvas.scaleOffsetY;
-        var pixels = {
-          x: (c.x / (1/sx)) + p.x + s.width/2 + ox,
-          y: (c.y / (1/sy)) + p.y + s.height/2 + oy
-        };
+        var pixels = Metamaps.Util.coordsToPixels(data.usercoords);
         $('#compass' + data.userid).css({
             left: pixels.x + 'px',
             top: pixels.y + 'px'
@@ -3099,6 +3105,8 @@ Metamaps.Map = {
             $('.rightclickmenu').remove();
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
+            Metamaps.Create.newTopic.hide();
+            Metamaps.Create.newSynapse.hide();
             Metamaps.Realtime.endActiveMap();
         }
     },

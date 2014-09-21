@@ -167,11 +167,17 @@
     </script>
 
     <script type="text/template" id="topicAutocompleteTemplate">
-        <img class="autocompleteSection topicType" width="22" height="22" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}" />
+        <img class="autocompleteSection topicType" width="24" height="24" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}" />
         <p class="autocompleteSection topicTitle">{{label}}</p>
-        <div class="autocompleteSection topicPermission {{permission}}"></div>
-        <div class="autocompleteSection topicOriginatorIcon hoverForTip">
-            <span class="tip topicOriginator">{{originator}}</span>
+        <div class="expandTopicMetadata"></div>
+        <div class="topicMetadata">
+          <div class="topicNumMaps">{{mapCount}}</div>
+          <div class="topicNumSynapses">{{synapseCount}}</div>
+          <div class="topicOriginatorIcon hoverForTip">
+              <img width="24" height="24" src="{{originatorImage}}" />
+              <span class="tip topicOriginator">{{originator}}</span>
+          </div>
+          <div class="topicPermission {{permission}}"></div>
         </div>
         <div class="clearfloat"></div>
     </script>
