@@ -1,4 +1,5 @@
 install homebrew
+
     \curl -sSL https://get.rvm.io | bash -s stable --rails
 
     rvm install 1.9.3 --with-gcc=clang
@@ -28,13 +29,12 @@ copy the database.yml.default file and rename it database.yml
 make sure the username and password match the POSTGRES username and password you set
 
 
-
 http://nodejs.org/ hit install, download, open, install
-
 
 
     rake db:create
     rake db:schema:load
     rake db:fixtures:load
     rails s 
+    
 ( to start the server) 
