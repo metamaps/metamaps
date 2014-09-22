@@ -11,7 +11,6 @@ Metamaps.JIT = {
 
         $(".zoomIn").click(self.zoomIn);
         $(".zoomOut").click(self.zoomOut);
-        $(".centerMap").click(self.centerMap);
         $(".zoomExtents").click(self.zoomExtents);
     },
     /**
@@ -690,8 +689,6 @@ Metamaps.JIT = {
         var self = Metamaps.JIT;
 
         if (node && !node.nodeFrom) {
-            Metamaps.Create.newTopic.hide();
-            Metamaps.Create.newSynapse.hide();
             var pos = eventInfo.getPos();
             // if it's a left click, or a touch, move the node
             if (e.touches || (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
@@ -738,6 +735,8 @@ Metamaps.JIT = {
                     tempNode = node;
                     tempInit = true;
 
+                    Metamaps.Create.newTopic.hide();
+                    Metamaps.Create.newSynapse.hide();
                     // set the draw synapse start positions
                     var l = Metamaps.Selected.Nodes.length;
                     if (l > 0) {
@@ -763,8 +762,7 @@ Metamaps.JIT = {
                 temp = eventInfo.getNode();
                 if (temp != false && temp.id != node.id && Metamaps.Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
                     tempNode2 = temp;
-                    Metamaps.Visualize.mGraph.plot();
-
+                    
                     Metamaps.Mouse.synapseEndCoordinates = {
                         x: tempNode2.pos.getc().x,
                         y: tempNode2.pos.getc().y
@@ -775,8 +773,7 @@ Metamaps.JIT = {
                         n.setData('dim', 25, 'current');
                     });
                     temp.setData('dim', 35, 'current');
-                    Metamaps.Visualize.mGraph.fx.plotNode(tempNode, Metamaps.Visualize.mGraph.canvas);
-                    Metamaps.Visualize.mGraph.fx.plotNode(temp, Metamaps.Visualize.mGraph.canvas);
+                    Metamaps.Visualize.mGraph.plot();
                 } else if (!temp) {
                     tempNode2 = null;
                     Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
@@ -787,8 +784,6 @@ Metamaps.JIT = {
                     var myY = e.clientY - 30;
                     $('#new_topic').css('left', myX + "px");
                     $('#new_topic').css('top', myY + "px");
-                    $('#new_synapse').css('left', myX + "px");
-                    $('#new_synapse').css('top', myY + "px");
                     Metamaps.Create.newTopic.x = eventInfo.getPos().x;
                     Metamaps.Create.newTopic.y = eventInfo.getPos().y;
                     Metamaps.Visualize.mGraph.plot();
@@ -803,6 +798,7 @@ Metamaps.JIT = {
     }, // onDragMoveTopicHandler
     onDragCancelHandler: function (node, eventInfo, e) {
         tempNode = null;
+        if (tempNode2) tempNode2.setData('dim', 25, 'current');
         tempNode2 = null;
         tempInit = false;
         // reset the draw synapse positions to false
@@ -811,7 +807,7 @@ Metamaps.JIT = {
         Metamaps.Visualize.mGraph.plot();
     }, // onDragCancelHandler
     onDragEndTopicHandler: function (node, eventInfo, e) {
-        var mapping;
+        var midpoint = {}, pixelPos, mapping;
 
         if (tempInit && tempNode2 == null) {
             // this means you want to add a new topic, and then a synapse
@@ -822,6 +818,13 @@ Metamaps.JIT = {
             Metamaps.Create.newTopic.addSynapse = false;
             Metamaps.Create.newSynapse.topic1id = tempNode.id;
             Metamaps.Create.newSynapse.topic2id = tempNode2.id;
+            tempNode2.setData('dim', 25, 'current');
+            Metamaps.Visualize.mGraph.plot();
+            midpoint.x = tempNode.pos.getc().x + (tempNode2.pos.getc().x - tempNode.pos.getc().x) / 2;
+            midpoint.y = tempNode.pos.getc().y + (tempNode2.pos.getc().y - tempNode.pos.getc().y) / 2;
+            pixelPos = Metamaps.Util.coordsToPixels(midpoint);
+            $('#new_synapse').css('left', pixelPos.x + "px");
+            $('#new_synapse').css('top', pixelPos.y + "px");
             Metamaps.Create.newSynapse.open();
             tempNode = null;
             tempNode2 = null;
@@ -830,11 +833,22 @@ Metamaps.JIT = {
             // this means you dragged an existing node, autosave that to the database
             if (Metamaps.Active.Map) {
                 mapping = node.getData('mapping');
-                mapping.set({
+                mapping.save({
                     xloc: node.getPos().x,
                     yloc: node.getPos().y
                 });
-                mapping.save();
+                // also save any other selected nodes that also got dragged along
+                var l = Metamaps.Selected.Nodes.length;
+                for (var i = l - 1; i >= 0; i -= 1) {
+                    var n = Metamaps.Selected.Nodes[i];
+                    if (n !== node) {
+                        mapping = n.getData('mapping');
+                        mapping.save({
+                            xloc: n.getPos().x,
+                            yloc: n.getPos().y
+                        });
+                    }
+                };
             }
         }
     }, //onDragEndTopicHandler
@@ -1113,6 +1127,9 @@ Metamaps.JIT = {
         e.stopPropagation();
 
         if (Metamaps.Visualize.mGraph.busy) return;
+
+        // select the node
+        Metamaps.Control.selectNode(node, e);
 
         // delete old right click menu
         $('.rightclickmenu').remove();

@@ -107,16 +107,7 @@ Metamaps.GlobalUI = {
         $('#lightbox_screen').animate({
                     'opacity': '0.42'
         }, 200);
-
-        if (Metamaps.Create && !Metamaps.Create.metacodeScrollerInit) {
-            $('.customMetacodeList, .metacodeSetList').mCustomScrollbar({
-                mouseWheelPixels: 200,
-                advanced: {
-                    updateOnContentResize: true
-                }
-            });
-            Metamaps.Create.metacodeScrollerInit = true;
-        }
+        
         if (which == "switchMetacodes") {
             Metamaps.Create.isSwitchingSet = true;
         }

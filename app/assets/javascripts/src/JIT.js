@@ -2450,9 +2450,13 @@ Extras.Classes.Navigation = new Class({
     
     // START METAMAPS CODE
 	  if (e.target.id != 'infovis-canvas') return;
+    if (Metamaps.Create.newTopic.beingCreated) return;
 	  // END METAMAPS CODE
   
-    $.event.stop($.event.get(e, win));
+    //$.event.stop($.event.get(e, win));
+    // END METAMAPS CODE
+    // ORIGINAL CODE $.event.stop($.event.get(e, win));
+
     var val = this.config.zooming / 1000,
         ans = 1 + scroll * val;
         

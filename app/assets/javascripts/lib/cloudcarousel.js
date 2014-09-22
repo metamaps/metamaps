@@ -177,10 +177,20 @@ jQuery.browser = browser;
 		// You will need this plugin for the mousewheel to work: http://plugins.jquery.com/project/mousewheel
 		if (options.mouseWheel)
 		{
+			// START METAMAPS CODE
+			$('body').bind('mousewheel',this,function(event, delta) {					 
+					 if (Metamaps.Create.newTopic.beingCreated && !Metamaps.Create.isSwitchingSet) {
+					 	event.data.rotate(delta);
+					 	return false;
+					 }
+				 });
+			// END METAMAPS CODE
+			/* ORIGINAL CODE
 			$(container).bind('mousewheel',this,function(event, delta) {					 
 					 event.data.rotate(delta);
 					 return false;
 				 });
+			*/
 		}
 		$(container).bind('mouseover click',this,function(event){
 			

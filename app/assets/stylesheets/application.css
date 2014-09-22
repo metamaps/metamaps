@@ -183,12 +183,20 @@ input[type="submit"]:active {
 .edit_user,
 .forgotPassword {
     display: block;
-    width: 250px;
+    width: 300px;
     background-color: #E0E0E0;
-    padding: 20px;
+    padding: 16px;
     border-radius: 5px;
     color: black;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
+    top: 50%;
+    left:50%;
+    position:absolute;
+    margin-left: -166px;
+}
+.forgotPassword {
+    height: 134px;
+    margin-top: -83px;
 }
 .centerGreyForm input[type="text"],
 .centerGreyForm input[type="email"],
@@ -230,57 +238,55 @@ input[type="submit"]:active {
     -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-#closenewtopic,
-#closenewsynapse {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-}
 .new_topic {
     /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
     top: -1000px;
     left: -1000px;
     display: block;
     position: absolute;
-    width: 300px;
-    margin: -40px 0 0 -50px;
+    width: 340px;
+    margin: -40px 0 0 -35px;
+    z-index: 1;
 }
-.new_synapse {
-    display: none;
-    position: absolute;
-}
+
 #new_topic .twitter-typeahead {
     position: absolute !important;
     top: 40px;
-    left: 50px;
+    left: 35px;
     z-index: 9999;
-    width: 202px;
-    height: 37px;
-    font-family: ':atp';
+    width: 270px;
+    height: 42px;
 }
 .new_topic #topic_name,
 .new_topic .tt-hint {
-    width: 190px;
-    background: rgba(0, 0, 0, 0.8);
-    height: 25px;
+    width: 254px;
+    background: #FFFFFF;
+    height: 14px;
     margin: 0;
-    padding: 5px 5px;
-    border: 1px solid black;
+    padding: 14px 8px;
+    border: none;
+    border-radius: 2px;
     outline: none;
-    font-size: 25px;
-    line-height: 35px;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    line-height: 14px;
+    color: #424242;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+.new_topic .tt-hint {
+    color: #BDBDBD;
 }
 .openMetacodeSwitcher {
     display: block;
-    height: 20px;
-    width: 20px;
-    background-image: url('MMCCicon_metacode_set_change.png');
-    background-size: contain;
+    height: 16px;
+    width: 16px;
+    background-image: url(metacodesettings_sprite.png);
     position: absolute;
     z-index: 2;
     top: 20px;
-    left: 30px;
+    left: 16px;
+}
+.openMetacodeSwitcher:hover {
+    background-position: -16px 0;
 }
 #metacodeImg {
     height: 120px;
@@ -289,27 +295,15 @@ input[type="submit"]:active {
     float: left;
     width: 120px;
     text-align: center;
-    margin-left: 90px;
+    margin-left: 110px;
 }
 /* synapse autocomplete */
-
-.new_topic #topic_name {
-    color: white;
-}
-.new_topic .tt-hint {
-    color: grey;
-}
-.new_topic #topic_name,
-.new_topic .tt-hint {
-    width: 190px;
-    background: rgba(0, 0, 0, 0.8);
-    height: 25px;
-    margin: 0;
-    padding: 5px 5px;
-    border: 1px solid black;
-    outline: none;
-    font-size: 18px;
-    line-height: 35px;
+.new_synapse {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    margin-left: -135px;
+    margin-top: -21px;
 }
 .new_synapse #synapse_desc {
     color: rgba(255, 255, 255, 0.7);
@@ -319,15 +313,18 @@ input[type="submit"]:active {
 }
 .new_synapse #synapse_desc,
 .new_synapse .tt-hint {
-    width: 200px;
-    background: rgba(0, 0, 0, 0.8);
-    height: 18px;
+    width: 254px;
+    background: #FFFFFF;
+    height: 14px;
     margin: 0;
-    padding: 5px 5px;
-    border: 1px solid black;
+    padding: 14px 8px;
+    border: none;
+    border-radius: 2px;
     outline: none;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 14px;
+    color: #424242;
+    font-family: 'din-medium', helvetica, sans-serif;
 }
 label,
 select,
@@ -907,35 +904,98 @@ float: left;
 
 #new_topic .tt-suggestion.tt-is-under-cursor,
 #new_topic .tt-suggestion.tt-is-under-mouse-cursor {
-    background: #0E161D;
+    background: #E0E0E0;
 }
 #new_topic .tt-suggestion {
-    padding: 5px;
-    background: rgba(42, 52, 60, 0.9);
-    ;
+    background: #F5F5F5;
+    width: 270px;
+    position: relative;
 }
 #new_topic .autocompleteSection {
     float: left;
 }
+#new_topic .topicType {
+    padding: 4px 0 0 4px;
+}
 #new_topic .topicTitle {
-    width: 130px;
-    line-height: 22px;
+    width: 190px;
+    line-height: 14px;
+    font-size: 14px;
+    padding: 9px 0 9px 4px;
+}
+#new_topic .expandTopicMetadata {
+    display:none;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-repeat: no-repeat;
+    background-image: url(arrowright_sprite.png);
+    background-position: 0 -32px;
+}
+#new_topic .tt-suggestion.tt-is-under-cursor .expandTopicMetadata,
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .expandTopicMetadata {
+    display: block;
+}
+#new_topic .tt-suggestion.tt-is-under-cursor .topicMetadata,
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .topicMetadata {
+    display: block;
+}
+#new_topic .topicMetadata {
+    position: absolute;
+    display: none;
+    top: -18px;
+    right: -100px;
+    width: 100px;
+    height: 70px;
+    background-color: #E0E0E0;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
 }
 #new_topic .topicPermission {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
+    background-image: url(permissions32_sprite.png);
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+}
+#new_topic .topicPermission.commons {
+    background-position: 0 0;
+}
+#new_topic .topicPermission.public {
+    background-position: -64px 0;
+}
+#new_topic .topicPermission.private {
+    background-position: -32px 0;
+}
+#new_topic .topicNumMaps {
+    height: 14px;
+    padding: 1px 0 1px 32px;
+    background-image: url(metamap16.png);
+    background-repeat: no-repeat;
+    background-position: 8px 0;
+    position: absolute;
+    top: 10px;
+}
+#new_topic .topicNumSynapses {
+    height: 14px;
+    padding: 1px 0 1px 32px;
+    background-image: url(synapse16.png);
+    background-repeat: no-repeat;
+    background-position: 8px 0;
+    position: absolute;
+    bottom: 10px;
 }
 #new_topic .topicOriginatorIcon {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
-    background-image: url(MMCCicon_mapper.png);
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+#new_topic .topicOriginatorIcon img {
+    border-radius: 12px;
 }
 #new_topic .topicOriginatorIcon:hover .tip {
     display: block;
@@ -1195,7 +1255,7 @@ float: left;
     display: none;
 }
 #lightbox_main {
-    width: 770px;
+    width: 800px;
     height: auto;
     margin: 0 auto;
     z-index: 2;
@@ -1223,24 +1283,22 @@ float: left;
     border: solid 2px #000;
 }
 #lightbox_overlay #lightbox_main a#lightbox_close {
-    /*background-image: url(../images/barometer_close.png);*/
+    background-image: url(xlightbox.png);
     cursor: pointer;
-    height: 42px;
-    outline-color: -moz-use-text-color;
+    height: 32px;
     outline-style: none;
     outline-width: medium;
     overflow: hidden;
     position: absolute;
-    top: -23px;
-    right: -22px;
-    width: 42px;
+    top: -8px;
+    right: -32px;
+    width: 32px;
     z-index: 4;
     border: none;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 #lightbox_content {
-/*    background: white url(metacode-watermark.png) 443px -30px no-repeat;
-    padding: 20px;
-    border-radius: 5px;*/
     width: 552px;
     height: 434px;
     background-color: #e0e0e0;
@@ -1429,6 +1487,7 @@ float: left;
 }
 #metacodeSwitchTabs > ul li {
     font-size: 14px;
+    text-transform: uppercase;
 }
 #metacodeSwitchTabs li.ui-state-active a {
     color: #00BCD4;
@@ -1436,9 +1495,8 @@ float: left;
 .customMetacodeList,
 .metacodeSetList {
     height: 301px;
-    overflow: hidden;
+    overflow-y: auto;
     margin: 5px 0 15px 0;
-    /*  border-bottom: 1px solid #BBB;*/
 }
 .customMetacodeList ul li {
     cursor: pointer;
@@ -1657,6 +1715,7 @@ float: left;
 }
 .permText {
     width: 360px;
+    height: 32px;
     margin: 16px 20px 0;
     text-align: center;
     float: right;
@@ -1734,6 +1793,9 @@ float: left;
 #helpWrapper li:hover, #helpWrapper li.ui-state-active {
     border-bottom: 2px solid #00BCD4;
 }
+#helpWrapper li.ui-state-active a, #helpWrapper li.ui-state-hover a {
+  color: #424242;
+}
 #helpWrapper li a {
     padding: 0;
     font-family: 'din-medium', helvetica, sans-serif;
@@ -1741,6 +1803,9 @@ float: left;
 }
 #quickReference {
     padding: 32px 0 0 0;
+}
+#quickReference .ui-widget-content {
+  color: #424242;
 }
 #quickReference ul {
     width: 150px;
@@ -1768,6 +1833,35 @@ float: left;
 #upYourSkillz {
     margin: 0 68px;
 }
+#moreResources {
+    padding: 16px 0 0 0;
+    font-size: 14px;
+    line-height: 18px;
+    color: #424242;
+}
+.resourcesColumn {
+    margin-top: 32px;
+    width: 273px;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+}
+.resourcesColumn ul {
+    list-style: none;
+}
+.resourcesColumn li {
+    margin-top: 16px;
+}
+.resourcesColumn a.button {
+    background-color: #00BCD4;
+    color: #FFF;
+    padding-top: 8px;
+    height: 24px;
+}
+.resourcesColumn li a {
+    color: #424242;
+}
+
 /* Admin Pages */
 
 .blackBox {
@@ -1900,8 +1994,8 @@ float: left;
 #wrapper .requestInvite {
     width: 700px;
     margin: 0 auto;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.4);
+    padding: 0 0 60px 0;
+    background: #FFFFFF;
     color: white;
     height: 100%;
     overflow: hidden;

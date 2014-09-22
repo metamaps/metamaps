@@ -288,21 +288,29 @@ cursor: pointer;
   position: absolute;
   line-height: 24px;
   height:24px;
-  font-size: 20px;
+  font-size: 24px;
   display: none;
   width: 90%;
-  padding: 11px 0 11px 10%;
+  padding: 13px 0 9px 10%;
   background-color: #64BC61;
-  color: #000;
+  color: #424242;
 }
 .permission.canEdit .metacodeTitle {
   cursor:pointer;
-  background-image: url(MMCCicon_maximize_arrow_black.png);
-  background-repeat:no-repeat;
-  background-position: right center;
 }
-.permission.canEdit .metacodeTitle.minimize {
-  background-image: url(MMCCicon_minimize_arrow_black.png);
+
+.permission.canEdit .expandMetacodeSelect {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 16px;
+  height: 16px;
+  background-image: url(arrowright_sprite.png);
+  background-repeat: no-repeat;
+  background-position: 0 -32px;
+}
+.permission.canEdit .minimize .expandMetacodeSelect {
+  
 }
 
 .CardOnGraph .metacodeImage {
@@ -322,38 +330,61 @@ cursor: pointer;
 }
 .CardOnGraph .metacodeSelect {
   display:none;
-  width:100%;
+  width:200px;
   z-index: 2;
   position: absolute;
   background: #EAEAEA;
-  height: 150px;
+  left: 300px;
 }
 .CardOnGraph .metacodeSelect ul {
-font-style: italic;
-font-family: 'vinyl';
-text-transform: uppercase;
-position: absolute;
-line-height: 36px;
-font-size: 20px;
-display:block;
-width: 100%;
-margin:0;
-padding: 0;
-list-style:none;
-height:150px;
-overflow:hidden;
+  position: relative; 
+  line-height: 14px;
+  font-size: 14px;
+  font-family: helvetica, sans-serif;
+  display:block;
+  width: 100%;
+  margin:0;
+  padding: 0;
+  list-style:none;
+  border: 1px solid #BDBDBD;
 }
 .CardOnGraph .metacodeSelect ul li {
-background-color: #EAEAEA;
-width:100%;
-border-bottom:1px solid #AAAAAA;
+background-color: #F5F5F5;
 cursor:pointer;
+position: relative;
+padding: 9px 12px;
 }
 .CardOnGraph .metacodeSelect ul li:hover {
-background-color: #F8F8F8;
+background-color: #E0E0E0;
 }
-.CardOnGraph .metacodeSelect ul li img, .CardOnGraph .metacodeSelect ul li .mSelectName {
-float:left;
+.CardOnGraph .metacodeSelect ul li img {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+}
+.CardOnGraph .metacodeSelect ul li .mSelectName {
+  padding-left: 28px;
+}
+.CardOnGraph .metacodeSelect ul ul {
+  display:none;
+  position: absolute;
+  left: 200px;
+  top: 0;
+  max-height: 270px;
+  overflow-y: auto;
+}
+.CardOnGraph .metacodeSelect li:hover ul {
+  display: block;
+}
+.CardOnGraph .metacodeSelect .expandMetacodeSet {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  background-image: url(arrowright_sprite.png);
+  background-repeat: no-repeat;
+  background-position: 0 -32px;
 }
 
 .CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip {
@@ -373,6 +404,13 @@ float:left;
  z-index:100;
 }
 
+#embedlyLink {
+  display: none;
+}
+#embedlyLinkLoader {
+  margin: 0 auto;
+  width: 28px;
+}
 
 .CardOnGraph .attachments {
   border-top: 1px solid #BDBDBD;
@@ -479,23 +517,19 @@ font-family: 'din-regular', helvetica, sans-serif;
   position: relative;
 }
 
+.CardOnGraph .embeds {
+  position: relative;
+}
 #linkremove {
-  height: 12px;
-  padding: 26px 0 10px;
-  font-size: 12px;
   background-image: url(/assets/remove.png);
   background-repeat: no-repeat;
-  background-position: center 8px;
-  width: 48px;
-  text-align: center;
+  background-position: center center;
+  width: 24px;
+  height: 24px;
   position: absolute;
-  top: 0;
-  right: 8px;
+  top: 3px;
+  right: 0;
   cursor: pointer;
-  color: #9E9E9E;
-}
-#linkremove:hover {
-  color: #616161;
 }
 
 .cardSettings {

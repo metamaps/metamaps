@@ -5,11 +5,7 @@
 <div class="onConsole">
 <%= form_for Map.new, url: maps_url, remote: true, html: { class: "new_map", id: "fork_map" } do |form|%>
   
-  <% if controller_name == "maps" %>
-    <h3 class="forCreateMap">Save To New Map</h3>
-  <% elsif controller_name == "topics" %>
-    <h3 class="forCreateMap">Save As New Map</h3>
-  <% end %>
+  <h3 class="forCreateMap">Save To New Map</h3>
   
   <div class="inputGroup">
     <label for="map_name">Name: </label>
