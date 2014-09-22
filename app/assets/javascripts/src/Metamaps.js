@@ -1418,7 +1418,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');   
+        self.socket = io.connect('http://localhost:5001'); 
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -1598,9 +1598,9 @@ Metamaps.Realtime = {
         $('#compass' + data.userid).remove();
         $('<div/>', {
             id: 'compass' + data.userid,
-            text: data.username,
             class: 'collabCompass'
-        }).appendTo('#wrapper');
+        }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
+
     },
     newPeerOnMap: function (data) {
         var self = Metamaps.Realtime;
@@ -1629,9 +1629,8 @@ Metamaps.Realtime = {
         $('#compass' + data.userid).remove();
         $('<div/>', {
             id: 'compass' + data.userid,
-            text: data.username,
             class: 'collabCompass'
-        }).appendTo('#wrapper');
+        }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
 
