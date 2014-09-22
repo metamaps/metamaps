@@ -4,12 +4,12 @@
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "forgotPassword centerGreyForm" }) do |f| %>
   <%= devise_error_messages! %>
   
-  <h3>Forgot your password?</h3>
+  <h3>FORGOT PASSWORD?</h3>
 
-  <div><%= f.label :email %>
+  <div><%= f.label :email, "Enter Your Email:" %>
   <%= f.email_field :email, :autofocus => true %></div>
 
-  <div><%= f.submit "Send me reset password instructions" %></div>
+  <div><%= f.submit "Send Reset Password Instructions" %></div>
   
 <% end %>
 </div>
