@@ -183,12 +183,20 @@ input[type="submit"]:active {
 .edit_user,
 .forgotPassword {
     display: block;
-    width: 250px;
+    width: 300px;
     background-color: #E0E0E0;
-    padding: 20px;
+    padding: 16px;
     border-radius: 5px;
     color: black;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
+    top: 50%;
+    left:50%;
+    position:absolute;
+    margin-left: -166px;
+}
+.forgotPassword {
+    height: 134px;
+    margin-top: -83px;
 }
 .centerGreyForm input[type="text"],
 .centerGreyForm input[type="email"],
@@ -2053,4 +2061,29 @@ float: left;
 }
 .templates {
     display: none;
+}
+
+/* collabCompass section */
+.collabCompass:hover p {
+    display: block;
+}
+.collabCompass p {
+    display: none;
+    background-color: #4fb5c0;
+    color: #FFFFFF;
+    padding: 0 8px 0 8px; 
+    position: absolute;
+    top: 9px;
+    left:30px;
+    z-index: 1;
+    font-size: 14px;
+    line-height: 14px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+.collabCompass img {
+    border-radius: 16px;
+    border: 2px solid #4fb5c0;
+    z-index: 2;
+
 }
