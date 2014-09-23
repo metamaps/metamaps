@@ -1458,7 +1458,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');
+        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -1635,24 +1635,13 @@ Metamaps.Realtime = {
             $('#mapper' + data.userid).remove();
             $('.realtimeMapperList ul').append(mapperListItem);
 
-<<<<<<< HEAD
-        // create a div for the collaborators compass
-        $('#compass' + data.userid).remove();
-        $('<div/>', {
-            id: 'compass' + data.userid,
-            class: 'collabCompass'
-        }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
-
-=======
             // create a div for the collaborators compass
             $('#compass' + data.userid).remove();
             $('<div/>', {
                 id: 'compass' + data.userid,
-                text: data.username,
                 class: 'collabCompass'
-            }).appendTo('#wrapper');
+            }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
         }
->>>>>>> fe1f35d63eda20b39e97f11c8bb75135281d5b98
     },
     newPeerOnMap: function (data) {
         var self = Metamaps.Realtime;
@@ -1669,35 +1658,6 @@ Metamaps.Realtime = {
         };
 
         // create an item for them in the realtime box
-<<<<<<< HEAD
-        var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
-        mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
-        mapperListItem += data.username;
-        mapperListItem += '<div class="littleJuntoIcon"></div>';
-        mapperListItem += '</li>';
-        $('#mapper' + data.userid).remove();
-        $('.realtimeMapperList ul').append(mapperListItem);
-
-        // create a div for the collaborators compass
-        $('#compass' + data.userid).remove();
-        $('<div/>', {
-            id: 'compass' + data.userid,
-            class: 'collabCompass'
-        }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
-
-        Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
-
-        // send this new mapper back your details, and the awareness that you've loaded the map
-        var update = {
-            userToNotify: data.userid,
-            username: Metamaps.Active.Mapper.get("name"),
-            userimage: Metamaps.Active.Mapper.get("image"),
-            userid: Metamaps.Active.Mapper.id,
-            userrealtime: self.status,
-            mapid: Metamaps.Active.Map.id
-        };
-        socket.emit('updateNewMapperList', update);
-=======
         if (data.userid !== Metamaps.Active.Mapper.id) {
             var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
             mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
@@ -1711,9 +1671,8 @@ Metamaps.Realtime = {
             $('#compass' + data.userid).remove();
             $('<div/>', {
                 id: 'compass' + data.userid,
-                text: data.username,
                 class: 'collabCompass'
-            }).appendTo('#wrapper');
+            }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
 
             Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
 
@@ -1728,7 +1687,6 @@ Metamaps.Realtime = {
             };
             socket.emit('updateNewMapperList', update);
         }
->>>>>>> fe1f35d63eda20b39e97f11c8bb75135281d5b98
     },
     lostPeerOnMap: function (data) {
         var self = Metamaps.Realtime;
