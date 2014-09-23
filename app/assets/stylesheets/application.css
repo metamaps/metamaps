@@ -318,6 +318,9 @@ input[type="submit"]:active {
     color: #424242;
     font-family: 'din-medium', helvetica, sans-serif;
 }
+.new_synapse .tt-hint {
+    color: #BDBDBD;
+}
 label,
 select,
 input,
@@ -819,57 +822,67 @@ h3.realtimeBoxTitle {
 
 .rightclickmenu {
     position: absolute;
-    background: white;
+    width: 300px;
+    background: #FFFFFF;
     z-index: 20;
     border-radius: 2px;
     color: black;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
-.rightclickmenu ul {
-    padding: 2px;
+.rightclickmenu > ul {
+    
 }
-.rightclickmenu ul li {
+.rightclickmenu li {
     list-style: none;
-    padding: 3px 10px 3px 30px;
-    font-family: arial, sans-serif;
-    font-size: 17px;
-    line-height: 17px;
-    background-repeat: no-repeat;
-    background-size: 20px 20px;
-    background-position: 5px 2px;
+    padding: 6px 10px 6px 32px;
+    font-family: helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 12px;
+    position: relative;
 }
-.rightclickmenu ul li:nth-child(odd) {
-    background-color: #FFF;
-}
-.rightclickmenu ul li:nth-child(even) {
-    background-color: #EEE;
-}
-.rightclickmenu ul li:hover {
-    background-color: #BBB;
-    background-position: 7px 2px;
+.rightclickmenu li:hover {
+    background-color: #E0E0E0;
     cursor: pointer;
 }
-.rightclickmenu .rc-delete {
-    background-image: url(MMCCicon_delete_black.png);
+.rightclickmenu > ul > li .rc-icon {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    background-image: url(context_sprite.png);
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
 }
-.rightclickmenu .rc-remove {
-    background-image: url(MMCCicon_remove_from_map_black.png);
+.rightclickmenu .rc-delete .rc-icon {
+    background-position: 0 -48px;
 }
-.rightclickmenu .rc-hide {
-    background-image: url(MMCCicon_hide.png);
+.rightclickmenu .rc-remove .rc-icon {
+    background-position: 0 -24px;
 }
-.rightclickmenu .rc-center {
-    background-image: url(MMCCicon_center.png);
+.rightclickmenu .rc-hide .rc-icon {
+    background-position: 0 0;
 }
-.rightclickmenu .rc-popout {
-    background-image: url(MMCCicon_pop-out_black.png);
+.rightclickmenu .rc-center .rc-icon {
+    
 }
-.rightclickmenu .rc-permission {
-    background-image: url(MMCCicon_edit_permission_black.png);
-    position: relative;
+.rightclickmenu .rc-popout .rc-icon {
+    background-position: 0 -72px;
 }
-.rightclickmenu .rc-metacode {
-    background-image: url(blank.png);
-    position: relative;
+.rightclickmenu .rc-permission .rc-icon {
+    background-position: 0 -96px;
+}
+.rightclickmenu .rc-metacode .rc-icon {
+    background-position: 0 -120px;
+}
+.rightclickmenu .expandLi {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    background-image: url(arrowright_sprite.png);
+    background-repeat: no-repeat;
+    background-position: 0 -32px;
 }
 .rc-metacode li img {
 float: left;
@@ -883,22 +896,81 @@ float: left;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     border-top-right-radius: 2px;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
-.rightclickmenu .rc-permission:hover ul, .rightclickmenu .rc-metacode:hover ul {
+.rightclickmenu .rc-permission:hover > ul, .rightclickmenu .rc-metacode:hover > ul {
     display: block;
 }
 .rightclickmenu p {
     padding: 7px;
 }
+.rightclickmenu li.changeP {
+    
+}
+.rightclickmenu li.changeP .rc-perm-icon {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    background-image: url(permissions32_sprite.png);
+    background-size: 72px 48px;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+}
+.rightclickmenu li.toCommons .rc-perm-icon {
+    background-position: 0 0;
+}
+.rightclickmenu li.toPublic .rc-perm-icon {
+    background-position: -48px 0;
+}
+.rightclickmenu li.toPrivate .rc-perm-icon {
+    background-position: -24px 0;
+}
+.rightclickmenu .rc-metacode > ul > li {
+    padding: 6px 10px 6px 8px;
+    width: 100px;
+}
+.rightclickmenu .rc-metacode ul ul {
+    display: none;
+    max-height: 270px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.rightclickmenu .rc-metacode li:hover ul {
+    display: block;
+}
+.rightclickmenu .rc-metacode ul ul li {
+    padding: 4px 10px 4px 8px;
+    width: 120px;
+}
+.rightclickmenu .expandMetacodeSet {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    background-image: url(arrowright_sprite.png);
+    background-repeat: no-repeat;
+    background-position: 0 -32px;
+}
+.rightclickmenu .rc-metacode .mSelectName {
+    padding: 6px 0 0 32px;
+    display: block;
+}
+
+
 /* end right click menu */
 
-/* topic autocomplete */
+/* topic and synapse autocomplete */
 
 #new_topic .tt-suggestion.tt-is-under-cursor,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor {
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor,
+#new_synapse .tt-suggestion.tt-is-under-cursor,
+#new_synapse .tt-suggestion.tt-is-under-mouse-cursor {
     background: #E0E0E0;
 }
-#new_topic .tt-suggestion {
+#new_topic .tt-suggestion, 
+#new_synapse .tt-suggestion {
     background: #F5F5F5;
     width: 270px;
     position: relative;
@@ -915,7 +987,15 @@ float: left;
     font-size: 14px;
     padding: 9px 0 9px 4px;
 }
-#new_topic .expandTopicMetadata {
+#new_synapse .synapseDesc, 
+#new_synapse .genericSynapseDesc {
+    width: 190px;
+    line-height: 14px;
+    font-size: 14px;
+    padding: 9px 0 9px 8px;
+}
+#new_topic .expandTopicMetadata,
+#new_synapse .expandSynapseMetadata {
     display:none;
     width: 16px;
     height: 16px;
@@ -927,14 +1007,19 @@ float: left;
     background-position: 0 -32px;
 }
 #new_topic .tt-suggestion.tt-is-under-cursor .expandTopicMetadata,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor .expandTopicMetadata {
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .expandTopicMetadata,
+#new_synapse .tt-suggestion.tt-is-under-cursor .expandSynapseMetadata,
+#new_synapse .tt-suggestion.tt-is-under-mouse-cursor .expandSynapseMetadata {
     display: block;
 }
 #new_topic .tt-suggestion.tt-is-under-cursor .topicMetadata,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor .topicMetadata {
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .topicMetadata,
+#new_synapse .tt-suggestion.tt-is-under-cursor .synapseMetadata,
+#new_synapse .tt-suggestion.tt-is-under-mouse-cursor .synapseMetadata {
     display: block;
 }
-#new_topic .topicMetadata {
+#new_topic .topicMetadata, 
+#new_synapse .synapseMetadata {
     position: absolute;
     display: none;
     top: -18px;
@@ -945,7 +1030,8 @@ float: left;
     font-family: 'din-regular', helvetica, sans-serif;
     font-size: 14px;
 }
-#new_topic .topicPermission {
+#new_topic .topicPermission,
+#new_synapse .synapsePermission {
     width: 32px;
     height: 32px;
     background-repeat: no-repeat;
@@ -954,16 +1040,20 @@ float: left;
     bottom: 4px;
     right: 4px;
 }
-#new_topic .topicPermission.commons {
+#new_topic .topicPermission.commons,
+#new_synapse .synapsePermission.commons {
     background-position: 0 0;
 }
-#new_topic .topicPermission.public {
+#new_topic .topicPermission.public,
+#new_synapse .synapsePermission.public {
     background-position: -64px 0;
 }
-#new_topic .topicPermission.private {
+#new_topic .topicPermission.private,
+#new_synapse .synapsePermission.private {
     background-position: -32px 0;
 }
-#new_topic .topicNumMaps {
+#new_topic .topicNumMaps,
+#new_synapse .synapseNumMaps {
     height: 14px;
     padding: 1px 0 1px 32px;
     background-image: url(metamap16.png);
@@ -981,79 +1071,21 @@ float: left;
     position: absolute;
     bottom: 10px;
 }
-#new_topic .topicOriginatorIcon {
+#new_topic .topicOriginatorIcon,
+#new_synapse .synapseOriginatorIcon {
     position: absolute;
     top: 8px;
     right: 8px;
 }
-#new_topic .topicOriginatorIcon img {
+#new_topic .topicOriginatorIcon img,
+#new_synapse .synapseOriginatorIcon img {
     border-radius: 12px;
 }
-#new_topic .topicOriginatorIcon:hover .tip {
-    display: block;
-}
-#new_topic .tip {
-    display: none;
-    position: absolute;
-    background: white;
-    width: auto;
-    top: 0;
-    left: 23px;
-    color: black;
-    white-space: nowrap;
-    border-radius: 4px;
-    font-size: 15px !important;
-    line-height: 15px;
-    padding: 2px 5px 2px;
-    z-index: 100;
-}
-/* synapse autocomplete */
-
-#new_synapse .tt-dropdown-menu {
-    width: 212px;
-    background: #2A343C;
-}
-#new_synapse .tt-dropdown-menu h3 {
-    font-family: 'vinyl', helvetica, sans-serif;
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 14pxpx;
-    line-height: 16px;
-    margin: 3px;
-}
-#new_synapse .tt-suggestion.tt-is-under-cursor,
-#new_synapse .tt-suggestion.tt-is-under-mouse-cursor {
-    background: #0E161D;
-}
-#new_synapse .tt-suggestion {
-    padding: 5px;
-}
-#new_synapse .autocompleteSection {
-    float: left;
-}
-#new_synapse .synapseDesc {
-    width: 162px;
-    line-height: 22px;
-}
-#new_synapse .synapsePermission {
-    width: 20px;
-    height: 20px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
-}
-#new_synapse .synapseOriginatorIcon {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
-    background-image: url(MMCCicon_mapper.png);
-}
+#new_topic .topicOriginatorIcon:hover .tip,
 #new_synapse .synapseOriginatorIcon:hover .tip {
     display: block;
 }
+#new_topic .tip,
 #new_synapse .tip {
     display: none;
     position: absolute;
@@ -1068,6 +1100,18 @@ float: left;
     line-height: 15px;
     padding: 2px 5px 2px;
     z-index: 100;
+}
+
+#new_synapse .tt-dropdown-menu {
+    background: #F5F5F5;
+}
+#new_synapse .tt-dropdown-menu h3 {
+    font-family: 'vinyl', helvetica, sans-serif;
+    text-transform: uppercase;
+    font-style: italic;
+    font-size: 14pxpx;
+    line-height: 16px;
+    margin: 3px;
 }
 #new_synapse .tt-suggestion .resultnoresult .synapsePermission,
 #new_synapse .tt-suggestion .resultnoresult .synapseOriginatorIcon {

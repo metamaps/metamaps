@@ -492,10 +492,7 @@ Metamaps.Create = {
     },
     newTopic: {
         init: function () {
-            $('#new_topic').bind('contextmenu', function (e) {
-                return false;
-            });
-
+            
             $('#topic_name').keyup(function () {
                 Metamaps.Create.newTopic.name = $(this).val();
             });
@@ -554,11 +551,6 @@ Metamaps.Create = {
         init: function () {
             var self = Metamaps.Create.newSynapse;
 
-            // keep the right click menu from opening
-            $('#new_synapse').bind('contextmenu', function (e) {
-                return false;
-            });
-
             $('#synapse_desc').keyup(function () {
                 Metamaps.Create.newSynapse.description = $(this).val();
             });
@@ -567,7 +559,7 @@ Metamaps.Create = {
             $('#synapse_desc').typeahead([
                 {
                     name: 'synapse_autocomplete',
-                    template: "<div>{{label}}</div>",
+                    template: "<div class='genericSynapseDesc'>{{label}}</div>",
                     remote: {
                         url: '/search/synapses?term=%QUERY'
                     },
@@ -2900,7 +2892,7 @@ Metamaps.Topic = {
         });
         Metamaps.Mappings.add(mapping);
 
-        self.renderTopic(mapping, topic, false);
+        self.renderTopic(mapping, topic, true);
     }
 }; // end Metamaps.Topic
 
@@ -3025,8 +3017,6 @@ Metamaps.Synapse = {
             node1,
             node2;
 
-        Metamaps.Create.newSynapse.hide();
-
         var synapse = self.get(id);
 
         var mapping = new Metamaps.Backbone.Mapping({
@@ -3037,8 +3027,9 @@ Metamaps.Synapse = {
 
         node1 = Metamaps.Visualize.mGraph.graph.getNode(Metamaps.Create.newSynapse.topic1id);
         node2 = Metamaps.Visualize.mGraph.graph.getNode(Metamaps.Create.newSynapse.topic2id);
+        Metamaps.Create.newSynapse.hide();
 
-        self.renderSynapse(mapping, synapse, node1, node2, false);
+        self.renderSynapse(mapping, synapse, node1, node2, true);
     }
 }; // end Metamaps.Synapse
 

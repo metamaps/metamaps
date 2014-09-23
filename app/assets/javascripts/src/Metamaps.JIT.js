@@ -1140,23 +1140,23 @@ Metamaps.JIT = {
         // add the proper options to the menu
         var menustring = '<ul>';
 
-        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete">Delete</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove">Remove from map</li>';
-        menustring += '<li class="rc-hide">Hide until refresh</li>';
+        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from map</li>';
+        menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
 
-        if (!Metamaps.Active.Map) menustring += '<li class="rc-center">Center this topic</li>';
-        menustring += '<li class="rc-popout">Open in new tab</li>';
+        if (!Metamaps.Active.Map) menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
+        menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>';
         if (Metamaps.Active.Mapper) {
-            var options = '<ul><li class="changeP toCommons">commons</li> \
-                         <li class="changeP toPublic">public</li> \
-                         <li class="changeP toPrivate">private</li> \
+            var options = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
+                         <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li> \
+                         <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
                      </ul>';
 
-            menustring += '<li class="rc-permission">Change permissions' + options + '</li>';
+            menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + options + '<div class="expandLi"></div></li>';
 
             var metacodeOptions = $('#metacodeOptions').html();
 
-            menustring += '<li class="rc-metacode">Change metacode' + metacodeOptions + '</li>';
+            menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode' + metacodeOptions + '<div class="expandLi"></div></li>';
         }
 
         menustring += '</ul>';
@@ -1288,18 +1288,19 @@ Metamaps.JIT = {
         // add the proper options to the menu
         var menustring = '<ul>';
 
-        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete">Delete</li>';
+        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
         if (Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)) {
-            menustring += '<li class="rc-remove">Remove from map</li>';
+            menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from map</li>';
         }
-        menustring += '<li class="rc-hide">Hide until refresh</li>';
+        menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
+
         if (Metamaps.Active.Mapper) {
-            var permOptions = '<ul><li class="changeP toCommons">commons</li> \
-                         <li class="changeP toPublic">public</li> \
-                         <li class="changeP toPrivate">private</li> \
+            var permOptions = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
+                         <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li> \
+                         <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
                      </ul>';
 
-            menustring += '<li class="rc-permission">Change permissions' + permOptions + '</li>';
+            menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + permOptions + '<div class="expandLi"></div></li>';
         }
 
         menustring += '</ul>';
