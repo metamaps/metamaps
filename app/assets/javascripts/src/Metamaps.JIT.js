@@ -1,6 +1,8 @@
 Metamaps.JIT = {
     events: {
-        mouseMove: 'Metamaps:JIT:events:mouseMove'
+        mouseMove: 'Metamaps:JIT:events:mouseMove',
+        pan: 'Metamaps:JIT:events:pan',
+        zoom: 'Metamaps:JIT:events:zoom'
     },
     vizData: [], // contains the visualization-compatible graph
     /**
@@ -1472,11 +1474,13 @@ Metamaps.JIT = {
             }, 13, inv, canvas, 0.3);
         }
     }, //renderEdgeArrows
-    zoomIn: function () {
+    zoomIn: function (event) {
         Metamaps.Visualize.mGraph.canvas.scale(1.25,1.25);
+        $(document).trigger(Metamaps.JIT.events.zoom, [event]);
     },
-    zoomOut: function () {
+    zoomOut: function (event) {
         Metamaps.Visualize.mGraph.canvas.scale(0.8,0.8);
+        $(document).trigger(Metamaps.JIT.events.zoom, [event]);
     },
     centerMap: function () {
         var canvas = Metamaps.Visualize.mGraph.canvas;
@@ -1489,7 +1493,7 @@ Metamaps.JIT = {
 
         canvas.translate(-1*offsetX,-1*offsetY);
     },
-    zoomExtents: function () {
+    zoomExtents: function (event) {
         Metamaps.JIT.centerMap();
         var height = $(document).height(),
             width = $(document).width(),
@@ -1616,5 +1620,6 @@ Metamaps.JIT = {
         var cogY = (maxY + minY)/2;
 
         canvas.translate(-1* cogX, -1* cogY);
+        $(document).trigger(Metamaps.JIT.events.zoom, [event]);
     }
 };

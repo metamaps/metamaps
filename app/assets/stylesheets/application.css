@@ -2071,10 +2071,10 @@ float: left;
     display: none;
     background-color: #4fb5c0;
     color: #FFFFFF;
-    padding: 0 8px 0 8px; 
+    padding: 2px 8px 2px 8px; 
     position: absolute;
-    top: 9px;
-    left:30px;
+    top: 7px;
+    left:28px;
     z-index: 1;
     font-size: 14px;
     line-height: 14px;
@@ -2082,13 +2082,18 @@ float: left;
     border-bottom-right-radius: 2px;
     white-space: nowrap;
 }
+.collabCompass.labelLeft p {
+    left: auto;
+    right: 28px;
+}
 .collabCompass img {
     border-radius: 16px;
     border: 2px solid #4fb5c0;
     z-index: 2;
-
+    position: relative;
 }
 .compassArrow {
+    display: none;
     background-repeat: no-repeat;
     background-image: url(compass_arrow.png);
     width: 48px;

@@ -2445,7 +2445,7 @@ Extras.Classes.Navigation = new Class({
     this.pressed = false;
   },
   
-  onMouseWheel: function(e, win, scroll) {
+  onMouseWheel: function(e, win, scroll) {      
     if(!this.config.zooming) return;
     
     // START METAMAPS CODE
@@ -2473,6 +2473,11 @@ Extras.Classes.Navigation = new Class({
 	  }
     // END METAMAPS CODE
     // ORIGINAL CODE this.canvas.scale(ans, ans);
+
+    // START METAMAPS CODE
+      jQuery(document).trigger(Metamaps.JIT.events.zoom, [e]);
+    // END METAMAPS CODE
+
   },
   
   onMouseDown: function(e, win, eventInfo) {
@@ -2553,6 +2558,10 @@ Extras.Classes.Navigation = new Class({
     
     this.pos = currentPos;
     this.canvas.translate(x * 1/sx, y * 1/sy);
+
+    // START METAMAPS CODE
+      jQuery(document).trigger(Metamaps.JIT.events.pan);
+    // END METAMAPS CODE
   },
   
   onMouseUp: function(e, win, eventInfo, isRightClick) {

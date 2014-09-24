@@ -1409,6 +1409,20 @@ Metamaps.Util = {
         };
         return pixels;
     },
+    pixelsToCoords: function (pixels) {
+        var canvas = Metamaps.Visualize.mGraph.canvas,
+            s = canvas.getSize(),
+            p = canvas.getPos(),
+            ox = canvas.translateOffsetX,
+            oy = canvas.translateOffsetY,
+            sx = canvas.scaleOffsetX,
+            sy = canvas.scaleOffsetY;
+        var coords = {
+            x: (pixels.x - p.x - s.width/2 - ox) * (1/sx),
+            y: (pixels.y - p.y - s.height/2 - oy) * (1/sy),
+        };
+        return coords;
+    },
     generateOptionsList: function (data) {
         var newlist = "";
         for (var i = 0; i < data.length; i++) {
@@ -1578,8 +1592,21 @@ Metamaps.Realtime = {
     
         var sendCoords = function (event, coords) {
             self.sendCoords(coords);
-        }
+        };
+        var zoom = function (event, e) {
+            if (e) {
+                var pixels = {
+                    x: e.pageX,
+                    y: e.pageY
+                };
+                var coords = Metamaps.Util.pixelsToCoords(pixels);
+                self.sendCoords(coords);
+            }
+            self.positionPeerIcons();
+        };
         $(document).on(Metamaps.JIT.events.mouseMove, sendCoords);
+        $(document).on(Metamaps.JIT.events.zoom, zoom);
+        $(document).on(Metamaps.JIT.events.pan, self.positionPeerIcons);
     },
     sendRealtimeOn: function () {
         var self = Metamaps.Realtime;
@@ -1751,8 +1778,13 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
 
-        for (var key in self.mappersOnMap) {
-            self.positionPeerIcon(key);
+        if (self.status) { // if i have realtime turned on
+            for (var key in self.mappersOnMap) {
+                var mapper = self.mappersOnMap[key];
+                if (mapper.realtime) {
+                    self.positionPeerIcon(key);
+                }
+            }
         }
     },
     positionPeerIcon: function (id) {
@@ -1783,8 +1815,13 @@ Metamaps.Realtime = {
                 transform: 'rotate(' + angle + 'rad)',
                 "-webkit-transform": 'rotate(' + angle + 'rad)',
             });
+            
+            if (dx > 0) {
+                $('#compass' + id).addClass('labelLeft');
+            }
         } else {
             $('#compassArrow' + id).hide();
+            $('#compass' + id).removeClass('labelLeft');
         }
     },
     limitPixelsToScreen: function (pixels) {
