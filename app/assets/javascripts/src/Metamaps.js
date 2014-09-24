@@ -1743,16 +1743,31 @@ Metamaps.Realtime = {
     updatePeerCoords: function (data) {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
+
+        self.mappersOnMap[data.userid].coords={x: data.usercoords.x,y:data.usercoords.y};
+        self.positionPeerIcon(data.userid);
+    },
+    positionPeerIcons: function () {
+        var self = Metamaps.Realtime;
+        var socket = Metamaps.Realtime.socket;
+
+        for (var key in self.mappersOnMap) {
+            self.positionPeerIcon(key);
+        }
+    },
+    positionPeerIcon: function (id) {
+        var self = Metamaps.Realtime;
+        var socket = Metamaps.Realtime.socket;
+
+        var mapper = self.mappersOnMap[id];
         var xMax=$(document).width();
         var yMax=$(document).height();
         var compassDiameter=56;
         var compassArrowSize=24;
-
-        self.mappersOnMap[data.userid].coords={x: data.usercoords.x,y:data.usercoords.y};
         
-        var origPixels = Metamaps.Util.coordsToPixels(data.usercoords);
+        var origPixels = Metamaps.Util.coordsToPixels(mapper.coords);
         var pixels = self.limitPixelsToScreen(origPixels);
-        $('#compass' + data.userid).css({
+        $('#compass' + id).css({
             left: pixels.x + 'px',
             top: pixels.y + 'px'
         });
@@ -1764,13 +1779,12 @@ Metamaps.Realtime = {
             var ratio = dy / dx;
             var angle = Math.atan2(dy, dx);
             
-            $('#compassArrow' + data.userid).show().css({
+            $('#compassArrow' + id).show().css({
                 transform: 'rotate(' + angle + 'rad)',
                 "-webkit-transform": 'rotate(' + angle + 'rad)',
             });
         } else {
-            $('#compassArrow' + data.userid).hide();
-
+            $('#compassArrow' + id).hide();
         }
     },
     limitPixelsToScreen: function (pixels) {
