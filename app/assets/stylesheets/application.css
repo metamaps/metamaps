@@ -2080,6 +2080,7 @@ float: left;
     line-height: 14px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
+    white-space: nowrap;
 }
 .collabCompass img {
     border-radius: 16px;
