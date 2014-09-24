@@ -1423,6 +1423,32 @@ Metamaps.Util = {
         };
         return coords;
     },
+    getPastelColor: function () {
+        var r = (Math.round(Math.random()* 127) + 127).toString(16);
+        var g = (Math.round(Math.random()* 127) + 127).toString(16);
+        var b = (Math.round(Math.random()* 127) + 127).toString(16);
+        return Metamaps.Util.colorLuminance('#' + r + g + b, -0.4);
+    },
+    // darkens a hex value by 'lum' percentage
+    colorLuminance: function (hex, lum) {
+
+        // validate hex string
+        hex = String(hex).replace(/[^0-9a-f]/gi, '');
+        if (hex.length < 6) {
+            hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+        }
+        lum = lum || 0;
+
+        // convert to decimal and change luminosity
+        var rgb = "#", c, i;
+        for (i = 0; i < 3; i++) {
+            c = parseInt(hex.substr(i*2,2), 16);
+            c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+            rgb += ("00"+c).substr(c.length);
+        }
+
+        return rgb;
+    },
     generateOptionsList: function (data) {
         var newlist = "";
         for (var i = 0; i < data.length; i++) {
@@ -1644,6 +1670,7 @@ Metamaps.Realtime = {
         self.mappersOnMap[data.userid] = {
             name: data.username,
             image: data.userimage,
+            color: Metamaps.Util.getPastelColor(),
             realtime: data.userrealtime,
             coords: {
                 x: 0, 
@@ -1667,7 +1694,7 @@ Metamaps.Realtime = {
             $('.realtimeMapperList ul').append(mapperListItem);
 
             // create a div for the collaborators compass
-            self.createCompass(data.username, data.userid, data.userimage);
+            self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color);
         }
     },
     newPeerOnMap: function (data) {
@@ -1682,6 +1709,7 @@ Metamaps.Realtime = {
         self.mappersOnMap[data.userid] = {
             name: data.username,
             image: data.userimage,
+            color: Metamaps.Util.getPastelColor(),
             realtime: true,
             coords: {
                 x: 0, 
@@ -1700,7 +1728,7 @@ Metamaps.Realtime = {
             $('.realtimeMapperList ul').append(mapperListItem);
 
             // create a div for the collaborators compass
-            self.createCompass(data.username, data.userid, data.userimage);
+            self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color);
             
             Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
 
@@ -1716,7 +1744,7 @@ Metamaps.Realtime = {
             socket.emit('updateNewMapperList', update);
         }
     },
-    createCompass: function(name, id, image) {
+    createCompass: function(name, id, image, color) {
         var str =  '<img width="28" height="28" src="'+image+'" /><p>'+name+'</p>';
         str += '<div id="compassArrow'+id+'" class="compassArrow"></div>';
         $('#compass' + id).remove();
@@ -1724,6 +1752,12 @@ Metamaps.Realtime = {
             id: 'compass' + id,
             class: 'collabCompass'
         }).html(str).appendTo('#wrapper');
+        $('#compass' + id + ' img').css({
+            'border': '2px solid ' + color
+        });
+        $('#compass' + id + ' p').css({
+            'background-color': color
+        });
     },
     lostPeerOnMap: function (data) {
         var self = Metamaps.Realtime;

@@ -1373,6 +1373,7 @@ Metamaps.JIT = {
 
         function myTimer() {
             Metamaps.Visualize.mGraph.canvas.translate(x_velocity * easing * 1 / sx, y_velocity * easing * 1 / sy);
+            $(document).trigger(Metamaps.JIT.events.pan);
             easing = easing * 0.75;
 
             if (easing < 0.1) window.clearInterval(panningInt);
