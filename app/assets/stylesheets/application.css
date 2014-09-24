@@ -2088,3 +2088,15 @@ float: left;
     z-index: 2;
 
 }
+.compassArrow {
+    background-repeat: no-repeat;
+    background-image: url(compass_arrow.png);
+    width: 48px;
+    height: 32px;
+    position: absolute;
+    top: 0;
+    left: 16px;
+    background-position: 16px 8px;
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+}   

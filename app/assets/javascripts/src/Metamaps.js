@@ -1458,7 +1458,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
+        self.socket = io.connect('http://localhost:5001');  
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -1617,7 +1617,11 @@ Metamaps.Realtime = {
         self.mappersOnMap[data.userid] = {
             name: data.username,
             image: data.userimage,
-            realtime: data.userrealtime
+            realtime: data.userrealtime,
+            coords: {
+                x: 0, 
+                y: 0
+            },
         };
 
         var onOff = data.userrealtime ? "On" : "Off";
@@ -1636,11 +1640,7 @@ Metamaps.Realtime = {
             $('.realtimeMapperList ul').append(mapperListItem);
 
             // create a div for the collaborators compass
-            $('#compass' + data.userid).remove();
-            $('<div/>', {
-                id: 'compass' + data.userid,
-                class: 'collabCompass'
-            }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
+            self.createCompass(data.username, data.userid, data.userimage);
         }
     },
     newPeerOnMap: function (data) {
@@ -1654,7 +1654,12 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid] = {
             name: data.username,
-            realtime: true
+            image: data.userimage,
+            realtime: true,
+            coords: {
+                x: 0, 
+                y: 0
+            },
         };
 
         // create an item for them in the realtime box
@@ -1668,12 +1673,8 @@ Metamaps.Realtime = {
             $('.realtimeMapperList ul').append(mapperListItem);
 
             // create a div for the collaborators compass
-            $('#compass' + data.userid).remove();
-            $('<div/>', {
-                id: 'compass' + data.userid,
-                class: 'collabCompass'
-            }).html('<img width="28" height="28" src="'+data.userimage+'" /><p>'+data.username+'</p>').appendTo('#wrapper');
-
+            self.createCompass(data.username, data.userid, data.userimage);
+            
             Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
 
             // send this new mapper back your details, and the awareness that you've loaded the map
@@ -1687,6 +1688,15 @@ Metamaps.Realtime = {
             };
             socket.emit('updateNewMapperList', update);
         }
+    },
+    createCompass: function(name, id, image) {
+        var str =  '<img width="28" height="28" src="'+image+'" /><p>'+name+'</p>';
+        str += '<div id="compassArrow'+id+'" class="compassArrow"></div>';
+        $('#compass' + id).remove();
+        $('<div/>', {
+            id: 'compass' + id,
+            class: 'collabCompass'
+        }).html(str).appendTo('#wrapper');
     },
     lostPeerOnMap: function (data) {
         var self = Metamaps.Realtime;
@@ -1733,12 +1743,52 @@ Metamaps.Realtime = {
     updatePeerCoords: function (data) {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
+        var xMax=$(document).width();
+        var yMax=$(document).height();
+        var compassDiameter=56;
+        var compassArrowSize=24;
 
-        var pixels = Metamaps.Util.coordsToPixels(data.usercoords);
+        self.mappersOnMap[data.userid].coords={x: data.usercoords.x,y:data.usercoords.y};
+        
+        var origPixels = Metamaps.Util.coordsToPixels(data.usercoords);
+        var pixels = self.limitPixelsToScreen(origPixels);
         $('#compass' + data.userid).css({
             left: pixels.x + 'px',
             top: pixels.y + 'px'
         });
+        /* showing the arrow if the collaborator is off of the viewport screen */
+        if (origPixels.x !== pixels.x || origPixels.y !== pixels.y) {
+
+            var dy = origPixels.y - pixels.y; //opposite
+            var dx = origPixels.x - pixels.x; // adjacent
+            var ratio = dy / dx;
+            var angle = Math.atan2(dy, dx);
+            
+            $('#compassArrow' + data.userid).show().css({
+                transform: 'rotate(' + angle + 'rad)',
+                "-webkit-transform": 'rotate(' + angle + 'rad)',
+            });
+        } else {
+            $('#compassArrow' + data.userid).hide();
+
+        }
+    },
+    limitPixelsToScreen: function (pixels) {
+        var self = Metamaps.Realtime;
+        var socket = Metamaps.Realtime.socket;
+
+        var xLimit, yLimit;
+        var xMax=$(document).width();
+        var yMax=$(document).height();
+        var compassDiameter=56;
+        var compassArrowSize=24;
+        
+        xLimit = Math.max(0 + compassArrowSize, pixels.x);
+        xLimit = Math.min(xLimit, xMax - compassDiameter);
+        yLimit = Math.max(0 + compassArrowSize, pixels.y);
+        yLimit = Math.min(yLimit, yMax - compassDiameter);
+        
+        return {x:xLimit,y:yLimit};
     },
     sendCoords: function (coords) {
         var self = Metamaps.Realtime;
