@@ -8,7 +8,10 @@
 <div id="yield">
 <%= form_for @user, url: user_url, :html =>{ :class => "edit_user centerGreyForm"} do |form| %>
   <h3>Edit Account</h3>
-  <% if @user.image %><%= image_tag @user.image.url(:round), :size => "120x120" %><% end %>
+  <div class="userImage">
+    <%= image_tag @user.image.url(:round), :size => "120x120" %>
+    <div class="editPhoto"></div>
+  </div>
   <div class="name"> <%= @user.name %> </div>
   <div><%= form.label :email, "Email:", :class => "firstFieldText" %>
   <%= form.email_field :email  %></div>

@@ -106,6 +106,25 @@ body,
     float: right;
 }
 
+.edit_user .userImage {
+    width: 120px;
+    margin: 0 auto;
+    position: relative;
+}
+.edit_user .editPhoto {
+    display: none;
+    width: 40px;
+    height: 40px;
+    background-image: url(photo.png);
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    cursor: pointer;
+}
+.edit_user .userImage:hover .editPhoto {
+    display: block;
+}
+
 html {
 
 } 
