@@ -92,8 +92,6 @@ body,
 .login input[type="submit"]{
     width:84px;
     margin-top: 16px;
-    margin-left: 61px;
-    margin-right: 35px;
     font-family: din-regular;
     text-transform: uppercase;
 }
@@ -227,21 +225,14 @@ input[type="submit"]:active {
 }
 
 .login{
-    width: 322px;
+    width: 200px;
     height: 308px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
-    margin-left:-166px;
+    margin-left:-100px;
     margin-top:-158px;
-    padding-left: 35px;
     font-family: din-medium;
     font-size: 18px;
     color: #424242;
-}
-
-.login input[type="checkbox"] {
-    border: 1px #424242;
-    top: 250px;
-    float: left;
 }
 
 .new_user{
@@ -258,8 +249,7 @@ input[type="submit"]:active {
 
 .edit_user {
     width: 300px;
-    height:531px;
-    top: 136px;
+    margin-top: -282px;
     margin-left: -166px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
     text-transform: uppercase;
@@ -307,13 +297,6 @@ input[type="submit"]:active {
     line-height: 12px;
     color: #c04f4f;
     margin-top: 16px;
-}
-
-.forgotPasswordText {
-    font-family: din-medium;
-    font-size: 12px;
-    color:#757575;
-    margin-left: 35px;
 }
 
 .name {
@@ -370,7 +353,6 @@ input[type="submit"]:active {
     font-size: 14px;
     text-align: left;
     padding: 11px 0px 0px 10px;
-    margin-left: 61px;
 }
 
 .login input[type="email"] {
@@ -745,11 +727,18 @@ li.accountInvite span {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .accountSubmit {
-    margin-left: 35px;
     float:left;
+}
+.loginAnywhere .accountSubmit {
+    margin-left: 35px;
 }
 .accountRememberMe {
     float:right;
+}
+.login .accountRememberMe {
+    margin-top: 10px;
+}
+.loginAnywhere .accountRememberMe {
     margin-right: 35px;
 }
 #user_remember_me {
@@ -761,11 +750,15 @@ label[for="user_remember_me"] {
     float: right;
     font-size: 12px;
     color: #424242;
-    margin-left: 24px;
 }
 .accountForgotPass {
-    margin: 8px 0 0 35px;
     font-size: 12px;
+}
+.loginAnywhere .accountForgotPass {
+    margin: 8px 0 0 35px;
+}
+.login .accountForgotPass {
+    margin: 8px 0 0 0;
 }
 .accountForgotPass a {
     color: #757575;

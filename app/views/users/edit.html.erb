@@ -6,18 +6,18 @@
   
 <% content_for :title, @user.name + "'s Settings | Metamaps" %> 
 <div id="yield">
-<%= formula_form_for @user, url: user_url, :html =>{ :class => "edit_user centerGreyForm"} do |form| %>
+<%= form_for @user, url: user_url, :html =>{ :class => "edit_user centerGreyForm"} do |form| %>
   <h3>Edit Account</h3>
   <% if @user.image %><%= image_tag @user.image.url(:round), :size => "120x120" %><% end %>
   <div class="name"> <%= @user.name %> </div>
   <div><%= form.label :email, "Email:", :class => "firstFieldText" %>
-  <%= form.input :email  %></div>
+  <%= form.email_field :email  %></div>
   <div><%= form.label :password, "Current Password:", :class => "firstFieldText" %>
-  <%= form.input :password, :autocomplete => :off%></div>
+  <%= form.password_field :password, :autocomplete => :off%></div>
    <div><%= form.label :password, "New Password:", :class => "firstFieldText" %>
-  <%= form.input :password, :autocomplete => :off%></div>
-   <div><%= form.label :password, "Confirm New Password:", :class => "firstFieldText" %>
-  <%= form.input :password, :autocomplete => :off%></div>
+  <%= form.password_field :password, :autocomplete => :off%></div>
+   <div><%= form.label :password_confirmation, "Confirm New Password:", :class => "firstFieldText" %>
+  <%= form.password_field :password_confirmation, :autocomplete => :off%></div>
   <%= form.submit "Update", class: "update" %>
 <% end %>
 </div>
