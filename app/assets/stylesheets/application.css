@@ -74,9 +74,40 @@ body,
 /* forgot password fix */
 
 .forgotPassword input[type="submit"] {
-    padding: 0 5px;
-    width: auto;
+    width: 300px;
+    color: #f5f5f5;
+    font-family: din-regular;
 }
+
+.new_user input[type="submit"] {
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
+}
+
+.login input[type="submit"]{
+    width:84px;
+    margin-top: 16px;
+    margin-left: 61px;
+    margin-right: 35px;
+    font-family: din-regular;
+    text-transform: uppercase;
+}
+
+.edit_user input[type="submit"]{
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
+}
+
 html {
 
 } 
@@ -181,6 +212,7 @@ input[type="submit"]:active {
 .new_session,
 .new_user,
 .edit_user,
+.login,
 .forgotPassword {
     display: block;
     width: 300px;
@@ -189,36 +221,132 @@ input[type="submit"]:active {
     border-radius: 5px;
     color: black;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
+    position:absolute;
     top: 50%;
     left:50%;
-    position:absolute;
-    margin-left: -166px;
 }
+
+.login{
+    width: 322px;
+    height: 308px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    margin-left:-166px;
+    margin-top:-158px;
+    padding-left: 35px;
+    font-family: din-medium;
+    font-size: 18px;
+    color: #424242;
+}
+
+.login input[type="checkbox"] {
+    border: 1px #424242;
+    top: 250px;
+    float: left;
+}
+
+.new_user{
+    height: 412px;
+    margin-left:-166px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    font-family: din-medium;
+    font-size: 18px;
+    line-height: 18px;
+    text-transform: uppercase;
+    color:#424242;
+    margin-top: -222px;
+}
+
+.edit_user {
+    width: 300px;
+    height:531px;
+    top: 136px;
+    margin-left: -166px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    text-transform: uppercase;
+    font-size: 18px;
+    line-height: 18px;
+    font-family: din-medium;
+    color:#424242;
+}
+
 .forgotPassword {
     height: 134px;
+    font-family: din-medium;
+    color:#424242;
+    text-transform: uppercase;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    font-size: 18px;
+    margin-left: -166px;
     margin-top: -83px;
 }
+
+.firstFieldText{
+    font-family: din-regular;
+    font-size: 14px;
+    color:#424242;
+    padding-top:24px;
+    padding-bottom: 6px;
+    text-transform: none;
+    margin: 0px;
+    line-height: 14px
+}
+.fieldText {
+    font-family: din-regular;
+    font-size: 14px;
+    color:#424242;
+    padding-top:16px;
+    padding-bottom: 6px;
+    text-transform: none;
+    margin: 0px;
+    line-height: 14px;
+}
+
+.smallText{
+    font: din-regular;
+    font-size: 12px;
+    line-height: 12px;
+    color: #c04f4f;
+    margin-top: 16px;
+}
+
+.forgotPasswordText {
+    font-family: din-medium;
+    font-size: 12px;
+    color:#757575;
+    margin-left: 35px;
+}
+
+.name {
+    font-size: 24px;
+    text-align: center;
+    font-family: din-meduim;
+    color:#424242;
+    margin-top: 24px;
+    text-transform: none;
+}
+
 .centerGreyForm input[type="text"],
 .centerGreyForm input[type="email"],
 .centerGreyForm input[type="password"] {
-    width: 250px;
+    width: 300px;
     height: 32px;
-    font-size: 15px;
+    font-size: 14px;
     direction: ltr;
     -webkit-appearance: none;
     appearance: none;
     display: inline-block;
-    margin: 0;
-    padding: 0 8px;
+    margin: 0px 0px;
+    padding: 10px 0px 0px 9px;
     background: #fff;
+    color: #bdbdbd;
     border: 1px solid #d9d9d9;
     border-top: 1px solid #c0c0c0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    border-radius: 1px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     font: -webkit-small-control;
     color: initial;
     letter-spacing: normal;
@@ -227,8 +355,28 @@ input[type="submit"]:active {
     text-indent: 0px;
     text-shadow: none;
     display: inline-block;
-    text-align: start;
+    font: din-medium;
+    text-align: left;
 }
+
+.login input[type="email"],
+.login input[type="password"] {
+    width: 200px;
+    height:32px;
+    border-radius: 2px;
+    background-color:#ffffff;
+    color:#bdbdbd;
+    font-family: din-medium;
+    font-size: 14px;
+    text-align: left;
+    padding: 11px 0px 0px 10px;
+    margin-left: 61px;
+}
+
+.login input[type="email"] {
+    margin-bottom:10px;
+}
+
 .centerGreyForm input[type="text"]:hover,
 .centerGreyForm input[type="email"]:hover,
 .centerGreyForm input[type="password"]:hover {
@@ -237,7 +385,9 @@ input[type="submit"]:active {
     -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: #424242;
 }
+
 .new_topic {
     /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
     top: -1000px;
@@ -548,6 +698,7 @@ li.accountInvite span {
     width:84px;
     margin: 24px auto;
 }
+
 .accountInput {
     margin: 0 35px 10px;
 }
@@ -600,12 +751,14 @@ li.accountInvite span {
 }
 #user_remember_me {
     margin-top: 11px;
+    display:inline;
 }
 #user_remember_me,
 label[for="user_remember_me"] {
-    float: left;
+    float: right;
     font-size: 12px;
     color: #424242;
+    margin-left: 24px;
 }
 .accountForgotPass {
     margin: 8px 0 0 35px;
