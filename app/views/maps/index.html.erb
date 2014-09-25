@@ -5,63 +5,16 @@
   #%>
   
 <% content_for :title, "Explore Maps | Metamaps" %>
-  
-<h1 class="index">Explore Maps</h1>
-
-
-  <div class="mapOrder">
-    <span class="displaying">Displaying:</span>
-    <div class="whichMaps">
-      <% if @request == "other" %>
-        <a href="/maps/mappers/<%= @user.id %>" class="active">By <%= @user.name %></a> /
-      <% end %>
-      <% if @request == "topic" %>
-        <a href="/maps/topics/<%= @topic.id %>" class="active">Maps Containing Topic <%= @topic.id.to_s %>: "<%= @topic.name.truncate(30) %>"</a>
-      <% end %>
-      
-      <% if @request != "topic" %>
-      <a href="/maps/active" class="<%= @request == "active" ? "active" : "" %>">Recently Active</a> /
-      <a href="/maps/featured" class="<%= @request == "featured" ? "active" : "" %>">Featured</a> /
-      <a href="/maps/new" class="<%= @request == "new" ? "active" : "" %>">Newest First</a>
-      <% if authenticated? %>
-         / <a href="/maps/mappers/<%= @current.id %>" class="<%= @request == "you" ? "active" : "" %>">Yours</a>
-      <% end %>
-      <% end %>
-    </div>
-    <div class="clearfloat"></div>
-  </div>
-
-<div class="mapsWrapper">
-  <div class="maps" id="cards">
-    <% @maps.each do |map| %>
-      <%= render map %>
-    <% end %>
-    <div class="clearfloat"></div>
-  </div>
-</div>
 
 <script>
-$(document).ready(function() {
-  $('.authenticated div.permission.canEdit .best_in_place').best_in_place();
-  
-  $('.scroll').each(function(index) {
-    $(this).height( $(this).height() ).mCustomScrollbar();
-  });
-  
-  // when you change the title, make sure that the description doesn't overflow
-  $('.best_in_place_name').bind('ajax:success', function() {
-    var p = $(this).parents('.mapCard').find('.scroll');
-    p.height( p.height() ).mCustomScrollbar('update');
-  });
-  
-  // when you change the description, update the scroll box field
-  $('.best_in_place_desc').bind('ajax:success', function() {
-    var s = $(this).parents('.scroll');
-    s.height( s.height() ).mCustomScrollbar('update');
-  });
-
-  $('.mapsWrapper').height( (parseInt($('body').height()) - 39) );
-  var s = $('.maps');
-  s.height( s.height() ).mCustomScrollbar();
-});
+    <% if @request == "active" %>
+      Metamaps.Maps.Active = <%= @maps.to_json.html_safe %>;
+      Metamaps.currentPage = "active";
+    <% elsif @request == "featured" %>
+      Metamaps.Maps.Featured = <%= @maps.to_json.html_safe %>;
+      Metamaps.currentPage = "featured";
+    <% end %>
+    Metamaps.currentSection = "explore";
+    Metamaps.GlobalUI.Search.isOpen = true;
+    Metamaps.GlobalUI.Search.lock();
 </script>

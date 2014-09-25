@@ -1,7 +1,6 @@
 <% content_for :title, "Sign In | Metamaps" %>
 
-<h1 class="index">Sign In</h1>
-
+<div id="yield">
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :method => :post, :class => "new_user centerGreyForm" }) do |f| %>
   <h3>Sign in</h3>
 
@@ -19,10 +18,11 @@
   
   <br />
   <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-    <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
+    <%= link_to "Forgot your password?", new_password_path(resource_name), 
+        :data => { :bypass => 'true'} %><br />
   <% end -%>
   <br />
-  <div>Don't have an account?<br /><a href="/request">Request an Invite</a></div>
+  <div>Don't have an account?<br /><a href="/request" data-bypass="true">Request an Invite</a></div>
 <% end %>
-
+</div>
 

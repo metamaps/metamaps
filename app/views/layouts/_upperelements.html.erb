@@ -1,0 +1,82 @@
+
+<!-- from left to right on the screen -->
+
+<div class="upperLeftUI">
+    <!-- home button -->
+    <div class="homeButton">
+        <a href="<%= root_url %>" <% if !authenticated? %><%= 'data-bypass=true' %><% end %>></a>
+    </div> <!-- end homeButton -->
+
+    <!-- search box -->
+    <div class="sidebarSearch">
+        <input type="text" class="sidebarSearchField" placeholder="Search for topics, maps, and mappers..."></input>
+        <div class="sidebarSearchIcon"></div>
+        <div class="clearfloat"></div>
+    </div> <!-- end sidebarSearch -->
+    <div class="clearfloat"></div>
+</div><!-- end upperLeftUI -->
+
+<div class="upperRightUI">
+    <div class="mapElement upperRightEl upperRightMapButtons">
+        <% if authenticated? %>
+            <!-- Realtime -->
+            <div class="sidebarCollaborate upperRightEl">
+                <div class="sidebarCollaborateIcon upperRightIcon blue"></div>
+                <div class="sidebarCollaborateBox upperRightBox">
+                    <h3 class="realtimeBoxTitle">REALTIME</h3>
+                    <span class="realtimeOnOff rtOff">OFF</span>
+                    <span class="realtimeOnOff rtOn">ON</span>
+                    <div class="clearfloat"></div>
+                    <div class="realtimeMapperList">
+                        <ul>
+                            <li class="rtMapper littleRtOn rtMapperSelf">
+                                <%= image_tag user.image.url(:thumb), :size => "24x24", :class => "rtUserImage" %>
+                                <%= user.name %> (me)
+                                <div class="littleJuntoIcon"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- end sidebarCollaborate a.k.a realtime -->
+        <% end %>
+
+        <!-- filtering -->
+        <div class="sidebarFilter upperRightEl">
+            <div class="sidebarFilterIcon upperRightIcon"></div>
+            <div class="sidebarFilterBox upperRightBox">
+                <%= render :partial => 'shared/filterBox' %>
+            </div>
+        </div> <!-- end sidebarFilter -->
+
+        <% if authenticated? %>
+        <!-- fork map -->
+        <div class="sidebarFork upperRightEl">
+            <div class="sidebarForkIcon upperRightIcon"></div>
+        </div> <!-- end sidebarFork -->
+        <% end %>
+
+        <div class="clearfloat"></div>
+    </div> <!-- end mapElement --> 
+
+    <% if authenticated? %>
+    <!-- create new map -->
+    <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap">
+    </div><!-- end addMap -->
+    <% end %>
+
+    <!-- Account / Sign in -->
+    <div class="sidebarAccount upperRightEl">
+        <div class="sidebarAccountIcon">
+            <% if user && user.image %>
+              <%= image_tag user.image.url(:thumb), :size => "32x32" %>
+            <% elsif !authenticated? %>
+              SIGN IN
+              <div class="accountInnerArrow"></div>
+            <% end %>
+        </div>
+        <div class="sidebarAccountBox upperRightBox">
+            <%= render :partial => 'layouts/account' %>
+        </div>
+    </div><!-- end sidebarAccount -->
+    <div class="clearfloat"></div>
+</div><!-- end upperRightUI -->

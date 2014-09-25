@@ -1,0 +1,93 @@
+<%#
+  # @file
+  # this code generates the list of icons in the filter box in the upper right menu area
+  #%>
+  
+<% 
+  @mappers = []
+  @synapses = []
+  @metacodes = []
+  @metacodelist = ''
+  @mapperlist = ''
+  @synapselist = ''
+# There are essentially three functions happening here one to fill data to 
+#@mappers with all people who have mapped on the selected map, which 
+#actually gets checked twice once for topics or within @metacodes and once 
+#for synapses on the map. @synapses get filled with all synapses on the map 
+#and metacodes is filled with all the metacodes that are being used on the map.
+
+  if @map
+    @map.topics.each_with_index do |topic, index| 
+      if @metacodes.index(topic.metacode) == nil
+        @metacodes.push(topic.metacode)
+      end
+    end 
+    @map.synapses.each_with_index do |synapse, index| 
+      if @synapses.index{|s| s.desc == synapse.desc} == nil
+        @synapses.push(synapse)
+      end
+    end
+    @map.mappings.each_with_index do |mapping, index|
+      if @mappers.index(mapping.user) == nil
+        @mappers.push(mapping.user)
+      end
+    end
+
+    @metacodes.sort! {|x,y| x.name <=> y.name }
+    @synapses.sort! {|x,y| x.desc <=> y.desc }
+    @mappers.sort! {|x,y| x.name <=> y.name }
+    
+    @metacodes.each_with_index do |metacode, index| 
+        @metacodelist += '<li data-id="' + metacode.id.to_s + '">'
+        @metacodelist += '<img src="' + metacode.icon + '" data-id="' + metacode.id.to_s + '" alt="' + metacode.name + '" />'
+        @metacodelist += '<p>' + metacode.name.downcase + '</p></li>'
+    end
+    @synapses.each_with_index do |synapse, index| 
+        @synapselist += '<li data-id="' + synapse.desc + '">'
+        @synapselist += '<img src="/assets/synapse16.png" alt="synapse icon" /><p>' + synapse.desc
+        @synapselist += '</p></li>'
+    end 
+    @mappers.each_with_index do |mapper, index| 
+        @mapperlist += '<li data-id="' + mapper.id.to_s + '">'
+        @mapperlist += '<img src="' + mapper.image.url(:thumb) + '" data-id="' + mapper.id.to_s + '" alt="' + mapper.name + '" />'
+        @mapperlist += '<p>' + mapper.name + '</p></li>'
+    end
+  end
+%>
+<div class="filterBox">
+<h2>FILTER BY</h2>
+<div id="filter_by_mapper" class="filterBySection">
+  <h3>MAPPERS</h3>
+  <span class="hideAll hideAllMappers">NONE</span>
+  <span class="showAll showAllMappers">ALL</span>
+  <div class="clearfloat"></div>
+  <ul>
+    <%= @mapperlist.html_safe %>
+  </ul> 
+  <div class="clearfloat"></div>
+</div>
+
+<div id="filter_by_metacode" class="filterBySection">
+  <h3>METACODES</h3>
+  <span class="hideAll hideAllMetacodes">NONE</span>
+  <span class="showAll showAllMetacodes">ALL</span>
+  <div class="clearfloat"></div>
+  <ul>
+    <%= @metacodelist.html_safe %>
+  </ul> 
+  <div class="clearfloat"></div>
+</div>
+
+<div id="filter_by_synapse" class="filterBySection">
+  <h3>SYNAPSES</h3>
+  <span class="hideAll hideAllSynapses">NONE</span>
+  <span class="showAll showAllSynapses">ALL</span>
+  <div class="clearfloat"></div>
+  <ul>
+    <%= @synapselist.html_safe %>
+  </ul> 
+  <div class="clearfloat"></div>
+</div>
+
+</div> <!-- end .filterBox -->
+

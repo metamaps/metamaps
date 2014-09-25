@@ -1,16 +1,3 @@
-<%#
-  # @file
-  # partial generating a new synapse
-  # TODO: Where is this code used?
-  #%>
-<div class="anypage">
-	<%= form_for Synapse.new, url: synapses_url, remote: true do |form| %>
-    <%= form.text_field :desc, :placeholder => "describe the connection..." %>
-    <%= form.hidden_field :topic1id, :value => 0 %>
-    <%= form.hidden_field :topic2id, :value => 0 %>
-    <%= form.hidden_field :grabSynapse, :value => "null" %>
-    <% if (@map.permission == "commons" && authenticated?) || @map.user == user %>
-      <%= form.hidden_field :map, :value => @map.id %>
-    <% end %>
-	<% end %>
-</div>
+<%= form_for Synapse.new, url: synapses_url, remote: true do |form| %>
+<%= form.text_field :desc, :placeholder => "describe the connection..." %>
+<% end %>

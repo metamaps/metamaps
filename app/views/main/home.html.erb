@@ -2,110 +2,39 @@
   # @file
   # Located at /
   # Shows 3 most recently created topics, synapses, and maps.
-  #%>
+  #%>  
   
-<% content_for :title, "Home | Metamaps" %>   
-  
-  
-<div id="preloaded-images">
-   <img src="/assets/metacodes75ms300x300.gif" width="128 height="128" alt="Image 01" />
-</div>  
-  
-<div class="home_bg">
-
-<div class="home_content">
-<div class="home_desc">
-  <div class="welcomeTo">
-    <% if !authenticated? %>  
-      Welcome to Metamaps
-    <% elsif authenticated? %>
-      Welcome back, <%= @current.name.split[0...1][0] %>!
-    <% end %>
-  </div>
-  <img id="homeMapImage" src="/assets/metamap128x128.png" width="128" height="128" />
-  
-  <% if !authenticated? %>
-    <div class="metamapsIs">
-      a home on the web for <span class="swapWord">
-        <ul class="texts">
-        <li>building shared knowledge</li>
-        <li>learning</li>
-        <li>visioning</li>
-        <li>conversing</li>
-        <li>collaborating</li>
-        <li>sensemaking</li>
-        <li>innovating</li>
-        <li>designing</li>
-        <li>playing</li>
-        <li>exploring</li>
-        </ul>
-      </span>
-    </div>
-  <% end %>
-</div>
-<div class="clearfloat"></div>
-
-<p class="contact">
-  <% if !authenticated? %>
-    <a href="/request" class="request button">Request Invite</a>
-    <a href="#" class="learnmore button openLightbox" data-open="about">Learn More</a>
-  <% end %>
-  <div class="featuredMaps">
-    <% if !authenticated? %>
-      explore featured maps from our community
-    <% elsif authenticated? %>
-      explore recently active maps
-    <% end %>
-  </div>
-</p>
-
-<div class="centeredProfile">
-  <div id="homeMap">
-    <figure id="homeFigure">
-    <% @maps.each_with_index do |map, index| %>
-      <% first = index == 0 ? true : false %>
-      <%= render :partial => 'maps/homemap', :locals => { :map => map, :first => first } %>
-    <% end %>
-    </figure>
-  </div>
-</div>
-</div>
-<div class="clearfloat"></div>
-
-<div class="socialIcons">
-  <a class="twitter" href="https://twitter.com/metamapps" target="_blank"></a>
-  <a class="google" href="https://plus.google.com/u/0/communities/115060009262157699234" target="_blank"></a>
-  <a class="wordpress" href="http://blog.metamaps.cc" target="_blank"></a>
-  <div class="clearfloat"></div>
-</div>
-
-</div>
-
-
-<script>
-
-$(document).ready(function() {
-  // flip through these words on the homepage
-  $('.swapWord').textillate({ 
-       in: { effect: 'fadeIn', delay: 20 },
-       out: { effect: 'fadeOut', sync: true }, 
-       loop: true,
-       minDisplayTime: 2000
-  });
-  
-  $('#homeMapImage').hover(function() {
-    $(this).attr('src','/assets/metacodes75ms300x300.gif');
-  }, function() {
-    $(this).attr('src','/assets/metamap128x128.png');
-  });
-                         
-  $('#homeMap .desc').each(function() {
-    $(this).height($(this).height()).mCustomScrollbar({
-      mouseWheelPixels: 200
-    });
-  });
-
-});
-
-
-</script>
+<% if !authenticated? %>
+    <% content_for :title, "Home | Metamaps" %> 
+    <div id="yield">
+        <div class="homeWrapper">
+            <div class="homeTitle">EXPERIENCE METAMAPS</div>
+            <div class="homeIntro">
+            <span class="green">metamaps.cc</span> is a free and open source platform. It enables individuals, communities, and organizations to build and visualize their shared knowledge and unlock their collective intelligence...
+            </div>
+            <iframe class="homeVideo" src="//player.vimeo.com/video/88334167?title=0&amp;byline=0&amp;portrait=0" width="560" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <div class="callToAction">
+                <a href="/request" class="requestInviteCTA" data-bypass="true">REQUEST INVITE</a>
+                <a href="/explore/featured" class="exploreFeaturedCTA">EXPLORE FEATURED MAPS</a>
+            </div>
+        </div>
+    </div><!-- end yield -->
+    <div class="github-fork-ribbon-wrapper left-bottom">
+        <div class="github-fork-ribbon">
+            <a href="https://github.com/connoropolous/metamaps_gen002" target="_blank">Fork me on GitHub</a>
+        </div>
+    </div>                     
+    <script>
+    Metamaps.currentSection = "";
+    Metamaps.currentPage = "";
+    </script>
+<% elsif authenticated? %>
+    <% content_for :title, "My Maps | Metamaps" %> 
+    <script>
+    Metamaps.Maps.Mine = <%= @maps.to_json.html_safe %>;
+    Metamaps.currentSection = "";
+    Metamaps.currentPage = "";
+    Metamaps.GlobalUI.Search.isOpen = true;
+    Metamaps.GlobalUI.Search.lock();
+    </script>
+<% end %>

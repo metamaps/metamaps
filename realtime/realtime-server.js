@@ -20,32 +20,33 @@ app.configure(function() {
 //redis = require('redis').createClient(rtg.port, rtg.hostname, {no_ready_check: true});
 
 var io = require('socket.io').listen(5001);
-var redis = require('redis').createClient();
+//var redis = require('redis').createClient();
 
 //redis.auth(rtg.auth.split(":")[1], function() {
 //    start();
 //});
 
 function start() {
-    redis.subscribe('maps');
+    //redis.subscribe('maps');
 
     io.on('connection', function (socket) {
 
         // this will ping everyone on a map with updates to the map
-        redis.on('message', function (channel, message) {
+        /*redis.on('message', function (channel, message) {
             console.log(message);
             var m = JSON.parse(message);
             var room = 'maps-' + m.mapid;
 
             socket.emit(room, m);
-        });
+        });*/
 
         // this will ping a new person with awareness of who's already on the map
         socket.on('updateNewMapperList', function (data) {
             var existingUser = {
                 userid: data.userid,
                 username: data.username,
-                userrealtime: data.userrealtime
+                userrealtime: data.userrealtime,
+                userimage: data.userimage
             };
             socket.broadcast.emit(data.userToNotify + '-' + data.mapid + '-UpdateMapperList', existingUser);
         });
@@ -58,7 +59,8 @@ function start() {
 
             var newUser = {
                 userid: data.userid,
-                username: data.username
+                username: data.username,
+                userimage: data.userimage
             };
 
             socket.broadcast.emit('maps-' + data.mapid + '-newmapper', newUser);
@@ -100,6 +102,15 @@ function start() {
             };
 
             socket.broadcast.emit('maps-' + data.mapid + '-lostrealtime', newUser);
+        });
+
+        socket.on('updateMapperCoords', function (data) {
+            var peer = {
+                userid: data.userid,
+                usercoords: data.usercoords
+            };
+
+            socket.broadcast.emit('maps-' + data.mapid + '-updatePeerCoords', peer);
         });
 
     });

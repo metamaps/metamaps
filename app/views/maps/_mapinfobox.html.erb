@@ -2,8 +2,9 @@
   # Partial rendering form for a new topic on a map
   # This code is called when viewing a metamap in show.html.erb in the views/maps folder
   #%>
-<div class="mapInfoBox permission <%= @map.user == user ? " yourMap" : "" %><%= @map.authorize_to_edit(user) ? " canEdit" : "" %>">
+<div class="mapInfoBox mapElement mapElementHidden permission <%= @map && @map.user == user ? " yourMap" : "" %><%= @map && @map.authorize_to_edit(user) ? " canEdit" : "" %>">
   
+  <% if @map %>
   <div class="mapInfoName"><%= best_in_place @map, :name, :type => :input, :classes => 'best_in_place_name' %></div>
   
   <div class="mapInfoStat">
@@ -40,13 +41,15 @@
   <% end %>
   
   <div class="mapInfoMeta">
-    <p>Created by <%= @map.user == user ? "you" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
-    <p>Last edited <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
+    <p class="mapCreatedAt">Created by <%= @map.user == user ? "you" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
+    <p class="mapEditedAt">Last edited <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
   </div>
   
   <div class="mapInfoDelete">
     <% if @map.user == user %>
-      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete %>
+      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete, 
+      :data => { :bypass => 'true'}  %>
     <% end %>
   </div>
+  <% end %>
 </div>

@@ -1,0 +1,52 @@
+<%#
+  # Partial rendering form for a new topic on a map
+  # This code is called when viewing a metamap in show.html.erb in the views/maps folder
+  #%>
+<div class="mapInfoBox permission <%= @map.user == user ? " yourMap" : "" %><%= @map.authorize_to_edit(user) ? " canEdit" : "" %>">
+  
+  <div class="mapInfoName"><%= best_in_place @map, :name, :type => :input, :classes => 'best_in_place_name' %></div>
+  
+  <div class="mapInfoStat">
+    <div class="infoStatIcon mapContributors hoverForTip">
+      <%= @map.contributors.count %>
+      <% contributorList = ''
+         @map.contributors.each_with_index do |c, index|
+            comma = (index+1) == @map.contributors.count ? '' : ', '
+            contributorList += c.name + comma
+         end 
+         if @map.contributors.count == 0
+           contributorList = 'No one has added anything yet.'
+         end %>
+      <div class="tip"><%= contributorList %></div>
+    </div>
+    <div class="infoStatIcon mapTopics">
+      <%= @map.topics.count %>
+    </div>
+    <div class="infoStatIcon mapSynapses">
+      <%= @map.synapses.count %>
+    </div>
+    <div class="infoStatIcon mapPermission <%= @map.permission %> hoverForTip">
+      <% if @map.user == user %>
+        <div class="tip">As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>
+      <% end %>
+    </div>
+    <div class="clearfloat"></div>
+  </div>
+  
+  <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
+  <div class="mapInfoDesc">
+    <%= best_in_place @map, :desc, :type => :textarea, :nil => "Click to add description.", :classes => 'best_in_place_desc' %>
+  </div>
+  <% end %>
+  
+  <div class="mapInfoMeta">
+    <p>Created by <%= @map.user == user ? "you" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
+    <p>Last edited <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
+  </div>
+  
+  <div class="mapInfoDelete">
+    <% if @map.user == user %>
+      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete %>
+    <% end %>
+  </div>
+</div>

@@ -6,26 +6,81 @@
 
 <div id="lightbox_overlay">
   <div id="lightbox_main">
-    <a id="lightbox_close" onclick="closeLightbox(); return false;" href="#"></a>
+    <a id="lightbox_close" href="#"></a>
     <div id="lightbox_content">
       
       <div class="lightboxContent" id="about">
         <h3>About Metamaps.cc</h3>
-        
+            <div id="aboutParms">
+            <div id="leftAboutParms">
+                <p>STATUS: </p>
+                <p>VERSION:</p>
+                <p>LAST UPDATE:</p>
+            </div> 
+                
+            <div id="rightAboutParms">
+                <p>PRIVATE BETA</p>
+                <p>2.6</p>
+                <p>Aug 31, 2014</p>
+            </div>  
+            <div class="clearfloat">  
+            </div>  
+            </div>  
+
+                
         <p>Metamaps.cc is a free and open source web platform for changemakers, innovators, educators and students. It enables individuals and communities to build and visualize their shared knowledge and unlock their collective intelligence.</p>
 
 <p>We're creating tools to help connect people, resources and ideas with rich detail and weave those relationships into actionable insights and stories. The platform is evolving for a range of applications amidst a growing network of designers, developers, practitioners, entrepreneurs, and artists.</p>
 
 <p>Metamaps.cc is created and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. We are currently based between San Francisco, CA and Waterloo, Ontario, Canada. Learn more in the PAQ link below.</p>
         
-        <ul>
-          <li><a href="/paq">P(ossibly)AQ</a></li>
-          <li><a href="http://blog.metamaps.cc" target="_blank">blog</a></li>
-          <li><a href="https://plus.google.com/u/0/communities/115060009262157699234" target="_blank">community</a></li>
-          <li><a href="https://twitter.com/metamapps" target="_blank">@metamapps</a></li>
-          <li><a href="https://github.com/Connoropolous/metamaps_gen002" target="_blank">source code</a></li>
-          <li><a href="http://metamaps.cc/maps/331" target="_blank">terms</a></li>
+        <ul class="lightbox_links">
+          <li>
+            <a id="lightbox_metamapss" href="https://twitter.com/metamapps" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              @metamapps
+            </a>
+          </li>
+          <li>
+            <a id="lightbox_community" href="https://plus.google.com/u/0/communities/115060009262157699234" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              community
+            </a>
+          </li>
+          <li>
+            <a id="lightbox_blog" href="http://blog.metamaps.cc" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              blog
+            </a>
+          </li>
+          <li>
+            <a id="lightbox_source" href="https://github.com/Connoropolous/metamaps_gen002" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              source code
+            </a>
+          </li>
+          <li>
+            <a id="lightbox_term" href="http://metamaps.cc/maps/331" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              terms
+            </a>
+          </li>
         </ul>
+        <div class="clearfloat"></div>
+      </div>
+
+    <div class="lightboxContent" id="getInvolved">
+        <h3>GET INVOLVED!</h3>
+<div class="leaveSpace"></div>  
+        
+        <p>Want to help us with design, code, marketing and management for Metamaps? We are an open value network, which for us means that we want to invite and empower peers to participate in creating value together.</p>
+
+        <p>We welcome contributions in many forms. One of the easiest and best things you can do is to keep on mapping your ideas into the commons on the platform!</p>
+
+        <p>We welcome people of all skillsets to contribute to the project in different ways. Designers, researchers, academics, strategists, and facilitators can get in touch about opportunities to contribute to the project. If you're a developer, help us advance the code and take a look around our <a href="http://github.com/connoropolous/metamaps_gen002" target="_blank">Github</a>.</p>
+
+        <p>Financial contributions are greatly appreciated in support of our work. All financial contributions are transparently governed and recorded in our value accounting system.</p>
+
         <div class="clearfloat"></div>
       </div>
       
@@ -35,38 +90,40 @@
       </div>
       
       <div class="lightboxContent" id="cheatsheet">
-        <%= render :partial => 'layouts/cheatsheet' %>
+        <%= render :partial => 'shared/cheatsheet' %>
       </div>    
       
       <% if authenticated? %>
         <div class="lightboxContent" id="invite">
-          <h3>Send Invites</h3>
-          <p>You can invite others to the Metamaps platform. Send them this link</p>
-          <p class="green">http://metamaps.cc/users/sign_up</p>
-          <p>and give them the access code shown below.</p>
-          <% mapper = current_user %>
-          <p class="green"><%= mapper.code %></p>
-          <p>We invite you to be conscious as to who you invite to this platform, because much of the collaborative editing is based on trust. We want to cultivate a community here that is fun, wise, creative, and flourishing. Can you help us build a community like that?</p>
+          <h3>SHARE INVITE</h3>
+            
+<div class="leaveSpace"></div>  
+<p>The Metamaps platform is currently in an invite-only beta with the express purpose of creating a high value knowledge ecosystem, as well as building a community of contributors. As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
+<p>Copy and send the link + access code below. The access code below is your personal code and can be used multiple times.</p>
+            <div id="joinCodesBox">
+          <p class="joinCodes">HTTP://METAMAPS.CC/JOIN</p>
+        <% mapper = current_user %>
+          <p class="joinCodes">ACCESS CODE: <%= mapper.code %></p>
+            </div>
+            
         </div>
       
         <% # this is the create new map form %>
         <div class="lightboxContent" id="newmap">  
-          <%= render :partial => 'maps/new' %>
+          <%= render :partial => 'layouts/newmap' %>
         </div>
       
-        <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
         <div class="lightboxContent" id="forkmap">  
-          <%= render :partial => 'maps/fork' %>
+          <%= render :partial => 'shared/forkmap' %>
         </div>
 
         <div class="lightboxContent" id="switchMetacodes">
-          <%= render :partial => 'layouts/switchmetacodes' %>
+          <%= render :partial => 'shared/switchmetacodes' %>
         </div>
-        <% end %>
       <% end %>
       
     </div>
   </div>
-  <div id="lightbox_screen" onclick="closeLightbox();return false;" style="height: 100%;"></div>
+  <div id="lightbox_screen" style="height: 100%;"></div>
 </div>
 
