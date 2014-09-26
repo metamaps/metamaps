@@ -3401,6 +3401,7 @@ Metamaps.Map.InfoBox = {
         });
 
         $('.yourMap .mapPermission').unbind().click(self.onPermissionClick);
+
     },
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
@@ -3457,6 +3458,41 @@ Metamaps.Map.InfoBox = {
     }
 }; // end Metamaps.Map.InfoBox
 
+/*
+*
+* Account Settings
+*
+*/
+Metamaps.Account = {
+    init: function () {
+        var self = Metamaps.Account;
+         $(".changePass").click(function(){
+            $(".toHide").show();
+            $(".changePass").hide();
+        });
+    },
+
+    load: function(){
+        var self = Metamaps.Account;
+         $(".changePass").click(function(){
+            $(".toHide").show();
+            $(".changePass").hide();
+        });
+        self.attachEventListeners();
+    },
+    attachEventListeners: function () {
+        $(".changePass").click();
+        $(".noChangePass").click();
+    },
+    showPass: function(){
+        $(".toHide").show();
+        $(".changePass").hide();
+    },
+    hidePass: function(){
+        $(".toHide").hide();
+        $(".changePass").show();
+    }
+};
 
 /*
  *

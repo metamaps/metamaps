@@ -15,12 +15,16 @@
   <div class="name"> <%= @user.name %> </div>
   <div><%= form.label :email, "Email:", :class => "firstFieldText" %>
   <%= form.email_field :email  %></div>
+  <div class="changePass" onclick="Metamaps.Account.showPass()">Change Password</div>
+  <div class="toHide">
   <div><%= form.label :password, "Current Password:", :class => "firstFieldText" %>
   <%= form.password_field :password, :autocomplete => :off%></div>
    <div><%= form.label :password, "New Password:", :class => "firstFieldText" %>
   <%= form.password_field :password, :autocomplete => :off%></div>
    <div><%= form.label :password_confirmation, "Confirm New Password:", :class => "firstFieldText" %>
   <%= form.password_field :password_confirmation, :autocomplete => :off%></div>
+  <div class="noChangePass" onclick="Metamaps.Account.hidePass()">oops, don't change password</div>
+</div>
   <%= form.submit "Update", class: "update" %>
 <% end %>
 </div>

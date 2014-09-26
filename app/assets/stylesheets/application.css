@@ -77,6 +77,8 @@ body,
     width: 300px;
     color: #f5f5f5;
     font-family: din-regular;
+    top: 118px;
+    position: absolute;
 }
 
 .new_user input[type="submit"] {
@@ -110,6 +112,7 @@ body,
     width: 120px;
     margin: 0 auto;
     position: relative;
+    margin-top: 40px;
 }
 .edit_user .editPhoto {
     display: none;
@@ -259,7 +262,6 @@ input[type="submit"]:active {
     margin-left:-166px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
     font-family: din-medium;
-    font-size: 18px;
     line-height: 18px;
     text-transform: uppercase;
     color:#424242;
@@ -272,10 +274,13 @@ input[type="submit"]:active {
     margin-left: -166px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
     text-transform: uppercase;
-    font-size: 18px;
     line-height: 18px;
     font-family: din-medium;
     color:#424242;
+}
+
+.toHide {
+    display:none;
 }
 
 .forgotPassword {
@@ -284,9 +289,9 @@ input[type="submit"]:active {
     color:#424242;
     text-transform: uppercase;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
-    font-size: 18px;
     margin-left: -166px;
     margin-top: -83px;
+    line-height: 18px;
 }
 
 .firstFieldText{
@@ -311,11 +316,12 @@ input[type="submit"]:active {
 }
 
 .smallText{
-    font: din-regular;
+    font-family: din-regular;
     font-size: 12px;
     line-height: 12px;
     color: #c04f4f;
-    margin-top: 16px;
+    margin-top: 8px;
+    text-transform: none;
 }
 
 .name {
@@ -325,6 +331,39 @@ input[type="submit"]:active {
     color:#424242;
     margin-top: 24px;
     text-transform: none;
+
+}
+
+.name:after {
+    background:url(edit.png)no-repeat;
+    content:" ";
+    position:absolute;
+    width:25px;
+    height:25px;
+    margin:5px 0px 0px 5px;
+}
+
+.changePass {
+    font-family: din-regular;
+    font-size: 14px;
+    line-height: 14px;
+    color: #4fb5c0;
+    padding-top: 16px;
+    float: left;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.noChangePass {
+    font-family: din-regular;
+    font-size: 12px;
+    line-height: 12px;
+    color: #c04f4f;
+    padding-top: 16px;
+    float: left;
+    text-transform: none;
+    cursor: pointer;
+
 }
 
 .centerGreyForm input[type="text"],
@@ -357,7 +396,7 @@ input[type="submit"]:active {
     text-indent: 0px;
     text-shadow: none;
     display: inline-block;
-    font: din-medium;
+    font-family: din-medium;
     text-align: left;
 }
 

@@ -6,27 +6,22 @@
   
   <div class="accountImage"></div>
   <div>
-  <%= f.email_field :email, :autofocus => true, :placeholder => "Email" %></div>
+  <%= f.email_field :email, :autofocus => true %></div>
 
   <div>
-  <%= f.password_field :password, :placeholder => "Password" %></div>
+  <%= f.password_field :password %></div>
 
-  <div class="accountSubmit"><%= f.submit "Sign in" %></div>
+  <div><%= f.submit "Sign in" %></div>
   <% if devise_mapping.rememberable? -%>
-    <div class="accountRememberMe">
-      <%= f.label :remember_me, "Stay signed in" %>
-      <%= f.check_box :remember_me %>
-      <div class="clearfloat"></div>
-    </div>
+    <div><%= f.check_box :remember_me %></div>
   <% end -%>
-  <div class="clearfloat"></div>
 
-  <div class="accountForgotPass">
-    <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-      <%= link_to "Forgot password?", new_password_path(resource_name), 
-          :data => { :bypass => 'true'}%><br />
-    <% end -%>
-  </div>
+  <br />
+  <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+    <%= link_to "Forgot your password?", new_password_path(resource_name), :class => "forgotPasswordText" , 
+        :data => { :bypass => 'true'}%><br />
+  <% end -%>
+  <br />
 <% end %>
 </div>
 
