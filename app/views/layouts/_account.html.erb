@@ -38,14 +38,18 @@
         </div>
         <div class="accountSubmit"><%= f.submit "SIGN IN" %></div>
         <% if devise_mapping.rememberable? -%>
-        <div class="accountRememberMe"><%= f.check_box :remember_me %> <%= f.label :remember_me, "Stay signed in" %><div class="clearfloat"></div></div>
+        <div class="accountRememberMe">
+          <%= f.label :remember_me, "Stay signed in" %>
+          <%= f.check_box :remember_me %>
+          <div class="clearfloat"></div>
+        </div>
         <% end -%>
         <div class="clearfloat"></div>
+        <div class="accountForgotPass">
+          <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+            <%= link_to "Forgot password?", new_password_path(resource_name), 
+              :data => { :bypass => 'true'} %>
+          <% end -%>
+        </div>
   <% end %>
-  <div class="accountForgotPass">
-    <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-      <%= link_to "Forgot password?", new_password_path(resource_name), 
-        :data => { :bypass => 'true'} %>
-    <% end -%>
-  </div>
 <% end %>

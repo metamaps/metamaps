@@ -1498,7 +1498,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://localhost:5001');  
+        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');  
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -3401,6 +3401,7 @@ Metamaps.Map.InfoBox = {
         });
 
         $('.yourMap .mapPermission').unbind().click(self.onPermissionClick);
+
     },
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
@@ -3457,6 +3458,34 @@ Metamaps.Map.InfoBox = {
     }
 }; // end Metamaps.Map.InfoBox
 
+/*
+*
+* Account Settings
+*
+*/
+Metamaps.Account = {
+    init: function () {
+        var self = Metamaps.Account;
+
+        
+    },
+    changeName: function(){
+        $('.accountName').hide();
+        $('.changeName').show();
+    },
+    showPass: function(){
+        $(".toHide").show();
+        $(".changePass").hide();
+    },
+    hidePass: function(){
+        $(".toHide").hide();
+        $(".changePass").show();
+
+        $('#current_password').val('');
+        $('#user_password').val('');
+        $('#user_password_confirmation').val('');
+    }
+};
 
 /*
  *

@@ -1,0 +1,130 @@
+
+
+diff --git a/app/assets/stylesheets/application.css b/app/assets/stylesheets/application.css
+index bb0edb6..bb56ab0 100644
+--- a/app/assets/stylesheets/application.css
++++ b/app/assets/stylesheets/application.css
+@@ -74,8 +74,9 @@ body,
+ /* forgot password fix */
+ 
+ .forgotPassword input[type="submit"] {
+-    padding: 0 5px;
+-    width: auto;
++    width: 300px;
++    color: #f5f5f5;
++    font-family: din-regular;
+ }
+ html {
+ 
+@@ -189,36 +190,55 @@ input[type="submit"]:active {
+     border-radius: 5px;
+     color: black;
+     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
++    position:absolute;
+     top: 50%;
+     left:50%;
+-    position:absolute;
+-    margin-left: -166px;
++    
+ }
++
+ .forgotPassword {
+     height: 134px;
+     margin-top: -83px;
++    font-family: din-medium;
++    color:#424242;
++    text-transform: uppercase;
++    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
++    font-size: 17px;
++    margin-left: -166px;
++
++}
++
++.emailText {
++    font-family: din-regular;
++    font-size: 14px;
++    color:#424242;
++    padding-top:24px;
++    padding-bottom: 6px;
++    text-transform: none;
++    margin: 0px;
+ }
+ .centerGreyForm input[type="text"],
+ .centerGreyForm input[type="email"],
+ .centerGreyForm input[type="password"] {
+-    width: 250px;
++    width: 300px;
+     height: 32px;
+     font-size: 15px;
+     direction: ltr;
+     -webkit-appearance: none;
+     appearance: none;
+     display: inline-block;
+-    margin: 0;
+-    padding: 0 8px;
++    margin: 0px 0px 6px 0px;
++    padding: 10px 0px 0px 9px;
+     background: #fff;
++    color: #bdbdbd;
+     border: 1px solid #d9d9d9;
+     border-top: 1px solid #c0c0c0;
+     -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+     box-sizing: border-box;
+-    -webkit-border-radius: 1px;
+-    -moz-border-radius: 1px;
+-    border-radius: 1px;
++    -webkit-border-radius: 2px;
++    -moz-border-radius: 2px;
++    border-radius: 2px;
+     font: -webkit-small-control;
+     color: initial;
+     letter-spacing: normal;
+@@ -227,8 +247,10 @@ input[type="submit"]:active {
+     text-indent: 0px;
+     text-shadow: none;
+     display: inline-block;
+-    text-align: start;
++    font: din-medium;
++    text-align: left;
+ }
++
+ .centerGreyForm input[type="text"]:hover,
+ .centerGreyForm input[type="email"]:hover,
+ .centerGreyForm input[type="password"]:hover {
+@@ -237,7 +259,9 @@ input[type="submit"]:active {
+     -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
++    color: #424242;
+ }
++
+ .new_topic {
+     /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
+     top: -1000px;
+diff --git a/app/views/users/edit.html.erb b/app/views/users/edit.html.erb
+index 738d5c6..70d6de7 100644
+--- a/app/views/users/edit.html.erb
++++ b/app/views/users/edit.html.erb
+@@ -17,4 +17,3 @@
+   <%= form.submit "Update", class: "update" %>
+ <% end %>
+ </div>
+-
+diff --git a/app/views/users/passwords/new.html.erb b/app/views/users/passwords/new.html.erb
+index 88dddb4..3238a81 100644
+--- a/app/views/users/passwords/new.html.erb
++++ b/app/views/users/passwords/new.html.erb
+@@ -6,10 +6,10 @@
+   
+   <h3>FORGOT PASSWORD?</h3>
+ 
+-  <div><%= f.label :email, "Enter Your Email:" %>
++  <div><%= f.label :email, "Enter your email:", :class => "emailText" %>
+   <%= f.email_field :email, :autofocus => true %></div>
+ 
+-  <div><%= f.submit "Send Reset Password Instructions" %></div>
++  <div><%= f.submit "Send Password Reset Instructions" %></div>
+   
+ <% end %>
+ </div>
