@@ -1,0 +1,62 @@
+<%#
+  # @file
+  # Partial view, renders a form that creates a new map.
+  #%>
+<div class="onConsole">
+<%= form_for Map.new, url: maps_url, remote: true, html: { class: "new_map", id: "fork_map" } do |form|%>
+  
+  <h3 class="forCreateMap">Save To New Map</h3>
+  
+  <div class="inputGroup">
+    <label for="map_name">Name: </label>
+    <%= form.text_field :name %>
+    <div class="clearfloat"></div>
+  </div>
+  
+  <div class="inputGroup">
+    <label for="map_desc">Description: </label> 
+    <%= form.text_area :desc, class: "description", :rows => 5, :cols => 43 %>
+    <div class="clearfloat"></div>
+  </div>
+  
+  <div class="inputGroup">
+    <label for="map_permission">Permission*: </label>    
+    <p class="permHelper">*new topics and synapses take on the same permission as the map they are created on</p>    
+    <div class="permIconWrapper">
+        <div class="permIcon" data-permission="commons">
+          <div id="newmap_co" class="mapCommonsIcon mapPermIcon selected">
+            <div class="tip">
+              Collaborate with other mappers on editing this map. Those without accounts can view this map.
+            </div>
+          </div>
+          <h4>COMMONS</h4>
+        </div>
+        <div class="permIcon" data-permission="public">
+          <div id="newmap_pu" class="mapPublicIcon mapPermIcon">
+            <div class="tip">
+              Anyone, with or without an account, can view this map but not edit anything.
+            </div>
+          </div>
+          <h4>PUBLIC</h4>
+        </div>
+        <div class="permIcon" data-permission="private">
+          <div id="newmap_pr" class="mapPrivateIcon mapPermIcon">
+            <div class="tip">
+              Only you can view or edit this map.
+            </div>
+          </div>
+          <h4>PRIVATE</h4>
+        </div>
+        <div class="clearfloat"></div>
+    </div>
+    <p class="permText">Collaborate with other mappers on editing this map. Those without accounts can view this map.</p>
+    <div class="clearfloat"></div>
+  </div> 
+  
+  <div class="buttonWrapper">
+    <button class="button cancel">Cancel</button>
+    <button class="button submitMap">Create!</button>
+  </div>
+  <div class="clearfloat"></div>
+<% end %>
+</div>

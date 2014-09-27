@@ -1,4 +1,4 @@
-ISSAD::Application.configure do
+Metamaps::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on
@@ -13,7 +13,16 @@ ISSAD::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
   
-  
+  # S3 file storage
+  config.paperclip_defaults = {
+    :storage => :s3,
+    :s3_credentials => {
+      :bucket => ENV['S3_BUCKET_NAME'],
+      :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+      :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+    }
+  }
+    
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              'mail.metamaps.cc',

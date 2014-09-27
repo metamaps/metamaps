@@ -1,17 +1,17 @@
 <% content_for :title, "Password Reset | Metamaps" %>
 
-<h1 class="index">Password Reset</h1>
-
+<div id="yield">
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "forgotPassword centerGreyForm" }) do |f| %>
   <%= devise_error_messages! %>
   
-  <h3>Forgot your password?</h3>
+  <h3>FORGOT PASSWORD?</h3>
 
-  <div><%= f.label :email %>
+  <div><%= f.label :email, "Enter your email:", :class => "firstFieldText" %>
   <%= f.email_field :email, :autofocus => true %></div>
 
-  <div><%= f.submit "Send me reset password instructions" %></div>
+  <div><%= f.submit "Send Password Reset Instructions" %></div>
   
 <% end %>
+</div>
 
 

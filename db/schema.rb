@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140517115841) do
+ActiveRecord::Schema.define(:version => 20140815162253) do
 
   create_table "in_metacode_sets", :force => true do |t|
     t.integer  "metacode_id"
@@ -41,9 +41,13 @@ ActiveRecord::Schema.define(:version => 20140517115841) do
     t.text     "desc"
     t.text     "permission"
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.boolean  "featured"
+    t.string   "screenshot_file_name"
+    t.string   "screenshot_content_type"
+    t.integer  "screenshot_file_size"
+    t.datetime "screenshot_updated_at"
   end
 
   create_table "metacode_sets", :force => true do |t|
@@ -83,8 +87,16 @@ ActiveRecord::Schema.define(:version => 20140517115841) do
     t.text     "permission"
     t.integer  "user_id"
     t.integer  "metacode_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "audio_file_name"
+    t.string   "audio_content_type"
+    t.integer  "audio_file_size"
+    t.datetime "audio_updated_at"
   end
 
   create_table "users", :force => true do |t|
@@ -110,6 +122,10 @@ ActiveRecord::Schema.define(:version => 20140517115841) do
     t.string   "current_sign_in_ip"
     t.datetime "reset_password_sent_at"
     t.boolean  "admin"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true

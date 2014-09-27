@@ -1,30 +1,29 @@
 <% content_for :title, "Sign Up | Metamaps" %>
 
-<h1 class="index">Sign Up</h1>
-
+<div id="yield">
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :post, :class => "new_user centerGreyForm" }) do |f| %>
   <%= devise_error_messages! %>
   
   <h3>Sign Up</h3>
 
-  <div><%= f.label :name %>
+  <div><%= f.label :name, "Name:", :class => "firstFieldText" %>
   <%= f.text_field :name, :autofocus => true %></div>
   
-  <div><%= f.label :email %>
+  <div><%= f.label :email, "Email:", :class => "fieldText" %>
   <%= f.email_field :email %></div>
 
-  <div><%= f.label :password %>
+  <div><%= f.label :password, "Password:", :class => "fieldText" %>
   <%= f.password_field :password %></div>
 
-  <div><%= f.label :password_confirmation %>
+  <div><%= f.label :password_confirmation, "Password Confirmation:", :class => "fieldText" %>
   <%= f.password_field :password_confirmation %></div>
   
-  <div><%= f.label "Access Code" %>
+  <div><%= f.label "Access Code:", :class => "fieldText" %>
   <%= f.text_field :joinedwithcode %></div>
 
-  <div><%= f.submit "Sign up" %></div>
+  <div><%= f.submit "Sign up!" %></div>
   
-  <div><br />Don't have an access code?<br /><a href="/request">Request an Invite</a></div>
+  <div class = "smallText"><br />Don't have an access code?<br /><a href="/request" data-bypass="true">Request an Invite</a></div>
 <% end %>
-
+</div>
 

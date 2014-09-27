@@ -9,43 +9,12 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree ../../../vendor/assets/stylesheets
  *= require_tree .
  *= require base
- *= require ForceDirected
  *= require jquery.mCustomScrollbar
  *= require jquery-ui
- *= require animate
 */
 
-@font-face {
-    font-family: 'LatoLight';
-    src: url('/assets/Fonts/Lato-Lig-webfont.eot');
-    src: url('/assets/Fonts/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-Lig-webfont.woff') format('woff'), url('/assets/Fonts/Lato-Lig-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-Lig-webfont.svg#LatoLight') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'LatoRegular';
-    src: url('/assets/Fonts/Lato-Reg-webfont.eot');
-    src: url('/assets/Fonts/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-Reg-webfont.woff') format('woff'), url('/assets/Fonts/Lato-Reg-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-Reg-webfont.svg#LatoRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'LatoItalic';
-    src: url('/assets/Fonts/Lato-RegIta-webfont.eot');
-    src: url('/assets/Fonts/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-RegIta-webfont.woff') format('woff'), url('/assets/Fonts/Lato-RegIta-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'LatoBold';
-    src: url('/assets/Fonts/Lato-Bol-webfont.eot');
-    src: url('/assets/Fonts/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'), url('/assets/Fonts/Lato-Bol-webfont.woff') format('woff'), url('/assets/Fonts/Lato-Bol-webfont.ttf') format('truetype'), url('/assets/Fonts/Lato-Bol-webfont.svg#LatoBold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
 /* clear styles */
 
 html,
@@ -82,23 +51,37 @@ img {
     display: block;
     text-indent: -9999px;
 }
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #BDBDBD;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #BDBDBD;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #BDBDBD;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #BDBDBD;
+}
+
 html,
 body,
 .main,
-.wrapper,
-#container {
+.wrapper {
     height: 100%;
-    overflow: hidden;
-}
-.unauthenticated .wrapper.homePage {
-    overflow: auto;
 }
 .wrapper.homePage {
-    background: url('mm-homepage-bg-image.png') no-repeat center -249px;
+    /*background: url('mm-homepage-bg-image.png') no-repeat center -249px;*/
+}
+.wrapper.mapPage {
+    overflow: hidden;
 }
 /* scrollbar override */
 
-.maps > div > div.mCS_no_scrollbar {
+.mCS_no_scrollbar {
     padding-right: 0px !important;
 }
 .mCSB_container {
@@ -107,15 +90,69 @@ body,
 /* forgot password fix */
 
 .forgotPassword input[type="submit"] {
-    padding: 0 5px;
-    width: auto;
+    width: 300px;
+    color: #f5f5f5;
+    font-family: din-regular;
+    top: 118px;
+    position: absolute;
 }
-html {} body {
-    background: url(background2-for-repeating.jpg);
-    font-family: 'LatoLight', helvetica, sans-serif;
-    color: #FFF;
+
+.new_user input[type="submit"] {
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
 }
-body.mapBody {} h1,
+
+.login input[type="submit"]{
+    width:84px;
+    margin-top: 16px;
+    font-family: din-regular;
+    text-transform: uppercase;
+}
+
+.edit_user input[type="submit"]{
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
+}
+
+.edit_user .userImage {
+    width: 84px;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 32px;
+}
+.edit_user .editPhoto {
+    display: none;
+    width: 40px;
+    height: 40px;
+    background-image: url(photo.png);
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    cursor: pointer;
+}
+.edit_user .userImage:hover .editPhoto {
+    display: block;
+}
+
+html {
+
+} 
+body {
+    background: #d8d9da url(shattered_@2X.png);
+    font-family: 'din-medium', helvetica, sans-serif;
+    color: #424242;
+}
+h1,
 h2,
 h3,
 h4,
@@ -123,57 +160,44 @@ h5,
 h6 {
     font-weight: normal;
 }
-h1 {
-    display: block;
-    text-align: left;
-    font-family: "vinyl", sans-serif;
-}
-h2 {
-    display: block;
-    text-align: center;
-    font-family: "katarine-web", sans-serif;
-    background: url('black_bg.png');
-    font-size: 24px;
-    line-height: 35px;
-}
 a {
-    color: #69a3a4;
+    color: #424242;
     text-decoration: none;
 }
 button.button,
 a.button,
 input[type="submit"] {
     border: none;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
-    border: none;
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
-    height: 30px;
+    height: 32px;
     outline: none;
-    padding: 0 0;
-    width: 60px;
+    padding: 0 18px;
     -webkit-box-shadow: none;
     box-shadow: none;
-    background: #AEA9FD;
+    background: #4FC059;
     vertical-align: top;
-    color: black;
+    color: #FFF;
     margin: 0px;
     cursor: pointer;
     display: inline-block;
-    font-weight: bold;
-    line-height: 29px;
-    min-width: 54px;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 16px;
     text-align: center;
     text-decoration: none;
     -webkit-border-radius: 2px;
     border-radius: 2px;
     -webkit-user-select: none;
+    font-family: 'din-medium', helvetica, sans-serif;
 }
 button.button:hover,
 a.button:hover,
 input[type="submit"]:hover {
-    background: #B6B2FD;
+    background: #49AD4E;
+}
+button.button:active,
+a.button:active,
+input[type="submit"]:active {
+    background: #429B46;
 }
 /*
  * Utility
@@ -193,12 +217,10 @@ input[type="submit"]:hover {
  * Layout stuffs
  */
 
-#barometer_tab {
+/*#barometer_tab {
     display: none;
-}
-#saveMapLayout {
-    display: none;
-}
+}*/
+
 #error_explanation {
     background: #612127;
     padding: 30px;
@@ -214,7 +236,7 @@ input[type="submit"]:hover {
     height: 100%;
     margin-bottom: 50px;
 }
-.centeredProfile {
+.centeedProfile {
     margin: 0 auto;
     display: block;
     width: 830px;
@@ -226,41 +248,168 @@ input[type="submit"]:hover {
 .new_session,
 .new_user,
 .edit_user,
+.login,
 .forgotPassword {
     display: block;
-    width: 250px;
-    position: absolute;
-    left: 50%;
-    top: 0;
-    margin: 100px 0 0 -145px;
-    background: url(bg.png);
-    padding: 20px;
+    width: 300px;
+    background-color: #E0E0E0;
+    padding: 16px;
     border-radius: 5px;
     color: black;
-    border: 1px solid #000;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
+    position:absolute;
+    top: 50%;
+    left:50%;
 }
+
+.login{
+    width: 200px;
+    height: 308px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    margin-left:-100px;
+    margin-top:-158px;
+    font-family: din-medium;
+    font-size: 18px;
+    color: #424242;
+}
+
+.new_user{
+    height: 412px;
+    margin-left:-166px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    font-family: din-medium;
+    line-height: 18px;
+    text-transform: uppercase;
+    color:#424242;
+    margin-top: -222px;
+}
+
+.edit_user {
+    width: 300px;
+    margin-top: -282px;
+    margin-left: -166px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    text-transform: uppercase;
+    line-height: 18px;
+    font-family: din-medium;
+    color:#424242;
+}
+
+.toHide {
+    display:none;
+}
+
+.forgotPassword {
+    height: 134px;
+    font-family: din-medium;
+    color:#424242;
+    text-transform: uppercase;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    margin-left: -166px;
+    margin-top: -83px;
+    line-height: 18px;
+}
+
+.edit_user label.firstFieldText {
+    padding-top: 8px;
+}
+.firstFieldText{
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
+    color:#424242;
+    padding-top:24px;
+    padding-bottom: 6px;
+    text-transform: none;
+    margin: 0px;
+    line-height: 14px
+}
+.fieldText {
+    font-family: din-regular;
+    font-size: 14px;
+    color:#424242;
+    padding-top:16px;
+    padding-bottom: 6px;
+    text-transform: none;
+    margin: 0px;
+    line-height: 14px;
+}
+
+.smallText{
+    font-family: din-regular;
+    font-size: 12px;
+    line-height: 12px;
+    color: #c04f4f;
+    margin-top: 8px;
+    text-transform: none;
+}
+
+.accountName {
+    font-size: 24px;
+    text-align: center;
+    font-family: 'din-medium', helvetica, sans-serif;
+    color:#424242;
+    margin-top: 24px;
+    text-transform: none;
+
+}
+.accountName:hover .nameEdit:after {
+    background:url(edit.png)no-repeat;
+    content:" ";
+    position:absolute;
+    width:25px;
+    height:25px;
+    margin:5px 0px 0px 5px;
+}
+.changeName {
+    display: none;
+    margin-top: 24px;
+}
+
+.changePass {
+    font-family: din-regular;
+    font-size: 14px;
+    line-height: 14px;
+    color: #4fb5c0;
+    padding-top: 16px;
+    float: left;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.noChangePass {
+    font-family: din-regular;
+    font-size: 12px;
+    line-height: 12px;
+    color: #c04f4f;
+    padding-top: 16px;
+    float: left;
+    text-transform: none;
+    cursor: pointer;
+
+}
+
 .centerGreyForm input[type="text"],
 .centerGreyForm input[type="email"],
 .centerGreyForm input[type="password"] {
-    width: 250px;
+    width: 300px;
     height: 32px;
-    font-size: 15px;
+    font-size: 14px;
     direction: ltr;
     -webkit-appearance: none;
     appearance: none;
     display: inline-block;
-    margin: 0;
-    padding: 0 8px;
+    margin: 0px 0px;
+    padding: 5px 0px 0px 9px;
     background: #fff;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
+    color: #424242 !important;
+    border: none;
+    outline:none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    border-radius: 1px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     font: -webkit-small-control;
     color: initial;
     letter-spacing: normal;
@@ -269,101 +418,93 @@ input[type="submit"]:hover {
     text-indent: 0px;
     text-shadow: none;
     display: inline-block;
-    text-align: start;
+    font-family: 'din-regular', helvetica, sans-serif;
+    text-align: left;
 }
-.centerGreyForm input[type="text"]:hover,
-.centerGreyForm input[type="email"]:hover,
-.centerGreyForm input[type="password"]:hover {
-    border: 1px solid #b9b9b9;
-    border-top: 1px solid #a0a0a0;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+.login input[type="email"],
+.login input[type="password"] {
+    width: 200px;
+    height:32px;
+    border-radius: 2px;
+    background-color:#ffffff;
+    color: #424242 !important;
+    font-family: din-medium;
+    font-size: 14px;
+    text-align: left;
+    padding: 5px 0px 0px 10px;
 }
-#closenewtopic,
-#closenewsynapse {
-    position: absolute;
-    top: 3px;
-    right: 3px;
+
+.login input[type="email"] {
+    margin-bottom:10px;
 }
-.anypage .new_topic {
+
+.new_topic {
     /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
     top: -1000px;
     left: -1000px;
     display: block;
     position: absolute;
-    width: 300px;
-    margin: -40px 0 0 -50px;
+    width: 340px;
+    margin: -40px 0 0 -35px;
+    z-index: 1;
 }
-.anypage .new_synapse {
-    display: none;
-    position: absolute;
-}
+
 #new_topic .twitter-typeahead {
     position: absolute !important;
     top: 40px;
-    left: 50px;
+    left: 35px;
     z-index: 9999;
-    width: 202px;
-    height: 37px;
-    font-family: ':atp';
+    width: 270px;
+    height: 42px;
 }
-.anypage #topic_name,
-.anypage .tt-hint {
-    width: 190px;
-    background: rgba(0, 0, 0, 0.8);
-    height: 25px;
+.new_topic #topic_name,
+.new_topic .tt-hint {
+    width: 254px;
+    background: #FFFFFF;
+    height: 14px;
     margin: 0;
-    padding: 5px 5px;
-    border: 1px solid black;
+    padding: 14px 8px;
+    border: none;
+    border-radius: 2px;
     outline: none;
-    font-size: 25px;
-    line-height: 35px;
-    color: rgba(255, 255, 255, 0.7);
-    font-family: 'LatoLight';
+    font-size: 14px;
+    line-height: 14px;
+    color: #424242;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+.new_topic .tt-hint {
+    color: #BDBDBD;
 }
 .openMetacodeSwitcher {
     display: block;
-    height: 20px;
-    width: 20px;
-    background-image: url('MMCCicon_metacode_set_change.png');
-    background-size: contain;
+    height: 16px;
+    width: 16px;
+    background-image: url(metacodesettings_sprite.png);
     position: absolute;
     z-index: 2;
     top: 20px;
-    left: 30px;
+    left: 16px;
+}
+.openMetacodeSwitcher:hover {
+    background-position: -16px 0;
 }
 #metacodeImg {
     height: 120px;
 }
 #metacodeImgTitle {
-    color: #FFF;
     float: left;
     width: 120px;
     text-align: center;
-    margin-left: 90px;
-    font-family: 'LatoRegular';
+    margin-left: 110px;
 }
 /* synapse autocomplete */
-
-.new_topic #topic_name {
-    color: white;
-}
-.new_topic .tt-hint {
-    color: grey;
-}
-.new_topic #topic_name,
-.new_topic .tt-hint {
-    width: 190px;
-    background: rgba(0, 0, 0, 0.8);
-    height: 25px;
-    margin: 0;
-    padding: 5px 5px;
-    border: 1px solid black;
-    outline: none;
-    font-size: 18px;
-    line-height: 35px;
-    font-family: 'LatoRegular';
+.new_synapse {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    margin-left: -135px;
+    margin-top: -21px;
 }
 .new_synapse #synapse_desc {
     color: rgba(255, 255, 255, 0.7);
@@ -373,16 +514,21 @@ input[type="submit"]:hover {
 }
 .new_synapse #synapse_desc,
 .new_synapse .tt-hint {
-    width: 200px;
-    background: rgba(0, 0, 0, 0.8);
-    height: 18px;
+    width: 254px;
+    background: #FFFFFF;
+    height: 14px;
     margin: 0;
-    padding: 5px 5px;
-    border: 1px solid black;
+    padding: 14px 8px;
+    border: none;
+    border-radius: 2px;
     outline: none;
-    font-size: 16px;
-    line-height: 20px;
-    font-family: 'LatoRegular';
+    font-size: 14px;
+    line-height: 14px;
+    color: #424242;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+.new_synapse .tt-hint {
+    color: #BDBDBD;
 }
 label,
 select,
@@ -393,16 +539,6 @@ textarea {
 label {
     margin-top: 10px;
     margin-bottom: 4px;
-}
-input[type="submit"] {
-    margin-top: 5px;
-}
-#user_remember_me {
-    margin-top: 11px;
-}
-#user_remember_me,
-label[for="user_remember_me"] {
-    float: left;
 }
 .contentarea p,
 .contentarea ul,
@@ -437,15 +573,6 @@ label[for="user_remember_me"] {
 }
 /* --- top options --*/
 
-.notice.metamaps,
-.alert.metamaps {
-    position: absolute;
-    margin: 5px 0 0 45px;
-    background: #0F1519;
-    padding: 10px 10px 9px 10px;
-    border-radius: 5px;
-    z-index: 1;
-}
 .headertop {
     display: block;
     position: fixed;
@@ -472,7 +599,6 @@ label[for="user_remember_me"] {
     height: 30px;
     background: none;
     color: #717474;
-    font-family: 'LatoLight';
     font-size: 17px;
     border: none;
     border-right: 1px solid #717474;
@@ -491,227 +617,223 @@ label[for="user_remember_me"] {
     height: 100%;
     margin: 0 0;
 }
-/* bottom right corner stuffs */
 
-.wrapper div.index {
-    position: fixed;
-    bottom: 5px;
-    right: 0px;
-    z-index: 9999;
-    width: auto;
-    padding: 1px 10px 0px 10px;
-    font-family: "vinyl", sans-serif;
-    font-style: italic;
-    height: 35px;
-    font-size: 30px;
-    line-height: 38px;
-    border-right: none;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-    background: #0F1519;
-}
-.wrapper div.index .openCheatsheet {
-    position: absolute;
-    top: 0;
-    left: -41px;
-    background: #0F1519 url('MMCCicon_help.png') no-repeat center center;
-    background-size: 27px 27px;
-    border-radius: 5px;
-    height: 36px;
-    width: 36px;
-    cursor: pointer;
-}
-.wrapper div.index .openCheatsheet:hover {} .wrapper div.index span {
-    float: left;
-}
-.wrapper div.index span.mapName {
-    text-transform: uppercase;
-    margin-right: 9px;
-}
-.wrapper div.index span.mapInfo {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    margin-top: 5px;
-    font-size: 27px;
-    background: url('MMCCicon_info.png') no-repeat center center;
-    background-size: 19px 19px;
-}
-.wrapper h1.index {
-    position: fixed;
-    bottom: 5px;
-    right: 0;
-    z-index: 9999;
-    width: auto;
-    padding: 1px 10px 0px 20px;
-    text-transform: uppercase;
-    font-style: italic;
-    height: 35px;
-    font-size: 30px;
-    line-height: 38px;
-    border-right: none;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-    background: #0F1519;
-}
 /* account */
 
 .sidebarAccount {
-    position: absolute;
-    top: 5px;
-    right: 0;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
+}
+.unauthenticated .sidebarAccount {
+    width: 84px;
+    box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    border-radius: 2px;
 }
 .sidebarAccountIcon {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    background: #0F1519 url('MMCCicon_mapper.png') no-repeat center center;
-    background-size: 24px 24px;
     cursor: pointer;
 }
+.authenticated .sidebarAccountIcon {
+    height: 32px;
+    width: 32px;
+}
+.unauthenticated .sidebarAccountIcon {
+    width: 66px;
+    height: 14px;
+    padding: 9px;
+    border-radius: 2px;
+    background-color: #E0E0E0;
+    color: #424242;
+    text-transform: uppercase;
+    text-align: left;
+    font-size: 14px;
+    line-height: 14px; 
+    position:relative;
+}
+.accountInnerArrow {
+    width:16px;
+    height:16px;
+    background-image: url(arrowdown_sprite.png);
+    background-repeat: no-repeat;
+    position:absolute;
+    top: 8px;
+    right:6px;
+}
+.unauthenticated .sidebarAccountIcon:hover .accountInnerArrow {
+    background-position: 0px -16px;
+}
+.sidebarAccountIcon img {
+    border-radius: 16px;
+}
 .sidebarAccountBox {
-    position: absolute;
     display: none;
     height: auto;
-    background: #000;
-    top: 35px;
-    right: 0;
-    padding: 10px;
-    border: 1px solid black;
-    min-width: 120px;
-    font-family: 'LatoLight', helvetica, sans-serif;
 }
-.sidebarAccountBox.loggedin {
-    width: auto;
+.authenticated .sidebarAccountBox {
+    width: 138px;
+    padding: 16px;
 }
-.sidebarAccountBox.loggedout {
-    width: 200px;
+.unauthenticated .sidebarAccountBox {
+    width: 270px;
+    height: 280px;
+}
+.sidebarAccountImage {
+    width:48px;
+    height:48px;
+    margin: 0 auto;
+    border-radius: 24px;
 }
 .sidebarAccountBox h3 {
-    font-family: 'vinyl', helvetica, sans-serif;
     text-transform: uppercase;
-    font-style: italic;
+    color:#424242;
+    font-size:14px;
+    line-height:14px;
+    margin-top:8px;
+    text-align:center;
+    max-width:138px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .sidebarAccountBox ul {
     list-style: none;
+    margin-top:10px;
 }
-.sidebarAccountBox li.accountIcon {
+.sidebarAccountBox .accountListItem {
     padding: 0;
     background-size: 18px 18px;
     background-repeat: no-repeat;
     background-position: 0px 6px;
-    font-size: 18px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 14px;
+    color: #757575;
 }
-li.accountIcon:hover {
-    background-position: 4px 6px;
+.accountListItem:hover {
+    color: #424242;
 }
-li.accountMaps {
-    background-image: url('MMCCicon_map.png');
+.accountListItem .accountIcon {
+    width:32px;
+    height:32px;
+    position:absolute;
+    pointer-events:none;
+    background-repeat:no-repeat;
+    background-image: url(user_sprite.png);
 }
-li.accountSettings {
-    background-image: url('MMCCicon_settings.png');
+.accountSettings .accountIcon {
+    background-position: 0 0;
 }
-li.accountAdmin {
-    background-image: url('MMCCicon_admin.png');
+.accountAdmin .accountIcon {
+    background-position: 0 -32px;
 }
-li.accountInvite {
-    background-image: url('MMCCicon_invite.png');
+.accountInvite .accountIcon {
+    background-position: 0 -64px;
 }
-li.accountLogout {
-    background-image: url('MMCCicon_logout.png');
+.accountLogout .accountIcon {
+    background-position: 0 -96px;
 }
-li.accountIcon a {
+.accountListItem a {
     display: block;
-    padding: 6px 0 6px 25px;
+    padding: 9px 0 9px 62px;
+    color: #757575;
+}
+.accountListItem:hover a {
+    color: #424242;
+}
+.accountListItem:hover .accountIcon {
+    background-position-x: -32px;
 }
 li.accountInvite span {
     display: block;
-    padding: 6px 0 6px 25px;
+    padding: 9px 0 9px 62px;
 }
-.sidebarAccountBox a {
-    color: white;
+.accountImage {
+    background-image: url(user.png);
+    background-repeat: no-repeat;
+    height:84px;
+    width:84px;
+    margin: 24px auto;
+}
+
+.accountInput {
+    margin: 0 35px 10px;
 }
 .sidebarAccountBox input[type="email"],
 .sidebarAccountBox input[type="password"] {
     width: 200px;
     height: 32px;
-    font-size: 15px;
+    font-size: 14px;
     direction: ltr;
+    outline:none;
     -webkit-appearance: none;
     appearance: none;
     display: inline-block;
     margin: 0;
-    padding: 0 8px;
+    padding: 0 10px;
     background: #fff;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
+    border: none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    border-radius: 1px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     font: -webkit-small-control;
-    color: initial;
+    color: #424242 !important;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
     text-indent: 0px;
     text-shadow: none;
-    display: inline-block;
     text-align: start;
+    font-family: 'din-medium', helvetica, sans-serif;
 }
-.sidebarAccountBox input[type="email"]:hover,
-.sidebarAccountBox input[type="password"]:hover {
-    border: 1px solid #b9b9b9;
-    border-top: 1px solid #a0a0a0;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+.accountSubmit {
+    float:left;
 }
-.sidebarAccountBox .links a {
-    display: block;
-    margin-top: 5px;
+.loginAnywhere .accountSubmit {
+    margin-left: 35px;
 }
+.accountRememberMe {
+    float:right;
+}
+.login .accountRememberMe {
+    margin-top: 10px;
+}
+.loginAnywhere .accountRememberMe {
+    margin-right: 35px;
+}
+#user_remember_me {
+    margin-top: 11px;
+    display:inline;
+}
+#user_remember_me,
+label[for="user_remember_me"] {
+    float: right;
+    font-size: 12px;
+    color: #424242;
+}
+.accountForgotPass {
+    font-size: 12px;
+}
+.loginAnywhere .accountForgotPass {
+    margin: 8px 0 0 35px;
+}
+.login .accountForgotPass {
+    margin: 8px 0 0 0;
+}
+.accountForgotPass a {
+    color: #757575;
+}
+.accountForgotPass a:hover {
+    color: #424242;
+}
+
 /* Save To New Map */
 
 .sidebarFork {
-    position: absolute;
-    top: 5px;
-    right: 71px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    border-right: 1px solid black;
+    width: 32px;
+    height: 32px;
 }
-.sidebarForkIcon {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    background: #0F1519 url('MMCCicon_save_new_map.png') no-repeat center center;
-    background-size: 28px 28px;
-    cursor: pointer;
-}
-.sidebarForkIcon:hover {
-    background-color: black;
-}
-.sidebarForkBox {
-    position: absolute;
-    display: none;
-    height: auto;
-    width: 182px;
-    background: #000;
-    top: 35px;
-    right: -36px;
-    padding: 10px;
-    border: 1px solid black;
-    font-family: 'LatoLight', helvetica, sans-serif;
-}
+
 .sidebarFork .hoverForTip:hover .tip {
     display: block;
 }
@@ -725,544 +847,177 @@ li.accountInvite span {
     color: white;
     border-radius: 4px;
     font-size: 15px !important;
-    font-family: 'LatoRegular';
     line-height: 17px;
     padding: 3px 5px 2px;
     z-index: 100;
 }
 /* end Save To New Map */
 
-/* Save Layout */
-
-.sidebarSave {
-    position: absolute;
-    top: 5px;
-    right: 107px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    border-right: 1px solid black;
-}
-.sidebarSaveIcon {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    background: #0F1519 url('MMCCicon_save_layout.png') no-repeat center center;
-    background-size: 22px 22px;
-    cursor: pointer;
-}
-.sidebarSaveIcon:hover {
-    background-color: black;
-}
-.sidebarSaveBox {
-    position: absolute;
-    display: none;
-    height: auto;
-    width: 182px;
-    background: #000;
-    top: 35px;
-    right: -36px;
-    padding: 10px;
-    border: 1px solid black;
-    font-family: 'LatoLight', helvetica, sans-serif;
-}
-.sidebarSave .hoverForTip:hover .tip {
-    display: block;
-}
-.sidebarSave .tip {
-    display: none;
-    position: absolute;
-    background: black;
-    text-align: center;
-    top: 36px;
-    right: 0;
-    color: white;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
-}
 /* Filter */
 
 .sidebarFilter {
-    position: absolute;
-    top: 5px;
-    right: 35px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    border-right: 1px solid black;
+    width: 32px;
+    height: 32px;
 }
-.sidebarFilter.loggedout {
-    right: 35px;
-}
-.sidebarFilterIcon {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    background: #0F1519 url('MMCCicon_filter2.png') no-repeat center center;
-    background-size: 28px 28px;
-    cursor: pointer;
-}
-.sidebarFilterIcon:hover {
-    background-color: black;
-}
-/* we set a few of these params off screen to begin with, so that when we initialize the scroll bar it works, but then 
-   we hide the element and position it correctly */
 
 .sidebarFilterBox {
-    position: fixed;
-    top: -1000px;
-    right: -1000px;
-    display: block;
-    /*
-  position:absolute; 
-  top: 35px;
-  right:-72px;
-  display:none;
-  */
-    height: auto;
-    width: 260px;
-    background: #000;
-    padding: 10px;
-    border: 1px solid black;
-    font-family: 'LatoLight', helvetica, sans-serif;
-    text-align: center;
+    display:none;
+    width: 304px;
+    padding: 16px 0;
+    overflow-y: auto;
 }
-h3.filterByMetacode {
-    margin-bottom: 10px;
+h3.filterBox {
     text-align: left;
     float: left;
 }
 .sidebarFilterBox span {
-    float: left;
-    background: #15bad4;
+    float: right;
     padding: 1px 4px;
     border-radius: 2px;
-    margin-left: 5px;
+    margin-right: 5px;
     cursor: pointer;
+    font-size:12px;
 }
-.sidebarFilterBox #filter_by_metacode {
-    height: 270px;
-    overflow: hidden;
+.sidebarFilterBox span:hover {
+    color: #00BCD4;
 }
 .sidebarFilterBox ul {
     list-style: none;
 }
 .sidebarFilterBox li {
     float: left;
-    width: 61px;
-    height: 70px;
+    width: 72px;
+    height: 72px;
     cursor: pointer;
+    text-align: center;
 }
 .sidebarFilterBox li:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    
 }
-.sidebarFilterBox li img {
-    width: 45px;
-    height: 45px;
-    margin: 0 auto;
+#filter_by_mapper li img {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    margin: 8px auto;
+}
+#filter_by_metacode li img {
+    width: 40px;
+    height: 40px;
+    margin: 8px auto;
+}
+#filter_by_synapse li img {
+    width: 16px;
+    height: 16px;
+    margin: 8px auto;
 }
 .sidebarFilterBox li p {
     font-size: 11px;
     line-height: 11px;
-    font-family: arial, sans-serif;
+    font-family: 'din-regular', helvetica, sans-serif;
 }
 .sidebarFilterBox li.toggledOff {
     opacity: 0.4;
+}
+.sidebarFilterBox h2 {
+    font-size: 18px;
+    margin-left: 16px;
+    line-height: 18px;
+}
+.sidebarFilterBox h3 {
+    text-align: left;
+    text-transform: uppercase;
+    font-size:14px;
+    float:left;
+}
+.filterBySection {
+    margin-left:16px;
+    width: 288px;
+    border-top: 1px solid #BDBDBD;
+    padding-top:8px;
+    margin-top:8px;
+}
+#filter_by_metacode {
+    
+}
+#filter_by_mapper {
+    
+}
+#filter_by_synapse {
+    
 }
 /* end filter by metacode */
 
 /* collaborate */
 
 .sidebarCollaborate {
-    position: absolute;
-    top: 5px;
-    right: 143px;
-    z-index: 200;
-    width: 35px;
-    height: 35px;
-    border-right: 1px solid black;
-}
-.sidebarCollaborateIcon {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    background-image: url('MMCCicon_realtime_junto.png');
-    background-size: 36px 36px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-color: #0F1519;
-    cursor: pointer;
-}
-.sidebarCollaborateIcon.blue {
-    background-image: url('MMCCicon_realtime_blue.png');
+    width: 32px;
+    height: 32px;
 }
 .sidebarCollaborateBox {
-    position: absolute;
     display: none;
     height: auto;
-    width: auto;
-    background: #000;
-    top: 35px;
-    right: 0;
-    padding: 10px;
-    border: 1px solid black;
-    min-width: 135px;
-    font-family: 'LatoLight', helvetica, sans-serif;
+    padding: 16px;
+    width: 238px;
 }
 h3.realtimeBoxTitle {
     margin-bottom: 10px;
     text-align: left;
     float: left;
-    font-family: 'Lato', helvetica, sans-serif;
+    font-size:18px;
+    line-height:18px;
 }
 .sidebarCollaborateBox .realtimeOnOff {
-    float: left;
+    float: right;
     padding: 4px;
     border-radius: 2px;
     margin-left: 12px;
     cursor: pointer;
-    width: 31px;
     text-align: center;
+    font-size:12px;
+}
+.sidebarCollaborateBox .realtimeOnOff:hover {
+    color: #00bcd4;
 }
 .sidebarCollaborateBox .rtOff {
-    background: white;
-    color: black;
-}
-.sidebarCollaborateBox .rtOff:hover {
-    padding: 3px;
-    border: 1px solid #15bad4;
+    
 }
 .sidebarCollaborateBox .rtOn {
-    background: #15bad4;
-    color: white;
+
 }
 .realtimeMapperList .rtMapper {
     list-style-type: none;
     white-space: nowrap;
-    padding: 2px 5px 2px 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 9px 32px;
     display: block;
-    background-size: 26px 26px;
-    background-repeat: no-repeat;
-    background-position: 4px center;
-    margin-bottom: 5px;
+    height: 14px;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 14px;
+    position: relative;
 }
-.realtimeMapperList .littleRtOff {
-    background-image: url('/assets/MMCCicon_realtime_junto.png');
+.rtUserImage {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    border-radius: 12px;
 }
-.realtimeMapperList .littleRtOn {
-    background-image: url('/assets/MMCCicon_realtime_blue.png');
+.littleJuntoIcon {
+    width: 24px;
+    height:24px;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    background-image: url('junto24_sprite.png');
+}
+.realtimeMapperList .littleRtOff  .littleJuntoIcon {
+    background-position: 0 0;
+}
+.realtimeMapperList .littleRtOn .littleJuntoIcon {
+    background-position: -24px 0;
 }
 /* end collaborate */
-
-/* search */
-
-.sidebarSearch {
-    position: absolute;
-    top: 5px;
-    left: 0;
-    height: 35px;
-    z-index: 200;
-}
-.sidebarSearchIcon {
-    float: left;
-    width: 35px;
-    height: 35px;
-    background: #0F1519 url('search_icon_32x32.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
-}
-.sidebarSearch .twitter-typeahead {
-    float: left;
-}
-.sidebarSearchField,
-.sidebarSearch .tt-hint {
-    height: 25px;
-    padding: 5px 0;
-    width: 0px;
-    margin: 0;
-    border: 0;
-    outline: none;
-    font-size: 18px;
-    line-height: 35px;
-    background: #0F1519;
-    color: rgba(255, 255, 255, 0.6);
-    font-family: 'LatoRegular';
-}
-.sidebarSearch .tt-dropdown-menu {
-    left: -35px !important;
-    background: #0F1519;
-    min-width: 440px;
-    width: 440px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.sidebarSearch .tt-dropdown-menu h3 {
-    font-family: 'vinyl', helvetica, sans-serif;
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 20px;
-    line-height: 20px;
-    margin: 10px 0 3px 10px;
-    float: left;
-}
-.sidebarSearch .tt-dropdown-menu .limitToMe {
-    float: left;
-    width: 15px;
-    height: 15px;
-    margin-top: 11px;
-    margin-left: 15px;
-}
-.sidebarSearch .tt-dropdown-menu .limitToMeLabel {
-    float: left;
-    margin-top: 11px;
-}
-.sidebarSearch .tt-dropdown-menu .minimizeResults {
-    float: right;
-    width: 35px;
-    height: 35px;
-    background: url('/assets/MMCCicon_minimize_arrow.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
-}
-.sidebarSearch .tt-dropdown-menu .maximizeResults {
-    float: right;
-    width: 35px;
-    height: 35px;
-    background: url('/assets/MMCCicon_maximize_arrow.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
-}
-.sidebarSearch .tt-suggestions {
-    font-family: 'LatoLight', helvetica, sans-serif;
-    overflow: visible;
-}
-.sidebarSearch .tt-suggestion {
-    background: #2A343C;
-}
-.sidebarSearch .tt-is-under-cursor,
-.sidebarSearch .tt-is-under-mouse-cursor {
-    background: #0E161D;
-}
-.sidebarSearch .tt-dataset-maps .tt-is-under-cursor .resultmap,
-.sidebarSearch .tt-dataset-maps .tt-is-under-mouse-cursor .resultmap,
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .resulttopic,
-.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .resulttopic {
-    min-height: 57px;
-}
-.sidebarSearch .tt-suggestion .icon {
-    float: left;
-    width: 36px;
-    height: 36px;
-    margin-right: 5px;
-}
-.sidebarSearch .topicMetacode {
-    float: left;
-    margin-right: 5px;
-    max-width: 70px;
-}
-.sidebarSearch .tt-dataset-topics .topicIcon {
-    width: 36px;
-    height: 36px;
-}
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .topicIcon,
-.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .topicIcon {
-    margin: 0 auto;
-    padding-left: 2px
-}
-.sidebarSearch .tt-dataset-topics .metacodeTip {
-    display: none;
-}
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip,
-.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .metacodeTip {
-    display: block;
-    font-family: 'vinyl';
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 13px;
-    margin: 0 5px 0 2px;
-    text-align: center;
-}
-.sidebarSearch .tt-dataset-mappers .tt-suggestion .icon {
-    width: 28px;
-    height: 28px;
-    padding: 4px;
-}
-.sidebarSearch .resultText {
-    width: 225px;
-    display: block;
-    float: left;
-    word-wrap: break-word;
-}
-.sidebarSearch .resultTitle {
-    font-weight: normal;
-    font-family: 'LatoRegular';
-    font-size: 18px;
-    line-height: 22px;
-    width: 100%;
-    padding-top: 8px;
-}
-.sidebarSearch .resultDesc {
-    font-family: 'LatoItalic';
-    font-size: 14px;
-    line-height: 16px;
-    width: 100%;
-    padding: 3px 0 6px 0;
-}
-.sidebarSearch .tip {
-    display: none;
-}
-.sidebarSearch div.autoOptions {
-    width: 122px;
-    float: right;
-    position: relative;
-    display: none;
-}
-.sidebarSearch .tt-is-under-cursor .autoOptions,
-.sidebarSearch .tt-is-under-mouse-cursor .autoOptions {
-    display: block;
-}
-.sidebarSearch .tt-suggestion .resultnoresult .autoOptions {
-    display: none;
-}
-.sidebarSearch .autoOptions button,
-.sidebarSearch .autoOptions a,
-.sidebarSearch .autoOptions div {
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    border: none;
-    outline: none;
-}
-.sidebarSearch button.addToMap {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_add.png) no-repeat center center;
-    background-size: 18px 18px;
-    top: 30px;
-    left: 84px;
-    cursor: pointer;
-}
-.sidebarSearch div.goTo {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_pop-out.png) no-repeat center center;
-    background-size: 18px 18px;
-    top: 7px;
-    left: 84px;
-}
-.sidebarSearch div.mapCount {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_map.png) no-repeat 0px center;
-    background-size: 14px 14px;
-    top: 7px;
-    left: 38px;
-    padding-left: 18px;
-    font-size: 12px;
-    line-height: 20px;
-}
-.sidebarSearch div.topicCount {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_topic.png) no-repeat 0px center;
-    background-size: 14px 14px;
-    top: 7px;
-    left: 39px;
-    padding-left: 18px;
-    font-size: 12px;
-    line-height: 20px;
-}
-.sidebarSearch div.synapseCount {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_synapse.png) no-repeat 0px center;
-    background-size: 15px 15px;
-    top: 30px;
-    left: 38px;
-    padding-left: 19px;
-    font-size: 12px;
-    line-height: 20px;
-}
-.sidebarSearch div.topicOriginatorIcon {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_mapper.png) no-repeat center center;
-    background-size: 17px 17px;
-    top: 7px;
-    left: 13px;
-}
-.sidebarSearch .tip {
-    position: absolute;
-    background: white;
-    width: auto;
-    bottom: 0;
-    right: 25px;
-    color: black;
-    white-space: nowrap;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
-}
-.sidebarSearch .mapCount .tip,
-.sidebarSearch .synapseCount .tip,
-.sidebarSearch .topicCount .tip {
-    right: -3px;
-    bottom: 24px;
-}
-.sidebarSearch .hoverForTip:hover .tip {
-    display: block;
-}
-.sidebarSearch .mapContributorsIcon .mapContributors {
-    right: 0;
-    bottom: 21px;
-    white-space: normal;
-    width: 200px;
-}
-.sidebarSearch div.mapContributorsIcon {
-    height: 20px;
-    background: url(/assets/MMCCicon_mapper.png) no-repeat 0px center;
-    background-size: 17px 17px;
-    top: 7px;
-    right: 85px;
-    padding-left: 19px;
-    font-size: 12px;
-    line-height: 20px;
-    padding-right: 5px;
-}
-.sidebarSearch div.topicPermission,
-.sidebarSearch div.mapPermission {
-    width: 20px;
-    height: 20px;
-    background-size: 19px 19px !important;
-    top: 30px;
-    left: 13px;
-}
-.sidebarSearch div.topicPermission.commons,
-.sidebarSearch div.mapPermission.commons {
-    background: url(/assets/MMCCicon_commons.png) no-repeat center center;
-}
-.sidebarSearch div.topicPermission.public,
-.sidebarSearch div.mapPermission.public {
-    background: url(/assets/MMCCicon_public.png) no-repeat center center;
-}
-.sidebarSearch div.topicPermission.private,
-.sidebarSearch div.mapPermission.private {
-    background: url(/assets/MMCCicon_private.png) no-repeat center center;
-}
-.sidebarSearch .tt-dataset-mappers a.goTo {
-    top: 7px;
-}
-.sidebarSearch .tt-dataset-mappers div.mapCount {
-    top: 8px;
-}
-/* end search */
 
 .nodemargin {
     padding-top: 120px;
@@ -1277,67 +1032,76 @@ h3.realtimeBoxTitle {
 #menus {
     margin: 0 7px;
 }
-#cards {
-    height: 100%;
-    width: 805px;
-    margin: 0 auto;
-}
-#cards p.empty {
-    margin-left: 50px;
-}
 /* right click menu */
 
 .rightclickmenu {
     position: absolute;
-    background: white;
+    width: 300px;
+    background: #FFFFFF;
     z-index: 20;
     border-radius: 2px;
     color: black;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
-.rightclickmenu ul {
-    padding: 2px;
+.rightclickmenu > ul {
+    
 }
-.rightclickmenu ul li {
+.rightclickmenu li {
     list-style: none;
-    padding: 3px 10px 3px 30px;
-    font-family: arial, sans-serif;
-    font-size: 17px;
-    line-height: 17px;
-    background-repeat: no-repeat;
-    background-size: 20px 20px;
-    background-position: 5px 2px;
-}
-.rightclickmenu ul li:nth-child(odd) {
-    background-color: #FFF;
-}
-.rightclickmenu ul li:nth-child(even) {
-    background-color: #EEE;
-}
-.rightclickmenu ul li:hover {
-    background-color: #BBB;
-    background-position: 7px 2px;
-    cursor: pointer;
-}
-.rightclickmenu .rc-delete {
-    background-image: url(MMCCicon_delete_black.png);
-}
-.rightclickmenu .rc-remove {
-    background-image: url(MMCCicon_remove_from_map_black.png);
-}
-.rightclickmenu .rc-hide {
-    background-image: url(MMCCicon_hide.png);
-}
-.rightclickmenu .rc-center {
-    background-image: url(MMCCicon_center.png);
-}
-.rightclickmenu .rc-popout {
-    background-image: url(MMCCicon_pop-out_black.png);
-}
-.rightclickmenu .rc-permission {
-    background-image: url(MMCCicon_edit_permission_black.png);
+    padding: 6px 10px 6px 32px;
+    font-family: helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 12px;
     position: relative;
 }
-.rightclickmenu .rc-permission ul {
+.rightclickmenu li:hover {
+    background-color: #E0E0E0;
+    cursor: pointer;
+}
+.rightclickmenu > ul > li .rc-icon {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    background-image: url(context_sprite.png);
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+}
+.rightclickmenu .rc-delete .rc-icon {
+    background-position: 0 -48px;
+}
+.rightclickmenu .rc-remove .rc-icon {
+    background-position: 0 -24px;
+}
+.rightclickmenu .rc-hide .rc-icon {
+    background-position: 0 0;
+}
+.rightclickmenu .rc-center .rc-icon {
+    
+}
+.rightclickmenu .rc-popout .rc-icon {
+    background-position: 0 -72px;
+}
+.rightclickmenu .rc-permission .rc-icon {
+    background-position: 0 -96px;
+}
+.rightclickmenu .rc-metacode .rc-icon {
+    background-position: 0 -120px;
+}
+.rightclickmenu .expandLi {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    background-image: url(arrowright_sprite.png);
+    background-repeat: no-repeat;
+    background-position: 0 -32px;
+}
+.rc-metacode li img {
+float: left;
+}
+.rightclickmenu .rc-permission ul, .rightclickmenu .rc-metacode ul  {
     display: none;
     background: white;
     top: 0;
@@ -1346,144 +1110,196 @@ h3.realtimeBoxTitle {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     border-top-right-radius: 2px;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
-.rightclickmenu .rc-permission:hover ul {
+.rightclickmenu .rc-permission:hover > ul, .rightclickmenu .rc-metacode:hover > ul {
     display: block;
-}
-.rightclickmenu .rc-permission .toCommons {
-    background-image: url(MMCCicon_commons.png);
-}
-.rightclickmenu .rc-permission .toPublic {
-    background-image: url(MMCCicon_public.png);
-}
-.rightclickmenu .rc-permission .toPrivate {
-    background-image: url(MMCCicon_private.png);
 }
 .rightclickmenu p {
     padding: 7px;
 }
+.rightclickmenu li.changeP {
+    
+}
+.rightclickmenu li.changeP .rc-perm-icon {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    background-image: url(permissions32_sprite.png);
+    background-size: 72px 48px;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+}
+.rightclickmenu li.toCommons .rc-perm-icon {
+    background-position: 0 0;
+}
+.rightclickmenu li.toPublic .rc-perm-icon {
+    background-position: -48px 0;
+}
+.rightclickmenu li.toPrivate .rc-perm-icon {
+    background-position: -24px 0;
+}
+.rightclickmenu .rc-metacode > ul > li {
+    padding: 6px 10px 6px 8px;
+    width: 100px;
+}
+.rightclickmenu .rc-metacode ul ul {
+    display: none;
+    max-height: 270px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.rightclickmenu .rc-metacode li:hover ul {
+    display: block;
+}
+.rightclickmenu .rc-metacode ul ul li {
+    padding: 4px 10px 4px 8px;
+    width: 120px;
+}
+.rightclickmenu .expandMetacodeSet {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    background-image: url(arrowright_sprite.png);
+    background-repeat: no-repeat;
+    background-position: 0 -32px;
+}
+.rightclickmenu .rc-metacode .mSelectName {
+    padding: 6px 0 0 32px;
+    display: block;
+}
+
+
 /* end right click menu */
 
-/* topic autocomplete */
+/* topic and synapse autocomplete */
 
 #new_topic .tt-suggestion.tt-is-under-cursor,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor {
-    background: #0E161D;
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor,
+#new_synapse .tt-suggestion.tt-is-under-cursor,
+#new_synapse .tt-suggestion.tt-is-under-mouse-cursor {
+    background: #E0E0E0;
 }
-#new_topic .tt-suggestion {
-    padding: 5px;
-    font-family: 'LatoLight';
-    background: rgba(42, 52, 60, 0.9);
-    ;
+#new_topic .tt-suggestion, 
+#new_synapse .tt-suggestion {
+    background: #F5F5F5;
+    width: 270px;
+    position: relative;
 }
 #new_topic .autocompleteSection {
     float: left;
 }
+#new_topic .topicType {
+    padding: 4px 0 0 4px;
+}
 #new_topic .topicTitle {
-    width: 130px;
-    line-height: 22px;
+    width: 190px;
+    line-height: 14px;
+    font-size: 14px;
+    padding: 9px 0 9px 4px;
 }
-#new_topic .topicPermission {
-    width: 20px;
-    height: 20px;
+#new_synapse .synapseDesc, 
+#new_synapse .genericSynapseDesc {
+    width: 190px;
+    line-height: 14px;
+    font-size: 14px;
+    padding: 9px 0 9px 8px;
+}
+#new_topic .expandTopicMetadata,
+#new_synapse .expandSynapseMetadata {
+    display:none;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
     background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
+    background-image: url(arrowright_sprite.png);
+    background-position: 0 -32px;
 }
-#new_topic .topicPermission.commons {
-    background-image: url(MMCCicon_commons.png);
-}
-#new_topic .topicPermission.public {
-    background-image: url(MMCCicon_public.png);
-}
-#new_topic .topicPermission.private {
-    background-image: url(MMCCicon_private.png);
-}
-#new_topic .topicOriginatorIcon {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
-    background-image: url(MMCCicon_mapper.png);
-}
-#new_topic .topicOriginatorIcon:hover .tip {
+#new_topic .tt-suggestion.tt-is-under-cursor .expandTopicMetadata,
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .expandTopicMetadata,
+#new_synapse .tt-suggestion.tt-is-under-cursor .expandSynapseMetadata,
+#new_synapse .tt-suggestion.tt-is-under-mouse-cursor .expandSynapseMetadata {
     display: block;
 }
-#new_topic .tip {
-    display: none;
+#new_topic .tt-suggestion.tt-is-under-cursor .topicMetadata,
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .topicMetadata,
+#new_synapse .tt-suggestion.tt-is-under-cursor .synapseMetadata,
+#new_synapse .tt-suggestion.tt-is-under-mouse-cursor .synapseMetadata {
+    display: block;
+}
+#new_topic .topicMetadata, 
+#new_synapse .synapseMetadata {
     position: absolute;
-    background: white;
-    width: auto;
-    top: 0;
-    left: 23px;
-    color: black;
-    white-space: nowrap;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 15px;
-    padding: 2px 5px 2px;
-    z-index: 100;
+    display: none;
+    top: -18px;
+    right: -100px;
+    width: 100px;
+    height: 70px;
+    background-color: #E0E0E0;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
 }
-/* synapse autocomplete */
-
-#new_synapse .tt-dropdown-menu {
-    width: 212px;
-    background: #2A343C;
-}
-#new_synapse .tt-dropdown-menu h3 {
-    font-family: 'vinyl', helvetica, sans-serif;
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 14pxpx;
-    line-height: 16px;
-    margin: 3px;
-}
-#new_synapse .tt-suggestion.tt-is-under-cursor,
-#new_synapse .tt-suggestion.tt-is-under-mouse-cursor {
-    background: #0E161D;
-}
-#new_synapse .tt-suggestion {
-    padding: 5px;
-    font-family: 'LatoLight';
-}
-#new_synapse .autocompleteSection {
-    float: left;
-}
-#new_synapse .synapseDesc {
-    width: 162px;
-    line-height: 22px;
-}
+#new_topic .topicPermission,
 #new_synapse .synapsePermission {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
+    background-image: url(permissions32_sprite.png);
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
 }
+#new_topic .topicPermission.commons,
 #new_synapse .synapsePermission.commons {
-    background-image: url(MMCCicon_commons.png);
+    background-position: 0 0;
 }
+#new_topic .topicPermission.public,
 #new_synapse .synapsePermission.public {
-    background-image: url(MMCCicon_public.png);
+    background-position: -64px 0;
 }
+#new_topic .topicPermission.private,
 #new_synapse .synapsePermission.private {
-    background-image: url(MMCCicon_private.png);
+    background-position: -32px 0;
 }
-#new_synapse .synapseOriginatorIcon {
-    position: relative;
-    width: 20px;
-    height: 20px;
+#new_topic .topicNumMaps,
+#new_synapse .synapseNumMaps {
+    height: 14px;
+    padding: 1px 0 1px 32px;
+    background-image: url(metamap16.png);
     background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 16px 16px;
-    background-image: url(MMCCicon_mapper.png);
+    background-position: 8px 0;
+    position: absolute;
+    top: 10px;
 }
+#new_topic .topicNumSynapses {
+    height: 14px;
+    padding: 1px 0 1px 32px;
+    background-image: url(synapse16.png);
+    background-repeat: no-repeat;
+    background-position: 8px 0;
+    position: absolute;
+    bottom: 10px;
+}
+#new_topic .topicOriginatorIcon,
+#new_synapse .synapseOriginatorIcon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+#new_topic .topicOriginatorIcon img,
+#new_synapse .synapseOriginatorIcon img {
+    border-radius: 12px;
+}
+#new_topic .topicOriginatorIcon:hover .tip,
 #new_synapse .synapseOriginatorIcon:hover .tip {
     display: block;
 }
+#new_topic .tip,
 #new_synapse .tip {
     display: none;
     position: absolute;
@@ -1495,15 +1311,27 @@ h3.realtimeBoxTitle {
     white-space: nowrap;
     border-radius: 4px;
     font-size: 15px !important;
-    font-family: 'LatoRegular';
     line-height: 15px;
     padding: 2px 5px 2px;
     z-index: 100;
+}
+
+#new_synapse .tt-dropdown-menu {
+    background: #F5F5F5;
+}
+#new_synapse .tt-dropdown-menu h3 {
+    font-family: 'vinyl', helvetica, sans-serif;
+    text-transform: uppercase;
+    font-style: italic;
+    font-size: 14pxpx;
+    line-height: 16px;
+    margin: 3px;
 }
 #new_synapse .tt-suggestion .resultnoresult .synapsePermission,
 #new_synapse .tt-suggestion .resultnoresult .synapseOriginatorIcon {
     display: none;
 }
+/* map info box */
 /* map info box */
 
 .wrapper div.mapInfoBox {
@@ -1511,49 +1339,46 @@ h3.realtimeBoxTitle {
     position: absolute;
     bottom: 40px;
     right: 3px;
-    background: #0F1519;
-    border-radius: 5px;
-    width: 320px;
-    height: auto;
-    padding: 10px;
-    font-family: 'LatoLight';
-    font-size: 15px;
-    line-height: 17px;
+    background-color: #424242;
+    color: #F5F5F5;
+    border-radius: 2px;
+    width: 360px;
+    height: 300px;
+    padding: 0;
     font-style: normal;
     text-align: center;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.23), 0px 3px 3px rgba(0,0,0,0.16);
 }
 .mapInfoName {
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    background: url(mapInfoLine.png) no-repeat bottom center;
+    font-size: 18px;
+    line-height: 20px;
+    height: 20px;
+    padding: 26px 0;
 }
-.mapInfoName,
 .mapInfoStat {
-    font-size: 25px;
-    line-height: 27px;
+    background-color: #E0E0E0;
+    font-size: 18px;
+    line-height: 20px;
+    height: 48px;
+    padding: 0;
+    color: #424242;
 }
 .wrapper div.mapInfoName span,
 .wrapper div.mapInfoDesc span {
     float: none !important;
     padding-bottom: 10px;
 }
-div.mapInfoStat {
-    padding-left: 29px;
-}
 .infoStatIcon {
     float: left;
     width: 25px;
-    padding: 6px 0px 7px 45px;
-    height: 27px;
+    padding: 14px 0px 14px 45px;
+    height: 20px;
     background-repeat: no-repeat;
     text-align: left;
-    font-size: 20px;
-    line-height: 27px;
 }
 .mapContributors {
     background-image: url(MMCCicon_mapper.png);
-    background-position: 16px 6px;
-    background-size: 27px 27px;
+    background-position: 13px center;
     position: relative;
 }
 .infoStatIcon .tip {
@@ -1566,7 +1391,6 @@ div.mapInfoStat {
     color: black;
     border-radius: 4px;
     font-size: 15px !important;
-    font-family: 'LatoRegular';
     line-height: 17px;
     padding: 3px 5px 2px;
     z-index: 100;
@@ -1583,86 +1407,92 @@ div.mapInfoStat {
     display: block;
 }
 .mapTopics {
-    background-image: url(MMCCicon_topic.png);
-    background-position: 16px 6px;
-    background-size: 27px 27px;
+    background-image: url(topic32.png);
+    background-position: 13px center;
 }
 .mapSynapses {
-    background-image: url(MMCCicon_synapse.png);
-    background-position: 18px 6px;
-    background-size: 27px 27px;
+    background-image: url(synapse32.png);
+    background-position: 13px center;
 }
 .mapInfoBox .mapPermission {
     background-position: 0 center;
-    background-size: 30px 30px;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     padding: 0;
-    margin: 5px 30px 5px 10px;
+    margin: 8px 30px 8px 10px;
     position: relative;
+    background-image: url(permissions32_sprite.png);
 }
 .mapInfoBox .mapPermission.commons {
-    background-image: url(MMCCicon_commons.png);
+    background-position: 0 0;
 }
 .mapInfoBox .mapPermission.public {
-    background-image: url(MMCCicon_public.png);
+    background-position: -64px 0;
 }
 .mapInfoBox .mapPermission.private {
-    background-image: url(MMCCicon_private.png);
+    background-position: -32px 0;
 }
 .yourMap .mapPermission:hover {
-    background-image: url(/assets/MMCCicon_maximize_arrow.png);
+    background-image: url(arrowperms_sprite.png);
     cursor: pointer;
+    background-position: -32px 0;
 }
 .yourMap .mapPermission.minimize {
-    background-image: url(MMCCicon_minimize_arrow.png) !important;
+    background-image: url(arrowperms_sprite.png) !important;
     cursor: pointer;
+    background-position: 0 0;
 }
 .mapInfoBox .mapPermission .permissionSelect {
     list-style: none;
-    width: 30px;
-    height: 60px;
+    width: 32px;
+    height: 64px;
     position: relative;
-    top: 30px;
+    top: 32px;
 }
 .mapInfoBox .mapPermission .permissionSelect li {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 30px 30px;
+    background-image: url(permissions32_sprite.png);
 }
 .mapInfoBox .mapPermission .permissionSelect .commons {
-    background-image: url(MMCCicon_commons.png);
+    background-position: 0 0;
 }
 .mapInfoBox .mapPermission .permissionSelect .public {
-    background-image: url(MMCCicon_public.png);
+    background-position: -64px 0;
 }
 .mapInfoBox .mapPermission .permissionSelect .private {
-    background-image: url(MMCCicon_private.png);
+    background-position: -32px 0;
 }
 .mapInfoBox .mapPermission .permissionSelect .commons:hover {
-    background-image: url(MMCCicon_commons_black.png);
+    background-position: 0 -32px;
 }
 .mapInfoBox .mapPermission .permissionSelect .public:hover {
-    background-image: url(MMCCicon_public_black.png);
+    background-position: -64px -32px;
 }
 .mapInfoBox .mapPermission .permissionSelect .private:hover {
-    background-image: url(MMCCicon_private_black.png);
+    background-position: -32px -32px;
 }
 .mapInfoBox .mapInfoDesc {
-    font-style: italic;
-    color: #BBB;
-    padding-bottom: 5px;
-    margin: 5px 0 8px;
-    background: url(mapInfoLine.png) no-repeat bottom center;
+    font-family: helvetica, sans-serif;
+    color: #E0E0E0;
+    margin: 8px;
+    height: 106px;
+    font-size: 14px;
+    line-height: 16px;
+    overflow-y: auto;
+}
+.mapInfoBox .mapInfoMeta {
+    height: 35px;
+    border-top: 1px solid #F5F5F5;
+    padding: 6px 0 7px;
 }
 .mapInfoBox .mapInfoMeta p {
     margin: 4px 0;
-    font-size: 14px;
-    font-style: italic;
-    color: #BBB;
+    font-size: 12px;
+    color: #F5F5F5;
 }
+
 /* lightboxes */
 
 #lightbox_overlay {
@@ -1675,7 +1505,7 @@ div.mapInfoStat {
     display: none;
 }
 #lightbox_main {
-    width: 550px;
+    width: 800px;
     height: auto;
     margin: 0 auto;
     z-index: 2;
@@ -1691,9 +1521,9 @@ div.mapInfoStat {
     width: 100%;
     position: absolute;
     background-color: #000;
-    opacity: 0.42;
-    filter: alpha(opacity=42);
-    -moz-opacity: 0.42;
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0.0;
 }
 #lightbox_overlay #lightbox_main #lightbox_header {
     padding: 6px 5px 1px 0;
@@ -1703,49 +1533,156 @@ div.mapInfoStat {
     border: solid 2px #000;
 }
 #lightbox_overlay #lightbox_main a#lightbox_close {
-    /*background-image: url(../images/barometer_close.png);*/
+    background-image: url(xlightbox.png);
     cursor: pointer;
-    height: 42px;
-    outline-color: -moz-use-text-color;
+    height: 32px;
     outline-style: none;
     outline-width: medium;
     overflow: hidden;
     position: absolute;
-    top: -23px;
-    right: -22px;
-    width: 42px;
+    top: -8px;
+    right: -32px;
+    width: 32px;
     z-index: 4;
     border: none;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 #lightbox_content {
-    background: white url(metacode-watermark.png) 443px -30px no-repeat;
-    padding: 20px;
-    border-radius: 5px;
+    width: 552px;
+    height: 434px;
+    background-color: #e0e0e0;
+    padding: 64px 124px 64px 124px;
+    border-radius: 2px;
 }
 .lightboxContent h3 {
-    font-style: italic;
+/*    font-style: italic;
     text-transform: uppercase;
     font-family: 'vinyl';
     font-size: 30px;
     line-height: 35px;
-    color: black;
+    color: black;*/
+    font-family: 'din-medium';
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #424242;
+    text-align: left;
+    padding: 0 0 0 0;
 }
 .lightboxContent h3.forCreateMap {
-    text-align: center;
+    text-align: left;
+}
+#svi {
+    padding-top: 56px;
+    padding-left: 162px;
+    margin: 0 auto;
+}
+#svi1 {
+    font-family: 'din-medium';
+    font-size: 14px;
+    font-color: #424242;
+    text-transform: uppercase;
+    text-align: left;
+    display: inline-block;
+}
+#svi2 {
+    font-family: 'din-medium';
+    font-size: 14px;
+    font-color: #424242;
+    text-transform: uppercase;
+    text-align: left;
+    display: inline-block;
+}
+
+#svi1 > p, #svi2 > p {
+    width: 150px;    
 }
 .lightboxContent {
-    display: none;
+    font-family: 'din-regular';
+    font-size: 14px;
+    color: #424242;
+    text-align: left;
 }
 .openLightbox {
     cursor: pointer;
 }
+.lightbox_links a {
+    height: 70px;
+    width: 104px;
+    border-radius: 2px;
+    padding-bottom: 0;
+    font-family: 'din-medium';
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #757575;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    position:relative;
+
+}
+.lightbox_links a:hover {
+    color: #424242;
+}
+.lightbox_links a:active {
+    color: #00bcd4;
+}
+.lightbox_links .lightboxAboutIcon {
+    background-image: url(about_sprite.png);
+    background-repeat: no-repeat;
+    width:32px;
+    height:32px;
+    margin:10px auto;
+    background-position: 0 0;
+}
+.lightbox_links a:hover .lightboxAboutIcon {
+    background-position-y: -32px;
+}
+#lightbox_metamapps .lightboxAboutIcon {
+    background-position-x: 0;
+}
+#lightbox_community .lightboxAboutIcon {
+    background-position-x: -32px;
+}
+#lightbox_source .lightboxAboutIcon {
+    background-position-x: -64px;
+}
+#lightbox_blog .lightboxAboutIcon {
+    background-position-x: -96px;
+}
+#lightbox_term .lightboxAboutIcon {
+    background-position-x: -128px;
+}
+
+
+.permIcon .mapCrePermIcon  {
+    background-image: url(permissions64sprite.png);
+    background-repeat: no-repeat;
+    width:64px;
+    height:64px;
+    margin:10px auto;
+    background-position: 0 0;
+}
+.mapCrePermIcon:hover {
+    background-position-y: -64px;
+}
+#map_CO {
+    background-position-x: 0;
+}
+#map_PU {
+    background-position-x: -64px;
+}
+#map_PR {
+    background-position-x: -128px;
+}
+
 /* jquery ui tabs */
 
 .ui-tabs-hide {
     display: none !important;
 }
 .ui-tabs-vertical {
-    width: 55em;
+  
 }
 .ui-tabs-vertical .ui-tabs-nav {
     float: left;
@@ -1758,16 +1695,14 @@ div.mapInfoStat {
 .ui-tabs-vertical .ui-tabs-nav li {
     clear: left;
     width: 100%;
-    border-top: none !important;
-    border-left: none !important;
-    border-bottom: none !important;
+    border: none !important;
     background: none !important;
     margin: 0 0 .2em 0 !important;
     white-space: normal !important;
 }
 .ui-tabs-vertical .ui-tabs-nav li.ui-state-active,
 .ui-tabs-vertical .ui-tabs-nav li.ui-state-hover {
-    border-right: 1px solid #000;
+    border-right: none;
 }
 .ui-tabs-vertical .ui-tabs-nav li a {
     display: block;
@@ -1783,23 +1718,35 @@ div.mapInfoStat {
 
 #metacodeSwitchTabs {
     width: 100%;
-    font-family: LatoLight, Arial, Sans-Serif;
     font-size: 17px;
     line-height: 21px;
     border: none;
+    background: none;
 }
 #metacodeSwitchTabs .setTitle {
-    font-family: Lato, Arial, sans-serif;
+    
 }
 #metacodeSwitchTabs .setDesc {
     margin-bottom: 5px;
 }
+#switchMetacodes > p {
+    margin: 16px 0 16px 0;
+}
+#metacodeSwitchTabs > ul {
+    width: 130px;
+}
+#metacodeSwitchTabs > ul li {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+#metacodeSwitchTabs li.ui-state-active a {
+    color: #00BCD4;
+}
 .customMetacodeList,
 .metacodeSetList {
     height: 301px;
-    overflow: hidden;
+    overflow-y: auto;
     margin: 5px 0 15px 0;
-    border-bottom: 1px solid #BBB;
 }
 .customMetacodeList ul li {
     cursor: pointer;
@@ -1830,44 +1777,53 @@ div.mapInfoStat {
     background: none;
     font-size: 14px;
     line-height: 14px;
-    font-family: Lato;
 }
 #metacodeSwitchTabs button.button {
     width: auto !important;
     padding: 0 10px;
     font-weight: normal;
+    float: right;
 }
-/* about */
+/* about, getInvolved */
 
-#about > p {
-    color: #000;
-    font-size: 16px;
-    line-height: 24px;
+#aboutParms {
+    margin: 30px auto;
+    width: 218px;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+#leftAboutParms {
+    text-align: left;
+    float: left;
+    margin-right: 30px;
+}
+#rightAboutParms {
+    text-align: left;
+    float: left;
+}
+
+#about > p, #getInvolved > p, #invite > p {
+/*    color: #000;
+    font-size: 16px;*/
     margin: 10px 0;
+    line-height: 20px;
 }
 #about ul {
     list-style: none;
 }
 #about ul li {
     display: inline-block;
-    padding: 5px;
 }
-#about li a {
-    color: #097A51;
-}
+
 /* invite */
 
-#invite {
-    color: black;
-}
-#invite p {
-    margin: 10px 0;
-    line-height: 24px;
-}
-#invite .green {
+.joinCodes {
     text-align: center;
     display: block;
-    color: #097A51;
+    color: #424242;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+#joinCodesBox {
+    margin-top: 30px;
 }
 /* new map */
 
@@ -1876,17 +1832,22 @@ div.mapInfoStat {
 }
 .new_map .inputGroup {
     margin: 15px 0 5px;
+    position: relative;
 }
 .new_map label {
     float: left;
     width: 100px;
-    text-align: right;
+    text-align: left;
     margin-right: 15px;
+    font-size: 18px;
+    color: #424242;
+    font-family: 'din-regular', helvetica, sans-serif;
 }
 .new_map input[type="text"] {
-    width: 336px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    width: 400px;
     height: 32px;
-    font-size: 15px;
+    font-size: 14px;
     direction: ltr;
     -webkit-appearance: none;
     appearance: none;
@@ -1901,9 +1862,8 @@ div.mapInfoStat {
     box-sizing: border-box;
     -webkit-border-radius: 1px;
     -moz-border-radius: 1px;
-    border-radius: 1px;
-    font: -webkit-small-control;
-    color: initial;
+    border-radius: 2px;
+    color: #424242;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
@@ -1911,7 +1871,7 @@ div.mapInfoStat {
     text-shadow: none;
     display: inline-block;
     text-align: start;
-    font-family: arial;
+    float: right;
 }
 .new_map input[type="text"]:hover,
 .new_map textarea:hover {
@@ -1922,96 +1882,103 @@ div.mapInfoStat {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .new_map textarea {
+    color: #424242;
     padding: 8px;
     border: 1px solid #d9d9d9;
     border-top: 1px solid #c0c0c0;
     resize: none;
-    font: -webkit-small-control;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
     text-indent: 0px;
     text-shadow: none;
     text-align: start;
-    font-family: arial;
-    font-size: 15px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    font-size: 14px;
     line-height: 17px;
-    width: 318px;
+    width: 400px;
+    box-sizing: border-box;
+    float: right;
+    border-radius: 2px;
+}
+
+.permHelper {
+    position: absolute;
+    width: 128px;
+    top: 36px;
+    color: #424242;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.permIconWrapper {
+    width: 276px;
+    padding: 0 62px;
+    float: right;
 }
 .new_map .permIcon {
     float: left;
     width: 92px;
-    height: 85px;
+    height: 102px;
     position: relative;
 }
 .new_map .mapPermIcon {
-    width: 60px;
+    background-image: url(permissions64sprite.png);
+    background-repeat: no-repeat;
+    width:64px;
+    height:64px;
+    margin:10px auto 0;
+    background-position: 0 0;
+/*    width: 60px;
     height: 60px;
     background-size: 48px 48px;
     background-position: center center;
     background-repeat: no-repeat;
     margin: 0 auto;
-    cursor: pointer;
+    cursor: pointer;*/
 }
-.new_map .mapCommonsIcon {
-    background-image: url(MMCCicon_commons.png);
+.mapPermIcon:hover, .mapPermIcon.selected {
+    background-position-y: -64px;
 }
-.new_map .mapPublicIcon {
-    background-image: url(MMCCicon_public.png);
+#newmap_co {
+    background-position-x: 0;
 }
-.new_map .mapPrivateIcon {
-    background-image: url(MMCCicon_private.png);
+#newmap_pu {
+    background-position-x: -64px;
 }
-.new_map .mapCommonsIcon.selected,
-.new_map .mapCommonsIcon:hover {
-    background-image: url(MMCCicon_commons_black.png);
+#newmap_pr {
+    background-position-x: -128px;
 }
-.new_map .mapPublicIcon.selected,
-.new_map .mapPublicIcon:hover {
-    background-image: url(MMCCicon_public_black.png);
-}
-.new_map .mapPrivateIcon.selected,
-.new_map .mapPrivateIcon:hover {
-    background-image: url(MMCCicon_private_black.png);
-}
+
+
 .new_map .permIcon h4 {
     font-style: italic;
     font-family: 'Vinyl';
     text-transform: uppercase;
     font-size: 18px;
     line-height: 20px;
-    color: black;
+    color: #424242 ;
     text-align: center;
 }
 .new_map .tip {
     display: none;
-    position: absolute;
-    background: black;
-    width: 150px;
-    top: 85px;
-    left: -29px;
-    color: white;
-    border-radius: 4px;
-    font-size: 15px !important;
-    font-family: 'LatoRegular';
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    z-index: 100;
-    text-align: center;
-}
-.new_map .hoverForTip:hover .tip {
-    display: block;
 }
 .permText {
     width: 360px;
-    margin: 0 auto;
+    height: 32px;
+    margin: 16px 20px 0;
     text-align: center;
+    float: right;
+    color: #424242;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
 }
 .buttonWrapper {
-    margin: 10px 0 0 131px;
-    width: 254px;
+    width: 274px;
+    float:right;
+    margin: 16px 0 0 0;
 }
-.onConsole .new_map button {
+.onConsole .new_map button.cancel {
     margin-right: 20px;
 }
 .onConsole .new_map button,
@@ -2019,7 +1986,6 @@ div.mapInfoStat {
     float: left;
     margin-top: 5px;
     height: 40px;
-    font-family: 'LatoItalic';
     font-size: 17px;
     width: auto;
     padding: 0 30px;
@@ -2032,43 +1998,128 @@ div.mapInfoStat {
     box-shadow: none;
 }
 /* Cheatsheet */
+
 #cheatSheet {
     width: 100%;
     height: 350px;
-    font-family: LatoLight, Arial, Sans-Serif;
     font-size: 17px;
     line-height: 21px;
     border: none;
+    background: none;
+    padding: 0;
 }
-
 #cheatSheet .sectionTitle {
-    font-family: Lato, Arial, sans-serif;
-    font-weight:bold;
+    font-weight: bold;
 }
 #cheatSheet .csItem {
     margin: 5px 0;
-    font-size:15px;
-    line-height:18px;
+    font-size: 15px;
+    line-height: 18px;
 }
 #cheatSheet .csItem img {
     display: inline-block;
     margin: 0 2px;
 }
 #cheatSheet .csTitle {
-    font-family: Lato, Arial, sans-serif;
+
 }
 #cheatSheet .indented {
-    margin-left:15px;
+    margin-left: 15px;
 }
+
+#helpWrapper {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #BDBDBD;
+    border-radius: 0;
+}
+#helpWrapper li {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0 30px 0 0;
+    border-bottom: 2px solid rgba(0,0,0,0);
+}
+#helpWrapper li:hover, #helpWrapper li.ui-state-active {
+    border-bottom: 2px solid #00BCD4;
+}
+#helpWrapper li.ui-state-active a, #helpWrapper li.ui-state-hover a {
+  color: #424242;
+}
+#helpWrapper li a {
+    padding: 0;
+    font-family: 'din-medium', helvetica, sans-serif;
+    font-size: 14px;
+}
+#quickReference {
+    padding: 32px 0 0 0;
+}
+#quickReference .ui-widget-content {
+  color: #424242;
+}
+#quickReference ul {
+    width: 150px;
+}
+#quickReference li.ui-state-active a {
+    color: #00BCD4;
+}
+#tutorials {
+    padding: 16px 0 0 0;
+}
+.tutorialItem {
+    margin-top: 16px;
+    display: inline-block;
+    font-size: 14px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    cursor: pointer;
+    color: #757575;
+}
+.tutorialItem:hover {
+    color: #424242;
+}
+.tutorialItem.active {
+    color: #00bcd4;
+}
+#upYourSkillz {
+    margin: 0 68px;
+}
+#moreResources {
+    padding: 16px 0 0 0;
+    font-size: 14px;
+    line-height: 18px;
+    color: #424242;
+}
+.resourcesColumn {
+    margin-top: 32px;
+    width: 273px;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+}
+.resourcesColumn ul {
+    list-style: none;
+}
+.resourcesColumn li {
+    margin-top: 16px;
+}
+.resourcesColumn a.button {
+    background-color: #00BCD4;
+    color: #FFF;
+    padding-top: 8px;
+    height: 24px;
+}
+.resourcesColumn li a {
+    color: #424242;
+}
+
 /* Admin Pages */
 
-#wrapper > div.blackBox {
-    width: 700px;
+.blackBox {
+    width: 760px;
     margin: 0 auto;
-    padding: 20px 0 20px 20px;
+    padding: 20px 0 60px 20px;
     background: rgba(0, 0, 0, 0.4);
     color: white;
-    height: 100%;
     overflow: hidden;
     position: relative;
 }
@@ -2176,7 +2227,6 @@ div.mapInfoStat {
     float: left;
     margin-top: 5px;
     height: 40px;
-    font-family: 'LatoItalic';
     font-size: 17px;
     width: auto;
     padding: 0 30px;
@@ -2188,377 +2238,25 @@ div.mapInfoStat {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-/* FAQ */
 
-#wrapper > div.FAQ {
-    width: 700px;
-    margin: 0 auto;
-    padding: 20px 0 20px 20px;
-    background: rgba(0, 0, 0, 0.4);
-    color: white;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-}
-.FAQ .question {
-    display: block;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 10px 45px 10px 10px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    margin-right: 20px;
-    line-height: 24px;
-    position: relative;
-    cursor: pointer;
-}
-.FAQ .answer {
-    padding: 0 30px;
-    margin-bottom: 20px;
-    line-height: 24px;
-    margin-right: 20px;
-}
-.FAQ .answer.off {
-    display: none;
-}
-.FAQ .switch {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 35px;
-    height: 44px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-image: url('/assets/MMCCicon_maximize_arrow.png');
-    background-size: 25px 25px;
-    cursor: pointer;
-}
-.FAQ .minimizeAnswer {
-    background-image: url('/assets/MMCCicon_minimize_arrow.png') !important;
-}
 /* request */
 
 #wrapper .requestInvite {
     width: 700px;
     margin: 0 auto;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.4);
+    padding: 0 0 60px 0;
+    background: #FFFFFF;
     color: white;
     height: 100%;
     overflow: hidden;
 }
-/* --- styling the logo button ---*/
 
-.footer {
-    display: block;
-    position: fixed;
-    bottom: 5px;
-    height: 35px;
-    z-index: 15000;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
-    background: #0F1519;
-}
-.addMap {
-    position: absolute;
-    right: -49px;
-    top: 0px;
-    width: 44px;
-    height: 35px;
-    background: #0F1519 url('MMCCicon_add_map.png') no-repeat 3px -4px;
-    background-size: 40px 40px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.addMap:hover {} .logo {
-    z-index: 12;
-    display: block;
-    width: 136px;
-    background: url(menu_icon_32.png) no-repeat -10px 8px;
-    padding: 5px 0px 1px 15px;
-    background-size: 22px 20px;
-}
-#mainTitle {
-    padding: 0 5px;
-}
-#mainTitle a {
-    color: #FFF;
-    font-family: "vinyl", sans-serif;
-    font-style: italic;
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 30px;
-}
-.footer .menu {
-    display: none;
-    position: absolute;
-    border: none;
-    bottom: 35px;
-    left: -1px;
-    height: 123px;
-    z-index: 12;
-    width: 122px;
-    color: white;
-    white-space: nowrap;
-    text-align: center;
-    font-size: 16px;
-    overflow: hidden;
-    padding: 0 0 0 30px;
-    margin: 0;
-    background: #0F1519 url(beta_gen002.png) no-repeat 6px 12px;
-}
-.footer ul li {
-    margin: 0;
-    clear: both;
-    float: none;
-    list-style-type: none;
-    display: block;
-    padding: 0;
-    text-align: center;
-    font-family: 'vinyl';
-    font-style: italic;
-    height: 30px;
-    line-height: 34px;
-    font-size: 17px;
-    cursor: pointer;
-}
-.footer ul li:hover {} li.meta a,
-li.tutorial a,
-li.exploreMaps a {
-    display: block;
-}
-li.meta,
-li.tutorial,
-li.exploreMaps {
-    border-top: 1px solid white;
-}
-.footer ul li a {
-    color: #FFF;
-}
 .home_bg {
     display: block;
     height: 100%;
 }
-/* home page */
 
-div#preloaded-images {
-    position: absolute;
-    overflow: hidden;
-    left: -9999px;
-    top: -9999px;
-}
-.home_content {
-    width: 830px;
-    margin: 0 auto;
-}
-span.blue {
-    color: #36bbe8;
-}
-.home_desc {
-    font-family: 'LatoLight';
-    font-size: 32px;
-    margin: 40px 20px 25px;
-    text-align: center;
-}
-.home_desc .welcomeTo {
-    text-transform: uppercase;
-    font-size: 50px;
-    font-family: 'Vinyl';
-    font-style: italic;
-}
-.home_content .request {
-    margin-right: 17px !important;
-}
-.home_content .request,
-.home_content .learnmore {
-    margin: 5px auto;
-    background: white;
-    height: 40px;
-    font-family: 'Vinyl';
-    font-size: 18px;
-    font-style: italic;
-    width: 135px;
-    padding: 0 15px;
-    cursor: pointer;
-    color: black;
-    line-height: 44px;
-    font-weight: normal;
-    text-transform: uppercase;
-}
-.home_content .request:hover,
-.home_content .learnmore:hover {
-    background: white;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-.metamapsIs {} .metamapsIs .swapWord {
-    display: block;
-}
-#homeMapImage {
-    margin: 5px auto;
-}
-.featuredMaps {
-    margin: 15px 0;
-    font-size: 20px;
-    line-height: 20px;
-    text-align: center;
-}
-#homeMap {
-    width: 738px;
-    margin: 0 auto;
-    height: 340px;
-    position: relative;
-    overflow: hidden;
-}
-#homeFigure {
-    height: 335px;
-    width: 738px;
-    margin: 0;
-}
-#homeFigure figure {
-    float: left;
-    margin: 10px !important;
-    overflow: hidden;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-}
-#homeMap .links {
-    font-size: 14px;
-    font-family: Lato;
-    flex: none;
-}
-#homeMap .title {
-    margin: 10px;
-    flex: none;
-}
-#homeMap .linkItem.contributor {
-    background-position: 5px center;
-    background-size: 20px 20px;
-    position: relative;
-    padding-left: 28px;
-    line-height: 40px;
-    margin-left: 0px;
-    padding-right: 2px;
-}
-#homeMap .mapPerm {
-    height: 40px;
-    background-repeat: no-repeat;
-    background-position: 5px center;
-    background-size: 20px 20px;
-    position: relative;
-    padding-left: 28px;
-    line-height: 40px;
-}
-#homeMap .mapPerm.co {
-    background-image: url(MMCCicon_commons.png);
-}
-#homeMap .mapPerm.pu {
-    background-image: url(MMCCicon_public.png);
-}
-#homeMap .mapPerm.pr {
-    background-image: url(MMCCicon_private.png);
-}
-#homeMap .desc {
-    color: #555555;
-    padding: 15px 5px 0 15px;
-    overflow: hidden;
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-}
-.mapContains {
-    max-height: 40px;
-    line-height: 40px;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid #AAAAAA;
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-}
-.mapContains span {
-    display: inline-block;
-    text-align: left;
-    padding-left: 27px;
-}
-.mapContains .topicCount {
-    background-image: url(MMCCicon_topic.png);
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: 5px center;
-    line-height: 40px;
-    width: 72px;
-}
-.mapContains .synapseCount {
-    background-image: url(MMCCicon_synapse_black.png);
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: 5px center;
-    line-height: 40px;
-    width: 95px;
-}
-#homeFigure figure .littleOverlay {
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    z-index: 2;
-    background: rgba(255, 255, 255, 0);
-    transition: .6s;
-    border-radius: 5px;
-}
-#homeFigure figure:hover .littleOverlay {
-    /*top: 0; 
-  background: rgba(255,255,255, 0.9); 
-  bottom: 0; */
-}
-#homeMap .map,
-#homeMap .mapCard {
-    height: 315px;
-}
-.socialIcons {
-    position: fixed;
-    bottom: 0px;
-    height: 37px;
-    right: 0px;
-}
-.socialIcons a {
-    float: left;
-    height: 30px;
-    width: 30px;
-    margin: 0 7px 7px 0px;
-    background-repeat: no-repeat;
-    background-size: 30px 30px;
-}
-.socialIcons .twitter {
-    background-image: url('MMSocial-51.png');
-}
-.socialIcons .google {
-    background-image: url('MMSocial-52.png');
-}
-.socialIcons .wordpress {
-    background-image: url('MMSocial-53.png');
-}
-.contact {
-    text-align: center;
-    margin: 1em 0 1em 0;
-}
-.contact a {
-    color: #36bbe8;
-}
+
 #edit_synapse label,
 #edit_synapse_left,
 #edit_synapse_right {
@@ -2570,3 +2268,54 @@ span.blue {
 .templates {
     display: none;
 }
+
+
+/* collabCompass section */
+.collabCompass {
+    position:fixed;
+    top:50%;
+    left:50%;
+    z-index: 4;
+}
+
+.collabCompass:hover p {
+    display: block;
+}
+.collabCompass p {
+    display: none;
+    background-color: #4fb5c0;
+    color: #FFFFFF;
+    padding: 2px 8px 2px 8px; 
+    position: absolute;
+    top: 7px;
+    left:28px;
+    z-index: 1;
+    font-size: 14px;
+    line-height: 14px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    white-space: nowrap;
+}
+.collabCompass.labelLeft p {
+    left: auto;
+    right: 28px;
+}
+.collabCompass img {
+    border-radius: 16px;
+    border: 2px solid #4fb5c0;
+    z-index: 2;
+    position: relative;
+}
+.compassArrow {
+    display: none;
+    background-repeat: no-repeat;
+    background-image: url(compass_arrow.png);
+    width: 48px;
+    height: 32px;
+    position: absolute;
+    top: 0;
+    left: 16px;
+    background-position: 16px 8px;
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+}   

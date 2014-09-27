@@ -5,39 +5,51 @@
 
 <% if authenticated? %>
   <% account = current_user %>
-  <h3 class="accountHeader">Hello <%= account.name.split[0...1][0] %>!</h3>
+  <%= image_tag user.image.url(:thumb), :size => "48x48", :class => "sidebarAccountImage" %>
+  <h3 class="accountHeader"><%= account.name.split[0...1][0] %></h3>
   <ul>
-    <li class="accountIcon accountMaps"><a href="/maps/mappers/<%= account.id %>">My Maps</a></li>
-    <li class="accountIcon accountSettings"><%= link_to "Account", edit_user_url(account) %></li>
+    <li class="accountListItem accountSettings">
+      <div class="accountIcon"></div>
+      <%= link_to "Account", edit_user_url(account), :data => { :bypass => 'true'} %>
+    </li>
     <% if account.admin %>
-      <li class="accountIcon accountAdmin"><%= link_to "Admin", metacodes_path %></li>
+      <li class="accountListItem accountAdmin">
+        <div class="accountIcon"></div>
+        <%= link_to "Admin", metacodes_path, :data => { :bypass => 'true'} %>
+      </li>
     <% end %>
-    <li class="accountIcon accountInvite openLightbox" data-open="invite"><span>Share Invite</span></li>
-    <li class="accountIcon accountLogout"><%= link_to "Logout", "/sign_out", id: "Logout" %></li>
+    <li class="accountListItem accountInvite openLightbox" data-open="invite">
+      <div class="accountIcon"></div>
+      <span>Share Invite</span>
+    </li>
+    <li class="accountListItem accountLogout">
+      <div class="accountIcon"></div>
+      <%= link_to "Sign Out", "/sign_out", id: "Logout", :data => { :bypass => 'true'} %>
+    </li>
   </ul>
 <% else %>
-  <h3 class="accountHeader">Sign In</h3>
   <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { class: "loginAnywhere" }) do |f| %>
-        <div>
-          <%= f.label :email %>
-          <%= f.email_field :email, :autofocus => true %>
+        <div class="accountImage"></div>
+        <div class="accountInput accountEmail">
+          <%= f.email_field :email, :placeholder => "Email" %>
         </div>
-        <div>
-          <%= f.label :password %>
-          <%= f.password_field :password %>
+        <div class="accountInput accountPassword">
+          <%= f.password_field :password, :placeholder => "Password" %>
         </div>
+        <div class="accountSubmit"><%= f.submit "SIGN IN" %></div>
         <% if devise_mapping.rememberable? -%>
-        <div><%= f.check_box :remember_me %> <%= f.label :remember_me %><div class="clearfloat"></div></div>
+        <div class="accountRememberMe">
+          <%= f.label :remember_me, "Stay signed in" %>
+          <%= f.check_box :remember_me %>
+          <div class="clearfloat"></div>
+        </div>
         <% end -%>
-        <div>
-          <%= f.submit "Sign in" %><br>
-          
+        <div class="clearfloat"></div>
+        <div class="accountForgotPass">
+          <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+            <%= link_to "Forgot password?", new_password_path(resource_name), 
+              :data => { :bypass => 'true'} %>
+          <% end -%>
         </div>
   <% end %>
-  <div class="links">
-    <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-      <%= link_to "Forgot your password?", new_password_path(resource_name) %>
-    <% end -%>
-    <a href="/request">Request Invite</a>
-  </div>
 <% end %>

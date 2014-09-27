@@ -6,25 +6,19 @@
     color:#444;
 }
 
-.showcard, #showcard {
+.showcard {
     position:absolute;
-    display:block;
-    top:-1000px;
-    left:-1000px;
-    margin-top: -181px;
-    width:226px;
-	  height:320px;
-    color:#FFF;
+    display:none;
+    top:100px;
+    left:100px;
+    width:300px;
+    background-color:#F5F5F5;
     text-align: left;
     overflow: visible;
 	  z-index:14000;
-    background: #FFF;
-    border-radius:5px;
-    box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
-}
-
-#showcard .contributor {
-  font-size:14px;
+    color: #424242;
+    border-radius:2px;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
 .text {
@@ -32,11 +26,8 @@
 }
 
 #infovis {
-  position:relative;
   width:100%;
   height:100%;
-  margin:0;
-  overflow:hidden;
 }
 
 .showcard .permission {
@@ -48,108 +39,103 @@
   display:block;
   position:relative;
   width:100%;
-  height:100%;
-  color:#000;
+  min-height:360px;
   z-index: 25;
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -moz-box-direction: normal;
-  -ms-flex-direction: column;
-  -webkit-flex-direction: column;
-  flex-direction: column;
+}
+.CardOnGraph.hasAttachment {
+  min-height:0;
+}
+
+.CardOnGraph .title {
+  font-size: 18px;
+  line-height: 22px;
+  display: table;
+  padding: 8px 0 16px;
+  height: 80px;
+  text-align: center;
+  font-family: 'din-regular', sans-serif;
+  width: 300px;
+  position: relative;
+}
+
+.CardOnGraph .titleWrapper {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0 16px;
+}
+.canEdit #titleActivator:hover {
+  background-image: url(edit.png);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+.best_in_place_name textarea, .best_in_place_name input {
+  font-family: 'din-regular', sans-serif;
+  color: #424242;
+  font-size: 18px;
+  line-height: 22px;
+  height: 15px;
+  padding: 5px 0;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  text-align:center;
+  resize: none;
+}
+.titleCounter {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  font-size: 11px;
+  font-family: helvetica;
+  color: #727272;
+  line-height: 11px;
 }
 
 .CardOnGraph .scroll {
    display:block;
-   padding:5px 0 0 10px;
-   -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+   padding: 8px 0 8px 16px;
+   height: 152px;
+   font-size: 12px;
+   line-height:15px;
+   font-family: helvetica, sans-serif;
 }
- 
-.CardOnGraph .type {
-  position: absolute;
-  color: white;
-  top: -22px;
-  right: 0;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 24px;
+.CardOnGraph.hasAttachment .scroll {
+  height: auto;
 }
 
-.CardOnGraph .title {
-  font-size:22px;
-  line-height:25px;
-  display:block;
-  padding:5px;
-  font-weight: bold;
-  text-align: center;
-  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: none;         /* OLD - Firefox 19- */
-  -webkit-flex: none;          /* Chrome */
-  -ms-flex: none;              /* IE 10 */
-  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-}
-
-.best_in_place_name {
-  
-}
-
-.best_in_place_name textarea, .best_in_place_name input {
-height: 15px;
-padding: 5px 0;
-width: 100%;
-margin: 0;
-border: 0;
-outline: none;
-font-size: 22px;
-font-weight:bold;
-line-height: 25px;
-background: white;
-color: black;
-text-align:center;
-font-family: 'LatoLight';
-}
-
-.desc {
-  font-size:15px;
-  line-height:19px;
-}
-.best_in_place_desc textarea {
+.CardOnGraph .best_in_place_desc textarea {
+  font-size: 12px;
+   line-height:15px;
+   font-family: helvetica, sans-serif;
+   color: #424242;
 padding: 0;
 width: 100%;
 margin: 0;
 border: 0;
 outline: none;
-font-size: 15px;
-line-height: 19px;
-background: white;
-color: black;
-font-family: 'LatoLight';
+font-size: 12px;
+line-height: 15px;
+background: none;
 }
 
-.desc h3 {
+.CardOnGraph .desc h3 {
   font-style:normal;
   margin-top:5px;
 }
 
-.best_in_place_desc input {
-  float: right;
-  margin: 2px 0px 0px 2px;
-  padding: 1px 5px;	
-}
-
-.best_in_place_desc {
+.CardOnGraph .best_in_place_desc {
   display:block;
   margin-top:2px;	
+  padding-right: 18px;
+  margin-right: 8px;
+}
+.canEdit .CardOnGraph .best_in_place_desc:hover {
+  background-image: url(edit.png);
+  background-position: top right;
+  background-repeat: no-repeat;
 }
 
 #edit_synapse .best_in_place_desc {
@@ -158,114 +144,141 @@ font-family: 'LatoLight';
 
 .CardOnGraph .links {
   position:relative;
-  border-bottom: 1px solid #AAAAAA;
-  border-top: 1px solid #AAAAAA;
-  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: none;         /* OLD - Firefox 19- */
-  -webkit-flex: none;          /* Chrome */
-  -ms-flex: none;              /* IE 10 */
-  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  border-bottom: 1px solid #BDBDBD;
+  border-top: 1px solid #BDBDBD;
+  background-color: #e0e0e0;
 }
 
 .linkItem {
   float:left;
-  min-width:40px;
-  height:40px;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 27px 27px;
-  z-index: 2;
-position: relative;
+  height:46px;
+  z-index: 1;
+  position: relative;
+  color: #424242;
+  font-size: 12px;
+  line-height:12px;
+  height:12px;
+  padding:17px 0;
+}
+.linkItem a {
+  color: #424242;
 }
 
 .CardOnGraph .icon {
   position:absolute;
   width:100%;
   z-index:1;
+  padding: 0;
 }
 .linkItem.contributor {
-  background-image: url(MMCCicon_mapper_black.png);
-  margin-left:20px;
-  z-index:3;
+  margin-left:32px;
+  z-index:1;
+  padding:17px 16px 17px 32px;
+  position: relative;
+}
+.contributor .contributorIcon {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  border-radius: 16px;
+}
+.contributorName {
+  display:none;
 }
 .linkItem.mapCount {
-  background-image: url(MMCCicon_map_black.png);
-  background-size: 22px 22px;
-background-position: 0px center;
-line-height: 40px;
-min-width: 16px;
-padding-left: 24px;
-color:black;
+  width: 24px;
+  padding:17px 0 17px 35px;
+}
+.linkItem.mapCount .mapCountIcon {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  background-image: url(map32_sprite.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+.linkItem.mapCount:hover .mapCountIcon {
+  background-position: 0 -32px;
 }
 .linkItem.synapseCount {
-  background-image: url(MMCCicon_synapse_black.png);
-  background-size: 22px 22px;
-background-position: 0px center;
-line-height: 40px;
-min-width: 16px;
-padding-left: 24px;
+  width: 24px;
+  padding:17px 0 17px 35px;
+}
+.linkItem.synapseCount .synapseCountIcon {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  background-image: url(synapse32_sprite.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+.linkItem.synapseCount:hover .synapseCountIcon {
+  background-position: 0 -32px;
 }
 .linkItem.mapPerm {
-
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  min-width: 32px;
+  margin-top: 8px;
+  background-image: url(permissions32_sprite.png);
+  background-position: 0 0;
 }
 .linkItem.mapPerm.co {
-  background-image: url(MMCCicon_commons.png);
+  background-position: 0 0;
 }
 .linkItem.mapPerm.pu {
-  background-image: url(MMCCicon_public.png);
+  background-position: -64px 0;
 }
 .linkItem.mapPerm.pr {
-  background-image: url(MMCCicon_private.png);
+  background-position: -32px 0;
 }
 
 .showcard .yourTopic .mapPerm:hover {
-  background-image: url(/assets/MMCCicon_maximize_arrow_black.png);
-  background-size: 31px 25px;
-  background-position-x: 8px;
+  background-image: url(arrowperms_sprite.png);
+  background-position-x: -32px;
   cursor:pointer;
 }
 .showcard .yourTopic .mapPerm.minimize {
- background-image: url(MMCCicon_minimize_arrow_black.png) !important;
- background-size: 31px 25px;
-background-position-x: 8px;
+ background-image: url(arrowperms_sprite.png) !important;
+background-position-x: 0px;
 cursor: pointer;
 }
 .mapPerm .permissionSelect {
   list-style: none;
-  width: 40px;
-  height: 80px;
+  width: 32px;
+  height: 64px;
   position: relative;
-  top: 40px;
+  top: 32px;
 }
 .mapPerm .permissionSelect li {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 27px 27px;
-  background-color:white;
+  background-position: 0 0;
+  background-image: url(permissions32_sprite.png);
 }
 .mapPerm .permissionSelect .commons {
-  background-image: url(MMCCicon_commons.png);
+  background-position: 0 0;
 }
 .mapPerm .permissionSelect .public {
-  background-image: url(MMCCicon_public.png);
+  background-position: -64px 0;
 }
 .mapPerm .permissionSelect .private {
-  background-image: url(MMCCicon_private.png);
+  background-position: -32px 0;
 }
 .mapPerm .permissionSelect .commons:hover {
-  background-image: url(MMCCicon_commons_black.png);
+  background-position: 0 -32px;
 }
 .mapPerm .permissionSelect .public:hover {
-  background-image: url(MMCCicon_public_black.png);
+  background-position: -64px -32px;
 }
 .mapPerm .permissionSelect .private:hover {
-  background-image: url(MMCCicon_private_black.png);
-}
-
-.linkItem.topicPopout {
-  background-image: url(MMCCicon_pop-out_black.png);
+  background-position: -32px -32px;
 }
 
 .CardOnGraph .metacodeTitle {
@@ -273,32 +286,41 @@ cursor: pointer;
   font-family: 'vinyl';
   text-transform: uppercase;
   position: absolute;
-  line-height: 36px;
-  font-size: 20px;
+  line-height: 24px;
+  height:24px;
+  font-size: 24px;
   display: none;
   width: 90%;
-  padding-left: 10%;
-  padding-top: 4px;
+  padding: 13px 0 9px 10%;
   background-color: #64BC61;
+  color: #424242;
 }
 .permission.canEdit .metacodeTitle {
   cursor:pointer;
-  background-image: url(MMCCicon_maximize_arrow_black.png);
-  background-repeat:no-repeat;
-  background-position: right center;
 }
-.permission.canEdit .metacodeTitle.minimize {
-  background-image: url(MMCCicon_minimize_arrow_black.png);
+
+.permission.canEdit .expandMetacodeSelect {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 16px;
+  height: 16px;
+  background-image: url(arrowright_sprite.png);
+  background-repeat: no-repeat;
+  background-position: 0 -32px;
+}
+.permission.canEdit .minimize .expandMetacodeSelect {
+  
 }
 
 .CardOnGraph .metacodeImage {
   cursor:move;
-  width:50px;
-  height:50px;
+  width:46px;
+  height:46px;
   position:absolute;
-  left:-25px;
-  top:-5px;
-  background-size:50px 50px;
+  left:-23px;
+  top:0;
+  background-size:46px 46px;
   background-position:0 0;
   background-repeat:no-repeat;
 }
@@ -308,38 +330,61 @@ cursor: pointer;
 }
 .CardOnGraph .metacodeSelect {
   display:none;
-  width:100%;
+  width:200px;
   z-index: 2;
   position: absolute;
   background: #EAEAEA;
-  height: 150px;
+  left: 300px;
 }
 .CardOnGraph .metacodeSelect ul {
-font-style: italic;
-font-family: 'vinyl';
-text-transform: uppercase;
-position: absolute;
-line-height: 36px;
-font-size: 20px;
-display:block;
-width: 100%;
-margin:0;
-padding: 0;
-list-style:none;
-height:150px;
-overflow:hidden;
+  position: relative; 
+  line-height: 14px;
+  font-size: 14px;
+  font-family: helvetica, sans-serif;
+  display:block;
+  width: 100%;
+  margin:0;
+  padding: 0;
+  list-style:none;
+  border: 1px solid #BDBDBD;
 }
 .CardOnGraph .metacodeSelect ul li {
-background-color: #EAEAEA;
-width:100%;
-border-bottom:1px solid #AAAAAA;
+background-color: #F5F5F5;
 cursor:pointer;
+position: relative;
+padding: 9px 12px;
 }
 .CardOnGraph .metacodeSelect ul li:hover {
-background-color: #F8F8F8;
+background-color: #E0E0E0;
 }
-.CardOnGraph .metacodeSelect ul li img, .CardOnGraph .metacodeSelect ul li .mSelectName {
-float:left;
+.CardOnGraph .metacodeSelect ul li img {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+}
+.CardOnGraph .metacodeSelect ul li .mSelectName {
+  padding-left: 28px;
+}
+.CardOnGraph .metacodeSelect ul ul {
+  display:none;
+  position: absolute;
+  left: 200px;
+  top: 0;
+  max-height: 270px;
+  overflow-y: auto;
+}
+.CardOnGraph .metacodeSelect li:hover ul {
+  display: block;
+}
+.CardOnGraph .metacodeSelect .expandMetacodeSet {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  background-image: url(arrowright_sprite.png);
+  background-repeat: no-repeat;
+  background-position: 0 -32px;
 }
 
 .CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip {
@@ -354,44 +399,26 @@ float:left;
  color: white;
  border-radius: 4px;
  font-size:15px !important;
- font-family:'LatoRegular';
  line-height:17px;
  padding: 3px 5px 2px;
  z-index:100;
 }
 
-
-.CardOnGraph .link {
-  -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  -webkit-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -moz-box-direction: normal;
-  -ms-flex-direction: row;
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  border-top: 1px solid #AAAAAA;
-  width:100%;
-  max-height:34px;
-  background: url(MMCCicon_link.png) no-repeat 6px 5px;
-  background-size:24px 24px;
+#embedlyLink {
+  display: none;
+}
+#embedlyLinkLoader {
+  margin: 0 auto;
+  width: 28px;
 }
 
-.CardOnGraph .best_in_place_link { 
-  -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+.CardOnGraph .attachments {
+  border-top: 1px solid #BDBDBD;
+  width:100%;
+  height:47px;
+}
+
+.attachments a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -402,30 +429,107 @@ float:left;
   line-height: 16px;
 }
 
-.best_in_place_link input{
-height: 16px;
-margin: -1px 0 0 0;
-border: 0;
-outline: none;
-font-size: 16px;
-line-height: 16px;
-line-height: 16px;
-background: white;
-color: black;
-font-family: 'LatoLight';
+#addlink, #addupload {
+  display: inline-block;
+  width: 102px;
+  height: 12px;
+  text-align: left; 
+  padding: 18px 0 18px 48px;
+  font-size: 12px;
+  color: #9e9e9e;
+  cursor: pointer;
+  position: relative;
 }
 
-.CardOnGraph .go-link {
-  max-width: 34px;
-  height: 34px;
-  background: url(MMCCicon_go.png) no-repeat center center;
-  background-size: 20px 20px;
-  -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  margin-right:12px;
+#addlink:hover, #addupload:hover {
+  color: #616161;
+}
+
+.attachmentIcon {
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+#linkIcon {
+  background-image: url(link_sprite.png);
+}
+#uploadIcon {
+  background-image: url(upload_sprite.png);
+}
+#addlink:hover #linkIcon, #addupload:hover #uploadIcon {
+  background-position: 0 -24px;
+}
+
+.addLink {
+  position: relative;
+}
+#addLinkInput {
+  height: 32px;
+  width: 268px;
+  padding: 8px 16px 8px 16px;
+  position: relative;
+}
+
+#addLinkInput input{
+padding: 9px 7px 9px 31px;
+height: 12px;
+width: 198px;
+margin: 0 0 0 0;
+border: 1px solid #BDBDBD;
+outline: none;
+font-size: 12px;
+line-height: 12px;
+background: white;
+color: black;
+font-family: 'din-regular', helvetica, sans-serif;
+}
+#addLinkIcon {
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: url(link_sprite.png);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#addLinkReset {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  float:none;
+  background-image: url(remove.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.linkActions {
+  position: relative;
+}
+
+.CardOnGraph .embeds {
+  position: relative;
+}
+#linkremove {
+  background-image: url(/assets/remove.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 3px;
+  right: 0;
+  cursor: pointer;
 }
 
 .cardSettings {
@@ -476,13 +580,13 @@ font-family: 'LatoLight';
   margin: 10px 12px 0 12px;
 }
 #edit_synapse .mapPerm.co {
-  background-image: url("/assets/MMCCicon_commons.png");
+  background-image: url("CO32.png");
 }
 #edit_synapse .mapPerm.pu {
-  background-image: url("/assets/MMCCicon_public.png");
+  background-image: url("PU32.png");
 }
 #edit_synapse .mapPerm.pr {
-  background-image: url("/assets/MMCCicon_private.png");
+  background-image: url("PR32.png");
 }
 
 #edit_synapse .permActivator {
@@ -491,7 +595,7 @@ font-family: 'LatoLight';
 }
 
 #edit_synapse {
-  background: url("/assets/MMCCicon_synapse_black.png") no-repeat scroll 0 center / 30px 30px #FFFFFF;
+  background: url("synapse32.png") no-repeat scroll 0 center / 30px 30px #FFFFFF;
   border-radius: 5px;
   padding: 5px 5px 5px 30px;
   color: #000;
@@ -523,7 +627,6 @@ font-family: 'LatoLight';
     border-radius: 4px;
     color: #FFFFFF;
     display: none;
-    font-family: 'LatoRegular';
     font-size: 15px !important;
     line-height: 17px;
     padding: 3px 5px 2px;
@@ -539,7 +642,7 @@ font-family: 'LatoLight';
 }
 
 #edit_synapse.yourEdge .mapPerm:hover {
-  background-image: url(/assets/MMCCicon_maximize_arrow_black.png);
+  background-image: url(MMCCicon_maximize_arrow_black.png);
   background-size: 24px 17px;
   background-position: 0px 2px;
   cursor:pointer;
@@ -572,14 +675,13 @@ font-family: 'LatoLight';
 
 .map {
     display:inline-block;
-    width:226px;
-	  height:320px;
-    color:#FFF;
+    width:220px;
+	  height:340px;
+    font-size: 12px;
     text-align: left;
     overflow: visible;
-    background: #FFF;
-    border-radius:5px;
-    box-shadow: 6px 6px 8px rgba(0,0,0,0.4);
+    background: #424242;
+    border-radius:2px;
     margin:16px 16px 16px 19px;
 }
 
@@ -598,20 +700,33 @@ font-family: 'LatoLight';
   flex-direction: column;
   position:relative;
   width:100%;
-  height:320px;
-  color:#000;
-  z-index: 25;
+  height:308px;
+  padding: 16px 0;
+  color:#F5F5F5;
 }
 
-.mapCard .metacodeImage {
-width: 50px;
-height: 50px;
-position: absolute;
-left: -25px;
-top: -5px;
-background-size: 50px 50px;
-background-position: 0 0;
-background-repeat: no-repeat;
+.mapCard .title {
+  font-size:18px;
+  line-height:22px;
+  display:block;
+  padding: 0 16px;
+  text-align: center;
+  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-flex: none;         /* OLD - Firefox 19- */
+  -webkit-flex: none;          /* Chrome */
+  -ms-flex: none;              /* IE 10 */
+  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  font-family: 'din-regular', sans-serif;
+}
+
+.mapCard .mapScreenshot {
+  width: 188px;
+  height: 126px;
+  padding: 8px 16px;
+}
+.mapCard .mapScreenshot img {
+  width: 188px;
+  height: 126px;
 }
 
 .mapCard .scroll {
@@ -621,41 +736,21 @@ background-repeat: no-repeat;
   -webkit-flex: 1;          /* Chrome */
   -ms-flex: 1;              /* IE 10 */
   flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-   overflow:hidden;
-   padding:5px 0 5px 10px;
+   overflow-y:auto;
+   padding:0 16px 8px;
+   font-family: helvetica, sans-serif;
+   font-style: italic;
+   font-size: 12px;
 }
 .mCS_no_scrollbar {
   padding-right: 5px;
-} 
- 
-.mapCard .type {
-  position: absolute;
-  color: white;
-  top: -22px;
-  right: 0;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 24px;
 }
 
-.mapCard .title {
-  font-size:22px;
-  line-height:25px;
-  display:block;
-  padding:5px;
-  font-weight: bold;
-  text-align: center;
-  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: none;         /* OLD - Firefox 19- */
-  -webkit-flex: none;          /* Chrome */
-  -ms-flex: none;              /* IE 10 */
-  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-}
-
-.mapCard .links {
+.mapCard .mapMetadata {
+  font-family: 'din-regular', sans-serif;
+  font-size: 12px;
   position:relative;
-  border-bottom: 1px solid #AAAAAA;
-  border-top: 1px solid #AAAAAA;
+  border-top: 1px solid #BDBDBD;
   -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
   -moz-box-flex: none;         /* OLD - Firefox 19- */
   -webkit-flex: none;          /* Chrome */
@@ -663,16 +758,24 @@ background-repeat: no-repeat;
   flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
 
-.mapCard .icon {
-  position:absolute;
-  width:100%;
-  z-index:1;
+.mapCard .metadataSection {
+  padding: 8px 16px 0 16px;
+  width: 78px;
+  float: left;
 }
-.linkItem.topicCount {
-  background-image: url(MMCCicon_topic.png);
-  background-size: 22px 22px;
-background-position: 0px center;
-line-height: 40px;
-min-width: 16px;
-padding-left: 24px;
+
+.mapPermission {
+  font-family: 'din-medium', sans-serif;
+}
+.cCountColor {
+  font-family: 'din-medium', sans-serif;
+  color: #DB5D5D;
+}
+.tCountColor {
+  font-family: 'din-medium', sans-serif;
+  color: #4FC059;
+}
+.sCountColor {
+  font-family: 'din-medium', sans-serif;
+  color: #DAB539;
 }

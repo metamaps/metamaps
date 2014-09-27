@@ -1,62 +1,25 @@
 <%#
-  # @file
-  # This shows a topic view. It is used.
-  # The first commented out section used to be a card at the top showing all
-  # info. Now we're moving towards most screens looking the same. The
-  # consequence of accessing data from this view is that you can't remove
-  # the topic that corresponds to the page you're on. Originally, accessing this
-  # page showed the topic with its neighbours arrayed around. Now it shows the
-  # same, but there's no cues to say which topic's page you're on. So when the
-  # map recenters on a new topic, it's like you're on that topic's page.
-  # Nice, but the URL and being unable to remove the root node still hamper that
-  # experience.
-  # URL: /topics/<topicid>
-  #
-  #%>
+# @file
+# This shows a topic view. It is used.
+# The first commented out section used to be a card at the top showing all
+# info. Now we're moving towards most screens looking the same. The
+# consequence of accessing data from this view is that you can't remove
+# the topic that corresponds to the page you're on. Originally, accessing this
+# page showed the topic with its neighbours arrayed around. Now it shows the
+# same, but there's no cues to say which topic's page you're on. So when the
+# map recenters on a new topic, it's like you're on that topic's page.
+# Nice, but the URL and being unable to remove the root node still hamper that
+# experience.
+# URL: /topics/<topicid>
+#
+#%>
 
 <% content_for :title, @topic.name + " | Metamaps" %>  
-  
-<% if authenticated? %>
-<div class="sidebarFork">
-  <div class="sidebarForkIcon hoverForTip">
-    <div class="tip">Save As New Map</div>
-  </div>
-  <div class="sidebarForkBox"></div>
-</div>
-<% end %>
-<div class="sidebarFilter <%= authenticated? ? 'loggedin' : 'loggedout' %>">
-  <div class="sidebarFilterIcon"></div>
-  <div class="sidebarFilterBox">
-    <h3 class="filterByMetacode">Filter By Metacode</h3><span class="showAll">all</span><span class="hideAll">none</span>
-    <div class="clearfloat"></div>
-    <%= render :partial => 'main/filterbymetacode' %>
-  </div>
-</div>
-
-<div class="index">
-  <div class="openCheatsheet openLightbox" data-open="cheatsheet"></div>
-  <span><img width="35" height="35" src="<%= @topic.metacode.icon %>"></span>
-  <span class="mapName"><%= @topic.name %></span>
-  <div class="clearfloat"></div>
-</div>
-
-<div class="relatives" id="container">
-  <div id="center-container">
-    <div id="infovis"></div>    
-  </div>
-  <div class="showcard" id="showcard"></div>
-</div>
-<div class="clearfloat"></div>
-
-<% if authenticated? %>
-  <%= render :partial => 'topics/new' %>
-  <%= render :partial => 'synapses/new' %>
-  <%= render :partial => 'main/metacodeoptions' %>
-<% end %>
-
 <script>
-	json = <%= @relatives %>;
-	$(window).load(function() {
-		initialize("centered");
-	});
+    Metamaps.currentSection = "topic";
+    Metamaps.currentPage = <%= @topic.id.to_s %>;
+    Metamaps.Active.Topic = <%= @topic.to_json.html_safe %>;
+    Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
+    Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;
+    Metamaps.Visualize.type = "RGraph";
 </script>

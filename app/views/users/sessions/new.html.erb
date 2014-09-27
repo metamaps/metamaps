@@ -1,28 +1,32 @@
 <% content_for :title, "Sign In | Metamaps" %>
 
-<h1 class="index">Sign In</h1>
-
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :method => :post, :class => "new_user centerGreyForm" }) do |f| %>
-  <h3>Sign in</h3>
-
-  <div><%= f.label :email %>
-  <%= f.email_field :email, :autofocus => true %></div>
-
-  <div><%= f.label :password %>
-  <%= f.password_field :password %></div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %><div class="clearfloat"></div></div>
-  <% end -%>
-
-  <div><%= f.submit "Sign in" %></div>
+<div id="yield">
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :method => :post, :class => "centerGreyForm login" }) do |f| %>
+  <h3>SIGN IN</h3>
   
-  <br />
-  <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-    <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
-  <% end -%>
-  <br />
-  <div>Don't have an account?<br /><a href="/request">Request an Invite</a></div>
-<% end %>
+  <div class="accountImage"></div>
+  <div>
+  <%= f.email_field :email, :autofocus => true, :placeholder => "Email" %></div>
 
+  <div>
+  <%= f.password_field :password, :placeholder => "Password" %></div>
+
+  <div class="accountSubmit"><%= f.submit "Sign in" %></div>
+  
+  <% if devise_mapping.rememberable? -%>
+  <div class="accountRememberMe">
+    <%= f.label :remember_me, "Stay signed in" %>
+    <%= f.check_box :remember_me %>
+    <div class="clearfloat"></div>
+  </div>
+  <% end -%>
+  <div class="clearfloat"></div>
+  <div class="accountForgotPass">
+    <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+      <%= link_to "Forgot password?", new_password_path(resource_name), 
+        :data => { :bypass => 'true'} %>
+    <% end -%>
+  </div>
+<% end %>
+</div>
 

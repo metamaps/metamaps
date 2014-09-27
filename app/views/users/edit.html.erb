@@ -4,13 +4,33 @@
   # User edit form
   #%>
   
-<% content_for :title, @user.name + "'s Settings | Metamaps" %>  
-<h1 class="index">Your Settings</h1>
-<%= formula_form_for @user, url: user_url do |form| %>
+<% content_for :title, @user.name + "'s Settings | Metamaps" %> 
+<div id="yield">
+<%= form_for @user, url: user_url, :html =>{ :class => "edit_user centerGreyForm"} do |form| %>
   <h3>Edit Account</h3>
-  <%= form.input :name, label: "Name", class: "name" %>
-  <%= form.input :email, label: "Email", class: "email" %>
-  <%= form.input :password, label: "Password", class: "password", :autocomplete => :off %>
+  <div class="userImage">
+    <%= image_tag @user.image.url(:round), :size => "84x84" %>
+    <div class="editPhoto"></div>
+  </div>
+  <div class="accountName" onclick="Metamaps.Account.changeName()">
+    <div class="nameEdit"><%= @user.name %></div>
+  </div>
+  <div class="changeName"><%= form.label :name, "Name:", :class => "firstFieldText" %>
+  <%= form.email_field :name  %></div>
+  <div><%= form.label :email, "Email:", :class => "firstFieldText" %>
+  <%= form.email_field :email  %></div>
+  <div class="changePass" onclick="Metamaps.Account.showPass()">Change Password</div>
+  <div class="toHide">
+  <div>
+    <%= form.label :current_password, "Current Password:", :class => "firstFieldText" %>
+    <%= password_field_tag :current_password, params[:current_password] %>
+  </div>
+   <div><%= form.label :password, "New Password:", :class => "firstFieldText" %>
+  <%= form.password_field :password, :autocomplete => :off%></div>
+   <div><%= form.label :password_confirmation, "Confirm New Password:", :class => "firstFieldText" %>
+  <%= form.password_field :password_confirmation, :autocomplete => :off%></div>
+  <div class="noChangePass" onclick="Metamaps.Account.hidePass()">Oops, don't change password</div>
+</div>
   <%= form.submit "Update", class: "update" %>
 <% end %>
-
+</div>

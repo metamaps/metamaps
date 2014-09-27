@@ -3,28 +3,23 @@ class MainController < ApplicationController
   include MapsHelper
   include UsersHelper
   include SynapsesHelper
-
-  before_filter :require_user, only: [:invite] 
    
-  respond_to :html, :js, :json
+  respond_to :html, :json
   
   # home page
   def home
     @current = current_user
-    
-    if !authenticated?
-      @maps = Map.find_all_by_featured(true).shuffle!
-      @maps = @maps.slice(0,3)
-    elsif authenticated?
-      @maps = Map.order("updated_at DESC").where("permission != ?", "private").limit(3)
+   
+    respond_to do |format|
+        format.html { 
+          if authenticated?
+            @maps = Map.where("maps.user_id = ?", @current.id).order("name ASC").page(1).per(20)
+            respond_with(@maps, @current) 
+          else 
+            respond_with(@current) 
+          end
+        }
     end
-    
-    respond_with(@maps, @current) 
-  end
-  
-  # /request
-  def requestinvite
-	  
   end
   
   ### SEARCHING ###
