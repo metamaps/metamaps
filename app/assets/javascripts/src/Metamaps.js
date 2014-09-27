@@ -3466,23 +3466,12 @@ Metamaps.Map.InfoBox = {
 Metamaps.Account = {
     init: function () {
         var self = Metamaps.Account;
-         $(".changePass").click(function(){
-            $(".toHide").show();
-            $(".changePass").hide();
-        });
-    },
 
-    load: function(){
-        var self = Metamaps.Account;
-         $(".changePass").click(function(){
-            $(".toHide").show();
-            $(".changePass").hide();
-        });
-        self.attachEventListeners();
+        
     },
-    attachEventListeners: function () {
-        $(".changePass").click();
-        $(".noChangePass").click();
+    changeName: function(){
+        $('.accountName').hide();
+        $('.changeName').show();
     },
     showPass: function(){
         $(".toHide").show();
@@ -3491,6 +3480,10 @@ Metamaps.Account = {
     hidePass: function(){
         $(".toHide").hide();
         $(".changePass").show();
+
+        $('#current_password').val('');
+        $('#user_password').val('');
+        $('#user_password_confirmation').val('');
     }
 };
 
