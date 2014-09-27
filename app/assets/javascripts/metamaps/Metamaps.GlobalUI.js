@@ -372,6 +372,23 @@ Metamaps.GlobalUI.Search = {
                     self.close(0, true);
                 }
                 break;
+            case 65:
+            case 97:
+                e.preventDefault();
+                if (e.ctrlKey){
+                    Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+                        Metamaps.Control.selectNode(n,e);
+                    });
+
+                    Metamaps.Visualize.mGraph.plot();
+                }
+                
+                break;
+            case 69:
+            case 101:
+                e.preventDefault();
+                Metamaps.JIT.zoomExtents();
+                break;
             default:
                 break; //console.log(e.which);
             }

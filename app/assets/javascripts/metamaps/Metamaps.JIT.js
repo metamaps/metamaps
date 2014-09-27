@@ -313,7 +313,7 @@ Metamaps.JIT = {
                     if (Metamaps.Mouse.boxStartCoordinates) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.selectWithBox(e);
+                        Metamaps.JIT.zoomToBox();
                         return;
                     }
 
@@ -663,8 +663,6 @@ Metamaps.JIT = {
 
             var scale = dist / lastDist;
 
-            console.log(scale);
-
             if (8 >= Metamaps.Visualize.mGraph.canvas.scaleOffsetX * scale && Metamaps.Visualize.mGraph.canvas.scaleOffsetX * scale >= 1) {
                 Metamaps.Visualize.mGraph.canvas.scale(scale, scale);
             }
@@ -945,7 +943,9 @@ Metamaps.JIT = {
 			var fromNodeY = -1 * synapse.get('edge').nodeFrom.pos.y;
 			var toNodeX = synapse.get('edge').nodeTo.pos.x;
 			var toNodeY = -1 * synapse.get('edge').nodeTo.pos.y;
-			
+            var from = synapse.get('edge').nodeFrom;
+			var to = synapse.get('edge').nodeTo;
+            
 			var maxX = fromNodeX;
 			var maxY = fromNodeY;
 			var minX = fromNodeX;
@@ -964,7 +964,7 @@ Metamaps.JIT = {
 			(eX > maxBoxX) ? (maxBoxX = eX):(minBoxX = eX);
 			(eY > maxBoxY) ? (maxBoxY = eY):(minBoxY = eY);
 			
-			//Fins the slopes from the synapse fromNode to the 4 corners of the selection box
+			//Find the slopes from the synapse fromNode to the 4 corners of the selection box
 			var slopes = [];
 			slopes.push( (sY - fromNodeY) / (sX - fromNodeX) );
 			slopes.push( (sY - fromNodeY) / (eX - fromNodeX) );
@@ -983,6 +983,10 @@ Metamaps.JIT = {
 			var b = fromNodeY - synSlope * fromNodeX;
 			
 			var selectTest = false;
+            if (from.name == 'node 3' && to.name == 'node1'){
+                console.log(from.pos.x,-1*from.pos.y,to.pos.x,-1*to.pos.y,sX,sY,eX,eY);   
+            }
+            
 			
 			//if the synapse slope is within a range that would intersect with the selection box
 			if (synSlope <= maxSlope && synSlope >= minSlope){
@@ -1003,17 +1007,18 @@ Metamaps.JIT = {
 				testY = sY;
 				testX = (testY - b)/synSlope;
 				
-				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testX >= minBoxX && testY <= maxBoxX){
+				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testX >= minBoxX && testX <= maxBoxX){
 					selectTest = true;
 				}
 				
 				testY = eY;
 				testX = (testY - b)/synSlope;
 				
-				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testX >= minBoxX && testY <= maxBoxX){
+				if(testX >= minX && testX <= maxX && testY >= minY && testY <= maxY && testX >= minBoxX && testX <= maxBoxX){
 					selectTest = true;
 				}				
 			}
+            //console.log('From '+from.name + ' to ' + to.name + ' is a ' +selectTest);
 			//The test synapse was selected!
 			if(selectTest){
 				if(e.ctrlKey){
@@ -1078,15 +1083,23 @@ Metamaps.JIT = {
             // wait a certain length of time, then check again, then run this code
             setTimeout(function () {
                 if (!Metamaps.JIT.nodeWasDoubleClicked()) {
-                    if (!e.shiftKey) {
+                    if (!e.shiftKey && !e.ctrlKey) {
                         Metamaps.Control.deselectAllNodes();
                         Metamaps.Control.deselectAllEdges();
                     }
-                    if (node.selected) {
-                        Metamaps.Control.deselectNode(node);
-                    } else {
+                    if(e.ctrlKey || e.shiftKey){
+                        if (node.selected) {
+                            Metamaps.Control.deselectNode(node);
+                        } else {
+                            Metamaps.Control.selectNode(node,e);
+                        } 
+                    }
+                    else{
+                        Metamaps.Control.deselectAllNodes();
+                        Metamaps.Control.deselectAllEdges();
                         Metamaps.Control.selectNode(node,e);
                     }
+                    
                     //trigger animation to final styles
                     Metamaps.Visualize.mGraph.fx.animate({
                         modes: ['edge-property:lineWidth:color:alpha'],
@@ -1111,7 +1124,6 @@ Metamaps.JIT = {
         // create new menu for clicked on node
         var rightclickmenu = document.createElement("div");
         rightclickmenu.className = "rightclickmenu";
-
         // add the proper options to the menu
         var menustring = '<ul>';
 
@@ -1139,7 +1151,7 @@ Metamaps.JIT = {
             top: e.clientY
         });
         //add the menu to the page
-        $('#center-container').append(rightclickmenu);
+        $('#infovis-canvaswidget').append(rightclickmenu);
 
 
         // attach events to clicks on the list items
@@ -1452,6 +1464,54 @@ Metamaps.JIT = {
 
         canvas.translate(-1*offsetX,-1*offsetY);
     },
+    zoomToBox: function () {
+        var sX = Metamaps.Mouse.boxStartCoordinates.x,
+            sY = Metamaps.Mouse.boxStartCoordinates.y,
+            eX = Metamaps.Mouse.boxEndCoordinates.x,
+            eY = Metamaps.Mouse.boxEndCoordinates.y;
+
+        Metamaps.JIT.centerMap();
+
+        var height = $(document).height(),
+            width = $(document).width();
+
+        var spanX = Math.abs(sX - eX);
+        var spanY = Math.abs(sY - eY);
+        var ratioX = width / spanX;
+        var ratioY = height / spanY;
+        console.log(ratioX,ratioY);
+
+        var newRatio = Math.min(ratioX,ratioY);
+
+        var canvas = Metamaps.Visualize.mGraph.canvas;
+
+        if(canvas.scaleOffsetX *newRatio<= 5 && canvas.scaleOffsetX*newRatio >= 0.2){
+            canvas.scale(newRatio,newRatio);
+        }
+        else if(canvas.scaleOffsetX * newRatio > 5){
+            newRatio = 5/ canvas.scaleOffsetX;
+            canvas.scale(newRatio,newRatio);
+        }
+        else{
+            newRatio = 0.2/ canvas.scaleOffsetX;
+            canvas.scale(newRatio,newRatio);
+        }
+        
+        
+        
+        
+
+        var cogX = (sX + eX)/2;
+        var cogY = (sY + eY)/2;
+
+        canvas.translate(-1* cogX, -1* cogY);
+        
+
+        Metamaps.Mouse.boxStartCoordinates = false;
+        Metamaps.Mouse.boxEndCoordinates = false;
+        Metamaps.Visualize.mGraph.plot();
+        
+    },
     zoomExtents: function () {
         Metamaps.JIT.centerMap();
         var height = $(document).height(),
@@ -1481,8 +1541,6 @@ Metamaps.JIT = {
                 var arrayOfLabelLines = Metamaps.Util.splitLine(n.name, 30).split('\n'),
                     dim = n.getData('dim'),
                     ctx = Metamaps.Visualize.mGraph.canvas.getCtx();
-
-                console.log(dim);
 
                 var height = 25 * arrayOfLabelLines.length;
 
@@ -1538,8 +1596,6 @@ Metamaps.JIT = {
                 var arrayOfLabelLines = Metamaps.Util.splitLine(n.name, 30).split('\n'),
                     dim = n.getData('dim'),
                     ctx = Metamaps.Visualize.mGraph.canvas.getCtx();
-
-                console.log(dim);
 
                 var height = 25 * arrayOfLabelLines.length;
 

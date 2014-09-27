@@ -47,6 +47,7 @@ Metamaps.Touch = {
 
 Metamaps.Mouse = {
     didPan: false,
+    didBoxZoom: false,
     changeInX: 0,
     changeInY: 0,
     edgeHoveringOver: false,
@@ -1718,11 +1719,13 @@ Metamaps.Control = {
         if (Metamaps.Selected.Nodes.indexOf(node) != -1) return;
         node.selected = true;
         node.setData('dim', 30, 'current');
+        /*
 		if(!(e.ctrlKey) && !(e.altKey)){
 			node.eachAdjacency(function (adj) {
 				Metamaps.Control.selectEdge(adj);
 			});
 		}
+        */
 		
         Metamaps.Selected.Nodes.push(node);
     },
