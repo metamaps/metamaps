@@ -368,8 +368,12 @@ Metamaps.GlobalUI.Search = {
                 break;
             case 65:
             case 97:
-                e.preventDefault();
+                
                 if (e.ctrlKey){
+                    Metamaps.Control.deselectAllNodes();
+                    Metamaps.Control.deselectAllEdges();
+
+                    e.preventDefault();
                     Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
                         Metamaps.Control.selectNode(n,e);
                     });
@@ -380,8 +384,10 @@ Metamaps.GlobalUI.Search = {
                 break;
             case 69:
             case 101:
-                e.preventDefault();
-                Metamaps.JIT.zoomExtents();
+                if (e.ctrlKey){
+                    e.preventDefault();
+                    Metamaps.JIT.zoomExtents();
+                }
                 break;
             default:
                 break; //console.log(e.which);
