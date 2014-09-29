@@ -20,6 +20,7 @@ Metamaps.JIT = {
      */
     prepareVizData: function () {
         var self = Metamaps.JIT;
+        var synapsesToRemove = [];
         var topic;
         var mapping;
         var node;
@@ -39,7 +40,12 @@ Metamaps.JIT = {
         Metamaps.Synapses.each(function (s) {
             edge = s.createEdge();
 
-            if (nodes[edge.nodeFrom] && nodes[edge.nodeTo]) {
+            if(Metamaps.Topics.get(s.get('node1_id')) === undefined || Metamaps.Topics.get(s.get('node2_id')) === undefined) {
+                // this means it's an invalid synapse
+                synapsesToRemove.push(s);
+            } 
+            else if (nodes[edge.nodeFrom] && nodes[edge.nodeTo]) {
+
                 existingEdge = _.findWhere(edges, {
                     nodeFrom: edge.nodeFrom,
                     nodeTo: edge.nodeTo
@@ -53,15 +59,24 @@ Metamaps.JIT = {
                     // for when you're dealing with multiple relationships between the same two topics
                     if (Metamaps.Active.Map) {
                         mapping = s.getMapping();
-                        existingEdge['$mappingIDs'].push(mapping.isNew() ? mapping.cid : mapping.id);
+                        existingEdge.data['$mappingIDs'].push(mapping.id);
                     }
-                    existingEdge['$synapseIDs'].push(s.id);
+                    existingEdge.data['$synapseIDs'].push(s.id);
                 } else {
                     // for when you're dealing with a topic that has relationships to many different nodes
                     nodes[edge.nodeFrom].adjacencies.push(edge);
+                    edges.push(edge);
                 }
             }
         });
+
+        // clean up the synapses array in case of any faulty data
+        _.each(synapsesToRemove, function (synapse) {
+            mapping = synapse.getMapping();
+            Metamaps.Synapses.remove(synapse);
+            Metamaps.Mappings.remove(mapping);
+        });
+
         _.each(nodes, function (node) {
             self.vizData.push(node);
         });
@@ -319,7 +334,7 @@ Metamaps.JIT = {
                     if (Metamaps.Mouse.boxStartCoordinates) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.zoomToBox();
+                        Metamaps.JIT.zoomToBox(e);
                         return;
                     }
 
@@ -816,8 +831,8 @@ Metamaps.JIT = {
         } else if (tempInit && tempNode2 != null) {
             // this means you want to create a synapse between two existing topics
             Metamaps.Create.newTopic.addSynapse = false;
-            Metamaps.Create.newSynapse.topic1id = tempNode.id;
-            Metamaps.Create.newSynapse.topic2id = tempNode2.id;
+            Metamaps.Create.newSynapse.topic1id = tempNode.getData('topic').id;
+            Metamaps.Create.newSynapse.topic2id = tempNode2.getData('topic').id;
             tempNode2.setData('dim', 25, 'current');
             Metamaps.Visualize.mGraph.plot();
             midpoint.x = tempNode.pos.getc().x + (tempNode2.pos.getc().x - tempNode.pos.getc().x) / 2;
@@ -1414,9 +1429,9 @@ Metamaps.JIT = {
         var v2 = intermediatePoint.$add(normal.$scale(-1));
 
         if (newSynapse) {
-            ctx.strokeStyle = "#222222";
+            ctx.strokeStyle = "#4fc059";
             ctx.lineWidth = 2;
-            ctx.globalAlpha = 0.4;
+            ctx.globalAlpha = 1;
         }
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
@@ -1465,8 +1480,7 @@ Metamaps.JIT = {
                 y: posChild.y
             }, 13, false, canvas, 0.7);
         } else if (directionCat == "from-to") {
-            var direction = adj.data.$direction;
-            var inv = (direction && direction.length > 1 && direction[0] != adj.nodeFrom.id);
+            var inv = (direction[0] != adj.nodeFrom.id);
             self.renderMidArrow({
                 x: pos.x,
                 y: pos.y
@@ -1502,7 +1516,7 @@ Metamaps.JIT = {
 
         canvas.translate(-1*offsetX,-1*offsetY);
     },
-    zoomToBox: function () {
+    zoomToBox: function (event) {
         var sX = Metamaps.Mouse.boxStartCoordinates.x,
             sY = Metamaps.Mouse.boxStartCoordinates.y,
             eX = Metamaps.Mouse.boxEndCoordinates.x,
@@ -1538,14 +1552,14 @@ Metamaps.JIT = {
         var cogY = (sY + eY)/2;
 
         canvas.translate(-1* cogX, -1* cogY);
-        
+        $(document).trigger(Metamaps.JIT.events.zoom, [event]); 
 
         Metamaps.Mouse.boxStartCoordinates = false;
         Metamaps.Mouse.boxEndCoordinates = false;
         Metamaps.Visualize.mGraph.plot();
         
     },
-    zoomExtents: function () {
+    zoomExtents: function (event) {
         Metamaps.JIT.centerMap();
         var height = $(document).height(),
             width = $(document).width(),

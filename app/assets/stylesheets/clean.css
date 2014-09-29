@@ -606,6 +606,14 @@
     background-color: #9150bc;
 }
 
+.github-fork-ribbon-wrapper {
+    display:none;
+}
+
+.homePage .github-fork-ribbon-wrapper {
+    display: block;
+}
+
 /* end home page */
 
 /* infoAndHelp */
