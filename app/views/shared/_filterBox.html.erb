@@ -55,7 +55,8 @@
         @metacodelist += '<p>' + metacode.name.downcase + '</p></li>'
     end
     @synapses.each_with_index do |synapse, index| 
-        @synapselist += '<li data-id="' + synapse.desc + '">'
+        d = synapse.desc || ""
+        @synapselist += '<li data-id="' + d + '">'
         @synapselist += '<img src="/assets/synapse16.png" alt="synapse icon" /><p>' + synapse.desc
         @synapselist += '</p></li>'
     end 
