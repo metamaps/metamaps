@@ -57,7 +57,7 @@
     @synapses.each_with_index do |synapse, index| 
         d = synapse.desc || ""
         @synapselist += '<li data-id="' + d + '">'
-        @synapselist += '<img src="/assets/synapse16.png" alt="synapse icon" /><p>' + synapse.desc
+        @synapselist += '<img src="/assets/synapse16.png" alt="synapse icon" /><p>' + d
         @synapselist += '</p></li>'
     end 
     @mappers.each_with_index do |mapper, index| 
