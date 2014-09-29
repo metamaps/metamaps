@@ -33,9 +33,21 @@
       end
     end
 
-    @metacodes.sort! {|x,y| x.name <=> y.name }
-    @synapses.sort! {|x,y| x.desc <=> y.desc }
-    @mappers.sort! {|x,y| x.name <=> y.name }
+    @metacodes.sort! {|x,y| 
+      n1 = x.name || ""
+      n2 = y.name || ""
+      n1 <=> n2
+    }
+    @synapses.sort! {|x,y|
+      d1 = x.desc || ""
+      d2 = y.desc || ""
+      d1 <=> d2
+    }
+    @mappers.sort! {|x,y| 
+      n1 = x.name || ""
+      n2 = y.name || ""
+      n1 <=> n2 
+    }
     
     @metacodes.each_with_index do |metacode, index| 
         @metacodelist += '<li data-id="' + metacode.id.to_s + '">'
