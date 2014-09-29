@@ -51,6 +51,22 @@ img {
     display: block;
     text-indent: -9999px;
 }
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #BDBDBD;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #BDBDBD;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #BDBDBD;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #BDBDBD;
+}
+
 html,
 body,
 .main,
@@ -74,9 +90,60 @@ body,
 /* forgot password fix */
 
 .forgotPassword input[type="submit"] {
-    padding: 0 5px;
-    width: auto;
+    width: 300px;
+    color: #f5f5f5;
+    font-family: din-regular;
+    top: 118px;
+    position: absolute;
 }
+
+.new_user input[type="submit"] {
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
+}
+
+.login input[type="submit"]{
+    width:84px;
+    margin-top: 16px;
+    font-family: din-regular;
+    text-transform: uppercase;
+}
+
+.edit_user input[type="submit"]{
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
+}
+
+.edit_user .userImage {
+    width: 84px;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 32px;
+}
+.edit_user .editPhoto {
+    display: none;
+    width: 40px;
+    height: 40px;
+    background-image: url(photo.png);
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    cursor: pointer;
+}
+.edit_user .userImage:hover .editPhoto {
+    display: block;
+}
+
 html {
 
 } 
@@ -181,6 +248,7 @@ input[type="submit"]:active {
 .new_session,
 .new_user,
 .edit_user,
+.login,
 .forgotPassword {
     display: block;
     width: 300px;
@@ -189,36 +257,159 @@ input[type="submit"]:active {
     border-radius: 5px;
     color: black;
     box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.4);
+    position:absolute;
     top: 50%;
     left:50%;
-    position:absolute;
-    margin-left: -166px;
 }
+
+.login{
+    width: 200px;
+    height: 308px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    margin-left:-100px;
+    margin-top:-158px;
+    font-family: din-medium;
+    font-size: 18px;
+    color: #424242;
+}
+
+.new_user{
+    height: 412px;
+    margin-left:-166px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    font-family: din-medium;
+    line-height: 18px;
+    text-transform: uppercase;
+    color:#424242;
+    margin-top: -222px;
+}
+
+.edit_user {
+    width: 300px;
+    margin-top: -282px;
+    margin-left: -166px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    text-transform: uppercase;
+    line-height: 18px;
+    font-family: din-medium;
+    color:#424242;
+}
+
+.toHide {
+    display:none;
+}
+
 .forgotPassword {
     height: 134px;
+    font-family: din-medium;
+    color:#424242;
+    text-transform: uppercase;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.23), 0px 3px 3px rgba(0, 0, 0, 0.16);
+    margin-left: -166px;
     margin-top: -83px;
+    line-height: 18px;
 }
+
+.edit_user label.firstFieldText {
+    padding-top: 8px;
+}
+.firstFieldText{
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
+    color:#424242;
+    padding-top:24px;
+    padding-bottom: 6px;
+    text-transform: none;
+    margin: 0px;
+    line-height: 14px
+}
+.fieldText {
+    font-family: din-regular;
+    font-size: 14px;
+    color:#424242;
+    padding-top:16px;
+    padding-bottom: 6px;
+    text-transform: none;
+    margin: 0px;
+    line-height: 14px;
+}
+
+.smallText{
+    font-family: din-regular;
+    font-size: 12px;
+    line-height: 12px;
+    color: #c04f4f;
+    margin-top: 8px;
+    text-transform: none;
+}
+
+.accountName {
+    font-size: 24px;
+    text-align: center;
+    font-family: 'din-medium', helvetica, sans-serif;
+    color:#424242;
+    margin-top: 24px;
+    text-transform: none;
+
+}
+.accountName:hover .nameEdit:after {
+    background:url(edit.png)no-repeat;
+    content:" ";
+    position:absolute;
+    width:25px;
+    height:25px;
+    margin:5px 0px 0px 5px;
+}
+.changeName {
+    display: none;
+    margin-top: 24px;
+}
+
+.changePass {
+    font-family: din-regular;
+    font-size: 14px;
+    line-height: 14px;
+    color: #4fb5c0;
+    padding-top: 16px;
+    float: left;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.noChangePass {
+    font-family: din-regular;
+    font-size: 12px;
+    line-height: 12px;
+    color: #c04f4f;
+    padding-top: 16px;
+    float: left;
+    text-transform: none;
+    cursor: pointer;
+
+}
+
 .centerGreyForm input[type="text"],
 .centerGreyForm input[type="email"],
 .centerGreyForm input[type="password"] {
-    width: 250px;
+    width: 300px;
     height: 32px;
-    font-size: 15px;
+    font-size: 14px;
     direction: ltr;
     -webkit-appearance: none;
     appearance: none;
     display: inline-block;
-    margin: 0;
-    padding: 0 8px;
+    margin: 0px 0px;
+    padding: 5px 0px 0px 9px;
     background: #fff;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
+    color: #424242 !important;
+    border: none;
+    outline:none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    border-radius: 1px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     font: -webkit-small-control;
     color: initial;
     letter-spacing: normal;
@@ -227,17 +418,27 @@ input[type="submit"]:active {
     text-indent: 0px;
     text-shadow: none;
     display: inline-block;
-    text-align: start;
+    font-family: 'din-regular', helvetica, sans-serif;
+    text-align: left;
 }
-.centerGreyForm input[type="text"]:hover,
-.centerGreyForm input[type="email"]:hover,
-.centerGreyForm input[type="password"]:hover {
-    border: 1px solid #b9b9b9;
-    border-top: 1px solid #a0a0a0;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+.login input[type="email"],
+.login input[type="password"] {
+    width: 200px;
+    height:32px;
+    border-radius: 2px;
+    background-color:#ffffff;
+    color: #424242 !important;
+    font-family: din-medium;
+    font-size: 14px;
+    text-align: left;
+    padding: 5px 0px 0px 10px;
 }
+
+.login input[type="email"] {
+    margin-bottom:10px;
+}
+
 .new_topic {
     /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
     top: -1000px;
@@ -551,6 +752,7 @@ li.accountInvite span {
     width:84px;
     margin: 24px auto;
 }
+
 .accountInput {
     margin: 0 35px 10px;
 }
@@ -567,8 +769,7 @@ li.accountInvite span {
     margin: 0;
     padding: 0 10px;
     background: #fff;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
+    border: none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -576,7 +777,7 @@ li.accountInvite span {
     -moz-border-radius: 2px;
     border-radius: 2px;
     font: -webkit-small-control;
-    color: #BDBDBD;
+    color: #424242 !important;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
@@ -585,34 +786,39 @@ li.accountInvite span {
     text-align: start;
     font-family: 'din-medium', helvetica, sans-serif;
 }
-.sidebarAccountBox input[type="email"]:hover,
-.sidebarAccountBox input[type="password"]:hover {
-    border: 1px solid #b9b9b9;
-    border-top: 1px solid #a0a0a0;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-}
 .accountSubmit {
-    margin-left: 35px;
     float:left;
+}
+.loginAnywhere .accountSubmit {
+    margin-left: 35px;
 }
 .accountRememberMe {
     float:right;
+}
+.login .accountRememberMe {
+    margin-top: 10px;
+}
+.loginAnywhere .accountRememberMe {
     margin-right: 35px;
 }
 #user_remember_me {
     margin-top: 11px;
+    display:inline;
 }
 #user_remember_me,
 label[for="user_remember_me"] {
-    float: left;
+    float: right;
     font-size: 12px;
     color: #424242;
 }
 .accountForgotPass {
-    margin: 8px 0 0 35px;
     font-size: 12px;
+}
+.loginAnywhere .accountForgotPass {
+    margin: 8px 0 0 35px;
+}
+.login .accountForgotPass {
+    margin: 8px 0 0 0;
 }
 .accountForgotPass a {
     color: #757575;
@@ -656,7 +862,7 @@ label[for="user_remember_me"] {
 
 .sidebarFilterBox {
     display:none;
-    width: 304px;
+    width: 319px;
     padding: 16px 0;
     overflow-y: auto;
 }
@@ -2063,7 +2269,15 @@ float: left;
     display: none;
 }
 
+
 /* collabCompass section */
+.collabCompass {
+    position:fixed;
+    top:50%;
+    left:50%;
+    z-index: 4;
+}
+
 .collabCompass:hover p {
     display: block;
 }

@@ -606,6 +606,14 @@
     background-color: #9150bc;
 }
 
+.github-fork-ribbon-wrapper {
+    display:none;
+}
+
+.homePage .github-fork-ribbon-wrapper {
+    display: block;
+}
+
 /* end home page */
 
 /* infoAndHelp */
@@ -805,14 +813,4 @@ box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
 
 body a#barometer_tab:hover {
   background-position: 0 -110px;
-}
-
-
-/* REALTIME */
-
-.collabCompass {
-    position:fixed;
-    top:50%;
-    left:50%;
-    z-index: 4;
 }
