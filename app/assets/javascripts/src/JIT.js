@@ -2498,7 +2498,11 @@ Extras.Classes.Navigation = new Class({
     if (!Metamaps.Mouse.boxStartCoordinates && (e.shiftKey || rightClick)) {
       Metamaps.Mouse.boxStartCoordinates = eventInfo.getPos();
     }
+
     Metamaps.Mouse.didPan = false;
+    
+
+    
     // END METAMAPS CODE
     
     this.pos = eventInfo.getPos();
@@ -2570,6 +2574,8 @@ Extras.Classes.Navigation = new Class({
     
     // START METAMAPS CODE
     if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
+    
+    
     // END METAMAPS CODE
     
   }
