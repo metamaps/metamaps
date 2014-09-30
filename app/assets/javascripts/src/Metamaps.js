@@ -1972,23 +1972,31 @@ Metamaps.Realtime = {
         var socket = self.socket;
 
         if (Metamaps.Active.Map && self.status) {
+            data.mapperid = Metamaps.Active.Mapper.id;
             data.mapid = Metamaps.Active.Map.id;
             socket.emit('newTopic', data);
         }
     },
     newTopic: function (data) {
-        var topic, mapping, cancel;
+        var topic, mapping, mapper, mapperCallback, cancel;
 
         function test() {
-            if (topic && mapping) {
+            if (topic && mapping && mapper) {
                 Metamaps.Topic.renderTopic(mapping, topic, false, false);
             }
             else if (!cancel) {
                 setTimeout(test, 10);
             }
         }
-        test();
 
+        mapper = Metamaps.Mappers.get(data.mapperid);
+        if (mapper === undefined) {
+            mapperCallback = function (m) {
+                Metamaps.Mappers.add(m);
+                mapper = m;
+            };
+            Metamaps.Mapper.get(data.mapperid, mapperCallback);
+        }
         $.ajax({
             url: "/topics/" + data.topicid + ".json",
             success: function (response) {
@@ -2009,6 +2017,8 @@ Metamaps.Realtime = {
                 cancel = true;
             }
         });
+
+        test();
     },
     // removeTopic
     sendRemoveTopic: function (data) {
@@ -2029,6 +2039,7 @@ Metamaps.Realtime = {
         var socket = self.socket;
 
         if (Metamaps.Active.Map && self.status) {
+            data.mapperid = Metamaps.Active.Mapper.id;
             data.mapid = Metamaps.Active.Map.id;
             socket.emit('newSynapse', data);
         }
@@ -2037,7 +2048,7 @@ Metamaps.Realtime = {
         var topic1, topic2, node1, node2, synapse, mapping, cancel;
 
         function test() {
-            if (synapse && mapping) {
+            if (synapse && mapping && mapper) {
                 topic1 = synapse.getTopic1();
                 node1 = topic1.get('node');
                 topic2 = synapse.getTopic2();
@@ -2049,8 +2060,15 @@ Metamaps.Realtime = {
                 setTimeout(test, 10);
             }
         }
-        test();
 
+        mapper = Metamaps.Mappers.get(data.mapperid);
+        if (mapper === undefined) {
+            mapperCallback = function (m) {
+                Metamaps.Mappers.add(m);
+                mapper = m;
+            };
+            Metamaps.Mapper.get(data.mapperid, mapperCallback);
+        }
         $.ajax({
             url: "/synapses/" + data.synapseid + ".json",
             success: function (response) {
@@ -2071,6 +2089,7 @@ Metamaps.Realtime = {
                 cancel = true;
             }
         });
+        test();
     },
     // removeSynapse
     sendRemoveSynapse: function (data) {
