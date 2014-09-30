@@ -1,6 +1,11 @@
 Metamaps.JIT = {
     events: {
         mouseMove: 'Metamaps:JIT:events:mouseMove',
+        topicDrag: 'Metamaps:JIT:events:topicDrag', 
+        newTopic: 'Metamaps:JIT:events:newTopic', 
+        removeTopic: 'Metamaps:JIT:events:removeTopic', 
+        newSynapse: 'Metamaps:JIT:events:newSynapse', 
+        removeSynapse: 'Metamaps:JIT:events:removeSynapse', 
         pan: 'Metamaps:JIT:events:pan',
         zoom: 'Metamaps:JIT:events:zoom'
     },
@@ -703,6 +708,11 @@ Metamaps.JIT = {
 
         var self = Metamaps.JIT;
 
+        // this is used to send nodes that are moving to 
+        // other realtime collaborators on the same map
+        var positionsToSend = {};
+        var topic;
+
         if (node && !node.nodeFrom) {
             var pos = eventInfo.getPos();
             // if it's a left click, or a touch, move the node
@@ -710,13 +720,23 @@ Metamaps.JIT = {
                 //if the node dragged isn't already selected, select it
                 var whatToDo = self.handleSelectionBeforeDragging(node, e);
                 if (node.pos.rho || node.pos.rho === 0) {
+                    // this means we're in topic view
                     var rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y);
                     var theta = Math.atan2(pos.y, pos.x);
                     node.pos.setp(theta, rho);
                 } else if (whatToDo == 'only-drag-this-one') {
                     node.pos.setc(pos.x, pos.y);
-                    node.setData('xloc', pos.x);
-                    node.setData('yloc', pos.y);
+
+                    if (Metamaps.Active.Map) {
+                        topic = node.getData('topic');
+                        // we use the topic ID not the node id
+                        // because we can't depend on the node id
+                        // to be the same as on other collaborators
+                        // maps
+                        positionsToSend[topic.id] = pos;
+                        $(document).trigger(Metamaps.JIT.events.topicDrag, [positionsToSend]);
+                        $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
+                    }
                 } else {
                     var len = Metamaps.Selected.Nodes.length;
 
@@ -734,9 +754,21 @@ Metamaps.JIT = {
                         var x = pos.x + xOffset[i];
                         var y = pos.y + yOffset[i];
                         n.pos.setc(x, y);
-                        n.setData('xloc', x);
-                        n.setData('yloc', y);
+
+                        if (Metamaps.Active.Map) {
+                            topic = n.getData('topic');
+                            // we use the topic ID not the node id
+                            // because we can't depend on the node id
+                            // to be the same as on other collaborators
+                            // maps
+                            positionsToSend[topic.id] = n.pos;
+                        }
                     } //for
+
+                    if (Metamaps.Active.Map) {
+                        $(document).trigger(Metamaps.JIT.events.topicDrag, [positionsToSend]);
+                        $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
+                    }
                 } //if
 
                 if (whatToDo == 'deselect') {
@@ -807,6 +839,7 @@ Metamaps.JIT = {
                         x: pos.x,
                         y: pos.y
                     };
+                    $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
                 }
             }
         }
