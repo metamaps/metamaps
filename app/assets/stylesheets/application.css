@@ -2152,6 +2152,9 @@ float: left;
     max-width: 415px;
     word-wrap: break-word;
 }
+.blackBox td.iconColor {
+    
+}
 .blackBox .field {
     margin: 15px 0 5px;
 }
