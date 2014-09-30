@@ -51,6 +51,22 @@ img {
     display: block;
     text-indent: -9999px;
 }
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #BDBDBD;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #BDBDBD;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #BDBDBD;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #BDBDBD;
+}
+
 html,
 body,
 .main,
@@ -109,10 +125,10 @@ body,
 }
 
 .edit_user .userImage {
-    width: 120px;
+    width: 84px;
     margin: 0 auto;
     position: relative;
-    margin-top: 40px;
+    margin-top: 32px;
 }
 .edit_user .editPhoto {
     display: none;
@@ -120,8 +136,8 @@ body,
     height: 40px;
     background-image: url(photo.png);
     position: absolute;
-    top: 40px;
-    left: 40px;
+    top: 22px;
+    left: 22px;
     cursor: pointer;
 }
 .edit_user .userImage:hover .editPhoto {
@@ -294,8 +310,11 @@ input[type="submit"]:active {
     line-height: 18px;
 }
 
+.edit_user label.firstFieldText {
+    padding-top: 8px;
+}
 .firstFieldText{
-    font-family: din-regular;
+    font-family: 'din-regular', helvetica, sans-serif;
     font-size: 14px;
     color:#424242;
     padding-top:24px;
@@ -324,23 +343,26 @@ input[type="submit"]:active {
     text-transform: none;
 }
 
-.name {
+.accountName {
     font-size: 24px;
     text-align: center;
-    font-family: din-meduim;
+    font-family: 'din-medium', helvetica, sans-serif;
     color:#424242;
     margin-top: 24px;
     text-transform: none;
 
 }
-
-.name:after {
+.accountName:hover .nameEdit:after {
     background:url(edit.png)no-repeat;
     content:" ";
     position:absolute;
     width:25px;
     height:25px;
     margin:5px 0px 0px 5px;
+}
+.changeName {
+    display: none;
+    margin-top: 24px;
 }
 
 .changePass {
@@ -377,11 +399,11 @@ input[type="submit"]:active {
     appearance: none;
     display: inline-block;
     margin: 0px 0px;
-    padding: 10px 0px 0px 9px;
+    padding: 5px 0px 0px 9px;
     background: #fff;
-    color: #bdbdbd;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
+    color: #424242 !important;
+    border: none;
+    outline:none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -396,7 +418,7 @@ input[type="submit"]:active {
     text-indent: 0px;
     text-shadow: none;
     display: inline-block;
-    font-family: din-medium;
+    font-family: 'din-regular', helvetica, sans-serif;
     text-align: left;
 }
 
@@ -406,26 +428,15 @@ input[type="submit"]:active {
     height:32px;
     border-radius: 2px;
     background-color:#ffffff;
-    color:#bdbdbd;
+    color: #424242 !important;
     font-family: din-medium;
     font-size: 14px;
     text-align: left;
-    padding: 11px 0px 0px 10px;
+    padding: 5px 0px 0px 10px;
 }
 
 .login input[type="email"] {
     margin-bottom:10px;
-}
-
-.centerGreyForm input[type="text"]:hover,
-.centerGreyForm input[type="email"]:hover,
-.centerGreyForm input[type="password"]:hover {
-    border: 1px solid #b9b9b9;
-    border-top: 1px solid #a0a0a0;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    color: #424242;
 }
 
 .new_topic {
@@ -758,8 +769,7 @@ li.accountInvite span {
     margin: 0;
     padding: 0 10px;
     background: #fff;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
+    border: none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -767,7 +777,7 @@ li.accountInvite span {
     -moz-border-radius: 2px;
     border-radius: 2px;
     font: -webkit-small-control;
-    color: #BDBDBD;
+    color: #424242 !important;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
@@ -775,14 +785,6 @@ li.accountInvite span {
     text-shadow: none;
     text-align: start;
     font-family: 'din-medium', helvetica, sans-serif;
-}
-.sidebarAccountBox input[type="email"]:hover,
-.sidebarAccountBox input[type="password"]:hover {
-    border: 1px solid #b9b9b9;
-    border-top: 1px solid #a0a0a0;
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .accountSubmit {
     float:left;
@@ -2267,7 +2269,15 @@ float: left;
     display: none;
 }
 
+
 /* collabCompass section */
+.collabCompass {
+    position:fixed;
+    top:50%;
+    left:50%;
+    z-index: 4;
+}
+
 .collabCompass:hover p {
     display: block;
 }
