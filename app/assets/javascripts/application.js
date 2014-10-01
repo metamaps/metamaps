@@ -23,3 +23,6 @@
 //= require ./src/JIT
 //= require ./src/Metamaps
 //= require ./src/Metamaps.JIT
+//= require_directory ./shims
+//= require_directory ./require
+//= require_directory ./famous

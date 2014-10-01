@@ -292,7 +292,7 @@ cursor: pointer;
   display: none;
   width: 90%;
   padding: 13px 0 9px 10%;
-  background-color: #64BC61;
+  background-color: #E0E0E0;
   color: #424242;
 }
 .permission.canEdit .metacodeTitle {

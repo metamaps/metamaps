@@ -6,6 +6,7 @@
     <tr>
       <th>Name</th>
       <th>Icon</th>
+      <th>Color</th>
       <th></th>
       <th></th>
     </tr>
@@ -14,6 +15,13 @@
     <tr>
       <td><%= metacode.name %></td>
       <td class="iconURL"><%= metacode.icon %></td>
+      <% if metacode.color %>
+        <td class="iconColor" style="background-color: <%= metacode.color %>">
+          <%= metacode.color %>
+        </td>
+      <% else %>
+        <td></td>
+      <% end %>
       <td><img width='40' src='<%= metacode.icon %>' /></td>
       <td><%= link_to 'Edit', edit_metacode_path(metacode), :data => { :bypass => 'true'} %></td>
     </tr>

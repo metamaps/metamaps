@@ -10,9 +10,6 @@
  *
  *= require_self
  *= require_tree .
- *= require base
- *= require jquery.mCustomScrollbar
- *= require jquery-ui
 */
 
 /* clear styles */
@@ -129,6 +126,9 @@ body,
     margin: 0 auto;
     position: relative;
     margin-top: 32px;
+}
+.edit_user .userImage img {
+    border-radius: 42px;
 }
 .edit_user .editPhoto {
     display: none;
@@ -862,7 +862,7 @@ label[for="user_remember_me"] {
 
 .sidebarFilterBox {
     display:none;
-    width: 304px;
+    width: 319px;
     padding: 16px 0;
     overflow-y: auto;
 }
@@ -2151,6 +2151,9 @@ float: left;
 .blackBox td.iconURL {
     max-width: 415px;
     word-wrap: break-word;
+}
+.blackBox td.iconColor {
+    
 }
 .blackBox .field {
     margin: 15px 0 5px;

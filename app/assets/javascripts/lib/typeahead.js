@@ -922,10 +922,17 @@
             this.dropdownView = new DropdownView({
                 menu: $menu
             }).on("suggestionSelected", this._handleSelection).on("cursorMoved", this._clearHint).on("cursorMoved", this._setInputValueToSuggestionUnderCursor).on("cursorRemoved", this._setInputValueToQuery).on("cursorRemoved", this._updateHint).on("suggestionsRendered", this._updateHint).on("opened", this._updateHint).on("closed", this._clearHint).on("opened closed", this._propagateEvent);
+            // START METAMAPS CODE
+                this.dropdownView.on('suggestionsRendered', this._suggestionsRendered);
+            // END METAMAPS CODE
+
             this.inputView = new InputView({
                 input: $input,
                 hint: $hint
             }).on("focused", this._openDropdown).on("blured", this._closeDropdown).on("blured", this._setInputValueToQuery).on("enterKeyed tabKeyed", this._handleSelection).on("queryChanged", this._clearHint).on("queryChanged", this._clearSuggestions).on("queryChanged", this._getSuggestions).on("whitespaceChanged", this._updateHint).on("queryChanged whitespaceChanged", this._openDropdown).on("queryChanged whitespaceChanged", this._setLanguageDirection).on("escKeyed", this._closeDropdown).on("escKeyed", this._setInputValueToQuery).on("tabKeyed upKeyed downKeyed", this._managePreventDefault).on("upKeyed downKeyed", this._moveDropdownCursor).on("upKeyed downKeyed", this._openDropdown).on("tabKeyed leftKeyed rightKeyed", this._autocomplete);
+            // START METAMAPS CODE
+                this.inputView.on('queryChanged', this._queryChanged);
+            // END METAMAPS CODE
         }
         utils.mixin(TypeaheadView.prototype, EventTarget, {
             _managePreventDefault: function(e) {
@@ -952,6 +959,14 @@
                     this.dropdownView.setLanguageDirection(dir);
                 }
             },
+            // START METAMAPS CODE
+            _suggestionsRendered: function() {
+                this.eventBus.trigger('suggestionsRendered');
+            },
+            _queryChanged: function() {
+                this.eventBus.trigger('queryChanged');
+            },
+            // END METAMAPS CODE
             _updateHint: function() {
                 var suggestion = this.dropdownView.getFirstSuggestion(), hint = suggestion ? suggestion.value : null, dropdownIsVisible = this.dropdownView.isVisible(), inputHasOverflow = this.inputView.isOverflow(), inputValue, query, escapedQuery, beginsWithQuery, match;
                 if (hint && dropdownIsVisible && !inputHasOverflow) {

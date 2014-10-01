@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140815162253) do
+ActiveRecord::Schema.define(:version => 20140930013020) do
 
   create_table "in_metacode_sets", :force => true do |t|
     t.integer  "metacode_id"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20140815162253) do
     t.string   "icon"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "color"
   end
 
   create_table "synapses", :force => true do |t|

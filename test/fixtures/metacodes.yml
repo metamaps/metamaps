@@ -7,6 +7,7 @@
 one: 
   name: Action  
   icon: /assets/icons/action.png
+  color: #bd6c85
 
 two: 
   name: Activity  

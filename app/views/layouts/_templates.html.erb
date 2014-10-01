@@ -83,22 +83,17 @@
           <span class="tip">add to map</span>
         </button>
         <% end %>
-        <div class="goTo hoverForTip">
-          <span class="tip">open in new tab</span>
-        </div>
-        <div class="mapCount hoverForTip">
-          <span class="tip">appears on this # of maps</span>
+        <div class="mapCount">
           {{mapCount}}
         </div>
-        <div class="synapseCount hoverForTip">
-          <span class="tip"> has this # of synapses</span>
+        <div class="synapseCount">
           {{synapseCount}}
         </div>
         <div class="topicOriginatorIcon hoverForTip">
-          <span class="tip topicOriginator">created by {{originator}}</span>
+            <img width="18" height="18" src="{{originatorImage}}">
+            <span class="tip topicOriginator">created by {{originator}}</span>
         </div>
-        <div class="topicPermission {{permission}} hoverForTip">
-          <span class="tip">topic is {{permission}}</span>
+        <div class="topicPermission {{permission}}">
         </div>
       </div>
       <div class="clearfloat"></div>
@@ -107,29 +102,25 @@
 
     <script type="text/template" id="mapSearchTemplate">
     <div class="result{{rtype}}">
-      <img class="icon" src="/assets/metamap32c.png">
+      <div class="searchResIconWrapper">
+        <img class="icon" src="/assets/metamap32c.png">
+      </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
         <p class="resultDesc">{{description}}</p>
       </div>
       <div class="autoOptions">
-        <div class="goTo hoverForTip">
-          <span class="tip">open in new tab</span>
-        </div>
-        <div class="topicCount hoverForTip">
-          <span class="tip">has this # of topics</span>
+        <div class="topicCount">
           {{topicCount}}
         </div>
-        <div class="synapseCount hoverForTip">
-          <span class="tip">has this # of synapses</span>
+        <div class="synapseCount">
           {{synapseCount}}
         </div>
         <div class="mapContributorsIcon hoverForTip">
           <span class="tip mapContributors">{{contributorList}}</span>
           {{contributorCount}}
         </div>
-        <div class="mapPermission {{permission}} hoverForTip">
-          <span class="tip">map is {{permission}}</span>
+        <div class="mapPermission {{permission}}">
         </div>
       </div>
       <div class="clearfloat"></div>
@@ -138,16 +129,20 @@
 
     <script type="text/template" id="mapperSearchTemplate">
     <div class="result{{rtype}}">
-      <img class="icon" width="32" height="32" src="{{profile}}">
+      <div class="searchResIconWrapper">
+        <img class="icon" width="32" height="32" src="{{profile}}">
+      </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
       </div>
       <div class="autoOptions">
-        <div class="goTo hoverForTip">
-          <span class="tip">open in new tab</span>
+        <div class="mapperCreated">
+          <span>Mapping since: {{created_at}}</span>
         </div>
-        <div class="mapCount hoverForTip">
-          <span class="tip">created this # of maps</span>
+        <div class="mapperGeneration">
+          <span>Generation {{generation}}</span>
+        </div>
+        <div class="mapCount">
           {{mapCount}}
         </div>
       </div>

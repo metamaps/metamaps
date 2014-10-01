@@ -33,9 +33,21 @@
       end
     end
 
-    @metacodes.sort! {|x,y| x.name <=> y.name }
-    @synapses.sort! {|x,y| x.desc <=> y.desc }
-    @mappers.sort! {|x,y| x.name <=> y.name }
+    @metacodes.sort! {|x,y| 
+      n1 = x.name || ""
+      n2 = y.name || ""
+      n1 <=> n2
+    }
+    @synapses.sort! {|x,y|
+      d1 = x.desc || ""
+      d2 = y.desc || ""
+      d1 <=> d2
+    }
+    @mappers.sort! {|x,y| 
+      n1 = x.name || ""
+      n2 = y.name || ""
+      n1 <=> n2 
+    }
     
     @metacodes.each_with_index do |metacode, index| 
         @metacodelist += '<li data-id="' + metacode.id.to_s + '">'
@@ -43,8 +55,9 @@
         @metacodelist += '<p>' + metacode.name.downcase + '</p></li>'
     end
     @synapses.each_with_index do |synapse, index| 
-        @synapselist += '<li data-id="' + synapse.desc + '">'
-        @synapselist += '<img src="/assets/synapse16.png" alt="synapse icon" /><p>' + synapse.desc
+        d = synapse.desc || ""
+        @synapselist += '<li data-id="' + d + '">'
+        @synapselist += '<img src="/assets/synapse16.png" alt="synapse icon" /><p>' + d
         @synapselist += '</p></li>'
     end 
     @mappers.each_with_index do |mapper, index| 
