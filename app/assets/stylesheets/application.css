@@ -859,7 +859,7 @@ label[for="user_remember_me"] {
 
 .sidebarFilterBox {
     display:none;
-    width: 304px;
+    width: 319px;
     padding: 16px 0;
     overflow-y: auto;
 }
@@ -2148,6 +2148,9 @@ float: left;
 .blackBox td.iconURL {
     max-width: 415px;
     word-wrap: break-word;
+}
+.blackBox td.iconColor {
+    
 }
 .blackBox .field {
     margin: 15px 0 5px;

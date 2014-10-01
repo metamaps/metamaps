@@ -217,15 +217,15 @@ Metamaps.Backbone.init = function () {
             else return false;
         },
         getTopic1: function () {
-            return Metamaps.Topic.get(this.get('node1_id'));
+            return Metamaps.Topics.get(this.get('node1_id'));
         },
         getTopic2: function () {
-            return Metamaps.Topic.get(this.get('node2_id'));
+            return Metamaps.Topics.get(this.get('node2_id'));
         },
         getDirection: function () {
             return [
-                    this.get('node1_id'),
-                    this.get('node2_id')
+                    this.getTopic1().get('node').id,
+                    this.getTopic2().get('node').id
                 ];
         },
         getMapping: function () {
@@ -1232,11 +1232,15 @@ Metamaps.Visualize = {
                 topic.updateNode();
 
                 n.eachAdjacency(function (edge) {
-                    l = edge.getData('synapseIDs').length;
-                    for (i = 0; i < l; i++) {
-                        synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
-                        synapse.set('edge', edge);
-                        synapse.updateEdge();
+                    if(!edge.getData('init')) {
+                        edge.setData('init', true);
+
+                        l = edge.getData('synapseIDs').length;
+                        for (i = 0; i < l; i++) {
+                            synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
+                            synapse.set('edge', edge);
+                            synapse.updateEdge();
+                        }
                     }
                 });
                 
@@ -1254,11 +1258,15 @@ Metamaps.Visualize = {
                 mapping = topic.getMapping();
 
                 n.eachAdjacency(function (edge) {
-                    l = edge.getData('synapseIDs').length;
-                    for (i = 0; i < l; i++) {
-                        synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
-                        synapse.set('edge', edge);
-                        synapse.updateEdge();
+                    if(!edge.getData('init')) {
+                        edge.setData('init', true);
+
+                        l = edge.getData('synapseIDs').length;
+                        for (i = 0; i < l; i++) {
+                            synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
+                            synapse.set('edge', edge);
+                            synapse.updateEdge();
+                        }
                     }
                 });
 
@@ -1274,7 +1282,6 @@ Metamaps.Visualize = {
     /**
      * render does the heavy lifting of creating the engine that renders the graph with the properties we desire
      *
-     * @param vizData a json structure containing the data to be rendered.
      */
     render: function () {
         var self = Metamaps.Visualize, RGraphSettings, FDSettings;
@@ -1499,7 +1506,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com');  
+        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -1612,14 +1619,30 @@ Metamaps.Realtime = {
         // receive word that there's a mapper turned on realtime
         socket.on('maps-' + Metamaps.Active.Map.id + '-lostrealtime', self.lostCollaborator);
 
-        socket.on('maps-' + Metamaps.Active.Map.id, self.contentUpdate);
+        //
+        socket.on('maps-' + Metamaps.Active.Map.id + '-topicDrag', self.topicDrag);
+
+        //
+        socket.on('maps-' + Metamaps.Active.Map.id + '-newTopic', self.newTopic);
+
+        //
+        socket.on('maps-' + Metamaps.Active.Map.id + '-removeTopic', self.removeTopic);
+
+        //
+        socket.on('maps-' + Metamaps.Active.Map.id + '-newSynapse', self.newSynapse);
+
+        //
+        socket.on('maps-' + Metamaps.Active.Map.id + '-removeSynapse', self.removeSynapse);
 
         // update mapper compass position
         socket.on('maps-' + Metamaps.Active.Map.id + '-updatePeerCoords', self.updatePeerCoords);
     
+        // local event listeners that trigger events
         var sendCoords = function (event, coords) {
             self.sendCoords(coords);
         };
+        $(document).on(Metamaps.JIT.events.mouseMove, sendCoords);
+
         var zoom = function (event, e) {
             if (e) {
                 var pixels = {
@@ -1631,9 +1654,35 @@ Metamaps.Realtime = {
             }
             self.positionPeerIcons();
         };
-        $(document).on(Metamaps.JIT.events.mouseMove, sendCoords);
         $(document).on(Metamaps.JIT.events.zoom, zoom);
+
         $(document).on(Metamaps.JIT.events.pan, self.positionPeerIcons);
+
+        var sendTopicDrag = function (event, positions) {
+            self.sendTopicDrag(positions);
+        };
+        $(document).on(Metamaps.JIT.events.topicDrag, sendTopicDrag);
+
+        var sendNewTopic = function (event, data) {
+            self.sendNewTopic(data);
+        };
+        $(document).on(Metamaps.JIT.events.newTopic, sendNewTopic);
+
+        var sendRemoveTopic = function (event, data) {
+            self.sendRemoveTopic(data);
+        };
+        $(document).on(Metamaps.JIT.events.removeTopic, sendRemoveTopic);
+
+        var sendNewSynapse = function (event, data) {
+            self.sendNewSynapse(data);
+        };
+        $(document).on(Metamaps.JIT.events.newSynapse, sendNewSynapse);
+
+        var sendRemoveSynapse = function (event, data) {
+            self.sendRemoveSynapse(data);
+        };
+        $(document).on(Metamaps.JIT.events.removeSynapse, sendRemoveSynapse);
+
     },
     sendRealtimeOn: function () {
         var self = Metamaps.Realtime;
@@ -1892,120 +1941,169 @@ Metamaps.Realtime = {
             socket.emit('updateMapperCoords', update);
         }
     },
-    contentUpdate: function (data) {
+    sendTopicDrag: function (positions) {
         var self = Metamaps.Realtime;
-        var socket = Metamaps.Realtime.socket;
-        var graph = Metamaps.Visualize.mGraph.graph;
+        var socket = self.socket;
 
-        //as long as you weren't the origin of the changes, update your map
-        if (data.origin != Metamaps.Active.Mapper.id && self.status) {
-            if (data.resource == 'Topic') {
-                topic = $.parseJSON(data.obj);
+        if (Metamaps.Active.Map && self.status) {
+            positions.mapid = Metamaps.Active.Map.id;
+            socket.emit('topicDrag', positions);
+        }
+    },
+    topicDrag: function (positions) {
+        var self = Metamaps.Realtime;
+        var socket = self.socket;
 
-                if (data.action == 'create') {
-                    self.addTopicToMap(topic);
-                } else if (data.action == 'update' && graph.getNode(topic.id) != 'undefined') {
-                    self.updateTopicOnMap(topic);
-                } else if (data.action == 'destroy' && graph.getNode(topic.id) != 'undefined') {
-                    Metamaps.Control.hideNode(topic.id)
-                }
+        var topic;
+        var node;
 
-                return;
-            } else if (data.resource == 'Synapse') {
-                synapse = $.parseJSON(data.obj);
+        if (Metamaps.Active.Map && self.status) {
+            for (var key in positions) {
+                topic = Metamaps.Topics.get(key);
+                if (topic) node = topic.get('node');
+                if (node) node.pos.setc(positions[key].x, positions[key].y);
+            } //for
+            Metamaps.Visualize.mGraph.plot();
+        }
+    },
+    // newTopic
+    sendNewTopic: function (data) {
+        var self = Metamaps.Realtime;
+        var socket = self.socket;
 
-                if (data.action == 'create') {
-                    self.addSynapseToMap(synapse);
-                } else if (data.action == 'update' &&
-                    graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {
-                    self.updateSynapseOnMap(synapse);
-                } else if (data.action == 'destroy' &&
-                    graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']) != 'undefined') {
-                    var edge = graph.getAdjacence(synapse.data.$direction['0'], synapse.data.$direction['1']);
-                    Metamaps.Control.hideEdge(edge);
-                }
+        if (Metamaps.Active.Map && self.status) {
+            data.mapperid = Metamaps.Active.Mapper.id;
+            data.mapid = Metamaps.Active.Map.id;
+            socket.emit('newTopic', data);
+        }
+    },
+    newTopic: function (data) {
+        var topic, mapping, mapper, mapperCallback, cancel;
 
-                return;
+        function test() {
+            if (topic && mapping && mapper) {
+                Metamaps.Topic.renderTopic(mapping, topic, false, false);
+            }
+            else if (!cancel) {
+                setTimeout(test, 10);
             }
         }
-    },
-    addTopicToMap: function (topic) {
 
-        // TODO
-        var newPos, tempForT;
-        Metamaps.Visualize.mGraph.graph.addNode(topic);
-        tempForT = Metamaps.Visualize.mGraph.graph.getNode(topic.id);
-        tempForT.setData('dim', 1, 'start');
-        tempForT.setData('dim', 25, 'end');
-        newPos = new $jit.Complex();
-        newPos.x = tempForT.data.$xloc;
-        newPos.y = tempForT.data.$yloc;
-        tempForT.setPos(newPos, 'start');
-        tempForT.setPos(newPos, 'current');
-        tempForT.setPos(newPos, 'end');
-        Metamaps.Visualize.mGraph.fx.plotNode(tempForT, Metamaps.Visualize.mGraph.canvas);
-    },
-    updateTopicOnMap: function (topic) {
-
-        // TODO
-        var newPos, tempForT;
-        tempForT = Metamaps.Visualize.mGraph.graph.getNode(topic.id);
-        tempForT.data = topic.data;
-        tempForT.name = topic.name;
-        if (MetamapsModel.showcardInUse === topic.id) {
-            populateShowCard(tempForT);
+        mapper = Metamaps.Mappers.get(data.mapperid);
+        if (mapper === undefined) {
+            mapperCallback = function (m) {
+                Metamaps.Mappers.add(m);
+                mapper = m;
+            };
+            Metamaps.Mapper.get(data.mapperid, mapperCallback);
         }
-        newPos = new $jit.Complex();
-        newPos.x = tempForT.data.$xloc;
-        newPos.y = tempForT.data.$yloc;
-        tempForT.setPos(newPos, 'start');
-        tempForT.setPos(newPos, 'current');
-        tempForT.setPos(newPos, 'end');
-        return Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['linear', 'node-property:dim', 'edge-property:lineWidth'],
-            transition: $jit.Trans.Quad.easeInOut,
-            duration: 500
+        $.ajax({
+            url: "/topics/" + data.topicid + ".json",
+            success: function (response) {
+                Metamaps.Topics.add(response);
+                topic = Metamaps.Topics.get(response.id);
+            },
+            error: function () {
+                cancel = true;
+            }
         });
-    },
-    addSynapseToMap: function (synapse) {
+        $.ajax({
+            url: "/mappings/" + data.mappingid + ".json",
+            success: function (response) {
+                Metamaps.Mappings.add(response);
+                mapping = Metamaps.Mappings.get(response.id);
+            },
+            error: function () {
+                cancel = true;
+            }
+        });
 
-        // TODO
-        var Node1, Node2, tempForS;
-        Node1 = Metamaps.Visualize.mGraph.graph.getNode(synapse.data.$direction[0]);
-        Node2 = Metamaps.Visualize.mGraph.graph.getNode(synapse.data.$direction[1]);
-        Metamaps.Visualize.mGraph.graph.addAdjacence(Node1, Node2, {});
-        tempForS = Metamaps.Visualize.mGraph.graph.getAdjacence(Node1.id, Node2.id);
-        tempForS.setDataset('start', {
-            lineWidth: 0.4
-        });
-        tempForS.setDataset('end', {
-            lineWidth: 2
-        });
-        tempForS.data = synapse.data;
-        Metamaps.Visualize.mGraph.fx.plotLine(tempForS, Metamaps.Visualize.mGraph.canvas);
-        return Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['linear', 'node-property:dim', 'edge-property:lineWidth'],
-            transition: $jit.Trans.Quad.easeInOut,
-            duration: 500
-        });
+        test();
     },
-    updateSynapseOnMap: function (synapse) {
+    // removeTopic
+    sendRemoveTopic: function (data) {
+        var self = Metamaps.Realtime;
+        var socket = self.socket;
 
-        // TODO
-        var k, tempForS, v, wasShowDesc, _ref;
-        tempForS = Metamaps.Visualize.mGraph.graph.getAdjacence(synapse.data.$direction[0], synapse.data.$direction[1]);
-        wasShowDesc = tempForS.data.$showDesc;
-        _ref = synapse.data;
-        for (k in _ref) {
-            v = _ref[k];
-            tempForS.data[k] = v;
+        if (Metamaps.Active.Map && self.status) {
+            data.mapid = Metamaps.Active.Map.id;
+            socket.emit('removeTopic', data);
         }
-        tempForS.data.$showDesc = wasShowDesc;
-        if (MetamapsModel.edgecardInUse === synapse.data.$id) { // TODO
-            editEdge(tempForS, false);
+    },
+    removeTopic: function (data) {
+        
+    },
+    // newSynapse
+    sendNewSynapse: function (data) {
+        var self = Metamaps.Realtime;
+        var socket = self.socket;
+
+        if (Metamaps.Active.Map && self.status) {
+            data.mapperid = Metamaps.Active.Mapper.id;
+            data.mapid = Metamaps.Active.Map.id;
+            socket.emit('newSynapse', data);
         }
-        return Metamaps.Visualize.mGraph.plot();
-    }
+    },
+    newSynapse: function (data) {
+        var topic1, topic2, node1, node2, synapse, mapping, cancel;
+
+        function test() {
+            if (synapse && mapping && mapper) {
+                topic1 = synapse.getTopic1();
+                node1 = topic1.get('node');
+                topic2 = synapse.getTopic2();
+                node2 = topic2.get('node');
+
+                Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, false);
+            }
+            else if (!cancel) {
+                setTimeout(test, 10);
+            }
+        }
+
+        mapper = Metamaps.Mappers.get(data.mapperid);
+        if (mapper === undefined) {
+            mapperCallback = function (m) {
+                Metamaps.Mappers.add(m);
+                mapper = m;
+            };
+            Metamaps.Mapper.get(data.mapperid, mapperCallback);
+        }
+        $.ajax({
+            url: "/synapses/" + data.synapseid + ".json",
+            success: function (response) {
+                Metamaps.Synapses.add(response);
+                synapse = Metamaps.Synapses.get(response.id);
+            },
+            error: function () {
+                cancel = true;
+            }
+        });
+        $.ajax({
+            url: "/mappings/" + data.mappingid + ".json",
+            success: function (response) {
+                Metamaps.Mappings.add(response);
+                mapping = Metamaps.Mappings.get(response.id);
+            },
+            error: function () {
+                cancel = true;
+            }
+        });
+        test();
+    },
+    // removeSynapse
+    sendRemoveSynapse: function (data) {
+        var self = Metamaps.Realtime;
+        var socket = self.socket;
+
+        if (Metamaps.Active.Map && self.status) {
+            data.mapid = Metamaps.Active.Map.id;
+            socket.emit('removeSynapse', data);
+        }
+    },
+    removeSynapse: function (data) {
+        
+    },
 }; // end Metamaps.Realtime
 
 
@@ -2895,12 +2993,14 @@ Metamaps.Topic = {
      *
      *
      */
-    renderTopic: function (mapping, topic, createNewInDB) {
+    renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter) {
         var self = Metamaps.Topic;
 
         var nodeOnViz, tempPos;
 
         var newnode = topic.createNode();
+
+        var midpoint = {}, pixelPos;
 
         if (!$.isEmptyObject(Metamaps.Visualize.mGraph.graph.nodes)) {
             Metamaps.Visualize.mGraph.graph.addNode(newnode);
@@ -2926,9 +3026,16 @@ Metamaps.Topic = {
                 nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), "start");
                 nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), "end");
             }
-            if (Metamaps.Create.newTopic.addSynapse) {
-                Metamaps.Create.newSynapse.topic1id = tempNode.id;
-                Metamaps.Create.newSynapse.topic2id = nodeOnViz.id;
+            if (Metamaps.Create.newTopic.addSynapse && permitCreateSynapseAfter) {
+                Metamaps.Create.newSynapse.topic1id = tempNode.getData('topic').id;
+                
+                // position the form
+                midpoint.x = tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - tempNode.pos.getc().x) / 2;
+                midpoint.y = tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - tempNode.pos.getc().y) / 2;
+                pixelPos = Metamaps.Util.coordsToPixels(midpoint);
+                $('#new_synapse').css('left', pixelPos.x + "px");
+                $('#new_synapse').css('top', pixelPos.y + "px");
+                // show the form
                 Metamaps.Create.newSynapse.open();
                 Metamaps.Visualize.mGraph.fx.animate({
                     modes: ["node-property:dim"],
@@ -2970,20 +3077,41 @@ Metamaps.Topic = {
             });
         }
 
+        var mappingSuccessCallback = function (mappingModel, response) {
+            var newTopicData = {
+                mappingid: mappingModel.id,
+                topicid: mappingModel.get('topic_id')
+            };
+
+            $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData]);
+        };  
+        var topicSuccessCallback = function (topicModel, response) {
+            if (Metamaps.Active.Map) {
+                mapping.save({ topic_id: topicModel.id }, {
+                    success: mappingSuccessCallback,
+                    error: function (model, response) {
+                        console.log('error saving mapping to database');
+                    }
+                });
+            }
+
+            if (Metamaps.Create.newTopic.addSynapse) {
+                Metamaps.Create.newSynapse.topic2id = topicModel.id;
+            }
+        };
+
         if (!Metamaps.Settings.sandbox && createNewInDB) {
             if (topic.isNew()) {
                 topic.save(null, {
-                    success: function (topicModel, response) {
-                        if (Metamaps.Active.Map) {
-                            mapping.save({ topic_id: topicModel.id });
-                        }
-                    },
+                    success: topicSuccessCallback,
                     error: function (model, response) {
                         console.log('error saving topic to database');
                     }
                 });
             } else if (!topic.isNew() && Metamaps.Active.Map) {
-                mapping.save();
+                mapping.save(null, {
+                    success: mappingSuccessCallback
+                });
             }
         }
     },
@@ -3011,7 +3139,7 @@ Metamaps.Topic = {
         //these can't happen until the value is retrieved, which happens in the line above
         Metamaps.Create.newTopic.hide();
 
-        self.renderTopic(mapping, topic, true); // this function also includes the creation of the topic in the database
+        self.renderTopic(mapping, topic, true, true); // this function also includes the creation of the topic in the database
     },
     getTopicFromAutocomplete: function (id) {
         var self = Metamaps.Topic;
@@ -3028,7 +3156,7 @@ Metamaps.Topic = {
         });
         Metamaps.Mappings.add(mapping);
 
-        self.renderTopic(mapping, topic, true);
+        self.renderTopic(mapping, topic, true, true);
     }
 }; // end Metamaps.Topic
 
@@ -3087,20 +3215,34 @@ Metamaps.Synapse = {
         Metamaps.Visualize.mGraph.fx.plotLine(edgeOnViz, Metamaps.Visualize.mGraph.canvas);
         Metamaps.Control.selectEdge(edgeOnViz);
 
+        var mappingSuccessCallback = function (mappingModel, response) {
+            var newSynapseData = {
+                mappingid: mappingModel.id,
+                synapseid: mappingModel.get('synapse_id')
+            };
+
+            $(document).trigger(Metamaps.JIT.events.newSynapse, [newSynapseData]);
+        };
+        var synapseSuccessCallback = function (synapseModel, response) {
+            if (Metamaps.Active.Map) {
+                mapping.save({ synapse_id: synapseModel.id }, {
+                    success: mappingSuccessCallback
+                });
+            }
+        };
+
         if (!Metamaps.Settings.sandbox && createNewInDB) {
             if (synapse.isNew()) {
                 synapse.save(null, {
-                    success: function (synapseModel, response) {
-                        if (Metamaps.Active.Map) {
-                            mapping.save({ synapse_id: synapseModel.id });
-                        }
-                    },
+                    success: synapseSuccessCallback,
                     error: function (model, response) {
                         console.log('error saving synapse to database');
                     }
                 });
             } else if (!synapse.isNew() && Metamaps.Active.Map) {
-                mapping.save();
+                mapping.save(null, {
+                    success: mappingSuccessCallback
+                });
             }
         }
     },
@@ -3116,12 +3258,13 @@ Metamaps.Synapse = {
         //for each node in this array we will create a synapse going to the position2 node.
         var synapsesToCreate = [];
 
-        node2 = Metamaps.Visualize.mGraph.graph.getNode(Metamaps.Create.newSynapse.topic2id);
-        topic2 = node2.getData('topic');
+        topic2 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic2id);
+        node2 = topic2.get('node');
 
         var len = Metamaps.Selected.Nodes.length;
         if (len == 0) {
-            synapsesToCreate[0] = Metamaps.Visualize.mGraph.graph.getNode(Metamaps.Create.newSynapse.topic1id);
+            topic1 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic1id);
+            synapsesToCreate[0] = topic1.get('node');
         } else if (len > 0) {
             synapsesToCreate = Metamaps.Selected.Nodes;
         }
@@ -3150,6 +3293,8 @@ Metamaps.Synapse = {
     },
     getSynapseFromAutocomplete: function (id) {
         var self = Metamaps.Synapse,
+            topic1,
+            topic2,
             node1,
             node2;
 
@@ -3161,8 +3306,10 @@ Metamaps.Synapse = {
         });
         Metamaps.Mappings.add(mapping);
 
-        node1 = Metamaps.Visualize.mGraph.graph.getNode(Metamaps.Create.newSynapse.topic1id);
-        node2 = Metamaps.Visualize.mGraph.graph.getNode(Metamaps.Create.newSynapse.topic2id);
+        topic1 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic1id);
+        node1 = topic1.get('node');
+        topic1 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic2id);
+        node2 = topic2.get('node');
         Metamaps.Create.newSynapse.hide();
 
         self.renderSynapse(mapping, synapse, node1, node2, true);
@@ -3220,6 +3367,7 @@ Metamaps.Map = {
             Metamaps.Filter.checkMappers();
 
             Metamaps.Realtime.startActiveMap();
+            Metamaps.Loading.hide();
         }
 
         $.ajax({

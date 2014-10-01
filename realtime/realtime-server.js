@@ -113,6 +113,41 @@ function start() {
             socket.broadcast.emit('maps-' + data.mapid + '-updatePeerCoords', peer);
         });
 
+        socket.on('topicDrag', function (data) {
+            var mapId = data.mapid;
+            delete data.mapid;
+
+            socket.broadcast.emit('maps-' + mapId + '-topicDrag', data);
+        });
+
+        socket.on('newTopic', function (data) {
+            var mapId = data.mapid;
+            delete data.mapid;
+
+            socket.broadcast.emit('maps-' + mapId + '-newTopic', data);
+        });
+
+        socket.on('removeTopic', function (data) {
+            var mapId = data.mapid;
+            delete data.mapid;
+
+            socket.broadcast.emit('maps-' + mapId + '-removeTopic', data);
+        });
+
+        socket.on('newSynapse', function (data) {
+            var mapId = data.mapid;
+            delete data.mapid;
+
+            socket.broadcast.emit('maps-' + mapId + '-newSynapse', data);
+        });
+
+        socket.on('removeSynapse', function (data) {
+            var mapId = data.mapid;
+            delete data.mapid;
+
+            socket.broadcast.emit('maps-' + mapId + '-removeSynapse', data);
+        });
+
     });
 }
 

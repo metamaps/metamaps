@@ -130,6 +130,7 @@
             Metamaps.GlobalUI.Search.unlock();
             Metamaps.GlobalUI.Search.close(0, true);
 
+            Metamaps.Loading.show();
             Metamaps.Map.end();
             Metamaps.Map.launch(id);
         },

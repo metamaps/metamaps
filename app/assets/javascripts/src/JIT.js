@@ -7081,7 +7081,8 @@ Graph.Plot = {
         var l = Metamaps.Mouse.synapseStartCoordinates.length;
         for (var i = l - 1; i >= 0; i -= 1) {
             start = Metamaps.Mouse.synapseStartCoordinates[i];
-            Metamaps.JIT.renderMidArrow(start, end, 13, false, canvas, 0.5, true);
+            Metamaps.JIT.renderMidArrow(start, end, 13, false, canvas, 0.3, true);
+            Metamaps.JIT.renderMidArrow(start, end, 13, false, canvas, 0.7, true);
         }
         ctx.restore();
     }
