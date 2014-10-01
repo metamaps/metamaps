@@ -1706,11 +1706,11 @@ float: left;
 }
 .ui-tabs-vertical .ui-tabs-nav li a {
     display: block;
-    width: 92%;
-    padding: 4% !important;
+    width: 100%;
+    padding: 4px 0 !important;
 }
 .ui-tabs-vertical .ui-tabs-panel {
-    padding: 5px !important;
+    padding: 0 !important;
     float: right;
     width: 388px;
 }
@@ -1722,12 +1722,13 @@ float: left;
     line-height: 21px;
     border: none;
     background: none;
-}
-#metacodeSwitchTabs .setTitle {
-    
+    padding: 0;
 }
 #metacodeSwitchTabs .setDesc {
     margin-bottom: 5px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    color: #424242;
+    font-size: 14px;
 }
 #switchMetacodes > p {
     margin: 16px 0 16px 0;
@@ -1777,6 +1778,8 @@ float: left;
     background: none;
     font-size: 14px;
     line-height: 14px;
+    font-family: 'din-regular', helvetica, sans-serif;
+    color: #424242;
 }
 #metacodeSwitchTabs button.button {
     width: auto !important;
@@ -2278,7 +2281,7 @@ float: left;
     position:fixed;
     top:50%;
     left:50%;
-    z-index: 4;
+    z-index: 1;
 }
 
 .collabCompass:hover p {

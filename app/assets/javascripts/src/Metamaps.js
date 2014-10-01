@@ -683,8 +683,8 @@ Metamaps.TopicCard = {
             link: null
         });
         $('.embeds').empty();
+        $('#addLinkInput input').val("");
         $('.attachments').removeClass('hidden');
-        $('.addAttachment').show();
         $('.CardOnGraph').removeClass('hasAttachment');
     },
     bindShowCardListeners: function (topic) {
@@ -700,21 +700,9 @@ Metamaps.TopicCard = {
         Metamaps.Mapper.get(topic.get('user_id'), setMapperImage)
 
         // starting embed.ly
-        var addLinkFunc = function () {
-            var addLinkDiv ='';
-            var addLinkDesc ='Enter or paste a link';
-            addLinkDiv+='<div class="addLink"><div id="addLinkIcon"></div>';
-            addLinkDiv+='<div id="addLinkInput"><input placeholder="' + addLinkDesc + '"></input>';
-            addLinkDiv+='<div id="addLinkReset"></div></div></div>';
-            $('.addAttachment').hide();
-            $('.attachments').append(addLinkDiv);
-            $('.showcard #addLinkReset').click(resetFunc);
-            $('.showcard #addLinkInput input').bind("paste keyup",inputEmbedFunc);
-            $('#addLinkInput input').focus();
-        };
         var resetFunc = function () {
-            $('.addLink').remove();
-            $('.addAttachment').show();
+            $('#addLinkInput input').val("");
+            $('#addLinkInput input').focus();
         };
         var inputEmbedFunc = function (event) {
             
@@ -734,7 +722,6 @@ Metamaps.TopicCard = {
                         'data-card-description': '0',
                         href: text
                     }).html(text);
-                    $('.addLink').remove();
                     $('.attachments').addClass('hidden');
                     $('.embeds').append(embedlyEl);
                     $('.embeds').append('<div id="embedlyLinkLoader"></div>');
@@ -749,6 +736,8 @@ Metamaps.TopicCard = {
                 }
             }, 100);
         };
+        $('#addLinkReset').click(resetFunc);
+        $('#addLinkInput input').bind("paste keyup",inputEmbedFunc);
 
         // initialize the link card, if there is a link
         if (topic.get('link') && topic.get('link') !== '') {
@@ -760,7 +749,6 @@ Metamaps.TopicCard = {
             loader.show(); // Hidden by default
             embedly('card', document.getElementById('embedlyLink'));
         }
-        $('.showcard #addlink').click(addLinkFunc);
 
 
         var selectingMetacode = false;
@@ -940,9 +928,9 @@ Metamaps.TopicCard = {
         }
 
         if (authorized) {
-            nodeValues.attachments = '<div class="addAttachment">';
-            nodeValues.attachments += '<div id="addlink"><div id="linkIcon" class="attachmentIcon"></div>Attach a link</div>';
-            nodeValues.attachments += '<div id="addupload"><div id="uploadIcon" class="attachmentIcon"></div>Upload a file</div></div>';
+            nodeValues.attachments = '<div class="addLink"><div id="addLinkIcon"></div>';
+            nodeValues.attachments += '<div id="addLinkInput"><input placeholder="Enter or paste a link"></input>';
+            nodeValues.attachments += '<div id="addLinkReset"></div></div></div>';
         } else {
             nodeValues.attachmentsHidden = 'hidden';
             nodeValues.attachments = '';
