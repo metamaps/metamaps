@@ -212,6 +212,7 @@
 .searchHeader {
     height: 42px;
     width: 100%;
+    position: relative;
 }
 .searchTopicsHeader {
     background: #4fc4a8;
@@ -227,35 +228,44 @@
     color: #F5F5F5;
     font-size: 18px;
     line-height: 18px;
-    margin: 10px 0 3px 10px;
+    margin: 12px 0 3px 16px;
     float: left;
 }
 .sidebarSearch .tt-dropdown-menu .limitToMe {
     float: left;
-    width: 15px;
-    height: 15px;
-    margin-top: 11px;
-    margin-left: 15px;
+    width: 12px;
+    height: 12px;
+    border: 1px;
+    color: #000000;
+    position: absolute;
+    top: 15px;
+    left: 136px;
 }
 .sidebarSearch .tt-dropdown-menu .limitToMeLabel {
     float: left;
-    margin-top: 11px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    font-size: 12px;
+    color: #f5f5f5;
+    margin: 0;
+    position: absolute;
+    top: 15px;
+    left: 156px;
+}
+.sidebarSearch .tt-dropdown-menu .minimizeResults, .sidebarSearch .tt-dropdown-menu .maximizeResults {
+    float: right;
+    width: 32px;
+    height: 32px;
+    background-image: url(arrowpermswhite_sprite.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 20px;
 }
 .sidebarSearch .tt-dropdown-menu .minimizeResults {
-    float: right;
-    width: 35px;
-    height: 35px;
-    background: url('/assets/MMCCicon_minimize_arrow.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
+    background-position-x: 0;
 }
 .sidebarSearch .tt-dropdown-menu .maximizeResults {
-    float: right;
-    width: 35px;
-    height: 35px;
-    background: url('/assets/MMCCicon_maximize_arrow.png') no-repeat center center;
-    background-size: 25px 25px;
-    cursor: pointer;
+    background-position-x: -32px;
 }
 .sidebarSearch .tt-suggestions {
     overflow: visible;
@@ -292,7 +302,7 @@
 .sidebarSearch .tt-dataset-topics .tt-is-under-cursor .topicIcon,
 .sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .topicIcon {
     margin: 0 auto;
-    padding-left: 2px
+    padding-left: 10px;
 }
 .sidebarSearch .tt-dataset-topics .metacodeTip {
     display: none;
@@ -311,7 +321,7 @@
     margin: 4px 9px 4px 4px;
 }
 .sidebarSearch .resultText {
-    width: 225px;
+    width: 260px;
     display: block;
     float: left;
     word-wrap: break-word;
@@ -355,14 +365,19 @@
     outline: none;
 }
 .sidebarSearch button.addToMap {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_add.png) no-repeat center center;
-    background-size: 18px 18px;
-    top: 30px;
+    width: 24px;
+    height: 24px;
+    background: url(addtopic_sprite.png);
+    background-repeat: no-repeat;
+    background-size: 48px 24px;
+    top: 19px;
     left: 84px;
     cursor: pointer;
 }
+.sidebarSearch button.addToMap:hover {
+    background-position: -24px;
+}
+/*
 .sidebarSearch div.goTo {
     width: 20px;
     height: 20px;
@@ -370,25 +385,28 @@
     background-size: 18px 18px;
     top: 7px;
     left: 84px;
-}
-.sidebarSearch div.mapCount {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_map.png) no-repeat 0px center;
-    background-size: 14px 14px;
+}*/
+.sidebarSearch div.topicCount {
+    width: 16px;
+    height: 16px;
+    background: url(topic16.png);
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
     top: 7px;
-    left: 38px;
+    left: 13px;
     padding-left: 18px;
     font-size: 12px;
     line-height: 20px;
 }
-.sidebarSearch div.topicCount {
+
+.sidebarSearch div.mapCount {
     width: 20px;
     height: 20px;
-    background: url(/assets/MMCCicon_topic.png) no-repeat 0px center;
+    background: url(metamap16.png);
+    background-repeat: no-repeat;
     background-size: 14px 14px;
     top: 7px;
-    left: 39px;
+    left: 13px;
     padding-left: 18px;
     font-size: 12px;
     line-height: 20px;
@@ -396,21 +414,20 @@
 .sidebarSearch div.synapseCount {
     width: 20px;
     height: 20px;
-    background: url(/assets/MMCCicon_synapse.png) no-repeat 0px center;
+    background: url(synapse16.png);
+    background-repeat: no-repeat;
     background-size: 15px 15px;
     top: 30px;
-    left: 38px;
+    left: 13px;
     padding-left: 19px;
     font-size: 12px;
     line-height: 20px;
 }
 .sidebarSearch div.topicOriginatorIcon {
-    width: 20px;
-    height: 20px;
-    background: url(/assets/MMCCicon_mapper.png) no-repeat center center;
-    background-size: 17px 17px;
+    width: 24px;
+    height: 24px;
     top: 7px;
-    left: 13px;
+    left: 47px;
 }
 .sidebarSearch .tip {
     position: absolute;
@@ -444,10 +461,11 @@
 }
 .sidebarSearch div.mapContributorsIcon {
     height: 20px;
-    background: url(/assets/MMCCicon_mapper.png) no-repeat 0px center;
+    background: url(/assets/MMCCicon_mapper.png);
+    background-repeat: no-repeat;
     background-size: 17px 17px;
     top: 7px;
-    right: 85px;
+    right: 25px;
     padding-left: 19px;
     font-size: 12px;
     line-height: 20px;
@@ -455,24 +473,27 @@
 }
 .sidebarSearch div.topicPermission,
 .sidebarSearch div.mapPermission {
-    width: 20px;
-    height: 20px;
-    background-size: 19px 19px !important;
-    top: 30px;
-    left: 13px;
+    width: 24px;
+    height: 24px;
+    background-image: url(permissions32_sprite.png);
+    background-repeat: no-repeat;
+    background-size: 72px 48px !important;
+    top: 27px;
+    left: 47px;
 }
 .sidebarSearch div.topicPermission.commons,
 .sidebarSearch div.mapPermission.commons {
-    background: url(/assets/MMCCicon_commons.png) no-repeat center center;
+    background-position: 0 0;
 }
 .sidebarSearch div.topicPermission.public,
 .sidebarSearch div.mapPermission.public {
-    background: url(/assets/MMCCicon_public.png) no-repeat center center;
+    background-position: -32px 0;
 }
 .sidebarSearch div.topicPermission.private,
 .sidebarSearch div.mapPermission.private {
-    background: url(/assets/MMCCicon_private.png) no-repeat center center;
+    background-position: -16px 0;
 }
+
 .sidebarSearch .tt-dataset-mappers a.goTo {
     top: 7px;
 }

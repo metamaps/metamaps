@@ -533,6 +533,7 @@ Metamaps.GlobalUI.Search = {
                     if (dataset.length == 0) {
                         dataset.push({
                             profile: "/assets/user.png",
+                  
                             value: "No results",
                             label: "No results",
                             rtype: "noresult"
@@ -591,14 +592,12 @@ Metamaps.GlobalUI.Search = {
             if (s.css('height') == '0px') {
                 s.css({
                     'height': 'auto',
-                    'border-top': 'none',
                     'overflow': 'visible'
                 });
                 $(this).removeClass('maximizeResults').addClass('minimizeResults');
             } else {
                 s.css({
                     'height': '0',
-                    'border-top': '1px solid rgb(56, 56, 56)',
                     'overflow': 'hidden'
                 });
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');

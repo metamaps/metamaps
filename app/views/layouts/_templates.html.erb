@@ -83,9 +83,6 @@
           <span class="tip">add to map</span>
         </button>
         <% end %>
-        <div class="goTo hoverForTip">
-          <span class="tip">open in new tab</span>
-        </div>
         <div class="mapCount hoverForTip">
           <span class="tip">appears on this # of maps</span>
           {{mapCount}}
@@ -95,7 +92,8 @@
           {{synapseCount}}
         </div>
         <div class="topicOriginatorIcon hoverForTip">
-          <span class="tip topicOriginator">created by {{originator}}</span>
+            <img width="24" height="24" src="{{originatorImage}}">
+            <span class="tip topicOriginator">created by {{originator}}</span>
         </div>
         <div class="topicPermission {{permission}} hoverForTip">
           <span class="tip">topic is {{permission}}</span>
@@ -145,6 +143,14 @@
       <div class="autoOptions">
         <div class="goTo hoverForTip">
           <span class="tip">open in new tab</span>
+        </div>
+        <div class="mapCount hoverForTip">
+          <span>Mapping since:</span>
+          {{create_at}}
+        </div>
+        <div class="mapCount hoverForTip">
+          <span>Generation</span>
+          {{mapCount}}
         </div>
         <div class="mapCount hoverForTip">
           <span class="tip">created this # of maps</span>

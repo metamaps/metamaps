@@ -10,9 +10,6 @@
  *
  *= require_self
  *= require_tree .
- *= require base
- *= require jquery.mCustomScrollbar
- *= require jquery-ui
 */
 
 /* clear styles */
