@@ -26,7 +26,7 @@ Metamaps.Settings = {
     colors: {
         background: '#344A58',
         synapses: {
-            normal: '#222222',
+            normal: '#888888',
             hover: '#222222',
             selected: '#FFFFFF'
         },
@@ -2105,17 +2105,11 @@ Metamaps.Control = {
 
     },
     selectNode: function (node,e) {
-        if (Metamaps.Selected.Nodes.indexOf(node) != -1) return;
+        var filtered = node.getData('alpha') === 0;
+
+        if (filtered || Metamaps.Selected.Nodes.indexOf(node) != -1) return;
         node.selected = true;
         node.setData('dim', 30, 'current');
-        /*
-		if(!(e.ctrlKey) && !(e.altKey)){
-			node.eachAdjacency(function (adj) {
-				Metamaps.Control.selectEdge(adj);
-			});
-		}
-        */
-		
         Metamaps.Selected.Nodes.push(node);
     },
     deselectAllNodes: function () {
@@ -2128,11 +2122,6 @@ Metamaps.Control = {
     },
     deselectNode: function (node) {
         delete node.selected;
-		/*
-        node.eachAdjacency(function (adj) {
-            Metamaps.Control.deselectEdge(adj);
-        });
-		*/
         node.setData('dim', 25, 'current');
 
         //remove the node
@@ -2211,26 +2200,18 @@ Metamaps.Control = {
         Metamaps.Filter.checkMappers();
     },
     selectEdge: function (edge) {
-        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
-        if (Metamaps.Selected.Edges.indexOf(edge) != -1) return;
-        edge.setData('showDesc', true, 'current');
-        if (!Metamaps.Settings.embed) {
-            edge.setDataset('end', {
-                lineWidth: 4,
-                color: Metamaps.Settings.colors.synapses.selected,
-                alpha: 1
-            });
-        } else if (Metamaps.Settings.embed) {
-            edge.setDataset('end', {
-                lineWidth: 4,
-                color: Metamaps.Settings.colors.synapses.selected,
-                alpha: 1
-            });
-        }
-        Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['edge-property:lineWidth:color:alpha'],
-            duration: 100
+        var filtered = edge.getData('alpha') === 0; // don't select if the edge is filtered
+
+        if (filtered || Metamaps.Selected.Edges.indexOf(edge) != -1) return;
+
+        var width = Metamaps.Mouse.edgeHoveringOver === edge ? 4 : 2;
+        edge.setDataset('current', {
+            showDesc: true,
+            lineWidth: width,
+            color: Metamaps.Settings.colors.synapses.selected
         });
+        Metamaps.Visualize.mGraph.plot();
+
         Metamaps.Selected.Edges.push(edge);
     },
     deselectAllEdges: function () {
@@ -2241,28 +2222,23 @@ Metamaps.Control = {
         }
         Metamaps.Visualize.mGraph.plot();
     },
-    deselectEdge: function (edge) {
-        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
+    deselectEdge: function (edge, quick) {
         edge.setData('showDesc', false, 'current');
-        edge.setDataset('end', {
+        
+        edge.setDataset('current', {
             lineWidth: 2,
-            color: Metamaps.Settings.colors.synapses.normal,
-            alpha: 0.4
+            color: Metamaps.Settings.colors.synapses.normal
         });
 
         if (Metamaps.Mouse.edgeHoveringOver == edge) {
-            edge.setData('showDesc', true, 'current');
-            edge.setDataset('end', {
+            edge.setDataset('current', {
+                showDesc: true,
                 lineWidth: 4,
-                color: Metamaps.Settings.colors.synapses.hover,
-                alpha: 1
+                color: Metamaps.Settings.colors.synapses.hover
             });
         }
 
-        Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['edge-property:lineWidth:color:alpha'],
-            duration: 100
-        });
+        Metamaps.Visualize.mGraph.plot();
 
         //remove the edge
         Metamaps.Selected.Edges.splice(
@@ -2692,8 +2668,11 @@ Metamaps.Filter = {
             }
             else {
                 if (n) {
-                    // TODO quick deselect node
+                    Metamaps.Control.deselectNode(n, true);
                     n.setData('alpha', 0, 'end');
+                    n.eachAdjacency(function(e){
+                        Metamaps.Control.deselectEdge(e, true);
+                    });
                 }
                 else console.log(topic);
             }
@@ -2712,15 +2691,17 @@ Metamaps.Filter = {
                 else passesMapper = true;
             }
 
+            var color = Metamaps.Settings.colors.synapses.normal;
             if (passesSynapse && passesMapper) {
                 if (e) {
-                    e.setData('alpha', 0.4, 'end');
+                    e.setData('alpha', 1, 'end');
+                    e.setData('color', color, 'end');
                 }
                 else console.log(synapse);
             }
             else {
                 if (e) {
-                    // TODO quick deselect edge
+                    Metamaps.Control.deselectEdge(e, true);
                     e.setData('alpha', 0, 'end');
                 }
                 else console.log(synapse);
