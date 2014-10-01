@@ -267,14 +267,14 @@
     left: 156px;
 }
 .sidebarSearch .tt-dropdown-menu .minimizeResults, .sidebarSearch .tt-dropdown-menu .maximizeResults {
-    float: right;
     width: 32px;
     height: 32px;
     background-image: url(arrowpermswhite_sprite.png);
     background-repeat: no-repeat;
     cursor: pointer;
-    margin-top: 5px;
-    margin-right: 20px;
+    position: absolute;
+    top: 5px;
+    left: 410px;
 }
 .sidebarSearch .tt-dropdown-menu .minimizeResults {
     background-position-x: 0;
