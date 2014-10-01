@@ -127,6 +127,9 @@ body,
     position: relative;
     margin-top: 32px;
 }
+.edit_user .userImage img {
+    border-radius: 42px;
+}
 .edit_user .editPhoto {
     display: none;
     width: 40px;

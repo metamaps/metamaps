@@ -2507,21 +2507,6 @@ Metamaps.Filter = {
         $('#filter_by_mapper ul').empty();
         $('#filter_by_synapse ul').empty();
     },
-    initializeFilterData: function () {
-        var self = Metamaps.Filter;
-
-        var check = function (filtersToUse, topicsOrSynapses, propertyToCheck) {
-            Metamaps[topicsOrSynapses].each(function(model) {
-                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-                if (prop && self.visible[filtersToUse].indexOf(prop) === -1) {
-                    self.visible[filtersToUse].push(prop);
-                }
-            });
-        };
-        check('metacodes', 'Topics', 'metacode_id');
-        check('mappers', 'Mappings', 'user_id');
-        check('synapses', 'Synapses', 'desc');
-    },
     /*  
     Most of this data essentially depends on the ruby function which are happening for filter inside view filterBox
     But what these function do is load this data into three accessible array within java : metacodes, mappers and synapses
@@ -2969,7 +2954,6 @@ Metamaps.Topic = {
 
             // update filters
             Metamaps.Filter.reset(); 
-            Metamaps.Filter.initializeFilterData(); // this sets all the visible filters to true
 
             // these three update the actual filter box with the right list items
             Metamaps.Filter.checkMetacodes();
@@ -3356,7 +3340,6 @@ Metamaps.Map = {
 
             // update filters
             Metamaps.Filter.reset(); 
-            Metamaps.Filter.initializeFilterData(); // this sets all the visible filters to true
 
             // set the proper mapinfobox content
             Metamaps.Map.InfoBox.load();
