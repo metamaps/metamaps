@@ -30,8 +30,8 @@
     <% m.metacodes.sort{|x,y| x.name <=> y.name }.each_with_index do |m, index| %>
       <% @list += '<li><img src="' + m.icon + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
     <% end %>
+    <p class="setDesc"><%= m.desc %></p>
     <div class="metacodeSetList">
-      <p class="setDesc"><%= m.desc %></p>
       <ul>
         <%= @list.html_safe %>
       </ul>
@@ -43,7 +43,7 @@
   </div>
   <% end %>
     <div id="metacodeSwitchTabsCustom">
-        <p class="setTitle">Pick Your Own Metacodes</p>
+        <p class="setDesc">Choose Your Metacodes</p>
         <% @list = '' %>
         <% Metacode.order("name").all.each_with_index do |m, index| %>
           <% if selectedSet == "custom" %>
