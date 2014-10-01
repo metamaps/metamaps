@@ -335,6 +335,13 @@ Metamaps.GlobalUI.Search = {
     init: function () {
         var self = Metamaps.GlobalUI.Search;
 
+        var loader = new CanvasLoader('searchLoading');
+        loader.setColor('#4fb5c0'); // default is '#000000'
+        loader.setDiameter(24); // default is 40
+        loader.setDensity(41); // default is 40
+        loader.setRange(0.9); // default is 1.3
+        loader.show(); // Hidden by default
+
         // bind the hover events
         $(".sidebarSearch").hover(function () {
             self.open()
@@ -422,7 +429,7 @@ Metamaps.GlobalUI.Search = {
                 self.isOpen = true;
             });
         }
-        else if (self.locked) $('.sidebarSearchField').focus();
+        //else if (self.locked) $('.sidebarSearchField').focus();
     },
     close: function (closeAfter, bypass) {
         var self = Metamaps.GlobalUI.Search;
@@ -445,16 +452,16 @@ Metamaps.GlobalUI.Search = {
             }
         }, closeAfter);
         
-        if (self.locked) {
+        /*if (self.locked) {
             $('.sidebarSearchField').typeahead('setQuery', '');
             $('.sidebarSearchField').blur();
-        }
+        }*/
     },
     startTypeahead: function () {
         var self = Metamaps.GlobalUI.Search;
 
-        var mapheader = Metamaps.Active.Mapper ? '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>' : '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>';
-        var topicheader = Metamaps.Active.Mapper ? '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>' : '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>';
+        var mapheader = Metamaps.Active.Mapper ? '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>' : '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>';
+        var topicheader = Metamaps.Active.Mapper ? '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>' : '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>';
         var mapperheader = '<div class="searchMappersHeader searchHeader"><h3 class="search-heading">Mappers</h3><div class="minimizeResults minimizeMapperResults"></div><div class="clearfloat"></div></div>';
 
         var topics = {
@@ -548,7 +555,9 @@ Metamaps.GlobalUI.Search = {
         $('.sidebarSearchField').typeahead([topics, maps, mappers]);
 
         //Set max height of the search results box to prevent it from covering bottom left footer
-        $('.sidebarSearchField').bind('typeahead:opened', function (event) {
+        $('.sidebarSearchField').bind('typeahead:suggestionsRendered', function (event) {
+            self.initSearchOptions();
+            self.hideLoader();
             var h = $(window).height();
             $(".tt-dropdown-menu").css('max-height', h - 100);
         });
@@ -559,13 +568,21 @@ Metamaps.GlobalUI.Search = {
 
         // tell the autocomplete to launch a new tab with the topic, map, or mapper you clicked on
         $('.sidebarSearchField').bind('typeahead:selected', self.handleResultClick);
+        
         // don't do it, if they clicked on a 'addToMap' button
         $('.sidebarSearch button.addToMap').click(function (event) {
             event.stopPropagation();
         });
 
         // make sure that when you click on 'limit to me' or 'toggle section' it works
-        $('.sidebarSearchField').bind('keyup', self.initSearchOptions);
+        $('.sidebarSearchField').bind('typeahead:queryChanged', function(){
+            if ($(this).val() === "") {
+                self.hideLoader();
+            }
+            else {
+                self.showLoader();
+            }
+        });
 
     },
     handleResultClick: function (event, datum, dataset) {
@@ -628,5 +645,11 @@ Metamaps.GlobalUI.Search = {
 
             self.optionsInitialized = true;
         }
+    },
+    hideLoader: function () {
+        $('#searchLoading').hide();
+    },
+    showLoader: function () {
+        $('#searchLoading').show();
     }
 };
