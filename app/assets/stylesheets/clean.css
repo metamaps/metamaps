@@ -678,13 +678,15 @@
 
 /* infoAndHelp */
 
+.mapPage .infoAndHelp, .topicPage .infoAndHelp{
+    right: 70px;
+}
 .infoAndHelp {
     position: fixed;
-    bottom: 24px;
-    right: 66px;
+    bottom: 20px;
+    right: 20px;
     z-index: 3;
     width: auto;
-    padding: 1px 10px 0px 10px;
     font-style: italic;
     height: 32px;
 }
