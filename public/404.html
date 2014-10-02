@@ -54,12 +54,17 @@
       padding-top: 150px;
     }
     .picture {
-      width: 500px;
+      width: 450px;
+      height: 450px;
+      border: 10px solid #424242;
+      border-radius: 225px;
+      -webkit-border-radius: 225px;
+      -moz-border-radius: 225px;
+      background: url(/assets/monkeyselfie.jpg) no-repeat;
       float: left;
-    }
-
-    .picture img {
-      width: 500px;
+      background-position:50% 20%;
+      background-size: 100%;
+      margin-top: 162px;
     }
 
     .wrapper {
@@ -68,10 +73,11 @@
     }
 
     .button {
-      display: inline-block;
+      display: block;
       width: 220px;
       height: 14px;
       padding: 16px 0;
+      margin-bottom: 16px;
       text-align: center;
       border-radius: 2px;
       font-size: 14px;
@@ -93,7 +99,7 @@
 
     .exploreFeaturedCTA {
       background-color: #a354cd;
-      margin-right: 16px;
+      margin-bottom: 16px;
     }
 
     .exploreFeaturedCTA:hover {
@@ -117,7 +123,6 @@
 
     </div>
     <div class="picture">
-      <img src="/assets/monkeyselfie.jpg"/>
     </div>
   </div>
 </body>
