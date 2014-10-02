@@ -12,155 +12,194 @@ one:
 two: 
   name: Activity  
   icon: /assets/icons/activity.png
+  color: #6ebf65
 
 three: 
   name: Bizarre  
   icon: /assets/icons/bizarre.png
+  color: #BDB25E
 
 four: 
   name: Catalyst  
   icon: /assets/icons/catalyst.png
+  color: #EF8964
 
 five: 
   name: Closed  
   icon: /assets/icons/closed.png
+  color: #ABB49F
 
 six: 
   name: Experience  
   icon: /assets/icons/experience.png
+  color: #BE995F
 
 seven: 
   name: Future Dev  
   icon: /assets/icons/futuredev.png
+  color: #25A17F
 
 eight:
   name: Group  
   icon: /assets/icons/group.png
+  color: #7076BC
 
 nine:
   name: Idea  
   icon: /assets/icons/idea.png
+  color: #C4BC5E
 
 ten:
   name: Implication  
   icon: /assets/icons/implication.png
+  color: #83DECA
 
 eleven:
   name: Insight  
   icon: /assets/icons/insight.png
+  color: #B074AD
 
 twelve:
   name: Intention  
   icon: /assets/icons/intention.png
+  color: #BAEAFF
 
 thirteen:
   name: Knowledge  
   icon: /assets/icons/knowledge.png
+  color: #60ACF7
 
 fourteen:
   name: Location  
   icon: /assets/icons/location.png
+  color: #ABD9A7
 
 fifteen:
   name: Open Issue  
   icon: /assets/icons/openissue.png
+  color: #9BBF71
 
 sixteen:
   name: Opinion  
   icon: /assets/icons/opinion.png
+  color: #54A19D
 
 seventeen:
   name: Opportunity  
   icon: /assets/icons/opportunity.png
+  color: #889F64
 
 eighteen:
   name: Person  
   icon: /assets/icons/person.png
+  color: #DE925F
 
 nineteen:
   name: Platform  
   icon: /assets/icons/platform.png
+  color: #21C8FE
 
 twenty:
   name: Problem  
   icon: /assets/icons/problem.png
+  color: #99CFC4
 
 twenty-one:
   name: Question  
   icon: /assets/icons/question.png
+  color: #709899
 
 twenty-two:
   name: Reference  
   icon: /assets/icons/reference.png
+  color: #A7A7A7
 
 twenty-three:
   name: Requirement  
   icon: /assets/icons/requirement.png
+  color: #D2A7D4
 
 twenty-four:
   name: Resource  
-  icon: /assets/icons/resource.png 
+  icon: /assets/icons/resource.png
+  color: #C98C63 
 
 twenty-five:
   name: Role  
   icon: /assets/icons/role.png
+  color: #A8595D
 
 twenty-six:
   name: Task  
   icon: /assets/icons/task.png
+  color: #2F89BA
 
 twenty-seven:
   name: Tool	  
   icon: /assets/icons/tool.png 
+  color: #828282
 
 twenty-eight:
   name: Trajectory  
   icon: /assets/icons/trajectory.png
+  color: #B3953D
   
 twenty-nine:
   name: Argument  
   icon: /assets/icons/argument.png
+  color: #7FAEFD
   
 thirty:
   name: Con  
   icon: /assets/icons/con_icon.png
+  color: #CF7C74
   
 thirty-one:
   name: Decision  
   icon: /assets/icons/decision.png
+  color: #CCA866
   
 thirty-two:
   name: Example  
   icon: /assets/icons/example.png
+  color: #598559
   
 thirty-three:
   name: Foresight  
   icon: /assets/icons/foresight.png
+  color: #B0B0B0
   
 thirty-four:
   name: Good Practice  
   icon: /assets/icons/goodpractice.png
+  color: #BD9E86
   
 thirty-five:
   name: List  
   icon: /assets/icons/list.png
+  color: #B7A499
   
 thirty-six:
   name: Movie Map  
   icon: /assets/icons/moviemap.png
+  color: #A5A0DE
   
 thirty-seven:
   name: Note  
   icon: /assets/icons/note.png
+  color: #A389A1
   
 thirty-eight:
   name: Pro  
   icon: /assets/icons/pro.png
+  color: #89B879
   
 thirty-nine:
   name: Research  
   icon: /assets/icons/research.png
+  color: #CD8E89
   
 forty:
   name: Wildcard  
   icon: /assets/icons/wildcard.png
+  color: #73C7DE
