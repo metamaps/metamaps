@@ -265,7 +265,7 @@ Metamaps.JIT = {
                 color: Metamaps.Settings.colors.synapses.normal,
                 type: 'customEdge',
                 lineWidth: 2,
-                alpha: 0.4
+                alpha: 1
             },
             //Native canvas text styling
             Label: {
@@ -574,16 +574,16 @@ Metamaps.JIT = {
         //following if statement only executes if the edge being hovered over is not selected
         if (edgeIsSelected == -1) {
             edge.setData('showDesc', true, 'current');
-            edge.setDataset('end', {
-                lineWidth: 4,
-                alpha: 1
-            });
-            Metamaps.Visualize.mGraph.fx.animate({
-                modes: ['edge-property:lineWidth:color:alpha'],
-                duration: 100
-            });
-            Metamaps.Visualize.mGraph.plot();
         }
+
+        edge.setDataset('end', {
+            lineWidth: 4
+        });
+        Metamaps.Visualize.mGraph.fx.animate({
+            modes: ['edge-property:lineWidth'],
+            duration: 100
+        });
+        Metamaps.Visualize.mGraph.plot();
     }, // onMouseEnter
     onMouseLeave: function (edge) {
         if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
@@ -592,15 +592,15 @@ Metamaps.JIT = {
         //following if statement only executes if the edge being hovered over is not selected
         if (edgeIsSelected == -1) {
             edge.setData('showDesc', false, 'current');
-            edge.setDataset('end', {
-                lineWidth: 2,
-                alpha: 0.4
-            });
-            Metamaps.Visualize.mGraph.fx.animate({
-                modes: ['edge-property:lineWidth:color:alpha'],
-                duration: 100
-            });
         }
+
+        edge.setDataset('end', {
+            lineWidth: 2
+        });
+        Metamaps.Visualize.mGraph.fx.animate({
+            modes: ['edge-property:lineWidth'],
+            duration: 100
+        });
         Metamaps.Visualize.mGraph.plot();
     }, // onMouseLeave
     onMouseMoveHandler: function (node, eventInfo, e) {

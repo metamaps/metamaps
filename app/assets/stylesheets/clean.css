@@ -267,14 +267,14 @@
     left: 156px;
 }
 .sidebarSearch .tt-dropdown-menu .minimizeResults, .sidebarSearch .tt-dropdown-menu .maximizeResults {
-    float: right;
     width: 32px;
     height: 32px;
     background-image: url(arrowpermswhite_sprite.png);
     background-repeat: no-repeat;
     cursor: pointer;
-    margin-top: 5px;
-    margin-right: 20px;
+    position: absolute;
+    top: 5px;
+    left: 410px;
 }
 .sidebarSearch .tt-dropdown-menu .minimizeResults {
     background-position-x: 0;
@@ -346,6 +346,10 @@
 .sidebarSearch .tt-dataset-mappers .tt-suggestion .icon {
     margin: 4px 9px 4px 4px;
 }
+.sidebarSearch .tt-dataset-mappers .resultText {
+    width: 150px;
+}
+
 .sidebarSearch .resultText {
     width: 260px;
     display: table-cell;
@@ -380,6 +384,9 @@
 }
 .tt-dataset-maps div.autoOptions {
     width: 84px;
+}
+.sidebarSearch .tt-dataset-mappers .autoOptions {
+    width: 235px;
 }
 .sidebarSearch .tt-is-under-cursor .autoOptions,
 .sidebarSearch .tt-is-under-mouse-cursor .autoOptions {
@@ -514,7 +521,24 @@
 
 .sidebarSearch .tt-dataset-mappers div.mapCount {
     top: 8px;
+    left: 170px;
 }
+.sidebarSearch .tt-dataset-mappers div.mapperCreated {
+    left: 0px;
+    padding-left: 0px;
+    font-size: 12px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    line-height: 24px;
+}
+.sidebarSearch .tt-dataset-mappers div.mapperGeneration {
+    top: 20px;
+    left: 0px;
+    padding-left: 0px;
+    font-size: 12px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    line-height: 24px;
+}
+
 /* end search */
 
 /* end upperLeftUI */

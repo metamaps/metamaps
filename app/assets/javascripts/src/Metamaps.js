@@ -26,7 +26,7 @@ Metamaps.Settings = {
     colors: {
         background: '#344A58',
         synapses: {
-            normal: '#222222',
+            normal: '#888888',
             hover: '#222222',
             selected: '#FFFFFF'
         },
@@ -683,8 +683,8 @@ Metamaps.TopicCard = {
             link: null
         });
         $('.embeds').empty();
+        $('#addLinkInput input').val("");
         $('.attachments').removeClass('hidden');
-        $('.addAttachment').show();
         $('.CardOnGraph').removeClass('hasAttachment');
     },
     bindShowCardListeners: function (topic) {
@@ -700,21 +700,9 @@ Metamaps.TopicCard = {
         Metamaps.Mapper.get(topic.get('user_id'), setMapperImage)
 
         // starting embed.ly
-        var addLinkFunc = function () {
-            var addLinkDiv ='';
-            var addLinkDesc ='Enter or paste a link';
-            addLinkDiv+='<div class="addLink"><div id="addLinkIcon"></div>';
-            addLinkDiv+='<div id="addLinkInput"><input placeholder="' + addLinkDesc + '"></input>';
-            addLinkDiv+='<div id="addLinkReset"></div></div></div>';
-            $('.addAttachment').hide();
-            $('.attachments').append(addLinkDiv);
-            $('.showcard #addLinkReset').click(resetFunc);
-            $('.showcard #addLinkInput input').bind("paste keyup",inputEmbedFunc);
-            $('#addLinkInput input').focus();
-        };
         var resetFunc = function () {
-            $('.addLink').remove();
-            $('.addAttachment').show();
+            $('#addLinkInput input').val("");
+            $('#addLinkInput input').focus();
         };
         var inputEmbedFunc = function (event) {
             
@@ -734,7 +722,6 @@ Metamaps.TopicCard = {
                         'data-card-description': '0',
                         href: text
                     }).html(text);
-                    $('.addLink').remove();
                     $('.attachments').addClass('hidden');
                     $('.embeds').append(embedlyEl);
                     $('.embeds').append('<div id="embedlyLinkLoader"></div>');
@@ -749,6 +736,8 @@ Metamaps.TopicCard = {
                 }
             }, 100);
         };
+        $('#addLinkReset').click(resetFunc);
+        $('#addLinkInput input').bind("paste keyup",inputEmbedFunc);
 
         // initialize the link card, if there is a link
         if (topic.get('link') && topic.get('link') !== '') {
@@ -760,7 +749,6 @@ Metamaps.TopicCard = {
             loader.show(); // Hidden by default
             embedly('card', document.getElementById('embedlyLink'));
         }
-        $('.showcard #addlink').click(addLinkFunc);
 
 
         var selectingMetacode = false;
@@ -940,9 +928,9 @@ Metamaps.TopicCard = {
         }
 
         if (authorized) {
-            nodeValues.attachments = '<div class="addAttachment">';
-            nodeValues.attachments += '<div id="addlink"><div id="linkIcon" class="attachmentIcon"></div>Attach a link</div>';
-            nodeValues.attachments += '<div id="addupload"><div id="uploadIcon" class="attachmentIcon"></div>Upload a file</div></div>';
+            nodeValues.attachments = '<div class="addLink"><div id="addLinkIcon"></div>';
+            nodeValues.attachments += '<div id="addLinkInput"><input placeholder="Enter or paste a link"></input>';
+            nodeValues.attachments += '<div id="addLinkReset"></div></div></div>';
         } else {
             nodeValues.attachmentsHidden = 'hidden';
             nodeValues.attachments = '';
@@ -2117,17 +2105,11 @@ Metamaps.Control = {
 
     },
     selectNode: function (node,e) {
-        if (Metamaps.Selected.Nodes.indexOf(node) != -1) return;
+        var filtered = node.getData('alpha') === 0;
+
+        if (filtered || Metamaps.Selected.Nodes.indexOf(node) != -1) return;
         node.selected = true;
         node.setData('dim', 30, 'current');
-        /*
-		if(!(e.ctrlKey) && !(e.altKey)){
-			node.eachAdjacency(function (adj) {
-				Metamaps.Control.selectEdge(adj);
-			});
-		}
-        */
-		
         Metamaps.Selected.Nodes.push(node);
     },
     deselectAllNodes: function () {
@@ -2140,11 +2122,6 @@ Metamaps.Control = {
     },
     deselectNode: function (node) {
         delete node.selected;
-		/*
-        node.eachAdjacency(function (adj) {
-            Metamaps.Control.deselectEdge(adj);
-        });
-		*/
         node.setData('dim', 25, 'current');
 
         //remove the node
@@ -2223,26 +2200,18 @@ Metamaps.Control = {
         Metamaps.Filter.checkMappers();
     },
     selectEdge: function (edge) {
-        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
-        if (Metamaps.Selected.Edges.indexOf(edge) != -1) return;
-        edge.setData('showDesc', true, 'current');
-        if (!Metamaps.Settings.embed) {
-            edge.setDataset('end', {
-                lineWidth: 4,
-                color: Metamaps.Settings.colors.synapses.selected,
-                alpha: 1
-            });
-        } else if (Metamaps.Settings.embed) {
-            edge.setDataset('end', {
-                lineWidth: 4,
-                color: Metamaps.Settings.colors.synapses.selected,
-                alpha: 1
-            });
-        }
-        Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['edge-property:lineWidth:color:alpha'],
-            duration: 100
+        var filtered = edge.getData('alpha') === 0; // don't select if the edge is filtered
+
+        if (filtered || Metamaps.Selected.Edges.indexOf(edge) != -1) return;
+
+        var width = Metamaps.Mouse.edgeHoveringOver === edge ? 4 : 2;
+        edge.setDataset('current', {
+            showDesc: true,
+            lineWidth: width,
+            color: Metamaps.Settings.colors.synapses.selected
         });
+        Metamaps.Visualize.mGraph.plot();
+
         Metamaps.Selected.Edges.push(edge);
     },
     deselectAllEdges: function () {
@@ -2253,28 +2222,23 @@ Metamaps.Control = {
         }
         Metamaps.Visualize.mGraph.plot();
     },
-    deselectEdge: function (edge) {
-        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
+    deselectEdge: function (edge, quick) {
         edge.setData('showDesc', false, 'current');
-        edge.setDataset('end', {
+        
+        edge.setDataset('current', {
             lineWidth: 2,
-            color: Metamaps.Settings.colors.synapses.normal,
-            alpha: 0.4
+            color: Metamaps.Settings.colors.synapses.normal
         });
 
         if (Metamaps.Mouse.edgeHoveringOver == edge) {
-            edge.setData('showDesc', true, 'current');
-            edge.setDataset('end', {
+            edge.setDataset('current', {
+                showDesc: true,
                 lineWidth: 4,
-                color: Metamaps.Settings.colors.synapses.hover,
-                alpha: 1
+                color: Metamaps.Settings.colors.synapses.hover
             });
         }
 
-        Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['edge-property:lineWidth:color:alpha'],
-            duration: 100
-        });
+        Metamaps.Visualize.mGraph.plot();
 
         //remove the edge
         Metamaps.Selected.Edges.splice(
@@ -2704,8 +2668,11 @@ Metamaps.Filter = {
             }
             else {
                 if (n) {
-                    // TODO quick deselect node
+                    Metamaps.Control.deselectNode(n, true);
                     n.setData('alpha', 0, 'end');
+                    n.eachAdjacency(function(e){
+                        Metamaps.Control.deselectEdge(e, true);
+                    });
                 }
                 else console.log(topic);
             }
@@ -2724,15 +2691,17 @@ Metamaps.Filter = {
                 else passesMapper = true;
             }
 
+            var color = Metamaps.Settings.colors.synapses.normal;
             if (passesSynapse && passesMapper) {
                 if (e) {
-                    e.setData('alpha', 0.4, 'end');
+                    e.setData('alpha', 1, 'end');
+                    e.setData('color', color, 'end');
                 }
                 else console.log(synapse);
             }
             else {
                 if (e) {
-                    // TODO quick deselect edge
+                    Metamaps.Control.deselectEdge(e, true);
                     e.setData('alpha', 0, 'end');
                 }
                 else console.log(synapse);
