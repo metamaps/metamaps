@@ -1784,7 +1784,7 @@ float: left;
     font-weight: normal;
     float: right;
 }
-/* about, getInvolved */
+/* about, getInvolved, colophon */
 
 #aboutParms {
     margin: 30px auto;
@@ -1801,10 +1801,22 @@ float: left;
     float: left;
 }
 
-#about > p, #getInvolved > p, #invite > p {
+#colophon {
+    overflow-y: scroll;
+    height:434px;
+}
+#colophonLinks {
+    padding-left:20px;
+}
+
+#colophoneHeader {
+    padding-bottom:40px;
+}
+
+#about > p, #getInvolved > p, #invite > p, #colophon p {
 /*    color: #000;
     font-size: 16px;*/
-    margin: 10px 0;
+    margin: 0px 0px 20px 0px;
     line-height: 20px;
 }
 #about ul {
@@ -1812,6 +1824,28 @@ float: left;
 }
 #about ul li {
     display: inline-block;
+}
+#colophonSectionIndented {
+    font-family: 'din-medium', helvetica, sans-serif;
+    text-align: left;
+    padding-left:20px;
+}
+
+
+#colophonSection {
+    font-family: 'din-medium', helvetica, sans-serif;
+    text-align: left;
+}
+
+#colophon a {
+    color: #c04f4f;
+    text-decoration: underline;  
+}
+
+#colophonCols {
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
 }
 
 /* invite */
