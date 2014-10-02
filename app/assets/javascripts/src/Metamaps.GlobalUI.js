@@ -621,30 +621,25 @@ Metamaps.GlobalUI.Search = {
             }
         }
 
-        if (!self.optionsInitialized) {
+        $('.limitToMe').unbind().bind("change", function (e) {
+            // set the value of the search equal to itself to retrigger the autocomplete event
+            self.isOpen = false;
+            $('.sidebarSearchField').typeahead('setQuery', $('.sidebarSearchField').val());
+            setTimeout(function () {
+                self.isOpen = true;
+            }, 2000);
+        });
 
-            $('.limitToMe').bind("change", function (e) {
-                // set the value of the search equal to itself to retrigger the autocomplete event
-                self.isOpen = false;
-                $('.sidebarSearchField').typeahead('setQuery', $('.sidebarSearchField').val());
-                setTimeout(function () {
-                    self.isOpen = true;
-                }, 2000);
-            });
-
-            // when the user clicks minimize section, hide the results for that section
-            $('.minimizeMapperResults').click(function (e) {
-                toggleResultSet.call(this, 'mappers');
-            });
-            $('.minimizeTopicResults').click(function (e) {
-                toggleResultSet.call(this, 'topics');
-            });
-            $('.minimizeMapResults').click(function (e) {
-                toggleResultSet.call(this, 'maps');
-            });
-
-            self.optionsInitialized = true;
-        }
+        // when the user clicks minimize section, hide the results for that section
+        $('.minimizeMapperResults').unbind().click(function (e) {
+            toggleResultSet.call(this, 'mappers');
+        });
+        $('.minimizeTopicResults').unbind().click(function (e) {
+            toggleResultSet.call(this, 'topics');
+        });
+        $('.minimizeMapResults').unbind().click(function (e) {
+            toggleResultSet.call(this, 'maps');
+        });
     },
     hideLoader: function () {
         $('#searchLoading').hide();
