@@ -2050,18 +2050,63 @@ float: left;
 }
 #cheatSheet .csItem {
     margin: 5px 0;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 18px;
+    font-family: 'din-regular'; 
 }
+
+#cheatSheet .csItem a {
+    color: #c04f4f;
+}
+
 #cheatSheet .csItem img {
     display: inline-block;
-    margin: 0 2px;
+    margin-bottom: 10px;
 }
 #cheatSheet .csTitle {
+    font-weight: bold;
+
 
 }
 #cheatSheet .indented {
     margin-left: 15px;
+}
+
+#zoomIn {
+    background: #424242 url(zoom_sprite.png) no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    background-position: -37px -5px;
+    border-radius: 2px;
+    margin: 0 4px;
+    position: relative;
+    top: 3px;
+}
+
+#zoomOut {
+    background: #424242 url(zoom_sprite.png) no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    background-position: -37px -37px;
+    border-radius: 2px;
+    margin: 0 4px;
+    position: relative;
+    top: 3px;
+}
+
+#centerMap {
+    background: #424242 url(extents_sprite.png) no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    background-position: -5px -5px;
+    border-radius: 2px;
+    margin: 0 4px;
+    position: relative;
+    top: 3px;
+
 }
 
 #helpWrapper {
@@ -2096,7 +2141,17 @@ float: left;
 }
 #quickReference ul {
     width: 150px;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 14px;
+    font-family: din-medium;
+
 }
+
+#quickReference ul li {
+    padding-bottom: 16px;
+}
+
 #quickReference li.ui-state-active a {
     color: #00BCD4;
 }
