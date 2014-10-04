@@ -58,25 +58,6 @@ class Topic < ActiveRecord::Base
     super(:methods =>[:user_name, :user_image, :map_count, :synapse_count])
   end
 
-  # sends push updates through redis to websockets for realtime updates
-  def message action, origin_user_id
-  
-    return if self.permission == "private" and action == "create"
-  
-    #get array of all maps topic appears in
-    @maps = self.maps
-    #sends update to all maps that topic appears in who have realtime on
-    @maps.each do |map|
-      msg = { origin: origin_user_id,
-          mapid: map.id,
-          resource: 'Topic',
-          action: action,
-          id: self.id,
-          obj: self.selfonmap_as_json(map.id).html_safe }
-      $redis.publish 'maps', msg.to_json
-    end 
-  end
-
   def topic_autocomplete_method
     "Get: #{self.name}"
   end

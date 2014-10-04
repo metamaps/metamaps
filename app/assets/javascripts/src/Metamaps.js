@@ -27,7 +27,7 @@ Metamaps.Settings = {
         background: '#344A58',
         synapses: {
             normal: '#888888',
-            hover: '#222222',
+            hover: '#888888',
             selected: '#FFFFFF'
         },
         topics: {
@@ -61,6 +61,12 @@ Metamaps.Mouse = {
 };
 
 Metamaps.Selected = {
+    reset: function () {
+        var self = Metamaps.Selected;
+
+        self.Nodes = [];
+        self.edges = [];
+    },
     Nodes: [],
     Edges: []
 };
@@ -1323,6 +1329,7 @@ Metamaps.Visualize = {
             self.mGraph.loadJSON(Metamaps.JIT.vizData, rootIndex);
             //compute positions and plot.
             self.computePositions();
+            self.mGraph.busy = true;
             if (self.type == "RGraph") {
                 self.mGraph.fx.animate(Metamaps.JIT.RGraph.animate);
             } else if (self.type == "ForceDirected") {
@@ -1494,7 +1501,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
+        self.socket = io.connect('http://localhost:5001'); 
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -2222,7 +2229,7 @@ Metamaps.Control = {
         }
         Metamaps.Visualize.mGraph.plot();
     },
-    deselectEdge: function (edge, quick) {
+    deselectEdge: function (edge) {
         edge.setData('showDesc', false, 'current');
         
         edge.setDataset('current', {
@@ -2233,8 +2240,7 @@ Metamaps.Control = {
         if (Metamaps.Mouse.edgeHoveringOver == edge) {
             edge.setDataset('current', {
                 showDesc: true,
-                lineWidth: 4,
-                color: Metamaps.Settings.colors.synapses.hover
+                lineWidth: 4
             });
         }
 
@@ -2295,6 +2301,7 @@ Metamaps.Control = {
         var from = edge.nodeFrom.id;
         var to = edge.nodeTo.id;
         edge.setData('alpha', 0, 'end');
+        Metamaps.Control.deselectEdge(edge);
         Metamaps.Visualize.mGraph.fx.animate({
             modes: ['edge-property:alpha'],
             duration: 500
@@ -2924,6 +2931,9 @@ Metamaps.Topic = {
             // update filters
             Metamaps.Filter.reset(); 
 
+            // reset selected arrays
+            Metamaps.Selected.reset();
+
             // these three update the actual filter box with the right list items
             Metamaps.Filter.checkMetacodes();
             Metamaps.Filter.checkSynapses();
@@ -2940,6 +2950,18 @@ Metamaps.Topic = {
             $('.rightclickmenu').remove();
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
+        }
+    },
+    centerOn: function (nodeid) {
+        if (!Metamaps.Visualize.mGraph.busy) {
+            var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
+            Metamaps.Visualize.mGraph.onClick(node.id, {
+                hideLabels: false,
+                duration: 1000,
+                onComplete: function () {
+                    
+                }
+            });
         }
     },
     /*
@@ -3163,9 +3185,8 @@ Metamaps.Synapse = {
         Metamaps.Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data);
         edgeOnViz = Metamaps.Visualize.mGraph.graph.getAdjacence(node1.id, node2.id);
         synapse.set('edge', edgeOnViz);
-        synapse.updateEdge(); // links the topic and the mapping to the node 
+        synapse.updateEdge(); // links the synapse and the mapping to the edge
 
-        Metamaps.Visualize.mGraph.fx.plotLine(edgeOnViz, Metamaps.Visualize.mGraph.canvas);
         Metamaps.Control.selectEdge(edgeOnViz);
 
         var mappingSuccessCallback = function (mappingModel, response) {
@@ -3309,6 +3330,9 @@ Metamaps.Map = {
 
             // update filters
             Metamaps.Filter.reset(); 
+
+            // reset selected arrays
+            Metamaps.Selected.reset();
 
             // set the proper mapinfobox content
             Metamaps.Map.InfoBox.load();

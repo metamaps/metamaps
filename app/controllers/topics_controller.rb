@@ -108,9 +108,6 @@ class TopicsController < ApplicationController
                     @map = m.map
                     @map.touch(:updated_at)
 
-                    #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-                    m.message 'destroy',@current.id
-
                     m.delete
                 end
 
@@ -121,9 +118,6 @@ class TopicsController < ApplicationController
 
                 @map = mapping.map
                 @map.touch(:updated_at)
-
-                #push notify to anyone viewing a map with this topic in realtime (see mapping.rb to understand the 'message' action)
-                mapping.message 'destroy',@current.id
 
                 mapping.delete
             end

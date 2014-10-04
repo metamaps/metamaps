@@ -424,7 +424,6 @@ Metamaps.GlobalUI.Search = {
                     padding: '7px 10px 3px 10px',
                     width: '380px'
                 });
-                $('.sidebarSearchField').focus();
                 self.changing = false;
                 self.isOpen = true;
             });
@@ -451,11 +450,6 @@ Metamaps.GlobalUI.Search = {
                 });
             }
         }, closeAfter);
-        
-        /*if (self.locked) {
-            $('.sidebarSearchField').typeahead('setQuery', '');
-            $('.sidebarSearchField').blur();
-        }*/
     },
     startTypeahead: function () {
         var self = Metamaps.GlobalUI.Search;

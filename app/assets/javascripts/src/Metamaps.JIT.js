@@ -568,7 +568,12 @@ Metamaps.JIT = {
         levelDistance: 200
     },
     onMouseEnter: function (edge) {
-        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
+        var filtered = edge.getData('alpha') === 0;
+
+        // don't do anything if the edge is filtered
+        // or if the canvas is animating        
+        if (filtered || Metamaps.Visualize.mGraph.busy) return; 
+
         $('canvas').css('cursor', 'pointer');
         var edgeIsSelected = Metamaps.Selected.Edges.indexOf(edge);
         //following if statement only executes if the edge being hovered over is not selected
@@ -1089,17 +1094,22 @@ Metamaps.JIT = {
             }			
 			
             //The test synapse was selected!
+
+            // make sure the edge hasn't been hidden temporarily
+            var node1id = synapse.get('edge').nodeFrom.id;
+            var node2id = synapse.get('edge').nodeTo.id;
+            var edge = Metamaps.Visualize.mGraph.graph.getAdjacence(node1id, node2id);
 			if(selectTest){
 				if(e.ctrlKey){
 					if(Metamaps.Selected.Edges.indexOf(synapse.get('edge')) != -1 ){
 						Metamaps.Control.deselectEdge(synapse.get('edge'));
 					}
 					else{
-						Metamaps.Control.selectEdge(synapse.get('edge'));
+						if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
 					}
 				}
 				else{
-					Metamaps.Control.selectEdge(synapse.get('edge'));
+					if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
 				}
 			}
 		});
@@ -1227,7 +1237,7 @@ Metamaps.JIT = {
             top: e.clientY
         });
         //add the menu to the page
-        $('#infovis-canvaswidget').append(rightclickmenu);
+        $('#wrapper').append(rightclickmenu);
 
         // attach events to clicks on the list items
 
@@ -1259,12 +1269,12 @@ Metamaps.JIT = {
             $('.rightclickmenu').remove();
             Metamaps.Control.hideSelectedEdges();
             Metamaps.Control.hideSelectedNodes();
-        });
+        }); 
 
         // when in radial, center on the topic you picked
         $('.rc-center').click(function () {
             $('.rightclickmenu').remove();
-            centerOn(node.id);
+            Metamaps.Topic.centerOn(node.id);
         });
 
         // open the entity in a new tab
@@ -1282,7 +1292,7 @@ Metamaps.JIT = {
         });
 
         // change the metacode of all the selected nodes that you have edit permission for
-        $('.rc-metacode li').click(function () {
+        $('.rc-metacode li li').click(function () {
             $('.rightclickmenu').remove();
             //
             Metamaps.Control.updateSelectedMetacodes($(this).attr('data-id'));
