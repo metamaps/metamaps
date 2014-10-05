@@ -54,10 +54,7 @@ class SynapsesController < ApplicationController
     @synapse.mappings.each do |m|
     
       m.map.touch(:updated_at)
-      
-      #push notify to anyone viewing same map in realtime (see mapping.rb to understand the 'message' action)
-      m.message 'destroy',@current.id
-    
+          
       m.delete
     end
 

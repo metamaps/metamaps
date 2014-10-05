@@ -219,7 +219,7 @@ background: none;
 .linkItem.synapseCount:hover .synapseCountIcon {
   background-position: 0 -32px;
 }
-.linkItem.mapPerm {
+.mapPerm {
   width: 32px;
   height: 32px;
   padding: 0;
@@ -228,22 +228,22 @@ background: none;
   background-image: url(permissions32_sprite.png);
   background-position: 0 0;
 }
-.linkItem.mapPerm.co {
+.mapPerm.co {
   background-position: 0 0;
 }
-.linkItem.mapPerm.pu {
+.mapPerm.pu {
   background-position: -64px 0;
 }
-.linkItem.mapPerm.pr {
+.mapPerm.pr {
   background-position: -32px 0;
 }
 
-.showcard .yourTopic .mapPerm:hover {
+.yourTopic .mapPerm:hover, .yourEdge .mapPerm:hover {
   background-image: url(arrowperms_sprite.png);
   background-position-x: -32px;
   cursor:pointer;
 }
-.showcard .yourTopic .mapPerm.minimize {
+.yourTopic .mapPerm.minimize, .yourEdge .mapPerm.minimize {
  background-image: url(arrowperms_sprite.png) !important;
 background-position-x: 0px;
 cursor: pointer;
@@ -555,69 +555,66 @@ font-family: 'din-regular', helvetica, sans-serif;
   display: inline-block;
 }
 
-.permActivator {
-  width: 16px;
-  height: 16px;
-  background: url('settings.png') no-repeat 0 0;
-  overflow:hidden;
-  position: absolute;
-  left: 0px;
-  top: 30px;
-}
-
-#edit_synapse .mapPerm,
-#edit_synapse .permActivator {
-  position: static;
-  display: inline-block;
-  color: #000;
-}
-
-#edit_synapse .mapPerm {
-  width: 20px;
-  height:20px;
-  background-repeat: no-repeat;
-  background-size: 20px 20px;
-  margin: 10px 12px 0 12px;
-}
-#edit_synapse .mapPerm.co {
-  background-image: url("CO32.png");
-}
-#edit_synapse .mapPerm.pu {
-  background-image: url("PU32.png");
-}
-#edit_synapse .mapPerm.pr {
-  background-image: url("PR32.png");
-}
-
-#edit_synapse .permActivator {
-  position: absolute;
-  margin-top: -1.3em;
-}
-
 #edit_synapse {
-  background: url("synapse32.png") no-repeat scroll 0 center / 30px 30px #FFFFFF;
-  border-radius: 5px;
-  padding: 5px 5px 5px 30px;
-  color: #000;
+  border-radius: 2px;
+  width: 270px;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
-#edit_synapse_name {
-  margin-left: 0.4em;
-  border-bottom: 1px solid black;
-  text-align:center;
-  max-width: 160px;
+#editSynUpperBar {
+  background: #FFFFFF url(synapse32.png) no-repeat 8px center;
+  min-height: 48px;
+  border-bottom: 1px solid #222222;
+  display: table;
+  width: 100%;
+}
+
+#editSynLowerBar {
+  background-color: #E0E0E0;
+  height: 48px;
+  position: relative;
+}
+
+#synapseCardCount {
+  font-size: 18px;
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 44px;
+  width: 20px;
+  line-height: 18px;
+}
+
+#edit_synapse_desc {
+  font-size: 14px;
+  font-family: 'din-regular', helvetica, sans-serif;
+  padding: 8px 32px 8px 4px;
+  display: table-cell;
+  vertical-align: middle;
+  line-height: 16px;
+}
+
+#edit_synapse .best_in_place_desc textarea {
+  font-family: 'din-regular', sans-serif;
+  color: #424242;
+  font-size: 14px;
+  line-height: 16px;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  resize: none;
 }
 
 #edgeUser {
     display:inline-block;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 20px 20px;
-    height: 20px;
-    min-width: 20px;
     position: relative;
-    background-image: url("MMCCicon_mapper_black.png");
-    margin: 10px 0 0 10px;
+    margin: 12px 0 0 11px;
+}
+#edgeUser img {
+  border-radius: 12px;
 }
 #edgeUser.hoverForTip:hover .tip {
   display:block;
@@ -637,39 +634,36 @@ font-family: 'din-regular', helvetica, sans-serif;
     z-index: 100;
 }
 
-#edit_synapse .click-to-edit {
-  margin-left: 0.3em;
+#edit_synapse .mapPerm {
+  position: absolute;
+  top: 0px;
+  left: 40px;
 }
 
-#edit_synapse.yourEdge .mapPerm:hover {
-  background-image: url(MMCCicon_maximize_arrow_black.png);
-  background-size: 24px 17px;
-  background-position: 0px 2px;
-  cursor:pointer;
-}
-#edit_synapse.yourEdge .mapPerm.minimize {
- background-image: url(MMCCicon_minimize_arrow_black.png) !important;
- background-size: 24px 17px;
- background-position: 0px 2px;
- cursor: pointer;
-}
-#edit_synapse .mapPerm .permissionSelect {
-  list-style: none;
-  width: 26px;
-  height: 52px;
-  position: relative;
-  top: 20px;
-  left:-3px;
-}
-#edit_synapse .mapPerm .permissionSelect li {
-  width: 26px;
-  height: 26px;
+#edit_synapse_left, #edit_synapse_right {
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  top: 12px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 20px 20px;
-  background-color:white;
 }
-
+#edit_synapse_right {
+  background-image: url(synapsedirectionright_sprite.png);
+  right: 16px; 
+}
+#edit_synapse_left {
+  background-image: url(synapsedirectionleft_sprite.png);
+  right: 56px; 
+}
+#edit_synapse_left.checked, #edit_synapse_right.checked {
+  background-position-y: -48px;
+}
+.canEdit #edit_synapse_left, .canEdit #edit_synapse_right {
+  cursor: pointer;
+}
+.canEdit #edit_synapse_left:not(.checked):hover, .canEdit #edit_synapse_right:not(.checked):hover {
+ background-position-y: -24px;
+}
 
 /* Map Cards */
 

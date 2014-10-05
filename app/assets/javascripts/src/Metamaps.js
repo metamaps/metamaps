@@ -703,7 +703,7 @@ Metamaps.TopicCard = {
         var setMapperImage = function (mapper) {
             $('.contributorIcon').attr('src', mapper.get('image'));
         };
-        Metamaps.Mapper.get(topic.get('user_id'), setMapperImage)
+        Metamaps.Mapper.get(topic.get('user_id'), setMapperImage);
 
         // starting embed.ly
         var resetFunc = function () {
@@ -970,8 +970,10 @@ Metamaps.TopicCard = {
  */
 Metamaps.SynapseCard = {
     openSynapseCard: null,
-    showCard: function (edge, e) {
+    showCard: function (edge, e, synapseIndex) {
         var self = Metamaps.SynapseCard;
+
+        var index = synapseIndex ? synapseIndex : 0;
 
         //reset so we don't interfere with other edges, but first, save its x and y 
         var myX = $('#edit_synapse').css('left');
@@ -981,11 +983,12 @@ Metamaps.SynapseCard = {
         //so label is missing while editing
         Metamaps.Control.deselectEdge(edge);
 
-        var synapse = edge.getData('synapses')[0]; // for now, just get the first synapse
+        var synapse = edge.getData('synapses')[index]; // for now, just get the first synapse
 
         //create the wrapper around the form elements, including permissions
         //classes to make best_in_place happy
         var edit_div = document.createElement('div');
+        edit_div.innerHTML = '<div id="editSynUpperBar"></div><div id="editSynLowerBar"></div>';
         edit_div.setAttribute('id', 'edit_synapse');
         if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
             edit_div.className = 'permission canEdit';
@@ -993,9 +996,9 @@ Metamaps.SynapseCard = {
         } else {
             edit_div.className = 'permission cannotEdit';
         }
-        $('.main .wrapper').append(edit_div);
+        $('#wrapper').append(edit_div);
 
-        self.populateShowCard(synapse);
+        self.populateShowCard(edge, synapse);
 
         //drop it in the right spot, activate it
         $('#edit_synapse').css('position', 'absolute');
@@ -1018,39 +1021,42 @@ Metamaps.SynapseCard = {
         Metamaps.SynapseCard.openSynapseCard = null;
     },
 
-    populateShowCard: function (synapse) {
+    populateShowCard: function (edge, synapse) {
         var self = Metamaps.SynapseCard;
 
-        self.add_name_form(synapse);
+        self.add_synapse_count(edge);
+        self.add_desc_form(synapse);
         self.add_user_info(synapse);
         self.add_perms_form(synapse);
-        if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
-            self.add_direction_form(synapse);
-        }
+        self.add_direction_form(synapse);
     },
+    add_synapse_count: function (edge) {
+        var count = edge.getData("synapses").length;
 
-    add_name_form: function (synapse) {
+        $('#editSynUpperBar').append('<div id="synapseCardCount">' + count + '</div>')
+    },
+    add_desc_form: function (synapse) {
         var data_nil = 'Click to add description.';
 
         // TODO make it so that this would work even in sandbox mode,
         // currently with Best_in_place it won't
 
-        //name editing form
-        $('#edit_synapse').append('<div id="edit_synapse_name"></div>');
-        $('#edit_synapse_name').attr('class', 'best_in_place best_in_place_desc');
-        $('#edit_synapse_name').attr('data-object', 'synapse');
-        $('#edit_synapse_name').attr('data-attribute', 'desc');
-        $('#edit_synapse_name').attr('data-type', 'textarea');
-        $('#edit_synapse_name').attr('data-nil', data_nil);
-        $('#edit_synapse_name').attr('data-url', '/synapses/' + synapse.id);
-        $('#edit_synapse_name').html(synapse.get("desc"));
+        //desc editing form
+        $('#editSynUpperBar').append('<div id="edit_synapse_desc"></div>');
+        $('#edit_synapse_desc').attr('class', 'best_in_place best_in_place_desc');
+        $('#edit_synapse_desc').attr('data-object', 'synapse');
+        $('#edit_synapse_desc').attr('data-attribute', 'desc');
+        $('#edit_synapse_desc').attr('data-type', 'textarea');
+        $('#edit_synapse_desc').attr('data-nil', data_nil);
+        $('#edit_synapse_desc').attr('data-url', '/synapses/' + synapse.id);
+        $('#edit_synapse_desc').html(synapse.get("desc"));
 
         //if edge data is blank or just whitespace, populate it with data_nil
-        if ($('#edit_synapse_name').html().trim() == '') {
-            $('#edit_synapse_name').html(data_nil);
+        if ($('#edit_synapse_desc').html().trim() == '') {
+            $('#edit_synapse_desc').html(data_nil);
         }
 
-        $('#edit_synapse_name').bind("ajax:success", function () {
+        $('#edit_synapse_desc').bind("ajax:success", function () {
             var desc = $(this).html();
             if (desc == data_nil) {
                 synapse.set("desc", '');
@@ -1064,13 +1070,20 @@ Metamaps.SynapseCard = {
 
     add_user_info: function (synapse) {
         var u = '<div id="edgeUser" class="hoverForTip">';
+        u += '<img src="" width="24" height="24" />'
         u += '<div class="tip">Created by ' + synapse.get("user_name") + '</div></div>';
-        $('#edit_synapse').append(u);
+        $('#editSynLowerBar').append(u);
+
+        // get mapper image
+        var setMapperImage = function (mapper) {
+            $('#edgeUser img').attr('src', mapper.get('image'));
+        };
+        Metamaps.Mapper.get(synapse.get('user_id'), setMapperImage);
     },
 
     add_perms_form: function (synapse) {
         //permissions - if owner, also allow permission editing
-        $('#edit_synapse').append('<div class="mapPerm ' + synapse.get("permission").substring(0, 2) + '"></div>');
+        $('#editSynLowerBar').append('<div class="mapPerm ' + synapse.get("permission").substring(0, 2) + '"></div>');
 
         // ability to change permission
         var selectingPermission = false;
@@ -1107,10 +1120,8 @@ Metamaps.SynapseCard = {
 
     add_direction_form: function (synapse) {
         //directionality checkboxes
-        $('#edit_synapse').append('<input type="checkbox" id="edit_synapse_left">');
-        $('#edit_synapse').append('<label class="left">&lt;</label>');
-        $('#edit_synapse').append('<input type="checkbox" id="edit_synapse_right">');
-        $('#edit_synapse').append('<label class="right">&gt;</label>');
+        $('#editSynLowerBar').append('<div id="edit_synapse_left"></div>');
+        $('#editSynLowerBar').append('<div id="edit_synapse_right"></div>');
 
         var edge = synapse.get('edge');
 
@@ -1119,11 +1130,11 @@ Metamaps.SynapseCard = {
         if (edge.nodeFrom.pos.x < edge.nodeTo.pos.x ||
             edge.nodeFrom.pos.x == edge.nodeTo.pos.x &&
             edge.nodeFrom.pos.y < edge.nodeTo.pos.y) {
-            var left = edge.nodeTo;
-            var right = edge.nodeFrom;
+            var left = edge.nodeTo.getData("topic");
+            var right = edge.nodeFrom.getData("topic");
         } else {
-            var left = edge.nodeFrom;
-            var right = edge.nodeTo;
+            var left = edge.nodeFrom.getData("topic");
+            var right = edge.nodeTo.getData("topic");
         }
 
         /*
@@ -1134,42 +1145,48 @@ Metamaps.SynapseCard = {
 
         var directionCat = synapse.get('category'); //both, none, from-to
         if (directionCat == 'from-to') {
-            var from_to = synapse.getDirection();
+            var from_to = [synapse.get("node1_id"), synapse.get("node2_id")];
             if (from_to[0] == left.id) {
                 //check left checkbox
-                $('#edit_synapse_left').prop('checked', true);
+                $('#edit_synapse_left').addClass('checked');
             } else {
                 //check right checkbox
-                $('#edit_synapse_right').prop('checked', true);
+                $('#edit_synapse_right').addClass('checked');
             }
         } else if (directionCat == 'both') {
             //check both checkboxes
-            $('#edit_synapse_left').prop('checked', true);
-            $('#edit_synapse_right').prop('checked', true);
+            $('#edit_synapse_left').addClass('checked');
+            $('#edit_synapse_right').addClass('checked');
         }
-        $('#edit_synapse_left, #edit_synapse_right').click(function () {
-            var leftChecked = $('#edit_synapse_left').is(':checked');
-            var rightChecked = $('#edit_synapse_right').is(':checked');
 
-            var dir = synapse.getDirection();
-            var dirCat = 'none';
-            if (leftChecked && rightChecked) {
-                dirCat = 'both';
-            } else if (!leftChecked && rightChecked) {
-                dirCat = 'from-to';
-                dir = [right.id, left.id];
-            } else if (leftChecked && !rightChecked) {
-                dirCat = 'from-to';
-                dir = [left.id, right.id];
-            }
+        if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
+            $('#edit_synapse_left, #edit_synapse_right').click(function () {
+                
+                $(this).toggleClass('checked');
 
-            synapse.save({
-                category: dirCat,
-                node1_id: dir[0],
-                node2_id: dir[1]
+                var leftChecked = $('#edit_synapse_left').is('.checked');
+                var rightChecked = $('#edit_synapse_right').is('.checked');
+
+                var dir = synapse.getDirection();
+                var dirCat = 'none';
+                if (leftChecked && rightChecked) {
+                    dirCat = 'both';
+                } else if (!leftChecked && rightChecked) {
+                    dirCat = 'from-to';
+                    dir = [right.id, left.id];
+                } else if (leftChecked && !rightChecked) {
+                    dirCat = 'from-to';
+                    dir = [left.id, right.id];
+                }
+
+                synapse.save({
+                    category: dirCat,
+                    node1_id: dir[0],
+                    node2_id: dir[1]
+                });
+                Metamaps.Visualize.mGraph.plot();
             });
-            Metamaps.Visualize.mGraph.plot();
-        });
+        } // if
     } //add_direction_form
 }; // end Metamaps.SynapseCard
 
@@ -1501,7 +1518,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
+        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); // io.connect('http://localhost:5001');
         self.startActiveMap();
     },
     toggleBox: function (event) {
@@ -2135,6 +2152,19 @@ Metamaps.Control = {
         Metamaps.Selected.Nodes.splice(
             Metamaps.Selected.Nodes.indexOf(node), 1);
     },
+    deleteSelected: function () {
+        var n = Metamaps.Selected.Nodes.length;
+        var e = Metamaps.Selected.Edges.length;
+        var ntext = n == 1 ? "1 topic" : n + " topics";
+        var etext = e == 1 ? "1 synapse" : e + " synapses";
+        var text = "You have " + ntext + " and " + etext + " selected. ";
+
+        var r = confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.");
+        if (r == true) {
+            Metamaps.Control.deleteSelectedEdges();
+            Metamaps.Control.deleteSelectedNodes();
+        }
+    },
     deleteSelectedNodes: function () { // refers to deleting topics permanently
         var l = Metamaps.Selected.Nodes.length;
         for (var i = l - 1; i >= 0; i -= 1) {
@@ -2262,9 +2292,18 @@ Metamaps.Control = {
 
         // TODO make it so that you select which one, of multiple possible synapses you want to delete
 
-        //var id = edge.getData("id");
-        //Metamaps.Synapses.get(id).destroy();
-        //Metamaps.Control.hideEdge(edge);
+        if (edge.getData("synapses").length - 1 === 0) {
+            Metamaps.Control.hideEdge(edge);
+        }
+
+        var synapse = edge.getData("synapses")[0];
+        var mapping = edge.getData("mappings")[0];
+        synapse.destroy();
+
+        // the server will destroy the mapping, we just need to remove it here
+        Metamaps.Mappings.remove(mapping);
+        edge.getData("mappings").splice(0, 1);
+        edge.getData("synapses").splice(0, 1);
     },
     removeSelectedEdges: function () {
         var l = Metamaps.Selected.Edges.length,
@@ -2283,9 +2322,18 @@ Metamaps.Control = {
 
         // TODO make it so that you select which one, of multiple possible synapses you want
 
-        //var mappingid = edge.getData("mappingid");
-        //Metamaps.Mappings.get(mappingid).destroy();
-        //Metamaps.Control.hideEdge(edge);
+        if (edge.getData("mappings").length - 1 === 0) {
+            Metamaps.Control.hideEdge(edge);
+        }
+
+        var synapse = edge.getData("synapses")[0];
+        var mapping = edge.getData("mappings")[0];
+        mapping.destroy();
+
+        Metamaps.Synapses.remove(synapse);
+
+        edge.getData("mappings").splice(0, 1);
+        edge.getData("synapses").splice(0, 1);
     },
     hideSelectedEdges: function () {
         var edge,
@@ -2768,18 +2816,17 @@ Metamaps.Listeners = {
                 break;
             case 82: //if r or R is pressed
             case 114:
-                if (e.ctrlKey){
+                /*if (e.ctrlKey){
                     e.preventDefault();
                     Metamaps.Control.removeSelectedNodes();
-                    console.log('Once function works, selected nodes will be removed');
-                }
+                    Metamaps.Control.removeSelectedEdges();
+                }*/
                 break;
             case 68: //if d or D is pressed
             case 100:
                 if (e.ctrlKey){
                     e.preventDefault();
-                    Metamaps.Control.deleteSelectedNodes();
-                    console.log('Once function works, selected nodes will be deleted');
+                    Metamaps.Control.deleteSelected();
                 }
                 break;
             case 72: //if h or H is pressed
@@ -2787,7 +2834,7 @@ Metamaps.Listeners = {
                 if (e.ctrlKey){
                     e.preventDefault();
                     Metamaps.Control.hideSelectedNodes();
-                    console.log('Once function works, selected nodes will be hidden');
+                    Metamaps.Control.hideSelectedEdges();
                 }
                 break;
             default:
@@ -3329,7 +3376,7 @@ Metamaps.Synapse = {
 
         topic1 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic1id);
         node1 = topic1.get('node');
-        topic1 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic2id);
+        topic2 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic2id);
         node2 = topic2.get('node');
         Metamaps.Create.newSynapse.hide();
 

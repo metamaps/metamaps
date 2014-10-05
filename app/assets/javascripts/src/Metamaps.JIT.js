@@ -99,6 +99,9 @@ Metamaps.JIT = {
 
         var synapse = adj.getData("synapses")[0]; // for now, just grab the first synapse
 
+        if (!synapse) return; // this means there are no corresponding synapses for
+        // this edge, don't render it
+
         var directionCat = synapse.get("category");
 
         //label placement on edges
@@ -1095,7 +1098,7 @@ Metamaps.JIT = {
 			
             //The test synapse was selected!
 
-            // make sure the edge hasn't been hidden temporarily
+            // make sure the edge hasn't been hidden from the page
             var node1id = synapse.get('edge').nodeFrom.id;
             var node2id = synapse.get('edge').nodeTo.id;
             var edge = Metamaps.Visualize.mGraph.graph.getAdjacence(node1id, node2id);
@@ -1244,17 +1247,7 @@ Metamaps.JIT = {
         // delete the selected things from the database
         $('.rc-delete').click(function () {
             $('.rightclickmenu').remove();
-            var n = Metamaps.Selected.Nodes.length;
-            var e = Metamaps.Selected.Edges.length;
-            var ntext = n == 1 ? "1 topic" : n + " topics";
-            var etext = e == 1 ? "1 synapse" : e + " synapses";
-            var text = "You have " + ntext + " and " + etext + " selected. ";
-
-            var r = confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.");
-            if (r == true) {
-                Metamaps.Control.deleteSelectedEdges();
-                Metamaps.Control.deleteSelectedNodes();
-            }
+            Metamaps.Control.deleteSelected();
         });
 
         // remove the selected things from the map
@@ -1388,17 +1381,7 @@ Metamaps.JIT = {
         // delete the selected things from the database
         $('.rc-delete').click(function () {
             $('.rightclickmenu').remove();
-            var n = Metamaps.Selected.Nodes.length;
-            var e = Metamaps.Selected.Edges.length;
-            var ntext = n == 1 ? "1 topic" : n + " topics";
-            var etext = e == 1 ? "1 synapse" : e + " synapses";
-            var text = "You have " + ntext + " and " + etext + " selected. ";
-
-            var r = confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.");
-            if (r == true) {
-                Metamaps.Control.deleteSelectedEdges();
-                Metamaps.Control.deleteSelectedNodes();
-            }
+            Metamaps.Control.deleteSelected();
         });
 
         // remove the selected things from the map
