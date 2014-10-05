@@ -67,6 +67,7 @@
   background-image: url(edit.png);
   background-repeat: no-repeat;
   background-position: bottom right;
+  cursor: text;
 }
 
 .best_in_place_name textarea, .best_in_place_name input {
@@ -136,6 +137,7 @@ background: none;
   background-image: url(edit.png);
   background-position: top right;
   background-repeat: no-repeat;
+  cursor: text;
 }
 
 #edit_synapse .best_in_place_desc {
@@ -587,10 +589,17 @@ font-family: 'din-regular', helvetica, sans-serif;
 #edit_synapse_desc {
   font-size: 14px;
   font-family: 'din-regular', helvetica, sans-serif;
-  padding: 8px 32px 8px 4px;
+  padding: 8px 38px 8px 4px;
   display: table-cell;
   vertical-align: middle;
   line-height: 16px;
+}
+
+.canEdit #edit_synapse_desc:hover {
+  background-image: url(edit.png);
+  background-repeat: no-repeat;
+  background-position: 164px center;
+  cursor: text;
 }
 
 #edit_synapse .best_in_place_desc textarea {
@@ -606,6 +615,40 @@ font-family: 'din-regular', helvetica, sans-serif;
   outline: none;
   background: none;
   resize: none;
+}
+
+#dropdownSynapses {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 12px;
+  right: 8px;
+  background-image: url(arrowdown_sprite.png);
+  background-repeat: no-repeat;
+  background-position: 4px -12px;
+}
+#dropdownSynapses:hover {
+  background-position: 4px -28px;
+  cursor: pointer;
+}
+#switchSynapseList {
+  display: none;
+  list-style: none;
+  width: 270px;
+  position: absolute;
+  z-index: 1;
+  background: #FFFFFF;
+  border-bottom: 1px solid #BBBBBB;
+}
+#switchSynapseList li {
+  padding: 8px;
+  cursor: pointer;
+  font-family: 'din-regular';
+  font-size: 14px;
+  line-height: 16px;
+}
+#switchSynapseList li:hover {
+  background: #E0E0E0;
 }
 
 #edgeUser {

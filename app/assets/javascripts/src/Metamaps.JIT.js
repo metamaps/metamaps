@@ -97,7 +97,17 @@ Metamaps.JIT = {
         var pos = adj.nodeFrom.pos.getc(true);
         var posChild = adj.nodeTo.pos.getc(true);
 
-        var synapse = adj.getData("synapses")[0]; // for now, just grab the first synapse
+        var synapse;
+        if(adj.getData("displayIndex")) {
+            synapse = adj.getData("synapses")[adj.getData("displayIndex")];
+            if (!synapse) {
+                delete adj.data.$displayIndex;
+                synapse = adj.getData("synapses")[0];
+            }
+        }
+        else {
+            synapse = adj.getData("synapses")[0];
+        }
 
         if (!synapse) return; // this means there are no corresponding synapses for
         // this edge, don't render it

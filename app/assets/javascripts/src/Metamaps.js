@@ -970,10 +970,8 @@ Metamaps.TopicCard = {
  */
 Metamaps.SynapseCard = {
     openSynapseCard: null,
-    showCard: function (edge, e, synapseIndex) {
+    showCard: function (edge, e) {
         var self = Metamaps.SynapseCard;
-
-        var index = synapseIndex ? synapseIndex : 0;
 
         //reset so we don't interfere with other edges, but first, save its x and y 
         var myX = $('#edit_synapse').css('left');
@@ -983,6 +981,7 @@ Metamaps.SynapseCard = {
         //so label is missing while editing
         Metamaps.Control.deselectEdge(edge);
 
+        var index = edge.getData("displayIndex") ? edge.getData("displayIndex") : 0;
         var synapse = edge.getData('synapses')[index]; // for now, just get the first synapse
 
         //create the wrapper around the form elements, including permissions
@@ -1013,7 +1012,7 @@ Metamaps.SynapseCard = {
         //$('#edit_synapse_name input').focus();
         $('#edit_synapse').show();
 
-        self.openSynapseCard = synapse.isNew() ? synapse.cid : synapse.id;
+        self.openSynapseCard = edge;
     },
 
     hideCard: function () {
@@ -1026,6 +1025,7 @@ Metamaps.SynapseCard = {
 
         self.add_synapse_count(edge);
         self.add_desc_form(synapse);
+        self.add_drop_down(edge, synapse);
         self.add_user_info(synapse);
         self.add_perms_form(synapse);
         self.add_direction_form(synapse);
@@ -1067,7 +1067,48 @@ Metamaps.SynapseCard = {
             Metamaps.Visualize.mGraph.plot();
         });
     },
+    add_drop_down: function (edge, synapse) {
+        var list, i, synapses, l;
 
+        synapses = edge.getData("synapses");
+        l = synapses.length;
+
+        if (l > 1) {
+            // append the element that you click to show dropdown select
+            $('#editSynUpperBar').append('<div id="dropdownSynapses"></div>');
+            $('#dropdownSynapses').click(function(e){
+                e.preventDefault();
+                e.stopPropagation(); // stop it from immediately closing it again
+                $('#switchSynapseList').toggle();
+            });
+            // hide the dropdown again if you click anywhere else on the synapse card
+            $('#edit_synapse').click(function(){
+                $('#switchSynapseList').hide();
+            });
+
+            // generate the list of other synapses
+            list = '<ul id="switchSynapseList">';
+            for (i = 0; i < l; i++) {
+                if (synapses[i] !== synapse) { // don't add the current one to the list
+                    list += '<li data-synapse-index="' + i + '">' + synapses[i].get('desc') + '</li>';
+                }
+            }
+            list += '</ul>'
+            // add the list of the other synapses
+            $('#editSynLowerBar').append(list);
+
+            // attach click listeners to list items that
+            // will cause it to switch the displayed synapse 
+            // when you click it
+            $('#switchSynapseList li').click(function(e){
+                e.stopPropagation();
+                var index = parseInt($(this).attr('data-synapse-index'));
+                edge.setData('displayIndex', index);
+                Metamaps.Visualize.mGraph.plot();
+                Metamaps.SynapseCard.showCard(edge, false);
+            });
+        }
+    },
     add_user_info: function (synapse) {
         var u = '<div id="edgeUser" class="hoverForTip">';
         u += '<img src="" width="24" height="24" />'
@@ -2296,14 +2337,19 @@ Metamaps.Control = {
             Metamaps.Control.hideEdge(edge);
         }
 
-        var synapse = edge.getData("synapses")[0];
-        var mapping = edge.getData("mappings")[0];
+        var index = edge.getData("displayIndex") ? edge.getData("displayIndex") : 0;
+
+        var synapse = edge.getData("synapses")[index];
+        var mapping = edge.getData("mappings")[index];
         synapse.destroy();
 
         // the server will destroy the mapping, we just need to remove it here
         Metamaps.Mappings.remove(mapping);
-        edge.getData("mappings").splice(0, 1);
-        edge.getData("synapses").splice(0, 1);
+        edge.getData("mappings").splice(index, 1);
+        edge.getData("synapses").splice(index, 1);
+        if (edge.getData("displayIndex")) {
+            delete edge.data.$displayIndex;
+        }
     },
     removeSelectedEdges: function () {
         var l = Metamaps.Selected.Edges.length,
@@ -2326,14 +2372,19 @@ Metamaps.Control = {
             Metamaps.Control.hideEdge(edge);
         }
 
-        var synapse = edge.getData("synapses")[0];
-        var mapping = edge.getData("mappings")[0];
+        var index = edge.getData("displayIndex") ? edge.getData("displayIndex") : 0;
+
+        var synapse = edge.getData("synapses")[index];
+        var mapping = edge.getData("mappings")[index];
         mapping.destroy();
 
         Metamaps.Synapses.remove(synapse);
 
-        edge.getData("mappings").splice(0, 1);
-        edge.getData("synapses").splice(0, 1);
+        edge.getData("mappings").splice(index, 1);
+        edge.getData("synapses").splice(index, 1);
+        if (edge.getData("displayIndex")) {
+            delete edge.data.$displayIndex;
+        }
     },
     hideSelectedEdges: function () {
         var edge,
