@@ -1654,6 +1654,11 @@ Metamaps.JIT = {
             var ratioX = spanX / width;
             var ratioY = spanY / height;
 
+            var cogX = (maxX + minX)/2;
+            var cogY = (maxY + minY)/2;
+
+            canvas.translate(-1* cogX, -1* cogY);
+
             var newRatio = Math.max(ratioX,ratioY);
             var scaleMultiplier = 1/newRatio*0.9;
 
@@ -1669,43 +1674,6 @@ Metamaps.JIT = {
                 canvas.scale(scaleMultiplier,scaleMultiplier);
             }
             
-            counter = 0;
-
-            nodes.forEach(function (n) {
-                var x = n.pos.x,
-                    y = n.pos.y;
-
-                if (counter == 0){
-                    maxX = x;
-                    minX = x; 
-                    maxY = y;
-                    minY = y; 
-                }
-
-                var arrayOfLabelLines = Metamaps.Util.splitLine(n.name, 30).split('\n'),
-                    dim = n.getData('dim'),
-                    ctx = canvas.getCtx();
-
-                var height = 25 * arrayOfLabelLines.length;
-
-                var index, lineWidths = [];
-                for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                    lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
-                }
-                var width = Math.max.apply(null, lineWidths) + 8;
-
-                maxX = Math.max(x + width /2,maxX);
-                maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
-                minX = Math.min(x - width /2,minX);
-                minY = Math.min(y - dim,minY);
-
-                counter++;
-            });
-
-            var cogX = (maxX + minX)/2;
-            var cogY = (maxY + minY)/2;
-
-            canvas.translate(-1* cogX, -1* cogY);
             $(document).trigger(Metamaps.JIT.events.zoom, [event]);
         }
         else if(nodes.length == 1){

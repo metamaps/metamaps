@@ -373,29 +373,7 @@ Metamaps.GlobalUI.Search = {
                     self.close(0, true);
                 }
                 break;
-            case 65:
-            case 97:
-                
-                if (e.ctrlKey){
-                    Metamaps.Control.deselectAllNodes();
-                    Metamaps.Control.deselectAllEdges();
-
-                    e.preventDefault();
-                    Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-                        Metamaps.Control.selectNode(n,e);
-                    });
-
-                    Metamaps.Visualize.mGraph.plot();
-                }
-                
-                break;
-            case 69:
-            case 101:
-                if (e.ctrlKey){
-                    e.preventDefault();
-                    Metamaps.JIT.zoomExtents();
-                }
-                break;
+            
             default:
                 break; //console.log(e.which);
             }
