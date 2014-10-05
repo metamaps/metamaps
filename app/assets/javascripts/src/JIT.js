@@ -8405,7 +8405,11 @@ $jit.RGraph = new Class( {
 
    */
   refresh: function(){
-    this.compute();
+    
+    // START METAMAPS CODE
+    // this.compute();
+    // END METAMAPS CODE
+    // ORIGINAL CODE: this.compute();
     this.plot();
   },
 
@@ -9119,7 +9123,10 @@ $jit.ForceDirected = new Class( {
     Computes positions and plots the tree.
   */
   refresh: function() {
-    this.compute();
+    // START METAMAPS CODE
+    // this.compute();
+    // END METAMAPS CODE
+    // ORIGINAL CODE: this.compute();
     this.plot();
   },
 
