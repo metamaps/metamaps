@@ -2743,6 +2743,53 @@ Metamaps.Listeners = {
             case 27:
                 if (Metamaps.Active.Map) Metamaps.JIT.escKeyHandler();
                 break;
+            case 65: //if a or A is pressed
+            case 97:
+                
+                if (e.ctrlKey){
+                    Metamaps.Control.deselectAllNodes();
+                    Metamaps.Control.deselectAllEdges();
+
+                    e.preventDefault();
+                    Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+                        Metamaps.Control.selectNode(n,e);
+                    });
+
+                    Metamaps.Visualize.mGraph.plot();
+                }
+                
+                break;
+            case 69: //if e or E is pressed
+            case 101:
+                if (e.ctrlKey){
+                    e.preventDefault();
+                    Metamaps.JIT.zoomExtents();
+                }
+                break;
+            case 82: //if r or R is pressed
+            case 114:
+                if (e.ctrlKey){
+                    e.preventDefault();
+                    Metamaps.Control.removeSelectedNodes();
+                    console.log('Once function works, selected nodes will be removed');
+                }
+                break;
+            case 68: //if d or D is pressed
+            case 100:
+                if (e.ctrlKey){
+                    e.preventDefault();
+                    Metamaps.Control.deleteSelectedNodes();
+                    console.log('Once function works, selected nodes will be deleted');
+                }
+                break;
+            case 72: //if h or H is pressed
+            case 104:
+                if (e.ctrlKey){
+                    e.preventDefault();
+                    Metamaps.Control.hideSelectedNodes();
+                    console.log('Once function works, selected nodes will be hidden');
+                }
+                break;
             default:
                 break; //alert(e.which);
             }
