@@ -37,7 +37,7 @@ Driessen][git-branching-model]. Here's an overview:
   Metamaps developers should be basing their work on. The `master` branch is not guaranteed to be stable.
 * All commits intended for `master` should take place on your own personal
   fork, and be submitted via pull request when ready.
-* Only maintainers can accept pull requests from forks into the core Famo.us
+* Only maintainers can accept pull requests from forks into the core Metamaps.cc
   repository.
 * Please squash your commits into a single commit before making a pull request.
 
@@ -68,10 +68,11 @@ TODO
 
 ### Branch grouping tokens
 
-All pull requests submitted to Famo.us should occur on a new branch. For these
+All pull requests submitted to Metamaps.cc should occur on a new branch. For these
 branches, we at metamaps use a short token indicating the nature of the branch in
 question followed by a solidus (`/`) and a kebab-cased string describing the
 branch. We are using the following tokens:
+**NOTE: Not sure the above is right, but also not sure what to change it to **
 
     bug   // bug fixes
     wip   // work in progress

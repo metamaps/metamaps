@@ -32,20 +32,3 @@ function fetchRelatives(node) {
         }
     });
 }
-
-function centerOn(nodeid) {
-    if (!Mconsole.busy) {
-        var node = Mconsole.graph.getNode(nodeid);
-        $('div.index img').attr('src', imgArray[node.getData('metacode')].src);
-        $('div.index .mapName').html(node.name);
-        $(document).attr('title', node.name + ' | Metamaps');
-        window.history.pushState(node.name, "Metamaps", "/topics/" + node.id);
-        Mconsole.onClick(node.id, {
-            hideLabels: false,
-            duration: 1000,
-            onComplete: function () {
-                fetchRelatives(node);
-            }
-        });
-    }
-}

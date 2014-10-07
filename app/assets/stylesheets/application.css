@@ -2425,15 +2425,6 @@ float: left;
     height: 100%;
 }
 
-
-#edit_synapse label,
-#edit_synapse_left,
-#edit_synapse_right {
-    display: inline-block;
-}
-#edit_synapse label.left {
-    margin-right: 0.5em;
-}
 .templates {
     display: none;
 }

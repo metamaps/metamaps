@@ -97,7 +97,20 @@ Metamaps.JIT = {
         var pos = adj.nodeFrom.pos.getc(true);
         var posChild = adj.nodeTo.pos.getc(true);
 
-        var synapse = adj.getData("synapses")[0]; // for now, just grab the first synapse
+        var synapse;
+        if(adj.getData("displayIndex")) {
+            synapse = adj.getData("synapses")[adj.getData("displayIndex")];
+            if (!synapse) {
+                delete adj.data.$displayIndex;
+                synapse = adj.getData("synapses")[0];
+            }
+        }
+        else {
+            synapse = adj.getData("synapses")[0];
+        }
+
+        if (!synapse) return; // this means there are no corresponding synapses for
+        // this edge, don't render it
 
         var directionCat = synapse.get("category");
 
@@ -568,7 +581,12 @@ Metamaps.JIT = {
         levelDistance: 200
     },
     onMouseEnter: function (edge) {
-        if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
+        var filtered = edge.getData('alpha') === 0;
+
+        // don't do anything if the edge is filtered
+        // or if the canvas is animating        
+        if (filtered || Metamaps.Visualize.mGraph.busy) return; 
+
         $('canvas').css('cursor', 'pointer');
         var edgeIsSelected = Metamaps.Selected.Edges.indexOf(edge);
         //following if statement only executes if the edge being hovered over is not selected
@@ -1089,17 +1107,22 @@ Metamaps.JIT = {
             }			
 			
             //The test synapse was selected!
+
+            // make sure the edge hasn't been hidden from the page
+            var node1id = synapse.get('edge').nodeFrom.id;
+            var node2id = synapse.get('edge').nodeTo.id;
+            var edge = Metamaps.Visualize.mGraph.graph.getAdjacence(node1id, node2id);
 			if(selectTest){
 				if(e.ctrlKey){
 					if(Metamaps.Selected.Edges.indexOf(synapse.get('edge')) != -1 ){
 						Metamaps.Control.deselectEdge(synapse.get('edge'));
 					}
 					else{
-						Metamaps.Control.selectEdge(synapse.get('edge'));
+						if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
 					}
 				}
 				else{
-					Metamaps.Control.selectEdge(synapse.get('edge'));
+					if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
 				}
 			}
 		});
@@ -1227,24 +1250,14 @@ Metamaps.JIT = {
             top: e.clientY
         });
         //add the menu to the page
-        $('#infovis-canvaswidget').append(rightclickmenu);
+        $('#wrapper').append(rightclickmenu);
 
         // attach events to clicks on the list items
 
         // delete the selected things from the database
         $('.rc-delete').click(function () {
             $('.rightclickmenu').remove();
-            var n = Metamaps.Selected.Nodes.length;
-            var e = Metamaps.Selected.Edges.length;
-            var ntext = n == 1 ? "1 topic" : n + " topics";
-            var etext = e == 1 ? "1 synapse" : e + " synapses";
-            var text = "You have " + ntext + " and " + etext + " selected. ";
-
-            var r = confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.");
-            if (r == true) {
-                Metamaps.Control.deleteSelectedEdges();
-                Metamaps.Control.deleteSelectedNodes();
-            }
+            Metamaps.Control.deleteSelected();
         });
 
         // remove the selected things from the map
@@ -1259,12 +1272,12 @@ Metamaps.JIT = {
             $('.rightclickmenu').remove();
             Metamaps.Control.hideSelectedEdges();
             Metamaps.Control.hideSelectedNodes();
-        });
+        }); 
 
         // when in radial, center on the topic you picked
         $('.rc-center').click(function () {
             $('.rightclickmenu').remove();
-            centerOn(node.id);
+            Metamaps.Topic.centerOn(node.id);
         });
 
         // open the entity in a new tab
@@ -1282,7 +1295,7 @@ Metamaps.JIT = {
         });
 
         // change the metacode of all the selected nodes that you have edit permission for
-        $('.rc-metacode li').click(function () {
+        $('.rc-metacode li li').click(function () {
             $('.rightclickmenu').remove();
             //
             Metamaps.Control.updateSelectedMetacodes($(this).attr('data-id'));
@@ -1378,17 +1391,7 @@ Metamaps.JIT = {
         // delete the selected things from the database
         $('.rc-delete').click(function () {
             $('.rightclickmenu').remove();
-            var n = Metamaps.Selected.Nodes.length;
-            var e = Metamaps.Selected.Edges.length;
-            var ntext = n == 1 ? "1 topic" : n + " topics";
-            var etext = e == 1 ? "1 synapse" : e + " synapses";
-            var text = "You have " + ntext + " and " + etext + " selected. ";
-
-            var r = confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.");
-            if (r == true) {
-                Metamaps.Control.deleteSelectedEdges();
-                Metamaps.Control.deleteSelectedNodes();
-            }
+            Metamaps.Control.deleteSelected();
         });
 
         // remove the selected things from the map
@@ -1644,6 +1647,11 @@ Metamaps.JIT = {
             var ratioX = spanX / width;
             var ratioY = spanY / height;
 
+            var cogX = (maxX + minX)/2;
+            var cogY = (maxY + minY)/2;
+
+            canvas.translate(-1* cogX, -1* cogY);
+
             var newRatio = Math.max(ratioX,ratioY);
             var scaleMultiplier = 1/newRatio*0.9;
 
@@ -1659,43 +1667,6 @@ Metamaps.JIT = {
                 canvas.scale(scaleMultiplier,scaleMultiplier);
             }
             
-            counter = 0;
-
-            nodes.forEach(function (n) {
-                var x = n.pos.x,
-                    y = n.pos.y;
-
-                if (counter == 0){
-                    maxX = x;
-                    minX = x; 
-                    maxY = y;
-                    minY = y; 
-                }
-
-                var arrayOfLabelLines = Metamaps.Util.splitLine(n.name, 30).split('\n'),
-                    dim = n.getData('dim'),
-                    ctx = canvas.getCtx();
-
-                var height = 25 * arrayOfLabelLines.length;
-
-                var index, lineWidths = [];
-                for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                    lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
-                }
-                var width = Math.max.apply(null, lineWidths) + 8;
-
-                maxX = Math.max(x + width /2,maxX);
-                maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
-                minX = Math.min(x - width /2,minX);
-                minY = Math.min(y - dim,minY);
-
-                counter++;
-            });
-
-            var cogX = (maxX + minX)/2;
-            var cogY = (maxY + minY)/2;
-
-            canvas.translate(-1* cogX, -1* cogY);
             $(document).trigger(Metamaps.JIT.events.zoom, [event]);
         }
         else if(nodes.length == 1){

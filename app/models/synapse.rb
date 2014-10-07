@@ -20,25 +20,6 @@ class Synapse < ActiveRecord::Base
     super(:methods =>[:user_name, :user_image])
   end
   
-  # sends push updates through redis to websockets for realtime updates
-  def message action, origin_user_id
-  
-    return if self.permission == "private" and action == "create"
-    
-    #get array of all maps topic appears in
-    @maps = self.maps
-    #sends update to all maps that topic appears in who have realtime on
-    @maps.each do |map|
-      msg = { origin: origin_user_id,
-          mapid: map.id,
-          resource: 'Synapse',
-          action: action,
-          id: self.id,
-          obj: self.self_as_json.html_safe }
-      $redis.publish 'maps', msg.to_json
-    end 
-  end
-  
   ##### PERMISSIONS ######
   
   # returns false if user not allowed to 'show' Topic, Synapse, or Map
