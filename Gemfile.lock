@@ -58,6 +58,7 @@ GEM
       warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (2.0.2)
+    ezcrypto (0.7.2)
     formtastic (2.2.1)
       actionpack (>= 3.0)
     formula (1.0.1)
@@ -84,6 +85,7 @@ GEM
       mini_portile (= 0.6.0)
     nokogiri (1.6.2.1-x86-mingw32)
       mini_portile (= 0.6.0)
+    oauth (0.4.7)
     orm_adapter (0.5.0)
     paperclip (4.1.1)
       activemodel (>= 3.0.0)
@@ -141,6 +143,10 @@ GEM
     uglifier (2.5.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    uservoice-ruby (0.0.11)
+      ezcrypto (>= 0.7.2)
+      json (>= 1.7.5)
+      oauth (>= 0.4.7)
     warden (1.2.3)
       rack (>= 1.0)
 
@@ -167,3 +173,4 @@ DEPENDENCIES
   redis (= 2.2.2)
   sass-rails
   uglifier (>= 1.0.3)
+  uservoice-ruby

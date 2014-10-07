@@ -19,7 +19,7 @@ gem 'json'
 gem 'rails3-jquery-autocomplete'
 gem 'best_in_place'
 gem 'kaminari' # pagination
-
+gem 'uservoice-ruby'
 gem 'paperclip'
 gem 'aws-sdk'
 

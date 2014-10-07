@@ -3,7 +3,7 @@ if(BAROMETER == undefined) {
   BAROMETER = {};
 }
 
-BAROMETER.load = function(barometer_id) {
+//BAROMETER.load = function(barometer_id) {
   this.barometer_id = barometer_id;
   this.empty_url = "http://getbarometer.s3.amazonaws.com/assets/barometer/images/transparent.gif";
   this.feedback_url = 'http://getbarometer.com/system/feedback_form/' + this.barometer_id;
