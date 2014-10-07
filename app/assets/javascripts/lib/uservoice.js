@@ -3,7 +3,7 @@ if(USERVOICE == undefined) {
   USERVOICE = {};
 }
 
-USERVOICE.load = function (sso_token) {
+USERVOICE.load = function (name, id, email, sso_token) {
 // Include the UserVoice JavaScript SDK (only needed once on a page)
 UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/wybK0nSMNuhlWkIKzTyWg.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
 
@@ -21,8 +21,13 @@ UserVoice.push(['set', {
 
 // Identify the user and pass traits
 // To enable, replace sample data with actual user traits and uncomment the line
-if (sso_token) {
+if (name) {
   UserVoice.push(['setSSO', sso_token]);
+  UserVoice.push(['identify', {
+    'email': email, // User’s email address
+    'name': name, // User’s real name
+    'id': id, // Optional: Unique id of the user 
+  }]);
 }
 
 // Add default trigger to the bottom-left corner of the window:

@@ -90,7 +90,7 @@
 
     // set up uservoice with signed in user
     <% if authenticated? %>
-        USERVOICE.load("<%= current_sso_token %>");
+        USERVOICE.load(Metamaps.Active.Mapper.name, Metamaps.Active.Mapper.id, "<%= user.email %>", "<%= current_sso_token %>");
     <% else %>
         USERVOICE.load();
     <% end %>
