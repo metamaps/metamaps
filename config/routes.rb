@@ -1,6 +1,11 @@
+require 'sidekiq/web'
+
 Metamaps::Application.routes.draw do
 
   root to: 'main#home', via: :get
+
+  #To debug sidekiq and monitor processes, enable this route
+  #mount Sidekiq::Web, at: '/sidekiq'
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request
   

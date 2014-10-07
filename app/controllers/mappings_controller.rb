@@ -15,6 +15,8 @@ class MappingsController < ApplicationController
   def create
     @mapping = Mapping.new(params[:mapping])
 
+    @mapping.map.touch(:updated_at)
+
     if @mapping.save
       render json: @mapping, status: :created
     else
@@ -26,6 +28,8 @@ class MappingsController < ApplicationController
   def update
     @mapping = Mapping.find(params[:id])
 
+    @mapping.map.touch(:updated_at)
+
     if @mapping.update_attributes(params[:mapping])
       head :no_content
     else
@@ -36,7 +40,11 @@ class MappingsController < ApplicationController
   # DELETE /mappings/1.json
   def destroy
     @mapping = Mapping.find(params[:id])
+    @map = @mapping.map
+
     @mapping.destroy
+
+    @map.touch(:updated_at)
 
     head :no_content 
   end

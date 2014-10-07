@@ -8,6 +8,8 @@ class Map < ActiveRecord::Base
   has_many :topics, :through => :topicmappings
   has_many :synapses, :through => :synapsemappings
 
+  after_touch :save_screenshot
+
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {
    :thumb => ['188x126#', :png],
@@ -76,7 +78,7 @@ class Map < ActiveRecord::Base
     json[:updated_at] = self.updated_at_str
     json
   end
-  
+
   ##### PERMISSIONS ######
   
   # returns false if user not allowed to 'show' Topic, Synapse, or Map
@@ -103,6 +105,17 @@ class Map < ActiveRecord::Base
   		return false
   	end
   	return true
+  end
+
+  def save_screenshot
+    # TODO - this will grab a map every single frickin' time a map is touched
+    # we need a system to throttle the amount to 1/hour or something like that
+    # maybe have a flag - last time this map was screenshotted
+    # don't update if it was less than an hour ago
+    # except this has the issue of a user updating map 7x, and it only screenshotting after
+    # the first time. We only want it to screenhsot the 7th time.
+    # We need to store a timestamp somewhere and do processing every hour, I think.
+    GrabMapScreenshotWorker.perform_async(self.id)
   end
 
 end
