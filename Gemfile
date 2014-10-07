@@ -7,7 +7,7 @@ gem 'rails', '3.2.17'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 #gem 'watir'
-#gem 'phantomjs'
+gem 'phantomjs'
 
 gem 'devise'
 gem 'redis', '2.2.2'
@@ -17,8 +17,12 @@ gem 'formula'
 gem 'formtastic'
 gem 'json'
 gem 'rails3-jquery-autocomplete'
-gem 'best_in_place'
+gem 'best_in_place' #in-place editing
 gem 'kaminari' # pagination
+
+gem 'sidekiq' # worker processes
+gem 'sinatra', require: false
+gem 'slim'
 
 gem 'paperclip'
 gem 'aws-sdk'
@@ -58,3 +62,4 @@ gem 'jquery-rails', '2.1.2'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
+

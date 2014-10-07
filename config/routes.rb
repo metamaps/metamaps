@@ -1,6 +1,10 @@
+require 'sidekiq/web'
+
 Metamaps::Application.routes.draw do
 
   root to: 'main#home', via: :get
+
+  mount Sidekiq::Web, at: '/sidekiq'
     
   devise_scope :user do 
     get "join" => "devise/registrations#new" 
