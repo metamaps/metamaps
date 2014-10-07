@@ -1851,6 +1851,80 @@ float: left;
     column-count: 2;
 }
 
+#noIE{
+    border-radius: 2px;
+}
+#noIE p {
+    text-align: center;
+    font-family: din-regular;
+    font-size: 18px;
+    line-height: 18px;
+    color: #424242;
+    padding: 0px;
+    width: 400px;
+    left:195px;
+    position: absolute;
+}
+
+#noIEsubheading{
+    top: 144px;
+
+}
+
+#noIEbody {
+    top:416px;
+}
+
+#noIEbody a {
+    color: #c04f4f;
+    text-decoration: underline;
+}
+
+#noIE h3 {
+    text-align: center;
+    text-transform: uppercase;
+    padding: 0px;
+    margin: 0px;
+}
+
+#chromeIcon, #fireFoxIcon, #safariIcon {
+    position: relative;
+    height: 105px;
+    width: 105px;
+    display: inline-block;
+    margin: 110px 32px 0px 32px;
+    font-family: din-medium;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 115px 0px 0px 0px;
+    opacity: 0.7;
+}
+#chromeIcon {
+    background: url(/assets/browser_icons.png) no-repeat;
+}
+
+#fireFoxIcon {
+    background: url(/assets/browser_icons.png) no-repeat -105px 0;
+}
+
+#safariIcon {
+    background: url(/assets/browser_icons.png) no-repeat -220px 0;
+}
+
+#chromeIcon:hover{ 
+    opacity: 1;
+}
+
+#fireFoxIcon:hover{ 
+    opacity: 1;
+}
+
+#safariIcon:hover{ 
+    opacity: 1;
+}
+
 /* invite */
 
 .joinCodes {
