@@ -1,10 +1,6 @@
 Metamaps::Application.routes.draw do
 
   root to: 'main#home', via: :get
-    
-  devise_scope :user do 
-    get "join" => "devise/registrations#new" 
-  end
   
   match 'request', to: 'main#requestinvite', via: :get, as: :request
   
@@ -31,10 +27,15 @@ Metamaps::Application.routes.draw do
   match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
   match 'maps/:id/contains', to: 'maps#contains', via: :get, as: :contains
   
-  devise_for :users, :controllers => { :registrations => "registrations" }, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
-  devise_scope :user do
-    get "sign_out", :to => "devise/sessions#destroy"
+  devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => [:sessions]
+
+  devise_scope :user do 
+    get 'login' => 'devise/sessions#new', :as => :new_user_session
+    post 'login' => 'devise/sessions#create', :as => :user_session
+    get 'logout' => 'devise/sessions#destroy', :as => :destroy_user_session
+    get 'join' => 'devise/registrations#new', :as => :new_user_registration
   end
+
   match 'user/updatemetacodes', to: 'users#updatemetacodes', via: :post, as: :updatemetacodes
   resources :users, except: [:index, :destroy]
 end

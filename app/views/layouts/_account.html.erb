@@ -24,7 +24,7 @@
     </li>
     <li class="accountListItem accountLogout">
       <div class="accountIcon"></div>
-      <%= link_to "Sign Out", "/sign_out", id: "Logout", :data => { :bypass => 'true'} %>
+      <%= link_to "Sign Out", "/logout", id: "Logout", :data => { :bypass => 'true'} %>
     </li>
   </ul>
 <% else %>
@@ -53,3 +53,5 @@
         </div>
   <% end %>
 <% end %>
+
+<% # Rails.logger.info(stored_location_for(:user)) %>

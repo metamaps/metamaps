@@ -66,6 +66,7 @@
     <% end %>
 
     <!-- Account / Sign in -->
+    <% if !(controller_name == "sessions" && action_name == "new") %>
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon">
             <% if user && user.image %>
@@ -79,5 +80,6 @@
             <%= render :partial => 'layouts/account' %>
         </div>
     </div><!-- end sidebarAccount -->
+    <% end %>
     <div class="clearfloat"></div>
 </div><!-- end upperRightUI -->
