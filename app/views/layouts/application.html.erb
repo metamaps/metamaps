@@ -66,8 +66,8 @@
 <%= render :partial => 'layouts/templates' %>
 <%= render :partial => 'shared/metacodeBgColors' %>
 <script type="text/javascript" charset="utf-8">
-    BAROMETER.load('Scqak8nyHdFEkezKMNeQp');
-
+    //BAROMETER.load('Scqak8nyHdFEkezKMNeQp');
+    USERVOICE.load();
     <% if authenticated? %>
         Metamaps.Active.Mapper = <%= user.to_json.html_safe %>
     <% else %>
