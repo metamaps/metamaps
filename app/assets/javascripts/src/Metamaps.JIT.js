@@ -3,6 +3,7 @@ Metamaps.JIT = {
         mouseMove: 'Metamaps:JIT:events:mouseMove',
         pan: 'Metamaps:JIT:events:pan',
         zoom: 'Metamaps:JIT:events:zoom'
+        animationDone: 'Metamaps:JIT:events:animationDone',
     },
     vizData: [], // contains the visualization-compatible graph
     /**
@@ -211,6 +212,7 @@ Metamaps.JIT = {
             duration: 800,
             onComplete: function () {
                 Metamaps.Visualize.mGraph.busy = false;
+                $(document).trigger(Metamaps.JIT.events.animationDone, [event]);
             }
         },
         animateFDLayout: {
