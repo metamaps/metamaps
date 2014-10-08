@@ -36,14 +36,18 @@ page.open(url, function (status) {
     };
 
     page.evaluate(function() {
-      $(document).on(Metamaps.JIT.events.animationDone, function(){
-        $('.upperLeftUI, .upperRightUI, .mapControls, .infoAndHelp, .uv-icon, .footer').hide();
-        Metamaps.JIT.zoomExtents();
-        if (typeof window.callPhantom === 'function') {
-          window.callPhantom();
-        }
-      });//document.on animationDone
+      
+      $(document).ready(function () {
+          //$(document).on(Metamaps.JIT.events.animationDone, function() {
+          setTimeout(function(){
+            $('.upperLeftUI, .upperRightUI, .mapControls, .infoAndHelp, .uv-icon, .footer').hide();
+            Metamaps.JIT.zoomExtents();
+            window.callPhantom();
+          }, 5000);
+      });
+
     });//page.evaluate
+
   } else {
     //failed to load
     phantom.exit();
