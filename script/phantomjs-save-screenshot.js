@@ -44,6 +44,10 @@ page.open(url, function (status) {
         }
       });//document.on animationDone
     });//page.evaluate
+
+    setTimeout(function(){
+      phantom.exit();
+    }, 10000)
   } else {
     //failed to load
     phantom.exit();
