@@ -1,3 +1,5 @@
+require 'phantomjs'
+
 # app/workers/grab_map_screenshot_worker.rb
 class GrabMapScreenshotWorker
   include Sidekiq::Worker

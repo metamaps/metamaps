@@ -46,5 +46,6 @@ page.open(url, function (status) {
     });//page.evaluate
   } else {
     //failed to load
+    phantom.exit();
   }//if
 });
