@@ -13,8 +13,9 @@ class Map < ActiveRecord::Base
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {
    :thumb => ['188x126#', :png],
-   :full => ['1880x1260#', :png]
-  }
+   :full => ['940x630#', :png]
+  },
+  :default_url => "/assets/missing-map.png"
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
@@ -64,6 +65,10 @@ class Map < ActiveRecord::Base
     self.contributors.length
   end
 
+  def screenshot_url
+    self.screenshot.url(:thumb)
+  end
+
   def created_at_str
     self.created_at.strftime("%m/%d/%Y")
   end
@@ -73,7 +78,7 @@ class Map < ActiveRecord::Base
   end
 
   def as_json(options={})
-    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count], :except => [:created_at, :updated_at])
+    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at, :created_at, :updated_at])
     json[:created_at] = self.created_at_str
     json[:updated_at] = self.updated_at_str
     json
@@ -116,6 +121,21 @@ class Map < ActiveRecord::Base
     # the first time. We only want it to screenhsot the 7th time.
     # We need to store a timestamp somewhere and do processing every hour, I think.
     GrabMapScreenshotWorker.perform_async(self.id)
+  end
+
+  def decode_base64(imgBase64)
+    decoded_data = Base64.decode64(imgBase64)
+ 
+    data = StringIO.new(decoded_data)
+    data.class_eval do
+      attr_accessor :content_type, :original_filename
+    end
+
+    data.content_type = "image/png"
+    data.original_filename = File.basename(self.id.to_s + '-' + 'screenshot.png')
+
+    self.screenshot = data
+    self.save
   end
 
 end

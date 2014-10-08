@@ -6,12 +6,8 @@ class GrabMapScreenshotWorker
     imgBase64 = ''
     Phantomjs.run('./script/phantomjs-save-screenshot.js', map_id.to_s) { |line|
       imgBase64 << line
-      puts line
     }
-
-    #this doesn't work yet
-    #map = Map.find(map_id)
-    #map.add_attachment(imgBase64)
-    #map.save!
+	map = Map.find(map_id)
+    map.decode_base64(imgBase64)
   end
 end

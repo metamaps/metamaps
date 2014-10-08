@@ -72,6 +72,7 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
             topic_count_string: this.get('topic_count')  == 1 ? ' topic' : ' topics',
             synapse_count_number: '<span class="sCountColor">' + this.get('synapse_count') + '</span>',
             synapse_count_string: this.get('synapse_count') == 1 ? ' synapse' : ' synapses',
+            screenshot: '<img src="' + this.get('screenshot_url') + '" />'
         };
         return obj;
     }
