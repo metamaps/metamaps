@@ -1534,12 +1534,9 @@ Metamaps.Util = {
  *
  */
 Metamaps.Realtime = {
-    // this is for the heroku staging environment
-    //Metamaps.Realtime.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); 
-    // this is for metamaps.cc
-    //Metamaps.Realtime.socket = io.connect('http://metamaps.cc:5001');    
-    // this is for localhost development    
-    //Metamaps.Realtime.socket = io.connect('http://localhost:5001'); 
+    stringForLocalhost: 'http://localhost:5001',
+    stringForMetamaps: 'http://metamaps.cc:5001',
+    stringForHeroku: 'http://gentle-savannah-1303.herokuapp.com',
     socket: null,
     isOpen: false,
     changing: false,
@@ -1560,7 +1557,9 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        self.socket = io.connect('http://gentle-savannah-1303.herokuapp.com'); // io.connect('http://localhost:5001');
+        var railsEnv = $('body').data('env');
+        var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
+        self.socket = io.connect(whichToConnect);
         self.startActiveMap();
     },
     toggleBox: function (event) {

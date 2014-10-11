@@ -8,7 +8,9 @@ if (args.length <= 1) {
 
 //configurable variables - CHANGE ME
 var mapID = args[1];
-var url = 'http://metamaps.herokuapp.com/maps/' + mapID;
+var environment = args[2];
+var address = environment === 'development' ? 'http://localhost:3000' : 'http://metamaps.herokuapp.com';
+var url = address + '/maps/' + mapID;
 var width = 940;
 var height = 630;
 
