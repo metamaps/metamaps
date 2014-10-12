@@ -186,13 +186,18 @@ Metamaps.GlobalUI.CreateMap = {
         // bind permission changer events on the createMap form
         $('.permIcon').unbind().bind('click', self.switchPermission);
     },
+    closeSuccess: function () {
+        $('#mapCreatedSuccess').fadeOut(300, function(){
+            $(this).remove();
+        });
+    },
     generateSuccessMessage: function (id) {
-        var stringStart = "Success! Do you want to <br> <a href='/maps/";
+        var stringStart = "<div id='mapCreatedSuccess'><h6>SUCCESS!</h6>Your map has been created. Do you want to: <a id='mapGo' href='/maps/";
         stringStart += id;
-        stringStart += "'>Go to your new map?</a>";
-        stringStart += "<br>or<br><a href='#' onclick='Metamaps.GlobalUI.closeLightbox(); return false;'>Stay on this ";
+        stringStart += "' onclick='Metamaps.GlobalUI.CreateMap.closeSuccess();'>Go to your new map</a>";
+        stringStart += "<span>OR</span><a id='mapStay' href='#' onclick='Metamaps.GlobalUI.CreateMap.closeSuccess(); return false;'>Stay on this ";
         var page = Metamaps.Active.Map ? 'map' : 'page';
-        var stringEnd = "?</a>";
+        var stringEnd = "</a></div>";
         return stringStart + page + stringEnd;
     },
     switchPermission: function () {
@@ -239,9 +244,8 @@ Metamaps.GlobalUI.CreateMap = {
             // TODO add error message
         });
         
-        if (Metamaps.GlobalUI.lightbox === 'forkmap') {
-            form.html('Working...');
-        }
+        Metamaps.GlobalUI.closeLightbox();
+        Metamaps.GlobalUI.notifyUser('Working...');
     },
     success: function (model) {
         var self = Metamaps.GlobalUI.CreateMap;
@@ -249,9 +253,9 @@ Metamaps.GlobalUI.CreateMap = {
         var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
         var form = $(formId);
         
-        form.html(self.generateSuccessMessage(model.id));
+        Metamaps.GlobalUI.clearNotify();
+        $('#wrapper').append(self.generateSuccessMessage(model.id));
         
-        $('#lightbox_main').css('margin-top', '-' + ($('#lightbox_main').height() / 2) + 'px');
     },
     reset: function (id) {
         var self = Metamaps.GlobalUI.CreateMap;

@@ -5,7 +5,7 @@ var t = {};
 t.logoContent = '<div class="logo">METAMAPS</div>';
 t.logoContent += '<ul class="bottomLinks">';
 t.logoContent += '<li onclick="Metamaps.GlobalUI.openLightbox(\'about\')">About /&nbsp;</li>';
-t.logoContent += '<li><a href="/maps/blank">Terms of Use /&nbsp;</a></li>';
+t.logoContent += '<li><a href="http://metamaps.cc/maps/331" data-bypass="true">Terms of Use /&nbsp;</a></li>';
 t.logoContent += '<li onclick="Metamaps.GlobalUI.openLightbox(\'colophon\')">Colophon /&nbsp;</li>';
 t.logoContent += '<li onclick="Metamaps.GlobalUI.openLightbox(\'getInvolved\')">Get Involved!</li>';
 t.logoContent += '</ul>';

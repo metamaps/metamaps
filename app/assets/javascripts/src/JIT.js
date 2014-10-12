@@ -2826,6 +2826,7 @@ var Canvas;
       this.getPos(true);
       this.translateOffsetX = this.translateOffsetY = 0;
       this.scaleOffsetX = this.scaleOffsetY = 1;
+
       for(var i=0, l=this.canvases.length; i<l; i++) {
         this.canvases[i].resize(width, height);
       }
@@ -3025,6 +3026,7 @@ var Canvas;
       canvas.height = height;
       styles.width = width + "px";
       styles.height = height + "px";
+
       //small ExCanvas fix
       if(!supportsCanvas) {
         this.translateToCenter(size);
@@ -3035,6 +3037,7 @@ var Canvas;
         this.translateOffsetY = 0;
       this.scaleOffsetX = 
         this.scaleOffsetY = 1;
+
       this.clear();
       this.viz.resize(width, height, this);
     },

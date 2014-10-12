@@ -2512,10 +2512,6 @@ Metamaps.Filter = {
         var self = Metamaps.Filter;
 
         $('.sidebarFilterIcon').click(self.toggleBox);
-        $('.sidebarFilterBox').click(function(event){ 
-            event.stopPropagation();
-        });
-        $('body').click(self.close);
 
         $('.sidebarFilterBox .showAllMetacodes').click(self.filterNoMetacodes);
         $('.sidebarFilterBox .showAllSynapses').click(self.filterNoSynapses);

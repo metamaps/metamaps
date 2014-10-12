@@ -70,8 +70,8 @@ body,
 .wrapper {
     height: 100%;
 }
-.wrapper.homePage {
-    /*background: url('mm-homepage-bg-image.png') no-repeat center -249px;*/
+.homePage .famousYield {
+    background: url(homepage-bg.png) no-repeat -515px -40px;
 }
 .wrapper.mapPage {
     overflow: hidden;
@@ -852,6 +852,67 @@ label[for="user_remember_me"] {
     z-index: 100;
 }
 /* end Save To New Map */
+
+/* Map Created */
+#mapCreatedSuccess {
+    width: 332px;
+    height: 182px;
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    margin-top: -107px;
+    margin-left: -182px;
+    background-color: #E0E0E0;
+    padding: 16px;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
+    font-size: 14px;
+    font-family: 'din-regular', helvetica, sans-serif;
+}
+
+#mapCreatedSuccess h6 {
+    font-size: 18px;
+    font-family: 'din-medium', helvetica, sans-serif;
+    margin-bottom: 6px;
+}
+
+#mapCreatedSuccess span {
+    margin: 8px auto;
+    display: block;
+    width: 20px;
+}
+
+#mapCreatedSuccess a {
+    display: block;
+    width: 220px;
+    height: 14px;
+    padding: 16px 0;
+    text-align: center;
+    border-radius: 2px;
+    font-size: 12px;
+    box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    margin-left: auto;
+    margin-right: auto;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+
+#mapGo {
+    background-color: #4fc059;
+    margin-top: 16px;
+}
+#mapGo:hover {
+    background-color: #49ad4e;
+}
+#mapStay {
+    background-color: #a354cd;
+}
+#mapStay:hover {
+    background-color: #9150bc;
+}
+
 
 /* Filter */
 

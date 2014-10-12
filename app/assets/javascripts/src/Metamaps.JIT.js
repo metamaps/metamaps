@@ -937,6 +937,7 @@ Metamaps.JIT = {
             Metamaps.Create.newTopic.open();
         } else if (!Metamaps.Mouse.didPan) {
             // SINGLE CLICK, no pan
+            Metamaps.Filter.close();
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
             Metamaps.Create.newTopic.hide();
