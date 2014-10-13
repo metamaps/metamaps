@@ -34,15 +34,15 @@
     <div class="clearfloat"></div>
   </div>
   
-  <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
   <div class="mapInfoDesc">
-    <%= best_in_place @map, :desc, :type => :textarea, :nil => "Click to add description.", :classes => 'best_in_place_desc' %>
+    <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
+      <%= best_in_place @map, :desc, :type => :textarea, :nil => "Click to add description.", :classes => 'best_in_place_desc' %>
+    <% end %>
   </div>
-  <% end %>
   
   <div class="mapInfoMeta">
-    <p class="mapCreatedAt">Created by <%= @map.user == user ? "you" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
-    <p class="mapEditedAt">Last edited <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
+    <p class="mapCreatedAt"><span>Created by:</span> <%= @map.user == user ? "You" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
+    <p class="mapEditedAt"><span>Last edited:</span> <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
   </div>
   
   <div class="mapInfoDelete">

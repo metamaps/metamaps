@@ -165,6 +165,9 @@ define(function(require, exports, module) {
             }
         );
     };
+    f.maps.reposition = function () {
+        f.maps.mod.setTransform(Transform.translate(window.innerWidth, 94, 0));
+    };
     var mapsScroll = new Scrollview();
     mapsScroll._scroller.on('edgeHit', function(data){
         if (data.position > 0 && 

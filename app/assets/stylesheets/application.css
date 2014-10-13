@@ -1415,7 +1415,19 @@ float: left;
     font-size: 18px;
     line-height: 20px;
     height: 20px;
-    padding: 26px 0;
+    padding: 26px 16px;
+}
+.mapInfoName input {
+    width: 328px;
+    font-size: 18px;
+    line-height: 20px;
+    height: 20px;
+    color: #F5F5F5;
+    font-family: 'din-medium', helvetica, sans-serif;
+    border: 0;
+    outline: none;
+    background: none;
+    text-align: center;
 }
 .mapInfoStat {
     background-color: #E0E0E0;
@@ -1539,20 +1551,46 @@ float: left;
     font-family: helvetica, sans-serif;
     color: #E0E0E0;
     margin: 8px;
+    padding-right: 16px;
     height: 106px;
     font-size: 14px;
     line-height: 16px;
     overflow-y: auto;
+    overflow-x: hidden;
+    font-style: italic;
+    text-align: left;
+}
+.mapInfoBox .mapInfoDesc textarea {
+    font-family: helvetica, sans-serif;
+    text-align: left;
+    color: #E0E0E0;
+    font-size: 14px;
+    line-height: 16px;
+    font-style: italic;
+    border: 0;
+    outline: 0;
+    background: none;
+    resize: none;
+    width: 340px;
 }
 .mapInfoBox .mapInfoMeta {
     height: 35px;
     border-top: 1px solid #F5F5F5;
-    padding: 6px 0 7px;
+    padding: 6px 0 7px 16px;
+    text-align: left;
 }
 .mapInfoBox .mapInfoMeta p {
     margin: 4px 0;
     font-size: 12px;
     color: #F5F5F5;
+}
+
+.mapCreatedAt span {
+    color: #4fc059;
+}
+
+.mapEditedAt span {
+    color: #dab539;
 }
 
 /* lightboxes */

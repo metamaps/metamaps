@@ -87,8 +87,8 @@ class Map < ActiveRecord::Base
   ##### PERMISSIONS ######
   
   # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)  
-  	if (self.permission == "private" && self.user != user)
+  def authorize_to_show(user)
+    if (self.permission == "private" && self.user != user)
   		return false
   	end
   	return self
@@ -96,7 +96,9 @@ class Map < ActiveRecord::Base
   
   # returns false if user not allowed to 'edit' Topic, Synapse, or Map
   def authorize_to_edit(user)  
-  	if (self.permission == "private" && self.user != user)
+  	if !user
+      return false
+    elsif (self.permission == "private" && self.user != user)
   		return false
   	elsif (self.permission == "public" && self.user != user)
   		return false
@@ -132,7 +134,7 @@ class Map < ActiveRecord::Base
     end
 
     data.content_type = "image/png"
-    data.original_filename = File.basename(self.id.to_s + '-' + 'screenshot.png')
+    data.original_filename = File.basename('map-' + self.id.to_s + '-screenshot.png')
 
     self.screenshot = data
     self.save

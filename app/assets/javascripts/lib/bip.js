@@ -332,12 +332,18 @@ BestInPlaceEditor.forms = {
 
       this.element.html(output);
       this.setHtmlAttributes();
-      this.element.find("input[type='text']")[0].select();
+      // START METAMAPS CODE
+      //this.element.find("input[type='text']")[0].select();
+      this.element.find("input[type='text']")[0].focus();
+      // END METAMAPS CODE
       this.element.find("form").bind('submit', {editor: this}, BestInPlaceEditor.forms.input.submitHandler);
       if (this.cancelButton) {
         this.element.find("input[type='button']").bind('click', {editor: this}, BestInPlaceEditor.forms.input.cancelButtonHandler);
       }
       this.element.find("input[type='text']").bind('blur', {editor: this}, BestInPlaceEditor.forms.input.inputBlurHandler);
+      // START METAMAPS CODE
+      this.element.find("input[type='text']").bind('keydown', {editor: this}, BestInPlaceEditor.forms.input.keydownHandler);  
+      // END METAMAPS CODE
       this.element.find("input[type='text']").bind('keyup', {editor: this}, BestInPlaceEditor.forms.input.keyupHandler);
       this.blurTimer = null;
       this.userClicked = false;
@@ -385,6 +391,11 @@ BestInPlaceEditor.forms = {
       if (event.keyCode == 27) {
         event.data.editor.abort();
       }
+      // START METAMAPS CODE
+      else if (event.keyCode == 13 && !event.shiftKey) {
+        event.data.editor.update();
+      }
+      // END METAMAPS CODE
     }
   },
 
@@ -426,6 +437,16 @@ BestInPlaceEditor.forms = {
     submitHandler : function(event) {
       event.data.editor.update();
     },
+
+    // START METAMAPS CODE
+    keydownHandler : function(event) {
+      if (event.keyCode == 13 && !event.shiftKey) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+    },
+    // END METAMAPS CODE
 
     keyupHandler : function(event) {
       if (event.keyCode == 27) {
