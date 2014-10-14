@@ -776,6 +776,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 .mapCard .mapScreenshot img {
   width: 188px;
   height: 126px;
+  border-radius: 2px;
 }
 
 .mapCard .scroll {
