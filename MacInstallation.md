@@ -1,3 +1,5 @@
+If you are doing an upgrade and or recent pull for changes you will need to change your default ruby package from 2.1.1 to ruby 2.1.2
+
 install homebrew
 
     \curl -sSL https://get.rvm.io | bash -s stable --rails
