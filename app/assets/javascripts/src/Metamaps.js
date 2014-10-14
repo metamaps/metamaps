@@ -808,7 +808,7 @@ Metamaps.TopicCard = {
         if (authorized) {
             $('.showcard .metacodeTitle').click(openMetacodeSelect);
             $('.showcard').click(hideMetacodeSelect);
-            $('.metacodeSelect > ul li').click(function (event){
+            $('.metacodeSelect > ul > li').click(function (event){
                 event.stopPropagation();
             });
             $('.metacodeSelect li li').click(metacodeLiClick);
@@ -845,36 +845,44 @@ Metamaps.TopicCard = {
             });
         }
 
+
+        var permissionLiClick = function (event) {
+            selectingPermission = false;
+            var permission = $(this).attr('class');
+            topic.save({
+                permission: permission
+            });
+            $('.showcard .mapPerm').removeClass('co pu pr minimize').addClass(permission.substring(0, 2));
+            $('.showcard .permissionSelect').remove();
+            event.stopPropagation();
+        };
+
+        var openPermissionSelect = function (event) {
+            if (!selectingPermission) {
+                selectingPermission = true;
+                $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
+                if ($(this).hasClass('co')) {
+                    $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
+                } else if ($(this).hasClass('pu')) {
+                    $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
+                } else if ($(this).hasClass('pr')) {
+                    $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
+                }
+                $('.showcard .permissionSelect li').click(permissionLiClick);
+                event.stopPropagation();
+            }
+        };
+
+        var hidePermissionSelect = function () {
+            selectingPermission = false;
+            $('.showcard .yourTopic .mapPerm').removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+            $('.showcard .permissionSelect').remove();
+        };
         // ability to change permission
         var selectingPermission = false;
         if (topic.authorizePermissionChange(Metamaps.Active.Mapper)) {
-            $('.showcard .yourTopic .mapPerm').click(function () {
-                if (!selectingPermission) {
-                    selectingPermission = true;
-                    $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
-                    if ($(this).hasClass('co')) {
-                        $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
-                    } else if ($(this).hasClass('pu')) {
-                        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
-                    } else if ($(this).hasClass('pr')) {
-                        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
-                    }
-                    $('.permissionSelect li').click(function (event) {
-                        selectingPermission = false;
-                        var permission = $(this).attr('class');
-                        topic.save({
-                            permission: permission
-                        });
-                        $('.showcard .mapPerm').removeClass('co pu pr minimize').addClass(permission.substring(0, 2));
-                        $('.permissionSelect').remove();
-                        event.stopPropagation();
-                    });
-                } else {
-                    selectingPermission = false;
-                    $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
-                    $('.permissionSelect').remove();
-                }
-            });
+            $('.showcard .yourTopic .mapPerm').click(openPermissionSelect);
+            $('.showcard').click(hidePermissionSelect);
         }
     },
     populateShowCard: function (topic) {
@@ -1129,34 +1137,42 @@ Metamaps.SynapseCard = {
 
         // ability to change permission
         var selectingPermission = false;
-        if (synapse.authorizePermissionChange(Metamaps.Active.Mapper)) {
-            $('#edit_synapse.yourEdge .mapPerm').click(function () {
-                if (!selectingPermission) {
-                    selectingPermission = true;
-                    $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
-                    if ($(this).hasClass('co')) {
-                        $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
-                    } else if ($(this).hasClass('pu')) {
-                        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
-                    } else if ($(this).hasClass('pr')) {
-                        $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
-                    }
-                    $('#edit_synapse .permissionSelect li').click(function (event) {
-                        selectingPermission = false;
-                        var permission = $(this).attr('class');
-                        synapse.save({
-                            permission: permission,
-                        });
-                        $('#edit_synapse .mapPerm').removeClass('co pu pr minimize').addClass(permission.substring(0, 2));
-                        $('#edit_synapse .permissionSelect').remove();
-                        event.stopPropagation();
-                    });
-                } else {
-                    selectingPermission = false;
-                    $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
-                    $('#edit_synapse .permissionSelect').remove();
-                }
+        var permissionLiClick = function (event) {
+            selectingPermission = false;
+            var permission = $(this).attr('class');
+            synapse.save({
+                permission: permission
             });
+            $('#edit_synapse .mapPerm').removeClass('co pu pr minimize').addClass(permission.substring(0, 2));
+            $('#edit_synapse .permissionSelect').remove();
+            event.stopPropagation();
+        };
+
+        var openPermissionSelect = function (event) {
+            if (!selectingPermission) {
+                selectingPermission = true;
+                $(this).addClass('minimize'); // this line flips the drop down arrow to a pull up arrow
+                if ($(this).hasClass('co')) {
+                    $(this).append('<ul class="permissionSelect"><li class="public"></li><li class="private"></li></ul>');
+                } else if ($(this).hasClass('pu')) {
+                    $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="private"></li></ul>');
+                } else if ($(this).hasClass('pr')) {
+                    $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
+                }
+                $('#edit_synapse .permissionSelect li').click(permissionLiClick);
+                event.stopPropagation();
+            }
+        };
+
+        var hidePermissionSelect = function () {
+            selectingPermission = false;
+            $('#edit_synapse.yourEdge .mapPerm').removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+            $('#edit_synapse .permissionSelect').remove();
+        };
+
+        if (synapse.authorizePermissionChange(Metamaps.Active.Mapper)) {
+            $('#edit_synapse.yourEdge .mapPerm').click(openPermissionSelect);
+            $('#edit_synapse').click(hidePermissionSelect);
         }
     }, //add_perms_form
 
@@ -2887,7 +2903,7 @@ Metamaps.Listeners = {
 
         $(window).resize(function () {
             if (Metamaps.Visualize && Metamaps.Visualize.mGraph) Metamaps.Visualize.mGraph.canvas.resize($(window).width(), $(window).height());
-            if (Metamaps.Famous && Metamaps.Famous.maps.surf) Metamaps.Famous.maps.hide();
+            if ((Metamaps.Active.Map || Metamaps.Active.Topic) && Metamaps.Famous && Metamaps.Famous.maps.surf) Metamaps.Famous.maps.reposition();
         });
     }
 }; // end Metamaps.Listeners
@@ -3643,7 +3659,7 @@ Metamaps.Map.InfoBox = {
         obj["map_creator_tip"] = isCreator ? self.changePermissionText : "";
         obj["delete"] = isCreator ? Hogan.compile(self.deleteHTML).render({id: map.id}) : "";
         obj["contributor_list"] = self.createContributorList();
-        obj["user_name"] = isCreator ? "you" : map.get("user_name");
+        obj["user_name"] = isCreator ? "You" : map.get("user_name");
 
         var classes = isCreator ? "yourMap" : "";
         classes += canEdit ? " canEdit" : "";
@@ -3656,7 +3672,7 @@ Metamaps.Map.InfoBox = {
     attachEventListeners: function () {
         var self = Metamaps.Map.InfoBox;
 
-        $('.mapInfoBox .best_in_place').best_in_place();
+        $('.mapInfoBox.canEdit .best_in_place').best_in_place();
 
         // because anyone who can edit the map can change the map title
         $('.mapInfoName .best_in_place_name').unbind("ajax:success").bind("ajax:success", function () {
@@ -3666,7 +3682,7 @@ Metamaps.Map.InfoBox = {
         });
 
         $('.yourMap .mapPermission').unbind().click(self.onPermissionClick);
-
+        $('.mapInfoBox.yourMap').unbind('.yourMap').bind('click.yourMap', self.hidePermissionSelect);
     },
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
@@ -3689,7 +3705,7 @@ Metamaps.Map.InfoBox = {
 
         $('.mapEditedAt').html('Last edited ' + Metamaps.Util.nowDateFormatted());
     },
-    onPermissionClick: function () {
+    onPermissionClick: function (event) {
         var self = Metamaps.Map.InfoBox;
 
         if (!self.selectingPermission) {
@@ -3703,13 +3719,17 @@ Metamaps.Map.InfoBox = {
                 $(this).append('<ul class="permissionSelect"><li class="commons"></li><li class="public"></li></ul>');
             }
             $('.mapPermission .permissionSelect li').click(self.selectPermission);
-        } else {
-            self.selectingPermission = false;
-            $(this).removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
-            $('.mapPermission .permissionSelect').remove();
+            event.stopPropagation();
         }
     },
-    selectPermission: function () {
+    hidePermissionSelect: function () {
+        var self = Metamaps.Map.InfoBox;
+
+        self.selectingPermission = false;
+        $('.mapPermission').removeClass('minimize'); // this line flips the pull up arrow to a drop down arrow
+        $('.mapPermission .permissionSelect').remove();
+    },
+    selectPermission: function (event) {
         var self = Metamaps.Map.InfoBox;
 
         self.selectingPermission = false;

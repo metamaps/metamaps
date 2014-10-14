@@ -13,4 +13,10 @@ div.uv-icon.uv-bottom-left {
 	top:25%;
 	width:25px;
 	z-index:100000;	
+	opacity: 1;
+	
+}
+
+div.uv-icon.uv-bottom-left:hover {
+	background-position: 0 -110px;	
 }
