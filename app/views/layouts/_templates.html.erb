@@ -6,11 +6,13 @@
 <div class="templates">
     
     <script type="text/template" id="mapInfoBoxTemplate">
-  <div class="mapInfoName">{{{name}}}</div>
+  <div class="mapInfoName" id="mapInfoName">{{{name}}}</div>
   
   <div class="mapInfoStat">
     <div class="infoStatIcon mapContributors hoverForTip">
-      {{contributor_count}}
+      <img id="mapContribs" class="{{contributors_class}}"
+        width="25" height="25" src="{{contributor_image}}" />
+      <span>{{contributor_count}}</span>
       <div class="tip">{{contributor_list}}</div>
     </div>
     <div class="infoStatIcon mapTopics">
@@ -24,17 +26,22 @@
     </div>
     <div class="clearfloat"></div>
   </div>
-  <div class="mapInfoDesc">
+  <div class="mapInfoDesc" id="mapInfoDesc">
     {{{desc}}}
   </div>
   
   <div class="mapInfoMeta">
     <p class="mapCreatedAt"><span>Created by:</span> {{user_name}} on {{created_at}}</p>
     <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
-  </div>
-  
-  <div class="mapInfoDelete">
-    {{{delete}}}
+    <div class="mapInfoButtonsWrapper">
+      <div class="mapInfoDelete">
+        <span>Delete</span>
+      </div>
+      <div class="mapInfoShare">
+        <div class="mapInfoShareIcon"></div>
+        <span>Share</span>
+      </div>
+    </div>
   </div>
     </script>
     
