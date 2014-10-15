@@ -183,6 +183,7 @@ resize: none;
   width:100%;
   z-index:1;
   padding: 0;
+  height: 48px;
 }
 .linkItem.contributor {
   margin-left:32px;
@@ -383,7 +384,7 @@ background-color: #E0E0E0;
   display:none;
   position: absolute;
   left: 200px;
-  top: 0;
+  top: -1px;
   max-height: 270px;
   overflow-y: auto;
 }
@@ -399,6 +400,25 @@ background-color: #E0E0E0;
   background-image: url(arrowright_sprite.png);
   background-repeat: no-repeat;
   background-position: 0 -32px;
+}
+
+/* too close to right side of screen case */
+.onRightEdge.metacodeSelect {
+  right: 1px;
+  left: auto;
+  top: 46px;
+}
+.onRightEdge.metacodeSelect ul ul {
+  left: auto;
+  right: 200px;
+}
+/* too close to bottom of screen case */
+.onBottomEdge.metacodeSelect {
+  bottom: 0;
+}
+.onBottomEdge.metacodeSelect ul ul {
+  top: auto;
+  bottom: 0;
 }
 
 .CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip {

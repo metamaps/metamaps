@@ -784,14 +784,51 @@ Metamaps.TopicCard = {
                 metacode_id: metacode.id
             });
             Metamaps.Visualize.mGraph.plot();
-            $('.metacodeSelect').hide();
+            $('.metacodeSelect').hide().removeClass('onRightEdge onBottomEdge');
             $('.metacodeTitle').hide();
             $('.showcard .icon').css('z-index', '1');
         };
 
         var openMetacodeSelect = function (event) {
+            var windowWidth;
+            var showcardLeft;
+            var TOPICCARD_WIDTH = 300;
+            var METACODESELECT_WIDTH = 404;
+            var distanceFromEdge;
+
+            var MAX_METACODELIST_HEIGHT = 270;
+            var windowHeight;
+            var showcardTop;
+            var topicTitleHeight;
+            var distanceFromBottom;
+
             if (!selectingMetacode) {
                 selectingMetacode = true;
+
+                // this is to make sure the metacode 
+                // select is accessible onscreen, when opened
+                // while topic card is close to the right 
+                // edge of the screen
+                windowWidth = $(window).width();
+                showcardLeft = parseInt($('.showcard').css('left'));
+                distanceFromEdge = windowWidth - (showcardLeft + TOPICCARD_WIDTH);
+                if (distanceFromEdge < METACODESELECT_WIDTH) {
+                    $('.metacodeSelect').addClass('onRightEdge');
+                }
+
+                // this is to make sure the metacode 
+                // select is accessible onscreen, when opened
+                // while topic card is close to the bottom
+                // edge of the screen
+                windowHeight = $(window).height();
+                showcardTop = parseInt($('.showcard').css('top'));
+                topicTitleHeight = $('.showcard .title').height() + parseInt($('.showcard .title').css('padding-top')) + parseInt($('.showcard .title').css('padding-bottom'));
+                heightOfSetList = $('.showcard .metacodeSelect').height();
+                distanceFromBottom = windowHeight - (showcardTop + topicTitleHeight);
+                if (distanceFromBottom < MAX_METACODELIST_HEIGHT) {
+                    $('.metacodeSelect').addClass('onBottomEdge');
+                }
+
                 $('.metacodeSelect').show();
                 event.stopPropagation();
             }
@@ -799,7 +836,7 @@ Metamaps.TopicCard = {
 
         var hideMetacodeSelect = function () {
             selectingMetacode = false;
-            $('.metacodeSelect').hide();
+            $('.metacodeSelect').hide().removeClass('onRightEdge onBottomEdge');
             $('.metacodeTitle').hide();
             $('.showcard .icon').css('z-index', '1');
         };
