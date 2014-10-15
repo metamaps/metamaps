@@ -1,3 +1,23 @@
+.nameCounter {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  font-size: 11px;
+  font-family: helvetica;
+  color: #727272;
+  line-height: 11px;
+}
+
+.nameCounter.forMap {
+  color: #FFF;
+  bottom: -11px;
+}
+
+.nameCounter.forTopic {
+  
+}
+
+
 #center-container {
     position:relative;
 	height:100%;
@@ -84,15 +104,6 @@
   background: none;
   text-align:center;
   resize: none;
-}
-.titleCounter {
-  position: absolute;
-  bottom: 1px;
-  right: 2px;
-  font-size: 11px;
-  font-family: helvetica;
-  color: #727272;
-  line-height: 11px;
 }
 
 .CardOnGraph .scroll {
@@ -765,6 +776,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 .mapCard .mapScreenshot img {
   width: 188px;
   height: 126px;
+  border-radius: 2px;
 }
 
 .mapCard .scroll {

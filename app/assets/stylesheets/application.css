@@ -1405,7 +1405,7 @@ float: left;
     color: #F5F5F5;
     border-radius: 2px;
     width: 360px;
-    height: 300px;
+    min-height: 300px;
     padding: 0;
     font-style: normal;
     text-align: center;
@@ -1414,21 +1414,29 @@ float: left;
 .mapInfoName {
     font-size: 18px;
     line-height: 20px;
-    height: 20px;
-    padding: 26px 16px;
+    padding: 13px 16px;
+    margin: 13px 0;
+    position: relative;
 }
-.mapInfoName input {
+.mapInfoName textarea {
     width: 328px;
     font-size: 18px;
     line-height: 20px;
-    height: 20px;
     color: #F5F5F5;
     font-family: 'din-medium', helvetica, sans-serif;
     border: 0;
     outline: none;
     background: none;
     text-align: center;
+    resize: none;
 }
+.mapInfoBox.canEdit #mapInfoName:hover {
+    background-image: url(edit.png);
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    cursor: text;
+}
+
 .mapInfoStat {
     background-color: #E0E0E0;
     font-size: 18px;
@@ -1451,10 +1459,34 @@ float: left;
     text-align: left;
 }
 .mapContributors {
-    background-image: url(MMCCicon_mapper.png);
-    background-position: 13px center;
     position: relative;
+    height: 30px;
+    margin: 9px 0px 9px 56px;
+    padding: 0;
+    width: 64px;
+    cursor: pointer;
 }
+#mapContribs {
+    float: left;
+    border: 2px solid #424242;
+    background-color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+}
+#mapContribs.multiple.mTwo {
+    box-shadow: 1px 1px 0 0 #B5B5B5,3px 2px 0 0 #424242;
+}
+#mapContribs.multiple {
+    box-shadow: 1px 1px 0 0 #B5B5B5,3px 2px 0 0 #424242,4px 3px 0 0 #B5B5B5,5px 4px 0 0 #424242;
+}
+.mapContributors span {
+    height: 20px;
+    padding-top: 5px;
+    padding-left: 8px;
+    float: left;
+}
+
 .infoStatIcon .tip {
     display: none;
     position: absolute;
@@ -1478,7 +1510,7 @@ float: left;
     right: 32px;
 }
 .mapInfoBox .hoverForTip:hover .tip {
-    display: block;
+    display: none;
 }
 .mapTopics {
     background-image: url(topic32.png);
@@ -1552,7 +1584,7 @@ float: left;
     color: #E0E0E0;
     margin: 8px;
     padding-right: 16px;
-    height: 106px;
+    height: 115px;
     font-size: 14px;
     line-height: 16px;
     overflow-y: auto;
@@ -1573,14 +1605,22 @@ float: left;
     resize: none;
     width: 340px;
 }
+.mapInfoBox.canEdit .mapInfoDesc:hover {
+    background-image: url(edit.png);
+    background-position: top right;
+    background-repeat: no-repeat;
+    cursor: text;
+}
+
 .mapInfoBox .mapInfoMeta {
     height: 35px;
     border-top: 1px solid #F5F5F5;
     padding: 6px 0 7px 16px;
     text-align: left;
+    position: relative;
 }
 .mapInfoBox .mapInfoMeta p {
-    margin: 4px 0;
+    margin: 2px 0;
     font-size: 12px;
     color: #F5F5F5;
 }
@@ -1591,6 +1631,43 @@ float: left;
 
 .mapEditedAt span {
     color: #dab539;
+}
+
+.mapInfoButtonsWrapper {
+    position: absolute;
+    top: 0;
+    right: 4px;
+}
+.mapInfoButtonsWrapper > div {
+    float: right;
+    width: 48px;
+    height: 48px;
+    font-size: 12px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+}
+.mapInfoShareIcon {
+    width: 24px;
+    height: 24px;
+    background-image: url(share_sprite_mapinfo.png);
+    background-repeat: no-repeat;
+    margin: 4px auto 0;
+    background-position: 0 -24px;
+}
+.mapInfoShare:hover .mapInfoShareIcon {
+    background-position: 0 0;
+}
+.mapInfoDelete {
+    background-image: url(delete_mapinfo.png);
+    background-repeat: no-repeat;
+    background-position: center 8px;
+}
+.mapInfoButtonsWrapper span {
+    position: absolute;
+    width: 100%;
+    display: block;
+    bottom: 8px;
 }
 
 /* lightboxes */

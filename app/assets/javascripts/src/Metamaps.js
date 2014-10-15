@@ -820,15 +820,15 @@ Metamaps.TopicCard = {
 
                 $el.attr('maxlength', '140');
 
-                $('.showcard .title').append('<div class="titleCounter"></div>');
+                $('.showcard .title').append('<div class="nameCounter forTopic"></div>');
 
                 var callback = function (data) {
-                    $('.titleCounter').html(data.all + '/140');
+                    $('.nameCounter.forTopic').html(data.all + '/140');
                 };
                 Countable.live(el, callback);
             });
             bipName.bind("best_in_place:deactivate", function () {
-                $('.titleCounter').remove();
+                $('.nameCounter.forTopic').remove();
             });
 
             //bind best_in_place ajax callbacks
@@ -3246,6 +3246,8 @@ Metamaps.Topic = {
     createTopicLocally: function () {
         var self = Metamaps.Topic;
 
+        $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
+
         var metacode = Metamaps.Metacodes.findWhere({
             name: Metamaps.Create.newTopic.metacode
         });
@@ -3382,6 +3384,8 @@ Metamaps.Synapse = {
             synapse,
             mapping;
 
+        $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
+
         //for each node in this array we will create a synapse going to the position2 node.
         var synapsesToCreate = [];
 
@@ -3450,6 +3454,9 @@ Metamaps.Synapse = {
  *
  */
 Metamaps.Map = {
+    events: {
+        editedByActiveMapper: "Metamaps:Map:events:editedByActiveMapper"
+    },
     init: function () {
         var self = Metamaps.Map;
 
@@ -3466,6 +3473,8 @@ Metamaps.Map = {
 
         self.InfoBox.init();
         self.CheatSheet.init();
+
+        $(document).on(Metamaps.Map.events.editedByActiveMapper, self.editedByActiveMapper);
     },
     launch: function (id) {
         var bb = Metamaps.Backbone;
@@ -3551,6 +3560,11 @@ Metamaps.Map = {
 
         Metamaps.GlobalUI.CreateMap.topicsToMap = nodes_data;
         Metamaps.GlobalUI.CreateMap.synapsesToMap = synapses_data;
+    },
+    editedByActiveMapper: function () {
+        if (Metamaps.Active.Mapper) {
+            Metamaps.Mappers.add(Metamaps.Active.Mapper);
+        }
     }
 };
 
@@ -3597,9 +3611,8 @@ Metamaps.Map.InfoBox = {
     changing: false,
     selectingPermission: false,
     changePermissionText: "<div class='tip'>As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>",
-    nameHTML: '<span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="input">{{name}}</span>',
-    descHTML: '<span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description." data-type="textarea">{{desc}}</span>',
-    deleteHTML: "<a href='/maps/{{id}}' class='delete' data-bypass='true' data-confirm='Delete this map (nodes and synapses will remain)?' data-method='delete' rel='nofollow'>Delete</a>",
+    nameHTML: '<span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea" data-activator="#mapInfoName">{{name}}</span>',
+    descHTML: '<span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description..." data-type="textarea" data-activator="#mapInfoDesc">{{desc}}</span>',
     init: function () {
         var self = Metamaps.Map.InfoBox;
 
@@ -3656,7 +3669,9 @@ Metamaps.Map.InfoBox = {
         obj["name"] = canEdit ? Hogan.compile(self.nameHTML).render({id: map.id, name: map.get("name")}) : map.get("name");
         obj["desc"] = canEdit ? Hogan.compile(self.descHTML).render({id: map.id, desc: map.get("desc")}) : map.get("desc");
         obj["map_creator_tip"] = isCreator ? self.changePermissionText : "";
-        obj["delete"] = isCreator ? Hogan.compile(self.deleteHTML).render({id: map.id}) : "";
+        obj["contributors_class"] = Metamaps.Mappers.length > 1 ? "multiple" : "";
+        obj["contributors_class"] += Metamaps.Mappers.length === 2 ? " mTwo" : "";
+        obj["contributor_image"] = Metamaps.Mappers.length > 0 ? Metamaps.Mappers.models[0].get("image") : "/assets/user.png";
         obj["contributor_list"] = self.createContributorList();
         obj["user_name"] = isCreator ? "You" : map.get("user_name");
 
@@ -3674,6 +3689,24 @@ Metamaps.Map.InfoBox = {
         $('.mapInfoBox.canEdit .best_in_place').best_in_place();
 
         // because anyone who can edit the map can change the map title
+        var bipName = $('.mapInfoBox .best_in_place_name');
+        bipName.unbind("best_in_place:activate").bind("best_in_place:activate", function () {
+            var $el = bipName.find('textarea');
+            var el = $el[0];
+
+            $el.attr('maxlength', '140');
+
+            $('.mapInfoName').append('<div class="nameCounter forMap"></div>');
+
+            var callback = function (data) {
+                $('.nameCounter.forMap').html(data.all + '/140');
+            };
+            Countable.live(el, callback);
+        });
+        bipName.unbind("best_in_place:deactivate").bind("best_in_place:deactivate", function () {
+            $('.nameCounter.forMap').remove();
+        });
+
         $('.mapInfoName .best_in_place_name').unbind("ajax:success").bind("ajax:success", function () {
             var name = $(this).html();
             $('.mapName').html(name);
@@ -3694,15 +3727,22 @@ Metamaps.Map.InfoBox = {
         var self = Metamaps.Map.InfoBox;
         var mapper = Metamaps.Active.Mapper;
 
-        if (mapper && Metamaps.Mappers.get(mapper.id) === undefined) {
-            Metamaps.Mappers.add(mapper); 
+        var contributors_class = "";
+        if (Metamaps.Mappers.length === 2) contributors_class = "multiple mTwo";
+        else if (Metamaps.Mappers.length > 2) contributors_class = "multiple";
+
+        var contributors_image = "/assets/user.png";
+        if (Metamaps.Mappers.length > 0) {
+            // get the first contributor and use their image
+            contributors_image = Metamaps.Mappers.models[0].get("image");
         }
-        $('.mapContributors').text(Metamaps.Mappers.length)
-            .append('<div class="tip">' + self.createContributorList() + '</div>');
+        $('.mapContributors img').attr('src', contributors_image).removeClass('multiple mTwo').addClass(contributors_class);
+        $('.mapContributors span').text(Metamaps.Mappers.length)
+        $('.mapContributors .tip').text(self.createContributorList());
         $('.mapTopics').text(Metamaps.Topics.length);
         $('.mapSynapses').text(Metamaps.Synapses.length);
 
-        $('.mapEditedAt').html('Last edited ' + Metamaps.Util.nowDateFormatted());
+        $('.mapEditedAt').html('<span>Last edited: </span>' + Metamaps.Util.nowDateFormatted());
     },
     onPermissionClick: function (event) {
         var self = Metamaps.Map.InfoBox;
