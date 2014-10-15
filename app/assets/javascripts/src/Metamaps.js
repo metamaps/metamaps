@@ -3680,7 +3680,7 @@ Metamaps.Map.InfoBox = {
         var classes = isCreator ? "yourMap" : "";
         classes += canEdit ? " canEdit" : "";
         classes += shareable ? " shareable" : "";
-        $(".mapInfoBox").removeClass("yourMap canEdit")
+        $(".mapInfoBox").removeClass("shareable yourMap canEdit")
             .addClass(classes)
             .html(self.generateBoxHTML.render(obj));
 
