@@ -36,6 +36,7 @@ Metamaps.Views.init = function () {
         setCollection: function (collection) {
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
+            this.listenTo(this.collection, 'add', this.render);
             this.listenTo(this.collection, 'successOnFetch', this.handleSuccess);
             this.listenTo(this.collection, 'errorOnFetch', this.handleError);
         },

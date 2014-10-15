@@ -249,6 +249,9 @@ Metamaps.GlobalUI.CreateMap = {
     },
     success: function (model) {
         var self = Metamaps.GlobalUI.CreateMap;
+
+        //push the new map onto the collection of 'my maps'
+        Metamaps.Maps.Mine.add(model);
         
         var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
         var form = $(formId);

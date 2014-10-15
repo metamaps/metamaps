@@ -126,6 +126,9 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
                 }
             });
         }
+        else {
+            self.trigger('successOnFetch');
+        }
     }
 });
 

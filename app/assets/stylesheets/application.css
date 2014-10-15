@@ -1646,6 +1646,7 @@ float: left;
     text-align: center;
     position: relative;
     cursor: pointer;
+    display: none;
 }
 .mapInfoShareIcon {
     width: 24px;
@@ -1658,10 +1659,18 @@ float: left;
 .mapInfoShare:hover .mapInfoShareIcon {
     background-position: 0 0;
 }
+/* only display share button if 'public' or 'commons' */
+.shareable .mapInfoShare {
+    display: block;
+}
 .mapInfoDelete {
     background-image: url(delete_mapinfo.png);
     background-repeat: no-repeat;
     background-position: center 8px;
+}
+/* only display delete button if it's a map you created */
+.yourMap .mapInfoDelete {
+    display: block;
 }
 .mapInfoButtonsWrapper span {
     position: absolute;

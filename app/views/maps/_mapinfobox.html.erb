@@ -2,7 +2,10 @@
   # Partial rendering form for a new topic on a map
   # This code is called when viewing a metamap in show.html.erb in the views/maps folder
   #%>
-<div class="mapInfoBox mapElement mapElementHidden permission <%= @map && @map.user == user ? " yourMap" : "" %><%= @map && @map.authorize_to_edit(user) ? " canEdit" : "" %>">
+<div class="mapInfoBox mapElement mapElementHidden permission 
+  <%= @map && @map.user == user ? " yourMap" : "" %>
+  <%= @map && @map.authorize_to_edit(user) ? " canEdit" : "" %>
+  <%= @map && @map.permission != 'private' ? " shareable" : "" %>">
   
   <% if @map %>
   <div class="mapInfoName" id="mapInfoName"><%= best_in_place @map, :name, :type => :textarea, :activator => "#mapInfoName", :classes => 'best_in_place_name' %></div>

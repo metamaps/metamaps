@@ -3654,6 +3654,7 @@ Metamaps.Map.InfoBox = {
             $('.mapInfoBox').fadeOut(200, function () {
                 self.changing = false;
                 self.isOpen = false;
+                self.hidePermissionSelect();
             });
         }
     },
@@ -3666,6 +3667,7 @@ Metamaps.Map.InfoBox = {
 
         var isCreator = map.authorizePermissionChange(Metamaps.Active.Mapper);
         var canEdit = map.authorizeToEdit(Metamaps.Active.Mapper);
+        var shareable = map.get('permission') !== 'private';
 
         obj["name"] = canEdit ? Hogan.compile(self.nameHTML).render({id: map.id, name: map.get("name")}) : map.get("name");
         obj["desc"] = canEdit ? Hogan.compile(self.descHTML).render({id: map.id, desc: map.get("desc")}) : map.get("desc");
@@ -3678,6 +3680,7 @@ Metamaps.Map.InfoBox = {
 
         var classes = isCreator ? "yourMap" : "";
         classes += canEdit ? " canEdit" : "";
+        classes += shareable ? " shareable" : "";
         $(".mapInfoBox").removeClass("yourMap canEdit")
             .addClass(classes)
             .html(self.generateBoxHTML.render(obj));
@@ -3715,7 +3718,11 @@ Metamaps.Map.InfoBox = {
         });
 
         $('.yourMap .mapPermission').unbind().click(self.onPermissionClick);
+        // .yourMap in the unbind/bind is just a namespace for the events
+        // not a reference to the class .yourMap on the .mapInfoBox
         $('.mapInfoBox.yourMap').unbind('.yourMap').bind('click.yourMap', self.hidePermissionSelect);
+
+        $('.yourMap .mapInfoDelete').unbind().click(self.deleteActiveMap);
     },
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
@@ -3777,9 +3784,33 @@ Metamaps.Map.InfoBox = {
         Metamaps.Active.Map.save({
             permission: permission
         });
+        shareable = permission === 'private' ? '' : 'shareable';
         $('.mapPermission').removeClass('commons public private minimize').addClass(permission);
         $('.mapPermission .permissionSelect').remove();
+        $('.mapInfoBox').removeClass('shareable').addClass(shareable);
         event.stopPropagation();
+    },
+    deleteActiveMap: function () {
+        var confirmString = 'Are you sure you want to delete this map? ';
+        confirmString += 'This action is irreversible. It will not delete the topics and synapses on the map.';
+
+        var doIt = confirm(confirmString);
+        var map = Metamaps.Active.Map;
+        var mapper = Metamaps.Active.Mapper;
+        var authorized = map.authorizePermissionChange(mapper);
+
+        if (doIt && authorized) {
+            Metamaps.Map.InfoBox.close();
+            Metamaps.Maps.Active.remove(map);
+            Metamaps.Maps.Featured.remove(map);
+            Metamaps.Maps.Mine.remove(map);
+            map.destroy();
+            Metamaps.Router.home();
+            Metamaps.GlobalUI.notifyUser('Map eliminated!');
+        }
+        else if (!authorized) {
+            alert('Hey now. We can\'t just go around willy nilly deleting other people\'s maps now can we? Run off and find something constructive to do, eh?');
+        }
     }
 }; // end Metamaps.Map.InfoBox
 

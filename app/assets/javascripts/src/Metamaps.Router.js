@@ -66,6 +66,8 @@
         },
         explore: function (section) {
             
+            // just capitalize the variable section
+            // either 'mine', 'featured', or 'active'
             var capitalize = section.charAt(0).toUpperCase() + section.slice(1);
             
             document.title = 'Explore ' + capitalize + ' Maps | Metamaps';
