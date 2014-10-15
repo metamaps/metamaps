@@ -40,7 +40,6 @@ Metamaps.Settings = {
     }
 };
 
-
 Metamaps.Touch = {
     touchPos: null, // this stores the x and y values of a current touch event 
     touchDragNode: null // this stores a reference to a JIT node that is being dragged

@@ -2,9 +2,7 @@
   # @file
   # The inner HTML of the account box that comes up in the bottom left
   #%>
-
-
-<div id="lightbox_overlay">
+  <div id="lightbox_overlay">
   <div id="lightbox_main">
     <a id="lightbox_close" href="#"></a>
     <div id="lightbox_content">
@@ -169,10 +167,28 @@
         <p>We welcome people of all skillsets to contribute to the project in different ways. Designers, researchers, academics, strategists, and facilitators can get in touch about opportunities to contribute to the project. If you're a developer, help us advance the code and take a look around our <a href="http://github.com/connoropolous/metamaps_gen002" target="_blank">Github</a>.</p>
 
         <p>Financial contributions are greatly appreciated in support of our work. All financial contributions are transparently governed and recorded in our value accounting system.</p>
+        <script data-gratipay-username="Metamaps.cc" src="//gttp.co/v1.js" style="float:left;display:inline;"></script>
+                <div style="font-size:16px; width:250px; display:inline; float:right" class="blockchain-btn"
+     data-address="14GontNS1FKoiTQDEB5WBCUDZaFTiyxkzN"
+     data-shared="false">
+         <div class="blockchain stage-begin">
+        <img src="https://blockchain.info//Resources/buttons/donate_64.png"/>
+    </div>
+    <div class="blockchain stage-loading" style="display:inline;float:right;">
 
-        <script data-gratipay-username="Metamaps.cc" src="//gttp.co/v1.js" style=display:inline;></script>
-        //TODO add bitcoin wallet payment link.
-        <img src="/assets/RibbonDonateBitcoin.png" alt="DonatewithBitCoin" link="" style=display:inline;>
+        <img src="https://blockchain.info//Resources/loading-large.gif"/>
+    </div>
+    <div class="blockchain stage-ready">
+         <p align="center">Please Donate To Bitcoin Address: <b>[[address]]</b></p>
+         <p align="center" class="qr-code"></p>
+    </div>
+    <div class="blockchain stage-paid">
+         Donation of <b>[[value]] BTC</b> Received. Thank You.
+    </div>
+    <div class="blockchain stage-error">
+        <font color="red">[[error]]</font>
+    </div>
+</div>
 
         <div class="clearfloat"></div>
       </div>
