@@ -1234,6 +1234,15 @@ float: left;
     display: block;
 }
 
+.moveMenusUp .rc-metacode ul, .moveMenusUp .rc-permission ul {
+    top: auto;
+    bottom: 0;
+}
+.moveMenusToLeft .rc-metacode ul, .moveMenusToLeft .rc-permission ul {
+    left: auto;
+    right: 100%;
+}
+
 
 /* end right click menu */
 

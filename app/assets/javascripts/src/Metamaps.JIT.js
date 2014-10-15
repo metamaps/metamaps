@@ -1248,10 +1248,38 @@ Metamaps.JIT = {
         rightclickmenu.innerHTML = menustring;
 
         // position the menu where the click happened
-        $(rightclickmenu).css({
-            left: e.clientX,
-            top: e.clientY
-        });
+        var position = {};
+        var RIGHTCLICK_WIDTH = 300;
+        var RIGHTCLICK_HEIGHT = 144; // this does vary somewhat, but we can use static
+        var SUBMENUS_WIDTH = 256;
+        var MAX_SUBMENU_HEIGHT = 270;
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+
+        if (windowWidth - e.clientX < SUBMENUS_WIDTH) {
+            position.right = windowWidth - e.clientX;  
+            $(rightclickmenu).addClass('moveMenusToLeft');
+        }
+        else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH) {
+            position.right = windowWidth - e.clientX;
+        }
+        else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH + SUBMENUS_WIDTH) {
+            position.left = e.clientX; 
+            $(rightclickmenu).addClass('moveMenusToLeft');
+        }
+        else position.left = e.clientX;
+
+        if (windowHeight - e.clientY < MAX_SUBMENU_HEIGHT) {
+            position.bottom = windowHeight - e.clientY;
+            $(rightclickmenu).addClass('moveMenusUp');
+        }
+        else if (windowHeight - e.clientY < RIGHTCLICK_HEIGHT + MAX_SUBMENU_HEIGHT) {
+            position.top = e.clientY;
+            $(rightclickmenu).addClass('moveMenusUp');
+        }
+        else position.top = e.clientY;
+
+        $(rightclickmenu).css(position);
         //add the menu to the page
         $('#wrapper').append(rightclickmenu);
 
@@ -1381,10 +1409,35 @@ Metamaps.JIT = {
         rightclickmenu.innerHTML = menustring;
 
         // position the menu where the click happened
-        $(rightclickmenu).css({
-            left: e.clientX,
-            top: e.clientY
-        });
+        var position = {};
+        var RIGHTCLICK_WIDTH = 300;
+        var RIGHTCLICK_HEIGHT = 144; // this does vary somewhat, but we can use static
+        var SUBMENUS_WIDTH = 256;
+        var MAX_SUBMENU_HEIGHT = 270;
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+
+        if (windowWidth - e.clientX < SUBMENUS_WIDTH) {
+            position.right = windowWidth - e.clientX;  
+            $(rightclickmenu).addClass('moveMenusToLeft');
+        }
+        else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH) {
+            position.right = windowWidth - e.clientX;
+        }
+        else position.left = e.clientX;
+
+        if (windowHeight - e.clientY < MAX_SUBMENU_HEIGHT) {
+            position.bottom = windowHeight - e.clientY;
+            $(rightclickmenu).addClass('moveMenusUp');
+        }
+        else if (windowHeight - e.clientY < RIGHTCLICK_HEIGHT + MAX_SUBMENU_HEIGHT) {
+            position.top = e.clientY;
+            $(rightclickmenu).addClass('moveMenusUp');
+        }
+        else position.top = e.clientY;
+
+        $(rightclickmenu).css(position);
+
         //add the menu to the page
         $('#wrapper').append(rightclickmenu);
 
