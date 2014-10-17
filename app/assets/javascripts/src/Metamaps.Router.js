@@ -114,6 +114,8 @@
 
             $('.wrapper').removeClass('homePage explorePage topicPage');
             $('.wrapper').addClass('mapPage');
+            // another class will be added to wrapper if you 
+            // can edit this map '.canEditMap'
 
             Metamaps.Famous.yield.hide();
             Metamaps.Famous.maps.hide();

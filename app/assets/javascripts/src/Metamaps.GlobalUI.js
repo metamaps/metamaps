@@ -368,11 +368,11 @@ Metamaps.GlobalUI.Search = {
 
         // open if the search is closed and user hits ctrl+/
         // close if they hit ESC
-        $('body').bind('keydown', function (e) {
+        $('body').bind('keyup', function (e) {
             switch (e.which) {
             case 191:
                 if ((e.ctrlKey && !self.isOpen) || (e.ctrlKey && self.locked)) {
-                    self.open();
+                    self.open(true); // true for focus
                 }
                 break;
             case 27:
@@ -396,7 +396,7 @@ Metamaps.GlobalUI.Search = {
         var self = Metamaps.GlobalUI.Search;
         self.locked = false;
     },
-    open: function () {
+    open: function (focus) {
         var self = Metamaps.GlobalUI.Search;
 
         clearTimeout(self.timeOut);
@@ -405,6 +405,7 @@ Metamaps.GlobalUI.Search = {
             $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
                 width: '400px'
             }, 300, function () {
+                if (focus) $('.sidebarSearchField').focus();
                 $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
                     padding: '7px 10px 3px 10px',
                     width: '380px'
@@ -413,7 +414,6 @@ Metamaps.GlobalUI.Search = {
                 self.isOpen = true;
             });
         }
-        //else if (self.locked) $('.sidebarSearchField').focus();
     },
     close: function (closeAfter, bypass) {
         var self = Metamaps.GlobalUI.Search;
@@ -566,6 +566,8 @@ Metamaps.GlobalUI.Search = {
     },
     handleResultClick: function (event, datum, dataset) {
         var self = Metamaps.GlobalUI.Search;
+
+        self.hideLoader();
 
         if (datum.rtype != "noresult") {
             self.close(0, true);

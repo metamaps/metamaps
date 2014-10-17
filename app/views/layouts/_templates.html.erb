@@ -84,12 +84,9 @@
         <p class="resultDesc">{{description}}</p>
       </div>
       <div class="autoOptions">
-
-        <% if controller_name == 'maps' && action_name == 'show' && authenticated? && @map.authorize_to_edit(@current) %>
-        <button class="addToMap hoverForTip" onclick="return keepFromCommons(event, {{id}})">
+        <button class="addToMap hoverForTip" onclick="return Metamaps.Topic.getTopicFromSearch(event, {{id}})">
           <span class="tip">add to map</span>
         </button>
-        <% end %>
         <div class="mapCount">
           {{mapCount}}
         </div>

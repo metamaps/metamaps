@@ -3309,6 +3309,8 @@ Metamaps.Topic = {
     getTopicFromAutocomplete: function (id) {
         var self = Metamaps.Topic;
 
+        $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
+
         Metamaps.Create.newTopic.hide();
 
         var topic = self.get(id);
@@ -3322,6 +3324,30 @@ Metamaps.Topic = {
         Metamaps.Mappings.add(mapping);
 
         self.renderTopic(mapping, topic, true, true);
+    },
+    getTopicFromSearch: function (event, id) {
+        var self = Metamaps.Topic;
+
+        $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
+
+        var topic = self.get(id);
+
+        var nextCoords = Metamaps.Map.getNextCoord();
+        var mapping = new Metamaps.Backbone.Mapping({
+            category: "Topic",
+            xloc: nextCoords.x,
+            yloc: nextCoords.y,
+            topic_id: topic.id
+        });
+        Metamaps.Mappings.add(mapping);
+
+        self.renderTopic(mapping, topic, true, true);
+
+        Metamaps.GlobalUI.notifyUser('Topic was added to your map!');
+
+        event.stopPropagation();
+        event.preventDefault();
+        return false;
     }
 }; // end Metamaps.Topic
 
@@ -3492,6 +3518,13 @@ Metamaps.Map = {
     events: {
         editedByActiveMapper: "Metamaps:Map:events:editedByActiveMapper"
     },
+    nextX: 0,
+    nextY: 0,
+    sideLength: 1,
+    turnCount: 0,
+    nextXshift: 1,
+    nextYshift: 0,
+    timeToTurn: 0,
     init: function () {
         var self = Metamaps.Map;
 
@@ -3520,6 +3553,20 @@ Metamaps.Map = {
             Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
             Metamaps.Mappings = new bb.MappingCollection(data.mappings);
             Metamaps.Backbone.attachCollectionEvents();
+
+            var map = Metamaps.Active.Map;
+            var mapper = Metamaps.Active.Mapper;
+
+            // add class to .wrapper for specifying whether you can edit the map
+            if (map.authorizeToEdit(mapper)) {
+                $('.wrapper').addClass('canEditMap');
+            }
+
+            // add class to .wrapper for specifying if the map can
+            // be collaborated on
+            if (map.get('permission') === 'commons') {
+                $('.wrapper').addClass('commonsMap');
+            }
 
             // build and render the visualization
             Metamaps.Visualize.type = "ForceDirected";
@@ -3550,6 +3597,10 @@ Metamaps.Map = {
     },
     end: function () {
         if (Metamaps.Active.Map) {
+
+            $('.wrapper').removeClass('canEditMap commonsMap');
+            Metamaps.Map.resetSpiral();
+
             $('.rightclickmenu').remove();
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
@@ -3600,6 +3651,63 @@ Metamaps.Map = {
         if (Metamaps.Active.Mapper) {
             Metamaps.Mappers.add(Metamaps.Active.Mapper);
         }
+    },
+    getNextCoord: function() {
+        var self = Metamaps.Map;
+        var nextX = self.nextX;
+        var nextY = self.nextY;
+
+        var DISTANCE_BETWEEN = 120;
+
+        self.nextX = self.nextX + DISTANCE_BETWEEN * self.nextXshift;
+        self.nextY = self.nextY + DISTANCE_BETWEEN * self.nextYshift;
+
+        self.timeToTurn += 1;
+        // if true, it's time to turn
+        if (self.timeToTurn === self.sideLength) {
+            
+            self.turnCount += 1;
+            // if true, it's time to increase side length
+            if (self.turnCount % 2 === 0) {
+                self.sideLength += 1;
+            }
+            self.timeToTurn = 0;
+
+            // going right? turn down
+            if (self.nextXshift == 1 && self.nextYshift == 0) {
+                self.nextXshift = 0;
+                self.nextYshift = 1;
+            }
+            // going down? turn left
+            else if (self.nextXshift == 0 && self.nextYshift == 1) {
+                self.nextXshift = -1;
+                self.nextYshift = 0;
+            }
+            // going left? turn up
+            else if (self.nextXshift == -1 && self.nextYshift == 0) {
+                self.nextXshift = 0;
+                self.nextYshift = -1;
+            }
+            // going up? turn right
+            else if (self.nextXshift == 0 && self.nextYshift == -1) {
+                self.nextXshift = 1;
+                self.nextYshift = 0;
+            }
+        }
+
+        return {
+            x: nextX,
+            y: nextY
+        }
+    },
+    resetSpiral: function() {
+        Metamaps.Map.nextX = 0;
+        Metamaps.Map.nextY = 0;
+        Metamaps.Map.nextXshift = 1;
+        Metamaps.Map.nextYshift = 0;
+        Metamaps.Map.sideLength = 1;
+        Metamaps.Map.timeToTurn = 0;
+        Metamaps.Map.turnCount = 0;
     }
 };
 

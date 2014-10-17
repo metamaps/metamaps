@@ -37,7 +37,16 @@
         <% classes = action_name == "home" ? "homePage" : ""
            classes += action_name == "home" && authenticated? ? " explorePage" : ""
            classes += controller_name == "maps" && action_name == "index" ? " explorePage" : ""
-           classes += controller_name == "maps" && action_name == "show" ? " mapPage" : ""
+           if controller_name == "maps" && action_name == "show" 
+             classes += " mapPage"
+             if @map.authorize_to_edit(current_user)
+               classes += " canEditMap"
+             end
+             if @map.permission == "commons"
+               classes += " commonsMap"
+             end
+           end
+           classes += controller_name == "topics" && action_name == "show" ? " topicPage" : ""
            %>
 
         <div class="wrapper <%= classes %>" id="wrapper">

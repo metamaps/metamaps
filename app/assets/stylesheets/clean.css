@@ -57,7 +57,7 @@
 .mapElement {
 	display: none;
 }
-.mapPage .mapElement {
+.mapPage .mapElement, .topicPage .mapElement {
 	display: block;
 }
 .mapPage .mapElementHidden {
@@ -405,6 +405,7 @@
     outline: none;
 }
 .sidebarSearch button.addToMap {
+    display:none;
     width: 24px;
     height: 24px;
     background: url(addtopic_sprite.png);
@@ -413,6 +414,9 @@
     top: 12px;
     left: 80px;
     cursor: pointer;
+}
+.canEditMap button.addToMap {
+    display: block;
 }
 .sidebarSearch button.addToMap:hover {
     background-position: -24px;
@@ -569,8 +573,12 @@
 	position: relative;
 	top: -42px; /* puts it just offscreen */
 }
-.mapPage .upperRightMapButtons {
+.mapPage .upperRightMapButtons, .topicPage .upperRightMapButtons {
 	top: 0;
+}
+
+.topicPage .sidebarCollaborate, .topicPage .sidebarFilter {
+    display: none;
 }
 
 .upperRightIcon {
@@ -588,6 +596,11 @@
 }
 .sidebarCollaborateIcon {
     background-position-x: 0;
+    display: none;
+}
+/* only show the collaborate icon on commons */
+.commonsMap .sidebarCollaborateIcon {
+    display: block;
 }
 .sidebarFilterIcon {
     background-position-x: -64px;
@@ -728,16 +741,9 @@
 	width:32px;
 	z-index: 3;
 }
-.mapPage .mapControls {
+.mapPage .mapControls, .topicPage .mapControls {
 	right: 24px; 
 }
-/*.mapControls.animations {
-  -webkit-transition-property: right;
-  -moz-transition-property: right;
-  -o-transition-property: right;
-  -ms-transition-property: right;
-  transition-property: right;
-}*/
 
 .mapControl {
 	width:32px;
