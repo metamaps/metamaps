@@ -410,37 +410,39 @@ Metamaps.Create = {
             return false;
         }
 
-        var codesToSwitchTo;
+        var codesToSwitchToIds;
+        var metacodeModels = new Metamaps.Backbone.MetacodeCollection();
         Metamaps.Create.selectedMetacodeSetIndex = index;
         Metamaps.Create.selectedMetacodeSet = "metacodeset-" + set;
 
         if (!custom) {
-            codesToSwitchTo = $('#metacodeSwitchTabs' + set).attr('data-metacodes').split(',');
+            codesToSwitchToIds = $('#metacodeSwitchTabs' + set).attr('data-metacodes').split(',');
             $('.customMetacodeList li').addClass('toggledOff');
             Metamaps.Create.selectedMetacodes = [];
             Metamaps.Create.selectedMetacodeNames = [];
             Metamaps.Create.newSelectedMetacodes = [];
             Metamaps.Create.newSelectedMetacodeNames = [];
         }
-        if (custom) {
+        else if (custom) {
             // uses .slice to avoid setting the two arrays to the same actual array
             Metamaps.Create.selectedMetacodes = Metamaps.Create.newSelectedMetacodes.slice(0);
             Metamaps.Create.selectedMetacodeNames = Metamaps.Create.newSelectedMetacodeNames.slice(0);
-            codesToSwitchTo = Metamaps.Create.selectedMetacodeNames.slice(0);
+            codesToSwitchToIds = Metamaps.Create.selectedMetacodes.slice(0);
         }
 
         // sort by name
-        codesToSwitchTo.sort();
-        codesToSwitchTo.reverse();
+        for (var i = 0; i < codesToSwitchToIds.length; i++) {
+            metacodeModels.add( Metamaps.Metacodes.get(codesToSwitchToIds[i]) );
+        };
+        metacodeModels.sort();
 
         $('#metacodeImg, #metacodeImgTitle').empty();
         $('#metacodeImg').removeData('cloudcarousel');
         var newMetacodes = "";
-        var metacode;
-        for (var i = 0; i < codesToSwitchTo.length; i++) {
-            metacode = Metamaps.Metacodes.findWhere({ name: codesToSwitchTo[i] });
-            newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + metacode.get('icon') + '" title="' + metacode.get('name') + '" alt="' + metacode.get('name') + '"/>';
-        };
+        metacodeModels.each(function(metacode){
+            newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + metacode.get('icon') + '" data-id="' + metacode.id + '" title="' + metacode.get('name') + '" alt="' + metacode.get('name') + '"/>';
+        });
+            
         $('#metacodeImg').empty().append(newMetacodes).CloudCarousel({
             titleBox: $('#metacodeImgTitle'),
             yRadius: 40,
@@ -772,13 +774,11 @@ Metamaps.TopicCard = {
 
         var metacodeLiClick = function () {
             selectingMetacode = false;
-            var metacodeName = $(this).find('.mSelectName').text();
-            var metacode = Metamaps.Metacodes.findWhere({
-                name: metacodeName
-            });
-            $('.CardOnGraph').find('.metacodeTitle').html(metacodeName)
+            var metacodeId = parseInt($(this).attr('data-id'));
+            var metacode = Metamaps.Metacodes.get(metacodeId);
+            $('.CardOnGraph').find('.metacodeTitle').html(metacode.get('name'))
                 .append('<div class="expandMetacodeSelect"></div>')
-                .attr('class', 'metacodeTitle mbg' + metacodeName.replace(/\s/g, ''));
+                .attr('class', 'metacodeTitle mbg' + metacode.id);
             $('.CardOnGraph').find('.metacodeImage').css('background-image', 'url(' + metacode.get('icon') + ')');
             topic.save({
                 metacode_id: metacode.id
@@ -993,7 +993,7 @@ Metamaps.TopicCard = {
         nodeValues.synapse_count = topic.get("synapse_count").toString();
         nodeValues.id = topic.isNew() ? topic.cid : topic.id;
         nodeValues.metacode = topic.getMetacode().get("name");
-        nodeValues.metacode_class = 'mbg' + topic.getMetacode().get("name").replace(/\s/g, '');
+        nodeValues.metacode_class = 'mbg' + topic.get('metacode_id');
         nodeValues.imgsrc = topic.getMetacode().get("icon");
         nodeValues.name = topic.get("name");
         nodeValues.userid = topic.get("user_id");
@@ -3285,9 +3285,7 @@ Metamaps.Topic = {
 
         $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
 
-        var metacode = Metamaps.Metacodes.findWhere({
-            name: Metamaps.Create.newTopic.metacode
-        });
+        var metacode = Metamaps.Metacodes.get(Metamaps.Create.newTopic.metacode);
 
         var topic = new Metamaps.Backbone.Topic({
             name: Metamaps.Create.newTopic.name,

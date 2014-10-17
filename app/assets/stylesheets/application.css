@@ -1669,8 +1669,10 @@ float: left;
     background-position: 0 0;
 }
 /* only display share button if 'public' or 'commons' */
+/* we're currently disabling this, as we're not ready for it
+and it won't be important on password protected instances */
 .shareable .mapInfoShare {
-    display: block;
+    display: none;
 }
 .mapInfoDelete {
     background-image: url(delete_mapinfo.png);
