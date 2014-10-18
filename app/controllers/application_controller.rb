@@ -34,8 +34,11 @@ private
   
   def require_user
     unless authenticated?
-      unless request.env["REQUEST_URI"] == root_url
-        store_location_for(:user, request.env["PATH_INFO"]) and redirect_to root_url
+
+      path = request.env["PATH_INFO"]
+
+      unless path == "/" || path == new_user_registration_path || path == new_user_session_path
+        store_location_for(:user, path) and redirect_to root_url
         return false
       end
     end
