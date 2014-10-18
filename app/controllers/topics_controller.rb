@@ -1,8 +1,6 @@
 class TopicsController < ApplicationController
     include TopicsHelper
 
-    before_filter :require_user, only: [:create, :update, :destroy]
-
     respond_to :html, :js, :json
 
     # GET /topics/autocomplete_topic

@@ -1,7 +1,5 @@
 class MappingsController < ApplicationController
-  
-  before_filter :require_user, only: [:create, :update, :destroy]    
-    
+      
   respond_to :json
     
   # GET /mappings/1.json

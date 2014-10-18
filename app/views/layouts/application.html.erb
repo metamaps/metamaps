@@ -51,19 +51,21 @@
 
         <div class="wrapper <%= classes %>" id="wrapper">
             
+            <% if authenticated? %>
             <%= render :partial => 'layouts/upperelements' %>
+            <% end %>
 
             <%= yield %>
 
-            <div class="showcard mapElement mapElementHidden" id="showcard"></div> <!-- the topic card -->
             <% if authenticated? %>
-                <% # for creating and pulling in topics and synapses %>
-                <%= render :partial => 'maps/newtopic' %>
-                <%= render :partial => 'maps/newsynapse' %>
-                <% # for populating the change metacode list on the topic card %>
-                <%= render :partial => 'shared/metacodeoptions' %>
+              <div class="showcard mapElement mapElementHidden" id="showcard"></div> <!-- the topic card -->
+              <% # for creating and pulling in topics and synapses %>
+              <%= render :partial => 'maps/newtopic' %>
+              <%= render :partial => 'maps/newsynapse' %>
+              <% # for populating the change metacode list on the topic card %>
+              <%= render :partial => 'shared/metacodeoptions' %>
+              <%= render :partial => 'layouts/lowermapelements' %>
             <% end %>
-            <%= render :partial => 'layouts/lowermapelements' %>
 
             <div id="famousOverlay"></div>
             <div id="loading"></div>

@@ -1,7 +1,5 @@
 class MapsController < ApplicationController
 
-    before_filter :require_user, only: [:create, :update, :destroy]
-
     respond_to :html, :json
 
     autocomplete :map, :name, :full => true, :extra_data => [:user_id]
