@@ -2481,6 +2481,7 @@ Extras.Classes.Navigation = new Class({
   },
   
   onMouseDown: function(e, win, eventInfo) {
+    console.log('mouse down!!!!');
     if(!this.config.panning) return;
     
     //START METAMAPS CODE
@@ -2495,8 +2496,9 @@ Extras.Classes.Navigation = new Class({
     //START METAMAPS CODE
     var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey); 
     // TODO make sure this works across browsers  
-    if (!Metamaps.Mouse.boxStartCoordinates && (e.shiftKey || rightClick)) {
+    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || (rightClick && e.ctrlKey))) {
       Metamaps.Mouse.boxStartCoordinates = eventInfo.getPos();
+      console.log('mouse down');
     }
 
     Metamaps.Mouse.didPan = false;
@@ -2524,14 +2526,19 @@ Extras.Classes.Navigation = new Class({
     
     // START METAMAPS CODE
     var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey);
-    if (!Metamaps.Mouse.boxStartCoordinates && (e.shiftKey || rightClick)) {
+    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || (rightClick && e.ctrlKey))) {
       Metamaps.Visualize.mGraph.busy = true;
       Metamaps.boxStartCoordinates = eventInfo.getPos();
+      console.log('mouse move');
       return;
     }
-    if (Metamaps.Mouse.boxStartCoordinates && (e.shiftKey || rightClick)) { 
+    if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || (rightClick && e.ctrlKey))) {
       Metamaps.Visualize.mGraph.busy = true;
       Metamaps.JIT.drawSelectBox(eventInfo,e);
+      console.log('mouse move');
+      return;
+    }
+    if (rightClick){
       return;
     }
     if (e.target.id != 'infovis-canvas') { 
