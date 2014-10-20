@@ -22,7 +22,7 @@ then lets install RVM with curl like this
 
     curl -L get.rvm.io | bash -s stable
 
-    PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+    PATH=$PATH:$HOME/.rvm/bin
 
     [[ -s "$HOME/.profile" ]] && source "$HOME/.profile"
 
