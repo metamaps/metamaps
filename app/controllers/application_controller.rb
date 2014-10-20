@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+
+  before_filter :require_user
   
   # this is for global login
   include ContentHelper
@@ -32,9 +34,13 @@ private
   
   def require_user
     unless authenticated?
-      flash[:warning] = "You must be logged in."
-      store_location and redirect_to new_user_session_path
-      return false
+
+      path = request.env["PATH_INFO"]
+
+      unless path == "/" || path == new_user_registration_path || path == new_user_session_path
+        store_location_for(:user, path) and redirect_to root_url
+        return false
+      end
     end
   end
     

@@ -154,44 +154,6 @@
         <p id="noIEbody">While it's downloading, explore our <a href="http://blog.metamaps.cc/">blog</a>,<br> watch the <a href="http://vimeo.com/88334167">tutorials</a>, or visit our <a href="http://support.metamaps.cc/">knowledge base</a>!
 
       </div>
-
-
-    <div class="lightboxContent" id="getInvolved">
-        <h3>GET INVOLVED!</h3>
-<div class="leaveSpace"></div>  
-        
-        <p>Want to help us with design, code, marketing and management for Metamaps? We are an open value network, which for us means that we want to invite and empower peers to participate in creating value together.</p>
-
-        <p>We welcome contributions in many forms. One of the easiest and best things you can do is to keep on mapping your ideas into the commons on the platform!</p>
-
-        <p>We welcome people of all skillsets to contribute to the project in different ways. Designers, researchers, academics, strategists, and facilitators can get in touch about opportunities to contribute to the project. If you're a developer, help us advance the code and take a look around our <a href="http://github.com/connoropolous/metamaps_gen002" target="_blank">Github</a>.</p>
-
-        <p>Financial contributions are greatly appreciated in support of our work. All financial contributions are transparently governed and recorded in our value accounting system.</p>
-        <script data-gratipay-username="Metamaps.cc" src="//gttp.co/v1.js" style="float:left;display:inline;"></script>
-                <div style="font-size:16px; width:250px; display:inline; float:right" class="blockchain-btn"
-     data-address="14GontNS1FKoiTQDEB5WBCUDZaFTiyxkzN"
-     data-shared="false">
-         <div class="blockchain stage-begin">
-        <img src="https://blockchain.info//Resources/buttons/donate_64.png"/>
-    </div>
-    <div class="blockchain stage-loading" style="display:inline;float:right;">
-
-        <img src="https://blockchain.info//Resources/loading-large.gif"/>
-    </div>
-    <div class="blockchain stage-ready">
-         <p align="center">Please Donate To Bitcoin Address: <b>[[address]]</b></p>
-         <p align="center" class="qr-code"></p>
-    </div>
-    <div class="blockchain stage-paid">
-         Donation of <b>[[value]] BTC</b> Received. Thank You.
-    </div>
-    <div class="blockchain stage-error">
-        <font color="red">[[error]]</font>
-    </div>
-</div>
-
-        <div class="clearfloat"></div>
-      </div>
       
       <div class="lightboxContent" id="tutorial">
         <h3>Tutorial</h3>
@@ -203,20 +165,6 @@
       </div>    
       
       <% if authenticated? %>
-        <div class="lightboxContent" id="invite">
-          <h3>SHARE INVITE</h3>
-            
-<div class="leaveSpace"></div>  
-<p>The Metamaps platform is currently in an invite-only beta with the express purpose of creating a high value knowledge ecosystem, as well as building a community of contributors. As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
-<p>Copy and send the link + access code below. The access code below is your personal code and can be used multiple times.</p>
-            <div id="joinCodesBox">
-          <p class="joinCodes">HTTP://METAMAPS.CC/JOIN</p>
-        <% mapper = current_user %>
-          <p class="joinCodes">ACCESS CODE: <%= mapper.code %></p>
-            </div>
-            
-        </div>
-      
         <% # this is the create new map form %>
         <div class="lightboxContent" id="newmap">  
           <%= render :partial => 'layouts/newmap' %>

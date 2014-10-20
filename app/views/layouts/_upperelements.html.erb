@@ -4,7 +4,7 @@
 <div class="upperLeftUI">
     <!-- home button -->
     <div class="homeButton">
-        <a href="<%= root_url %>" <% if !authenticated? %><%= 'data-bypass=true' %><% end %>></a>
+        <a href="<%= root_url %>"></a>
     </div> <!-- end homeButton -->
 
     <!-- search box -->
@@ -19,7 +19,6 @@
 
 <div class="upperRightUI">
     <div class="mapElement upperRightEl upperRightMapButtons">
-        <% if authenticated? %>
             <!-- Realtime -->
             <div class="sidebarCollaborate upperRightEl">
                 <div class="sidebarCollaborateIcon upperRightIcon blue"></div>
@@ -39,7 +38,6 @@
                     </div>
                 </div>
             </div> <!-- end sidebarCollaborate a.k.a realtime -->
-        <% end %>
 
         <!-- filtering -->
         <div class="sidebarFilter upperRightEl">
@@ -49,37 +47,27 @@
             </div>
         </div> <!-- end sidebarFilter -->
 
-        <% if authenticated? %>
         <!-- fork map -->
         <div class="sidebarFork upperRightEl">
             <div class="sidebarForkIcon upperRightIcon"></div>
         </div> <!-- end sidebarFork -->
-        <% end %>
 
         <div class="clearfloat"></div>
     </div> <!-- end mapElement --> 
 
-    <% if authenticated? %>
     <!-- create new map -->
     <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap">
     </div><!-- end addMap -->
-    <% end %>
 
     <!-- Account / Sign in -->
-    <% if !(controller_name == "sessions" && action_name == "new") %>
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon">
-            <% if user && user.image %>
               <%= image_tag user.image.url(:thumb), :size => "32x32" %>
-            <% elsif !authenticated? %>
-              SIGN IN
-              <div class="accountInnerArrow"></div>
-            <% end %>
         </div>
         <div class="sidebarAccountBox upperRightBox">
             <%= render :partial => 'layouts/account' %>
         </div>
     </div><!-- end sidebarAccount -->
-    <% end %>
+        
     <div class="clearfloat"></div>
 </div><!-- end upperRightUI -->

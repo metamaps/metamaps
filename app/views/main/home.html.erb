@@ -8,22 +8,33 @@
     <% content_for :title, "Home | Metamaps" %> 
     <div id="yield">
         <div class="homeWrapper">
-            <div class="homeTitle">EXPERIENCE METAMAPS</div>
-            <div class="homeIntro">
-            <span class="green">metamaps.cc</span> is a free and open source platform. It enables individuals, communities, and organizations to build and visualize their shared knowledge and unlock their collective intelligence...
-            </div>
-            <iframe class="homeVideo" src="//player.vimeo.com/video/88334167?title=0&amp;byline=0&amp;portrait=0" width="560" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-            <div class="callToAction">
-                <a href="/request" class="requestInviteCTA" data-bypass="true">REQUEST INVITE</a>
-                <a href="/explore/featured" class="exploreFeaturedCTA">EXPLORE FEATURED MAPS</a>
-            </div>
+            <div class="homeTitle">THE VALUE WEB</div>
+
+                <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { class: "loginAnywhere" }) do |f| %>
+                    <div class="accountInput accountEmail">
+                      <%= f.email_field :email, :placeholder => "Email" %>
+                    </div>
+                    <div class="accountInput accountPassword">
+                      <%= f.password_field :password, :placeholder => "Password" %>
+                    </div>
+                    <div class="accountSubmit"><%= f.submit "SIGN IN" %></div>
+                    <% if devise_mapping.rememberable? -%>
+                    <div class="accountRememberMe">
+                      <%= f.label :remember_me, "Stay signed in" %>
+                      <%= f.check_box :remember_me %>
+                      <div class="clearfloat"></div>
+                    </div>
+                    <% end -%>
+                    <div class="clearfloat"></div>
+                    <div class="accountForgotPass">
+                      <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+                        <%= link_to "Forgot password?", new_password_path(resource_name), 
+                          :data => { :bypass => 'true'} %>
+                      <% end -%>
+                    </div>
+                <% end %>
         </div>
-    </div><!-- end yield -->
-    <div class="github-fork-ribbon-wrapper left-bottom">
-        <div class="github-fork-ribbon">
-            <a href="https://github.com/connoropolous/metamaps_gen002" target="_blank">Fork me on GitHub</a>
-        </div>
-    </div>                     
+    </div><!-- end yield -->                  
     <script>
     Metamaps.currentSection = "";
     Metamaps.currentPage = "";

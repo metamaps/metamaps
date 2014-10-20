@@ -1588,6 +1588,7 @@ Metamaps.Util = {
 Metamaps.Realtime = {
     stringForLocalhost: 'http://localhost:5001',
     stringForMetamaps: 'http://metamaps.cc:5001',
+    stringForTVW: 'http://tvw.mooo.com:5001',
     stringForHeroku: 'http://gentle-savannah-1303.herokuapp.com',
     socket: null,
     isOpen: false,
@@ -1610,7 +1611,7 @@ Metamaps.Realtime = {
         $('body').click(self.close);
 
         var railsEnv = $('body').data('env');
-        var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
+        var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForTVW;
         self.socket = io.connect(whichToConnect);
         self.startActiveMap();
     },

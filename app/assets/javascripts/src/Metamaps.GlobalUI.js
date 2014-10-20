@@ -55,6 +55,9 @@ $(document).ready(function () {
         }
     }
 
+    if (Metamaps.Active.Mapper) {
+        Metamaps.GlobalUI.Search.authInit();
+    }
 });
 
 Metamaps.GlobalUI = {
@@ -63,9 +66,11 @@ Metamaps.GlobalUI = {
     init: function () {
         var self = Metamaps.GlobalUI;
 
-        self.Search.init();
-        self.CreateMap.init();
-        self.Account.init();
+        if (Metamaps.Active.Mapper) {
+            self.Search.init();
+            self.CreateMap.init();
+            self.Account.init();
+        }
 
         //bind lightbox clicks
         $('.openLightbox').click(function (event) {

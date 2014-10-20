@@ -6,9 +6,7 @@ Metamaps::Application.routes.draw do
 
   #To debug sidekiq and monitor processes, enable this route
   #mount Sidekiq::Web, at: '/sidekiq'
-  
-  match 'request', to: 'main#requestinvite', via: :get, as: :request
-  
+    
   match 'search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
   match 'search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps
   match 'search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers
