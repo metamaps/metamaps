@@ -1,12 +1,3 @@
-If you are doing an upgrade and or recent pull for changes you will need to change your default ruby package from 2.1.1 to ruby 2.1.2
-to do this use this command
-    rvm install ruby-2.1.2
-once the download is finished select that package as your default
-    rvm default ruby-2.1.2
-then 
-    bundle install
-now you are good to go with normal execution
-
 Firstly this walkthrough is done with a 14.04 32bit install of Ubuntu.
 
 All commands that I could are terminal based.
@@ -31,7 +22,7 @@ then lets install RVM with curl like this
 
     curl -L get.rvm.io | bash -s stable
 
-    PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+    PATH=$PATH:$HOME/.rvm/bin
 
     [[ -s "$HOME/.profile" ]] && source "$HOME/.profile"
 
@@ -49,7 +40,29 @@ alright now we can download metamaps from the master using git
 
     git clone https://github.com/Connoropolous/metamaps_gen002.git
 
-now there is a couple other things we are going to need which is nodejs, postgresql, libpq-dev and redis-server
+now there is a couple other things we are going to need which is phantomjs, nodejs, postgresql, libpq-dev and redis-server
+
+    
+    // 64 bit ubuntu
+    cd /usr/local/share
+    sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2
+    sudo tar xjf phantomjs-1.9.7-linux-x86_64.tar.bz2
+    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-x86_64/bin/phantomjs /usr/local/share/phantomjs
+    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-x86_64/bin/phantomjs /usr/bin/phantomjs
+    
+    
+    // 32 bit ubuntu
+    cd /usr/local/share
+    sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-i686.tar.bz2
+    sudo tar xjf phantomjs-1.9.7-linux-i686.tar.bz2
+    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-i686/bin/phantomjs /usr/local/share/phantomjs
+    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-i686/bin/phantomjs /usr/local/bin/phantomjs
+    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-i686/bin/phantomjs /usr/bin/phantomjs
+    
+    // on either running
+    phantomjs -v
+    // will confirm it's installed
 
     sudo apt-get install nodejs
 
@@ -59,9 +72,9 @@ now there is a couple other things we are going to need which is nodejs, postgre
 
     sudo apt-get install redis-server
 
-Install the specific version of ruby needed this will take some time *Note you will get a warning about this being an outdated version*
+Install the specific version of ruby needed this will take some time
 
-    rvm install ruby-1.9.3-p125
+    rvm install ruby-2.1.3
 
 Now we also need to rename your database file which is in ./config/database.default.yml to database.yml
 
