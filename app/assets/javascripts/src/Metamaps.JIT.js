@@ -301,16 +301,16 @@ Metamaps.JIT = {
                 enableForEdges: true,
                 onMouseMove: function (node, eventInfo, e) {
                     Metamaps.JIT.onMouseMoveHandler(node, eventInfo, e);
-                    console.log('called mouse move handler');
+                    //console.log('called mouse move handler');
                 },
                 //Update node positions when dragged
                 onDragMove: function (node, eventInfo, e) {
                     Metamaps.JIT.onDragMoveTopicHandler(node, eventInfo, e);
-                    console.log('called drag move handler');
+                    //console.log('called drag move handler');
                 },
                 onDragEnd: function (node, eventInfo, e) {
                     Metamaps.JIT.onDragEndTopicHandler(node, eventInfo, e, false);
-                    console.log('called drag end handler');
+                    //console.log('called drag end handler');
                 },
                 onDragCancel: function (node, eventInfo, e) {
                     Metamaps.JIT.onDragCancelHandler(node, eventInfo, e, false);
@@ -359,14 +359,14 @@ Metamaps.JIT = {
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
                             Metamaps.JIT.zoomToBox(e);
-                            console.log('called zoom to box');
+                            //console.log('called zoom to box');
                             return;
                         }
                         else if (e.ctrlKey || e.shiftKey) {
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
                             Metamaps.JIT.selectWithBox(e);
-                            console.log('called select with box');
+                            //console.log('called select with box');
                             return;
                         };
                     }
@@ -376,13 +376,13 @@ Metamaps.JIT = {
                     //clicking on a edge, node, or clicking on blank part of canvas?
                     if (node.nodeFrom) {
                         Metamaps.JIT.selectEdgeOnClickHandler(node, e);
-                        console.log('called selectEdgeOnClickHandler');
+                        //console.log('called selectEdgeOnClickHandler');
                     } else if (node && !node.nodeFrom) {
                         Metamaps.JIT.selectNodeOnClickHandler(node, e);
-                        console.log('called selectNodeOnClickHandler');
+                        //console.log('called selectNodeOnClickHandler');
                     } else {
                         Metamaps.JIT.canvasClickHandler(eventInfo.getPos(), e);
-                        console.log('called canvasClickHandler');
+                        //console.log('called canvasClickHandler');
                     } //if
                 },
                 //Add also a click handler to nodes
