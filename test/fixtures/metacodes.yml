@@ -176,61 +176,66 @@ thirty-four:
   color: "#8fa1c9"
   
 thirty-five:
+  name: Metamap 
+  icon: /assets/icons/TVW_GNRL_metamap.png
+  color: "#aea9fd"
+  
+thirty-six:
   name: Model 
   icon: /assets/icons/TVW_GNRL_model.png
   color: "#b595b8"
   
-thirty-six:
+thirty-seven:
   name: Module  
   icon: /assets/icons/TVW_GNRL_module.png
   color: "#4cb5ab"
   
-thirty-seven:
+thirty-eight:
   name: Organization 
   icon: /assets/icons/TVW_GNRL_organization.png
   color: "#9474cc"
 
-thirty-eight:
+thirty-nine:
   name: Perspective  
   icon: /assets/icons/TVW_GNRL_perspective.png
   color: "#00a8de"
   
-thirty-nine:
+forty:
   name: Pro  
   icon: /assets/icons/TVW_GNRL_pro.png
   color: "#95ca57"
   
-forty:
+forty-one:
   name: Project
   icon: /assets/icons/TVW_GNRL_project.png
   color: "#5b822e"
   
-forty-one:
+forty-two:
   name: Question
   icon: /assets/icons/TVW_GNRL_question.png
   color: "#4ec2f6"
 
-forty-two:
+forty-three:
   name: Reference  
   icon: /assets/icons/TVW_GNRL_reference.png
   color: "#a29a8f"
   
-forty-three:
+forty-four:
   name: Research
   icon: /assets/icons/TVW_GNRL_research.png
   color: "#cb8c84"
   
-forty-four:
+forty-five:
   name: Role
   icon: /assets/icons/TVW_GNRL_role.png
   color: "#e47272"
   
-forty-five:
+forty-six:
   name: Status Update  
   icon: /assets/icons/TVW_GNRL_status.png
   color: "#ec94b2"
   
-forty-six:
+forty-seven:
   name: Wildcard
   icon: /assets/icons/TVW_GNRL_wildcard.png  
   color: "#82bfbf"
