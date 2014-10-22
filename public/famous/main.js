@@ -262,14 +262,14 @@ define(function(require, exports, module) {
     // LOGO
     f.logo = {};
     f.logo.surf = new Surface({
-        size: [258, 56],
+        size: [258, 63],
         content: templates.logoContent,
         classes: ['footer']
     });
 
     f.logo.mod = new Modifier({
         origin: [0.5, 1],
-        transform: Transform.translate(0, 56, 0)
+        transform: Transform.translate(0, 63, 0)
     });
     f.logo.show = function () {
         f.logo.mod.setTransform(
@@ -279,7 +279,7 @@ define(function(require, exports, module) {
     };
     f.logo.hide = function () {
         f.logo.mod.setTransform(
-            Transform.translate(0, 56, 0), 
+            Transform.translate(0, 63, 0), 
             { duration: 300, curve: 'easeIn' }
         );
     };

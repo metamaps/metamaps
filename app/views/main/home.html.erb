@@ -8,7 +8,18 @@
     <% content_for :title, "Home | Metamaps" %> 
     <div id="yield">
         <div class="homeWrapper">
-            <div class="homeTitle">THE VALUE WEB</div>
+                <div class="homeTextWrapper">
+                  <div class="homeLogo"></div>
+                  <div class="homeText">
+                    Welcome to the collaborative, realtime design and sensemaking playground
+                    for members of The Value Web globally.
+                  </div>
+                  <div class="learnMore">LEARN MORE:</div>
+                  <div class="homeLinks">
+                    <a id="toMetamaps" href="http://metamaps.cc" data-bypass="true"></a>
+                    <a id="toTheValueWeb" href="http://www.thevalueweb.org" data-bypass="true"></a>
+                  </div>
+                </div>
 
                 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { class: "loginAnywhere" }) do |f| %>
                     <div class="accountInput accountEmail">
@@ -33,6 +44,7 @@
                       <% end -%>
                     </div>
                 <% end %>
+                <div class="clearfloat"></div>
         </div>
     </div><!-- end yield -->                  
     <script>

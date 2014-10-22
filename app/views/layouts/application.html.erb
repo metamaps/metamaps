@@ -14,11 +14,17 @@
 
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
-  <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-  <script type="text/javascript" src="//use.typekit.net/obp7wss.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
+
+  <!-- for metamaps.thevalueweb.com -->
+  <script src="//use.typekit.net/jcy0yfj.js"></script>
+  <!-- for tvw.mooo.com TODO remove -->
+  <script src="//use.typekit.net/poj3rbu.js"></script>
+  <!-- for localhost development -->
+  <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
+  <!-- to initialize all typekits -->
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
         <!-- app code -->
         <script type="text/javascript">
             require.config({baseUrl: '/famous/'});

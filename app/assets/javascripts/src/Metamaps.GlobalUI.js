@@ -54,10 +54,7 @@ $(document).ready(function () {
             Metamaps[prop].init();
         }
     }
-
-    if (Metamaps.Active.Mapper) {
-        Metamaps.GlobalUI.Search.authInit();
-    }
+    
 });
 
 Metamaps.GlobalUI = {
