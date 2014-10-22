@@ -2730,3 +2730,11 @@ and it won't be important on password protected instances */
     -webkit-transform-origin: left center;
     transform-origin: left center;
 }   
+.blockchain-btn {
+    display: inline;
+    float: right;
+}
+script.data-gratipay-username {
+    display: inline;
+    float: left;
+}

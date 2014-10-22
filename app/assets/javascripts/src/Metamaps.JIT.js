@@ -301,13 +301,16 @@ Metamaps.JIT = {
                 enableForEdges: true,
                 onMouseMove: function (node, eventInfo, e) {
                     Metamaps.JIT.onMouseMoveHandler(node, eventInfo, e);
+                    //console.log('called mouse move handler');
                 },
                 //Update node positions when dragged
                 onDragMove: function (node, eventInfo, e) {
                     Metamaps.JIT.onDragMoveTopicHandler(node, eventInfo, e);
+                    //console.log('called drag move handler');
                 },
                 onDragEnd: function (node, eventInfo, e) {
                     Metamaps.JIT.onDragEndTopicHandler(node, eventInfo, e, false);
+                    //console.log('called drag end handler');
                 },
                 onDragCancel: function (node, eventInfo, e) {
                     Metamaps.JIT.onDragCancelHandler(node, eventInfo, e, false);
@@ -352,10 +355,20 @@ Metamaps.JIT = {
                     $('.rightclickmenu').remove();
 
                     if (Metamaps.Mouse.boxStartCoordinates) {
-                        Metamaps.Visualize.mGraph.busy = false;
-                        Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.zoomToBox(e);
-                        return;
+                        if(e.ctrlKey && e.shiftKey){
+                            Metamaps.Visualize.mGraph.busy = false;
+                            Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
+                            Metamaps.JIT.zoomToBox(e);
+                            //console.log('called zoom to box');
+                            return;
+                        }
+                        else if (e.ctrlKey || e.shiftKey) {
+                            Metamaps.Visualize.mGraph.busy = false;
+                            Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
+                            Metamaps.JIT.selectWithBox(e);
+                            //console.log('called select with box');
+                            return;
+                        };
                     }
 
                     if (e.target.id != "infovis-canvas") return false;
@@ -363,10 +376,13 @@ Metamaps.JIT = {
                     //clicking on a edge, node, or clicking on blank part of canvas?
                     if (node.nodeFrom) {
                         Metamaps.JIT.selectEdgeOnClickHandler(node, e);
+                        //console.log('called selectEdgeOnClickHandler');
                     } else if (node && !node.nodeFrom) {
                         Metamaps.JIT.selectNodeOnClickHandler(node, e);
+                        //console.log('called selectNodeOnClickHandler');
                     } else {
                         Metamaps.JIT.canvasClickHandler(eventInfo.getPos(), e);
+                        //console.log('called canvasClickHandler');
                     } //if
                 },
                 //Add also a click handler to nodes
@@ -375,10 +391,10 @@ Metamaps.JIT = {
                     // remove the rightclickmenu
                     $('.rightclickmenu').remove();
 
-                    if (Metamaps.Mouse.boxStartCoordinates) {
+                    if (Metamaps.Mouse.boxStartCoordinates && e.ctrlKey) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.selectWithBox(e);
+                        Metamaps.JIT.zoomToBox(e);
                         return;
                     }
 
@@ -390,8 +406,8 @@ Metamaps.JIT = {
                     } else if (node && !node.nodeFrom) {
                         Metamaps.JIT.selectNodeOnRightClickHandler(node, e);
                     } else {
-                        console.log('right clicked on open space');
-                    } //if
+                        //console.log('right clicked on open space');
+                    } 
                 }
             },
             //Number of iterations for the FD algorithm
@@ -736,7 +752,7 @@ Metamaps.JIT = {
         if (node && !node.nodeFrom) {
             var pos = eventInfo.getPos();
             // if it's a left click, or a touch, move the node
-            if (e.touches || (e.button == 0 && !e.altKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
+            if (e.touches || (e.button == 0 && !e.altKey && !e.ctrlKey && !e.shiftKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
                 //if the node dragged isn't already selected, select it
                 var whatToDo = self.handleSelectionBeforeDragging(node, e);
                 if (node.pos.rho || node.pos.rho === 0) {
@@ -949,8 +965,10 @@ Metamaps.JIT = {
             tempInit = false;
             tempNode = null;
             tempNode2 = null;
-            Metamaps.Control.deselectAllEdges();
-            Metamaps.Control.deselectAllNodes();
+            if (!e.ctrlKey && !e.shiftKey) {
+                Metamaps.Control.deselectAllEdges();
+                Metamaps.Control.deselectAllNodes();
+            }
         }
     }, //canvasClickHandler 
     nodeDoubleClickHandler: function (node, e) {
@@ -1181,19 +1199,20 @@ Metamaps.JIT = {
                     if (!e.shiftKey && !e.ctrlKey) {
                         Metamaps.Control.deselectAllNodes();
                         Metamaps.Control.deselectAllEdges();
+                        Metamaps.Control.selectNode(node,e);
                     }
-                    if(e.ctrlKey || e.shiftKey){
+                    else if(e.shiftKey && e.ctrlKey){
+                        //no result
+                    }
+                    else if(e.ctrlKey){
                         if (node.selected) {
                             Metamaps.Control.deselectNode(node);
                         } else {
                             Metamaps.Control.selectNode(node,e);
                         } 
-                    }
-                    else{
-                        Metamaps.Control.deselectAllNodes();
-                        Metamaps.Control.deselectAllEdges();
+                    }else if(e.shiftKey){
                         Metamaps.Control.selectNode(node,e);
-                    }
+                    } 
                     
                     //trigger animation to final styles
                     Metamaps.Visualize.mGraph.fx.animate({
@@ -1352,15 +1371,24 @@ Metamaps.JIT = {
             // wait a certain length of time, then check again, then run this code
             setTimeout(function () {
                 if (!Metamaps.JIT.nodeWasDoubleClicked()) {
-                    if (!e.shiftKey) {
+                    if (!e.shiftKey && !e.ctrlKey) {
                         Metamaps.Control.deselectAllNodes();
                         Metamaps.Control.deselectAllEdges();
                     }
-                    if (Metamaps.Selected.Edges.indexOf(adj) !== -1) {
-                        Metamaps.Control.deselectEdge(adj);
-                    } else {
+                    else if (e.shiftKey && e.ctrlKey){
+                        //no result
+                    }
+                    else if (e.ctrlKey){
+                        if (Metamaps.Selected.Edges.indexOf(adj) !== -1) {
+                            Metamaps.Control.deselectEdge(adj);
+                        } else {
+                            Metamaps.Control.selectEdge(adj);
+                        }
+                    }
+                    else if (e.shiftKey){
                         Metamaps.Control.selectEdge(adj);
                     }
+
                     Metamaps.Visualize.mGraph.plot();
                 }
             }, Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE);
