@@ -4,202 +4,233 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
+
 one: 
-  name: Action  
-  icon: /assets/icons/action.png
-  color: #bd6c85
+  name: Identity  
+  icon: /assets/icons/TVW_7stg_identity.png
+  color: "#f34235"
 
 two: 
-  name: Activity  
-  icon: /assets/icons/activity.png
-  color: #6ebf65
+  name: Intent  
+  icon: /assets/icons/TVW_7stg_intent.png
+  color: "#f47e16"
 
 three: 
-  name: Bizarre  
-  icon: /assets/icons/bizarre.png
-  color: #BDB25E
+  name: Vision  
+  icon: /assets/icons/TVW_7stg_vision.png
+  color: "#f47e16"
 
 four: 
-  name: Catalyst  
-  icon: /assets/icons/catalyst.png
-  color: #EF8964
+  name: Insight 
+  icon: /assets/icons/TVW_7stg_insight.png
+  color: "#378d3b"
 
 five: 
-  name: Closed  
-  icon: /assets/icons/closed.png
-  color: #ABB49F
+  name: Engineering 
+  icon: /assets/icons/TVW_7stg_engineering.png
+  color: "#526cfd"
 
 six: 
-  name: Experience  
-  icon: /assets/icons/experience.png
-  color: #BE995F
+  name: Building 
+  icon: /assets/icons/TVW_7stg_building.png
+  color: "#9474cc"
 
 seven: 
-  name: Future Dev  
-  icon: /assets/icons/futuredev.png
-  color: #25A17F
+  name: Using  
+  icon: /assets/icons/TVW_7stg_using.png
+  color: "#ff7faa"
 
 eight:
-  name: Group  
-  icon: /assets/icons/group.png
-  color: #7076BC
+  name: Philosophy  
+  icon: /assets/icons/TVW_VP_philosophy.png
+  color: "#859364"
 
 nine:
-  name: Idea  
-  icon: /assets/icons/idea.png
-  color: #C4BC5E
+  name: Culture 
+  icon: /assets/icons/TVW_VP_culture.png
+  color: "#95a577"
 
 ten:
-  name: Implication  
-  icon: /assets/icons/implication.png
-  color: #83DECA
+  name: Policy  
+  icon: /assets/icons/TVW_VP_policy.png
+  color: "#a7ba78"
 
 eleven:
-  name: Insight  
-  icon: /assets/icons/insight.png
-  color: #B074AD
+  name: Strategy 
+  icon: /assets/icons/TVW_VP_strategy.png
+  color: "#b6cc8b"
 
 twelve:
-  name: Intention  
-  icon: /assets/icons/intention.png
-  color: #BAEAFF
+  name: Tactics  
+  icon: /assets/icons/TVW_VP_tactics.png
+  color: "#cbdfaa"
 
 thirteen:
-  name: Knowledge  
-  icon: /assets/icons/knowledge.png
-  color: #60ACF7
+  name: Logistics
+  icon: /assets/icons/TVW_VP_logistics.png
+  color: "#d3e6b8"
 
 fourteen:
-  name: Location  
-  icon: /assets/icons/location.png
-  color: #ABD9A7
+  name: Tasks  
+  icon: /assets/icons/TVW_VP_tasks.png
+  color: "#e3ebc6"
 
 fifteen:
-  name: Open Issue  
-  icon: /assets/icons/openissue.png
-  color: #9BBF71
+  name: Purpose  
+  icon: /assets/icons/TVW_RCD_purpose.png
+  color: "#9c3116"
 
 sixteen:
-  name: Opinion  
-  icon: /assets/icons/opinion.png
-  color: #54A19D
+  name: People 
+  icon: /assets/icons/TVW_RCD_people.png
+  color: "#1a6775"
 
 seventeen:
-  name: Opportunity  
-  icon: /assets/icons/opportunity.png
-  color: #889F64
+  name: Structure 
+  icon: /assets/icons/TVW_RCD_structure.png
+  color: "#3d6312"
 
 eighteen:
-  name: Person  
-  icon: /assets/icons/person.png
-  color: #DE925F
+  name: Process 
+  icon: /assets/icons/TVW_RCD_process.png
+  color: "#e06100"
 
 nineteen:
-  name: Platform  
-  icon: /assets/icons/platform.png
-  color: #21C8FE
+  name: Facilitation  
+  icon: /assets/icons/TVW_RCD_facilitation.png
+  color: "#723366"
 
 twenty:
-  name: Problem  
-  icon: /assets/icons/problem.png
-  color: #99CFC4
+  name: Sharing 
+  icon: /assets/icons/TVW_RCD_sharing.png
+  color: "#dd9e00"
 
 twenty-one:
-  name: Question  
-  icon: /assets/icons/question.png
-  color: #709899
+  name: Activity
+  icon: /assets/icons/TVW_GNRL_activity.png
+  color: "#54b948"
 
 twenty-two:
-  name: Reference  
-  icon: /assets/icons/reference.png
-  color: #A7A7A7
+  name: Agreeement 
+  icon: /assets/icons/TVW_GNRL_agreement.png
+  color: "#cf9e76"
 
 twenty-three:
-  name: Requirement  
-  icon: /assets/icons/requirement.png
-  color: #D2A7D4
+  name: Asset 
+  icon: /assets/icons/TVW_GNRL_asset.png
+  color: "#ce8254"
 
 twenty-four:
-  name: Resource  
-  icon: /assets/icons/resource.png
-  color: #C98C63 
+  name: Capability  
+  icon: /assets/icons/TVW_GNRL_capability.png
+  color: "#ff8964"
 
 twenty-five:
-  name: Role  
-  icon: /assets/icons/role.png
-  color: #A8595D
+  name: Challenge  
+  icon: /assets/icons/TVW_GNRL_challenge.png
+  color: "#00bcc5"
 
 twenty-six:
-  name: Task  
-  icon: /assets/icons/task.png
-  color: #2F89BA
+  name: Con  
+  icon: /assets/icons/TVW_GNRL_con.png
+  color: "#d25b46"
 
 twenty-seven:
-  name: Tool	  
-  icon: /assets/icons/tool.png 
-  color: #828282
+  name: Event	  
+  icon: /assets/icons/TVW_GNRL_event.png
+  color: "#f26922"
 
 twenty-eight:
-  name: Trajectory  
-  icon: /assets/icons/trajectory.png
-  color: #B3953D
+  name: Feedback 
+  icon: /assets/icons/TVW_GNRL_feedback.png
+  color: "#ffa625"
   
 twenty-nine:
-  name: Argument  
-  icon: /assets/icons/argument.png
-  color: #7FAEFD
+  name: Foresight  
+  icon: /assets/icons/TVW_GNRL_foresight.png
+  color: "#aeaeae"
   
 thirty:
-  name: Con  
-  icon: /assets/icons/con_icon.png
-  color: #CF7C74
+  name: Idea 
+  icon: /assets/icons/TVW_GNRL_idea.png
+  color: "#f7d443"
   
 thirty-one:
-  name: Decision  
-  icon: /assets/icons/decision.png
-  color: #CCA866
+  name: Individual  
+  icon: /assets/icons/TVW_GNRL_individual.png
+  color: "#ff9700"
   
 thirty-two:
-  name: Example  
-  icon: /assets/icons/example.png
-  color: #598559
+  name: Issue/Topic 
+  icon: /assets/icons/TVW_GNRL_issue-topic.png
+  color: "#7885ca"
   
 thirty-three:
-  name: Foresight  
-  icon: /assets/icons/foresight.png
-  color: #B0B0B0
+  name: "Location 
+  icon: /assets/icons/TVW_GNRL_location.png
+  color: "#dc4c47"
   
 thirty-four:
-  name: Good Practice  
-  icon: /assets/icons/goodpractice.png
-  color: #BD9E86
+  name: Media  
+  icon: /assets/icons/TVW_GNRL_media.png
+  color: "#8fa1c9"
   
 thirty-five:
-  name: List  
-  icon: /assets/icons/list.png
-  color: #B7A499
+  name: Model 
+  icon: /assets/icons/TVW_GNRL_model.png
+  color: "#b595b8"
   
 thirty-six:
-  name: Movie Map  
-  icon: /assets/icons/moviemap.png
-  color: #A5A0DE
+  name: Module  
+  icon: /assets/icons/TVW_GNRL_module.png
+  color: "#4cb5ab"
   
 thirty-seven:
-  name: Note  
-  icon: /assets/icons/note.png
-  color: #A389A1
-  
+  name: Organization 
+  icon: /assets/icons/TVW_GNRL_organization.png
+  color: "#9474cc"
+
 thirty-eight:
-  name: Pro  
-  icon: /assets/icons/pro.png
-  color: #89B879
+  name: Perspective  
+  icon: /assets/icons/TVW_GNRL_perspective.png
+  color: "#00a8de"
   
 thirty-nine:
-  name: Research  
-  icon: /assets/icons/research.png
-  color: #CD8E89
+  name: Pro  
+  icon: /assets/icons/TVW_GNRL_pro.png
+  color: "#95ca57"
   
 forty:
-  name: Wildcard  
-  icon: /assets/icons/wildcard.png
-  color: #73C7DE
+  name: Project
+  icon: /assets/icons/TVW_GNRL_project.png
+  color: "#5b822e"
+  
+forty-one:
+  name: Question
+  icon: /assets/icons/TVW_GNRL_question.png
+  color: "#4ec2f6"
+
+forty-two:
+  name: Reference  
+  icon: /assets/icons/TVW_GNRL_reference.png
+  color: "#a29a8f"
+  
+forty-three:
+  name: Research
+  icon: /assets/icons/TVW_GNRL_research.png
+  color: "#cb8c84"
+  
+forty-four:
+  name: Role
+  icon: /assets/icons/TVW_GNRL_role.png
+  color: "#e47272"
+  
+forty-five:
+  name: Status Update  
+  icon: /assets/icons/TVW_GNRL_status.png
+  color: "#ec94b2"
+  
+forty-six:
+  name: Wildcard
+  icon: /assets/icons/TVW_GNRL_wildcard.png  
+  color: "#82bfbf"
