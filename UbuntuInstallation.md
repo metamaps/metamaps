@@ -72,6 +72,9 @@ now there is a couple other things we are going to need which is phantomjs, node
 
     sudo apt-get install redis-server
 
+Furthermore, if you want to be able to work on profile picture uploading, or use it
+you'll need ImageMagick. On Ubuntu, you can just go find ImageMagick in the Ubuntu Software Centre
+
 Install the specific version of ruby needed this will take some time
 
     rvm install ruby-2.1.3
@@ -110,11 +113,18 @@ Execute the server:
     
     rails s
 
-and dont forget to run realtime too open a new terminal
-
+and dont forget to run the two other servers, for sidekiq, and realtime...
+open a new terminal
 navigate to ./realtime and run 
 
+    sudo apt-get install npm
+    npm install
     nodejs realtime-server.js
+
+open a new terminal
+navigate to the main directory and run 
+
+    sidekiq
 
 Now you're all set enjoy your personal server of metamaps :)
 

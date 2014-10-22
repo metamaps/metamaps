@@ -3962,10 +3962,61 @@ Metamaps.Map.InfoBox = {
 *
 */
 Metamaps.Account = {
+    listenersInitialized: false,
     init: function () {
         var self = Metamaps.Account;
 
-        
+
+    },
+    initListeners: function(){
+        var self = Metamaps.Account;
+
+        $('#user_image').change(self.showImagePreview);
+        self.listenersInitialized = true;
+    },
+    toggleChangePicture: function(){
+        var self = Metamaps.Account;
+
+        $('.userImageMenu').toggle();
+        if (!self.listenersInitialized) self.initListeners();
+    },
+    openChangePicture: function(){
+        var self = Metamaps.Account;
+
+        $('.userImageMenu').show();
+        if (!self.listenersInitialized) self.initListeners();
+    },
+    closeChangePicture: function(){
+        var self = Metamaps.Account;
+
+        $('.userImageMenu').hide();
+    },
+    showImagePreview: function(){
+        var self = Metamaps.Account;
+
+        var file = $('#user_image')[0].files[0];
+
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('.userImageDiv img').attr('src', reader.result);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+            $('.userImageMenu').hide();
+            $('#remove_image').val('0');
+        }
+    },
+    removePicture: function(){
+        var self = Metamaps.Account;
+
+        $('.userImage img').attr('src', '/assets/user.png');
+        $('.userImageMenu').hide();
+
+        var input = $('#user_image');
+        input.replaceWith(input.val('').clone(true));
+        $('#remove_image').val('1');
     },
     changeName: function(){
         $('.accountName').hide();

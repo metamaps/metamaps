@@ -21,13 +21,49 @@ class UsersController < ApplicationController
   # PUT /users/:id
   def update
     @user = current_user
-    @user.attributes = params[:user]
-    
-    @user.save
 
-    sign_in(@user, :bypass => true)
-       
-    respond_with(@user, location: session[:previous_url]) do |format|
+    if params[:user][:password] == "" && params[:user][:password_confirmation] == ""
+      # not trying to change the password
+      if @user.update_attributes(params[:user])
+        if params[:remove_image] == "1"
+          @user.image = nil
+        end
+        @user.save
+        sign_in(@user, :bypass => true)
+        respond_to do |format|
+          format.html { redirect_to root_url, notice: "Account updated!" }
+        end
+      else
+        sign_in(@user, :bypass => true)
+        respond_to do |format|
+          format.html { redirect_to edit_user_path(@user), notice: @user.errors.to_a[0] }
+        end
+      end
+    else
+      # trying to change the password
+      correct_pass = @user.valid_password?(params[:current_password])
+
+      if correct_pass && @user.update_attributes(params[:user])
+        if params[:remove_image] == "1"
+          @user.image = nil
+        end
+        @user.save
+        sign_in(@user, :bypass => true)
+        respond_to do |format|
+          format.html { redirect_to root_url, notice: "Account updated!" }
+        end
+      else
+        respond_to do |format|
+          if correct_pass
+            u = User.find(@user.id)
+            sign_in(u, :bypass => true)
+            format.html { redirect_to edit_user_path(@user), notice: @user.errors.to_a[0] }
+          else
+            sign_in(@user, :bypass => true)
+            format.html { redirect_to edit_user_path(@user), notice: "Incorrect current password" }
+          end
+        end
+      end
     end
   end
     
