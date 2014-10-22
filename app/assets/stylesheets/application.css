@@ -76,73 +76,6 @@ body,
 .wrapper.mapPage {
     overflow: hidden;
 }
-/* scrollbar override */
-
-.mCS_no_scrollbar {
-    padding-right: 0px !important;
-}
-.mCSB_container {
-    margin-right: 15px !important;
-}
-/* forgot password fix */
-
-.forgotPassword input[type="submit"] {
-    width: 300px;
-    color: #f5f5f5;
-    font-family: din-regular;
-    top: 118px;
-    position: absolute;
-}
-
-.new_user input[type="submit"] {
-    width: 96px;
-    padding: 0px;
-    font-family: din-regular;
-    text-transform: uppercase;
-    color: #f5f5f5;
-    margin-top:16px;
-    float: right;
-}
-
-.login input[type="submit"]{
-    width:84px;
-    margin-top: 16px;
-    font-family: din-regular;
-    text-transform: uppercase;
-}
-
-.edit_user input[type="submit"]{
-    width: 96px;
-    padding: 0px;
-    font-family: din-regular;
-    text-transform: uppercase;
-    color: #f5f5f5;
-    margin-top:16px;
-    float: right;
-}
-
-.edit_user .userImage {
-    width: 84px;
-    margin: 0 auto;
-    position: relative;
-    margin-top: 32px;
-}
-.edit_user .userImage img {
-    border-radius: 42px;
-}
-.edit_user .editPhoto {
-    display: none;
-    width: 40px;
-    height: 40px;
-    background-image: url(photo.png);
-    position: absolute;
-    top: 22px;
-    left: 22px;
-    cursor: pointer;
-}
-.edit_user .userImage:hover .editPhoto {
-    display: block;
-}
 
 html {
 
@@ -308,6 +241,127 @@ input[type="submit"]:active {
     margin-left: -166px;
     margin-top: -83px;
     line-height: 18px;
+}
+
+/* forgot password fix */
+
+.forgotPassword input[type="submit"] {
+    width: 300px;
+    color: #f5f5f5;
+    font-family: din-regular;
+    top: 118px;
+    position: absolute;
+}
+
+.new_user input[type="submit"] {
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
+}
+
+.login input[type="submit"]{
+    width:84px;
+    margin-top: 16px;
+    font-family: din-regular;
+    text-transform: uppercase;
+}
+
+.edit_user input[type="submit"]{
+    width: 96px;
+    padding: 0px;
+    font-family: din-regular;
+    text-transform: uppercase;
+    color: #f5f5f5;
+    margin-top:16px;
+    float: right;
+}
+
+.edit_user .userImage {
+    width: 84px;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 32px;
+    cursor: pointer;
+}
+.edit_user .userImage img {
+    border-radius: 42px;
+}
+.edit_user .editPhoto {
+    display: none;
+    width: 40px;
+    height: 40px;
+    background-image: url(photo.png);
+    position: absolute;
+    top: 22px;
+    left: 22px;
+}
+.edit_user .userImageDiv:hover .editPhoto {
+    display: block;
+}
+.userImageMenu {
+    position: absolute;
+    top: 88px;
+    left: -18px;
+    display: none;
+}
+.userMenuArrow {
+    border-color: transparent;
+    border-bottom-color: #202020;
+    border-style: dashed dashed solid;
+    border-width: 0 8px 8px;
+    display: block;
+    position: absolute;
+    left: 52px;
+    top: 0px;
+    z-index: 1;
+    height: 0;
+    width: 0;
+}
+.userImageMenu ul {
+    background: #202020;
+    list-style: none;
+    text-align: center;
+    font-size: 14px;
+    line-height: 14px;
+    color: #FFFFFF;
+    width: 120px;
+    border-radius: 2px;
+    position: absolute;
+    top: 8px;
+    overflow: hidden;
+    z-index: 1;
+}
+.userImageMenu li {
+    height:14px;
+    padding: 5px 0;
+    position: relative;
+}
+.userImageMenu li:hover {
+    background-color: #757575;
+}
+.edit_user #user_image {
+    width: 120px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.edit_user .upload label {
+    width: 120px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
 }
 
 .edit_user label.firstFieldText {
@@ -2676,3 +2730,11 @@ and it won't be important on password protected instances */
     -webkit-transform-origin: left center;
     transform-origin: left center;
 }   
+.blockchain-btn {
+    display: inline;
+    float: right;
+}
+script.data-gratipay-username {
+    display: inline;
+    float: left;
+}

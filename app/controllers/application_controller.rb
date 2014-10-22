@@ -26,19 +26,18 @@ private
 
   def require_no_user
     if authenticated?
-      flash[:warning] = "You must be logged out."
-      store and redirect_to edit_user_path(user)
+      redirect_to edit_user_path(user), notice: "You must be logged out."
       return false
     end
   end
   
   def require_user
     unless authenticated?
-
+      
       path = request.env["PATH_INFO"]
 
       unless path == "/" || path == new_user_registration_path || path == new_user_session_path
-        store_location_for(:user, path) and redirect_to root_url
+        store_location_for(:user, path) and redirect_to root_url, notice: "You must be logged in."
         return false
       end
     end

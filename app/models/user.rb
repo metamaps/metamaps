@@ -15,6 +15,16 @@ class User < ActiveRecord::Base
 
   serialize :settings, UserPreference
 	
+  validates :password, :presence => true,
+                       :length => { :within => 8..40 },
+                       :on => :create
+  validates :password, :length => { :within => 8..40 },
+                       :allow_blank => true,
+                       :on => :update
+  validates_confirmation_of :password
+
+  validates_presence_of :name # done by devise
+  validates_presence_of :email # done by devise
   validates_uniqueness_of :name # done by devise
   validates_uniqueness_of :email # done by devise
     
