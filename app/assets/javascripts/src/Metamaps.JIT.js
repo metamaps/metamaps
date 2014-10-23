@@ -1375,6 +1375,7 @@ Metamaps.JIT = {
                     if (!e.shiftKey && !e.ctrlKey) {
                         Metamaps.Control.deselectAllNodes();
                         Metamaps.Control.deselectAllEdges();
+                        Metamaps.Control.selectEdge(adj);
                     }
                     else if (e.shiftKey && e.ctrlKey){
                         //no result
