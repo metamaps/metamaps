@@ -2,8 +2,7 @@
 --------------------------------------------------------*/
 	
 div.uv-icon.uv-bottom-left {
-	background-image:url(feedback_sprite.png);
-	background-color:#222222;
+	background-image:url(support_tab_sprite.png);
 	color:#FFFFFF;
 	cursor:pointer;
 	height:108px;

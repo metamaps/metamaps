@@ -1587,9 +1587,7 @@ Metamaps.Util = {
  */
 Metamaps.Realtime = {
     stringForLocalhost: 'http://localhost:5001',
-    stringForMetamaps: 'http://metamaps.cc:5001',
-    stringForTVW: 'http://tvw.mooo.com:5001',
-    stringForHeroku: 'http://gentle-savannah-1303.herokuapp.com',
+    stringForTVW: 'http://metamaps.thevalueweb.org:5001',
     socket: null,
     isOpen: false,
     changing: false,
@@ -3722,6 +3720,7 @@ Metamaps.Map.CheatSheet = {
     init: function () {
         // tab the cheatsheet
         $('#cheatSheet').tabs();
+        $('#cheatSheet').tabs("disable", 1); // TODO re-enable once the tutorials are in
         $('#quickReference').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
         $("#quickReference .ui-tabs-nav li").removeClass("ui-corner-top").addClass("ui-corner-left");
         
