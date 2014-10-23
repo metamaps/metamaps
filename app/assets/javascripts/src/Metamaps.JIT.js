@@ -1244,9 +1244,10 @@ Metamaps.JIT = {
         // add the proper options to the menu
         var menustring = '<ul>';
 
-        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from map</li>';
         menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from map</li>';
+        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
+        
 
         if (!Metamaps.Active.Map) menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
         menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>';
@@ -1418,11 +1419,11 @@ Metamaps.JIT = {
         // add the proper options to the menu
         var menustring = '<ul>';
 
-        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
+        menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
         if (Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)) {
             menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from map</li>';
         }
-        menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
+        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
 
         if (Metamaps.Active.Mapper) {
             var permOptions = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
