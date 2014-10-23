@@ -1183,15 +1183,16 @@ h3.realtimeBoxTitle {
     width: 24px;
     height: 24px;
 }
-.rightclickmenu .rc-delete .rc-icon {
-    background-position: 0 -48px;
+.rightclickmenu .rc-hide .rc-icon {
+    background-position: 0 0;
 }
 .rightclickmenu .rc-remove .rc-icon {
     background-position: 0 -24px;
 }
-.rightclickmenu .rc-hide .rc-icon {
-    background-position: 0 0;
+.rightclickmenu .rc-delete .rc-icon {
+    background-position: 0 -48px;
 }
+
 .rightclickmenu .rc-center .rc-icon {
     
 }
