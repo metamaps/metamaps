@@ -34,8 +34,10 @@
 
 <body data-env="<%= Rails.env %>">
 
-    <% if notice %>
-    <p id="toast"><%= notice %></p>
+    <% if devise_error_messages? %>
+      <p id="toast"><%= devise_error_messages! %></p>
+    <% elsif notice %>
+      <p id="toast"><%= notice %></p>
     <% end %>
 
     <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>

@@ -54,7 +54,17 @@ $(document).ready(function () {
             Metamaps[prop].init();
         }
     }
-    
+
+    // initialize the famous ui
+    var callFamous = function(){
+        if (Metamaps.Famous) {
+            Metamaps.Famous.build();
+        }
+        else {
+            setTimeout(callFamous, 100);
+        }
+    }
+    callFamous();
 });
 
 Metamaps.GlobalUI = {

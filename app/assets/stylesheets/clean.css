@@ -271,10 +271,10 @@
     left: 410px;
 }
 .sidebarSearch .tt-dropdown-menu .minimizeResults {
-    background-position-x: 0;
+    background-position: 0 0;
 }
 .sidebarSearch .tt-dropdown-menu .maximizeResults {
-    background-position-x: -32px;
+    background-position: -32px 0;
 }
 .sidebarSearch .tt-suggestions {
     overflow: visible;
@@ -421,7 +421,7 @@
     height: 24px;
     background: url(topic16.png);
     background-repeat: no-repeat;
-    background-position-y: center;
+    background-position: 0 center;
     top: 0;
     left: 0;
     padding-left: 18px;
@@ -434,7 +434,7 @@
     height: 24px;
     background: url(metamap16.png);
     background-repeat: no-repeat;
-    background-position-y: center;
+    background-position: 0 center;
     left: 0;
     padding-left: 20px;
     font-size: 12px;
@@ -445,7 +445,7 @@
     height: 24px;
     background: url(synapse16.png);
     background-repeat: no-repeat;
-    background-position-y: center;
+    background-position: 0 center;
     top: 24px;
     left: 0;
     padding-left: 20px;
@@ -582,28 +582,38 @@
     background-repeat: no-repeat;
     cursor: pointer;
 }
-.upperRightIcon:hover {
-    background-position-y: -32px;
+.sidebarCollaborateIcon {
+    background-position: 0 0;
+    display: none;
 }
 .sidebarCollaborateIcon.blue {
-    background-position-x: -32px;
+    background-position: -32px 0;
 }
-.sidebarCollaborateIcon {
-    background-position-x: 0;
-    display: none;
+.sidebarCollaborateIcon.blue:hover {
+    background-position: -32px -32px;
 }
 /* only show the collaborate icon on commons */
 .commonsMap .sidebarCollaborateIcon {
     display: block;
 }
 .sidebarFilterIcon {
-    background-position-x: -64px;
+    background-position: -64px 0;
 }
 .sidebarForkIcon {
-    background-position-x: -96px;
+    background-position: -96px 0;
 }
 .addMap {
-    background-position-x: -128px;
+    background-position: -128px 0;
+    margin-right:10px;
+}
+.sidebarFilterIcon:hover {
+    background-position: -64px -32px;
+}
+.sidebarForkIcon:hover {
+    background-position: -96px -32px;
+}
+.addMap:hover {
+    background-position: -128px -32px;
     margin-right:10px;
 }
 
@@ -749,7 +759,7 @@
     background-repeat:no-repeat;
 }
 .openCheatsheet:hover {
-    background-position-y: -32px;
+    background-position: 0 -32px;
 }
 .mapInfoIcon {
 	position: relative;
@@ -758,7 +768,7 @@
     background-repeat:no-repeat;
 }
 .mapInfoIcon:hover {
-    background-position-y: -32px;
+    background-position: 0 -32px;
 }
 .mapPage .mapInfoIcon {
 	top: 0;
@@ -789,7 +799,7 @@
 	cursor:pointer;
 }
 .mapControl:hover {
-    background-position-x: -32px;
+    background-position: -32px 0;
 }
 .zoomExtents {
     margin-bottom:5px;
@@ -859,22 +869,21 @@
     position:absolute;
     top:5px;
     left:5px;
-    background-position-y: 0;
 }
 .exploreMapsCenter .myMaps .exploreMapsIcon {
     background-image: url(exploremaps_sprite.png);
-    background-position-x: 0;
+    background-position: 0 0;
 }
 .exploreMapsCenter .activeMaps .exploreMapsIcon {
     background-image: url(exploremaps_sprite.png);
-    background-position-x: -32px;
+    background-position: -32px 0;
 }
 .exploreMapsCenter .featuredMaps .exploreMapsIcon {
     background-image: url(exploremaps_sprite.png);
-    background-position-x: -64px;
+    background-position: -64px 0;
 }
 .exploreMapsButton:hover .exploreMapsIcon, .exploreMapsButton.active .exploreMapsIcon {
-    background-position-y: -32px;
+    background-position: -32px 0;
 }
 
 .mapsWrapper {
