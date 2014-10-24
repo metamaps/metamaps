@@ -763,13 +763,13 @@
     background-position: 0 0;
 	cursor:pointer;
 }
-.mapControl:hover {
-    background-position: -32px 0;
-}
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
     background-image: url(extents_sprite.png);
+}
+.zoomExtents:hover {
+    background-position: -32px 0;
 }
 .zoomIn {
     background-image: url(zoom_sprite.png);
@@ -777,11 +777,17 @@
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
+.zoomIn:hover {
+    background-position: -32px 0;
+}
 .zoomOut {
     background-image: url(zoom_sprite.png);
     background-position:0 -32px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
+}
+.zoomOut:hover {
+    background-position: -32px -32px;
 }
 
 /* end mapControls */
@@ -805,7 +811,7 @@
 }
 
 .exploreMapsCenter {
-    z-index: 3;
+    z-index: 3 !important;
 }
 
 .exploreMapsButton {
@@ -847,8 +853,14 @@
     background-image: url(exploremaps_sprite.png);
     background-position: -64px 0;
 }
-.exploreMapsButton:hover .exploreMapsIcon, .exploreMapsButton.active .exploreMapsIcon {
-    background-position: -32px 0;
+.myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
+    background-position: 0 -32px;
+}
+.activeMaps:hover .exploreMapsIcon, .activeMaps.active .exploreMapsIcon {
+    background-position: -32px -32px;
+}
+.featuredMaps:hover .exploreMapsIcon, .featuredMaps.active .exploreMapsIcon {
+    background-position: -64px -32px;
 }
 
 .mapsWrapper {
