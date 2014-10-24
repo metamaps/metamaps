@@ -1,4 +1,7 @@
 define(function(require, exports, module) {
+
+Metamaps.Famous = {};
+Metamaps.Famous.build = function () {
     // import dependencies
     var Engine = require('famous/core/Engine');
     var Modifier = require('famous/core/Modifier');
@@ -14,7 +17,6 @@ define(function(require, exports, module) {
     // create the main context
     var famous = document.getElementById('famousOverlay');
 
-    Metamaps.Famous = {};
     var f = Metamaps.Famous;
 
     f.mainContext = Engine.createContext(famous);
@@ -324,4 +326,6 @@ define(function(require, exports, module) {
     f.compasses = {};
 
     f.logo.show();
+
+}// build
 });

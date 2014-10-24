@@ -1887,45 +1887,35 @@ and it won't be important on password protected instances */
     margin:10px auto;
     background-position: 0 0;
 }
-.lightbox_links a:hover .lightboxAboutIcon {
-    background-position-y: -32px;
-}
 #lightbox_metamapps .lightboxAboutIcon {
-    background-position-x: 0;
-}
-#lightbox_community .lightboxAboutIcon {
-    background-position-x: -32px;
-}
-#lightbox_source .lightboxAboutIcon {
-    background-position-x: -64px;
-}
-#lightbox_blog .lightboxAboutIcon {
-    background-position-x: -96px;
-}
-#lightbox_term .lightboxAboutIcon {
-    background-position-x: -128px;
-}
-
-
-.permIcon .mapCrePermIcon  {
-    background-image: url(permissions64sprite.png);
-    background-repeat: no-repeat;
-    width:64px;
-    height:64px;
-    margin:10px auto;
     background-position: 0 0;
 }
-.mapCrePermIcon:hover {
-    background-position-y: -64px;
+#lightbox_community .lightboxAboutIcon {
+    background-position: -32px 0;
 }
-#map_CO {
-    background-position-x: 0;
+#lightbox_source .lightboxAboutIcon {
+    background-position: -64px 0;
 }
-#map_PU {
-    background-position-x: -64px;
+#lightbox_blog .lightboxAboutIcon {
+    background-position: -96px 0;
 }
-#map_PR {
-    background-position-x: -128px;
+#lightbox_term .lightboxAboutIcon {
+    background-position: -128px 0;
+}
+#lightbox_metamapps:hover .lightboxAboutIcon {
+    background-position: 0 -32px;
+}
+#lightbox_community:hover .lightboxAboutIcon {
+    background-position: -32px -32px;
+}
+#lightbox_source:hover .lightboxAboutIcon {
+    background-position: -64px -32px;
+}
+#lightbox_blog:hover .lightboxAboutIcon {
+    background-position: -96px -32px;
+}
+#lightbox_term:hover .lightboxAboutIcon {
+    background-position: -128px -32px;
 }
 
 /* jquery ui tabs */
@@ -2292,25 +2282,27 @@ and it won't be important on password protected instances */
     height:64px;
     margin:10px auto 0;
     background-position: 0 0;
-/*    width: 60px;
-    height: 60px;
-    background-size: 48px 48px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    margin: 0 auto;
-    cursor: pointer;*/
 }
 .mapPermIcon:hover, .mapPermIcon.selected {
-    background-position-y: -64px;
+    background-position: -64px 0;
 }
 #newmap_co {
-    background-position-x: 0;
+    background-position: 0 0;
 }
 #newmap_pu {
-    background-position-x: -64px;
+    background-position: -64px 0;
 }
 #newmap_pr {
-    background-position-x: -128px;
+    background-position: -128px 0;
+}
+#newmap_co:hover, #newmap_co.selected {
+    background-position: 0 -64px;
+}
+#newmap_pu:hover, #newmap_co.selected {
+    background-position: -64px -64px;
+}
+#newmap_pr:hover, #newmap_pr.selected {
+    background-position: -128px -64px;
 }
 
 
@@ -2337,7 +2329,7 @@ and it won't be important on password protected instances */
     font-size: 14px;
 }
 .buttonWrapper {
-    width: 274px;
+    width: 286px;
     float:right;
     margin: 16px 0 0 0;
 }

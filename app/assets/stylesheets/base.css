@@ -255,12 +255,12 @@ resize: none;
 
 .yourTopic .mapPerm:hover, .yourEdge .mapPerm:hover {
   background-image: url(arrowperms_sprite.png);
-  background-position-x: -32px;
+  background-position: -32px 0;
   cursor:pointer;
 }
 .yourTopic .mapPerm.minimize, .yourEdge .mapPerm.minimize {
  background-image: url(arrowperms_sprite.png) !important;
-background-position-x: 0px;
+background-position: 0 0;
 cursor: pointer;
 }
 .mapPerm .permissionSelect {
@@ -731,13 +731,13 @@ font-family: 'din-regular', helvetica, sans-serif;
   right: 56px; 
 }
 #edit_synapse_left.checked, #edit_synapse_right.checked {
-  background-position-y: -48px;
+  background-position: 0 -48px;
 }
 .canEdit #edit_synapse_left, .canEdit #edit_synapse_right {
   cursor: pointer;
 }
 .canEdit #edit_synapse_left:not(.checked):hover, .canEdit #edit_synapse_right:not(.checked):hover {
- background-position-y: -24px;
+ background-position: 0 -24px;
 }
 
 /* Map Cards */
