@@ -2056,18 +2056,6 @@ and it won't be important on password protected instances */
     float: left;
 }
 
-#colophon {
-    overflow-y: scroll;
-    height:434px;
-}
-#colophonLinks {
-    padding-left:20px;
-}
-
-#colophoneHeader {
-    padding-bottom:12px;
-}
-
 #about > p, #getInvolved > p, #invite > p, #colophon p {
 /*    color: #000;
     font-size: 16px;*/
@@ -2080,14 +2068,25 @@ and it won't be important on password protected instances */
 #about ul li {
     display: inline-block;
 }
-#colophonSectionIndented {
+
+#colophon {
+    overflow-y: scroll;
+    height:434px;
+}
+.colophonLinks {
+    padding-left:20px;
+}
+
+.colophoneHeader {
+    padding-bottom:12px;
+}
+.colophonSectionIndented {
     font-family: 'din-medium', helvetica, sans-serif;
     text-align: left;
     padding-left:20px;
 }
 
-
-#colophonSection {
+.colophonSection {
     font-family: 'din-medium', helvetica, sans-serif;
     text-align: left;
 }
@@ -2097,7 +2096,7 @@ and it won't be important on password protected instances */
     text-decoration: underline;  
 }
 
-#colophonCols {
+.colophonCols {
     -webkit-column-count: 2; /* Chrome, Safari, Opera */
     -moz-column-count: 2; /* Firefox */
     column-count: 2;
