@@ -36,7 +36,7 @@ private
       
       path = request.env["PATH_INFO"]
 
-      accessible_urls = ["/", new_user_registration_path, new_user_session_path, new_user_password_path, edit_user_password_path]
+      accessible_urls = ["/", new_user_registration_path, new_user_session_path, user_registration_path, new_user_password_path, edit_user_password_path]
 
       unless accessible_urls.include?(path)
         store_location_for(:user, path) and redirect_to root_url, notice: "You must be logged in."

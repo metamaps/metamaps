@@ -2069,7 +2069,7 @@ and it won't be important on password protected instances */
     display: inline-block;
 }
 
-#colophon {
+#colophon, #about {
     overflow-y: scroll;
     height:434px;
 }
