@@ -206,18 +206,26 @@ class MapsController < ApplicationController
     def destroy
         @current = current_user
 
-        @map = Map.find(params[:id])
+        @map = Map.find(params[:id]).authorize_to_delete(@current)
 
-        @mappings = @map.mappings
+        if @map 
+            @mappings = @map.mappings
 
-        @mappings.each do |mapping| 
-            mapping.delete
+            @mappings.each do |mapping| 
+                mapping.delete
+            end
+
+            @map.delete
         end
 
-        @map.delete
-
         respond_to do |format|
-            format.html { redirect_to "/maps/mappers/" + @current.id.to_s, notice: "Map deleted." }
+            format.json { 
+                if @map
+                    render json: "success"
+                else
+                    render json: "unauthorized"
+                end
+            }
         end
     end
 end
