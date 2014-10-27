@@ -2297,7 +2297,7 @@ and it won't be important on password protected instances */
 #newmap_co:hover, #newmap_co.selected {
     background-position: 0 -64px;
 }
-#newmap_pu:hover, #newmap_co.selected {
+#newmap_pu:hover, #newmap_pu.selected {
     background-position: -64px -64px;
 }
 #newmap_pr:hover, #newmap_pr.selected {
