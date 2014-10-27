@@ -242,6 +242,12 @@ input[type="submit"]:active {
     margin-top: -83px;
     line-height: 18px;
 }
+.forgotPasswordReset {
+    height: 215px !important;
+}
+.forgotPasswordReset input[type="submit"] {
+    top: 200px !important;
+}
 
 /* forgot password fix */
 
