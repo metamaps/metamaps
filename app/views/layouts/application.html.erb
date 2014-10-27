@@ -15,14 +15,8 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
 
-  <% if Rails.env.production? %>
-    <!-- for metamaps.herokuapp.com and metamaps.cc -->
-    <script type="text/javascript" src="//use.typekit.net/obp7wss.js"></script>
-  <% elsif Rails.env.development? %>
-    <!-- for localhost development -->
-    <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
-  <% end %>
-  <!-- to initialize all typekits -->
+  <!-- typekit for vinyl font -->
+  <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
         <!-- app code -->
