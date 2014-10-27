@@ -66,8 +66,7 @@ function start() {
             socket.broadcast.emit('maps-' + data.mapid + '-newmapper', newUser);
         });
 
-        // this will ping everyone on a map that there's a person just left the map
-        socket.on('disconnect', function () {
+        var end = function () {
             var socketUserName, socketUserID;
             socket.get('userid', function (err, id) {
                 socketUserID = id;
@@ -82,7 +81,10 @@ function start() {
             socket.get('mapid', function (err, mapid) {
                 socket.broadcast.emit('maps-' + mapid + '-lostmapper', data);
             });
-        });
+        };
+        // this will ping everyone on a map that there's a person just left the map
+        socket.on('disconnect', end);
+        socket.on('endMapperNotify', end);
         
         // this will ping everyone on a map that someone just turned on realtime
         socket.on('notifyStartRealtime', function (data) {
@@ -127,6 +129,22 @@ function start() {
             socket.broadcast.emit('maps-' + mapId + '-newTopic', data);
         });
 
+        socket.on('topicChangeFromClient', function (data) {
+            socket.broadcast.emit('topicChangeFromServer', data);
+        });
+
+        socket.on('synapseChangeFromClient', function (data) {
+            socket.broadcast.emit('synapseChangeFromServer', data);
+        });
+
+        socket.on('mapChangeFromClient', function (data) {
+            socket.broadcast.emit('mapChangeFromServer', data);
+        });
+
+        socket.on('deleteTopicFromClient', function (data) {
+            socket.broadcast.emit('deleteTopicFromServer', data);
+        });
+
         socket.on('removeTopic', function (data) {
             var mapId = data.mapid;
             delete data.mapid;
@@ -139,6 +157,10 @@ function start() {
             delete data.mapid;
 
             socket.broadcast.emit('maps-' + mapId + '-newSynapse', data);
+        });
+
+        socket.on('deleteSynapseFromClient', function (data) {
+            socket.broadcast.emit('deleteSynapseFromServer', data);
         });
 
         socket.on('removeSynapse', function (data) {

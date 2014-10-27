@@ -3,8 +3,10 @@ Metamaps.JIT = {
         mouseMove: 'Metamaps:JIT:events:mouseMove',
         topicDrag: 'Metamaps:JIT:events:topicDrag', 
         newTopic: 'Metamaps:JIT:events:newTopic', 
+        deleteTopic: 'Metamaps:JIT:events:deleteTopic', 
         removeTopic: 'Metamaps:JIT:events:removeTopic', 
         newSynapse: 'Metamaps:JIT:events:newSynapse', 
+        deleteSynapse: 'Metamaps:JIT:events:deleteSynapse', 
         removeSynapse: 'Metamaps:JIT:events:removeSynapse', 
         pan: 'Metamaps:JIT:events:pan',
         zoom: 'Metamaps:JIT:events:zoom',
@@ -915,7 +917,24 @@ Metamaps.JIT = {
             tempInit = false;
         } else if (!tempInit && node && !node.nodeFrom) {
             // this means you dragged an existing node, autosave that to the database
-            if (Metamaps.Active.Map) {
+
+            // check whether to save mappings
+            var checkWhetherToSave = function() {
+                var map = Metamaps.Active.Map;
+                var mapper = Metamaps.Active.Mapper;
+                // this case
+                // covers when it is a public map owned by you
+                // and also when it's a private map
+                var activeMappersMap = map.authorizePermissionChange(mapper); 
+                var commonsMap = map.get('permission') === 'commons';
+                var realtimeOn = Metamaps.Realtime.status;
+
+                // don't save if commons map, and you have realtime off, 
+                // even if you're map creator
+                return map && mapper && ((commonsMap && realtimeOn) || (activeMappersMap && !commonsMap));
+            }
+
+            if (checkWhetherToSave()) {
                 mapping = node.getData('mapping');
                 mapping.save({
                     xloc: node.getPos().x,

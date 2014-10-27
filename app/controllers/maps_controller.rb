@@ -75,7 +75,7 @@ class MapsController < ApplicationController
         @map = Map.find(params[:id]).authorize_to_show(@current)
 
         if not @map
-            redirect_to root_url and return
+            redirect_to root_url, notice: "Access denied. That map is private." and return
         end
 
         respond_to do |format|
@@ -98,7 +98,7 @@ class MapsController < ApplicationController
         @map = Map.find(params[:id]).authorize_to_show(@current)
 
         if not @map
-            redirect_to root_url and return
+            redirect_to root_url, notice: "Access denied. That map is private." and return
         end
 
         @allmappers = @map.contributors
