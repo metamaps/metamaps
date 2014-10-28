@@ -3026,7 +3026,7 @@ Metamaps.Filter = {
         
         var model, li, jQueryLi;
         function sortAlpha(a,b){
-            return a.childNodes[1].innerText.toLowerCase() > b.childNodes[1].innerText.toLowerCase() ? 1 : -1;  
+            return a.childNodes[1].innerHTML.toLowerCase() > b.childNodes[1].innerHTML.toLowerCase() ? 1 : -1;  
         }
         // for each new filter to be added, create a list item for it and fade it in
         _.each(added, function (identifier) {
