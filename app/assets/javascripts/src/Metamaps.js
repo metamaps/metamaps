@@ -701,6 +701,7 @@ Metamaps.Create = {
                 $('#topic_name').focus();
             });
             Metamaps.Create.newTopic.beingCreated = true;
+            Metamaps.Create.newTopic.name = "";
         },
         hide: function () {
             $('#new_topic').fadeOut('fast');
@@ -3618,6 +3619,11 @@ Metamaps.Topic = {
     },
     createTopicLocally: function () {
         var self = Metamaps.Topic;
+
+        if (Metamaps.Create.newTopic.name === "") {
+            Metamaps.GlobalUI.notifyUser("Please enter a topic title...");
+            return;
+        }
 
         $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
 
