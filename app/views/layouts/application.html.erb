@@ -24,6 +24,46 @@
             require.config({baseUrl: '/famous/'});
             require(['main']);
         </script>
+
+  <!--[if (IE)]>
+    <style type="text/css">
+      #lightbox_overlay {
+        display: block;
+      }
+
+      #lightbox_main {
+        top: 50%;
+        margin-top: -281px;
+      }
+
+      #lightbox_screen {
+        height: 100%;
+        opacity: 0.42;
+      }
+
+      .lightboxContent {
+        display: none;
+      }
+
+      #noIE {
+        display: block;
+      }
+
+      #lightbox_close {
+        display: none;
+      }
+
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#lightbox_screen").unbind().click(function(event){
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        });
+      });
+    </script>
+  <![endif]-->
 </head>
 
 <body data-env="<%= Rails.env %>">
