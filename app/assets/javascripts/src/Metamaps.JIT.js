@@ -682,10 +682,16 @@ Metamaps.JIT = {
         $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
     }, // onMouseMoveHandler
     enterKeyHandler: function () {
+        var creatingMap = Metamaps.GlobalUI.lightbox;
+        if (creatingMap === "newmap" || creatingMap === "forkmap") {
+            Metamaps.GlobalUI.CreateMap.submit();
+        }
         // this is to submit new topic creation
-        if (Metamaps.Create.newTopic.beingCreated) {
+        else if (Metamaps.Create.newTopic.beingCreated) {
             Metamaps.Topic.createTopicLocally();
-        } else if (Metamaps.Create.newSynapse.beingCreated) {
+        }
+        // to submit new synapse creation 
+        else if (Metamaps.Create.newSynapse.beingCreated) {
             Metamaps.Synapse.createSynapseLocally();
         }
     }, //enterKeyHandler

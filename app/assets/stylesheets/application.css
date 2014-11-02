@@ -2192,6 +2192,16 @@ and it won't be important on password protected instances */
     margin: 15px 0 5px;
     position: relative;
 }
+
+.new_map .feedback_message {
+    float: right;
+    width: 388px;
+    background: #c04f4f;
+    margin: 5px 1px;
+    padding: 2px 5px;
+    border-radius: 2px;
+    color: #FFF;
+}
 .new_map label {
     float: left;
     width: 100px;
