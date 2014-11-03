@@ -29,7 +29,6 @@ Metamaps::Application.routes.draw do
   match 'maps/mappers/:id', to: 'maps#index', via: :get, as: :usermaps
   match 'maps/topics/:id', to: 'maps#index', via: :get, as: :topicmaps
   resources :maps, except: [:new, :edit]
-  match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
   match 'maps/:id/contains', to: 'maps#contains', via: :get, as: :contains
   
   devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => [:sessions]

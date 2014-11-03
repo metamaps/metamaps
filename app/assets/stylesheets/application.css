@@ -1180,6 +1180,13 @@ h3.realtimeBoxTitle {
     background-color: #E0E0E0;
     cursor: pointer;
 }
+.rightclickmenu li.disabled {
+    opacity: 0.4;
+}
+.rightclickmenu li.disabled:hover {
+    background-color: transparent;
+    cursor: default;
+}
 .rightclickmenu > ul > li .rc-icon {
     position: absolute;
     top: 0;
@@ -1976,6 +1983,8 @@ and it won't be important on password protected instances */
     font-family: 'din-medium', helvetica, sans-serif;
     color: #424242;
     font-size: 14px;
+    text-align: justify;
+    padding-right: 16px;
 }
 #switchMetacodes > p {
     margin: 16px 0 16px 0;
@@ -1990,10 +1999,17 @@ and it won't be important on password protected instances */
 #metacodeSwitchTabs li.ui-state-active a {
     color: #00BCD4;
 }
+.metacodeSwitchTab {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+}
+.customMetacodeList {
+    overflow-y: auto;
+}
 .customMetacodeList,
 .metacodeSetList {
     height: 301px;
-    overflow-y: auto;
     margin: 5px 0 15px 0;
 }
 .customMetacodeList ul li {

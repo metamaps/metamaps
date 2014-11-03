@@ -757,6 +757,8 @@ Metamaps.JIT = {
         var positionsToSend = {};
         var topic;
 
+        var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
         if (node && !node.nodeFrom) {
             var pos = eventInfo.getPos();
             // if it's a left click, or a touch, move the node
@@ -821,7 +823,7 @@ Metamaps.JIT = {
                 Metamaps.Visualize.mGraph.plot();
             }
             // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
-            else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Metamaps.Active.Mapper) {
+            else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && authorized) {
                 if (tempInit == false) {
                     tempNode = node;
                     tempInit = true;
@@ -886,6 +888,9 @@ Metamaps.JIT = {
                     $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
                 }
             }
+            else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && !authorized) {
+                Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            }
         }
     }, // onDragMoveTopicHandler
     onDragCancelHandler: function (node, eventInfo, e) {
@@ -927,6 +932,9 @@ Metamaps.JIT = {
             // check whether to save mappings
             var checkWhetherToSave = function() {
                 var map = Metamaps.Active.Map;
+
+                if (!map) return false;
+
                 var mapper = Metamaps.Active.Mapper;
                 // this case
                 // covers when it is a public map owned by you
@@ -967,7 +975,13 @@ Metamaps.JIT = {
         var now = Date.now(); //not compatible with IE8 FYI 
         Metamaps.Mouse.lastCanvasClick = now;
 
+        var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
         if (now - storedTime < Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE && !Metamaps.Mouse.didPan) {
+            if (Metamaps.Active.Map && !authorized) {
+                Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+                return;
+            }
             // DOUBLE CLICK
             //pop up node creation :) 
             Metamaps.Create.newTopic.addSynapse = false;
@@ -1269,12 +1283,16 @@ Metamaps.JIT = {
         // add the proper options to the menu
         var menustring = '<ul>';
 
-        menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from map</li>';
-        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
+        var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        var disabled = authorized ? "" : "disabled";
+
+        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map</li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
         
 
-        if (!Metamaps.Active.Map) menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
+        if (Metamaps.Active.Topic) menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
         menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>';
         if (Metamaps.Active.Mapper) {
             var options = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
@@ -1331,17 +1349,21 @@ Metamaps.JIT = {
         // attach events to clicks on the list items
 
         // delete the selected things from the database
-        $('.rc-delete').click(function () {
-            $('.rightclickmenu').remove();
-            Metamaps.Control.deleteSelected();
-        });
+        if (authorized) {
+            $('.rc-delete').click(function () {
+                $('.rightclickmenu').remove();
+                Metamaps.Control.deleteSelected();
+            });
+        }
 
         // remove the selected things from the map
-        $('.rc-remove').click(function () {
-            $('.rightclickmenu').remove();
-            Metamaps.Control.removeSelectedEdges();
-            Metamaps.Control.removeSelectedNodes();
-        });
+        if (authorized) {
+            $('.rc-remove').click(function () {
+                $('.rightclickmenu').remove();
+                Metamaps.Control.removeSelectedEdges();
+                Metamaps.Control.removeSelectedNodes();
+            });
+        }
 
         // hide selected nodes and synapses until refresh
         $('.rc-hide').click(function () {
@@ -1445,11 +1467,13 @@ Metamaps.JIT = {
         // add the proper options to the menu
         var menustring = '<ul>';
 
-        menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)) {
-            menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from map</li>';
-        }
-        if (Metamaps.Active.Mapper) menustring += '<li class="rc-delete"><div class="rc-icon"></div>Delete</li>';
+        var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        var disabled = authorized ? "" : "disabled";
+
+        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map</li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
 
         if (Metamaps.Active.Mapper) {
             var permOptions = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
@@ -1500,17 +1524,21 @@ Metamaps.JIT = {
         // attach events to clicks on the list items
 
         // delete the selected things from the database
-        $('.rc-delete').click(function () {
-            $('.rightclickmenu').remove();
-            Metamaps.Control.deleteSelected();
-        });
+        if (authorized) {
+            $('.rc-delete').click(function () {
+                $('.rightclickmenu').remove();
+                Metamaps.Control.deleteSelected();
+            });
+        }
 
         // remove the selected things from the map
-        $('.rc-remove').click(function () {
-            $('.rightclickmenu').remove();
-            Metamaps.Control.removeSelectedEdges();
-            Metamaps.Control.removeSelectedNodes();
-        });
+        if (authorized) {
+            $('.rc-remove').click(function () {
+                $('.rightclickmenu').remove();
+                Metamaps.Control.removeSelectedEdges();
+                Metamaps.Control.removeSelectedNodes();
+            });
+        }
 
         // hide selected nodes and synapses until refresh
         $('.rc-hide').click(function () {

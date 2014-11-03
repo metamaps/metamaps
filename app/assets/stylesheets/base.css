@@ -113,6 +113,7 @@
    font-size: 12px;
    line-height:15px;
    font-family: helvetica, sans-serif;
+   overflow-y: scroll;
 }
 .CardOnGraph.hasAttachment .scroll {
   height: auto;

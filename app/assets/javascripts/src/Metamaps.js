@@ -2566,11 +2566,21 @@ Metamaps.Control = {
             Metamaps.Selected.Nodes.indexOf(node), 1);
     },
     deleteSelected: function () {
+
+        if (!Metamaps.Active.Map) return;
+        
         var n = Metamaps.Selected.Nodes.length;
         var e = Metamaps.Selected.Edges.length;
         var ntext = n == 1 ? "1 topic" : n + " topics";
         var etext = e == 1 ? "1 synapse" : e + " synapses";
         var text = "You have " + ntext + " and " + etext + " selected. ";
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
 
         var r = confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.");
         if (r == true) {
@@ -2579,6 +2589,16 @@ Metamaps.Control = {
         }
     },
     deleteSelectedNodes: function () { // refers to deleting topics permanently
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
         var l = Metamaps.Selected.Nodes.length;
         for (var i = l - 1; i >= 0; i -= 1) {
             var node = Metamaps.Selected.Nodes[i];
@@ -2586,6 +2606,16 @@ Metamaps.Control = {
         }
     },
     deleteNode: function (nodeid) { // refers to deleting topics permanently
+        
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
         var topic = node.getData('topic');
         var topicid = topic.id;
@@ -2598,33 +2628,45 @@ Metamaps.Control = {
         Metamaps.Control.hideNode(nodeid);
     },
     removeSelectedNodes: function () { // refers to removing topics permanently from a map
+
+        if (!Metamaps.Active.Map) return;
+
         var l = Metamaps.Selected.Nodes.length,
             i,
             node,
-            mapperm = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+            authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
-        if (mapperm) {
-            for (i = l - 1; i >= 0; i -= 1) {
-                node = Metamaps.Selected.Nodes[i];
-                Metamaps.Control.removeNode(node.id);
-            }
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
+        for (i = l - 1; i >= 0; i -= 1) {
+            node = Metamaps.Selected.Nodes[i];
+            Metamaps.Control.removeNode(node.id);
         }
     },
     removeNode: function (nodeid) { // refers to removing topics permanently from a map
-        var mapperm = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
 
-        if (mapperm) {
-            var topic = node.getData('topic');
-            var topicid = topic.id;
-            var mapping = node.getData('mapping');
-            mapping.destroy();
-            Metamaps.Topics.remove(topic);
-            $(document).trigger(Metamaps.JIT.events.removeTopic, [{
-                topicid: topicid
-            }]);
-            Metamaps.Control.hideNode(nodeid);
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
         }
+
+        var topic = node.getData('topic');
+        var topicid = topic.id;
+        var mapping = node.getData('mapping');
+        mapping.destroy();
+        Metamaps.Topics.remove(topic);
+        $(document).trigger(Metamaps.JIT.events.removeTopic, [{
+            topicid: topicid
+        }]);
+        Metamaps.Control.hideNode(nodeid);
     },
     hideSelectedNodes: function () {
         var l = Metamaps.Selected.Nodes.length,
@@ -2709,12 +2751,31 @@ Metamaps.Control = {
     deleteSelectedEdges: function () { // refers to deleting topics permanently
         var edge,
             l = Metamaps.Selected.Edges.length;
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
         for (var i = l - 1; i >= 0; i -= 1) {
             edge = Metamaps.Selected.Edges[i];
             Metamaps.Control.deleteEdge(edge);
         }
     },
     deleteEdge: function (edge) {
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
 
         if (edge.getData("synapses").length - 1 === 0) {
             Metamaps.Control.hideEdge(edge);
@@ -2743,15 +2804,31 @@ Metamaps.Control = {
             i,
             edge;
 
-        if (Metamaps.Active.Map) {
-            for (i = l - 1; i >= 0; i -= 1) {
-                edge = Metamaps.Selected.Edges[i];
-                Metamaps.Control.removeEdge(edge);
-            }
-            Metamaps.Selected.Edges = new Array();
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
         }
+
+        for (i = l - 1; i >= 0; i -= 1) {
+            edge = Metamaps.Selected.Edges[i];
+            Metamaps.Control.removeEdge(edge);
+        }
+        Metamaps.Selected.Edges = new Array();
     },
     removeEdge: function (edge) {
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
 
         if (edge.getData("mappings").length - 1 === 0) {
             Metamaps.Control.hideEdge(edge);

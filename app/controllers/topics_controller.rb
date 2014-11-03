@@ -34,8 +34,8 @@ class TopicsController < ApplicationController
 
         respond_to do |format|
             format.html { 
-                @alltopics = [@topic] + @topic.relatives # should limit to topics visible to user
-                @allsynapses = @topic.synapses # should also be limited
+                @alltopics = ([@topic] + @topic.relatives).delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) } # should limit to topics visible to user
+                @allsynapses = @topic.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
 
                 respond_with(@allsynapses, @alltopics, @topic) 
             }
@@ -52,8 +52,8 @@ class TopicsController < ApplicationController
             redirect_to root_url and return
         end
 
-        @alltopics = @topic.relatives # should limit to topics visible to user
-        @allsynapses = @topic.synapses # should also be limited
+        @alltopics = @topic.relatives.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        @allsynapses = @topic.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
 
         @json = Hash.new()
         @json['topic'] = @topic
