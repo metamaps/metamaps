@@ -113,7 +113,7 @@
    font-size: 12px;
    line-height:15px;
    font-family: helvetica, sans-serif;
-   overflow-y: scroll;
+   overflow-y: auto;
 }
 .CardOnGraph.hasAttachment .scroll {
   height: auto;
@@ -546,6 +546,28 @@ font-family: 'din-regular', helvetica, sans-serif;
   background-image: url(remove.png);
   background-repeat: no-repeat;
   background-position: center center;
+}
+
+.embeds.nonEmbedlyLink {
+  padding-top: 24px;
+}
+
+#embedlyLink {
+  border-left: 8px solid #CCC;
+  overflow: hidden;
+  padding: 8px;
+  padding-left: 12px;
+  -moz-box-shadow: 1px 1px 5px 0 #ccc;
+  -webkit-box-shadow: 1px 1px 5px 0 #ccc;
+  box-shadow: 1px 1px 5px 0 #ccc;
+  -moz-border-radius-topright: 5px;
+  -webkit-border-top-right-radius: 5px;
+  border-top-right-radius: 5px;
+  -moz-border-radius-bottomright: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  display: none;
+  margin: 8px;
 }
 
 .linkActions {

@@ -832,7 +832,14 @@ Metamaps.TopicCard = {
         var self = Metamaps.TopicCard;
 
         $('#embedlyLinkLoader').hide();
-        $('#embedlyLink').fadeIn('fast');
+
+        // means that the embedly call returned 404 not found
+        if ($('#embedlyLink')[0]) {
+            $('#embedlyLink').css('display', 'block').fadeIn('fast');
+            $('.embeds').addClass('nonEmbedlyLink');
+        }
+
+        $('.CardOnGraph').addClass('hasAttachment');
         if (self.authorizedToEdit) {
             $('.embeds').append('<div id="linkremove"></div>');
             $('#linkremove').click(self.removeLink);
@@ -843,7 +850,7 @@ Metamaps.TopicCard = {
         self.openTopicCard.save({
             link: null
         });
-        $('.embeds').empty();
+        $('.embeds').empty().removeClass('nonEmbedlyLink');
         $('#addLinkInput input').val("");
         $('.attachments').removeClass('hidden');
         $('.CardOnGraph').removeClass('hasAttachment');
@@ -892,8 +899,10 @@ Metamaps.TopicCard = {
                     loader.setDensity(41); // default is 40
                     loader.setRange(0.9); // default is 1.3
                     loader.show(); // Hidden by default
-                    embedly('card', document.getElementById('embedlyLink'));
-                    $('.CardOnGraph').addClass('hasAttachment');
+                    var e = embedly('card', document.getElementById('embedlyLink'));
+                    if (!e) {
+                        self.handleInvalidLink();
+                    }
                 }
             }, 100);
         };
@@ -908,7 +917,10 @@ Metamaps.TopicCard = {
             loader.setDensity(41); // default is 40
             loader.setRange(0.9); // default is 1.3
             loader.show(); // Hidden by default
-            embedly('card', document.getElementById('embedlyLink'));
+            var e = embedly('card', document.getElementById('embedlyLink'));
+            if (!e) {
+                self.handleInvalidLink();
+            }
         }
 
 
@@ -1074,6 +1086,12 @@ Metamaps.TopicCard = {
             $('.showcard .yourTopic .mapPerm').click(openPermissionSelect);
             $('.showcard').click(hidePermissionSelect);
         }
+    },
+    handleInvalidLink: function() {
+        var self = Metamaps.TopicCard;
+
+        self.removeLink();
+        Metamaps.GlobalUI.notifyUser("Invalid link");
     },
     populateShowCard: function (topic) {
         var self = Metamaps.TopicCard;
