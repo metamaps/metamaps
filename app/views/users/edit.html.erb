@@ -49,6 +49,7 @@
   <%= form.password_field :password_confirmation, :autocomplete => :off%></div>
   <div class="noChangePass" onclick="Metamaps.Account.hidePass()">Oops, don't change password</div>
 </div>
-  <%= form.submit "Update", class: "update" %>
+  <div id="accountPageLoading"></div>
+  <%= form.submit "Update", class: "update", onclick: "Metamaps.Account.showLoading()" %>
 <% end %>
 </div>

@@ -4429,6 +4429,17 @@ Metamaps.Account = {
 
         $('.userImageMenu').hide();
     },
+    showLoading: function(){
+        var self = Metamaps.Account;
+
+        var loader = new CanvasLoader('accountPageLoading');
+        loader.setColor('#4FC059'); // default is '#000000'
+        loader.setDiameter(28); // default is 40
+        loader.setDensity(41); // default is 40
+        loader.setRange(0.9); // default is 1.3
+        loader.show(); // Hidden by default
+        $('#accountPageLoading').show();
+    },
     showImagePreview: function(){
         var self = Metamaps.Account;
 

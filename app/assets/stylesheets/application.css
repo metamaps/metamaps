@@ -448,6 +448,13 @@ input[type="submit"]:active {
 
 }
 
+#accountPageLoading {
+    display: none;
+    position: absolute;
+    bottom: 16px;
+    right: 120px;
+}
+
 .centerGreyForm input[type="text"],
 .centerGreyForm input[type="email"],
 .centerGreyForm input[type="password"] {
