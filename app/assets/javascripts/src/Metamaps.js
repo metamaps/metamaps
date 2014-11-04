@@ -1835,10 +1835,14 @@ Metamaps.Realtime = {
 
         if (Metamaps.Active.Map) {
             var commonsMap = Metamaps.Active.Map.get('permission') === 'commons';
+            var publicMap = Metamaps.Active.Map.get('permission') === 'public';
 
             if (commonsMap) {
                 self.turnOn();
                 self.setupSocket();
+            }
+            else if (publicMap) {
+                self.attachMapListener();
             }
         }
     },
@@ -1872,11 +1876,11 @@ Metamaps.Realtime = {
             $(".collabCompass").show();
         }
     },
-    turnOff: function () {
+    turnOff: function (silent) {
         var self = Metamaps.Realtime;
 
         if (self.status) {
-            self.sendRealtimeOff();
+            if (!silent) self.sendRealtimeOff();
             $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
             self.status = false;
             $(".sidebarCollaborateIcon").removeClass("blue");
@@ -1934,7 +1938,7 @@ Metamaps.Realtime = {
 
         socket.on('topicChangeFromServer', self.topicChange);
         socket.on('synapseChangeFromServer', self.synapseChange);
-        socket.on('mapChangeFromServer', self.mapChange);
+        self.attachMapListener();
     
         // local event listeners that trigger events
         var sendCoords = function (event, coords) {
@@ -1992,6 +1996,12 @@ Metamaps.Realtime = {
         };
         $(document).on(Metamaps.JIT.events.removeSynapse, sendRemoveSynapse);
 
+    },
+    attachMapListener: function(){
+        var self = Metamaps.Realtime;
+        var socket = Metamaps.Realtime.socket;
+
+        socket.on('mapChangeFromServer', self.mapChange);
     },
     sendRealtimeOn: function () {
         var self = Metamaps.Realtime;
@@ -2334,18 +2344,32 @@ Metamaps.Realtime = {
         socket.emit('mapChangeFromClient', data);
     },
     mapChange: function (data) {
-        /*var map = Metamaps.Topics.get(data.topicId);
-        if (map) {
-            var node = topic.get('node');
-            topic.fetch({
-                success: function (model) {
-                    // must be set using silent:true otherwise 
-                    // will trigger a change event and an infinite 
-                    // loop with other clients of change events
-                    model.set({ node: node });
+        var map = Metamaps.Active.Map;
+        var isActiveMap = map && data.mapId === map.id;
+        if (isActiveMap) {
+            var permBefore = map.get('permission');
+            var idBefore = map.id;
+            map.fetch({
+                success: function (model, response) {
+
+                    var idNow = model.id;
+                    var permNow = model.get('permission');
+                    if (idNow !== idBefore) {
+                        Metamaps.Map.leavePrivateMap(); // this means the map has been changed to private
+                    }
+                    else if (permNow === 'public' && permBefore === 'commons') {
+                        Metamaps.Map.commonsToPublic();
+                    }
+                    else if (permNow === 'commons' && permBefore === 'public') {
+                        Metamaps.Map.publicToCommons();
+                    }
+                    else {
+                        model.fetchContained();
+                        model.trigger('changeByOther');
+                    }
                 }
             });
-        }*/
+        }
     },
     // newTopic
     sendNewTopic: function (data) {
@@ -4084,6 +4108,26 @@ Metamaps.Map = {
         Metamaps.GlobalUI.CreateMap.topicsToMap = nodes_data;
         Metamaps.GlobalUI.CreateMap.synapsesToMap = synapses_data;
     },
+    leavePrivateMap: function(){
+        var map = Metamaps.Active.Map;
+        Metamaps.Maps.Active.remove(map);
+        Metamaps.Maps.Featured.remove(map);
+        Metamaps.Router.home();
+        Metamaps.GlobalUI.notifyUser('Sorry! That map has been changed to Private.');
+    },
+    commonsToPublic: function(){
+        Metamaps.Realtime.turnOff(true); // true is for 'silence'
+        Metamaps.GlobalUI.notifyUser('Map was changed to Public. Editing is disabled.');
+        Metamaps.Active.Map.trigger('changeByOther');
+    },
+    publicToCommons: function(){
+        var confirmString = "This map permission has been changed to Commons! ";
+        confirmString += "Do you want to reload and enable realtime collaboration?";
+        var c = confirm(confirmString);
+        if (c) {
+            Metamaps.Router.maps(Metamaps.Active.Map.id);
+        }
+    },
     editedByActiveMapper: function () {
         if (Metamaps.Active.Mapper) {
             Metamaps.Mappers.add(Metamaps.Active.Mapper);
@@ -4292,8 +4336,13 @@ Metamaps.Map.InfoBox = {
 
         $('.mapInfoName .best_in_place_name').unbind("ajax:success").bind("ajax:success", function () {
             var name = $(this).html();
-            $('.mapName').html(name);
             Metamaps.Active.Map.set('name', name);
+            Metamaps.Active.Map.trigger('saved');
+        });
+
+        $('.mapInfoDesc .best_in_place_desc').unbind("ajax:success").bind("ajax:success", function () {
+            var desc = $(this).html();
+            Metamaps.Active.Map.set('desc', desc);
             Metamaps.Active.Map.trigger('saved');
         });
 
@@ -4303,6 +4352,11 @@ Metamaps.Map.InfoBox = {
         $('.mapInfoBox.yourMap').unbind('.yourMap').bind('click.yourMap', self.hidePermissionSelect);
 
         $('.yourMap .mapInfoDelete').unbind().click(self.deleteActiveMap);
+    },
+    updateNameDescPerm: function(name, desc, perm) {
+        $('.mapInfoName .best_in_place_name').html(name);
+        $('.mapInfoDesc .best_in_place_desc').html(desc);
+        $('.mapInfoBox .mapPermission').removeClass('commons public private').addClass(perm);
     },
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
@@ -4364,6 +4418,7 @@ Metamaps.Map.InfoBox = {
         Metamaps.Active.Map.save({
             permission: permission
         });
+        Metamaps.Active.Map.updateMapWrapper();
         shareable = permission === 'private' ? '' : 'shareable';
         $('.mapPermission').removeClass('commons public private minimize').addClass(permission);
         $('.mapPermission .permissionSelect').remove();

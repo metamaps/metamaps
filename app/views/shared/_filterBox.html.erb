@@ -62,7 +62,7 @@
     end 
     @mappers.each_with_index do |mapper, index| 
         @mapperlist += '<li data-id="' + mapper.id.to_s + '">'
-        @mapperlist += '<img src="' + mapper.image.url(:thumb) + '" data-id="' + mapper.id.to_s + '" alt="' + mapper.name + '" />'
+        @mapperlist += '<img src="' + mapper.image.url(:square) + '" data-id="' + mapper.id.to_s + '" alt="' + mapper.name + '" />'
         @mapperlist += '<p>' + mapper.name + '</p></li>'
     end
   end

@@ -31,7 +31,7 @@
                     <div class="realtimeMapperList">
                         <ul>
                             <li class="rtMapper littleRtOn rtMapperSelf">
-                                <%= image_tag user.image.url(:thumb), :size => "24x24", :class => "rtUserImage" %>
+                                <%= image_tag user.image.url(:square), :size => "24x24", :class => "rtUserImage" %>
                                 <%= user.name %> (me)
                                 <div class="littleJuntoIcon"></div>
                             </li>
@@ -70,7 +70,7 @@
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon">
             <% if user && user.image %>
-              <%= image_tag user.image.url(:thumb), :size => "32x32" %>
+              <%= image_tag user.image.url(:square), :size => "32x32" %>
             <% elsif !authenticated? %>
               SIGN IN
               <div class="accountInnerArrow"></div>

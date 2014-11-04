@@ -15,11 +15,11 @@
       <% if @map.contributors.count == 0 %>
         <img id="mapContribs" width="25" height="25" src="/assets/user.png" />
       <% elsif @map.contributors.count == 1 %>
-        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url %>" />
+        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" />
       <% elsif @map.contributors.count == 2 %>
-        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url %>" class="multiple mTwo" />
+        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" class="multiple mTwo" />
       <% elsif @map.contributors.count > 2 %>
-        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url %>" class="multiple" />
+        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" class="multiple" />
       <% end %>
       <span><%= @map.contributors.count %></span>
       <% contributorList = ''

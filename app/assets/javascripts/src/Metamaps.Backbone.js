@@ -5,6 +5,34 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     toJSON: function (options) {
         return _.omit(this.attributes, this.blacklist);
     },
+    save: function (key, val, options) {
+        
+        var attrs;
+
+        // Handle both `"key", value` and `{key: value}` -style arguments.
+        if (key == null || typeof key === 'object') {
+            attrs = key;
+            options = val;
+        } else {
+            (attrs = {})[key] = val;
+        }
+
+        var newOptions = options || {};
+        var s = newOptions.success;
+
+        newOptions.success = function (model, response, opt) {
+            if (s) s(model, response, opt);
+            model.trigger('saved');
+        };
+        return Backbone.Model.prototype.save.call(this, attrs, newOptions);
+    },
+    initialize: function () {
+        this.on('changeByOther', this.updateView);
+        this.on('saved', this.savedEvent);
+    },
+    savedEvent: function() {
+        Metamaps.Realtime.sendMapChange(this);
+    },
     authorizeToEdit: function (mapper) {
         if (mapper && (this.get('permission') === "commons" || this.get('user_id') === mapper.get('id'))) return true;
         else return false;
@@ -24,11 +52,12 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
             that.set('topics', new bb.TopicCollection(data.topics));
             that.set('synapses', new bb.SynapseCollection(data.synapses));
             that.set('mappings', new bb.MappingCollection(data.mappings));
-        }
+        };
 
-        $.ajax({
+        var e = $.ajax({
             url: "/maps/" + this.id + "/contains.json",
             success: start,
+            error: errorFunc,
             async: false
         });
     },
@@ -75,6 +104,25 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
             screenshot: '<img src="' + this.get('screenshot_url') + '" />'
         };
         return obj;
+    },
+    updateView: function() {
+        var map = Metamaps.Active.Map;
+        var isActiveMap = this.id === map.id;
+        var authorized = map && map.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEditMap' : '';
+        var commonsMap = map && map.get('permission') === 'commons' ? 'commonsMap' : '';
+        if (isActiveMap) {
+            Metamaps.Map.InfoBox.updateNameDescPerm(this.get('name'), this.get('desc'), this.get('permission'));
+            this.updateMapWrapper();
+        }
+    },
+    updateMapWrapper: function() {
+        var map = Metamaps.Active.Map;
+        var isActiveMap = this.id === map.id;
+        var authorized = map && map.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEditMap' : '';
+        var commonsMap = map && map.get('permission') === 'commons' ? 'commonsMap' : '';
+        if (isActiveMap) {
+            $('.wrapper').removeClass('canEditMap commonsMap').addClass(authorized + ' ' + commonsMap);
+        }
     }
 });
 Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
