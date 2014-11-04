@@ -293,7 +293,7 @@ input[type="submit"]:active {
     margin-top: 32px;
     cursor: pointer;
 }
-.edit_user .userImage img {
+.edit_user .userImage img, .edit_user .userImage canvas {
     border-radius: 42px;
 }
 .edit_user .editPhoto {

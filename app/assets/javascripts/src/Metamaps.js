@@ -4437,7 +4437,37 @@ Metamaps.Account = {
         var reader = new FileReader();
 
         reader.onload = function(e) {
-            $('.userImageDiv img').attr('src', reader.result);
+            var $canvas = $('<canvas>').attr({
+                width: 84,
+                height: 84
+            });
+            var context = $canvas[0].getContext('2d');
+            var imageObj = new Image();
+
+            imageObj.onload = function() {
+                $('.userImageDiv img').hide();
+
+                var imgWidth = imageObj.width;
+                var imgHeight = imageObj.height;
+
+                var dimensionToMatch = imgWidth > imgHeight ? imgHeight : imgWidth;
+                // draw cropped image
+                var nonZero = Math.abs(imgHeight - imgWidth) / 2;
+                var sourceX = dimensionToMatch === imgWidth ? 0 : nonZero;
+                var sourceY = dimensionToMatch === imgHeight ? 0 : nonZero;
+                var sourceWidth = dimensionToMatch;
+                var sourceHeight = dimensionToMatch;
+                var destX = 0;
+                var destY = 0;
+                var destWidth = 84;
+                var destHeight = 84;
+
+                //debugger;
+
+                context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+                $('.userImageDiv').prepend($canvas);
+            };
+            imageObj.src = reader.result;
         };
 
         if (file) {
@@ -4449,7 +4479,8 @@ Metamaps.Account = {
     removePicture: function(){
         var self = Metamaps.Account;
 
-        $('.userImage img').attr('src', '/assets/user.png');
+        $('.userImageDiv canvas').remove();
+        $('.userImage img').attr('src', '/assets/user.png').show();
         $('.userImageMenu').hide();
 
         var input = $('#user_image');
