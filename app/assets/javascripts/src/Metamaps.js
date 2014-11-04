@@ -4456,6 +4456,7 @@ Metamaps.Account = {
             var imageObj = new Image();
 
             imageObj.onload = function() {
+                $('.userImageDiv canvas').remove();
                 $('.userImageDiv img').hide();
 
                 var imgWidth = imageObj.width;
@@ -4491,7 +4492,7 @@ Metamaps.Account = {
         var self = Metamaps.Account;
 
         $('.userImageDiv canvas').remove();
-        $('.userImage img').attr('src', '/assets/user.png').show();
+        $('.userImageDiv img').attr('src', '/assets/user.png').show();
         $('.userImageMenu').hide();
 
         var input = $('#user_image');
