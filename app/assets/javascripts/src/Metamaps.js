@@ -1705,17 +1705,26 @@ Metamaps.Util = {
         }
     },
     pixelsToCoords: function (pixels) {
-        var canvas = Metamaps.Visualize.mGraph.canvas,
-            s = canvas.getSize(),
-            p = canvas.getPos(),
-            ox = canvas.translateOffsetX,
-            oy = canvas.translateOffsetY,
-            sx = canvas.scaleOffsetX,
-            sy = canvas.scaleOffsetY;
-        var coords = {
-            x: (pixels.x - p.x - s.width/2 - ox) * (1/sx),
-            y: (pixels.y - p.y - s.height/2 - oy) * (1/sy),
-        };
+        var coords;
+        if (Metamaps.Visualize.mGraph) {
+            var canvas = Metamaps.Visualize.mGraph.canvas,
+                s = canvas.getSize(),
+                p = canvas.getPos(),
+                ox = canvas.translateOffsetX,
+                oy = canvas.translateOffsetY,
+                sx = canvas.scaleOffsetX,
+                sy = canvas.scaleOffsetY;
+            coords = {
+                x: (pixels.x - p.x - s.width/2 - ox) * (1/sx),
+                y: (pixels.y - p.y - s.height/2 - oy) * (1/sy),
+            };
+        }
+        else {
+            coords = {
+                x: 0,
+                y: 0
+            };
+        }
         return coords;
     },
     getPastelColor: function () {
@@ -3633,14 +3642,9 @@ Metamaps.Topic = {
 
         if (!$.isEmptyObject(Metamaps.Visualize.mGraph.graph.nodes)) {
             Metamaps.Visualize.mGraph.graph.addNode(newnode);
-            Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-                n.setData("dim", 25, "start");
-                n.setData("dim", 25, "end");
-            });
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            topic.set('node', nodeOnViz);
-            topic.updateNode(); // links the topic and the mapping to the node    
-
+            topic.set('node', nodeOnViz, {silent: true}); // 
+            topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
             nodeOnViz.setData("dim", 25, "end");
