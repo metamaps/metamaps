@@ -130,6 +130,16 @@ Metamaps.JIT = {
 
         var showDesc = adj.getData("showDesc");
 
+        var drawStar = function (context, x, y) {
+            var starImage = Metamaps.JIT.synapseStarImage;
+            var starImageLoaded = starImage.complete ||
+                (typeof starImage.naturalWidth !== "undefined" &&
+                    starImage.naturalWidth !== 0)
+            if (starImageLoaded) {
+                context.drawImage(starImage, x, y, 16, 16);
+            }
+        };
+
         if (desc != "" && showDesc) {
             // '&amp;' to '&'
             desc = Metamaps.Util.decodeEntities(desc);
@@ -150,6 +160,7 @@ Metamaps.JIT = {
 
             var x = (pos.x + posChild.x - width) / 2;
             var y = ((pos.y + posChild.y) / 2) - height / 2;
+
             var radius = 5;
 
             //render background
@@ -172,64 +183,21 @@ Metamaps.JIT = {
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
                 ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 5 + (16 * index));
             }
+
+            if (adj.getData("synapses").length > 1) {
+                drawStar(ctx, x + width, y);
+            }
         }
+        else if (showDesc) {
+            if (adj.getData("synapses").length > 1) {
+                var ctx = canvas.getCtx();
+                var x = (pos.x + posChild.x) / 2;
+                var y = (pos.y + posChild.y) / 2;
+                drawStar(ctx, x, y);
+            }
+        }
+
     }, // edgeRender
-    edgeRenderEmbed: function (adj, canvas) {
-        //get nodes cartesian coordinates 
-        var pos = adj.nodeFrom.pos.getc(true);
-        var posChild = adj.nodeTo.pos.getc(true);
-
-        var directionCat = adj.getData("category");
-        //label placement on edges 
-        Metamaps.JIT.renderEdgeArrows(this.edgeHelper, adj);
-
-        //check for edge label in data  
-        var desc = adj.getData("desc");
-        var showDesc = adj.getData("showDesc");
-        if (desc != "" && showDesc) {
-            // '&amp;' to '&'
-            desc = Metamaps.Util.decodeEntities(desc);
-
-            //now adjust the label placement 
-            var ctx = canvas.getCtx();
-            ctx.font = 'bold 14px arial';
-            ctx.fillStyle = '#FFF';
-            ctx.textBaseline = 'hanging';
-
-            var arrayOfLabelLines = Metamaps.Util.splitLine(desc, 30).split('\n');
-            var index, lineWidths = [];
-            for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
-            }
-            var width = Math.max.apply(null, lineWidths) + 8;
-            var height = (16 * arrayOfLabelLines.length) + 8;
-
-            var x = (pos.x + posChild.x - width) / 2;
-            var y = ((pos.y + posChild.y) / 2) - height / 2;
-            var radius = 5;
-
-            //render background
-            ctx.beginPath();
-            ctx.moveTo(x + radius, y);
-            ctx.lineTo(x + width - radius, y);
-            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-            ctx.lineTo(x + width, y + height - radius);
-            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-            ctx.lineTo(x + radius, y + height);
-            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-            ctx.lineTo(x, y + radius);
-            ctx.quadraticCurveTo(x, y, x + radius, y);
-            ctx.closePath();
-            ctx.fill();
-
-            //render text
-            ctx.fillStyle = '#222222';
-            ctx.textAlign = 'center';
-            for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 5 + (16 * index));
-            }
-        }
-    }, // edgeRenderEmbed
     ForceDirected: {
         animateSavedLayout: {
             modes: ['linear'],
