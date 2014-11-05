@@ -7100,7 +7100,7 @@ Graph.Plot = {
     }
     //END METAMAPS CODE  
 
-      function plot(node) {
+     aGraph.eachNode(function(node) {
        var nodeAlpha = node.getData('alpha');
        node.eachAdjacency(function(adj) {
          var nodeTo = adj.nodeTo;
@@ -7123,55 +7123,7 @@ Graph.Plot = {
          }
        }
        node.visited = !T;
-     }
-
-       function stop() {
-         cancelAnimationFrame(requestAnimId);
-       }
-       stop(); // cancels any previous plot calls
-
-       var i = 0;
-       var length = aGraph.nodes.length;
-       var keys = _.keys(aGraph.nodes);
-       function eachNode() {
-          var key = keys[i];
-          var node = aGraph.nodes[key];
-
-          if (node) {
-            i += 1;
-            requestAnimId = requestAnimationFrame(eachNode);
-            plot(node);
-          }
-          else {
-            stop();
-          }
-       }
-
-       requestAnimId = requestAnimationFrame(eachNode);
-     /*aGraph.eachNode(function(node) {
-       var nodeAlpha = node.getData('alpha');
-       node.eachAdjacency(function(adj) {
-         var nodeTo = adj.nodeTo;
-         if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
-           !animating && opt.onBeforePlotLine(adj);
-           that.plotLine(adj, canvas, animating);
-           !animating && opt.onAfterPlotLine(adj);
-         }
-       });
-       if(node.drawn) {
-         !animating && opt.onBeforePlotNode(node);
-         that.plotNode(node, canvas, animating);
-         !animating && opt.onAfterPlotNode(node);
-       }
-       if(!that.labelsHidden && opt.withLabels) {
-         if(node.drawn && nodeAlpha >= 0.95) {
-           that.labels.plotLabel(canvas, node, opt);
-         } else {
-           that.labels.hideLabel(node, false);
-         }
-       }
-       node.visited = !T;
-     });*/
+     });
     },
 
   /*
