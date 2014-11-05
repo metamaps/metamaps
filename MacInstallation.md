@@ -4,7 +4,7 @@ install homebrew
 
     \curl -sSL https://get.rvm.io | bash -s stable --rails
 
-    rvm install 1.9.3 --with-gcc=clang
+    rvm install 2.1.3 --with-gcc=clang
 
     rvm use 2.1.3
 
