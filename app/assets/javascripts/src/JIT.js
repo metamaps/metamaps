@@ -1,3 +1,6 @@
+
+var requestAnimId;
+
 /*
 Copyright (c) 2011 Sencha Inc. - Author: Nicolas Garcia Belmonte (http://philogb.github.com/)
 
@@ -2477,8 +2480,6 @@ Extras.Classes.Navigation = new Class({
     // START METAMAPS CODE
       jQuery(document).trigger(Metamaps.JIT.events.zoom, [e]);
     // END METAMAPS CODE
-
-    console.log('zooming');
   },
   
   onMouseDown: function(e, win, eventInfo) {
@@ -7098,8 +7099,8 @@ Graph.Plot = {
         ctx.restore();
     }
     //END METAMAPS CODE  
-       
-     aGraph.eachNode(function(node) {
+
+      function plot(node) {
        var nodeAlpha = node.getData('alpha');
        node.eachAdjacency(function(adj) {
          var nodeTo = adj.nodeTo;
@@ -7122,7 +7123,55 @@ Graph.Plot = {
          }
        }
        node.visited = !T;
-     });
+     }
+
+       function stop() {
+         cancelAnimationFrame(requestAnimId);
+       }
+       stop(); // cancels any previous plot calls
+
+       var i = 0;
+       var length = aGraph.nodes.length;
+       var keys = _.keys(aGraph.nodes);
+       function eachNode() {
+          var key = keys[i];
+          var node = aGraph.nodes[key];
+
+          if (node) {
+            i += 1;
+            requestAnimId = requestAnimationFrame(eachNode);
+            plot(node);
+          }
+          else {
+            stop();
+          }
+       }
+
+       requestAnimId = requestAnimationFrame(eachNode);
+     /*aGraph.eachNode(function(node) {
+       var nodeAlpha = node.getData('alpha');
+       node.eachAdjacency(function(adj) {
+         var nodeTo = adj.nodeTo;
+         if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
+           !animating && opt.onBeforePlotLine(adj);
+           that.plotLine(adj, canvas, animating);
+           !animating && opt.onAfterPlotLine(adj);
+         }
+       });
+       if(node.drawn) {
+         !animating && opt.onBeforePlotNode(node);
+         that.plotNode(node, canvas, animating);
+         !animating && opt.onAfterPlotNode(node);
+       }
+       if(!that.labelsHidden && opt.withLabels) {
+         if(node.drawn && nodeAlpha >= 0.95) {
+           that.labels.plotLabel(canvas, node, opt);
+         } else {
+           that.labels.hideLabel(node, false);
+         }
+       }
+       node.visited = !T;
+     });*/
     },
 
   /*
@@ -7428,7 +7477,7 @@ Graph.Label.Native = new Class({
        (end code)
     */
     plotLabel: function(canvas, node, controller) {
-      /*
+      
       var ctx = canvas.getCtx();
       var pos = node.pos.getc(true);
 
@@ -7439,8 +7488,7 @@ Graph.Label.Native = new Class({
       
       //START METAMAPS CODE
       
-      //var arrayOfLabelLines = Metamaps.Util.splitLine(node.name,30).split('\n');
-      var arrayOfLabelLines = ["something", "something"];
+      var arrayOfLabelLines = Metamaps.Util.splitLine(node.name,30).split('\n');
       //render background
             ctx.fillStyle = ctx.strokeStyle = Metamaps.Settings.colors.labels.background;
             ctx.lineWidth = 2;
@@ -7469,9 +7517,9 @@ Graph.Label.Native = new Class({
               ctx.fill();
               //ctx.stroke();
        
-       ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');*/
+       ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
 
-      //this.renderLabel(arrayOfLabelLines, canvas, node, controller);
+      this.renderLabel(arrayOfLabelLines, canvas, node, controller);
       // END METAMAPS CODE
       // ORIGINAL CODE  this.renderLabel(canvas, node, controller);
     },
@@ -7496,7 +7544,7 @@ Graph.Label.Native = new Class({
       // START METAMAPS CODE
       var index;
       for (index = 0; index < customLabel.length; ++index) {
-        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 8 + (25*index));
+        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 9 + (25*index));
       }
       // END METAMAPS CODE
     },
