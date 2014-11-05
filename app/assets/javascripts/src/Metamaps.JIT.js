@@ -21,6 +21,12 @@ Metamaps.JIT = {
         $(".zoomIn").click(self.zoomIn);
         $(".zoomOut").click(self.zoomOut);
         $(".zoomExtents").click(self.zoomExtents);
+
+        self.synapseStarImage = new Image();
+        self.synapseStarImage.src = '/assets/synapsestar.png';
+
+        self.topicMediaImage = new Image();
+        self.topicMediaImage.src = '/assets/linkedmedia.png';
     },
     /**
      * convert our topic JSON into something JIT can use
@@ -445,6 +451,16 @@ Metamaps.JIT = {
                         ctx.fill();
                     } else {
                         ctx.drawImage(metacode.get('image'), pos.x - dim, pos.y - dim, dim * 2, dim * 2);
+                    }
+
+                    // if the topic has a link, draw a small image to indicate that
+                    var hasLink = topic.get('link') !== "" && topic.get('link') !== null;
+                    var linkImage = Metamaps.JIT.topicMediaImage;
+                    var linkImageLoaded = linkImage.complete ||
+                        (typeof linkImage.naturalWidth !== "undefined" &&
+                            linkImage.naturalWidth !== 0)
+                    if (hasLink && linkImageLoaded) {
+                        ctx.drawImage(linkImage, pos.x + dim / 2, pos.y - dim - 8, 16, 16);
                     }
                 },
                 'contains': function (node, pos) {

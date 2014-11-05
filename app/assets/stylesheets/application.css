@@ -1118,7 +1118,7 @@ h3.realtimeBoxTitle {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 9px 32px;
+    padding: 10px 34px;
     display: block;
     height: 14px;
     font-family: 'din-regular', helvetica, sans-serif;
@@ -1126,11 +1126,16 @@ h3.realtimeBoxTitle {
     line-height: 14px;
     position: relative;
 }
+
+.rtMapperSelf img {
+    border: 2px solid #424242;
+}
+
 .rtUserImage {
     position: absolute;
     top: 4px;
     left: 0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 .littleJuntoIcon {
     width: 24px;

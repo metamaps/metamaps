@@ -2070,7 +2070,8 @@ Metamaps.Realtime = {
         mapperListItem += '" class="rtMapper littleRt';
         mapperListItem += onOff;
         mapperListItem += '">';
-        mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
+        mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
+        mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
         mapperListItem += data.username;
         mapperListItem += '<div class="littleJuntoIcon"></div>';
         mapperListItem += '</li>';
@@ -2106,7 +2107,8 @@ Metamaps.Realtime = {
         // create an item for them in the realtime box
         if (data.userid !== Metamaps.Active.Mapper.id && self.status) {
             var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
-            mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
+            mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
+            mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
             mapperListItem += data.username;
             mapperListItem += '<div class="littleJuntoIcon"></div>';
             mapperListItem += '</li>';
