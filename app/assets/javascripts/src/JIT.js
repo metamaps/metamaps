@@ -2478,6 +2478,7 @@ Extras.Classes.Navigation = new Class({
       jQuery(document).trigger(Metamaps.JIT.events.zoom, [e]);
     // END METAMAPS CODE
 
+    console.log('zooming');
   },
   
   onMouseDown: function(e, win, eventInfo) {
@@ -7427,6 +7428,7 @@ Graph.Label.Native = new Class({
        (end code)
     */
     plotLabel: function(canvas, node, controller) {
+      /*
       var ctx = canvas.getCtx();
       var pos = node.pos.getc(true);
 
@@ -7437,7 +7439,8 @@ Graph.Label.Native = new Class({
       
       //START METAMAPS CODE
       
-      var arrayOfLabelLines = Metamaps.Util.splitLine(node.name,30).split('\n');
+      //var arrayOfLabelLines = Metamaps.Util.splitLine(node.name,30).split('\n');
+      var arrayOfLabelLines = ["something", "something"];
       //render background
             ctx.fillStyle = ctx.strokeStyle = Metamaps.Settings.colors.labels.background;
             ctx.lineWidth = 2;
@@ -7466,9 +7469,9 @@ Graph.Label.Native = new Class({
               ctx.fill();
               //ctx.stroke();
        
-       ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
+       ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');*/
 
-      this.renderLabel(arrayOfLabelLines, canvas, node, controller);
+      //this.renderLabel(arrayOfLabelLines, canvas, node, controller);
       // END METAMAPS CODE
       // ORIGINAL CODE  this.renderLabel(canvas, node, controller);
     },

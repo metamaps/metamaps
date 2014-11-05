@@ -422,7 +422,7 @@ Metamaps.JIT = {
                     }
 
                     // if the topic has a link, draw a small image to indicate that
-                    var hasLink = topic.get('link') !== "" && topic.get('link') !== null;
+                    var hasLink = topic && topic.get('link') !== "" && topic.get('link') !== null;
                     var linkImage = Metamaps.JIT.topicMediaImage;
                     var linkImageLoaded = linkImage.complete ||
                         (typeof linkImage.naturalWidth !== "undefined" &&

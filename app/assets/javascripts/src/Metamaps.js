@@ -1845,7 +1845,7 @@ Metamaps.Realtime = {
     startActiveMap: function () {
         var self = Metamaps.Realtime;
 
-        if (Metamaps.Active.Map) {
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) {
             var commonsMap = Metamaps.Active.Map.get('permission') === 'commons';
             var publicMap = Metamaps.Active.Map.get('permission') === 'public';
 
@@ -3645,7 +3645,7 @@ Metamaps.Topic = {
         if (!$.isEmptyObject(Metamaps.Visualize.mGraph.graph.nodes)) {
             Metamaps.Visualize.mGraph.graph.addNode(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            topic.set('node', nodeOnViz, {silent: true}); // 
+            topic.set('node', nodeOnViz, {silent: true});  
             topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
@@ -3694,7 +3694,7 @@ Metamaps.Topic = {
         } else {
             Metamaps.Visualize.mGraph.loadJSON(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            topic.set('node', nodeOnViz);
+            topic.set('node', nodeOnViz, {silent: true});
             topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
