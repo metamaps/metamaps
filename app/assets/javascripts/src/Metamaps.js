@@ -1781,8 +1781,11 @@ Metamaps.Realtime = {
         var reenableRealtime = function () {
             self.reenableRealtime();
         };
+        var turnOff = function () {
+            self.turnOff();
+        };
         $(".rtOn").click(reenableRealtime);
-        $(".rtOff").click(self.turnOff);
+        $(".rtOff").click(turnOff);
 
         $('.sidebarCollaborateIcon').click(self.toggleBox);
         $('.sidebarCollaborateBox').click(function(event){ 
@@ -1849,7 +1852,7 @@ Metamaps.Realtime = {
     endActiveMap: function () {
         var self = Metamaps.Realtime;
 
-        $(document).off(Metamaps.JIT.events.mouseMove);
+        $(document).off('mousemove');
         self.socket.removeAllListeners();
         self.socket.emit('endMapperNotify');
         $(".collabCompass").remove();
@@ -1941,10 +1944,15 @@ Metamaps.Realtime = {
         self.attachMapListener();
     
         // local event listeners that trigger events
-        var sendCoords = function (event, coords) {
+        var sendCoords = function (event) {
+            var pixels = {
+                x: event.pageX,
+                y: event.pageY
+            };
+            var coords = Metamaps.Util.pixelsToCoords(pixels);
             self.sendCoords(coords);
         };
-        $(document).on(Metamaps.JIT.events.mouseMove, sendCoords);
+        $(document).mousemove(sendCoords);
 
         var zoom = function (event, e) {
             if (e) {
@@ -2087,7 +2095,7 @@ Metamaps.Realtime = {
         };
 
         // create an item for them in the realtime box
-        if (data.userid !== Metamaps.Active.Mapper.id) {
+        if (data.userid !== Metamaps.Active.Mapper.id && self.status) {
             var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
             mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
             mapperListItem += data.username;
@@ -4415,10 +4423,19 @@ Metamaps.Map.InfoBox = {
 
         self.selectingPermission = false;
         var permission = $(this).attr('class');
+        var permBefore = Metamaps.Active.Map.get('permission');
         Metamaps.Active.Map.save({
             permission: permission
         });
         Metamaps.Active.Map.updateMapWrapper();
+        if (permBefore !== 'commons' && permission === 'commons') {
+            Metamaps.Realtime.setupSocket();
+            Metamaps.Realtime.turnOn();
+        }
+        else if (permBefore === 'commons' && permission === 'public') {
+            Metamaps.Realtime.turnOff(true); // true is to 'silence' 
+            // the notification that would otherwise be sent
+        }
         shareable = permission === 'private' ? '' : 'shareable';
         $('.mapPermission').removeClass('commons public private minimize').addClass(permission);
         $('.mapPermission .permissionSelect').remove();

@@ -1,6 +1,5 @@
 Metamaps.JIT = {
     events: {
-        mouseMove: 'Metamaps:JIT:events:mouseMove',
         topicDrag: 'Metamaps:JIT:events:topicDrag', 
         newTopic: 'Metamaps:JIT:events:newTopic', 
         deleteTopic: 'Metamaps:JIT:events:deleteTopic', 
@@ -677,9 +676,6 @@ Metamaps.JIT = {
         if (!node && !edge) {
             $('canvas').css('cursor', 'default');
         }
-
-        var pos = eventInfo.getPos();
-        $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
     }, // onMouseMoveHandler
     enterKeyHandler: function () {
         var creatingMap = Metamaps.GlobalUI.lightbox;
@@ -781,7 +777,6 @@ Metamaps.JIT = {
                         // maps
                         positionsToSend[topic.id] = pos;
                         $(document).trigger(Metamaps.JIT.events.topicDrag, [positionsToSend]);
-                        $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
                     }
                 } else {
                     var len = Metamaps.Selected.Nodes.length;
@@ -813,7 +808,6 @@ Metamaps.JIT = {
 
                     if (Metamaps.Active.Map) {
                         $(document).trigger(Metamaps.JIT.events.topicDrag, [positionsToSend]);
-                        $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
                     }
                 } //if
 
@@ -885,7 +879,6 @@ Metamaps.JIT = {
                         x: pos.x,
                         y: pos.y
                     };
-                    $(document).trigger(Metamaps.JIT.events.mouseMove, [pos]);
                 }
             }
             else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && !authorized) {
