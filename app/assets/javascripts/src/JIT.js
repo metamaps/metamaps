@@ -1,6 +1,3 @@
-
-var requestAnimId;
-
 /*
 Copyright (c) 2011 Sencha Inc. - Author: Nicolas Garcia Belmonte (http://philogb.github.com/)
 
