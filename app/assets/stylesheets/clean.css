@@ -191,7 +191,7 @@
 .explorePage .sidebarSearchField,
 .explorePage .sidebarSearch .tt-hint {
 	width: 380px;
-	padding: 7px 10px 3px 10px;
+	padding: 5px 10px 5px 10px;
 }
 
 .sidebarSearchField {
@@ -207,7 +207,7 @@
     border-bottom: 1px solid #BDBDBD;
     border-left: none;
     border-right: none;
-    padding: 7px 0 3px 0;
+    padding: 5px 0 5px 0;
     width: 0px;
     margin: 0;
     outline: none;
@@ -218,7 +218,7 @@
 }
 .sidebarSearch .tt-dropdown-menu {
     top: 40px !important;
-    background: #FFF;
+    background: #F5F5F5;
     width: 472px;
     overflow-y: auto;
     overflow-x: hidden;

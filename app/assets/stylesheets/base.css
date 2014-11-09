@@ -110,7 +110,7 @@
    display:block;
    padding: 8px 0 8px 16px;
    height: 152px;
-   font-size: 12px;
+   font-size: 13px;
    line-height:15px;
    font-family: helvetica, sans-serif;
    overflow-y: auto;
@@ -120,7 +120,7 @@
 }
 
 .CardOnGraph .best_in_place_desc textarea {
-  font-size: 12px;
+  font-size: 13px;
    line-height:15px;
    font-family: helvetica, sans-serif;
    color: #424242;
@@ -170,8 +170,8 @@ resize: none;
   z-index: 1;
   position: relative;
   color: #424242;
-  font-size: 12px;
-  line-height:12px;
+  font-size: 14px;
+  line-height:14px;
   height:12px;
   padding:17px 0;
 }
@@ -187,9 +187,9 @@ resize: none;
   height: 48px;
 }
 .linkItem.contributor {
-  margin-left:32px;
+  margin-left:40px;
   z-index:1;
-  padding:17px 16px 17px 32px;
+  padding:17px 16px 17px 30px;
   position: relative;
 }
 .contributor .contributorIcon {
@@ -202,8 +202,9 @@ resize: none;
   display:none;
 }
 .linkItem.mapCount {
+  margin-left: 12px;
   width: 24px;
-  padding:17px 0 17px 35px;
+  padding:17px 0 17px 36px;
 }
 .linkItem.mapCount .mapCountIcon {
   position: absolute;
@@ -219,8 +220,9 @@ resize: none;
   background-position: 0 -32px;
 }
 .linkItem.synapseCount {
+  margin-left: 2px;
   width: 24px;
-  padding:17px 0 17px 35px;
+  padding:17px 0 17px 32px;
 }
 .linkItem.synapseCount .synapseCountIcon {
   position: absolute;
@@ -241,6 +243,7 @@ resize: none;
   padding: 0;
   min-width: 32px;
   margin-top: 8px;
+  margin-left: 8px;
   background-image: url(permissions32_sprite.png);
   background-position: 0 0;
 }
@@ -507,6 +510,8 @@ background-color: #E0E0E0;
   width: 268px;
   padding: 8px 16px 8px 16px;
   position: relative;
+  border: none;
+  line-height: 14px;
 }
 
 #addLinkInput input{
