@@ -763,6 +763,18 @@
     background-position: 0 0;
 	cursor:pointer;
 }
+.takeScreenshot {
+    margin-bottom: 5px;
+    border-radius: 2px;
+    background-image: url(screenshot_sprite.png);
+    display: none;
+}
+.takeScreenshot:hover {
+    background-position: -32px 0;
+}
+.canEditMap .takeScreenshot {
+    display: block;
+}
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
@@ -881,6 +893,10 @@
     z-index: 1;
     font-size: 14px;
     line-height:14px;
+}
+
+.toast a {
+    color: #4fc059;
 }
 
 /* end toast */

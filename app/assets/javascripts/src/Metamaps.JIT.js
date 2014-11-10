@@ -20,7 +20,13 @@ Metamaps.JIT = {
 
         $(".zoomIn").click(self.zoomIn);
         $(".zoomOut").click(self.zoomOut);
-        $(".zoomExtents").click(self.zoomExtents);
+
+        var zoomExtents = function (event) {
+            self.zoomExtents(event, Metamaps.Visualize.mGraph.canvas);
+        };
+        $(".zoomExtents").click(zoomExtents);
+
+        $(".takeScreenshot").click(Metamaps.Map.exportImage);
 
         self.synapseStarImage = new Image();
         self.synapseStarImage.src = '/assets/synapsestar.png';
@@ -123,7 +129,11 @@ Metamaps.JIT = {
         var directionCat = synapse.get("category");
 
         //label placement on edges
-        Metamaps.JIT.renderEdgeArrows($jit.Graph.Plot.edgeHelper, adj, synapse);
+        if (canvas.denySelected) {
+            var color = Metamaps.Settings.colors.synapses.normal;
+            canvas.getCtx().fillStyle = canvas.getCtx().strokeStyle = color;
+        }
+        Metamaps.JIT.renderEdgeArrows($jit.Graph.Plot.edgeHelper, adj, synapse, canvas);
 
         //check for edge label in data  
         var desc = synapse.get("desc");
@@ -140,7 +150,7 @@ Metamaps.JIT = {
             }
         };
 
-        if (desc != "" && showDesc) {
+        if (!canvas.denySelected && desc != "" && showDesc) {
             // '&amp;' to '&'
             desc = Metamaps.Util.decodeEntities(desc);
 
@@ -188,7 +198,7 @@ Metamaps.JIT = {
                 drawStar(ctx, x + width, y);
             }
         }
-        else if (showDesc) {
+        else if (!canvas.denySelected && showDesc) {
             if (adj.getData("synapses").length > 1) {
                 var ctx = canvas.getCtx();
                 var x = (pos.x + posChild.x) / 2;
@@ -400,7 +410,7 @@ Metamaps.JIT = {
                         ctx = canvas.getCtx();
 
                     // if the topic is selected draw a circle around it
-                    if (node.selected) {
+                    if (!canvas.denySelected && node.selected) {
                         ctx.beginPath();
                         ctx.arc(pos.x, pos.y, dim + 3, 0, 2 * Math.PI, false);
                         ctx.strokeStyle = Metamaps.Settings.colors.topics.selected;
@@ -1595,11 +1605,9 @@ Metamaps.JIT = {
         ctx.lineTo(v2.x, v2.y);
         ctx.stroke();
     }, // renderMidArrow
-    renderEdgeArrows: function (edgeHelper, adj, synapse) {
+    renderEdgeArrows: function (edgeHelper, adj, synapse, canvas) {
 
         var self = Metamaps.JIT;
-
-        var canvas = Metamaps.Visualize.mGraph.canvas;
 
         var directionCat = synapse.get('category');
         var direction = synapse.getDirection();
@@ -1657,8 +1665,7 @@ Metamaps.JIT = {
         Metamaps.Visualize.mGraph.canvas.scale(0.8,0.8);
         $(document).trigger(Metamaps.JIT.events.zoom, [event]);
     },
-    centerMap: function () {
-        var canvas = Metamaps.Visualize.mGraph.canvas;
+    centerMap: function (canvas) {
         var offsetScale = canvas.scaleOffsetX;
                 
         canvas.scale(1/offsetScale,1/offsetScale);
@@ -1674,7 +1681,8 @@ Metamaps.JIT = {
             eX = Metamaps.Mouse.boxEndCoordinates.x,
             eY = Metamaps.Mouse.boxEndCoordinates.y;
 
-        Metamaps.JIT.centerMap();
+        var canvas = Metamaps.Visualize.mGraph.canvas;
+        Metamaps.JIT.centerMap(canvas);
 
         var height = $(document).height(),
             width = $(document).width();
@@ -1685,8 +1693,6 @@ Metamaps.JIT = {
         var ratioY = height / spanY;
 
         var newRatio = Math.min(ratioX,ratioY);
-
-        var canvas = Metamaps.Visualize.mGraph.canvas;
 
         if(canvas.scaleOffsetX *newRatio<= 5 && canvas.scaleOffsetX*newRatio >= 0.2){
             canvas.scale(newRatio,newRatio);
@@ -1711,15 +1717,14 @@ Metamaps.JIT = {
         Metamaps.Visualize.mGraph.plot();
         
     },
-    zoomExtents: function (event) {
-        Metamaps.JIT.centerMap();
-        var height = $(document).height(),
-            width = $(document).width(),
+    zoomExtents: function (event, canvas, denySelected) {
+        Metamaps.JIT.centerMap(canvas);
+        var height = canvas.getSize().height,
+            width = canvas.getSize().width,
             maxX, minX, maxY, minY, counter = 0;
-        var canvas = Metamaps.Visualize.mGraph.canvas;  
 
         
-        if (Metamaps.Selected.Nodes.length > 0) {
+        if (!denySelected && Metamaps.Selected.Nodes.length > 0) {
             var nodes = Metamaps.Selected.Nodes;
         }
         else {

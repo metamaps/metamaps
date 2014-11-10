@@ -3384,7 +3384,7 @@ Metamaps.Listeners = {
             case 69: //if e or E is pressed
                 if (e.ctrlKey){
                     e.preventDefault();
-                    Metamaps.JIT.zoomExtents();
+                    Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas);
                 }
                 break;
             case 77: //if m or M is pressed
@@ -4203,6 +4203,130 @@ Metamaps.Map = {
         Metamaps.Map.sideLength = 1;
         Metamaps.Map.timeToTurn = 0;
         Metamaps.Map.turnCount = 0;
+    },
+    exportImage: function() {
+
+        var canvas = {};
+
+        canvas.canvas = document.createElement("canvas");
+        canvas.canvas.width  =  1880; // 960;
+        canvas.canvas.height = 1260; // 630
+
+        canvas.scaleOffsetX = 1;
+        canvas.scaleOffsetY = 1;
+        canvas.translateOffsetY = 0;
+        canvas.translateOffsetX = 0;
+        canvas.denySelected = true;
+
+        canvas.getSize =  function() {
+            if(this.size) return this.size;
+            var canvas = this.canvas;
+            return this.size = {
+                width: canvas.width,
+                height: canvas.height
+            };
+        };
+        canvas.scale = function(x, y) {
+            var px = this.scaleOffsetX * x,
+                py = this.scaleOffsetY * y;
+            var dx = this.translateOffsetX * (x -1) / px,
+                dy = this.translateOffsetY * (y -1) / py;
+            this.scaleOffsetX = px;
+            this.scaleOffsetY = py;
+            this.getCtx().scale(x, y);
+            this.translate(dx, dy);
+        };
+        canvas.translate = function(x, y) {
+            var sx = this.scaleOffsetX,
+                sy = this.scaleOffsetY;
+            this.translateOffsetX += x*sx;
+            this.translateOffsetY += y*sy;
+            this.getCtx().translate(x, y); 
+        };
+        canvas.getCtx = function() {
+          return this.canvas.getContext("2d");
+        };
+        // center it
+        canvas.getCtx().translate(1880/2, 1260/2);
+
+        var mGraph = Metamaps.Visualize.mGraph;
+
+        var id = mGraph.root;
+        var root = mGraph.graph.getNode(id);
+        var T = !!root.visited;
+
+        // pass true to avoid basing it on a selection
+        Metamaps.JIT.zoomExtents(null, canvas, true);
+
+        var c = canvas.canvas,
+            ctx = canvas.getCtx(),
+            scale = canvas.scaleOffsetX;
+
+        // draw a grey background
+        ctx.fillStyle = '#d8d9da';
+        var xPoint = (-(c.width/scale)/2) - (canvas.translateOffsetX/scale),
+        yPoint = (-(c.height/scale)/2) - (canvas.translateOffsetY/scale);
+        ctx.fillRect(xPoint,yPoint,c.width/scale,c.height/scale);
+
+        // draw the graph
+        mGraph.graph.eachNode(function(node) {
+           var nodeAlpha = node.getData('alpha');
+           node.eachAdjacency(function(adj) {
+             var nodeTo = adj.nodeTo;
+             if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
+               mGraph.fx.plotLine(adj, canvas);
+             }
+           });
+           if(node.drawn) {
+             mGraph.fx.plotNode(node, canvas);
+           }
+           if(!mGraph.labelsHidden) {
+             if(node.drawn && nodeAlpha >= 0.95) {
+               mGraph.labels.plotLabel(canvas, node);
+             } else {
+               mGraph.labels.hideLabel(node, false);
+             }
+           }
+           node.visited = !T;
+         });
+        
+        var imageData = {
+            encoded_image: canvas.canvas.toDataURL()
+        };
+
+        console.log(imageData.encoded_image);
+        var map = Metamaps.Active.Map;
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10) {
+            dd='0'+dd
+        } 
+        if(mm<10) {
+            mm='0'+mm
+        }
+        today = mm+'/'+dd+'/'+yyyy;
+
+        var downloadMessage = "";
+        downloadMessage += "Captured map screenshot! ";
+        downloadMessage += "<a href='" + imageData.encoded_image + "' ";
+        downloadMessage += "download='map-" + map.id + "-screenshot-" + today + ".png'>DOWNLOAD</a>";
+        Metamaps.GlobalUI.notifyUser(downloadMessage);
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: "/maps/" + Metamaps.Active.Map.id + "/upload_screenshot",
+            data: imageData,
+            success: function (data) {
+                console.log('successfully uploaded map screenshot');
+            },
+            error: function () {
+                console.log('failed to save map screenshot');
+            }
+        });
     }
 };
 

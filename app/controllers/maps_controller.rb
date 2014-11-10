@@ -1,6 +1,6 @@
 class MapsController < ApplicationController
 
-    before_filter :require_user, only: [:create, :update, :destroy]
+    before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
     respond_to :html, :json
 
@@ -180,6 +180,30 @@ class MapsController < ApplicationController
             else
                 format.json { render json: @map.errors, status: :unprocessable_entity }
             end
+        end
+    end
+
+    # POST maps/:id/upload_screenshot
+    def screenshot
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_edit(@current)
+
+        if @map
+          png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
+          StringIO.open(png) do |data|
+            data.class.class_eval { attr_accessor :original_filename, :content_type }
+            data.original_filename = "map-" + @map.id.to_s + "-screenshot.png"
+            data.content_type = "image/png"
+            @map.screenshot = data
+          end
+          
+          if @map.save
+            render :json => {:message => "Successfully uploaded the map screenshot."}
+          else
+            render :json => {:message => "Failed to upload image."}
+          end
+        else
+            render :json => {:message => "Unauthorized to set map screenshot."}
         end
     end
 

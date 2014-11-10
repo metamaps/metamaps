@@ -30,6 +30,7 @@ Metamaps::Application.routes.draw do
   match 'maps/topics/:id', to: 'maps#index', via: :get, as: :topicmaps
   resources :maps, except: [:new, :edit]
   match 'maps/:id/contains', to: 'maps#contains', via: :get, as: :contains
+  match 'maps/:id/upload_screenshot', to: 'maps#screenshot', via: :post, as: :screenshot
   
   devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => [:sessions]
 
