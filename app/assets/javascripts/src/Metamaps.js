@@ -82,6 +82,7 @@ Metamaps.Backbone.init = function () {
     self.Metacode = Backbone.Model.extend({
         initialize: function () {
             var image = new Image();
+            image.setAttribute('crossOrigin', 'anonymous');
             image.src = this.get('icon');
             this.set('image',image);
         },
