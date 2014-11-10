@@ -28,11 +28,11 @@ Metamaps.JIT = {
 
         $(".takeScreenshot").click(Metamaps.Map.exportImage);
 
-        self.synapseStarImage = new Image();
-        self.synapseStarImage.src = '/assets/synapsestar.png';
+        self.topicDescImage = new Image();
+        self.topicDescImage.src = '/assets/topic_description_signifier.png';
 
-        self.topicMediaImage = new Image();
-        self.topicMediaImage.src = '/assets/linkedmedia.png';
+        self.topicLinkImage = new Image();
+        self.topicLinkImage.src = '/assets/topic_link_signifier.png';
     },
     /**
      * convert our topic JSON into something JIT can use
@@ -140,14 +140,31 @@ Metamaps.JIT = {
 
         var showDesc = adj.getData("showDesc");
 
-        var drawStar = function (context, x, y) {
-            var starImage = Metamaps.JIT.synapseStarImage;
-            var starImageLoaded = starImage.complete ||
-                (typeof starImage.naturalWidth !== "undefined" &&
-                    starImage.naturalWidth !== 0)
-            if (starImageLoaded) {
-                context.drawImage(starImage, x, y, 16, 16);
-            }
+        var drawSynapseCount = function (context, x, y, count) {
+            /*
+            circle size: 16x16px
+            positioning: overlay and center on top right corner of synapse label - 8px left and 8px down
+            color: #dab539
+            border color: #424242
+            border size: 1.5px
+            font: DIN medium
+            font-size: 14pt
+            font-color: #424242
+            */
+            context.beginPath();
+            context.arc(x, y, 8, 0, 2 * Math.PI, false);
+            context.fillStyle = '#DAB539';
+            context.strokeStyle = '#424242';
+            context.lineWidth = 1.5;
+            context.closePath();
+            context.fill();
+            context.stroke();
+
+            // add the synapse count
+            context.fillStyle = '#424242';
+            context.textAlign = 'center';
+            context.font = '14px din-medium';
+            context.fillText(count, x, y - 6);
         };
 
         if (!canvas.denySelected && desc != "" && showDesc) {
@@ -165,7 +182,7 @@ Metamaps.JIT = {
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
                 lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
             }
-            var width = Math.max.apply(null, lineWidths) + 8;
+            var width = Math.max.apply(null, lineWidths) + 16;
             var height = (16 * arrayOfLabelLines.length) + 8;
 
             var x = (pos.x + posChild.x - width) / 2;
@@ -187,23 +204,29 @@ Metamaps.JIT = {
             ctx.closePath();
             ctx.fill();
 
+            // get number of synapses
+            var synapseNum = adj.getData("synapses").length;
+
             //render text
-            ctx.fillStyle = '#222222';
+            ctx.fillStyle = '#424242';
             ctx.textAlign = 'center';
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 5 + (16 * index));
+                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 7 + (16 * index));
             }
 
-            if (adj.getData("synapses").length > 1) {
-                drawStar(ctx, x + width, y);
+            if (synapseNum > 1) {
+                drawSynapseCount(ctx, x + width, y, synapseNum);
             }
         }
         else if (!canvas.denySelected && showDesc) {
-            if (adj.getData("synapses").length > 1) {
+            // get number of synapses
+            var synapseNum = adj.getData("synapses").length;
+
+            if (synapseNum > 1) {
                 var ctx = canvas.getCtx();
                 var x = (pos.x + posChild.x) / 2;
                 var y = (pos.y + posChild.y) / 2;
-                drawStar(ctx, x, y);
+                drawSynapseCount(ctx, x, y, synapseNum);
             }
         }
 
@@ -433,12 +456,22 @@ Metamaps.JIT = {
 
                     // if the topic has a link, draw a small image to indicate that
                     var hasLink = topic && topic.get('link') !== "" && topic.get('link') !== null;
-                    var linkImage = Metamaps.JIT.topicMediaImage;
+                    var linkImage = Metamaps.JIT.topicLinkImage;
                     var linkImageLoaded = linkImage.complete ||
                         (typeof linkImage.naturalWidth !== "undefined" &&
                             linkImage.naturalWidth !== 0)
                     if (hasLink && linkImageLoaded) {
-                        ctx.drawImage(linkImage, pos.x + dim / 2, pos.y - dim - 8, 16, 16);
+                        ctx.drawImage(linkImage, pos.x - dim - 8, pos.y - dim - 8, 16, 16);
+                    }
+
+                    // if the topic has a desc, draw a small image to indicate that
+                    var hasDesc = topic && topic.get('desc') !== "" && topic.get('desc') !== null;
+                    var descImage = Metamaps.JIT.topicDescImage;
+                    var descImageLoaded = descImage.complete ||
+                        (typeof descImage.naturalWidth !== "undefined" &&
+                            descImage.naturalWidth !== 0)
+                    if (hasDesc && descImageLoaded) {
+                        ctx.drawImage(descImage, pos.x + dim - 8, pos.y - dim - 8, 16, 16);
                     }
                 },
                 'contains': function (node, pos) {
@@ -479,7 +512,7 @@ Metamaps.JIT = {
                     if (-1 < pos.x && pos.x < 1) pos.x = 0;
                     if (-1 < pos.y && pos.y < 1) pos.y = 0;
                     
-                    return $jit.Graph.Plot.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon);
+                    return $jit.Graph.Plot.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon + 5);
                 }
             }
         }
