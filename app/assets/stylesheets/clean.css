@@ -577,7 +577,7 @@
 	top: 0;
 }
 
-.topicPage .sidebarCollaborate, .topicPage .sidebarFilter {
+.topicPage .sidebarCollaborate {
     display: none;
 }
 

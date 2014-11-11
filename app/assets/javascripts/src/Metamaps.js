@@ -477,6 +477,9 @@ Metamaps.Backbone.init = function () {
 
     Metamaps.Mappers = Metamaps.Mappers ? new self.MapperCollection(Metamaps.Mappers) : new self.MapperCollection();
 
+    // this is for topic view
+    Metamaps.Creators = Metamaps.Creators ? new self.MapperCollection(Metamaps.Creators) : new self.MapperCollection();
+
     if (Metamaps.Active.Map) {
         Metamaps.Mappings = Metamaps.Mappings ? new self.MappingCollection(Metamaps.Mappings) : new self.MappingCollection();
 
@@ -3146,12 +3149,30 @@ Metamaps.Filter = {
         var removed = [];
         var added = [];
         
-        Metamaps[collection].each(function(model) {
-            var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-            if (prop && newList.indexOf(prop) === -1) {
-                newList.push(prop);
-            }
-        });
+        // the first option enables us to accept
+        // ['Topics', 'Synapses'] as 'collection'
+        if (typeof collection === "object") {
+            Metamaps[collection[0]].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+            Metamaps[collection[1]].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+        }
+        else if (typeof collection === "string") {
+            Metamaps[collection].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+        }
         
         removed = _.difference(self.filters[filtersToUse], newList);
         added = _.difference(newList, self.filters[filtersToUse]);
@@ -3194,7 +3215,14 @@ Metamaps.Filter = {
     },
     checkMappers: function () {
         var self = Metamaps.Filter;
-        self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper');
+        var onMap = Metamaps.Active.Map ? true : false;
+        if (onMap) {
+            self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper');
+        }
+        else {
+            // on topic view
+            self.updateFilters(['Topics', 'Synapses'], 'user_id', 'Creators', 'mappers', 'mapper');
+        }
     },
     checkSynapses: function () {
         var self = Metamaps.Filter;
@@ -3275,7 +3303,11 @@ Metamaps.Filter = {
         if (Metamaps.Active.Map) {
             onMap = true;
         }
-        else passesMapper = true; // for when you're on a topic page
+        else if (Metamaps.Active.Topic) {
+            onMap = false;
+        }
+
+        var opacityForFilter = onMap ? 0 : 0.4;
 
         Metamaps.Topics.each(function(topic) {
             var n = topic.get('node');
@@ -3285,7 +3317,18 @@ Metamaps.Filter = {
             else passesMetacode = true;
 
             if (onMap) {
+                // when on a map, 
+                // we filter by mapper according to the person who added the 
+                // topic or synapse to the map
                 var user_id = topic.getMapping().get("user_id").toString();
+                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+                else passesMapper = true;
+            }
+            else {
+                // when on a topic view, 
+                // we filter by mapper according to the person who created the 
+                // topic or synapse
+                var user_id = topic.get("user_id").toString();
                 if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
                 else passesMapper = true;
             }
@@ -3299,7 +3342,7 @@ Metamaps.Filter = {
             else {
                 if (n) {
                     Metamaps.Control.deselectNode(n, true);
-                    n.setData('alpha', 0, 'end');
+                    n.setData('alpha', opacityForFilter, 'end');
                     n.eachAdjacency(function(e){
                         Metamaps.Control.deselectEdge(e, true);
                     });
@@ -3316,10 +3359,13 @@ Metamaps.Filter = {
             else passesSynapse = true;
 
             if (onMap) {
-                var user_id = synapse.getMapping().get("user_id").toString();
-                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
-                else passesMapper = true;
+                // when on a map, 
+                // we filter by mapper according to the person who added the 
+                // topic or synapse to the map
+                user_id = synapse.getMapping().get("user_id").toString();
             }
+            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+            else passesMapper = true;
 
             var color = Metamaps.Settings.colors.synapses.normal;
             if (passesSynapse && passesMapper) {
@@ -3332,10 +3378,10 @@ Metamaps.Filter = {
             else {
                 if (e) {
                     Metamaps.Control.deselectEdge(e, true);
-                    e.setData('alpha', 0, 'end');
+                    e.setData('alpha', opacityForFilter, 'end');
                 }
                 else console.log(synapse);
-            } 
+            }
         });
             
         // run the animation
@@ -3586,9 +3632,13 @@ Metamaps.Topic = {
         var bb = Metamaps.Backbone;
         var start = function (data) {
             Metamaps.Active.Topic = new bb.Topic(data.topic);
+            Metamaps.Creators = new bb.MapperCollection(data.creators);
             Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives));
             Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
             Metamaps.Backbone.attachCollectionEvents();
+
+            // set filter mapper H3 text
+            $('#filter_by_mapper h3').html('CREATORS');
 
             // build and render the visualization
             Metamaps.Visualize.type = "RGraph";
@@ -3616,6 +3666,7 @@ Metamaps.Topic = {
             $('.rightclickmenu').remove();
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
+            Metamaps.Filter.close();
         }
     },
     centerOn: function (nodeid) {
@@ -4044,6 +4095,9 @@ Metamaps.Map = {
                 $('.wrapper').addClass('commonsMap');
             }
 
+            // set filter mapper H3 text
+            $('#filter_by_mapper h3').html('MAPPERS');
+
             // build and render the visualization
             Metamaps.Visualize.type = "ForceDirected";
             Metamaps.JIT.prepareVizData();
@@ -4082,6 +4136,7 @@ Metamaps.Map = {
             Metamaps.SynapseCard.hideCard();
             Metamaps.Create.newTopic.hide();
             Metamaps.Create.newSynapse.hide();
+            Metamaps.Filter.close();
             Metamaps.Realtime.endActiveMap();
         }
     },
@@ -4090,31 +4145,37 @@ Metamaps.Map = {
 
         var nodes_data = "",
             synapses_data = "";
-        var synapses_array = new Array();
+        var nodes_array = [];
+        var synapses_array = [];
+        // collect the unfiltered topics
         Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-            //don't add to the map if it was filtered out
-            // TODO
-            //if (categoryVisible[n.getData('metacode')] == false) {
-            //    return;
-            //}
-
-            var x, y;
-            if (n.pos.x && n.pos.y) {
-                x = n.pos.x;
-                y = n.pos.y;
-            } else {
-                var x = Math.cos(n.pos.theta) * n.pos.rho;
-                var y = Math.sin(n.pos.theta) * n.pos.rho;
+            // if the opacity is less than 1 then it's filtered
+            if (n.getData('alpha') === 1) {
+                var id = n.getData('topic').id;
+                nodes_array.push(id);
+                var x, y;
+                if (n.pos.x && n.pos.y) {
+                    x = n.pos.x;
+                    y = n.pos.y;
+                } else {
+                    var x = Math.cos(n.pos.theta) * n.pos.rho;
+                    var y = Math.sin(n.pos.theta) * n.pos.rho;
+                }
+                nodes_data += id + '/' + x + '/' + y + ',';
             }
-            nodes_data += n.id + '/' + x + '/' + y + ',';
-            n.eachAdjacency(function (adj) {
-                synapses_array.push(adj.getData("synapses")[0].id); // TODO
-            });
         });
+        // collect the unfiltered synapses
+        Metamaps.Synapses.each(function(synapse){
+            var desc = synapse.get("desc");
 
-        //get unique values only
-        synapses_array = $.grep(synapses_array, function (value, key) {
-            return $.inArray(value, synapses_array) === key;
+            var descNotFiltered = Metamaps.Filter.visible.synapses.indexOf(desc) > -1;
+            // make sure that both topics are being added, otherwise, it 
+            // doesn't make sense to add the synapse
+            var topicsNotFiltered = nodes_array.indexOf(synapse.get('node1_id')) > -1;
+            topicsNotFiltered = topicsNotFiltered && nodes_array.indexOf(synapse.get('node2_id')) > -1;
+            if (descNotFiltered && topicsNotFiltered) {
+                synapses_array.push(synapse.id);
+            }
         });
 
         synapses_data = synapses_array.join();
@@ -4310,10 +4371,11 @@ Metamaps.Map = {
         }
         today = mm+'/'+dd+'/'+yyyy;
 
+        var mapName = map.get("name").split(" ").join([separator = '-']);
         var downloadMessage = "";
         downloadMessage += "Captured map screenshot! ";
         downloadMessage += "<a href='" + imageData.encoded_image + "' ";
-        downloadMessage += "download='map-" + map.id + "-screenshot-" + today + ".png'>DOWNLOAD</a>";
+        downloadMessage += "download='metamap-" + map.id + "-" + mapName + "-" + today + ".png'>DOWNLOAD</a>";
         Metamaps.GlobalUI.notifyUser(downloadMessage);
 
         $.ajax({

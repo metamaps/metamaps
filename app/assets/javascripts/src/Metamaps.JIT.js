@@ -908,6 +908,9 @@ Metamaps.JIT = {
                     };
                 }
             }
+            else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Metamaps.Active.Topic) {
+                Metamaps.GlobalUI.notifyUser("Cannot create in Topic view.");
+            }
             else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && !authorized) {
                 Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
             }
@@ -1000,6 +1003,10 @@ Metamaps.JIT = {
         if (now - storedTime < Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE && !Metamaps.Mouse.didPan) {
             if (Metamaps.Active.Map && !authorized) {
                 Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+                return;
+            }
+            else if (Metamaps.Active.Topic) {
+                Metamaps.GlobalUI.notifyUser("Cannot create in Topic view.");
                 return;
             }
             // DOUBLE CLICK

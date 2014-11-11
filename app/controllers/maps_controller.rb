@@ -83,7 +83,14 @@ class MapsController < ApplicationController
                 @allmappers = @map.contributors
                 @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
                 @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-                @allmappings = @map.mappings
+                @allmappings = @map.mappings.delete_if {|m| 
+                    if m.category == "Synapse"
+                        object = m.synapse
+                    elsif m.category == "Topic"
+                        object = m.topic
+                    end
+                    object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)) 
+                }
 
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
             }
@@ -104,7 +111,14 @@ class MapsController < ApplicationController
         @allmappers = @map.contributors
         @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
         @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-        @allmappings = @map.mappings
+        @allmappings = @map.mappings.delete_if {|m| 
+            if m.category == "Synapse"
+                object = m.synapse
+            elsif m.category == "Topic"
+                object = m.topic
+            end
+            object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)) 
+        }
 
         @json = Hash.new()
         @json['map'] = @map
