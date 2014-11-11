@@ -219,7 +219,6 @@ Metamaps.Backbone.init = function () {
             var mapping;
             var node = this.get('node');
             node.setData('topic', this);
-            node.id = this.isNew() ? this.cid : this.id;
             
             if (Metamaps.Active.Map) {
                 mapping = this.getMapping();
@@ -1508,6 +1507,8 @@ Metamaps.Visualize = {
             mapping;
 
         if (self.type == "RGraph") {
+            var i, l, startPos, endPos, topic, synapse;
+
             self.mGraph.graph.eachNode(function (n) {
                 topic = Metamaps.Topics.get(n.id);
                 topic.set({ node: n }, { silent: true });
@@ -3671,8 +3672,7 @@ Metamaps.Topic = {
     },
     centerOn: function (nodeid) {
         if (!Metamaps.Visualize.mGraph.busy) {
-            var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
-            Metamaps.Visualize.mGraph.onClick(node.id, {
+            Metamaps.Visualize.mGraph.onClick(nodeid, {
                 hideLabels: false,
                 duration: 1000,
                 onComplete: function () {
@@ -3680,6 +3680,66 @@ Metamaps.Topic = {
                 }
             });
         }
+    },
+    fetchRelatives: function(node, metacode_id) {
+        
+        var topics = Metamaps.Topics.map(function(t){ return t.id });
+        var topics_string = topics.join();
+
+        var creators = Metamaps.Creators.map(function(t){ return t.id });
+        var creators_string = creators.join();
+
+        var topic = node.getData('topic');
+
+        var successCallback = function(data) {
+            if (data.creators.length > 0) Metamaps.Creators.add(data.creators);
+            if (data.topics.length > 0) Metamaps.Topics.add(data.topics);
+            if (data.synapses.length > 0) Metamaps.Synapses.add(data.synapses);
+
+            var topicColl = new Metamaps.Backbone.TopicCollection(data.topics);
+            topicColl.add(topic);
+            var synapseColl = new Metamaps.Backbone.SynapseCollection(data.synapses);
+
+            var graph = Metamaps.JIT.convertModelsToJIT(topicColl, synapseColl)[0];
+            Metamaps.Visualize.mGraph.op.sum(graph, {
+                type: 'fade',
+                duration: 500,
+                hideLabels: false
+            });
+
+            var i, l, t, s;
+        
+            Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+                t = Metamaps.Topics.get(n.id);
+                t.set({ node: n }, { silent: true });
+                t.updateNode();
+
+                n.eachAdjacency(function (edge) {
+                    if(!edge.getData('init')) {
+                        edge.setData('init', true);
+
+                        l = edge.getData('synapseIDs').length;
+                        for (i = 0; i < l; i++) {
+                            s = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
+                            s.set({ edge: edge }, { silent: true });
+                            s.updateEdge();
+                        }
+                    }
+                });
+            });
+        };
+
+        var paramsString = metacode_id ? "metacode=" + metacode_id + "&" : "";
+        paramsString += "network=" + topics_string + "&creators=" + creators_string;
+
+        $.ajax({
+            type: "Get",
+            url: "/topics/" + topic.id + "/relatives.json?" + paramsString,
+            success: successCallback,
+            error: function () {
+                
+            }
+        });
     },
     /*
      *
@@ -4738,8 +4798,6 @@ Metamaps.Account = {
                 var destY = 0;
                 var destWidth = 84;
                 var destHeight = 84;
-
-                //debugger;
 
                 context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
                 $('.userImageDiv').prepend($canvas);

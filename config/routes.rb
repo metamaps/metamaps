@@ -22,6 +22,8 @@ Metamaps::Application.routes.draw do
     get :autocomplete_topic, :on => :collection
   end
   match 'topics/:id/network', to: 'topics#network', via: :get, as: :network
+  match 'topics/:id/relative_numbers', to: 'topics#relative_numbers', via: :get, as: :relative_numbers
+  match 'topics/:id/relatives', to: 'topics#relatives', via: :get, as: :relatives
   
   match 'explore/active', to: 'maps#index', via: :get, as: :activemaps
   match 'explore/featured', to: 'maps#index', via: :get, as: :featuredmaps

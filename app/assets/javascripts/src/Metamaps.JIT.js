@@ -37,8 +37,9 @@ Metamaps.JIT = {
     /**
      * convert our topic JSON into something JIT can use
      */
-    prepareVizData: function () {
-        var self = Metamaps.JIT;
+    convertModelsToJIT: function(topics, synapses) {
+        var jitReady = [];
+
         var synapsesToRemove = [];
         var topic;
         var mapping;
@@ -48,18 +49,14 @@ Metamaps.JIT = {
         var edge;
         var edges = [];
 
-        // reset/empty vizData
-        self.vizData = [];
-        Metamaps.Visualize.loadLater = false;
-
-        Metamaps.Topics.each(function (t) {
+        topics.each(function (t) {
             node = t.createNode();
             nodes[node.id] = node;
         });
-        Metamaps.Synapses.each(function (s) {
+        synapses.each(function (s) {
             edge = s.createEdge();
 
-            if(Metamaps.Topics.get(s.get('node1_id')) === undefined || Metamaps.Topics.get(s.get('node2_id')) === undefined) {
+            if (topics.get(s.get('node1_id')) === undefined || topics.get(s.get('node2_id')) === undefined) {
                 // this means it's an invalid synapse
                 synapsesToRemove.push(s);
             } 
@@ -89,15 +86,29 @@ Metamaps.JIT = {
             }
         });
 
+        _.each(nodes, function (node) {
+            jitReady.push(node);
+        });
+
+        return [jitReady, synapsesToRemove];
+    },
+    prepareVizData: function () {
+        var self = Metamaps.JIT;
+        var mapping;
+
+        // reset/empty vizData
+        self.vizData = [];
+        Metamaps.Visualize.loadLater = false;
+
+        var results = self.convertModelsToJIT(Metamaps.Topics, Metamaps.Synapses);
+
+        self.vizData = results[0];
+
         // clean up the synapses array in case of any faulty data
-        _.each(synapsesToRemove, function (synapse) {
+        _.each(results[1], function (synapse) {
             mapping = synapse.getMapping();
             Metamaps.Synapses.remove(synapse);
             Metamaps.Mappings.remove(mapping);
-        });
-
-        _.each(nodes, function (node) {
-            self.vizData.push(node);
         });
 
         if (self.vizData.length == 0) {
@@ -1319,7 +1330,9 @@ Metamaps.JIT = {
         if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
         
 
-        if (Metamaps.Active.Topic) menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
+        if (Metamaps.Active.Topic) {
+            menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
+        }
         menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>';
         if (Metamaps.Active.Mapper) {
             var options = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
@@ -1332,6 +1345,15 @@ Metamaps.JIT = {
             var metacodeOptions = $('#metacodeOptions').html();
 
             menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode' + metacodeOptions + '<div class="expandLi"></div></li>';
+        }
+        if (Metamaps.Active.Topic) {
+            // set up the get sibling menu as a "lazy load"
+            // only fill in the submenu when they hover over the get siblings list item
+            var siblingMenu = '<ul id="fetchSiblingList"> \
+                                <li class="fetchAll">All</li> \
+                                <li id="loadingSiblings"></li> \
+                            </ul>';
+            menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Get siblings' + siblingMenu + '<div class="expandLi"></div></li>';
         }
 
         menustring += '</ul>';
@@ -1426,7 +1448,70 @@ Metamaps.JIT = {
             Metamaps.Control.updateSelectedMetacodes($(this).attr('data-id'));
         });
 
-    }, //selectNodeOnRightClickHandler
+
+        // fetch relatives
+        var fetched = false;
+        $('.rc-siblings').hover(function () {
+            if (!fetched) {
+                Metamaps.JIT.populateRightClickSiblings(node);
+                fetched = true;
+            }
+        });
+        $('.rc-siblings .fetchAll').click(function () {
+            $('.rightclickmenu').remove();
+            // data-id is a metacode id
+            Metamaps.Topic.fetchRelatives(node);
+        });
+    }, //selectNodeOnRightClickHandler,
+    populateRightClickSiblings: function(node) {
+        var self = Metamaps.JIT;
+
+        // depending on how many topics are selected, do different things
+        /*if (Metamaps.Selected.Nodes.length > 1) {
+            // we don't bother filling the submenu with 
+            // specific numbers, because there are too many topics
+            // selected to find those numbers
+            $('#loadingSiblings').remove();
+            return;
+        }*/
+
+        var topic = node.getData('topic');
+
+        // add a loading icon for now
+        var loader = new CanvasLoader('loadingSiblings');
+        loader.setColor('#4FC059'); // default is '#000000'
+        loader.setDiameter(15); // default is 40
+        loader.setDensity(41); // default is 40
+        loader.setRange(0.9); // default is 1.3
+        loader.show(); // Hidden by default
+
+        var topics = Metamaps.Topics.map(function(t){ return t.id });
+        var topics_string = topics.join();
+
+        var successCallback = function(data) {
+            $('#loadingSiblings').remove();
+
+            for (var key in data) {
+                var string = Metamaps.Metacodes.get(key).get('name') + ' (' + data[key] + ')';
+                $('#fetchSiblingList').append('<li class="getSiblings" data-id="' + key + '">' + string + '</li>');
+            }
+
+            $('.rc-siblings .getSiblings').click(function () {
+                $('.rightclickmenu').remove();
+                // data-id is a metacode id
+                Metamaps.Topic.fetchRelatives(node, $(this).attr('data-id'));
+            });
+        };
+
+        $.ajax({
+            type: "Get",
+            url: "/topics/" + topic.id + "/relative_numbers.json?network=" + topics_string,
+            success: successCallback,
+            error: function () {
+                
+            }
+        });
+    },
     selectEdgeOnClickHandler: function (adj, e) {
         if (Metamaps.Visualize.mGraph.busy) return;
 
