@@ -87,7 +87,7 @@ class MapsController < ApplicationController
                     elsif m.category == "Topic"
                         object = m.topic
                     end
-                    object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)) 
+                    !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
                 }
 
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
@@ -115,7 +115,7 @@ class MapsController < ApplicationController
             elsif m.category == "Topic"
                 object = m.topic
             end
-            object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)) 
+            !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
         }
 
         @json = Hash.new()
