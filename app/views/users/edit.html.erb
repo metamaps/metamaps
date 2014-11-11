@@ -10,7 +10,7 @@
   <h3>Edit Account</h3>
   <div class="userImage">
     <div class="userImageDiv" onclick="Metamaps.Account.toggleChangePicture()">
-      <%= image_tag @user.image.url(:round), :size => "84x84" %>
+      <%= image_tag @user.image.url(:square), :size => "84x84" %>
       <div class="editPhoto"></div>
     </div>
     <div class="userImageMenu">
@@ -49,6 +49,7 @@
   <%= form.password_field :password_confirmation, :autocomplete => :off%></div>
   <div class="noChangePass" onclick="Metamaps.Account.hidePass()">Oops, don't change password</div>
 </div>
-  <%= form.submit "Update", class: "update" %>
+  <div id="accountPageLoading"></div>
+  <%= form.submit "Update", class: "update", onclick: "Metamaps.Account.showLoading()" %>
 <% end %>
 </div>

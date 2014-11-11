@@ -82,6 +82,7 @@ Metamaps.Backbone.init = function () {
     self.Metacode = Backbone.Model.extend({
         initialize: function () {
             var image = new Image();
+            image.crossOrigin = "Anonymous";
             image.src = this.get('icon');
             this.set('image',image);
         },
@@ -218,7 +219,6 @@ Metamaps.Backbone.init = function () {
             var mapping;
             var node = this.get('node');
             node.setData('topic', this);
-            node.id = this.isNew() ? this.cid : this.id;
             
             if (Metamaps.Active.Map) {
                 mapping = this.getMapping();
@@ -476,6 +476,9 @@ Metamaps.Backbone.init = function () {
 
     Metamaps.Mappers = Metamaps.Mappers ? new self.MapperCollection(Metamaps.Mappers) : new self.MapperCollection();
 
+    // this is for topic view
+    Metamaps.Creators = Metamaps.Creators ? new self.MapperCollection(Metamaps.Creators) : new self.MapperCollection();
+
     if (Metamaps.Active.Map) {
         Metamaps.Mappings = Metamaps.Mappings ? new self.MappingCollection(Metamaps.Mappings) : new self.MappingCollection();
 
@@ -701,6 +704,7 @@ Metamaps.Create = {
                 $('#topic_name').focus();
             });
             Metamaps.Create.newTopic.beingCreated = true;
+            Metamaps.Create.newTopic.name = "";
         },
         hide: function () {
             $('#new_topic').fadeOut('fast');
@@ -831,7 +835,14 @@ Metamaps.TopicCard = {
         var self = Metamaps.TopicCard;
 
         $('#embedlyLinkLoader').hide();
-        $('#embedlyLink').fadeIn('fast');
+
+        // means that the embedly call returned 404 not found
+        if ($('#embedlyLink')[0]) {
+            $('#embedlyLink').css('display', 'block').fadeIn('fast');
+            $('.embeds').addClass('nonEmbedlyLink');
+        }
+
+        $('.CardOnGraph').addClass('hasAttachment');
         if (self.authorizedToEdit) {
             $('.embeds').append('<div id="linkremove"></div>');
             $('#linkremove').click(self.removeLink);
@@ -842,7 +853,7 @@ Metamaps.TopicCard = {
         self.openTopicCard.save({
             link: null
         });
-        $('.embeds').empty();
+        $('.embeds').empty().removeClass('nonEmbedlyLink');
         $('#addLinkInput input').val("");
         $('.attachments').removeClass('hidden');
         $('.CardOnGraph').removeClass('hasAttachment');
@@ -891,8 +902,10 @@ Metamaps.TopicCard = {
                     loader.setDensity(41); // default is 40
                     loader.setRange(0.9); // default is 1.3
                     loader.show(); // Hidden by default
-                    embedly('card', document.getElementById('embedlyLink'));
-                    $('.CardOnGraph').addClass('hasAttachment');
+                    var e = embedly('card', document.getElementById('embedlyLink'));
+                    if (!e) {
+                        self.handleInvalidLink();
+                    }
                 }
             }, 100);
         };
@@ -907,7 +920,10 @@ Metamaps.TopicCard = {
             loader.setDensity(41); // default is 40
             loader.setRange(0.9); // default is 1.3
             loader.show(); // Hidden by default
-            embedly('card', document.getElementById('embedlyLink'));
+            var e = embedly('card', document.getElementById('embedlyLink'));
+            if (!e) {
+                self.handleInvalidLink();
+            }
         }
 
 
@@ -1073,6 +1089,12 @@ Metamaps.TopicCard = {
             $('.showcard .yourTopic .mapPerm').click(openPermissionSelect);
             $('.showcard').click(hidePermissionSelect);
         }
+    },
+    handleInvalidLink: function() {
+        var self = Metamaps.TopicCard;
+
+        self.removeLink();
+        Metamaps.GlobalUI.notifyUser("Invalid link");
     },
     populateShowCard: function (topic) {
         var self = Metamaps.TopicCard;
@@ -1485,6 +1507,8 @@ Metamaps.Visualize = {
             mapping;
 
         if (self.type == "RGraph") {
+            var i, l, startPos, endPos, topic, synapse;
+
             self.mGraph.graph.eachNode(function (n) {
                 topic = Metamaps.Topics.get(n.id);
                 topic.set({ node: n }, { silent: true });
@@ -1686,17 +1710,26 @@ Metamaps.Util = {
         }
     },
     pixelsToCoords: function (pixels) {
-        var canvas = Metamaps.Visualize.mGraph.canvas,
-            s = canvas.getSize(),
-            p = canvas.getPos(),
-            ox = canvas.translateOffsetX,
-            oy = canvas.translateOffsetY,
-            sx = canvas.scaleOffsetX,
-            sy = canvas.scaleOffsetY;
-        var coords = {
-            x: (pixels.x - p.x - s.width/2 - ox) * (1/sx),
-            y: (pixels.y - p.y - s.height/2 - oy) * (1/sy),
-        };
+        var coords;
+        if (Metamaps.Visualize.mGraph) {
+            var canvas = Metamaps.Visualize.mGraph.canvas,
+                s = canvas.getSize(),
+                p = canvas.getPos(),
+                ox = canvas.translateOffsetX,
+                oy = canvas.translateOffsetY,
+                sx = canvas.scaleOffsetX,
+                sy = canvas.scaleOffsetY;
+            coords = {
+                x: (pixels.x - p.x - s.width/2 - ox) * (1/sx),
+                y: (pixels.y - p.y - s.height/2 - oy) * (1/sy),
+            };
+        }
+        else {
+            coords = {
+                x: 0,
+                y: 0
+            };
+        }
         return coords;
     },
     getPastelColor: function () {
@@ -1761,8 +1794,11 @@ Metamaps.Realtime = {
         var reenableRealtime = function () {
             self.reenableRealtime();
         };
+        var turnOff = function () {
+            self.turnOff();
+        };
         $(".rtOn").click(reenableRealtime);
-        $(".rtOff").click(self.turnOff);
+        $(".rtOff").click(turnOff);
 
         $('.sidebarCollaborateIcon').click(self.toggleBox);
         $('.sidebarCollaborateBox').click(function(event){ 
@@ -1813,19 +1849,23 @@ Metamaps.Realtime = {
     startActiveMap: function () {
         var self = Metamaps.Realtime;
 
-        if (Metamaps.Active.Map) {
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) {
             var commonsMap = Metamaps.Active.Map.get('permission') === 'commons';
+            var publicMap = Metamaps.Active.Map.get('permission') === 'public';
 
             if (commonsMap) {
                 self.turnOn();
                 self.setupSocket();
+            }
+            else if (publicMap) {
+                self.attachMapListener();
             }
         }
     },
     endActiveMap: function () {
         var self = Metamaps.Realtime;
 
-        $(document).off(Metamaps.JIT.events.mouseMove);
+        $(document).off('mousemove');
         self.socket.removeAllListeners();
         self.socket.emit('endMapperNotify');
         $(".collabCompass").remove();
@@ -1852,11 +1892,11 @@ Metamaps.Realtime = {
             $(".collabCompass").show();
         }
     },
-    turnOff: function () {
+    turnOff: function (silent) {
         var self = Metamaps.Realtime;
 
         if (self.status) {
-            self.sendRealtimeOff();
+            if (!silent) self.sendRealtimeOff();
             $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
             self.status = false;
             $(".sidebarCollaborateIcon").removeClass("blue");
@@ -1914,13 +1954,18 @@ Metamaps.Realtime = {
 
         socket.on('topicChangeFromServer', self.topicChange);
         socket.on('synapseChangeFromServer', self.synapseChange);
-        socket.on('mapChangeFromServer', self.mapChange);
+        self.attachMapListener();
     
         // local event listeners that trigger events
-        var sendCoords = function (event, coords) {
+        var sendCoords = function (event) {
+            var pixels = {
+                x: event.pageX,
+                y: event.pageY
+            };
+            var coords = Metamaps.Util.pixelsToCoords(pixels);
             self.sendCoords(coords);
         };
-        $(document).on(Metamaps.JIT.events.mouseMove, sendCoords);
+        $(document).mousemove(sendCoords);
 
         var zoom = function (event, e) {
             if (e) {
@@ -1973,6 +2018,12 @@ Metamaps.Realtime = {
         $(document).on(Metamaps.JIT.events.removeSynapse, sendRemoveSynapse);
 
     },
+    attachMapListener: function(){
+        var self = Metamaps.Realtime;
+        var socket = Metamaps.Realtime.socket;
+
+        socket.on('mapChangeFromServer', self.mapChange);
+    },
     sendRealtimeOn: function () {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
@@ -2023,7 +2074,8 @@ Metamaps.Realtime = {
         mapperListItem += '" class="rtMapper littleRt';
         mapperListItem += onOff;
         mapperListItem += '">';
-        mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
+        mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
+        mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
         mapperListItem += data.username;
         mapperListItem += '<div class="littleJuntoIcon"></div>';
         mapperListItem += '</li>';
@@ -2057,9 +2109,10 @@ Metamaps.Realtime = {
         };
 
         // create an item for them in the realtime box
-        if (data.userid !== Metamaps.Active.Mapper.id) {
+        if (data.userid !== Metamaps.Active.Mapper.id && self.status) {
             var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
-            mapperListItem += '<img src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
+            mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
+            mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
             mapperListItem += data.username;
             mapperListItem += '<div class="littleJuntoIcon"></div>';
             mapperListItem += '</li>';
@@ -2314,18 +2367,32 @@ Metamaps.Realtime = {
         socket.emit('mapChangeFromClient', data);
     },
     mapChange: function (data) {
-        /*var map = Metamaps.Topics.get(data.topicId);
-        if (map) {
-            var node = topic.get('node');
-            topic.fetch({
-                success: function (model) {
-                    // must be set using silent:true otherwise 
-                    // will trigger a change event and an infinite 
-                    // loop with other clients of change events
-                    model.set({ node: node });
+        var map = Metamaps.Active.Map;
+        var isActiveMap = map && data.mapId === map.id;
+        if (isActiveMap) {
+            var permBefore = map.get('permission');
+            var idBefore = map.id;
+            map.fetch({
+                success: function (model, response) {
+
+                    var idNow = model.id;
+                    var permNow = model.get('permission');
+                    if (idNow !== idBefore) {
+                        Metamaps.Map.leavePrivateMap(); // this means the map has been changed to private
+                    }
+                    else if (permNow === 'public' && permBefore === 'commons') {
+                        Metamaps.Map.commonsToPublic();
+                    }
+                    else if (permNow === 'commons' && permBefore === 'public') {
+                        Metamaps.Map.publicToCommons();
+                    }
+                    else {
+                        model.fetchContained();
+                        model.trigger('changeByOther');
+                    }
                 }
             });
-        }*/
+        }
     },
     // newTopic
     sendNewTopic: function (data) {
@@ -2564,11 +2631,21 @@ Metamaps.Control = {
             Metamaps.Selected.Nodes.indexOf(node), 1);
     },
     deleteSelected: function () {
+
+        if (!Metamaps.Active.Map) return;
+        
         var n = Metamaps.Selected.Nodes.length;
         var e = Metamaps.Selected.Edges.length;
         var ntext = n == 1 ? "1 topic" : n + " topics";
         var etext = e == 1 ? "1 synapse" : e + " synapses";
         var text = "You have " + ntext + " and " + etext + " selected. ";
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
 
         var r = confirm(text + "Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.");
         if (r == true) {
@@ -2577,6 +2654,16 @@ Metamaps.Control = {
         }
     },
     deleteSelectedNodes: function () { // refers to deleting topics permanently
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
         var l = Metamaps.Selected.Nodes.length;
         for (var i = l - 1; i >= 0; i -= 1) {
             var node = Metamaps.Selected.Nodes[i];
@@ -2584,6 +2671,16 @@ Metamaps.Control = {
         }
     },
     deleteNode: function (nodeid) { // refers to deleting topics permanently
+        
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
         var topic = node.getData('topic');
         var topicid = topic.id;
@@ -2596,33 +2693,45 @@ Metamaps.Control = {
         Metamaps.Control.hideNode(nodeid);
     },
     removeSelectedNodes: function () { // refers to removing topics permanently from a map
+
+        if (!Metamaps.Active.Map) return;
+
         var l = Metamaps.Selected.Nodes.length,
             i,
             node,
-            mapperm = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+            authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
 
-        if (mapperm) {
-            for (i = l - 1; i >= 0; i -= 1) {
-                node = Metamaps.Selected.Nodes[i];
-                Metamaps.Control.removeNode(node.id);
-            }
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
+        for (i = l - 1; i >= 0; i -= 1) {
+            node = Metamaps.Selected.Nodes[i];
+            Metamaps.Control.removeNode(node.id);
         }
     },
     removeNode: function (nodeid) { // refers to removing topics permanently from a map
-        var mapperm = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
 
-        if (mapperm) {
-            var topic = node.getData('topic');
-            var topicid = topic.id;
-            var mapping = node.getData('mapping');
-            mapping.destroy();
-            Metamaps.Topics.remove(topic);
-            $(document).trigger(Metamaps.JIT.events.removeTopic, [{
-                topicid: topicid
-            }]);
-            Metamaps.Control.hideNode(nodeid);
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
         }
+
+        var topic = node.getData('topic');
+        var topicid = topic.id;
+        var mapping = node.getData('mapping');
+        mapping.destroy();
+        Metamaps.Topics.remove(topic);
+        $(document).trigger(Metamaps.JIT.events.removeTopic, [{
+            topicid: topicid
+        }]);
+        Metamaps.Control.hideNode(nodeid);
     },
     hideSelectedNodes: function () {
         var l = Metamaps.Selected.Nodes.length,
@@ -2707,12 +2816,31 @@ Metamaps.Control = {
     deleteSelectedEdges: function () { // refers to deleting topics permanently
         var edge,
             l = Metamaps.Selected.Edges.length;
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
+
         for (var i = l - 1; i >= 0; i -= 1) {
             edge = Metamaps.Selected.Edges[i];
             Metamaps.Control.deleteEdge(edge);
         }
     },
     deleteEdge: function (edge) {
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
 
         if (edge.getData("synapses").length - 1 === 0) {
             Metamaps.Control.hideEdge(edge);
@@ -2741,15 +2869,31 @@ Metamaps.Control = {
             i,
             edge;
 
-        if (Metamaps.Active.Map) {
-            for (i = l - 1; i >= 0; i -= 1) {
-                edge = Metamaps.Selected.Edges[i];
-                Metamaps.Control.removeEdge(edge);
-            }
-            Metamaps.Selected.Edges = new Array();
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
         }
+
+        for (i = l - 1; i >= 0; i -= 1) {
+            edge = Metamaps.Selected.Edges[i];
+            Metamaps.Control.removeEdge(edge);
+        }
+        Metamaps.Selected.Edges = new Array();
     },
     removeEdge: function (edge) {
+
+        if (!Metamaps.Active.Map) return;
+
+        var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
+
+        if (!authorized) {
+            Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+            return;
+        }
 
         if (edge.getData("mappings").length - 1 === 0) {
             Metamaps.Control.hideEdge(edge);
@@ -3005,12 +3149,30 @@ Metamaps.Filter = {
         var removed = [];
         var added = [];
         
-        Metamaps[collection].each(function(model) {
-            var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-            if (prop && newList.indexOf(prop) === -1) {
-                newList.push(prop);
-            }
-        });
+        // the first option enables us to accept
+        // ['Topics', 'Synapses'] as 'collection'
+        if (typeof collection === "object") {
+            Metamaps[collection[0]].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+            Metamaps[collection[1]].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+        }
+        else if (typeof collection === "string") {
+            Metamaps[collection].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+        }
         
         removed = _.difference(self.filters[filtersToUse], newList);
         added = _.difference(newList, self.filters[filtersToUse]);
@@ -3053,7 +3215,14 @@ Metamaps.Filter = {
     },
     checkMappers: function () {
         var self = Metamaps.Filter;
-        self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper');
+        var onMap = Metamaps.Active.Map ? true : false;
+        if (onMap) {
+            self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper');
+        }
+        else {
+            // on topic view
+            self.updateFilters(['Topics', 'Synapses'], 'user_id', 'Creators', 'mappers', 'mapper');
+        }
     },
     checkSynapses: function () {
         var self = Metamaps.Filter;
@@ -3134,7 +3303,11 @@ Metamaps.Filter = {
         if (Metamaps.Active.Map) {
             onMap = true;
         }
-        else passesMapper = true; // for when you're on a topic page
+        else if (Metamaps.Active.Topic) {
+            onMap = false;
+        }
+
+        var opacityForFilter = onMap ? 0 : 0.4;
 
         Metamaps.Topics.each(function(topic) {
             var n = topic.get('node');
@@ -3144,7 +3317,18 @@ Metamaps.Filter = {
             else passesMetacode = true;
 
             if (onMap) {
+                // when on a map, 
+                // we filter by mapper according to the person who added the 
+                // topic or synapse to the map
                 var user_id = topic.getMapping().get("user_id").toString();
+                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+                else passesMapper = true;
+            }
+            else {
+                // when on a topic view, 
+                // we filter by mapper according to the person who created the 
+                // topic or synapse
+                var user_id = topic.get("user_id").toString();
                 if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
                 else passesMapper = true;
             }
@@ -3158,7 +3342,7 @@ Metamaps.Filter = {
             else {
                 if (n) {
                     Metamaps.Control.deselectNode(n, true);
-                    n.setData('alpha', 0, 'end');
+                    n.setData('alpha', opacityForFilter, 'end');
                     n.eachAdjacency(function(e){
                         Metamaps.Control.deselectEdge(e, true);
                     });
@@ -3175,10 +3359,13 @@ Metamaps.Filter = {
             else passesSynapse = true;
 
             if (onMap) {
-                var user_id = synapse.getMapping().get("user_id").toString();
-                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
-                else passesMapper = true;
+                // when on a map, 
+                // we filter by mapper according to the person who added the 
+                // topic or synapse to the map
+                user_id = synapse.getMapping().get("user_id").toString();
             }
+            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+            else passesMapper = true;
 
             var color = Metamaps.Settings.colors.synapses.normal;
             if (passesSynapse && passesMapper) {
@@ -3191,10 +3378,10 @@ Metamaps.Filter = {
             else {
                 if (e) {
                     Metamaps.Control.deselectEdge(e, true);
-                    e.setData('alpha', 0, 'end');
+                    e.setData('alpha', opacityForFilter, 'end');
                 }
                 else console.log(synapse);
-            } 
+            }
         });
             
         // run the animation
@@ -3244,7 +3431,7 @@ Metamaps.Listeners = {
             case 69: //if e or E is pressed
                 if (e.ctrlKey){
                     e.preventDefault();
-                    Metamaps.JIT.zoomExtents();
+                    Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas);
                 }
                 break;
             case 77: //if m or M is pressed
@@ -3445,9 +3632,13 @@ Metamaps.Topic = {
         var bb = Metamaps.Backbone;
         var start = function (data) {
             Metamaps.Active.Topic = new bb.Topic(data.topic);
+            Metamaps.Creators = new bb.MapperCollection(data.creators);
             Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives));
             Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
             Metamaps.Backbone.attachCollectionEvents();
+
+            // set filter mapper H3 text
+            $('#filter_by_mapper h3').html('CREATORS');
 
             // build and render the visualization
             Metamaps.Visualize.type = "RGraph";
@@ -3475,12 +3666,12 @@ Metamaps.Topic = {
             $('.rightclickmenu').remove();
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
+            Metamaps.Filter.close();
         }
     },
     centerOn: function (nodeid) {
         if (!Metamaps.Visualize.mGraph.busy) {
-            var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
-            Metamaps.Visualize.mGraph.onClick(node.id, {
+            Metamaps.Visualize.mGraph.onClick(nodeid, {
                 hideLabels: false,
                 duration: 1000,
                 onComplete: function () {
@@ -3488,6 +3679,66 @@ Metamaps.Topic = {
                 }
             });
         }
+    },
+    fetchRelatives: function(node, metacode_id) {
+        
+        var topics = Metamaps.Topics.map(function(t){ return t.id });
+        var topics_string = topics.join();
+
+        var creators = Metamaps.Creators.map(function(t){ return t.id });
+        var creators_string = creators.join();
+
+        var topic = node.getData('topic');
+
+        var successCallback = function(data) {
+            if (data.creators.length > 0) Metamaps.Creators.add(data.creators);
+            if (data.topics.length > 0) Metamaps.Topics.add(data.topics);
+            if (data.synapses.length > 0) Metamaps.Synapses.add(data.synapses);
+
+            var topicColl = new Metamaps.Backbone.TopicCollection(data.topics);
+            topicColl.add(topic);
+            var synapseColl = new Metamaps.Backbone.SynapseCollection(data.synapses);
+
+            var graph = Metamaps.JIT.convertModelsToJIT(topicColl, synapseColl)[0];
+            Metamaps.Visualize.mGraph.op.sum(graph, {
+                type: 'fade',
+                duration: 500,
+                hideLabels: false
+            });
+
+            var i, l, t, s;
+        
+            Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+                t = Metamaps.Topics.get(n.id);
+                t.set({ node: n }, { silent: true });
+                t.updateNode();
+
+                n.eachAdjacency(function (edge) {
+                    if(!edge.getData('init')) {
+                        edge.setData('init', true);
+
+                        l = edge.getData('synapseIDs').length;
+                        for (i = 0; i < l; i++) {
+                            s = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
+                            s.set({ edge: edge }, { silent: true });
+                            s.updateEdge();
+                        }
+                    }
+                });
+            });
+        };
+
+        var paramsString = metacode_id ? "metacode=" + metacode_id + "&" : "";
+        paramsString += "network=" + topics_string + "&creators=" + creators_string;
+
+        $.ajax({
+            type: "Get",
+            url: "/topics/" + topic.id + "/relatives.json?" + paramsString,
+            success: successCallback,
+            error: function () {
+                
+            }
+        });
     },
     /*
      *
@@ -3504,14 +3755,9 @@ Metamaps.Topic = {
 
         if (!$.isEmptyObject(Metamaps.Visualize.mGraph.graph.nodes)) {
             Metamaps.Visualize.mGraph.graph.addNode(newnode);
-            Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-                n.setData("dim", 25, "start");
-                n.setData("dim", 25, "end");
-            });
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            topic.set('node', nodeOnViz);
-            topic.updateNode(); // links the topic and the mapping to the node    
-
+            topic.set('node', nodeOnViz, {silent: true});  
+            topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
             nodeOnViz.setData("dim", 25, "end");
@@ -3559,7 +3805,7 @@ Metamaps.Topic = {
         } else {
             Metamaps.Visualize.mGraph.loadJSON(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            topic.set('node', nodeOnViz);
+            topic.set('node', nodeOnViz, {silent: true});
             topic.updateNode(); // links the topic and the mapping to the node 
 
             nodeOnViz.setData("dim", 1, "start");
@@ -3617,6 +3863,11 @@ Metamaps.Topic = {
     },
     createTopicLocally: function () {
         var self = Metamaps.Topic;
+
+        if (Metamaps.Create.newTopic.name === "") {
+            Metamaps.GlobalUI.notifyUser("Please enter a topic title...");
+            return;
+        }
 
         $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
 
@@ -3903,6 +4154,9 @@ Metamaps.Map = {
                 $('.wrapper').addClass('commonsMap');
             }
 
+            // set filter mapper H3 text
+            $('#filter_by_mapper h3').html('MAPPERS');
+
             // build and render the visualization
             Metamaps.Visualize.type = "ForceDirected";
             Metamaps.JIT.prepareVizData();
@@ -3941,6 +4195,7 @@ Metamaps.Map = {
             Metamaps.SynapseCard.hideCard();
             Metamaps.Create.newTopic.hide();
             Metamaps.Create.newSynapse.hide();
+            Metamaps.Filter.close();
             Metamaps.Realtime.endActiveMap();
         }
     },
@@ -3949,31 +4204,37 @@ Metamaps.Map = {
 
         var nodes_data = "",
             synapses_data = "";
-        var synapses_array = new Array();
+        var nodes_array = [];
+        var synapses_array = [];
+        // collect the unfiltered topics
         Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-            //don't add to the map if it was filtered out
-            // TODO
-            //if (categoryVisible[n.getData('metacode')] == false) {
-            //    return;
-            //}
-
-            var x, y;
-            if (n.pos.x && n.pos.y) {
-                x = n.pos.x;
-                y = n.pos.y;
-            } else {
-                var x = Math.cos(n.pos.theta) * n.pos.rho;
-                var y = Math.sin(n.pos.theta) * n.pos.rho;
+            // if the opacity is less than 1 then it's filtered
+            if (n.getData('alpha') === 1) {
+                var id = n.getData('topic').id;
+                nodes_array.push(id);
+                var x, y;
+                if (n.pos.x && n.pos.y) {
+                    x = n.pos.x;
+                    y = n.pos.y;
+                } else {
+                    var x = Math.cos(n.pos.theta) * n.pos.rho;
+                    var y = Math.sin(n.pos.theta) * n.pos.rho;
+                }
+                nodes_data += id + '/' + x + '/' + y + ',';
             }
-            nodes_data += n.id + '/' + x + '/' + y + ',';
-            n.eachAdjacency(function (adj) {
-                synapses_array.push(adj.getData("synapses")[0].id); // TODO
-            });
         });
+        // collect the unfiltered synapses
+        Metamaps.Synapses.each(function(synapse){
+            var desc = synapse.get("desc");
 
-        //get unique values only
-        synapses_array = $.grep(synapses_array, function (value, key) {
-            return $.inArray(value, synapses_array) === key;
+            var descNotFiltered = Metamaps.Filter.visible.synapses.indexOf(desc) > -1;
+            // make sure that both topics are being added, otherwise, it 
+            // doesn't make sense to add the synapse
+            var topicsNotFiltered = nodes_array.indexOf(synapse.get('node1_id')) > -1;
+            topicsNotFiltered = topicsNotFiltered && nodes_array.indexOf(synapse.get('node2_id')) > -1;
+            if (descNotFiltered && topicsNotFiltered) {
+                synapses_array.push(synapse.id);
+            }
         });
 
         synapses_data = synapses_array.join();
@@ -3981,6 +4242,26 @@ Metamaps.Map = {
 
         Metamaps.GlobalUI.CreateMap.topicsToMap = nodes_data;
         Metamaps.GlobalUI.CreateMap.synapsesToMap = synapses_data;
+    },
+    leavePrivateMap: function(){
+        var map = Metamaps.Active.Map;
+        Metamaps.Maps.Active.remove(map);
+        Metamaps.Maps.Featured.remove(map);
+        Metamaps.Router.home();
+        Metamaps.GlobalUI.notifyUser('Sorry! That map has been changed to Private.');
+    },
+    commonsToPublic: function(){
+        Metamaps.Realtime.turnOff(true); // true is for 'silence'
+        Metamaps.GlobalUI.notifyUser('Map was changed to Public. Editing is disabled.');
+        Metamaps.Active.Map.trigger('changeByOther');
+    },
+    publicToCommons: function(){
+        var confirmString = "This map permission has been changed to Commons! ";
+        confirmString += "Do you want to reload and enable realtime collaboration?";
+        var c = confirm(confirmString);
+        if (c) {
+            Metamaps.Router.maps(Metamaps.Active.Map.id);
+        }
     },
     editedByActiveMapper: function () {
         if (Metamaps.Active.Mapper) {
@@ -4043,6 +4324,131 @@ Metamaps.Map = {
         Metamaps.Map.sideLength = 1;
         Metamaps.Map.timeToTurn = 0;
         Metamaps.Map.turnCount = 0;
+    },
+    exportImage: function() {
+
+        var canvas = {};
+
+        canvas.canvas = document.createElement("canvas");
+        canvas.canvas.width  =  1880; // 960;
+        canvas.canvas.height = 1260; // 630
+
+        canvas.scaleOffsetX = 1;
+        canvas.scaleOffsetY = 1;
+        canvas.translateOffsetY = 0;
+        canvas.translateOffsetX = 0;
+        canvas.denySelected = true;
+
+        canvas.getSize =  function() {
+            if(this.size) return this.size;
+            var canvas = this.canvas;
+            return this.size = {
+                width: canvas.width,
+                height: canvas.height
+            };
+        };
+        canvas.scale = function(x, y) {
+            var px = this.scaleOffsetX * x,
+                py = this.scaleOffsetY * y;
+            var dx = this.translateOffsetX * (x -1) / px,
+                dy = this.translateOffsetY * (y -1) / py;
+            this.scaleOffsetX = px;
+            this.scaleOffsetY = py;
+            this.getCtx().scale(x, y);
+            this.translate(dx, dy);
+        };
+        canvas.translate = function(x, y) {
+            var sx = this.scaleOffsetX,
+                sy = this.scaleOffsetY;
+            this.translateOffsetX += x*sx;
+            this.translateOffsetY += y*sy;
+            this.getCtx().translate(x, y); 
+        };
+        canvas.getCtx = function() {
+          return this.canvas.getContext("2d");
+        };
+        // center it
+        canvas.getCtx().translate(1880/2, 1260/2);
+
+        var mGraph = Metamaps.Visualize.mGraph;
+
+        var id = mGraph.root;
+        var root = mGraph.graph.getNode(id);
+        var T = !!root.visited;
+
+        // pass true to avoid basing it on a selection
+        Metamaps.JIT.zoomExtents(null, canvas, true);
+
+        var c = canvas.canvas,
+            ctx = canvas.getCtx(),
+            scale = canvas.scaleOffsetX;
+
+        // draw a grey background
+        ctx.fillStyle = '#d8d9da';
+        var xPoint = (-(c.width/scale)/2) - (canvas.translateOffsetX/scale),
+        yPoint = (-(c.height/scale)/2) - (canvas.translateOffsetY/scale);
+        ctx.fillRect(xPoint,yPoint,c.width/scale,c.height/scale);
+
+        // draw the graph
+        mGraph.graph.eachNode(function(node) {
+           var nodeAlpha = node.getData('alpha');
+           node.eachAdjacency(function(adj) {
+             var nodeTo = adj.nodeTo;
+             if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
+               mGraph.fx.plotLine(adj, canvas);
+             }
+           });
+           if(node.drawn) {
+             mGraph.fx.plotNode(node, canvas);
+           }
+           if(!mGraph.labelsHidden) {
+             if(node.drawn && nodeAlpha >= 0.95) {
+               mGraph.labels.plotLabel(canvas, node);
+             } else {
+               mGraph.labels.hideLabel(node, false);
+             }
+           }
+           node.visited = !T;
+         });
+        
+        var imageData = {
+            encoded_image: canvas.canvas.toDataURL()
+        };
+
+        console.log(imageData.encoded_image);
+        var map = Metamaps.Active.Map;
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10) {
+            dd='0'+dd
+        } 
+        if(mm<10) {
+            mm='0'+mm
+        }
+        today = mm+'/'+dd+'/'+yyyy;
+
+        var mapName = map.get("name").split(" ").join([separator = '-']);
+        var downloadMessage = "";
+        downloadMessage += "Captured map screenshot! ";
+        downloadMessage += "<a href='" + imageData.encoded_image + "' ";
+        downloadMessage += "download='metamap-" + map.id + "-" + mapName + "-" + today + ".png'>DOWNLOAD</a>";
+        Metamaps.GlobalUI.notifyUser(downloadMessage);
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: "/maps/" + Metamaps.Active.Map.id + "/upload_screenshot",
+            data: imageData,
+            success: function (data) {
+                console.log('successfully uploaded map screenshot');
+            },
+            error: function () {
+                console.log('failed to save map screenshot');
+            }
+        });
     }
 };
 
@@ -4191,8 +4597,13 @@ Metamaps.Map.InfoBox = {
 
         $('.mapInfoName .best_in_place_name').unbind("ajax:success").bind("ajax:success", function () {
             var name = $(this).html();
-            $('.mapName').html(name);
             Metamaps.Active.Map.set('name', name);
+            Metamaps.Active.Map.trigger('saved');
+        });
+
+        $('.mapInfoDesc .best_in_place_desc').unbind("ajax:success").bind("ajax:success", function () {
+            var desc = $(this).html();
+            Metamaps.Active.Map.set('desc', desc);
             Metamaps.Active.Map.trigger('saved');
         });
 
@@ -4202,6 +4613,11 @@ Metamaps.Map.InfoBox = {
         $('.mapInfoBox.yourMap').unbind('.yourMap').bind('click.yourMap', self.hidePermissionSelect);
 
         $('.yourMap .mapInfoDelete').unbind().click(self.deleteActiveMap);
+    },
+    updateNameDescPerm: function(name, desc, perm) {
+        $('.mapInfoName .best_in_place_name').html(name);
+        $('.mapInfoDesc .best_in_place_desc').html(desc);
+        $('.mapInfoBox .mapPermission').removeClass('commons public private').addClass(perm);
     },
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
@@ -4260,9 +4676,19 @@ Metamaps.Map.InfoBox = {
 
         self.selectingPermission = false;
         var permission = $(this).attr('class');
+        var permBefore = Metamaps.Active.Map.get('permission');
         Metamaps.Active.Map.save({
             permission: permission
         });
+        Metamaps.Active.Map.updateMapWrapper();
+        if (permBefore !== 'commons' && permission === 'commons') {
+            Metamaps.Realtime.setupSocket();
+            Metamaps.Realtime.turnOn();
+        }
+        else if (permBefore === 'commons' && permission === 'public') {
+            Metamaps.Realtime.turnOff(true); // true is to 'silence' 
+            // the notification that would otherwise be sent
+        }
         shareable = permission === 'private' ? '' : 'shareable';
         $('.mapPermission').removeClass('commons public private minimize').addClass(permission);
         $('.mapPermission .permissionSelect').remove();
@@ -4328,6 +4754,17 @@ Metamaps.Account = {
 
         $('.userImageMenu').hide();
     },
+    showLoading: function(){
+        var self = Metamaps.Account;
+
+        var loader = new CanvasLoader('accountPageLoading');
+        loader.setColor('#4FC059'); // default is '#000000'
+        loader.setDiameter(28); // default is 40
+        loader.setDensity(41); // default is 40
+        loader.setRange(0.9); // default is 1.3
+        loader.show(); // Hidden by default
+        $('#accountPageLoading').show();
+    },
     showImagePreview: function(){
         var self = Metamaps.Account;
 
@@ -4336,7 +4773,36 @@ Metamaps.Account = {
         var reader = new FileReader();
 
         reader.onload = function(e) {
-            $('.userImageDiv img').attr('src', reader.result);
+            var $canvas = $('<canvas>').attr({
+                width: 84,
+                height: 84
+            });
+            var context = $canvas[0].getContext('2d');
+            var imageObj = new Image();
+
+            imageObj.onload = function() {
+                $('.userImageDiv canvas').remove();
+                $('.userImageDiv img').hide();
+
+                var imgWidth = imageObj.width;
+                var imgHeight = imageObj.height;
+
+                var dimensionToMatch = imgWidth > imgHeight ? imgHeight : imgWidth;
+                // draw cropped image
+                var nonZero = Math.abs(imgHeight - imgWidth) / 2;
+                var sourceX = dimensionToMatch === imgWidth ? 0 : nonZero;
+                var sourceY = dimensionToMatch === imgHeight ? 0 : nonZero;
+                var sourceWidth = dimensionToMatch;
+                var sourceHeight = dimensionToMatch;
+                var destX = 0;
+                var destY = 0;
+                var destWidth = 84;
+                var destHeight = 84;
+
+                context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+                $('.userImageDiv').prepend($canvas);
+            };
+            imageObj.src = reader.result;
         };
 
         if (file) {
@@ -4348,7 +4814,8 @@ Metamaps.Account = {
     removePicture: function(){
         var self = Metamaps.Account;
 
-        $('.userImage img').attr('src', '/assets/user.png');
+        $('.userImageDiv canvas').remove();
+        $('.userImageDiv img').attr('src', '/assets/user.png').show();
         $('.userImageMenu').hide();
 
         var input = $('#user_image');

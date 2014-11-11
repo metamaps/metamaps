@@ -2477,7 +2477,6 @@ Extras.Classes.Navigation = new Class({
     // START METAMAPS CODE
       jQuery(document).trigger(Metamaps.JIT.events.zoom, [e]);
     // END METAMAPS CODE
-
   },
   
   onMouseDown: function(e, win, eventInfo) {
@@ -7097,7 +7096,7 @@ Graph.Plot = {
         ctx.restore();
     }
     //END METAMAPS CODE  
-       
+
      aGraph.eachNode(function(node) {
        var nodeAlpha = node.getData('alpha');
        node.eachAdjacency(function(adj) {
@@ -7427,6 +7426,7 @@ Graph.Label.Native = new Class({
        (end code)
     */
     plotLabel: function(canvas, node, controller) {
+      
       var ctx = canvas.getCtx();
       var pos = node.pos.getc(true);
 
@@ -7493,7 +7493,7 @@ Graph.Label.Native = new Class({
       // START METAMAPS CODE
       var index;
       for (index = 0; index < customLabel.length; ++index) {
-        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 8 + (25*index));
+        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 9 + (25*index));
       }
       // END METAMAPS CODE
     },

@@ -223,7 +223,7 @@ Metamaps.GlobalUI.CreateMap = {
         $(this).parents('.new_map').find('.permText').html(permText);
     },
     submit: function (event) {
-        event.preventDefault();
+        if (event) event.preventDefault();
         
         var self = Metamaps.GlobalUI.CreateMap;
 
@@ -233,23 +233,15 @@ Metamaps.GlobalUI.CreateMap = {
         }
 
         var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
-        var form = $(formId)
+        var $form = $(formId);
 
-        self.newMap.set('name', form.find('#map_name').val());
-        self.newMap.set('desc', form.find('#map_desc').val());
+        self.newMap.set('name', $form.find('#map_name').val());
+        self.newMap.set('desc', $form.find('#map_desc').val());
 
-        // TODO validate map attributes
         if (self.newMap.get('name').length===0){
-            console.log('Empty map name.');
-            Metamaps.GlobalUI.notifyUser('map name is mandatory.');
-            return;
-
-        } else if (self.newMap.get('name').length>140){
-            console.log('map name cannot exceed 140 characteres.');
-            Metamaps.GlobalUI.notifyUser('map name cannot exceed 140 characteres.');
+            self.throwMapNameError();
             return;
         }
-        //console.log('self.newMap.get("name").length='+self.newMap.get("name").length.toString());
 
         self.newMap.save(null, {
             success: self.success
@@ -258,6 +250,21 @@ Metamaps.GlobalUI.CreateMap = {
         
         Metamaps.GlobalUI.closeLightbox();
         Metamaps.GlobalUI.notifyUser('Working...');
+    },
+    throwMapNameError: function () {
+        var self = Metamaps.GlobalUI.CreateMap;
+
+        var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
+        var $form = $(formId);
+
+        var message = $("<div class='feedback_message'>Please enter a map name...</div>");
+
+        $form.find('#map_name').after(message);
+        setTimeout(function(){
+            message.fadeOut('fast', function(){
+                message.remove();
+            });
+        }, 5000);
     },
     success: function (model) {
         var self = Metamaps.GlobalUI.CreateMap;

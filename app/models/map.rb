@@ -8,12 +8,12 @@ class Map < ActiveRecord::Base
   has_many :topics, :through => :topicmappings
   has_many :synapses, :through => :synapsemappings
 
-  after_touch :save_screenshot
+  #after_touch :save_screenshot
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {
-   :thumb => ['188x126#', :png],
-   :full => ['940x630#', :png]
+   :thumb => ['188x126#', :png]
+   #:full => ['940x630#', :png]
   },
   :default_url => "/assets/missing-map.png"
     

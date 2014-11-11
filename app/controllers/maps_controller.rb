@@ -79,9 +79,16 @@ class MapsController < ApplicationController
         respond_to do |format|
             format.html { 
                 @allmappers = @map.contributors
-                @alltopics = @map.topics # should limit to topics visible to user
-                @allsynapses = @map.synapses # should also be limited
-                @allmappings = @map.mappings
+                @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+                @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @allmappings = @map.mappings.delete_if {|m| 
+                    if m.category == "Synapse"
+                        object = m.synapse
+                    elsif m.category == "Topic"
+                        object = m.topic
+                    end
+                    object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)) 
+                }
 
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
             }
@@ -100,9 +107,16 @@ class MapsController < ApplicationController
         end
 
         @allmappers = @map.contributors
-        @alltopics = @map.topics # should limit to topics visible to user
-        @allsynapses = @map.synapses # should also be limited
-        @allmappings = @map.mappings
+        @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @allmappings = @map.mappings.delete_if {|m| 
+            if m.category == "Synapse"
+                object = m.synapse
+            elsif m.category == "Topic"
+                object = m.topic
+            end
+            object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)) 
+        }
 
         @json = Hash.new()
         @json['map'] = @map
@@ -113,27 +127,6 @@ class MapsController < ApplicationController
 
         respond_to do |format|
             format.json { render json: @json }
-        end
-    end
-
-
-    # GET maps/:id/embed
-    def embed
-        @current = current_user
-        @map = Map.find(params[:id]).authorize_to_show(@current)
-
-        if not @map
-            redirect_to root_url and return
-        end
-
-        @alltopics = @map.topics # should limit to topics visible to user
-        @allsynapses = @map.synapses # should also be limited
-        @allmappings = @map.mappings
-        @allmetacodes = Metacode.all
-
-        respond_to do |format|
-            format.html { respond_with(@allmetacodes, @allmappings, @allsynapses, @alltopics, @map, @user) }
-            format.json { render json: @map }
         end
     end
 
@@ -199,6 +192,30 @@ class MapsController < ApplicationController
             else
                 format.json { render json: @map.errors, status: :unprocessable_entity }
             end
+        end
+    end
+
+    # POST maps/:id/upload_screenshot
+    def screenshot
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_edit(@current)
+
+        if @map
+          png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
+          StringIO.open(png) do |data|
+            data.class.class_eval { attr_accessor :original_filename, :content_type }
+            data.original_filename = "map-" + @map.id.to_s + "-screenshot.png"
+            data.content_type = "image/png"
+            @map.screenshot = data
+          end
+          
+          if @map.save
+            render :json => {:message => "Successfully uploaded the map screenshot."}
+          else
+            render :json => {:message => "Failed to upload image."}
+          end
+        else
+            render :json => {:message => "Unauthorized to set map screenshot."}
         end
     end
 

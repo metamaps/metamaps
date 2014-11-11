@@ -185,7 +185,7 @@
 .explorePage .sidebarSearchField,
 .explorePage .sidebarSearch .tt-hint {
 	width: 380px;
-	padding: 7px 10px 3px 10px;
+	padding: 5px 10px 5px 10px;
 }
 
 .sidebarSearchField {
@@ -201,7 +201,7 @@
     border-bottom: 1px solid #BDBDBD;
     border-left: none;
     border-right: none;
-    padding: 7px 0 3px 0;
+    padding: 5px 0 5px 0;
     width: 0px;
     margin: 0;
     outline: none;
@@ -212,7 +212,7 @@
 }
 .sidebarSearch .tt-dropdown-menu {
     top: 40px !important;
-    background: #FFF;
+    background: #F5F5F5;
     width: 472px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -571,7 +571,7 @@
 	top: 0;
 }
 
-.topicPage .sidebarCollaborate, .topicPage .sidebarFilter {
+.topicPage .sidebarCollaborate {
     display: none;
 }
 
@@ -798,6 +798,18 @@
     background-position: 0 0;
 	cursor:pointer;
 }
+.takeScreenshot {
+    margin-bottom: 5px;
+    border-radius: 2px;
+    background-image: url(screenshot_sprite.png);
+    display: none;
+}
+.takeScreenshot:hover {
+    background-position: -32px 0;
+}
+.canEditMap .takeScreenshot {
+    display: block;
+}
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
@@ -916,6 +928,10 @@
     z-index: 1;
     font-size: 14px;
     line-height:14px;
+}
+
+.toast a {
+    color: #4fc059;
 }
 
 /* end toast */

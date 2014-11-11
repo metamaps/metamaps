@@ -27,15 +27,27 @@ class TopicsController < ApplicationController
         @topic = Topic.find(params[:id]).authorize_to_show(@current)
 
         if not @topic
-            redirect_to root_url and return
+            redirect_to root_url, notice: "Access denied. That topic is private." and return
         end
 
         respond_to do |format|
             format.html { 
-                @alltopics = [@topic] + @topic.relatives # should limit to topics visible to user
-                @allsynapses = @topic.synapses # should also be limited
+                @alltopics = ([@topic] + @topic.relatives).delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) } # should limit to topics visible to user
+                @allsynapses = @topic.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
 
-                respond_with(@allsynapses, @alltopics, @topic) 
+                @allcreators = []
+                @alltopics.each do |t|
+                    if @allcreators.index(t.user) == nil
+                      @allcreators.push(t.user)
+                    end
+                end
+                @allsynapses.each do |s|
+                    if @allcreators.index(s.user) == nil
+                      @allcreators.push(s.user)
+                    end
+                end
+
+                respond_with(@allsynapses, @alltopics, @allcreators, @topic) 
             }
             format.json { render json: @topic }
         end
@@ -47,16 +59,108 @@ class TopicsController < ApplicationController
         @topic = Topic.find(params[:id]).authorize_to_show(@current)
 
         if not @topic
-            redirect_to root_url and return
+            redirect_to root_url, notice: "Access denied. That topic is private." and return
         end
 
-        @alltopics = @topic.relatives # should limit to topics visible to user
-        @allsynapses = @topic.synapses # should also be limited
-
+        @alltopics = @topic.relatives.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        @allsynapses = @topic.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @allcreators = []
+        @allcreators.push(@topic.user)
+        @alltopics.each do |t|
+            if @allcreators.index(t.user) == nil
+              @allcreators.push(t.user)
+            end
+        end
+        @allsynapses.each do |s|
+            if @allcreators.index(s.user) == nil
+              @allcreators.push(s.user)
+            end
+        end
+                
         @json = Hash.new()
         @json['topic'] = @topic
+        @json['creators'] = @allcreators
         @json['relatives'] = @alltopics
         @json['synapses'] = @allsynapses
+
+        respond_to do |format|
+            format.json { render json: @json }
+        end
+    end
+
+    # GET topics/:id/relative_numbers
+    def relative_numbers
+        @current = current_user
+        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+
+        if not @topic
+            redirect_to root_url, notice: "Access denied. That topic is private." and return
+        end
+
+        @topicsAlreadyHas = params[:network] ? params[:network].split(',') : []
+
+        @alltopics = @topic.relatives.delete_if {|t| 
+            @topicsAlreadyHas.index(t.id.to_s) != nil ||
+                (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
+        }
+
+        @alltopics.uniq!
+
+        @json = Hash.new()
+        @alltopics.each do |t|
+            if @json[t.metacode.id] 
+                @json[t.metacode.id] += 1
+            else
+                @json[t.metacode.id] = 1
+            end
+        end
+
+        respond_to do |format|
+            format.json { render json: @json }
+        end
+    end
+
+    # GET topics/:id/relatives
+    def relatives
+        @current = current_user
+        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+
+        if not @topic
+            redirect_to root_url, notice: "Access denied. That topic is private." and return
+        end
+
+        @topicsAlreadyHas = params[:network] ? params[:network].split(',') : []
+
+        @alltopics = @topic.relatives.delete_if {|t| 
+            @topicsAlreadyHas.index(t.id.to_s) != nil ||
+                (params[:metacode] && t.metacode_id.to_s != params[:metacode]) ||
+                (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
+        }
+
+        @alltopics.uniq!
+
+        @allsynapses = @topic.synapses.delete_if {|s|
+            (s.topic1 == @topic && @alltopics.index(s.topic2) == nil) ||
+            (s.topic2 == @topic && @alltopics.index(s.topic1) == nil)
+        }
+
+        @creatorsAlreadyHas = params[:creators] ? params[:creators].split(',') : []
+        @allcreators = []
+        @alltopics.each do |t|
+            if @allcreators.index(t.user) == nil && @creatorsAlreadyHas.index(t.user_id.to_s) == nil
+              @allcreators.push(t.user)
+            end
+        end
+        @allsynapses.each do |s|
+            if @allcreators.index(s.user) == nil && @creatorsAlreadyHas.index(s.user_id.to_s) == nil
+              @allcreators.push(s.user)
+            end
+        end
+
+        @json = Hash.new()
+        @json['topics'] = @alltopics
+        @json['synapses'] = @allsynapses
+        @json['creators'] = @allcreators
 
         respond_to do |format|
             format.json { render json: @json }

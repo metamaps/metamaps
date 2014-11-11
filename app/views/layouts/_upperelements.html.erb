@@ -30,7 +30,7 @@
                     <div class="realtimeMapperList">
                         <ul>
                             <li class="rtMapper littleRtOn rtMapperSelf">
-                                <%= image_tag user.image.url(:thumb), :size => "24x24", :class => "rtUserImage" %>
+                                <%= image_tag user.image.url(:square), :size => "24x24", :class => "rtUserImage" %>
                                 <%= user.name %> (me)
                                 <div class="littleJuntoIcon"></div>
                             </li>
@@ -62,7 +62,7 @@
     <!-- Account / Sign in -->
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon">
-              <%= image_tag user.image.url(:thumb), :size => "32x32" %>
+              <%= image_tag user.image.url(:square), :size => "32x32" %>
         </div>
         <div class="sidebarAccountBox upperRightBox">
             <%= render :partial => 'layouts/account' %>
