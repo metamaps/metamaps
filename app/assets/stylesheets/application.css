@@ -1220,7 +1220,7 @@ h3.realtimeBoxTitle {
 }
 
 .rightclickmenu .rc-center .rc-icon {
-    
+    background-image: url(context_topicview_sprite.png);
 }
 .rightclickmenu .rc-popout .rc-icon {
     background-position: 0 -72px;
@@ -1230,6 +1230,10 @@ h3.realtimeBoxTitle {
 }
 .rightclickmenu .rc-metacode .rc-icon {
     background-position: 0 -120px;
+}
+.rightclickmenu .rc-siblings .rc-icon {
+    background-position: 0 -24px;
+    background-image: url(context_topicview_sprite.png);
 }
 .rightclickmenu .expandLi {
     position: absolute;
