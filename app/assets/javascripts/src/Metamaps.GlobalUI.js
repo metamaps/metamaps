@@ -324,6 +324,8 @@ Metamaps.GlobalUI.Account = {
 
         Metamaps.Realtime.close();
         Metamaps.Filter.close();
+        $('.sidebarAccountIcon div').addClass('hide');
+
 
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -337,6 +339,7 @@ Metamaps.GlobalUI.Account = {
     close: function () {
         var self = Metamaps.GlobalUI.Account;
 
+        $('.sidebarAccountIcon div').removeClass('hide');
         if (!self.changing) {
             self.changing = true;
             $('.sidebarAccountBox #user_email').blur();

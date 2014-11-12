@@ -763,17 +763,160 @@
     background-position: 0 0;
 	cursor:pointer;
 }
+
+.mapControls:hover, .infoAndHelp:hover {
+    z-index: 4;
+}
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
     background-image: url(extents_sprite.png);
 }
+
 .zoomExtents:hover {
     background-position: -32px 0;
 }
+
+.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .sidebarCollaborateIcon:hover .tooltipsUnder,
+ .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .sidebarAccountIcon:hover .tooltipsUnder,
+ .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove {
+    display: block;
+}
+
+.hide {
+    display: none !important; 
+}
+
+.tooltips {
+    display: none;
+    position: absolute;
+    background: black;
+    text-align: center;
+    right: 45px;
+    color: white;
+    border-radius: 2px;
+    font-family: din-regular;
+    line-height: 15px;
+    font-size: 12px;
+    padding: 3px 5px 2px;
+    white-space: nowrap;
+    margin-top: 5px;
+}
+
+.tooltipsUnder {
+    display: none;
+    position: absolute;
+    background: black;
+    text-align: center;
+    color: white;
+    border-radius: 2px;
+    font-family: din-regular;
+    line-height: 15px;
+    font-size: 12px;
+    padding: 3px 5px 2px;
+    white-space: nowrap;
+    margin-top: 36px;
+}
+
+.tooltipsAbove {
+    display: none;
+    position: absolute;
+    background: black;
+    text-align: center;
+    text-transform: none;
+    color: white;
+    border-radius: 2px;
+    font-family: din-regular;
+    line-height: 15px;
+    font-size: 12px;
+    padding: 3px 5px 2px;
+    white-space: nowrap;
+    margin-top: -23px;
+    font-style: normal;
+}
+
+.sidebarCollaborateIcon .tooltipsUnder {
+    margin-left: -3px;
+}
+
+.sidebarFilterIcon .tooltipsUnder {
+    margin-left: -4px;
+}
+
+.sidebarForkIcon .tooltipsUnder {
+    margin-left: -34px;
+}
+
+.sidebarForkIcon div:after{
+    left: 45%;
+}
+
+.addMap .tooltipsUnder {
+    margin-left: -36px;
+}
+
+.addMap div:after {
+    left: 45%;
+}
+
+.mapInfoIcon .tooltipsAbove {
+    left: -11px;
+}
+
+.openCheatsheet .tooltipsAbove {
+    left: 29px;
+}
+
+.sidebarAccountIcon .tooltipsUnder {
+    margin-left: -8px;
+    margin-top: 40px;
+}
+
+.zoomExtents div::after, .zoomIn div::after, .zoomOut div::after {
+    content: '';
+    position: absolute;
+    top: 57%;
+    left: 100%;
+    margin-top: -6px;
+    width: 0;
+    height: 0;
+    border-left: 4px solid #000000;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarAccountIcon div:after {
+    left: 38%;
+}
+
+.sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon div:after {
+    content: '';
+    position: absolute;
+    top: 128%;
+    margin-top: -30px;
+    width: 0;
+    height: 0;
+    border-bottom: 4px solid #000000;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
+
+.mapInfoIcon div:after, .openCheatsheet div:after {
+   content: '';
+    position: absolute;
+    top: 77%;
+    left: 41%;
+    margin-top: 5px;
+    width: 0;
+    height: 0;
+    border-top: 4px solid #000000;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
+
 .zoomIn {
     background-image: url(zoom_sprite.png);
-    background-position: 0 0;
+    background-position: 0 /…0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }

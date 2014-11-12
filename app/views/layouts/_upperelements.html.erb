@@ -22,7 +22,7 @@
         <% if authenticated? %>
             <!-- Realtime -->
             <div class="sidebarCollaborate upperRightEl">
-                <div class="sidebarCollaborateIcon upperRightIcon blue"></div>
+                <div class="sidebarCollaborateIcon upperRightIcon blue"><div class="tooltipsUnder">Junto</div></div>
                 <div class="sidebarCollaborateBox upperRightBox">
                     <h3 class="realtimeBoxTitle">REALTIME</h3>
                     <span class="realtimeOnOff rtOff">OFF</span>
@@ -43,7 +43,7 @@
 
         <!-- filtering -->
         <div class="sidebarFilter upperRightEl">
-            <div class="sidebarFilterIcon upperRightIcon"></div>
+            <div class="sidebarFilterIcon upperRightIcon"><div class="tooltipsUnder">Filter</div></div>
             <div class="sidebarFilterBox upperRightBox">
                 <%= render :partial => 'shared/filterBox' %>
             </div>
@@ -52,7 +52,7 @@
         <% if authenticated? %>
         <!-- fork map -->
         <div class="sidebarFork upperRightEl">
-            <div class="sidebarForkIcon upperRightIcon"></div>
+            <div class="sidebarForkIcon upperRightIcon"><div class="tooltipsUnder">Save to new map</div></div>
         </div> <!-- end sidebarFork -->
         <% end %>
 
@@ -61,14 +61,14 @@
 
     <% if authenticated? %>
     <!-- create new map -->
-    <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap">
+    <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap"><div class="tooltipsUnder">Create new map</div>
     </div><!-- end addMap -->
     <% end %>
 
     <!-- Account / Sign in -->
     <% if !(controller_name == "sessions" && action_name == "new") %>
     <div class="sidebarAccount upperRightEl">
-        <div class="sidebarAccountIcon">
+        <div class="sidebarAccountIcon"><div class="tooltipsUnder">Account</div>
             <% if user && user.image %>
               <%= image_tag user.image.url(:square), :size => "32x32" %>
             <% elsif !authenticated? %>

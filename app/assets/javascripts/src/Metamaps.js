@@ -1822,6 +1822,7 @@ Metamaps.Realtime = {
 
         Metamaps.GlobalUI.Account.close();
         Metamaps.Filter.close();
+        $('.sidebarCollaborateIcon div').addClass('hide');
 
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -1833,7 +1834,7 @@ Metamaps.Realtime = {
     },
     close: function () {
         var self = Metamaps.Realtime;
-
+        $(".sidebarCollaborateIcon div").removeClass('hide');
         if (!self.changing) {
             self.changing = true;
             $('.sidebarCollaborateBox').fadeOut(200, function () {
@@ -3063,6 +3064,8 @@ Metamaps.Filter = {
 
         Metamaps.GlobalUI.Account.close();
         Metamaps.Realtime.close();
+        $('.sidebarFilterIcon div').addClass('hide');
+
 
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -3076,6 +3079,8 @@ Metamaps.Filter = {
     },
     close: function () {
         var self = Metamaps.Filter;
+        $('.sidebarFilterIcon div').removeClass('hide');
+
 
         if (!self.changing) {
             self.changing = true;
@@ -4121,6 +4126,7 @@ Metamaps.Map = {
 
         Metamaps.GlobalUI.CreateMap.topicsToMap = nodes_data;
         Metamaps.GlobalUI.CreateMap.synapsesToMap = synapses_data;
+
     },
     leavePrivateMap: function(){
         var map = Metamaps.Active.Map;
@@ -4274,7 +4280,7 @@ Metamaps.Map.InfoBox = {
     },
     open: function () {
         var self = Metamaps.Map.InfoBox;
-
+        $('.mapInfoIcon div').addClass('hide');
         if (!self.isOpen && !self.changing) {
             self.changing = true;
             $('.mapInfoBox').fadeIn(200, function () {
@@ -4286,6 +4292,7 @@ Metamaps.Map.InfoBox = {
     close: function () {
         var self = Metamaps.Map.InfoBox;
 
+        $('.mapInfoIcon div').removeClass('hide');
         if (!self.changing) {
             self.changing = true;
             $('.mapInfoBox').fadeOut(200, function () {
