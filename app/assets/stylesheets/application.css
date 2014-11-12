@@ -519,19 +519,19 @@ input[type="submit"]:active {
 
 #new_topic .twitter-typeahead {
     position: absolute !important;
-    top: 40px;
-    left: 35px;
+    top: 45px;
+    left: 41px;
     z-index: 9999;
-    width: 270px;
+    width: 256px;
     height: 42px;
 }
 .new_topic #topic_name,
 .new_topic .tt-hint {
-    width: 254px;
+    width: 244px;
     background: #FFFFFF;
     height: 14px;
     margin: 0;
-    padding: 14px 8px;
+    padding: 10px 6px;
     border: none;
     border-radius: 2px;
     outline: none;
@@ -581,11 +581,11 @@ input[type="submit"]:active {
 }
 .new_synapse #synapse_desc,
 .new_synapse .tt-hint {
-    width: 254px;
+    width: 244px;
     background: #FFFFFF;
     height: 14px;
     margin: 0;
-    padding: 14px 8px;
+    padding: 10px 6px;
     border: none;
     border-radius: 2px;
     outline: none;
@@ -1170,8 +1170,9 @@ h3.realtimeBoxTitle {
 
 .rightclickmenu {
     position: absolute;
-    width: 300px;
+    width: 260px;
     background: #FFFFFF;
+    padding: 6px 0px 6px 0px;
     z-index: 20;
     border-radius: 2px;
     color: black;
@@ -1184,8 +1185,8 @@ h3.realtimeBoxTitle {
     list-style: none;
     padding: 6px 10px 6px 32px;
     font-family: helvetica, sans-serif;
-    font-size: 12px;
-    line-height: 12px;
+    font-size: 13px;
+    line-height: 15px;
     position: relative;
 }
 .rightclickmenu li:hover {
@@ -1219,7 +1220,7 @@ h3.realtimeBoxTitle {
 }
 
 .rightclickmenu .rc-center .rc-icon {
-    
+    background-image: url(context_topicview_sprite.png);
 }
 .rightclickmenu .rc-popout .rc-icon {
     background-position: 0 -72px;
@@ -1229,6 +1230,10 @@ h3.realtimeBoxTitle {
 }
 .rightclickmenu .rc-metacode .rc-icon {
     background-position: 0 -120px;
+}
+.rightclickmenu .rc-siblings .rc-icon {
+    background-position: 0 -24px;
+    background-image: url(context_topicview_sprite.png);
 }
 .rightclickmenu .expandLi {
     position: absolute;
@@ -1243,7 +1248,9 @@ h3.realtimeBoxTitle {
 .rc-metacode li img {
 float: left;
 }
-.rightclickmenu .rc-permission ul, .rightclickmenu .rc-metacode ul  {
+.rightclickmenu .rc-permission ul, 
+.rightclickmenu .rc-metacode ul,
+.rightclickmenu .rc-siblings ul  {
     display: none;
     background: white;
     top: 0;
@@ -1254,7 +1261,9 @@ float: left;
     border-top-right-radius: 2px;
     box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
-.rightclickmenu .rc-permission:hover > ul, .rightclickmenu .rc-metacode:hover > ul {
+.rightclickmenu .rc-permission:hover > ul, 
+.rightclickmenu .rc-metacode:hover > ul,
+ .rightclickmenu .rc-siblings:hover > ul {
     display: block;
 }
 .rightclickmenu p {
@@ -1282,20 +1291,24 @@ float: left;
 .rightclickmenu li.toPrivate .rc-perm-icon {
     background-position: -24px 0;
 }
-.rightclickmenu .rc-metacode > ul > li {
+.rightclickmenu .rc-metacode > ul > li,
+.rightclickmenu .rc-siblings > ul > li {
     padding: 6px 10px 6px 8px;
     width: 100px;
 }
-.rightclickmenu .rc-metacode ul ul {
+.rightclickmenu .rc-metacode ul ul,
+.rightclickmenu .rc-siblings ul ul {
     display: none;
     max-height: 270px;
     overflow-y: auto;
     overflow-x: hidden;
 }
-.rightclickmenu .rc-metacode li:hover ul {
+.rightclickmenu .rc-metacode li:hover ul,
+.rightclickmenu .rc-siblings li:hover ul {
     display: block;
 }
-.rightclickmenu .rc-metacode ul ul li {
+.rightclickmenu .rc-metacode ul ul li,
+.rightclickmenu .rc-siblings ul ul li {
     padding: 4px 10px 4px 8px;
     width: 120px;
 }
@@ -1314,13 +1327,22 @@ float: left;
     display: block;
 }
 
-.moveMenusUp .rc-metacode ul, .moveMenusUp .rc-permission ul {
+.moveMenusUp .rc-metacode ul, 
+.moveMenusUp .rc-permission ul,
+.moveMenusUp .rc-siblings ul {
     top: auto;
     bottom: 0;
 }
-.moveMenusToLeft .rc-metacode ul, .moveMenusToLeft .rc-permission ul {
+.moveMenusToLeft .rc-metacode ul, 
+.moveMenusToLeft .rc-permission ul,
+.moveMenusToLeft .rc-siblings ul {
     left: auto;
     right: 100%;
+}
+
+#loadingSiblings div {
+    width: 15px;
+    margin: 0 auto;
 }
 
 
@@ -1337,7 +1359,7 @@ float: left;
 #new_topic .tt-suggestion, 
 #new_synapse .tt-suggestion {
     background: #F5F5F5;
-    width: 270px;
+    width: 256px;
     position: relative;
 }
 #new_topic .autocompleteSection {
@@ -1606,7 +1628,7 @@ float: left;
     background-position: 13px center;
 }
 .mapSynapses {
-    background-image: url(synapse32.png);
+    background-image: url(synapse32padded.png);
     background-position: 13px center;
 }
 .mapInfoBox .mapPermission {
@@ -1671,7 +1693,7 @@ float: left;
 .mapInfoBox .mapInfoDesc {
     font-family: helvetica, sans-serif;
     color: #E0E0E0;
-    margin: 8px;
+    margin: 16px;
     padding-right: 16px;
     height: 115px;
     font-size: 14px;

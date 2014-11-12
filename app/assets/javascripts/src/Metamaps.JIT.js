@@ -20,19 +20,26 @@ Metamaps.JIT = {
 
         $(".zoomIn").click(self.zoomIn);
         $(".zoomOut").click(self.zoomOut);
-        $(".zoomExtents").click(self.zoomExtents);
 
-        self.synapseStarImage = new Image();
-        self.synapseStarImage.src = '/assets/synapsestar.png';
+        var zoomExtents = function (event) {
+            self.zoomExtents(event, Metamaps.Visualize.mGraph.canvas);
+        };
+        $(".zoomExtents").click(zoomExtents);
 
-        self.topicMediaImage = new Image();
-        self.topicMediaImage.src = '/assets/linkedmedia.png';
+        $(".takeScreenshot").click(Metamaps.Map.exportImage);
+
+        self.topicDescImage = new Image();
+        self.topicDescImage.src = '/assets/topic_description_signifier.png';
+
+        self.topicLinkImage = new Image();
+        self.topicLinkImage.src = '/assets/topic_link_signifier.png';
     },
     /**
      * convert our topic JSON into something JIT can use
      */
-    prepareVizData: function () {
-        var self = Metamaps.JIT;
+    convertModelsToJIT: function(topics, synapses) {
+        var jitReady = [];
+
         var synapsesToRemove = [];
         var topic;
         var mapping;
@@ -42,18 +49,14 @@ Metamaps.JIT = {
         var edge;
         var edges = [];
 
-        // reset/empty vizData
-        self.vizData = [];
-        Metamaps.Visualize.loadLater = false;
-
-        Metamaps.Topics.each(function (t) {
+        topics.each(function (t) {
             node = t.createNode();
             nodes[node.id] = node;
         });
-        Metamaps.Synapses.each(function (s) {
+        synapses.each(function (s) {
             edge = s.createEdge();
 
-            if(Metamaps.Topics.get(s.get('node1_id')) === undefined || Metamaps.Topics.get(s.get('node2_id')) === undefined) {
+            if (topics.get(s.get('node1_id')) === undefined || topics.get(s.get('node2_id')) === undefined) {
                 // this means it's an invalid synapse
                 synapsesToRemove.push(s);
             } 
@@ -83,15 +86,29 @@ Metamaps.JIT = {
             }
         });
 
+        _.each(nodes, function (node) {
+            jitReady.push(node);
+        });
+
+        return [jitReady, synapsesToRemove];
+    },
+    prepareVizData: function () {
+        var self = Metamaps.JIT;
+        var mapping;
+
+        // reset/empty vizData
+        self.vizData = [];
+        Metamaps.Visualize.loadLater = false;
+
+        var results = self.convertModelsToJIT(Metamaps.Topics, Metamaps.Synapses);
+
+        self.vizData = results[0];
+
         // clean up the synapses array in case of any faulty data
-        _.each(synapsesToRemove, function (synapse) {
+        _.each(results[1], function (synapse) {
             mapping = synapse.getMapping();
             Metamaps.Synapses.remove(synapse);
             Metamaps.Mappings.remove(mapping);
-        });
-
-        _.each(nodes, function (node) {
-            self.vizData.push(node);
         });
 
         if (self.vizData.length == 0) {
@@ -123,24 +140,45 @@ Metamaps.JIT = {
         var directionCat = synapse.get("category");
 
         //label placement on edges
-        Metamaps.JIT.renderEdgeArrows($jit.Graph.Plot.edgeHelper, adj, synapse);
+        if (canvas.denySelected) {
+            var color = Metamaps.Settings.colors.synapses.normal;
+            canvas.getCtx().fillStyle = canvas.getCtx().strokeStyle = color;
+        }
+        Metamaps.JIT.renderEdgeArrows($jit.Graph.Plot.edgeHelper, adj, synapse, canvas);
 
         //check for edge label in data  
         var desc = synapse.get("desc");
 
         var showDesc = adj.getData("showDesc");
 
-        var drawStar = function (context, x, y) {
-            var starImage = Metamaps.JIT.synapseStarImage;
-            var starImageLoaded = starImage.complete ||
-                (typeof starImage.naturalWidth !== "undefined" &&
-                    starImage.naturalWidth !== 0)
-            if (starImageLoaded) {
-                context.drawImage(starImage, x, y, 16, 16);
-            }
+        var drawSynapseCount = function (context, x, y, count) {
+            /*
+            circle size: 16x16px
+            positioning: overlay and center on top right corner of synapse label - 8px left and 8px down
+            color: #dab539
+            border color: #424242
+            border size: 1.5px
+            font: DIN medium
+            font-size: 14pt
+            font-color: #424242
+            */
+            context.beginPath();
+            context.arc(x, y, 8, 0, 2 * Math.PI, false);
+            context.fillStyle = '#DAB539';
+            context.strokeStyle = '#424242';
+            context.lineWidth = 1.5;
+            context.closePath();
+            context.fill();
+            context.stroke();
+
+            // add the synapse count
+            context.fillStyle = '#424242';
+            context.textAlign = 'center';
+            context.font = '14px din-medium';
+            context.fillText(count, x, y - 6);
         };
 
-        if (desc != "" && showDesc) {
+        if (!canvas.denySelected && desc != "" && showDesc) {
             // '&amp;' to '&'
             desc = Metamaps.Util.decodeEntities(desc);
 
@@ -155,7 +193,7 @@ Metamaps.JIT = {
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
                 lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
             }
-            var width = Math.max.apply(null, lineWidths) + 8;
+            var width = Math.max.apply(null, lineWidths) + 16;
             var height = (16 * arrayOfLabelLines.length) + 8;
 
             var x = (pos.x + posChild.x - width) / 2;
@@ -177,23 +215,29 @@ Metamaps.JIT = {
             ctx.closePath();
             ctx.fill();
 
+            // get number of synapses
+            var synapseNum = adj.getData("synapses").length;
+
             //render text
-            ctx.fillStyle = '#222222';
+            ctx.fillStyle = '#424242';
             ctx.textAlign = 'center';
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 5 + (16 * index));
+                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 7 + (16 * index));
             }
 
-            if (adj.getData("synapses").length > 1) {
-                drawStar(ctx, x + width, y);
+            if (synapseNum > 1) {
+                drawSynapseCount(ctx, x + width, y, synapseNum);
             }
         }
-        else if (showDesc) {
-            if (adj.getData("synapses").length > 1) {
+        else if (!canvas.denySelected && showDesc) {
+            // get number of synapses
+            var synapseNum = adj.getData("synapses").length;
+
+            if (synapseNum > 1) {
                 var ctx = canvas.getCtx();
                 var x = (pos.x + posChild.x) / 2;
                 var y = (pos.y + posChild.y) / 2;
-                drawStar(ctx, x, y);
+                drawSynapseCount(ctx, x, y, synapseNum);
             }
         }
 
@@ -400,7 +444,7 @@ Metamaps.JIT = {
                         ctx = canvas.getCtx();
 
                     // if the topic is selected draw a circle around it
-                    if (node.selected) {
+                    if (!canvas.denySelected && node.selected) {
                         ctx.beginPath();
                         ctx.arc(pos.x, pos.y, dim + 3, 0, 2 * Math.PI, false);
                         ctx.strokeStyle = Metamaps.Settings.colors.topics.selected;
@@ -423,12 +467,22 @@ Metamaps.JIT = {
 
                     // if the topic has a link, draw a small image to indicate that
                     var hasLink = topic && topic.get('link') !== "" && topic.get('link') !== null;
-                    var linkImage = Metamaps.JIT.topicMediaImage;
+                    var linkImage = Metamaps.JIT.topicLinkImage;
                     var linkImageLoaded = linkImage.complete ||
                         (typeof linkImage.naturalWidth !== "undefined" &&
                             linkImage.naturalWidth !== 0)
                     if (hasLink && linkImageLoaded) {
-                        ctx.drawImage(linkImage, pos.x + dim / 2, pos.y - dim - 8, 16, 16);
+                        ctx.drawImage(linkImage, pos.x - dim - 8, pos.y - dim - 8, 16, 16);
+                    }
+
+                    // if the topic has a desc, draw a small image to indicate that
+                    var hasDesc = topic && topic.get('desc') !== "" && topic.get('desc') !== null;
+                    var descImage = Metamaps.JIT.topicDescImage;
+                    var descImageLoaded = descImage.complete ||
+                        (typeof descImage.naturalWidth !== "undefined" &&
+                            descImage.naturalWidth !== 0)
+                    if (hasDesc && descImageLoaded) {
+                        ctx.drawImage(descImage, pos.x + dim - 8, pos.y - dim - 8, 16, 16);
                     }
                 },
                 'contains': function (node, pos) {
@@ -469,7 +523,7 @@ Metamaps.JIT = {
                     if (-1 < pos.x && pos.x < 1) pos.x = 0;
                     if (-1 < pos.y && pos.y < 1) pos.y = 0;
                     
-                    return $jit.Graph.Plot.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon);
+                    return $jit.Graph.Plot.edgeHelper.line.contains(from, to, pos, adj.Edge.epsilon + 5);
                 }
             }
         }
@@ -865,6 +919,9 @@ Metamaps.JIT = {
                     };
                 }
             }
+            else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Metamaps.Active.Topic) {
+                Metamaps.GlobalUI.notifyUser("Cannot create in Topic view.");
+            }
             else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && !authorized) {
                 Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
             }
@@ -957,6 +1014,10 @@ Metamaps.JIT = {
         if (now - storedTime < Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE && !Metamaps.Mouse.didPan) {
             if (Metamaps.Active.Map && !authorized) {
                 Metamaps.GlobalUI.notifyUser("Cannot edit Public map.");
+                return;
+            }
+            else if (Metamaps.Active.Topic) {
+                Metamaps.GlobalUI.notifyUser("Cannot create in Topic view.");
                 return;
             }
             // DOUBLE CLICK
@@ -1269,7 +1330,9 @@ Metamaps.JIT = {
         if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
         
 
-        if (Metamaps.Active.Topic) menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
+        if (Metamaps.Active.Topic) {
+            menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>';
+        }
         menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>';
         if (Metamaps.Active.Mapper) {
             var options = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
@@ -1282,6 +1345,15 @@ Metamaps.JIT = {
             var metacodeOptions = $('#metacodeOptions').html();
 
             menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode' + metacodeOptions + '<div class="expandLi"></div></li>';
+        }
+        if (Metamaps.Active.Topic) {
+            // set up the get sibling menu as a "lazy load"
+            // only fill in the submenu when they hover over the get siblings list item
+            var siblingMenu = '<ul id="fetchSiblingList"> \
+                                <li class="fetchAll">All</li> \
+                                <li id="loadingSiblings"></li> \
+                            </ul>';
+            menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Get siblings' + siblingMenu + '<div class="expandLi"></div></li>';
         }
 
         menustring += '</ul>';
@@ -1376,7 +1448,70 @@ Metamaps.JIT = {
             Metamaps.Control.updateSelectedMetacodes($(this).attr('data-id'));
         });
 
-    }, //selectNodeOnRightClickHandler
+
+        // fetch relatives
+        var fetched = false;
+        $('.rc-siblings').hover(function () {
+            if (!fetched) {
+                Metamaps.JIT.populateRightClickSiblings(node);
+                fetched = true;
+            }
+        });
+        $('.rc-siblings .fetchAll').click(function () {
+            $('.rightclickmenu').remove();
+            // data-id is a metacode id
+            Metamaps.Topic.fetchRelatives(node);
+        });
+    }, //selectNodeOnRightClickHandler,
+    populateRightClickSiblings: function(node) {
+        var self = Metamaps.JIT;
+
+        // depending on how many topics are selected, do different things
+        /*if (Metamaps.Selected.Nodes.length > 1) {
+            // we don't bother filling the submenu with 
+            // specific numbers, because there are too many topics
+            // selected to find those numbers
+            $('#loadingSiblings').remove();
+            return;
+        }*/
+
+        var topic = node.getData('topic');
+
+        // add a loading icon for now
+        var loader = new CanvasLoader('loadingSiblings');
+        loader.setColor('#4FC059'); // default is '#000000'
+        loader.setDiameter(15); // default is 40
+        loader.setDensity(41); // default is 40
+        loader.setRange(0.9); // default is 1.3
+        loader.show(); // Hidden by default
+
+        var topics = Metamaps.Topics.map(function(t){ return t.id });
+        var topics_string = topics.join();
+
+        var successCallback = function(data) {
+            $('#loadingSiblings').remove();
+
+            for (var key in data) {
+                var string = Metamaps.Metacodes.get(key).get('name') + ' (' + data[key] + ')';
+                $('#fetchSiblingList').append('<li class="getSiblings" data-id="' + key + '">' + string + '</li>');
+            }
+
+            $('.rc-siblings .getSiblings').click(function () {
+                $('.rightclickmenu').remove();
+                // data-id is a metacode id
+                Metamaps.Topic.fetchRelatives(node, $(this).attr('data-id'));
+            });
+        };
+
+        $.ajax({
+            type: "Get",
+            url: "/topics/" + topic.id + "/relative_numbers.json?network=" + topics_string,
+            success: successCallback,
+            error: function () {
+                
+            }
+        });
+    },
     selectEdgeOnClickHandler: function (adj, e) {
         if (Metamaps.Visualize.mGraph.busy) return;
 
@@ -1595,11 +1730,9 @@ Metamaps.JIT = {
         ctx.lineTo(v2.x, v2.y);
         ctx.stroke();
     }, // renderMidArrow
-    renderEdgeArrows: function (edgeHelper, adj, synapse) {
+    renderEdgeArrows: function (edgeHelper, adj, synapse, canvas) {
 
         var self = Metamaps.JIT;
-
-        var canvas = Metamaps.Visualize.mGraph.canvas;
 
         var directionCat = synapse.get('category');
         var direction = synapse.getDirection();
@@ -1657,8 +1790,7 @@ Metamaps.JIT = {
         Metamaps.Visualize.mGraph.canvas.scale(0.8,0.8);
         $(document).trigger(Metamaps.JIT.events.zoom, [event]);
     },
-    centerMap: function () {
-        var canvas = Metamaps.Visualize.mGraph.canvas;
+    centerMap: function (canvas) {
         var offsetScale = canvas.scaleOffsetX;
                 
         canvas.scale(1/offsetScale,1/offsetScale);
@@ -1674,7 +1806,8 @@ Metamaps.JIT = {
             eX = Metamaps.Mouse.boxEndCoordinates.x,
             eY = Metamaps.Mouse.boxEndCoordinates.y;
 
-        Metamaps.JIT.centerMap();
+        var canvas = Metamaps.Visualize.mGraph.canvas;
+        Metamaps.JIT.centerMap(canvas);
 
         var height = $(document).height(),
             width = $(document).width();
@@ -1685,8 +1818,6 @@ Metamaps.JIT = {
         var ratioY = height / spanY;
 
         var newRatio = Math.min(ratioX,ratioY);
-
-        var canvas = Metamaps.Visualize.mGraph.canvas;
 
         if(canvas.scaleOffsetX *newRatio<= 5 && canvas.scaleOffsetX*newRatio >= 0.2){
             canvas.scale(newRatio,newRatio);
@@ -1711,15 +1842,14 @@ Metamaps.JIT = {
         Metamaps.Visualize.mGraph.plot();
         
     },
-    zoomExtents: function (event) {
-        Metamaps.JIT.centerMap();
-        var height = $(document).height(),
-            width = $(document).width(),
+    zoomExtents: function (event, canvas, denySelected) {
+        Metamaps.JIT.centerMap(canvas);
+        var height = canvas.getSize().height,
+            width = canvas.getSize().width,
             maxX, minX, maxY, minY, counter = 0;
-        var canvas = Metamaps.Visualize.mGraph.canvas;  
 
         
-        if (Metamaps.Selected.Nodes.length > 0) {
+        if (!denySelected && Metamaps.Selected.Nodes.length > 0) {
             var nodes = Metamaps.Selected.Nodes;
         }
         else {

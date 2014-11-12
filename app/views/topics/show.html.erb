@@ -19,6 +19,7 @@
     Metamaps.currentSection = "topic";
     Metamaps.currentPage = <%= @topic.id.to_s %>;
     Metamaps.Active.Topic = <%= @topic.to_json.html_safe %>;
+    Metamaps.Creators = <%= @allcreators.to_json.html_safe %>;
     Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
     Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;
     Metamaps.Visualize.type = "RGraph";

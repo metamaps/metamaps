@@ -1,6 +1,6 @@
 class MapsController < ApplicationController
 
-    before_filter :require_user, only: [:create, :update, :destroy]
+    before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
     respond_to :html, :json
 
@@ -83,7 +83,14 @@ class MapsController < ApplicationController
                 @allmappers = @map.contributors
                 @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
                 @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-                @allmappings = @map.mappings
+                @allmappings = @map.mappings.delete_if {|m| 
+                    if m.category == "Synapse"
+                        object = m.synapse
+                    elsif m.category == "Topic"
+                        object = m.topic
+                    end
+                    !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
+                }
 
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
             }
@@ -104,7 +111,14 @@ class MapsController < ApplicationController
         @allmappers = @map.contributors
         @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
         @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-        @allmappings = @map.mappings
+        @allmappings = @map.mappings.delete_if {|m| 
+            if m.category == "Synapse"
+                object = m.synapse
+            elsif m.category == "Topic"
+                object = m.topic
+            end
+            !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
+        }
 
         @json = Hash.new()
         @json['map'] = @map
@@ -180,6 +194,30 @@ class MapsController < ApplicationController
             else
                 format.json { render json: @map.errors, status: :unprocessable_entity }
             end
+        end
+    end
+
+    # POST maps/:id/upload_screenshot
+    def screenshot
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_edit(@current)
+
+        if @map
+          png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
+          StringIO.open(png) do |data|
+            data.class.class_eval { attr_accessor :original_filename, :content_type }
+            data.original_filename = "map-" + @map.id.to_s + "-screenshot.png"
+            data.content_type = "image/png"
+            @map.screenshot = data
+          end
+          
+          if @map.save
+            render :json => {:message => "Successfully uploaded the map screenshot."}
+          else
+            render :json => {:message => "Failed to upload image."}
+          end
+        else
+            render :json => {:message => "Unauthorized to set map screenshot."}
         end
     end
 

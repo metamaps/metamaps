@@ -82,6 +82,7 @@ Metamaps.Backbone.init = function () {
     self.Metacode = Backbone.Model.extend({
         initialize: function () {
             var image = new Image();
+            image.crossOrigin = "Anonymous";
             image.src = this.get('icon');
             this.set('image',image);
         },
@@ -218,7 +219,6 @@ Metamaps.Backbone.init = function () {
             var mapping;
             var node = this.get('node');
             node.setData('topic', this);
-            node.id = this.isNew() ? this.cid : this.id;
             
             if (Metamaps.Active.Map) {
                 mapping = this.getMapping();
@@ -475,6 +475,9 @@ Metamaps.Backbone.init = function () {
     Metamaps.Synapses = Metamaps.Synapses ? new self.SynapseCollection(Metamaps.Synapses) : new self.SynapseCollection();
 
     Metamaps.Mappers = Metamaps.Mappers ? new self.MapperCollection(Metamaps.Mappers) : new self.MapperCollection();
+
+    // this is for topic view
+    Metamaps.Creators = Metamaps.Creators ? new self.MapperCollection(Metamaps.Creators) : new self.MapperCollection();
 
     if (Metamaps.Active.Map) {
         Metamaps.Mappings = Metamaps.Mappings ? new self.MappingCollection(Metamaps.Mappings) : new self.MappingCollection();
@@ -1504,6 +1507,8 @@ Metamaps.Visualize = {
             mapping;
 
         if (self.type == "RGraph") {
+            var i, l, startPos, endPos, topic, synapse;
+
             self.mGraph.graph.eachNode(function (n) {
                 topic = Metamaps.Topics.get(n.id);
                 topic.set({ node: n }, { silent: true });
@@ -3150,12 +3155,30 @@ Metamaps.Filter = {
         var removed = [];
         var added = [];
         
-        Metamaps[collection].each(function(model) {
-            var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-            if (prop && newList.indexOf(prop) === -1) {
-                newList.push(prop);
-            }
-        });
+        // the first option enables us to accept
+        // ['Topics', 'Synapses'] as 'collection'
+        if (typeof collection === "object") {
+            Metamaps[collection[0]].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+            Metamaps[collection[1]].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+        }
+        else if (typeof collection === "string") {
+            Metamaps[collection].each(function(model) {
+                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
+                if (prop && newList.indexOf(prop) === -1) {
+                    newList.push(prop);
+                }
+            });
+        }
         
         removed = _.difference(self.filters[filtersToUse], newList);
         added = _.difference(newList, self.filters[filtersToUse]);
@@ -3198,7 +3221,14 @@ Metamaps.Filter = {
     },
     checkMappers: function () {
         var self = Metamaps.Filter;
-        self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper');
+        var onMap = Metamaps.Active.Map ? true : false;
+        if (onMap) {
+            self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper');
+        }
+        else {
+            // on topic view
+            self.updateFilters(['Topics', 'Synapses'], 'user_id', 'Creators', 'mappers', 'mapper');
+        }
     },
     checkSynapses: function () {
         var self = Metamaps.Filter;
@@ -3279,7 +3309,11 @@ Metamaps.Filter = {
         if (Metamaps.Active.Map) {
             onMap = true;
         }
-        else passesMapper = true; // for when you're on a topic page
+        else if (Metamaps.Active.Topic) {
+            onMap = false;
+        }
+
+        var opacityForFilter = onMap ? 0 : 0.4;
 
         Metamaps.Topics.each(function(topic) {
             var n = topic.get('node');
@@ -3289,7 +3323,18 @@ Metamaps.Filter = {
             else passesMetacode = true;
 
             if (onMap) {
+                // when on a map, 
+                // we filter by mapper according to the person who added the 
+                // topic or synapse to the map
                 var user_id = topic.getMapping().get("user_id").toString();
+                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+                else passesMapper = true;
+            }
+            else {
+                // when on a topic view, 
+                // we filter by mapper according to the person who created the 
+                // topic or synapse
+                var user_id = topic.get("user_id").toString();
                 if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
                 else passesMapper = true;
             }
@@ -3303,7 +3348,7 @@ Metamaps.Filter = {
             else {
                 if (n) {
                     Metamaps.Control.deselectNode(n, true);
-                    n.setData('alpha', 0, 'end');
+                    n.setData('alpha', opacityForFilter, 'end');
                     n.eachAdjacency(function(e){
                         Metamaps.Control.deselectEdge(e, true);
                     });
@@ -3320,10 +3365,13 @@ Metamaps.Filter = {
             else passesSynapse = true;
 
             if (onMap) {
-                var user_id = synapse.getMapping().get("user_id").toString();
-                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
-                else passesMapper = true;
+                // when on a map, 
+                // we filter by mapper according to the person who added the 
+                // topic or synapse to the map
+                user_id = synapse.getMapping().get("user_id").toString();
             }
+            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+            else passesMapper = true;
 
             var color = Metamaps.Settings.colors.synapses.normal;
             if (passesSynapse && passesMapper) {
@@ -3336,10 +3384,10 @@ Metamaps.Filter = {
             else {
                 if (e) {
                     Metamaps.Control.deselectEdge(e, true);
-                    e.setData('alpha', 0, 'end');
+                    e.setData('alpha', opacityForFilter, 'end');
                 }
                 else console.log(synapse);
-            } 
+            }
         });
             
         // run the animation
@@ -3389,7 +3437,7 @@ Metamaps.Listeners = {
             case 69: //if e or E is pressed
                 if (e.ctrlKey){
                     e.preventDefault();
-                    Metamaps.JIT.zoomExtents();
+                    Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas);
                 }
                 break;
             case 77: //if m or M is pressed
@@ -3590,9 +3638,13 @@ Metamaps.Topic = {
         var bb = Metamaps.Backbone;
         var start = function (data) {
             Metamaps.Active.Topic = new bb.Topic(data.topic);
+            Metamaps.Creators = new bb.MapperCollection(data.creators);
             Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives));
             Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
             Metamaps.Backbone.attachCollectionEvents();
+
+            // set filter mapper H3 text
+            $('#filter_by_mapper h3').html('CREATORS');
 
             // build and render the visualization
             Metamaps.Visualize.type = "RGraph";
@@ -3620,12 +3672,12 @@ Metamaps.Topic = {
             $('.rightclickmenu').remove();
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
+            Metamaps.Filter.close();
         }
     },
     centerOn: function (nodeid) {
         if (!Metamaps.Visualize.mGraph.busy) {
-            var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
-            Metamaps.Visualize.mGraph.onClick(node.id, {
+            Metamaps.Visualize.mGraph.onClick(nodeid, {
                 hideLabels: false,
                 duration: 1000,
                 onComplete: function () {
@@ -3633,6 +3685,66 @@ Metamaps.Topic = {
                 }
             });
         }
+    },
+    fetchRelatives: function(node, metacode_id) {
+        
+        var topics = Metamaps.Topics.map(function(t){ return t.id });
+        var topics_string = topics.join();
+
+        var creators = Metamaps.Creators.map(function(t){ return t.id });
+        var creators_string = creators.join();
+
+        var topic = node.getData('topic');
+
+        var successCallback = function(data) {
+            if (data.creators.length > 0) Metamaps.Creators.add(data.creators);
+            if (data.topics.length > 0) Metamaps.Topics.add(data.topics);
+            if (data.synapses.length > 0) Metamaps.Synapses.add(data.synapses);
+
+            var topicColl = new Metamaps.Backbone.TopicCollection(data.topics);
+            topicColl.add(topic);
+            var synapseColl = new Metamaps.Backbone.SynapseCollection(data.synapses);
+
+            var graph = Metamaps.JIT.convertModelsToJIT(topicColl, synapseColl)[0];
+            Metamaps.Visualize.mGraph.op.sum(graph, {
+                type: 'fade',
+                duration: 500,
+                hideLabels: false
+            });
+
+            var i, l, t, s;
+        
+            Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+                t = Metamaps.Topics.get(n.id);
+                t.set({ node: n }, { silent: true });
+                t.updateNode();
+
+                n.eachAdjacency(function (edge) {
+                    if(!edge.getData('init')) {
+                        edge.setData('init', true);
+
+                        l = edge.getData('synapseIDs').length;
+                        for (i = 0; i < l; i++) {
+                            s = Metamaps.Synapses.get(edge.getData('synapseIDs')[i]);
+                            s.set({ edge: edge }, { silent: true });
+                            s.updateEdge();
+                        }
+                    }
+                });
+            });
+        };
+
+        var paramsString = metacode_id ? "metacode=" + metacode_id + "&" : "";
+        paramsString += "network=" + topics_string + "&creators=" + creators_string;
+
+        $.ajax({
+            type: "Get",
+            url: "/topics/" + topic.id + "/relatives.json?" + paramsString,
+            success: successCallback,
+            error: function () {
+                
+            }
+        });
     },
     /*
      *
@@ -4048,6 +4160,9 @@ Metamaps.Map = {
                 $('.wrapper').addClass('commonsMap');
             }
 
+            // set filter mapper H3 text
+            $('#filter_by_mapper h3').html('MAPPERS');
+
             // build and render the visualization
             Metamaps.Visualize.type = "ForceDirected";
             Metamaps.JIT.prepareVizData();
@@ -4086,6 +4201,7 @@ Metamaps.Map = {
             Metamaps.SynapseCard.hideCard();
             Metamaps.Create.newTopic.hide();
             Metamaps.Create.newSynapse.hide();
+            Metamaps.Filter.close();
             Metamaps.Realtime.endActiveMap();
         }
     },
@@ -4094,31 +4210,37 @@ Metamaps.Map = {
 
         var nodes_data = "",
             synapses_data = "";
-        var synapses_array = new Array();
+        var nodes_array = [];
+        var synapses_array = [];
+        // collect the unfiltered topics
         Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-            //don't add to the map if it was filtered out
-            // TODO
-            //if (categoryVisible[n.getData('metacode')] == false) {
-            //    return;
-            //}
-
-            var x, y;
-            if (n.pos.x && n.pos.y) {
-                x = n.pos.x;
-                y = n.pos.y;
-            } else {
-                var x = Math.cos(n.pos.theta) * n.pos.rho;
-                var y = Math.sin(n.pos.theta) * n.pos.rho;
+            // if the opacity is less than 1 then it's filtered
+            if (n.getData('alpha') === 1) {
+                var id = n.getData('topic').id;
+                nodes_array.push(id);
+                var x, y;
+                if (n.pos.x && n.pos.y) {
+                    x = n.pos.x;
+                    y = n.pos.y;
+                } else {
+                    var x = Math.cos(n.pos.theta) * n.pos.rho;
+                    var y = Math.sin(n.pos.theta) * n.pos.rho;
+                }
+                nodes_data += id + '/' + x + '/' + y + ',';
             }
-            nodes_data += n.id + '/' + x + '/' + y + ',';
-            n.eachAdjacency(function (adj) {
-                synapses_array.push(adj.getData("synapses")[0].id); // TODO
-            });
         });
+        // collect the unfiltered synapses
+        Metamaps.Synapses.each(function(synapse){
+            var desc = synapse.get("desc");
 
-        //get unique values only
-        synapses_array = $.grep(synapses_array, function (value, key) {
-            return $.inArray(value, synapses_array) === key;
+            var descNotFiltered = Metamaps.Filter.visible.synapses.indexOf(desc) > -1;
+            // make sure that both topics are being added, otherwise, it 
+            // doesn't make sense to add the synapse
+            var topicsNotFiltered = nodes_array.indexOf(synapse.get('node1_id')) > -1;
+            topicsNotFiltered = topicsNotFiltered && nodes_array.indexOf(synapse.get('node2_id')) > -1;
+            if (descNotFiltered && topicsNotFiltered) {
+                synapses_array.push(synapse.id);
+            }
         });
 
         synapses_data = synapses_array.join();
@@ -4209,6 +4331,131 @@ Metamaps.Map = {
         Metamaps.Map.sideLength = 1;
         Metamaps.Map.timeToTurn = 0;
         Metamaps.Map.turnCount = 0;
+    },
+    exportImage: function() {
+
+        var canvas = {};
+
+        canvas.canvas = document.createElement("canvas");
+        canvas.canvas.width  =  1880; // 960;
+        canvas.canvas.height = 1260; // 630
+
+        canvas.scaleOffsetX = 1;
+        canvas.scaleOffsetY = 1;
+        canvas.translateOffsetY = 0;
+        canvas.translateOffsetX = 0;
+        canvas.denySelected = true;
+
+        canvas.getSize =  function() {
+            if(this.size) return this.size;
+            var canvas = this.canvas;
+            return this.size = {
+                width: canvas.width,
+                height: canvas.height
+            };
+        };
+        canvas.scale = function(x, y) {
+            var px = this.scaleOffsetX * x,
+                py = this.scaleOffsetY * y;
+            var dx = this.translateOffsetX * (x -1) / px,
+                dy = this.translateOffsetY * (y -1) / py;
+            this.scaleOffsetX = px;
+            this.scaleOffsetY = py;
+            this.getCtx().scale(x, y);
+            this.translate(dx, dy);
+        };
+        canvas.translate = function(x, y) {
+            var sx = this.scaleOffsetX,
+                sy = this.scaleOffsetY;
+            this.translateOffsetX += x*sx;
+            this.translateOffsetY += y*sy;
+            this.getCtx().translate(x, y); 
+        };
+        canvas.getCtx = function() {
+          return this.canvas.getContext("2d");
+        };
+        // center it
+        canvas.getCtx().translate(1880/2, 1260/2);
+
+        var mGraph = Metamaps.Visualize.mGraph;
+
+        var id = mGraph.root;
+        var root = mGraph.graph.getNode(id);
+        var T = !!root.visited;
+
+        // pass true to avoid basing it on a selection
+        Metamaps.JIT.zoomExtents(null, canvas, true);
+
+        var c = canvas.canvas,
+            ctx = canvas.getCtx(),
+            scale = canvas.scaleOffsetX;
+
+        // draw a grey background
+        ctx.fillStyle = '#d8d9da';
+        var xPoint = (-(c.width/scale)/2) - (canvas.translateOffsetX/scale),
+        yPoint = (-(c.height/scale)/2) - (canvas.translateOffsetY/scale);
+        ctx.fillRect(xPoint,yPoint,c.width/scale,c.height/scale);
+
+        // draw the graph
+        mGraph.graph.eachNode(function(node) {
+           var nodeAlpha = node.getData('alpha');
+           node.eachAdjacency(function(adj) {
+             var nodeTo = adj.nodeTo;
+             if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
+               mGraph.fx.plotLine(adj, canvas);
+             }
+           });
+           if(node.drawn) {
+             mGraph.fx.plotNode(node, canvas);
+           }
+           if(!mGraph.labelsHidden) {
+             if(node.drawn && nodeAlpha >= 0.95) {
+               mGraph.labels.plotLabel(canvas, node);
+             } else {
+               mGraph.labels.hideLabel(node, false);
+             }
+           }
+           node.visited = !T;
+         });
+        
+        var imageData = {
+            encoded_image: canvas.canvas.toDataURL()
+        };
+
+        console.log(imageData.encoded_image);
+        var map = Metamaps.Active.Map;
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10) {
+            dd='0'+dd
+        } 
+        if(mm<10) {
+            mm='0'+mm
+        }
+        today = mm+'/'+dd+'/'+yyyy;
+
+        var mapName = map.get("name").split(" ").join([separator = '-']);
+        var downloadMessage = "";
+        downloadMessage += "Captured map screenshot! ";
+        downloadMessage += "<a href='" + imageData.encoded_image + "' ";
+        downloadMessage += "download='metamap-" + map.id + "-" + mapName + "-" + today + ".png'>DOWNLOAD</a>";
+        Metamaps.GlobalUI.notifyUser(downloadMessage);
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: "/maps/" + Metamaps.Active.Map.id + "/upload_screenshot",
+            data: imageData,
+            success: function (data) {
+                console.log('successfully uploaded map screenshot');
+            },
+            error: function () {
+                console.log('failed to save map screenshot');
+            }
+        });
     }
 };
 
@@ -4558,8 +4805,6 @@ Metamaps.Account = {
                 var destY = 0;
                 var destWidth = 84;
                 var destHeight = 84;
-
-                //debugger;
 
                 context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
                 $('.userImageDiv').prepend($canvas);

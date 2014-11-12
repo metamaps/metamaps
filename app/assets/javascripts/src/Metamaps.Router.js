@@ -125,7 +125,7 @@
             if (Metamaps.Visualize.mGraph) {
                 Metamaps.Visualize.mGraph.graph.empty();
                 Metamaps.Visualize.mGraph.plot();
-                Metamaps.JIT.centerMap();
+                Metamaps.JIT.centerMap(Metamaps.Visualize.mGraph.canvas);
             }
             Metamaps.Famous.viz.show();
             Metamaps.Topic.end();
@@ -156,7 +156,7 @@
             if (Metamaps.Visualize.mGraph) {
                 Metamaps.Visualize.mGraph.graph.empty();
                 Metamaps.Visualize.mGraph.plot();
-                Metamaps.JIT.centerMap();
+                Metamaps.JIT.centerMap(Metamaps.Visualize.mGraph.canvas);
             }
             Metamaps.Famous.viz.show();
             Metamaps.Map.end();
