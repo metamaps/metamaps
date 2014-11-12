@@ -791,7 +791,7 @@
     background-position: -32px 0;
 }
 
-.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .sidebarCollaborateIcon:hover .tooltipsUnder,
+.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarCollaborateIcon:hover .tooltipsUnder,
  .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .sidebarAccountIcon:hover .tooltipsUnder,
  .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove {
     display: block;
@@ -886,7 +886,7 @@
     margin-top: 40px;
 }
 
-.zoomExtents div::after, .zoomIn div::after, .zoomOut div::after {
+.zoomExtents div::after, .zoomIn div::after, .zoomOut div::after, .takeScreenshot div:after {
     content: '';
     position: absolute;
     top: 57%;
