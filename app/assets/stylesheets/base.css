@@ -198,9 +198,40 @@ resize: none;
   left: 0;
   border-radius: 16px;
 }
-.contributorName {
-  display:none;
+
+.contributor:hover .contributorName {
+  display: block;
 }
+
+.contributorName {
+  display: none;
+  position: absolute;
+  background: black;
+  text-align: center;
+  color: white;
+  border-radius: 2px;
+  font-family: din-regular;
+  line-height: 15px;
+  font-size: 12px;
+  padding: 3px 5px 2px;
+  white-space: nowrap;
+  margin-top: 36px;
+  margin-left: -32px;
+}
+
+.contributor div:after {
+  content: '';
+  position: absolute;
+  top: 128%;
+  left: 39%;
+  margin-top: -30px;
+  width: 0;
+  height: 0;
+  border-bottom: 4px solid #000000;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
 .linkItem.mapCount {
   margin-left: 12px;
   width: 24px;
