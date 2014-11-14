@@ -704,6 +704,10 @@
 .mapPage .infoAndHelp, .topicPage .infoAndHelp{
     right: 70px;
 }
+.mapPage .openCheatsheet .tooltipsAbove, .topicPage .openCheatsheat .tooltipsAbove {
+    left: 29px;
+}
+
 .infoAndHelp {
     position: fixed;
     bottom: 20px;
@@ -878,7 +882,7 @@
 }
 
 .openCheatsheet .tooltipsAbove {
-    left: 29px;
+    left: -4px;
 }
 
 .sidebarAccountIcon .tooltipsUnder {
