@@ -196,7 +196,7 @@ class MainController < ApplicationController
     if term && !term.empty?
       @synapses = Synapse.select('DISTINCT "desc"').
         where('LOWER("desc") like ?', '%' + term.downcase + '%').limit(5).order('"desc"')
-      
+
       render json: autocomplete_synapse_generic_json(@synapses)
       
     elsif topic1id && !topic1id.empty?

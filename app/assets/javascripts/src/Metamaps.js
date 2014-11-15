@@ -1289,7 +1289,7 @@ Metamaps.SynapseCard = {
         });
     },
     add_drop_down: function (edge, synapse) {
-        var list, i, synapses, l;
+        var list, i, synapses, l, desc;
 
         synapses = edge.getData("synapses");
         l = synapses.length;
@@ -1311,7 +1311,9 @@ Metamaps.SynapseCard = {
             list = '<ul id="switchSynapseList">';
             for (i = 0; i < l; i++) {
                 if (synapses[i] !== synapse) { // don't add the current one to the list
-                    list += '<li data-synapse-index="' + i + '">' + synapses[i].get('desc') + '</li>';
+                    desc = synapses[i].get('desc');
+                    desc = desc === "" || desc === null ? "(no description)" : desc;
+                    list += '<li data-synapse-index="' + i + '">' + desc + '</li>';
                 }
             }
             list += '</ul>'

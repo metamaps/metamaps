@@ -1902,6 +1902,9 @@ and it won't be important on password protected instances */
     color: #424242;
     text-align: left;
 }
+.lightboxContent li {
+    list-style: none;
+}
 .openLightbox {
     cursor: pointer;
 }

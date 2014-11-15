@@ -732,14 +732,14 @@ font-family: 'din-regular', helvetica, sans-serif;
   border-bottom: 1px solid #BBBBBB;
 }
 #switchSynapseList li {
-  padding: 8px;
+  padding: 8px 8px 8px 68px;
   cursor: pointer;
   font-family: 'din-regular';
   font-size: 14px;
   line-height: 16px;
 }
 #switchSynapseList li:hover {
-  background: #E0E0E0;
+  background: #DAB539;
 }
 
 #edgeUser {
