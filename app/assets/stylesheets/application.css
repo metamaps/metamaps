@@ -141,7 +141,7 @@ input[type="submit"]:active {
 }
 .leaveSpace {
     display: block;
-    height: 50px;
+    height: 25px;
 }
 .hidden {
     display: none;
@@ -2113,10 +2113,8 @@ and it won't be important on password protected instances */
     padding-bottom:12px;
 }
 
-#about > p, #getInvolved > p, #invite > p, #colophon p {
-/*    color: #000;
-    font-size: 16px;*/
-    margin: 0px 0px 20px 0px;
+#about > p, #getInvolved > p, #invite > p, #colophon p, #donate > p {
+    margin: 0px 0px 10px 0px;
     line-height: 20px;
 }
 #about ul {

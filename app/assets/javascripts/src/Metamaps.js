@@ -1043,8 +1043,8 @@ Metamaps.TopicCard = {
             });
 
             $(showCard).find('.best_in_place_desc').bind("ajax:success", function () {
-                this.innerHTML = this.innerHTML.replace(/\r/g, '')
-                var desc = $(this).html();
+                this.innerHTML = this.innerHTML.replace(/\r/g, '');
+                var desc = $(this).html() === $(this).data('nil') ? "" : $(this).html();
                 topic.set("desc", desc);
                 topic.trigger('saved');
             });

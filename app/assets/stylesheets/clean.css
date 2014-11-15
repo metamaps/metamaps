@@ -796,7 +796,7 @@
 }
 
 .zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarCollaborateIcon:hover .tooltipsUnder,
- .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .sidebarAccountIcon:hover .tooltipsUnder,
+ .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
  .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove {
     display: block;
 }
@@ -903,11 +903,11 @@
     border-bottom: 5px solid transparent;
 }
 
-.sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarAccountIcon div:after {
+.sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarAccountIcon .tooltipsUnder:after {
     left: 38%;
 }
 
-.sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon div:after {
+.sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
     content: '';
     position: absolute;
     top: 128%;
