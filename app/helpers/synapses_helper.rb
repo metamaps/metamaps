@@ -20,7 +20,7 @@ module SynapsesHelper
     synapses.each do |s|
       synapse = {}
       synapse['id'] = s.id
-      synapse['label'] = s.desc
+      synapse['label'] = s.desc == nil || s.desc == "" ? "(no description)" : s.desc
       synapse['value'] = s.desc
       synapse['permission'] = s.permission
       synapse['mapCount'] = s.maps.count

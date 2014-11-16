@@ -156,13 +156,11 @@
 
     <script type="text/template" id="synapseAutocompleteTemplate">
       <div class="result{{rtype}}">
-      <p class="autocompleteSection synapseDesc">{{label}}</p>
-      <div class="expandSynapseMetadata"></div>
+        <p class="autocompleteSection synapseDesc">{{label}}</p>
         <div class="synapseMetadata">
-          <div class="synapseNumMaps">{{mapCount}}</div>
           <div class="synapseOriginatorIcon hoverForTip">
               <img width="24" height="24" src="{{originatorImage}}" />
-              <span class="tip synapseOriginator">{{originator}}</span>
+              <span class="tooltips synapseOriginator">{{originator}}</span>
           </div>
           <div class="synapsePermission {{permission}}"></div>
         </div>

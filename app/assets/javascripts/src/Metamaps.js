@@ -741,7 +741,7 @@ Metamaps.Create = {
                         }
                     },
                     engine: Hogan,
-                    header: "<h3>Existing Synapses</h3>"
+                    header: "<h3>Existing synapses</h3>"
                 }
           ]);
 
