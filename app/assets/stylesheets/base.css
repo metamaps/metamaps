@@ -456,7 +456,21 @@ background-color: #E0E0E0;
   bottom: 0;
 }
 
-.CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip {
+.tip li {
+  list-style-type: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px 34px;
+  display: block;
+  height: 14px;
+  font-family: 'din-regular', helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 14px;
+  position: relative;
+}
+
+.CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip, #mapContribs:hover .tip {
   display:block;
 }
 .CardOnGraph .tip, .mapCard .tip {
