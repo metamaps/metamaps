@@ -194,9 +194,24 @@ class MainController < ApplicationController
     topic2id = params[:topic2id]
     
     if term && !term.empty?
-      @synapses = Synapse.select('DISTINCT "desc"').
-        where('LOWER("desc") like ?', '%' + term.downcase + '%').limit(5).order('"desc"')
-      
+      @synapses = Synapse.select('DISTINCT "desc"').where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
+
+      # remove any duplicate synapse types that just differ by 
+      # leading or trailing whitespaces
+      collectedDesc = []
+      @synapses.delete_if {|s|
+        desc = s.desc == nil || s.desc == "" ? "" : s.desc.strip
+        if collectedDesc.index(desc) == nil
+          collectedDesc.push(desc)
+          boolean = false
+        else
+          boolean = true
+        end
+      }
+
+      #limit to 5 results
+      @synapses = @synapses.slice(0,5)
+
       render json: autocomplete_synapse_generic_json(@synapses)
       
     elsif topic1id && !topic1id.empty?

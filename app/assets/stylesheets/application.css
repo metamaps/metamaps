@@ -141,7 +141,7 @@ input[type="submit"]:active {
 }
 .leaveSpace {
     display: block;
-    height: 50px;
+    height: 25px;
 }
 .hidden {
     display: none;
@@ -581,7 +581,7 @@ input[type="submit"]:active {
 }
 .new_synapse #synapse_desc,
 .new_synapse .tt-hint {
-    width: 244px;
+    width: 258px;
     background: #FFFFFF;
     height: 14px;
     margin: 0;
@@ -1359,7 +1359,7 @@ float: left;
 #new_topic .tt-suggestion, 
 #new_synapse .tt-suggestion {
     background: #F5F5F5;
-    width: 256px;
+    width: 270px;
     position: relative;
 }
 #new_topic .autocompleteSection {
@@ -1380,9 +1380,9 @@ float: left;
     line-height: 14px;
     font-size: 14px;
     padding: 9px 0 9px 8px;
+    display: inline-block;
 }
-#new_topic .expandTopicMetadata,
-#new_synapse .expandSynapseMetadata {
+#new_topic .expandTopicMetadata {
     display:none;
     width: 16px;
     height: 16px;
@@ -1394,19 +1394,14 @@ float: left;
     background-position: 0 -32px;
 }
 #new_topic .tt-suggestion.tt-is-under-cursor .expandTopicMetadata,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor .expandTopicMetadata,
-#new_synapse .tt-suggestion.tt-is-under-cursor .expandSynapseMetadata,
-#new_synapse .tt-suggestion.tt-is-under-mouse-cursor .expandSynapseMetadata {
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .expandTopicMetadata {
     display: block;
 }
 #new_topic .tt-suggestion.tt-is-under-cursor .topicMetadata,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor .topicMetadata,
-#new_synapse .tt-suggestion.tt-is-under-cursor .synapseMetadata,
-#new_synapse .tt-suggestion.tt-is-under-mouse-cursor .synapseMetadata {
+#new_topic .tt-suggestion.tt-is-under-mouse-cursor .topicMetadata {
     display: block;
 }
-#new_topic .topicMetadata, 
-#new_synapse .synapseMetadata {
+#new_topic .topicMetadata {
     position: absolute;
     display: none;
     top: -18px;
@@ -1417,8 +1412,7 @@ float: left;
     font-family: 'din-regular', helvetica, sans-serif;
     font-size: 14px;
 }
-#new_topic .topicPermission,
-#new_synapse .synapsePermission {
+#new_topic .topicPermission {
     width: 32px;
     height: 32px;
     background-repeat: no-repeat;
@@ -1439,8 +1433,7 @@ float: left;
 #new_synapse .synapsePermission.private {
     background-position: -32px 0;
 }
-#new_topic .topicNumMaps,
-#new_synapse .synapseNumMaps {
+#new_topic .topicNumMaps {
     height: 14px;
     padding: 1px 0 1px 32px;
     background-image: url(metamap16.png);
@@ -1458,14 +1451,12 @@ float: left;
     position: absolute;
     bottom: 10px;
 }
-#new_topic .topicOriginatorIcon,
-#new_synapse .synapseOriginatorIcon {
+#new_topic .topicOriginatorIcon {
     position: absolute;
     top: 8px;
     right: 8px;
 }
-#new_topic .topicOriginatorIcon img,
-#new_synapse .synapseOriginatorIcon img {
+#new_topic .topicOriginatorIcon img {
     border-radius: 12px;
 }
 #new_topic .topicOriginatorIcon:hover .tip,
@@ -1493,16 +1484,58 @@ float: left;
     background: #F5F5F5;
 }
 #new_synapse .tt-dropdown-menu h3 {
-    font-family: 'vinyl', helvetica, sans-serif;
-    text-transform: uppercase;
-    font-style: italic;
-    font-size: 14pxpx;
+    font-size: 14px;
     line-height: 16px;
-    margin: 3px;
+    padding: 8px;
+    border-top: 1px solid #BFBFBF;
+    color: #808080;
 }
 #new_synapse .tt-suggestion .resultnoresult .synapsePermission,
 #new_synapse .tt-suggestion .resultnoresult .synapseOriginatorIcon {
     display: none;
+}
+
+#new_synapse .synapseMetadata {
+    width: 64px;
+    padding-left: 4px;
+    height: 32px;
+    position: absolute;
+    left: 202px;
+    top: 0;
+}
+#new_synapse .synapseOriginatorIcon {
+    position: absolute;
+    top: 4px;
+}
+#new_synapse .synapseOriginatorIcon .tooltips {
+    right: 36px;
+    top: -2px;
+}
+#new_synapse .synapseOriginatorIcon .tooltips:after {
+    content: '';
+    position: absolute;
+    top: 57%;
+    left: 100%;
+    margin-top: -6px;
+    width: 0;
+    height: 0;
+    border-left: 4px solid #000000;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+#new_synapse .synapseOriginatorIcon:hover .tooltips {
+    display:block;
+}
+#new_synapse .synapseOriginatorIcon img {
+    border-radius: 12px;
+}
+#new_synapse .synapsePermission {
+    position: absolute;
+    left: 32px;
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    background-image: url(permissions32_sprite.png);
 }
 /* map info box */
 /* map info box */
@@ -1945,6 +1978,9 @@ and it won't be important on password protected instances */
     color: #424242;
     text-align: left;
 }
+.lightboxContent li {
+    list-style: none;
+}
 .openLightbox {
     cursor: pointer;
 }
@@ -2156,10 +2192,8 @@ and it won't be important on password protected instances */
     padding-bottom:12px;
 }
 
-#about > p, #getInvolved > p, #invite > p, #colophon p {
-/*    color: #000;
-    font-size: 16px;*/
-    margin: 0px 0px 20px 0px;
+#about > p, #getInvolved > p, #invite > p, #colophon p, #donate > p {
+    margin: 0px 0px 10px 0px;
     line-height: 20px;
 }
 #about ul {

@@ -741,7 +741,7 @@ Metamaps.Create = {
                         }
                     },
                     engine: Hogan,
-                    header: "<h3>Existing Synapses</h3>"
+                    header: "<h3>Existing synapses</h3>"
                 }
           ]);
 
@@ -1043,8 +1043,8 @@ Metamaps.TopicCard = {
             });
 
             $(showCard).find('.best_in_place_desc').bind("ajax:success", function () {
-                this.innerHTML = this.innerHTML.replace(/\r/g, '')
-                var desc = $(this).html();
+                this.innerHTML = this.innerHTML.replace(/\r/g, '');
+                var desc = $(this).html() === $(this).data('nil') ? "" : $(this).html();
                 topic.set("desc", desc);
                 topic.trigger('saved');
             });
@@ -1289,7 +1289,7 @@ Metamaps.SynapseCard = {
         });
     },
     add_drop_down: function (edge, synapse) {
-        var list, i, synapses, l;
+        var list, i, synapses, l, desc;
 
         synapses = edge.getData("synapses");
         l = synapses.length;
@@ -1311,7 +1311,9 @@ Metamaps.SynapseCard = {
             list = '<ul id="switchSynapseList">';
             for (i = 0; i < l; i++) {
                 if (synapses[i] !== synapse) { // don't add the current one to the list
-                    list += '<li data-synapse-index="' + i + '">' + synapses[i].get('desc') + '</li>';
+                    desc = synapses[i].get('desc');
+                    desc = desc === "" || desc === null ? "(no description)" : desc;
+                    list += '<li data-synapse-index="' + i + '">' + desc + '</li>';
                 }
             }
             list += '</ul>'
