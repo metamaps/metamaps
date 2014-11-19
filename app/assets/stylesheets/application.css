@@ -1137,6 +1137,7 @@ h3.realtimeBoxTitle {
     left: 0;
     border-radius: 14px;
 }
+
 .littleJuntoIcon {
     width: 24px;
     height:24px;
@@ -1643,20 +1644,23 @@ float: left;
 .infoStatIcon .tip {
     display: none;
     position: absolute;
-    background: black;
+    background: #202020;
     min-width: 180px;
     max-width: 250px;
+    min-height: 44px;
+    max-height: 188px;
     text-align: center;
     color: black;
     border-radius: 4px;
     font-size: 15px !important;
     line-height: 17px;
-    padding: 3px 10px 2px;
+    padding: 6px 8px 6px 8px;
     z-index: 100;
 }
+
 .mapContributors .tip {
     top: 45px;
-    left: 6px;
+    left: -10px;
 }
 
 .mapContributors .tip li {
@@ -1664,7 +1668,7 @@ float: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 11px 36px;
+    padding: 12px 40px;
     display: block;
     height: 14px;
     font-family: 'din-regular', helvetica, sans-serif;
@@ -1675,20 +1679,24 @@ float: left;
     color: white;
 }
 
-.mapContributors div:after{
+.mapContributors div:after {
     content: '';
     position: absolute;
-    margin-top: -115px;
-    left: inherit;
+    margin-top: -124px;
+    left: 21px;
     width: 0;
     height: 0;
-    border-bottom: 4px solid #000000;
+    border-bottom: 4px solid #202020;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
 }
 
 .mapContributors .tip img {
-    border: 2px solid #424242
+    border: 2px solid #bdbdbd;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    border-radius: 14px;
 }
 
 .mapInfoBox .mapPermission .tip {
