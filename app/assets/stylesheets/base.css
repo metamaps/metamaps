@@ -19,11 +19,12 @@
 
 
 #center-container {
-    position:relative;
+  position:relative;
 	height:100%;
 	width:100%;
-    /* background-color:#031924; */
-    color:#444;
+  
+  /* background-color:#031924; */
+  color:#444;
 }
 
 .showcard {
@@ -121,18 +122,18 @@
 
 .CardOnGraph .best_in_place_desc textarea {
   font-size: 13px;
-   line-height:15px;
-   font-family: helvetica, sans-serif;
-   color: #424242;
-padding: 0;
-width: 100%;
-margin: 0;
-border: 0;
-outline: none;
-font-size: 12px;
-line-height: 15px;
-background: none;
-resize: none;
+  line-height:15px;
+  font-family: helvetica, sans-serif;
+  color: #424242;
+  padding: 0;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  outline: none;
+  font-size: 12px;
+  line-height: 15px;
+  background: none;
+  resize: none;
 }
 
 .CardOnGraph .desc h3 {
@@ -219,11 +220,11 @@ resize: none;
   margin-left: -32px;
 }
 
-.contributor div:after {
+.contributor div:before {
   content: '';
   position: absolute;
   top: 128%;
-  left: 39%;
+  left: 13px;
   margin-top: -30px;
   width: 0;
   height: 0;
@@ -768,18 +769,32 @@ font-family: 'din-regular', helvetica, sans-serif;
   display:block;
 }
 #edgeUser .tip {
-    background: none repeat scroll 0 0 #000000;
-    border-radius: 4px;
-    color: #FFFFFF;
-    display: none;
-    font-size: 15px !important;
-    line-height: 17px;
-    padding: 3px 5px 2px;
-    position: absolute;
-    left: 0;
-    text-align: center;
-    top: 23px;
-    z-index: 100;
+  display: none;
+  position: absolute;
+  background: black;
+  text-align: center;
+  text-transform: none;
+  color: white;
+  border-radius: 2px;
+  font-family: din-regular;
+  line-height: 15px;
+  font-size: 12px;
+  padding: 3px 5px 2px;
+  white-space: nowrap;
+  margin-top: 9px;
+  font-style: normal;
+}
+
+#edgeUser:hover div:before{
+  content: '';
+  position: absolute;
+  margin-top: -7px;
+  margin-left: 2px;
+  width: 0;
+  height: 0;
+  border-bottom: 4px solid #000000;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
 }
 
 #edit_synapse .mapPerm {
