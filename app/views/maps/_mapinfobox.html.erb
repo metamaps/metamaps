@@ -18,6 +18,7 @@
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" />
       <% elsif @map.contributors.count == 2 %>
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" class="multiple mTwo" />
+        <div class="mapContribsDrop"> 
       <% elsif @map.contributors.count > 2 %>
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" class="multiple" />
       <% end %>
@@ -30,7 +31,11 @@
          if @map.contributors.count == 0
            contributorList = 'No one has added anything yet.'
          end %>
-      <div class="tip"><%= contributorList %></div>
+      <div class="tip"> <ul><%    @map.contributors.each_with_index do |c, index| %>
+           <li > <img class="rtUserImage" width="25" height="25" src="<%= @map.contributors[index].image.url(:square) %>"  />
+            <%= @map.contributors[index].name %> 
+            </li>         
+        <% end %></ul></div>
     </div>
     <div class="infoStatIcon mapTopics">
       <%= @map.topics.count %>

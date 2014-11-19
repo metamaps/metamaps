@@ -1631,10 +1631,19 @@ float: left;
     float: left;
 }
 
+
+#mapContribsTip {
+    border: 2px solid #424242;
+    background-color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+}
+
 .infoStatIcon .tip {
     display: none;
     position: absolute;
-    background: white;
+    background: black;
     min-width: 180px;
     max-width: 250px;
     text-align: center;
@@ -1642,20 +1651,54 @@ float: left;
     border-radius: 4px;
     font-size: 15px !important;
     line-height: 17px;
-    padding: 3px 5px 2px;
+    padding: 3px 10px 2px;
     z-index: 100;
 }
 .mapContributors .tip {
-    top: 38px;
+    top: 45px;
     left: 6px;
 }
+
+.mapContributors .tip li {
+    list-style-type: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 11px 36px;
+    display: block;
+    height: 14px;
+    font-family: 'din-regular', helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 14px;
+    position: relative;
+    text-align: left;
+    color: white;
+}
+
+.mapContributors div:after{
+    content: '';
+    position: absolute;
+    margin-top: -115px;
+    left: inherit;
+    width: 0;
+    height: 0;
+    border-bottom: 4px solid #000000;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
+
+.mapContributors .tip img {
+    border: 2px solid #424242
+}
+
 .mapInfoBox .mapPermission .tip {
     top: 0;
     right: 32px;
 }
 .mapInfoBox .hoverForTip:hover .tip {
-    display: none;
+    display: block;
 }
+
 .mapTopics {
     background-image: url(topic32.png);
     background-position: 13px center;
