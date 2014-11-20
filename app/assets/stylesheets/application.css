@@ -531,7 +531,7 @@ input[type="submit"]:active {
     background: #FFFFFF;
     height: 14px;
     margin: 0;
-    padding: 10px 6px;
+    padding: 14px 6px;
     border: none;
     border-radius: 2px;
     outline: none;
@@ -1360,8 +1360,13 @@ float: left;
 #new_topic .tt-suggestion, 
 #new_synapse .tt-suggestion {
     background: #F5F5F5;
-    width: 270px;
     position: relative;
+}
+#new_topic .tt-suggestion {
+    width: 256px;
+}
+#new_synapse .tt-suggestion {
+    width: 270px;
 }
 #new_topic .autocompleteSection {
     float: left;
@@ -1460,25 +1465,25 @@ float: left;
 #new_topic .topicOriginatorIcon img {
     border-radius: 12px;
 }
-#new_topic .topicOriginatorIcon:hover .tip,
-#new_synapse .synapseOriginatorIcon:hover .tip {
-    display: block;
+#new_topic .topicOriginatorIcon .tooltips {
+    left: 32px;
+    top: -2px;
+    right: auto;
 }
-#new_topic .tip,
-#new_synapse .tip {
-    display: none;
+#new_topic .topicOriginatorIcon .tooltips:after {
+    content: '';
     position: absolute;
-    background: white;
-    width: auto;
-    top: 0;
-    left: 23px;
-    color: black;
-    white-space: nowrap;
-    border-radius: 4px;
-    font-size: 15px !important;
-    line-height: 15px;
-    padding: 2px 5px 2px;
-    z-index: 100;
+    top: 57%;
+    left: -4px;
+    margin-top: -6px;
+    width: 0;
+    height: 0;
+    border-right: 4px solid #000000;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+#new_topic .topicOriginatorIcon:hover .tooltips {
+    display:block;
 }
 
 #new_synapse .tt-dropdown-menu {
@@ -1509,7 +1514,7 @@ float: left;
     top: 4px;
 }
 #new_synapse .synapseOriginatorIcon .tooltips {
-    right: 36px;
+    right: 32px;
     top: -2px;
 }
 #new_synapse .synapseOriginatorIcon .tooltips:after {
@@ -1609,7 +1614,6 @@ float: left;
     margin: 9px 0px 9px 56px;
     padding: 0;
     width: 64px;
-    cursor: pointer;
 }
 #mapContribs {
     float: left;
@@ -1647,8 +1651,6 @@ float: left;
     background: #202020;
     min-width: 180px;
     max-width: 250px;
-    min-height: 44px;
-    max-height: 188px;
     text-align: center;
     color: black;
     border-radius: 4px;
@@ -1661,6 +1663,11 @@ float: left;
 .mapContributors .tip {
     top: 45px;
     left: -10px;
+}
+
+.mapContributors .tip ul {
+    max-height: 188px;
+    overflow-y: auto;
 }
 
 .mapContributors .tip li {
@@ -1682,7 +1689,7 @@ float: left;
 .mapContributors div:after {
     content: '';
     position: absolute;
-    margin-top: -124px;
+    top: -4px;
     left: 21px;
     width: 0;
     height: 0;
@@ -1699,11 +1706,29 @@ float: left;
     border-radius: 14px;
 }
 
-.mapInfoBox .mapPermission .tip {
-    top: 0;
-    right: 32px;
-}
 .mapInfoBox .hoverForTip:hover .tip {
+    display: block;
+}
+
+.mapInfoBox .mapPermission .tooltips {
+    top: -20px;
+    right: 36px;
+    width: 155px;
+    white-space: normal;
+    text-align: center;
+}
+.mapInfoBox .mapPermission .tooltips:after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 24px;
+    width: 0;
+    height: 0;
+    border-left: 4px solid black;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+.mapInfoBox.yourMap .mapPermission.hoverForTip:hover .tooltips {
     display: block;
 }
 
@@ -2317,6 +2342,9 @@ and it won't be important on password protected instances */
 }
 #joinCodesBox {
     margin-top: 30px;
+}
+#joinCodesBox button {
+    margin: 16px 198px 0;
 }
 /* new map */
 

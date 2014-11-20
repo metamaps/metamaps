@@ -165,6 +165,9 @@ Metamaps.GlobalUI = {
 
         clearTimeout(self.notifyTimeOut);
         Metamaps.Famous.toast.hide();
+    },
+    shareInvite: function(inviteLink) {
+        window.prompt("To copy the invite link, press: Ctrl+C, Enter", inviteLink);
     }
 };
 

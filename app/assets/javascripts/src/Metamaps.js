@@ -1335,7 +1335,7 @@ Metamaps.SynapseCard = {
     add_user_info: function (synapse) {
         var u = '<div id="edgeUser" class="hoverForTip">';
         u += '<img src="" width="24" height="24" />'
-        u += '<div class="tip">Created by ' + synapse.get("user_name") + '</div></div>';
+        u += '<div class="tip">' + synapse.get("user_name") + '</div></div>';
         $('#editSynLowerBar').append(u);
 
         // get mapper image
@@ -4503,7 +4503,7 @@ Metamaps.Map.InfoBox = {
     isOpen: false,
     changing: false,
     selectingPermission: false,
-    changePermissionText: "<div class='tip'>As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>",
+    changePermissionText: "<div class='tooltips'>As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>",
     nameHTML: '<span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea" data-activator="#mapInfoName">{{name}}</span>',
     descHTML: '<span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description..." data-type="textarea" data-activator="#mapInfoDesc">{{desc}}</span>',
     init: function () {
@@ -4631,9 +4631,17 @@ Metamaps.Map.InfoBox = {
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
 
-        var mapperNames = Metamaps.Mappers.pluck("name");
+        var string = ""; 
 
-        return mapperNames.length > 0 ? mapperNames.join(", ") : "No one has added anything yet.";
+        string += "<ul>";
+
+        Metamaps.Mappers.each(function(m){
+            string += '<li><img class="rtUserImage" width="25" height="25" src="' + m.get("image") + '" />' + m.get("name") + '</li>';
+        });
+        
+        string += "</ul>";
+
+        return string;
     },
     updateNumbers: function () {
         var self = Metamaps.Map.InfoBox;
