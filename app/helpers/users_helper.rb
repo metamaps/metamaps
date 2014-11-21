@@ -10,6 +10,7 @@ module UsersHelper
       user['value'] = u.name
       user['profile'] = u.image.url(:square)
       user['mapCount'] = u.maps.count
+      user['generation'] = u.generation
       user['created_at'] = u.created_at.strftime("%m/%d/%Y")
       user['rtype'] = "mapper"
       

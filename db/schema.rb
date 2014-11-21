@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140930013020) do
+ActiveRecord::Schema.define(:version => 20141121204712) do
 
   create_table "in_metacode_sets", :force => true do |t|
     t.integer  "metacode_id"
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(:version => 20140930013020) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.integer  "generation"
   end
 
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
