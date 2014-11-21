@@ -1007,7 +1007,7 @@ h3.filterBox {
     cursor: pointer;
     font-size:12px;
 }
-.sidebarFilterBox span:hover {
+.sidebarFilterBox span:hover, .sidebarFilterBox span.active {
     color: #00BCD4;
 }
 .sidebarFilterBox ul {
@@ -1104,7 +1104,7 @@ h3.realtimeBoxTitle {
     text-align: center;
     font-size:12px;
 }
-.sidebarCollaborateBox .realtimeOnOff:hover {
+.sidebarCollaborateBox .realtimeOnOff:hover, .sidebarCollaborateBox .realtimeOnOff.active {
     color: #00bcd4;
 }
 .sidebarCollaborateBox .rtOff {

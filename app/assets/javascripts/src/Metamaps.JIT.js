@@ -1861,7 +1861,7 @@ Metamaps.JIT = {
                 var x = n.pos.x,
                     y = n.pos.y;
 
-                if (counter == 0){
+                if (counter == 0 && n.getData('alpha') == 1){
                     maxX = x;
                     minX = x; 
                     maxY = y;
@@ -1880,12 +1880,15 @@ Metamaps.JIT = {
                 }
                 var width = Math.max.apply(null, lineWidths) + 8;
 
-                maxX = Math.max(x + width /2,maxX);
-                maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
-                minX = Math.min(x - width /2,minX);
-                minY = Math.min(y - dim,minY);
+                // only adjust these values if the node is not filtered
+                if (n.getData('alpha') == 1) {
+                    maxX = Math.max(x + width /2,maxX);
+                    maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
+                    minX = Math.min(x - width /2,minX);
+                    minY = Math.min(y - dim,minY);
 
-                counter++;
+                    counter++;
+                }
             });
 
             var spanX = maxX - minX;

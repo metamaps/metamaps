@@ -91,7 +91,7 @@
 <div id="filter_by_mapper" class="filterBySection">
   <h3><%= @map ? "MAPPERS" : @topic ? "CREATORS" : "" %></h3>
   <span class="hideAll hideAllMappers">NONE</span>
-  <span class="showAll showAllMappers">ALL</span>
+  <span class="active showAll showAllMappers">ALL</span>
   <div class="clearfloat"></div>
   <ul>
     <%= @mapperlist.html_safe %>
@@ -102,7 +102,7 @@
 <div id="filter_by_metacode" class="filterBySection">
   <h3>METACODES</h3>
   <span class="hideAll hideAllMetacodes">NONE</span>
-  <span class="showAll showAllMetacodes">ALL</span>
+  <span class="active showAll showAllMetacodes">ALL</span>
   <div class="clearfloat"></div>
   <ul>
     <%= @metacodelist.html_safe %>
@@ -113,7 +113,7 @@
 <div id="filter_by_synapse" class="filterBySection">
   <h3>SYNAPSES</h3>
   <span class="hideAll hideAllSynapses">NONE</span>
-  <span class="showAll showAllSynapses">ALL</span>
+  <span class="active showAll showAllSynapses">ALL</span>
   <div class="clearfloat"></div>
   <ul>
     <%= @synapselist.html_safe %>
