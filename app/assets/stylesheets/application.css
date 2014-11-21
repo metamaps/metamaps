@@ -1622,6 +1622,7 @@ float: left;
     width: 25px;
     height: 25px;
     border-radius: 15px;
+    cursor: pointer;
 }
 #mapContribs.multiple.mTwo {
     box-shadow: 1px 1px 0 0 #B5B5B5,3px 2px 0 0 #424242;
@@ -1634,6 +1635,7 @@ float: left;
     padding-top: 5px;
     padding-left: 8px;
     float: left;
+    cursor: pointer;
 }
 
 
@@ -1704,10 +1706,6 @@ float: left;
     top: 4px;
     left: 4px;
     border-radius: 14px;
-}
-
-.mapInfoBox .hoverForTip:hover .tip {
-    display: block;
 }
 
 .mapInfoBox .mapPermission .tooltips {

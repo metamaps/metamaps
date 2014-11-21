@@ -4548,6 +4548,7 @@ Metamaps.Map.InfoBox = {
                 self.changing = false;
                 self.isOpen = false;
                 self.hidePermissionSelect();
+                $('.mapContributors .tip').hide();
             });
         }
     },
@@ -4622,6 +4623,17 @@ Metamaps.Map.InfoBox = {
         $('.mapInfoBox.yourMap').unbind('.yourMap').bind('click.yourMap', self.hidePermissionSelect);
 
         $('.yourMap .mapInfoDelete').unbind().click(self.deleteActiveMap);
+
+        $('.mapContributors span, #mapContribs').unbind().click(function(event){
+            $('.mapContributors .tip').toggle();
+            event.stopPropagation();
+        });
+        $('.mapContributors .tip').unbind().click(function(event){
+            event.stopPropagation();
+        });
+        $('.mapInfoBox').unbind('.hideTip').bind('click.hideTip', function(){
+            $('.mapContributors .tip').hide();
+        });
     },
     updateNameDescPerm: function(name, desc, perm) {
         $('.mapInfoName .best_in_place_name').html(name);
