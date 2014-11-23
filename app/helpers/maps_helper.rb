@@ -34,7 +34,7 @@ module MapsHelper
         m.contributors.each_with_index do |c, index|
           userImage = c.image.url(:square)
           name = c.name
-          contributorTip += '<li> <img class="rtUserImage" width="25" height="25" src=' + userImage + ' />' + name + '</li>'         
+          contributorTip += '<li> <img class="tipUserImage" width="25" height="25" src=' + userImage + ' />' + '<span>' + name + '</span> </li>'         
         end
       end
       map['contributorTip'] = contributorTip

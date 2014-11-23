@@ -237,6 +237,11 @@
     margin-left: 5px;
 }
 
+.mapContributorsIcon li span {
+    margin-left: 10px;
+}
+
+
 .searchHeader {
     height: 42px;
     width: 100%;
@@ -483,7 +488,7 @@
 }
 
 .sidebarSearch .topicOriginatorIcon .tip {
-    margin-right: -147px;
+    margin-right: -120px;
     top: 1px;
 }
 .sidebarSearch .tip {
@@ -506,9 +511,10 @@
 }
 
 .sidebarSearch .mapContributorsIcon .tip {
-    margin-right: -144px;
-    top: -11px;
-    padding-top: 3px;
+    margin-right: -120px;
+    top: -5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .sidebarSearch .hoverForTip .tip li {
@@ -518,7 +524,7 @@
 
 .tipUserImage {
     position: absolute;
-    top: 4px;
+    top: 0px;
     left: 7px;
     border-radius: 14px;
 }
@@ -534,7 +540,7 @@
 }
 
 .sidebarSearch .mapContributorsIcon .tip:before {
-    top: 71px;
+    top: 65px;
     left: -4px;
     margin-top: -53px;
 }
