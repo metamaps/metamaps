@@ -7493,7 +7493,7 @@ Graph.Label.Native = new Class({
       // START METAMAPS CODE
       var index;
       for (index = 0; index < customLabel.length; ++index) {
-        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 6 + (25*index));
+        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 23 + (25*index));
       }
       // END METAMAPS CODE
     },

@@ -672,6 +672,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 #editSynUpperBar {
   background: #FFFFFF url(synapse32.png) no-repeat 8px center;
   min-height: 48px;
+  height: 48px;
   border-bottom: 1px solid #222222;
   display: table;
   width: 100%;
