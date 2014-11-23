@@ -28,12 +28,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :name # done by devise
   validates_uniqueness_of :email # done by devise
 
-  if ActiveRecord::Base.connection.table_exists? 'users' 
-    codes =  ActiveRecord::Base.connection.execute("SELECT code FROM users").map {|user| user["code"] }
-  else 
-    codes = []
-  end
-  validates :joinedwithcode, :presence => true, :inclusion => { :in => codes, :message => "%{value} is not valid" }, :on => :create
+  validates :joinedwithcode, :presence => true, :inclusion => { :in => $codes, :message => "%{value} is not valid" }, :on => :create
     
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :image, :styles => {
@@ -54,6 +49,24 @@ class User < ActiveRecord::Base
   def generate_code
     #generate a random 8 letter/digit code that they can use to invite people
 	  self.code = rand(36**8).to_s(36)
+
+    $codes.push(self.code)
+
+    self.generation = self.get_generation
+  end
+
+  def get_generation
+    if self.joinedwithcode == self.code
+      # if your joinedwithcode equals your code you must be GEN 0
+      gen = 0
+    elsif self.generation
+      # if your generation has already been calculated then just return that value
+      gen = self.generation
+    else
+      # if your generation hasn't been calculated, base it off the
+      # generation of the person whose code you joined with + 1
+      gen = User.find_by_code(self.joinedwithcode).get_generation + 1
+    end
   end
   
   def settings

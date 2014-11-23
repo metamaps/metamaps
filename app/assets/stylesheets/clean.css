@@ -760,7 +760,7 @@
 
 /* infoAndHelp */
 
-.mapPage .infoAndHelp, .topicPage .infoAndHelp{
+.mapPage .infoAndHelp, .topicPage .infoAndHelp {
     right: 70px;
 }
 .mapPage .openCheatsheet .tooltipsAbove, .topicPage .openCheatsheet .tooltipsAbove {
@@ -816,6 +816,10 @@
 }
 .mapPage .mapControls, .topicPage .mapControls {
 	right: 24px; 
+}
+
+.topicPage .zoomExtents {
+    display: none;
 }
 
 .mapControl {

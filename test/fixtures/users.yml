@@ -5,6 +5,7 @@ user:
   email: user@user.com
   encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
   code: qwertyui
+  joinedwithcode: qwertyui
   admin: false
 
 admin:
@@ -12,4 +13,5 @@ admin:
   email: admin@admin.com
   encrypted_password: $2a$10$psR68SWYNy5ZKQPs9FrFM.HuRMrTXO/YFzv.HaUmdCsQZsQrG1XAW
   code: iuytrewq
+  joinedwithcode: iuytrewq
   admin: true

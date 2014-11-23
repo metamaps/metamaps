@@ -1888,13 +1888,13 @@ Metamaps.Realtime = {
     turnOn: function (notify) {
         var self = Metamaps.Realtime;
 
-        if (!self.status) {
-            if (notify) self.sendRealtimeOn();
-            $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
-            self.status = true;
-            $(".sidebarCollaborateIcon").addClass("blue");
-            $(".collabCompass").show();
-        }
+        if (notify) self.sendRealtimeOn();
+        $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
+        $('.rtOn').addClass('active');
+        $('.rtOff').removeClass('active');
+        self.status = true;
+        $(".sidebarCollaborateIcon").addClass("blue");
+        $(".collabCompass").show();
     },
     turnOff: function (silent) {
         var self = Metamaps.Realtime;
@@ -1902,6 +1902,8 @@ Metamaps.Realtime = {
         if (self.status) {
             if (!silent) self.sendRealtimeOff();
             $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
+            $('.rtOn').removeClass('active');
+            $('.rtOff').addClass('active');
             self.status = false;
             $(".sidebarCollaborateIcon").removeClass("blue");
             $(".collabCompass").hide();
@@ -3111,6 +3113,8 @@ Metamaps.Filter = {
         $('#filter_by_metacode ul').empty(); 
         $('#filter_by_mapper ul').empty();
         $('#filter_by_synapse ul').empty();
+
+        $('.filterBox .showAll').addClass('active');
     },
     /*  
     Most of this data essentially depends on the ruby function which are happening for filter inside view filterBox
@@ -3239,36 +3243,48 @@ Metamaps.Filter = {
     filterAllMetacodes: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_metacode ul li').addClass('toggledOff');
+        $('.showAllMetacodes').removeClass('active');
+        $('.hideAllMetacodes').addClass('active');
         self.visible.metacodes = [];
         self.passFilters();
     },
     filterNoMetacodes: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_metacode ul li').removeClass('toggledOff');
+        $('.showAllMetacodes').addClass('active');
+        $('.hideAllMetacodes').removeClass('active');
         self.visible.metacodes = self.filters.metacodes.slice();
         self.passFilters();
     },
     filterAllMappers: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_mapper ul li').addClass('toggledOff');
+        $('.showAllMappers').removeClass('active');
+        $('.hideAllMappers').addClass('active');
         self.visible.mappers = [];
         self.passFilters();       
     },
     filterNoMappers: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_mapper ul li').removeClass('toggledOff');
+        $('.showAllMappers').addClass('active');
+        $('.hideAllMappers').removeClass('active');
         self.visible.mappers = self.filters.mappers.slice();
         self.passFilters();
     },
     filterAllSynapses: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_synapse ul li').addClass('toggledOff');
+        $('.showAllSynapses').removeClass('active');
+        $('.hideAllSynapses').addClass('active');
         self.visible.synapses = [];
         self.passFilters();
     },
     filterNoSynapses: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_synapse ul li').removeClass('toggledOff');
+        $('.showAllSynapses').addClass('active');
+        $('.hideAllSynapses').removeClass('active');
         self.visible.synapses = self.filters.synapses.slice();
         self.passFilters();
     },
@@ -3292,14 +3308,53 @@ Metamaps.Filter = {
     toggleMetacode: function () {
         var self = Metamaps.Filter;
         self.toggleLi.call(this, 'metacodes');
+
+        if (self.visible.metacodes.length === self.filters.metacodes.length) {
+            $('.showAllMetacodes').addClass('active');
+            $('.hideAllMetacodes').removeClass('active');
+        }
+        else if (self.visible.metacodes.length === 0) {
+            $('.showAllMetacodes').removeClass('active');
+            $('.hideAllMetacodes').addClass('active');
+        }
+        else {
+            $('.showAllMetacodes').removeClass('active');
+            $('.hideAllMetacodes').removeClass('active');
+        }
     },
     toggleMapper: function () {
         var self = Metamaps.Filter;
         self.toggleLi.call(this, 'mappers');
+
+        if (self.visible.mappers.length === self.filters.mappers.length) {
+            $('.showAllMappers').addClass('active');
+            $('.hideAllMappers').removeClass('active');
+        }
+        else if (self.visible.mappers.length === 0) {
+            $('.showAllMappers').removeClass('active');
+            $('.hideAllMappers').addClass('active');
+        }
+        else {
+            $('.showAllMappers').removeClass('active');
+            $('.hideAllMappers').removeClass('active');
+        }
     },
     toggleSynapse: function () {
         var self = Metamaps.Filter;
         self.toggleLi.call(this, 'synapses');
+
+        if (self.visible.synapses.length === self.filters.synapses.length) {
+            $('.showAllSynapses').addClass('active');
+            $('.hideAllSynapses').removeClass('active');
+        }
+        else if (self.visible.synapses.length === 0) {
+            $('.showAllSynapses').removeClass('active');
+            $('.hideAllSynapses').addClass('active');
+        }
+        else {
+            $('.showAllSynapses').removeClass('active');
+            $('.hideAllSynapses').removeClass('active');
+        }
     },
     passFilters: function () {        
         var self = Metamaps.Filter;
@@ -4204,6 +4259,7 @@ Metamaps.Map = {
             Metamaps.Create.newTopic.hide();
             Metamaps.Create.newSynapse.hide();
             Metamaps.Filter.close();
+            Metamaps.Map.InfoBox.close();
             Metamaps.Realtime.endActiveMap();
         }
     },
