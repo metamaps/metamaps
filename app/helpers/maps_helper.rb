@@ -13,6 +13,7 @@ module MapsHelper
       map['topicCount'] = m.topics.count
       map['synapseCount'] = m.synapses.count
       map['contributorCount'] = m.contributors.count
+      map[''] =  m.contributors[0].image.url(:square) 
       map['rtype'] = "map"
       
       contributorList = m.user.name + ' created this map. '
@@ -28,6 +29,15 @@ module MapsHelper
       end
       map['contributorList'] = contributorList
       
+      contributorTip = ''
+      if m.contributors.count > 0 
+        m.contributors.each_with_index do |c, index|
+          userImage = c.image.url(:square)
+          name = c.name
+          contributorTip += '<li> <img class="rtUserImage" width="25" height="25" src=' + userImage + ' />' + name + '</li>'         
+        end
+      end
+      map['contributorTip'] = contributorTip
       temp.push map
     end
     return temp

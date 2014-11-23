@@ -220,10 +220,23 @@
     top: 40px !important;
     background: #F5F5F5;
     width: 472px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-y: visible;
+    overflow-x: visible;
     box-shadow: 0 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
 }
+
+.autoOptions #mapContribs { 
+    width: 15px;
+    height: 15px;
+    border: 1px solid #424242;
+    margin-top: 4px;
+    margin-left: 4px;
+}
+
+.mapContributorsIcon span {
+    margin-left: 5px;
+}
+
 .searchHeader {
     height: 42px;
     width: 100%;
@@ -468,6 +481,11 @@
 .sidebarSearch .topicOriginatorIcon img {
     border-radius: 9px;
 }
+
+.sidebarSearch .topicOriginatorIcon .tip {
+    margin-right: -147px;
+    top: 1px;
+}
 .sidebarSearch .tip {
     position: absolute;
     background: #424242;
@@ -486,6 +504,47 @@
 .sidebarSearch .hoverForTip:hover .tip {
     display: block;
 }
+
+.sidebarSearch .mapContributorsIcon .tip {
+    margin-right: -144px;
+    top: -11px;
+    padding-top: 3px;
+}
+
+.sidebarSearch .hoverForTip .tip li {
+    padding-left: 28px;
+    padding-top: 4px;
+}
+
+.tipUserImage {
+    position: absolute;
+    top: 4px;
+    left: 7px;
+    border-radius: 14px;
+}
+
+.sidebarSearch .hoverForTip .tip:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 4px solid #424242;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.sidebarSearch .mapContributorsIcon .tip:before {
+    top: 71px;
+    left: -4px;
+    margin-top: -53px;
+}
+
+.sidebarSearch .topicOriginatorIcon .tip:before {
+    top: 58px;
+    left: -4px;
+    margin-top: -53px;
+}
+
 .sidebarSearch .mapContributorsIcon .mapContributors {
     top: auto;
     right: 0;

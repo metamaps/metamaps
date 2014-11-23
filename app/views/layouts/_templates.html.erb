@@ -121,8 +121,13 @@
           {{synapseCount}}
         </div>
         <div class="mapContributorsIcon hoverForTip">
-          <span class="tip mapContributors">{{contributorList}}</span>
-          {{contributorCount}}
+            <img id="mapContribs" width="25" height="25" src="{{mapContributorImage}}" />
+          <div class="tip"> 
+            <ul>
+              {{{contributorTip}}}
+            </ul>
+          </div>
+          <span>{{contributorCount}}</span>
         </div>
         <div class="mapPermission {{permission}}">
         </div>
