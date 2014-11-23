@@ -175,7 +175,8 @@ Metamaps.JIT = {
             context.fillStyle = '#424242';
             context.textAlign = 'center';
             context.font = '14px din-medium';
-            context.fillText(count, x, y - 6);
+
+            context.fillText(count, x, y - 9);
         };
 
         if (!canvas.denySelected && desc != "" && showDesc) {
@@ -186,7 +187,7 @@ Metamaps.JIT = {
             var ctx = canvas.getCtx();
             ctx.font = 'bold 14px arial';
             ctx.fillStyle = '#FFF';
-            ctx.textBaseline = 'hanging';
+            ctx.textBaseline = 'top';
 
             var arrayOfLabelLines = Metamaps.Util.splitLine(desc, 30).split('\n');
             var index, lineWidths = [];
@@ -222,7 +223,7 @@ Metamaps.JIT = {
             ctx.fillStyle = '#424242';
             ctx.textAlign = 'center';
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 7 + (16 * index));
+                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 4 + (16 * index));
             }
 
             if (synapseNum > 1) {
@@ -306,7 +307,7 @@ Metamaps.JIT = {
                 type: 'Native', //Native or HTML
                 size: 20,
                 family: 'arial',
-                textBaseline: 'hanging',
+                textBaseline: 'top',
                 color: Metamaps.Settings.colors.labels.text
             },
             //Add Tips
