@@ -741,7 +741,7 @@ Metamaps.Create = {
                         }
                     },
                     engine: Hogan,
-                    header: "<h3>Existing Synapses</h3>"
+                    header: "<h3>Existing synapses</h3>"
                 }
           ]);
 
@@ -1043,8 +1043,8 @@ Metamaps.TopicCard = {
             });
 
             $(showCard).find('.best_in_place_desc').bind("ajax:success", function () {
-                this.innerHTML = this.innerHTML.replace(/\r/g, '')
-                var desc = $(this).html();
+                this.innerHTML = this.innerHTML.replace(/\r/g, '');
+                var desc = $(this).html() === $(this).data('nil') ? "" : $(this).html();
                 topic.set("desc", desc);
                 topic.trigger('saved');
             });
@@ -1289,7 +1289,7 @@ Metamaps.SynapseCard = {
         });
     },
     add_drop_down: function (edge, synapse) {
-        var list, i, synapses, l;
+        var list, i, synapses, l, desc;
 
         synapses = edge.getData("synapses");
         l = synapses.length;
@@ -1311,7 +1311,9 @@ Metamaps.SynapseCard = {
             list = '<ul id="switchSynapseList">';
             for (i = 0; i < l; i++) {
                 if (synapses[i] !== synapse) { // don't add the current one to the list
-                    list += '<li data-synapse-index="' + i + '">' + synapses[i].get('desc') + '</li>';
+                    desc = synapses[i].get('desc');
+                    desc = desc === "" || desc === null ? "(no description)" : desc;
+                    list += '<li data-synapse-index="' + i + '">' + desc + '</li>';
                 }
             }
             list += '</ul>'
@@ -1333,7 +1335,7 @@ Metamaps.SynapseCard = {
     add_user_info: function (synapse) {
         var u = '<div id="edgeUser" class="hoverForTip">';
         u += '<img src="" width="24" height="24" />'
-        u += '<div class="tip">Created by ' + synapse.get("user_name") + '</div></div>';
+        u += '<div class="tip">' + synapse.get("user_name") + '</div></div>';
         $('#editSynLowerBar').append(u);
 
         // get mapper image
@@ -1826,6 +1828,7 @@ Metamaps.Realtime = {
 
         Metamaps.GlobalUI.Account.close();
         Metamaps.Filter.close();
+        $('.sidebarCollaborateIcon div').addClass('hide');
 
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -1837,7 +1840,7 @@ Metamaps.Realtime = {
     },
     close: function () {
         var self = Metamaps.Realtime;
-
+        $(".sidebarCollaborateIcon div").removeClass('hide');
         if (!self.changing) {
             self.changing = true;
             $('.sidebarCollaborateBox').fadeOut(200, function () {
@@ -1884,13 +1887,13 @@ Metamaps.Realtime = {
     turnOn: function (notify) {
         var self = Metamaps.Realtime;
 
-        if (!self.status) {
-            if (notify) self.sendRealtimeOn();
-            $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
-            self.status = true;
-            $(".sidebarCollaborateIcon").addClass("blue");
-            $(".collabCompass").show();
-        }
+        if (notify) self.sendRealtimeOn();
+        $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
+        $('.rtOn').addClass('active');
+        $('.rtOff').removeClass('active');
+        self.status = true;
+        $(".sidebarCollaborateIcon").addClass("blue");
+        $(".collabCompass").show();
     },
     turnOff: function (silent) {
         var self = Metamaps.Realtime;
@@ -1898,6 +1901,8 @@ Metamaps.Realtime = {
         if (self.status) {
             if (!silent) self.sendRealtimeOff();
             $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
+            $('.rtOn').removeClass('active');
+            $('.rtOff').addClass('active');
             self.status = false;
             $(".sidebarCollaborateIcon").removeClass("blue");
             $(".collabCompass").hide();
@@ -3067,6 +3072,8 @@ Metamaps.Filter = {
 
         Metamaps.GlobalUI.Account.close();
         Metamaps.Realtime.close();
+        $('.sidebarFilterIcon div').addClass('hide');
+
 
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -3080,6 +3087,8 @@ Metamaps.Filter = {
     },
     close: function () {
         var self = Metamaps.Filter;
+        $('.sidebarFilterIcon div').removeClass('hide');
+
 
         if (!self.changing) {
             self.changing = true;
@@ -3103,6 +3112,8 @@ Metamaps.Filter = {
         $('#filter_by_metacode ul').empty(); 
         $('#filter_by_mapper ul').empty();
         $('#filter_by_synapse ul').empty();
+
+        $('.filterBox .showAll').addClass('active');
     },
     /*  
     Most of this data essentially depends on the ruby function which are happening for filter inside view filterBox
@@ -3231,36 +3242,48 @@ Metamaps.Filter = {
     filterAllMetacodes: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_metacode ul li').addClass('toggledOff');
+        $('.showAllMetacodes').removeClass('active');
+        $('.hideAllMetacodes').addClass('active');
         self.visible.metacodes = [];
         self.passFilters();
     },
     filterNoMetacodes: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_metacode ul li').removeClass('toggledOff');
+        $('.showAllMetacodes').addClass('active');
+        $('.hideAllMetacodes').removeClass('active');
         self.visible.metacodes = self.filters.metacodes.slice();
         self.passFilters();
     },
     filterAllMappers: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_mapper ul li').addClass('toggledOff');
+        $('.showAllMappers').removeClass('active');
+        $('.hideAllMappers').addClass('active');
         self.visible.mappers = [];
         self.passFilters();       
     },
     filterNoMappers: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_mapper ul li').removeClass('toggledOff');
+        $('.showAllMappers').addClass('active');
+        $('.hideAllMappers').removeClass('active');
         self.visible.mappers = self.filters.mappers.slice();
         self.passFilters();
     },
     filterAllSynapses: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_synapse ul li').addClass('toggledOff');
+        $('.showAllSynapses').removeClass('active');
+        $('.hideAllSynapses').addClass('active');
         self.visible.synapses = [];
         self.passFilters();
     },
     filterNoSynapses: function (e) {
         var self = Metamaps.Filter;
         $('#filter_by_synapse ul li').removeClass('toggledOff');
+        $('.showAllSynapses').addClass('active');
+        $('.hideAllSynapses').removeClass('active');
         self.visible.synapses = self.filters.synapses.slice();
         self.passFilters();
     },
@@ -3284,14 +3307,53 @@ Metamaps.Filter = {
     toggleMetacode: function () {
         var self = Metamaps.Filter;
         self.toggleLi.call(this, 'metacodes');
+
+        if (self.visible.metacodes.length === self.filters.metacodes.length) {
+            $('.showAllMetacodes').addClass('active');
+            $('.hideAllMetacodes').removeClass('active');
+        }
+        else if (self.visible.metacodes.length === 0) {
+            $('.showAllMetacodes').removeClass('active');
+            $('.hideAllMetacodes').addClass('active');
+        }
+        else {
+            $('.showAllMetacodes').removeClass('active');
+            $('.hideAllMetacodes').removeClass('active');
+        }
     },
     toggleMapper: function () {
         var self = Metamaps.Filter;
         self.toggleLi.call(this, 'mappers');
+
+        if (self.visible.mappers.length === self.filters.mappers.length) {
+            $('.showAllMappers').addClass('active');
+            $('.hideAllMappers').removeClass('active');
+        }
+        else if (self.visible.mappers.length === 0) {
+            $('.showAllMappers').removeClass('active');
+            $('.hideAllMappers').addClass('active');
+        }
+        else {
+            $('.showAllMappers').removeClass('active');
+            $('.hideAllMappers').removeClass('active');
+        }
     },
     toggleSynapse: function () {
         var self = Metamaps.Filter;
         self.toggleLi.call(this, 'synapses');
+
+        if (self.visible.synapses.length === self.filters.synapses.length) {
+            $('.showAllSynapses').addClass('active');
+            $('.hideAllSynapses').removeClass('active');
+        }
+        else if (self.visible.synapses.length === 0) {
+            $('.showAllSynapses').removeClass('active');
+            $('.hideAllSynapses').addClass('active');
+        }
+        else {
+            $('.showAllSynapses').removeClass('active');
+            $('.hideAllSynapses').removeClass('active');
+        }
     },
     passFilters: function () {        
         var self = Metamaps.Filter;
@@ -4196,6 +4258,7 @@ Metamaps.Map = {
             Metamaps.Create.newTopic.hide();
             Metamaps.Create.newSynapse.hide();
             Metamaps.Filter.close();
+            Metamaps.Map.InfoBox.close();
             Metamaps.Realtime.endActiveMap();
         }
     },
@@ -4242,6 +4305,7 @@ Metamaps.Map = {
 
         Metamaps.GlobalUI.CreateMap.topicsToMap = nodes_data;
         Metamaps.GlobalUI.CreateMap.synapsesToMap = synapses_data;
+
     },
     leavePrivateMap: function(){
         var map = Metamaps.Active.Map;
@@ -4495,7 +4559,7 @@ Metamaps.Map.InfoBox = {
     isOpen: false,
     changing: false,
     selectingPermission: false,
-    changePermissionText: "<div class='tip'>As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>",
+    changePermissionText: "<div class='tooltips'>As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>",
     nameHTML: '<span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea" data-activator="#mapInfoName">{{name}}</span>',
     descHTML: '<span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description..." data-type="textarea" data-activator="#mapInfoDesc">{{desc}}</span>',
     init: function () {
@@ -4521,7 +4585,7 @@ Metamaps.Map.InfoBox = {
     },
     open: function () {
         var self = Metamaps.Map.InfoBox;
-
+        $('.mapInfoIcon div').addClass('hide');
         if (!self.isOpen && !self.changing) {
             self.changing = true;
             $('.mapInfoBox').fadeIn(200, function () {
@@ -4533,12 +4597,14 @@ Metamaps.Map.InfoBox = {
     close: function () {
         var self = Metamaps.Map.InfoBox;
 
+        $('.mapInfoIcon div').removeClass('hide');
         if (!self.changing) {
             self.changing = true;
             $('.mapInfoBox').fadeOut(200, function () {
                 self.changing = false;
                 self.isOpen = false;
                 self.hidePermissionSelect();
+                $('.mapContributors .tip').hide();
             });
         }
     },
@@ -4613,6 +4679,17 @@ Metamaps.Map.InfoBox = {
         $('.mapInfoBox.yourMap').unbind('.yourMap').bind('click.yourMap', self.hidePermissionSelect);
 
         $('.yourMap .mapInfoDelete').unbind().click(self.deleteActiveMap);
+
+        $('.mapContributors span, #mapContribs').unbind().click(function(event){
+            $('.mapContributors .tip').toggle();
+            event.stopPropagation();
+        });
+        $('.mapContributors .tip').unbind().click(function(event){
+            event.stopPropagation();
+        });
+        $('.mapInfoBox').unbind('.hideTip').bind('click.hideTip', function(){
+            $('.mapContributors .tip').hide();
+        });
     },
     updateNameDescPerm: function(name, desc, perm) {
         $('.mapInfoName .best_in_place_name').html(name);
@@ -4622,9 +4699,17 @@ Metamaps.Map.InfoBox = {
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
 
-        var mapperNames = Metamaps.Mappers.pluck("name");
+        var string = ""; 
 
-        return mapperNames.length > 0 ? mapperNames.join(", ") : "No one has added anything yet.";
+        string += "<ul>";
+
+        Metamaps.Mappers.each(function(m){
+            string += '<li><img class="rtUserImage" width="25" height="25" src="' + m.get("image") + '" />' + m.get("name") + '</li>';
+        });
+        
+        string += "</ul>";
+
+        return string;
     },
     updateNumbers: function () {
         var self = Metamaps.Map.InfoBox;
@@ -4641,7 +4726,7 @@ Metamaps.Map.InfoBox = {
         }
         $('.mapContributors img').attr('src', contributors_image).removeClass('multiple mTwo').addClass(contributors_class);
         $('.mapContributors span').text(Metamaps.Mappers.length)
-        $('.mapContributors .tip').text(self.createContributorList());
+        $('.mapContributors .tip').html(self.createContributorList());
         $('.mapTopics').text(Metamaps.Topics.length);
         $('.mapSynapses').text(Metamaps.Synapses.length);
 

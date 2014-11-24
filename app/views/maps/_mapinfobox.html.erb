@@ -22,15 +22,11 @@
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" class="multiple" />
       <% end %>
       <span><%= @map.contributors.count %></span>
-      <% contributorList = ''
-         @map.contributors.each_with_index do |c, index|
-            comma = (index+1) == @map.contributors.count ? '' : ', '
-            contributorList += c.name + comma
-         end 
-         if @map.contributors.count == 0
-           contributorList = 'No one has added anything yet.'
-         end %>
-      <div class="tip"><%= contributorList %></div>
+      <div class="tip"> <ul><% @map.contributors.each_with_index do |c, index| %>
+           <li > <img class="rtUserImage" width="25" height="25" src="<%= c.image.url(:square) %>"  />
+            <%= c.name %> 
+            </li>         
+        <% end %></ul></div>
     </div>
     <div class="infoStatIcon mapTopics">
       <%= @map.topics.count %>
@@ -39,9 +35,7 @@
       <%= @map.synapses.count %>
     </div>
     <div class="infoStatIcon mapPermission <%= @map.permission %> hoverForTip">
-      <% if @map.user == user %>
-        <div class="tip">As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>
-      <% end %>
+        <div class="tooltips">As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>
     </div>
     <div class="clearfloat"></div>
   </div>

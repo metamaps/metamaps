@@ -167,6 +167,9 @@ Metamaps.GlobalUI = {
 
         clearTimeout(self.notifyTimeOut);
         Metamaps.Famous.toast.hide();
+    },
+    shareInvite: function(inviteLink) {
+        window.prompt("To copy the invite link, press: Ctrl+C, Enter", inviteLink);
     }
 };
 
@@ -326,6 +329,8 @@ Metamaps.GlobalUI.Account = {
 
         Metamaps.Realtime.close();
         Metamaps.Filter.close();
+        $('.sidebarAccountIcon .tooltipsUnder').addClass('hide');
+
 
         if (!self.isOpen && !self.changing) {
             self.changing = true;
@@ -339,6 +344,7 @@ Metamaps.GlobalUI.Account = {
     close: function () {
         var self = Metamaps.GlobalUI.Account;
 
+        $('.sidebarAccountIcon .tooltipsUnder').removeClass('hide');
         if (!self.changing) {
             self.changing = true;
             $('.sidebarAccountBox #user_email').blur();

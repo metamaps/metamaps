@@ -15,19 +15,19 @@ module MapsHelper
       map['contributorCount'] = m.contributors.count
       map['rtype'] = "map"
       
-      contributorList = m.user.name + ' created this map. '
+      contributorTip = ''
+      firstContributorImage = '/assets/user.png'
       if m.contributors.count > 0 
-          m.contributors.each_with_index do |c, index|
-            comma = (index+1) == m.contributors.count ? '' : ', '
-            contributorList += c.name + comma
-          end
-          contributorList += ' has edited it.' if m.contributors.count == 1
-          contributorList += ' have edited it.' if m.contributors.count > 1
-      else
-        contributorList += 'No one has added anything yet.'      
+        firstContributorImage = m.contributors[0].image.url(:square)
+        m.contributors.each_with_index do |c, index|
+          userImage = c.image.url(:square)
+          name = c.name
+          contributorTip += '<li> <img class="tipUserImage" width="25" height="25" src=' + userImage + ' />' + '<span>' + name + '</span> </li>'         
+        end
       end
-      map['contributorList'] = contributorList
-      
+      map['contributorTip'] = contributorTip
+      map['mapContributorImage'] = firstContributorImage
+
       temp.push map
     end
     return temp

@@ -2495,7 +2495,7 @@ Extras.Classes.Navigation = new Class({
     //START METAMAPS CODE
     var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey); 
     // TODO make sure this works across browsers  
-    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || (rightClick && e.ctrlKey))) {
+    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
       Metamaps.Mouse.boxStartCoordinates = eventInfo.getPos();
       //console.log('mouse down');
     }
@@ -2525,13 +2525,13 @@ Extras.Classes.Navigation = new Class({
     
     // START METAMAPS CODE
     var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey);
-    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || (rightClick && e.ctrlKey))) {
+    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
       Metamaps.Visualize.mGraph.busy = true;
       Metamaps.boxStartCoordinates = eventInfo.getPos();
       //console.log('mouse move');
       return;
     }
-    if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || (rightClick && e.ctrlKey))) {
+    if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
       Metamaps.Visualize.mGraph.busy = true;
       Metamaps.JIT.drawSelectBox(eventInfo,e);
       //console.log('mouse move');
@@ -7493,7 +7493,7 @@ Graph.Label.Native = new Class({
       // START METAMAPS CODE
       var index;
       for (index = 0; index < customLabel.length; ++index) {
-        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 9 + (25*index));
+        ctx.fillText(customLabel[index], pos.x, pos.y + node.getData("height") + 23 + (25*index));
       }
       // END METAMAPS CODE
     },

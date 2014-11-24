@@ -18,7 +18,7 @@
   <%= f.password_field :password_confirmation %></div>
   
   <div><%= f.label "Access Code:", :class => "fieldText" %>
-  <%= f.text_field :joinedwithcode %></div>
+  <%= f.text_field :joinedwithcode, :value => params[:code] %></div>
 
   <div><%= f.submit "Sign up!" %></div>
 <% end %>

@@ -175,7 +175,8 @@ Metamaps.JIT = {
             context.fillStyle = '#424242';
             context.textAlign = 'center';
             context.font = '14px din-medium';
-            context.fillText(count, x, y - 6);
+
+            context.fillText(count, x, y + 5);
         };
 
         if (!canvas.denySelected && desc != "" && showDesc) {
@@ -186,7 +187,7 @@ Metamaps.JIT = {
             var ctx = canvas.getCtx();
             ctx.font = 'bold 14px arial';
             ctx.fillStyle = '#FFF';
-            ctx.textBaseline = 'hanging';
+            ctx.textBaseline = 'alphabetic';
 
             var arrayOfLabelLines = Metamaps.Util.splitLine(desc, 30).split('\n');
             var index, lineWidths = [];
@@ -222,7 +223,7 @@ Metamaps.JIT = {
             ctx.fillStyle = '#424242';
             ctx.textAlign = 'center';
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
-                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 7 + (16 * index));
+                ctx.fillText(arrayOfLabelLines[index], x + (width / 2), y + 18 + (16 * index));
             }
 
             if (synapseNum > 1) {
@@ -306,7 +307,7 @@ Metamaps.JIT = {
                 type: 'Native', //Native or HTML
                 size: 20,
                 family: 'arial',
-                textBaseline: 'hanging',
+                textBaseline: 'alphabetic',
                 color: Metamaps.Settings.colors.labels.text
             },
             //Add Tips
@@ -374,14 +375,14 @@ Metamaps.JIT = {
                     $('.rightclickmenu').remove();
 
                     if (Metamaps.Mouse.boxStartCoordinates) {
-                        if(e.ctrlKey && e.shiftKey){
+                        if(e.ctrlKey){
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
                             Metamaps.JIT.zoomToBox(e);
                             //console.log('called zoom to box');
                             return;
                         }
-                        else if (e.ctrlKey || e.shiftKey) {
+                        else if (e.shiftKey) {
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
                             Metamaps.JIT.selectWithBox(e);
@@ -410,10 +411,10 @@ Metamaps.JIT = {
                     // remove the rightclickmenu
                     $('.rightclickmenu').remove();
 
-                    if (Metamaps.Mouse.boxStartCoordinates && e.ctrlKey) {
+                    if (Metamaps.Mouse.boxStartCoordinates) {
                         Metamaps.Visualize.mGraph.busy = false;
                         Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                        Metamaps.JIT.zoomToBox(e);
+                        Metamaps.JIT.selectWithBox(e);
                         return;
                     }
 
@@ -1097,7 +1098,7 @@ Metamaps.JIT = {
             eX = Metamaps.Mouse.boxEndCoordinates.x,
             eY = Metamaps.Mouse.boxEndCoordinates.y;
 		
-		if(!(e.shiftKey) && !(e.ctrlKey)){
+		if(!e.shiftKey){
 			Metamaps.Control.deselectAllNodes();
 			Metamaps.Control.deselectAllEdges();
 		}
@@ -1108,7 +1109,7 @@ Metamaps.JIT = {
                 y = n.pos.y;
 
             if ((sX < x && x < eX && sY < y && y < eY) || (sX > x && x > eX && sY > y && y > eY) || (sX > x && x > eX && sY < y && y < eY) || (sX < x && x < eX && sY > y && y > eY)) {
-                if(e.ctrlKey){
+                if(e.shiftKey){
 					if(n.selected){
 						Metamaps.Control.deselectNode(n);
 					}
@@ -1211,7 +1212,7 @@ Metamaps.JIT = {
             var node2id = synapse.get('edge').nodeTo.id;
             var edge = Metamaps.Visualize.mGraph.graph.getAdjacence(node1id, node2id);
 			if(selectTest){
-				if(e.ctrlKey){
+				if(e.shiftKey){
 					if(Metamaps.Selected.Edges.indexOf(synapse.get('edge')) != -1 ){
 						Metamaps.Control.deselectEdge(synapse.get('edge'));
 					}
@@ -1273,23 +1274,19 @@ Metamaps.JIT = {
             // wait a certain length of time, then check again, then run this code
             setTimeout(function () {
                 if (!Metamaps.JIT.nodeWasDoubleClicked()) {
-                    if (!e.shiftKey && !e.ctrlKey) {
+
+                    var nodeAlreadySelected = node.selected;
+
+                    if (!e.shiftKey) {
                         Metamaps.Control.deselectAllNodes();
                         Metamaps.Control.deselectAllEdges();
+                    }
+                    
+                    if (nodeAlreadySelected) {
+                        Metamaps.Control.deselectNode(node);
+                    } else {
                         Metamaps.Control.selectNode(node,e);
                     }
-                    else if(e.shiftKey && e.ctrlKey){
-                        //no result
-                    }
-                    else if(e.ctrlKey){
-                        if (node.selected) {
-                            Metamaps.Control.deselectNode(node);
-                        } else {
-                            Metamaps.Control.selectNode(node,e);
-                        } 
-                    }else if(e.shiftKey){
-                        Metamaps.Control.selectNode(node,e);
-                    } 
                     
                     //trigger animation to final styles
                     Metamaps.Visualize.mGraph.fx.animate({
@@ -1531,22 +1528,17 @@ Metamaps.JIT = {
             // wait a certain length of time, then check again, then run this code
             setTimeout(function () {
                 if (!Metamaps.JIT.nodeWasDoubleClicked()) {
-                    if (!e.shiftKey && !e.ctrlKey) {
+
+                    var edgeAlreadySelected = Metamaps.Selected.Edges.indexOf(adj) !== -1;
+
+                    if (!e.shiftKey) {
                         Metamaps.Control.deselectAllNodes();
                         Metamaps.Control.deselectAllEdges();
-                        Metamaps.Control.selectEdge(adj);
                     }
-                    else if (e.shiftKey && e.ctrlKey){
-                        //no result
-                    }
-                    else if (e.ctrlKey){
-                        if (Metamaps.Selected.Edges.indexOf(adj) !== -1) {
-                            Metamaps.Control.deselectEdge(adj);
-                        } else {
-                            Metamaps.Control.selectEdge(adj);
-                        }
-                    }
-                    else if (e.shiftKey){
+
+                    if (edgeAlreadySelected) {
+                        Metamaps.Control.deselectEdge(adj);
+                    } else {
                         Metamaps.Control.selectEdge(adj);
                     }
 
@@ -1861,7 +1853,7 @@ Metamaps.JIT = {
                 var x = n.pos.x,
                     y = n.pos.y;
 
-                if (counter == 0){
+                if (counter == 0 && n.getData('alpha') == 1){
                     maxX = x;
                     minX = x; 
                     maxY = y;
@@ -1880,12 +1872,15 @@ Metamaps.JIT = {
                 }
                 var width = Math.max.apply(null, lineWidths) + 8;
 
-                maxX = Math.max(x + width /2,maxX);
-                maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
-                minX = Math.min(x - width /2,minX);
-                minY = Math.min(y - dim,minY);
+                // only adjust these values if the node is not filtered
+                if (n.getData('alpha') == 1) {
+                    maxX = Math.max(x + width /2,maxX);
+                    maxY = Math.max(y + n.getData("height") + 5 + height,maxY);
+                    minX = Math.min(x - width /2,minX);
+                    minY = Math.min(y - dim,minY);
 
-                counter++;
+                    counter++;
+                }
             });
 
             var spanX = maxX - minX;

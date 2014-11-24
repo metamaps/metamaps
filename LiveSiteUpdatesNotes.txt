@@ -1,0 +1,6 @@
+make sure that root individuals have same 'joinedwithcode' as 'code'
+
+User.all.each do |u|
+	u.generation = u.get_generation
+	u.save
+end

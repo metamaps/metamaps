@@ -149,6 +149,10 @@
     <% end %>
 </script>
 
+<% if !authenticated? %>
+  <iframe width="1" height="1" src="http://support.metamaps.cc/logout.json"; style="visibility:hidden;"></iframe>
+<% end %>
+
 <%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>
 </body>
 </html>

@@ -21,7 +21,7 @@
     <div class="mapElement upperRightEl upperRightMapButtons">
             <!-- Realtime -->
             <div class="sidebarCollaborate upperRightEl">
-                <div class="sidebarCollaborateIcon upperRightIcon blue"></div>
+                <div class="sidebarCollaborateIcon upperRightIcon blue"><div class="tooltipsUnder">Junto</div></div>
                 <div class="sidebarCollaborateBox upperRightBox">
                     <h3 class="realtimeBoxTitle">REALTIME</h3>
                     <span class="realtimeOnOff rtOff">OFF</span>
@@ -41,7 +41,7 @@
 
         <!-- filtering -->
         <div class="sidebarFilter upperRightEl">
-            <div class="sidebarFilterIcon upperRightIcon"></div>
+            <div class="sidebarFilterIcon upperRightIcon"><div class="tooltipsUnder">Filter</div></div>
             <div class="sidebarFilterBox upperRightBox">
                 <%= render :partial => 'shared/filterBox' %>
             </div>
@@ -49,19 +49,20 @@
 
         <!-- fork map -->
         <div class="sidebarFork upperRightEl">
-            <div class="sidebarForkIcon upperRightIcon"></div>
+            <div class="sidebarForkIcon upperRightIcon"><div class="tooltipsUnder">Save To New Map</div></div>
         </div> <!-- end sidebarFork -->
 
         <div class="clearfloat"></div>
     </div> <!-- end mapElement --> 
 
     <!-- create new map -->
-    <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap">
+    <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap"><div class="tooltipsUnder">Create New Map</div>
     </div><!-- end addMap -->
 
     <!-- Account / Sign in -->
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon">
+              <div class="tooltipsUnder">Account</div>
               <%= image_tag user.image.url(:square), :size => "32x32" %>
         </div>
         <div class="sidebarAccountBox upperRightBox">

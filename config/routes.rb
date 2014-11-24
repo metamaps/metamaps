@@ -1,12 +1,7 @@
-require 'sidekiq/web'
-
 Metamaps::Application.routes.draw do
 
-  root to: 'main#home', via: :get
+  root to: 'main#home', via: :get  
 
-  #To debug sidekiq and monitor processes, enable this route
-  #mount Sidekiq::Web, at: '/sidekiq'
-    
   match 'search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
   match 'search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps
   match 'search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers

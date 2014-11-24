@@ -6,8 +6,6 @@ gem 'rails', '3.2.17'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'phantomjs'
-
 gem 'devise'
 gem 'redis'
 gem 'pg'
@@ -19,9 +17,6 @@ gem 'rails3-jquery-autocomplete'
 gem 'best_in_place' #in-place editing
 gem 'kaminari' # pagination
 gem 'uservoice-ruby'
-gem 'sidekiq' # worker processes
-gem 'sinatra', require: false
-gem 'slim'
 
 gem 'paperclip'
 gem 'aws-sdk'

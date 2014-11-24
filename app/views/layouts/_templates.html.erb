@@ -13,7 +13,7 @@
       <img id="mapContribs" class="{{contributors_class}}"
         width="25" height="25" src="{{contributor_image}}" />
       <span>{{contributor_count}}</span>
-      <div class="tip">{{contributor_list}}</div>
+      <div class="tip">{{{contributor_list}}}</div>
     </div>
     <div class="infoStatIcon mapTopics">
       {{topic_count}}
@@ -121,8 +121,13 @@
           {{synapseCount}}
         </div>
         <div class="mapContributorsIcon hoverForTip">
-          <span class="tip mapContributors">{{contributorList}}</span>
-          {{contributorCount}}
+            <img id="mapContribs" width="25" height="25" src="{{mapContributorImage}}" />
+          <div class="tip"> 
+            <ul>
+              {{{contributorTip}}}
+            </ul>
+          </div>
+          <span>{{contributorCount}}</span>
         </div>
         <div class="mapPermission {{permission}}">
         </div>
@@ -143,9 +148,6 @@
         <div class="mapperCreated">
           <p>Mapping since: {{created_at}}</p>
         </div>
-        <div class="mapperGeneration">
-          <p>Generation: 1</p>
-        </div>
         <div class="mapCount">
           {{mapCount}}
         </div>
@@ -156,13 +158,11 @@
 
     <script type="text/template" id="synapseAutocompleteTemplate">
       <div class="result{{rtype}}">
-      <p class="autocompleteSection synapseDesc">{{label}}</p>
-      <div class="expandSynapseMetadata"></div>
+        <p class="autocompleteSection synapseDesc">{{label}}</p>
         <div class="synapseMetadata">
-          <div class="synapseNumMaps">{{mapCount}}</div>
           <div class="synapseOriginatorIcon hoverForTip">
               <img width="24" height="24" src="{{originatorImage}}" />
-              <span class="tip synapseOriginator">{{originator}}</span>
+              <span class="tooltips synapseOriginator">{{originator}}</span>
           </div>
           <div class="synapsePermission {{permission}}"></div>
         </div>
@@ -179,7 +179,7 @@
           <div class="topicNumSynapses">{{synapseCount}}</div>
           <div class="topicOriginatorIcon hoverForTip">
               <img width="24" height="24" src="{{originatorImage}}" />
-              <span class="tip topicOriginator">{{originator}}</span>
+              <span class="tooltips topicOriginator">{{originator}}</span>
           </div>
           <div class="topicPermission {{permission}}"></div>
         </div>
