@@ -488,7 +488,8 @@
 }
 
 .sidebarSearch .topicOriginatorIcon .tip {
-    margin-right: -120px;
+    left: 30px;
+    right: auto;
     top: 1px;
 }
 .sidebarSearch .tip {
@@ -511,7 +512,8 @@
 }
 
 .sidebarSearch .mapContributorsIcon .tip {
-    margin-right: -120px;
+    left: 40px;
+    right: auto;
     top: -5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -537,6 +539,15 @@
     border-right: 4px solid #424242;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
+}
+
+.sidebarSearch .hoverForTip.addToMap .tip {
+    right: 30px;
+}
+.sidebarSearch .hoverForTip.addToMap .tip:before {
+    right: -4px;
+    border-left: 4px solid #424242;
+    border-right: none;
 }
 
 .sidebarSearch .mapContributorsIcon .tip:before {

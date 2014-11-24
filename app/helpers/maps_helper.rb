@@ -13,24 +13,12 @@ module MapsHelper
       map['topicCount'] = m.topics.count
       map['synapseCount'] = m.synapses.count
       map['contributorCount'] = m.contributors.count
-      map[''] =  m.contributors[0].image.url(:square) 
       map['rtype'] = "map"
       
-      contributorList = m.user.name + ' created this map. '
-      if m.contributors.count > 0 
-          m.contributors.each_with_index do |c, index|
-            comma = (index+1) == m.contributors.count ? '' : ', '
-            contributorList += c.name + comma
-          end
-          contributorList += ' has edited it.' if m.contributors.count == 1
-          contributorList += ' have edited it.' if m.contributors.count > 1
-      else
-        contributorList += 'No one has added anything yet.'      
-      end
-      map['contributorList'] = contributorList
-      
       contributorTip = ''
+      firstContributorImage = '/assets/user.png'
       if m.contributors.count > 0 
+        firstContributorImage = m.contributors[0].image.url(:square)
         m.contributors.each_with_index do |c, index|
           userImage = c.image.url(:square)
           name = c.name
@@ -38,6 +26,8 @@ module MapsHelper
         end
       end
       map['contributorTip'] = contributorTip
+      map['mapContributorImage'] = firstContributorImage
+
       temp.push map
     end
     return temp

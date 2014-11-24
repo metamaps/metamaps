@@ -4726,7 +4726,7 @@ Metamaps.Map.InfoBox = {
         }
         $('.mapContributors img').attr('src', contributors_image).removeClass('multiple mTwo').addClass(contributors_class);
         $('.mapContributors span').text(Metamaps.Mappers.length)
-        $('.mapContributors .tip').text(self.createContributorList());
+        $('.mapContributors .tip').html(self.createContributorList());
         $('.mapTopics').text(Metamaps.Topics.length);
         $('.mapSynapses').text(Metamaps.Synapses.length);
 

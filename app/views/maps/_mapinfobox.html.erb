@@ -18,7 +18,6 @@
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" />
       <% elsif @map.contributors.count == 2 %>
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" class="multiple mTwo" />
-        <div class="mapContribsDrop"> 
       <% elsif @map.contributors.count > 2 %>
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:square) %>" class="multiple" />
       <% end %>
