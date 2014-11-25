@@ -6,6 +6,7 @@
         routes: {
             "": "home", // #home
             "explore/:section": "explore", // #explore/active
+            "explore/:section/:id": "explore", // #explore/mapper/1234
             "maps/:id": "maps" // #maps/7
         },
         home: function () {
@@ -64,19 +65,35 @@
             Metamaps.Active.Map = null;
             Metamaps.Active.Topic = null;
         },
-        explore: function (section) {
+        explore: function (section, id) {
             
             // just capitalize the variable section
-            // either 'mine', 'featured', or 'active'
+            // either 'featured', 'mapper', or 'active'
             var capitalize = section.charAt(0).toUpperCase() + section.slice(1);
             
-            document.title = 'Explore ' + capitalize + ' Maps | Metamaps';
+            if (capitalize === "featured" || capitalize === "active") {
+                document.title = 'Explore ' + capitalize + ' Maps | Metamaps';
+            }
+            else if (capitalize === "mapper") {
+                document.title = 'Explore Maps | Metamaps';
+            }
 
             $('.wrapper').removeClass('homePage mapPage topicPage');
             $('.wrapper').addClass('explorePage');
             
             Metamaps.currentSection = "explore";
             Metamaps.currentPage = section;
+
+            // this will mean it's a mapper page being loaded
+            if (id) {
+                if (Metamaps.Maps.Mapper.mapperId !== id) {
+                    // empty the collection if we are trying to load the maps 
+                    // collection of a different mapper than we had previously
+                    Metamaps.Maps.Mapper.reset();
+                    Metamaps.Maps.Mapper.page = 1;
+                }
+                Metamaps.Maps.Mapper.mapperId = id;
+            }
 
             Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
             if (Metamaps.Maps[capitalize].length === 0) {
@@ -86,7 +103,12 @@
                 }, 300); // wait 300 milliseconds till the other animations are done to do the fetch 
             }
             else {
-                Metamaps.Views.exploreMaps.render();
+                if (id) {
+                    Metamaps.Views.exploreMaps.fetchUserThenRender();
+                }
+                else {
+                    Metamaps.Views.exploreMaps.render();
+                }
             }
 
             Metamaps.GlobalUI.Search.open();
@@ -96,7 +118,7 @@
 
             Metamaps.Famous.maps.resetScroll(); // sets the scroll back to the top
             Metamaps.Famous.maps.show();
-            Metamaps.Famous.explore.set(section);
+            Metamaps.Famous.explore.set(section, id);
             Metamaps.Famous.explore.show();
 
             Metamaps.Famous.viz.hide();

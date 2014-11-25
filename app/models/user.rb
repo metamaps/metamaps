@@ -32,7 +32,10 @@ class User < ActiveRecord::Base
     
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :image, :styles => {
-   :square => ['84x84#', :png]
+   :thirtytwo => ['32x32#', :png],
+   :sixtyfour => ['64x64#', :png],
+   :ninetysix => ['96x96#', :png],
+   :onetwentyeight => ['128x128#', :png]
   },
   :default_url => "/assets/user.png"
     
@@ -42,7 +45,7 @@ class User < ActiveRecord::Base
   def as_json(options={})
     { :id => self.id,
       :name => self.name,
-      :image => self.image.url(:square)
+      :image => self.image.url(:sixtyfour)
     }
   end
   

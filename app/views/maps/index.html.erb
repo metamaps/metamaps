@@ -13,6 +13,12 @@
     <% elsif @request == "featured" %>
       Metamaps.Maps.Featured = <%= @maps.to_json.html_safe %>;
       Metamaps.currentPage = "featured";
+    <% elsif @request == "mapper" %>
+      Metamaps.Maps.Mapper = {
+        models: <%= @maps.to_json.html_safe %>,
+        id: <%= params[:id] %>
+      };
+      Metamaps.currentPage = "mapper";
     <% end %>
     Metamaps.currentSection = "explore";
     Metamaps.GlobalUI.Search.isOpen = true;

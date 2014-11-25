@@ -131,11 +131,20 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
         this.id = options.id;
         this.sortBy = options.sortBy;
 
+        if (options.mapperId) {
+            this.mapperId = options.mapperId;
+        }
+
         // this.page represents the NEXT page to fetch
         this.page = models.length > 0 ? (models.length < 20 ? "loadedAll" : 2) : 1;
     },
     url: function() {
-        return '/explore/' + this.id + '.json';
+        if (!this.mapperId) {
+            return '/explore/' + this.id + '.json';
+        }
+        else {
+            return '/explore/mapper/' + this.mapperId + '.json';
+        }
     },
     comparator: function (a, b) {
         a = a.get(this.sortBy);

@@ -198,10 +198,15 @@ Metamaps.Famous.build = function () {
             var capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1);
 
             Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
-            Metamaps.Views.exploreMaps.render();
+            if (Metamaps.currentPage === "mapper") {
+                Metamaps.Views.exploreMaps.fetchUserThenRender();
+            }
+            else {
+                Metamaps.Views.exploreMaps.render();
+            }
             f.maps.show();
-            f.explore.set(Metamaps.currentPage);
-            f.explore.show();
+            f.explore.set(Metamaps.currentPage, Metamaps.Maps.Mapper.mapperId);
+            f.explore.show();   
         }
         else if (Metamaps.currentSection === "") {
             Metamaps.Loading.hide();
@@ -247,9 +252,33 @@ Metamaps.Famous.build = function () {
             { duration: 300, curve: 'easeIn' }
         );
     };
-    f.explore.set = function (section) {
+    f.explore.set = function (section, mapperId) {
         var loggedIn = Metamaps.Active.Mapper ? 'Auth' : '';
-        f.explore.surf.setContent(templates[section + loggedIn + 'Content']);
+        
+
+        if (section === "mine" || section === "active" || section === "featured") {
+            f.explore.surf.setContent(templates[section + loggedIn + 'Content']);
+        }
+        else if (section === "mapper") {
+
+            var setMapper = function(mapperObj) {
+                var mapperContent;
+                mapperContent = "<div class='exploreMapsButton active mapperButton'><img class='exploreMapperImage' width='24' height='24' src='" + mapperObj.image + "' />";
+                mapperContent += "<div class='exploreMapperName'>" + mapperObj.name + "'s Maps</div><div class='clearfloat'></div></div>";
+
+                f.explore.surf.setContent(mapperContent);
+            };
+
+            $.ajax({
+                url: "/users/" + mapperId + ".json",
+                success: function (response) {
+                    setMapper(response);
+                },
+                error: function () {
+                    
+                }
+            });
+        }
     };
     var exploreMod = f.mainContext.add(f.explore.mod);
     exploreMod.add(new Modifier({

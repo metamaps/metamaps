@@ -1074,6 +1074,23 @@
   border-bottom: 2px solid #00BCD4;
 }
 
+.exploreMapsButton.mapperButton {
+    height: 40px;
+    padding: 0;
+}
+.mapperButton img.exploreMapperImage {
+    float: left;
+    border-radius: 12px;
+    margin-top: 8px;
+    margin-right: 8px;
+}
+.exploreMapperName {
+    white-space: nowrap;
+    float: left;
+    margin-top: 12px;
+}
+
+
 .exploreMapsButton .exploreMapsIcon {
     background-repeat: no-repeat;
     width:32px;
