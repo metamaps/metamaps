@@ -711,14 +711,26 @@
 
 /* homepage */
 
+.homeWrapper.homeText {
+    margin-top: 10%;
+}
+
+.fullWidthWrapper {
+    width: 100%;
+}
+.fullWidthWrapper.withVideo {
+    height: 350px;
+    background: #757575;
+}
+
 .homeWrapper {
-    width: 560px;
-    margin: 56px auto 72px;
+    width: 880px;
+    margin: 0 auto;
     color: #424242;
 }
 
 .homeTitle {
-    font-size: 48px;
+    font-size: 69px;
     line-height: 48px;
     text-align: center;
     margin-bottom: 20px;
@@ -728,18 +740,40 @@
     font-size: 23px;
     line-height: 26px;
     text-align: justify;
-    margin-bottom: 20px;
+    margin: 32px 0 20px;
+    font-family: 'din-regular', helvetica, sans-serif;
 }
 
 .homeWrapper .green {
     color: #4fc059;
 }
 
-.homeVideo {
-    margin-bottom: 20px;
+.homeWrapper .din-medium {
+    font-family: 'din-medium', helvetica, sans-serif;
 }
 
-.callToAction a {
+.homeVideo {
+    margin-bottom: 20px;
+    float: left;
+}
+
+.homeWrapper .callToAction {
+    float: left;
+    width: 220px;
+    padding: 24px 0 24px 24px;
+    color: #F5F5F5;
+}
+.callToAction h3 {
+    font-size: 24px;
+}
+.callToAction p {
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 16px;
+    font-family: 'din-regular', helvetica, sans-serif;
+    text-align: justify;
+}
+.callToAction a, .callToAction button {
     display: block;
     width: 220px;
     height: 12px;
@@ -750,19 +784,37 @@
     box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
     margin: 0 auto;
     color: #FFFFFF;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
 }
 .callToAction .requestInviteCTA {
     background-color: #4fc059;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
 }
 .callToAction .requestInviteCTA:hover {
     background-color: #49ad4e;
 }
 .callToAction .exploreFeaturedCTA {
     background-color: #a354cd;
+    margin-bottom: 16px;
 }
 .callToAction .exploreFeaturedCTA:hover {
     background-color: #9150bc;
+}
+.callToAction .learnMoreCTA {
+    background-color: #4fb5c0;
+}
+.callToAction .learnMoreCTA:hover {
+    background-color: #9150bc;
+}
+
+.fullWidthWrapper.withPartners {
+    background: url(homepage-bg.png) no-repeat center -300px;
+}
+.homeWrapper.homePartners {
+    padding-bottom: 100px;
+    height: 200px;
 }
 
 .github-fork-ribbon-wrapper {

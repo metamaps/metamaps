@@ -70,9 +70,6 @@ body,
 .wrapper {
     height: 100%;
 }
-.homePage .famousYield {
-    background: url(homepage-bg.png) no-repeat -515px -40px;
-}
 .wrapper.mapPage {
     overflow: hidden;
 }
