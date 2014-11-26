@@ -17,7 +17,8 @@ module TopicsHelper
       topic['originator'] = t.user.name
       topic['originatorImage'] = t.user.image.url(:square)
       topic['rtype'] = "topic"
-      
+      topic['inmaps'] = t.inmaps
+       
       temp.push topic
     end
     return temp

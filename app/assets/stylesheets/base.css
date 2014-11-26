@@ -251,6 +251,49 @@
 .linkItem.mapCount:hover .mapCountIcon {
   background-position: 0 -32px;
 }
+
+.CardOnGraph .mapCount .tip {
+  top: 44px;
+  left: 0px;
+  font-size: 12px !important;
+}
+
+.CardOnGraph .mapCount .tip:before {
+  content: '';
+  position: absolute;
+  top: 26px;
+  left: 10px;
+  margin-top: -30px;
+  width: 0;
+  height: 0;
+  border-bottom: 4px solid #000000;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+.CardOnGraph .mapCount .tip li {
+  list-style-type: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 10px;
+  display: block;
+  height: 14px;
+  font-family: 'din-regular', helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 14px;
+  position: relative;
+}
+
+.CardOnGraph .mapCount li.hideExtra {
+  display: none;
+}
+
+.showMore {
+  cursor: pointer;
+}
+
+
 .linkItem.synapseCount {
   margin-left: 2px;
   width: 24px;
