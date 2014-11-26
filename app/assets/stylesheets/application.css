@@ -520,7 +520,7 @@ input[type="submit"]:active {
     left: 41px;
     z-index: 9999;
     width: 256px;
-    height: 42px;
+    height: 34px;
 }
 .new_topic #topic_name,
 .new_topic .tt-hint {
@@ -528,7 +528,7 @@ input[type="submit"]:active {
     background: #FFFFFF;
     height: 14px;
     margin: 0;
-    padding: 14px 6px;
+    padding: 10px 6px;
     border: none;
     border-radius: 2px;
     outline: none;
