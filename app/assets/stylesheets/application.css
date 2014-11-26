@@ -1884,9 +1884,21 @@ and it won't be important on password protected instances */
     display: none;
 }
 .mapInfoDelete {
-    background-image: url(delete_mapinfo.png);
+    color: #E0E0E0;
+}
+.mapInfoDelete .deleteMap {
+    width: 16px;
+    height: 16px;
+    margin: 8px auto 0;
+    background-image: url(remove_mapinfo_sprite.png);
     background-repeat: no-repeat;
-    background-position: center 8px;
+    background-position: -16px 0;
+}
+.mapInfoDelete:hover {
+    color: #F5F5F5;
+}
+.mapInfoDelete:hover .deleteMap {
+    background-position: 0 0;
 }
 /* only display delete button if it's a map you created */
 .yourMap .mapInfoDelete {
