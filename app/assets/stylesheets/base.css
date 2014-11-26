@@ -312,6 +312,39 @@
 .linkItem.synapseCount:hover .synapseCountIcon {
   background-position: 0 -32px;
 }
+
+.CardOnGraph .synapseCount .tip {
+  position: absolute;
+  background: #424242;
+  width: auto;
+  top: 45px;
+  color: white;
+  white-space: nowrap;
+  border-radius: 2px;
+  font-size: 12px !important;
+  font-family: 'din-regular';
+  line-height: 12px;
+  padding: 4px 4px 4px;
+  z-index: 100;
+}
+
+.CardOnGraph .synapseCount:hover .tip {
+  display: block;
+}
+
+.CardOnGraph .synapseCount .tip:before {
+  content: '';
+  position: absolute;
+  margin-top: -8px;
+  margin-left: 6px;
+  width: 0;
+  height: 0;
+  border-bottom: 4px solid #424242;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+
 .mapPerm {
   width: 32px;
   height: 32px;
