@@ -237,10 +237,12 @@
                 <img src="/assets/user.png" class="contributorIcon" width="32" height="32" />
                 <div class="contributorName">{{username}}</div>
             </div>
-            <a href="/explore/topics/{{id}}" class="linkItem mapCount" title="Click to see which maps topic appears on">                  
-                 <div class="mapCountIcon"></div>
-                 {{map_count}}                                                 
-               </a> 
+            <div class="linkItem mapCount" title="Click to see which maps topic appears on">                  
+                <div class="mapCountIcon"></div>
+                {{map_count}} 
+                <div class="tip"><ul>{{{inmaps}}}</ul></div>                              
+            </div>
+
             <a href="/topics/{{id}}" class="linkItem synapseCount" title="Click to see this topics synapses">
               <div class="synapseCountIcon"></div>
               {{synapse_count}}

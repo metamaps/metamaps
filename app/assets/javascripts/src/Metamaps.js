@@ -1089,6 +1089,31 @@ Metamaps.TopicCard = {
             $('.showcard .yourTopic .mapPerm').click(openPermissionSelect);
             $('.showcard').click(hidePermissionSelect);
         }
+
+        $('.links .mapCount').unbind().click(function(event){
+            $('.mapCount .tip').toggle();
+            event.stopPropagation();
+        });
+        $('.mapCount .tip').unbind().click(function(event){
+            event.stopPropagation();
+        });
+        $('.showCard').unbind('.hideTip').bind('click.hideTip', function(){
+            $('.mapCount .tip').hide();
+        });
+        var originalText = $('.showMore').html();
+        $('.mapCount .tip .showMore').unbind().toggle(
+            function(event){
+                $('.extraText').toggleClass("hideExtra");
+                $('.showMore').html('Show less...');
+            },
+            function(event){
+                $('.extraText').toggleClass("hideExtra");
+                $('.showMore').html(originalText);
+            });
+
+        $('.mapCount .tip showMore').unbind().click(function(event){
+            event.stopPropagation();
+        });
     },
     handleInvalidLink: function() {
         var self = Metamaps.TopicCard;
@@ -1162,6 +1187,24 @@ Metamaps.TopicCard = {
             nodeValues.attachments = '';
         }
 
+        console.log(topic.get("inmaps"));
+        var inmapsAr = topic.get("inmaps");
+        nodeValues.inmaps ='';
+        if (inmapsAr.length < 6) {
+            for (i = 0; i < inmapsAr.length; i++) {
+                nodeValues.inmaps += '<li>' + inmapsAr[i] + '</li>';
+            }
+        }
+        else {
+            for (i = 0; i < 5; i++){
+                nodeValues.inmaps += '<li>' + inmapsAr[i] + '</li>';
+            }
+            extra = inmapsAr.length - 5;
+            nodeValues.inmaps += '<li><span class="showMore">See ' + extra + ' more...</span></li>'
+            for (i = 5; i < inmapsAr.length; i++){
+                nodeValues.inmaps += '<li class="hideExtra extraText">' + inmapsAr[i] + '</li>';
+            }
+        }
         nodeValues.permission = topic.get("permission");
         nodeValues.mk_permission = topic.get("permission").substring(0, 2);
         nodeValues.map_count = topic.get("map_count").toString();
