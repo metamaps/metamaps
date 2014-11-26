@@ -6,10 +6,9 @@ class MapsController < ApplicationController
 
     autocomplete :map, :name, :full => true, :extra_data => [:user_id]
 
-    # GET /maps/recent
-    # GET /maps/featured
-    # GET /maps/new
-    # GET /maps/mappers/:id
+    # GET /explore/active
+    # GET /explore/featured
+    # GET /explore/mapper/:id
     def index
 
         if request.path == "/explore"
@@ -19,6 +18,7 @@ class MapsController < ApplicationController
         @current = current_user
         @user = nil
         @maps = []
+        @mapperId = nil
 
         if !params[:page] 
             page = 1
@@ -39,21 +39,12 @@ class MapsController < ApplicationController
                 redirect_to activemaps_url and return
             end
             # don't need to exclude private maps because they all belong to you
-            @maps = Map.where("maps.user_id = ?", @current.id).order("name ASC").page(page).per(20)
             @request = "you"
 
-        elsif request.path.index('/explore/mappers/') != nil  # looking for maps by a mapper
+        elsif request.path.index('/explore/mapper/') != nil  # looking for maps by a mapper
             @user = User.find(params[:id])
             @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("name ASC").page(page).per(20)
-            @request = "other"
-
-        elsif request.path.index('/explore/topics/') != nil  # looking for maps by a certain topic they include
-            @topic = Topic.find(params[:id]).authorize_to_show(@current)
-            if !@topic
-                redirect_to featuredmaps_url, notice: "Access denied." and return
-            end
-            @maps = @topic.maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
-            @request = "topic"
+            @request = "mapper"
         end
 
         respond_to do |format|

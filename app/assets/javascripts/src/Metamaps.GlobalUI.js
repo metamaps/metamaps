@@ -90,9 +90,17 @@ Metamaps.GlobalUI = {
         if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
 
         var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
+        var mapperCollection = [];
+        var mapperOptionsObj = {id: 'mapper', sortBy: 'name' };
+        if (Metamaps.Maps.Mapper) {
+            mapperCollection = Metamaps.Maps.Mapper.models;
+            mapperOptionsObj.mapperId = Metamaps.Maps.Mapper.id;
+        }
         var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : [];
         var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : [];
         Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'name' });
+        // 'Mapper' refers to another mapper
+        Metamaps.Maps.Mapper = new Metamaps.Backbone.MapsCollection(mapperCollection, mapperOptionsObj);
         Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'name' });
         Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, {id: 'active', sortBy: 'updated_at' });
     },
@@ -600,8 +608,7 @@ Metamaps.GlobalUI.Search = {
             } else if (dataset == "maps") {
                 Metamaps.Router.maps(datum.id);
             } else if (dataset == "mappers") {
-                win = window.open('/maps/mappers/' + datum.id, '_blank');
-                win.focus();
+                Metamaps.Router.explore("mapper", datum.id);
             }
         }
     },

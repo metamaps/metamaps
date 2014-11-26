@@ -35,6 +35,7 @@
     <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
     <div class="mapInfoButtonsWrapper">
       <div class="mapInfoDelete">
+        <div class="deleteMap"></div>
         <span>Delete</span>
       </div>
       <div class="mapInfoShare">
@@ -71,6 +72,27 @@
     </div>
   </div>
   </a>
+    </script>
+
+    <script type="text/template" id="mapperCardTemplate">
+    <div class="mapperCard">                                                    
+      <div class="mapperImage">
+        <img src="{{image}}" width="96" height="96" />
+      </div> 
+      <div class="mapperName" title="{{name}}">                                                  
+        {{name}}
+      </div>
+      <div class="mapperInfo">
+        <div class="mapperCreatedAt">Mapper since: {{created_at}}</div>
+        <div class="mapperGeneration">Generation: {{generation}}</div>
+      </div>
+      <div class="mapperMetadata">
+         <div class="metadataSection metadataMaps"><div>{{numMaps}}</div>maps</div>
+         <div class="metadataSection metadataTopics"><div>{{numTopics}}</div>topics</div> 
+         <div class="metadataSection metadataSynapses"><div>{{numSynapses}}</div>synapses</div> 
+         <div class="clearfloat"></div>                               
+      </div>                                         
+    </div>
     </script>
         
     <script type="text/template" id="topicSearchTemplate">

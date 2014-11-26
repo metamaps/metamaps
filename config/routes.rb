@@ -23,8 +23,7 @@ Metamaps::Application.routes.draw do
   match 'explore/active', to: 'maps#index', via: :get, as: :activemaps
   match 'explore/featured', to: 'maps#index', via: :get, as: :featuredmaps
   match 'explore/mine', to: 'maps#index', via: :get, as: :mymaps
-  match 'maps/mappers/:id', to: 'maps#index', via: :get, as: :usermaps
-  match 'maps/topics/:id', to: 'maps#index', via: :get, as: :topicmaps
+  match 'explore/mapper/:id', to: 'maps#index', via: :get, as: :usermaps
   resources :maps, except: [:new, :edit]
   match 'maps/:id/contains', to: 'maps#contains', via: :get, as: :contains
   match 'maps/:id/upload_screenshot', to: 'maps#screenshot', via: :post, as: :screenshot
@@ -38,6 +37,7 @@ Metamaps::Application.routes.draw do
     get 'join' => 'devise/registrations#new', :as => :new_user_registration
   end
 
+  match 'users/:id/details', to: 'users#details', via: :get, as: :details
   match 'user/updatemetacodes', to: 'users#updatemetacodes', via: :post, as: :updatemetacodes
   resources :users, except: [:index, :destroy]
 end
