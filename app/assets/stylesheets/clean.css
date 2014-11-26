@@ -724,20 +724,20 @@
 }
 
 .homeWrapper {
-    width: 880px;
+    width: 800px;
     margin: 0 auto;
     color: #424242;
 }
 
 .homeTitle {
-    font-size: 69px;
+    font-size: 63px;
     line-height: 48px;
     text-align: center;
     margin-bottom: 20px;
 }
 
 .homeIntro {
-    font-size: 23px;
+    font-size: 22px;
     line-height: 26px;
     text-align: justify;
     margin: 32px 0 20px;
@@ -759,7 +759,7 @@
 
 .homeWrapper .callToAction {
     float: left;
-    width: 220px;
+    width: 216px;
     padding: 24px 0 24px 24px;
     color: #F5F5F5;
 }
@@ -767,11 +767,11 @@
     font-size: 24px;
 }
 .callToAction p {
-    margin: 16px 0;
-    font-size: 14px;
+    margin: 8px 0 16px;
+    font-size: 13px;
     line-height: 16px;
     font-family: 'din-regular', helvetica, sans-serif;
-    text-align: justify;
+    text-align: left;
 }
 .callToAction a, .callToAction button {
     display: block;
@@ -810,11 +810,13 @@
 }
 
 .fullWidthWrapper.withPartners {
-    background: url(homepage-bg.png) no-repeat center -300px;
+    background: url(homepage-bg.png) no-repeat center -332px;
+    background-size: 1430px 1072px;
 }
 .homeWrapper.homePartners {
-    padding-bottom: 100px;
-    height: 200px;
+    padding: 64px 0 100px;
+    height: 96px;
+    background: url(partner_logos.png) no-repeat 0 64px;
 }
 
 .github-fork-ribbon-wrapper {

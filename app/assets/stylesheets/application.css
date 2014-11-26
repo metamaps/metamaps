@@ -1596,6 +1596,7 @@ float: left;
 .wrapper div.mapInfoDesc span {
     float: none !important;
     padding-bottom: 10px;
+    word-wrap: break-word;
 }
 .infoStatIcon {
     float: left;
