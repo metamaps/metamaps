@@ -811,6 +811,7 @@ li.accountInvite span {
 }
 .accountImage {
     background-image: url(user.png);
+    background-size: 84px 84px;
     background-repeat: no-repeat;
     height:84px;
     width:84px;
