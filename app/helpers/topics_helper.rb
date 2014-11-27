@@ -18,6 +18,7 @@ module TopicsHelper
       topic['originatorImage'] = t.user.image.url(:thirtytwo)
       topic['rtype'] = "topic"
       topic['inmaps'] = t.inmaps
+      topic['inmapsLinks'] = t.inmapsLinks
        
       temp.push topic
     end

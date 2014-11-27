@@ -247,18 +247,39 @@
   background-image: url(map32_sprite.png);
   background-repeat: no-repeat;
   background-position: 0 0;
+  cursor: pointer;
 }
 .linkItem.mapCount:hover .mapCountIcon {
   background-position: 0 -32px;
 }
 
-.CardOnGraph .mapCount .tip {
+.linkItem.mapCount:hover .hoverTip {
+  display: block;
+}
+.CardOnGraph .mapCount .tip, .CardonGraph .mapCount .hoverTip {
   top: 44px;
   left: 0px;
   font-size: 12px !important;
 }
 
-.CardOnGraph .mapCount .tip:before {
+.hoverTip {
+  white-space: nowrap;
+  font-family: 'din-regular';
+  top: 44px;
+  left: 0px;
+  font-size: 12px !important;
+  display: none;
+  position: absolute;
+  background: black;
+  color: white;
+  border-radius: 4px;
+  line-height: 17px;
+  padding: 3px 5px 2px;
+  z-index: 100;
+}
+
+
+.CardOnGraph .mapCount .tip:before, .CardOnGraph .mapCount .hoverTip:before {
   content: '';
   position: absolute;
   top: 26px;
@@ -293,6 +314,14 @@
   cursor: pointer;
 }
 
+.mapCount .tip a {
+  color: white;
+}
+
+.mapCount .tip a:hover {
+  color: #757575;
+}
+
 
 .linkItem.synapseCount {
   margin-left: 2px;
@@ -315,9 +344,9 @@
 
 .CardOnGraph .synapseCount .tip {
   position: absolute;
-  background: #424242;
+  background: black;
   width: auto;
-  top: 45px;
+  top: 44px;
   color: white;
   white-space: nowrap;
   border-radius: 2px;
@@ -339,7 +368,7 @@
   margin-left: 6px;
   width: 0;
   height: 0;
-  border-bottom: 4px solid #424242;
+  border-bottom: 4px solid black;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
 }
