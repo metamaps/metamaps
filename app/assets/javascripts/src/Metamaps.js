@@ -1316,7 +1316,12 @@ Metamaps.SynapseCard = {
 
         //if edge data is blank or just whitespace, populate it with data_nil
         if ($('#edit_synapse_desc').html().trim() == '') {
-            $('#edit_synapse_desc').html(data_nil);
+            if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
+                $('#edit_synapse_desc').html(data_nil);
+            }
+            else {
+                $('#edit_synapse_desc').html("(no description)");
+            }
         }
 
         $('#edit_synapse_desc').bind("ajax:success", function () {
@@ -3537,7 +3542,9 @@ Metamaps.Listeners = {
             case 69: //if e or E is pressed
                 if (e.ctrlKey){
                     e.preventDefault();
-                    Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas);
+                    if (Metamaps.Active.Map) {
+                        Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas);
+                    }
                 }
                 break;
             case 77: //if m or M is pressed

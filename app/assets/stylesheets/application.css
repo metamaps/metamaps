@@ -1177,6 +1177,14 @@ h3.realtimeBoxTitle {
     color: black;
     box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
+
+.rightclickmenu .rc-spacer {
+    width:100%;
+    height:0;
+    border-top:1px solid #EBEBEB;
+    margin: 6px 0;
+    padding: 0;
+}
 .rightclickmenu > ul {
     
 }
@@ -1199,6 +1207,14 @@ h3.realtimeBoxTitle {
     background-color: transparent;
     cursor: default;
 }
+
+.rc-keyboard {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    color: #757575;
+}
+
 .rightclickmenu > ul > li .rc-icon {
     position: absolute;
     top: 0;
