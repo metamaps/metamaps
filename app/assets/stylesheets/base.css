@@ -487,11 +487,12 @@ cursor: pointer;
 }
 .CardOnGraph .metacodeSelect {
   display:none;
-  width:200px;
+  width:auto;
   z-index: 2;
   position: absolute;
   background: #EAEAEA;
   left: 300px;
+  white-space: nowrap;
 }
 .CardOnGraph .metacodeSelect ul {
   position: relative; 
@@ -506,10 +507,10 @@ cursor: pointer;
   border: 1px solid #BDBDBD;
 }
 .CardOnGraph .metacodeSelect ul li {
-background-color: #F5F5F5;
-cursor:pointer;
-position: relative;
-padding: 9px 12px;
+    background-color: #F5F5F5;
+    cursor:pointer;
+    position: relative;
+    padding: 9px 24px 9px 12px;
 }
 .CardOnGraph .metacodeSelect ul li:hover {
 background-color: #E0E0E0;
@@ -520,15 +521,17 @@ background-color: #E0E0E0;
   left: 8px;
 }
 .CardOnGraph .metacodeSelect ul li .mSelectName {
-  padding-left: 28px;
+  margin-left: 28px;
+  margin-right: 4px;
 }
 .CardOnGraph .metacodeSelect ul ul {
   display:none;
   position: absolute;
-  left: 200px;
+  left: 100%;
   top: -1px;
   max-height: 270px;
   overflow-y: auto;
+  width: auto;
 }
 .CardOnGraph .metacodeSelect li:hover ul {
   display: block;
@@ -552,7 +555,7 @@ background-color: #E0E0E0;
 }
 .onRightEdge.metacodeSelect ul ul {
   left: auto;
-  right: 200px;
+  right: 100%;
 }
 /* too close to bottom of screen case */
 .onBottomEdge.metacodeSelect {
