@@ -222,7 +222,7 @@
     width: 472px;
     overflow-y: auto;
     overflow-x: visible;
-    box-shadow: 0 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    box-shadow: 0 10px 10px rgba(0,0,0,0.19), 0 6px 3px rgba(0,0,0,0.23);
 }
 
 .autoOptions #mapContribs { 
@@ -327,7 +327,7 @@
     display: table-cell;
     vertical-align: middle;
     height: 32px;
-    padding: 0 8px;
+    padding: 0 18px 0 28px;
 }
 .sidebarSearch .tt-suggestion .icon {
     width: 32px;
@@ -360,7 +360,7 @@
     text-align: center;
 }
 .sidebarSearch .tt-dataset-mappers .tt-suggestion .icon {
-    margin: 4px 9px 4px 4px;
+    margin: 0px 0px 0px 0px;
 }
 .sidebarSearch .tt-dataset-mappers .resultText {
     width: 150px;
