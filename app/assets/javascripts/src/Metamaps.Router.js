@@ -194,34 +194,38 @@
     
     Metamaps.Router = new Router();
 
+
+    Metamaps.Router.intercept = function (evt) {
+        var segments;
+
+        var href = {
+            prop: $(this).prop("href"),
+            attr: $(this).attr("href")
+        };
+        var root = location.protocol + "//" + location.host + Backbone.history.options.root;
+        
+        if (href.prop && href.prop === root) href.attr = "";
+        
+        if (href.prop && href.prop.slice(0, root.length) === root) {
+            evt.preventDefault();
+
+            segments = href.attr.split('/');
+            segments.splice(0,1); // pop off the element created by the first /
+
+            if (href.attr === "") Metamaps.Router.home();
+            else {
+                console.log(segments);
+                Metamaps.Router[segments[0]](segments[1]);
+            }
+        }
+    };
+
     Metamaps.Router.init = function () {
         Backbone.history.start({
             silent: true,
             pushState: true,
             root: '/'
         });
-        $(document).on("click", "a:not([data-bypass])", function (evt) {
-            var segments;
-
-            var href = {
-                prop: $(this).prop("href"),
-                attr: $(this).attr("href")
-            };
-            var root = location.protocol + "//" + location.host + Backbone.history.options.root;
-            
-            if (href.prop && href.prop === root) href.attr = ""
-            
-            if (href.prop && href.prop.slice(0, root.length) === root) {
-                evt.preventDefault();
-
-                segments = href.attr.split('/');
-                segments.splice(0,1); // pop off the element created by the first /
-
-                if (href.attr === "") Metamaps.Router.home();
-                else {
-                    Metamaps.Router[segments[0]](segments[1]);
-                }
-            }
-        });
-    }
+        $(document).on("click", "a:not([data-bypass])", Metamaps.Router.intercept);
+    };
 })();

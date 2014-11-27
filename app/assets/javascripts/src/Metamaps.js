@@ -1092,7 +1092,7 @@ Metamaps.TopicCard = {
 
         $('.links .mapCount').unbind().click(function(event){
             $('.mapCount .tip').toggle();
-            $('.hoverTip').toggleClass('hide');
+            $('.showcard .hoverTip').toggleClass('hide');
             event.stopPropagation();
         });
         $('.mapCount .tip').unbind().click(function(event){
@@ -1100,7 +1100,10 @@ Metamaps.TopicCard = {
         });
         $('.showcard').unbind('.hideTip').bind('click.hideTip', function(){
             $('.mapCount .tip').hide();
+            $('.showcard .hoverTip').removeClass('hide');
         });
+
+        $('.mapCount .tip li a').click(Metamaps.Router.intercept);
 
         var originalText = $('.showMore').html();
         $('.mapCount .tip .showMore').unbind().toggle(

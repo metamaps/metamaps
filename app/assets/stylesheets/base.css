@@ -312,6 +312,7 @@
 
 .showMore {
   cursor: pointer;
+  color: #4FC059;
 }
 
 .mapCount .tip a {
