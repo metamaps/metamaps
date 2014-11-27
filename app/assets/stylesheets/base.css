@@ -670,7 +670,7 @@ padding: 9px 7px 9px 31px;
 height: 12px;
 width: 198px;
 margin: 0 0 0 0;
-border: 1px solid #BDBDBD;
+border: none;
 outline: none;
 font-size: 12px;
 line-height: 12px;
@@ -946,6 +946,7 @@ font-family: 'din-regular', helvetica, sans-serif;
     background: #424242;
     border-radius:2px;
     margin:16px 16px 16px 19px;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
 .mapCard {
@@ -969,8 +970,10 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 .mapCard .title {
+  word-wrap: break-word;
   font-size:18px;
   line-height:22px;
+  height: 44px;
   display:block;
   padding: 0 16px;
   text-align: center;
@@ -1000,11 +1003,11 @@ font-family: 'din-regular', helvetica, sans-serif;
   -webkit-flex: 1;          /* Chrome */
   -ms-flex: 1;              /* IE 10 */
   flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-   overflow-y:auto;
    padding:0 16px 8px;
    font-family: helvetica, sans-serif;
    font-style: italic;
    font-size: 12px;
+   word-wrap: break-word;
 }
 .mCS_no_scrollbar {
   padding-right: 5px;

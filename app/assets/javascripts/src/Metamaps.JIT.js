@@ -1322,9 +1322,9 @@ Metamaps.JIT = {
 
         var disabled = authorized ? "" : "disabled";
 
-        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
+        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>';
         
 
         if (Metamaps.Active.Topic) {
@@ -1337,6 +1337,8 @@ Metamaps.JIT = {
                          <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
                      </ul>';
 
+            menustring += '<li class="rc-spacer"></li>';
+
             menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + options + '<div class="expandLi"></div></li>';
 
             var metacodeOptions = $('#metacodeOptions').html();
@@ -1344,6 +1346,11 @@ Metamaps.JIT = {
             menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode' + metacodeOptions + '<div class="expandLi"></div></li>';
         }
         if (Metamaps.Active.Topic) {
+
+            if (!Metamaps.Active.Mapper) {
+                menustring += '<li class="rc-spacer"></li>';
+            }
+
             // set up the get sibling menu as a "lazy load"
             // only fill in the submenu when they hover over the get siblings list item
             var siblingMenu = '<ul id="fetchSiblingList"> \
@@ -1575,9 +1582,11 @@ Metamaps.JIT = {
 
         var disabled = authorized ? "" : "disabled";
 
-        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
+        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>';
+
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-spacer"></li>';
 
         if (Metamaps.Active.Mapper) {
             var permOptions = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
