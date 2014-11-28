@@ -802,10 +802,10 @@
 }
 
 .fullWidthWrapper.withPartners {
-    background: url(homepage_bg.png) no-repeat center -300px;
+    background: url(homepage_bg_fade.png) no-repeat center -300px;
 }
 .homeWrapper.homePartners {
-    padding: 64px 0 100px;
+    padding: 64px 0 280px;
     height: 96px;
     background: url(partner_logos.png) no-repeat 0 64px;
 }

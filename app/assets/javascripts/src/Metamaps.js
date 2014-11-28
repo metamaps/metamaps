@@ -749,6 +749,10 @@ Metamaps.Create = {
                 if (datum.id) { // if they clicked on an existing synapse get it
                     Metamaps.Synapse.getSynapseFromAutocomplete(datum.id);
                 }
+                else {
+                    Metamaps.Create.newSynapse.description = datum.value;
+                    Metamaps.Synapse.createSynapseLocally();
+                }
             });
         },
         beingCreated: false,
@@ -3469,38 +3473,67 @@ Metamaps.Filter = {
                 else console.log(topic);
             }
         });
+
+        // flag all the edges back to 'untouched'
         Metamaps.Synapses.each(function(synapse) {
            var e = synapse.get('edge');
-           var desc = synapse.get("desc");
+           e.setData('touched', false);
+        });
+        Metamaps.Synapses.each(function(synapse) {
+           var e = synapse.get('edge');
+           var desc;
            var user_id = synapse.get("user_id").toString();
 
-            if (visible.synapses.indexOf(desc) == -1) passesSynapse = false;
-            else passesSynapse = true;
+           if (e && !e.getData('touched')) {
 
-            if (onMap) {
-                // when on a map, 
-                // we filter by mapper according to the person who added the 
-                // topic or synapse to the map
-                user_id = synapse.getMapping().get("user_id").toString();
-            }
-            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
-            else passesMapper = true;
+                var synapses = e.getData('synapses');
 
-            var color = Metamaps.Settings.colors.synapses.normal;
-            if (passesSynapse && passesMapper) {
-                if (e) {
+                // if any of the synapses represent by the edge are still unfiltered
+                // leave the edge visible
+                passesSynapse = false;
+                for (var i = 0; i < synapses.length; i++) {
+                    desc = synapses[i].get("desc");
+                    if (visible.synapses.indexOf(desc) > -1) passesSynapse = true;
+                }
+
+                // if the synapse description being displayed is now being
+                // filtered, set the displayIndex to the first unfiltered synapse if there is one
+                var displayIndex = e.getData("displayIndex") ? e.getData("displayIndex") : 0;
+                var displayedSynapse = synapses[displayIndex];
+                desc = displayedSynapse.get("desc");
+                if (passesSynapse && visible.synapses.indexOf(desc) == -1) {
+                    // iterate and find an unfiltered one
+                    for (var i = 0; i < synapses.length; i++) {
+                        desc = synapses[i].get("desc");
+                        if (visible.synapses.indexOf(desc) > -1) {
+                            e.setData('displayIndex', i);
+                            break;
+                        }
+                    }
+                }
+
+                if (onMap) {
+                    // when on a map, 
+                    // we filter by mapper according to the person who added the 
+                    // topic or synapse to the map
+                    user_id = synapse.getMapping().get("user_id").toString();
+                }
+                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+                else passesMapper = true;
+
+                var color = Metamaps.Settings.colors.synapses.normal;
+                if (passesSynapse && passesMapper) {
                     e.setData('alpha', 1, 'end');
                     e.setData('color', color, 'end');
                 }
-                else console.log(synapse);
-            }
-            else {
-                if (e) {
+                else {
                     Metamaps.Control.deselectEdge(e, true);
                     e.setData('alpha', opacityForFilter, 'end');
                 }
-                else console.log(synapse);
+
+                e.setData('touched', true);
             }
+            else if (!e) console.log(synapse);
         });
             
         // run the animation
@@ -4538,7 +4571,6 @@ Metamaps.Map = {
             encoded_image: canvas.canvas.toDataURL()
         };
 
-        console.log(imageData.encoded_image);
         var map = Metamaps.Active.Map;
 
         var today = new Date();
