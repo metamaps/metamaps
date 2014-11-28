@@ -66,7 +66,7 @@
   <![endif]-->
 </head>
 
-<body data-env="<%= Rails.env %>">
+<body data-env="<%= Rails.env %>" class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
 
     <% if devise_error_messages? %>
       <p id="toast"><%= devise_error_messages! %></p>
@@ -74,7 +74,7 @@
       <p id="toast"><%= notice %></p>
     <% end %>
 
-    <%= content_tag :div, class: authenticated? ? "main authenticated" : "main unauthenticated" do %>
+    <%= content_tag :div, class: "main" do %>
 
         <% classes = action_name == "home" ? "homePage" : ""
            classes += action_name == "home" && authenticated? ? " explorePage" : ""

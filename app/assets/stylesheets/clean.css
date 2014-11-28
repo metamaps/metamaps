@@ -829,6 +829,10 @@
     left: 29px;
 }
 
+.homePage .infoAndHelp {
+    display:none;
+}
+
 .infoAndHelp {
     position: fixed;
     bottom: 20px;

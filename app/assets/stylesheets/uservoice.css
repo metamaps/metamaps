@@ -1,6 +1,10 @@
 /* =USERVOICE ICON DEFINE
 --------------------------------------------------------*/
-	
+
+.unauthenticated .uv-icon {
+	display: none;
+}
+
 div.uv-icon.uv-bottom-left {
 	background-image:url(feedback_sprite.png);
 	color:#FFFFFF;
