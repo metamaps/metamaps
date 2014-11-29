@@ -212,10 +212,10 @@ Metamaps.Famous.build = function () {
             Metamaps.Loading.hide();
             if (Metamaps.Active.Mapper) {
 
-                Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Mine );
+                Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Active );
                 Metamaps.Views.exploreMaps.render();
                 f.maps.show();
-                f.explore.set('mine');
+                f.explore.set('active');
                 f.explore.show();
             }
             else f.explore.set('featured');

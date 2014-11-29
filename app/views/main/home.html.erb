@@ -42,9 +42,9 @@
     Metamaps.currentPage = "";
     </script>
 <% elsif authenticated? %>
-    <% content_for :title, "My Maps | Metamaps" %> 
+    <% content_for :title, "Explore Active Maps | Metamaps" %> 
     <script>
-    Metamaps.Maps.Mine = <%= @maps.to_json.html_safe %>;
+    Metamaps.Maps.Active = <%= @maps.to_json.html_safe %>;
     Metamaps.currentSection = "";
     Metamaps.currentPage = "";
     Metamaps.GlobalUI.Search.isOpen = true;

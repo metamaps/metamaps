@@ -11,7 +11,7 @@
         },
         home: function () {
             
-            if (Metamaps.Active.Mapper) document.title = 'My Maps | Metamaps';
+            if (Metamaps.Active.Mapper) document.title = 'Explore Active Maps | Metamaps';
             else document.title = 'Home | Metamaps';
 
             Metamaps.currentSection = "";
@@ -26,7 +26,7 @@
                 
                 Metamaps.Famous.yield.hide();
                 
-                Metamaps.Famous.explore.set('mine');
+                Metamaps.Famous.explore.set('active');
                 Metamaps.Famous.maps.resetScroll(); // sets the scroll back to the top
                 Metamaps.Famous.explore.show();
 
@@ -35,9 +35,9 @@
                 Metamaps.GlobalUI.Search.open();
                 Metamaps.GlobalUI.Search.lock();
 
-                Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Mine );
-                if (Metamaps.Maps.Mine.length === 0) {
-                    Metamaps.Maps.Mine.getMaps(); // this will trigger an explore maps render
+                Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Active );
+                if (Metamaps.Maps.Active.length === 0) {
+                    Metamaps.Maps.Active.getMaps(); // this will trigger an explore maps render
                 }
                 else {
                     Metamaps.Views.exploreMaps.render();
@@ -71,11 +71,22 @@
             // either 'featured', 'mapper', or 'active'
             var capitalize = section.charAt(0).toUpperCase() + section.slice(1);
             
-            if (capitalize === "featured" || capitalize === "active") {
+            if (section === "featured" || section === "active") {
                 document.title = 'Explore ' + capitalize + ' Maps | Metamaps';
             }
-            else if (capitalize === "mapper") {
-                document.title = 'Explore Maps | Metamaps';
+            else if (section === "mapper") {
+                $.ajax({
+                    url: "/users/" + id + ".json",
+                    success: function (response) {
+                        document.title = response.name + ' | Metamaps';
+                    },
+                    error: function () {
+                        
+                    }
+                });
+            }
+            else if (section === "mine") {
+                document.title = 'Explore My Maps | Metamaps';
             }
 
             $('.wrapper').removeClass('homePage mapPage topicPage');
