@@ -829,7 +829,7 @@
     left: 29px;
 }
 
-.homePage .infoAndHelp {
+.unauthenticated .homePage .infoAndHelp {
     display:none;
 }
 
