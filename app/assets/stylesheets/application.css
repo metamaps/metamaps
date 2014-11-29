@@ -1991,7 +1991,7 @@ and it won't be important on password protected instances */
     height: 434px;
     background-color: #e0e0e0;
     padding: 64px 124px 64px 124px;
-    box-shadow: 0px 6px 3px rgba(0, 0, 0, 0.23), 10px 10px 10px rgba(0, 0, 0, 0.19)
+    box-shadow: 0px 6px 3px rgba(0, 0, 0, 0.23), 10px 10px 10px rgba(0, 0, 0, 0.19);
     border-radius: 2px;
 }
 .lightboxContent h3 {
