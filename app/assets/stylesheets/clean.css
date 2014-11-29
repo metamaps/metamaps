@@ -723,7 +723,7 @@
     width: 100%;
 }
 .fullWidthWrapper.withVideo {
-    height: 350px;
+    height: 315px;
     background: #757575;
 }
 
@@ -764,7 +764,7 @@
 .homeWrapper .callToAction {
     float: left;
     width: 216px;
-    padding: 24px 0 24px 24px;
+    padding: 8px 0 8px 24px;
     color: #F5F5F5;
 }
 .callToAction h3 {
@@ -794,14 +794,14 @@
 }
 .callToAction .requestInviteCTA {
     background-color: #4fc059;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 .callToAction .requestInviteCTA:hover {
     background-color: #49ad4e;
 }
 .callToAction .exploreFeaturedCTA {
     background-color: #a354cd;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 .callToAction .exploreFeaturedCTA:hover {
     background-color: #9150bc;
