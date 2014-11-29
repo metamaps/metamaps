@@ -92,12 +92,7 @@ Metamaps.Views.init = function () {
 
             Metamaps.Loading.hide();
 
-            console.log("OK current page is " + Metamaps.currentPage);
-            console.log(Metamaps);
             setTimeout((function(localCurrentPage){ return function(){
-                console.log("YEAH current page is " + Metamaps.currentPage);
-                console.log("YEAH current page passed is " + localCurrentPage);
-                console.log(Metamaps);
                 var path = (Metamaps.currentSection == "") ? "" : "/explore/" + localCurrentPage;
 
                 // alter url if for mapper profile page
