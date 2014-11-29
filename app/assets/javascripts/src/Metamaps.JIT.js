@@ -1129,11 +1129,18 @@ Metamaps.JIT = {
 		sY = -1 * sY;
 		eY = -1 * eY
 
-		Metamaps.Synapses.each(function(synapse) {
-			var fromNodeX = synapse.get('edge').nodeFrom.pos.x;
-			var fromNodeY = -1 * synapse.get('edge').nodeFrom.pos.y;
-			var toNodeX = synapse.get('edge').nodeTo.pos.x;
-			var toNodeY = -1 * synapse.get('edge').nodeTo.pos.y;
+        var edgesToToggle = [];
+        Metamaps.Synapses.each(function(synapse) {
+            var e = synapse.get('edge');
+            if (edgesToToggle.indexOf(e) === -1) {
+                edgesToToggle.push(e);
+            }
+        });
+		edgesToToggle.forEach(function(edge) {
+			var fromNodeX = edge.nodeFrom.pos.x;
+			var fromNodeY = -1 * edge.nodeFrom.pos.y;
+			var toNodeX = edge.nodeTo.pos.x;
+			var toNodeY = -1 * edge.nodeTo.pos.y;
 
             var maxX = fromNodeX;
 			var maxY = fromNodeY;
@@ -1209,21 +1216,18 @@ Metamaps.JIT = {
 			
             //The test synapse was selected!
 
-            // make sure the edge hasn't been hidden from the page
-            var node1id = synapse.get('edge').nodeFrom.id;
-            var node2id = synapse.get('edge').nodeTo.id;
-            var edge = Metamaps.Visualize.mGraph.graph.getAdjacence(node1id, node2id);
-			if(selectTest){
+            if(selectTest){
+                // shiftKey = toggleSelect, otherwise 
 				if(e.shiftKey){
-					if(Metamaps.Selected.Edges.indexOf(synapse.get('edge')) != -1 ){
-						Metamaps.Control.deselectEdge(synapse.get('edge'));
+					if(Metamaps.Selected.Edges.indexOf(edge) != -1 ){
+						Metamaps.Control.deselectEdge(edge);
 					}
 					else{
-						if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
+						Metamaps.Control.selectEdge(edge);
 					}
 				}
 				else{
-					if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
+					Metamaps.Control.selectEdge(edge);
 				}
 			}
 		});

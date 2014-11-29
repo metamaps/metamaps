@@ -2818,20 +2818,8 @@ Metamaps.Control = {
         }
 
         Metamaps.Control.deselectNode(node);
-
-        node.setData('alpha', 0, 'end');
-        node.eachAdjacency(function (adj) {
-            adj.setData('alpha', 0, 'end');
-        });
-        Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['node-property:alpha',
-            'edge-property:alpha'
-        ],
-            duration: 500
-        });
-        setTimeout(function () {
-            Metamaps.Visualize.mGraph.graph.removeNode(nodeid);
-        }, 500);
+        Metamaps.Visualize.mGraph.graph.removeNode(nodeid);
+        Metamaps.Visualize.mGraph.plot();
         Metamaps.Filter.checkMetacodes();
         Metamaps.Filter.checkMappers();
     },
@@ -2996,17 +2984,13 @@ Metamaps.Control = {
     hideEdge: function (edge) {
         var from = edge.nodeFrom.id;
         var to = edge.nodeTo.id;
-        edge.setData('alpha', 0, 'end');
         Metamaps.Control.deselectEdge(edge);
-        Metamaps.Visualize.mGraph.fx.animate({
-            modes: ['edge-property:alpha'],
-            duration: 500
-        });
-        setTimeout(function () {
+        if (Metamaps.Visualize.mGraph.graph.getAdjacence(from, to)) {
             Metamaps.Visualize.mGraph.graph.removeAdjacence(from, to);
-        }, 500);
-        Metamaps.Filter.checkSynapses();
-        Metamaps.Filter.checkMappers();
+            Metamaps.Visualize.mGraph.plot();
+            Metamaps.Filter.checkSynapses();
+            Metamaps.Filter.checkMappers();
+        }
     },
     updateSelectedPermissions: function (permission) {
 
