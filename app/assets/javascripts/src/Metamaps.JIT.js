@@ -380,11 +380,21 @@ Metamaps.JIT = {
                         if(e.ctrlKey){
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                            Metamaps.JIT.zoomToBox(e);
+
+                            var bS = Metamaps.Mouse.boxStartCoordinates;
+                            var bE = Metamaps.Mouse.boxEndCoordinates;
+                            if (Math.abs(bS.x - bE.x) > 20 && Math.abs(bS.y - bE.y) > 20) {
+                                Metamaps.JIT.zoomToBox(e);
+                                return;
+                            }
+                            else {
+                                Metamaps.Mouse.boxStartCoordinates = null;
+                                Metamaps.Mouse.boxEndCoordinates = null;
+                            }
                             //console.log('called zoom to box');
-                            return;
                         }
-                        else if (e.shiftKey) {
+                        
+                        if (e.shiftKey) {
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
                             Metamaps.JIT.selectWithBox(e);
