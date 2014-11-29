@@ -225,7 +225,6 @@
 
             if (href.attr === "") Metamaps.Router.home();
             else {
-                console.log(segments);
                 Metamaps.Router[segments[0]](segments[1], segments[2]);
             }
         }
