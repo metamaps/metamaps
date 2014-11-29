@@ -4781,6 +4781,8 @@ Metamaps.Map.InfoBox = {
         $('.mapContributors .tip').unbind().click(function(event){
             event.stopPropagation();
         });
+        $('.mapContributors .tip li a').click(Metamaps.Router.intercept);
+
         $('.mapInfoBox').unbind('.hideTip').bind('click.hideTip', function(){
             $('.mapContributors .tip').hide();
         });
@@ -4794,15 +4796,15 @@ Metamaps.Map.InfoBox = {
         var self = Metamaps.Map.InfoBox;
 
         var string = ""; 
-
+        console.log("hello!!")
         string += "<ul>";
 
         Metamaps.Mappers.each(function(m){
-            string += '<li><img class="rtUserImage" width="25" height="25" src="' + m.get("image") + '" />' + m.get("name") + '</li>';
+            string += '<li><a href="/explore/mapper/' + m.get("id") + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get("image") + '" />' + m.get("name") + '</a></li>';
         });
         
         string += "</ul>";
-
+        console.log(string);
         return string;
     },
     updateNumbers: function () {
