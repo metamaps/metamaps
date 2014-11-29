@@ -9,7 +9,7 @@ Metamaps.Views.init = function () {
 
         template: Hogan.compile( $('#mapperCardTemplate').html() ),
 
-        tagName: "div",
+        tagNamea: "div",
 
         className: "mapper",
 
@@ -92,7 +92,8 @@ Metamaps.Views.init = function () {
 
             Metamaps.Loading.hide();
 
-            setTimeout((function(localCurrentPage){ return function(){
+            clearTimeout(Metamaps.routerTimeoutFunctionIds);
+            Metamaps.routerTimeoutId = setTimeout((function(localCurrentPage){ return function(){
                 var path = (Metamaps.currentSection == "") ? "" : "/explore/" + localCurrentPage;
 
                 // alter url if for mapper profile page
