@@ -4023,6 +4023,9 @@ Metamaps.Topic = {
             return;
         }
 
+        // hide the 'double-click to add a topic' message
+        Metamaps.Famous.viz.hideInstructions();
+
         $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
 
         var metacode = Metamaps.Metacodes.get(Metamaps.Create.newTopic.metacode);

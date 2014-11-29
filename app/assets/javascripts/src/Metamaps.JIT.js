@@ -112,8 +112,10 @@ Metamaps.JIT = {
         });
 
         if (self.vizData.length == 0) {
+            Metamaps.Famous.viz.showInstructions();
             Metamaps.Visualize.loadLater = true;
         }
+        else Metamaps.Famous.viz.hideInstructions();
 
         Metamaps.Visualize.render();
     }, // prepareVizData

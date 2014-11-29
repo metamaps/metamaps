@@ -27,11 +27,34 @@ Metamaps.Famous.build = function () {
 
     // INFOVIS
     f.viz = {};
+
+    var instructions = {
+        addTopic: "Double-click to<br>add a topic!",
+        tabKey: "Use Tab & Shift+Tab to select a metacode",
+        enterKey: "Press Enter to add the topic"
+    };
+
     f.viz.surf = new Surface({
         size: [undefined, undefined],
         classes: [],
         properties: {
-            display: 'none'
+            display: "none",
+            zIndex: "1"
+        }
+    });
+
+    var instrShowing = false;
+    f.viz.instrSurf = new Surface({
+        content: instructions.addTopic,
+        size: [220, 80],
+        classes: ["doubleClickSurf"],
+        properties: {
+            fontFamily: "'din-regular', helvetica, sans-serif",
+            fontSize: "32px",
+            display: "none",
+            textAlign: "center",
+            color: "#999999",
+            zIndex: "0"
         }
     });
     var prepare = function () {
@@ -62,8 +85,20 @@ Metamaps.Famous.build = function () {
             }
         );
     };
-    f.mainContext.add(f.viz.mod).add(f.viz.surf);
-
+    f.viz.isInstrShowing = function() {
+        return instrShowing;
+    }
+    f.viz.showInstructions = function() {
+        instrShowing = true;
+        f.viz.instrSurf.setProperties({ "display":"block" });
+    };
+    f.viz.hideInstructions = function() {
+        instrShowing = false;
+        f.viz.instrSurf.setProperties({ "display":"none" });
+    };
+    var vizMod = f.mainContext.add(f.viz.mod);
+    vizMod.add(f.viz.surf);
+    vizMod.add(f.viz.instrSurf);
     
     // CONTENT / OTHER PAGES
     f.yield = {};
