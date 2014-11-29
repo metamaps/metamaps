@@ -9,7 +9,7 @@ Metamaps.Views.init = function () {
 
         template: Hogan.compile( $('#mapperCardTemplate').html() ),
 
-        tagName: "div",
+        tagNamea: "div",
 
         className: "mapper",
 
@@ -91,8 +91,10 @@ Metamaps.Views.init = function () {
             }
 
             Metamaps.Loading.hide();
-            setTimeout(function(){
-                var path = Metamaps.currentSection == "" ? "" : "/explore/" + Metamaps.currentPage;
+
+            clearTimeout(Metamaps.routerTimeoutFunctionIds);
+            Metamaps.routerTimeoutId = setTimeout((function(localCurrentPage){ return function(){
+                var path = (Metamaps.currentSection == "") ? "" : "/explore/" + localCurrentPage;
 
                 // alter url if for mapper profile page
                 if (that.collection && that.collection.mapperId) {
@@ -100,7 +102,7 @@ Metamaps.Views.init = function () {
                 }
 
                 Metamaps.Router.navigate(path);
-            }, 500);
+            }})(Metamaps.currentPage), 500);
         },
         handleSuccess: function () {
             var that = this;

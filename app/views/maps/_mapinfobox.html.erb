@@ -23,8 +23,8 @@
       <% end %>
       <span><%= @map.contributors.count %></span>
       <div class="tip"> <ul><% @map.contributors.each_with_index do |c, index| %>
-           <li > <img class="rtUserImage" width="25" height="25" src="<%= c.image.url(:thirtytwo) %>"  />
-            <%= c.name %> 
+           <li ><a href="/explore/mapper/<%= c.id %>" > <img class="rtUserImage" width="25" height="25" src="<%= c.image.url(:thirtytwo) %>"  />
+            <%= c.name %></a> 
             </li>         
         <% end %></ul></div>
     </div>

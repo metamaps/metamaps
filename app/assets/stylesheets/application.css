@@ -1708,6 +1708,9 @@ h3.realtimeBoxTitle {
     color: white;
 }
 
+.mapContributors .tip li a {
+    color: white;
+}
 .mapContributors div:after {
     content: '';
     position: absolute;
