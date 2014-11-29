@@ -2255,6 +2255,11 @@ and it won't be important on password protected instances */
     padding-bottom:12px;
 }
 
+
+#getInvolved a, #donate a {
+    color: #c04f4f;
+    text-decoration: underline;
+}
 #about > p, #getInvolved > p, #invite > p, #colophon p, #donate > p {
     margin: 0px 0px 10px 0px;
     line-height: 20px;
