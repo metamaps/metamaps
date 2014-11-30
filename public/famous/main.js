@@ -364,6 +364,7 @@ Metamaps.Famous.build = function () {
         if (message) {
             Metamaps.GlobalUI.notifyUser(message);
             f.toast.surf.deploy(f.toast.surf._currTarget);
+            f.toast.surf.removeListener('deploy', initialToast);
         }
     };
     f.toast.surf.on('deploy', initialToast);
