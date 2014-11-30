@@ -38,7 +38,7 @@ running this will check your system for requirements as well so you will need to
 
 alright now we can download metamaps from the master using git
 
-    git clone https://github.com/Connoropolous/metamaps_gen002.git
+    git clone https://github.com/metamaps/metamaps_gen002.git
 
 now there is a couple other things we are going to need which is phantomjs, nodejs, postgresql, libpq-dev and redis-server
 
