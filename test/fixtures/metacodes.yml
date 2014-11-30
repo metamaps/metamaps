@@ -25,8 +25,8 @@ four:
   color: #ABB49F
 
 five: 
-  name: Evolution  
-  icon: /assets/icons/blueprint_96px/bp_evolution.png
+  name: Process  
+  icon: /assets/icons/blueprint_96px/bp_process.png
   color: #BDB25E
 
 six: 
@@ -125,8 +125,8 @@ twenty-four:
   color: #CF7C74
 
 twenty-five:
-  name: Concept  
-  icon: /assets/icons/generics_96px/gen_concept.png
+  name: Subject  
+  icon: /assets/icons/generics_96px/gen_subject.png
   color: #8293D8
 
 twenty-six:
@@ -155,8 +155,8 @@ thirty:
   color: #54A19D
 
 thirty-one:
-  name: Foresight  
-  icon: /assets/icons/generics_96px/gen_foresight.png
+  name: Aim  
+  icon: /assets/icons/generics_96px/gen_aim.png
   color: #B0B0B0
 
 thirty-two:
