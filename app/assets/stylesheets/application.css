@@ -81,6 +81,8 @@ body {
     background: #d8d9da url(shattered_@2X.png);
     font-family: 'din-medium', helvetica, sans-serif;
     color: #424242;
+    -moz-osx-font-smoothing: grayscale;
+
 }
 h1,
 h2,
@@ -118,6 +120,7 @@ input[type="submit"] {
     border-radius: 2px;
     -webkit-user-select: none;
     font-family: 'din-medium', helvetica, sans-serif;
+    -webkit-font-smoothing: inherit;
 }
 button.button:hover,
 a.button:hover,
