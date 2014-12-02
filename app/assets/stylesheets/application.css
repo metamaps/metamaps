@@ -2710,6 +2710,13 @@ and it won't be important on password protected instances */
 .tutorialItem.active {
     color: #00bcd4;
 }
+.tutorialItem.disable {
+    color: #999;
+    cursor: default;
+}
+.tutorialItem.disable:hover {
+    color: #999;
+}
 #upYourSkillz {
     margin: 0 68px;
 }

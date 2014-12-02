@@ -4620,7 +4620,6 @@ Metamaps.Map.CheatSheet = {
     init: function () {
         // tab the cheatsheet
         $('#cheatSheet').tabs();
-        $('#cheatSheet').tabs("disable", 1); // TODO re-enable once the tutorials are in
         $('#quickReference').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
         $("#quickReference .ui-tabs-nav li").removeClass("ui-corner-top").addClass("ui-corner-left");
         
@@ -4632,13 +4631,13 @@ Metamaps.Map.CheatSheet = {
         };
 
         $('#gettingStarted').click(function() {
-            switchVideo(this,'88334167');
+            //switchVideo(this,'88334167');
         });
         $('#upYourSkillz').click(function() {
-            switchVideo(this,'100118167');
+            //switchVideo(this,'100118167');
         });
         $('#advancedMapping').click(function() {
-            switchVideo(this,'88334167');
+            //switchVideo(this,'88334167');
         });
     }
 }; // end Metamaps.Map.CheatSheet
