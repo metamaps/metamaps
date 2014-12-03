@@ -74,7 +74,6 @@ class UsersController < ApplicationController
     @details['name'] = @user.name
     @details['created_at'] = @user.created_at.strftime("%m/%d/%Y")
     @details['image'] = @user.image.url(:ninetysix)
-    @details['generation'] = @user.generation
     @details['numSynapses'] = @user.synapses.count
     @details['numTopics'] = @user.topics.count
     @details['numMaps'] = @user.maps.count

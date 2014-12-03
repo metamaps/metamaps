@@ -632,18 +632,6 @@
 	box-shadow: 0 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
-.supportUs.upperRightEl {
-    cursor: pointer;
-    color: #4fc059;
-    font-size: 14px;
-    height: 14px;
-    margin: 9px 8px 9px 0;
-    display: none;
-}
-.homePage .supportUs, .explorePage .supportUs {
-    display: block;
-}
-
 .upperRightMapButtons {
 	position: relative;
 	top: -42px; /* puts it just offscreen */
