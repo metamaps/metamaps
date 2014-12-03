@@ -5,6 +5,20 @@
     
 Metamaps.Views.init = function () {
 
+    Metamaps.Views.MapperCard = Backbone.View.extend({
+
+        template: Hogan.compile( $('#mapperCardTemplate').html() ),
+
+        tagNamea: "div",
+
+        className: "mapper",
+
+        render: function () {
+            this.$el.html( this.template.render(this.model) );
+            return this;
+        }
+    });
+
     Metamaps.Views.MapCard = Backbone.View.extend({
 
         template: Hogan.compile( $('#mapCardTemplate').html() ),
@@ -40,11 +54,19 @@ Metamaps.Views.init = function () {
             this.listenTo(this.collection, 'successOnFetch', this.handleSuccess);
             this.listenTo(this.collection, 'errorOnFetch', this.handleError);
         },
-        render: function () {
+        render: function (mapperObj) {
             
             var that = this;
 
             this.el.innerHTML = "";
+
+            // in case it is a page where we have to display the mapper card
+            if (mapperObj) {
+                var view = new Metamaps.Views.MapperCard({ model: mapperObj });
+
+                that.el.appendChild( view.render().el );
+            }
+
 
             this.collection.each(function (map) {
                 var view = new Metamaps.Views.MapCard({ model: map });
@@ -69,16 +91,44 @@ Metamaps.Views.init = function () {
             }
 
             Metamaps.Loading.hide();
-            setTimeout(function(){
-                var path = Metamaps.currentSection == "" ? "" : "/explore/" + Metamaps.currentPage; 
+
+            clearTimeout(Metamaps.routerTimeoutFunctionIds);
+            Metamaps.routerTimeoutId = setTimeout((function(localCurrentPage){ return function(){
+                var path = (Metamaps.currentSection == "") ? "" : "/explore/" + localCurrentPage;
+
+                // alter url if for mapper profile page
+                if (that.collection && that.collection.mapperId) {
+                    path += "/" + that.collection.mapperId;
+                }
+
                 Metamaps.Router.navigate(path);
-            }, 500);
+            }})(Metamaps.currentPage), 500);
         },
         handleSuccess: function () {
-            this.render();
+            var that = this;
+
+            if (this.collection && this.collection.id === "mapper") {
+                this.fetchUserThenRender();
+            }
+            else {
+                this.render();
+            }
         },
         handleError: function () {
             console.log('error loading maps!'); //TODO 
+        },
+        fetchUserThenRender: function () {
+            var that = this;
+            // first load the mapper object and then call the render function
+            $.ajax({
+                url: "/users/" + this.collection.mapperId + "/details.json",
+                success: function (response) {
+                    that.render(response);
+                },
+                error: function () {
+                    
+                }
+            });
         }
     });
 

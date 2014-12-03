@@ -18,6 +18,7 @@
 </div><!-- end upperLeftUI -->
 
 <div class="upperRightUI">
+    <div class="supportUs upperRightEl openLightbox" data-open="donate">SUPPORT US!</div>
     <div class="mapElement upperRightEl upperRightMapButtons">
             <!-- Realtime -->
             <div class="sidebarCollaborate upperRightEl">
@@ -30,7 +31,7 @@
                     <div class="realtimeMapperList">
                         <ul>
                             <li class="rtMapper littleRtOn rtMapperSelf">
-                                <%= image_tag user.image.url(:square), :size => "24x24", :class => "rtUserImage" %>
+                                <%= image_tag user.image.url(:thirtytwo), :size => "24x24", :class => "rtUserImage" %>
                                 <%= user.name %> (me)
                                 <div class="littleJuntoIcon"></div>
                             </li>
@@ -63,7 +64,7 @@
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon">
               <div class="tooltipsUnder">Account</div>
-              <%= image_tag user.image.url(:square), :size => "32x32" %>
+              <%= image_tag user.image.url(:thirtytwo), :size => "32x32" %>
         </div>
         <div class="sidebarAccountBox upperRightBox">
             <%= render :partial => 'layouts/account' %>

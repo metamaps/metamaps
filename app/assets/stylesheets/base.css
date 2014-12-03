@@ -247,10 +247,83 @@
   background-image: url(map32_sprite.png);
   background-repeat: no-repeat;
   background-position: 0 0;
+  cursor: pointer;
 }
 .linkItem.mapCount:hover .mapCountIcon {
   background-position: 0 -32px;
 }
+
+.linkItem.mapCount:hover .hoverTip {
+  display: block;
+}
+.CardOnGraph .mapCount .tip, .CardonGraph .mapCount .hoverTip {
+  top: 44px;
+  left: 0px;
+  font-size: 12px !important;
+}
+
+.hoverTip {
+  white-space: nowrap;
+  font-family: 'din-regular';
+  top: 44px;
+  left: 0px;
+  font-size: 12px !important;
+  display: none;
+  position: absolute;
+  background: black;
+  color: white;
+  border-radius: 4px;
+  line-height: 17px;
+  padding: 3px 5px 2px;
+  z-index: 100;
+}
+
+
+.CardOnGraph .mapCount .tip:before, .CardOnGraph .mapCount .hoverTip:before {
+  content: '';
+  position: absolute;
+  top: 26px;
+  left: 10px;
+  margin-top: -30px;
+  width: 0;
+  height: 0;
+  border-bottom: 4px solid #000000;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+.CardOnGraph .mapCount .tip li {
+  list-style-type: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 10px;
+  display: block;
+  height: 14px;
+  font-family: 'din-regular', helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 14px;
+  position: relative;
+}
+
+.CardOnGraph .mapCount li.hideExtra {
+  display: none;
+}
+
+.showMore {
+  cursor: pointer;
+  color: #4FC059;
+}
+
+.mapCount .tip a {
+  color: white;
+}
+
+.mapCount .tip a:hover {
+  color: #757575;
+}
+
+
 .linkItem.synapseCount {
   margin-left: 2px;
   width: 24px;
@@ -269,6 +342,39 @@
 .linkItem.synapseCount:hover .synapseCountIcon {
   background-position: 0 -32px;
 }
+
+.CardOnGraph .synapseCount .tip {
+  position: absolute;
+  background: black;
+  width: auto;
+  top: 44px;
+  color: white;
+  white-space: nowrap;
+  border-radius: 2px;
+  font-size: 12px !important;
+  font-family: 'din-regular';
+  line-height: 12px;
+  padding: 4px 4px 4px;
+  z-index: 100;
+}
+
+.CardOnGraph .synapseCount:hover .tip {
+  display: block;
+}
+
+.CardOnGraph .synapseCount .tip:before {
+  content: '';
+  position: absolute;
+  margin-top: -8px;
+  margin-left: 6px;
+  width: 0;
+  height: 0;
+  border-bottom: 4px solid black;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+
 .mapPerm {
   width: 32px;
   height: 32px;
@@ -381,11 +487,12 @@ cursor: pointer;
 }
 .CardOnGraph .metacodeSelect {
   display:none;
-  width:200px;
+  width:auto;
   z-index: 2;
   position: absolute;
   background: #EAEAEA;
   left: 300px;
+  white-space: nowrap;
 }
 .CardOnGraph .metacodeSelect ul {
   position: relative; 
@@ -400,10 +507,10 @@ cursor: pointer;
   border: 1px solid #BDBDBD;
 }
 .CardOnGraph .metacodeSelect ul li {
-background-color: #F5F5F5;
-cursor:pointer;
-position: relative;
-padding: 9px 12px;
+    background-color: #F5F5F5;
+    cursor:pointer;
+    position: relative;
+    padding: 9px 24px 9px 12px;
 }
 .CardOnGraph .metacodeSelect ul li:hover {
 background-color: #E0E0E0;
@@ -414,15 +521,17 @@ background-color: #E0E0E0;
   left: 8px;
 }
 .CardOnGraph .metacodeSelect ul li .mSelectName {
-  padding-left: 28px;
+  margin-left: 28px;
+  margin-right: 4px;
 }
 .CardOnGraph .metacodeSelect ul ul {
   display:none;
   position: absolute;
-  left: 200px;
+  left: 100%;
   top: -1px;
   max-height: 270px;
   overflow-y: auto;
+  width: auto;
 }
 .CardOnGraph .metacodeSelect li:hover ul {
   display: block;
@@ -446,7 +555,7 @@ background-color: #E0E0E0;
 }
 .onRightEdge.metacodeSelect ul ul {
   left: auto;
-  right: 200px;
+  right: 100%;
 }
 /* too close to bottom of screen case */
 .onBottomEdge.metacodeSelect {
@@ -565,7 +674,7 @@ padding: 9px 7px 9px 31px;
 height: 12px;
 width: 198px;
 margin: 0 0 0 0;
-border: 1px solid #BDBDBD;
+border: none;
 outline: none;
 font-size: 12px;
 line-height: 12px;
@@ -841,6 +950,7 @@ font-family: 'din-regular', helvetica, sans-serif;
     background: #424242;
     border-radius:2px;
     margin:16px 16px 16px 19px;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
 .mapCard {
@@ -864,8 +974,10 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 .mapCard .title {
+  word-wrap: break-word;
   font-size:18px;
   line-height:22px;
+  height: 44px;
   display:block;
   padding: 0 16px;
   text-align: center;
@@ -895,11 +1007,11 @@ font-family: 'din-regular', helvetica, sans-serif;
   -webkit-flex: 1;          /* Chrome */
   -ms-flex: 1;              /* IE 10 */
   flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-   overflow-y:auto;
    padding:0 16px 8px;
    font-family: helvetica, sans-serif;
    font-style: italic;
    font-size: 12px;
+   word-wrap: break-word;
 }
 .mCS_no_scrollbar {
   padding-right: 5px;
@@ -937,4 +1049,79 @@ font-family: 'din-regular', helvetica, sans-serif;
 .sCountColor {
   font-family: 'din-medium', sans-serif;
   color: #DAB539;
+}
+
+
+/* mapper card */
+
+.mapper {
+    float: left;
+    width:220px;
+    height:340px;
+    font-size: 12px;
+    text-align: left;
+    overflow: visible;
+    background: #E0E0E0;
+    border-radius:2px;
+    margin:16px 16px 16px 19px;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
+}
+
+.mapperCard {
+  width:100%;
+  height:308px;
+  padding: 16px 0;
+  color:#424242;
+}
+
+.mapperImage {
+    margin: 16px auto 0;
+    width: 96px;
+}
+.mapperImage img {
+  border-radius: 48px;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.23);
+}
+
+.mapperName {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 24px;
+    padding: 0 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 189px;
+    overflow: hidden;
+}
+
+.mapperInfo {
+    color: #DB5D5D;
+    text-align:center;
+    margin-top: 16px;
+}
+
+.mapperMetadata {
+    background: url(profile_card_sprite.png) no-repeat center 0;
+    height: 64px;
+    width: 160px;
+    margin: 16px auto 0;
+}
+.mapperMetadata .metadataSection {
+    width: 32%;
+    display: inline-block;
+    text-align: center;
+}
+.mapperMetadata .metadataSection div {
+    font-size: 16px;
+    color: #424242;
+    margin: 14px 0;
+}
+.mapperMetadata .metadataMaps {
+    color: #DB5D5D;
+}
+.mapperMetadata .metadataTopics {
+    color: #4FC059;
+}
+.mapperMetadata .metadataSynapses {
+    color: #DAB539;
 }

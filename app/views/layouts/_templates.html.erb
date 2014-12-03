@@ -35,6 +35,7 @@
     <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
     <div class="mapInfoButtonsWrapper">
       <div class="mapInfoDelete">
+        <div class="deleteMap"></div>
         <span>Delete</span>
       </div>
       <div class="mapInfoShare">
@@ -49,14 +50,14 @@
   <a href="/maps/{{id}}">
   <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
 	  <div class="mapCard">                                                   
-      <span class="title">                                                  
+      <span class="title" title="{{fullName}}">                                                  
         {{name}}
       </span>  
       <div class="mapScreenshot">
         {{{screenshot}}}
       </div>                                                  
       <div class="scroll">                                                    
-        <div class="desc">                                                    
+        <div class="desc">                                                  
           {{desc}}
           <div class="clearfloat"></div>                              
         </div>                                                                
@@ -72,12 +73,33 @@
   </div>
   </a>
     </script>
+
+    <script type="text/template" id="mapperCardTemplate">
+    <div class="mapperCard">                                                    
+      <div class="mapperImage">
+        <img src="{{image}}" width="96" height="96" />
+      </div> 
+      <div class="mapperName" title="{{name}}">                                                  
+        {{name}}
+      </div>
+      <div class="mapperInfo">
+        <div class="mapperCreatedAt">Mapper since: {{created_at}}</div>
+        <div class="mapperGeneration">Generation: {{generation}}</div>
+      </div>
+      <div class="mapperMetadata">
+         <div class="metadataSection metadataMaps"><div>{{numMaps}}</div>maps</div>
+         <div class="metadataSection metadataTopics"><div>{{numTopics}}</div>topics</div> 
+         <div class="metadataSection metadataSynapses"><div>{{numSynapses}}</div>synapses</div> 
+         <div class="clearfloat"></div>                               
+      </div>                                         
+    </div>
+    </script>
         
     <script type="text/template" id="topicSearchTemplate">
     <div class="result{{rtype}}">
       <div class="topicMetacode">
         <img src="{{typeImageURL}}" class="topicIcon" />
-        <span class="metacodeTip">{{type}}</span>
+        <div class="metacodeTip">{{type}}</div>
       </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
@@ -95,7 +117,7 @@
         </div>
         <div class="topicOriginatorIcon hoverForTip">
             <img width="18" height="18" src="{{originatorImage}}">
-            <span class="tip topicOriginator">created by {{originator}}</span>
+            <span class="tip topicOriginator">{{originator}}</span>
         </div>
         <div class="topicPermission {{permission}}">
         </div>
@@ -107,7 +129,7 @@
     <script type="text/template" id="mapSearchTemplate">
     <div class="result{{rtype}}">
       <div class="searchResIconWrapper">
-        <img class="icon" src="/assets/metamap32c.png">
+        <img class="icon" src="/assets/metamap36c.png">
       </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
@@ -209,16 +231,20 @@
                 <div class="metacodeSelect">{{{metacode_select}}}</div>
             </div>
             <div class="linkItem contributor">
-                <img src="/assets/user.png" class="contributorIcon" width="32" height="32" />
+                <a href="/explore/mapper/{{userid}}"><img src="/assets/user.png" class="contributorIcon" width="32" height="32" /></a>
                 <div class="contributorName">{{username}}</div>
             </div>
-            <a href="/explore/topics/{{id}}" class="linkItem mapCount" title="Click to see which maps topic appears on">                  
-                 <div class="mapCountIcon"></div>
-                 {{map_count}}                                                 
-               </a> 
-            <a href="/topics/{{id}}" class="linkItem synapseCount" title="Click to see this topics synapses">
+            <div class="linkItem mapCount">                  
+                <div class="mapCountIcon"></div>
+                {{map_count}} 
+                <div class ="hoverTip">Click to see which maps topic appears on</div>
+                <div class="tip"><ul>{{{inmaps}}}</ul></div>                              
+            </div>
+
+            <a href="/topics/{{id}}" class="linkItem synapseCount">
               <div class="synapseCountIcon"></div>
               {{synapse_count}}
+              <div class="tip">Click to see this topics synapses</div>
             </a>
             <div class="linkItem mapPerm {{mk_permission}}" title="{{permission}}"></div>
             <div class="clearfloat"></div>

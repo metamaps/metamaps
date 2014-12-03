@@ -27,11 +27,34 @@ Metamaps.Famous.build = function () {
 
     // INFOVIS
     f.viz = {};
+
+    var instructions = {
+        addTopic: "Double-click to<br>add a topic!",
+        tabKey: "Use Tab & Shift+Tab to select a metacode",
+        enterKey: "Press Enter to add the topic"
+    };
+
     f.viz.surf = new Surface({
         size: [undefined, undefined],
         classes: [],
         properties: {
-            display: 'none'
+            display: "none",
+            zIndex: "1"
+        }
+    });
+
+    var instrShowing = false;
+    f.viz.instrSurf = new Surface({
+        content: instructions.addTopic,
+        size: [220, 80],
+        classes: ["doubleClickSurf"],
+        properties: {
+            fontFamily: "'din-regular', helvetica, sans-serif",
+            fontSize: "32px",
+            display: "none",
+            textAlign: "center",
+            color: "#999999",
+            zIndex: "0"
         }
     });
     var prepare = function () {
@@ -62,8 +85,20 @@ Metamaps.Famous.build = function () {
             }
         );
     };
-    f.mainContext.add(f.viz.mod).add(f.viz.surf);
-
+    f.viz.isInstrShowing = function() {
+        return instrShowing;
+    }
+    f.viz.showInstructions = function() {
+        instrShowing = true;
+        f.viz.instrSurf.setProperties({ "display":"block" });
+    };
+    f.viz.hideInstructions = function() {
+        instrShowing = false;
+        f.viz.instrSurf.setProperties({ "display":"none" });
+    };
+    var vizMod = f.mainContext.add(f.viz.mod);
+    vizMod.add(f.viz.surf);
+    vizMod.add(f.viz.instrSurf);
     
     // CONTENT / OTHER PAGES
     f.yield = {};
@@ -198,19 +233,24 @@ Metamaps.Famous.build = function () {
             var capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1);
 
             Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
-            Metamaps.Views.exploreMaps.render();
+            if (Metamaps.currentPage === "mapper") {
+                Metamaps.Views.exploreMaps.fetchUserThenRender();
+            }
+            else {
+                Metamaps.Views.exploreMaps.render();
+            }
             f.maps.show();
-            f.explore.set(Metamaps.currentPage);
-            f.explore.show();
+            f.explore.set(Metamaps.currentPage, Metamaps.Maps.Mapper.mapperId);
+            f.explore.show();   
         }
         else if (Metamaps.currentSection === "") {
             Metamaps.Loading.hide();
             if (Metamaps.Active.Mapper) {
 
-                Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Mine );
+                Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Active );
                 Metamaps.Views.exploreMaps.render();
                 f.maps.show();
-                f.explore.set('mine');
+                f.explore.set('active');
                 f.explore.show();
             }
             else f.explore.set('featured');
@@ -247,9 +287,33 @@ Metamaps.Famous.build = function () {
             { duration: 300, curve: 'easeIn' }
         );
     };
-    f.explore.set = function (section) {
+    f.explore.set = function (section, mapperId) {
         var loggedIn = Metamaps.Active.Mapper ? 'Auth' : '';
-        f.explore.surf.setContent(templates[section + loggedIn + 'Content']);
+        
+
+        if (section === "mine" || section === "active" || section === "featured") {
+            f.explore.surf.setContent(templates[section + loggedIn + 'Content']);
+        }
+        else if (section === "mapper") {
+
+            var setMapper = function(mapperObj) {
+                var mapperContent;
+                mapperContent = "<div class='exploreMapsButton active mapperButton'><img class='exploreMapperImage' width='24' height='24' src='" + mapperObj.image + "' />";
+                mapperContent += "<div class='exploreMapperName'>" + mapperObj.name + "'s Maps</div><div class='clearfloat'></div></div>";
+
+                f.explore.surf.setContent(mapperContent);
+            };
+
+            $.ajax({
+                url: "/users/" + mapperId + ".json",
+                success: function (response) {
+                    setMapper(response);
+                },
+                error: function () {
+                    
+                }
+            });
+        }
     };
     var exploreMod = f.mainContext.add(f.explore.mod);
     exploreMod.add(new Modifier({
@@ -300,6 +364,7 @@ Metamaps.Famous.build = function () {
         if (message) {
             Metamaps.GlobalUI.notifyUser(message);
             f.toast.surf.deploy(f.toast.surf._currTarget);
+            f.toast.surf.removeListener('deploy', initialToast);
         }
     };
     f.toast.surf.on('deploy', initialToast);

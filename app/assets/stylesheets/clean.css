@@ -30,6 +30,7 @@
   width: 100%;
   height: 100%;
   margin:0;
+  z-index: 0;
 }
 
 #yield {
@@ -207,16 +208,16 @@
     outline: none;
     font-size: 14px;
     line-height: 14px;
-    background: #FFFFFF; 
+    background: #F5F5F5; 
     font-family: 'din-medium', helvetica, sans-serif;
 }
 .sidebarSearch .tt-dropdown-menu {
     top: 40px !important;
     background: #F5F5F5;
     width: 472px;
-    overflow-y: visible;
+    overflow-y: auto;
     overflow-x: visible;
-    box-shadow: 0 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    box-shadow: 0 10px 10px rgba(0,0,0,0.19), 0 6px 3px rgba(0,0,0,0.23);
 }
 
 .autoOptions #mapContribs { 
@@ -321,7 +322,7 @@
     display: table-cell;
     vertical-align: middle;
     height: 32px;
-    padding: 0 8px;
+    padding: 0 18px 0 28px;
 }
 .sidebarSearch .tt-suggestion .icon {
     width: 32px;
@@ -332,18 +333,16 @@
     display: table-cell;
     vertical-align: middle;
     padding: 0 0 0 8px;
-    max-width: 70px;
+    width: 70px;
 }
 .sidebarSearch .tt-dataset-topics .topicIcon {
     width: 32px;
     height: 32px;
-}
-.sidebarSearch .tt-dataset-topics .tt-is-under-cursor .topicIcon,
-.sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .topicIcon {
     margin: 0 auto;
 }
 .sidebarSearch .tt-dataset-topics .metacodeTip {
     display: none;
+    margin: 0 auto;
 }
 .sidebarSearch .tt-dataset-topics .tt-is-under-cursor .metacodeTip,
 .sidebarSearch .tt-dataset-topics .tt-is-under-mouse-cursor .metacodeTip {
@@ -356,7 +355,7 @@
     text-align: center;
 }
 .sidebarSearch .tt-dataset-mappers .tt-suggestion .icon {
-    margin: 4px 9px 4px 4px;
+    margin: 0px 0px 0px 0px;
 }
 .sidebarSearch .tt-dataset-mappers .resultText {
     width: 150px;
@@ -482,8 +481,7 @@
 }
 
 .sidebarSearch .topicOriginatorIcon .tip {
-    left: 30px;
-    right: auto;
+    right: 30px;
     top: 1px;
 }
 .sidebarSearch .tip {
@@ -506,8 +504,7 @@
 }
 
 .sidebarSearch .mapContributorsIcon .tip {
-    left: 40px;
-    right: auto;
+    right: 40px;
     top: -5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -530,7 +527,7 @@
     position: absolute;
     width: 0;
     height: 0;
-    border-right: 4px solid #424242;
+    border-left: 4px solid #424242;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
 }
@@ -540,20 +537,16 @@
 }
 .sidebarSearch .hoverForTip.addToMap .tip:before {
     right: -4px;
-    border-left: 4px solid #424242;
-    border-right: none;
 }
 
 .sidebarSearch .mapContributorsIcon .tip:before {
-    top: 65px;
-    left: -4px;
-    margin-top: -53px;
+    top: 12px;
+    right: -4px;
 }
 
 .sidebarSearch .topicOriginatorIcon .tip:before {
-    top: 58px;
-    left: -4px;
-    margin-top: -53px;
+    top: 5px;
+    right: -4px;
 }
 
 .sidebarSearch .mapContributorsIcon .mapContributors {
@@ -639,6 +632,18 @@
 	box-shadow: 0 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
+.supportUs.upperRightEl {
+    cursor: pointer;
+    color: #4fc059;
+    font-size: 14px;
+    height: 14px;
+    margin: 9px 8px 9px 0;
+    display: none;
+}
+.homePage .supportUs, .explorePage .supportUs {
+    display: block;
+}
+
 .upperRightMapButtons {
 	position: relative;
 	top: -42px; /* puts it just offscreen */
@@ -705,6 +710,18 @@
 
 /* homepage */
 
+.homeWrapper.homeText {
+    margin-top: 5%;
+}
+
+.fullWidthWrapper {
+    width: 100%;
+}
+.fullWidthWrapper.withVideo {
+    height: 315px;
+    background: #757575;
+}
+
 .homeWrapper {
     position: absolute;
     left: 50%;
@@ -754,7 +771,6 @@
     margin-left:54px;
 }
 
-
 .homeWrapper #new_user {
     margin-left: 48px;
     margin-top: 160px;
@@ -803,6 +819,22 @@
 .homeWrapper #new_user .accountForgotPass {
     margin: 8px 0 0 0;
 }
+.callToAction .learnMoreCTA {
+    background-color: #4fb5c0;
+    margin-bottom: 12px;
+}
+.callToAction .learnMoreCTA:hover {
+    background-color: #419599;
+}
+
+.fullWidthWrapper.withPartners {
+    background: url(homepage_bg_fade.png) no-repeat center -300px;
+}
+.homeWrapper.homePartners {
+    padding: 64px 0 280px;
+    height: 96px;
+    background: url(partner_logos.png) no-repeat 0 64px;
+}
 
 
 /* 204x25  , 170x36 */
@@ -817,6 +849,10 @@
 }
 .mapPage .openCheatsheet .tooltipsAbove, .topicPage .openCheatsheet .tooltipsAbove {
     left: 29px;
+}
+
+.unauthenticated .homePage .infoAndHelp {
+    display:none;
 }
 
 .infoAndHelp {
@@ -1108,6 +1144,23 @@
   color: #424242;
   border-bottom: 2px solid #00BCD4;
 }
+
+.exploreMapsButton.mapperButton {
+    height: 40px;
+    padding: 0;
+}
+.mapperButton img.exploreMapperImage {
+    float: left;
+    border-radius: 12px;
+    margin-top: 8px;
+    margin-right: 8px;
+}
+.exploreMapperName {
+    white-space: nowrap;
+    float: left;
+    margin-top: 12px;
+}
+
 
 .exploreMapsButton .exploreMapsIcon {
     background-repeat: no-repeat;

@@ -7,6 +7,7 @@
 <% if !authenticated? %>
     <% content_for :title, "Home | Metamaps" %> 
     <div id="yield">
+<<<<<<< HEAD
         <div class="homeWrapper">
                 <div class="homeTextWrapper">
                   <div class="homeLogo"></div>
@@ -47,14 +48,46 @@
                 <div class="clearfloat"></div>
         </div>
     </div><!-- end yield -->                  
+=======
+        <div class="homeWrapper homeText">
+            <div class="homeTitle">Make Sense with Metamaps</div>
+            <div class="homeIntro">
+            <span class="green din-medium">METAMAPS.CC</span> is a free and open source platform that supports real-time sense-making, distributed collaboration, and the creative intelligence of individuals, organizations and communities. We are currently in an <span class="din-medium">invite-only beta.</span>
+            </div>
+        </div>
+        <div class="fullWidthWrapper withVideo">
+            <div class="homeWrapper">
+                <iframe class="homeVideo" src="//player.vimeo.com/video/113154814" width="560" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <div class="callToAction">
+                    <h3>Who finds it useful?</h3>
+                    <p>Designers, inventors, artists, educators, strategists, consultants, facilitators, entrepreneurs, systems thinkers, changemakers, analysts, students, researchers... maybe you!</p>
+                    <button type="button" class="button learnMoreCTA" onclick="Metamaps.GlobalUI.openLightbox('about');">LEARN MORE</button>
+                    <a href="/explore/featured" class="exploreFeaturedCTA">EXPLORE FEATURED MAPS</a>
+                    <a href="/request" class="requestInviteCTA" data-bypass="true">REQUEST INVITE</a>
+                </div>
+                <div class="clearfloat"></div>
+            </div>
+        </div>
+        <div class="fullWidthWrapper withPartners">
+            <div class="homeWrapper homePartners">
+                <% # our partners %>
+            </div>
+        </div>
+    </div><!-- end yield -->
+    <div class="github-fork-ribbon-wrapper right-bottom">
+        <div class="github-fork-ribbon">
+            <a href="https://github.com/metamaps/metamaps_gen002" target="_blank">Fork me on GitHub</a>
+        </div>
+    </div>                     
+>>>>>>> develop
     <script>
     Metamaps.currentSection = "";
     Metamaps.currentPage = "";
     </script>
 <% elsif authenticated? %>
-    <% content_for :title, "My Maps | Metamaps" %> 
+    <% content_for :title, "Explore Active Maps | Metamaps" %> 
     <script>
-    Metamaps.Maps.Mine = <%= @maps.to_json.html_safe %>;
+    Metamaps.Maps.Active = <%= @maps.to_json.html_safe %>;
     Metamaps.currentSection = "";
     Metamaps.currentPage = "";
     Metamaps.GlobalUI.Search.isOpen = true;

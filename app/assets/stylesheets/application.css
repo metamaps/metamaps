@@ -70,9 +70,6 @@ body,
 .wrapper {
     height: 100%;
 }
-.homePage .famousYield {
-    
-}
 .wrapper.mapPage {
     overflow: hidden;
 }
@@ -84,6 +81,8 @@ body {
     background: #d8d9da url(shattered_@2X.png);
     font-family: 'din-medium', helvetica, sans-serif;
     color: #424242;
+    -moz-osx-font-smoothing: grayscale;
+
 }
 h1,
 h2,
@@ -121,6 +120,7 @@ input[type="submit"] {
     border-radius: 2px;
     -webkit-user-select: none;
     font-family: 'din-medium', helvetica, sans-serif;
+    -webkit-font-smoothing: inherit;
 }
 button.button:hover,
 a.button:hover,
@@ -523,7 +523,7 @@ input[type="submit"]:active {
     left: 41px;
     z-index: 9999;
     width: 256px;
-    height: 42px;
+    height: 34px;
 }
 .new_topic #topic_name,
 .new_topic .tt-hint {
@@ -531,7 +531,7 @@ input[type="submit"]:active {
     background: #FFFFFF;
     height: 14px;
     margin: 0;
-    padding: 14px 6px;
+    padding: 10px 6px;
     border: none;
     border-radius: 2px;
     outline: none;
@@ -814,6 +814,7 @@ li.accountInvite span {
 }
 .accountImage {
     background-image: url(user.png);
+    background-size: 84px 84px;
     background-repeat: no-repeat;
     height:84px;
     width:84px;
@@ -1179,6 +1180,14 @@ h3.realtimeBoxTitle {
     color: black;
     box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
+
+.rightclickmenu .rc-spacer {
+    width:100%;
+    height:0;
+    border-top:1px solid #EBEBEB;
+    margin: 6px 0;
+    padding: 0;
+}
 .rightclickmenu > ul {
     
 }
@@ -1201,6 +1210,14 @@ h3.realtimeBoxTitle {
     background-color: transparent;
     cursor: default;
 }
+
+.rc-keyboard {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    color: #757575;
+}
+
 .rightclickmenu > ul > li .rc-icon {
     position: absolute;
     top: 0;
@@ -1247,7 +1264,7 @@ h3.realtimeBoxTitle {
     background-position: 0 -32px;
 }
 .rc-metacode li img {
-float: left;
+    display: inline-block;
 }
 .rightclickmenu .rc-permission ul, 
 .rightclickmenu .rc-metacode ul,
@@ -1294,8 +1311,9 @@ float: left;
 }
 .rightclickmenu .rc-metacode > ul > li,
 .rightclickmenu .rc-siblings > ul > li {
-    padding: 6px 10px 6px 8px;
-    width: 100px;
+    padding: 6px 24px 6px 8px;
+    width: auto;
+    white-space: nowrap;
 }
 .rightclickmenu .rc-metacode ul ul,
 .rightclickmenu .rc-siblings ul ul {
@@ -1311,7 +1329,9 @@ float: left;
 .rightclickmenu .rc-metacode ul ul li,
 .rightclickmenu .rc-siblings ul ul li {
     padding: 4px 10px 4px 8px;
-    width: 120px;
+    width: auto;
+    white-space: nowrap;
+    height: 24px;
 }
 .rightclickmenu .expandMetacodeSet {
     position: absolute;
@@ -1324,8 +1344,10 @@ float: left;
     background-position: 0 -32px;
 }
 .rightclickmenu .rc-metacode .mSelectName {
-    padding: 6px 0 0 32px;
-    display: block;
+    padding: 0 16px 0 4px;
+    display: inline-block;
+    position: relative;
+    top: -7px;
 }
 
 .moveMenusUp .rc-metacode ul, 
@@ -1599,6 +1621,7 @@ float: left;
 .wrapper div.mapInfoDesc span {
     float: none !important;
     padding-bottom: 10px;
+    word-wrap: break-word;
 }
 .infoStatIcon {
     float: left;
@@ -1688,6 +1711,9 @@ float: left;
     color: white;
 }
 
+.mapContributors .tip li a {
+    color: white;
+}
 .mapContributors div:after {
     content: '';
     position: absolute;
@@ -1884,9 +1910,21 @@ and it won't be important on password protected instances */
     display: none;
 }
 .mapInfoDelete {
-    background-image: url(delete_mapinfo.png);
+    color: #E0E0E0;
+}
+.mapInfoDelete .deleteMap {
+    width: 16px;
+    height: 16px;
+    margin: 8px auto 0;
+    background-image: url(remove_mapinfo_sprite.png);
     background-repeat: no-repeat;
-    background-position: center 8px;
+    background-position: -16px 0;
+}
+.mapInfoDelete:hover {
+    color: #F5F5F5;
+}
+.mapInfoDelete:hover .deleteMap {
+    background-position: 0 0;
 }
 /* only display delete button if it's a map you created */
 .yourMap .mapInfoDelete {
@@ -1959,6 +1997,7 @@ and it won't be important on password protected instances */
     height: 434px;
     background-color: #e0e0e0;
     padding: 64px 124px 64px 124px;
+    box-shadow: 0px 6px 3px rgba(0, 0, 0, 0.23), 10px 10px 10px rgba(0, 0, 0, 0.19);
     border-radius: 2px;
 }
 .lightboxContent h3 {
@@ -2676,6 +2715,13 @@ and it won't be important on password protected instances */
 }
 .tutorialItem.active {
     color: #00bcd4;
+}
+.tutorialItem.disable {
+    color: #999;
+    cursor: default;
+}
+.tutorialItem.disable:hover {
+    color: #999;
 }
 #upYourSkillz {
     margin: 0 68px;

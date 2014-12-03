@@ -8,7 +8,7 @@ module UsersHelper
       user['id'] = u.id
       user['label'] = u.name
       user['value'] = u.name
-      user['profile'] = u.image.url(:square)
+      user['profile'] = u.image.url(:sixtyfour)
       user['mapCount'] = u.maps.count
       user['created_at'] = u.created_at.strftime("%m/%d/%Y")
       user['rtype'] = "mapper"

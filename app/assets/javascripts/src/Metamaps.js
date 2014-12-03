@@ -749,6 +749,10 @@ Metamaps.Create = {
                 if (datum.id) { // if they clicked on an existing synapse get it
                     Metamaps.Synapse.getSynapseFromAutocomplete(datum.id);
                 }
+                else {
+                    Metamaps.Create.newSynapse.description = datum.value;
+                    Metamaps.Synapse.createSynapseLocally();
+                }
             });
         },
         beingCreated: false,
@@ -1089,6 +1093,36 @@ Metamaps.TopicCard = {
             $('.showcard .yourTopic .mapPerm').click(openPermissionSelect);
             $('.showcard').click(hidePermissionSelect);
         }
+
+        $('.links .mapCount').unbind().click(function(event){
+            $('.mapCount .tip').toggle();
+            $('.showcard .hoverTip').toggleClass('hide');
+            event.stopPropagation();
+        });
+        $('.mapCount .tip').unbind().click(function(event){
+            event.stopPropagation();
+        });
+        $('.showcard').unbind('.hideTip').bind('click.hideTip', function(){
+            $('.mapCount .tip').hide();
+            $('.showcard .hoverTip').removeClass('hide');
+        });
+
+        $('.mapCount .tip li a').click(Metamaps.Router.intercept);
+
+        var originalText = $('.showMore').html();
+        $('.mapCount .tip .showMore').unbind().toggle(
+            function(event){
+                $('.extraText').toggleClass("hideExtra");
+                $('.showMore').html('Show less...');
+            },
+            function(event){
+                $('.extraText').toggleClass("hideExtra");
+                $('.showMore').html(originalText);
+            });
+
+        $('.mapCount .tip showMore').unbind().click(function(event){
+            event.stopPropagation();
+        });
     },
     handleInvalidLink: function() {
         var self = Metamaps.TopicCard;
@@ -1162,6 +1196,27 @@ Metamaps.TopicCard = {
             nodeValues.attachments = '';
         }
 
+        var inmapsAr = topic.get("inmaps");
+        var inmapsLinks = topic.get("inmapsLinks");
+        nodeValues.inmaps ='';
+        if (inmapsAr.length < 6) {
+            for (i = 0; i < inmapsAr.length; i++) {
+                var url = "/maps/" + inmapsLinks[i];
+                nodeValues.inmaps += '<li><a href="' + url + '">'  + inmapsAr[i]+ '</a></li>';
+            }
+        }
+        else {
+            for (i = 0; i < 5; i++){
+                var url = "/maps/" + inmapsLinks[i];
+                nodeValues.inmaps += '<li><a href="' + url + '">' + inmapsAr[i] + '</a></li>';
+            }
+            extra = inmapsAr.length - 5;
+            nodeValues.inmaps += '<li><span class="showMore">See ' + extra + ' more...</span></li>'
+            for (i = 5; i < inmapsAr.length; i++){
+                var url = "/maps/" + inmapsLinks[i];
+                nodeValues.inmaps += '<li class="hideExtra extraText"><a href="' + url + '">' + inmapsAr[i]+ '</a></li>';
+            }
+        }
         nodeValues.permission = topic.get("permission");
         nodeValues.mk_permission = topic.get("permission").substring(0, 2);
         nodeValues.map_count = topic.get("map_count").toString();
@@ -1273,7 +1328,12 @@ Metamaps.SynapseCard = {
 
         //if edge data is blank or just whitespace, populate it with data_nil
         if ($('#edit_synapse_desc').html().trim() == '') {
-            $('#edit_synapse_desc').html(data_nil);
+            if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
+                $('#edit_synapse_desc').html(data_nil);
+            }
+            else {
+                $('#edit_synapse_desc').html("(no description)");
+            }
         }
 
         $('#edit_synapse_desc').bind("ajax:success", function () {
@@ -1334,7 +1394,7 @@ Metamaps.SynapseCard = {
     },
     add_user_info: function (synapse) {
         var u = '<div id="edgeUser" class="hoverForTip">';
-        u += '<img src="" width="24" height="24" />'
+        u += '<a href="/explore/mapper/' + synapse.get("user_id") + '"> <img src="" width="24" height="24" /></a>'
         u += '<div class="tip">' + synapse.get("user_name") + '</div></div>';
         $('#editSynLowerBar').append(u);
 
@@ -3412,38 +3472,67 @@ Metamaps.Filter = {
                 else console.log(topic);
             }
         });
+
+        // flag all the edges back to 'untouched'
         Metamaps.Synapses.each(function(synapse) {
            var e = synapse.get('edge');
-           var desc = synapse.get("desc");
+           e.setData('touched', false);
+        });
+        Metamaps.Synapses.each(function(synapse) {
+           var e = synapse.get('edge');
+           var desc;
            var user_id = synapse.get("user_id").toString();
 
-            if (visible.synapses.indexOf(desc) == -1) passesSynapse = false;
-            else passesSynapse = true;
+           if (e && !e.getData('touched')) {
 
-            if (onMap) {
-                // when on a map, 
-                // we filter by mapper according to the person who added the 
-                // topic or synapse to the map
-                user_id = synapse.getMapping().get("user_id").toString();
-            }
-            if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
-            else passesMapper = true;
+                var synapses = e.getData('synapses');
 
-            var color = Metamaps.Settings.colors.synapses.normal;
-            if (passesSynapse && passesMapper) {
-                if (e) {
+                // if any of the synapses represent by the edge are still unfiltered
+                // leave the edge visible
+                passesSynapse = false;
+                for (var i = 0; i < synapses.length; i++) {
+                    desc = synapses[i].get("desc");
+                    if (visible.synapses.indexOf(desc) > -1) passesSynapse = true;
+                }
+
+                // if the synapse description being displayed is now being
+                // filtered, set the displayIndex to the first unfiltered synapse if there is one
+                var displayIndex = e.getData("displayIndex") ? e.getData("displayIndex") : 0;
+                var displayedSynapse = synapses[displayIndex];
+                desc = displayedSynapse.get("desc");
+                if (passesSynapse && visible.synapses.indexOf(desc) == -1) {
+                    // iterate and find an unfiltered one
+                    for (var i = 0; i < synapses.length; i++) {
+                        desc = synapses[i].get("desc");
+                        if (visible.synapses.indexOf(desc) > -1) {
+                            e.setData('displayIndex', i);
+                            break;
+                        }
+                    }
+                }
+
+                if (onMap) {
+                    // when on a map, 
+                    // we filter by mapper according to the person who added the 
+                    // topic or synapse to the map
+                    user_id = synapse.getMapping().get("user_id").toString();
+                }
+                if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
+                else passesMapper = true;
+
+                var color = Metamaps.Settings.colors.synapses.normal;
+                if (passesSynapse && passesMapper) {
                     e.setData('alpha', 1, 'end');
                     e.setData('color', color, 'end');
                 }
-                else console.log(synapse);
-            }
-            else {
-                if (e) {
+                else {
                     Metamaps.Control.deselectEdge(e, true);
                     e.setData('alpha', opacityForFilter, 'end');
                 }
-                else console.log(synapse);
+
+                e.setData('touched', true);
             }
+            else if (!e) console.log(synapse);
         });
             
         // run the animation
@@ -3493,7 +3582,9 @@ Metamaps.Listeners = {
             case 69: //if e or E is pressed
                 if (e.ctrlKey){
                     e.preventDefault();
-                    Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas);
+                    if (Metamaps.Active.Map) {
+                        Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas);
+                    }
                 }
                 break;
             case 77: //if m or M is pressed
@@ -3930,6 +4021,9 @@ Metamaps.Topic = {
             Metamaps.GlobalUI.notifyUser("Please enter a topic title...");
             return;
         }
+
+        // hide the 'double-click to add a topic' message
+        Metamaps.Famous.viz.hideInstructions();
 
         $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
 
@@ -4479,7 +4573,6 @@ Metamaps.Map = {
             encoded_image: canvas.canvas.toDataURL()
         };
 
-        console.log(imageData.encoded_image);
         var map = Metamaps.Active.Map;
 
         var today = new Date();
@@ -4538,13 +4631,13 @@ Metamaps.Map.CheatSheet = {
         };
 
         $('#gettingStarted').click(function() {
-            switchVideo(this,'88334167');
+            //switchVideo(this,'88334167');
         });
         $('#upYourSkillz').click(function() {
-            switchVideo(this,'100118167');
+            //switchVideo(this,'100118167');
         });
         $('#advancedMapping').click(function() {
-            switchVideo(this,'88334167');
+            //switchVideo(this,'88334167');
         });
     }
 }; // end Metamaps.Map.CheatSheet
@@ -4687,6 +4780,8 @@ Metamaps.Map.InfoBox = {
         $('.mapContributors .tip').unbind().click(function(event){
             event.stopPropagation();
         });
+        $('.mapContributors .tip li a').click(Metamaps.Router.intercept);
+
         $('.mapInfoBox').unbind('.hideTip').bind('click.hideTip', function(){
             $('.mapContributors .tip').hide();
         });
@@ -4700,15 +4795,15 @@ Metamaps.Map.InfoBox = {
         var self = Metamaps.Map.InfoBox;
 
         var string = ""; 
-
+        console.log("hello!!")
         string += "<ul>";
 
         Metamaps.Mappers.each(function(m){
-            string += '<li><img class="rtUserImage" width="25" height="25" src="' + m.get("image") + '" />' + m.get("name") + '</li>';
+            string += '<li><a href="/explore/mapper/' + m.get("id") + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get("image") + '" />' + m.get("name") + '</a></li>';
         });
         
         string += "</ul>";
-
+        console.log(string);
         return string;
     },
     updateNumbers: function () {

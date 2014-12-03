@@ -18,9 +18,9 @@ module MapsHelper
       contributorTip = ''
       firstContributorImage = '/assets/user.png'
       if m.contributors.count > 0 
-        firstContributorImage = m.contributors[0].image.url(:square)
+        firstContributorImage = m.contributors[0].image.url(:thirtytwo)
         m.contributors.each_with_index do |c, index|
-          userImage = c.image.url(:square)
+          userImage = c.image.url(:thirtytwo)
           name = c.name
           contributorTip += '<li> <img class="tipUserImage" width="25" height="25" src=' + userImage + ' />' + '<span>' + name + '</span> </li>'         
         end

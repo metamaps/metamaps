@@ -1,3 +1,9 @@
+make sure that devise key is correct
+
+
+make sure that AWS bucket is set to the metamaps-production bucket
+
+
 make sure that root individuals have same 'joinedwithcode' as 'code'
 
 User.all.each do |u|

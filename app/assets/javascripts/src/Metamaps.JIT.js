@@ -112,8 +112,10 @@ Metamaps.JIT = {
         });
 
         if (self.vizData.length == 0) {
+            Metamaps.Famous.viz.showInstructions();
             Metamaps.Visualize.loadLater = true;
         }
+        else Metamaps.Famous.viz.hideInstructions();
 
         Metamaps.Visualize.render();
     }, // prepareVizData
@@ -378,11 +380,21 @@ Metamaps.JIT = {
                         if(e.ctrlKey){
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
-                            Metamaps.JIT.zoomToBox(e);
+
+                            var bS = Metamaps.Mouse.boxStartCoordinates;
+                            var bE = Metamaps.Mouse.boxEndCoordinates;
+                            if (Math.abs(bS.x - bE.x) > 20 && Math.abs(bS.y - bE.y) > 20) {
+                                Metamaps.JIT.zoomToBox(e);
+                                return;
+                            }
+                            else {
+                                Metamaps.Mouse.boxStartCoordinates = null;
+                                Metamaps.Mouse.boxEndCoordinates = null;
+                            }
                             //console.log('called zoom to box');
-                            return;
                         }
-                        else if (e.shiftKey) {
+                        
+                        if (e.shiftKey) {
                             Metamaps.Visualize.mGraph.busy = false;
                             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos();
                             Metamaps.JIT.selectWithBox(e);
@@ -1127,11 +1139,18 @@ Metamaps.JIT = {
 		sY = -1 * sY;
 		eY = -1 * eY
 
-		Metamaps.Synapses.each(function(synapse) {
-			var fromNodeX = synapse.get('edge').nodeFrom.pos.x;
-			var fromNodeY = -1 * synapse.get('edge').nodeFrom.pos.y;
-			var toNodeX = synapse.get('edge').nodeTo.pos.x;
-			var toNodeY = -1 * synapse.get('edge').nodeTo.pos.y;
+        var edgesToToggle = [];
+        Metamaps.Synapses.each(function(synapse) {
+            var e = synapse.get('edge');
+            if (edgesToToggle.indexOf(e) === -1) {
+                edgesToToggle.push(e);
+            }
+        });
+		edgesToToggle.forEach(function(edge) {
+			var fromNodeX = edge.nodeFrom.pos.x;
+			var fromNodeY = -1 * edge.nodeFrom.pos.y;
+			var toNodeX = edge.nodeTo.pos.x;
+			var toNodeY = -1 * edge.nodeTo.pos.y;
 
             var maxX = fromNodeX;
 			var maxY = fromNodeY;
@@ -1207,21 +1226,18 @@ Metamaps.JIT = {
 			
             //The test synapse was selected!
 
-            // make sure the edge hasn't been hidden from the page
-            var node1id = synapse.get('edge').nodeFrom.id;
-            var node2id = synapse.get('edge').nodeTo.id;
-            var edge = Metamaps.Visualize.mGraph.graph.getAdjacence(node1id, node2id);
-			if(selectTest){
+            if(selectTest){
+                // shiftKey = toggleSelect, otherwise 
 				if(e.shiftKey){
-					if(Metamaps.Selected.Edges.indexOf(synapse.get('edge')) != -1 ){
-						Metamaps.Control.deselectEdge(synapse.get('edge'));
+					if(Metamaps.Selected.Edges.indexOf(edge) != -1 ){
+						Metamaps.Control.deselectEdge(edge);
 					}
 					else{
-						if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
+						Metamaps.Control.selectEdge(edge);
 					}
 				}
 				else{
-					if (edge) Metamaps.Control.selectEdge(synapse.get('edge'));
+					Metamaps.Control.selectEdge(edge);
 				}
 			}
 		});
@@ -1322,9 +1338,9 @@ Metamaps.JIT = {
 
         var disabled = authorized ? "" : "disabled";
 
-        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
+        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>';
         
 
         if (Metamaps.Active.Topic) {
@@ -1337,6 +1353,8 @@ Metamaps.JIT = {
                          <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
                      </ul>';
 
+            menustring += '<li class="rc-spacer"></li>';
+
             menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + options + '<div class="expandLi"></div></li>';
 
             var metacodeOptions = $('#metacodeOptions').html();
@@ -1344,6 +1362,11 @@ Metamaps.JIT = {
             menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode' + metacodeOptions + '<div class="expandLi"></div></li>';
         }
         if (Metamaps.Active.Topic) {
+
+            if (!Metamaps.Active.Mapper) {
+                menustring += '<li class="rc-spacer"></li>';
+            }
+
             // set up the get sibling menu as a "lazy load"
             // only fill in the submenu when they hover over the get siblings list item
             var siblingMenu = '<ul id="fetchSiblingList"> \
@@ -1575,9 +1598,11 @@ Metamaps.JIT = {
 
         var disabled = authorized ? "" : "disabled";
 
-        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map</li>';
-        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete</li>';
+        if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>';
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>';
+
+        if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-spacer"></li>';
 
         if (Metamaps.Active.Mapper) {
             var permOptions = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \

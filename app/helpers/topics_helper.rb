@@ -15,9 +15,11 @@ module TopicsHelper
       topic['mapCount'] = t.maps.count
       topic['synapseCount'] = t.synapses.count
       topic['originator'] = t.user.name
-      topic['originatorImage'] = t.user.image.url(:square)
+      topic['originatorImage'] = t.user.image.url(:thirtytwo)
       topic['rtype'] = "topic"
-      
+      topic['inmaps'] = t.inmaps
+      topic['inmapsLinks'] = t.inmapsLinks
+       
       temp.push topic
     end
     return temp

@@ -54,8 +54,16 @@ class Topic < ActiveRecord::Base
     self.synapses.count
   end
 
+  def inmaps
+    self.maps.map(&:name)
+  end
+
+  def inmapsLinks
+    self.maps.map(&:id)
+  end
+
   def as_json(options={})
-    super(:methods =>[:user_name, :user_image, :map_count, :synapse_count])
+    super(:methods =>[:user_name, :user_image, :map_count, :synapse_count, :inmaps, :inmapsLinks])
   end
 
   def topic_autocomplete_method

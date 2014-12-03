@@ -47,9 +47,9 @@ Copyright (c) 2014 Connor Turland
 [site-blog]: http://blog.metamaps.cc
 [site-beta]: http://metamaps.cc
 [community]: https://plus.google.com/u/0/communities/115060009262157699234
-[license]: https://github.com/Connoropolous/metamaps_gen002/blob/master/LICENSE
-[contributing]: https://github.com/Connoropolous/metamaps_gen002/blob/master/CONTRIBUTING.md
-[contributing-issues]: https://github.com/Connoropolous/metamaps_gen002/blob/master/CONTRIBUTING.md#reporting-bugs-and-other-issues
-[windows-installation]: https://github.com/Connoropolous/metamaps_gen002/blob/master/WindowsInstallation.md
-[mac-installation]: https://github.com/Connoropolous/metamaps_gen002/blob/master/MacInstallation.md
-[ubuntu-installation]: https://github.com/Connoropolous/metamaps_gen002/blob/master/UbuntuInstallation.md
+[license]: https://github.com/metamaps/metamaps_gen002/blob/master/LICENSE
+[contributing]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md
+[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md#reporting-bugs-and-other-issues
+[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/WindowsInstallation.md
+[mac-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/MacInstallation.md
+[ubuntu-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/UbuntuInstallation.md

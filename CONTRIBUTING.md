@@ -87,7 +87,7 @@ If you'd like to contribute a fix for a bug you've encountered, first read up on
 aware of the issue. By filing the issue first, we may be able to provide you
 with some insight that guides you in the right direction.
 
-[metamaps-issues]: https://github.com/Connoropolous/metamaps_gen002/issues
+[metamaps-issues]: https://github.com/metamaps/metamaps_gen002/issues
 [git-branching-model]: http://nvie.com/posts/a-successful-git-branching-model/
-[fork-metamaps]: https://github.com/Connoropolous/metamaps_gen002/fork
+[fork-metamaps]: https://github.com/metamaps/metamaps_gen002/fork
 [cla]: http://metamaps.cc/cla

@@ -25,7 +25,7 @@ module SynapsesHelper
       synapse['permission'] = s.permission
       synapse['mapCount'] = s.maps.count
       synapse['originator'] = s.user.name
-      synapse['originatorImage'] = s.user.image.url(:square)
+      synapse['originatorImage'] = s.user.image.url(:thirtytwo)
       synapse['rtype'] = "synapse"
       
       temp.push synapse

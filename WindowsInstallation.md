@@ -13,7 +13,7 @@ also download node.js, which is also needed http://nodejs.org/download/
 
 Navigate to the folder that you want to download the metamaps files to and run the following: (use your forked git repository address if it's different than this repo. You will also need to go to your Github account settings and add the SSH key that was placed in your clipboard earlier)
 
-    git clone https://github.com/Connoropolous/metamaps_gen002.git --branch develop
+    git clone https://github.com/metamaps/metamaps_gen002.git --branch develop
     cd metamaps_gen002
   
 Now you're in the main directory. 

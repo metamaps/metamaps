@@ -65,6 +65,23 @@ class UsersController < ApplicationController
     end
   end
     
+  # GET /users/:id/details [.json]
+  def details
+    @user = User.find(params[:id])
+    
+    @details = Hash.new
+
+    @details['name'] = @user.name
+    @details['created_at'] = @user.created_at.strftime("%m/%d/%Y")
+    @details['image'] = @user.image.url(:ninetysix)
+    @details['generation'] = @user.generation
+    @details['numSynapses'] = @user.synapses.count
+    @details['numTopics'] = @user.topics.count
+    @details['numMaps'] = @user.maps.count
+
+    render json: @details 
+  end
+
   # PUT /user/updatemetacodes
   def updatemetacodes
     @user = current_user
