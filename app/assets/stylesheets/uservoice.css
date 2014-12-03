@@ -6,12 +6,8 @@
 }
 
 div.uv-icon.uv-bottom-left {
-<<<<<<< HEAD
 	background-image:url(support_tab_sprite.png);
-=======
-	background-image:url(feedback_sprite.png);
 	background-repeat: no-repeat;
->>>>>>> develop
 	color:#FFFFFF;
 	cursor:pointer;
 	height:110px;
