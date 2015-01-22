@@ -13,6 +13,7 @@
   <meta name="viewport" content="width=device-width, user-scalable=no">
 
   <%= stylesheet_link_tag    "application", :media => "all" %>
+  <script type="text/javascript" src="//website.com/mapmaker.js"></script>
   <%= javascript_include_tag "application" %>
 
   <!-- typekit for vinyl font -->
@@ -64,6 +65,34 @@
       });
     </script>
   <![endif]-->
+
+  <script>
+  $(document).ready(function () {
+
+      for (var prop in Metamaps) {
+
+          // this runs the init function within each sub-object on the Metamaps one
+          if (Metamaps.hasOwnProperty(prop) &&
+              Metamaps[prop].hasOwnProperty('init') &&
+              typeof (Metamaps[prop].init) == 'function'
+          ) {
+              Metamaps[prop].init();
+          }
+      }
+
+      // initialize the famous ui
+      var callFamous = function(){
+          if (Metamaps.Famous) {
+              Metamaps.Famous.build();
+          }
+          else {
+              setTimeout(callFamous, 100);
+          }
+      }
+      callFamous();
+  });
+  </script>
+
 </head>
 
 <body data-env="<%= Rails.env %>" class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">

@@ -5,6 +5,8 @@
   #%>
   
 <% content_for :title, @user.name + "'s Settings | Metamaps" %> 
+
+<%= javascript_include_tag "pages/Metamaps.Admin" %>
 <div id="yield">
 <%= form_for @user, url: user_url, :html =>{ :multipart => true, :class => "edit_user centerGreyForm"} do |form| %>
   <h3>Edit Account</h3>

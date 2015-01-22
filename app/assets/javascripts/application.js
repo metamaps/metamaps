@@ -20,9 +20,6 @@
 //= require ./src/Metamaps.Router
 //= require ./src/Metamaps.Backbone
 //= require ./src/Metamaps.Views
-//= require ./src/JIT
-//= require ./src/Metamaps
-//= require ./src/Metamaps.JIT
 //= require_directory ./shims
 //= require_directory ./require
 //= require_directory ./famous

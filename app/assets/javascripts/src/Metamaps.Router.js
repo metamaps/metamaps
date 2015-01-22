@@ -1,3 +1,5 @@
+if (typeof Metamaps === 'undefined') Metamaps = {};
+
 (function () {
 
     Metamaps.currentPage = "";

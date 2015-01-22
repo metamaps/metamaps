@@ -1,39 +1,4 @@
-var Metamaps = {}; // this variable declaration defines a Javascript object that will contain all the variables and functions used by us, broken down into 'sub-modules' that look something like this
-/*
-
-* unless you are on a page with the Javascript InfoVis Toolkit (Topic or Map) the only section in the metamaps 
-* object will be these
-GlobalUI
-Active
-Maps
-Mappers
-Backbone
-
-* all these get added when you are on a page with the Javascript Infovis Toolkit
-Settings
-Touch
-Mouse
-Selected
-Metacodes
-Topics
-Synapses
-Mappings
-Create
-TopicCard
-SynapseCard
-Visualize
-Util
-Realtime
-Control
-Filter
-Listeners
-Organize
-Map
-Mapper
-Topic
-Synapse
-JIT 
-*/
+if (typeof Metamaps === 'undefined') Metamaps = {};
 
 Metamaps.Active = {
     Map: null,
@@ -41,31 +6,6 @@ Metamaps.Active = {
     Mapper: null
 };
 Metamaps.Maps = {};
-
-$(document).ready(function () {
-
-    for (var prop in Metamaps) {
-
-        // this runs the init function within each sub-object on the Metamaps one
-        if (Metamaps.hasOwnProperty(prop) &&
-            Metamaps[prop].hasOwnProperty('init') &&
-            typeof (Metamaps[prop].init) == 'function'
-        ) {
-            Metamaps[prop].init();
-        }
-    }
-
-    // initialize the famous ui
-    var callFamous = function(){
-        if (Metamaps.Famous) {
-            Metamaps.Famous.build();
-        }
-        else {
-            setTimeout(callFamous, 100);
-        }
-    }
-    callFamous();
-});
 
 Metamaps.GlobalUI = {
     notifyTimeout: null,
@@ -76,6 +16,7 @@ Metamaps.GlobalUI = {
         self.Search.init();
         self.CreateMap.init();
         self.Account.init();
+        self.CheatSheet.init();
 
         //bind lightbox clicks
         $('.openLightbox').click(function (event) {
@@ -362,6 +303,31 @@ Metamaps.GlobalUI.Account = {
     }
 };
 
+Mapmaker.GlobalUI.CheatSheet = {
+    init: function () {
+        // tab the cheatsheet
+        $('#cheatSheet').tabs();
+        $('#quickReference').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+        $("#quickReference .ui-tabs-nav li").removeClass("ui-corner-top").addClass("ui-corner-left");
+        
+        // id = the id of a vimeo video
+        var switchVideo = function (element, id) {
+            $('.tutorialItem').removeClass("active");
+            $(element).addClass("active");
+            $('#tutorialVideo').attr('src','//player.vimeo.com/video/'+id);
+        };
+
+        $('#gettingStarted').click(function() {
+            //switchVideo(this,'88334167');
+        });
+        $('#upYourSkillz').click(function() {
+            //switchVideo(this,'100118167');
+        });
+        $('#advancedMapping').click(function() {
+            //switchVideo(this,'88334167');
+        });
+    }
+};
 
 
 Metamaps.GlobalUI.Search = {
