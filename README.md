@@ -34,7 +34,7 @@ To stop them:
 ```
 ./bin/stop
 ```
-With your webservers running, open a web browser and go to http://localhost:3000
+With your webservers running, open a web browser and go to `http://localhost:3000`
 
 You can sign in with the default account
 email: `user@user.com`
