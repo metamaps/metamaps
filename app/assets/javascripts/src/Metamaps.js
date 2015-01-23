@@ -2812,10 +2812,6 @@ Metamaps.Control = {
     hideNode: function (nodeid) {
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
         var graph = Metamaps.Visualize.mGraph;
-        if (nodeid == Metamaps.Visualize.mGraph.root) { // && Metamaps.Visualize.type === "RGraph"
-            var newroot = _.find(graph.graph.nodes, function(n){ return n.id !== nodeid; });
-            graph.root = newroot ? newroot.id : null;
-        }
 
         Metamaps.Control.deselectNode(node);
 
@@ -2830,6 +2826,10 @@ Metamaps.Control = {
             duration: 500
         });
         setTimeout(function () {
+            if (nodeid == Metamaps.Visualize.mGraph.root) { // && Metamaps.Visualize.type === "RGraph"
+                var newroot = _.find(graph.graph.nodes, function(n){ return n.id !== nodeid; });
+                graph.root = newroot ? newroot.id : null;
+            }
             Metamaps.Visualize.mGraph.graph.removeNode(nodeid);
         }, 500);
         Metamaps.Filter.checkMetacodes();
