@@ -40,29 +40,7 @@ alright now we can download metamaps from the master using git
 
     git clone https://github.com/metamaps/metamaps_gen002.git
 
-now there is a couple other things we are going to need which is phantomjs, nodejs, postgresql, libpq-dev and redis-server
-
-    
-    // 64 bit ubuntu
-    cd /usr/local/share
-    sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2
-    sudo tar xjf phantomjs-1.9.7-linux-x86_64.tar.bz2
-    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-x86_64/bin/phantomjs /usr/local/share/phantomjs
-    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
-    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-x86_64/bin/phantomjs /usr/bin/phantomjs
-    
-    
-    // 32 bit ubuntu
-    cd /usr/local/share
-    sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-i686.tar.bz2
-    sudo tar xjf phantomjs-1.9.7-linux-i686.tar.bz2
-    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-i686/bin/phantomjs /usr/local/share/phantomjs
-    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-i686/bin/phantomjs /usr/local/bin/phantomjs
-    sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-i686/bin/phantomjs /usr/bin/phantomjs
-    
-    // on either running
-    phantomjs -v
-    // will confirm it's installed
+now there is a couple other things we are going to need which is nodejs, postgresql, libpq-dev and redis-server
 
     sudo apt-get install nodejs
 
@@ -113,18 +91,13 @@ Execute the server:
     
     rails s
 
-and dont forget to run the two other servers, for sidekiq, and realtime...
+and dont forget to run the other server for realtime...
 open a new terminal
 navigate to ./realtime and run 
 
     sudo apt-get install npm
     npm install
     nodejs realtime-server.js
-
-open a new terminal
-navigate to the main directory and run 
-
-    sidekiq
 
 Now you're all set enjoy your personal server of metamaps :)
 
