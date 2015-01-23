@@ -4,15 +4,6 @@ function start() {
 
     io.on('connection', function (socket) {
 
-        // this will ping everyone on a map with updates to the map
-        /*redis.on('message', function (channel, message) {
-            console.log(message);
-            var m = JSON.parse(message);
-            var room = 'maps-' + m.mapid;
-
-            socket.emit(room, m);
-        });*/
-
         // this will ping a new person with awareness of who's already on the map
         socket.on('updateNewMapperList', function (data) {
             var existingUser = {
