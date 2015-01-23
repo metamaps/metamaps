@@ -84,7 +84,7 @@
 /* logo */
 
 .footer {
-    z-index: 3;
+    z-index: 3 !important; /* important necessary for firefox */
 }
 
 .logo {
@@ -1199,7 +1199,7 @@
     color: #F5F5F5;
     padding: 16px;
     border-radius: 2px;
-    z-index: 1;
+    z-index: 1 !important; /* important necessary for firefox */
     font-size: 14px;
     line-height:14px;
 }
