@@ -4794,8 +4794,7 @@ Metamaps.Map.InfoBox = {
     createContributorList: function () {
         var self = Metamaps.Map.InfoBox;
 
-        var string = ""; 
-        console.log("hello!!")
+        var string = "";
         string += "<ul>";
 
         Metamaps.Mappers.each(function(m){
@@ -4803,7 +4802,6 @@ Metamaps.Map.InfoBox = {
         });
         
         string += "</ul>";
-        console.log(string);
         return string;
     },
     updateNumbers: function () {
