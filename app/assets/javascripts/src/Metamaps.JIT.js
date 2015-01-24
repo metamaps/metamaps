@@ -28,6 +28,8 @@ Metamaps.JIT = {
 
         $(".takeScreenshot").click(Metamaps.Map.exportImage);
 
+        $('.downloadMap').click(Metamaps.Map.downloadIt);
+
         self.topicDescImage = new Image();
         self.topicDescImage.src = '/assets/topic_description_signifier.png';
 
