@@ -23,14 +23,14 @@ class MetacodesController < ApplicationController
   ### SHOW IS CURRENTLY DISABLED
   # GET /metacodes/1
   # GET /metacodes/1.json
-#  def show
-#    @metacode = Metacode.find(params[:id])
-#
-#    respond_to do |format|
-#      format.html # show.html.erb
-#      format.json { render json: @metacode }
-#    end
-#  end
+  def show
+    @metacode = Metacode.find(params[:id])
+
+    respond_to do |format|
+      #format.html # show.html.erb
+      format.json { render json: @metacode }
+    end
+  end
 
   # GET /metacodes/new
   # GET /metacodes/new.json
