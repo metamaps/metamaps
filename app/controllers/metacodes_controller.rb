@@ -1,6 +1,6 @@
 class MetacodesController < ApplicationController
   
-  before_filter :require_admin, except: [:index]
+  before_filter :require_admin, except: [:index, :show]
     
   # GET /metacodes
   # GET /metacodes.json
