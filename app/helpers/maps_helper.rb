@@ -33,4 +33,39 @@ module MapsHelper
     return temp
   end
 
+  def linkeddata(map)
+  
+    @alltopics = map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+
+    js = Hash.new()
+    
+    js['@context'] = { "@vocab" => "http://schema.org/", "mm" => "http://ns.metamaps.cc/", "mmc" => "http://metamaps.cc/metacodes/" }
+    js['@id'] = "http://metamaps.cc/maps/" + map.id.to_s
+    js['@type'] = [ "CreativeWork", "mm:Metamap" ]  
+    js['name'] = map.name
+    js['description'] = map.desc
+    
+    graph = []
+    
+    @alltopics.each do |t|
+      topic = Hash.new()
+      topic['@id'] = 'http://metamaps.cc/topics/' + t.id.to_s
+      topic['@type'] = [
+        'mmc:' + t.metacode_id.to_s
+      ]
+      topic['name'] = t.name
+      
+      t.synapses2.each do |s|
+        topic['http://metamaps.cc/synapses/' + s.id.to_s] = [ 'http://metamaps.cc/topics/' + s.node1_id.to_s ]
+      end
+      
+      graph.push(topic)
+    end
+    
+    js['@graph'] = graph
+    
+    return js
+  end
 end
+
+

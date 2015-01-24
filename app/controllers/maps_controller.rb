@@ -1,4 +1,5 @@
 class MapsController < ApplicationController
+    include MapsHelper
 
     before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
@@ -120,6 +121,21 @@ class MapsController < ApplicationController
 
         respond_to do |format|
             format.json { render json: @json }
+        end
+    end
+
+    # GET maps/:id/ld
+    def ld
+
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_show(@current)
+
+        if not @map
+            redirect_to root_url, notice: "Access denied. That map is private." and return
+        end
+
+        respond_to do |format|
+            format.json { render json: linkeddata(@map) }
         end
     end
 
