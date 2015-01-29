@@ -356,10 +356,13 @@ Metamaps.Backbone.init = function () {
             return Metamaps.Topics.get(this.get('node2_id'));
         },
         getDirection: function () {
-            return [
-                    this.getTopic1().get('node').id,
-                    this.getTopic2().get('node').id
-                ];
+            var t1 = this.getTopic1(),
+                t2 = this.getTopic2();
+
+            return t1 && t2 ? [
+                    t1.get('node').id,
+                    t2.get('node').id
+                ] : false;
         },
         getMapping: function () {
             
