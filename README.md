@@ -1,6 +1,8 @@
 Metamaps
 =======
 
+[![Join the chat at https://gitter.im/metamaps/metamaps_gen002](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps_gen002?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Welcome to the Metamaps GitHub repo. 
 
 ## About
