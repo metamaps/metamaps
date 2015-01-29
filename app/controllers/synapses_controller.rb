@@ -49,16 +49,16 @@ class SynapsesController < ApplicationController
   # DELETE synapses/:id
   def destroy
     @current = current_user
-    @synapse = Synapse.find(params[:id]).authorize_to_edit(@current)
+    @synapse = Synapse.find(params[:id]).authorize_to_delete(@current)
 
-    @synapse.mappings.each do |m|
-    
-      m.map.touch(:updated_at)
-          
-      m.delete
+    if @synapse
+      @synapse.mappings.each do |m|
+        m.map.touch(:updated_at)
+        m.delete
+      end
+
+      @synapse.delete
     end
-
-    @synapse.delete if @synapse
       
     respond_to do |format|
       format.json { head :no_content }
