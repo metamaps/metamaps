@@ -2449,6 +2449,7 @@ Extras.Classes.Navigation = new Class({
     if(!this.config.zooming) return;
     
     // START METAMAPS CODE
+    e.preventDefault();
 	  if (e.target.id != 'infovis-canvas') return;
     if (Metamaps.Create.newTopic.beingCreated) return;
 	  // END METAMAPS CODE
