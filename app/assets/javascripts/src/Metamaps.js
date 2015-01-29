@@ -893,7 +893,6 @@ Metamaps.TopicCard = {
                     });
                     var embedlyEl = $('<a/>', {
                         id: 'embedlyLink',
-                        'data-card-chrome': '0',
                         'data-card-description': '0',
                         href: text
                     }).html(text);
@@ -1176,7 +1175,7 @@ Metamaps.TopicCard = {
 
         nodeValues.attachmentsHidden = '';
         if (topic.get('link') && topic.get('link')!== '') {
-            nodeValues.embeds = '<a href="' + topic.get('link') + '" id="embedlyLink" target="_blank" data-card-chrome="0" data-card-description="0">';
+            nodeValues.embeds = '<a href="' + topic.get('link') + '" id="embedlyLink" target="_blank" data-card-description="0">';
             nodeValues.embeds += topic.get('link');
             nodeValues.embeds += '</a><div id="embedlyLinkLoader"></div>';
             nodeValues.attachmentsHidden = 'hidden';
