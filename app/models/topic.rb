@@ -110,6 +110,13 @@ class Topic < ActiveRecord::Base
 	end
 	return self
   end
+
+  def authorize_to_delete(user)  
+    if (self.user != user)
+      return false
+    end
+    return self
+  end
   
   # returns Boolean if user allowed to view Topic, Synapse, or Map
   def authorize_to_view(user)  

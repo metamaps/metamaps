@@ -200,7 +200,7 @@ class TopicsController < ApplicationController
     # DELETE topics/:id
     def destroy
         @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_edit(@current)
+        @topic = Topic.find(params[:id]).authorize_to_delete(@current)
 
         if @topic 
             @synapses = @topic.synapses
@@ -230,7 +230,7 @@ class TopicsController < ApplicationController
         end
 
         respond_to do |format|
-            format.js { render :json => "success" }
+            format.json { head :no_content }
         end
     end
 end

@@ -2751,14 +2751,20 @@ Metamaps.Control = {
 
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
         var topic = node.getData('topic');
-        var topicid = topic.id;
-        var mapping = node.getData('mapping');
-        topic.destroy();
-        Metamaps.Mappings.remove(mapping);
-        $(document).trigger(Metamaps.JIT.events.deleteTopic, [{
-            topicid: topicid
-        }]);
-        Metamaps.Control.hideNode(nodeid);
+        
+        var permToDelete = Metamaps.Active.Mapper.id === topic.get('user_id');
+        if (permToDelete) {
+            var topicid = topic.id;
+            var mapping = node.getData('mapping');
+            topic.destroy();
+            Metamaps.Mappings.remove(mapping);
+            $(document).trigger(Metamaps.JIT.events.deleteTopic, [{
+                topicid: topicid
+            }]);
+            Metamaps.Control.hideNode(nodeid);
+        } else {
+            Metamaps.GlobalUI.notifyUser('Only topics you created can be deleted');
+        }
     },
     removeSelectedNodes: function () { // refers to removing topics permanently from a map
 
@@ -2910,27 +2916,33 @@ Metamaps.Control = {
             return;
         }
 
-        if (edge.getData("synapses").length - 1 === 0) {
-            Metamaps.Control.hideEdge(edge);
-        }
-
         var index = edge.getData("displayIndex") ? edge.getData("displayIndex") : 0;
 
         var synapse = edge.getData("synapses")[index];
         var mapping = edge.getData("mappings")[index];
-        var synapseid = synapse.id;
-        synapse.destroy();
+            
+        var permToDelete = Metamaps.Active.Mapper.id === synapse.get('user_id');
+        if (permToDelete) {
+            if (edge.getData("synapses").length - 1 === 0) {
+                Metamaps.Control.hideEdge(edge);
+            }
+        
+            var synapseid = synapse.id;
+            synapse.destroy();
 
-        // the server will destroy the mapping, we just need to remove it here
-        Metamaps.Mappings.remove(mapping);
-        edge.getData("mappings").splice(index, 1);
-        edge.getData("synapses").splice(index, 1);
-        if (edge.getData("displayIndex")) {
-            delete edge.data.$displayIndex;
+            // the server will destroy the mapping, we just need to remove it here
+            Metamaps.Mappings.remove(mapping);
+            edge.getData("mappings").splice(index, 1);
+            edge.getData("synapses").splice(index, 1);
+            if (edge.getData("displayIndex")) {
+                delete edge.data.$displayIndex;
+            }
+            $(document).trigger(Metamaps.JIT.events.deleteSynapse, [{
+                synapseid: synapseid
+            }]);
+        } else {
+            Metamaps.GlobalUI.notifyUser('Only synapses you created can be deleted');
         }
-        $(document).trigger(Metamaps.JIT.events.deleteSynapse, [{
-            synapseid: synapseid
-        }]);
     },
     removeSelectedEdges: function () {
         var l = Metamaps.Selected.Edges.length,
