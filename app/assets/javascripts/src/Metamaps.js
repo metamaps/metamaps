@@ -2762,6 +2762,8 @@ Metamaps.Control = {
                 topicid: topicid
             }]);
             Metamaps.Control.hideNode(nodeid);
+        } else {
+            Metamaps.GlobalUI.notifyUser('Only topics you created can be deleted');
         }
     },
     removeSelectedNodes: function () { // refers to removing topics permanently from a map
@@ -2914,10 +2916,6 @@ Metamaps.Control = {
             return;
         }
 
-        if (edge.getData("synapses").length - 1 === 0) {
-            Metamaps.Control.hideEdge(edge);
-        }
-
         var index = edge.getData("displayIndex") ? edge.getData("displayIndex") : 0;
 
         var synapse = edge.getData("synapses")[index];
@@ -2925,6 +2923,10 @@ Metamaps.Control = {
             
         var permToDelete = Metamaps.Active.Mapper.id === synapse.get('user_id');
         if (permToDelete) {
+            if (edge.getData("synapses").length - 1 === 0) {
+                Metamaps.Control.hideEdge(edge);
+            }
+        
             var synapseid = synapse.id;
             synapse.destroy();
 
@@ -2938,6 +2940,8 @@ Metamaps.Control = {
             $(document).trigger(Metamaps.JIT.events.deleteSynapse, [{
                 synapseid: synapseid
             }]);
+        } else {
+            Metamaps.GlobalUI.notifyUser('Only synapses you created can be deleted');
         }
     },
     removeSelectedEdges: function () {
