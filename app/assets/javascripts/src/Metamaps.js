@@ -1668,29 +1668,52 @@ Metamaps.Visualize = {
             self.mGraph.graph.empty();
         }
 
-        Metamaps.Loading.hide();
-        // load JSON data, if it's not empty
-        if (!self.loadLater) {
-            //load JSON data.
-            var rootIndex = 0;
-            if (Metamaps.Active.Topic) {
-                var node = _.find(Metamaps.JIT.vizData, function(node){
-                    return node.id === Metamaps.Active.Topic.id;
-                });
-                rootIndex = _.indexOf(Metamaps.JIT.vizData, node);
-            }
-            self.mGraph.loadJSON(Metamaps.JIT.vizData, rootIndex);
-            //compute positions and plot.
-            self.computePositions();
-            self.mGraph.busy = true;
-            if (self.type == "RGraph") {
-                self.mGraph.fx.animate(Metamaps.JIT.RGraph.animate);
-            } else if (self.type == "ForceDirected") {
-                self.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout);
-            } else if (self.type == "ForceDirected3D") {
-                self.mGraph.animate(Metamaps.JIT.ForceDirected.animateFDLayout);
+        function runAnimation() {
+            Metamaps.Loading.hide();
+            // load JSON data, if it's not empty
+            if (!self.loadLater) {
+                //load JSON data.
+                var rootIndex = 0;
+                if (Metamaps.Active.Topic) {
+                    var node = _.find(Metamaps.JIT.vizData, function(node){
+                        return node.id === Metamaps.Active.Topic.id;
+                    });
+                    rootIndex = _.indexOf(Metamaps.JIT.vizData, node);
+                }
+                self.mGraph.loadJSON(Metamaps.JIT.vizData, rootIndex);
+                //compute positions and plot.
+                self.computePositions();
+                self.mGraph.busy = true;
+                if (self.type == "RGraph") {
+                    self.mGraph.fx.animate(Metamaps.JIT.RGraph.animate);
+                } else if (self.type == "ForceDirected") {
+                    self.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout);
+                } else if (self.type == "ForceDirected3D") {
+                    self.mGraph.animate(Metamaps.JIT.ForceDirected.animateFDLayout);
+                }
             }
         }
+        // hold until all the needed metacode images are loaded
+        // hold for a maximum of 80 passes, or 4 seconds of waiting time
+        var tries = 0;
+        function hold() {
+            var unique = _.uniq(Metamaps.Topics.models, function (metacode) { return metacode.get('metacode_id'); }),
+                requiredMetacodes = _.map(unique, function (metacode) { return metacode.get('metacode_id'); }),
+                loadedCount = 0;
+
+            _.each(requiredMetacodes, function (metacode_id) {
+                var metacode = Metamaps.Metacodes.get(metacode_id),
+                    img = metacode ? metacode.get('image') : false;
+
+                if (img && (img.complete || (typeof img.naturalWidth !== "undefined" && img.naturalWidth !== 0))) {
+                    loadedCount += 1;
+                }
+            });
+
+            if (loadedCount === requiredMetacodes.length || tries > 80) runAnimation();
+            else setTimeout(function(){ tries++; hold() }, 50);
+        }
+        hold();
 
         // update the url now that the map is ready
         setTimeout(function(){
