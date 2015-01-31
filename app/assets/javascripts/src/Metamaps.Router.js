@@ -10,7 +10,8 @@
             "maps/:id": "maps" // #maps/7
         },
         home: function () {
-            
+            clearTimeout(Metamaps.routerTimeoutId);
+
             if (Metamaps.Active.Mapper) document.title = 'Explore Active Maps | Metamaps';
             else document.title = 'Home | Metamaps';
 
@@ -67,7 +68,8 @@
             Metamaps.Active.Topic = null;
         },
         explore: function (section, id) {
-            
+            clearTimeout(Metamaps.routerTimeoutId);
+
             // just capitalize the variable section
             // either 'featured', 'mapper', or 'active'
             var capitalize = section.charAt(0).toUpperCase() + section.slice(1);
@@ -140,7 +142,8 @@
             Metamaps.Active.Topic = null;
         },
         maps: function (id) {
-            
+            clearTimeout(Metamaps.routerTimeoutId);
+
             document.title = 'Map ' + id + ' | Metamaps';
             
             Metamaps.currentSection = "map";
@@ -173,6 +176,7 @@
             Metamaps.Map.launch(id);
         },
         topics: function (id) {
+            clearTimeout(Metamaps.routerTimeoutId);
             
             document.title = 'Topic ' + id + ' | Metamaps';
             
