@@ -1,7 +1,7 @@
 Metamaps.Backbone = {};
 Metamaps.Backbone.Map = Backbone.Model.extend({
     urlRoot: '/maps',
-    blacklist: ['created_at', 'updated_at', 'user_name', 'contributor_count', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
+    blacklist: ['created_at', 'updated_at', 'created_at_clean', 'updated_at_clean', 'user_name', 'contributor_count', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
     toJSON: function (options) {
         return _.omit(this.attributes, this.blacklist);
     },
@@ -169,10 +169,12 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
             temp = a;
             a = b;
             b = temp;
+            a = (new Date(a)).getTime();
+            b = (new Date(b)).getTime();
         }
         return a > b ? 1 : a < b ? -1 : 0;
     },
-    getMaps: function () {
+    getMaps: function (cb) {
 
         var self = this;
 
@@ -190,7 +192,7 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
                         self.page = "loadedAll";
                     }
                     else self.page += 1;
-                    self.trigger('successOnFetch');
+                    self.trigger('successOnFetch', cb);
                 },
                 error: function (collection, response, options) {
                     // you can pass additional options to the event you trigger here as well
@@ -199,7 +201,7 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
             });
         }
         else {
-            self.trigger('successOnFetch');
+            self.trigger('successOnFetch', cb);
         }
     }
 });

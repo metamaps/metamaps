@@ -76,9 +76,9 @@ class Map < ActiveRecord::Base
   end
 
   def as_json(options={})
-    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at, :created_at, :updated_at])
-    json[:created_at] = self.created_at_str
-    json[:updated_at] = self.updated_at_str
+    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
+    json[:created_at_clean] = self.created_at_str
+    json[:updated_at_clean] = self.updated_at_str
     json
   end
 

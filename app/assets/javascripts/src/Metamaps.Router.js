@@ -22,6 +22,11 @@
             var classes = Metamaps.Active.Mapper ? "homePage explorePage" : "homePage";
             $('.wrapper').addClass(classes);
 
+            var navigate = function() {
+                Metamaps.routerTimeoutId = setTimeout(function() {
+                    Metamaps.Router.navigate("");
+                }, 300);
+            };
             // all this only for the logged in home page
             if (Metamaps.Active.Mapper) {
                 
@@ -38,10 +43,10 @@
 
                 Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Active );
                 if (Metamaps.Maps.Active.length === 0) {
-                    Metamaps.Maps.Active.getMaps(); // this will trigger an explore maps render
+                    Metamaps.Maps.Active.getMaps(navigate); // this will trigger an explore maps render
                 }
                 else {
-                    Metamaps.Views.exploreMaps.render();
+                    Metamaps.Views.exploreMaps.render(navigate);
                 }
             }
             // logged out home page
@@ -55,10 +60,7 @@
                 Metamaps.GlobalUI.Search.close(0, true);
 
                 Metamaps.Famous.maps.hide();
-                clearTimeout(Metamaps.routerTimeoutId);
-                Metamaps.routerTimeoutId = setTimeout(function(){
-                    Metamaps.Router.navigate("");
-                }, 500);
+                Metamaps.routerTimeoutId = setTimeout(navigate, 500);
             }
 
             Metamaps.Famous.viz.hide();
@@ -110,18 +112,32 @@
             }
 
             Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
+
+            var navigate = function(){
+                var path = "/explore/" + Metamaps.currentPage;
+
+                // alter url if for mapper profile page
+                if (Metamaps.currentPage == "mapper") {
+                    path += "/" + Metamaps.Maps.Mapper.mapperId;
+                }
+
+                Metamaps.Router.navigate(path);
+            };
+            var navigateTimeout = function() {
+                Metamaps.routerTimeoutId = setTimeout(navigate, 300);
+            };
             if (Metamaps.Maps[capitalize].length === 0) {
                 Metamaps.Loading.show();
                 setTimeout(function(){
-                    Metamaps.Maps[capitalize].getMaps(); // this will trigger an explore maps render
+                    Metamaps.Maps[capitalize].getMaps(navigate); // this will trigger an explore maps render
                 }, 300); // wait 300 milliseconds till the other animations are done to do the fetch 
             }
             else {
                 if (id) {
-                    Metamaps.Views.exploreMaps.fetchUserThenRender();
+                    Metamaps.Views.exploreMaps.fetchUserThenRender(navigateTimeout);
                 }
                 else {
-                    Metamaps.Views.exploreMaps.render();
+                    Metamaps.Views.exploreMaps.render(navigateTimeout);
                 }
             }
 

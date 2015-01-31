@@ -4744,7 +4744,7 @@ Metamaps.Map.InfoBox = {
 
         var map = Metamaps.Active.Map;
 
-        var obj = map.pick("permission","contributor_count","topic_count","synapse_count","created_at","updated_at");
+        var obj = map.pick("permission","contributor_count","topic_count","synapse_count");
 
         var isCreator = map.authorizePermissionChange(Metamaps.Active.Mapper);
         var canEdit = map.authorizeToEdit(Metamaps.Active.Mapper);
@@ -4758,6 +4758,8 @@ Metamaps.Map.InfoBox = {
         obj["contributor_image"] = Metamaps.Mappers.length > 0 ? Metamaps.Mappers.models[0].get("image") : "/assets/user.png";
         obj["contributor_list"] = self.createContributorList();
         obj["user_name"] = isCreator ? "You" : map.get("user_name");
+        obj["created_at"] = map.get("created_at_clean");
+        obj["updated_at"] = map.get("updated_at_clean");
 
         var classes = isCreator ? "yourMap" : "";
         classes += canEdit ? " canEdit" : "";
