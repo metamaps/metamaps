@@ -54,7 +54,8 @@
                 Metamaps.GlobalUI.Search.close(0, true);
 
                 Metamaps.Famous.maps.hide();
-                setTimeout(function(){
+                clearTimeout(Metamaps.routerTimeoutId);
+                Metamaps.routerTimeoutId = setTimeout(function(){
                     Metamaps.Router.navigate("");
                 }, 500);
             }

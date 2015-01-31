@@ -206,12 +206,15 @@ Metamaps.Famous.build = function () {
         f.maps.mod.setTransform(Transform.translate(window.innerWidth, 94, 0));
     };
     var mapsScroll = new Scrollview();
+    f.maps.lock = false;
     mapsScroll._scroller.on('edgeHit', function(data){
-        if (data.position > 0 && 
+        if (!f.maps.lock &&
+            data.position > 0 && 
             Metamaps.Views && 
             Metamaps.Views.exploreMaps && 
             Metamaps.Views.exploreMaps.collection &&
             Metamaps.Views.exploreMaps.collection.page != "loadedAll") {
+                f.maps.lock = true;
                 Metamaps.Views.exploreMaps.collection.getMaps();
         }
     });

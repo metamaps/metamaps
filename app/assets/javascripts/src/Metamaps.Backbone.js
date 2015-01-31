@@ -176,14 +176,19 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
 
         var self = this;
 
+        Metamaps.Loading.show();
+
         if (this.page != "loadedAll") {
             var numBefore = this.length;
             this.fetch({
                 remove: false,
+                silent: true,
                 data: { page: this.page },
                 success: function (collection, response, options) {
                     // you can pass additional options to the event you trigger here as well
-                    if (collection.length - numBefore < 20) self.page = "loadedAll";
+                    if (collection.length - numBefore < 20) {
+                        self.page = "loadedAll";
+                    }
                     else self.page += 1;
                     self.trigger('successOnFetch');
                 },

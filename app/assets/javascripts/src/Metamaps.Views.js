@@ -91,8 +91,9 @@ Metamaps.Views.init = function () {
             }
 
             Metamaps.Loading.hide();
+            Metamaps.Famous.maps.lock = false;
 
-            clearTimeout(Metamaps.routerTimeoutFunctionIds);
+            clearTimeout(Metamaps.routerTimeoutId);
             Metamaps.routerTimeoutId = setTimeout((function(localCurrentPage){ return function(){
                 var path = (Metamaps.currentSection == "") ? "" : "/explore/" + localCurrentPage;
 

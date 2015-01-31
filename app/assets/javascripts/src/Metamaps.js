@@ -1716,7 +1716,8 @@ Metamaps.Visualize = {
         hold();
 
         // update the url now that the map is ready
-        setTimeout(function(){
+        clearTimeout(Metamaps.routerTimeoutId);
+        Metamaps.routerTimeoutId = setTimeout(function(){
             var m = Metamaps.Active.Map;
             var t = Metamaps.Active.Topic;
 
