@@ -1053,7 +1053,7 @@
 .sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
     content: '';
     position: absolute;
-    top: 128%;
+    top: 129%;
     margin-top: -30px;
     width: 0;
     height: 0;
@@ -1065,7 +1065,7 @@
 .mapInfoIcon div:after, .openCheatsheet div:after {
    content: '';
     position: absolute;
-    top: 77%;
+    top: 76%;
     left: 41%;
     margin-top: 5px;
     width: 0;
