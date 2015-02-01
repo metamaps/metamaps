@@ -1654,8 +1654,8 @@ Metamaps.Visualize = {
             $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
             $jit.ForceDirected.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
             
-            FDSettings.width = $(document).width();
-            FDSettings.height = $(document).height();
+            FDSettings.width = $('body').width();
+            FDSettings.height = $('body').height();
 
             self.mGraph = new $jit.ForceDirected(FDSettings);
 
