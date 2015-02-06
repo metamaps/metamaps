@@ -49,7 +49,7 @@ Driessen][git-branching-model]. Here's an overview:
    changing all the time. It's important that any changes you make are based on
    the most recent version of metamaps, since it's possible that something may
    have changed that breaks your pull request or invalidates its need.
-4. Make sure you have a [Contributor License Agreement][cla] on file.
+4. Make sure you have a [Contributor License Agreement](http://caa.metamaps.cc) on file.
 5. Read on ...
 
 
@@ -59,7 +59,7 @@ Before we can accept any contributions to Metamaps, we first require that all
 individuals or companies agree to our Contributor License Agreement (CLA). The e-mail
 address used in the pull request will be used to check if a CLA has already been
 filed, so be sure to list all email addresses that you might use to submit your
-pull requests when filling it out. Our CLA can be found [here][cla].
+pull requests when filling it out. Our CLA can be found [here](http://caa.metamaps.cc).
 
 ### Testing and Linting
 

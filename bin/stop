@@ -1,0 +1,2 @@
+# stop rails server and node server
+vagrant ssh --command "cd /vagrant; kill -9 $(cat tmp/pids/server.pid); forever stopall"

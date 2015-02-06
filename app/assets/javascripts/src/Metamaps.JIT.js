@@ -1758,7 +1758,9 @@ Metamaps.JIT = {
         var posChild = adj.nodeTo.pos.getc(true);
 
         //plot arrow edge 
-        if (directionCat == "none") {
+        if (!direction) {
+            // render nothing for this arrow if the direction couldn't be retrieved
+        } else if (directionCat == "none") {
             edgeHelper.line.render({
                 x: pos.x,
                 y: pos.y

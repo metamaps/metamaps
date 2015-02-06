@@ -1,6 +1,8 @@
 Metamaps
 =======
 
+[![Join the chat at https://gitter.im/metamaps/metamaps_gen002](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps_gen002?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Welcome to the Metamaps GitHub repo. 
 
 ## About
@@ -15,18 +17,40 @@ To get connected with the community interested in Metamaps, join our [Google+ co
 
 ## Installation
 
-Depending on which OS you are using, the instructions for getting set up with a local installation of the Metamaps software will vary. Because the software has both Node.js components, and RubyOnRails, getting set up with your local copy can take 1 to 2 hours.
+If you are on Mac or Ubuntu you can use the following instructions to quickly get a local copy of metamaps up and running using a Vagrant virtualbox. Don't be intimidated, it's easy!
+```
+git clone git@github.com:metamaps/metamaps_gen002.git
+```
+Now ensure you have VirtualBox and Vagrant installed on your computer
+```
+cd metamaps_gen002
+./configure.sh
+```
+This will do all the setup steps to make Metamaps work with a bit of behind the scenes ninja magick.
+
+To start servers which will run metamaps you can then run:
+```
+./bin/start
+```
+To stop them:
+```
+./bin/stop
+```
+With your webservers running, open a web browser and go to `http://localhost:3000`
+
+You can sign in with the default account
+email: `user@user.com`
+password: `toolsplusconsciousness`
+OR create a new account at `/join`, and use access code `qwertyui`
+
+Start mapping and programming!
+
+While we are still figuring out vagrant for Windows, there is an older set of instructions below
 - [For Windows][windows-installation]
-- [For Ubuntu][ubuntu-installation]
-- [For Mac][mac-installation]
 
 ## Contributing
 
 Cloning this repository directly is primarily for those wishing to contribute to our codebase. Check out our [contributing instructions][contributing] to get involved. 
-  
-## Documentation
-
-- TODO
 
 ## Community
 
@@ -41,7 +65,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 The license can be read [here][license].
 
-Copyright (c) 2014 Connor Turland
+Copyright (c) 2015 Connor Turland
 
 
 [site-blog]: http://blog.metamaps.cc
@@ -51,5 +75,3 @@ Copyright (c) 2014 Connor Turland
 [contributing]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md
 [contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md#reporting-bugs-and-other-issues
 [windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/WindowsInstallation.md
-[mac-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/MacInstallation.md
-[ubuntu-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/UbuntuInstallation.md

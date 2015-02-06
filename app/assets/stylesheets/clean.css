@@ -84,7 +84,7 @@
 /* logo */
 
 .footer {
-    z-index: 3;
+    z-index: 3 !important; /* important necessary for firefox */
 }
 
 .logo {
@@ -1041,7 +1041,7 @@
 .sidebarCollaborateIcon div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
     content: '';
     position: absolute;
-    top: 128%;
+    top: 129%;
     margin-top: -30px;
     width: 0;
     height: 0;
@@ -1053,7 +1053,7 @@
 .mapInfoIcon div:after, .openCheatsheet div:after {
    content: '';
     position: absolute;
-    top: 77%;
+    top: 76%;
     left: 41%;
     margin-top: 5px;
     width: 0;
@@ -1187,7 +1187,7 @@
     color: #F5F5F5;
     padding: 16px;
     border-radius: 2px;
-    z-index: 1;
+    z-index: 1 !important; /* important necessary for firefox */
     font-size: 14px;
     line-height:14px;
 }

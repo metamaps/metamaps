@@ -206,15 +206,24 @@ Metamaps.Famous.build = function () {
         f.maps.mod.setTransform(Transform.translate(window.innerWidth, 94, 0));
     };
     var mapsScroll = new Scrollview();
-    mapsScroll._scroller.on('edgeHit', function(data){
-        if (data.position > 0 && 
+    f.maps.lock = false;
+    mapsScroll._eventInput.on('update', _.throttle(function(data) {
+        var bottom = f.maps.surf.getSize()[1], // how far down it goes
+            pos = mapsScroll.getPosition(), // how far down you are
+            containerSize = f.maps.mod.getSize()[1], // height of the viewable area
+            distanceToBottom = bottom - (pos + containerSize),
+            triggerDistance = 700;
+
+        if (!f.maps.lock &&
+            distanceToBottom < triggerDistance && 
             Metamaps.Views && 
             Metamaps.Views.exploreMaps && 
             Metamaps.Views.exploreMaps.collection &&
             Metamaps.Views.exploreMaps.collection.page != "loadedAll") {
+                f.maps.lock = true;
                 Metamaps.Views.exploreMaps.collection.getMaps();
         }
-    });
+    }, 500));
     f.maps.resetScroll = function() {
         // set the scrollView back to the top
         mapsScroll._physicsEngine.detachAll();

@@ -10,7 +10,8 @@
             "maps/:id": "maps" // #maps/7
         },
         home: function () {
-            
+            clearTimeout(Metamaps.routerTimeoutId);
+
             if (Metamaps.Active.Mapper) document.title = 'Explore Active Maps | Metamaps';
             else document.title = 'Home | Metamaps';
 
@@ -21,6 +22,11 @@
             var classes = Metamaps.Active.Mapper ? "homePage explorePage" : "homePage";
             $('.wrapper').addClass(classes);
 
+            var navigate = function() {
+                Metamaps.routerTimeoutId = setTimeout(function() {
+                    Metamaps.Router.navigate("");
+                }, 300);
+            };
             // all this only for the logged in home page
             if (Metamaps.Active.Mapper) {
                 
@@ -37,10 +43,10 @@
 
                 Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Active );
                 if (Metamaps.Maps.Active.length === 0) {
-                    Metamaps.Maps.Active.getMaps(); // this will trigger an explore maps render
+                    Metamaps.Maps.Active.getMaps(navigate); // this will trigger an explore maps render
                 }
                 else {
-                    Metamaps.Views.exploreMaps.render();
+                    Metamaps.Views.exploreMaps.render(navigate);
                 }
             }
             // logged out home page
@@ -54,9 +60,7 @@
                 Metamaps.GlobalUI.Search.close(0, true);
 
                 Metamaps.Famous.maps.hide();
-                setTimeout(function(){
-                    Metamaps.Router.navigate("");
-                }, 500);
+                Metamaps.routerTimeoutId = setTimeout(navigate, 500);
             }
 
             Metamaps.Famous.viz.hide();
@@ -66,7 +70,8 @@
             Metamaps.Active.Topic = null;
         },
         explore: function (section, id) {
-            
+            clearTimeout(Metamaps.routerTimeoutId);
+
             // just capitalize the variable section
             // either 'featured', 'mapper', or 'active'
             var capitalize = section.charAt(0).toUpperCase() + section.slice(1);
@@ -107,18 +112,32 @@
             }
 
             Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
+
+            var navigate = function(){
+                var path = "/explore/" + Metamaps.currentPage;
+
+                // alter url if for mapper profile page
+                if (Metamaps.currentPage == "mapper") {
+                    path += "/" + Metamaps.Maps.Mapper.mapperId;
+                }
+
+                Metamaps.Router.navigate(path);
+            };
+            var navigateTimeout = function() {
+                Metamaps.routerTimeoutId = setTimeout(navigate, 300);
+            };
             if (Metamaps.Maps[capitalize].length === 0) {
                 Metamaps.Loading.show();
                 setTimeout(function(){
-                    Metamaps.Maps[capitalize].getMaps(); // this will trigger an explore maps render
+                    Metamaps.Maps[capitalize].getMaps(navigate); // this will trigger an explore maps render
                 }, 300); // wait 300 milliseconds till the other animations are done to do the fetch 
             }
             else {
                 if (id) {
-                    Metamaps.Views.exploreMaps.fetchUserThenRender();
+                    Metamaps.Views.exploreMaps.fetchUserThenRender(navigateTimeout);
                 }
                 else {
-                    Metamaps.Views.exploreMaps.render();
+                    Metamaps.Views.exploreMaps.render(navigateTimeout);
                 }
             }
 
@@ -139,7 +158,8 @@
             Metamaps.Active.Topic = null;
         },
         maps: function (id) {
-            
+            clearTimeout(Metamaps.routerTimeoutId);
+
             document.title = 'Map ' + id + ' | Metamaps';
             
             Metamaps.currentSection = "map";
@@ -172,6 +192,7 @@
             Metamaps.Map.launch(id);
         },
         topics: function (id) {
+            clearTimeout(Metamaps.routerTimeoutId);
             
             document.title = 'Topic ' + id + ' | Metamaps';
             
