@@ -1,6 +1,7 @@
 class Map < ActiveRecord::Base
 
   belongs_to :user
+  has_many :map_views
 
   has_many :topicmappings, :class_name => 'Mapping', :conditions => {:category => 'Topic'}
   has_many :synapsemappings, :class_name => 'Mapping', :conditions => {:category => 'Synapse'}

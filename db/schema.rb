@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141121204712) do
+ActiveRecord::Schema.define(:version => 20150209003902) do
 
   create_table "in_metacode_sets", :force => true do |t|
     t.integer  "metacode_id"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(:version => 20141121204712) do
 
   add_index "in_metacode_sets", ["metacode_id"], :name => "index_in_metacode_sets_on_metacode_id"
   add_index "in_metacode_sets", ["metacode_set_id"], :name => "index_in_metacode_sets_on_metacode_set_id"
+
+  create_table "map_views", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "map_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "map_views", ["map_id"], :name => "index_map_views_on_map_id"
+  add_index "map_views", ["user_id"], :name => "index_map_views_on_user_id"
 
   create_table "mappings", :force => true do |t|
     t.text     "category"

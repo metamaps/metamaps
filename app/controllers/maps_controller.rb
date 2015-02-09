@@ -1,4 +1,5 @@
 class MapsController < ApplicationController
+    include MapsHelper
 
     before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
@@ -69,6 +70,8 @@ class MapsController < ApplicationController
             redirect_to root_url, notice: "Access denied. That map is private." and return
         end
 
+        log_page_view(@current, params[:id])
+
         respond_to do |format|
             format.html { 
                 @allmappers = @map.contributors
@@ -98,6 +101,8 @@ class MapsController < ApplicationController
         if not @map
             redirect_to root_url, notice: "Access denied. That map is private." and return
         end
+
+        log_page_view(@current, params[:id])
 
         @allmappers = @map.contributors
         @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }

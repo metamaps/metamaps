@@ -1,5 +1,15 @@
 module MapsHelper
 
+  def log_page_view(user, mapId)
+    if user
+      MapView.find_or_create_by_user_id_and_map_id(user.id, mapId).touch(:updated_at)
+
+      #limit records of map views for this user to ten
+      MapView.where(user_id: user.id).order('updated_at desc').offset(10).destroy_all
+    end
+  end
+
+
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_map_array_json(maps)
     temp = []
