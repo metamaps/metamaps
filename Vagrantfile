@@ -18,6 +18,9 @@ sudo apt-get install postgresql -y
 sudo apt-get install libpq-dev -y
 sudo apt-get install redis-server -y
 
+# get imagemagick
+sudo apt-get install imagemagick --fix-missing
+
 # Install node
 ln -fs /usr/bin/nodejs /usr/bin/node
 
