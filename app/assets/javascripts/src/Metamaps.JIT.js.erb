@@ -1047,7 +1047,11 @@ Metamaps.JIT = {
             Metamaps.TopicCard.hideCard();
             Metamaps.SynapseCard.hideCard();
             Metamaps.Create.newTopic.hide();
-            Metamaps.Create.newSynapse.hide();
+            if ($('#new_synapse').is(":visible")) {
+              // Hide the new_synapse form and create the synapse!
+              Metamaps.Synapse.createSynapseLocally();
+            }//if
+
             $('.rightclickmenu').remove();
             // reset the draw synapse positions to false
             Metamaps.Mouse.synapseStartCoordinates = [];
