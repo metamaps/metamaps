@@ -2776,7 +2776,7 @@ Metamaps.Control = {
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
         var topic = node.getData('topic');
         
-        var permToDelete = Metamaps.Active.Mapper.id === topic.get('user_id');
+        var permToDelete = Metamaps.Active.Mapper.id === topic.get('user_id') || Metamaps.Active.Mapper.get('admin');
         if (permToDelete) {
             var topicid = topic.id;
             var mapping = node.getData('mapping');
@@ -2945,7 +2945,7 @@ Metamaps.Control = {
         var synapse = edge.getData("synapses")[index];
         var mapping = edge.getData("mappings")[index];
             
-        var permToDelete = Metamaps.Active.Mapper.id === synapse.get('user_id');
+        var permToDelete = Metamaps.Active.Mapper.id === synapse.get('user_id') || Metamaps.Active.Mapper.get('admin');
         if (permToDelete) {
             if (edge.getData("synapses").length - 1 === 0) {
                 Metamaps.Control.hideEdge(edge);
