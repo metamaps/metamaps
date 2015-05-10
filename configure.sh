@@ -7,6 +7,7 @@ fi
 vagrant up
 
 # Bundle!
+vagrant ssh --command "cd /vagrant; gem install bundler";
 vagrant ssh --command "cd /vagrant; bundle install";
 
 # copy the db config
