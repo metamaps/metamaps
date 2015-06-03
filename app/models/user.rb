@@ -45,7 +45,8 @@ class User < ActiveRecord::Base
   def as_json(options={})
     { :id => self.id,
       :name => self.name,
-      :image => self.image.url(:sixtyfour)
+      :image => self.image.url(:sixtyfour),
+      :admin => self.admin
     }
   end
   
