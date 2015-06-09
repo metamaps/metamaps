@@ -28,10 +28,10 @@ Metamaps.Settings = {
         synapses: {
             normal: '#888888',
             hover: '#888888',
-            selected: '#FFFFFF'
+            selected: '#aea9fd'
         },
         topics: {
-            selected: '#FFFFFF'
+            selected: '#aea9fd'
         },
         labels: {
             background: '#18202E',
