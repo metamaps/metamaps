@@ -736,7 +736,9 @@ font-family: 'din-regular', helvetica, sans-serif;
 
 .CardOnGraph .embeds {
   position: relative;
+  overflow: hidden;
 }
+
 #linkremove {
   background-image: url(/assets/remove.png);
   background-repeat: no-repeat;
