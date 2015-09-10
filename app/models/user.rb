@@ -11,8 +11,6 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
   
-  attr_accessible :name, :email, :image, :password, :password_confirmation, :code, :joinedwithcode, :remember_me
-
   serialize :settings, UserPreference
 	
   validates :password, :presence => true,
