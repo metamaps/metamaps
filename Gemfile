@@ -38,6 +38,7 @@ group :production do #this is used on heroku
 end
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # To use Jbuilder templates for JSON
 gem 'jbuilder'
