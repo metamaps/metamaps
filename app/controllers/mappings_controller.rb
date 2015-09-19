@@ -13,7 +13,7 @@ class MappingsController < ApplicationController
 
   # POST /mappings.json
   def create
-    @mapping = Mapping.new(params[:mapping])
+    @mapping = Mapping.new(mapping_params)
 
     @mapping.map.touch(:updated_at)
 
@@ -30,7 +30,7 @@ class MappingsController < ApplicationController
 
     @mapping.map.touch(:updated_at)
 
-    if @mapping.update_attributes(params[:mapping])
+    if @mapping.update_attributes(mapping_params)
       head :no_content
     else
       render json: @mapping.errors, status: :unprocessable_entity
