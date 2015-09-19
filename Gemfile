@@ -38,6 +38,12 @@ group :production do #this is used on heroku
  #gem 'rmagick'
 end
 
+group :development, :test do
+  gem 'pry-rails'
+  gem 'better_errors'
+  gem 'quiet_assets'
+end
+
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
