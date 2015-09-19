@@ -21,7 +21,7 @@ class SynapsesController < ApplicationController
   # POST /synapses
   # POST /synapses.json
   def create
-    @synapse = Synapse.new(params[:synapse])
+    @synapse = Synapse.new(synapse_params)
 
     respond_to do |format|
       if @synapse.save
@@ -38,7 +38,7 @@ class SynapsesController < ApplicationController
     @synapse = Synapse.find(params[:id])
 
     respond_to do |format|
-      if @synapse.update_attributes(params[:synapse])
+      if @synapse.update_attributes(synapse_params)
         format.json { head :no_content }
       else
         format.json { render json: @synapse.errors, status: :unprocessable_entity }

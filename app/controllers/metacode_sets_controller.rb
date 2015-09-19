@@ -45,7 +45,7 @@ class MetacodeSetsController < ApplicationController
   # POST /metacode_sets.json
   def create
     @user = current_user
-    @metacode_set = MetacodeSet.new(params[:metacode_set])
+    @metacode_set = MetacodeSet.new(metacode_set_params)
     @metacode_set.user_id = @user.id
 
     respond_to do |format|
@@ -70,7 +70,7 @@ class MetacodeSetsController < ApplicationController
     @metacode_set = MetacodeSet.find(params[:id])
 
     respond_to do |format|
-      if @metacode_set.update_attributes(params[:metacode_set])
+      if @metacode_set.update_attributes(metacode_set_params)
         
         # build an array of the IDs of the metacodes currently in the set
         @currentMetacodes = @metacode_set.metacodes.map{ |m| m.id.to_s }  

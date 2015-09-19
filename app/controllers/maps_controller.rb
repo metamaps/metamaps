@@ -180,7 +180,7 @@ class MapsController < ApplicationController
         respond_to do |format|
             if !@map 
                 format.json { render json: "unauthorized" }
-            elsif @map.update_attributes(params[:map])
+            elsif @map.update_attributes(map_params)
                 format.json { head :no_content }
             else
                 format.json { render json: @map.errors, status: :unprocessable_entity }
