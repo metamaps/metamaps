@@ -2,10 +2,6 @@ class MetacodeSetsController < ApplicationController
   
   before_filter :require_admin
 
-  def metacode_set_params
-    params.require(:metacode_set).permit(:desc, :mapperContributed, :name)
-  end
-    
   # GET /metacode_sets
   # GET /metacode_sets.json
   def index
@@ -120,4 +116,11 @@ class MetacodeSetsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+
+  def metacode_set_params
+    params.require(:metacode_set).permit(:desc, :mapperContributed, :name)
+  end
+    
 end

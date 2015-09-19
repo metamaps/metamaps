@@ -64,4 +64,10 @@ class SynapsesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+
+  def synapse_params
+    params.require(:synapse).permit(:id, :desc, :category, :weight, :permission, :node1_id, :node2_id, :user_id)
+  end
 end

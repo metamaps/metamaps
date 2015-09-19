@@ -93,4 +93,11 @@ class MetacodesController < ApplicationController
 #      format.json { head :no_content }
 #    end
 #  end
+
+  private
+
+    # Never trust parameters from the scary internet, only allow the white list through.      
+    def metacode_params
+      params.require(:metacode).permit(:id, :name, :icon, :color)
+    end
 end
