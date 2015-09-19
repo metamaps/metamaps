@@ -72,9 +72,9 @@ class MapsController < ApplicationController
         respond_to do |format|
             format.html { 
                 @allmappers = @map.contributors
-                @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-                @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-                @allmappings = @map.mappings.delete_if {|m| 
+                @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+                @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @allmappings = @map.mappings.to_a.delete_if {|m| 
                     if m.category == "Synapse"
                         object = m.synapse
                     elsif m.category == "Topic"
@@ -100,9 +100,9 @@ class MapsController < ApplicationController
         end
 
         @allmappers = @map.contributors
-        @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-        @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-        @allmappings = @map.mappings.delete_if {|m| 
+        @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @allmappings = @map.mappings.to_a.delete_if {|m| 
             if m.category == "Synapse"
                 object = m.synapse
             elsif m.category == "Topic"
