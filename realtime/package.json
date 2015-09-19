@@ -3,6 +3,7 @@
   "description": "providing real-time sychronization for ruby on rails",
   "version": "0.0.1",
   "dependencies": {
-    "socket.io": "0.9.12"
+    "socket.io": "0.9.12",
+    "node-uuid": "1.2.0"
   }
 }

@@ -1910,11 +1910,15 @@ Metamaps.Realtime = {
     stringForLocalhost: 'http://localhost:5001',
     stringForMetamaps: 'http://metamaps.cc:5001',
     stringForHeroku: 'http://gentle-savannah-1303.herokuapp.com',
+    videoId: 'video-wrapper',
     socket: null,
+    webrtc: null,
+    readyToCall: false,
     isOpen: false,
     changing: false,
     mappersOnMap: {},
-    status: true, // stores whether realtime is True/On or False/Off
+    status: true, // stores whether realtime is True/On or False/Off,
+    localVideo: null,
     init: function () {
         var self = Metamaps.Realtime;
 
@@ -1935,10 +1939,54 @@ Metamaps.Realtime = {
 
         var railsEnv = $('body').data('env');
         var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
-        self.socket = io.connect(whichToConnect);
+        self.socket = new SocketIoConnection({ url: whichToConnect });
         self.socket.on('connect', function () {
             self.startActiveMap();
         });
+        self.webrtc = new SimpleWebRTC({
+            connection: self.socket,
+            localVideoEl: self.videoId,
+            remoteVideosEl: '',
+            detectSpeakingEvents: true,
+            autoAdjustMic: true,
+            autoRequestMedia: false,
+            localVideo: {
+                autoplay: true,
+                mirror: true,
+                muted: true
+            },
+            media: {
+              video: true,
+              audio: true
+            }
+        });
+        self.webrtc.on('readyToCall', function () {
+          self.readyToCall = true;
+          if (self.localVideo && self.status) {
+            $('#wrapper').append(self.localVideo.view.$container);
+          }
+        });
+
+        var
+          $video = $('<video></video>').attr('id', self.videoId);
+        self.localVideo = {
+            $video: $video,
+            view: new Metamaps.Views.videoView($video[0], $('body'), 'me', true, { DOUBLE_CLICK_TOLERANCE: 200 }),     
+        };
+
+        self.room = new Metamaps.Views.room({
+          webrtc: self.webrtc,
+          socket: self.socket,
+          username: 'dude',//getUsername(opts.user, provider),
+          image: 'https://pbs.twimg.com/profile_images/436050101539065856/QMGlzCUn_400x400.jpeg', //getImage(opts.user, provider),
+          room: 'global',
+          $video: self.localVideo.$video,
+          myVideoView: self.localVideo.view,
+          config: { DOUBLE_CLICK_TOLERANCE: 200 }
+        });
+
+        self.createChat();
+        self.webrtc.startLocalVideo();
     },
     toggleBox: function (event) {
         var self = Metamaps.Realtime;
@@ -2019,6 +2067,31 @@ Metamaps.Realtime = {
         self.status = true;
         $(".sidebarCollaborateIcon").addClass("blue");
         $(".collabCompass").show();
+        if (self.localVideo) $('#wrapper').append(self.localVideo.view.$container);
+        self.room.room = 'map-' + Metamaps.Active.Map.id;
+        self.room.join(function (err, roomDesc) {
+          console.log('joining');
+          attachMediaStream(self.webrtc.webrtc.localStream, self.localVideo.$video[0]);
+
+          function addVideo(v) {
+            // random position for now
+            var top = Math.floor((Math.random() * ($('#wrapper').height() - 100)) + 1);
+            var left = Math.floor((Math.random() * ($('#wrapper').width() - 100)) + 1);
+            //var right = Math.floor((Math.random() * (468 - 100)) + 1);
+            v.setParent($('#wrapper'));
+            $('#wrapper').append(v.$container);
+            v.$container.css({
+                top: top + 'px',
+                left: left + 'px'
+            });
+          }
+
+          self.room.videoAdded(addVideo);
+          
+          for (peer in self.room.videos) {
+            addVideo(self.room.videos[peer]);
+          }
+        });
     },
     turnOff: function (silent) {
         var self = Metamaps.Realtime;
@@ -2031,6 +2104,7 @@ Metamaps.Realtime = {
             self.status = false;
             $(".sidebarCollaborateIcon").removeClass("blue");
             $(".collabCompass").hide();
+            $('#' + self.videoId).remove();
         }
     },
     setupSocket: function () {
@@ -2153,6 +2227,12 @@ Metamaps.Realtime = {
         var socket = Metamaps.Realtime.socket;
 
         socket.on('mapChangeFromServer', self.mapChange);
+    },
+    createChat: function() {
+        var self = Metamaps.Realtime;
+
+        $('#wrapper').append(self.room.chat.$container);
+        //self.room.chat.open();
     },
     sendRealtimeOn: function () {
         var self = Metamaps.Realtime;

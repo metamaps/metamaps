@@ -20,6 +20,9 @@
 //= require ./src/Metamaps.Router
 //= require ./src/Metamaps.Backbone
 //= require ./src/Metamaps.Views
+//= require ./src/views/chatView
+//= require ./src/views/videoView
+//= require ./src/views/room
 //= require ./src/JIT
 //= require ./src/Metamaps
 //= require ./src/Metamaps.JIT

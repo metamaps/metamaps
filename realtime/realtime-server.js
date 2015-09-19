@@ -1,6 +1,11 @@
-var io = require('socket.io').listen(5001);
+var
+  io = require('socket.io').listen(5001),
+  signalServer = require('./signal'),
+  stunservers = [{"url": "stun:stun.l.google.com:19302"}];
 
 function start() {
+
+    signalServer(io, stunservers);
 
     io.on('connection', function (socket) {
 
