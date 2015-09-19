@@ -127,7 +127,7 @@ class MainController < ApplicationController
     end
     
     #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
-    @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+    @topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
     
     render json: autocomplete_array_json(@topics)
   end
@@ -163,7 +163,7 @@ class MainController < ApplicationController
     end
     
     #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
-    @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
+    @maps.to_a.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
     
     render json: autocomplete_map_array_json(@maps)
   end
@@ -199,7 +199,7 @@ class MainController < ApplicationController
       # remove any duplicate synapse types that just differ by 
       # leading or trailing whitespaces
       collectedDesc = []
-      @synapses.delete_if {|s|
+      @synapses.to_a.delete_if {|s|
         desc = s.desc == nil || s.desc == "" ? "" : s.desc.strip
         if collectedDesc.index(desc) == nil
           collectedDesc.push(desc)
@@ -221,7 +221,7 @@ class MainController < ApplicationController
       @synapses.sort! {|s1,s2| s1.desc <=> s2.desc }
       
       #read this next line as 'delete a synapse if its private and you're either 1. logged out or 2. logged in but not the synapse creator
-      @synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+      @synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
     
       render json: autocomplete_synapse_array_json(@synapses)
     else
