@@ -36,6 +36,7 @@ end
 
 group :production do #this is used on heroku
  #gem 'rmagick'
+ gem 'rails_12factor'
 end
 
 group :development, :test do
