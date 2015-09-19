@@ -2,8 +2,10 @@ class Map < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :topics, -> { Mapping.topicmapping }, :through => :topicmappings
-  has_many :synapses, -> { Mapping.synapsemapping }, :through => :synapsemappings
+  has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping
+  has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping
+  has_many :topics, through: :topicmappings
+  has_many :synapses, through: :synapsemappings
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {

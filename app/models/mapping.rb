@@ -1,7 +1,7 @@
 class Mapping < ActiveRecord::Base
 
-  scope :topicmapping, -> { where (category: :Topic) }
-  scope :synapsemapping, -> { where (category: :Synapse) }
+  scope :topicmapping, -> { where(category: :Topic) }
+  scope :synapsemapping, -> { where(category: :Synapse) }
 
   belongs_to :topic, :class_name => "Topic", :foreign_key => "topic_id"
   belongs_to :synapse, :class_name => "Synapse", :foreign_key => "synapse_id"
