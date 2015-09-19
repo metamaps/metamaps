@@ -10,7 +10,6 @@ class TopicsController < ApplicationController
         @current = current_user
         term = params[:term]
         if term && !term.empty?
-            # !connor term here needs to have .downcase
             @topics = Topic.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
 
             #read this next line as 'delete a topic if its private and you're either 
@@ -233,4 +232,10 @@ class TopicsController < ApplicationController
             format.json { head :no_content }
         end
     end
+
+  private
+
+  def topic_params
+    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :user_id, :metacode_id)
+  end
 end

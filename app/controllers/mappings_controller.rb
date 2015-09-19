@@ -48,4 +48,10 @@ class MappingsController < ApplicationController
 
     head :no_content 
   end
+
+  private
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def mapping_params
+      params.require(:mapping).permit(:id, :category, :xloc, :yloc, :topic_id, :synapse_id, :map_id, :user_id)
+    end
 end
