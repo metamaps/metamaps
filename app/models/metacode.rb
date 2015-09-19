@@ -13,5 +13,4 @@ class Metacode < ActiveRecord::Base
     return true if self.metacode_sets.include? metacode_set
     return false
   end
-
 end
