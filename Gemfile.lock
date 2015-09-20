@@ -72,6 +72,7 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    dotenv (2.0.0)
     erubis (2.7.0)
     execjs (2.6.0)
     ezcrypto (0.7.2)
@@ -198,6 +199,7 @@ DEPENDENCIES
   cancancan
   coffee-rails
   devise
+  dotenv
   formtastic
   formula
   jbuilder

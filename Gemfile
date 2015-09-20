@@ -14,6 +14,7 @@ gem 'rails3-jquery-autocomplete'
 gem 'best_in_place' #in-place editing
 gem 'kaminari' # pagination
 gem 'uservoice-ruby'
+gem 'dotenv'
 
 gem 'paperclip'
 gem 'aws-sdk'

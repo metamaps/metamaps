@@ -6,6 +6,7 @@
 
 realtime/node_modules
 config/database.yml
+.env
 #public/assets
 
 # Ignore bundler config

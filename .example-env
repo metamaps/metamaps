@@ -1,0 +1,18 @@
+RAILS_ENV=development
+
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+BUNDLE_GEMFILE
+SMTP_DOMAIN
+SMTP_PASSWORD
+SMTP_PORT
+SMTP_SERVER
+SMTP_USERNAME
+SSO_KEY
+
+## find the ENV currently in use in the app using : 
+##   grep -rIso -P "(?<=ENV)(\.fetch\(|\[).[A-Z_]+.(\)|\])" 
+
+# for a uniq ordered list of env vars:
+##   grep -rIsoh -P "(?<=ENV)(\.fetch\(|\[).[A-Z_]+.(\)|\])" | grep -oP "[A-Z_]+" | sort -u > temp 
+
