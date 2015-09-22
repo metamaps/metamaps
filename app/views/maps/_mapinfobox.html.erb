@@ -13,7 +13,7 @@
   <div class="mapInfoStat">
     <div class="infoStatIcon mapContributors hoverForTip">
       <% if @map.contributors.count == 0 %>
-        <img id="mapContribs" width="25" height="25" src="/assets/user.png" />
+        <img id="mapContribs" width="25" height="25" src="<%= asset_path('user.png'); %>" />
       <% elsif @map.contributors.count == 1 %>
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:thirtytwo) %>" />
       <% elsif @map.contributors.count == 2 %>
