@@ -665,8 +665,11 @@ Metamaps.Create = {
             });
 
             // initialize the autocomplete results for the metacode spinner
-            $('#topic_name').typeahead([
+            $('#topic_name').typeahead(
                 {
+                    minLength: 2,
+                },    
+                [{
                     name: 'topic_autocomplete',
                     limit: 8,
                     template: $('#topicAutocompleteTemplate').html(),
@@ -674,8 +677,8 @@ Metamaps.Create = {
                         url: '/topics/autocomplete_topic?term=%QUERY'
                     },
                     engine: Hogan
-                  }
-            ]);
+                }]
+            );
 
             // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
             $('#topic_name').bind('typeahead:selected', function (event, datum, dataset) {
@@ -724,8 +727,11 @@ Metamaps.Create = {
             });
 
             // initialize the autocomplete results for synapse creation
-            $('#synapse_desc').typeahead([
+            $('#synapse_desc').typeahead(
                 {
+                    minLength: 2,
+                }, 
+                [{
                     name: 'synapse_autocomplete',
                     template: "<div class='genericSynapseDesc'>{{label}}</div>",
                     remote: {
@@ -745,8 +751,8 @@ Metamaps.Create = {
                     },
                     engine: Hogan,
                     header: "<h3>Existing synapses</h3>"
-                }
-          ]);
+                }]
+          );
 
             $('#synapse_desc').bind('typeahead:selected', function (event, datum, dataset) {
                 if (datum.id) { // if they clicked on an existing synapse get it
