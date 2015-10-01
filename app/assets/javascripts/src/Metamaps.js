@@ -672,11 +672,15 @@ Metamaps.Create = {
                 [{
                     name: 'topic_autocomplete',
                     limit: 8,
-                    template: $('#topicAutocompleteTemplate').html(),
-                    remote: {
-                        url: '/topics/autocomplete_topic?term=%QUERY'
+                    template: Hogan.compile($('#topicAutocompleteTemplate').html()),
+                    source: function(query, syncResults, asyncResults) {
+                      syncResults([]); //we don't got none
+                      var url = '/topics/autocomplete_topic?term=' + query;
+                      $.ajax(url, {
+                        success: function(data) { asyncResults(data); },
+                        error: function() { asyncResults([]); },
+                      });
                     },
-                    engine: Hogan
                 }]
             );
 
@@ -733,23 +737,34 @@ Metamaps.Create = {
                 }, 
                 [{
                     name: 'synapse_autocomplete',
-                    template: "<div class='genericSynapseDesc'>{{label}}</div>",
-                    remote: {
-                        url: '/search/synapses?term=%QUERY'
+                    template: Hogan.compile("<div class='genericSynapseDesc'>{{label}}</div>"),
+                    source: function(query, syncResults, asyncResults) {
+                      syncResults([]); //we don't got none
+                      var url = '/search/synapses?term=' + query;
+                      $.ajax(url, {
+                        success: function(data) { asyncResults(data); },
+                        error: function() { asyncResults([]); },
+                      });
                     },
-                    engine: Hogan
                 },
                 {
                     name: 'existing_synapses',
                     limit: 50,
-                    template: $('#synapseAutocompleteTemplate').html(),
-                    remote: {
-                        url: '/search/synapses',
-                        replace: function () {
-                            return self.getSearchQuery();
-                        }
+                    template: Hogan.compile($('#synapseAutocompleteTemplate').html()),
+                    source: function(query, syncResults, asyncResults) {
+                      syncResults([]); //we don't got none
+                      var self = Metamaps.Create.newSynapse;
+
+                      if (Metamaps.Selected.Nodes.length < 2) {
+                        var url = '/search/synapses?topic1id=' + self.topic1id + '&topic2id=' + self.topic2id;
+                        $.ajax(url, {
+                          success: function(data) { asyncResults(data); },
+                          error: function() { asyncResults([]); },
+                        });
+                      } else {
+                        asyncResults([]);
+                      }
                     },
-                    engine: Hogan,
                     header: "<h3>Existing synapses</h3>"
                 }]
           );
@@ -785,13 +800,6 @@ Metamaps.Create = {
             Metamaps.Mouse.synapseStartCoordinates = [];
             Metamaps.Visualize.mGraph.plot();
         },
-        getSearchQuery: function () {
-            var self = Metamaps.Create.newSynapse;
-
-            if (Metamaps.Selected.Nodes.length < 2) {
-                return '/search/synapses?topic1id=' + self.topic1id + '&topic2id=' + self.topic2id;
-            } else return '';
-        }
     }
 }; // end Metamaps.Create
 
