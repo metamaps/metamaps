@@ -200,33 +200,7 @@ class TopicsController < ApplicationController
     def destroy
         @current = current_user
         @topic = Topic.find(params[:id]).authorize_to_delete(@current)
-
-        if @topic 
-            @synapses = @topic.synapses
-            @mappings = @topic.mappings
-
-            @synapses.each do |synapse| 
-                synapse.mappings.each do |m|
-
-                    @map = m.map
-                    @map.touch(:updated_at)
-
-                    m.delete
-                end
-
-                synapse.delete
-            end
-
-            @mappings.each do |mapping| 
-
-                @map = mapping.map
-                @map.touch(:updated_at)
-
-                mapping.delete
-            end
-
-            @topic.delete
-        end
+        @topic.delete if @topic
 
         respond_to do |format|
             format.json { head :no_content }
