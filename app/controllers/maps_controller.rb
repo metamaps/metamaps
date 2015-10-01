@@ -218,15 +218,7 @@ class MapsController < ApplicationController
 
         @map = Map.find(params[:id]).authorize_to_delete(@current)
 
-        if @map 
-            @mappings = @map.mappings
-
-            @mappings.each do |mapping| 
-                mapping.delete
-            end
-
-            @map.delete
-        end
+        @map.delete if @map
 
         respond_to do |format|
             format.json { 

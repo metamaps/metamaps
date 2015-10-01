@@ -2,8 +2,8 @@ class Map < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping
-  has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping
+  has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
+  has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
   has_many :topics, through: :topicmappings
   has_many :synapses, through: :synapsemappings
 
