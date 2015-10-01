@@ -669,7 +669,7 @@ Metamaps.Create = {
                 {
                     minLength: 2,
                 },    
-                [{
+                {
                     name: 'topic_autocomplete',
                     limit: 8,
                     template: $('#topicAutocompleteTemplate').html(),
@@ -677,7 +677,7 @@ Metamaps.Create = {
                         url: '/topics/autocomplete_topic?term=%QUERY'
                     },
                     engine: Hogan
-                }]
+                }
             );
 
             // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
@@ -731,7 +731,7 @@ Metamaps.Create = {
                 {
                     minLength: 2,
                 }, 
-                [{
+                {
                     name: 'synapse_autocomplete',
                     template: "<div class='genericSynapseDesc'>{{label}}</div>",
                     remote: {
@@ -751,7 +751,7 @@ Metamaps.Create = {
                     },
                     engine: Hogan,
                     header: "<h3>Existing synapses</h3>"
-                }]
+                }
           );
 
             $('#synapse_desc').bind('typeahead:selected', function (event, datum, dataset) {
