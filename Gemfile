@@ -19,6 +19,10 @@ gem 'dotenv'
 gem 'paperclip'
 gem 'aws-sdk'
 
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jbuilder'
+
 #gem 'therubyracer' #optional
 #gem 'rb-readline'
 
@@ -44,9 +48,3 @@ group :development, :test do
   gem 'better_errors'
   gem 'quiet_assets'
 end
-
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
-
-# To use Jbuilder templates for JSON
-gem 'jbuilder'
