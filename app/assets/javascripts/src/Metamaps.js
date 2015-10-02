@@ -457,11 +457,11 @@ Metamaps.Backbone.init = function () {
             return Metamaps.Map.get(this.get('map_id'));
         },
         getTopic: function () {
-            if (this.get('category') === 'Topic') return Metamaps.Topic.get(this.get('topic_id'));
+            if (this.get('mappable_type') === 'Topic') return Metamaps.Topic.get(this.get('mappable_id'));
             else return false;
         },
         getSynapse: function () {
-            if (this.get('category') === 'Synapse') return Metamaps.Synapse.get(this.get('synapse_id'));
+            if (this.get('mappable_type') === 'Synapse') return Metamaps.Synapse.get(this.get('mappable_id'));
             else return false;
         }
     });
@@ -4109,10 +4109,10 @@ Metamaps.Topic = {
         Metamaps.Topics.add(topic);
 
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Topic",
             xloc: Metamaps.Create.newTopic.x,
             yloc: Metamaps.Create.newTopic.y,
-            topic_id: topic.cid
+            mappable_id: topic.cid,
+            mappable_type: "Topic",
         });
         Metamaps.Mappings.add(mapping);
 
@@ -4131,10 +4131,10 @@ Metamaps.Topic = {
         var topic = self.get(id);
 
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Topic",
             xloc: Metamaps.Create.newTopic.x,
             yloc: Metamaps.Create.newTopic.y,
-            topic_id: topic.id
+            mappable_type: "Topic",
+            mappable_id: topic.id,
         });
         Metamaps.Mappings.add(mapping);
 
@@ -4149,10 +4149,10 @@ Metamaps.Topic = {
 
         var nextCoords = Metamaps.Map.getNextCoord();
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Topic",
             xloc: nextCoords.x,
             yloc: nextCoords.y,
-            topic_id: topic.id
+            mappable_type: "Topic",
+            mappable_id: topic.id,
         });
         Metamaps.Mappings.add(mapping);
 
@@ -4287,8 +4287,8 @@ Metamaps.Synapse = {
             Metamaps.Synapses.add(synapse);
 
             mapping = new Metamaps.Backbone.Mapping({
-                category: "Synapse",
-                synapse_id: synapse.cid
+                mappable_type: "Synapse",
+                mappable_id: synapse.cid,
             });
             Metamaps.Mappings.add(mapping);
 
@@ -4308,8 +4308,8 @@ Metamaps.Synapse = {
         var synapse = self.get(id);
 
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Synapse",
-            synapse_id: synapse.id
+            mappable_type: "Synapse",
+            mappable_id: synapse.id,
         });
         Metamaps.Mappings.add(mapping);
 
