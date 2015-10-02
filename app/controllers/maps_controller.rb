@@ -75,11 +75,7 @@ class MapsController < ApplicationController
                 @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
                 @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
                 @allmappings = @map.mappings.to_a.delete_if {|m| 
-                    if m.category == "Synapse"
-                        object = m.synapse
-                    elsif m.category == "Topic"
-                        object = m.topic
-                    end
+                    object = m.mappable
                     !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
                 }
 
@@ -103,11 +99,7 @@ class MapsController < ApplicationController
         @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
         @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
         @allmappings = @map.mappings.to_a.delete_if {|m| 
-            if m.category == "Synapse"
-                object = m.synapse
-            elsif m.category == "Topic"
-                object = m.topic
-            end
+            object = m.mappable
             !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
         }
 
@@ -141,7 +133,6 @@ class MapsController < ApplicationController
             @all.each do |topic|
                 topic = topic.split('/')
                 @mapping = Mapping.new()
-                @mapping.category = "Topic"
                 @mapping.user = @user
                 @mapping.map  = @map
                 @mapping.topic = Topic.find(topic[0])
@@ -155,7 +146,6 @@ class MapsController < ApplicationController
                 @synAll = @synAll.split(',')
                 @synAll.each do |synapse_id|
                     @mapping = Mapping.new()
-                    @mapping.category = "Synapse"
                     @mapping.user = @user
                     @mapping.map = @map
                     @mapping.synapse = Synapse.find(synapse_id)

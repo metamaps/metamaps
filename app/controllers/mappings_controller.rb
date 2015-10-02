@@ -52,6 +52,6 @@ class MappingsController < ApplicationController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def mapping_params
-      params.require(:mapping).permit(:id, :category, :xloc, :yloc, :topic_id, :synapse_id, :map_id, :user_id)
+      params.require(:mapping).permit(:id, :xloc, :yloc, :mappable_id, :mappable_type, :map_id, :user_id)
     end
 end
