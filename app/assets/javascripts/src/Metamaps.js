@@ -664,6 +664,15 @@ Metamaps.Create = {
                 Metamaps.Create.newTopic.name = $(this).val();
             });
 
+            var topicBloodhound = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/topics/autocomplete_topic?term=%QUERY',
+                    wildcard: '%QUERY',
+                },
+            });
+
             // initialize the autocomplete results for the metacode spinner
             $('#topic_name').typeahead(
                 {
@@ -672,20 +681,18 @@ Metamaps.Create = {
                 [{
                     name: 'topic_autocomplete',
                     limit: 8,
-                    template: Hogan.compile($('#topicAutocompleteTemplate').html()),
-                    source: function(query, syncResults, asyncResults) {
-                      syncResults([]); //we don't got none
-                      var url = '/topics/autocomplete_topic?term=' + query;
-                      $.ajax(url, {
-                        success: function(data) { asyncResults(data); },
-                        error: function() { asyncResults([]); },
-                      });
+                    display: function (s) { return s.label; },
+                    templates: {
+                        suggestion: function(s) {
+                            return Hogan.compile($('#topicAutocompleteTemplate').html()).render(s);
+                        },
                     },
+                    source: topicBloodhound,
                 }]
             );
 
             // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
-            $('#topic_name').bind('typeahead:selected', function (event, datum, dataset) {
+            $('#topic_name').bind('typeahead:select', function (event, datum, dataset) {
                 Metamaps.Topic.getTopicFromAutocomplete(datum.id);
             });
 
@@ -718,7 +725,7 @@ Metamaps.Create = {
         },
         hide: function () {
             $('#new_topic').fadeOut('fast');
-            $("#topic_name").typeahead('setQuery', '');
+            $("#topic_name").typeahead('val', '');
             Metamaps.Create.newTopic.beingCreated = false;
         }
     },
@@ -730,6 +737,31 @@ Metamaps.Create = {
                 Metamaps.Create.newSynapse.description = $(this).val();
             });
 
+            var synapseBloodhound = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/search/synapses?term=%QUERY',
+                    wildcard: '%QUERY',
+                },
+            });
+            var existingSynapseBloodhound = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
+                    prepare: function(query, settings) {
+                      var self = Metamaps.Create.newSynapse;
+                      if (Metamaps.Selected.Nodes.length < 2) {
+                        var url = '/search/synapses?topic1id=' + self.topic1id + '&topic2id=' + self.topic2id;
+                      }
+                      console.log(query);
+                      console.log(settings);
+                      return settings;
+                    },
+                },
+            });
+
             // initialize the autocomplete results for synapse creation
             $('#synapse_desc').typeahead(
                 {
@@ -737,39 +769,29 @@ Metamaps.Create = {
                 }, 
                 [{
                     name: 'synapse_autocomplete',
-                    template: Hogan.compile("<div class='genericSynapseDesc'>{{label}}</div>"),
-                    source: function(query, syncResults, asyncResults) {
-                      syncResults([]); //we don't got none
-                      var url = '/search/synapses?term=' + query;
-                      $.ajax(url, {
-                        success: function(data) { asyncResults(data); },
-                        error: function() { asyncResults([]); },
-                      });
+                    display: function(s) { return s.label; },
+                    templates: {
+                        suggestion: function(s) { 
+                            return Hogan.compile("<div class='genericSynapseDesc'>{{label}}</div>").render(s);
+                        },
                     },
+                    source: synapseBloodhound,
                 },
                 {
                     name: 'existing_synapses',
                     limit: 50,
-                    template: Hogan.compile($('#synapseAutocompleteTemplate').html()),
-                    source: function(query, syncResults, asyncResults) {
-                      syncResults([]); //we don't got none
-                      var self = Metamaps.Create.newSynapse;
-
-                      if (Metamaps.Selected.Nodes.length < 2) {
-                        var url = '/search/synapses?topic1id=' + self.topic1id + '&topic2id=' + self.topic2id;
-                        $.ajax(url, {
-                          success: function(data) { asyncResults(data); },
-                          error: function() { asyncResults([]); },
-                        });
-                      } else {
-                        asyncResults([]);
-                      }
+                    display: function(s) { return s.label; },
+                    templates: {
+                        suggestion: function(s) {
+                            return Hogan.compile($('#synapseAutocompleteTemplate').html()).render(s);
+                        },
+                        header: "<h3>Existing synapses</h3>"
                     },
-                    header: "<h3>Existing synapses</h3>"
+                    source: existingSynapseBloodhound,
                 }]
           );
 
-            $('#synapse_desc').bind('typeahead:selected', function (event, datum, dataset) {
+            $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
                 if (datum.id) { // if they clicked on an existing synapse get it
                     Metamaps.Synapse.getSynapseFromAutocomplete(datum.id);
                 }
@@ -792,7 +814,7 @@ Metamaps.Create = {
         },
         hide: function () {
             $('#new_synapse').fadeOut('fast');
-            $("#synapse_desc").typeahead('setQuery', '');
+            $("#synapse_desc").typeahead('val', '');
             Metamaps.Create.newSynapse.beingCreated = false;
             Metamaps.Create.newTopic.addSynapse = false;
             Metamaps.Create.newSynapse.topic1id = 0;
