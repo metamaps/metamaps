@@ -37,7 +37,7 @@ Metamaps.Settings = {
             background: '#18202E',
             text: '#DDD'
         }
-    }
+    },
 };
 
 Metamaps.Touch = {
@@ -1562,8 +1562,6 @@ Metamaps.SynapseCard = {
 
 
 ////////////////////// END TOPIC AND SYNAPSE CARDS //////////////////////////////////
-
-
 
 
 /*
