@@ -187,14 +187,14 @@ class MainController < ApplicationController
     term = params[:term]
     topic1id = params[:topic1id]
     topic2id = params[:topic2id]
-    
+
     if term && !term.empty?
-      @synapses = Synapse.select('DISTINCT "desc"').where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
+      @synapses = Synapse.where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
 
       # remove any duplicate synapse types that just differ by 
       # leading or trailing whitespaces
       collectedDesc = []
-      @synapses.to_a.delete_if {|s|
+      @synapses.to_a.uniq(&:desc).delete_if {|s|
         desc = s.desc == nil || s.desc == "" ? "" : s.desc.strip
         if collectedDesc.index(desc) == nil
           collectedDesc.push(desc)
