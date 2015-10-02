@@ -753,11 +753,11 @@ Metamaps.Create = {
                     prepare: function(query, settings) {
                       var self = Metamaps.Create.newSynapse;
                       if (Metamaps.Selected.Nodes.length < 2) {
-                        var url = '/search/synapses?topic1id=' + self.topic1id + '&topic2id=' + self.topic2id;
+                        settings.url = settings.url.replace("%TOPIC1", self.topic1id).replace("%TOPIC2", self.topic2id);
+                        return settings;
+                      } else {
+                        return null;
                       }
-                      console.log(query);
-                      console.log(settings);
-                      return settings;
                     },
                 },
             });
