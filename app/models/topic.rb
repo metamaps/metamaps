@@ -8,7 +8,7 @@ class Topic < ActiveRecord::Base
   has_many :topics1, :through => :synapses2, :source => :topic1
   has_many :topics2, :through => :synapses1, :source => :topic2
 
-  has_many :mappings, dependent: :destroy
+  has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
     
   # This method associates the attribute ":image" with a file attachment
