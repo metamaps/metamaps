@@ -194,7 +194,8 @@ Metamaps.Backbone.init = function () {
             
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
-                topic_id: this.isNew() ? this.cid : this.id
+                mappable_type: "Topic",
+                mappable_id: this.isNew() ? this.cid : this.id
             });
         },
         createNode: function () {
@@ -370,7 +371,8 @@ Metamaps.Backbone.init = function () {
             
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
-                synapse_id: this.isNew() ? this.cid : this.id
+                mappable_type: "Synapse",
+                mappable_id: this.isNew() ? this.cid : this.id
             });
         },
         createEdge: function () {
