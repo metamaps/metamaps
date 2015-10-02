@@ -11,3 +11,10 @@
 #  desc: MyText
 #  user: 
 #  mapperContributed: false
+
+four:
+  id: 4
+  name: Sense-Making
+  desc: A metacode set constructed specifically for a rigorous and structured sense-making
+  user_id:
+  mapperContributed: false
