@@ -1380,6 +1380,7 @@ h3.realtimeBoxTitle {
     background: #E0E0E0;
 }
 #new_topic .tt-suggestion, 
+#new_synapse .tt-dataset h3,
 #new_synapse .tt-suggestion {
     background: #F5F5F5;
     position: relative;
