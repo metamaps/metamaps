@@ -219,7 +219,7 @@ class MainController < ApplicationController
       @synapses = []
     end
 
-    render json: utocomplete_synapse_array_json(@synapses)
+    render json: autocomplete_synapse_array_json(@synapses)
   end 
 
 end
