@@ -616,7 +616,7 @@ Metamaps.GlobalUI.Search = {
         var self = Metamaps.GlobalUI.Search;
 
         function toggleResultSet(set) {
-            var s = $('.tt-dataset-' + set + ' .tt-suggestions');
+            var s = $('.tt-dataset-' + set + ' .tt-dataset');
             if (s.css('height') == '0px') {
                 s.css({
                     'height': 'auto',

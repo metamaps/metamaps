@@ -1373,10 +1373,10 @@ h3.realtimeBoxTitle {
 
 /* topic and synapse autocomplete */
 
-#new_topic .tt-suggestion.tt-is-under-cursor,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor,
-#new_synapse .tt-suggestion.tt-is-under-cursor,
-#new_synapse .tt-suggestion.tt-is-under-mouse-cursor {
+#new_topic .tt-suggestion:hover,
+#new_topic .tt-suggestion.tt-cursor,
+#new_synapse .tt-suggestion:hover,
+#new_synapse .tt-suggestion.tt-cursor {
     background: #E0E0E0;
 }
 #new_topic .tt-suggestion, 
@@ -1421,12 +1421,12 @@ h3.realtimeBoxTitle {
     background-image: url(arrowright_sprite.png);
     background-position: 0 -32px;
 }
-#new_topic .tt-suggestion.tt-is-under-cursor .expandTopicMetadata,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor .expandTopicMetadata {
+#new_topic .tt-suggestion:hover .expandTopicMetadata,
+#new_topic .tt-suggestion.tt-cursor .expandTopicMetadata {
     display: block;
 }
-#new_topic .tt-suggestion.tt-is-under-cursor .topicMetadata,
-#new_topic .tt-suggestion.tt-is-under-mouse-cursor .topicMetadata {
+#new_topic .tt-suggestion:hover .topicMetadata,
+#new_topic .tt-suggestion.tt-cursor .topicMetadata {
     display: block;
 }
 #new_topic .topicMetadata {
