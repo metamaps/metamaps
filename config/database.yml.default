@@ -1,10 +1,17 @@
-development:
+defaults: &defaults
   min_messages: WARNING
   adapter: postgresql
   host: 127.0.0.1
   port: 5432
   encoding: unicode
-  database: metamap002_development
   pool: 5
   username: postgres
   password: "3112"
+
+development:
+  <<: *defaults
+  database: metamap002_development
+
+test:
+  <<: *defaults
+  database: metamap002_test
