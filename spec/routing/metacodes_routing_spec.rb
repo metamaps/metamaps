@@ -11,10 +11,6 @@ RSpec.describe MetacodesController, :type => :routing do
       expect(:get => "/metacodes/new").to route_to("metacodes#new")
     end
 
-    it "routes to #show" do
-      expect(:get => "/metacodes/1").to route_to("metacodes#show", :id => "1")
-    end
-
     it "routes to #edit" do
       expect(:get => "/metacodes/1/edit").to route_to("metacodes#edit", :id => "1")
     end
@@ -27,9 +23,8 @@ RSpec.describe MetacodesController, :type => :routing do
       expect(:put => "/metacodes/1").to route_to("metacodes#update", :id => "1")
     end
 
-    it "routes to #destroy" do
-      expect(:delete => "/metacodes/1").to route_to("metacodes#destroy", :id => "1")
-    end
-
+    #it "routes to #destroy" do
+    #  expect(:delete => "/metacodes/1").to route_to("metacodes#destroy", :id => "1")
+    #end
   end
 end

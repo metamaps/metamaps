@@ -7,16 +7,8 @@ RSpec.describe MapsController, :type => :routing do
       expect(:get => "/maps").to route_to("maps#index")
     end
 
-    it "routes to #new" do
-      expect(:get => "/maps/new").to route_to("maps#new")
-    end
-
     it "routes to #show" do
       expect(:get => "/maps/1").to route_to("maps#show", :id => "1")
-    end
-
-    it "routes to #edit" do
-      expect(:get => "/maps/1/edit").to route_to("maps#edit", :id => "1")
     end
 
     it "routes to #create" do
