@@ -90,3 +90,8 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+def random_string(length = 10)
+  o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
+  string = (0...length).map { o[rand(o.length)] }.join
+end
