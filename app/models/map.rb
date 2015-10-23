@@ -12,7 +12,7 @@ class Map < ActiveRecord::Base
    :thumb => ['188x126#', :png]
    #:full => ['940x630#', :png]
   },
-  :default_url => "/assets/missing-map.png"
+  :default_url => asset_path('missing-map.png')
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
