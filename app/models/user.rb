@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
    :ninetysix => ['96x96#', :png],
    :onetwentyeight => ['128x128#', :png]
   },
-  :default_url => asset_path('user.png')
+  :default_url => ActionController::Base.helpers.asset_path('user.png')
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
