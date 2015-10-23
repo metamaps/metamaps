@@ -1163,15 +1163,15 @@
     left:5px;
 }
 .exploreMapsCenter .myMaps .exploreMapsIcon {
-    background-image: url(exploremaps_sprite.png);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: 0 0;
 }
 .exploreMapsCenter .activeMaps .exploreMapsIcon {
-    background-image: url(exploremaps_sprite.png);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -32px 0;
 }
 .exploreMapsCenter .featuredMaps .exploreMapsIcon {
-    background-image: url(exploremaps_sprite.png);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -64px 0;
 }
 .myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
@@ -1212,7 +1212,7 @@
 
 /* feedback */
 body a#barometer_tab {
-background-image: url(feedback_sprite.png);
+background-image: url(<%= asset_path 'feedback_sprite.png' %>);
 background-position: 0 0;
 background-color: transparent;
 height: 110px;
