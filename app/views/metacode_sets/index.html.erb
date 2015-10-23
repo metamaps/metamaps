@@ -23,7 +23,7 @@
       <td class='metacodeSetDesc'><%= metacode_set.desc %></td>
       <td>
         <% metacode_set.metacodes.each_with_index do |metacode, index| %>
-          <img class='metacodeSetImage' src='<%= metacode.icon %>' />
+          <img class='metacodeSetImage' src='<%= asset_path metacode.icon %>' />
           <% if (index+1)%4 == 0 %>
           <div class='clearfloat'></div>
           <% end %>

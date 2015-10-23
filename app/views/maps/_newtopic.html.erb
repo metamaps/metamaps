@@ -4,7 +4,7 @@
     <% @metacodes = user_metacodes() %>
     <% set = get_metacodeset() %>
     <% @metacodes.each do |metacode| %>
-      <img class="cloudcarousel" width="40" height="40" src="<%= metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
+      <img class="cloudcarousel" width="40" height="40" src="<%= asset_path metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
     <% end %>
   </div> 
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>
