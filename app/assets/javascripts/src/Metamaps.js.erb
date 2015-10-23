@@ -337,7 +337,7 @@ Metamaps.Backbone.init = function () {
         prepareLiForFilter: function () {
             var li = '';
             li += '<li data-id="' + this.get('desc') + '">';      
-            li += '<img src="/assets/synapse16.png"';
+            li += '<img src="<%= asset_path('synapse16.png') %>"';
             li += ' alt="synapse icon" />';      
             li += '<p>' + this.get('desc') + '</p></li>';
             return li;
@@ -4791,7 +4791,7 @@ Metamaps.Map.InfoBox = {
         obj["map_creator_tip"] = isCreator ? self.changePermissionText : "";
         obj["contributors_class"] = Metamaps.Mappers.length > 1 ? "multiple" : "";
         obj["contributors_class"] += Metamaps.Mappers.length === 2 ? " mTwo" : "";
-        obj["contributor_image"] = Metamaps.Mappers.length > 0 ? Metamaps.Mappers.models[0].get("image") : "/assets/user.png";
+        obj["contributor_image"] = Metamaps.Mappers.length > 0 ? Metamaps.Mappers.models[0].get("image") : "<%= asset_path('user.png') %>";
         obj["contributor_list"] = self.createContributorList();
         obj["user_name"] = isCreator ? "You" : map.get("user_name");
         obj["created_at"] = map.get("created_at_clean");
@@ -4888,7 +4888,7 @@ Metamaps.Map.InfoBox = {
         if (Metamaps.Mappers.length === 2) contributors_class = "multiple mTwo";
         else if (Metamaps.Mappers.length > 2) contributors_class = "multiple";
 
-        var contributors_image = "/assets/user.png";
+        var contributors_image = "<%= asset_path('user.png') %>";
         if (Metamaps.Mappers.length > 0) {
             // get the first contributor and use their image
             contributors_image = Metamaps.Mappers.models[0].get("image");
@@ -5069,7 +5069,7 @@ Metamaps.Account = {
         var self = Metamaps.Account;
 
         $('.userImageDiv canvas').remove();
-        $('.userImageDiv img').attr('src', '/assets/user.png').show();
+        $('.userImageDiv img').attr('src', '<%= asset_path('user.png') %>').show();
         $('.userImageMenu').hide();
 
         var input = $('#user_image');

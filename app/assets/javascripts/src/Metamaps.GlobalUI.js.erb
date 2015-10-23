@@ -495,7 +495,7 @@ Metamaps.GlobalUI.Search = {
                         dataset.push({
                             value: "No results",
                             label: "No results",
-                            typeImageURL: "/assets/icons/wildcard.png",
+                            typeImageURL: "<%= asset_path('icons/wildcard.png') %>",
                             rtype: "noresult"
                         });
                     }
@@ -549,7 +549,7 @@ Metamaps.GlobalUI.Search = {
                 filter: function (dataset) {
                     if (dataset.length == 0) {
                         dataset.push({
-                            profile: "/assets/user.png",
+                            profile: "<%= asset_path('user.png') %>",
                   
                             value: "No results",
                             label: "No results",
