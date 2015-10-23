@@ -135,7 +135,7 @@ class MapsController < ApplicationController
                 @mapping = Mapping.new()
                 @mapping.user = @user
                 @mapping.map  = @map
-                @mapping.topic = Topic.find(topic[0])
+                @mapping.mappable = Topic.find(topic[0])
                 @mapping.xloc = topic[1]
                 @mapping.yloc = topic[2]
                 @mapping.save
@@ -148,7 +148,7 @@ class MapsController < ApplicationController
                     @mapping = Mapping.new()
                     @mapping.user = @user
                     @mapping.map = @map
-                    @mapping.synapse = Synapse.find(synapse_id)
+                    @mapping.mappable = Synapse.find(synapse_id)
                     @mapping.save
                 end
             end
