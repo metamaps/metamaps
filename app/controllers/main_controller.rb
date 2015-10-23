@@ -68,25 +68,20 @@ class MainController < ApplicationController
         else
           search = term.downcase + '%'
           
-          if !user
-            @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
-            @topics2 = Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
-            @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
-            @topics4 = Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"')
-            @topics = @topics + (@topics2 - @topics)
-            @topics = @topics + (@topics3 - @topics)
-            @topics = @topics + (@topics4 - @topics)
-            
-          elsif user
-            @topics = Topic.where('LOWER("name") like ?', search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
-            @topics2 = Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
-            @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
-            @topics4 = Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"')
-            @topics = @topics + (@topics2 - @topics)
-            @topics = @topics + (@topics3 - @topics)
-            @topics = @topics + (@topics4 - @topics)
-            
+          if user
+            @topics = Set.new(Topic.where('LOWER("name") like ?', search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
+            @topics2 = Set.new(Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
+            @topics3 = Set.new(Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
+            @topics4 = Set.new(Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
+          else
+            @topics = Set.new(Topic.where('LOWER("name") like ?', search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
+            @topics2 = Set.new(Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
+            @topics3 = Set.new(Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
+            @topics4 = Set.new(Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
           end
+
+          #get unique elements only through the magic of Sets
+          @topics = (@topics + @topics2 + @topics3 + @topics4).to_a
         end
       elsif desc
         search = '%' + term.downcase + '%'
@@ -127,7 +122,7 @@ class MainController < ApplicationController
     end
     
     #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
-    @topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+    @topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
     
     render json: autocomplete_array_json(@topics)
   end
@@ -163,7 +158,7 @@ class MainController < ApplicationController
     end
     
     #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
-    @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
+    @maps.to_a.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
     
     render json: autocomplete_map_array_json(@maps)
   end
@@ -192,14 +187,14 @@ class MainController < ApplicationController
     term = params[:term]
     topic1id = params[:topic1id]
     topic2id = params[:topic2id]
-    
+
     if term && !term.empty?
-      @synapses = Synapse.select('DISTINCT "desc"').where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
+      @synapses = Synapse.where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
 
       # remove any duplicate synapse types that just differ by 
       # leading or trailing whitespaces
       collectedDesc = []
-      @synapses.delete_if {|s|
+      @synapses.to_a.uniq(&:desc).delete_if {|s|
         desc = s.desc == nil || s.desc == "" ? "" : s.desc.strip
         if collectedDesc.index(desc) == nil
           collectedDesc.push(desc)
@@ -211,23 +206,20 @@ class MainController < ApplicationController
 
       #limit to 5 results
       @synapses = @synapses.slice(0,5)
-
-      render json: autocomplete_synapse_generic_json(@synapses)
-      
     elsif topic1id && !topic1id.empty?
       @one = Synapse.where('node1_id = ? AND node2_id = ?', topic1id, topic2id)
       @two = Synapse.where('node2_id = ? AND node1_id = ?', topic1id, topic2id)
       @synapses = @one + @two
-      @synapses.sort! {|s1,s2| s1.desc <=> s2.desc }
+      @synapses.sort! {|s1,s2| s1.desc <=> s2.desc }.to_a
       
-      #read this next line as 'delete a synapse if its private and you're either 1. logged out or 2. logged in but not the synapse creator
-      @synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-    
-      render json: autocomplete_synapse_array_json(@synapses)
+      #permissions
+      @synapses.delete_if {|s| s.permission == "private" && !authenticated? }
+      @synapses.delete_if {|s| s.permission == "private" && authenticated? && @current.id != s.user_id }
     else
       @synapses = []
-      render json: autocomplete_synapse_array_json(@synapses)
     end
+
+    render json: autocomplete_synapse_array_json(@synapses)
   end 
 
 end

@@ -301,7 +301,7 @@
 .sidebarSearch .tt-dropdown-menu .maximizeResults {
     background-position: -32px 0;
 }
-.sidebarSearch .tt-suggestions {
+.sidebarSearch .tt-dataset {
     overflow: visible;
 }
 .sidebarSearch .tt-suggestion {
@@ -310,7 +310,7 @@
     padding: 8px 0;
 }
 .sidebarSearch .tt-is-under-cursor,
-.sidebarSearch .tt-is-under-mouse-cursor {
+.sidebarSearch .tt-suggestion:hover {
     background: #E0E0E0;
 }
 

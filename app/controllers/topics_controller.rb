@@ -10,12 +10,11 @@ class TopicsController < ApplicationController
         @current = current_user
         term = params[:term]
         if term && !term.empty?
-            # !connor term here needs to have .downcase
             @topics = Topic.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
 
             #read this next line as 'delete a topic if its private and you're either 
             #1. logged out or 2. logged in but not the topic creator
-            @topics.delete_if {|t| t.permission == "private" && 
+            @topics.to_a.delete_if {|t| t.permission == "private" && 
                 (!authenticated? || (authenticated? && @current.id != t.user_id)) }
         else
             @topics = []
@@ -35,7 +34,7 @@ class TopicsController < ApplicationController
         respond_to do |format|
             format.html { 
                 @alltopics = ([@topic] + @topic.relatives).delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) } # should limit to topics visible to user
-                @allsynapses = @topic.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
 
                 @allcreators = []
                 @alltopics.each do |t|
@@ -64,8 +63,8 @@ class TopicsController < ApplicationController
             redirect_to root_url, notice: "Access denied. That topic is private." and return
         end
 
-        @alltopics = @topic.relatives.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-        @allsynapses = @topic.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @alltopics = @topic.relatives.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
         @allcreators = []
         @allcreators.push(@topic.user)
         @alltopics.each do |t|
@@ -101,7 +100,7 @@ class TopicsController < ApplicationController
 
         @topicsAlreadyHas = params[:network] ? params[:network].split(',') : []
 
-        @alltopics = @topic.relatives.delete_if {|t| 
+        @alltopics = @topic.relatives.to_a.delete_if {|t| 
             @topicsAlreadyHas.index(t.id.to_s) != nil ||
                 (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
         }
@@ -133,7 +132,7 @@ class TopicsController < ApplicationController
 
         @topicsAlreadyHas = params[:network] ? params[:network].split(',') : []
 
-        @alltopics = @topic.relatives.delete_if {|t| 
+        @alltopics = @topic.relatives.to_a.delete_if {|t| 
             @topicsAlreadyHas.index(t.id.to_s) != nil ||
                 (params[:metacode] && t.metacode_id.to_s != params[:metacode]) ||
                 (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
@@ -141,7 +140,7 @@ class TopicsController < ApplicationController
 
         @alltopics.uniq!
 
-        @allsynapses = @topic.synapses.delete_if {|s|
+        @allsynapses = @topic.synapses.to_a.delete_if {|s|
             (s.topic1 == @topic && @alltopics.index(s.topic2) == nil) ||
             (s.topic2 == @topic && @alltopics.index(s.topic1) == nil)
         }
@@ -172,7 +171,7 @@ class TopicsController < ApplicationController
     # POST /topics
     # POST /topics.json
     def create
-        @topic = Topic.new(params[:topic])
+        @topic = Topic.new(topic_params)
 
         respond_to do |format|
             if @topic.save
@@ -189,7 +188,7 @@ class TopicsController < ApplicationController
         @topic = Topic.find(params[:id])
 
         respond_to do |format|
-            if @topic.update_attributes(params[:topic])
+            if @topic.update_attributes(topic_params)
                 format.json { head :no_content }
             else
                 format.json { render json: @topic.errors, status: :unprocessable_entity }
@@ -201,36 +200,16 @@ class TopicsController < ApplicationController
     def destroy
         @current = current_user
         @topic = Topic.find(params[:id]).authorize_to_delete(@current)
-
-        if @topic 
-            @synapses = @topic.synapses
-            @mappings = @topic.mappings
-
-            @synapses.each do |synapse| 
-                synapse.mappings.each do |m|
-
-                    @map = m.map
-                    @map.touch(:updated_at)
-
-                    m.delete
-                end
-
-                synapse.delete
-            end
-
-            @mappings.each do |mapping| 
-
-                @map = mapping.map
-                @map.touch(:updated_at)
-
-                mapping.delete
-            end
-
-            @topic.delete
-        end
+        @topic.delete if @topic
 
         respond_to do |format|
             format.json { head :no_content }
         end
     end
+
+  private
+
+  def topic_params
+    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :user_id, :metacode_id)
+  end
 end

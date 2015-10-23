@@ -5,7 +5,7 @@ class Synapse < ActiveRecord::Base
   belongs_to :topic1, :class_name => "Topic", :foreign_key => "node1_id"
   belongs_to :topic2, :class_name => "Topic", :foreign_key => "node2_id"
 
-  has_many :mappings
+  has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
 
   def user_name

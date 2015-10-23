@@ -37,7 +37,7 @@ Metamaps.Settings = {
             background: '#18202E',
             text: '#DDD'
         }
-    }
+    },
 };
 
 Metamaps.Touch = {
@@ -157,7 +157,7 @@ Metamaps.Backbone.init = function () {
             this.on('saved', this.savedEvent);
             this.on('nowPrivate', function(){
                 var removeTopicData = {
-                    topicid: this.id
+                    mappableid: this.id
                 };
 
                 $(document).trigger(Metamaps.JIT.events.removeTopic, [removeTopicData]);
@@ -165,7 +165,7 @@ Metamaps.Backbone.init = function () {
             this.on('noLongerPrivate', function(){
                 var newTopicData = {
                     mappingid: this.getMapping().id,
-                    topicid: this.id
+                    mappableid: this.id
                 };
 
                 $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData]);
@@ -194,7 +194,8 @@ Metamaps.Backbone.init = function () {
             
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
-                topic_id: this.isNew() ? this.cid : this.id
+                mappable_type: "Topic",
+                mappable_id: this.isNew() ? this.cid : this.id
             });
         },
         createNode: function () {
@@ -320,14 +321,14 @@ Metamaps.Backbone.init = function () {
             this.on('noLongerPrivate', function(){
                 var newSynapseData = {
                     mappingid: this.getMapping().id,
-                    synapseid: this.id
+                    mappableid: this.id
                 };
 
                 $(document).trigger(Metamaps.JIT.events.newSynapse, [newSynapseData]);
             });
             this.on('nowPrivate', function(){
                 $(document).trigger(Metamaps.JIT.events.removeSynapse, [{
-                    synapseid: this.id
+                    mappableid: this.id
                 }]);
             });
 
@@ -370,7 +371,8 @@ Metamaps.Backbone.init = function () {
             
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
-                synapse_id: this.isNew() ? this.cid : this.id
+                mappable_type: "Synapse",
+                mappable_id: this.isNew() ? this.cid : this.id
             });
         },
         createEdge: function () {
@@ -457,11 +459,11 @@ Metamaps.Backbone.init = function () {
             return Metamaps.Map.get(this.get('map_id'));
         },
         getTopic: function () {
-            if (this.get('category') === 'Topic') return Metamaps.Topic.get(this.get('topic_id'));
+            if (this.get('mappable_type') === 'Topic') return Metamaps.Topic.get(this.get('mappable_id'));
             else return false;
         },
         getSynapse: function () {
-            if (this.get('category') === 'Synapse') return Metamaps.Synapse.get(this.get('synapse_id'));
+            if (this.get('mappable_type') === 'Synapse') return Metamaps.Synapse.get(this.get('mappable_id'));
             else return false;
         }
     });
@@ -664,6 +666,15 @@ Metamaps.Create = {
                 Metamaps.Create.newTopic.name = $(this).val();
             });
 
+            var topicBloodhound = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/topics/autocomplete_topic?term=%QUERY',
+                    wildcard: '%QUERY',
+                },
+            });
+
             // initialize the autocomplete results for the metacode spinner
             $('#topic_name').typeahead(
                 {
@@ -672,16 +683,18 @@ Metamaps.Create = {
                 [{
                     name: 'topic_autocomplete',
                     limit: 8,
-                    template: $('#topicAutocompleteTemplate').html(),
-                    remote: {
-                        url: '/topics/autocomplete_topic?term=%QUERY'
+                    display: function (s) { return s.label; },
+                    templates: {
+                        suggestion: function(s) {
+                            return Hogan.compile($('#topicAutocompleteTemplate').html()).render(s);
+                        },
                     },
-                    engine: Hogan
+                    source: topicBloodhound,
                 }]
             );
 
             // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
-            $('#topic_name').bind('typeahead:selected', function (event, datum, dataset) {
+            $('#topic_name').bind('typeahead:select', function (event, datum, dataset) {
                 Metamaps.Topic.getTopicFromAutocomplete(datum.id);
             });
 
@@ -714,7 +727,7 @@ Metamaps.Create = {
         },
         hide: function () {
             $('#new_topic').fadeOut('fast');
-            $("#topic_name").typeahead('setQuery', '');
+            $("#topic_name").typeahead('val', '');
             Metamaps.Create.newTopic.beingCreated = false;
         }
     },
@@ -726,6 +739,31 @@ Metamaps.Create = {
                 Metamaps.Create.newSynapse.description = $(this).val();
             });
 
+            var synapseBloodhound = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/search/synapses?term=%QUERY',
+                    wildcard: '%QUERY',
+                },
+            });
+            var existingSynapseBloodhound = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
+                    prepare: function(query, settings) {
+                      var self = Metamaps.Create.newSynapse;
+                      if (Metamaps.Selected.Nodes.length < 2) {
+                        settings.url = settings.url.replace("%TOPIC1", self.topic1id).replace("%TOPIC2", self.topic2id);
+                        return settings;
+                      } else {
+                        return null;
+                      }
+                    },
+                },
+            });
+
             // initialize the autocomplete results for synapse creation
             $('#synapse_desc').typeahead(
                 {
@@ -733,28 +771,29 @@ Metamaps.Create = {
                 }, 
                 [{
                     name: 'synapse_autocomplete',
-                    template: "<div class='genericSynapseDesc'>{{label}}</div>",
-                    remote: {
-                        url: '/search/synapses?term=%QUERY'
+                    display: function(s) { return s.label; },
+                    templates: {
+                        suggestion: function(s) { 
+                            return Hogan.compile("<div class='genericSynapseDesc'>{{label}}</div>").render(s);
+                        },
                     },
-                    engine: Hogan
+                    source: synapseBloodhound,
                 },
                 {
                     name: 'existing_synapses',
                     limit: 50,
-                    template: $('#synapseAutocompleteTemplate').html(),
-                    remote: {
-                        url: '/search/synapses',
-                        replace: function () {
-                            return self.getSearchQuery();
-                        }
+                    display: function(s) { return s.label; },
+                    templates: {
+                        suggestion: function(s) {
+                            return Hogan.compile($('#synapseAutocompleteTemplate').html()).render(s);
+                        },
+                        header: "<h3>Existing synapses</h3>"
                     },
-                    engine: Hogan,
-                    header: "<h3>Existing synapses</h3>"
+                    source: existingSynapseBloodhound,
                 }]
           );
 
-            $('#synapse_desc').bind('typeahead:selected', function (event, datum, dataset) {
+            $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
                 if (datum.id) { // if they clicked on an existing synapse get it
                     Metamaps.Synapse.getSynapseFromAutocomplete(datum.id);
                 }
@@ -777,7 +816,7 @@ Metamaps.Create = {
         },
         hide: function () {
             $('#new_synapse').fadeOut('fast');
-            $("#synapse_desc").typeahead('setQuery', '');
+            $("#synapse_desc").typeahead('val', '');
             Metamaps.Create.newSynapse.beingCreated = false;
             Metamaps.Create.newTopic.addSynapse = false;
             Metamaps.Create.newSynapse.topic1id = 0;
@@ -785,13 +824,6 @@ Metamaps.Create = {
             Metamaps.Mouse.synapseStartCoordinates = [];
             Metamaps.Visualize.mGraph.plot();
         },
-        getSearchQuery: function () {
-            var self = Metamaps.Create.newSynapse;
-
-            if (Metamaps.Selected.Nodes.length < 2) {
-                return '/search/synapses?topic1id=' + self.topic1id + '&topic2id=' + self.topic2id;
-            } else return '';
-        }
     }
 }; // end Metamaps.Create
 
@@ -1532,8 +1564,6 @@ Metamaps.SynapseCard = {
 
 
 ////////////////////// END TOPIC AND SYNAPSE CARDS //////////////////////////////////
-
-
 
 
 /*
@@ -2511,7 +2541,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        function test() {
+        function waitThenRenderTopic() {
             if (topic && mapping && mapper) {
                 Metamaps.Topic.renderTopic(mapping, topic, false, false);
             }
@@ -2529,7 +2559,7 @@ Metamaps.Realtime = {
             Metamaps.Mapper.get(data.mapperid, mapperCallback);
         }
         $.ajax({
-            url: "/topics/" + data.topicid + ".json",
+            url: "/topics/" + data.mappableid + ".json",
             success: function (response) {
                 Metamaps.Topics.add(response);
                 topic = Metamaps.Topics.get(response.id);
@@ -2549,7 +2579,7 @@ Metamaps.Realtime = {
             }
         });
 
-        test();
+        waitThenRenderTopic();
     },
     // removeTopic
     sendDeleteTopic: function (data) {
@@ -2576,7 +2606,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        var topic = Metamaps.Topics.get(data.topicid);
+        var topic = Metamaps.Topics.get(data.mappableid);
         if (topic) {
             var node = topic.get('node');
             var mapping = topic.getMapping();
@@ -2604,7 +2634,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        function test() {
+        function waitThenRenderSynapse() {
             if (synapse && mapping && mapper) {
                 topic1 = synapse.getTopic1();
                 node1 = topic1.get('node');
@@ -2627,7 +2657,7 @@ Metamaps.Realtime = {
             Metamaps.Mapper.get(data.mapperid, mapperCallback);
         }
         $.ajax({
-            url: "/synapses/" + data.synapseid + ".json",
+            url: "/synapses/" + data.mappableid + ".json",
             success: function (response) {
                 Metamaps.Synapses.add(response);
                 synapse = Metamaps.Synapses.get(response.id);
@@ -2646,7 +2676,7 @@ Metamaps.Realtime = {
                 cancel = true;
             }
         });
-        test();
+        waitThenRenderSynapse();
     },
     // deleteSynapse
     sendDeleteSynapse: function (data) {
@@ -2674,7 +2704,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        var synapse = Metamaps.Synapses.get(data.synapseid);
+        var synapse = Metamaps.Synapses.get(data.mappableid);
         if (synapse) {
             var edge = synapse.get('edge');
             var mapping = synapse.getMapping();
@@ -2784,12 +2814,12 @@ Metamaps.Control = {
         
         var permToDelete = Metamaps.Active.Mapper.id === topic.get('user_id') || Metamaps.Active.Mapper.get('admin');
         if (permToDelete) {
-            var topicid = topic.id;
+            var mappableid = topic.id;
             var mapping = node.getData('mapping');
             topic.destroy();
             Metamaps.Mappings.remove(mapping);
             $(document).trigger(Metamaps.JIT.events.deleteTopic, [{
-                topicid: topicid
+                mappableid: mappableid
             }]);
             Metamaps.Control.hideNode(nodeid);
         } else {
@@ -2828,12 +2858,12 @@ Metamaps.Control = {
         }
 
         var topic = node.getData('topic');
-        var topicid = topic.id;
+        var mappableid = topic.id;
         var mapping = node.getData('mapping');
         mapping.destroy();
         Metamaps.Topics.remove(topic);
         $(document).trigger(Metamaps.JIT.events.removeTopic, [{
-            topicid: topicid
+            mappableid: mappableid
         }]);
         Metamaps.Control.hideNode(nodeid);
     },
@@ -2957,7 +2987,7 @@ Metamaps.Control = {
                 Metamaps.Control.hideEdge(edge);
             }
         
-            var synapseid = synapse.id;
+            var mappableid = synapse.id;
             synapse.destroy();
 
             // the server will destroy the mapping, we just need to remove it here
@@ -2968,7 +2998,7 @@ Metamaps.Control = {
                 delete edge.data.$displayIndex;
             }
             $(document).trigger(Metamaps.JIT.events.deleteSynapse, [{
-                synapseid: synapseid
+                mappableid: mappableid
             }]);
         } else {
             Metamaps.GlobalUI.notifyUser('Only synapses you created can be deleted');
@@ -3013,7 +3043,7 @@ Metamaps.Control = {
 
         var synapse = edge.getData("synapses")[index];
         var mapping = edge.getData("mappings")[index];
-        var synapseid = synapse.id;
+        var mappableid = synapse.id;
         mapping.destroy();
 
         Metamaps.Synapses.remove(synapse);
@@ -3024,7 +3054,7 @@ Metamaps.Control = {
             delete edge.data.$displayIndex;
         }
         $(document).trigger(Metamaps.JIT.events.removeSynapse, [{
-            synapseid: synapseid
+            mappableid: mappableid
         }]);
     },
     hideSelectedEdges: function () {
@@ -4024,14 +4054,14 @@ Metamaps.Topic = {
         var mappingSuccessCallback = function (mappingModel, response) {
             var newTopicData = {
                 mappingid: mappingModel.id,
-                topicid: mappingModel.get('topic_id')
+                mappableid: mappingModel.get('mappable_id')
             };
 
             $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData]);
         };  
         var topicSuccessCallback = function (topicModel, response) {
             if (Metamaps.Active.Map) {
-                mapping.save({ topic_id: topicModel.id }, {
+                mapping.save({ mappable_id: topicModel.id }, {
                     success: mappingSuccessCallback,
                     error: function (model, response) {
                         console.log('error saving mapping to database');
@@ -4081,10 +4111,10 @@ Metamaps.Topic = {
         Metamaps.Topics.add(topic);
 
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Topic",
             xloc: Metamaps.Create.newTopic.x,
             yloc: Metamaps.Create.newTopic.y,
-            topic_id: topic.cid
+            mappable_id: topic.cid,
+            mappable_type: "Topic",
         });
         Metamaps.Mappings.add(mapping);
 
@@ -4103,10 +4133,10 @@ Metamaps.Topic = {
         var topic = self.get(id);
 
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Topic",
             xloc: Metamaps.Create.newTopic.x,
             yloc: Metamaps.Create.newTopic.y,
-            topic_id: topic.id
+            mappable_type: "Topic",
+            mappable_id: topic.id,
         });
         Metamaps.Mappings.add(mapping);
 
@@ -4121,10 +4151,10 @@ Metamaps.Topic = {
 
         var nextCoords = Metamaps.Map.getNextCoord();
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Topic",
             xloc: nextCoords.x,
             yloc: nextCoords.y,
-            topic_id: topic.id
+            mappable_type: "Topic",
+            mappable_id: topic.id,
         });
         Metamaps.Mappings.add(mapping);
 
@@ -4195,14 +4225,14 @@ Metamaps.Synapse = {
         var mappingSuccessCallback = function (mappingModel, response) {
             var newSynapseData = {
                 mappingid: mappingModel.id,
-                synapseid: mappingModel.get('synapse_id')
+                mappableid: mappingModel.get('mappable_id')
             };
 
             $(document).trigger(Metamaps.JIT.events.newSynapse, [newSynapseData]);
         };
         var synapseSuccessCallback = function (synapseModel, response) {
             if (Metamaps.Active.Map) {
-                mapping.save({ synapse_id: synapseModel.id }, {
+                mapping.save({ mappable_id: synapseModel.id }, {
                     success: mappingSuccessCallback
                 });
             }
@@ -4259,8 +4289,8 @@ Metamaps.Synapse = {
             Metamaps.Synapses.add(synapse);
 
             mapping = new Metamaps.Backbone.Mapping({
-                category: "Synapse",
-                synapse_id: synapse.cid
+                mappable_type: "Synapse",
+                mappable_id: synapse.cid,
             });
             Metamaps.Mappings.add(mapping);
 
@@ -4280,8 +4310,8 @@ Metamaps.Synapse = {
         var synapse = self.get(id);
 
         var mapping = new Metamaps.Backbone.Mapping({
-            category: "Synapse",
-            synapse_id: synapse.id
+            mappable_type: "Synapse",
+            mappable_id: synapse.id,
         });
         Metamaps.Mappings.add(mapping);
 

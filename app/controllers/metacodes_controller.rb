@@ -51,7 +51,7 @@ class MetacodesController < ApplicationController
   # POST /metacodes
   # POST /metacodes.json
   def create
-    @metacode = Metacode.new(params[:metacode])
+    @metacode = Metacode.new(metacode_params)
 
     respond_to do |format|
       if @metacode.save
@@ -70,7 +70,7 @@ class MetacodesController < ApplicationController
     @metacode = Metacode.find(params[:id])
 
     respond_to do |format|
-      if @metacode.update_attributes(params[:metacode])
+      if @metacode.update_attributes(metacode_params)
         format.html { redirect_to metacodes_url, notice: 'Metacode was successfully updated.' }
         format.json { head :no_content }
       else
@@ -93,4 +93,11 @@ class MetacodesController < ApplicationController
 #      format.json { head :no_content }
 #    end
 #  end
+
+  private
+
+    # Never trust parameters from the scary internet, only allow the white list through.      
+    def metacode_params
+      params.require(:metacode).permit(:id, :name, :icon, :color)
+    end
 end

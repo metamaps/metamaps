@@ -2,12 +2,12 @@ Metamaps::Application.routes.draw do
 
   root to: 'main#home', via: :get
   
-  match 'request', to: 'main#requestinvite', via: :get, as: :request
+  get 'request', to: 'main#requestinvite', as: :request
   
-  match 'search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
-  match 'search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps
-  match 'search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers
-  match 'search/synapses', to: 'main#searchsynapses', via: :get, as: :searchsynapses
+  get 'search/topics', to: 'main#searchtopics', as: :searchtopics
+  get 'search/maps', to: 'main#searchmaps', as: :searchmaps
+  get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
+  get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
   
   resources :mappings, except: [:index, :new, :edit]
   resources :metacode_sets, :except => [:show]
@@ -16,28 +16,28 @@ Metamaps::Application.routes.draw do
   resources :topics, except: [:index, :new, :edit] do
     get :autocomplete_topic, :on => :collection
   end
-  match 'topics/:id/network', to: 'topics#network', via: :get, as: :network
-  match 'topics/:id/relative_numbers', to: 'topics#relative_numbers', via: :get, as: :relative_numbers
-  match 'topics/:id/relatives', to: 'topics#relatives', via: :get, as: :relatives
+  get 'topics/:id/network', to: 'topics#network', as: :network
+  get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
+  get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
   
-  match 'explore/active', to: 'maps#index', via: :get, as: :activemaps
-  match 'explore/featured', to: 'maps#index', via: :get, as: :featuredmaps
-  match 'explore/mine', to: 'maps#index', via: :get, as: :mymaps
-  match 'explore/mapper/:id', to: 'maps#index', via: :get, as: :usermaps
+  get 'explore/active', to: 'maps#index', as: :activemaps
+  get 'explore/featured', to: 'maps#index', as: :featuredmaps
+  get 'explore/mine', to: 'maps#index', as: :mymaps
+  get 'explore/mapper/:id', to: 'maps#index', as: :usermaps
   resources :maps, except: [:new, :edit]
-  match 'maps/:id/contains', to: 'maps#contains', via: :get, as: :contains
-  match 'maps/:id/upload_screenshot', to: 'maps#screenshot', via: :post, as: :screenshot
+  get 'maps/:id/contains', to: 'maps#contains', as: :contains
+  get 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
   
-  devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => [:sessions]
+  devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => :sessions
 
   devise_scope :user do 
     get 'login' => 'devise/sessions#new', :as => :new_user_session
     post 'login' => 'devise/sessions#create', :as => :user_session
     get 'logout' => 'devise/sessions#destroy', :as => :destroy_user_session
-    get 'join' => 'devise/registrations#new', :as => :new_user_registration
+    get 'join' => 'devise/registrations#new', :as => :new_user_registration_path
   end
 
-  match 'users/:id/details', to: 'users#details', via: :get, as: :details
-  match 'user/updatemetacodes', to: 'users#updatemetacodes', via: :post, as: :updatemetacodes
+  get 'users/:id/details', to: 'users#details', as: :details
+  post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
   resources :users, except: [:index, :destroy]
 end

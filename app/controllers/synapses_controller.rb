@@ -21,7 +21,7 @@ class SynapsesController < ApplicationController
   # POST /synapses
   # POST /synapses.json
   def create
-    @synapse = Synapse.new(params[:synapse])
+    @synapse = Synapse.new(synapse_params)
 
     respond_to do |format|
       if @synapse.save
@@ -38,7 +38,7 @@ class SynapsesController < ApplicationController
     @synapse = Synapse.find(params[:id])
 
     respond_to do |format|
-      if @synapse.update_attributes(params[:synapse])
+      if @synapse.update_attributes(synapse_params)
         format.json { head :no_content }
       else
         format.json { render json: @synapse.errors, status: :unprocessable_entity }
@@ -50,18 +50,16 @@ class SynapsesController < ApplicationController
   def destroy
     @current = current_user
     @synapse = Synapse.find(params[:id]).authorize_to_delete(@current)
-
-    if @synapse
-      @synapse.mappings.each do |m|
-        m.map.touch(:updated_at)
-        m.delete
-      end
-
-      @synapse.delete
-    end
+    @synapse.delete if @synapse
       
     respond_to do |format|
       format.json { head :no_content }
     end
+  end
+
+  private
+
+  def synapse_params
+    params.require(:synapse).permit(:id, :desc, :category, :weight, :permission, :node1_id, :node2_id, :user_id)
   end
 end

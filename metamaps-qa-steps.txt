@@ -1,0 +1,24 @@
+Metamaps Test Suite
+
+1) Log in to the interface
+2) Create an account using your join code
+3) Check your user's "generation"
+4) Create three maps: private, public, and another public
+5) Change the last map's permissions to commons
+6) Change a map's name
+7) Create a topic on map #1
+8) Verify (in a private window or another browser) that the second user can't acccess map #1
+9) Create a topic on map #2
+10) Verify that the second user can't edit map #2
+11) Create a topic on map #3
+12) Verify that the second can edit map #3
+13) Pull a topic from map #1 to map #3
+14) Create a private topic on map #1
+15) Verify that the private topic can be pulled from map #1 by the same user
+16) Verify that the private topic can't be pulled from map #1 by another user
+17) Login as admin. Change metacode sets.
+18) Add a number of topics to one of your maps. Reload to see if they are still there.
+19) Add a number of synapses to one of your maps. Reload to see if they are still there.
+20) Rearrange one of your maps. Reload to see if the layout is preserved.
+21) Set the screenshot for one of your maps, and verify the index of maps is updated.
+22) Open two browsers on map #3 and verify that realtime editing works.

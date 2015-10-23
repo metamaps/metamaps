@@ -2,11 +2,10 @@ class Map < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :topicmappings, :class_name => 'Mapping', :conditions => {:category => 'Topic'}
-  has_many :synapsemappings, :class_name => 'Mapping', :conditions => {:category => 'Synapse'}
-
-  has_many :topics, :through => :topicmappings
-  has_many :synapses, :through => :synapsemappings
+  has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
+  has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
+  has_many :topics, through: :topicmappings, source: :mappable, source_type: "Topic"
+  has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {
