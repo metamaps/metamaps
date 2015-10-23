@@ -8,6 +8,8 @@ class Synapse < ActiveRecord::Base
   has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
 
+  validates :desc, length: { minimum: 0, allow_nil: false }
+
   def user_name
     self.user.name
   end

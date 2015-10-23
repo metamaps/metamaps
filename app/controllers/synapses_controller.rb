@@ -21,6 +21,7 @@ class SynapsesController < ApplicationController
   # POST /synapses
   # POST /synapses.json
   def create
+    binding.pry
     @synapse = Synapse.new(synapse_params)
     @synapse.update_attribute :desc, "" if @synapse.desc.nil?
 

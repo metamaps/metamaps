@@ -2352,15 +2352,15 @@ and it won't be important on password protected instances */
     opacity: 0.7;
 }
 #chromeIcon {
-    background: url(/assets/browser_icons.png) no-repeat;
+    background: url(<%= asset_data_uri 'browser_icons.png' %>) no-repeat;
 }
 
 #fireFoxIcon {
-    background: url(/assets/browser_icons.png) no-repeat -105px 0;
+    background: url(<%= asset_data_uri 'browser_icons.png' %>) no-repeat -105px 0;
 }
 
 #safariIcon {
-    background: url(/assets/browser_icons.png) no-repeat -220px 0;
+    background: url(<%= asset_data_uri 'browser_icons.png' %>) no-repeat -220px 0;
 }
 
 #chromeIcon:hover{ 
