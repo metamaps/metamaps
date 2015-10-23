@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001024122) do
+ActiveRecord::Schema.define(version: 20151023143719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,7 +40,11 @@ ActiveRecord::Schema.define(version: 20151001024122) do
     t.string   "mappable_type"
   end
 
+  add_index "mappings", ["map_id", "synapse_id"], name: "index_mappings_on_map_id_and_synapse_id", using: :btree
+  add_index "mappings", ["map_id", "topic_id"], name: "index_mappings_on_map_id_and_topic_id", using: :btree
+  add_index "mappings", ["map_id"], name: "index_mappings_on_map_id", using: :btree
   add_index "mappings", ["mappable_id", "mappable_type"], name: "index_mappings_on_mappable_id_and_mappable_type", using: :btree
+  add_index "mappings", ["user_id"], name: "index_mappings_on_user_id", using: :btree
 
   create_table "maps", force: :cascade do |t|
     t.text     "name"
@@ -56,6 +60,8 @@ ActiveRecord::Schema.define(version: 20151001024122) do
     t.integer  "screenshot_file_size"
     t.datetime "screenshot_updated_at"
   end
+
+  add_index "maps", ["user_id"], name: "index_maps_on_user_id", using: :btree
 
   create_table "metacode_sets", force: :cascade do |t|
     t.string   "name"
@@ -88,6 +94,12 @@ ActiveRecord::Schema.define(version: 20151001024122) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "synapses", ["node1_id", "node1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
+  add_index "synapses", ["node1_id"], name: "index_synapses_on_node1_id", using: :btree
+  add_index "synapses", ["node2_id", "node2_id"], name: "index_synapses_on_node2_id_and_node2_id", using: :btree
+  add_index "synapses", ["node2_id"], name: "index_synapses_on_node2_id", using: :btree
+  add_index "synapses", ["user_id"], name: "index_synapses_on_user_id", using: :btree
+
   create_table "topics", force: :cascade do |t|
     t.text     "name"
     t.text     "desc"
@@ -106,6 +118,9 @@ ActiveRecord::Schema.define(version: 20151001024122) do
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
   end
+
+  add_index "topics", ["metacode_id"], name: "index_topics_on_metacode_id", using: :btree
+  add_index "topics", ["user_id"], name: "index_topics_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
