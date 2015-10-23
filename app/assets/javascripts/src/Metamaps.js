@@ -157,7 +157,7 @@ Metamaps.Backbone.init = function () {
             this.on('saved', this.savedEvent);
             this.on('nowPrivate', function(){
                 var removeTopicData = {
-                    topicid: this.id
+                    mappableid: this.id
                 };
 
                 $(document).trigger(Metamaps.JIT.events.removeTopic, [removeTopicData]);
@@ -165,7 +165,7 @@ Metamaps.Backbone.init = function () {
             this.on('noLongerPrivate', function(){
                 var newTopicData = {
                     mappingid: this.getMapping().id,
-                    topicid: this.id
+                    mappableid: this.id
                 };
 
                 $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData]);
@@ -321,14 +321,14 @@ Metamaps.Backbone.init = function () {
             this.on('noLongerPrivate', function(){
                 var newSynapseData = {
                     mappingid: this.getMapping().id,
-                    synapseid: this.id
+                    mappableid: this.id
                 };
 
                 $(document).trigger(Metamaps.JIT.events.newSynapse, [newSynapseData]);
             });
             this.on('nowPrivate', function(){
                 $(document).trigger(Metamaps.JIT.events.removeSynapse, [{
-                    synapseid: this.id
+                    mappableid: this.id
                 }]);
             });
 
@@ -2559,7 +2559,7 @@ Metamaps.Realtime = {
             Metamaps.Mapper.get(data.mapperid, mapperCallback);
         }
         $.ajax({
-            url: "/topics/" + data.topicid + ".json",
+            url: "/topics/" + data.mappableid + ".json",
             success: function (response) {
                 Metamaps.Topics.add(response);
                 topic = Metamaps.Topics.get(response.id);
@@ -2606,7 +2606,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        var topic = Metamaps.Topics.get(data.topicid);
+        var topic = Metamaps.Topics.get(data.mappableid);
         if (topic) {
             var node = topic.get('node');
             var mapping = topic.getMapping();
@@ -2657,7 +2657,7 @@ Metamaps.Realtime = {
             Metamaps.Mapper.get(data.mapperid, mapperCallback);
         }
         $.ajax({
-            url: "/synapses/" + data.synapseid + ".json",
+            url: "/synapses/" + data.mappableid + ".json",
             success: function (response) {
                 Metamaps.Synapses.add(response);
                 synapse = Metamaps.Synapses.get(response.id);
@@ -2704,7 +2704,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        var synapse = Metamaps.Synapses.get(data.synapseid);
+        var synapse = Metamaps.Synapses.get(data.mappableid);
         if (synapse) {
             var edge = synapse.get('edge');
             var mapping = synapse.getMapping();
@@ -2814,12 +2814,12 @@ Metamaps.Control = {
         
         var permToDelete = Metamaps.Active.Mapper.id === topic.get('user_id') || Metamaps.Active.Mapper.get('admin');
         if (permToDelete) {
-            var topicid = topic.id;
+            var mappableid = topic.id;
             var mapping = node.getData('mapping');
             topic.destroy();
             Metamaps.Mappings.remove(mapping);
             $(document).trigger(Metamaps.JIT.events.deleteTopic, [{
-                topicid: topicid
+                mappableid: mappableid
             }]);
             Metamaps.Control.hideNode(nodeid);
         } else {
@@ -2858,12 +2858,12 @@ Metamaps.Control = {
         }
 
         var topic = node.getData('topic');
-        var topicid = topic.id;
+        var mappableid = topic.id;
         var mapping = node.getData('mapping');
         mapping.destroy();
         Metamaps.Topics.remove(topic);
         $(document).trigger(Metamaps.JIT.events.removeTopic, [{
-            topicid: topicid
+            mappableid: mappableid
         }]);
         Metamaps.Control.hideNode(nodeid);
     },
@@ -2987,7 +2987,7 @@ Metamaps.Control = {
                 Metamaps.Control.hideEdge(edge);
             }
         
-            var synapseid = synapse.id;
+            var mappableid = synapse.id;
             synapse.destroy();
 
             // the server will destroy the mapping, we just need to remove it here
@@ -2998,7 +2998,7 @@ Metamaps.Control = {
                 delete edge.data.$displayIndex;
             }
             $(document).trigger(Metamaps.JIT.events.deleteSynapse, [{
-                synapseid: synapseid
+                mappableid: mappableid
             }]);
         } else {
             Metamaps.GlobalUI.notifyUser('Only synapses you created can be deleted');
@@ -3043,7 +3043,7 @@ Metamaps.Control = {
 
         var synapse = edge.getData("synapses")[index];
         var mapping = edge.getData("mappings")[index];
-        var synapseid = synapse.id;
+        var mappableid = synapse.id;
         mapping.destroy();
 
         Metamaps.Synapses.remove(synapse);
@@ -3054,7 +3054,7 @@ Metamaps.Control = {
             delete edge.data.$displayIndex;
         }
         $(document).trigger(Metamaps.JIT.events.removeSynapse, [{
-            synapseid: synapseid
+            mappableid: mappableid
         }]);
     },
     hideSelectedEdges: function () {
@@ -4054,14 +4054,14 @@ Metamaps.Topic = {
         var mappingSuccessCallback = function (mappingModel, response) {
             var newTopicData = {
                 mappingid: mappingModel.id,
-                topicid: mappingModel.get('topic_id')
+                mappableid: mappingModel.get('mappable_id')
             };
 
             $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData]);
         };  
         var topicSuccessCallback = function (topicModel, response) {
             if (Metamaps.Active.Map) {
-                mapping.save({ topic_id: topicModel.id }, {
+                mapping.save({ mappable_id: topicModel.id }, {
                     success: mappingSuccessCallback,
                     error: function (model, response) {
                         console.log('error saving mapping to database');
@@ -4225,14 +4225,14 @@ Metamaps.Synapse = {
         var mappingSuccessCallback = function (mappingModel, response) {
             var newSynapseData = {
                 mappingid: mappingModel.id,
-                synapseid: mappingModel.get('synapse_id')
+                mappableid: mappingModel.get('mappable_id')
             };
 
             $(document).trigger(Metamaps.JIT.events.newSynapse, [newSynapseData]);
         };
         var synapseSuccessCallback = function (synapseModel, response) {
             if (Metamaps.Active.Map) {
-                mapping.save({ synapse_id: synapseModel.id }, {
+                mapping.save({ mappable_id: synapseModel.id }, {
                     success: mappingSuccessCallback
                 });
             }
