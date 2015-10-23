@@ -45,6 +45,7 @@ end
 
 group :development, :test do
   gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'better_errors'
   gem 'quiet_assets'
 end
