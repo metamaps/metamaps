@@ -2541,7 +2541,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        function test() {
+        function waitThenRenderTopic() {
             if (topic && mapping && mapper) {
                 Metamaps.Topic.renderTopic(mapping, topic, false, false);
             }
@@ -2579,7 +2579,7 @@ Metamaps.Realtime = {
             }
         });
 
-        test();
+        waitThenRenderTopic();
     },
     // removeTopic
     sendDeleteTopic: function (data) {
@@ -2634,7 +2634,7 @@ Metamaps.Realtime = {
 
         if (!self.status) return;
 
-        function test() {
+        function waitThenRenderSynapse() {
             if (synapse && mapping && mapper) {
                 topic1 = synapse.getTopic1();
                 node1 = topic1.get('node');
@@ -2676,7 +2676,7 @@ Metamaps.Realtime = {
                 cancel = true;
             }
         });
-        test();
+        waitThenRenderSynapse();
     },
     // deleteSynapse
     sendDeleteSynapse: function (data) {
