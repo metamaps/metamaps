@@ -7,7 +7,7 @@
 realtime/node_modules
 config/database.yml
 .env
-#public/assets
+public/assets
 
 # Ignore bundler config
 .bundle
