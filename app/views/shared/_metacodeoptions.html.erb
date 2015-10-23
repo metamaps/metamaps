@@ -12,7 +12,7 @@
     <ul>
     	<% set.metacodes.sort { |a, b| a.name <=> b.name }.each do |m| %>
 		  <li data-id="<%= m.id.to_s %>">
-		    <img width="24" height="24" src="<%= m.icon %>" alt="<%= m.name %>" />
+		    <img width="24" height="24" src="<%= asset_path m.icon %>" alt="<%= m.name %>" />
 		    <div class="mSelectName"><%= m.name %></div>
 		    <div class="clearfloat"></div>
 		  </li>
@@ -26,7 +26,7 @@
   	<ul>
   		<% Metacode.order("name").all.each do |m| %>
 		  <li data-id="<%= m.id.to_s %>">
-		    <img width="24" height="24" src="<%= m.icon %>" alt="<%= m.name %>" />
+		    <img width="24" height="24" src="<%= asset_path m.icon %>" alt="<%= m.name %>" />
 		    <div class="mSelectName"><%= m.name %></div>
 		    <div class="clearfloat"></div>
 		  </li>
