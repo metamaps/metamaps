@@ -15,7 +15,7 @@ Metamaps::Application.configure do
   # Disable Rails's static asset server (Apache or nginx will already do this)
   config.serve_static_files = true
 
-  config.assets.compile = true
+  config.assets.compile = false
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
