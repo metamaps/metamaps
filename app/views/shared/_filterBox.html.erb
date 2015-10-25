@@ -70,7 +70,7 @@
     
     @metacodes.each_with_index do |metacode, index| 
         @metacodelist += '<li data-id="' + metacode.id.to_s + '">'
-        @metacodelist += '<img src="' + metacode.icon + '" data-id="' + metacode.id.to_s + '" alt="' + metacode.name + '" />'
+        @metacodelist += '<img src="' + asset_path(metacode.icon) + '" data-id="' + metacode.id.to_s + '" alt="' + metacode.name + '" />'
         @metacodelist += '<p>' + metacode.name.downcase + '</p></li>'
     end
     @synapses.each_with_index do |synapse, index| 
