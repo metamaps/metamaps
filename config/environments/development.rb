@@ -40,10 +40,6 @@ Metamaps::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
-  # Compress assets
-  config.assets.compile = true
-  config.assets.compress = false
-
   # Expands the lines which load the assets
   config.assets.debug = true
 end
