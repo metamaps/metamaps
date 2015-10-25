@@ -5,8 +5,10 @@ class MetacodesController < ApplicationController
   # GET /metacodes
   # GET /metacodes.json
   def index
-      
     @metacodes = Metacode.order("name").all
+    @metacodes.map do |metacode|
+      metacode.icon = asset_path(metacode.icon)
+    end
 
     respond_to do |format|
       format.html {
