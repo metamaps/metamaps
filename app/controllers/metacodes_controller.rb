@@ -7,7 +7,7 @@ class MetacodesController < ApplicationController
   def index
     @metacodes = Metacode.order("name").all
     @metacodes.map do |metacode|
-      metacode.icon = asset_path(metacode.icon)
+      metacode.icon = ActionController::Base.helpers.asset_path(metacode.icon)
     end
 
     respond_to do |format|
