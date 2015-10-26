@@ -15,15 +15,17 @@ class Metacode < ActiveRecord::Base
   end
 
   def asset_path_icon
-    ActionController::Base.helpers.asset_path icon
+    if icon.start_with?('http')
+      icon
+    else
+      ActionController::Base.helpers.asset_path icon
+    end
   end
 
   #output json with asset_paths merged in
   def as_json(options)
     json = super(options.merge!(methods: :asset_path_icon))
-    unless json["icon"].start_with?('http')
-      json["icon"] = json["asset_path_icon"]
-    end
+    json["icon"] = json["asset_path_icon"]
     json.except("asset_path_icon")
   end
 end
