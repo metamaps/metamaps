@@ -13,4 +13,15 @@ class Metacode < ActiveRecord::Base
     return true if self.metacode_sets.include? metacode_set
     return false
   end
+
+  def asset_path_icon
+    ActionController::Base.helpers.asset_path icon
+  end
+
+  #output json with asset_paths merged in
+  def as_json(options)
+    json = super(options.merge!(methods: :asset_path_icon))
+    json["icon"] = json["asset_path_icon"]
+    json.except("asset_path_icon")
+  end
 end
