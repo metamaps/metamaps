@@ -22,3 +22,6 @@ Metamaps Test Suite
 20) Rearrange one of your maps. Reload to see if the layout is preserved.
 21) Set the screenshot for one of your maps, and verify the index of maps is updated.
 22) Open two browsers on map #3 and verify that realtime editing works.
+23) Log in as admin
+24) Open the metacodes editor, and create a metacode. Verify it behaves normally (its icon shows up, you can assign it to topics, etc)
+25) Create a new metacode set, and include metacodes. Switch to using this metacode set. Ensure the set shows up in the right click menu on a topic
