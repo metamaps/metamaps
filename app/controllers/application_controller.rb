@@ -37,7 +37,7 @@ private
   end
     
   def require_admin
-    unless authenticated? && user.admin
+    unless authenticated? && admin?
       redirect_to root_url, notice: "You need to be an admin for that."
       return false
     end

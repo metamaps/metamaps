@@ -11,8 +11,6 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
   
-  attr_accessible :name, :email, :image, :password, :password_confirmation, :code, :joinedwithcode, :remember_me
-
   serialize :settings, UserPreference
 	
   validates :password, :presence => true,
@@ -37,7 +35,7 @@ class User < ActiveRecord::Base
    :ninetysix => ['96x96#', :png],
    :onetwentyeight => ['128x128#', :png]
   },
-  :default_url => "/assets/user.png"
+  :default_url => ActionController::Base.helpers.asset_path('user.png')
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/

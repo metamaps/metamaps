@@ -1,15 +1,12 @@
 source 'https://rubygems.org'
 ruby '2.1.3'
 
-gem 'rails', '3.2.17'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'rails', '4.2.4'
 
 gem 'devise'
 gem 'redis'
 gem 'pg'
-gem 'cancan'
+gem 'cancancan'
 gem 'formula'
 gem 'formtastic'
 gem 'json'
@@ -22,6 +19,10 @@ gem 'dotenv'
 gem 'paperclip'
 gem 'aws-sdk'
 
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jbuilder'
+
 #gem 'therubyracer' #optional
 #gem 'rb-readline'
 
@@ -29,12 +30,12 @@ gem 'aws-sdk'
 # in production environments by default.
 group :assets do
   gem 'sass-rails'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'
 
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
 end
 
 group :test do
@@ -44,22 +45,13 @@ end
 
 group :production do #this is used on heroku
  #gem 'rmagick'
+ gem 'rails_12factor'
 end
 
-gem 'jquery-rails', '2.1.2'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
- gem 'jbuilder', '0.8.2'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
-
+group :development, :test do
+  gem 'pry-rails'
+  gem 'pry-byebug'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'quiet_assets'
+end

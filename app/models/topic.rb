@@ -3,12 +3,12 @@ class Topic < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :synapses1, :class_name => 'Synapse', :foreign_key => 'node1_id'
-  has_many :synapses2, :class_name => 'Synapse', :foreign_key => 'node2_id'
+  has_many :synapses1, :class_name => 'Synapse', :foreign_key => 'node1_id', dependent: :destroy
+  has_many :synapses2, :class_name => 'Synapse', :foreign_key => 'node2_id', dependent: :destroy
   has_many :topics1, :through => :synapses2, :source => :topic1
   has_many :topics2, :through => :synapses1, :source => :topic2
 
-  has_many :mappings
+  has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
     
   # This method associates the attribute ":image" with a file attachment

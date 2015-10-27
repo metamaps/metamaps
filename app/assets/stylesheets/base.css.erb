@@ -85,7 +85,7 @@
   padding: 0 16px;
 }
 .canEdit #titleActivator:hover {
-  background-image: url(edit.png);
+  background-image: url(<%= asset_data_uri('edit.png') %>);
   background-repeat: no-repeat;
   background-position: bottom right;
   cursor: text;
@@ -148,7 +148,7 @@
   margin-right: 8px;
 }
 .canEdit .CardOnGraph .best_in_place_desc:hover {
-  background-image: url(edit.png);
+  background-image: url(<%= asset_data_uri('edit.png') %>);
   background-position: top right;
   background-repeat: no-repeat;
   cursor: text;
@@ -244,7 +244,7 @@
   left: 0;
   width: 32px;
   height: 32px;
-  background-image: url(map32_sprite.png);
+  background-image: url(<%= asset_data_uri('map32_sprite.png') %>);
   background-repeat: no-repeat;
   background-position: 0 0;
   cursor: pointer;
@@ -335,7 +335,7 @@
   left: 0;
   width: 32px;
   height: 32px;
-  background-image: url(synapse32_sprite.png);
+  background-image: url(<%= asset_data_uri('synapse32_sprite.png') %>);
   background-repeat: no-repeat;
   background-position: 0 0;
 }
@@ -382,7 +382,7 @@
   min-width: 32px;
   margin-top: 8px;
   margin-left: 8px;
-  background-image: url(permissions32_sprite.png);
+  background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
   background-position: 0 0;
 }
 .mapPerm.co {
@@ -396,12 +396,12 @@
 }
 
 .yourTopic .mapPerm:hover, .yourEdge .mapPerm:hover {
-  background-image: url(arrowperms_sprite.png);
+  background-image: url(<%= asset_data_uri('arrowperms_sprite.png') %>);
   background-position: -32px 0;
   cursor:pointer;
 }
 .yourTopic .mapPerm.minimize, .yourEdge .mapPerm.minimize {
- background-image: url(arrowperms_sprite.png) !important;
+ background-image: url(<%= asset_data_uri('arrowperms_sprite.png') %>) !important;
 background-position: 0 0;
 cursor: pointer;
 }
@@ -417,7 +417,7 @@ cursor: pointer;
   height: 32px;
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-image: url(permissions32_sprite.png);
+  background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
 }
 .mapPerm .permissionSelect .commons {
   background-position: 0 0;
@@ -462,7 +462,7 @@ cursor: pointer;
   right: 16px;
   width: 16px;
   height: 16px;
-  background-image: url(arrowright_sprite.png);
+  background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
   background-repeat: no-repeat;
   background-position: 0 -32px;
 }
@@ -542,7 +542,7 @@ background-color: #E0E0E0;
   right: 8px;
   width: 16px;
   height: 16px;
-  background-image: url(arrowright_sprite.png);
+  background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
   background-repeat: no-repeat;
   background-position: 0 -32px;
 }
@@ -648,10 +648,10 @@ background-color: #E0E0E0;
   left: 12px;
 }
 #linkIcon {
-  background-image: url(link_sprite.png);
+  background-image: url(<%= asset_data_uri('link_sprite.png') %>);
 }
 #uploadIcon {
-  background-image: url(upload_sprite.png);
+  background-image: url(<%= asset_data_uri('upload_sprite.png') %>);
 }
 #addlink:hover #linkIcon, #addupload:hover #uploadIcon {
   background-position: 0 -24px;
@@ -690,7 +690,7 @@ font-family: 'din-regular', helvetica, sans-serif;
   height: 24px;
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-image: url(link_sprite.png);
+  background-image: url(<%= asset_data_uri('link_sprite.png') %>);
   pointer-events: none;
   z-index: 1;
 }
@@ -703,7 +703,7 @@ font-family: 'din-regular', helvetica, sans-serif;
   height: 32px;
   cursor: pointer;
   float:none;
-  background-image: url(remove.png);
+  background-image: url(<%= asset_data_uri('remove.png') %>);
   background-repeat: no-repeat;
   background-position: center center;
 }
@@ -740,7 +740,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 #linkremove {
-  background-image: url(/assets/remove.png);
+  background-image: url(<%= asset_data_uri 'remove.png' %>);
   background-repeat: no-repeat;
   background-position: center center;
   width: 24px;
@@ -781,7 +781,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 #editSynUpperBar {
-  background: #FFFFFF url(synapse32.png) no-repeat 8px center;
+  background: #FFFFFF url(<%= asset_data_uri('synapse32.png') %>) no-repeat 8px center;
   min-height: 48px;
   height: 48px;
   border-bottom: 1px solid #222222;
@@ -814,7 +814,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 .canEdit #edit_synapse_desc:hover {
-  background-image: url(edit.png);
+  background-image: url(<%= asset_data_uri('edit.png') %>);
   background-repeat: no-repeat;
   background-position: 164px center;
   cursor: text;
@@ -841,7 +841,7 @@ font-family: 'din-regular', helvetica, sans-serif;
   height: 24px;
   top: 12px;
   right: 8px;
-  background-image: url(arrowdown_sprite.png);
+  background-image: url(<%= asset_data_uri('arrowdown_sprite.png') %>);
   background-repeat: no-repeat;
   background-position: 4px -12px;
 }
@@ -923,11 +923,11 @@ font-family: 'din-regular', helvetica, sans-serif;
   background-repeat: no-repeat;
 }
 #edit_synapse_right {
-  background-image: url(synapsedirectionright_sprite.png);
+  background-image: url(<%= asset_data_uri('synapsedirectionright_sprite.png') %>);
   right: 16px; 
 }
 #edit_synapse_left {
-  background-image: url(synapsedirectionleft_sprite.png);
+  background-image: url(<%= asset_data_uri('synapsedirectionleft_sprite.png') %>);
   right: 56px; 
 }
 #edit_synapse_left.checked, #edit_synapse_right.checked {
@@ -1103,7 +1103,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 .mapperMetadata {
-    background: url(profile_card_sprite.png) no-repeat center 0;
+    background: url(<%= asset_data_uri('profile_card_sprite.png') %>) no-repeat center 0;
     height: 64px;
     width: 160px;
     margin: 16px auto 0;

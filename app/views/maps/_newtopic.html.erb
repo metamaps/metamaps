@@ -1,19 +1,10 @@
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
   <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes"></div>
   <div id="metacodeImg">
-    <% @m = user.settings.metacodes %>
-    <% set = @m[0].include?("metacodeset") ? MetacodeSet.find(@m[0].sub("metacodeset-","").to_i) : false %>
-    <% if set %>
-      <% @metacodes = set.metacodes %>
-    <% else %>
-      <% @metacodes = [] %>
-      <% @m.each do |m| %>
-        <% @metacodes.push(Metacode.find(m.to_i)) %>
-      <% end %>
-    <% end %>
-    <% @metacodes.sort! {|m1,m2| m2.name.downcase <=> m1.name.downcase }.rotate!(-1) %>
+    <% @metacodes = user_metacodes() %>
+    <% set = get_metacodeset() %>
     <% @metacodes.each do |metacode| %>
-      <img class="cloudcarousel" width="40" height="40" src="<%= metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
+      <img class="cloudcarousel" width="40" height="40" src="<%= asset_path metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
     <% end %>
   </div> 
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>

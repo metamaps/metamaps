@@ -20,7 +20,7 @@
     <% end %>
     <% @metacodes.sort! {|m1,m2| m2.name.downcase <=> m1.name.downcase }.rotate!(-1) %>
     <% @metacodes.each do |metacode| %>
-      <img class="cloudcarousel" width="40" height="40" src="<%= metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>"/>
+      <img class="cloudcarousel" width="40" height="40" src="<%= asset_path metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>"/>
     <% end %>
   </div> 
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>

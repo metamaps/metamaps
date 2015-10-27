@@ -37,7 +37,7 @@
        <% while $i < (Metacode.all.length / 4) do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %> 
               onclick="Metamaps.Admin.liClickHandler.call(this);">
-              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>
@@ -48,7 +48,7 @@
        <% while $i < (Metacode.all.length / 4 * 2) do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
               onclick="Metamaps.Admin.liClickHandler.call(this);">
-              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>
@@ -59,7 +59,7 @@
        <% while $i < (Metacode.all.length / 4 * 3) do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
               onclick="Metamaps.Admin.liClickHandler.call(this);">
-              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>
@@ -70,7 +70,7 @@
        <% while $i < Metacode.all.length do %>
             <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
               onclick="Metamaps.Admin.liClickHandler.call(this);">
-              <img src="<%= @m[$i].icon %>" alt="<%= @m[$i].name %>" />
+              <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
               <div class="clearfloat"></div>
             </li>

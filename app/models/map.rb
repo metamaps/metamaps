@@ -2,18 +2,17 @@ class Map < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :topicmappings, :class_name => 'Mapping', :conditions => {:category => 'Topic'}
-  has_many :synapsemappings, :class_name => 'Mapping', :conditions => {:category => 'Synapse'}
-
-  has_many :topics, :through => :topicmappings
-  has_many :synapses, :through => :synapsemappings
+  has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
+  has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
+  has_many :topics, through: :topicmappings, source: :mappable, source_type: "Topic"
+  has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {
    :thumb => ['188x126#', :png]
    #:full => ['940x630#', :png]
   },
-  :default_url => "/assets/missing-map.png"
+  :default_url => ActionController::Base.helpers.asset_path('missing-map.png')
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/

@@ -10,7 +10,7 @@ module TopicsHelper
       topic['value'] = t.name
       topic['description'] = t.desc.truncate(70) # make this return matched results
       topic['type'] = t.metacode.name
-      topic['typeImageURL'] = t.metacode.icon
+      topic['typeImageURL'] = t.metacode.asset_path_icon
       topic['permission'] = t.permission
       topic['mapCount'] = t.maps.count
       topic['synapseCount'] = t.synapses.count

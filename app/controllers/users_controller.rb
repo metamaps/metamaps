@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_filter :require_user, only: [:edit, :update, :updatemetacodes]
     
   respond_to :html, :json 
-  
+
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
@@ -96,6 +96,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json { render json: @user }
     end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :email, :image, :password, 
+    :password_confirmation, :code, :joinedwithcode, :remember_me)
   end
 
 end
