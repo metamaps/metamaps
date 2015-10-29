@@ -1,4 +1,4 @@
-First off, Metamaps runs on Ruby On Rails. Ruby 2.1.3 and Rails 3.2. You'll need to get Ruby and Rails installed on your computer if you don't already have it. Go to here for Ruby http://rubyinstaller.org/downloads/
+First off, Metamaps runs on Ruby On Rails. You'll need to get Ruby and Rails installed on your computer if you don't already have it. Go to here for Ruby http://rubyinstaller.org/downloads/
 
 You'll also need GIT: http://git-scm.com/download/win
 
@@ -7,7 +7,7 @@ It uses postgreSQL 9.2 as a database. You can install that for your computer fro
 Once you install those, open a 'command prompt with ruby'. 
 
 to install rails
-    gem install rails -v 3.2
+    gem install rails -v 4.2
     
 also download node.js, which is also needed http://nodejs.org/download/
 
@@ -24,7 +24,7 @@ Install all the gems needed for Metamaps by running
 
 Setting up the database:
 
-1) Copy /config/database.yml.default and rename the copy to /config/database.yml then edit database.yml with your text editor and set the password to whatever you chose when you set up the PostGres database.
+1) Copy /config/database.yml.default and rename the copy to /config/database.yml then edit database.yml with your text editor and set the password to whatever you chose when you set up the PostGres database. Then do the same for /config/secrets.yml (the defaults should be OK for this file).
  
 2) In a terminal:
 
