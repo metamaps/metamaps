@@ -1937,6 +1937,13 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
+        $(document).on(Metamaps.Views.chatView.events.openTray, function () {
+          $('.main').addClass('compressed');
+        });
+        $(document).on(Metamaps.Views.chatView.events.closeTray, function () {
+          $('.main').removeClass('compressed');
+        });
+
         var railsEnv = $('body').data('env');
         var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
         self.socket = new SocketIoConnection({ url: whichToConnect });
@@ -1977,8 +1984,8 @@ Metamaps.Realtime = {
         self.room = new Metamaps.Views.room({
           webrtc: self.webrtc,
           socket: self.socket,
-          username: 'dude',//getUsername(opts.user, provider),
-          image: 'https://pbs.twimg.com/profile_images/436050101539065856/QMGlzCUn_400x400.jpeg', //getImage(opts.user, provider),
+          username: Metamaps.Active.Mapper.get('name'),
+          image: Metamaps.Active.Mapper.get('image'),
           room: 'global',
           $video: self.localVideo.$video,
           myVideoView: self.localVideo.view,
@@ -2231,7 +2238,7 @@ Metamaps.Realtime = {
     createChat: function() {
         var self = Metamaps.Realtime;
 
-        $('#wrapper').append(self.room.chat.$container);
+        $('body').prepend(self.room.chat.$container);
         //self.room.chat.open();
     },
     sendRealtimeOn: function () {
@@ -2269,6 +2276,7 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid] = {
             name: data.username,
+            username: data.username,
             image: data.userimage,
             color: Metamaps.Util.getPastelColor(),
             realtime: data.userrealtime,
@@ -2291,8 +2299,8 @@ Metamaps.Realtime = {
         mapperListItem += '</li>';
 
         if (data.userid !== Metamaps.Active.Mapper.id) {
-            $('#mapper' + data.userid).remove();
-            $('.realtimeMapperList ul').append(mapperListItem);
+            //$('#mapper' + data.userid).remove();
+            self.room.chat.addParticipant(self.mappersOnMap[data.userid]);
 
             // create a div for the collaborators compass
             self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status);
@@ -2309,6 +2317,7 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid] = {
             name: data.username,
+            username: data.username,
             image: data.userimage,
             color: Metamaps.Util.getPastelColor(),
             realtime: true,
@@ -2326,8 +2335,8 @@ Metamaps.Realtime = {
             mapperListItem += data.username;
             mapperListItem += '<div class="littleJuntoIcon"></div>';
             mapperListItem += '</li>';
-            $('#mapper' + data.userid).remove();
-            $('.realtimeMapperList ul').append(mapperListItem);
+            //$('#mapper' + data.userid).remove();
+            self.room.chat.addParticipant(self.mappersOnMap[data.userid]);
 
             // create a div for the collaborators compass
             self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status);
@@ -2373,8 +2382,9 @@ Metamaps.Realtime = {
 
         delete self.mappersOnMap[data.userid];
 
-        $('#mapper' + data.userid).remove();
+        //$('#mapper' + data.userid).remove();
         $('#compass' + data.userid).remove();
+        self.room.chat.removeParticipant(data.username);
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just left the map');
     },
@@ -2387,7 +2397,7 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid].realtime = true;
 
-        $('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn');
+        //$('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn');
         $('#compass' + data.userid).show();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just turned on realtime');
@@ -2401,7 +2411,7 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid].realtime = false;
 
-        $('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff');
+        //$('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff');
         $('#compass' + data.userid).hide();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just turned off realtime');

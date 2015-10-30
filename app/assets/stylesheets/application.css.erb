@@ -628,7 +628,11 @@ label {
     margin: 0 0 0 1.3em;
 }
 .main {
+    position: relative;
     /*overflow:hidden; */
+}
+.main.compressed {
+  width: calc(100% - 300px);
 }
 #infovis-canvas {
     -webkit-touch-callout: none;
@@ -1076,84 +1080,6 @@ h3.filterBox {
     
 }
 /* end filter by metacode */
-
-/* collaborate */
-
-.sidebarCollaborate {
-    width: 32px;
-    height: 32px;
-}
-.sidebarCollaborateBox {
-    display: none;
-    height: auto;
-    padding: 16px;
-    width: 238px;
-}
-h3.realtimeBoxTitle {
-    margin-bottom: 10px;
-    text-align: left;
-    float: left;
-    font-size:18px;
-    line-height:18px;
-}
-.sidebarCollaborateBox .realtimeOnOff {
-    float: right;
-    padding: 4px;
-    border-radius: 2px;
-    margin-left: 12px;
-    cursor: pointer;
-    text-align: center;
-    font-size:12px;
-}
-.sidebarCollaborateBox .realtimeOnOff:hover, .sidebarCollaborateBox .realtimeOnOff.active {
-    color: #00bcd4;
-}
-.sidebarCollaborateBox .rtOff {
-    
-}
-.sidebarCollaborateBox .rtOn {
-
-}
-.realtimeMapperList .rtMapper {
-    list-style-type: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 10px 34px;
-    display: block;
-    height: 14px;
-    font-family: 'din-regular', helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 14px;
-    position: relative;
-}
-
-.rtMapperSelf img {
-    border: 2px solid #424242;
-}
-
-.rtUserImage {
-    position: absolute;
-    top: 4px;
-    left: 0;
-    border-radius: 14px;
-}
-
-.littleJuntoIcon {
-    width: 24px;
-    height:24px;
-    position: absolute;
-    top: 4px;
-    right: 0;
-    background-image: url(<%= asset_data_uri('junto24_sprite.png') %>);
-}
-.realtimeMapperList .littleRtOff  .littleJuntoIcon {
-    background-position: 0 0;
-}
-.realtimeMapperList .littleRtOn .littleJuntoIcon {
-    background-position: -24px 0;
-}
-/* end collaborate */
 
 .nodemargin {
     padding-top: 120px;

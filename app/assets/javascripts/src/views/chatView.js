@@ -203,6 +203,9 @@ Metamaps.Views.chatView = (function () {
         Private.addEventListeners.call(this);
         Private.initialMessages.call(this);
         Private.initializeSounds.call(this);
+        this.$container.css({
+            right: '-300px'
+        });
     };
 
     chatView.prototype.addParticipant = function (participant) {
@@ -229,6 +232,7 @@ Metamaps.Views.chatView = (function () {
         this.unreadMessages = 0;
         this.$unread.hide();
         this.scrollMessages(0);
+        $(document).trigger(chatView.events.openTray);
     }
 
     chatView.prototype.scrollMessages = function(duration) {
@@ -249,6 +253,7 @@ Metamaps.Views.chatView = (function () {
         });
         this.$messageInput.blur();
         this.isOpen = false;
+        $(document).trigger(chatView.events.closeTray);
     }
 
     chatView.prototype.remove = function () {
@@ -262,6 +267,8 @@ Metamaps.Views.chatView = (function () {
      */
     chatView.events = {
         message: 'ChatView:message',
+        openTray: 'ChatView:openTray',
+        closeTray: 'ChatView:closeTray',
         inputFocus: 'ChatView:inputFocus',
         inputBlur: 'ChatView:inputBlur'
     };
