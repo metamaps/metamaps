@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
    :ninetysix => ['96x96#', :png],
    :onetwentyeight => ['128x128#', :png]
   },
-  :default_url => Rails.application.secrets.user_png_url
+  :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
