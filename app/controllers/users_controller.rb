@@ -22,9 +22,9 @@ class UsersController < ApplicationController
   def update
     @user = current_user
 
-    if params[:user][:password] == "" && params[:user][:password_confirmation] == ""
+    if user_params[:password] == "" && user_params[:password_confirmation] == ""
       # not trying to change the password
-      if @user.update_attributes(params[:user])
+      if @user.update_attributes(user_params.except(:password, :password_confirmation))
         if params[:remove_image] == "1"
           @user.image = nil
         end
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       # trying to change the password
       correct_pass = @user.valid_password?(params[:current_password])
 
-      if correct_pass && @user.update_attributes(params[:user])
+      if correct_pass && @user.update_attributes(user_params)
         if params[:remove_image] == "1"
           @user.image = nil
         end
@@ -101,8 +101,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :image, :password, 
-    :password_confirmation, :code, :joinedwithcode, :remember_me)
+    params.require(:user).permit(:name, :email, :image, :password, :password_confirmation)
   end
 
 end
