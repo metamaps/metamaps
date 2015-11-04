@@ -26,7 +26,7 @@ Metamaps::Application.routes.draw do
   get 'explore/mapper/:id', to: 'maps#index', as: :usermaps
   resources :maps, except: [:new, :edit]
   get 'maps/:id/contains', to: 'maps#contains', as: :contains
-  get 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
+  post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
   
   devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => :sessions
 
