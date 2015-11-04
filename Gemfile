@@ -17,7 +17,7 @@ gem 'uservoice-ruby'
 gem 'dotenv'
 
 gem 'paperclip'
-gem 'aws-sdk'
+gem 'aws-sdk', '< 2.0'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
