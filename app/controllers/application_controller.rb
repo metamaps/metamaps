@@ -61,6 +61,6 @@ private
     unsafe_uri = request.env["REQUEST_URI"]
     valid_url = /^https?:\/\/([\w\.-]+)(:\d{1,5})?\/?$/
     safe_uri = (unsafe_uri.match(valid_url)) ? unsafe_uri : "http://metamaps.cc/"
-    @invite_link = "#{safe_uri}join?code=#{current_user.code}"
+    @invite_link = "#{safe_uri}join" + (current_user ? "?code=#{current_user.code}" : "")
   end
 end
