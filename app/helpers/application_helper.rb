@@ -9,7 +9,7 @@ module ApplicationHelper
     @m = user.settings.metacodes
     set = get_metacodeset
     if set
-      @metacodes = set.metacodes
+      @metacodes = set.metacodes.to_a
     else
       @metacodes = Metacode.where(id: @m).to_a
     end
