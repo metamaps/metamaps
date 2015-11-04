@@ -656,7 +656,7 @@ Metamaps.Create = {
             self.newSelectedMetacodeNames = self.selectedMetacodeNames.slice(0);
             self.newSelectedMetacodes = self.selectedMetacodes.slice(0);
         }
-        $('#metacodeSwitchTabs').tabs("select", self.selectedMetacodeSetIndex);
+        $('#metacodeSwitchTabs').tabs("option", "active", self.selectedMetacodeSetIndex);
         $('#topic_name').focus();
     },
     newTopic: {
