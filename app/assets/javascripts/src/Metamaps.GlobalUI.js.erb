@@ -459,7 +459,7 @@ Metamaps.GlobalUI.Search = {
                 $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
                     width: '0'
                 }, 300, function () {
-                    $('.sidebarSearchField').typeahead('setQuery', '');
+                    $('.sidebarSearchField').typeahead('val', '');
                     $('.sidebarSearchField').blur();
                     self.changing = false;
                     self.isOpen = false;
@@ -635,7 +635,7 @@ Metamaps.GlobalUI.Search = {
         $('.limitToMe').unbind().bind("change", function (e) {
             // set the value of the search equal to itself to retrigger the autocomplete event
             self.isOpen = false;
-            $('.sidebarSearchField').typeahead('setQuery', $('.sidebarSearchField').val());
+            $('.sidebarSearchField').typeahead('val', $('.sidebarSearchField').val());
             setTimeout(function () {
                 self.isOpen = true;
             }, 2000);
