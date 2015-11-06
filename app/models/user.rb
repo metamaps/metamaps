@@ -40,6 +40,7 @@ class User < ActiveRecord::Base
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
+  # override default as_json
   def as_json(options={})
     { :id => self.id,
       :name => self.name,
@@ -47,27 +48,36 @@ class User < ActiveRecord::Base
       :admin => self.admin
     }
   end
+
+  def as_json_for_autocomplete
+    user = {}
+    user['id'] = u.id
+    user['label'] = u.name
+    user['value'] = u.name
+    user['profile'] = u.image.url(:sixtyfour)
+    user['mapCount'] = u.maps.count
+    user['generation'] = u.generation
+    user['created_at'] = u.created_at.strftime("%m/%d/%Y")
+    user['rtype'] = "mapper"
+  end
   
+  #generate a random 8 letter/digit code that they can use to invite people
   def generate_code
-    #generate a random 8 letter/digit code that they can use to invite people
 	  self.code = rand(36**8).to_s(36)
-
     $codes.push(self.code)
-
     self.generation = self.get_generation
   end
 
   def get_generation
-    if self.joinedwithcode == self.code
-      # if your joinedwithcode equals your code you must be GEN 0
-      gen = 0
-    elsif self.generation
-      # if your generation has already been calculated then just return that value
-      gen = self.generation
+    calculate_generation() if generation.nil?
+    generation
+  end
+
+  def calculate_generation
+    if code == joinedwithcode
+      update(generation: 0)
     else
-      # if your generation hasn't been calculated, base it off the
-      # generation of the person whose code you joined with + 1
-      gen = User.find_by_code(self.joinedwithcode).get_generation + 1
+      update(generation: User.find_by_code(joinedwithcode) + 1
     end
   end
   
@@ -75,13 +85,12 @@ class User < ActiveRecord::Base
     # make sure we always return a UserPreference instance
     if read_attribute(:settings).nil?
       write_attribute :settings, UserPreference.new
-      read_attribute :settings
-    else
-      read_attribute :settings
     end
+    read_attribute :settings
   end
   
   def settings=(val)
     write_attribute :settings, val
   end
+
 end

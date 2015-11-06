@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-
   before_filter :require_user, only: [:edit, :update, :updatemetacodes]
     
   respond_to :html, :json 
@@ -14,7 +13,6 @@ class UsersController < ApplicationController
   # GET /users/:id/edit
   def edit
     @user = current_user
-    
     respond_with(@user)  
   end
   
