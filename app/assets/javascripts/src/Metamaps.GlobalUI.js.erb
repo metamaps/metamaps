@@ -499,7 +499,7 @@ Metamaps.GlobalUI.Search = {
                 remote: {
                     url: '/search/topics',
                     prepare: function(query, settings) {
-                        settings.url += '?term=' + $('.sidebarSearchField').val();
+                        settings.url += '?term=' + query;
                         if (Metamaps.Active.Mapper && $("#limitTopicsToMe").is(':checked')) {
                             settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
                         }
@@ -532,7 +532,7 @@ Metamaps.GlobalUI.Search = {
                 remote: {
                     url: '/search/maps',
                     prepare: function(query, settings) {
-                        settings.url += '?term=' + $('.sidebarSearchField').val();
+                        settings.url += '?term=' + query;
                         if (Metamaps.Active.Mapper && $("#limitMapsToMe").is(':checked')) {
                             settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
                         }
@@ -564,7 +564,7 @@ Metamaps.GlobalUI.Search = {
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: '/search/maps?term=%QUERY',
+                    url: '/search/mappers?term=%QUERY',
                     wildcard: '%QUERY',
                 },
             }),
