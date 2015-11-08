@@ -26,8 +26,6 @@ class MainController < ApplicationController
   
   # get /search/topics?term=SOMETERM
   def searchtopics
-    @current = current_user
-    
     term = params[:term]
     user = params[:user] ? params[:user] : false
     
@@ -122,15 +120,13 @@ class MainController < ApplicationController
     end
     
     #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
-    @topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+    @topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
     
     render json: autocomplete_array_json(@topics)
   end
   
   # get /search/maps?term=SOMETERM
   def searchmaps
-    @current = current_user
-    
     term = params[:term]
     user = params[:user] ? params[:user] : nil
     
@@ -158,15 +154,13 @@ class MainController < ApplicationController
     end
     
     #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
-    @maps.to_a.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
+    @maps.to_a.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && current_user.id != m.user_id)) }
     
     render json: autocomplete_map_array_json(@maps)
   end
   
   # get /search/mappers?term=SOMETERM
   def searchmappers
-    @current = current_user
-    
     term = params[:term]
     if term && !term.empty?  && term.downcase[0..3] != "map:" && term.downcase[0..5] != "topic:" && term.downcase != "mapper:"
     
@@ -182,8 +176,6 @@ class MainController < ApplicationController
   # get /search/synapses?term=SOMETERM OR
   # get /search/synapses?topic1id=SOMEID&topic2id=SOMEID
   def searchsynapses
-    @current = current_user
-    
     term = params[:term]
     topic1id = params[:topic1id]
     topic2id = params[:topic2id]
@@ -214,7 +206,7 @@ class MainController < ApplicationController
       
       #permissions
       @synapses.delete_if {|s| s.permission == "private" && !authenticated? }
-      @synapses.delete_if {|s| s.permission == "private" && authenticated? && @current.id != s.user_id }
+      @synapses.delete_if {|s| s.permission == "private" && authenticated? && current_user.id != s.user_id }
     else
       @synapses = []
     end
