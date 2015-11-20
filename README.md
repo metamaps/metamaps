@@ -45,7 +45,8 @@ OR create a new account at `/join`, and use access code `qwertyui`
 
 Start mapping and programming!
 
-While we are still figuring out vagrant for Windows, there is an older set of instructions below
+We haven't figured out Vagrant for Windows yet, but we have a set of manual instructions here:
+
 - [For Windows][windows-installation]
 
 ## Contributing
