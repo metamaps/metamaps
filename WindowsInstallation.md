@@ -1,17 +1,13 @@
-First off, Metamaps runs on Ruby On Rails. Ruby 2.1.3 and Rails 3.2. You'll need to get Ruby and Rails installed on your computer if you don't already have it. Go to here for Ruby http://rubyinstaller.org/downloads/
+If you have any trouble with this process, contact us at team@metamaps.cc, and one of our developers may be able to help you out.
 
-You'll also need GIT: http://git-scm.com/download/win
+First, http://railsinstaller.org/en. This will install Ruby, Rails, and Git for you.
 
-It uses postgreSQL 9.2 as a database. You can install that for your computer from here: http://www.enterprisedb.com/products-services-training/pgdownload . During installation you can choose whatever database password you like. Make sure to note it down!
+Once you've done that, you will need to download PostgreSQL and node.js:
 
-Once you install those, open a 'command prompt with ruby'. 
+ - http://nodejs.org/en/download/
+ - http://www.postgresql.org/download/windows/
 
-to install rails
-    gem install rails -v 3.2
-    
-also download node.js, which is also needed http://nodejs.org/download/
-
-Navigate to the folder that you want to download the metamaps files to and run the following: (use your forked git repository address if it's different than this repo. You will also need to go to your Github account settings and add the SSH key that was placed in your clipboard earlier)
+Now open a terminal, and navigate to the folder that you want to download the metamaps files to and run the following:
 
     git clone https://github.com/metamaps/metamaps_gen002.git --branch develop
     cd metamaps_gen002
