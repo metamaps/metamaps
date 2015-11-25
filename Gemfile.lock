@@ -188,6 +188,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
+    tunemygc (1.0.61)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -229,5 +230,9 @@ DEPENDENCIES
   rails_12factor
   redis
   sass-rails
+  tunemygc
   uglifier
   uservoice-ruby
+
+BUNDLED WITH
+   1.10.6
