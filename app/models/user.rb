@@ -50,15 +50,16 @@ class User < ActiveRecord::Base
   end
 
   def as_json_for_autocomplete
-    user = {}
-    user['id'] = u.id
-    user['label'] = u.name
-    user['value'] = u.name
-    user['profile'] = u.image.url(:sixtyfour)
-    user['mapCount'] = u.maps.count
-    user['generation'] = u.generation
-    user['created_at'] = u.created_at.strftime("%m/%d/%Y")
-    user['rtype'] = "mapper"
+    json = {}
+    json['id'] = id
+    json['label'] = name
+    json['value'] = name
+    json['profile'] = image.url(:sixtyfour)
+    json['mapCount'] = maps.count
+    json['generation'] = generation
+    json['created_at'] = created_at.strftime("%m/%d/%Y")
+    json['rtype'] = "mapper"
+    json
   end
   
   #generate a random 8 letter/digit code that they can use to invite people
