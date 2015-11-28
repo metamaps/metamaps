@@ -25,10 +25,6 @@
 	padding: 5px 10px 5px 10px;
 }
 
-.sidebarSearchField {
-  color: #424242;
-}
-
 .sidebarSearchIcon {
   float: left;
   width: 72px;
@@ -74,6 +70,7 @@
 .resultmap, .resulttopic, .resultmapper, .resultnoresult {
   min-height: 48px;
   display: table;
+  width: 100%;
 }
 
 .canEditMap button.addToMap {
@@ -87,22 +84,6 @@
   border-radius: 14px;
 }
 
-.sidebarSearchField {
-  height: 20px;
-  border-top: 1px solid #BDBDBD;
-  border-bottom: 1px solid #BDBDBD;
-  border-left: none;
-  border-right: none;
-  padding: 5px 0 5px 0;
-  width: 0px;
-  margin: 0;
-  outline: none;
-  font-size: 14px;
-  line-height: 14px;
-  background: #F5F5F5; 
-  font-family: 'din-medium', helvetica, sans-serif;
-}
-
 /* main search selector */
 
 .sidebarSearch {
@@ -110,9 +91,26 @@
   height: 32px;
   position: relative;
 
-  .twitter-typeahead,
+  .twitter-typeahead {
+    float: left;
+  }
+
   .sidebarSearchField {
     float: left;
+    height: 20px;
+    border-top: 1px solid #BDBDBD;
+    border-bottom: 1px solid #BDBDBD;
+    border-left: none;
+    border-right: none;
+    padding: 5px 0 5px 0;
+    width: 0px;
+    margin: 0;
+    outline: none;
+    font-size: 14px;
+    line-height: 14px;
+    background: #F5F5F5; 
+    font-family: 'din-medium', helvetica, sans-serif;
+    color: #424242;
   }
 
   .tt-hint {
@@ -132,7 +130,7 @@
     font-family: 'din-medium', helvetica, sans-serif;
   }
 
-  .tt-dropdown-menu {
+  .tt-menu {
     top: 40px !important;
     background: #F5F5F5;
     width: 472px;
@@ -188,26 +186,51 @@
     .maximizeResults {
       background-position: -32px 0;
     }
-  }/* tt-dropdown-menu */
+  }/* tt-menu */
 
   .tt-suggestion {
     position: relative;
     background: #FFF;
     padding: 8px 0;
 
+    > div {
+      display: table-cell;
+    }
+
     &:hover {
       background: #E0E0E0;
-    }
-    .searchResIconWrapper {
-      display: table-cell;
-      vertical-align: middle;
-      height: 32px;
-      padding: 0 18px 0 28px;
     }
     .icon {
       width: 32px;
       height: 32px;
       border-radius:16px;
+    }
+    .resultText {
+      width: 260px;
+      padding-left: 8px;
+      vertical-align: middle;
+      word-wrap: break-word;
+    }
+    .resultTitle {
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      width: 100%;
+      font-family: 'din-regular', helvetica, sans-serif;
+    }
+    .resultDesc {
+      font-size: 12px;
+      line-height: 16px;
+      width: 100%;
+      font-style: italic;
+      font-family: helvetica, sans-serif;
+    }
+
+    .topicMetacode,
+    .searchResIconWrapper {
+      vertical-align: middle;
+      padding: 0 0 0 8px;
+      width: 70px;
     }
   }/* tt-suggestion */
 
@@ -274,28 +297,6 @@
     }
   }/* tt-dataset-mappers */
 
-  .resultText {
-    width: 260px;
-    display: table-cell;
-    padding-left: 8px;
-    vertical-align: middle;
-    word-wrap: break-word;
-  }
-  .resultTitle {
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 20px;
-    width: 100%;
-    font-family: 'din-regular', helvetica, sans-serif;
-  }
-  .resultDesc {
-    font-size: 12px;
-    line-height: 16px;
-    width: 100%;
-    font-style: italic;
-    font-family: helvetica, sans-serif;
-  }
-
   .autoOptions {
     width: 114px;
     height: 48px;
@@ -308,7 +309,6 @@
     div,
     button {
       position: absolute;
-      padding: 0;
       margin: 0;
       border: none;
       outline: none;
@@ -375,13 +375,6 @@
     padding-left: 20px;
     font-size: 12px;
     line-height: 24px;
-  }
-
-  .topicMetacode {
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0 0 0 8px;
-    width: 70px;
   }
 
   .tip {
