@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+
+  before_filter :get_invite_link
   
   # this is for global login
   include ContentHelper
@@ -47,7 +49,6 @@ private
     current_user
   end
   
-    
   def authenticated?
     current_user
   end
@@ -55,5 +56,11 @@ private
   def admin?
     current_user && current_user.admin
   end
-  
+
+  def get_invite_link
+    unsafe_uri = request.env["REQUEST_URI"]
+    valid_url = /^https?:\/\/([\w\.-]+)(:\d{1,5})?\/?$/
+    safe_uri = (unsafe_uri.match(valid_url)) ? unsafe_uri : "http://metamaps.cc/"
+    @invite_link = "#{safe_uri}join" + (current_user ? "?code=#{current_user.code}" : "")
+  end
 end

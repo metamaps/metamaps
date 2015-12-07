@@ -37,12 +37,11 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
-    aws-sdk (2.1.32)
-      aws-sdk-resources (= 2.1.32)
-    aws-sdk-core (2.1.32)
-      jmespath (~> 1.0)
-    aws-sdk-resources (2.1.32)
-      aws-sdk-core (= 2.1.32)
+    aws-sdk (1.66.0)
+      aws-sdk-v1 (= 1.66.0)
+    aws-sdk-v1 (1.66.0)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     bcrypt (3.1.10)
     best_in_place (3.0.3)
       actionpack (>= 3.2)
@@ -98,7 +97,6 @@ GEM
     jbuilder (2.3.2)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
-    jmespath (1.1.3)
     jquery-rails (4.0.5)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -213,6 +211,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
+    tunemygc (1.0.61)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -229,7 +228,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aws-sdk
+  aws-sdk (< 2.0)
   best_in_place
   better_errors
   binding_of_caller
@@ -256,6 +255,7 @@ DEPENDENCIES
   redis
   rspec-rails
   sass-rails
+  tunemygc
   uglifier
   uservoice-ruby
 

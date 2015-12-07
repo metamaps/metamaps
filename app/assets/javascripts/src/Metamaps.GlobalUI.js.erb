@@ -459,7 +459,7 @@ Metamaps.GlobalUI.Search = {
                 $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
                     width: '0'
                 }, 300, function () {
-                    $('.sidebarSearchField').typeahead('setQuery', '');
+                    $('.sidebarSearchField').typeahead('val', '');
                     $('.sidebarSearchField').blur();
                     self.changing = false;
                     self.isOpen = false;
@@ -477,95 +477,109 @@ Metamaps.GlobalUI.Search = {
         var topics = {
             name: 'topics',
             limit: 9999,
-            dupChecker: function (datum1, datum2) {
-                return false;
-            },
-            template: $('#topicSearchTemplate').html(),
-            remote: {
-                url: '/search/topics?term=%QUERY',
-                replace: function () {
-                    var q = '/search/topics?term=' + $('.sidebarSearchField').val();
-                    if (Metamaps.Active.Mapper && $("#limitTopicsToMe").is(':checked')) {
-                        q += "&user=" + Metamaps.Active.Mapper.id.toString();
-                    }
-                    return q;
+            
+            display: function(s) { return s.label; },
+            templates: {
+                notFound: function(s) {
+                    return Hogan.compile($('#topicSearchTemplate').html()).render({
+                        value: "No results",
+                        label: "No results",
+                        typeImageURL: "<%= asset_path('icons/wildcard.png') %>",
+                        rtype: "noresult"
+                    });
                 },
-                filter: function (dataset) {
-                    if (dataset.length == 0) {
-                        dataset.push({
-                            value: "No results",
-                            label: "No results",
-                            typeImageURL: "<%= asset_path('icons/wildcard.png') %>",
-                            rtype: "noresult"
-                        });
-                    }
-                    return dataset;
-                }
+                header: topicheader,
+                suggestion: function(s) {
+                    return Hogan.compile($('#topicSearchTemplate').html()).render(s);
+                },
             },
-            engine: Hogan,
-            header: topicheader
+            source: new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/search/topics',
+                    prepare: function(query, settings) {
+                        settings.url += '?term=' + query;
+                        if (Metamaps.Active.Mapper && $("#limitTopicsToMe").is(':checked')) {
+                            settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
+                        }
+                        return settings;
+                    },
+                },
+            }),
         };
 
         var maps = {
             name: 'maps',
             limit: 9999,
-            dupChecker: function (datum1, datum2) {
-                return false;
-            },
-            template: $('#mapSearchTemplate').html(),
-            remote: {
-                url: '/search/maps?term=%QUERY',
-                replace: function () {
-                    var q = '/search/maps?term=' + $('.sidebarSearchField').val();
-                    if (Metamaps.Active.Mapper && $("#limitMapsToMe").is(':checked')) {
-                        q += "&user=" + Metamaps.Active.Mapper.id.toString();
-                    }
-                    return q;
+            display: function(s) { return s.label; },
+            templates: {
+                notFound: function(s) {
+                    return Hogan.compile($('#mapSearchTemplate').html()).render({
+                        value: "No results",
+                        label: "No results",
+                        rtype: "noresult"
+                    });
                 },
-                filter: function (dataset) {
-                    if (dataset.length == 0) {
-                        dataset.push({
-                            value: "No results",
-                            label: "No results",
-                            rtype: "noresult"
-                        });
-                    }
-                    return dataset;
-                }
+                header: mapheader,
+                suggestion: function(s) {
+                    return Hogan.compile($('#mapSearchTemplate').html()).render(s);
+                },
             },
-            engine: Hogan,
-            header: mapheader
+            source: new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/search/maps',
+                    prepare: function(query, settings) {
+                        settings.url += '?term=' + query;
+                        if (Metamaps.Active.Mapper && $("#limitMapsToMe").is(':checked')) {
+                            settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
+                        }
+                        return settings;
+                    },
+                },
+            }),
         };
 
         var mappers = {
             name: 'mappers',
             limit: 9999,
-            dupChecker: function (datum1, datum2) {
-                return false;
+            display: function(s) { return s.label; },
+            templates: {
+                notFound: function(s) {
+                    return Hogan.compile($('#mapperSearchTemplate').html()).render({
+                        value: "No results",
+                        label: "No results",
+                        rtype: "noresult",
+                        profile: "<%= asset_path('user.png') %>",
+                    });
+                },
+                header: mapperheader,
+                suggestion: function(s) {
+                    return Hogan.compile($('#mapperSearchTemplate').html()).render(s);
+                },
             },
-            template: $('#mapperSearchTemplate').html(),
-            remote: {
-                url: '/search/mappers?term=%QUERY',
-                filter: function (dataset) {
-                    if (dataset.length == 0) {
-                        dataset.push({
-                            profile: "<%= asset_path('user.png') %>",
-                  
-                            value: "No results",
-                            label: "No results",
-                            rtype: "noresult"
-                        });
-                    }
-                    return dataset;
-                }
-            },
-            engine: Hogan,
-            header: mapperheader
+            source: new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/search/mappers?term=%QUERY',
+                    wildcard: '%QUERY',
+                },
+            }),
         };
-        $('.sidebarSearchField').typeahead([topics, maps, mappers]);
+
+        // Take all that crazy setup data and put it together into one beautiful typeahead call!
+        $('.sidebarSearchField').typeahead(
+            {
+                highlight: true,
+            },
+            [topics, maps, mappers]
+        );
 
         //Set max height of the search results box to prevent it from covering bottom left footer
-        $('.sidebarSearchField').bind('typeahead:suggestionsRendered', function (event) {
+        $('.sidebarSearchField').bind('typeahead:render', function (event) {
             self.initSearchOptions();
             self.hideLoader();
             var h = $(window).height();
@@ -577,7 +591,7 @@ Metamaps.GlobalUI.Search = {
         });
 
         // tell the autocomplete to launch a new tab with the topic, map, or mapper you clicked on
-        $('.sidebarSearchField').bind('typeahead:selected', self.handleResultClick);
+        $('.sidebarSearchField').bind('typeahead:select', self.handleResultClick);
         
         // don't do it, if they clicked on a 'addToMap' button
         $('.sidebarSearch button.addToMap').click(function (event) {
@@ -585,7 +599,7 @@ Metamaps.GlobalUI.Search = {
         });
 
         // make sure that when you click on 'limit to me' or 'toggle section' it works
-        $('.sidebarSearchField').bind('typeahead:queryChanged', function(){
+        $('.sidebarSearchField').bind('typeahead:change', function(){
             if ($(this).val() === "") {
                 self.hideLoader();
             }
@@ -635,7 +649,7 @@ Metamaps.GlobalUI.Search = {
         $('.limitToMe').unbind().bind("change", function (e) {
             // set the value of the search equal to itself to retrigger the autocomplete event
             self.isOpen = false;
-            $('.sidebarSearchField').typeahead('setQuery', $('.sidebarSearchField').val());
+            $('.sidebarSearchField').typeahead('val', $('.sidebarSearchField').val());
             setTimeout(function () {
                 self.isOpen = true;
             }, 2000);

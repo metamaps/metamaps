@@ -231,9 +231,8 @@
 <p>As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
 <p>Below is a personal invite link containing your unique access code, which can be used multiple times.</p>
             <div id="joinCodesBox">
-            <% mapper = current_user %>
-            <p class="joinCodes">http://metamaps.cc/join?code=<%= mapper.code %></p>
-            <button class="button" onclick="Metamaps.GlobalUI.shareInvite('http://metamaps.cc/join?code=<%= mapper.code %>');">COPY INVITE LINK!</button>
+            <p class="joinCodes"><%= @invite_link %>
+            <button class="button" onclick="Metamaps.GlobalUI.shareInvite('<%= @invite_link %>');">COPY INVITE LINK!</button>
             </div>
             
         </div>

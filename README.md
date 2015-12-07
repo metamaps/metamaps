@@ -45,7 +45,8 @@ OR create a new account at `/join`, and use access code `qwertyui`
 
 Start mapping and programming!
 
-While we are still figuring out vagrant for Windows, there is an older set of instructions below
+We haven't figured out Vagrant for Windows yet, but we have a set of manual instructions here:
+
 - [For Windows][windows-installation]
 
 ## Contributing
@@ -72,6 +73,6 @@ Copyright (c) 2015 Connor Turland
 [site-beta]: http://metamaps.cc
 [community]: https://plus.google.com/u/0/communities/115060009262157699234
 [license]: https://github.com/metamaps/metamaps_gen002/blob/master/LICENSE
-[contributing]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md
-[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md#reporting-bugs-and-other-issues
-[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/WindowsInstallation.md
+[contributing]: https://github.com/metamaps/metamaps_gen002/blob/master/doc/CONTRIBUTING.md
+[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/master/doc/CONTRIBUTING.md#reporting-bugs-and-other-issues
+[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/doc/WindowsInstallation.md

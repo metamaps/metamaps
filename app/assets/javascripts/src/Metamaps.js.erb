@@ -656,7 +656,7 @@ Metamaps.Create = {
             self.newSelectedMetacodeNames = self.selectedMetacodeNames.slice(0);
             self.newSelectedMetacodes = self.selectedMetacodes.slice(0);
         }
-        $('#metacodeSwitchTabs').tabs("select", self.selectedMetacodeSetIndex);
+        $('#metacodeSwitchTabs').tabs("option", "active", self.selectedMetacodeSetIndex);
         $('#topic_name').focus();
     },
     newTopic: {
@@ -3300,26 +3300,34 @@ Metamaps.Filter = {
         // the first option enables us to accept
         // ['Topics', 'Synapses'] as 'collection'
         if (typeof collection === "object") {
-            Metamaps[collection[0]].each(function(model) {
-                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-                if (prop && newList.indexOf(prop) === -1) {
-                    newList.push(prop);
-                }
-            });
-            Metamaps[collection[1]].each(function(model) {
-                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-                if (prop && newList.indexOf(prop) === -1) {
-                    newList.push(prop);
-                }
-            });
-        }
-        else if (typeof collection === "string") {
-            Metamaps[collection].each(function(model) {
-                var prop = model.get(propertyToCheck) ? model.get(propertyToCheck).toString() : false;
-                if (prop && newList.indexOf(prop) === -1) {
-                    newList.push(prop);
-                }
-            });
+          Metamaps[collection[0]].each(function(model) {
+            var prop = model.get(propertyToCheck);
+            if (prop !== null) {
+              prop = prop.toString();
+              if (newList.indexOf(prop) === -1) {
+                newList.push(prop);
+              }
+            }
+          });
+          Metamaps[collection[1]].each(function(model) {
+            var prop = model.get(propertyToCheck);
+            if (prop !== null) {
+              prop = prop.toString();
+              if (newList.indexOf(prop) === -1) {
+                newList.push(prop);
+              }
+            }
+          });
+        } else if (typeof collection === "string") {
+          Metamaps[collection].each(function(model) {
+            var prop = model.get(propertyToCheck);
+            if (prop !== null) {
+              prop = prop.toString();
+              if (newList.indexOf(prop) === -1) {
+                newList.push(prop);
+              }
+            }
+          });
         }
         
         removed = _.difference(self.filters[filtersToUse], newList);

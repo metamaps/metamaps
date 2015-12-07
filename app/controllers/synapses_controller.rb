@@ -50,8 +50,7 @@ class SynapsesController < ApplicationController
   
   # DELETE synapses/:id
   def destroy
-    @current = current_user
-    @synapse = Synapse.find(params[:id]).authorize_to_delete(@current)
+    @synapse = Synapse.find(params[:id]).authorize_to_delete(current_user)
     @synapse.delete if @synapse
       
     respond_to do |format|

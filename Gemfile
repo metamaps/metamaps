@@ -17,7 +17,7 @@ gem 'uservoice-ruby'
 gem 'dotenv'
 
 gem 'paperclip'
-gem 'aws-sdk'
+gem 'aws-sdk', '< 2.0'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -54,4 +54,5 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'quiet_assets'
+  gem 'tunemygc'
 end
