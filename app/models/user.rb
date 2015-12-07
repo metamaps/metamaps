@@ -78,7 +78,7 @@ class User < ActiveRecord::Base
     if code == joinedwithcode
       update(generation: 0)
     else
-      update(generation: User.find_by_code(joinedwithcode) + 1)
+      update(generation: User.find_by_code(joinedwithcode).generation + 1)
     end
   end
   
