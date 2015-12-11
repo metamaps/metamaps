@@ -1972,10 +1972,7 @@ Metamaps.Realtime = {
           if (self.localVideo && self.status) {
             $('#wrapper').append(self.localVideo.view.$container);
           }
-          self.socket.emit('videoAdded', {
-            avatar: Metamaps.Active.Mapper.get('image'),
-            username: Metamaps.Active.Mapper.get('name')
-          });
+          self.socket.emit('videoAdded');
           self.webrtc.webrtc.peers.forEach(function (p) {
             p.pc.addStream(self.webrtc.webrtc.localStream);
             p.start();
@@ -2059,13 +2056,6 @@ Metamaps.Realtime = {
         self.room.room = 'map-' + Metamaps.Active.Map.id;
         self.room.join(function (err, roomDesc) {
           //attachMediaStream(self.webrtc.webrtc.localStream, self.localVideo.$video[0]);
-
-          for (id in roomDesc.avatars) {
-            self.webrtc.webrtc.peers.find(function(p) { return p.id === id; }).avatar = roomDesc.avatars[id];
-          }
-          for (id in roomDesc.usernames) {
-            self.webrtc.webrtc.peers.find(function(p) { return p.id === id; }).username = roomDesc.usernames[id];
-          }
 
           function addVideo(v) {
             // random position for now
