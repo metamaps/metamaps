@@ -7,7 +7,7 @@ Metamaps.Views.chatView = (function () {
 
     var Private = {
         messageHTML: "<div class='chat-message'>" +
-            "<div class='chat-message-user'><img src='<%= image %>' title='<%= user %>'/></div>" +
+            "<div class='chat-message-user'><img src='<%= user_image %>' title='<%= user_name %>'/></div>" +
             "<div class='chat-message-text'><%= message %></div>" +
             "<div class='chat-message-time'><%= timestamp %></div>" +
             "<div class='clearfloat'></div>" +
@@ -46,9 +46,9 @@ Metamaps.Views.chatView = (function () {
             this.$container.append(this.$juntoHeader);
             this.$container.append(this.$participants);
             this.$container.append(this.$chatHeader);
-            this.$container.append(this.$messageInput);
             this.$container.append(this.$button);
             this.$container.append(this.$messages);
+            this.$container.append(this.$messageInput);
         },
         addEventListeners: function() {
             var self = this;
@@ -116,12 +116,12 @@ Metamaps.Views.chatView = (function () {
             var m = _.clone(message.attributes);
 
             var today = new Date();
-            m.timestamp = new Date(m.timestamp);
+            m.timestamp = new Date(m.created_at);
 
             var date = (m.timestamp.getMonth() + 1) + '/' + m.timestamp.getDate();
             date += " " + addZero(m.timestamp.getHours()) + ":" + addZero(m.timestamp.getMinutes());
             m.timestamp = date;
-            m.image = m.image || 'http://www.hotpepper.ca/wp-content/uploads/2014/11/default_profile_1_200x200.png';
+            m.image = m.user_image || 'http://www.hotpepper.ca/wp-content/uploads/2014/11/default_profile_1_200x200.png';
             m.message = linker.link(m.message);
             var $html = $(this.messageTemplate(m));
             this.$messages.append($html);
@@ -138,9 +138,6 @@ Metamaps.Views.chatView = (function () {
         handleInputMessage: function() {
             var message = {
                 message: this.$messageInput.val(),
-                timestamp: Date.now(),
-                user: this.mapper.get('name'),
-                image: this.mapper.get('image')
             };
             this.$messageInput.val('');
             $(document).trigger(chatView.events.message + '-' + this.room, [message]);
@@ -245,6 +242,12 @@ Metamaps.Views.chatView = (function () {
         this.$messages.animate({
             scrollTop: numMessages * messageHeight
         }, duration);
+    }
+
+    chatView.prototype.clearMessages = function () {
+        this.unreadMessages = 0;
+        this.$unread.hide();
+        this.$messages.empty();
     }
 
     chatView.prototype.close = function () {

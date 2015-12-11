@@ -40,6 +40,8 @@ Metamaps.Views.room = (function () {
       this.isActiveRoom = false;
       this.webrtc.leaveRoom();
       this.chat.removeParticipants();
+      this.chat.clearMessages();
+      this.messages.reset();
     }
 
     room.prototype.setPeopleCount = function(count) {
@@ -76,6 +78,55 @@ Metamaps.Views.room = (function () {
           }
         });
 
+        this.webrtc.on('mute', function (data) {
+          var v = self.videos[data.id];
+          if (!v) return;
+
+          if (data.name === 'audio') {
+            v.audioStatus = false;
+          }
+          else if (data.name === 'video') {
+            v.videoStatus = false;
+            v.$avatar.show();
+          }
+          if (!v.audioStatus && !v.videoStatus) v.$container.hide();
+        });
+        this.webrtc.on('unmute', function (data) {
+          var v = self.videos[data.id];
+          if (!v) return;
+
+          if (data.name === 'audio') {
+            v.audioStatus = true;
+          }
+          else if (data.name === 'video') {
+            v.videoStatus = true;
+            v.$avatar.hide();
+          }
+          v.$container.show();
+        });
+
+        this.socket.on('addVideo', function (data) {
+          var existingPeer = self.webrtc.webrtc.peers.find(function(p) { return p.id === data.id; });
+          if (!existingPeer) {
+            var peer = self.webrtc.webrtc.createPeer({
+              id: data.id,
+              type: 'video',
+              enableDataChannels: true,
+              receiveMedia: {
+                mandatory: {
+                  OfferToReceiveAudio: true,
+                  OfferToReceiveVideo: true
+                }
+              }
+            });
+            peer.avatar = data.avatar;
+            self.webrtc.emit('createdPeer', peer);
+            peer.start();
+            
+            // the rest will happen automatically through the 'peerStreamAdded' event and associated event handlers
+          }
+        });
+
         var sendChatMessage = function (event, data) {
           self.sendChatMessage(data);
         };
@@ -90,22 +141,46 @@ Metamaps.Views.room = (function () {
         var
           id = this.webrtc.getDomId(peer),
           video = attachMediaStream(peer.stream);
-          v = new VideoView(video, null, id, false, { DOUBLE_CLICK_TOLERANCE: 200 });
+          v = new VideoView(video, null, id, false, { DOUBLE_CLICK_TOLERANCE: 200, avatar: peer.avatar });
 
         if (this._videoAdded) this._videoAdded(v);
         this.videos[peer.id] = v;
       }
 
       room.prototype.removeVideo = function (peer) {
-          console.log(peer);
+          console.log('removeVideo', peer);
           var id = typeof peer == 'string' ? peer : peer.id;
           this.videos[id].remove();
           delete this.videos[id];
       }
 
       room.prototype.sendChatMessage = function (data) {
+        var self = this;
           //this.roomRef.child('messages').push(data);
+          console.log(data);
+          var m = new Metamaps.Backbone.Message({
+            message: data.message,
+            resource_id: Metamaps.Active.Map.id,
+            resource_type: "Map"
+          });
+          m.save(null, {
+            success: function (model, response) {
+              self.messages.add(model);
+              $(document).trigger(room.events.newMessage, [model]);
+            },
+            error: function (model, response) {
+              console.log('error!', response);
+            }
+          });
       }
+
+    /**
+     * @class
+     * @static
+     */
+    room.events = {
+        newMessage: "Room:newMessage"
+    };
 
     return room;
 })();

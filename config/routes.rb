@@ -9,6 +9,7 @@ Metamaps::Application.routes.draw do
   get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
   get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
   
+  resources :messages, only: [:show, :create, :update, :destroy]
   resources :mappings, except: [:index, :new, :edit]
   resources :metacode_sets, :except => [:show]
   resources :metacodes, :except => [:show, :destroy]

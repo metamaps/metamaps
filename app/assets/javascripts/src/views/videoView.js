@@ -127,7 +127,8 @@ Metamaps.Views.videoView = (function () {
         $vidContainer.addClass('video-cutoff');
         $vidContainer.append(this.video);
 
-        this.$avatar = $('<img draggable="false" class="collaborator-video-avatar" src="/assets/default_profile.png" width="150" height="150" />');
+        this.avatar = config.avatar;
+        this.$avatar = $('<img draggable="false" class="collaborator-video-avatar" src="' + config.avatar + '" width="150" height="150" />');
         $vidContainer.append(this.$avatar);
 
         this.$container.append($vidContainer);
@@ -155,6 +156,11 @@ Metamaps.Views.videoView = (function () {
         this.$parent.on('mousemove.video' + this.id, function (event) {
             Handlers.mousemove.call(self, event);
         });
+    }
+
+    videoView.prototype.setAvatar = function (src) {
+        this.$avatar.attr('src', src);
+        this.avatar = src;
     }
 
     videoView.prototype.remove = function () {

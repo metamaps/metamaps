@@ -10,9 +10,9 @@ class User < ActiveRecord::Base
   before_create :generate_code
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
-  
+
   serialize :settings, UserPreference
-	
+
   validates :password, :presence => true,
                        :length => { :within => 8..40 },
                        :on => :create
@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email # done by devise
 
   validates :joinedwithcode, :presence => true, :inclusion => { :in => $codes, :message => "%{value} is not valid" }, :on => :create
-    
+
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :image, :styles => {
    :thirtytwo => ['32x32#', :png],
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
    :onetwentyeight => ['128x128#', :png]
   },
   :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
-    
+
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
     json['rtype'] = "mapper"
     json
   end
-  
+
   #generate a random 8 letter/digit code that they can use to invite people
   def generate_code
 	  self.code = rand(36**8).to_s(36)
@@ -78,10 +78,10 @@ class User < ActiveRecord::Base
     if code == joinedwithcode
       update(generation: 0)
     else
-      update(generation: User.find_by_code(joinedwithcode) + 1)
+      update(generation: User.find_by_code(joinedwithcode).generation + 1)
     end
   end
-  
+
   def settings
     # make sure we always return a UserPreference instance
     if read_attribute(:settings).nil?
@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
     end
     read_attribute :settings
   end
-  
+
   def settings=(val)
     write_attribute :settings, val
   end

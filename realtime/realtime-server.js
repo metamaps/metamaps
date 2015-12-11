@@ -3,6 +3,8 @@ var
   signalServer = require('./signal'),
   stunservers = [{"url": "stun:stun.l.google.com:19302"}];
 
+io.set('log', false);
+
 function start() {
 
     signalServer(io, stunservers);
@@ -89,6 +91,13 @@ function start() {
             delete data.mapid;
 
             socket.broadcast.emit('maps-' + mapId + '-topicDrag', data);
+        });
+
+        socket.on('newMessage', function (data) {
+            var mapId = data.mapid;
+            delete data.mapid;
+
+            socket.broadcast.emit('maps-' + mapId + '-newMessage', data);
         });
 
         socket.on('newTopic', function (data) {

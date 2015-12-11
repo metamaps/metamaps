@@ -9,10 +9,12 @@ module.exports = function(io, stunservers) {
     function describeRoom(name) {
         var clients = io.sockets.clients(name);
         var result = {
-            clients: {}
+            clients: {},
+            avatars: {}
         };
         clients.forEach(function (client) {
             result.clients[client.id] = client.resources;
+            result.avatars[client.id] = client.avatar;
         });
         return result;
     }
@@ -38,7 +40,7 @@ module.exports = function(io, stunservers) {
 
         client.resources = {
             screen: false,
-            video: true,
+            video: false,
             audio: false
         };
 
@@ -63,6 +65,18 @@ module.exports = function(io, stunservers) {
         });
 
         client.on('join', join);
+        client.on('videoAdded', videoAdded);
+
+        function videoAdded(data) {
+          var socketsInRoom = io.sockets.clients(client.room);
+          client.resources.video = true;
+          client.avatar = data.avatar;
+          socketsInRoom.forEach(function(socket) {
+            if (socket.id !== client.id) {
+              socket.emit('addVideo', { id: client.id, avatar: data.avatar });
+            }
+          });
+        }
 
         client.on('requestRoomCount', function(name) {
             client.emit('room_count', {

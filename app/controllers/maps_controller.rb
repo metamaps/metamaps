@@ -78,8 +78,9 @@ class MapsController < ApplicationController
                     object = m.mappable
                     !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
                 }
+                @allmessages = @map.messages
 
-                respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
+                respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @allmessages, @map) 
             }
             format.json { render json: @map }
         end
@@ -109,6 +110,7 @@ class MapsController < ApplicationController
         @json['synapses'] = @allsynapses
         @json['mappings'] = @allmappings
         @json['mappers'] = @allmappers
+        @json['messages'] = @map.messages
 
         respond_to do |format|
             format.json { render json: @json }
