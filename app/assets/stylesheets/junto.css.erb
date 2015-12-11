@@ -62,7 +62,7 @@
   top: 85%;
   right: 0px;
   cursor: pointer;
-  background: url(audio_sprite.png) no-repeat;
+  background: url(<%= asset_path 'audio_sprite.png' %>) no-repeat;
 }
 .collaborator-video .video-audio:hover {
   background-position-x: -24px;
@@ -77,7 +77,7 @@
   top: 85%;
   left: 0px;
   cursor: pointer;
-  background: url(camera_sprite.png) no-repeat;
+  background: url(<%= asset_path 'camera_sprite.png' %>) no-repeat;
 }
 .collaborator-video .video-video:hover {
   background-position-x: -24px;
@@ -106,7 +106,7 @@
   left: -36px;
   width: 36px;
   height: 49px;
-  background: url(junto.png) no-repeat 2px 9px, url(tray_tab.png) no-repeat;
+  background: url(<%= asset_path 'junto.png' %>) no-repeat 2px 9px, url(<%= asset_path 'tray_tab.png' %>) no-repeat;
   cursor: pointer;
 }
 .chat-box .chat-button .chat-unread {
@@ -141,7 +141,7 @@
   margin-right: 8px;
   margin-top: -8px;
   float: right;
-  background: url(cursor_sprite.png) no-repeat;
+  background: url(<%= asset_path 'cursor_sprite.png' %>) no-repeat;
 }
 .chat-box .junto-header .cursor-toggle:hover {
   background-position-x: -32px;
@@ -155,7 +155,7 @@
   margin-right: 32px;
   margin-top: -8px;
   float: right;
-  background: url(video_sprite.png) no-repeat;
+  background: url(<%= asset_path 'video_sprite.png' %>) no-repeat;
 }
 .chat-box .junto-header .video-toggle:hover {
   background-position-x: -32px;
@@ -218,7 +218,7 @@
   margin-right: 32px;
   margin-top: -2px;
   float: right;
-  background: url(sound_sprite.png) no-repeat;
+  background: url(<%= asset_path 'sound_sprite.png' %>) no-repeat;
 }
 .chat-box .chat-header .sound-toggle:hover {
   background-position-x: -24px;
