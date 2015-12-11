@@ -67,6 +67,10 @@ Metamaps.Views.room = (function () {
         this.webrtc.webrtc.off('peerStreamAdded');
         this.webrtc.webrtc.off('peerStreamRemoved');
         this.webrtc.on('peerStreamAdded', function (peer) {
+          var mapper = Metamaps.Realtime.mappersOnMap[peer.nick];
+          peer.avatar = mapper.image;
+          peer.username = mapper.name;
+          console.log(peer);
           if (self.isActiveRoom) {
               self.addVideo(peer);
           }
@@ -119,10 +123,12 @@ Metamaps.Views.room = (function () {
                 }
               }
             });
+            console.log(data);
             peer.avatar = data.avatar;
+            peer.username = data.username;
             self.webrtc.emit('createdPeer', peer);
             peer.start();
-            
+
             // the rest will happen automatically through the 'peerStreamAdded' event and associated event handlers
           }
         });
@@ -141,7 +147,10 @@ Metamaps.Views.room = (function () {
         var
           id = this.webrtc.getDomId(peer),
           video = attachMediaStream(peer.stream);
-          v = new VideoView(video, null, id, false, { DOUBLE_CLICK_TOLERANCE: 200, avatar: peer.avatar });
+
+        $(video).prop('muted', true); // until the viewer accepts the viewing
+        var
+          v = new VideoView(video, null, id, false, { DOUBLE_CLICK_TOLERANCE: 200, avatar: peer.avatar, username: peer.username });
 
         if (this._videoAdded) this._videoAdded(v);
         this.videos[peer.id] = v;
@@ -150,8 +159,10 @@ Metamaps.Views.room = (function () {
       room.prototype.removeVideo = function (peer) {
           console.log('removeVideo', peer);
           var id = typeof peer == 'string' ? peer : peer.id;
-          this.videos[id].remove();
-          delete this.videos[id];
+          if (this.videos[id]) {
+            this.videos[id].remove();
+            delete this.videos[id];
+          }
       }
 
       room.prototype.sendChatMessage = function (data) {

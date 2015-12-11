@@ -6,6 +6,29 @@
   cursor: default;
   color: #FFF;
 }
+.collaborator-video .video-receive {
+    position: absolute;
+    width: 160px;
+    padding: 20px 20px 20px 170px;
+    background: #424242;
+    height: 110px;
+    border-top-left-radius: 75px;
+    border-bottom-left-radius: 75px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+.collaborator-video .video-receive .video-statement {
+    margin-bottom: 10px;
+}
+.collaborator-video .video-receive .btn-group .btn-yes {
+    margin-right: 10px;
+}
+.collaborator-video .video-receive .btn-group .btn-no {
+    background-color: #c04f4f;
+}
+.collaborator-video .video-receive .btn-group .btn-no:hover {
+    background-color: #A54242;
+}
 .collaborator-video .video-cutoff {
   width: 150px;
   height: 150px;
@@ -31,7 +54,6 @@
   -o-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
-  display: none;
 }
 .collaborator-video .video-audio {
   position: absolute;

@@ -10,11 +10,13 @@ module.exports = function(io, stunservers) {
         var clients = io.sockets.clients(name);
         var result = {
             clients: {},
-            avatars: {}
+            avatars: {},
+            usernames: {}
         };
         clients.forEach(function (client) {
             result.clients[client.id] = client.resources;
             result.avatars[client.id] = client.avatar;
+            result.usernames[client.id] = client.username;
         });
         return result;
     }
@@ -71,9 +73,10 @@ module.exports = function(io, stunservers) {
           var socketsInRoom = io.sockets.clients(client.room);
           client.resources.video = true;
           client.avatar = data.avatar;
+          client.username = data.username;
           socketsInRoom.forEach(function(socket) {
             if (socket.id !== client.id) {
-              socket.emit('addVideo', { id: client.id, avatar: data.avatar });
+              socket.emit('addVideo', { id: client.id, avatar: data.avatar, username: data.username });
             }
           });
         }

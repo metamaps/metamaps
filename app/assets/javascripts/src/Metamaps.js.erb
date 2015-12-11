@@ -1962,7 +1962,8 @@ Metamaps.Realtime = {
             media: {
               video: true,
               audio: true
-            }
+            },
+            nick: Metamaps.Active.Mapper.id
         });
         self.webrtc.on('readyToCall', function () {
           console.log('readyToCall');
@@ -1972,7 +1973,8 @@ Metamaps.Realtime = {
             $('#wrapper').append(self.localVideo.view.$container);
           }
           self.socket.emit('videoAdded', {
-            avatar: Metamaps.Active.Mapper.get('image')
+            avatar: Metamaps.Active.Mapper.get('image'),
+            username: Metamaps.Active.Mapper.get('name')
           });
           self.webrtc.webrtc.peers.forEach(function (p) {
             p.pc.addStream(self.webrtc.webrtc.localStream);
@@ -2060,6 +2062,9 @@ Metamaps.Realtime = {
 
           for (id in roomDesc.avatars) {
             self.webrtc.webrtc.peers.find(function(p) { return p.id === id; }).avatar = roomDesc.avatars[id];
+          }
+          for (id in roomDesc.usernames) {
+            self.webrtc.webrtc.peers.find(function(p) { return p.id === id; }).username = roomDesc.usernames[id];
           }
 
           function addVideo(v) {

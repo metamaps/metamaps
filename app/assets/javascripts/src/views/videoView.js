@@ -26,7 +26,7 @@ Metamaps.Views.videoView = (function () {
             this.mouseIsDown = false;
 
             if (this.hasMoved) {
-                
+
             }
 
             $(document).trigger(videoView.events.dragEnd);
@@ -97,6 +97,14 @@ Metamaps.Views.videoView = (function () {
             }
             this.videoStatus = !this.videoStatus;
             $(document).trigger(videoView.events.videoControlClick, [this]);
+        },
+        yesReceiveClick: function () {
+          this.$receiveContainer.hide();
+          this.$avatar.hide();
+          $(this.video).prop('muted', false);
+        },
+        noReceiveClick: function () {
+          this.$container.hide();
         }
     };
 
@@ -121,11 +129,22 @@ Metamaps.Views.videoView = (function () {
         this.$container = $('<div></div>');
         this.$container.addClass('collaborator-video' + (isMyself ? ' my-video' : ''));
         this.$container.attr('id', 'container_' + id);
-        
+
 
         var $vidContainer = $('<div></div>');
         $vidContainer.addClass('video-cutoff');
         $vidContainer.append(this.video);
+
+        if (!isMyself) {
+          this.$receiveContainer = $('<div class="video-receive"><div class="video-statement">' + config.username + ' is sharing their audio and video. Do you wish to receive it?</div><div class="btn-group"><button type="button" class="button btn-yes">Yes</button><button type="button" class="button btn-no">No</button></div></div>');
+          this.$container.append(this.$receiveContainer);
+          this.$container.find('.btn-yes').on('click', function (event) {
+              Handlers.yesReceiveClick.call(self, event);
+          });
+          this.$container.find('.btn-no').on('click', function (event) {
+              Handlers.noReceiveClick.call(self, event);
+          });
+        }
 
         this.avatar = config.avatar;
         this.$avatar = $('<img draggable="false" class="collaborator-video-avatar" src="' + config.avatar + '" width="150" height="150" />');
@@ -137,14 +156,17 @@ Metamaps.Views.videoView = (function () {
             Handlers.mousedown.call(self, event);
         });
 
-        if (isMyself) Private.addControls.call(this);
+        if (isMyself) {
+          this.$avatar.hide();
+          Private.addControls.call(this);
+        }
 
         // suppress contextmenu
         this.video.oncontextmenu = function () { return false; };
 
         if (this.$parent) this.setParent(this.$parent);
     };
-    
+
     videoView.prototype.setParent = function($parent) {
         var self = this;
         this.$parent = $parent;
@@ -184,5 +206,3 @@ Metamaps.Views.videoView = (function () {
 
     return videoView;
 })();
-
-    

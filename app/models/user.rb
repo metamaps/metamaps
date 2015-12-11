@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :maps
   has_many :mappings
 
-  before_create :generate_code
+  after_create :generate_code
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
 
