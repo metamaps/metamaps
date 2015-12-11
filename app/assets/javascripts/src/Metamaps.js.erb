@@ -1909,7 +1909,7 @@ Metamaps.Util = {
 Metamaps.Realtime = {
     stringForLocalhost: 'http://' + location.host.split(':')[0] + ':5001',
     stringForMetamaps: 'http://metamaps.cc:5001',
-    stringForHeroku: 'http://gentle-savannah-1303.herokuapp.com',
+    stringForHeroku: 'https://gentle-savannah-1303.herokuapp.com',
     videoId: 'video-wrapper',
     socket: null,
     webrtc: null,
@@ -1945,6 +1945,7 @@ Metamaps.Realtime = {
         var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
         self.socket = new SocketIoConnection({ url: whichToConnect });
         self.socket.on('connect', function () {
+            console.log('connected');
             self.startActiveMap();
         });
         self.webrtc = new SimpleWebRTC({
