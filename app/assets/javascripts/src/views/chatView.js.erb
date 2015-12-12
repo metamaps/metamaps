@@ -7,17 +7,20 @@ Metamaps.Views.chatView = (function () {
 
     var Private = {
         messageHTML: "<div class='chat-message'>" +
-            "<div class='chat-message-user'><img src='<%= user_image %>' title='<%= user_name %>'/></div>" +
-            "<div class='chat-message-text'><%= message %></div>" +
-            "<div class='chat-message-time'><%= timestamp %></div>" +
+            "<div class='chat-message-user'><img src='{{ user_image }}' title='{{user_name }}'/></div>" +
+            "<div class='chat-message-text'>{{ message }}</div>" +
+            "<div class='chat-message-time'>{{ timestamp }}</div>" +
             "<div class='clearfloat'></div>" +
           "</div>",
-        participantHTML: "<div class='participant participant-<%= username %>'>" +
-                "<div class='chat-participant-image'><img src='<%= image %>' /></div>" +
-                "<div class='chat-participant-name'><%= username %></div>" +
+        participantHTML: "<div class='participant participant-{{ username }}'>" +
+                "<div class='chat-participant-image'><img src='{{ image }}' /></div>" +
+                "<div class='chat-participant-name'>{{ username }}</div>" +
                 "<div class='clearfloat'></div>" +
               "</div>",
         templates: function() {
+            _.templateSettings = {
+              interpolate: /\{\{(.+?)\}\}/g
+            };
             this.messageTemplate = _.template(Private.messageHTML);
 
             this.participantTemplate = _.template(Private.participantHTML);
@@ -92,7 +95,7 @@ Metamaps.Views.chatView = (function () {
         },
         initializeSounds: function() {
             this.sound = new Howl({
-              urls: ['/assets/sounds/sounds.mp3', '/assets/sounds/sounds.ogg'],
+              urls: ["<%= asset_path 'sounds/sounds.mp3' %>", "<%= asset_path 'sounds/sounds.ogg' %>"],
               sprite: {
                 laser: [3000, 700]
               }
@@ -279,4 +282,3 @@ Metamaps.Views.chatView = (function () {
     return chatView;
 
 })();
-
