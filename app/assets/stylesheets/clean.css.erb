@@ -412,7 +412,7 @@
 	z-index: 3;
 }
 .mapPage .mapControls, .topicPage .mapControls {
-	right: 24px; 
+	right: 24px;
 }
 
 .topicPage .zoomExtents {
@@ -461,7 +461,7 @@
 }
 
 .hide {
-    display: none !important; 
+    display: none !important;
 }
 
 .tooltips {
@@ -541,7 +541,7 @@
 }
 
 .sidebarAccountIcon .tooltipsUnder {
-    margin-left: -8px;
+    margin-left: -12px;
     margin-top: 40px;
 }
 
@@ -561,13 +561,16 @@
 .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
     content: '';
     position: absolute;
-    top: 129%;
-    margin-top: -30px;
+    right: 40%;
+    margin-top: -7px;
     width: 0;
     height: 0;
     border-bottom: 4px solid #000000;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
+}
+.sidebarFilterIcon div:after {
+    right: 37% !important;
 }
 
 .mapInfoIcon div:after, .openCheatsheet div:after {
