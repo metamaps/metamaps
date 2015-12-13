@@ -12,7 +12,7 @@ Metamaps.Views.chatView = (function () {
             "<div class='chat-message-time'>{{ timestamp }}</div>" +
             "<div class='clearfloat'></div>" +
           "</div>",
-        participantHTML: "<div class='participant participant-{{ username }}'>" +
+        participantHTML: "<div class='participant participant-{{ id }}'>" +
                 "<div class='chat-participant-image'><img src='{{ image }}' /></div>" +
                 "<div class='chat-participant-name'>{{ username }}</div>" +
                 "<div class='clearfloat'></div>" +
@@ -151,7 +151,7 @@ Metamaps.Views.chatView = (function () {
             this.$participants.append(html);
         },
         removeParticipant: function(participant) {
-            this.$container.find('.participant-' + participant.get('username')).remove();
+            this.$container.find('.participant-' + participant.get('id')).remove();
         }
     };
 

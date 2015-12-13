@@ -29,7 +29,7 @@ module.exports = function(io, stunservers) {
 
         client.resources = {
             screen: false,
-            video: false,
+            video: true,
             audio: false
         };
 
@@ -54,17 +54,6 @@ module.exports = function(io, stunservers) {
         });
 
         client.on('join', join);
-        client.on('videoAdded', videoAdded);
-
-        function videoAdded(data) {
-          var socketsInRoom = io.sockets.clients(client.room);
-          client.resources.video = true;
-          socketsInRoom.forEach(function(socket) {
-            if (socket.id !== client.id) {
-              socket.emit('addVideo', { id: client.id });
-            }
-          });
-        }
 
         function removeFeed(type) {
             if (client.room) {

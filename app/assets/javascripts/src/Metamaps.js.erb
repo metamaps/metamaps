@@ -1948,7 +1948,9 @@ Metamaps.Realtime = {
             console.log('connected');
             self.startActiveMap();
         });
-        self.webrtc = new SimpleWebRTC({
+
+        if (Metamaps.Active.Mapper) {
+          self.webrtc = new SimpleWebRTC({
             connection: self.socket,
             localVideoEl: self.videoId,
             remoteVideosEl: '',
@@ -1965,45 +1967,45 @@ Metamaps.Realtime = {
               audio: true
             },
             nick: Metamaps.Active.Mapper.id
-        });
-        self.webrtc.on('readyToCall', function () {
-          console.log('readyToCall');
-          self.videoInitialized = true;
-          self.readyToCall = true;
-          if (self.localVideo && self.status) {
-            $('#wrapper').append(self.localVideo.view.$container);
-          }
-          self.socket.emit('videoAdded');
-          self.webrtc.webrtc.peers.forEach(function (p) {
-            p.pc.addStream(self.webrtc.webrtc.localStream);
-            p.start();
           });
-        });
 
-        var
-          $video = $('<video></video>').attr('id', self.videoId);
-        self.localVideo = {
-            $video: $video,
-            view: new Metamaps.Views.videoView($video[0], $('body'), 'me', true, {
-                DOUBLE_CLICK_TOLERANCE: 200,
-                avatar: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : ''
-            }),
-        };
+          var
+            $video = $('<video></video>').attr('id', self.videoId);
+          self.localVideo = {
+              $video: $video,
+              view: new Metamaps.Views.videoView($video[0], $('body'), 'me', true, {
+                  DOUBLE_CLICK_TOLERANCE: 200,
+                  avatar: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : ''
+              })
+          };
 
-        self.room = new Metamaps.Views.room({
-          webrtc: self.webrtc,
-          socket: self.socket,
-          username: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('name') : '',
-          image: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : '',
-          room: 'global',
-          $video: self.localVideo.$video,
-          myVideoView: self.localVideo.view,
-          config: { DOUBLE_CLICK_TOLERANCE: 200 }
-        });
-        if (Metamaps.Messages) self.room.messages.add(Metamaps.Messages);
+          self.room = new Metamaps.Views.room({
+            webrtc: self.webrtc,
+            socket: self.socket,
+            username: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('name') : '',
+            image: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : '',
+            room: 'global',
+            $video: self.localVideo.$video,
+            myVideoView: self.localVideo.view,
+            config: { DOUBLE_CLICK_TOLERANCE: 200 }
+          });
+          if (Metamaps.Messages) self.room.messages.add(Metamaps.Messages);
+          self.room.videoAdded(self.handleVideoAdded);
 
-        self.createChat();
-        //self.webrtc.startLocalVideo();
+          self.createChat();
+        } // if Metamaps.Active.Mapper
+    },
+    handleVideoAdded: function (v) {
+      // random position for now
+      var top = Math.floor((Math.random() * ($('#wrapper').height() - 100)) + 1);
+      var left = Math.floor((Math.random() * ($('#wrapper').width() - 100)) + 1);
+      //var right = Math.floor((Math.random() * (468 - 100)) + 1);
+      v.setParent($('#wrapper'));
+      $('#wrapper').append(v.$container);
+      v.$container.css({
+          top: top + 'px',
+          left: left + 'px'
+      });
     },
     startActiveMap: function () {
         var self = Metamaps.Realtime;
@@ -2053,30 +2055,86 @@ Metamaps.Realtime = {
         self.status = true;
         //$(".sidebarCollaborateIcon").addClass("blue");
         $(".collabCompass").show();
-        self.localVideo.view.$container.show();
         self.room.room = 'map-' + Metamaps.Active.Map.id;
-        self.room.join(function (err, roomDesc) {
-          //attachMediaStream(self.webrtc.webrtc.localStream, self.localVideo.$video[0]);
+        self.checkForACallToJoin();
+    },
+    checkForACallToJoin: function () {
+      var self = Metamaps.Realtime;
+      self.socket.emit('checkForCall', { room: self.room.room, mapid: Metamaps.Active.Map.id });
+    },
+    promptToJoin: function (data) {
+      var self = Metamaps.Realtime;
 
-          function addVideo(v) {
-            // random position for now
-            var top = Math.floor((Math.random() * ($('#wrapper').height() - 100)) + 1);
-            var left = Math.floor((Math.random() * ($('#wrapper').width() - 100)) + 1);
-            //var right = Math.floor((Math.random() * (468 - 100)) + 1);
-            v.setParent($('#wrapper'));
-            $('#wrapper').append(v.$container);
-            v.$container.css({
-                top: top + 'px',
-                left: left + 'px'
-            });
-          }
+      console.log(data);
+      var notifyText = 'There\'s a conversation happening, want to join?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText);
+    },
+    invitedToCall: function (inviter) {
+      var self = Metamaps.Realtime;
 
-          self.room.videoAdded(addVideo);
+      var username = self.mappersOnMap[inviter].name;
+      var notifyText = username + ' is suggesting a video call. What do you think?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText);
+    },
+    acceptCall: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('callAccepted', {
+        mapid: Metamaps.Active.Map.id,
+        invited: Metamaps.Active.Mapper.id,
+        inviter: userid
+      });
+      self.joinCall();
+      Metamaps.GlobalUI.clearNotify();
+    },
+    denyCall: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('callDenied', {
+        mapid: Metamaps.Active.Map.id,
+        invited: Metamaps.Active.Mapper.id,
+        inviter: userid
+      });
+      Metamaps.GlobalUI.clearNotify();
+    },
+    inviteACall: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('inviteACall', {
+        mapid: Metamaps.Active.Map.id,
+        inviter: Metamaps.Active.Mapper.id,
+        invited: userid
+      });
+    },
+    callAccepted: function (userid) {
+      var self = Metamaps.Realtime;
 
-          for (peer in self.room.videos) {
-            addVideo(self.room.videos[peer]);
-          }
-        });
+      var username = self.mappersOnMap[userid].name;
+      Metamaps.GlobalUI.notifyUser(username + ' liked your suggestion! Video call starting...');
+      self.joinCall();
+    },
+    callDenied: function (userid) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[userid].name;
+      Metamaps.GlobalUI.notifyUser(username + ' isn\'t feeling it right now...');
+    },
+    joinCall: function () {
+      var self = Metamaps.Realtime;
+
+      self.webrtc.off('readyToCall');
+      self.webrtc.on('readyToCall', function () {
+        self.videoInitialized = true;
+        self.readyToCall = true;
+        self.localVideo.view.$container.show();
+        if (self.localVideo && self.status) {
+          $('#wrapper').append(self.localVideo.view.$container);
+        }
+        self.room.join();
+      });
+      self.webrtc.startLocalVideo();
+      Metamaps.GlobalUI.clearNotify();
     },
     startVideo: function() {
         var
@@ -2133,6 +2191,13 @@ Metamaps.Realtime = {
             userimage: Metamaps.Active.Mapper.get("image"),
             mapid: Metamaps.Active.Map.id
         });
+
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToCall', self.invitedToCall);
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-callAccepted', self.callAccepted);
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-callDenied', self.callDenied);
+
+        // receive word that there's a conversation in progress
+        socket.on('maps-' + Metamaps.Active.Map.id + '-callInProgress', self.promptToJoin);
 
         // if you're the 'new guy' update your list with who's already online
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-UpdateMapperList', self.updateMapperList);
@@ -2244,6 +2309,16 @@ Metamaps.Realtime = {
         };
         $(document).on(Metamaps.Views.room.events.newMessage, sendNewMessage);
 
+        $(document).on(Metamaps.Views.room.events.callEnded, function () {
+          Metamaps.GlobalUI.notifyUser('Conversation has ended.');
+          self.localVideo.view.$container.hide();
+          self.webrtc.webrtc.localStreams.forEach(function (stream) {
+            stream.getTracks().forEach(function (track) {
+              track.stop();
+            });
+          });
+        });
+
     },
     attachMapListener: function(){
         var self = Metamaps.Realtime;
@@ -2291,6 +2366,7 @@ Metamaps.Realtime = {
         // data.userrealtime
 
         self.mappersOnMap[data.userid] = {
+            id: data.userid,
             name: data.username,
             username: data.username,
             image: data.userimage,
@@ -2330,8 +2406,10 @@ Metamaps.Realtime = {
         // data.username
         // data.userimage
         // data.coords
+        var firstOtherPerson = Object.keys(self.mappersOnMap).length === 0;
 
         self.mappersOnMap[data.userid] = {
+            id: data.userid,
             name: data.username,
             username: data.username,
             image: data.userimage,
@@ -2357,7 +2435,11 @@ Metamaps.Realtime = {
             // create a div for the collaborators compass
             self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status);
 
-            Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
+            var notifyMessage = data.username + ' just joined the map';
+            if (firstOtherPerson) {
+              notifyMessage += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.inviteACall(' + data.userid + ')">Suggest A Video Call</button>';
+            }
+            Metamaps.GlobalUI.notifyUser(notifyMessage);
 
             // send this new mapper back your details, and the awareness that you've loaded the map
             var update = {

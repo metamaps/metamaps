@@ -33,6 +33,11 @@ Metamaps.Views.room = (function () {
       this.webrtc.joinRoom(this.room, cb);
     }
 
+    room.prototype.leaveVideoOnly = function() {
+      this.isActiveRoom = false;
+      this.webrtc.leaveRoom();
+    }
+
     room.prototype.leave = function() {
       for (var id in this.videos) {
         this.removeVideo(id);
@@ -51,10 +56,6 @@ Metamaps.Views.room = (function () {
     room.prototype.init = function () {
         var self = this;
 
-        /*this.roomRef.child('messages').on('child_added', function (snap) {
-          self.messages.add(snap.val());
-        });*/
-
         $(document).on(VideoView.events.audioControlClick, function (event, videoView) {
           if (!videoView.audioStatus) self.webrtc.mute();
           else if (videoView.audioStatus) self.webrtc.unmute();
@@ -70,7 +71,6 @@ Metamaps.Views.room = (function () {
           var mapper = Metamaps.Realtime.mappersOnMap[peer.nick];
           peer.avatar = mapper.image;
           peer.username = mapper.name;
-          console.log(peer);
           if (self.isActiveRoom) {
               self.addVideo(peer);
           }
@@ -148,7 +148,6 @@ Metamaps.Views.room = (function () {
           id = this.webrtc.getDomId(peer),
           video = attachMediaStream(peer.stream);
 
-        $(video).prop('muted', true); // until the viewer accepts the viewing
         var
           v = new VideoView(video, null, id, false, { DOUBLE_CLICK_TOLERANCE: 200, avatar: peer.avatar, username: peer.username });
 
@@ -162,6 +161,10 @@ Metamaps.Views.room = (function () {
           if (this.videos[id]) {
             this.videos[id].remove();
             delete this.videos[id];
+            if (Object.keys(this.videos).length === 0) {
+              this.leaveVideoOnly();
+              $(document).trigger(room.events.callEnded);
+            }
           }
       }
 
@@ -190,7 +193,8 @@ Metamaps.Views.room = (function () {
      * @static
      */
     room.events = {
-        newMessage: "Room:newMessage"
+        newMessage: "Room:newMessage",
+        callEnded: "Room:callEnded"
     };
 
     return room;

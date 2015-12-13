@@ -98,14 +98,14 @@ Metamaps.Views.videoView = (function () {
             this.videoStatus = !this.videoStatus;
             $(document).trigger(videoView.events.videoControlClick, [this]);
         },
-        yesReceiveClick: function () {
+        /*yesReceiveClick: function () {
           this.$receiveContainer.hide();
           this.$avatar.hide();
           $(this.video).prop('muted', false);
         },
         noReceiveClick: function () {
           this.$container.hide();
-        }
+        }*/
     };
 
     var videoView = function(video, $parent, id, isMyself, config) {
@@ -135,6 +135,7 @@ Metamaps.Views.videoView = (function () {
         $vidContainer.addClass('video-cutoff');
         $vidContainer.append(this.video);
 
+        /*
         if (!isMyself) {
           this.$receiveContainer = $('<div class="video-receive"><div class="video-statement">' + config.username + ' is sharing their audio and video. Do you wish to receive it?</div><div class="btn-group"><button type="button" class="button btn-yes">Yes</button><button type="button" class="button btn-no">No</button></div></div>');
           this.$container.append(this.$receiveContainer);
@@ -144,7 +145,7 @@ Metamaps.Views.videoView = (function () {
           this.$container.find('.btn-no').on('click', function (event) {
               Handlers.noReceiveClick.call(self, event);
           });
-        }
+        }*/
 
         this.avatar = config.avatar;
         this.$avatar = $('<img draggable="false" class="collaborator-video-avatar" src="' + config.avatar + '" width="150" height="150" />');
@@ -157,7 +158,6 @@ Metamaps.Views.videoView = (function () {
         });
 
         if (isMyself) {
-          this.$avatar.hide();
           Private.addControls.call(this);
         }
 

@@ -22,6 +22,23 @@ function start() {
             socket.broadcast.emit(data.userToNotify + '-' + data.mapid + '-UpdateMapperList', existingUser);
         });
 
+        // as a new mapper check whether there's a call in progress to join
+        socket.on('checkForCall', function (data) {
+          var socketsInRoom = io.sockets.clients(data.room);
+          if (socketsInRoom.length) socket.emit('maps-' + data.mapid + '-callInProgress', socketsInRoom.length);
+        });
+        // send the invitation to start a call
+        socket.on('inviteACall', function (data) {
+          socket.broadcast.emit(data.invited + '-' + data.mapid + '-invitedToCall', data.inviter);
+        });
+        // send response back to the inviter
+        socket.on('callAccepted', function (data) {
+          socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callAccepted', data.invited);
+        });
+        socket.on('callDenied', function (data) {
+          socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callDenied', data.invited);
+        });
+
         // this will ping everyone on a map that there's a person just joined the map
         socket.on('newMapperNotify', function (data) {
             socket.set('mapid', data.mapid);
@@ -56,7 +73,7 @@ function start() {
         // this will ping everyone on a map that there's a person just left the map
         socket.on('disconnect', end);
         socket.on('endMapperNotify', end);
-        
+
         // this will ping everyone on a map that someone just turned on realtime
         socket.on('notifyStartRealtime', function (data) {
             var newUser = {
@@ -66,7 +83,7 @@ function start() {
 
             socket.broadcast.emit('maps-' + data.mapid + '-newrealtime', newUser);
         });
-        
+
         // this will ping everyone on a map that someone just turned on realtime
         socket.on('notifyStopRealtime', function (data) {
             var newUser = {
