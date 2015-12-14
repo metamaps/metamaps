@@ -1915,8 +1915,10 @@ Metamaps.Realtime = {
     webrtc: null,
     readyToCall: false,
     mappersOnMap: {},
+    chatOpen: false,
     status: true, // stores whether realtime is True/On or False/Off,
     broadcastingStatus: false,
+    inConversation: false,
     localVideo: null,
     init: function () {
         var self = Metamaps.Realtime;
@@ -1927,19 +1929,10 @@ Metamaps.Realtime = {
         var turnOff = function () {
             self.turnOff();
         };
-        var toggleVideo = function () {
-            self.toggleVideo();
-        };
         $(".rtOn").click(reenableRealtime);
         $(".rtOff").click(turnOff);
-        $(".startVideo").click(toggleVideo);
 
-        $(document).on(Metamaps.Views.chatView.events.openTray, function () {
-          $('.main').addClass('compressed');
-        });
-        $(document).on(Metamaps.Views.chatView.events.closeTray, function () {
-          $('.main').removeClass('compressed');
-        });
+        self.addJuntoListeners();
 
         var railsEnv = $('body').data('env');
         var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
@@ -1995,7 +1988,34 @@ Metamaps.Realtime = {
           self.createChat();
         } // if Metamaps.Active.Mapper
     },
-    handleVideoAdded: function (v) {
+    addJuntoListeners: function () {
+      var self = Metamaps.Realtime;
+
+      $(document).on(Metamaps.Views.chatView.events.openTray, function () {
+        $('.main').addClass('compressed');
+        self.chatOpen = true;
+        self.positionPeerIcons();
+      });
+      $(document).on(Metamaps.Views.chatView.events.closeTray, function () {
+        $('.main').removeClass('compressed');
+        self.chatOpen = false;
+        self.positionPeerIcons();
+      });
+      $(document).on(Metamaps.Views.chatView.events.videosOn, function () {
+        $('#wrapper').removeClass('hideVideos');
+      });
+      $(document).on(Metamaps.Views.chatView.events.videosOff, function () {
+        $('#wrapper').addClass('hideVideos');
+      });
+      $(document).on(Metamaps.Views.chatView.events.cursorsOn, function () {
+        $('#wrapper').removeClass('hideCursors');
+      });
+      $(document).on(Metamaps.Views.chatView.events.cursorsOff, function () {
+        $('#wrapper').addClass('hideCursors');
+      });
+    },
+    handleVideoAdded: function (v, id) {
+      var self = Metamaps.Realtime;
       // random position for now
       var top = Math.floor((Math.random() * ($('#wrapper').height() - 100)) + 1);
       var left = Math.floor((Math.random() * ($('#wrapper').width() - 100)) + 1);
@@ -2005,6 +2025,9 @@ Metamaps.Realtime = {
       v.$container.css({
           top: top + 'px',
           left: left + 'px'
+      });
+      v.$container.find('.video-cutoff').css({
+        border: '2px solid ' + self.mappersOnMap[id].color
       });
     },
     startActiveMap: function () {
@@ -2069,7 +2092,23 @@ Metamaps.Realtime = {
       var notifyText = 'There\'s a conversation happening, want to join?';
       notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
       notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
-      Metamaps.GlobalUI.notifyUser(notifyText);
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
+      self.room.conversationInProgress();
+    },
+    conversationHasBegun: function () {
+      var self = Metamaps.Realtime;
+
+      if (self.inConversation) return;
+      var notifyText = 'There\'s a conversation starting, want to join?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
+      self.room.conversationInProgress();
+    },
+    conversationHasEnded: function () {
+      var self = Metamaps.Realtime;
+
+      self.room.conversationEnding();
     },
     invitedToCall: function (inviter) {
       var self = Metamaps.Realtime;
@@ -2078,7 +2117,7 @@ Metamaps.Realtime = {
       var notifyText = username + ' is suggesting a video call. What do you think?';
       notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>';
       notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>';
-      Metamaps.GlobalUI.notifyUser(notifyText);
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
     },
     acceptCall: function (userid) {
       var self = Metamaps.Realtime;
@@ -2133,38 +2172,16 @@ Metamaps.Realtime = {
         }
         self.room.join();
       });
+      self.inConversation = true;
       self.webrtc.startLocalVideo();
       Metamaps.GlobalUI.clearNotify();
     },
-    startVideo: function() {
-        var
-          self = Metamaps.Realtime;
+    leaveCall: function () {
+      var self = Metamaps.Realtime;
 
-        if (!self.videoInitialized) {
-          self.webrtc.startLocalVideo();
-        }
-        else {
-          self.webrtc.resume();
-        }
-        self.broadcastingStatus = true;
-        self.localVideo.view.$container.show();
-        $(".startVideo").html("stop broadcasting");
-    },
-    stopVideo: function () {
-        var
-          self = Metamaps.Realtime;
-
-        self.webrtc.pause();
-        self.broadcastingStatus = false;
-        self.localVideo.view.$container.hide();
-        $(".startVideo").html("start my video");
-    },
-    toggleVideo: function () {
-        var
-          self = Metamaps.Realtime;
-
-        if (!self.broadcastingStatus) self.startVideo();
-        else self.stopVideo();
+      self.room.leaveVideoOnly();
+      self.inConversation = false;
+      self.localVideo.view.$container.hide();
     },
     turnOff: function (silent) {
         var self = Metamaps.Realtime;
@@ -2198,6 +2215,8 @@ Metamaps.Realtime = {
 
         // receive word that there's a conversation in progress
         socket.on('maps-' + Metamaps.Active.Map.id + '-callInProgress', self.promptToJoin);
+        socket.on('maps-' + Metamaps.Active.Map.id + '-callStarting', self.conversationHasBegun);
+        socket.on('maps-' + Metamaps.Active.Map.id + '-callEnding', self.conversationHasEnded);
 
         // if you're the 'new guy' update your list with who's already online
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-UpdateMapperList', self.updateMapperList);
@@ -2310,6 +2329,8 @@ Metamaps.Realtime = {
         $(document).on(Metamaps.Views.room.events.newMessage, sendNewMessage);
 
         $(document).on(Metamaps.Views.room.events.callEnded, function () {
+          socket.emit('callEnded', { mapid: Metamaps.Active.Map.id }); // so that anyone who isn't currently in the call gets notified
+          self.inConversation = false;
           Metamaps.GlobalUI.notifyUser('Conversation has ended.');
           self.localVideo.view.$container.hide();
           self.webrtc.webrtc.localStreams.forEach(function (stream) {
@@ -2538,9 +2559,10 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
 
+        var boundary = self.chatOpen ? '#wrapper' : document;
         var mapper = self.mappersOnMap[id];
-        var xMax=$(document).width();
-        var yMax=$(document).height();
+        var xMax=$(boundary).width();
+        var yMax=$(boundary).height();
         var compassDiameter=56;
         var compassArrowSize=24;
 
@@ -2575,9 +2597,10 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
 
+        var boundary = self.chatOpen ? '#wrapper' : document;
         var xLimit, yLimit;
-        var xMax=$(document).width();
-        var yMax=$(document).height();
+        var xMax=$(boundary).width();
+        var yMax=$(boundary).height();
         var compassDiameter=56;
         var compassArrowSize=24;
 

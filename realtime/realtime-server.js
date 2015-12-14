@@ -34,9 +34,13 @@ function start() {
         // send response back to the inviter
         socket.on('callAccepted', function (data) {
           socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callAccepted', data.invited);
+          socket.broadcast.emit('maps-' + data.mapid + '-callStarting');
         });
         socket.on('callDenied', function (data) {
           socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callDenied', data.invited);
+        });
+        socket.on('callEnded', function (data) {
+          socket.broadcast.emit('maps-' + data.mapid + '-callEnding');
         });
 
         // this will ping everyone on a map that there's a person just joined the map

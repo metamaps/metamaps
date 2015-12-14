@@ -13,8 +13,9 @@ Metamaps.Views.chatView = (function () {
             "<div class='clearfloat'></div>" +
           "</div>",
         participantHTML: "<div class='participant participant-{{ id }}'>" +
-                "<div class='chat-participant-image'><img src='{{ image }}' /></div>" +
+                "<div class='chat-participant-image'><img src='{{ image }}' style='border: 2px solid {{ color }};' /></div>" +
                 "<div class='chat-participant-name'>{{ username }}</div>" +
+                "<button type='button' class='button chat-participant-invite' onclick='Metamaps.Realtime.inviteACall({{ id}});'>I</button>" +
                 "<div class='clearfloat'></div>" +
               "</div>",
         templates: function() {
@@ -33,6 +34,7 @@ Metamaps.Views.chatView = (function () {
             this.$videoToggle = $('<div class="video-toggle"></div>');
             this.$cursorToggle = $('<div class="cursor-toggle"></div>');
             this.$participants = $('<div class="participants"></div>');
+            this.$conversationInProgress = $('<div class="conversation-live">LIVE <span class="call-action leave" onclick="Metamaps.Realtime.leaveCall();">LEAVE</span><span class="call-action join" onclick="Metamaps.Realtime.joinCall();">JOIN</span></div>');
             this.$chatHeader = $('<div class="chat-header">CHAT</div>');
             this.$soundToggle = $('<div class="sound-toggle active"></div>');
             this.$messages = $('<div class="chat-messages"></div>');
@@ -45,6 +47,8 @@ Metamaps.Views.chatView = (function () {
             this.$juntoHeader.append(this.$cursorToggle);
 
             this.$chatHeader.append(this.$soundToggle);
+
+            this.$participants.append(this.$conversationInProgress);
 
             this.$container.append(this.$juntoHeader);
             this.$container.append(this.$participants);
@@ -162,9 +166,13 @@ Metamaps.Views.chatView = (function () {
         },
         videoToggleClick: function() {
             this.$videoToggle.toggleClass('active');
+            this.videosShowing = !this.videosShowing;
+            $(document).trigger(this.videosShowing ? chatView.events.videosOn : chatView.events.videosOff);
         },
         cursorToggleClick: function() {
             this.$cursorToggle.toggleClass('active');
+            this.cursorsShowing = !this.cursorsShowing;
+            $(document).trigger(this.cursorsShowing ? chatView.events.cursorsOn : chatView.events.cursorsOff);
         },
         soundToggleClick: function() {
             this.alertSound = !this.alertSound;
@@ -194,6 +202,8 @@ Metamaps.Views.chatView = (function () {
 
         this.isOpen = false;
         this.alertSound = false; // whether to play sounds on arrival of new messages or not
+        this.cursorsShowing = true;
+        this.videosShowing = true;
         this.unreadMessages = 0;
         this.participants = new Backbone.Collection();
 
@@ -207,6 +217,18 @@ Metamaps.Views.chatView = (function () {
             right: '-300px'
         });
     };
+
+    chatView.prototype.conversationInProgress = function (participating) {
+      this.$conversationInProgress.show();
+      this.$participants.addClass('is-live');
+      if (participating) this.$conversationInProgress.addClass('is-participating');
+    }
+
+    chatView.prototype.conversationEnded = function () {
+      this.$conversationInProgress.hide();
+      this.$participants.removeClass('is-live');
+      this.$conversationInProgress.removeClass('is-participating');
+    }
 
     chatView.prototype.addParticipant = function (participant) {
         this.participants.add(participant);
@@ -276,7 +298,11 @@ Metamaps.Views.chatView = (function () {
         openTray: 'ChatView:openTray',
         closeTray: 'ChatView:closeTray',
         inputFocus: 'ChatView:inputFocus',
-        inputBlur: 'ChatView:inputBlur'
+        inputBlur: 'ChatView:inputBlur',
+        cursorsOff: 'ChatView:cursorsOff',
+        cursorsOn: 'ChatView:cursorsOn',
+        videosOff: 'ChatView:videosOff',
+        videosOn: 'ChatView:videosOn'
     };
 
     return chatView;

@@ -31,11 +31,24 @@ Metamaps.Views.room = (function () {
     room.prototype.join = function(cb) {
       this.isActiveRoom = true;
       this.webrtc.joinRoom(this.room, cb);
+      this.chat.conversationInProgress(true); // true indicates participation
+    }
+
+    room.prototype.conversationInProgress = function() {
+      this.chat.conversationInProgress(false); // false indicates not participating
+    }
+
+    room.prototype.conversationEnding = function() {
+      this.chat.conversationEnded();
     }
 
     room.prototype.leaveVideoOnly = function() {
+      for (var id in this.videos) {
+        this.removeVideo(id);
+      }
       this.isActiveRoom = false;
       this.webrtc.leaveRoom();
+      this.chat.conversationEnded();
     }
 
     room.prototype.leave = function() {
@@ -44,6 +57,7 @@ Metamaps.Views.room = (function () {
       }
       this.isActiveRoom = false;
       this.webrtc.leaveRoom();
+      this.chat.conversationEnded();
       this.chat.removeParticipants();
       this.chat.clearMessages();
       this.messages.reset();
@@ -109,30 +123,6 @@ Metamaps.Views.room = (function () {
           v.$container.show();
         });
 
-        this.socket.on('addVideo', function (data) {
-          var existingPeer = self.webrtc.webrtc.peers.find(function(p) { return p.id === data.id; });
-          if (!existingPeer) {
-            var peer = self.webrtc.webrtc.createPeer({
-              id: data.id,
-              type: 'video',
-              enableDataChannels: true,
-              receiveMedia: {
-                mandatory: {
-                  OfferToReceiveAudio: true,
-                  OfferToReceiveVideo: true
-                }
-              }
-            });
-            console.log(data);
-            peer.avatar = data.avatar;
-            peer.username = data.username;
-            self.webrtc.emit('createdPeer', peer);
-            peer.start();
-
-            // the rest will happen automatically through the 'peerStreamAdded' event and associated event handlers
-          }
-        });
-
         var sendChatMessage = function (event, data) {
           self.sendChatMessage(data);
         };
@@ -151,7 +141,7 @@ Metamaps.Views.room = (function () {
         var
           v = new VideoView(video, null, id, false, { DOUBLE_CLICK_TOLERANCE: 200, avatar: peer.avatar, username: peer.username });
 
-        if (this._videoAdded) this._videoAdded(v);
+        if (this._videoAdded) this._videoAdded(v, peer.nick);
         this.videos[peer.id] = v;
       }
 
