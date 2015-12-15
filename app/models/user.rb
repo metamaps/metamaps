@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :maps
   has_many :mappings
 
-  before_create :generate_code
+  after_create :generate_code
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
   
@@ -66,15 +66,10 @@ class User < ActiveRecord::Base
   def generate_code
 	  self.code = rand(36**8).to_s(36)
     $codes.push(self.code)
-    self.generation = self.get_generation
+    self.generation = get_generation!
   end
 
-  def get_generation
-    calculate_generation() if generation.nil?
-    generation
-  end
-
-  def calculate_generation
+  def get_generation!
     if code == joinedwithcode
       update(generation: 0)
     else
