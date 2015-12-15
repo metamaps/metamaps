@@ -52,13 +52,6 @@ RSpec.describe MapsController, :type => :controller do
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new map as @map" do
-      get :new, {}, valid_session
-      expect(assigns(:map)).to be_a_new(Map)
-    end
-  end
-
   describe "GET #edit" do
     it "assigns the requested map as @map" do
       map = Map.create! valid_attributes

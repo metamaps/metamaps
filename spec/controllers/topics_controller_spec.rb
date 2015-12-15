@@ -52,13 +52,6 @@ RSpec.describe TopicsController, :type => :controller do
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new topic as @topic" do
-      get :new, {}, valid_session
-      expect(assigns(:topic)).to be_a_new(Topic)
-    end
-  end
-
   describe "GET #edit" do
     it "assigns the requested topic as @topic" do
       topic = Topic.create! valid_attributes

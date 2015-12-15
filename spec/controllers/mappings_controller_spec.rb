@@ -52,13 +52,6 @@ RSpec.describe MappingsController, :type => :controller do
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new mapping as @mapping" do
-      get :new, {}, valid_session
-      expect(assigns(:mapping)).to be_a_new(Mapping)
-    end
-  end
-
   describe "GET #edit" do
     it "assigns the requested mapping as @mapping" do
       mapping = Mapping.create! valid_attributes

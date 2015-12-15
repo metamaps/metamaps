@@ -52,13 +52,6 @@ RSpec.describe SynapsesController, :type => :controller do
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new synapse as @synapse" do
-      get :new, {}, valid_session
-      expect(assigns(:synapse)).to be_a_new(Synapse)
-    end
-  end
-
   describe "GET #edit" do
     it "assigns the requested synapse as @synapse" do
       synapse = Synapse.create! valid_attributes
