@@ -50,17 +50,20 @@ private
   end
   
   def authenticated?
+    return nil if warden.nil? #rspec tests
     current_user
   end
     
   def admin?
-    current_user && current_user.admin
+    authenticated? && current_user.admin
   end
 
   def get_invite_link
-    unsafe_uri = request.env["REQUEST_URI"]
-    valid_url = /^https?:\/\/([\w\.-]+)(:\d{1,5})?\/?$/
-    safe_uri = unsafe_uri.try(:match, valid_url) ? unsafe_uri : "http://metamaps.cc/"
-    @invite_link = "#{safe_uri}join" + (current_user ? "?code=#{current_user.code}" : "")
+    unless warden.nil? # rspec tests
+      unsafe_uri = request.env["REQUEST_URI"]
+      valid_url = /^https?:\/\/([\w\.-]+)(:\d{1,5})?\/?$/
+      safe_uri = (unsafe_uri.match(valid_url)) ? unsafe_uri : "http://metamaps.cc/"
+      @invite_link = "#{safe_uri}join" + (current_user ? "?code=#{current_user.code}" : "")
+    end
   end
 end

@@ -19,6 +19,10 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe MetacodesController, :type => :controller do
+  before :each do
+    @user = User.new(admin: true)
+    sign_in @user
+  end
 
   # This should return the minimal set of attributes required to create a valid
   # Metacode. As you add validations to Metacode, be sure to
