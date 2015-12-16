@@ -58,9 +58,9 @@ private
   end
 
   def get_invite_link
-    unsafe_uri = request.env["REQUEST_URI"]
+    unsafe_uri = request.env["REQUEST_URI"] || 'http://metamaps.cc'
     valid_url = /^https?:\/\/([\w\.-]+)(:\d{1,5})?\/?$/
-    safe_uri = (unsafe_uri.match(valid_url)) ? unsafe_uri : "http://metamaps.cc/"
+    safe_uri = (unsafe_uri.match(valid_url)) ? unsafe_uri : 'http://metamaps.cc/'
     @invite_link = "#{safe_uri}join" + (current_user ? "?code=#{current_user.code}" : "")
   end
 end
