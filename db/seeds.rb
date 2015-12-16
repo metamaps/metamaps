@@ -2,36 +2,36 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 
 ## USERS
-User.create({
+User.new({
   name: 'user',
   email: 'user@user.com',
   password: 'toolsplusconsciousness',
   code: 'qwertyui',
   joinedwithcode: 'qwertyui',
-  admin: 'false',
-})
+  admin: 'false'
+}).save
 
-User.create({
+User.new({
   name: 'admin',
   email: 'admin@admin.com',
   password: 'toolsplusconsciousness',
   code: 'iuytrewq',
   joinedwithcode: 'iuytrewq',
-  admin: 'true',
-})
+  admin: 'true'
+}).save
 ## END USERS
 
 ## METACODES
 Metacode.create({
   name: 'Action',
   icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/blueprint/96px/bp_action.png',
-  color: '#BD6C85',
+  color: '#BD6C85'
 })
 
 Metacode.create({
   name: 'Activity',
   icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/blueprint/96px/bp_activity.png',
-  color: '#6EBF65',
+  color: '#6EBF65'
 })
 
 Metacode.create({

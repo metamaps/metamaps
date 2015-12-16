@@ -20,7 +20,7 @@ require 'rails_helper'
 
 RSpec.describe MetacodesController, :type => :controller do
   before :each do
-    @user = User.new(admin: true)
+    @user = create(:user, admin: true)
     sign_in @user
   end
 
