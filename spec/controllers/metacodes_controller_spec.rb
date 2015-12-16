@@ -112,20 +112,26 @@ RSpec.describe MetacodesController, type: :controller do
 
       it 'updates the requested metacode' do
         metacode = Metacode.create! valid_attributes
-        put :update, { id: metacode.to_param, metacode: new_attributes }, valid_session
+        put :update,
+            { id: metacode.to_param, metacode: new_attributes },
+            valid_session
         metacode.reload
         skip('Add assertions for updated state')
       end
 
       it 'assigns the requested metacode as @metacode' do
         metacode = Metacode.create! valid_attributes
-        put :update, { id: metacode.to_param, metacode: valid_attributes }, valid_session
+        put :update,
+            { id: metacode.to_param, metacode: valid_attributes },
+            valid_session
         expect(assigns(:metacode)).to eq(metacode)
       end
 
       it 'redirects to the metacode' do
         metacode = Metacode.create! valid_attributes
-        put :update, { id: metacode.to_param, metacode: valid_attributes }, valid_session
+        put :update,
+            { id: metacode.to_param, metacode: valid_attributes },
+            valid_session
         expect(response).to redirect_to(metacode)
       end
     end
@@ -133,13 +139,17 @@ RSpec.describe MetacodesController, type: :controller do
     context 'with invalid params' do
       it 'assigns the metacode as @metacode' do
         metacode = Metacode.create! valid_attributes
-        put :update, { id: metacode.to_param, metacode: invalid_attributes }, valid_session
+        put :update,
+            { id: metacode.to_param, metacode: invalid_attributes },
+            valid_session
         expect(assigns(:metacode)).to eq(metacode)
       end
 
       it "re-renders the 'edit' template" do
         metacode = Metacode.create! valid_attributes
-        put :update, { id: metacode.to_param, metacode: invalid_attributes }, valid_session
+        put :update,
+            { id: metacode.to_param, metacode: invalid_attributes },
+            valid_session
         expect(response).to render_template('edit')
       end
     end

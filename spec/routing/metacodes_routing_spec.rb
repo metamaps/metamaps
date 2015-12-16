@@ -21,9 +21,5 @@ RSpec.describe MetacodesController, type: :routing do
     it 'routes to #update via PUT' do
       expect(put: '/metacodes/1').to route_to('metacodes#update', id: '1')
     end
-
-    # it "routes to #destroy" do
-    #  expect(:delete => "/metacodes/1").to route_to("metacodes#destroy", :id => "1")
-    # end
   end
 end

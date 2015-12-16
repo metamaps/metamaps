@@ -5,6 +5,8 @@ FactoryGirl.define do
     code { random_string(8) }
     joinedwithcode { code }
     password 'omgwtfbbq'
-    to_create { |instance| instance.save(validate: false) } # bypass validation of the joinedwithcode
+
+    # bypass validation of the joinedwithcode
+    to_create { |instance| instance.save(validate: false) }
   end
 end

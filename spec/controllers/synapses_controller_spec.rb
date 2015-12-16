@@ -100,20 +100,26 @@ RSpec.describe SynapsesController, type: :controller do
 
       it 'updates the requested synapse' do
         synapse = Synapse.create! valid_attributes
-        put :update, { id: synapse.to_param, synapse: new_attributes }, valid_session
+        put :update,
+            { id: synapse.to_param, synapse: new_attributes },
+            valid_session
         synapse.reload
         skip('Add assertions for updated state')
       end
 
       it 'assigns the requested synapse as @synapse' do
         synapse = Synapse.create! valid_attributes
-        put :update, { id: synapse.to_param, synapse: valid_attributes }, valid_session
+        put :update,
+            { id: synapse.to_param, synapse: valid_attributes },
+            valid_session
         expect(assigns(:synapse)).to eq(synapse)
       end
 
       it 'redirects to the synapse' do
         synapse = Synapse.create! valid_attributes
-        put :update, { id: synapse.to_param, synapse: valid_attributes }, valid_session
+        put :update,
+            { id: synapse.to_param, synapse: valid_attributes },
+            valid_session
         expect(response).to redirect_to(synapse)
       end
     end
@@ -121,13 +127,17 @@ RSpec.describe SynapsesController, type: :controller do
     context 'with invalid params' do
       it 'assigns the synapse as @synapse' do
         synapse = Synapse.create! valid_attributes
-        put :update, { id: synapse.to_param, synapse: invalid_attributes }, valid_session
+        put :update,
+            { id: synapse.to_param, synapse: invalid_attributes },
+            valid_session
         expect(assigns(:synapse)).to eq(synapse)
       end
 
       it "re-renders the 'edit' template" do
         synapse = Synapse.create! valid_attributes
-        put :update, { id: synapse.to_param, synapse: invalid_attributes }, valid_session
+        put :update,
+            { id: synapse.to_param, synapse: invalid_attributes },
+            valid_session
         expect(response).to render_template('edit')
       end
     end

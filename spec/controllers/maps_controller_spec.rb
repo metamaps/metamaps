@@ -100,20 +100,26 @@ RSpec.describe MapsController, type: :controller do
 
       it 'updates the requested map' do
         map = Map.create! valid_attributes
-        put :update, { id: map.to_param, map: new_attributes }, valid_session
+        put :update,
+            { id: map.to_param, map: new_attributes },
+            valid_session
         map.reload
         skip('Add assertions for updated state')
       end
 
       it 'assigns the requested map as @map' do
         map = Map.create! valid_attributes
-        put :update, { id: map.to_param, map: valid_attributes }, valid_session
+        put :update,
+            { id: map.to_param, map: valid_attributes },
+            valid_session
         expect(assigns(:map)).to eq(map)
       end
 
       it 'redirects to the map' do
         map = Map.create! valid_attributes
-        put :update, { id: map.to_param, map: valid_attributes }, valid_session
+        put :update,
+            { id: map.to_param, map: valid_attributes },
+            valid_session
         expect(response).to redirect_to(map)
       end
     end
@@ -121,13 +127,17 @@ RSpec.describe MapsController, type: :controller do
     context 'with invalid params' do
       it 'assigns the map as @map' do
         map = Map.create! valid_attributes
-        put :update, { id: map.to_param, map: invalid_attributes }, valid_session
+        put :update,
+            { id: map.to_param, map: invalid_attributes },
+            valid_session
         expect(assigns(:map)).to eq(map)
       end
 
       it "re-renders the 'edit' template" do
         map = Map.create! valid_attributes
-        put :update, { id: map.to_param, map: invalid_attributes }, valid_session
+        put :update,
+            { id: map.to_param, map: invalid_attributes },
+            valid_session
         expect(response).to render_template('edit')
       end
     end

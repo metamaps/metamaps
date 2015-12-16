@@ -100,20 +100,26 @@ RSpec.describe MappingsController, type: :controller do
 
       it 'updates the requested mapping' do
         mapping = Mapping.create! valid_attributes
-        put :update, { id: mapping.to_param, mapping: new_attributes }, valid_session
+        put :update,
+            { id: mapping.to_param, mapping: new_attributes },
+            valid_session
         mapping.reload
         skip('Add assertions for updated state')
       end
 
       it 'assigns the requested mapping as @mapping' do
         mapping = Mapping.create! valid_attributes
-        put :update, { id: mapping.to_param, mapping: valid_attributes }, valid_session
+        put :update,
+            { id: mapping.to_param, mapping: valid_attributes },
+            valid_session
         expect(assigns(:mapping)).to eq(mapping)
       end
 
       it 'redirects to the mapping' do
         mapping = Mapping.create! valid_attributes
-        put :update, { id: mapping.to_param, mapping: valid_attributes }, valid_session
+        put :update,
+            { id: mapping.to_param, mapping: valid_attributes },
+            valid_session
         expect(response).to redirect_to(mapping)
       end
     end
@@ -121,13 +127,17 @@ RSpec.describe MappingsController, type: :controller do
     context 'with invalid params' do
       it 'assigns the mapping as @mapping' do
         mapping = Mapping.create! valid_attributes
-        put :update, { id: mapping.to_param, mapping: invalid_attributes }, valid_session
+        put :update,
+            { id: mapping.to_param, mapping: invalid_attributes },
+            valid_session
         expect(assigns(:mapping)).to eq(mapping)
       end
 
       it "re-renders the 'edit' template" do
         mapping = Mapping.create! valid_attributes
-        put :update, { id: mapping.to_param, mapping: invalid_attributes }, valid_session
+        put :update,
+            { id: mapping.to_param, mapping: invalid_attributes },
+            valid_session
         expect(response).to render_template('edit')
       end
     end
