@@ -1,7 +1,8 @@
 class Perm
+  # e.g. Perm::ISSIONS
+  ISSIONS = [:commons, :public, :private]
+
   class << self
-    # e.g. Perm::ISSIONS
-    ISSIONS = [:commons, :public, :private]
   
     def short(permission)
       case permission

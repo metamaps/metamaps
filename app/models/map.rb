@@ -13,9 +13,11 @@ class Map < ActiveRecord::Base
    #:full => ['940x630#', :png]
   },
   :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
-  validates_presence_of :name
-  validates_presence_of :arranged
-  validate_presence_of :permission
+  validates :name, presence: true
+  validates :arranged, presence: true
+  validates :arranged, inclusion: { in: [true, false] }
+  validates :permission, presence: true
+  validates :permission, inclusion: { in: Perm::ISSIONS }
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
