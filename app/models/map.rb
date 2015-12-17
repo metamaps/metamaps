@@ -14,7 +14,6 @@ class Map < ActiveRecord::Base
   },
   :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
   validates :name, presence: true
-  validates :arranged, presence: true
   validates :arranged, inclusion: { in: [true, false] }
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
