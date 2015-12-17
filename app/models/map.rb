@@ -17,7 +17,7 @@ class Map < ActiveRecord::Base
   validates :arranged, presence: true
   validates :arranged, inclusion: { in: [true, false] }
   validates :permission, presence: true
-  validates :permission, inclusion: { in: Perm::ISSIONS }
+  validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
