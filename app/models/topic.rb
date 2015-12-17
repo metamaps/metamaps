@@ -39,27 +39,27 @@ class Topic < ActiveRecord::Base
   belongs_to :metacode
 
   def user_name
-    self.user.name
+    user.name
   end
 
   def user_image
-    self.user.image.url
+    user.image.url
   end
 
   def map_count
-    self.maps.count
+    maps.count
   end
 
   def synapse_count
-    self.synapses.count
+    synapses.count
   end
 
   def inmaps
-    self.maps.map(&:name)
+    maps.map(&:name)
   end
 
   def inmapsLinks
-    self.maps.map(&:id)
+    maps.map(&:id)
   end
 
   def as_json(options={})
@@ -71,24 +71,18 @@ class Topic < ActiveRecord::Base
   end
   
   def mk_permission
-    if self.permission == "commons"
-      "co"
-    elsif self.permission == "public"
-      "pu"
-    elsif self.permission == "private"
-      "pr"
-    end
+    Perm.short(permission)
   end
 
   # has no viewable synapses helper function
   def has_viewable_synapses(current)
   	result = false
-  	self.synapses.each do |synapse|
+  	synapses.each do |synapse|
   		if synapse.authorize_to_view(current)
   			result = true
   		end
   	end
-  	return result
+  	result
   end
   
   ##### PERMISSIONS ######
