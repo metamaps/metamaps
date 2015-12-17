@@ -78,7 +78,7 @@ class Topic < ActiveRecord::Base
   def has_viewable_synapses(current)
   	result = false
   	synapses.each do |synapse|
-  		if synapse.authorize_to_view(current)
+  		if synapse.authorize_to_show(current)
   			result = true
   		end
   	end
@@ -110,13 +110,5 @@ class Topic < ActiveRecord::Base
       return self
     end
     return false
-  end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return true
   end
 end

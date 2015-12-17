@@ -107,14 +107,6 @@ class Map < ActiveRecord::Base
   	end
   	return self
   end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-  	if (self.permission == "private" && self.user != user)
-  		return false
-  	end
-  	return true
-  end
 
   def decode_base64(imgBase64)
     decoded_data = Base64.decode64(imgBase64)

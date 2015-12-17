@@ -48,13 +48,4 @@ class Synapse < ActiveRecord::Base
     end
     return false
   end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return true
-  end
-
 end
