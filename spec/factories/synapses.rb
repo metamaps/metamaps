@@ -3,7 +3,7 @@ FactoryGirl.define do
     desc { random_string(10) }
     category :to
     permission :commons
-    association :node1, factory: :topic
-    association :node2, factory: :topic
+    association :topic1, factory: :topic
+    association :topic2, factory: :topic
   end
 end
