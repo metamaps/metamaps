@@ -10,6 +10,9 @@ class Synapse < ActiveRecord::Base
 
   validates :desc, length: { minimum: 0, allow_nil: false }
 
+  validates :permission, presence: true
+  validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
+
   def user_name
     self.user.name
   end

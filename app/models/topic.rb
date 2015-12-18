@@ -10,6 +10,9 @@ class Topic < ActiveRecord::Base
 
   has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
+
+  validates :permission, presence: true
+  validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
     
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :image
