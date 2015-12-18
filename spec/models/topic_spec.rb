@@ -51,6 +51,7 @@ RSpec.describe Topic, type: :model do
   end
 
   context 'permssions' do
+    let(:owner) { create :user }
     let(:other_user) { create :user }
     let(:topic) { create :topic, user: owner, permission: :commons }
     let(:private_topic) { create :topic, user: owner, permission: :private }
