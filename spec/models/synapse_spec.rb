@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Synapse, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-  pending "validate that desc can't be nil - important for javascript"
   it { is_expected.to belong_to :user }
   it { is_expected.to belong_to :topic1 }
   it { is_expected.to belong_to :topic2 }
@@ -10,6 +8,8 @@ RSpec.describe Synapse, type: :model do
   it { is_expected.to have_many :mappings }
   it { is_expected.to validate_presence_of :permission }
   it { is_expected.to validate_inclusion_of(:permission).in_array Perm::ISSIONS.map(&:to_s) }
+
+  pending "validate that desc can't be nil - important for javascript"
 
   context 'permissions' do
     let(:owner) { create :user }
