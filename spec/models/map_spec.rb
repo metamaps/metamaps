@@ -6,7 +6,6 @@ RSpec.describe Map, type: :model do
   it { is_expected.to validate_presence_of :name }
   it { is_expected.to validate_presence_of :permission }
   it { is_expected.to validate_inclusion_of(:permission).in_array Perm::ISSIONS.map(&:to_s) }
-  it { is_expected.to validate_inclusion_of(:arranged).in_array [true, false] }
 
   context 'permissions' do
     let(:owner) { create :user }
