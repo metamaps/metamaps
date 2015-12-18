@@ -24,19 +24,19 @@ RSpec.describe Synapse, type: :model do
     end
 
     it 'prevents visibility if private' do
-      expect(synapse.authorize_to_show(other_user)).to eq true
-      expect(synapse.authorize_to_show(owner)).to eq true
-      expect(private_synapse.authorize_to_show(owner)).to eq true
+      expect(synapse.authorize_to_show(other_user)).to eq synapse
+      expect(synapse.authorize_to_show(owner)).to eq synapse
+      expect(private_synapse.authorize_to_show(owner)).to eq private_synapse
       expect(private_synapse.authorize_to_show(other_user)).to eq false
     end
 
     it 'only allows editing if commons or owned' do
-      expect(synapse.authorize_to_edit(other_user)).to eq true
-      expect(synapse.authorize_to_edit(owner)).to eq true
+      expect(synapse.authorize_to_edit(other_user)).to eq synapse
+      expect(synapse.authorize_to_edit(owner)).to eq synapse
       expect(private_synapse.authorize_to_edit(other_user)).to eq false
-      expect(private_synapse.authorize_to_edit(owner)).to eq true
+      expect(private_synapse.authorize_to_edit(owner)).to eq private_synapse
       expect(public_synapse.authorize_to_edit(other_user)).to eq false
-      expect(public_synapse.authorize_to_edit(owner)).to eq true
+      expect(public_synapse.authorize_to_edit(owner)).to eq public_synapse
     end
   end
 end

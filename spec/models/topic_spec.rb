@@ -63,19 +63,19 @@ RSpec.describe Topic, type: :model do
     end
 
     it 'prevents visibility if private' do
-      expect(topic.authorize_to_show(other_user)).to eq true
-      expect(topic.authorize_to_show(owner)).to eq true
-      expect(private_topic.authorize_to_show(owner)).to eq true
+      expect(topic.authorize_to_show(other_user)).to eq topic
+      expect(topic.authorize_to_show(owner)).to eq topic
+      expect(private_topic.authorize_to_show(owner)).to eq private_topic
       expect(private_topic.authorize_to_show(other_user)).to eq false
     end
 
     it 'only allows editing if commons or owned' do
-      expect(topic.authorize_to_edit(other_user)).to eq true
-      expect(topic.authorize_to_edit(owner)).to eq true
+      expect(topic.authorize_to_edit(other_user)).to eq topic
+      expect(topic.authorize_to_edit(owner)).to eq topic
       expect(private_topic.authorize_to_edit(other_user)).to eq false
-      expect(private_topic.authorize_to_edit(owner)).to eq true
+      expect(private_topic.authorize_to_edit(owner)).to eq private_topic
       expect(public_topic.authorize_to_edit(other_user)).to eq false
-      expect(public_topic.authorize_to_edit(owner)).to eq true
+      expect(public_topic.authorize_to_edit(owner)).to eq public_topic
     end
   end
 end

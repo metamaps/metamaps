@@ -20,19 +20,19 @@ RSpec.describe Map, type: :model do
     end
 
     it 'prevents visibility if private' do
-      expect(map.authorize_to_show(other_user)).to eq true
-      expect(map.authorize_to_show(owner)).to eq true
-      expect(private_map.authorize_to_show(owner)).to eq true
+      expect(map.authorize_to_show(other_user)).to eq map
+      expect(map.authorize_to_show(owner)).to eq map
+      expect(private_map.authorize_to_show(owner)).to eq private_map
       expect(private_map.authorize_to_show(other_user)).to eq false
     end
 
     it 'only allows editing if commons or owned' do
-      expect(map.authorize_to_edit(other_user)).to eq true
-      expect(map.authorize_to_edit(owner)).to eq true
+      expect(map.authorize_to_edit(other_user)).to eq map
+      expect(map.authorize_to_edit(owner)).to eq map
       expect(private_map.authorize_to_edit(other_user)).to eq false
-      expect(private_map.authorize_to_edit(owner)).to eq true
+      expect(private_map.authorize_to_edit(owner)).to eq private_map
       expect(public_map.authorize_to_edit(other_user)).to eq false
-      expect(public_map.authorize_to_edit(owner)).to eq true
+      expect(public_map.authorize_to_edit(owner)).to eq public_map
     end
   end
 end
