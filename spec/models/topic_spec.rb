@@ -21,8 +21,8 @@ RSpec.describe Topic, type: :model do
     end
 
     context 'topic with one unpermitted synapse' do
-      let (:topic) { create(:topic) }
-      let (:synapse) { create(:synapse, permission: :private, topic1: topic, user: other_user) }
+      let (:synapse) { create(:synapse, permission: :private, user: other_user) }
+      let (:topic) { create(:topic, synapses1: [synapse]) }
 
       it 'returns false' do
         expect(topic.has_viewable_synapses(user)).to eq false
@@ -30,8 +30,8 @@ RSpec.describe Topic, type: :model do
     end
 
     context 'topic with one permitted synapse' do
-      let (:topic) { create(:topic) }
-      let (:synapse) { create(:synapse, permission: :private, topic1: topic, user: user) }
+      let (:synapse) { create(:synapse, permission: :private, user: user) }
+      let(:topic) { create(:topic, synapses1: [synapse]) }
 
       it 'returns true' do
         expect(topic.has_viewable_synapses(user)).to eq true
@@ -39,9 +39,9 @@ RSpec.describe Topic, type: :model do
     end
 
     context 'topic with one unpermitted, one permitted synapse' do
-      let (:topic) { create(:topic) }
-      let (:synapse1) { create(:synapse, permission: :private, topic1: topic, user: other_user) }
-      let (:synapse2) { create(:synapse, permission: :private, topic1: topic, user: user) }
+      let (:synapse1) { create(:synapse, permission: :private, user: other_user) }
+      let (:synapse2) { create(:synapse, permission: :private, user: user) }
+      let (:topic) { create(:topic, synapses1: [synapse1, synapse2]) }
 
       it 'returns true' do
         expect(topic.synapses.count).to eq 2
