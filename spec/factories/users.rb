@@ -1,12 +1,15 @@
 FactoryGirl.define do
   factory :user do
-    name { random_string(10) }
-    email { random_string(10) + '@' + random_string(10) + '.com' }
-    code { random_string(8) }
-    joinedwithcode { code }
+    sequence(:name) { |n| "Cool User ##{n}" }
+    sequence(:email) { |n| "cooluser#{n}@cooldomain.com" }
+    joinedwithcode { "qwertyui" }
     password 'omgwtfbbq'
 
+    transient do
+      validate false
+    end
+
     # bypass validation of the joinedwithcode
-    to_create { |instance| instance.save(validate: false) }
+    to_create { |instance| instance.save(validate: instance.validate) }
   end
 end

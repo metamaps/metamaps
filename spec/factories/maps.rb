@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :map do
-    name { random_string(10) }
+    sequence(:name) { |n| "Cool Map ##{n}" }
     permission :commons
     arranged { false }
     user

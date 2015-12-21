@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :topic do
-    name { random_string(10) }
+    sequence(:name) { |n| "Cool Topic ##{n}" }
     permission :commons
     user
     metacode
