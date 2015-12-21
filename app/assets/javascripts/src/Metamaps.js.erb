@@ -928,8 +928,11 @@ Metamaps.TopicCard = {
             setTimeout(function () {
                 var text = $(element).val();
                 if (event.type=="paste" || (event.type=="keyup" && event.which==13)){
-                    if (text.slice(0, 4) !== 'http') {
-                        text='http://'+text;
+                  // TODO evaluate converting this to '//' no matter what (infer protocol)
+                  if (text.slice(0, 7) !== 'http://' &&
+                      text.slice(0, 8) !== 'https://' && 
+                      text.slice(0, 2) !== '//') {
+                        text='//'+text;
                     }
                     topic.save({
                         link: text
@@ -1897,7 +1900,7 @@ Metamaps.Util = {
         return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     },
     checkURLisYoutubeVideo: function (url) {
-        return (url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$/) != null);
+        return (url.match(/^https?:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$/) != null);
     }
 }; // end Metamaps.Util
 
@@ -1907,9 +1910,9 @@ Metamaps.Util = {
  *
  */
 Metamaps.Realtime = {
-    stringForLocalhost: 'http://localhost:5001',
-    stringForMetamaps: 'http://metamaps.cc:5001',
-    stringForHeroku: 'http://gentle-savannah-1303.herokuapp.com',
+    stringForLocalhost: '//localhost:5001',
+    stringForMetamaps: '//metamaps.cc:5001',
+    stringForHeroku: '//gentle-savannah-1303.herokuapp.com',
     socket: null,
     isOpen: false,
     changing: false,
