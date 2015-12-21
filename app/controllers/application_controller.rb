@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   
   def after_sign_in_path_for(resource)
     unsafe_uri = request.env["REQUEST_URI"]
-    if unsafe_uri.starts_with? 'http' && !unsafe_uri.starts_with? 'https'
+    if unsafe_uri.starts_with?('http') && !unsafe_uri.starts_with?('https')
       protocol = 'http'
     else
       protocol = 'https'
