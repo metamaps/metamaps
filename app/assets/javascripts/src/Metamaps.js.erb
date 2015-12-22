@@ -2024,7 +2024,6 @@ Metamaps.Realtime = {
       var heightOfVideo = 150;
       var padding = 25;
       var top = paddingAboveTop + (self.videosInPosition * heightOfVideo) + padding;
-      console.log(top);
       var left = 30;
       //var right = Math.floor((Math.random() * (468 - 100)) + 1);
       v.setParent($('#wrapper'));
@@ -2153,12 +2152,13 @@ Metamaps.Realtime = {
         inviter: Metamaps.Active.Mapper.id,
         invited: userid
       });
+      Metamaps.GlobalUI.notifyUser('Invitation pending...', true);
     },
     callAccepted: function (userid) {
       var self = Metamaps.Realtime;
 
       var username = self.mappersOnMap[userid].name;
-      Metamaps.GlobalUI.notifyUser(username + ' liked your suggestion! Video call starting...');
+      Metamaps.GlobalUI.notifyUser('Conversation starting...');
       self.joinCall();
     },
     callDenied: function (userid) {

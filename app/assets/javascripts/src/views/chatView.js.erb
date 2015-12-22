@@ -215,12 +215,14 @@ Metamaps.Views.chatView = (function () {
       this.$conversationInProgress.show();
       this.$participants.addClass('is-live');
       if (participating) this.$conversationInProgress.addClass('is-participating');
+      this.$button.addClass('active');
     }
 
     chatView.prototype.conversationEnded = function () {
       this.$conversationInProgress.hide();
       this.$participants.removeClass('is-live');
       this.$conversationInProgress.removeClass('is-participating');
+      this.$button.removeClass('active');
     }
 
     chatView.prototype.addParticipant = function (participant) {

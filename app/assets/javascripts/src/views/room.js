@@ -146,7 +146,6 @@ Metamaps.Views.room = (function () {
       }
 
       room.prototype.removeVideo = function (peer) {
-          console.log('removeVideo', peer);
           var id = typeof peer == 'string' ? peer : peer.id;
           if (this.videos[id]) {
             this.videos[id].remove();
