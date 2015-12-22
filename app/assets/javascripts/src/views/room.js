@@ -161,7 +161,6 @@ Metamaps.Views.room = (function () {
       room.prototype.sendChatMessage = function (data) {
         var self = this;
           //this.roomRef.child('messages').push(data);
-          console.log(data);
           var m = new Metamaps.Backbone.Message({
             message: data.message,
             resource_id: Metamaps.Active.Map.id,
@@ -169,13 +168,23 @@ Metamaps.Views.room = (function () {
           });
           m.save(null, {
             success: function (model, response) {
-              self.messages.add(model);
+              self.addMessages(new Metamaps.Backbone.MessageCollection(model));
               $(document).trigger(room.events.newMessage, [model]);
             },
             error: function (model, response) {
               console.log('error!', response);
             }
           });
+      }
+
+      // they should be instantiated as backbone models before they get
+      // passed to this function
+      room.prototype.addMessages = function (messages, isInitial) {
+        var self = this;
+
+        messages.models.forEach(function (message) {
+          self.chat.addMessage(message, isInitial);
+        });
       }
 
     /**

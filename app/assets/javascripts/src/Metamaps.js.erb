@@ -1918,6 +1918,7 @@ Metamaps.Realtime = {
     chatOpen: false,
     status: true, // stores whether realtime is True/On or False/Off,
     broadcastingStatus: false,
+    videosInPosition: 1,
     inConversation: false,
     localVideo: null,
     init: function () {
@@ -1982,7 +1983,6 @@ Metamaps.Realtime = {
             myVideoView: self.localVideo.view,
             config: { DOUBLE_CLICK_TOLERANCE: 200 }
           });
-          if (Metamaps.Messages) self.room.messages.add(Metamaps.Messages);
           self.room.videoAdded(self.handleVideoAdded);
 
           self.createChat();
@@ -2017,8 +2017,12 @@ Metamaps.Realtime = {
     handleVideoAdded: function (v, id) {
       var self = Metamaps.Realtime;
       // random position for now
-      var top = Math.floor((Math.random() * ($('#wrapper').height() - 100)) + 1);
-      var left = Math.floor((Math.random() * ($('#wrapper').width() - 100)) + 1);
+      var paddingAboveTop = 72;
+      var heightOfVideo = 150;
+      var padding = 25;
+      var top = paddingAboveTop + (self.videosInPosition * heightOfVideo) + padding;
+      console.log(top);
+      var left = 30;
       //var right = Math.floor((Math.random() * (468 - 100)) + 1);
       v.setParent($('#wrapper'));
       $('#wrapper').append(v.$container);
@@ -2029,6 +2033,7 @@ Metamaps.Realtime = {
       v.$container.find('.video-cutoff').css({
         border: '2px solid ' + self.mappersOnMap[id].color
       });
+      self.videosInPosition += 1;
     },
     startActiveMap: function () {
         var self = Metamaps.Realtime;
@@ -2044,7 +2049,7 @@ Metamaps.Realtime = {
             else if (publicMap) {
                 self.attachMapListener();
             }
-            self.room.messages.add(Metamaps.Messages);
+            self.room.addMessages(new Metamaps.Backbone.MessageCollection(Metamaps.Messages), true);
         }
     },
     endActiveMap: function () {
@@ -2055,8 +2060,8 @@ Metamaps.Realtime = {
         self.socket.emit('endMapperNotify');
         $(".collabCompass").remove();
         self.status = false;
-        self.stopVideo();
         self.room.leave();
+        self.videosInPosition = 1;
     },
     reenableRealtime: function() {
         var confirmString = "The layout of your map has fallen out of sync with the saved copy. ";
@@ -2181,6 +2186,7 @@ Metamaps.Realtime = {
 
       self.room.leaveVideoOnly();
       self.inConversation = false;
+      self.videosInPosition = 1;
       self.localVideo.view.$container.hide();
     },
     turnOff: function (silent) {
@@ -2331,8 +2337,14 @@ Metamaps.Realtime = {
         $(document).on(Metamaps.Views.room.events.callEnded, function () {
           socket.emit('callEnded', { mapid: Metamaps.Active.Map.id }); // so that anyone who isn't currently in the call gets notified
           self.inConversation = false;
+          self.videosInPosition = 1;
           Metamaps.GlobalUI.notifyUser('Conversation has ended.');
-          self.localVideo.view.$container.hide();
+          self.localVideo.view.$container.hide().css({
+            top: '72px',
+            left: '30px'
+          });
+          self.localVideo.view.audioOn();
+          self.localVideo.view.videoOn();
           self.webrtc.webrtc.localStreams.forEach(function (stream) {
             stream.getTracks().forEach(function (track) {
               track.stop();
@@ -2748,7 +2760,7 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = self.socket;
 
-        self.room.messages.add(data);
+        self.room.addMessages(new Metamaps.Backbone.MessageCollection(data));
     },
     // newTopic
     sendNewTopic: function (data) {

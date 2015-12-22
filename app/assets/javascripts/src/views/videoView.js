@@ -80,22 +80,18 @@ Metamaps.Views.videoView = (function () {
         },
         audioControlClick: function() {
             if (this.audioStatus) {
-                this.$audioControl.addClass('active');
+              this.audioOff();
             } else {
-                this.$audioControl.removeClass('active');
+              this.audioOn();
             }
-            this.audioStatus = !this.audioStatus;
             $(document).trigger(videoView.events.audioControlClick, [this]);
         },
         videoControlClick: function() {
             if (this.videoStatus) {
-                this.$videoControl.addClass('active');
-                this.$avatar.show();
+              this.videoOff();
             } else {
-                this.$videoControl.removeClass('active');
-                this.$avatar.hide();
+              this.videoOn();
             }
-            this.videoStatus = !this.videoStatus;
             $(document).trigger(videoView.events.videoControlClick, [this]);
         },
         /*yesReceiveClick: function () {
@@ -189,6 +185,28 @@ Metamaps.Views.videoView = (function () {
         this.$container.off();
         if (this.$parent) this.$parent.off('.video' + this.id);
         this.$container.remove();
+    }
+
+    videoView.prototype.videoOff = function () {
+      this.$videoControl.addClass('active');
+      this.$avatar.show();
+      this.videoStatus = false;
+    }
+
+    videoView.prototype.videoOn = function () {
+      this.$videoControl.removeClass('active');
+      this.$avatar.hide();
+      this.videoStatus = true;
+    }
+
+    videoView.prototype.audioOff = function () {
+      this.$audioControl.addClass('active');
+      this.audioStatus = false;
+    }
+
+    videoView.prototype.audioOn = function () {
+      this.$audioControl.removeClass('active');
+      this.audioStatus = true;
     }
 
     /**

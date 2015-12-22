@@ -68,13 +68,6 @@ Metamaps.Views.chatView = (function () {
                 Private.removeParticipant.call(self, participant);
             });
 
-            // add the event listener so that when
-            // the realtime module adds messages to the collection
-            // from other mappers, it will update the UI
-            this.messages.on('add', function (message) {
-                Private.addMessage.call(self, message);
-            });
-
             this.$button.on('click', function () {
                 Handlers.buttonClick.call(self);
             });
@@ -110,9 +103,9 @@ Metamaps.Views.chatView = (function () {
             this.$unread.html(this.unreadMessages);
             this.$unread.show();
         },
-        addMessage: function(message) {
+        addMessage: function(message, isInitial) {
 
-            if (!this.isOpen) Private.incrementUnread.call(this);
+            if (!this.isOpen && !isInitial) Private.incrementUnread.call(this);
 
             function addZero(i) {
                 if (i < 10) {
@@ -132,14 +125,14 @@ Metamaps.Views.chatView = (function () {
             m.message = linker.link(m.message);
             var $html = $(this.messageTemplate(m));
             this.$messages.append($html);
-            this.scrollMessages(200);
+            if (!isInitial) this.scrollMessages(200);
 
-            if (this.alertSound) this.sound.play('laser');
+            if (!isInitial && this.alertSound) this.sound.play('laser');
         },
         initialMessages: function() {
             var messages = this.messages.models;
             for (var i = 0; i < messages.length; i++) {
-                Private.addMessage.call(this, messages[i]);
+                Private.addMessage.call(this, messages[i], true);
             }
         },
         handleInputMessage: function() {
@@ -255,6 +248,11 @@ Metamaps.Views.chatView = (function () {
         this.$unread.hide();
         this.scrollMessages(0);
         $(document).trigger(chatView.events.openTray);
+    }
+
+    chatView.prototype.addMessage = function(message, isInitial) {
+      this.messages.add(message);
+      Private.addMessage.call(this, message, isInitial);
     }
 
     chatView.prototype.scrollMessages = function(duration) {
