@@ -14,11 +14,11 @@ class Map < ActiveRecord::Base
    #:full => ['940x630#', :png]
   },
   :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
-    
+
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
 
-  def mappings 
+  def mappings
   	topicmappings + synapsemappings
   end
 
@@ -35,11 +35,11 @@ class Map < ActiveRecord::Base
   #return an array of the contributors to the map
   def contributors
     contributors = []
-    
+
     self.mappings.each do |m|
       contributors.push(m.user) if !contributors.include?(m.user)
     end
-    
+
     return contributors
   end
 
@@ -59,7 +59,7 @@ class Map < ActiveRecord::Base
     self.user.image.url
   end
 
-  def contributor_count 
+  def contributor_count
     self.contributors.length
   end
 
@@ -83,7 +83,7 @@ class Map < ActiveRecord::Base
   end
 
   ##### PERMISSIONS ######
-  
+
   def authorize_to_delete(user)
     if (self.user != user)
       return false
@@ -98,9 +98,9 @@ class Map < ActiveRecord::Base
   	end
   	return self
   end
-  
+
   # returns false if user not allowed to 'edit' Topic, Synapse, or Map
-  def authorize_to_edit(user)  
+  def authorize_to_edit(user)
   	if !user
       return false
     elsif (self.permission == "private" && self.user != user)
@@ -110,9 +110,9 @@ class Map < ActiveRecord::Base
   	end
   	return self
   end
-  
+
   # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
+  def authorize_to_view(user)
   	if (self.permission == "private" && self.user != user)
   		return false
   	end
@@ -121,7 +121,7 @@ class Map < ActiveRecord::Base
 
   def decode_base64(imgBase64)
     decoded_data = Base64.decode64(imgBase64)
- 
+
     data = StringIO.new(decoded_data)
     data.class_eval do
       attr_accessor :content_type, :original_filename

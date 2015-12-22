@@ -51,6 +51,3 @@ group :development, :test do
   gem 'quiet_assets'
   gem 'tunemygc'
 end
-
-# To use Jbuilder templates for JSON
-gem 'jbuilder'
