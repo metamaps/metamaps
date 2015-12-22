@@ -1918,6 +1918,7 @@ Metamaps.Realtime = {
     webrtc: null,
     readyToCall: false,
     mappersOnMap: {},
+    disconnected: false,
     chatOpen: false,
     status: true, // stores whether realtime is True/On or False/Off,
     broadcastingStatus: false,
@@ -1943,7 +1944,12 @@ Metamaps.Realtime = {
         self.socket = new SocketIoConnection({ url: whichToConnect });
         self.socket.on('connect', function () {
             console.log('connected');
-            self.startActiveMap();
+            if (!self.disconnected) {
+              self.startActiveMap();
+            } else self.disconnected = false;
+        });
+        self.socket.on('disconnect', function () {
+          self.disconnected = true;
         });
 
         if (Metamaps.Active.Mapper) {
@@ -2171,7 +2177,7 @@ Metamaps.Realtime = {
       var self = Metamaps.Realtime;
 
       self.webrtc.off('readyToCall');
-      self.webrtc.on('readyToCall', function () {
+      self.webrtc.once('readyToCall', function () {
         self.videoInitialized = true;
         self.readyToCall = true;
         self.localVideo.view.$container.show();
