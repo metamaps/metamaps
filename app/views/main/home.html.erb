@@ -47,7 +47,7 @@
     Metamaps.Maps.Active = <%= @maps.to_json.html_safe %>;
     Metamaps.currentSection = "";
     Metamaps.currentPage = "";
-    Metamaps.GlobalUI.Search.isOpen = true;
+    Metamaps.GlobalUI.Search.open();
     Metamaps.GlobalUI.Search.lock();
     </script>
 <% end %>
