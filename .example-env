@@ -4,7 +4,16 @@ export DB_USERNAME='postgres'
 export DB_PASSWORD='3112'
 export DB_HOST='localhost'
 export DB_PORT='5432'
-export REALTIME_SERVER='https://realtime.metamaps.cc'
+
+export MAILER_DEFAULT_URL='localhost:3000'
+# you could also use
+# export MAILER_DEFAULT_URL='metamaps.herokuapp.com'
+
+export REALTIME_SERVER='http://localhost:5001'
+# you could also use
+# export REALTIME_SERVER='https://realtime.metamaps.cc'
+# export REALTIME_SERVER='https://my-heroku-realtime-server.herokuapp.com',
+
 
 # you can safely leave the rest of these blank, unless you're
 # deploying an instance, in which case you'll need to set them up
