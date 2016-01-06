@@ -1,4 +1,4 @@
-defaults: &defaults
+default: &default
   min_messages: WARNING
   adapter: postgresql
   host: 127.0.0.1
@@ -9,9 +9,13 @@ defaults: &defaults
   password: "3112"
 
 development:
-  <<: *defaults
+  <<: *default
   database: metamap002_development
 
 test:
-  <<: *defaults
+  <<: *default
   database: metamap002_test
+
+production:
+  <<: *default
+  database: metamap002_production
