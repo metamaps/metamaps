@@ -8,11 +8,6 @@ During the installation of the PostgreSQL database, you'll need to choose a data
 
 Once you are ready, create a new folder to hold this and any other git repositories. As an example, let's pretend you've chose C:\git, and made that folder writable by your user account.
 
-Open a command prompt ("cmd.exe"), and navigate to the folder you chose. Then use the gem command (which is part of Ruby) to install Ruby on Rails.
-
-    cd .\git
-    gem install rails -v 4.2
-
 Now you are ready to clone the Metamaps git repository:
 
     git clone https://github.com/metamaps/metamaps_gen002.git --branch develop
