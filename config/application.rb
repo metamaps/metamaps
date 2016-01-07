@@ -1,8 +1,12 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'dotenv'
 
 Bundler.require(*Rails.groups)
+
+ENV["RAILS_ENV"] ||= ENV["RACK_ENV"] || "development"
+Dotenv.load ".env.#{ENV["RAILS_ENV"]}", '.env'
 
 module Metamaps
   class Application < Rails::Application
