@@ -10,12 +10,12 @@ default: &default
 
 development:
   <<: *default
-  database: metamap002_development
+  database: <%= ENV['DB_NAME'] %>_development
 
 test:
   <<: *default
-  database: metamap002_test
+  database: <%= ENV['DB_NAME'] %>_test
 
 production:
   <<: *default
-  database: metamap002_production
+  database: <%= ENV['DB_NAME'] %>_production
