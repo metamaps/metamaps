@@ -4,10 +4,14 @@ RSpec is a ruby gem that allows you to test your code base. This is great -
 every time you make a change, you can do some basic sanity checks to make sure 
 you didn't break anything.
 
-To test Metamaps, run `rspec` in the top level directory. It will automatically
-search the `spec` directory for files called `*_spec.rb`, and run them as tests.
-When it's done testing, it will print a report telling you how many tests
-failed. With luck, the number will be 0.
+To test Metamaps, run
+
+    rspec
+
+in the top level directory. It will automatically search the `spec` directory
+for files called `*_spec.rb`, and run them as tests. When it's done testing, it
+will print a report telling you how many tests failed. With luck, the number
+will be 0.
 
 Note that if your test database doesn't exist yet, you'll need to create it
 first:
