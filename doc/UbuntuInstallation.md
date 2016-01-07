@@ -57,13 +57,15 @@ Install the specific version of ruby needed this will take some time
 
     rvm install ruby-2.1.3
 
-Now we also need to rename your database file which is in ./config/database.default.yml to database.yml
+Now we also need to copy .example-env to a new file named .env. Review the configuration in here to see if you need any changes.
 
-now run inside your metamaps_gen002 folder
+    cp .example-env .env
+
+Now run inside your metamaps_gen002 folder
 
     bundle install
 
-in your top lvl directory for metamaps this is a lengthy process so you might want to go and make a coffee or something :)
+in your top level directory for metamaps this is a lengthy process so you might want to go and make a coffee or something :)
 
 alright now we need to make sure your postgres password is the same as it is listed in the DB file so we are going to set it by
 

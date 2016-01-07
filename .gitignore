@@ -8,16 +8,11 @@
 realtime/node_modules
 public/assets
 
-#secrets
-config/database.yml
-config/secrets.yml
+#secrets and config
 .env
 
 # Ignore bundler config
 .bundle
-
-# Ignore the default SQLite database.
-db/*.sqlite3
 
 # Ignore all logfiles and tempfiles.
 log/*.log

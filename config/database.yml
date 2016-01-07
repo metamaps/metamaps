@@ -1,12 +1,12 @@
 default: &default
   min_messages: WARNING
-  adapter: postgresql
-  host: 127.0.0.1
-  port: 5432
   encoding: unicode
   pool: 5
-  username: postgres
-  password: "3112"
+  adapter: postgresql
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
 
 development:
   <<: *default

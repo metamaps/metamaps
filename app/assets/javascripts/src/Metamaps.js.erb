@@ -1910,9 +1910,6 @@ Metamaps.Util = {
  *
  */
 Metamaps.Realtime = {
-    stringForLocalhost: '//localhost:5001',
-    stringForMetamaps: 'https://realtime.metamaps.cc',
-    stringForHeroku: 'https://gentle-savannah-1303.herokuapp.com',
     socket: null,
     isOpen: false,
     changing: false,
@@ -1936,9 +1933,8 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        var railsEnv = $('body').data('env');
-        var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
-        self.socket = io.connect(whichToConnect);
+        var realtimeServerUrl = '<%= ENV['REALTIME_SERVER'] %>'
+        self.socket = io.connect(realtimeServerUrl);
         self.socket.on('connect', function () {
             self.startActiveMap();
         });

@@ -20,7 +20,7 @@ At this point you should be in C:\git\metamaps_gen002, or whatever equivalent di
 
     start config
 
-This command will open a Windows Explorer window of the "config" directory of Metamaps. Copy database.yml.default, and rename the copy to database.yml. Edit the file and set the password to be whatever you set up with postgres earlier. Once you're done, then move back into the command prompt. The next few commands will fail unless database.yml is correctly configured and Postgres is running.
+This command will open a Windows Explorer window of the "config" directory of Metamaps. Copy `.example-env`, and rename the copy to `.env`. Edit the file and set the DB_PASSWORD to be whatever you set up with postgres earlier. Once you're done, then move back into the command prompt. The next few commands will fail unless `.env` is correctly configured and Postgres is running.
 
     rake db:create
     rake db:schema:load
