@@ -38,6 +38,12 @@ group :assets do
   gem 'uglifier'
 end
 
+group :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'shoulda-matchers'
+end
+
 group :production do #this is used on heroku
  #gem 'rmagick'
  gem 'rails_12factor'

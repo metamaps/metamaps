@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   
   #generate a random 8 letter/digit code that they can use to invite people
   def generate_code
-	  self.code = rand(36**8).to_s(36)
+	  self.code ||= rand(36**8).to_s(36)
     $codes.push(self.code)
     self.generation = get_generation!
   end

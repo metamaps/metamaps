@@ -10,6 +10,9 @@ class Synapse < ActiveRecord::Base
 
   validates :desc, length: { minimum: 0, allow_nil: false }
 
+  validates :permission, presence: true
+  validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
+
   def user_name
     self.user.name
   end
@@ -48,13 +51,4 @@ class Synapse < ActiveRecord::Base
     end
     return false
   end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return true
-  end
-
 end

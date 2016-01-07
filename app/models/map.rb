@@ -13,6 +13,10 @@ class Map < ActiveRecord::Base
    #:full => ['940x630#', :png]
   },
   :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
+  validates :name, presence: true
+  validates :arranged, inclusion: { in: [true, false] }
+  validates :permission, presence: true
+  validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
@@ -22,13 +26,7 @@ class Map < ActiveRecord::Base
   end
 
   def mk_permission
-    if self.permission == "commons"
-      "co"
-    elsif self.permission == "public"
-      "pu"
-    elsif self.permission == "private"
-      "pr"
-    end
+    Perm.short(permission)
   end
 
   #return an array of the contributors to the map
@@ -108,14 +106,6 @@ class Map < ActiveRecord::Base
   		return false
   	end
   	return self
-  end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-  	if (self.permission == "private" && self.user != user)
-  		return false
-  	end
-  	return true
   end
 
   def decode_base64(imgBase64)
