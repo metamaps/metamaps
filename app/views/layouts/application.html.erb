@@ -66,7 +66,7 @@
   <![endif]-->
 </head>
 
-<body data-env="<%= Rails.env %>" class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
+<body class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
 
     <% if devise_error_messages? %>
       <p id="toast"><%= devise_error_messages! %></p>

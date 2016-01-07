@@ -8,11 +8,6 @@ During the installation of the PostgreSQL database, you'll need to choose a data
 
 Once you are ready, create a new folder to hold this and any other git repositories. As an example, let's pretend you've chose C:\git, and made that folder writable by your user account.
 
-Open a command prompt ("cmd.exe"), and navigate to the folder you chose. Then use the gem command (which is part of Ruby) to install Ruby on Rails.
-
-    cd .\git
-    gem install rails -v 4.2
-
 Now you are ready to clone the Metamaps git repository:
 
     git clone https://github.com/metamaps/metamaps_gen002.git --branch develop
@@ -25,7 +20,7 @@ At this point you should be in C:\git\metamaps_gen002, or whatever equivalent di
 
     start config
 
-This command will open a Windows Explorer window of the "config" directory of Metamaps. Copy database.yml.default, and rename the copy to database.yml. Edit the file and set the password to be whatever you set up with postgres earlier. Once you're done, then move back into the command prompt. The next few commands will fail unless database.yml is correctly configured and Postgres is running.
+This command will open a Windows Explorer window of the "config" directory of Metamaps. Copy `.example-env`, and rename the copy to `.env`. Edit the file and set the DB_PASSWORD to be whatever you set up with postgres earlier. Once you're done, then move back into the command prompt. The next few commands will fail unless `.env` is correctly configured and Postgres is running.
 
     rake db:create
     rake db:schema:load

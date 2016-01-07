@@ -42,7 +42,7 @@ Metamaps::Application.configure do
     authentication:       'plain',
     enable_starttls_auto: true,
     openssl_verify_mode: 'none'    }
-  config.action_mailer.default_url_options = { :host => 'metamaps.herokuapp.com' }
+  config.action_mailer.default_url_options = { :host => ENV['MAILER_DEFAULT_URL'] }
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 

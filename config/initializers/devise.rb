@@ -11,21 +11,13 @@ Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "team@metamaps.cc"
+  config.mailer_sender = ENV['DEVISE_MAILER_SENDER']
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
   
   
-  if Rails.env.development? # this is for Connors localhost
-    config.secret_key = 'f71c467e526f23d614b3b08866cad4788c502bed869c282f06e73ee6c94675b62fe1f6d52fa7ba8196b33031f0d2f3b67e27ea07693c52ecebccb01700cad614'
-  end
-  if Rails.env.test?
-    config.secret_key = '81eb6e1c01efc2c78fde270d7c8233439488b20fac92bd08d0c1b02e98d2a32a7d603141e8ad7f7c01c24814bee81067074e17d868a0b1422df032af415be31c'
-  end
-  if Rails.env.production?  # this is for the heroku staging environment
-    config.secret_key = 'd91ba0da95749174ee2b8922034783cbde4945409ed28b13383e18e72844beb74467f8199e9e216f0687cd2290c6e46bf74da24486d14bba3671d76c5b10c753'
-  end
+  config.secret_key = ENV['DEVISE_SECRET_KEY']
     
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
