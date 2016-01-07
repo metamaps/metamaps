@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :name # done by devise
   validates_uniqueness_of :email # done by devise
 
-  validates :joinedwithcode, :presence => true, :inclusion => { :in => User.all.pluck(:code), :message => "%{value} is not valid" }, :on => :create
+  validates :joinedwithcode, :presence => true, :inclusion => { :in => $codes, :message => "%{value} is not valid" }, :on => :create
     
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :image, :styles => {
