@@ -1933,8 +1933,7 @@ Metamaps.Realtime = {
         });
         $('body').click(self.close);
 
-        var realtimeServerUrl = '<%= ENV['REALTIME_SERVER'] %>'
-        self.socket = io.connect(realtimeServerUrl);
+        self.socket = io.connect('<%= ENV['REALTIME_SERVER'] %>');
         self.socket.on('connect', function () {
             self.startActiveMap();
         });
