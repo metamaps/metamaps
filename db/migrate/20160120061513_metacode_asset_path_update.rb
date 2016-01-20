@@ -1,3 +1,6 @@
+class Metacode < ActiveRecord::Base
+end
+
 class MetacodeAssetPathUpdate < ActiveRecord::Migration
   def change
     Metacode.first(50).each do |metacode|
