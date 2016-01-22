@@ -260,12 +260,8 @@ Metamaps.Views.chatView = (function () {
     chatView.prototype.scrollMessages = function(duration) {
         duration = duration || 0;
 
-        var
-          numMessages = this.$messages.find('.chat-message').length,
-          messageHeight = 52;
-
         this.$messages.animate({
-            scrollTop: numMessages * messageHeight
+            scrollTop: this.$messages[0].scrollHeight
         }, duration);
     }
 
