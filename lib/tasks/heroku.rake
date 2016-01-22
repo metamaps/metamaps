@@ -1,6 +1,8 @@
+require 'dotenv/tasks'
+
 namespace :heroku do
   desc "Generate the Heroku gems manifest from gem dependencies"
-  task :gems do
+  task :gems => :dotenv do
     RAILS_ENV='production'
     Rake::Task[:environment].invoke
     list = Rails.configuration.gems.collect do |g| 

@@ -15,12 +15,16 @@ class MappingPolymorphism < ActiveRecord::Migration
       end
 
       unless mapping.synapse_id.nil?
-        mapping.mappable = Synapse.find(mapping.synapse_id)
+        mapping.mappable = Synapse.find_by(id: mapping.synapse_id)
       else
-        next if mapping.topic_id == 0
-        mapping.mappable = Topic.find(mapping.topic_id)
+        mapping.mappable = Topic.find_by(id: mapping.topic_id)
       end
-      mapping.save
+      
+      if mapping.mappable.nil?
+        mapping.delete
+      else
+        mapping.save
+      end
     end
   end
 

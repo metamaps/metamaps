@@ -626,14 +626,14 @@ Metamaps.GlobalUI.Search = {
 
         self.hideLoader();
 
-        if (datum.rtype != "noresult") {
+        if (["topic", "map", "mapper"].indexOf(datum.rtype) !== -1) {
             self.close(0, true);
             var win;
-            if (dataset == "topics") {
+            if (datum.rtype == "topic") {
                 Metamaps.Router.topics(datum.id);
-            } else if (dataset == "maps") {
+            } else if (datum.rtype == "map") {
                 Metamaps.Router.maps(datum.id);
-            } else if (dataset == "mappers") {
+            } else if (datum.rtype == "mapper") {
                 Metamaps.Router.explore("mapper", datum.id);
             }
         }

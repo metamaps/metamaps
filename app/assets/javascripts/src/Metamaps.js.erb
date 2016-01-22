@@ -1910,9 +1910,6 @@ Metamaps.Util = {
  *
  */
 Metamaps.Realtime = {
-    stringForLocalhost: '//' + location.host.split(':')[0] + ':5001',
-    stringForMetamaps: 'https://realtime.metamaps.cc',
-    stringForHeroku: 'https://gentle-savannah-1303.herokuapp.com',
     videoId: 'video-wrapper',
     socket: null,
     webrtc: null,
@@ -1939,9 +1936,7 @@ Metamaps.Realtime = {
 
         self.addJuntoListeners();
 
-        var railsEnv = $('body').data('env');
-        var whichToConnect = railsEnv === 'development' ? self.stringForLocalhost : self.stringForHeroku;
-        self.socket = new SocketIoConnection({ url: whichToConnect });
+        self.socket = new SocketIoConnection({ url: '<%= ENV['REALTIME_SERVER'] %>' });
         self.socket.on('connect', function () {
             console.log('connected');
             if (!self.disconnected) {
