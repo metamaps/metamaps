@@ -9,7 +9,7 @@ User.new({
   code: 'qwertyui',
   joinedwithcode: 'qwertyui',
   admin: 'false'
-}).save
+}).save(validate: false)
 
 User.new({
   name: 'admin',
@@ -18,7 +18,7 @@ User.new({
   code: 'iuytrewq',
   joinedwithcode: 'iuytrewq',
   admin: 'true'
-}).save
+}).save(validate: false)
 ## END USERS
 
 ## METACODES
