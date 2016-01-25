@@ -72,7 +72,7 @@ Copyright (c) 2015 Connor Turland
 [site-blog]: http://blog.metamaps.cc
 [site-beta]: http://metamaps.cc
 [community]: https://plus.google.com/u/0/communities/115060009262157699234
-[license]: https://github.com/metamaps/metamaps_gen002/blob/master/LICENSE
-[contributing]: https://github.com/metamaps/metamaps_gen002/blob/master/doc/CONTRIBUTING.md
-[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/master/doc/CONTRIBUTING.md#reporting-bugs-and-other-issues
-[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/doc/WindowsInstallation.md
+[license]: https://github.com/metamaps/metamaps_gen002/blob/develop/LICENSE
+[contributing]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/CONTRIBUTING.md
+[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/CONTRIBUTING.md#reporting-bugs-and-other-issues
+[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/WindowsInstallation.md
