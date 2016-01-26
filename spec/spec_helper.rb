@@ -1,3 +1,6 @@
+require 'support/controller_helpers'
+require 'devise'
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -5,5 +8,10 @@ RSpec.configure do |config|
 
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
+  end
+
+  RSpec.configure do |config|
+    config.include Devise::TestHelpers, type: :controller
+    config.extend ControllerHelpers, type: :controller
   end
 end
