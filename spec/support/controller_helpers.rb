@@ -10,6 +10,7 @@ module ControllerHelpers
         receive(:authenticate!).and_throw(:warden, scope: :user)
       )
     else # simulate authenticated
+      allow_message_expectations_on_nil
       allow(request.env['warden']).to(
         receive(:authenticate!).and_return(user)
       )
