@@ -2066,6 +2066,7 @@ Metamaps.Realtime = {
         self.status = false;
         self.room.leave();
         self.room.chat.$container.hide();
+        self.room.chat.close();
         self.videosInPosition = 1;
     },
     reenableRealtime: function() {
