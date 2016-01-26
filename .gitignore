@@ -19,6 +19,8 @@ vendor/
 log/*.log
 tmp
 
+coverage
+
 .DS_Store
 */.DS_Store
 .DS_Store?
