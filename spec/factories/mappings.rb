@@ -5,5 +5,10 @@ FactoryGirl.define do
     map
     user
     association :mappable, factory: :topic
+
+    factory :mapping_random_location do
+      xloc { rand(-100...100) }
+      yloc { rand(-100...100) }
+    end
   end
 end

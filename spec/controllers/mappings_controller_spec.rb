@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe MappingsController, type: :controller do
-  let(:mapping) { create(:mapping) }
+  let!(:mapping) { create(:mapping) }
+  let(:valid_attributes) { mapping.attributes.except('id') }
+  let(:invalid_attributes) { { xloc: 0 } }
   before :each do
     sign_in
   end
@@ -38,15 +40,12 @@ RSpec.describe MappingsController, type: :controller do
 
   describe 'PUT #update' do
     context 'with valid params' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
+      let(:new_attributes) { build(:mapping_random_location).attributes.except('id') }
 
       it 'updates the requested mapping' do
         put :update,
             { id: mapping.to_param, mapping: new_attributes }
         mapping.reload
-        skip('Add assertions for updated state')
       end
 
       it 'assigns the requested mapping as @mapping' do
