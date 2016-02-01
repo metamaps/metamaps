@@ -13,17 +13,23 @@ class Synapse < ActiveRecord::Base
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
 
+  # :nocov:
   def user_name
     self.user.name
   end
+  # :nocov:
 
+  # :nocov:
   def user_image
     self.user.image.url
   end
+  # :nocov:
 
+  # :nocov:
   def as_json(options={})
     super(:methods =>[:user_name, :user_image])
   end
+  # :nocov:
   
   ##### PERMISSIONS ######
   

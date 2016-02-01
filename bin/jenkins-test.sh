@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#prerequisites
+# jenkins machine prerequisites
 #sudo aptitude -q -y install libpq-dev
 
 source "$HOME/.rvm/scripts/rvm"
@@ -21,4 +21,4 @@ sed -i -e "s/DB_USERNAME='.*'/DB_USERNAME='jenkins'/" .env
 #test
 bundle install
 rake db:create db:test:prepare
-bundle exec rspec
+COVERAGE=on COVERAGE_FORMATTER=rcov bundle exec rspec

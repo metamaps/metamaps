@@ -1,3 +1,4 @@
+require 'simplecov'
 require 'support/controller_helpers'
 
 RSpec.configure do |config|
