@@ -630,19 +630,13 @@ Metamaps.GlobalUI.Search = {
         var self = Metamaps.GlobalUI.Search;
 
         function toggleResultSet(set) {
-            var s = $('.tt-dataset-' + set + ' .tt-dataset');
-            if (s.css('height') == '0px') {
-                s.css({
-                    'height': 'auto',
-                    'overflow': 'visible'
-                });
-                $(this).removeClass('maximizeResults').addClass('minimizeResults');
-            } else {
-                s.css({
-                    'height': '0',
-                    'overflow': 'hidden'
-                });
+            var s = $('.tt-dataset-' + set + ' .tt-suggestion, .tt-dataset-' + set + ' .resultnoresult');
+            if (s.is(':visible')) {
+                s.hide();
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
+            } else {
+                s.show();
+                $(this).removeClass('maximizeResults').addClass('minimizeResults');
             }
         }
 
