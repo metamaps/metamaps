@@ -450,7 +450,7 @@ Metamaps.GlobalUI.Search = {
         var self = Metamaps.GlobalUI.Search;
 
         self.timeOut = setTimeout(function () {
-            if (!self.locked && !self.changing && self.isOpen && (bypass || $('.sidebarSearchField').typeahead('val') == '')) {
+            if (!self.locked && !self.changing && self.isOpen && (bypass || $('.sidebarSearchField.tt-input').val() == '')) {
                 self.changing = true;
                 $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
                     padding: '7px 0 3px 0',
@@ -600,7 +600,7 @@ Metamaps.GlobalUI.Search = {
 
         // make sure that when you click on 'limit to me' or 'toggle section' it works
         $('.sidebarSearchField').bind('typeahead:change', function(){
-            if ($(this).typeahead('val') === '') {
+            if ($('.sidebarSearchField.tt-input').val() === '') {
                 self.hideLoader();
             }
             else {
@@ -643,7 +643,9 @@ Metamaps.GlobalUI.Search = {
         $('.limitToMe').unbind().bind("change", function (e) {
             // set the value of the search equal to itself to retrigger the autocomplete event
             self.isOpen = false;
-            $('.sidebarSearchField').typeahead('val', $('.sidebarSearchField').typeahead('val'));
+            var searchQuery = $('.sidebarSearchField.tt-input').val();
+            $(".sidebarSearchField").typeahead('val', '')
+            $(".sidebarSearchField").focus().typeahead('val', searchQuery).focus();
             setTimeout(function () {
                 self.isOpen = true;
             }, 2000);
