@@ -4,21 +4,21 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile ~/.gitignore_global
 
+#assety stuff
 realtime/node_modules
-config/database.yml
+public/assets
+
+#secrets and config
 .env
-#public/assets
 
 # Ignore bundler config
 .bundle
-
-# Ignore the default SQLite database.
-db/*.sqlite3
 
 # Ignore all logfiles and tempfiles.
 log/*.log
 tmp
 
 .DS_Store
-
+*/.DS_Store
+.DS_Store?
 .vagrant

@@ -8,12 +8,12 @@
   <%= @map && @map.permission != 'private' ? " shareable" : "" %>">
   
   <% if @map %>
-  <div class="mapInfoName" id="mapInfoName"><%= best_in_place @map, :name, :type => :textarea, :activator => "#mapInfoName", :classes => 'best_in_place_name' %></div>
+  <div class="mapInfoName" id="mapInfoName"><%= best_in_place @map, :name, :as => :textarea, :activator => "#mapInfoName", :class => 'best_in_place_name' %></div>
   
   <div class="mapInfoStat">
     <div class="infoStatIcon mapContributors hoverForTip">
       <% if @map.contributors.count == 0 %>
-        <img id="mapContribs" width="25" height="25" src="/assets/user.png" />
+        <img id="mapContribs" width="25" height="25" src="<%= asset_path('user.png'); %>" />
       <% elsif @map.contributors.count == 1 %>
         <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:thirtytwo) %>" />
       <% elsif @map.contributors.count == 2 %>
@@ -23,7 +23,7 @@
       <% end %>
       <span><%= @map.contributors.count %></span>
       <div class="tip"> <ul><% @map.contributors.each_with_index do |c, index| %>
-           <li ><a href="/explore/mapper/<%= c.id %>" > <img class="rtUserImage" width="25" height="25" src="<%= c.image.url(:thirtytwo) %>"  />
+           <li ><a href="/explore/mapper/<%= c.id %>" > <img class="rtUserImage" width="25" height="25" src="<%= asset_path c.image.url(:thirtytwo) %>"  />
             <%= c.name %></a> 
             </li>         
         <% end %></ul></div>
@@ -42,7 +42,7 @@
   
   <div class="mapInfoDesc" id="mapInfoDesc">
     <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
-      <%= best_in_place @map, :desc, :activator => "#mapInfoDesc", :type => :textarea, :nil => "Click to add description...", :classes => 'best_in_place_desc' %>
+      <%= best_in_place @map, :desc, :activator => "#mapInfoDesc", :as => :textarea, :placeholder => "Click to add description...", :class => 'best_in_place_desc' %>
     <% end %>
   </div>
   

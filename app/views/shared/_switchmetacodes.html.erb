@@ -19,16 +19,16 @@
 <div id="metacodeSwitchTabs">
   <ul>
     <% allMetacodeSets.each do |m| %>
-    <li><a href="#metacodeSwitchTabs<%= m.id %>" data-set-id="<%= m.id %>"><%= m.name %></a></li>
+    <li><a href="#metacodeSwitchTabs<%= m.id %>" data-set-id="<%= m.id %>" data-bypass="true"><%= m.name %></a></li>
     <% end %>
-    <li><a href="#metacodeSwitchTabsCustom" data-set-id="custom" id="metacodeSetCustom">CUSTOM SELECTION</a></li>
+    <li><a href="#metacodeSwitchTabsCustom" data-set-id="custom" data-bypass="true" id="metacodeSetCustom">CUSTOM SELECTION</a></li>
   </ul>
   <% allMetacodeSets.each_with_index do |m, localindex| %>
   <div id="metacodeSwitchTabs<%= m.id %>" 
        data-metacodes="<%= m.metacodes.map(&:id).join(',') %>">
     <% @list = '' %>
     <% m.metacodes.sort{|x,y| x.name <=> y.name }.each_with_index do |m, index| %>
-      <% @list += '<li><img src="' + m.icon + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
+      <% @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
     <% end %>
     <div class="metacodeSwitchTab">
       <p class="setDesc"><%= m.desc %></p>
@@ -53,7 +53,7 @@
           <% else %>
             <% mClass = "toggledOff" %>
           <% end %>
-          <% @list += '<li id="' + m.id.to_s + '" data-name="' + m.name + '" class="' + mClass + '"><img src="' + m.icon + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
+          <% @list += '<li id="' + m.id.to_s + '" data-name="' + m.name + '" class="' + mClass + '"><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
         <% end %>
 
         <div class="customMetacodeList">

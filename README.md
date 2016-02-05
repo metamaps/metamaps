@@ -2,6 +2,7 @@ Metamaps
 =======
 
 [![Join the chat at https://gitter.im/metamaps/metamaps_gen002](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps_gen002?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Build Status](https://jenkins.devinhoward.ca/job/metamaps_gen002.develop/badge/icon)
 
 Welcome to the Metamaps GitHub repo. 
 
@@ -72,7 +73,7 @@ Copyright (c) 2015 Connor Turland
 [site-blog]: http://blog.metamaps.cc
 [site-beta]: http://metamaps.cc
 [community]: https://plus.google.com/u/0/communities/115060009262157699234
-[license]: https://github.com/metamaps/metamaps_gen002/blob/master/LICENSE
-[contributing]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md
-[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/master/CONTRIBUTING.md#reporting-bugs-and-other-issues
-[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/master/WindowsInstallation.md
+[license]: https://github.com/metamaps/metamaps_gen002/blob/develop/LICENSE
+[contributing]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/CONTRIBUTING.md
+[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/CONTRIBUTING.md#reporting-bugs-and-other-issues
+[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/WindowsInstallation.md

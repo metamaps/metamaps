@@ -14,7 +14,7 @@
   <% @metacodes.each do |metacode| %>
     <tr>
       <td><%= metacode.name %></td>
-      <td class="iconURL"><%= metacode.icon %></td>
+      <td class="iconURL"><%= asset_path metacode.icon %></td>
       <% if metacode.color %>
         <td class="iconColor" style="background-color: <%= metacode.color %>">
           <%= metacode.color %>
@@ -22,7 +22,7 @@
       <% else %>
         <td></td>
       <% end %>
-      <td><img width='40' src='<%= metacode.icon %>' /></td>
+      <td><img width='40' src='<%= asset_path metacode.icon %>' /></td>
       <td><%= link_to 'Edit', edit_metacode_path(metacode), :data => { :bypass => 'true'} %></td>
     </tr>
   <% end %>

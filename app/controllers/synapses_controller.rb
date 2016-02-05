@@ -21,7 +21,8 @@ class SynapsesController < ApplicationController
   # POST /synapses
   # POST /synapses.json
   def create
-    @synapse = Synapse.new(params[:synapse])
+    @synapse = Synapse.new(synapse_params)
+    @synapse.update_attribute :desc, "" if @synapse.desc.nil?
 
     respond_to do |format|
       if @synapse.save
@@ -36,9 +37,10 @@ class SynapsesController < ApplicationController
   # PUT /synapses/1.json
   def update
     @synapse = Synapse.find(params[:id])
+    @synapse.update_attribute :desc, "" if @synapse.desc.nil?
 
     respond_to do |format|
-      if @synapse.update_attributes(params[:synapse])
+      if @synapse.update_attributes(synapse_params)
         format.json { head :no_content }
       else
         format.json { render json: @synapse.errors, status: :unprocessable_entity }
@@ -48,20 +50,17 @@ class SynapsesController < ApplicationController
   
   # DELETE synapses/:id
   def destroy
-    @current = current_user
-    @synapse = Synapse.find(params[:id]).authorize_to_delete(@current)
-
-    if @synapse
-      @synapse.mappings.each do |m|
-        m.map.touch(:updated_at)
-        m.delete
-      end
-
-      @synapse.delete
-    end
+    @synapse = Synapse.find(params[:id]).authorize_to_delete(current_user)
+    @synapse.delete if @synapse
       
     respond_to do |format|
       format.json { head :no_content }
     end
+  end
+
+  private
+
+  def synapse_params
+    params.require(:synapse).permit(:id, :desc, :category, :weight, :permission, :node1_id, :node2_id, :user_id)
   end
 end

@@ -72,14 +72,10 @@ class MapsController < ApplicationController
         respond_to do |format|
             format.html { 
                 @allmappers = @map.contributors
-                @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-                @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-                @allmappings = @map.mappings.delete_if {|m| 
-                    if m.category == "Synapse"
-                        object = m.synapse
-                    elsif m.category == "Topic"
-                        object = m.topic
-                    end
+                @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+                @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @allmappings = @map.mappings.to_a.delete_if {|m| 
+                    object = m.mappable
                     !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
                 }
 
@@ -100,14 +96,10 @@ class MapsController < ApplicationController
         end
 
         @allmappers = @map.contributors
-        @alltopics = @map.topics.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-        @allsynapses = @map.synapses.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-        @allmappings = @map.mappings.delete_if {|m| 
-            if m.category == "Synapse"
-                object = m.synapse
-            elsif m.category == "Topic"
-                object = m.topic
-            end
+        @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @allmappings = @map.mappings.to_a.delete_if {|m| 
+            object = m.mappable
             !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
         }
 
@@ -141,10 +133,9 @@ class MapsController < ApplicationController
             @all.each do |topic|
                 topic = topic.split('/')
                 @mapping = Mapping.new()
-                @mapping.category = "Topic"
                 @mapping.user = @user
                 @mapping.map  = @map
-                @mapping.topic = Topic.find(topic[0])
+                @mapping.mappable = Topic.find(topic[0])
                 @mapping.xloc = topic[1]
                 @mapping.yloc = topic[2]
                 @mapping.save
@@ -155,10 +146,9 @@ class MapsController < ApplicationController
                 @synAll = @synAll.split(',')
                 @synAll.each do |synapse_id|
                     @mapping = Mapping.new()
-                    @mapping.category = "Synapse"
                     @mapping.user = @user
                     @mapping.map = @map
-                    @mapping.synapse = Synapse.find(synapse_id)
+                    @mapping.mappable = Synapse.find(synapse_id)
                     @mapping.save
                 end
             end
@@ -180,7 +170,7 @@ class MapsController < ApplicationController
         respond_to do |format|
             if !@map 
                 format.json { render json: "unauthorized" }
-            elsif @map.update_attributes(params[:map])
+            elsif @map.update_attributes(map_params)
                 format.json { head :no_content }
             else
                 format.json { render json: @map.errors, status: :unprocessable_entity }
@@ -218,15 +208,7 @@ class MapsController < ApplicationController
 
         @map = Map.find(params[:id]).authorize_to_delete(@current)
 
-        if @map 
-            @mappings = @map.mappings
-
-            @mappings.each do |mapping| 
-                mapping.delete
-            end
-
-            @map.delete
-        end
+        @map.delete if @map
 
         respond_to do |format|
             format.json { 
@@ -237,5 +219,12 @@ class MapsController < ApplicationController
                 end
             }
         end
+    end
+
+    private
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def map_params
+      params.require(:map).permit(:id, :name, :arranged, :desc, :permission, :user_id)
     end
 end

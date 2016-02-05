@@ -5,8 +5,13 @@ class Synapse < ActiveRecord::Base
   belongs_to :topic1, :class_name => "Topic", :foreign_key => "node1_id"
   belongs_to :topic2, :class_name => "Topic", :foreign_key => "node2_id"
 
-  has_many :mappings
+  has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
+
+  validates :desc, length: { minimum: 0, allow_nil: false }
+
+  validates :permission, presence: true
+  validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
 
   def user_name
     self.user.name
@@ -46,13 +51,4 @@ class Synapse < ActiveRecord::Base
     end
     return false
   end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return true
-  end
-
 end

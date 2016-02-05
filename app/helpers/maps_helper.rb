@@ -16,7 +16,7 @@ module MapsHelper
       map['rtype'] = "map"
       
       contributorTip = ''
-      firstContributorImage = '/assets/user.png'
+      firstContributorImage = 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
       if m.contributors.count > 0 
         firstContributorImage = m.contributors[0].image.url(:thirtytwo)
         m.contributors.each_with_index do |c, index|

@@ -2,6 +2,7 @@
   "name": "RoR-real-time",
   "description": "providing real-time sychronization for ruby on rails",
   "version": "0.0.1",
+  "private": true,
   "dependencies": {
     "socket.io": "0.9.12"
   }

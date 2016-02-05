@@ -129,7 +129,7 @@
     <script type="text/template" id="mapSearchTemplate">
     <div class="result{{rtype}}">
       <div class="searchResIconWrapper">
-        <img class="icon" src="/assets/metamap36c.png">
+        <img class="icon" src="<%= asset_path('metamap36c.png') %>">
       </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
@@ -196,6 +196,7 @@
     </script>
 
     <script type="text/template" id="topicAutocompleteTemplate">
+      <div>
         <img class="autocompleteSection topicType" width="24" height="24" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}" />
         <p class="autocompleteSection topicTitle">{{label}}</p>
         <div class="expandTopicMetadata"></div>
@@ -209,6 +210,7 @@
           <div class="topicPermission {{permission}}"></div>
         </div>
         <div class="clearfloat"></div>
+      </div>
     </script>
 
 
@@ -234,7 +236,7 @@
                 <div class="metacodeSelect">{{{metacode_select}}}</div>
             </div>
             <div class="linkItem contributor">
-                <a href="/explore/mapper/{{userid}}"><img src="/assets/user.png" class="contributorIcon" width="32" height="32" /></a>
+                <a href="/explore/mapper/{{userid}}"><img src="<%= asset_path('user.png') %>" class="contributorIcon" width="32" height="32" /></a>
                 <div class="contributorName">{{username}}</div>
             </div>
             <div class="linkItem mapCount">                  

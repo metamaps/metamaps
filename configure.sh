@@ -11,7 +11,7 @@ vagrant ssh --command "cd /vagrant; gem install bundler";
 vagrant ssh --command "cd /vagrant; bundle install";
 
 # copy the db config
-vagrant ssh --command "cd /vagrant; cp config/database.yml.default config/database.yml";
+vagrant ssh --command "cd /vagrant; cp .example-env .env";
 
 # Rake all the things
 vagrant ssh --command "cd /vagrant; rake db:create; rake db:schema:load; rake db:fixtures:load"

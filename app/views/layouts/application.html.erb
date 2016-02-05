@@ -16,12 +16,12 @@
   <%= javascript_include_tag "application" %>
 
   <!-- typekit for vinyl font -->
-  <script type="text/javascript" src="//use.typekit.net/tki2nyo.js"></script>
+  <script type="text/javascript" src="https://use.typekit.net/tki2nyo.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
         <!-- app code -->
         <script type="text/javascript">
-            require.config({baseUrl: '/famous/'});
+            require.config({baseUrl: '<%= "#{ asset_path '/famous/main.js' }".chomp('main.js') %>'});
             require(['main']);
         </script>
 
@@ -66,7 +66,7 @@
   <![endif]-->
 </head>
 
-<body data-env="<%= Rails.env %>" class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
+<body class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
 
     <% if devise_error_messages? %>
       <p id="toast"><%= devise_error_messages! %></p>
@@ -141,15 +141,11 @@
 
     // set up uservoice with signed in user
     <% if authenticated? && ENV['SSO_KEY'] %>
-        USERVOICE.load(Metamaps.Active.Mapper.name, Metamaps.Active.Mapper.id, "<%= user.email %>", "<%= current_sso_token %>");
+      USERVOICE.load(Metamaps.Active.Mapper.name, Metamaps.Active.Mapper.id, "<%= user.email %>", "<%= current_sso_token %>");
     <% else %>
-        USERVOICE.load();
+      USERVOICE.load();
     <% end %>
 </script>
-
-<% if !authenticated? %>
-  <iframe width="1" height="1" src="http://support.metamaps.cc/logout.json"; style="visibility:hidden;"></iframe>
-<% end %>
 
 <%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>
 </body>
