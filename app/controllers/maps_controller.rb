@@ -2,7 +2,7 @@ class MapsController < ApplicationController
 
     before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
-    respond_to :html, :json
+    respond_to :html, :json, :csv
 
     autocomplete :map, :name, :full => true, :extra_data => [:user_id]
 
@@ -82,6 +82,8 @@ class MapsController < ApplicationController
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
             }
             format.json { render json: @map }
+            format.csv { send_data @map.to_csv }
+            format.xls
         end
     end
 

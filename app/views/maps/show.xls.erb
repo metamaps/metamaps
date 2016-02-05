@@ -1,0 +1,26 @@
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Metacode</th>
+    <th>Description</th>
+    <th>Link</th>
+    <th>Username</th>
+    <th>Permission</th>
+    <th>Synapses</th>
+  </tr>
+  <% @map.topics.each do |topic| %>
+  <tr>
+    <td><%= topic.id %></td>
+    <td><%= topic.name %></td>
+    <td><%= topic.metacode.name %></td>
+    <td><%= topic.desc %></td>
+    <td><%= topic.link %></td>
+    <td><%= topic.user.name %></td>
+    <td><%= topic.permission %></td>
+    <% topic.synapses_csv.each do |s_text| %>
+      <td><%= s_text %></td>
+    <% end %>
+  </tr>
+  <% end %>
+</table>
