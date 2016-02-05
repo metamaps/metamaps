@@ -43,7 +43,6 @@ group :test do
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
-  gem 'simplecov-rcov'
 end
 
 group :production do #this is used on heroku
