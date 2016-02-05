@@ -25,7 +25,7 @@ git clone git@github.com:metamaps/metamaps_gen002.git
 Now ensure you have VirtualBox and Vagrant installed on your computer
 ```
 cd metamaps_gen002
-./configure.sh
+./bin/configure.sh
 ```
 This will do all the setup steps to make Metamaps work with a bit of behind the scenes ninja magick.
 
