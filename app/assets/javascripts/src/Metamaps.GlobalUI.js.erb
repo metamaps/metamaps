@@ -607,11 +607,10 @@ Metamaps.GlobalUI.Search = {
         });
 
         // make sure that when you click on 'limit to me' or 'toggle section' it works
-        $('.sidebarSearchField').bind('typeahead:change', function(){
+        $('.sidebarSearchField.tt-input').keyup(function(){
             if ($('.sidebarSearchField.tt-input').val() === '') {
                 self.hideLoader();
-            }
-            else {
+            } else {
                 self.showLoader();
             }
         });
