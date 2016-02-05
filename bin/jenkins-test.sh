@@ -4,8 +4,11 @@
 #sudo aptitude -q -y install libpq-dev
 
 source "$HOME/.rvm/scripts/rvm"
-rvm install $(cat .ruby-version)
-rvm gemset use $(cat .ruby-gemset)
+rvm use $(cat .ruby-version) || \
+  rvm install $(cat .ruby-version)
+rvm gemset use $(cat .ruby-gemset) || \
+  rvm gemset create $(cat .ruby-gemset) && \
+  rvm gemset use $(cat .ruby-gemset)
 gem install bundler
 
 set -x
