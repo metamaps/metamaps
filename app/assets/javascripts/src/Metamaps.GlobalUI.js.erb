@@ -481,7 +481,7 @@ Metamaps.GlobalUI.Search = {
             display: function(s) { return s.label; },
             templates: {
                 notFound: function(s) {
-                    return Hogan.compile($('#topicSearchTemplate').html()).render({
+                    return Hogan.compile(topicheader + $('#topicSearchTemplate').html()).render({
                         value: "No results",
                         label: "No results",
                         typeImageURL: "<%= asset_path('icons/wildcard.png') %>",
@@ -515,7 +515,7 @@ Metamaps.GlobalUI.Search = {
             display: function(s) { return s.label; },
             templates: {
                 notFound: function(s) {
-                    return Hogan.compile($('#mapSearchTemplate').html()).render({
+                    return Hogan.compile(mapheader + $('#mapSearchTemplate').html()).render({
                         value: "No results",
                         label: "No results",
                         rtype: "noresult"
@@ -548,7 +548,7 @@ Metamaps.GlobalUI.Search = {
             display: function(s) { return s.label; },
             templates: {
                 notFound: function(s) {
-                    return Hogan.compile($('#mapperSearchTemplate').html()).render({
+                    return Hogan.compile(mapperheader + $('#mapperSearchTemplate').html()).render({
                         value: "No results",
                         label: "No results",
                         rtype: "noresult",
