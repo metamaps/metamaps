@@ -367,6 +367,8 @@ Metamaps.GlobalUI.Account = {
 Metamaps.GlobalUI.Search = {
     locked: false,
     isOpen: false,
+    limitTopicsToMe: false,
+    limitMapsToMe: false,
     timeOut: null,
     changing: false,
     optionsInitialized: false,
@@ -500,7 +502,7 @@ Metamaps.GlobalUI.Search = {
                     url: '/search/topics',
                     prepare: function(query, settings) {
                         settings.url += '?term=' + query;
-                        if (Metamaps.Active.Mapper && $("#limitTopicsToMe").is(':checked')) {
+                        if (Metamaps.Active.Mapper && self.limitTopicsToMe) {
                             settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
                         }
                         return settings;
@@ -533,7 +535,7 @@ Metamaps.GlobalUI.Search = {
                     url: '/search/maps',
                     prepare: function(query, settings) {
                         settings.url += '?term=' + query;
-                        if (Metamaps.Active.Mapper && $("#limitMapsToMe").is(':checked')) {
+                        if (Metamaps.Active.Mapper && self.limitMapsToMe) {
                             settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
                         }
                         return settings;
@@ -584,6 +586,12 @@ Metamaps.GlobalUI.Search = {
             self.hideLoader();
             var h = $(window).height();
             $(".tt-dropdown-menu").css('max-height', h - 100);
+            if (self.limitTopicsToMe) {
+              $('#limitTopicsToMe').prop('checked', true);
+            }
+            if (self.limitMapsToMe) {
+              $('#limitMapsToMe').prop('checked', true);
+            }
         });
         $(window).resize(function () {
             var h = $(window).height();
@@ -641,6 +649,13 @@ Metamaps.GlobalUI.Search = {
         }
 
         $('.limitToMe').unbind().bind("change", function (e) {
+            if ($(this).attr('id') == 'limitTopicsToMe') {
+              self.limitTopicsToMe = !self.limitTopicsToMe;
+            }
+            if ($(this).attr('id') == 'limitMapsToMe') {
+              self.limitMapsToMe = !self.limitMapsToMe;
+            }
+
             // set the value of the search equal to itself to retrigger the autocomplete event
             self.isOpen = false;
             var searchQuery = $('.sidebarSearchField.tt-input').val();
