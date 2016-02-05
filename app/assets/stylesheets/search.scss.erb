@@ -67,6 +67,14 @@
   width: 100%;
 }
 
+.resultnoresult {
+  padding: 8px 0;
+  > div {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
 .canEditMap button.addToMap {
   display: block;
 }
@@ -219,14 +227,13 @@
       font-style: italic;
       font-family: helvetica, sans-serif;
     }
-
-    .topicMetacode,
-    .searchResIconWrapper {
-      vertical-align: middle;
-      padding: 0 0 0 8px;
-      width: 70px;
-    }
   }/* tt-suggestion */
+
+  .searchResIconWrapper {
+    vertical-align: middle;
+    width: 70px;
+    padding: 0 18px 0 28px;
+  }
 
   .tt-dataset {
     overflow: visible;
@@ -242,8 +249,12 @@
     .topicIcon {
       width: 32px;
       height: 32px;
-      margin: 0 auto;
     }
+
+    .resulttopic .topicIcon {
+      margin: 0 auto
+    }
+
     .metacodeTip {
       display: none;
       margin: 0 auto;
@@ -313,7 +324,7 @@
   .tt-suggestion:hover .autoOptions {
     display: block;
   }
-  .tt-suggestion .resultnoresult .autoOptions {
+  .resultnoresult .autoOptions {
     display: none;
   }
 

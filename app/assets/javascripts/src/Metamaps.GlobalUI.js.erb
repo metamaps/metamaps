@@ -367,6 +367,8 @@ Metamaps.GlobalUI.Account = {
 Metamaps.GlobalUI.Search = {
     locked: false,
     isOpen: false,
+    limitTopicsToMe: false,
+    limitMapsToMe: false,
     timeOut: null,
     changing: false,
     optionsInitialized: false,
@@ -450,7 +452,7 @@ Metamaps.GlobalUI.Search = {
         var self = Metamaps.GlobalUI.Search;
 
         self.timeOut = setTimeout(function () {
-            if (!self.locked && !self.changing && self.isOpen && (bypass || $('.sidebarSearchField').val() == '')) {
+            if (!self.locked && !self.changing && self.isOpen && (bypass || $('.sidebarSearchField.tt-input').val() == '')) {
                 self.changing = true;
                 $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
                     padding: '7px 0 3px 0',
@@ -481,7 +483,7 @@ Metamaps.GlobalUI.Search = {
             display: function(s) { return s.label; },
             templates: {
                 notFound: function(s) {
-                    return Hogan.compile($('#topicSearchTemplate').html()).render({
+                    return Hogan.compile(topicheader + $('#topicSearchTemplate').html()).render({
                         value: "No results",
                         label: "No results",
                         typeImageURL: "<%= asset_path('icons/wildcard.png') %>",
@@ -500,7 +502,7 @@ Metamaps.GlobalUI.Search = {
                     url: '/search/topics',
                     prepare: function(query, settings) {
                         settings.url += '?term=' + query;
-                        if (Metamaps.Active.Mapper && $("#limitTopicsToMe").is(':checked')) {
+                        if (Metamaps.Active.Mapper && self.limitTopicsToMe) {
                             settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
                         }
                         return settings;
@@ -515,7 +517,7 @@ Metamaps.GlobalUI.Search = {
             display: function(s) { return s.label; },
             templates: {
                 notFound: function(s) {
-                    return Hogan.compile($('#mapSearchTemplate').html()).render({
+                    return Hogan.compile(mapheader + $('#mapSearchTemplate').html()).render({
                         value: "No results",
                         label: "No results",
                         rtype: "noresult"
@@ -533,7 +535,7 @@ Metamaps.GlobalUI.Search = {
                     url: '/search/maps',
                     prepare: function(query, settings) {
                         settings.url += '?term=' + query;
-                        if (Metamaps.Active.Mapper && $("#limitMapsToMe").is(':checked')) {
+                        if (Metamaps.Active.Mapper && self.limitMapsToMe) {
                             settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
                         }
                         return settings;
@@ -548,7 +550,7 @@ Metamaps.GlobalUI.Search = {
             display: function(s) { return s.label; },
             templates: {
                 notFound: function(s) {
-                    return Hogan.compile($('#mapperSearchTemplate').html()).render({
+                    return Hogan.compile(mapperheader + $('#mapperSearchTemplate').html()).render({
                         value: "No results",
                         label: "No results",
                         rtype: "noresult",
@@ -584,6 +586,12 @@ Metamaps.GlobalUI.Search = {
             self.hideLoader();
             var h = $(window).height();
             $(".tt-dropdown-menu").css('max-height', h - 100);
+            if (self.limitTopicsToMe) {
+              $('#limitTopicsToMe').prop('checked', true);
+            }
+            if (self.limitMapsToMe) {
+              $('#limitMapsToMe').prop('checked', true);
+            }
         });
         $(window).resize(function () {
             var h = $(window).height();
@@ -599,11 +607,10 @@ Metamaps.GlobalUI.Search = {
         });
 
         // make sure that when you click on 'limit to me' or 'toggle section' it works
-        $('.sidebarSearchField').bind('typeahead:change', function(){
-            if ($(this).val() === "") {
+        $('.sidebarSearchField.tt-input').keyup(function(){
+            if ($('.sidebarSearchField.tt-input').val() === '') {
                 self.hideLoader();
-            }
-            else {
+            } else {
                 self.showLoader();
             }
         });
@@ -630,26 +637,29 @@ Metamaps.GlobalUI.Search = {
         var self = Metamaps.GlobalUI.Search;
 
         function toggleResultSet(set) {
-            var s = $('.tt-dataset-' + set + ' .tt-dataset');
-            if (s.css('height') == '0px') {
-                s.css({
-                    'height': 'auto',
-                    'overflow': 'visible'
-                });
-                $(this).removeClass('maximizeResults').addClass('minimizeResults');
-            } else {
-                s.css({
-                    'height': '0',
-                    'overflow': 'hidden'
-                });
+            var s = $('.tt-dataset-' + set + ' .tt-suggestion, .tt-dataset-' + set + ' .resultnoresult');
+            if (s.is(':visible')) {
+                s.hide();
                 $(this).removeClass('minimizeResults').addClass('maximizeResults');
+            } else {
+                s.show();
+                $(this).removeClass('maximizeResults').addClass('minimizeResults');
             }
         }
 
         $('.limitToMe').unbind().bind("change", function (e) {
+            if ($(this).attr('id') == 'limitTopicsToMe') {
+              self.limitTopicsToMe = !self.limitTopicsToMe;
+            }
+            if ($(this).attr('id') == 'limitMapsToMe') {
+              self.limitMapsToMe = !self.limitMapsToMe;
+            }
+
             // set the value of the search equal to itself to retrigger the autocomplete event
             self.isOpen = false;
-            $('.sidebarSearchField').typeahead('val', $('.sidebarSearchField').val());
+            var searchQuery = $('.sidebarSearchField.tt-input').val();
+            $(".sidebarSearchField").typeahead('val', '')
+            $(".sidebarSearchField").focus().typeahead('val', searchQuery).focus();
             setTimeout(function () {
                 self.isOpen = true;
             }, 2000);
