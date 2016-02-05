@@ -101,7 +101,7 @@ class Map < ActiveRecord::Base
       end
     end
   end
-  
+
   def decode_base64(imgBase64)
     decoded_data = Base64.decode64(imgBase64)
 
