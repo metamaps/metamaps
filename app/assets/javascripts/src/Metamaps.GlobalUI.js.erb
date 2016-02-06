@@ -655,14 +655,11 @@ Metamaps.GlobalUI.Search = {
               self.limitMapsToMe = !self.limitMapsToMe;
             }
 
-            // set the value of the search equal to itself to retrigger the autocomplete event
-            self.isOpen = false;
+            // set the value of the search equal to itself to retrigger the
+            // autocomplete event
             var searchQuery = $('.sidebarSearchField.tt-input').val();
             $(".sidebarSearchField").typeahead('val', '')
-            $(".sidebarSearchField").focus().typeahead('val', searchQuery).focus();
-            setTimeout(function () {
-                self.isOpen = true;
-            }, 2000);
+                                    .typeahead('val', searchQuery);
         });
 
         // when the user clicks minimize section, hide the results for that section
