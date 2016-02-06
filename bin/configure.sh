@@ -14,4 +14,4 @@ vagrant ssh --command "cd /vagrant; bundle install";
 vagrant ssh --command "cd /vagrant; cp .example-env .env";
 
 # Rake all the things
-vagrant ssh --command "cd /vagrant; rake db:create; rake db:schema:load; rake db:fixtures:load"
+vagrant ssh --command "cd /vagrant; rake db:create; rake db:setup"
