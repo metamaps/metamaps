@@ -1,0 +1,104 @@
+/*
+ * Example tab-separated input:
+ * Some fields will be ignored
+ *
+ * id	name	metacode	desc	link	user.name	permission	synapses		
+ * 1	topic1	Catalyst			admin	commons	1->7		
+ * 2	topic2	Event			admin	commons			
+ * 5	topic	Action			admin	commons			
+ * 6	topic6	Action			admin	commons	6->7		
+ * 7	topic7	Action			admin	commons	7->8	 7<-6	 7<-1
+ * 8	topic8	Action			admin	commons	8<-7		
+ */
+
+Metamaps.Import = {
+  headersWhitelist: [
+		'name', 'metacode', 'desc', 'link', 'permission'
+	],
+
+  init: function() {
+    var self = Metamaps.Import;
+    $('body').bind('paste', function(e) {
+      var text = e.originalEvent.clipboardData.getData('text/plain');
+      var parsed = self.parseTabbedString(text);
+
+      if (confirm("Are you sure you want to create " + parsed.length + " new topics?")) {
+        self.importTopics(parsed);
+      }//if
+    });
+  },
+
+  importTopics: function(parsedTopics) {
+    var self = Metamaps.Import;
+
+    var x = -200;
+    var y = -200;
+    parsedTopics.forEach(function(topic) {
+      self.createTopicWithParameters(
+        topic.name, topic.metacode, topic.permission,
+        topic.desc, topic.link, x, y
+      );
+
+      // update positions of topics
+      x += 50;
+      if (x > 200) {
+        y += 50;
+        x = -200;
+      }//if
+    });
+  },
+
+  parseTabbedString: function(text) {
+    var self = Metamaps.Import;
+
+    // determine line ending and split lines
+    var delim = "\n";
+    if (text.indexOf("\r\n") !== -1) {
+      delim = "\r\n";
+    }//if
+    var lines = text.split(delim);
+
+    // get csv-style headers to name the object fields
+    var headers = lines[0].split('	'); //tab character
+
+    var results = [];
+    lines.forEach(function(line, index) {
+      if (index === 0) return;
+      if (line == "") return;
+
+      var topic = {};
+      line.split("	").forEach(function(field, index) {
+				if (self.headersWhitelist.indexOf(headers[index]) === -1) return;
+        topic[headers[index]] = field;
+      });
+      results.push(topic);
+    });
+    return results;
+  },
+
+  createTopicWithParameters: function(name, metacode_name, permission, desc, link, xloc, yloc) {
+    var self = Metamaps.Topic;
+
+    var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null;
+    if (metacode === null) return console.error("metacode not found");
+
+    var topic = new Metamaps.Backbone.Topic({
+      name: name,
+      metacode_id: metacode.id,
+      permission: permission || Metamaps.Active.Map.get('permission'),
+      desc: desc,
+      link: link
+    });
+    Metamaps.Topics.add(topic);
+
+    var mapping = new Metamaps.Backbone.Mapping({
+        xloc: xloc,
+        yloc: yloc,
+        mappable_id: topic.cid,
+        mappable_type: "Topic",
+    });
+    Metamaps.Mappings.add(mapping);
+
+    self.renderTopic(mapping, topic, true, true); // this function also includes the creation of the topic in the database
+  },
+};
