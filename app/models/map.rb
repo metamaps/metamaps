@@ -81,6 +81,24 @@ class Map < ActiveRecord::Base
     json
   end
 
+  def to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << ["id", "name", "metacode", "desc", "link", "user.name", "permission", "synapses"]
+      self.topics.each do |topic|
+        csv << [
+          topic.id,
+          topic.name,
+          topic.metacode.name,
+          topic.desc,
+          topic.link,
+          topic.user.name,
+          topic.permission,
+          topic.synapses_csv("text")
+        ]
+      end
+    end
+  end
+
   ##### PERMISSIONS ######
 
   def authorize_to_delete(user)
