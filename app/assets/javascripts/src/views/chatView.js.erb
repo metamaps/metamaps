@@ -15,7 +15,7 @@ Metamaps.Views.chatView = (function () {
         participantHTML: "<div class='participant participant-{{ id }}'>" +
                 "<div class='chat-participant-image'><img src='{{ image }}' style='border: 2px solid {{ color }};' /></div>" +
                 "<div class='chat-participant-name'>{{ username }}</div>" +
-                "<button type='button' class='button chat-participant-invite' onclick='Metamaps.Realtime.inviteACall({{ id}});'>I</button>" +
+                "<button type='button' class='button chat-participant-invite' onclick='Metamaps.Realtime.inviteACall({{ id}});'></button>" +
                 "<div class='clearfloat'></div>" +
               "</div>",
         templates: function() {
@@ -121,7 +121,7 @@ Metamaps.Views.chatView = (function () {
             var date = (m.timestamp.getMonth() + 1) + '/' + m.timestamp.getDate();
             date += " " + addZero(m.timestamp.getHours()) + ":" + addZero(m.timestamp.getMinutes());
             m.timestamp = date;
-            m.image = m.user_image || 'http://www.hotpepper.ca/wp-content/uploads/2014/11/default_profile_1_200x200.png';
+            m.image = m.user_image || 'http://www.hotpepper.ca/wp-content/uploads/2014/11/default_profile_1_200x200.png'; // TODO: remove
             m.message = linker.link(m.message);
             var $html = $(this.messageTemplate(m));
             this.$messages.append($html);
