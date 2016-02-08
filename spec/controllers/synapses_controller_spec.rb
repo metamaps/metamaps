@@ -8,23 +8,9 @@ RSpec.describe SynapsesController, type: :controller do
     sign_in
   end
 
-  describe 'GET #index' do
-    it 'assigns all synapses as @synapses' do
-      get :index, {}
-      expect(assigns(:synapses)).to eq([synapse])
-    end
-  end
-
   describe 'GET #show' do
     it 'assigns the requested synapse as @synapse' do
       get :show, { id: synapse.to_param }
-      expect(assigns(:synapse)).to eq(synapse)
-    end
-  end
-
-  describe 'GET #edit' do
-    it 'assigns the requested synapse as @synapse' do
-      get :edit, { id: synapse.to_param }
       expect(assigns(:synapse)).to eq(synapse)
     end
   end
@@ -53,11 +39,6 @@ RSpec.describe SynapsesController, type: :controller do
       it 'assigns a newly created but unsaved synapse as @synapse' do
         post :create, { synapse: invalid_attributes }
         expect(assigns(:synapse)).to be_a_new(Synapse)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, { synapse: invalid_attributes }
-        expect(response).to render_template('new')
       end
     end
   end
@@ -93,12 +74,6 @@ RSpec.describe SynapsesController, type: :controller do
         put :update,
             { id: synapse.to_param, synapse: invalid_attributes }
         expect(assigns(:synapse)).to eq(synapse)
-      end
-
-      it "re-renders the 'edit' template" do
-        put :update,
-            { id: synapse.to_param, synapse: invalid_attributes }
-        expect(response).to render_template('edit')
       end
     end
   end

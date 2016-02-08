@@ -8,23 +8,9 @@ RSpec.describe TopicsController, type: :controller do
     sign_in
   end
 
-  describe 'GET #index' do
-    it 'assigns all topics as @topics' do
-      get :index, {}
-      expect(assigns(:topics)).to eq([topic])
-    end
-  end
-
   describe 'GET #show' do
     it 'assigns the requested topic as @topic' do
       get :show, { id: topic.to_param }
-      expect(assigns(:topic)).to eq(topic)
-    end
-  end
-
-  describe 'GET #edit' do
-    it 'assigns the requested topic as @topic' do
-      get :edit, { id: topic.to_param }
       expect(assigns(:topic)).to eq(topic)
     end
   end
@@ -53,11 +39,6 @@ RSpec.describe TopicsController, type: :controller do
       it 'assigns a newly created but unsaved topic as @topic' do
         post :create, { topic: invalid_attributes }
         expect(assigns(:topic)).to be_a_new(Topic)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, { topic: invalid_attributes }
-        expect(response).to render_template('new')
       end
     end
   end
@@ -93,12 +74,6 @@ RSpec.describe TopicsController, type: :controller do
         put :update,
             { id: topic.to_param, topic: invalid_attributes }
         expect(assigns(:topic)).to eq(topic)
-      end
-
-      it "re-renders the 'edit' template" do
-        put :update,
-            { id: topic.to_param, topic: invalid_attributes }
-        expect(response).to render_template('edit')
       end
     end
   end

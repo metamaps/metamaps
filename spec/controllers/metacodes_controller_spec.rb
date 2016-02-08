@@ -15,13 +15,6 @@ RSpec.describe MetacodesController, type: :controller do
     end
   end
 
-  describe 'GET #show' do
-    it 'assigns the requested metacode as @metacode' do
-      get :show, { id: metacode.to_param }
-      expect(assigns(:metacode)).to eq(metacode)
-    end
-  end
-
   describe 'GET #new' do
     it 'assigns a new metacode as @metacode' do
       get :new, {}
@@ -107,19 +100,6 @@ RSpec.describe MetacodesController, type: :controller do
             { id: metacode.to_param, metacode: invalid_attributes }
         expect(response).to render_template('edit')
       end
-    end
-  end
-
-  describe 'DELETE #destroy' do
-    it 'destroys the requested metacode' do
-      expect do
-        delete :destroy, { id: metacode.to_param }
-      end.to change(Metacode, :count).by(-1)
-    end
-
-    it 'redirects to the metacodes list' do
-      delete :destroy, { id: metacode.to_param }
-      expect(response).to redirect_to(metacodes_url)
     end
   end
 end

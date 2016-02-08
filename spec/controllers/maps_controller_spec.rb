@@ -22,13 +22,6 @@ RSpec.describe MapsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    it 'assigns the requested map as @map' do
-      get :edit, { id: map.to_param }
-      expect(assigns(:map)).to eq(map)
-    end
-  end
-
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new Map' do
@@ -53,11 +46,6 @@ RSpec.describe MapsController, type: :controller do
       it 'assigns a newly created but unsaved map as @map' do
         post :create, { map: invalid_attributes }
         expect(assigns(:map)).to be_a_new(Map)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, { map: invalid_attributes }
-        expect(response).to render_template('new')
       end
     end
   end
@@ -93,12 +81,6 @@ RSpec.describe MapsController, type: :controller do
         put :update,
             { id: map.to_param, map: invalid_attributes }
         expect(assigns(:map)).to eq(map)
-      end
-
-      it "re-renders the 'edit' template" do
-        put :update,
-            { id: map.to_param, map: invalid_attributes }
-        expect(response).to render_template('edit')
       end
     end
   end
