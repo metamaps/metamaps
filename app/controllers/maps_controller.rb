@@ -1,5 +1,4 @@
 class MapsController < ApplicationController
-
     before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
     respond_to :html, :json
@@ -10,38 +9,24 @@ class MapsController < ApplicationController
     # GET /explore/featured
     # GET /explore/mapper/:id
     def index
-
-        if request.path == "/explore"
-            redirect_to activemaps_url and return
-        end
+        return redirect_to activemaps_url if request.path == "/explore"
 
         @current = current_user
-        @user = nil
         @maps = []
-        @mapperId = nil
-
-        if !params[:page] 
-            page = 1
-        else 
-            page = params[:page]
-        end
+        page = params[:page].present ? params[:page] : 1
 
         if request.path.index("/explore/active") != nil
             @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
             @request = "active"
-
         elsif request.path.index("/explore/featured") != nil
             @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private").order("updated_at DESC").page(page).per(20)
             @request = "featured"
-
         elsif request.path.index('/explore/mine') != nil  # looking for maps by me
-            if !authenticated?
-                redirect_to activemaps_url and return
-            end
+            return redirect_to activemaps_url if !authenticated?
+
             # don't need to exclude private maps because they all belong to you
             @maps = Map.where("maps.user_id = ?", @current.id).order("updated_at DESC").page(page).per(20)
             @request = "you"
-
         elsif request.path.index('/explore/mapper/') != nil  # looking for maps by a mapper
             @user = User.find(params[:id])
             @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
