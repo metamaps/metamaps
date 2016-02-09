@@ -55,15 +55,13 @@ RSpec.describe MapsController, type: :controller do
 
   describe 'PUT #update' do
     context 'with valid params' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
+      let(:new_attributes) { { name: "Uncool map", permission: :private } }
 
       it 'updates the requested map' do
         put :update,
             { id: map.to_param, map: new_attributes, format: :json }
-        map.reload
-        skip('Add assertions for updated state')
+        expect(assigns(:map).name).to eq "Uncool map"
+        expect(assigns(:map).permission).to eq 'private'
       end
 
       it 'assigns the requested map as @map' do
@@ -79,16 +77,6 @@ RSpec.describe MapsController, type: :controller do
             { id: map.to_param, map: invalid_attributes, format: :json }
         expect(assigns(:map)).to eq(map)
       end
-    end
-  end
-
-  describe 'update the map screenshot' do
-    it 'successfully if authorized' do
-      skip
-    end
-
-    it 'unsucessfully if not authorized' do
-      skip
     end
   end
 
