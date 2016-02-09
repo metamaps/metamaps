@@ -9,7 +9,7 @@ RSpec.describe MapsController, type: :controller do
   end
 
   describe 'GET #index' do
-    it 'assigns all maps as @maps' do
+    it 'viewable maps as @maps' do
       get :index, {}
       expect(assigns(:maps)).to eq([map])
     end
@@ -18,7 +18,6 @@ RSpec.describe MapsController, type: :controller do
   describe 'GET #contains' do
     it 'returns json matching schema' do
       get :contains, { id: map.to_param, format: :json }
-      # get "maps/#{map.id}/contains"
       expect(response.body).to match_json_schema(:map_contains)
     end
   end
@@ -66,43 +65,55 @@ RSpec.describe MapsController, type: :controller do
 
       it 'updates the requested map' do
         put :update,
-            { id: map.to_param, map: new_attributes }
+            { id: map.to_param, map: new_attributes, format: :json }
         map.reload
         skip('Add assertions for updated state')
       end
 
       it 'assigns the requested map as @map' do
         put :update,
-            { id: map.to_param, map: valid_attributes }
+            { id: map.to_param, map: valid_attributes, format: :json }
         expect(assigns(:map)).to eq(map)
-      end
-
-      it 'redirects to the map' do
-        put :update,
-            { id: map.to_param, map: valid_attributes }
-        expect(response).to redirect_to(map)
       end
     end
 
     context 'with invalid params' do
       it 'assigns the map as @map' do
         put :update,
-            { id: map.to_param, map: invalid_attributes }
+            { id: map.to_param, map: invalid_attributes, format: :json }
         expect(assigns(:map)).to eq(map)
       end
     end
   end
 
-  describe 'DELETE #destroy' do
-    it 'destroys the requested map' do
-      expect do
-        delete :destroy, { id: map.to_param }
-      end.to change(Map, :count).by(-1)
+  describe 'update the map screenshot' do
+    it 'successfully if authorized' do
+      skip
     end
 
-    it 'redirects to the maps list' do
-      delete :destroy, { id: map.to_param }
-      expect(response).to redirect_to(maps_url)
+    it 'unsucessfully if not authorized' do
+      skip
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:unowned_map) { create(:map) }
+    let(:owned_map) { create(:map, user: controller.current_user) }
+
+    it 'prevents deletion by non-owners' do
+      unowned_map.reload
+      expect do
+        delete :destroy, { id: unowned_map.to_param, format: :json }
+      end.to change(Map, :count).by(0)
+      expect(response.body).to eq("unauthorized")
+    end
+
+    it 'deletes owned map' do
+      owned_map.reload # ensure it's in the database
+      expect do
+        delete :destroy, { id: owned_map.to_param, format: :json }
+      end.to change(Map, :count).by(-1)
+      expect(response.body).to eq("success")
     end
   end
 end
