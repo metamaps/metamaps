@@ -15,6 +15,14 @@ RSpec.describe MapsController, type: :controller do
     end
   end
 
+  describe 'GET #contains' do
+    it 'returns json matching schema' do
+      get :contains, { id: map.to_param, format: :json }
+      # get "maps/#{map.id}/contains"
+      expect(response.body).to match_json_schema(:map_contains)
+    end
+  end
+
   describe 'GET #show' do
     it 'assigns the requested map as @map' do
       get :show, { id: map.to_param }
