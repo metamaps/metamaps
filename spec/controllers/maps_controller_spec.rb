@@ -32,26 +32,22 @@ RSpec.describe MapsController, type: :controller do
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new Map' do
+        map.reload
         expect do
-          post :create, { map: valid_attributes }
+          post :create, valid_attributes.merge(format: :json)
         end.to change(Map, :count).by(1)
       end
 
       it 'assigns a newly created map as @map' do
-        post :create, { map: valid_attributes }
+        post :create, valid_attributes.merge(format: :json)
         expect(assigns(:map)).to be_a(Map)
         expect(assigns(:map)).to be_persisted
-      end
-
-      it 'redirects to the created map' do
-        post :create, { map: valid_attributes }
-        expect(response).to redirect_to(Map.last)
       end
     end
 
     context 'with invalid params' do
       it 'assigns a newly created but unsaved map as @map' do
-        post :create, { map: invalid_attributes }
+        post :create, invalid_attributes.merge(format: :json)
         expect(assigns(:map)).to be_a_new(Map)
       end
     end

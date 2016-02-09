@@ -102,7 +102,6 @@ class MapsController < ApplicationController
 
     # POST maps
     def create
-
         @user = current_user
         @map = Map.new()
         @map.name = params[:name]
@@ -110,40 +109,45 @@ class MapsController < ApplicationController
         @map.permission = params[:permission]
         @map.user = @user
         @map.arranged = false 
-        @map.save     
 
         if params[:topicsToMap]
             @all = params[:topicsToMap]
             @all = @all.split(',')
             @all.each do |topic|
                 topic = topic.split('/')
-                @mapping = Mapping.new()
-                @mapping.user = @user
-                @mapping.map  = @map
-                @mapping.mappable = Topic.find(topic[0])
-                @mapping.xloc = topic[1]
-                @mapping.yloc = topic[2]
-                @mapping.save
+                mapping = Mapping.new()
+                mapping.user = @user
+                mapping.mappable = Topic.find(topic[0])
+                mapping.xloc = topic[1]
+                mapping.yloc = topic[2]
+                @map.topicmappings << mapping
+                mapping.save
             end
 
             if params[:synapsesToMap]
                 @synAll = params[:synapsesToMap]
                 @synAll = @synAll.split(',')
                 @synAll.each do |synapse_id|
-                    @mapping = Mapping.new()
-                    @mapping.user = @user
-                    @mapping.map = @map
-                    @mapping.mappable = Synapse.find(synapse_id)
-                    @mapping.save
+                    mapping = Mapping.new()
+                    mapping.user = @user
+                    mapping.map = @map
+                    mapping.mappable = Synapse.find(synapse_id)
+                    @map.synapsemappings << mapping
+                    mapping.save
                 end
             end
 
             @map.arranged = true
-            @map.save      
         end
 
-        respond_to do |format|
+        if @map.save
+          respond_to do |format|
             format.json { render :json => @map }
+          end
+        else
+          respond_to do |format|
+            format.json { render :json => "invalid params" }
+          end
         end
     end
 

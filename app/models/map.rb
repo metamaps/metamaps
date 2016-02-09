@@ -41,41 +41,41 @@ class Map < ActiveRecord::Base
   end
 
   def topic_count
-    self.topics.length
+    topics.length
   end
 
   def synapse_count
-    self.synapses.length
+    synapses.length
   end
 
   def user_name
-    self.user.name
+    user.name
   end
 
   def user_image
-    self.user.image.url
+    user.image.url
   end
 
   def contributor_count 
-    self.contributors.length
+    contributors.length
   end
 
   def screenshot_url
-    self.screenshot.url(:thumb)
+    screenshot.url(:thumb)
   end
 
   def created_at_str
-    self.created_at.strftime("%m/%d/%Y")
+    created_at.strftime("%m/%d/%Y")
   end
 
   def updated_at_str
-    self.updated_at.strftime("%m/%d/%Y")
+    updated_at.strftime("%m/%d/%Y")
   end
 
   def as_json(options={})
     json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
-    json[:created_at_clean] = self.created_at_str
-    json[:updated_at_clean] = self.updated_at_str
+    json[:created_at_clean] = created_at_str
+    json[:updated_at_clean] = updated_at_str
     json
   end
 
