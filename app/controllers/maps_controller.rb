@@ -13,7 +13,7 @@ class MapsController < ApplicationController
 
         @current = current_user
         @maps = []
-        page = params[:page].present ? params[:page] : 1
+        page = params[:page].present? ? params[:page] : 1
 
         if request.path.index("/explore/active") != nil
             @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
