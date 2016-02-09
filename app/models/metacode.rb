@@ -1,5 +1,4 @@
 class Metacode < ActiveRecord::Base
-
   has_many :in_metacode_sets
   has_many :metacode_sets, :through => :in_metacode_sets 
   has_many :topics
