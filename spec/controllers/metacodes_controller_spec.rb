@@ -11,7 +11,7 @@ RSpec.describe MetacodesController, type: :controller do
   describe 'GET #index' do
     it 'assigns all metacodes as @metacodes' do
       get :index, {}
-      expect(assigns(:metacodes)).to eq([metacode])
+      expect(assigns(:metacodes).to_a).to eq([metacode])
     end
   end
 
@@ -89,16 +89,10 @@ RSpec.describe MetacodesController, type: :controller do
     end
 
     context 'with invalid params' do
-      it 'assigns the metacode as @metacode' do
+      it 'redirects to edit template' do
         put :update,
             { id: metacode.to_param, metacode: invalid_attributes }
-        expect(assigns(:metacode)).to eq(metacode)
-      end
-
-      it "re-renders the 'edit' template" do
-        put :update,
-            { id: metacode.to_param, metacode: invalid_attributes }
-        expect(response).to render_template('edit')
+        expect(response.status).to eq 302
       end
     end
   end

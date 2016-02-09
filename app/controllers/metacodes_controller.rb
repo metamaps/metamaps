@@ -15,23 +15,11 @@ class MetacodesController < ApplicationController
           redirect_to root_url, notice: "You need to be an admin for that."
           return false
         end
-        render action: "index"
+        render :index
       }
       format.json { render json: @metacodes }
     end
   end
-
-  ### SHOW IS CURRENTLY DISABLED
-  # GET /metacodes/1
-  # GET /metacodes/1.json
-#  def show
-#    @metacode = Metacode.find(params[:id])
-#
-#    respond_to do |format|
-#      format.html # show.html.erb
-#      format.json { render json: @metacode }
-#    end
-#  end
 
   # GET /metacodes/new
   # GET /metacodes/new.json
@@ -59,7 +47,7 @@ class MetacodesController < ApplicationController
         format.html { redirect_to metacodes_url, notice: 'Metacode was successfully created.' }
         format.json { render json: @metacode, status: :created, location: metacodes_url }
       else
-        format.html { render action: "new" }
+        format.html { render :new }
         format.json { render json: @metacode.errors, status: :unprocessable_entity }
       end
     end
@@ -71,34 +59,20 @@ class MetacodesController < ApplicationController
     @metacode = Metacode.find(params[:id])
 
     respond_to do |format|
-      if @metacode.update_attributes(metacode_params)
+      if @metacode.update(metacode_params)
         format.html { redirect_to metacodes_url, notice: 'Metacode was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render :edit }
         format.json { render json: @metacode.errors, status: :unprocessable_entity }
       end
     end
   end
 
-    
-  ### DESTROY IS CURRENTLY DISABLED
-  # DELETE /metacodes/1
-  # DELETE /metacodes/1.json
-#  def destroy
-#    @metacode = Metacode.find(params[:id])
-#    @metacode.destroy
-#
-#    respond_to do |format|
-#      format.html { redirect_to metacodes_url }
-#      format.json { head :no_content }
-#    end
-#  end
-
   private
 
-    # Never trust parameters from the scary internet, only allow the white list through.      
-    def metacode_params
-      params.require(:metacode).permit(:id, :name, :icon, :color)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def metacode_params
+    params.require(:metacode).permit(:id, :name, :icon, :color)
+  end
 end
