@@ -22,7 +22,7 @@ class SynapsesController < ApplicationController
   # POST /synapses.json
   def create
     @synapse = Synapse.new(synapse_params)
-    @synapse.update_attribute :desc, "" if @synapse.desc.nil?
+    @synapse.desc = "" if @synapse.desc.nil?
 
     respond_to do |format|
       if @synapse.save
@@ -37,7 +37,7 @@ class SynapsesController < ApplicationController
   # PUT /synapses/1.json
   def update
     @synapse = Synapse.find(params[:id])
-    @synapse.update_attribute :desc, "" if @synapse.desc.nil?
+    @synapse.desc = "" if @synapse.desc.nil?
 
     respond_to do |format|
       if @synapse.update_attributes(synapse_params)

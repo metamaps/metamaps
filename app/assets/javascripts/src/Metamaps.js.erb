@@ -736,10 +736,6 @@ Metamaps.Create = {
         init: function () {
             var self = Metamaps.Create.newSynapse;
 
-            $('#synapse_desc').keyup(function () {
-                Metamaps.Create.newSynapse.description = $(this).val();
-            });
-
             var synapseBloodhound = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -795,6 +791,16 @@ Metamaps.Create = {
                 }]
           );
 
+            $('#synapse_desc').keyup(function () {
+              Metamaps.Create.newSynapse.description = $(this).val();
+            });
+
+            $('#synapse_desc').focusout(function() {
+              // Metamaps.Create.newSynapse.description = $(this).val();
+              Metamaps.Synapse.createSynapseLocally();
+            });
+
+
             $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
                 if (datum.id) { // if they clicked on an existing synapse get it
                     Metamaps.Synapse.getSynapseFromAutocomplete(datum.id);
@@ -811,7 +817,7 @@ Metamaps.Create = {
         topic2id: null,
         newSynapseId: null,
         open: function () {
-            $('#new_synapse').fadeIn('fast', function () {
+            $('#new_synapse').fadeIn(100, function () {
                 $('#synapse_desc').focus();
             });
             Metamaps.Create.newSynapse.beingCreated = true;
