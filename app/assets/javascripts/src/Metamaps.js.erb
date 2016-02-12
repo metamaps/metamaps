@@ -791,15 +791,21 @@ Metamaps.Create = {
                 }]
           );
 
-            $('#synapse_desc').keyup(function () {
+            $('#synapse_desc').keyup(function (e) {
+              var ESC = 27, BACKSPACE = 8, DELETE = 46;
+              if (e.keyCode === BACKSPACE && $(this).val() === "" ||
+                  e.keyCode === DELETE && $(this).val() === "" ||
+                  e.keyCode === ESC) {
+                Metamaps.Create.newSynapse.hide();
+              }//if
               Metamaps.Create.newSynapse.description = $(this).val();
             });
 
             $('#synapse_desc').focusout(function() {
-              // Metamaps.Create.newSynapse.description = $(this).val();
-              Metamaps.Synapse.createSynapseLocally();
+              if (Metamaps.Create.newSynapse.beingCreated) {
+                Metamaps.Synapse.createSynapseLocally();
+              }
             });
-
 
             $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
                 if (datum.id) { // if they clicked on an existing synapse get it
