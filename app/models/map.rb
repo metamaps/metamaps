@@ -86,17 +86,36 @@ class Map < ActiveRecord::Base
 
   def to_csv(options = {})
     CSV.generate(options) do |csv|
-      csv << ["id", "name", "metacode", "desc", "link", "user.name", "permission", "synapses"]
-      self.topics.each do |topic|
+      csv << ["topics"]
+      csv << ["id", "name", "metacode", "x", "y", "desc", "link", "user.name", "permission"]
+      self.topicmappings.each do |mapping|
+        topic = mapping.mappable
+        next if topic.nil?
         csv << [
           topic.id,
           topic.name,
           topic.metacode.name,
+          mapping.x,
+          mapping.y,
           topic.desc,
           topic.link,
           topic.user.name,
           topic.permission,
           topic.synapses_csv("text")
+        ]
+      end
+      csv << []
+      csv << ["synapses"]
+      csv << ["id", "description", "category", "topic1", "topic2", "username", "permission"]
+      self.synapses.each do |synapse|
+        csv << [
+          synapse.id,
+          synapse.desc,
+          synapse.category,
+          synapse.node1_id,
+          synapse.node2_id,
+          synapse.user.name,
+          synapse.permission
         ]
       end
     end
