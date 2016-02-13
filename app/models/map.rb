@@ -84,39 +84,46 @@ class Map < ActiveRecord::Base
     json
   end
 
+  def to_spreadsheet
+    spreadsheet = []
+    spreadsheet << ["Topics"]
+    spreadsheet << ["Id", "Name", "Metacode", "X", "Y", "Description", "Link", "User", "Permission"]
+    self.topicmappings.each do |mapping|
+      topic = mapping.mappable
+      next if topic.nil?
+      spreadsheet << [
+        topic.id,
+        topic.name,
+        topic.metacode.name,
+        mapping.xloc,
+        mapping.yloc,
+        topic.desc,
+        topic.link,
+        topic.user.name,
+        topic.permission
+      ]
+    end
+    spreadsheet << []
+    spreadsheet << ["Synapses"]
+    spreadsheet << ["Id", "Description", "Category", "Topic1", "Topic2", "User", "Permission"]
+    self.synapses.each do |synapse|
+      spreadsheet << [
+        synapse.id,
+        synapse.desc,
+        synapse.category,
+        synapse.node1_id,
+        synapse.node2_id,
+        synapse.user.name,
+        synapse.permission
+      ]
+    end
+    spreadsheet
+  end
+
   def to_csv(options = {})
     CSV.generate(options) do |csv|
-      csv << ["topics"]
-      csv << ["id", "name", "metacode", "x", "y", "desc", "link", "user.name", "permission"]
-      self.topicmappings.each do |mapping|
-        topic = mapping.mappable
-        next if topic.nil?
-        csv << [
-          topic.id,
-          topic.name,
-          topic.metacode.name,
-          mapping.x,
-          mapping.y,
-          topic.desc,
-          topic.link,
-          topic.user.name,
-          topic.permission,
-          topic.synapses_csv("text")
-        ]
-      end
-      csv << []
-      csv << ["synapses"]
-      csv << ["id", "description", "category", "topic1", "topic2", "username", "permission"]
-      self.synapses.each do |synapse|
-        csv << [
-          synapse.id,
-          synapse.desc,
-          synapse.category,
-          synapse.node1_id,
-          synapse.node2_id,
-          synapse.user.name,
-          synapse.permission
-        ]
+      to_spreadsheet.each do |line|
+        csv << line
       end
     end
   end

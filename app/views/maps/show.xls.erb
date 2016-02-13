@@ -1,51 +1,9 @@
 <table>
-  <tr><th>Topics</th></tr>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Metacode</th>
-    <th>X</th>
-    <th>Y</th>
-    <th>Description</th>
-    <th>Link</th>
-    <th>Username</th>
-    <th>Permission</th>
-  </tr>
-  <% @map.topicmappings.each do |mapping| %>
-  <% topic = mapping.mappable %>
-  <% next if topic.nil? %>
-  <tr>
-    <td><%= topic.id %></td>
-    <td><%= topic.name %></td>
-    <td><%= topic.metacode.name %></td>
-    <td><%= mapping.xloc %></td>
-    <td><%= mapping.yloc %></td>
-    <td><%= topic.desc %></td>
-    <td><%= topic.link %></td>
-    <td><%= topic.user.name %></td>
-    <td><%= topic.permission %></td>
-  </tr>
-  <% end %>
-  <tr></tr>
-  <tr><th>Synapses</th></tr>
-  <tr>
-    <th>ID</th>
-    <th>Description</th>
-    <th>Category</th>
-    <th>Topic1</th>
-    <th>Topic2</th>
-    <th>Username</th>
-    <th>Permission</th>
-  </tr>
-  <% @map.synapses.each do |synapse| %>
-  <tr>
-    <td><%= synapse.id %></td>
-    <td><%= synapse.desc %></td>
-    <td><%= synapse.category %></td>
-    <td><%= synapse.node1_id %></td>
-    <td><%= synapse.node2_id %></td>
-    <td><%= synapse.user.name %></td>
-    <td><%= synapse.permission %></td>
-  </tr>
+  <% @map.to_spreadsheet.each do |line| %>
+    <tr>
+      <% line.each do |field| %>
+        <td><%= field %></td>
+      <% end %>
+    </tr>
   <% end %>
 </table>
