@@ -56,7 +56,6 @@ GEM
     builder (3.2.2)
     byebug (5.0.0)
       columnize (= 0.9.0)
-    cancancan (1.13.1)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.7)
@@ -141,6 +140,8 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    pundit (1.1.0)
+      activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
@@ -243,7 +244,6 @@ DEPENDENCIES
   best_in_place
   better_errors
   binding_of_caller
-  cancancan
   coffee-rails
   devise
   dotenv
@@ -260,6 +260,7 @@ DEPENDENCIES
   pg
   pry-byebug
   pry-rails
+  pundit
   quiet_assets
   rails (= 4.2.4)
   rails3-jquery-autocomplete
