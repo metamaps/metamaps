@@ -20,11 +20,12 @@ Metamaps::Application.routes.draw do
   get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
   get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
   
-  get 'explore/active', to: 'maps#index', as: :activemaps
-  get 'explore/featured', to: 'maps#index', as: :featuredmaps
-  get 'explore/mine', to: 'maps#index', as: :mymaps
-  get 'explore/mapper/:id', to: 'maps#index', as: :usermaps
-  resources :maps, except: [:new, :edit]
+  resources :maps, except: [:index, :new, :edit]
+  get 'explore/active', to: 'maps#activemaps'
+  get 'explore/featured', to: 'maps#featuredmaps'
+  get 'explore/mine', to: 'maps#mymaps'
+  get 'explore/mapper/:id', to: 'maps#usermaps'
+
   get 'maps/:id/contains', to: 'maps#contains', as: :contains
   post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
   

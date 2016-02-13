@@ -6,47 +6,66 @@ class MapsController < ApplicationController
     autocomplete :map, :name, :full => true, :extra_data => [:user_id]
 
     # GET /explore/active
-    # GET /explore/featured
-    # GET /explore/mapper/:id
-    def index
-        return redirect_to activemaps_url if request.path == "/explore"
-
+    def activemaps
         @current = current_user
-        @maps = []
         page = params[:page].present? ? params[:page] : 1
+        @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
+        @request = "active"
 
-        if request.path.index("/explore/active") != nil
-            @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
-            @request = "active"
-        elsif request.path.index("/explore/featured") != nil
-            @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private").order("updated_at DESC").page(page).per(20)
-            @request = "featured"
-        elsif request.path.index('/explore/mine') != nil  # looking for maps by me
-            return redirect_to activemaps_url if !authenticated?
-
-            # don't need to exclude private maps because they all belong to you
-            @maps = Map.where("maps.user_id = ?", @current.id).order("updated_at DESC").page(page).per(20)
-            @request = "you"
-        elsif request.path.index('/explore/mapper/') != nil  # looking for maps by a mapper
-            @user = User.find(params[:id])
-            @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
-            @request = "mapper"
-        end
+        redirect_to root_url and return if authenticated?
 
         respond_to do |format|
-            format.html { 
-                if @request == "active" && authenticated?
-                    redirect_to root_url and return
-                end
-                respond_with(@maps, @request, @user)
-            }
+            format.html { respond_with(@maps, @request, @user) }
+            format.json { render json: @maps }
+        end
+    end
+
+    # GET /explore/featured
+    def featuredmaps
+        @current = current_user
+        page = params[:page].present? ? params[:page] : 1
+        @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private")
+                   .order("updated_at DESC").page(page).per(20)
+        @request = "featured"
+
+        respond_to do |format|
+            format.html { respond_with(@maps, @request, @user) }
+            format.json { render json: @maps }
+        end
+    end
+
+    # GET /explore/mine
+    def mymaps
+        return redirect_to activemaps_url if !authenticated?
+
+        @current = current_user
+        page = params[:page].present? ? params[:page] : 1
+        # don't need to exclude private maps because they all belong to you
+        @maps = Map.where("maps.user_id = ?", @current.id).order("updated_at DESC").page(page).per(20)
+        @request = "you"
+
+        respond_to do |format|
+            format.html { respond_with(@maps, @request, @user) }
+            format.json { render json: @maps }
+        end
+    end
+
+    # GET /explore/mapper/:id
+    def usermaps
+        @current = current_user
+        page = params[:page].present? ? params[:page] : 1
+        @user = User.find(params[:id])
+        @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
+        @request = "mapper"
+
+        respond_to do |format|
+            format.html { respond_with(@maps, @request, @user) }
             format.json { render json: @maps }
         end
     end
 
     # GET maps/:id
     def show
-
         @current = current_user
         @map = Map.find(params[:id]).authorize_to_show(@current)
 
@@ -72,7 +91,6 @@ class MapsController < ApplicationController
 
     # GET maps/:id/contains
     def contains
-
         @current = current_user
         @map = Map.find(params[:id]).authorize_to_show(@current)
 
