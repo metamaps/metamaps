@@ -10,7 +10,7 @@ RSpec.describe MapsController, type: :controller do
 
   describe 'GET #index' do
     it 'viewable maps as @maps' do
-      get :index, {}
+      get :activemaps
       expect(assigns(:maps)).to eq([map])
     end
   end
