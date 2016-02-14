@@ -21,5 +21,8 @@ sed -i -e "s/DB_USERNAME='.*'/DB_USERNAME='jenkins'/" .env
 
 #test
 bundle install
-rake db:create db:test:prepare
+rake db:drop
+rake db:create
+rake db:schema:load
+rake db:migrate
 COVERAGE=on bundle exec rspec
