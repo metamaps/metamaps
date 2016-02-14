@@ -12,42 +12,34 @@
  */
 
 Metamaps.Import = {
-  headersWhitelist: [
-		'name', 'metacode', 'desc', 'link', 'permission'
+  topicWhitelist: [
+    'name', 'metacode', 'description', 'link', 'permission'
 	],
+  synapseWhitelist: [
+    'desc', 'description', 'category', 'topic1', 'topic2', 'permission'
+  ],
 
   init: function() {
     var self = Metamaps.Import;
     $('body').bind('paste', function(e) {
       var text = e.originalEvent.clipboardData.getData('text/plain');
-      var parsed = self.parseTabbedString(text);
 
-      if (parsed.length > 0 &&
-        confirm("Are you sure you want to create " + parsed.length +
-                " new topics?")) {
-        self.importTopics(parsed);
+      var results = self.parseTabbedString(text);
+      var topics = results.topics;
+      var synapses = results.synapses;
+
+      if (topics.length > 0 || synapses.length > 0) {
+        if (confirm("Are you sure you want to create " + topics.length +
+                    " new topics and " + synapses.length + " new synapses?")) {
+          self.importTopics(topics);
+          self.importSynapses(synapses);
+        }//if
       }//if
     });
   },
 
-  importTopics: function(parsedTopics) {
-    var self = Metamaps.Import;
-
-    var x = -200;
-    var y = -200;
-    parsedTopics.forEach(function(topic) {
-      self.createTopicWithParameters(
-        topic.name, topic.metacode, topic.permission,
-        topic.desc, topic.link, x, y
-      );
-
-      // update positions of topics
-      x += 50;
-      if (x > 200) {
-        y += 50;
-        x = -200;
-      }//if
-    });
+  abort: function(message) {
+    console.error(message);
   },
 
   parseTabbedString: function(text) {
@@ -58,30 +50,162 @@ Metamaps.Import = {
     if (text.indexOf("\r\n") !== -1) {
       delim = "\r\n";
     }//if
+
+    var STATES = {
+      UNKNOWN: 0,
+      TOPICS_NEED_HEADERS: 1,
+      SYNAPSES_NEED_HEADERS: 2,
+      TOPICS: 3,
+      SYNAPSES: 4,
+    };
+
+    // state & lines determine parser behaviour
+    var state = STATES.UNKNOWN;
     var lines = text.split(delim);
+    var results = { topics: [], synapses: [] }
+    var topicHeaders = [];
+    var synapseHeaders = [];
 
-    // get csv-style headers to name the object fields
-    var headers = lines[0].split('	'); //tab character
-
-    var results = [];
-    lines.forEach(function(line, index) {
-      if (index === 0) return;
-      if (line == "") return;
-
-      var topic = {};
-      line.split("	").forEach(function(field, index) {
-				if (self.headersWhitelist.indexOf(headers[index]) === -1) return;
-        topic[headers[index]] = field;
+    lines.forEach(function(line_raw, index) {
+      var line = line_raw.split('	'); // tab character
+      var noblanks = line.filter(function(elt) {
+        return elt !== "";
       });
-      results.push(topic);
+      switch(state) {
+        case STATES.UNKNOWN:
+          if (noblanks.length === 0) {
+            state = STATES.UNKNOWN;
+            break;
+          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'topics') {
+            state = STATES.TOPICS_NEED_HEADERS;
+            break;
+          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'synapses') {
+            state = STATES.SYNAPSES_NEED_HEADERS;
+            break;
+          }
+          state = STATES.TOPICS_NEED_HEADERS;
+          // FALL THROUGH - if we're not sure what to do, pretend
+          // we're on the TOPICS_NEED_HEADERS state and parse some headers
+
+        case STATES.TOPICS_NEED_HEADERS:
+          if (noblanks.length < 2) {
+            return self.abort("Not enough topic headers on line " + index);
+          }
+          topicHeaders = line.map(function(header, index) {
+            return header.toLowerCase().replace('description', 'desc');
+          });
+          state = STATES.TOPICS;
+          break;
+
+        case STATES.SYNAPSES_NEED_HEADERS:
+          if (noblanks.length < 2) {
+            return self.abort("Not enough synapse headers on line " + index);
+          }
+          synapseHeaders = line.map(function(header, index) {
+            return header.toLowerCase().replace('description', 'desc');
+          });
+          state = STATES.SYNAPSES;
+          break;
+
+        case STATES.TOPICS:
+          if (noblanks.length === 0) {
+            state = STATES.UNKNOWN;
+          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'topics') {
+            state = STATES.TOPICS_NEED_HEADERS;
+          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'synapses') {
+            state = STATES.SYNAPSES_NEED_HEADERS;
+          } else {
+            var topic = {};
+            line.forEach(function(field, index) {
+              var header = topicHeaders[index];
+              if (self.topicWhitelist.indexOf(header) === -1) return;
+              topic[header] = field;
+              if (header === 'x' || header === 'y') {
+                topic[header] = parseInt(topic[header]);
+              }//if
+            });
+            results.topics.push(topic);
+          }
+          break;
+
+        case STATES.SYNAPSES:
+          if (noblanks.length === 0) {
+            state = STATES.UNKNOWN;
+          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'topics') {
+            state = STATES.TOPICS_NEED_HEADERS;
+          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'synapses') {
+            state = STATES.SYNAPSES_NEED_HEADERS;
+          } else {
+            var synapse = {};
+            line.forEach(function(field, index) {
+              var header = synapseHeaders[index];
+              if (self.synapseWhitelist.indexOf(header) === -1) return;
+              synapse[header] = field;
+              if (header === 'topic1' || header === 'topic2') {
+                synapse[header] = parseInt(header);
+              }//if
+            });
+            results.synapses.push(synapse);
+          }
+          break;
+
+        default:
+          return self.abort("Invalid state while parsing import data. " +
+                            "Check code.");
+      }
     });
+
     return results;
   },
 
-  createTopicWithParameters: function(name, metacode_name, permission, desc,
-                                      link, xloc, yloc) {
-    var self = Metamaps.Topic;
 
+  importTopics: function(parsedTopics) {
+    var self = Metamaps.Import;
+
+    // up to 25 topics: scale 100
+    // up to 81 topics: scale 200
+    // up to 169 topics: scale 300
+    var scale = Math.floor((Math.sqrt(parsedTopics.length) - 1) / 4) * 100;
+    if (scale < 100) scale = 100;
+    var autoX = -scale;
+    var autoY = -scale;
+
+    parsedTopics.forEach(function(topic) {
+      var x, y;
+      if (topic.x && topic.y) {
+        x = topic.x;
+        y = topic.y;
+      } else {
+        x = autoX;
+        y = autoY;
+        autoX += 50;
+        if (autoX > scale) {
+          autoY += 50;
+          autoX = -scale;
+        }
+      }
+
+      self.createTopicWithParameters(
+        topic.name, topic.metacode, topic.permission,
+        topic.desc, topic.link, x, y, topic.id
+      );
+    });
+  },
+
+  importSynapses: function(parsedSynapses) {
+    var self = Metamaps.Import;
+
+    parsedSynapses.forEach(function(synapse) {
+      self.createSynapseWithParameters(
+        synapse.desc, synapse.category, synapse.permission,
+        synapse.topic1, synapse.topic2
+      );
+    });
+  },
+
+  createTopicWithParameters: function(name, metacode_name, permission, desc,
+                                      link, xloc, yloc, import_id) {
+    $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null;
     if (metacode === null) return console.error("metacode not found");
 
@@ -90,7 +214,8 @@ Metamaps.Import = {
       metacode_id: metacode.id,
       permission: permission || Metamaps.Active.Map.get('permission'),
       desc: desc,
-      link: link
+      link: link,
+      import_id: import_id
     });
     Metamaps.Topics.add(topic);
 
@@ -103,6 +228,32 @@ Metamaps.Import = {
     Metamaps.Mappings.add(mapping);
 
     // this function also includes the creation of the topic in the database
-    self.renderTopic(mapping, topic, true, true);
+    Metamaps.Topic.renderTopic(mapping, topic, true, true);
+
+    Metamaps.Famous.viz.hideInstructions();
+  },
+
+  createSynapseWithParameters: function(description, category, permission,
+                                        node1_id, node2_id) {
+    var topic1 = Metamaps.Topics.where({import_id: node1_id});
+    var topic2 = Metamaps.Topics.where({import_id: node2_id});
+    var node1 = topic1.get('node');
+    var node2 = topic2.get('node');
+    // TODO check if topic1 and topic2 were sucessfully found...
+
+    var synapse = new Metamaps.Backbone.Synapse({
+      desc: description,
+      category: category,
+      permission: permission,
+      node1_id: node1_id,
+      node2_id: node2_id,
+    });
+
+    var mapping = new Metamaps.Backbone.Mapping({
+      mappable_type: "Synapse",
+      mappable_id: synapse.cid,
+    });
+
+    Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, true);
   },
 };
