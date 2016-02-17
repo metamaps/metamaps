@@ -31,6 +31,10 @@ function start() {
         socket.on('inviteACall', function (data) {
           socket.broadcast.emit(data.invited + '-' + data.mapid + '-invitedToCall', data.inviter);
         });
+        // send an invitation to join a call in progress
+        socket.on('inviteToJoin', function (data) {
+          socket.broadcast.emit(data.invited + '-' + data.mapid + '-invitedToJoin', data.inviter);
+        });
         // send response back to the inviter
         socket.on('callAccepted', function (data) {
           socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callAccepted', data.invited);
@@ -39,8 +43,11 @@ function start() {
         socket.on('callDenied', function (data) {
           socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callDenied', data.invited);
         });
-        socket.on('callEnded', function (data) {
-          socket.broadcast.emit('maps-' + data.mapid + '-callEnding');
+        socket.on('mapperJoinedCall', function (data) {
+          socket.broadcast.emit('maps-' + data.mapid + '-mapperJoinedCall', data.id);
+        });
+        socket.on('mapperLeftCall', function (data) {
+          socket.broadcast.emit('maps-' + data.mapid + '-mapperLeftCall', data.id);
         });
 
         // this will ping everyone on a map that there's a person just joined the map

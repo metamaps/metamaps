@@ -2061,6 +2061,7 @@ Metamaps.Realtime = {
 
         $(document).off('mousemove');
         self.socket.removeAllListeners();
+        if (self.inConversation) self.leaveCall();
         self.socket.emit('endMapperNotify');
         $(".collabCompass").remove();
         self.status = false;
@@ -2100,7 +2101,6 @@ Metamaps.Realtime = {
     promptToJoin: function (data) {
       var self = Metamaps.Realtime;
 
-      console.log(data);
       var notifyText = 'There\'s a conversation happening, want to join?';
       notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
       notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
@@ -2117,10 +2117,68 @@ Metamaps.Realtime = {
       Metamaps.GlobalUI.notifyUser(notifyText, true);
       self.room.conversationInProgress();
     },
-    conversationHasEnded: function () {
+    countOthersInConversation: function () {
+      var self = Metamaps.Realtime;
+      var count = 0;
+
+      for (var key in self.mappersOnMap) {
+        if (self.mappersOnMap[key].inConversation) count++;
+      }
+      return count;
+    },
+    mapperJoinedCall: function (id) {
+      var self = Metamaps.Realtime;
+      var mapper = self.mappersOnMap[id];
+
+      if (mapper) {
+        if (self.inConversation) {
+          var username = mapper.name;
+          var notifyText = username + ' joined the call';
+          Metamaps.GlobalUI.notifyUser(notifyText);
+        }
+
+        mapper.inConversation = true;
+        self.room.chat.mapperJoinedCall(id);
+      }
+    },
+    mapperLeftCall: function (id) {
+      var self = Metamaps.Realtime;
+      var mapper = self.mappersOnMap[id];
+
+      if (mapper) {
+        if (self.inConversation) {
+          var username = mapper.name;
+          var notifyText = username + ' left the call';
+          Metamaps.GlobalUI.notifyUser(notifyText);
+        }
+
+        mapper.inConversation = false;
+        self.room.chat.mapperLeftCall(id);
+
+        if (self.countOthersInConversation() < 2) {
+          self.callEnded();
+        }
+      }
+    },
+    callEnded: function () {
       var self = Metamaps.Realtime;
 
       self.room.conversationEnding();
+      self.room.leaveVideoOnly();
+      self.inConversation = false;
+      self.videosInPosition = 1;
+      self.localVideo.view.$container.hide().css({
+        top: '72px',
+        left: '30px'
+      });
+      self.localVideo.view.audioOn();
+      self.localVideo.view.videoOn();
+      self.webrtc.webrtc.localStreams.forEach(function (stream) {
+        stream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+      });
+      self.webrtc.webrtc.localStreams = [];
     },
     invitedToCall: function (inviter) {
       var self = Metamaps.Realtime;
@@ -2129,6 +2187,15 @@ Metamaps.Realtime = {
       var notifyText = username + ' is suggesting a video call. What do you think?';
       notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>';
       notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
+    },
+    invitedToJoin: function (inviter) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[inviter].name;
+      var notifyText = username + ' is inviting you to the conversation. Join?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
       Metamaps.GlobalUI.notifyUser(notifyText, true);
     },
     acceptCall: function (userid) {
@@ -2159,6 +2226,15 @@ Metamaps.Realtime = {
       });
       Metamaps.GlobalUI.notifyUser('Invitation pending...', true);
     },
+    inviteToJoin: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('inviteToJoin', {
+        mapid: Metamaps.Active.Map.id,
+        inviter: Metamaps.Active.Mapper.id,
+        invited: userid
+      });
+      Metamaps.GlobalUI.notifyUser('Invitation has been sent.');
+    },
     callAccepted: function (userid) {
       var self = Metamaps.Realtime;
 
@@ -2170,7 +2246,7 @@ Metamaps.Realtime = {
       var self = Metamaps.Realtime;
 
       var username = self.mappersOnMap[userid].name;
-      Metamaps.GlobalUI.notifyUser(username + ' isn\'t feeling it right now...');
+      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invite.');
     },
     joinCall: function () {
       var self = Metamaps.Realtime;
@@ -2186,16 +2262,31 @@ Metamaps.Realtime = {
         self.room.join();
       });
       self.inConversation = true;
+      self.socket.emit('mapperJoinedCall', {
+        mapid: Metamaps.Active.Map.id,
+        id: Metamaps.Active.Mapper.id
+      });
       self.webrtc.startLocalVideo();
       Metamaps.GlobalUI.clearNotify();
     },
     leaveCall: function () {
       var self = Metamaps.Realtime;
 
+      self.socket.emit('mapperLeftCall', {
+        mapid: Metamaps.Active.Map.id,
+        id: Metamaps.Active.Mapper.id
+      });
+
       self.room.leaveVideoOnly();
       self.inConversation = false;
       self.videosInPosition = 1;
       self.localVideo.view.$container.hide();
+
+      // if there's only two people in the room, and we're leaving
+      // we should shut down the call locally
+      if (self.countOthersInConversation() === 1) {
+        self.callEnded();
+      }
     },
     turnOff: function (silent) {
         var self = Metamaps.Realtime;
@@ -2223,14 +2314,17 @@ Metamaps.Realtime = {
             mapid: Metamaps.Active.Map.id
         });
 
-        socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToCall', self.invitedToCall);
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToCall', self.invitedToCall); // new call
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToJoin', self.invitedToJoin); // call already in progress
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-callAccepted', self.callAccepted);
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-callDenied', self.callDenied);
 
         // receive word that there's a conversation in progress
         socket.on('maps-' + Metamaps.Active.Map.id + '-callInProgress', self.promptToJoin);
         socket.on('maps-' + Metamaps.Active.Map.id + '-callStarting', self.conversationHasBegun);
-        socket.on('maps-' + Metamaps.Active.Map.id + '-callEnding', self.conversationHasEnded);
+
+        socket.on('maps-' + Metamaps.Active.Map.id + '-mapperJoinedCall', self.mapperJoinedCall);
+        socket.on('maps-' + Metamaps.Active.Map.id + '-mapperLeftCall', self.mapperLeftCall);
 
         // if you're the 'new guy' update your list with who's already online
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-UpdateMapperList', self.updateMapperList);
@@ -2341,25 +2435,6 @@ Metamaps.Realtime = {
             self.sendNewMessage(data);
         };
         $(document).on(Metamaps.Views.room.events.newMessage, sendNewMessage);
-
-        $(document).on(Metamaps.Views.room.events.callEnded, function () {
-          socket.emit('callEnded', { mapid: Metamaps.Active.Map.id }); // so that anyone who isn't currently in the call gets notified
-          self.inConversation = false;
-          self.videosInPosition = 1;
-          Metamaps.GlobalUI.notifyUser('Conversation has ended.');
-          self.localVideo.view.$container.hide().css({
-            top: '72px',
-            left: '30px'
-          });
-          self.localVideo.view.audioOn();
-          self.localVideo.view.videoOn();
-          self.webrtc.webrtc.localStreams.forEach(function (stream) {
-            stream.getTracks().forEach(function (track) {
-              track.stop();
-            });
-          });
-          self.webrtc.webrtc.localStreams = [];
-        });
 
     },
     attachMapListener: function(){
@@ -2521,6 +2596,10 @@ Metamaps.Realtime = {
         self.room.chat.removeParticipant(data.username);
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just left the map');
+
+        if (self.inConversation && self.countOthersInConversation() < 2) {
+          self.callEnded();
+        }
     },
     newCollaborator: function (data) {
         var self = Metamaps.Realtime;

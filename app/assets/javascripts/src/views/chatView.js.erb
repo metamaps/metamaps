@@ -15,7 +15,9 @@ Metamaps.Views.chatView = (function () {
         participantHTML: "<div class='participant participant-{{ id }}'>" +
                 "<div class='chat-participant-image'><img src='{{ image }}' style='border: 2px solid {{ color }};' /></div>" +
                 "<div class='chat-participant-name'>{{ username }}</div>" +
-                "<button type='button' class='button chat-participant-invite' onclick='Metamaps.Realtime.inviteACall({{ id}});'></button>" +
+                "<button type='button' class='button chat-participant-invite-call' onclick='Metamaps.Realtime.inviteACall({{ id}});'></button>" +
+                "<button type='button' class='button chat-participant-invite-join' onclick='Metamaps.Realtime.inviteToJoin({{ id}});'></button>" +
+                "<span class='chat-participant-participating'>IN CALL</span>" +
                 "<div class='clearfloat'></div>" +
               "</div>",
         templates: function() {
@@ -214,15 +216,30 @@ Metamaps.Views.chatView = (function () {
     chatView.prototype.conversationInProgress = function (participating) {
       this.$conversationInProgress.show();
       this.$participants.addClass('is-live');
-      if (participating) this.$conversationInProgress.addClass('is-participating');
+      if (participating) this.$participants.addClass('is-participating');
       this.$button.addClass('active');
+
+      // hide invite to call buttons
     }
 
     chatView.prototype.conversationEnded = function () {
       this.$conversationInProgress.hide();
       this.$participants.removeClass('is-live');
-      this.$conversationInProgress.removeClass('is-participating');
+      this.$participants.removeClass('is-participating');
       this.$button.removeClass('active');
+      this.$participants.find('.participant').removeClass('active');
+    }
+
+    chatView.prototype.leaveConversation = function () {
+      this.$participants.removeClass('is-participating');
+    }
+
+    chatView.prototype.mapperJoinedCall = function (id) {
+      this.$participants.find('.participant-' + id).addClass('active');
+    }
+
+    chatView.prototype.mapperLeftCall = function (id) {
+      this.$participants.find('.participant-' + id).removeClass('active');
     }
 
     chatView.prototype.addParticipant = function (participant) {

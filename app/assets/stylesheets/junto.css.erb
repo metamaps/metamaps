@@ -190,10 +190,10 @@
 .chat-box .participants .conversation-live .leave {
   display: none;
 }
-.chat-box .participants .conversation-live.is-participating .leave {
+.chat-box .participants.is-participating .conversation-live .leave {
   display: block;
 }
-.chat-box .participants .conversation-live.is-participating .join {
+.chat-box .participants.is-participating .conversation-live .join {
   display: none;
 }
 .chat-box .participants .participant {
@@ -226,12 +226,28 @@
   padding: 2px 8px 0;
   text-align: left;
 }
-.chat-box .participants.is-live .participant .chat-participant-invite {
+.chat-box .participants.is-live .participant .chat-participant-invite-call {
   display: none;
 }
-.chat-box .participants .participant .chat-participant-invite {
+.chat-box .participants .participant .chat-participant-invite-join {
+  display: none;
+}
+.chat-box .participants.is-live .participant:not(.active) .chat-participant-invite-join {
+  display: block;
+}
+.chat-box .participants .participant .chat-participant-invite-call,
+.chat-box .participants .participant .chat-participant-invite-join
+ {
   float: right;
   background: #4FC059 url(<%= asset_path 'invitepeer16.png' %>) no-repeat center center;
+}
+.chat-box .participants .participant .chat-participant-participating {
+  float: right;
+  display: none;
+  margin-top: 14px;
+}
+.chat-box .participants .participant.active .chat-participant-participating {
+  display: block;
 }
 .chat-box .chat-header {
   width: 100%;

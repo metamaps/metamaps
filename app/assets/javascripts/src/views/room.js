@@ -43,12 +43,12 @@ Metamaps.Views.room = (function () {
     }
 
     room.prototype.leaveVideoOnly = function() {
+      this.chat.leaveConversation(); // the conversation will carry on without you
       for (var id in this.videos) {
         this.removeVideo(id);
       }
       this.isActiveRoom = false;
       this.webrtc.leaveRoom();
-      this.chat.conversationEnded();
     }
 
     room.prototype.leave = function() {
@@ -150,10 +150,6 @@ Metamaps.Views.room = (function () {
           if (this.videos[id]) {
             this.videos[id].remove();
             delete this.videos[id];
-            if (Object.keys(this.videos).length === 0) {
-              this.leaveVideoOnly();
-              $(document).trigger(room.events.callEnded);
-            }
           }
       }
 
@@ -191,8 +187,7 @@ Metamaps.Views.room = (function () {
      * @static
      */
     room.events = {
-        newMessage: "Room:newMessage",
-        callEnded: "Room:callEnded"
+        newMessage: "Room:newMessage"
     };
 
     return room;
