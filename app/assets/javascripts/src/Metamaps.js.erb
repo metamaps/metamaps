@@ -2155,7 +2155,8 @@ Metamaps.Realtime = {
         mapper.inConversation = false;
         self.room.chat.mapperLeftCall(id);
 
-        if (self.countOthersInConversation() < 2) {
+        if ((self.inConversation && self.countOthersInConversation() === 0) ||
+            (!self.inConversation && self.countOthersInConversation() === 1)) {
           self.callEnded();
         }
       }
