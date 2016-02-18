@@ -2,7 +2,7 @@ Metamaps
 =======
 
 [![Join the chat at https://gitter.im/metamaps/metamaps_gen002](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps_gen002?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-![Build Status](https://jenkins.devinhoward.ca/job/metamaps_gen002.develop/badge/icon)
+[![Build Status](https://jenkins.devinhoward.ca/job/metamaps_gen002.develop/badge/icon)](https://jenkins.devinhoward.ca/job/metamaps_gen002.develop/)
 
 Welcome to the Metamaps GitHub repo. 
 
