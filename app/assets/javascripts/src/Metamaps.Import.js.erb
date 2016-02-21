@@ -24,11 +24,12 @@
 
 Metamaps.Import = {
   topicWhitelist: [
-    'name', 'metacode', 'description', 'link', 'permission'
+    'id', 'name', 'metacode', 'description', 'link', 'permission'
   ],
   synapseWhitelist: [
-    'desc', 'description', 'category', 'topic1', 'topic2', 'permission'
+    'id', 'desc', 'description', 'category', 'topic1', 'topic2', 'permission'
   ],
+  cidMappings: {}, //to be filled by import_id => cid mappings
 
   init: function() {
     var self = Metamaps.Import;
@@ -145,7 +146,7 @@ Metamaps.Import = {
               var header = topicHeaders[index];
               if (self.topicWhitelist.indexOf(header) === -1) return;
               topic[header] = field;
-              if (header === 'x' || header === 'y') {
+              if (['id', 'x', 'y'].indexOf(header) !== -1) {
                 topic[header] = parseInt(topic[header]);
               }//if
             });
@@ -166,8 +167,8 @@ Metamaps.Import = {
               var header = synapseHeaders[index];
               if (self.synapseWhitelist.indexOf(header) === -1) return;
               synapse[header] = field;
-              if (header === 'topic1' || header === 'topic2') {
-                synapse[header] = parseInt(header);
+              if (['id', 'topic1', 'topic2'].indexOf(header) !== -1) {
+                synapse[header] = parseInt(synapse[header]);
               }//if
             });
             results.synapses.push(synapse);
@@ -235,6 +236,7 @@ Metamaps.Import = {
 
   createTopicWithParameters: function(name, metacode_name, permission, desc,
                                       link, xloc, yloc, import_id) {
+    var self = Metamaps.Import;
     $(document).trigger(Metamaps.Map.events.editedByActiveMapper);
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null;
     if (metacode === null) return console.error("metacode not found");
@@ -245,9 +247,9 @@ Metamaps.Import = {
       permission: permission || Metamaps.Active.Map.get('permission'),
       desc: desc,
       link: link,
-      import_id: import_id
     });
     Metamaps.Topics.add(topic);
+    self.cidMappings[import_id] = topic.cid;
 
     var mapping = new Metamaps.Backbone.Mapping({
         xloc: xloc,
@@ -260,13 +262,15 @@ Metamaps.Import = {
     // this function also includes the creation of the topic in the database
     Metamaps.Topic.renderTopic(mapping, topic, true, true);
 
+
     Metamaps.Famous.viz.hideInstructions();
   },
 
   createSynapseWithParameters: function(description, category, permission,
                                         node1_id, node2_id) {
-    var topic1 = Metamaps.Topics.where({import_id: node1_id});
-    var topic2 = Metamaps.Topics.where({import_id: node2_id});
+    var self = Metamaps.Import;
+    var topic1 = Metamaps.Topics.get(self.cidMappings[node1_id]);
+    var topic2 = Metamaps.Topics.get(self.cidMappings[node2_id]);
     var node1 = topic1.get('node');
     var node2 = topic2.get('node');
     // TODO check if topic1 and topic2 were sucessfully found...
@@ -275,13 +279,13 @@ Metamaps.Import = {
       desc: description,
       category: category,
       permission: permission,
-      node1_id: node1_id,
-      node2_id: node2_id,
+      node1_id: node1.id,
+      node2_id: node2.id,
     });
 
     var mapping = new Metamaps.Backbone.Mapping({
       mappable_type: "Synapse",
-      mappable_id: synapse.cid,
+      mappable_id: synapse.id,
     });
 
     Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, true);
