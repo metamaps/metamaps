@@ -2,19 +2,30 @@
  * Example tab-separated input:
  * Some fields will be ignored
  *
- * id	name	metacode	desc	link	user.name	permission	synapses		
- * 1	topic1	Catalyst			admin	commons	1->7		
- * 2	topic2	Event			admin	commons			
- * 5	topic	Action			admin	commons			
- * 6	topic6	Action			admin	commons	6->7		
- * 7	topic7	Action			admin	commons	7->8	 7<-6	 7<-1
- * 8	topic8	Action			admin	commons	8<-7		
+ * Topics								
+ * Id	Name	Metacode	X	Y	Description	Link	User	Permission
+ * 8	topic8	Action	-231	131			admin	commons
+ * 5	topic	Action	-229	-131			admin	commons
+ * 7	topic7.1	Action	-470	-55	hey		admin	commons
+ * 2	topic2	Event	-57	-63			admin	commons
+ * 1	topic1	Catalyst	-51	50			admin	commons
+ * 6	topic6	Action	-425	63			admin	commons
+ * 								
+ * Synapses								
+ * Id	Description	Category	Topic1	Topic2	User	Permission		
+ * 43		from-to	6	2	admin	commons		
+ * 44		from-to	6	1	admin	commons		
+ * 45		from-to	6	5	admin	commons		
+ * 46		from-to	2	7	admin	commons		
+ * 47		from-to	8	6	admin	commons		
+ * 48		from-to	8	1	admin	commons		
+ *
  */
 
 Metamaps.Import = {
   topicWhitelist: [
     'name', 'metacode', 'description', 'link', 'permission'
-	],
+  ],
   synapseWhitelist: [
     'desc', 'description', 'category', 'topic1', 'topic2', 'permission'
   ],
@@ -25,6 +36,8 @@ Metamaps.Import = {
       var text = e.originalEvent.clipboardData.getData('text/plain');
 
       var results = self.parseTabbedString(text);
+      if (results === false) return;
+
       var topics = results.topics;
       var synapses = results.synapses;
 
@@ -39,8 +52,15 @@ Metamaps.Import = {
   },
 
   abort: function(message) {
+    alert("Sorry, something went wrong!\n\n" + message);
     console.error(message);
   },
+
+	simplify: function(string) {
+		return string
+      .replace(/(^\s*|\s*$)/g, '')
+      .toLowerCase();
+	},
 
   parseTabbedString: function(text) {
     var self = Metamaps.Import;
@@ -49,9 +69,12 @@ Metamaps.Import = {
     var delim = "\n";
     if (text.indexOf("\r\n") !== -1) {
       delim = "\r\n";
+    } else if (text.indexOf("\r") !== -1) {
+      delim = "\r";
     }//if
 
     var STATES = {
+      ABORT: -1,
       UNKNOWN: 0,
       TOPICS_NEED_HEADERS: 1,
       SYNAPSES_NEED_HEADERS: 2,
@@ -67,7 +90,7 @@ Metamaps.Import = {
     var synapseHeaders = [];
 
     lines.forEach(function(line_raw, index) {
-      var line = line_raw.split('	'); // tab character
+      var line = line_raw.split("\t");
       var noblanks = line.filter(function(elt) {
         return elt !== "";
       });
@@ -76,10 +99,10 @@ Metamaps.Import = {
           if (noblanks.length === 0) {
             state = STATES.UNKNOWN;
             break;
-          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'topics') {
+          } else if (noblanks.length === 1 && self.simplify(line[0]) === 'topics') {
             state = STATES.TOPICS_NEED_HEADERS;
             break;
-          } else if (noblanks.length === 1 && line[0].toLowerCase() === 'synapses') {
+          } else if (noblanks.length === 1 && self.simplify(line[0]) === 'synapses') {
             state = STATES.SYNAPSES_NEED_HEADERS;
             break;
           }
@@ -89,7 +112,8 @@ Metamaps.Import = {
 
         case STATES.TOPICS_NEED_HEADERS:
           if (noblanks.length < 2) {
-            return self.abort("Not enough topic headers on line " + index);
+            self.abort("Not enough topic headers on line " + index);
+            state = STATES.ABORT;
           }
           topicHeaders = line.map(function(header, index) {
             return header.toLowerCase().replace('description', 'desc');
@@ -99,7 +123,8 @@ Metamaps.Import = {
 
         case STATES.SYNAPSES_NEED_HEADERS:
           if (noblanks.length < 2) {
-            return self.abort("Not enough synapse headers on line " + index);
+            self.abort("Not enough synapse headers on line " + index);
+            state = STATES.ABORT;
           }
           synapseHeaders = line.map(function(header, index) {
             return header.toLowerCase().replace('description', 'desc');
@@ -148,14 +173,19 @@ Metamaps.Import = {
             results.synapses.push(synapse);
           }
           break;
-
+        case STATES.ABORT:
+          ;
         default:
-          return self.abort("Invalid state while parsing import data. " +
-                            "Check code.");
+          self.abort("Invalid state while parsing import data. Check code.");
+          state = STATES.ABORT;
       }
     });
 
-    return results;
+    if (state === STATES.ABORT) {
+      return false;
+    } else {
+      return results;
+    }
   },
 
 
