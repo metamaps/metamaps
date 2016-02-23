@@ -1,10 +1,12 @@
-<%#
-  # @file
-  # Shows a list of all maps, or just a user's maps.
-  # TODO: What url is this accessible at?
-  #%>
-  
-
+<% #
+   # @file
+   # Shows a list of all maps, or just a user's maps.
+   # GET /explore/active(.:format)
+   # GET /explore/featured(.:format)
+   # GET /explore/mine(.:format)
+   # GET /explore/mapper/:id(.:format)
+   # GET /maps(.:format)
+   # %>
 
 <script>
     <% if @request == "you" %>
