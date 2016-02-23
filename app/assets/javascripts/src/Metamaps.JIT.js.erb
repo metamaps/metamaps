@@ -869,9 +869,9 @@ Metamaps.JIT = {
             }
             // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
             else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && authorized) {
-                if (tempInit == false) {
-                    tempNode = node;
-                    tempInit = true;
+                if (Metamaps.tempInit == false) {
+                    Metamaps.tempNode = node;
+                    Metamaps.tempInit = true;
 
                     Metamaps.Create.newTopic.hide();
                     Metamaps.Create.newSynapse.hide();
@@ -887,8 +887,8 @@ Metamaps.JIT = {
                         }
                     } else {
                         Metamaps.Mouse.synapseStartCoordinates = [{
-                            x: tempNode.pos.getc().x,
-                            y: tempNode.pos.getc().y
+                            x: Metamaps.tempNode.pos.getc().x,
+                            y: Metamaps.tempNode.pos.getc().y
                         }];
                     }
                     Metamaps.Mouse.synapseEndCoordinates = {
@@ -899,11 +899,11 @@ Metamaps.JIT = {
                 //
                 temp = eventInfo.getNode();
                 if (temp != false && temp.id != node.id && Metamaps.Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
-                    tempNode2 = temp;
+                    Metamaps.tempNode2 = temp;
                     
                     Metamaps.Mouse.synapseEndCoordinates = {
-                        x: tempNode2.pos.getc().x,
-                        y: tempNode2.pos.getc().y
+                        x: Metamaps.tempNode2.pos.getc().x,
+                        y: Metamaps.tempNode2.pos.getc().y
                     };
 
                     // before making the highlighted one bigger, make sure all the others are regular size
@@ -913,7 +913,7 @@ Metamaps.JIT = {
                     temp.setData('dim', 35, 'current');
                     Metamaps.Visualize.mGraph.plot();
                 } else if (!temp) {
-                    tempNode2 = null;
+                    Metamaps.tempNode2 = null;
                     Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
                         n.setData('dim', 25, 'current');
                     });
@@ -941,10 +941,10 @@ Metamaps.JIT = {
         }
     }, // onDragMoveTopicHandler
     onDragCancelHandler: function (node, eventInfo, e) {
-        tempNode = null;
-        if (tempNode2) tempNode2.setData('dim', 25, 'current');
-        tempNode2 = null;
-        tempInit = false;
+        Metamaps.tempNode = null;
+        if (Metamaps.tempNode2) Metamaps.tempNode2.setData('dim', 25, 'current');
+        Metamaps.tempNode2 = null;
+        Metamaps.tempInit = false;
         // reset the draw synapse positions to false
         Metamaps.Mouse.synapseStartCoordinates = [];
         Metamaps.Mouse.synapseEndCoordinates = null;
@@ -953,27 +953,27 @@ Metamaps.JIT = {
     onDragEndTopicHandler: function (node, eventInfo, e) {
         var midpoint = {}, pixelPos, mapping;
 
-        if (tempInit && tempNode2 == null) {
+        if (Metamaps.tempInit && Metamaps.tempNode2 == null) {
             // this means you want to add a new topic, and then a synapse
             Metamaps.Create.newTopic.addSynapse = true;
             Metamaps.Create.newTopic.open();
-        } else if (tempInit && tempNode2 != null) {
+        } else if (Metamaps.tempInit && Metamaps.tempNode2 != null) {
             // this means you want to create a synapse between two existing topics
             Metamaps.Create.newTopic.addSynapse = false;
-            Metamaps.Create.newSynapse.topic1id = tempNode.getData('topic').id;
-            Metamaps.Create.newSynapse.topic2id = tempNode2.getData('topic').id;
-            tempNode2.setData('dim', 25, 'current');
+            Metamaps.Create.newSynapse.topic1id = Metamaps.tempNode.getData('topic').id;
+            Metamaps.Create.newSynapse.topic2id = Metamaps.tempNode2.getData('topic').id;
+            Metamaps.tempNode2.setData('dim', 25, 'current');
             Metamaps.Visualize.mGraph.plot();
-            midpoint.x = tempNode.pos.getc().x + (tempNode2.pos.getc().x - tempNode.pos.getc().x) / 2;
-            midpoint.y = tempNode.pos.getc().y + (tempNode2.pos.getc().y - tempNode.pos.getc().y) / 2;
+            midpoint.x = Metamaps.tempNode.pos.getc().x + (Metamaps.tempNode2.pos.getc().x - Metamaps.tempNode.pos.getc().x) / 2;
+            midpoint.y = Metamaps.tempNode.pos.getc().y + (Metamaps.tempNode2.pos.getc().y - Metamaps.tempNode.pos.getc().y) / 2;
             pixelPos = Metamaps.Util.coordsToPixels(midpoint);
             $('#new_synapse').css('left', pixelPos.x + "px");
             $('#new_synapse').css('top', pixelPos.y + "px");
             Metamaps.Create.newSynapse.open();
-            tempNode = null;
-            tempNode2 = null;
-            tempInit = false;
-        } else if (!tempInit && node && !node.nodeFrom) {
+            Metamaps.tempNode = null;
+            Metamaps.tempNode2 = null;
+            Metamaps.tempInit = false;
+        } else if (!Metamaps.tempInit && node && !node.nodeFrom) {
             // this means you dragged an existing node, autosave that to the database
 
             // check whether to save mappings
@@ -1052,9 +1052,9 @@ Metamaps.JIT = {
             // reset the draw synapse positions to false
             Metamaps.Mouse.synapseStartCoordinates = [];
             Metamaps.Mouse.synapseEndCoordinates = null;
-            tempInit = false;
-            tempNode = null;
-            tempNode2 = null;
+            Metamaps.tempInit = false;
+            Metamaps.tempNode = null;
+            Metamaps.tempNode2 = null;
             if (!e.ctrlKey && !e.shiftKey) {
                 Metamaps.Control.deselectAllEdges();
                 Metamaps.Control.deselectAllNodes();
@@ -1693,8 +1693,8 @@ Metamaps.JIT = {
             easing = 1; // frictional value
 
         easing = 1;
-        window.clearInterval(panningInt)
-        panningInt = setInterval(function () {
+        window.clearInterval(Metamaps.panningInt)
+        Metamaps.panningInt = setInterval(function () {
             myTimer()
         }, 1);
 
@@ -1703,7 +1703,7 @@ Metamaps.JIT = {
             $(document).trigger(Metamaps.JIT.events.pan);
             easing = easing * 0.75;
 
-            if (easing < 0.1) window.clearInterval(panningInt);
+            if (easing < 0.1) window.clearInterval(Metamaps.panningInt);
         }
     }, // SmoothPanning
     renderMidArrow: function (from, to, dim, swap, canvas, placement, newSynapse) {
