@@ -1,3 +1,5 @@
+// TODO document this user agent function
+
 var labelType, useGradients, nativeTextSupport, animate;
 
 (function () {
@@ -14,11 +16,13 @@ var labelType, useGradients, nativeTextSupport, animate;
     animate = !(iStuff || !nativeCanvasSupport);
 })();
 
-// TODO eliminate these 4 global variables
-var panningInt; // this variable is used to store a 'setInterval' for the Metamaps.JIT.SmoothPanning() function, so that it can be cleared with window.clearInterval
-var tempNode = null,
-    tempInit = false,
-    tempNode2 = null;
+// TODO eliminate these 4 top-level variables
+Metamaps = {
+  panningInt: null,
+  tempNode: null,
+  tempInit: false,
+  tempNode2: null
+}
 
 Metamaps.Settings = {
     embed: false, // indicates that the app is on a page that is optimized for embedding in iFrames on other web pages
