@@ -5,9 +5,6 @@ class MetacodesController < ApplicationController
   # GET /metacodes.json
   def index
     @metacodes = Metacode.order("name").all
-    @metacodes.map do |metacode|
-      metacode.icon = ActionController::Base.helpers.asset_path(metacode.icon)
-    end
 
     respond_to do |format|
       format.html {
@@ -73,6 +70,6 @@ class MetacodesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def metacode_params
-    params.require(:metacode).permit(:id, :name, :icon, :color)
+    params.require(:metacode).permit(:id, :name, :aws_icon, :manual_icon, :color)
   end
 end

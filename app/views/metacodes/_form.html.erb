@@ -18,7 +18,8 @@
   </div>
   <div class="field">
     <%= f.label :icon %>
-    <%= f.file_field :icon %>
+    <%= f.hidden_field :manual_icon, value: nil %>
+    <%= f.file_field :aws_icon %>
     <div class="clearfloat"></div>
   </div>
   <div class="field">
