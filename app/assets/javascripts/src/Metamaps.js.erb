@@ -1948,6 +1948,7 @@ Metamaps.Realtime = {
         });
 
         if (Metamaps.Active.Mapper) {
+
           self.webrtc = new SimpleWebRTC({
             connection: self.socket,
             localVideoEl: self.videoId,
@@ -2035,7 +2036,7 @@ Metamaps.Realtime = {
           left: left + 'px'
       });
       v.$container.find('.video-cutoff').css({
-        border: '2px solid ' + self.mappersOnMap[id].color
+        border: '5px solid ' + self.mappersOnMap[id].color
       });
       self.videosInPosition += 1;
     },
@@ -2093,6 +2094,19 @@ Metamaps.Realtime = {
         self.room.chat.$container.show();
         self.room.room = 'map-' + Metamaps.Active.Map.id;
         self.checkForACallToJoin();
+
+        self.activeMapper = {
+            id: Metamaps.Active.Mapper.id,
+            name: Metamaps.Active.Mapper.get('name'),
+            username: Metamaps.Active.Mapper.get('name'),
+            image: Metamaps.Active.Mapper.get('image'),
+            color: Metamaps.Util.getPastelColor(),
+            self: true
+        };
+        self.localVideo.view.$container.find('.video-cutoff').css({
+          border: '5px solid ' + self.activeMapper.color
+        });
+        self.room.chat.addParticipant(self.activeMapper);
     },
     checkForACallToJoin: function () {
       var self = Metamaps.Realtime;
@@ -2225,7 +2239,8 @@ Metamaps.Realtime = {
         inviter: Metamaps.Active.Mapper.id,
         invited: userid
       });
-      Metamaps.GlobalUI.notifyUser('Invitation pending...', true);
+      self.room.chat.invitationPending(userid);
+      Metamaps.GlobalUI.clearNotify();
     },
     inviteToJoin: function (userid) {
       var self = Metamaps.Realtime;
@@ -2242,12 +2257,14 @@ Metamaps.Realtime = {
       var username = self.mappersOnMap[userid].name;
       Metamaps.GlobalUI.notifyUser('Conversation starting...');
       self.joinCall();
+      self.room.chat.invitationAnswered(userid);
     },
     callDenied: function (userid) {
       var self = Metamaps.Realtime;
 
       var username = self.mappersOnMap[userid].name;
       Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invite.');
+      self.room.chat.invitationAnswered(userid);
     },
     joinCall: function () {
       var self = Metamaps.Realtime;
@@ -2269,6 +2286,7 @@ Metamaps.Realtime = {
       });
       self.webrtc.startLocalVideo();
       Metamaps.GlobalUI.clearNotify();
+      self.room.chat.mapperJoinedCall(Metamaps.Active.Mapper.id);
     },
     leaveCall: function () {
       var self = Metamaps.Realtime;
@@ -2278,6 +2296,7 @@ Metamaps.Realtime = {
         id: Metamaps.Active.Mapper.id
       });
 
+      self.room.chat.mapperLeftCall(Metamaps.Active.Mapper.id);
       self.room.leaveVideoOnly();
       self.inConversation = false;
       self.videosInPosition = 1;
@@ -2535,13 +2554,6 @@ Metamaps.Realtime = {
 
         // create an item for them in the realtime box
         if (data.userid !== Metamaps.Active.Mapper.id && self.status) {
-            var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
-            mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
-            mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
-            mapperListItem += data.username;
-            mapperListItem += '<div class="littleJuntoIcon"></div>';
-            mapperListItem += '</li>';
-            //$('#mapper' + data.userid).remove();
             self.room.chat.addParticipant(self.mappersOnMap[data.userid]);
 
             // create a div for the collaborators compass
@@ -2598,7 +2610,8 @@ Metamaps.Realtime = {
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just left the map');
 
-        if (self.inConversation && self.countOthersInConversation() < 2) {
+        if ((self.inConversation && self.countOthersInConversation() === 0) ||
+            (!self.inConversation && self.countOthersInConversation() === 1)) {
           self.callEnded();
         }
     },

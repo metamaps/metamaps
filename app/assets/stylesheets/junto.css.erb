@@ -170,7 +170,7 @@
 .chat-box .participants {
   width: 100%;
   min-height: 150px;
-  padding: 16px 0px 0px 0px;
+  padding: 16px 0px 16px 0px;
   text-align: left;
   color: #f5f5f5;
   overflow-y: auto;
@@ -226,6 +226,10 @@
   padding: 2px 8px 0;
   text-align: left;
 }
+.chat-box .participants .participant.is-self .chat-participant-invite-call,
+.chat-box .participants .participant.is-self .chat-participant-invite-join {
+  display: none !important;
+}
 .chat-box .participants.is-live .participant .chat-participant-invite-call {
   display: none;
 }
@@ -240,6 +244,10 @@
  {
   float: right;
   background: #4FC059 url(<%= asset_path 'invitepeer16.png' %>) no-repeat center center;
+}
+.chat-box .participants .participant.pending .chat-participant-invite-call,
+.chat-box .participants .participant.pending .chat-participant-invite-join {
+    background: #dab539 url(<%= asset_path 'ellipsis.gif' %>) no-repeat center center;
 }
 .chat-box .participants .participant .chat-participant-participating {
   float: right;
