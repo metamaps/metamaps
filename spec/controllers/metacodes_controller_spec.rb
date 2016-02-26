@@ -55,7 +55,8 @@ RSpec.describe MetacodesController, type: :controller do
   describe 'PUT #update' do
     context 'with valid params' do
       let(:new_attributes) do
-        { icon: 'https://newimages.ca/cool-image.jpg',
+        { manual_icon: 'https://newimages.ca/cool-image.jpg',
+          aws_icon: nil,
           color: '#ffffff',
           name: 'Cognition' }
       end
