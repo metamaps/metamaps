@@ -7,7 +7,6 @@ class TopicsController < ApplicationController
 
     # GET /topics/autocomplete_topic
     def autocomplete_topic
-        @current = current_user
         term = params[:term]
         if term && !term.empty?
             @topics = Topic.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
@@ -15,7 +14,7 @@ class TopicsController < ApplicationController
             #read this next line as 'delete a topic if its private and you're either 
             #1. logged out or 2. logged in but not the topic creator
             @topics.to_a.delete_if {|t| t.permission == "private" && 
-                (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+                (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
         else
             @topics = []
         end
@@ -24,8 +23,7 @@ class TopicsController < ApplicationController
 
     # GET topics/:id
     def show
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+        @topic = Topic.find(params[:id]).authorize_to_show(current_user)
 
         if not @topic
             redirect_to root_url, notice: "Access denied. That topic is private." and return
@@ -33,8 +31,8 @@ class TopicsController < ApplicationController
 
         respond_to do |format|
             format.html { 
-                @alltopics = ([@topic] + @topic.relatives).delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) } # should limit to topics visible to user
-                @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @alltopics = ([@topic] + @topic.relatives).delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) } # should limit to topics visible to user
+                @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && current_user.id != s.user_id)) }
 
                 @allcreators = []
                 @alltopics.each do |t|
@@ -56,15 +54,14 @@ class TopicsController < ApplicationController
 
     # GET topics/:id/network
     def network
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+        @topic = Topic.find(params[:id]).authorize_to_show(current_user)
 
         if not @topic
             redirect_to root_url, notice: "Access denied. That topic is private." and return
         end
 
-        @alltopics = @topic.relatives.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-        @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @alltopics = @topic.relatives.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
+        @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && current_user.id != s.user_id)) }
         @allcreators = []
         @allcreators.push(@topic.user)
         @alltopics.each do |t|
@@ -91,8 +88,7 @@ class TopicsController < ApplicationController
 
     # GET topics/:id/relative_numbers
     def relative_numbers
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+        @topic = Topic.find(params[:id]).authorize_to_show(current_user)
 
         if not @topic
             redirect_to root_url, notice: "Access denied. That topic is private." and return
@@ -102,7 +98,7 @@ class TopicsController < ApplicationController
 
         @alltopics = @topic.relatives.to_a.delete_if {|t| 
             @topicsAlreadyHas.index(t.id.to_s) != nil ||
-                (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
+                (t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)))
         }
 
         @alltopics.uniq!
@@ -123,8 +119,7 @@ class TopicsController < ApplicationController
 
     # GET topics/:id/relatives
     def relatives
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+        @topic = Topic.find(params[:id]).authorize_to_show(current_user)
 
         if not @topic
             redirect_to root_url, notice: "Access denied. That topic is private." and return
@@ -135,7 +130,7 @@ class TopicsController < ApplicationController
         @alltopics = @topic.relatives.to_a.delete_if {|t| 
             @topicsAlreadyHas.index(t.id.to_s) != nil ||
                 (params[:metacode] && t.metacode_id.to_s != params[:metacode]) ||
-                (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
+                (t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)))
         }
 
         @alltopics.uniq!
@@ -198,8 +193,7 @@ class TopicsController < ApplicationController
 
     # DELETE topics/:id
     def destroy
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_delete(@current)
+        @topic = Topic.find(params[:id]).authorize_to_delete(current_user)
         @topic.delete if @topic
 
         respond_to do |format|

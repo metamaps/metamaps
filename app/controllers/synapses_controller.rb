@@ -9,7 +9,7 @@ class SynapsesController < ApplicationController
   def show
     @synapse = Synapse.find(params[:id])
 
-    #.authorize_to_show(@current)
+    #.authorize_to_show(current_user)
 	
     #if not @synapse
     #  redirect_to root_url and return

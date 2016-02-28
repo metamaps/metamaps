@@ -8,15 +8,13 @@ class MainController < ApplicationController
   
   # home page
   def home
-    @current = current_user
-   
+    @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(1).per(20)
     respond_to do |format|
         format.html { 
           if authenticated?
-            @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(1).per(20)
-            respond_with(@maps, @current) 
+            render 'main/home'
           else 
-            respond_with(@current) 
+            render 'maps/activemaps'
           end
         }
     end
@@ -213,5 +211,4 @@ class MainController < ApplicationController
 
     render json: autocomplete_synapse_array_json(@synapses)
   end 
-
 end

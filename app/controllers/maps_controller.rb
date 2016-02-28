@@ -7,10 +7,10 @@ class MapsController < ApplicationController
 
     # GET /explore/active
     def activemaps
-        @current = current_user
         page = params[:page].present? ? params[:page] : 1
         @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
 
+        # root url => main/home. main/home renders maps/activemaps view.
         redirect_to root_url and return if authenticated?
 
         respond_to do |format|
@@ -21,7 +21,6 @@ class MapsController < ApplicationController
 
     # GET /explore/featured
     def featuredmaps
-        @current = current_user
         page = params[:page].present? ? params[:page] : 1
         @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private")
                    .order("updated_at DESC").page(page).per(20)
@@ -36,10 +35,9 @@ class MapsController < ApplicationController
     def mymaps
         return redirect_to activemaps_url if !authenticated?
 
-        @current = current_user
         page = params[:page].present? ? params[:page] : 1
         # don't need to exclude private maps because they all belong to you
-        @maps = Map.where("maps.user_id = ?", @current.id).order("updated_at DESC").page(page).per(20)
+        @maps = Map.where("maps.user_id = ?", current_user.id).order("updated_at DESC").page(page).per(20)
 
         respond_to do |format|
             format.html { respond_with(@maps, @user) }
@@ -49,7 +47,6 @@ class MapsController < ApplicationController
 
     # GET /explore/mapper/:id
     def usermaps
-        @current = current_user
         page = params[:page].present? ? params[:page] : 1
         @user = User.find(params[:id])
         @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
@@ -62,8 +59,7 @@ class MapsController < ApplicationController
 
     # GET maps/:id
     def show
-        @current = current_user
-        @map = Map.find(params[:id]).authorize_to_show(@current)
+        @map = Map.find(params[:id]).authorize_to_show(current_user)
 
         if not @map
             redirect_to root_url, notice: "Access denied. That map is private." and return
@@ -72,11 +68,11 @@ class MapsController < ApplicationController
         respond_to do |format|
             format.html { 
                 @allmappers = @map.contributors
-                @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-                @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
+                @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && current_user.id != s.user_id)) }
                 @allmappings = @map.mappings.to_a.delete_if {|m| 
                     object = m.mappable
-                    !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
+                    !object || (object.permission == "private" && (!authenticated? || (authenticated? && current_user.id != object.user_id)))
                 }
 
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
@@ -87,19 +83,18 @@ class MapsController < ApplicationController
 
     # GET maps/:id/contains
     def contains
-        @current = current_user
-        @map = Map.find(params[:id]).authorize_to_show(@current)
+        @map = Map.find(params[:id]).authorize_to_show(current_user)
 
         if not @map
             redirect_to root_url, notice: "Access denied. That map is private." and return
         end
 
         @allmappers = @map.contributors
-        @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-        @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
+        @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && current_user.id != s.user_id)) }
         @allmappings = @map.mappings.to_a.delete_if {|m| 
             object = m.mappable
-            !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
+            !object || (object.permission == "private" && (!authenticated? || (authenticated? && current_user.id != object.user_id)))
         }
 
         @json = Hash.new()
@@ -167,8 +162,7 @@ class MapsController < ApplicationController
 
     # PUT maps/:id
     def update
-        @current = current_user
-        @map = Map.find(params[:id]).authorize_to_edit(@current)
+        @map = Map.find(params[:id]).authorize_to_edit(current_user)
 
         respond_to do |format|
             if !@map 
@@ -183,8 +177,7 @@ class MapsController < ApplicationController
 
     # POST maps/:id/upload_screenshot
     def screenshot
-        @current = current_user
-        @map = Map.find(params[:id]).authorize_to_edit(@current)
+        @map = Map.find(params[:id]).authorize_to_edit(current_user)
 
         if @map
           png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
@@ -207,9 +200,7 @@ class MapsController < ApplicationController
 
     # DELETE maps/:id
     def destroy
-        @current = current_user
-
-        @map = Map.find(params[:id]).authorize_to_delete(@current)
+        @map = Map.find(params[:id]).authorize_to_delete(current_user)
 
         @map.delete if @map
 
