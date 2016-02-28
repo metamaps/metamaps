@@ -1,6 +1,6 @@
 class MetacodeSetsController < ApplicationController
   
-  before_filter :require_admin
+  before_action :require_admin
 
   # GET /metacode_sets
   # GET /metacode_sets.json

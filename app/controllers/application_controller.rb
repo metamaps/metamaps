@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery
 
-  before_filter :get_invite_link
+  before_action :get_invite_link
   after_action :allow_embedding
   
   # this is for global login
