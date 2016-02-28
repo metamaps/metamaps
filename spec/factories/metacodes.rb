@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :metacode do
     sequence(:name) { |n| "Cool Metacode ##{n}" }
-    icon 'https://images.com/image.png'
+    manual_icon 'https://images.com/image.png'
+    aws_icon nil
     color '#cccccc'
   end
 end

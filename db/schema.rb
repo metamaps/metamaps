@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120061513) do
+ActiveRecord::Schema.define(version: 20160223061711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,19 @@ ActiveRecord::Schema.define(version: 20160120061513) do
 
   add_index "maps", ["user_id"], name: "index_maps_on_user_id", using: :btree
 
+  create_table "messages", force: :cascade do |t|
+    t.text     "message"
+    t.integer  "user_id"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "messages", ["resource_id"], name: "index_messages_on_resource_id", using: :btree
+  add_index "messages", ["resource_type"], name: "index_messages_on_resource_type", using: :btree
+  add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
+
   create_table "metacode_sets", force: :cascade do |t|
     t.string   "name"
     t.text     "desc"
@@ -76,10 +89,14 @@ ActiveRecord::Schema.define(version: 20160120061513) do
 
   create_table "metacodes", force: :cascade do |t|
     t.text     "name"
-    t.string   "icon"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "manual_icon"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.string   "color"
+    t.string   "aws_icon_file_name"
+    t.string   "aws_icon_content_type"
+    t.integer  "aws_icon_file_size"
+    t.datetime "aws_icon_updated_at"
   end
 
   create_table "synapses", force: :cascade do |t|

@@ -272,6 +272,3 @@ DEPENDENCIES
   tunemygc
   uglifier
   uservoice-ruby
-
-BUNDLED WITH
-   1.11.2
