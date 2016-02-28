@@ -10,12 +10,11 @@ class MapsController < ApplicationController
         @current = current_user
         page = params[:page].present? ? params[:page] : 1
         @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
-        @request = "active"
 
         redirect_to root_url and return if authenticated?
 
         respond_to do |format|
-            format.html { respond_with(@maps, @request, @user) }
+            format.html { respond_with(@maps, @user) }
             format.json { render json: @maps }
         end
     end
@@ -26,10 +25,9 @@ class MapsController < ApplicationController
         page = params[:page].present? ? params[:page] : 1
         @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private")
                    .order("updated_at DESC").page(page).per(20)
-        @request = "featured"
 
         respond_to do |format|
-            format.html { respond_with(@maps, @request, @user) }
+            format.html { respond_with(@maps, @user) }
             format.json { render json: @maps }
         end
     end
@@ -42,10 +40,9 @@ class MapsController < ApplicationController
         page = params[:page].present? ? params[:page] : 1
         # don't need to exclude private maps because they all belong to you
         @maps = Map.where("maps.user_id = ?", @current.id).order("updated_at DESC").page(page).per(20)
-        @request = "you"
 
         respond_to do |format|
-            format.html { respond_with(@maps, @request, @user) }
+            format.html { respond_with(@maps, @user) }
             format.json { render json: @maps }
         end
     end
@@ -56,10 +53,9 @@ class MapsController < ApplicationController
         page = params[:page].present? ? params[:page] : 1
         @user = User.find(params[:id])
         @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
-        @request = "mapper"
 
         respond_to do |format|
-            format.html { respond_with(@maps, @request, @user) }
+            format.html { respond_with(@maps, @user) }
             format.json { render json: @maps }
         end
     end
