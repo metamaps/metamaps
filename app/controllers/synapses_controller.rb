@@ -1,7 +1,7 @@
 class SynapsesController < ApplicationController
   include TopicsHelper
 
-  before_filter :require_user, only: [:create, :update, :destroy]
+  before_action :require_user, only: [:create, :update, :destroy]
     
   respond_to :json
   
