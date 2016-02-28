@@ -1,12 +1,12 @@
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.where('permission IN ("public", "commons") OR user_id = ?', @user.id)
+      scope.where('permission IN ("public", "commons") OR user_id = ?', user.id)
     end
   end
 
   def activemaps?
-    @user.blank? # redirect to root url if authenticated for some reason
+    user.blank? # redirect to root url if authenticated for some reason
   end
 
   def featuredmaps?
@@ -14,7 +14,7 @@ class MapPolicy < ApplicationPolicy
   end
 
   def mymaps?
-    @user.present?
+    user.present?
   end
 
   def usermaps?
@@ -22,7 +22,7 @@ class MapPolicy < ApplicationPolicy
   end
 
   def show?
-    @record.permission == 'commons' || @record.permission == 'public' || @record.user == @user
+    record.permission == 'commons' || record.permission == 'public' || record.user == user
   end
 
   def contains?
@@ -30,11 +30,11 @@ class MapPolicy < ApplicationPolicy
   end
 
   def create?
-    @user.present?
+    user.present?
   end
 
   def update?
-    @user.present? && (@record.permission == 'commons' || @record.user == @user)
+    user.present? && (record.permission == 'commons' || record.user == user)
     true
   end
 
@@ -43,6 +43,6 @@ class MapPolicy < ApplicationPolicy
   end
 
   def destroy?
-    @record.user == @user || @user.admin
+    record.user == user || user.admin
   end
 end
