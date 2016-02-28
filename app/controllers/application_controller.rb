@@ -12,13 +12,7 @@ class ApplicationController < ActionController::Base
   helper_method :admin?
   
   def after_sign_in_path_for(resource)
-    unsafe_uri = request.env["REQUEST_URI"]
-    if unsafe_uri.starts_with?('http') && !unsafe_uri.starts_with?('https')
-      protocol = 'http'
-    else
-      protocol = 'https'
-    end
-    sign_in_url = url_for(:action => 'new', :controller => 'sessions', :only_path => false, :protocol => protocol)
+    sign_in_url = url_for(:action => 'new', :controller => 'sessions', :only_path => false, :protocol => 'https')
 
     if request.referer == sign_in_url
       super
