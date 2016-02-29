@@ -1,5 +1,4 @@
 class MapsController < ApplicationController
-
     before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
     respond_to :html, :json, :csv
@@ -10,38 +9,24 @@ class MapsController < ApplicationController
     # GET /explore/featured
     # GET /explore/mapper/:id
     def index
-
-        if request.path == "/explore"
-            redirect_to activemaps_url and return
-        end
+        return redirect_to activemaps_url if request.path == "/explore"
 
         @current = current_user
-        @user = nil
         @maps = []
-        @mapperId = nil
-
-        if !params[:page] 
-            page = 1
-        else 
-            page = params[:page]
-        end
+        page = params[:page].present? ? params[:page] : 1
 
         if request.path.index("/explore/active") != nil
             @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
             @request = "active"
-
         elsif request.path.index("/explore/featured") != nil
             @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private").order("updated_at DESC").page(page).per(20)
             @request = "featured"
-
         elsif request.path.index('/explore/mine') != nil  # looking for maps by me
-            if !authenticated?
-                redirect_to activemaps_url and return
-            end
+            return redirect_to activemaps_url if !authenticated?
+
             # don't need to exclude private maps because they all belong to you
             @maps = Map.where("maps.user_id = ?", @current.id).order("updated_at DESC").page(page).per(20)
             @request = "you"
-
         elsif request.path.index('/explore/mapper/') != nil  # looking for maps by a mapper
             @user = User.find(params[:id])
             @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
@@ -121,7 +106,6 @@ class MapsController < ApplicationController
 
     # POST maps
     def create
-
         @user = current_user
         @map = Map.new()
         @map.name = params[:name]
@@ -129,40 +113,45 @@ class MapsController < ApplicationController
         @map.permission = params[:permission]
         @map.user = @user
         @map.arranged = false 
-        @map.save     
 
         if params[:topicsToMap]
             @all = params[:topicsToMap]
             @all = @all.split(',')
             @all.each do |topic|
                 topic = topic.split('/')
-                @mapping = Mapping.new()
-                @mapping.user = @user
-                @mapping.map  = @map
-                @mapping.mappable = Topic.find(topic[0])
-                @mapping.xloc = topic[1]
-                @mapping.yloc = topic[2]
-                @mapping.save
+                mapping = Mapping.new()
+                mapping.user = @user
+                mapping.mappable = Topic.find(topic[0])
+                mapping.xloc = topic[1]
+                mapping.yloc = topic[2]
+                @map.topicmappings << mapping
+                mapping.save
             end
 
             if params[:synapsesToMap]
                 @synAll = params[:synapsesToMap]
                 @synAll = @synAll.split(',')
                 @synAll.each do |synapse_id|
-                    @mapping = Mapping.new()
-                    @mapping.user = @user
-                    @mapping.map = @map
-                    @mapping.mappable = Synapse.find(synapse_id)
-                    @mapping.save
+                    mapping = Mapping.new()
+                    mapping.user = @user
+                    mapping.map = @map
+                    mapping.mappable = Synapse.find(synapse_id)
+                    @map.synapsemappings << mapping
+                    mapping.save
                 end
             end
 
             @map.arranged = true
-            @map.save      
         end
 
-        respond_to do |format|
+        if @map.save
+          respond_to do |format|
             format.json { render :json => @map }
+          end
+        else
+          respond_to do |format|
+            format.json { render :json => "invalid params" }
+          end
         end
     end
 

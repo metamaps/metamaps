@@ -1,36 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe TopicsController, type: :controller do
-  let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
-  end
-
-  let(:invalid_attributes) do
-    skip('Add a hash of attributes invalid for your model')
-  end
-
-  let(:valid_session) { {} }
-
-  describe 'GET #index' do
-    it 'assigns all topics as @topics' do
-      topic = Topic.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:topics)).to eq([topic])
-    end
+  let(:topic) { create(:topic) }
+  let(:valid_attributes) { topic.attributes.except('id') }
+  let(:invalid_attributes) { { permission: :invalid_lol } }
+  before :each do
+    sign_in
   end
 
   describe 'GET #show' do
     it 'assigns the requested topic as @topic' do
-      topic = Topic.create! valid_attributes
-      get :show, { id: topic.to_param }, valid_session
-      expect(assigns(:topic)).to eq(topic)
-    end
-  end
-
-  describe 'GET #edit' do
-    it 'assigns the requested topic as @topic' do
-      topic = Topic.create! valid_attributes
-      get :edit, { id: topic.to_param }, valid_session
+      get :show, { id: topic.to_param, format: :json }
       expect(assigns(:topic)).to eq(topic)
     end
   end
@@ -38,32 +18,28 @@ RSpec.describe TopicsController, type: :controller do
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new Topic' do
+        topic.reload # ensure it's created
         expect do
-          post :create, { topic: valid_attributes }, valid_session
+          post :create, { topic: valid_attributes, format: :json }
         end.to change(Topic, :count).by(1)
       end
 
       it 'assigns a newly created topic as @topic' do
-        post :create, { topic: valid_attributes }, valid_session
+        post :create, { topic: valid_attributes, format: :json }
         expect(assigns(:topic)).to be_a(Topic)
         expect(assigns(:topic)).to be_persisted
       end
 
-      it 'redirects to the created topic' do
-        post :create, { topic: valid_attributes }, valid_session
-        expect(response).to redirect_to(Topic.last)
+      it 'returns 201 CREATED' do 
+        post :create, { topic: valid_attributes, format: :json }
+        expect(response.status).to eq 201
       end
     end
 
     context 'with invalid params' do
       it 'assigns a newly created but unsaved topic as @topic' do
-        post :create, { topic: invalid_attributes }, valid_session
+        post :create, { topic: invalid_attributes, format: :json }
         expect(assigns(:topic)).to be_a_new(Topic)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, { topic: invalid_attributes }, valid_session
-        expect(response).to render_template('new')
       end
     end
   end
@@ -71,66 +47,56 @@ RSpec.describe TopicsController, type: :controller do
   describe 'PUT #update' do
     context 'with valid params' do
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        { name: 'Cool Topic with no number',
+          desc: 'This is a cool topic.',
+          link: 'https://cool-topics.com/4',
+          permission: :public }
       end
 
       it 'updates the requested topic' do
-        topic = Topic.create! valid_attributes
         put :update,
-            { id: topic.to_param, topic: new_attributes },
-            valid_session
+            { id: topic.to_param, topic: new_attributes, format: :json }
         topic.reload
-        skip('Add assertions for updated state')
+        expect(topic.name).to eq 'Cool Topic with no number'
+        expect(topic.desc).to eq 'This is a cool topic.'
+        expect(topic.link).to eq 'https://cool-topics.com/4'
+        expect(topic.permission).to eq 'public'
       end
 
       it 'assigns the requested topic as @topic' do
-        topic = Topic.create! valid_attributes
         put :update,
-            { id: topic.to_param, topic: valid_attributes },
-            valid_session
+            { id: topic.to_param, topic: valid_attributes, format: :json }
         expect(assigns(:topic)).to eq(topic)
       end
 
-      it 'redirects to the topic' do
-        topic = Topic.create! valid_attributes
+      it 'returns status of no content' do 
         put :update,
-            { id: topic.to_param, topic: valid_attributes },
-            valid_session
-        expect(response).to redirect_to(topic)
+            { id: topic.to_param, topic: valid_attributes, format: :json }
+        expect(response.status).to eq 204
       end
     end
 
     context 'with invalid params' do
       it 'assigns the topic as @topic' do
-        topic = Topic.create! valid_attributes
         put :update,
-            { id: topic.to_param, topic: invalid_attributes },
-            valid_session
+            { id: topic.to_param, topic: invalid_attributes, format: :json }
         expect(assigns(:topic)).to eq(topic)
-      end
-
-      it "re-renders the 'edit' template" do
-        topic = Topic.create! valid_attributes
-        put :update,
-            { id: topic.to_param, topic: invalid_attributes },
-            valid_session
-        expect(response).to render_template('edit')
       end
     end
   end
 
   describe 'DELETE #destroy' do
+    let(:owned_topic) { create(:topic, user: controller.current_user) }
     it 'destroys the requested topic' do
-      topic = Topic.create! valid_attributes
+      owned_topic.reload # ensure it's there
       expect do
-        delete :destroy, { id: topic.to_param }, valid_session
+        delete :destroy, { id: owned_topic.to_param, format: :json }
       end.to change(Topic, :count).by(-1)
     end
 
-    it 'redirects to the topics list' do
-      topic = Topic.create! valid_attributes
-      delete :destroy, { id: topic.to_param }, valid_session
-      expect(response).to redirect_to(topics_url)
+    it 'return 204 NO CONTENT' do 
+      delete :destroy, { id: topic.to_param, format: :json }
+      expect(response.status).to eq 204
     end
   end
 end

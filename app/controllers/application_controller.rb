@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   before_filter :get_invite_link
-
+  after_action :allow_embedding
+  
   # this is for global login
   include ContentHelper
 
@@ -64,9 +65,13 @@ private
   end
 
   def get_invite_link
-    unsafe_uri = request.env["REQUEST_URI"] || 'https://metamaps.cc'
-    valid_url = /^https?:\/\/([\w\.-]+)(:\d{1,5})?\/?$/
-    safe_uri = (unsafe_uri.match(valid_url)) ? unsafe_uri : '//metamaps.cc/'
-    @invite_link = "#{safe_uri}join" + (current_user ? "?code=#{current_user.code}" : "")
+    @invite_link = "#{request.base_url}/join" + (current_user ? "?code=#{current_user.code}" : "")
+  end
+
+  def allow_embedding
+    #allow all
+    response.headers.except! 'X-Frame-Options'
+    # or allow a whitelist
+    # response.headers['X-Frame-Options'] = 'ALLOW-FROM http://blog.metamaps.cc'
   end
 end

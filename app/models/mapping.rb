@@ -4,10 +4,15 @@ class Mapping < ActiveRecord::Base
   scope :synapsemapping, -> { where(mappable_type: :Synapse) }
 
   belongs_to :mappable, polymorphic: true
-
-  belongs_to :map, :class_name => "Map", :foreign_key => "map_id"
-
+  belongs_to :map, :class_name => "Map", :foreign_key => "map_id", touch: true
   belongs_to :user
+
+  validates :xloc, presence: true, 
+    unless: Proc.new { |m| m.mappable_type == 'Synapse' }
+  validates :yloc, presence: true,
+    unless: Proc.new { |m| m.mappable_type == 'Synapse' }
+  validates :map, presence: true
+  validates :mappable, presence: true
   
   def user_name
     self.user.name

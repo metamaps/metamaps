@@ -1,0 +1,42 @@
+{
+  "name": "Map Contents",
+  "type": "object",
+  "properties": {
+    "map": {
+      "type": "object"
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "synapses": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "mappers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "map",
+    "topics",
+    "synapses",
+    "mappings",
+    "mappers"
+  ]
+}
+
+

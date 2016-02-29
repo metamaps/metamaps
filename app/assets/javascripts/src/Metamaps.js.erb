@@ -1,3 +1,5 @@
+// TODO document this user agent function
+
 var labelType, useGradients, nativeTextSupport, animate;
 
 (function () {
@@ -14,11 +16,13 @@ var labelType, useGradients, nativeTextSupport, animate;
     animate = !(iStuff || !nativeCanvasSupport);
 })();
 
-// TODO eliminate these 4 global variables
-var panningInt; // this variable is used to store a 'setInterval' for the Metamaps.JIT.SmoothPanning() function, so that it can be cleared with window.clearInterval
-var tempNode = null,
-    tempInit = false,
-    tempNode2 = null;
+// TODO eliminate these 4 top-level variables
+Metamaps = {
+  panningInt: null,
+  tempNode: null,
+  tempInit: false,
+  tempNode2: null
+}
 
 Metamaps.Settings = {
     embed: false, // indicates that the app is on a page that is optimized for embedding in iFrames on other web pages
@@ -736,10 +740,6 @@ Metamaps.Create = {
         init: function () {
             var self = Metamaps.Create.newSynapse;
 
-            $('#synapse_desc').keyup(function () {
-                Metamaps.Create.newSynapse.description = $(this).val();
-            });
-
             var synapseBloodhound = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -795,6 +795,22 @@ Metamaps.Create = {
                 }]
           );
 
+            $('#synapse_desc').keyup(function (e) {
+              var ESC = 27, BACKSPACE = 8, DELETE = 46;
+              if (e.keyCode === BACKSPACE && $(this).val() === "" ||
+                  e.keyCode === DELETE && $(this).val() === "" ||
+                  e.keyCode === ESC) {
+                Metamaps.Create.newSynapse.hide();
+              }//if
+              Metamaps.Create.newSynapse.description = $(this).val();
+            });
+
+            $('#synapse_desc').focusout(function() {
+              if (Metamaps.Create.newSynapse.beingCreated) {
+                Metamaps.Synapse.createSynapseLocally();
+              }
+            });
+
             $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
                 if (datum.id) { // if they clicked on an existing synapse get it
                     Metamaps.Synapse.getSynapseFromAutocomplete(datum.id);
@@ -811,7 +827,7 @@ Metamaps.Create = {
         topic2id: null,
         newSynapseId: null,
         open: function () {
-            $('#new_synapse').fadeIn('fast', function () {
+            $('#new_synapse').fadeIn(100, function () {
                 $('#synapse_desc').focus();
             });
             Metamaps.Create.newSynapse.beingCreated = true;

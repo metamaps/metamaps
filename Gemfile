@@ -42,6 +42,8 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+  gem 'json-schema'
 end
 
 group :production do #this is used on heroku

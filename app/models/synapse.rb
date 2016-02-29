@@ -1,5 +1,4 @@
 class Synapse < ActiveRecord::Base
-
   belongs_to :user
 
   belongs_to :topic1, :class_name => "Topic", :foreign_key => "node1_id"
@@ -13,17 +12,25 @@ class Synapse < ActiveRecord::Base
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
 
+  validates :category, inclusion: { in: ['from-to', 'both'], allow_nil: true }
+
+  # :nocov:
   def user_name
-    self.user.name
+    user.name
   end
+  # :nocov:
 
+  # :nocov:
   def user_image
-    self.user.image.url
+    user.image.url
   end
+  # :nocov:
 
+  # :nocov:
   def as_json(options={})
     super(:methods =>[:user_name, :user_image])
   end
+  # :nocov:
   
   ##### PERMISSIONS ######
   
