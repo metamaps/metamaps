@@ -235,6 +235,7 @@ Metamaps.Views.chatView = (function () {
       this.$participants.removeClass('is-participating');
       this.$button.removeClass('active');
       this.$participants.find('.participant').removeClass('active');
+      this.$participants.find('.participant').removeClass('pending');
     }
 
     chatView.prototype.leaveConversation = function () {

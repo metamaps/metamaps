@@ -1,5 +1,5 @@
 .collaborator-video {
-  z-index: 2;
+  z-index: 1;
   position: absolute;
   width: 150px;
   height: 150px;
@@ -236,7 +236,7 @@
 .chat-box .participants .participant .chat-participant-invite-join {
   display: none;
 }
-.chat-box .participants.is-live .participant:not(.active) .chat-participant-invite-join {
+.chat-box .participants.is-live.is-participating .participant:not(.active) .chat-participant-invite-join {
   display: block;
 }
 .chat-box .participants .participant .chat-participant-invite-call,

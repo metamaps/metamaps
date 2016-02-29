@@ -17,6 +17,7 @@ function start() {
                 userid: data.userid,
                 username: data.username,
                 userrealtime: data.userrealtime,
+                userinconversation: data.userinconversation,
                 userimage: data.userimage
             };
             socket.broadcast.emit(data.userToNotify + '-' + data.mapid + '-UpdateMapperList', existingUser);
@@ -25,7 +26,7 @@ function start() {
         // as a new mapper check whether there's a call in progress to join
         socket.on('checkForCall', function (data) {
           var socketsInRoom = io.sockets.clients(data.room);
-          if (socketsInRoom.length) socket.emit('maps-' + data.mapid + '-callInProgress', socketsInRoom.length);
+          if (socketsInRoom.length) socket.emit('maps-' + data.mapid + '-callInProgress');
         });
         // send the invitation to start a call
         socket.on('inviteACall', function (data) {
@@ -42,6 +43,9 @@ function start() {
         });
         socket.on('callDenied', function (data) {
           socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callDenied', data.invited);
+        });
+        socket.on('inviteDenied', function (data) {
+          socket.broadcast.emit(data.inviter + '-' + data.mapid + '-inviteDenied', data.invited);
         });
         socket.on('mapperJoinedCall', function (data) {
           socket.broadcast.emit('maps-' + data.mapid + '-mapperJoinedCall', data.id);

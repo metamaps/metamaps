@@ -2126,7 +2126,7 @@ Metamaps.Realtime = {
       var self = Metamaps.Realtime;
       self.socket.emit('checkForCall', { room: self.room.room, mapid: Metamaps.Active.Map.id });
     },
-    promptToJoin: function (data) {
+    promptToJoin: function () {
       var self = Metamaps.Realtime;
 
       var notifyText = 'There\'s a conversation happening, want to join?';
@@ -2224,7 +2224,7 @@ Metamaps.Realtime = {
       var username = self.mappersOnMap[inviter].name;
       var notifyText = username + ' is inviting you to the conversation. Join?';
       notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
-      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyInvite(' + inviter + ')">No</button>';
       Metamaps.GlobalUI.notifyUser(notifyText, true);
     },
     acceptCall: function (userid) {
@@ -2240,6 +2240,15 @@ Metamaps.Realtime = {
     denyCall: function (userid) {
       var self = Metamaps.Realtime;
       self.socket.emit('callDenied', {
+        mapid: Metamaps.Active.Map.id,
+        invited: Metamaps.Active.Mapper.id,
+        inviter: userid
+      });
+      Metamaps.GlobalUI.clearNotify();
+    },
+    denyInvite: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('inviteDenied', {
         mapid: Metamaps.Active.Map.id,
         invited: Metamaps.Active.Mapper.id,
         inviter: userid
@@ -2263,7 +2272,7 @@ Metamaps.Realtime = {
         inviter: Metamaps.Active.Mapper.id,
         invited: userid
       });
-      Metamaps.GlobalUI.notifyUser('Invitation has been sent.');
+      self.room.chat.invitationPending(userid);
     },
     callAccepted: function (userid) {
       var self = Metamaps.Realtime;
@@ -2274,6 +2283,13 @@ Metamaps.Realtime = {
       self.room.chat.invitationAnswered(userid);
     },
     callDenied: function (userid) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[userid].name;
+      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invite.');
+      self.room.chat.invitationAnswered(userid);
+    },
+    inviteDenied: function (userid) {
       var self = Metamaps.Realtime;
 
       var username = self.mappersOnMap[userid].name;
@@ -2352,6 +2368,7 @@ Metamaps.Realtime = {
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToJoin', self.invitedToJoin); // call already in progress
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-callAccepted', self.callAccepted);
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-callDenied', self.callDenied);
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-inviteDenied', self.inviteDenied);
 
         // receive word that there's a conversation in progress
         socket.on('maps-' + Metamaps.Active.Map.id + '-callInProgress', self.promptToJoin);
@@ -2520,24 +2537,12 @@ Metamaps.Realtime = {
             coords: {
                 x: 0,
                 y: 0
-            },
+            }
         };
 
-        var onOff = data.userrealtime ? "On" : "Off";
-        var mapperListItem = '<li id="mapper';
-        mapperListItem += data.userid;
-        mapperListItem += '" class="rtMapper littleRt';
-        mapperListItem += onOff;
-        mapperListItem += '">';
-        mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
-        mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
-        mapperListItem += data.username;
-        mapperListItem += '<div class="littleJuntoIcon"></div>';
-        mapperListItem += '</li>';
-
         if (data.userid !== Metamaps.Active.Mapper.id) {
-            //$('#mapper' + data.userid).remove();
             self.room.chat.addParticipant(self.mappersOnMap[data.userid]);
+            if (data.userinconversation) self.room.chat.mapperJoinedCall(data.userid);
 
             // create a div for the collaborators compass
             self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status);
@@ -2586,6 +2591,7 @@ Metamaps.Realtime = {
                 userimage: Metamaps.Active.Mapper.get("image"),
                 userid: Metamaps.Active.Mapper.id,
                 userrealtime: self.status,
+                userinconversation: self.inConversation,
                 mapid: Metamaps.Active.Map.id
             };
             socket.emit('updateNewMapperList', update);
