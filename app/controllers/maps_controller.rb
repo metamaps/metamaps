@@ -1,5 +1,5 @@
 class MapsController < ApplicationController
-    before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
+    before_action :require_user, only: [:create, :update, :screenshot, :destroy]
 
     respond_to :html, :json
 
