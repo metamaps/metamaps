@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
     include TopicsHelper
 
     before_action :require_user, only: [:create, :update, :destroy]
-    after_action :verify_authorized
+    after_action :verify_authorized, except: :autocomplete_topic
    
     respond_to :html, :js, :json
 
