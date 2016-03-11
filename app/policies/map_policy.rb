@@ -1,7 +1,7 @@
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.where('permission IN ("public", "commons") OR user_id = ?', user.id)
+      scope.where('maps.permission IN (?) OR maps.user_id = ?', ["public", "commons"], user.id)
     end
   end
 

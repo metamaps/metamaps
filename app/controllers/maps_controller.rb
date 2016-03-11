@@ -1,8 +1,8 @@
 class MapsController < ApplicationController
     before_action :require_user, only: [:create, :update, :screenshot, :destroy]
 
-    after_action :verify_authorized, except: :activemaps, :featuredmaps, :mymaps, :usermaps
-    after_action :verify_policy_scoped, only: :activemaps, :featuredmaps, :mymaps, :usermaps
+    after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :usermaps]
+    after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :usermaps]
 
     respond_to :html, :json
 
@@ -68,11 +68,7 @@ class MapsController < ApplicationController
     # GET maps/:id
     def show
         @map = Map.find(params[:id])
-        authorize! @map
-
-        if not @map
-            redirect_to root_url, notice: "Access denied. That map is private." and return
-        end
+        authorize @map
 
         respond_to do |format|
             format.html { 
@@ -86,18 +82,14 @@ class MapsController < ApplicationController
 
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
             }
-            format.json { render json: @map }
+            format.json { render json: @map.as_json }
         end
     end
 
     # GET maps/:id/contains
     def contains
         @map = Map.find(params[:id])
-        authorize! @map
-
-        if not @map
-            redirect_to root_url, notice: "Access denied. That map is private." and return
-        end
+        authorize @map
 
         @allmappers = @map.contributors
         @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
@@ -140,7 +132,7 @@ class MapsController < ApplicationController
                 mapping.xloc = topic[1]
                 mapping.yloc = topic[2]
                 @map.topicmappings << mapping
-                authorize! mapping, :create
+                authorize mapping, :create
                 mapping.save
             end
 
@@ -153,7 +145,7 @@ class MapsController < ApplicationController
                     mapping.map = @map
                     mapping.mappable = Synapse.find(synapse_id)
                     @map.synapsemappings << mapping
-                    authorize! mapping, :create
+                    authorize mapping, :create
                     mapping.save
                 end
             end
@@ -161,7 +153,7 @@ class MapsController < ApplicationController
             @map.arranged = true
         end
 
-        authorize! @map
+        authorize @map
 
         if @map.save
           respond_to do |format|
@@ -177,12 +169,10 @@ class MapsController < ApplicationController
     # PUT maps/:id
     def update
         @map = Map.find(params[:id])
-        authorize! @map
+        authorize @map
 
         respond_to do |format|
-            if !@map 
-                format.json { render json: "unauthorized" }
-            elsif @map.update_attributes(map_params)
+            if @map.update_attributes(map_params)
                 format.json { head :no_content }
             else
                 format.json { render json: @map.errors, status: :unprocessable_entity }
@@ -193,7 +183,7 @@ class MapsController < ApplicationController
     # POST maps/:id/upload_screenshot
     def screenshot
       @map = Map.find(params[:id])
-      authorize! @map
+      authorize @map
 
       png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
       StringIO.open(png) do |data|
@@ -213,7 +203,7 @@ class MapsController < ApplicationController
     # DELETE maps/:id
     def destroy
       @map = Map.find(params[:id])
-      authorize! @map
+      authorize @map
 
       @map.delete
 
@@ -228,6 +218,6 @@ class MapsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def map_params
-      params.require(:map).permit(:id, :name, :arranged, :desc, :permission, :user_id)
+      params.require(:map).permit(:id, :name, :arranged, :desc, :permission)
     end
 end
