@@ -1,24 +1,32 @@
 class API::RestfulController < ActionController::Base
+  include Pundit
+  include PunditExtra
+
   snorlax_used_rest!
 
+  rescue_from(Pundit::NotAuthorizedError) { |e| respond_with_standard_error e, 403 }
+  load_and_authorize_resource except: [:index, :create] 
+
   def create
-    raise CanCan::AccessDenied.new unless current_user.is_logged_in?
+    authorize resource_class
     instantiate_resouce
     resource.user = current_user
     create_action
     respond_with_resource
   end
 
-  def show
-    load_resource
-    raise AccessDenied.new unless resource.authorize_to_show(current_user)
-    respond_with_resource
-  end
-
   private
 
+  def accessible_records
+    if current_user
+      visible_records
+    else
+      public_records
+    end
+  end
+
   def current_user
-    super || token_user || LoggedOutUser.new
+    super || token_user || nil
   end
 
   def token_user
