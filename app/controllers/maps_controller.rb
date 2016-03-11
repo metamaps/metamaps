@@ -1,5 +1,7 @@
 class MapsController < ApplicationController
     before_action :require_user, only: [:create, :update, :screenshot, :destroy]
+    after_action :verify_authorized, except: :activemaps, :featuredmaps, :mymaps, :usermaps
+    after_action :verify_policy_scoped, only: :activemaps, :featuredmaps, :mymaps, :usermaps
 
     respond_to :html, :json
 
@@ -8,7 +10,8 @@ class MapsController < ApplicationController
     # GET /explore/active
     def activemaps
         page = params[:page].present? ? params[:page] : 1
-        @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
+        @maps = policy_scope(Map).order("updated_at DESC")
+          .page(page).per(20)
 
         # root url => main/home. main/home renders maps/activemaps view.
         redirect_to root_url and return if authenticated?
@@ -22,8 +25,10 @@ class MapsController < ApplicationController
     # GET /explore/featured
     def featuredmaps
         page = params[:page].present? ? params[:page] : 1
-        @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private")
-                   .order("updated_at DESC").page(page).per(20)
+        @maps = policy_scope(
+          Map.where("maps.featured = ? AND maps.permission != ?",
+                    true, "private")
+        ).order("updated_at DESC").page(page).per(20)
 
         respond_to do |format|
             format.html { respond_with(@maps, @user) }
@@ -36,8 +41,9 @@ class MapsController < ApplicationController
         return redirect_to activemaps_url if !authenticated?
 
         page = params[:page].present? ? params[:page] : 1
-        # don't need to exclude private maps because they all belong to you
-        @maps = Map.where("maps.user_id = ?", current_user.id).order("updated_at DESC").page(page).per(20)
+        @maps = policy_scope(
+          Map.where("maps.user_id = ?", current_user.id)
+        ).order("updated_at DESC").page(page).per(20)
 
         respond_to do |format|
             format.html { respond_with(@maps, @user) }
@@ -49,7 +55,8 @@ class MapsController < ApplicationController
     def usermaps
         page = params[:page].present? ? params[:page] : 1
         @user = User.find(params[:id])
-        @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
+        @maps = policy_scope(Map.where(user: @user))
+          .order("updated_at DESC").page(page).per(20)
 
         respond_to do |format|
             format.html { respond_with(@maps, @user) }
@@ -59,7 +66,8 @@ class MapsController < ApplicationController
 
     # GET maps/:id
     def show
-        @map = Map.find(params[:id]).authorize_to_show(current_user)
+        @map = Map.find(params[:id])
+        authorize! @map
 
         if not @map
             redirect_to root_url, notice: "Access denied. That map is private." and return
@@ -83,7 +91,8 @@ class MapsController < ApplicationController
 
     # GET maps/:id/contains
     def contains
-        @map = Map.find(params[:id]).authorize_to_show(current_user)
+        @map = Map.find(params[:id])
+        authorize! @map
 
         if not @map
             redirect_to root_url, notice: "Access denied. That map is private." and return
@@ -130,6 +139,7 @@ class MapsController < ApplicationController
                 mapping.xloc = topic[1]
                 mapping.yloc = topic[2]
                 @map.topicmappings << mapping
+                authorize! mapping, :create
                 mapping.save
             end
 
@@ -142,12 +152,15 @@ class MapsController < ApplicationController
                     mapping.map = @map
                     mapping.mappable = Synapse.find(synapse_id)
                     @map.synapsemappings << mapping
+                    authorize! mapping, :create
                     mapping.save
                 end
             end
 
             @map.arranged = true
         end
+
+        authorize! @map
 
         if @map.save
           respond_to do |format|
@@ -162,7 +175,8 @@ class MapsController < ApplicationController
 
     # PUT maps/:id
     def update
-        @map = Map.find(params[:id]).authorize_to_edit(current_user)
+        @map = Map.find(params[:id])
+        authorize! @map
 
         respond_to do |format|
             if !@map 
@@ -177,42 +191,36 @@ class MapsController < ApplicationController
 
     # POST maps/:id/upload_screenshot
     def screenshot
-        @map = Map.find(params[:id]).authorize_to_edit(current_user)
+      @map = Map.find(params[:id])
+      authorize! @map
 
-        if @map
-          png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
-          StringIO.open(png) do |data|
-            data.class.class_eval { attr_accessor :original_filename, :content_type }
-            data.original_filename = "map-" + @map.id.to_s + "-screenshot.png"
-            data.content_type = "image/png"
-            @map.screenshot = data
-          end
+      png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
+      StringIO.open(png) do |data|
+        data.class.class_eval { attr_accessor :original_filename, :content_type }
+        data.original_filename = "map-" + @map.id.to_s + "-screenshot.png"
+        data.content_type = "image/png"
+        @map.screenshot = data
+      end
           
-          if @map.save
-            render :json => {:message => "Successfully uploaded the map screenshot."}
-          else
-            render :json => {:message => "Failed to upload image."}
-          end
-        else
-            render :json => {:message => "Unauthorized to set map screenshot."}
-        end
+      if @map.save
+        render :json => {:message => "Successfully uploaded the map screenshot."}
+      else
+        render :json => {:message => "Failed to upload image."}
+      end
     end
 
     # DELETE maps/:id
     def destroy
-        @map = Map.find(params[:id]).authorize_to_delete(current_user)
+      @map = Map.find(params[:id])
+      authorize! @map
 
-        @map.delete if @map
+      @map.delete
 
-        respond_to do |format|
-            format.json { 
-                if @map
-                    render json: "success"
-                else
-                    render json: "unauthorized"
-                end
-            }
+      respond_to do |format|
+        format.json do
+          head :no_content
         end
+      end
     end
 
     private
