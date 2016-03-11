@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pundit
+  rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
   protect_from_forgery
 
   before_action :get_invite_link
@@ -22,6 +23,10 @@ class ApplicationController < ActionController::Base
     else
       stored_location_for(resource) || request.referer || root_path
     end
+  end
+
+  def handle_unauthorized
+    head :forbidden # TODO make this better
   end
   
 private
