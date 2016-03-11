@@ -24,7 +24,7 @@ class TopicsController < ApplicationController
 
         respond_to do |format|
             format.html { 
-                @alltopics = ([@topic] + policy_scope(@topic.relatives)
+                @alltopics = ([@topic] + policy_scope(@topic.relatives))
                 @allsynapses = policy_scope(@topic.synapses)
 
                 @allcreators = @alltopics.map(&:user).uniq
