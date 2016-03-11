@@ -17,6 +17,10 @@ class API::RestfulController < ActionController::Base
 
   private
 
+  def resource_serializer
+    "new_#{resource_name}_serializer".camelize.constantize
+  end
+
   def accessible_records
     if current_user
       visible_records
