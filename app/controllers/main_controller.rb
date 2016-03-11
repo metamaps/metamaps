@@ -3,20 +3,21 @@ class MainController < ApplicationController
   include MapsHelper
   include UsersHelper
   include SynapsesHelper
+
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
    
   respond_to :html, :json
   
   # home page
   def home
-    @current = current_user
-   
+    @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(1).per(20)
     respond_to do |format|
         format.html { 
           if authenticated?
-            @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(1).per(20)
-            respond_with(@maps, @current) 
+            render 'main/home'
           else 
-            respond_with(@current) 
+            render 'maps/activemaps'
           end
         }
     end
@@ -213,5 +214,4 @@ class MainController < ApplicationController
 
     render json: autocomplete_synapse_array_json(@synapses)
   end 
-
 end

@@ -2,20 +2,15 @@ class TopicsController < ApplicationController
     include TopicsHelper
 
     before_action :require_user, only: [:create, :update, :destroy]
-
+    after_action :verify_authorized
+   
     respond_to :html, :js, :json
 
     # GET /topics/autocomplete_topic
     def autocomplete_topic
-        @current = current_user
         term = params[:term]
         if term && !term.empty?
-            @topics = Topic.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
-
-            #read this next line as 'delete a topic if its private and you're either 
-            #1. logged out or 2. logged in but not the topic creator
-            @topics.to_a.delete_if {|t| t.permission == "private" && 
-                (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+            @topics = policy_scope(Topic.where('LOWER("name") like ?', term.downcase + '%')).order('"name"')
         else
             @topics = []
         end
@@ -24,29 +19,16 @@ class TopicsController < ApplicationController
 
     # GET topics/:id
     def show
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
-
-        if not @topic
-            redirect_to root_url, notice: "Access denied. That topic is private." and return
-        end
+        @topic = Topic.find(params[:id])
+        authorize! @topic
 
         respond_to do |format|
             format.html { 
-                @alltopics = ([@topic] + @topic.relatives).delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) } # should limit to topics visible to user
-                @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @alltopics = ([@topic] + policy_scope(@topic.relatives)
+                @allsynapses = policy_scope(@topic.synapses)
 
-                @allcreators = []
-                @alltopics.each do |t|
-                    if @allcreators.index(t.user) == nil
-                      @allcreators.push(t.user)
-                    end
-                end
-                @allsynapses.each do |s|
-                    if @allcreators.index(s.user) == nil
-                      @allcreators.push(s.user)
-                    end
-                end
+                @allcreators = @alltopics.map(&:user).uniq
+                @allcreators += @allsynapses.map(&:user).uniq
 
                 respond_with(@allsynapses, @alltopics, @allcreators, @topic) 
             }
@@ -56,28 +38,15 @@ class TopicsController < ApplicationController
 
     # GET topics/:id/network
     def network
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+        @topic = Topic.find(params[:id])
+        authorize! @topic
 
-        if not @topic
-            redirect_to root_url, notice: "Access denied. That topic is private." and return
-        end
+        @alltopics = [@topic] + policy_scope(@topic.relatives)
+        @allsynapses = policy_scope(@topic.synapses)
 
-        @alltopics = @topic.relatives.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
-        @allsynapses = @topic.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
-        @allcreators = []
-        @allcreators.push(@topic.user)
-        @alltopics.each do |t|
-            if @allcreators.index(t.user) == nil
-              @allcreators.push(t.user)
-            end
-        end
-        @allsynapses.each do |s|
-            if @allcreators.index(s.user) == nil
-              @allcreators.push(s.user)
-            end
-        end
-                
+        @allcreators = @alltopics.map(&:user).uniq
+        @allcreators += @allsynapses.map(&:user).uniq
+
         @json = Hash.new()
         @json['topic'] = @topic
         @json['creators'] = @allcreators
@@ -91,121 +60,99 @@ class TopicsController < ApplicationController
 
     # GET topics/:id/relative_numbers
     def relative_numbers
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+        @topic = Topic.find(params[:id])
+        authorize @topic
 
-        if not @topic
-            redirect_to root_url, notice: "Access denied. That topic is private." and return
+        topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
+
+        @alltopics = policy_scope(@topic.relatives).to_a.uniq
+        @alltopics.delete_if! do |topic|
+          topicsAlreadyHas.index(topic.id) != nil
         end
 
-        @topicsAlreadyHas = params[:network] ? params[:network].split(',') : []
-
-        @alltopics = @topic.relatives.to_a.delete_if {|t| 
-            @topicsAlreadyHas.index(t.id.to_s) != nil ||
-                (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
-        }
-
-        @alltopics.uniq!
-
-        @json = Hash.new()
+        @json = Hash.new(0)
         @alltopics.each do |t|
-            if @json[t.metacode.id] 
-                @json[t.metacode.id] += 1
-            else
-                @json[t.metacode.id] = 1
-            end
+          @json[t.metacode.id] += 1
         end
 
         respond_to do |format|
-            format.json { render json: @json }
+          format.json { render json: @json }
         end
     end
 
     # GET topics/:id/relatives
     def relatives
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_show(@current)
+      @topic = Topic.find(params[:id])
+      authorize! @topic
 
-        if not @topic
-            redirect_to root_url, notice: "Access denied. That topic is private." and return
-        end
+      topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
-        @topicsAlreadyHas = params[:network] ? params[:network].split(',') : []
+      alltopics = policy_scope(@topic.relatives).to_a.uniq.delete_if do |topic| 
+        topicsAlreadyHas.index(topic.id.to_s) != nil
+      end
 
-        @alltopics = @topic.relatives.to_a.delete_if {|t| 
-            @topicsAlreadyHas.index(t.id.to_s) != nil ||
-                (params[:metacode] && t.metacode_id.to_s != params[:metacode]) ||
-                (t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)))
-        }
+      #find synapses between topics in alltopics array
+      allsynapses = policy_scope(@topic.synapses)
+      synapse_ids = (allsynapses.map(&:topic1_id) + allsynapses.map(&:topic2_id)).uniq
+      allsynapses.delete_if! do |synapse|
+        synapse_ids.index(synapse.id) != nil
+      end
 
-        @alltopics.uniq!
+      creatorsAlreadyHas = params[:creators] ? params[:creators].split(',').map(&:to_i) : []
+      allcreators = (alltopics.map(&:user) + allsynapses.map(&:user)).uniq.delete_if do |user|
+        creatorsAlreadyHas.index(user.id) != nil
+      end
 
-        @allsynapses = @topic.synapses.to_a.delete_if {|s|
-            (s.topic1 == @topic && @alltopics.index(s.topic2) == nil) ||
-            (s.topic2 == @topic && @alltopics.index(s.topic1) == nil)
-        }
+      @json = Hash.new()
+      @json['topics'] = alltopics
+      @json['synapses'] = allsynapses
+      @json['creators'] = allcreators
 
-        @creatorsAlreadyHas = params[:creators] ? params[:creators].split(',') : []
-        @allcreators = []
-        @alltopics.each do |t|
-            if @allcreators.index(t.user) == nil && @creatorsAlreadyHas.index(t.user_id.to_s) == nil
-              @allcreators.push(t.user)
-            end
-        end
-        @allsynapses.each do |s|
-            if @allcreators.index(s.user) == nil && @creatorsAlreadyHas.index(s.user_id.to_s) == nil
-              @allcreators.push(s.user)
-            end
-        end
-
-        @json = Hash.new()
-        @json['topics'] = @alltopics
-        @json['synapses'] = @allsynapses
-        @json['creators'] = @allcreators
-
-        respond_to do |format|
-            format.json { render json: @json }
-        end
+      respond_to do |format|
+        format.json { render json: @json }
+      end
     end
 
-    # POST /topics
-    # POST /topics.json
-    def create
-        @topic = Topic.new(topic_params)
+  # POST /topics
+  # POST /topics.json
+  def create
+    @topic = Topic.new(topic_params)
+    authorize! @topic
 
-        respond_to do |format|
-            if @topic.save
-                format.json { render json: @topic, status: :created }
-            else
-                format.json { render json: @topic.errors, status: :unprocessable_entity }
-            end
-        end
+    respond_to do |format|
+      if @topic.save
+        format.json { render json: @topic, status: :created }
+      else
+        format.json { render json: @topic.errors, status: :unprocessable_entity }
+      end
     end
+  end
 
-    # PUT /topics/1
-    # PUT /topics/1.json
-    def update
-        @topic = Topic.find(params[:id])
+  # PUT /topics/1
+  # PUT /topics/1.json
+  def update
+    @topic = Topic.find(params[:id])
+    authorize! @topic
 
-        respond_to do |format|
-            if @topic.update_attributes(topic_params)
-                format.json { head :no_content }
-            else
-                format.json { render json: @topic.errors, status: :unprocessable_entity }
-            end
-        end
+    respond_to do |format|
+      if @topic.update_attributes(topic_params)
+        format.json { head :no_content }
+      else
+        format.json { render json: @topic.errors, status: :unprocessable_entity }
+      end
     end
+  end
 
-    # DELETE topics/:id
-    def destroy
-        @current = current_user
-        @topic = Topic.find(params[:id]).authorize_to_delete(@current)
-        @topic.delete if @topic
+  # DELETE topics/:id
+  def destroy
+    @topic = Topic.find(params[:id])
+    authorize! @topic
 
-        respond_to do |format|
-            format.json { head :no_content }
-        end
+    @topic.delete
+    respond_to do |format|
+      format.json { head :no_content }
     end
+  end
 
   private
 
