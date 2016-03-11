@@ -1,7 +1,7 @@
 class TopicPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.where('permission IN ("public", "commons") OR user_id = ?', user.id)
+      scope.where('permission IN (?) OR user_id = ?', ["public", "commons"], user.id)
     end
   end
 

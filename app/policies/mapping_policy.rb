@@ -5,7 +5,8 @@ class MappingPolicy < ApplicationPolicy
       # it would be nice if we could also base this on the mappable, but that
       # gets really complicated. Devin thinks it's OK to SHOW a mapping for
       # a private topic, since you can't see the private topic anyways
-      scope.joins(:maps).where('maps.permission IN ("public", "commons") OR maps.user_id = ?', user.id)
+      scope.joins(:maps).where('maps.permission IN (?) OR maps.user_id = ?',
+                                 ["public", "commons"], user.id)
     end
   end
 
