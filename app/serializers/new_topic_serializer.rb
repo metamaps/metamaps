@@ -1,4 +1,4 @@
-class TopicSerializer < ActiveModel::Serializer
+class NewTopicSerializer < ActiveModel::Serializer
   embed :ids, include: true
   attributes :id,
              :name,
@@ -8,8 +8,8 @@ class TopicSerializer < ActiveModel::Serializer
              :created_at,
              :updated_at
 
-  has_one :user
-  has_one :metacode
+  has_one :user, serializer: NewUserSerializer
+  has_one :metacode, serializer: NewMetacodeSerializer
 
   #def filter(keys)
   #  keys.delete(:outcome_author) unless object.outcome_author.present?

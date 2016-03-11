@@ -1,4 +1,4 @@
-class UserSerializer < ActiveModel::Serializer
+class NewUserSerializer < ActiveModel::Serializer
   attributes :id,
              :name,
              :avatar,
