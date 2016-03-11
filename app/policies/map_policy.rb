@@ -43,6 +43,6 @@ class MapPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.user == user || user.admin
+    record.user == user || admin_override
   end
 end

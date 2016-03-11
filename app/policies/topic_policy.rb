@@ -14,12 +14,11 @@ class TopicPolicy < ApplicationPolicy
   end
 
   def update?
-    # user.present? && (record.permission == 'commons' || record.user == user)
-    true
+    user.present? && (record.permission == 'commons' || record.user == user)
   end
 
   def destroy?
-    record.user == user || user.admin
+    record.user == user || admin_override
   end
 
   def autocomplete_topic?

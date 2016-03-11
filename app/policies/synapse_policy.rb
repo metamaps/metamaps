@@ -10,16 +10,14 @@ class SynapsePolicy < ApplicationPolicy
   end
 
   def show?
-    # record.permission == 'commons' || record.permission == 'public' || record.user == user
-    true
+    record.permission == 'commons' || record.permission == 'public' || record.user == user
   end
 
   def update?
-    # user.present? && (record.permission == 'commons' || record.user == user)
-    true
+    user.present? && (record.permission == 'commons' || record.user == user)
   end
 
   def destroy?
-    record.user == user || user.admin
+    record.user == user || admin_override
   end
 end
