@@ -78,36 +78,7 @@ class Map < ActiveRecord::Base
     json[:updated_at_clean] = updated_at_str
     json
   end
-
-  ##### PERMISSIONS ######
   
-  def authorize_to_delete(user)
-    if (self.user != user)
-      return false
-    end
-    return self
-  end
-
-  # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)
-    if (self.permission == "private" && self.user != user)
-  		return false
-  	end
-  	return self
-  end
-  
-  # returns false if user not allowed to 'edit' Topic, Synapse, or Map
-  def authorize_to_edit(user)  
-  	if !user
-      return false
-    elsif (self.permission == "private" && self.user != user)
-  		return false
-  	elsif (self.permission == "public" && self.user != user)
-  		return false
-  	end
-  	return self
-  end
-
   def decode_base64(imgBase64)
     decoded_data = Base64.decode64(imgBase64)
  
