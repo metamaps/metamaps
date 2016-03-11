@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :synapses
   has_many :maps
   has_many :mappings
+  has_many :tokens
 
   after_create :generate_code
 
@@ -39,6 +40,10 @@ class User < ActiveRecord::Base
     
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
+
+  def is_logged_in?
+    true
+  end
 
   # override default as_json
   def as_json(options={})

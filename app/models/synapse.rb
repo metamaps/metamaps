@@ -10,6 +10,8 @@ class Synapse < ActiveRecord::Base
   validates :desc, length: { minimum: 0, allow_nil: false }
 
   validates :permission, presence: true
+  validates :node1_id, presence: true
+  validates :node2_id, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
 
   validates :category, inclusion: { in: ['from-to', 'both'], allow_nil: true }

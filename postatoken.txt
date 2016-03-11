@@ -1,0 +1,7 @@
+$.post('http://localhost:3000/api/v1/tokens', {token: {
+  description: 'for stuff',
+  token: '1234',
+  user_id: 2
+}})
+
+curl -X POST -d @postdata.txt http://localhost:3000/api/v1/maps --header "Authorization: Token token=fb5b3db125c94e9fb50f1e42054be856" --header "Content-Type:application/json"

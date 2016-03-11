@@ -9,6 +9,16 @@ Metamaps::Application.routes.draw do
   get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
   get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
   
+  namespace :api, path: '/api/v1', defaults: {format: :json} do
+    resources :maps, only: [:create, :show, :update, :destroy]
+    resources :synapses, only: [:create, :show, :update, :destroy]
+    resources :topics, only: [:create, :show, :update, :destroy]
+    resources :mappings, only: [:create, :show, :update, :destroy]
+    resources :tokens, only: [ :create, :destroy] do
+      get :my_tokens, on: :collection
+    end 
+  end
+ 
   resources :mappings, except: [:index, :new, :edit]
   resources :metacode_sets, :except => [:show]
   resources :metacodes, :except => [:show, :destroy]

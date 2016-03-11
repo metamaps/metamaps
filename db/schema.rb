@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223061711) do
+ActiveRecord::Schema.define(version: 20160310200131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,16 @@ ActiveRecord::Schema.define(version: 20160223061711) do
   add_index "synapses", ["node2_id"], name: "index_synapses_on_node2_id", using: :btree
   add_index "synapses", ["user_id"], name: "index_synapses_on_user_id", using: :btree
 
+  create_table "tokens", force: :cascade do |t|
+    t.string   "token"
+    t.string   "description"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "tokens", ["user_id"], name: "index_tokens_on_user_id", using: :btree
+
   create_table "topics", force: :cascade do |t|
     t.text     "name"
     t.text     "desc"
@@ -171,4 +181,5 @@ ActiveRecord::Schema.define(version: 20160223061711) do
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "tokens", "users"
 end

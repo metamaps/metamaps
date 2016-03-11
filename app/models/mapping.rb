@@ -25,5 +25,13 @@ class Mapping < ActiveRecord::Base
   def as_json(options={})
     super(:methods =>[:user_name, :user_image])
   end
-  
+
+  def authorize_to_show(user)
+    if ((self.map.permission == "private" && self.map.user != user) ||
+         (self.mappable.permission == "private" && self.mappable.user != user))
+      return false
+    end
+    return self
+  end
+
 end
