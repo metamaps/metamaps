@@ -13,7 +13,7 @@ class MainController < ApplicationController
     @maps = policy_scope(Map).order("updated_at DESC").page(1).per(20)
     respond_to do |format|
         format.html { 
-          if authenticated?
+          if not authenticated?
             render 'main/home'
           else 
             render 'maps/activemaps'
