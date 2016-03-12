@@ -13,11 +13,12 @@ class MapsController < ApplicationController
         @maps = policy_scope(Map).order("updated_at DESC")
           .page(page).per(20)
 
-        # root url => main/home. main/home renders maps/activemaps view.
-        redirect_to root_url and return if authenticated?
-
         respond_to do |format|
-            format.html { respond_with(@maps, @user) }
+            format.html { 
+              # root url => main/home. main/home renders maps/activemaps view.
+              redirect_to root_url and return if authenticated?
+              respond_with(@maps, @user) 
+            }
             format.json { render json: @maps }
         end
     end
@@ -81,7 +82,7 @@ class MapsController < ApplicationController
 
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
             }
-            format.json { render json: @map.as_json }
+            format.json { render json: @map }
         end
     end
 
