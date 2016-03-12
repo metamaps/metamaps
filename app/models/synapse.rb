@@ -14,6 +14,10 @@ class Synapse < ActiveRecord::Base
 
   validates :category, inclusion: { in: ['from-to', 'both'], allow_nil: true }
 
+  scope :for_topic, ->(topic_id = nil) { 
+    where("node1_id = ? OR node2_id = ?", topic_id, topic_id) 
+  } 
+
   # :nocov:
   def user_name
     user.name
@@ -32,30 +36,4 @@ class Synapse < ActiveRecord::Base
   end
   # :nocov:
   
-  ##### PERMISSIONS ######
-  
-  # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return self
-  end
-  
-  # returns false if user not allowed to 'edit' Topic, Synapse, or Map
-  def authorize_to_edit(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	elsif (self.permission == "public" && self.user != user)
-		return false
-	end
-	return self
-  end
-
-  def authorize_to_delete(user)  
-    if (self.user == user || user.admin)
-      return self
-    end
-    return false
-  end
 end

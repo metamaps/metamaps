@@ -53,5 +53,8 @@ module Metamaps
       g.test_framework :rspec
     end
     config.active_record.raise_in_transactional_callbacks = true
+
+    # pundit errors return 403 FORBIDDEN
+    config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
   end
 end

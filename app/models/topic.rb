@@ -41,6 +41,13 @@ class Topic < ActiveRecord::Base
 
   belongs_to :metacode
 
+  scope :relatives, ->(topic_id = nil) { 
+    includes(:synapses1)
+    .includes(:synapses2)
+    .where('synapses.node1_id = ? OR synapses.node2_id = ?', topic_id, topic_id)
+    .references(:synapses)
+  }
+
   def user_name
     user.name
   end
@@ -86,32 +93,5 @@ class Topic < ActiveRecord::Base
   		end
   	end
   	result
-  end
-  
-  ##### PERMISSIONS ######
-  
-  # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return self
-  end
-  
-  # returns false if user not allowed to 'edit' Topic, Synapse, or Map
-  def authorize_to_edit(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	elsif (self.permission == "public" && self.user != user)
-		return false
-	end
-	return self
-  end
-
-  def authorize_to_delete(user)  
-    if (self.user == user || user.admin)
-      return self
-    end
-    return false
   end
 end
