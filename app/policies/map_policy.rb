@@ -35,7 +35,6 @@ class MapPolicy < ApplicationPolicy
 
   def update?
     user.present? && (record.permission == 'commons' || record.user == user)
-    true
   end
 
   def screenshot?
