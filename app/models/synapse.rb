@@ -16,6 +16,10 @@ class Synapse < ActiveRecord::Base
 
   validates :category, inclusion: { in: ['from-to', 'both'], allow_nil: true }
 
+  scope :for_topic, ->(topic_id = nil) { 
+    where("node1_id = ? OR node2_id = ?", topic_id, topic_id) 
+  } 
+
   # :nocov:
   def user_name
     user.name

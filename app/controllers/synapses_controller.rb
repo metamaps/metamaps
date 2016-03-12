@@ -10,7 +10,7 @@ class SynapsesController < ApplicationController
   # GET /synapses/1.json
   def show
     @synapse = Synapse.find(params[:id])
-    authorize! @synapse
+    authorize @synapse
 
     render json: @synapse
   end
@@ -20,7 +20,7 @@ class SynapsesController < ApplicationController
   def create
     @synapse = Synapse.new(synapse_params)
     @synapse.desc = "" if @synapse.desc.nil?
-    authorize! @synapse
+    authorize @synapse
 
     respond_to do |format|
       if @synapse.save
@@ -36,7 +36,7 @@ class SynapsesController < ApplicationController
   def update
     @synapse = Synapse.find(params[:id])
     @synapse.desc = "" if @synapse.desc.nil?
-    authorize! @synapse
+    authorize @synapse
 
     respond_to do |format|
       if @synapse.update_attributes(synapse_params)
@@ -50,7 +50,7 @@ class SynapsesController < ApplicationController
   # DELETE synapses/:id
   def destroy
     @synapse = Synapse.find(params[:id])
-    authorize! @synapse
+    authorize @synapse
     @synapse.delete
       
     respond_to do |format|

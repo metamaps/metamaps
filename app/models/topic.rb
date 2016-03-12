@@ -41,6 +41,13 @@ class Topic < ActiveRecord::Base
 
   belongs_to :metacode
 
+  scope :relatives, ->(topic_id = nil) { 
+    includes(:synapses1)
+    .includes(:synapses2)
+    .where('synapses.node1_id = ? OR synapses.node2_id = ?', topic_id, topic_id)
+    .references(:synapses)
+  }
+
   def user_name
     user.name
   end
