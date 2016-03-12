@@ -18,7 +18,7 @@ class MappingPolicy < ApplicationPolicy
 
   def create?
     map = policy(record.map, user)
-    map.edit?
+    map.update?
   end
 
   def update?
