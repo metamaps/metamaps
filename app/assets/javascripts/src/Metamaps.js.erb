@@ -4083,7 +4083,7 @@ Metamaps.Topic = {
         };  
         var topicSuccessCallback = function (topicModel, response) {
             if (Metamaps.Active.Map) {
-                mapping.save({ mappable_id: topicModel.get('topic').id }, {
+                mapping.save({ mappable_id: topicModel.id }, {
                     success: mappingSuccessCallback,
                     error: function (model, response) {
                         console.log('error saving mapping to database');
@@ -4254,7 +4254,7 @@ Metamaps.Synapse = {
         };
         var synapseSuccessCallback = function (synapseModel, response) {
             if (Metamaps.Active.Map) {
-                mapping.save({ mappable_id: synapseModel.get('synapse').id }, {
+                mapping.save({ mappable_id: synapseModel.id }, {
                     success: mappingSuccessCallback
                 });
             }
