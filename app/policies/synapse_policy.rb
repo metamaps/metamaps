@@ -1,7 +1,7 @@
 class SynapsePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.where('permission IN (?) OR user_id = ?', ["public", "commons"], user.id)
+      scope.where('synapses.permission IN (?) OR synapses.user_id = ?', ["public", "commons"], user.id)
     end
   end
 

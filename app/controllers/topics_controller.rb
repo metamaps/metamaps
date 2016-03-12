@@ -20,12 +20,12 @@ class TopicsController < ApplicationController
     # GET topics/:id
     def show
         @topic = Topic.find(params[:id])
-        authorize! @topic
+        authorize @topic
 
         respond_to do |format|
             format.html { 
-                @alltopics = ([@topic] + policy_scope(@topic.relatives))
-                @allsynapses = policy_scope(@topic.synapses)
+                @alltopics = ([@topic] + policy_scope(Topic.relatives(@topic.id)))
+                @allsynapses = policy_scope(Synapse.for_topic(@topic.id))
 
                 @allcreators = @alltopics.map(&:user).uniq
                 @allcreators += @allsynapses.map(&:user).uniq
@@ -39,7 +39,7 @@ class TopicsController < ApplicationController
     # GET topics/:id/network
     def network
         @topic = Topic.find(params[:id])
-        authorize! @topic
+        authorize @topic
 
         @alltopics = [@topic] + policy_scope(@topic.relatives)
         @allsynapses = policy_scope(@topic.synapses)
@@ -83,7 +83,7 @@ class TopicsController < ApplicationController
     # GET topics/:id/relatives
     def relatives
       @topic = Topic.find(params[:id])
-      authorize! @topic
+      authorize @topic
 
       topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
@@ -117,7 +117,7 @@ class TopicsController < ApplicationController
   # POST /topics.json
   def create
     @topic = Topic.new(topic_params)
-    authorize! @topic
+    authorize @topic
 
     respond_to do |format|
       if @topic.save
@@ -132,7 +132,7 @@ class TopicsController < ApplicationController
   # PUT /topics/1.json
   def update
     @topic = Topic.find(params[:id])
-    authorize! @topic
+    authorize @topic
 
     respond_to do |format|
       if @topic.update_attributes(topic_params)
@@ -146,7 +146,7 @@ class TopicsController < ApplicationController
   # DELETE topics/:id
   def destroy
     @topic = Topic.find(params[:id])
-    authorize! @topic
+    authorize @topic
 
     @topic.delete
     respond_to do |format|
