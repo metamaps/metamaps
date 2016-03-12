@@ -7,6 +7,8 @@ gem 'devise'
 gem 'redis'
 gem 'pg'
 gem 'pundit'
+gem 'cancan'
+gem 'pundit_extra'
 gem 'formula'
 gem 'formtastic'
 gem 'json'
@@ -15,6 +17,8 @@ gem 'best_in_place' #in-place editing
 gem 'kaminari' # pagination
 gem 'uservoice-ruby'
 gem 'dotenv'
+gem 'snorlax', '~> 0.1.3'
+gem 'active_model_serializers', '~> 0.8.1'
 
 gem 'paperclip'
 gem 'aws-sdk', '< 2.0'

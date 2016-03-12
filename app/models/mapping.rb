@@ -25,5 +25,5 @@ class Mapping < ActiveRecord::Base
   def as_json(options={})
     super(:methods =>[:user_name, :user_image])
   end
-  
+
 end

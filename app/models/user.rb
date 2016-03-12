@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :synapses
   has_many :maps
   has_many :mappings
+  has_many :tokens
 
   after_create :generate_code
 
