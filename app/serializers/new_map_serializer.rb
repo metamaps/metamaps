@@ -13,8 +13,4 @@ class NewMapSerializer < ActiveModel::Serializer
   has_many :mappings, serializer: NewMappingSerializer
   has_many :contributors, root: :users, serializer: NewUserSerializer
 
-  #def filter(keys)
-  #  keys.delete(:outcome_author) unless object.outcome_author.present?
-  #  keys
-  #end
 end

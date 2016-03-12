@@ -7,8 +7,4 @@ class TokenSerializer < ActiveModel::Serializer
              :created_at,
              :updated_at
 
-  #def filter(keys)
-  #  keys.delete(:outcome_author) unless object.outcome_author.present?
-  #  keys
-  #end
 end

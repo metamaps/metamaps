@@ -1,1 +1,0 @@
-{ "map": { "name":"tree", "desc": "green", "permission": "commons", "arranged": true }}

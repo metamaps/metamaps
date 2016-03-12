@@ -1,1 +1,0 @@
-{ "mapping": { "xloc": 123, "yloc": 123,  "map_id": 1, "mappable_type": "Topic", "mappable_id": 2 }}

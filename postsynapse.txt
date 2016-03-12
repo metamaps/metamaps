@@ -1,1 +1,0 @@
-{ "synapse": { "desc": "link between", "permission": "commons", "node1_id": 1,  "node2_id": 2, "category": "from-to" }}

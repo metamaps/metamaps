@@ -12,8 +12,4 @@ class NewSynapseSerializer < ActiveModel::Serializer
   has_one :topic2, root: :topics, serializer: NewTopicSerializer
   has_one :user, serializer: NewUserSerializer
 
-  #def filter(keys)
-  #  keys.delete(:outcome_author) unless object.outcome_author.present?
-  #  keys
-  #end
 end

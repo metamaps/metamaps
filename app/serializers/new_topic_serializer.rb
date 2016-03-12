@@ -11,8 +11,4 @@ class NewTopicSerializer < ActiveModel::Serializer
   has_one :user, serializer: NewUserSerializer
   has_one :metacode, serializer: NewMetacodeSerializer
 
-  #def filter(keys)
-  #  keys.delete(:outcome_author) unless object.outcome_author.present?
-  #  keys
-  #end
 end
