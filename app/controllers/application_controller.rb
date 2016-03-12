@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
   before_action :get_invite_link
   after_action :allow_embedding
   
+  def default_serializer_options
+    { root: false }
+  end
+
   # this is for global login
   include ContentHelper
   
