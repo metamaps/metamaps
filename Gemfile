@@ -18,6 +18,8 @@ gem 'kaminari' # pagination
 gem 'uservoice-ruby'
 gem 'dotenv'
 gem 'snorlax', '~> 0.1.3'
+gem 'httparty'
+gem 'sequenced', '~> 2.0.0'
 gem 'active_model_serializers', '~> 0.8.1'
 
 gem 'paperclip'

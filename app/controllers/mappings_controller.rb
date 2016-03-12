@@ -22,6 +22,7 @@ class MappingsController < ApplicationController
 
     if @mapping.save
       render json: @mapping, status: :created
+      Events::NewMapping.publish!(@mapping, current_user)
     else
       render json: @mapping.errors, status: :unprocessable_entity
     end
