@@ -1,4 +1,5 @@
 class MapsController < ApplicationController
+
     before_action :require_user, only: [:create, :update, :screenshot, :destroy]
     after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :usermaps]
     after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :usermaps]
