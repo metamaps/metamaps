@@ -7,6 +7,7 @@ class SynapsePolicy < ApplicationPolicy
 
   def create?
     user.present?
+    # todo add validation against whether you can see both topics
   end
 
   def show?

@@ -11,19 +11,17 @@ class MappingPolicy < ApplicationPolicy
   end
 
   def show?
-    map = policy(record.map, user)
-    mappable = policy(record.mappable, user)
+    map = Pundit.policy(user, record.map)
+    mappable = Pundit.policy(user, record.mappable)
     map.show? && mappable.show?
   end
 
   def create?
-    map = policy(record.map, user)
-    map.update?
+    Pundit.policy(user, record.map).update?
   end
 
   def update?
-    map = policy(record.map, user)
-    map.update?
+    Pundit.policy(user, record.map).update?
   end
 
   def destroy?
