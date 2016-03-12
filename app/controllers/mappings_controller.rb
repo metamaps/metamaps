@@ -19,6 +19,7 @@ class MappingsController < ApplicationController
     @mapping = Mapping.new(mapping_params)
     authorize @mapping
     @mapping.user = current_user
+
     if @mapping.save
       render json: @mapping, status: :created
     else
