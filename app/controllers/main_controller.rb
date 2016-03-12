@@ -4,14 +4,13 @@ class MainController < ApplicationController
   include UsersHelper
   include SynapsesHelper
 
-#  after_action :verify_authorized, except: :index
-#  after_action :verify_policy_scoped, only: :index
+  after_action :verify_policy_scoped
    
   respond_to :html, :json
   
   # home page
   def home
-    @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(1).per(20)
+    @maps = policy_scope(Map).order("updated_at DESC").page(1).per(20)
     respond_to do |format|
         format.html { 
           if authenticated?
@@ -60,69 +59,35 @@ class MainController < ApplicationController
           filterByMetacode = m
         end
       end
+
+      search = '%' + term.downcase + '%'
+      builder = policy_scope(Topic)
       
       if filterByMetacode
         if term == ""
-          @topics = []
+          builder = builder.none
         else
-          search = term.downcase + '%'
-          
-          if user
-            @topics = Set.new(Topic.where('LOWER("name") like ?', search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
-            @topics2 = Set.new(Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
-            @topics3 = Set.new(Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
-            @topics4 = Set.new(Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ? AND user_id = ?',  filterByMetacode.id, user).order('"name"'))
-          else
-            @topics = Set.new(Topic.where('LOWER("name") like ?', search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
-            @topics2 = Set.new(Topic.where('LOWER("name") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
-            @topics3 = Set.new(Topic.where('LOWER("desc") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
-            @topics4 = Set.new(Topic.where('LOWER("link") like ?', '%' + search).where('metacode_id = ?',  filterByMetacode.id).order('"name"'))
-          end
-
-          #get unique elements only through the magic of Sets
-          @topics = (@topics + @topics2 + @topics3 + @topics4).to_a
+          builder = builder.where('LOWER("name") like ? OR
+                                   LOWER("desc") like ? OR
+                                   LOWER("link") like ?', search, search, search)
+          builder = builder.where(metacode_id: filterByMetacode.id)
         end
       elsif desc
-        search = '%' + term.downcase + '%'
-        if !user
-          @topics = Topic.where('LOWER("desc") like ?', search).order('"name"')
-        elsif user
-          @topics = Topic.where('LOWER("desc") like ?', search).where('user_id = ?', user).order('"name"')
-        end
+        builder = builder.where('LOWER("desc") like ?', search)
       elsif link
-        search = '%' + term.downcase + '%'
-        if !user
-          @topics = Topic.where('LOWER("link") like ?', search).order('"name"')
-        elsif user
-          @topics = Topic.where('LOWER("link") like ?', search).where('user_id = ?', user).order('"name"')
-        end
+        builder = builder.where('LOWER("link") like ?', search)
       else #regular case, just search the name
-        search = term.downcase + '%'
-        if !user
-          @topics = Topic.where('LOWER("name") like ?', search).order('"name"')
-          @topics2 = Topic.where('LOWER("name") like ?', '%' + search).order('"name"')
-          @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).order('"name"')
-          @topics4 = Topic.where('LOWER("link") like ?', '%' + search).order('"name"')
-          @topics = @topics + (@topics2 - @topics)
-          @topics = @topics + (@topics3 - @topics)
-          @topics = @topics + (@topics4 - @topics)
-        elsif user
-          @topics = Topic.where('LOWER("name") like ?', search).where('user_id = ?', user).order('"name"')
-          @topics2 = Topic.where('LOWER("name") like ?', '%' + search).where('user_id = ?', user).order('"name"')
-          @topics3 = Topic.where('LOWER("desc") like ?', '%' + search).where('user_id = ?', user).order('"name"')
-          @topics4 = Topic.where('LOWER("link") like ?', '%' + search).where('user_id = ?', user).order('"name"')
-          @topics = @topics + (@topics2 - @topics)
-          @topics = @topics + (@topics3 - @topics)
-          @topics = @topics + (@topics4 - @topics)
-        end
+        builder = builder.where('LOWER("name") like ? OR
+                                 LOWER("desc") like ? OR
+                                 LOWER("link") like ?', search, search, search)
       end
+
+      builder = builder.where(user: user) if user
+      @topics = builder.order(:name)
     else
       @topics = []
     end
-    
-    #read this next line as 'delete a topic if its private and you're either 1. logged out or 2. logged in but not the topic creator
-    @topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
-    
+
     render json: autocomplete_array_json(@topics)
   end
   
@@ -142,20 +107,20 @@ class MainController < ApplicationController
         term = term[5..-1] 
         desc = true
       end
+
       search = '%' + term.downcase + '%'
-      query = desc ?  'LOWER("desc") like ?' : 'LOWER("name") like ?'
-      if !user
-      	# !connor why is the limit 5 done here and not above? also, why not limit after sorting alphabetically?
-        @maps = Map.where(query, search).limit(5).order('"name"')
-      elsif user
-        @maps = Map.where(query, search).where('user_id = ?', user).order('"name"')
+      builder = policy_scope(Map)
+
+      if desc
+        builder = builder.where('LOWER("desc") like ?', search)
+      else
+        builder = builder.where('LOWER("name") like ?', search)
       end
+      builder = builder.where(user: user) if user
+      @maps = builder.order(:name)
     else
       @maps = []
     end
-    
-    #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
-    @maps.to_a.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && current_user.id != m.user_id)) }
     
     render json: autocomplete_map_array_json(@maps)
   end
@@ -167,7 +132,10 @@ class MainController < ApplicationController
     
       #remove "mapper:" if appended at beginning
       term = term[7..-1] if term.downcase[0..6] == "mapper:"
-      @mappers = User.where('LOWER("name") like ?', term.downcase + '%').order('"name"')
+      search = term.downcase + '%'
+      builder = policy_scope(User) # TODO do I need to policy scope? I guess yes to verify_policy_scoped
+      builder = builder.where('LOWER("name") like ?', search)
+      @mappers = builder.order(:name)
     else
       @mappers = []
     end
@@ -182,7 +150,7 @@ class MainController < ApplicationController
     topic2id = params[:topic2id]
 
     if term && !term.empty?
-      @synapses = Synapse.where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
+      @synapses = policy_scope(Synapse).where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
 
       # remove any duplicate synapse types that just differ by 
       # leading or trailing whitespaces
@@ -196,21 +164,17 @@ class MainController < ApplicationController
           boolean = true
         end
       }
-
-      #limit to 5 results
-      @synapses = @synapses.slice(0,5)
     elsif topic1id && !topic1id.empty?
-      @one = Synapse.where('node1_id = ? AND node2_id = ?', topic1id, topic2id)
-      @two = Synapse.where('node2_id = ? AND node1_id = ?', topic1id, topic2id)
+      @one = policy_scope(Synapse).where('node1_id = ? AND node2_id = ?', topic1id, topic2id)
+      @two = policy_scope(Synapse).where('node2_id = ? AND node1_id = ?', topic1id, topic2id)
       @synapses = @one + @two
       @synapses.sort! {|s1,s2| s1.desc <=> s2.desc }.to_a
-      
-      #permissions
-      @synapses.delete_if {|s| s.permission == "private" && !authenticated? }
-      @synapses.delete_if {|s| s.permission == "private" && authenticated? && current_user.id != s.user_id }
     else
       @synapses = []
     end
+
+    #limit to 5 results
+    @synapses = @synapses.slice(0,5)
 
     render json: autocomplete_synapse_array_json(@synapses)
   end 
