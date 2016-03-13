@@ -2,9 +2,9 @@ Metamaps
 =======
 
 [![Join the chat at https://gitter.im/metamaps/metamaps_gen002](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps_gen002?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://jenkins.devinhoward.ca/job/metamaps_gen002.develop/badge/icon)](https://jenkins.devinhoward.ca/job/metamaps_gen002.develop/)
+[![Build Status](https://travis-ci.org/metamaps/metamaps_gen002.svg)](https://travis-ci.org/metamaps/metamaps_gen002)
 
-Welcome to the Metamaps GitHub repo. 
+Welcome to the Metamaps GitHub repo.
 
 ## About
 
@@ -12,7 +12,7 @@ Metamaps is a free and AGPL open source technology for changemakers, innovators,
 
 You can find a version of this software running at [metamaps.cc][site-beta], where the technology is being tested in a private beta.
 
-Metamaps is created and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. You can get in touch with us at team@metamaps.cc or @metamapps on twitter. 
+Metamaps is created and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. You can get in touch with us at team@metamaps.cc or @metamapps on twitter.
 
 To get connected with the community interested in Metamaps, join our [Google+ community][community].
 
@@ -52,7 +52,7 @@ We haven't figured out Vagrant for Windows yet, but we have a set of manual inst
 
 ## Contributing
 
-Cloning this repository directly is primarily for those wishing to contribute to our codebase. Check out our [contributing instructions][contributing] to get involved. 
+Cloning this repository directly is primarily for those wishing to contribute to our codebase. Check out our [contributing instructions][contributing] to get involved.
 
 ## Community
 
