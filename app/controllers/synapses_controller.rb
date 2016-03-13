@@ -1,20 +1,17 @@
 class SynapsesController < ApplicationController
   include TopicsHelper
 
-  before_filter :require_user, only: [:create, :update, :destroy]
+  before_action :require_user, only: [:create, :update, :destroy]
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
     
   respond_to :json
   
   # GET /synapses/1.json
   def show
     @synapse = Synapse.find(params[:id])
+    authorize @synapse
 
-    #.authorize_to_show(@current)
-	
-    #if not @synapse
-    #  redirect_to root_url and return
-    #end
-      
     render json: @synapse
   end
   
@@ -23,6 +20,7 @@ class SynapsesController < ApplicationController
   def create
     @synapse = Synapse.new(synapse_params)
     @synapse.desc = "" if @synapse.desc.nil?
+    authorize @synapse
 
     respond_to do |format|
       if @synapse.save
@@ -38,6 +36,7 @@ class SynapsesController < ApplicationController
   def update
     @synapse = Synapse.find(params[:id])
     @synapse.desc = "" if @synapse.desc.nil?
+    authorize @synapse
 
     respond_to do |format|
       if @synapse.update_attributes(synapse_params)
@@ -50,8 +49,9 @@ class SynapsesController < ApplicationController
   
   # DELETE synapses/:id
   def destroy
-    @synapse = Synapse.find(params[:id]).authorize_to_delete(current_user)
-    @synapse.delete if @synapse
+    @synapse = Synapse.find(params[:id])
+    authorize @synapse
+    @synapse.delete
       
     respond_to do |format|
       format.json { head :no_content }

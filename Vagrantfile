@@ -16,7 +16,6 @@ sudo apt-get install nodejs -y
 sudo apt-get install npm -y
 sudo apt-get install postgresql -y
 sudo apt-get install libpq-dev -y
-sudo apt-get install redis-server -y
 
 # get imagemagick
 sudo apt-get install imagemagick --fix-missing

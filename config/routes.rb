@@ -9,6 +9,16 @@ Metamaps::Application.routes.draw do
   get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
   get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
   
+  namespace :api, path: '/api/v1', defaults: {format: :json} do
+    resources :maps, only: [:create, :show, :update, :destroy]
+    resources :synapses, only: [:create, :show, :update, :destroy]
+    resources :topics, only: [:create, :show, :update, :destroy]
+    resources :mappings, only: [:create, :show, :update, :destroy]
+    resources :tokens, only: [ :create, :destroy] do
+      get :my_tokens, on: :collection
+    end 
+  end
+ 
   resources :messages, only: [:show, :create, :update, :destroy]
   resources :mappings, except: [:index, :new, :edit]
   resources :metacode_sets, :except => [:show]
@@ -21,11 +31,12 @@ Metamaps::Application.routes.draw do
   get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
   get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
   
-  get 'explore/active', to: 'maps#index', as: :activemaps
-  get 'explore/featured', to: 'maps#index', as: :featuredmaps
-  get 'explore/mine', to: 'maps#index', as: :mymaps
-  get 'explore/mapper/:id', to: 'maps#index', as: :usermaps
-  resources :maps, except: [:new, :edit]
+  resources :maps, except: [:index, :new, :edit]
+  get 'explore/active', to: 'maps#activemaps'
+  get 'explore/featured', to: 'maps#featuredmaps'
+  get 'explore/mine', to: 'maps#mymaps'
+  get 'explore/mapper/:id', to: 'maps#usermaps'
+
   get 'maps/:id/contains', to: 'maps#contains', as: :contains
   post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
   

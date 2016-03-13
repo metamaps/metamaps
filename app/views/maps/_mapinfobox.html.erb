@@ -4,7 +4,7 @@
   #%>
 <div class="mapInfoBox mapElement mapElementHidden permission 
   <%= @map && @map.user == user ? " yourMap" : "" %>
-  <%= @map && @map.authorize_to_edit(user) ? " canEdit" : "" %>
+  <%= @map && policy(@map).update? ? " canEdit" : "" %>
   <%= @map && @map.permission != 'private' ? " shareable" : "" %>">
   
   <% if @map %>
@@ -41,7 +41,7 @@
   </div>
   
   <div class="mapInfoDesc" id="mapInfoDesc">
-    <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
+    <% if (authenticated? && policy(@map).update?) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
       <%= best_in_place @map, :desc, :activator => "#mapInfoDesc", :as => :textarea, :placeholder => "Click to add description...", :class => 'best_in_place_desc' %>
     <% end %>
   </div>

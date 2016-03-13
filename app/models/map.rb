@@ -8,6 +8,9 @@ class Map < ActiveRecord::Base
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
   has_many :messages, as: :resource, dependent: :destroy
 
+  has_many :webhooks, as: :hookable
+  has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
+
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {
    :thumb => ['188x126#', :png]
@@ -98,36 +101,7 @@ class Map < ActiveRecord::Base
       end
     end
   end
-
-  ##### PERMISSIONS ######
-
-  def authorize_to_delete(user)
-    if (self.user != user)
-      return false
-    end
-    return self
-  end
-
-  # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)
-    if (self.permission == "private" && self.user != user)
-  		return false
-  	end
-  	return self
-  end
-
-  # returns false if user not allowed to 'edit' Topic, Synapse, or Map
-  def authorize_to_edit(user)
-  	if !user
-      return false
-    elsif (self.permission == "private" && self.user != user)
-  		return false
-  	elsif (self.permission == "public" && self.user != user)
-  		return false
-  	end
-  	return self
-  end
-
+  
   def decode_base64(imgBase64)
     decoded_data = Base64.decode64(imgBase64)
 

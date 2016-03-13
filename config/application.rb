@@ -11,6 +11,7 @@ Dotenv.load ".env.#{ENV["RAILS_ENV"]}", '.env'
 
 module Metamaps
   class Application < Rails::Application
+    config.active_job.queue_adapter = :delayed_job    
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -54,5 +55,8 @@ module Metamaps
       g.test_framework :rspec
     end
     config.active_record.raise_in_transactional_callbacks = true
+
+    # pundit errors return 403 FORBIDDEN
+    config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
   end
 end

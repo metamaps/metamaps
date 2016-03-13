@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :require_user, only: [:edit, :update, :updatemetacodes]
+  before_action :require_user, only: [:edit, :update, :updatemetacodes]
     
   respond_to :html, :json 
 

@@ -1,5 +1,6 @@
 require 'simplecov'
 require 'support/controller_helpers'
+require 'pundit/rspec'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

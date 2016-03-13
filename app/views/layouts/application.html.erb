@@ -81,7 +81,7 @@
            classes += controller_name == "maps" && action_name == "index" ? " explorePage" : ""
            if controller_name == "maps" && action_name == "show" 
              classes += " mapPage"
-             if @map.authorize_to_edit(current_user)
+             if policy(@map).update?
                classes += " canEditMap"
              end
              if @map.permission == "commons"
