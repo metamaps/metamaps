@@ -1,3 +1,3 @@
 class WebhookSerializer < ActiveModel::Serializer
-  attributes :text, :username #, :attachments #, :icon_url
+  attributes :text, :username, :icon_url #, :attachments
 end

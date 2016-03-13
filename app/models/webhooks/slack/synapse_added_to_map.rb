@@ -1,7 +1,7 @@
 class Webhooks::Slack::SynapseAddedToMap < Webhooks::Slack::Base
 
   def text
-    "\"*#{eventable.synapse.topic1.name}* #{eventable.synapse.desc || '->'} *#{eventable.synapse.topic2.name}*\" was added as a connection to the map *#{view_map_on_metamaps()}*"
+    "\"*#{eventable.mappable.topic1.name}* #{eventable.mappable.desc || '->'} *#{eventable.mappable.topic2.name}*\" was added as a connection to the map *#{view_map_on_metamaps()}*"
   end
 
   def attachment_fallback

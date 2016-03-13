@@ -73,6 +73,11 @@ GEM
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.1)
     debug_inspector (0.0.2)
+    delayed_job (4.0.6)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
     devise (3.5.6)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -262,6 +267,8 @@ DEPENDENCIES
   binding_of_caller
   cancan
   coffee-rails
+  delayed_job (~> 4.0.2)
+  delayed_job_active_record (~> 4.0.1)
   devise
   dotenv
   factory_girl_rails

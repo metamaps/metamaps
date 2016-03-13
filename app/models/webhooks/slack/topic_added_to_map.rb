@@ -1,11 +1,11 @@
 class Webhooks::Slack::TopicAddedToMap < Webhooks::Slack::Base
 
   def text
-    "New #{eventable.topic.metacode.name} topic *#{eventable.topic.name}* was added to the map *#{view_map_on_metamaps()}*"
+    "New #{eventable.mappable.metacode.name} topic *#{eventable.mappable.name}* was added to the map *#{view_map_on_metamaps()}*"
   end
 
   def icon_url
-    eventable.topic.metacode.icon
+    eventable.mappable.metacode.icon
   end
 
   def attachment_fallback
