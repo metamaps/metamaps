@@ -7,6 +7,9 @@ class Map < ActiveRecord::Base
   has_many :topics, through: :topicmappings, source: :mappable, source_type: "Topic"
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
 
+  has_many :webhooks, as: :hookable
+  has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
+
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot, :styles => {
    :thumb => ['188x126#', :png]

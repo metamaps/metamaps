@@ -11,10 +11,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310200131) do
+ActiveRecord::Schema.define(version: 20160313003721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "events", force: :cascade do |t|
+    t.string   "kind",           limit: 255
+    t.integer  "eventable_id"
+    t.string   "eventable_type"
+    t.integer  "user_id"
+    t.integer  "map_id"
+    t.integer  "sequence_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "events", ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id", using: :btree
+  add_index "events", ["map_id", "sequence_id"], name: "index_events_on_map_id_and_sequence_id", unique: true, using: :btree
+  add_index "events", ["map_id"], name: "index_events_on_map_id", using: :btree
+  add_index "events", ["sequence_id"], name: "index_events_on_sequence_id", using: :btree
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "in_metacode_sets", force: :cascade do |t|
     t.integer  "metacode_id"
@@ -180,6 +213,16 @@ ActiveRecord::Schema.define(version: 20160310200131) do
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "webhooks", force: :cascade do |t|
+    t.integer "hookable_id"
+    t.string  "hookable_type"
+    t.string  "kind",                       null: false
+    t.string  "uri",                        null: false
+    t.text    "event_types",   default: [],              array: true
+  end
+
+  add_index "webhooks", ["hookable_type", "hookable_id"], name: "index_webhooks_on_hookable_type_and_hookable_id", using: :btree
 
   add_foreign_key "tokens", "users"
 end
