@@ -49,33 +49,4 @@ RSpec.describe Topic, type: :model do
       end
     end
   end
-
-  context 'permssions' do
-    let(:owner) { create :user }
-    let(:other_user) { create :user }
-    let(:topic) { create :topic, user: owner, permission: :commons }
-    let(:private_topic) { create :topic, user: owner, permission: :private }
-    let(:public_topic) { create :topic, user: owner, permission: :public }
-
-    it 'prevents deletion by non-owner' do
-      expect(topic.authorize_to_delete(other_user)).to eq false
-      expect(topic.authorize_to_delete(owner)).to eq topic
-    end
-
-    it 'prevents visibility if private' do
-      expect(topic.authorize_to_show(other_user)).to eq topic
-      expect(topic.authorize_to_show(owner)).to eq topic
-      expect(private_topic.authorize_to_show(owner)).to eq private_topic
-      expect(private_topic.authorize_to_show(other_user)).to eq false
-    end
-
-    it 'only allows editing if commons or owned' do
-      expect(topic.authorize_to_edit(other_user)).to eq topic
-      expect(topic.authorize_to_edit(owner)).to eq topic
-      expect(private_topic.authorize_to_edit(other_user)).to eq false
-      expect(private_topic.authorize_to_edit(owner)).to eq private_topic
-      expect(public_topic.authorize_to_edit(other_user)).to eq false
-      expect(public_topic.authorize_to_edit(owner)).to eq public_topic
-    end
-  end
 end

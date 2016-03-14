@@ -16,20 +16,28 @@ class MappingPolicy < ApplicationPolicy
   end
 
   def show?
-    map = Pundit.policy(user, record.map)
-    mappable = Pundit.policy(user, record.mappable)
-    map.show? && mappable.show?
+    map_policy.show? && mappable_policy.show?
   end
 
   def create?
-    Pundit.policy(user, record.map).update?
+    map_policy.update?
   end
 
   def update?
-    Pundit.policy(user, record.map).update?
+    record.mappable_type == 'Topic' && map_policy.update?
   end
 
   def destroy?
-    record.user == user || admin_override
+    map_policy.update? || admin_override
+  end
+
+  # Helpers
+
+  def map_policy
+    @map_policy ||= Pundit.policy(user, record.map)
+  end
+
+  def mappable_policy
+    @mappable_policy ||= Pundit.policy(user, record.mappable)
   end
 end
