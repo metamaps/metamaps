@@ -57,6 +57,7 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
     byebug (8.2.2)
+    cancan (1.6.10)
     cancancan (1.10.1)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -264,6 +265,7 @@ DEPENDENCIES
   best_in_place
   better_errors
   binding_of_caller
+  cancan
   coffee-rails
   delayed_job (~> 4.0.2)
   delayed_job_active_record (~> 4.0.1)
@@ -299,3 +301,6 @@ DEPENDENCIES
   tunemygc
   uglifier
   uservoice-ruby
+
+BUNDLED WITH
+   1.11.2
