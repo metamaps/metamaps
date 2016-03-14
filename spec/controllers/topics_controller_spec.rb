@@ -95,7 +95,7 @@ RSpec.describe TopicsController, type: :controller do
     end
 
     it 'return 204 NO CONTENT' do 
-      delete :destroy, { id: topic.to_param, format: :json }
+      delete :destroy, { id: owned_topic.to_param, format: :json }
       expect(response.status).to eq 204
     end
   end
