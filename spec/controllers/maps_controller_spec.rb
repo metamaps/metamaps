@@ -89,7 +89,8 @@ RSpec.describe MapsController, type: :controller do
       expect do
         delete :destroy, { id: unowned_map.to_param, format: :json }
       end.to change(Map, :count).by(0)
-      expect(response.body).to eq("unauthorized")
+      expect(response.body).to eq ''
+      expect(response.status).to eq 403
     end
 
     it 'deletes owned map' do
@@ -97,7 +98,8 @@ RSpec.describe MapsController, type: :controller do
       expect do
         delete :destroy, { id: owned_map.to_param, format: :json }
       end.to change(Map, :count).by(-1)
-      expect(response.body).to eq("success")
+      expect(response.body).to eq ''
+      expect(response.status).to eq 204
     end
   end
 end

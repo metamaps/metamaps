@@ -88,15 +88,4 @@ class Topic < ActiveRecord::Base
   def mk_permission
     Perm.short(permission)
   end
-
-  # has no viewable synapses helper function
-  def has_viewable_synapses(current)
-  	result = false
-  	synapses.each do |synapse|
-  		if synapse.authorize_to_show(current)
-  			result = true
-  		end
-  	end
-  	result
-  end
 end
