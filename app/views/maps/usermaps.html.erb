@@ -13,6 +13,6 @@
   <% content_for :title, @user.name + " | Metamaps" %>
 
   Metamaps.currentSection = "explore";
-  Metamaps.GlobalUI.Search.isOpen = true;
+  Metamaps.GlobalUI.Search.open();
   Metamaps.GlobalUI.Search.lock();
 </script>
