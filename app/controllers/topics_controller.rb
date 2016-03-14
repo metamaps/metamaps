@@ -24,9 +24,10 @@ class TopicsController < ApplicationController
 
         respond_to do |format|
             format.html { 
-                @alltopics = ([@topic] + policy_scope(Topic.relatives(@topic.id)))
-                @allsynapses = policy_scope(Synapse.for_topic(@topic.id))
-
+                @alltopics = [@topic].concat(policy_scope(Topic.relatives1(@topic.id)).to_a).concat(policy_scope(Topic.relatives2(@topic.id)).to_a)
+                @allsynapses = policy_scope(Synapse.for_topic(@topic.id)).to_a
+puts @alltopics.length
+puts @allsynapses.length
                 @allcreators = @alltopics.map(&:user).uniq
                 @allcreators += @allsynapses.map(&:user).uniq
 
@@ -41,8 +42,8 @@ class TopicsController < ApplicationController
         @topic = Topic.find(params[:id])
         authorize @topic
 
-        @alltopics = [@topic] + policy_scope(@topic.relatives)
-        @allsynapses = policy_scope(@topic.synapses)
+        @alltopics = [@topic].concat(policy_scope(Topic.relatives1(@topic.id)).to_a).concat(policy_scope(Topic.relatives2(@topic.id)).to_a)
+        @allsynapses = policy_scope(Synapse.for_topic(@topic.id))
 
         @allcreators = @alltopics.map(&:user).uniq
         @allcreators += @allsynapses.map(&:user).uniq
@@ -65,8 +66,8 @@ class TopicsController < ApplicationController
 
         topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
-        @alltopics = policy_scope(@topic.relatives).to_a.uniq
-        @alltopics.delete_if! do |topic|
+        @alltopics = policy_scope(Topic.relatives1(@topic.id)).to_a.concat(policy_scope(Topic.relatives2(@topic.id)).to_a).uniq
+        @alltopics.delete_if do |topic|
           topicsAlreadyHas.index(topic.id) != nil
         end
 
@@ -87,14 +88,15 @@ class TopicsController < ApplicationController
 
       topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
-      alltopics = policy_scope(@topic.relatives).to_a.uniq.delete_if do |topic| 
+      alltopics =  policy_scope(Topic.relatives1(@topic.id)).to_a.concat(policy_scope(Topic.relatives2(@topic.id)).to_a).uniq
+      alltopics.delete_if do |topic| 
         topicsAlreadyHas.index(topic.id.to_s) != nil
       end
 
       #find synapses between topics in alltopics array
-      allsynapses = policy_scope(@topic.synapses)
-      synapse_ids = (allsynapses.map(&:topic1_id) + allsynapses.map(&:topic2_id)).uniq
-      allsynapses.delete_if! do |synapse|
+      allsynapses = policy_scope(Synapse.for_topic(@topic.id)).to_a
+      synapse_ids = (allsynapses.map(&:node1_id) + allsynapses.map(&:node2_id)).uniq
+      allsynapses.delete_if do |synapse|
         synapse_ids.index(synapse.id) != nil
       end
 
