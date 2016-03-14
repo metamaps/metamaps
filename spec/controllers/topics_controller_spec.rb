@@ -92,10 +92,7 @@ RSpec.describe TopicsController, type: :controller do
       expect do
         delete :destroy, { id: owned_topic.to_param, format: :json }
       end.to change(Topic, :count).by(-1)
-    end
-
-    it 'return 204 NO CONTENT' do 
-      delete :destroy, { id: owned_topic.to_param, format: :json }
+      expect(response.body).to eq ''
       expect(response.status).to eq 204
     end
   end
