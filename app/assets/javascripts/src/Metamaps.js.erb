@@ -4023,11 +4023,11 @@ Metamaps.Topic = {
                 nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), "end");
             }
             if (Metamaps.Create.newTopic.addSynapse && permitCreateSynapseAfter) {
-                Metamaps.Create.newSynapse.topic1id = tempNode.getData('topic').id;
+                Metamaps.Create.newSynapse.topic1id = Metamaps.tempNode.getData('topic').id;
                 
                 // position the form
-                midpoint.x = tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - tempNode.pos.getc().x) / 2;
-                midpoint.y = tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - tempNode.pos.getc().y) / 2;
+                midpoint.x = Metamaps.tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - Metamaps.tempNode.pos.getc().x) / 2;
+                midpoint.y = Metamaps.tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - Metamaps.tempNode.pos.getc().y) / 2;
                 pixelPos = Metamaps.Util.coordsToPixels(midpoint);
                 $('#new_synapse').css('left', pixelPos.x + "px");
                 $('#new_synapse').css('top', pixelPos.y + "px");
@@ -4037,9 +4037,9 @@ Metamaps.Topic = {
                     modes: ["node-property:dim"],
                     duration: 500,
                     onComplete: function () {
-                        tempNode = null;
-                        tempNode2 = null;
-                        tempInit = false;
+                        Metamaps.tempNode = null;
+                        Metamaps.tempNode2 = null;
+                        Metamaps.tempInit = false;
                     }
                 });
             } else {

@@ -108,7 +108,7 @@ Metamaps.JIT = {
         _.each(results[1], function (synapse) {
             mapping = synapse.getMapping();
             Metamaps.Synapses.remove(synapse);
-            Metamaps.Mappings.remove(mapping);
+            if (Metamaps.Mappings) Metamaps.Mappings.remove(mapping);
         });
 
         if (self.vizData.length == 0) {
