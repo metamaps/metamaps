@@ -1,28 +1,28 @@
 require 'rails_helper'
 
-RSpec.describe MapPolicy, type: :policy do
+RSpec.describe SynapsePolicy, type: :policy do
   subject { described_class }
 
   context 'unauthenticated' do
     context 'commons' do
-      let(:map) { create(:map, permission: :commons) }
+      let(:synapse) { create(:synapse, permission: :commons) }
       permissions :show? do
         it 'permits access' do
-          expect(subject).to permit(nil, map)
+          expect(subject).to permit(nil, synapse)
         end
       end
       permissions :create?, :update?, :destroy? do
         it 'denies access' do
-          expect(subject).to_not permit(nil, map)
+          expect(subject).to_not permit(nil, synapse)
         end
       end
     end
 
     context 'private' do
-      let(:map) { create(:map, permission: :private) }
+      let(:synapse) { create(:synapse, permission: :private) }
       permissions :show?, :create?, :update?, :destroy? do
-        it 'permits access' do
-          expect(subject).to_not permit(nil, map)
+        it 'denies access' do
+          expect(subject).to_not permit(nil, synapse)
         end
       end
     end
@@ -37,54 +37,54 @@ RSpec.describe MapPolicy, type: :policy do
 
     context 'commons' do
       let(:owner) { create(:user) }
-      let(:map) { create(:map, permission: :commons, user: owner) }
+      let(:synapse) { create(:synapse, permission: :commons, user: owner) }
       permissions :show?, :create?, :update? do
         it 'permits access' do
-          expect(subject).to permit(user, map)
+          expect(subject).to permit(user, synapse)
         end
       end
       permissions :destroy? do
         it 'denies access' do
-          expect(subject).to_not permit(user, map)
+          expect(subject).to_not permit(user, synapse)
         end
         it 'permits access to owner' do
-          expect(subject).to permit(owner, map)
+          expect(subject).to permit(owner, synapse)
         end
       end
     end
 
     context 'public' do
       let(:owner) { create(:user) }
-      let(:map) { create(:map, permission: :public, user: owner) }
+      let(:synapse) { create(:synapse, permission: :public, user: owner) }
       permissions :show?, :create? do
         it 'permits access' do
-          expect(subject).to permit(user, map)
+          expect(subject).to permit(user, synapse)
         end
       end
       permissions :update?, :destroy? do
         it 'denies access' do
-          expect(subject).to_not permit(user, map)
+          expect(subject).to_not permit(user, synapse)
         end
         it 'permits access to owner' do
-          expect(subject).to permit(owner, map)
+          expect(subject).to permit(owner, synapse)
         end
       end
     end
 
     context 'private' do
       let(:owner) { create(:user) }
-      let(:map) { create(:map, permission: :private, user: owner) }
+      let(:synapse) { create(:synapse, permission: :private, user: owner) }
       permissions :create? do
         it 'permits access' do
-          expect(subject).to permit(user, map)
+          expect(subject).to permit(user, synapse)
         end
       end
       permissions :show?, :update?, :destroy? do
         it 'denies access' do
-          expect(subject).to_not permit(user, map)
+          expect(subject).to_not permit(user, synapse)
         end
         it 'permits access to owner' do
-          expect(subject).to permit(owner, map)
+          expect(subject).to permit(owner, synapse)
         end
       end
     end
