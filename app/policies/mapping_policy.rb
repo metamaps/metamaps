@@ -20,7 +20,7 @@ class MappingPolicy < ApplicationPolicy
   end
 
   def create?
-    map_policy.update?
+    record.map.present? && map_policy.update?
   end
 
   def update?
