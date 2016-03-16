@@ -9,10 +9,10 @@ Ruby on Rails is a pretty intimidating framework to get started with, since ther
 
 Here are the top level folders you should know about:
 
-- app: holds the ruby code + assets that make up the app. Really, you only need to look in here to see how the app works.
+- app: holds the ruby code + assets that make up the app. This is the only directory you really need to see how the app works.
 - spec: tests describing how the code *should* work
 - db: code for handling interaction with the underlying Postgresql database
-- config: low-level, in-depth configuration variables.
+- config: low-level, in-depth configuration variables. The most interesting file is `config/routes.rb`.
 - Gemfile: listing of app dependencies from https://rubygems.org/
 - realtime: code for our Node.JS realtime server. This is a separate server written in Javascript that isn't served by ruby on rails.
 
