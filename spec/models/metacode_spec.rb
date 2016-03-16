@@ -15,9 +15,16 @@ RSpec.describe Metacode, type: :model do
   end
 
   context 'NEITHER aws_icon or manual_icon' do
-    let(:metacode2) { build(:metacode, aws_icon: nil, manual_icon: nil) }
+    let(:metacode) { build(:metacode, aws_icon: nil, manual_icon: nil) }
     it 'raises a validation error' do
-      expect { metacode2.save! }.to raise_error ActiveRecord::RecordInvalid
+      expect { metacode.save! }.to raise_error ActiveRecord::RecordInvalid
+    end
+  end
+
+  context 'non-https manual icon' do
+    let(:metacode) { build(:metacode, manual_icon: 'http://metamaps.cc/assets/user.png') }
+    it 'raises a validation error' do
+      expect { metacode.save! }.to raise_error ActiveRecord::RecordInvalid
     end
   end
 end
