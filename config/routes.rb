@@ -1,5 +1,6 @@
 Metamaps::Application.routes.draw do
 
+  use_doorkeeper
   root to: 'main#home', via: :get
   
   get 'request', to: 'main#requestinvite', as: :request

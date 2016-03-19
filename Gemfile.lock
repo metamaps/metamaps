@@ -87,6 +87,8 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    doorkeeper (3.1.0)
+      railties (>= 3.2)
     dotenv (2.1.0)
     erubis (2.7.0)
     execjs (2.6.0)
@@ -270,6 +272,7 @@ DEPENDENCIES
   delayed_job (~> 4.0.2)
   delayed_job_active_record (~> 4.0.1)
   devise
+  doorkeeper
   dotenv
   factory_girl_rails
   formtastic
