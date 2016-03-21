@@ -456,7 +456,7 @@
 }
 
 .zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
- .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove {
+ .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips {
     display: block;
 }
 
@@ -536,6 +536,10 @@
     left: -11px;
 }
 
+.chat-button .tooltips {
+    top: 10px;
+}
+
 .openCheatsheet .tooltipsAbove {
     left: -4px;
 }
@@ -545,7 +549,7 @@
     margin-top: 40px;
 }
 
-.zoomExtents div::after, .zoomIn div::after, .zoomOut div::after, .takeScreenshot div:after {
+.zoomExtents div::after, .zoomIn div::after, .zoomOut div::after, .takeScreenshot div:after, .chat-button div.tooltips::after {
     content: '';
     position: absolute;
     top: 57%;

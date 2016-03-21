@@ -17,7 +17,7 @@ Metamaps.Views.chatView = (function () {
                 "<div class='chat-participant-name'>{{ username }} {{ selfName }}</div>" +
                 "<button type='button' class='button chat-participant-invite-call' onclick='Metamaps.Realtime.inviteACall({{ id}});'></button>" +
                 "<button type='button' class='button chat-participant-invite-join' onclick='Metamaps.Realtime.inviteToJoin({{ id}});'></button>" +
-                "<span class='chat-participant-participating'>IN CALL</span>" +
+                "<span class='chat-participant-participating'><div class='green-dot'></div></span>" +
                 "<div class='clearfloat'></div>" +
               "</div>",
         templates: function() {
@@ -30,7 +30,7 @@ Metamaps.Views.chatView = (function () {
         },
         createElements: function() {
             this.$unread = $('<div class="chat-unread"></div>');
-            this.$button = $('<div class="chat-button"></div>');
+            this.$button = $('<div class="chat-button"><div class="tooltips">Chat</div></div>');
             this.$messageInput = $('<textarea placeholder="Send a message..." class="chat-input"></textarea>');
             this.$juntoHeader = $('<div class="junto-header">PARTICIPANTS</div>');
             this.$videoToggle = $('<div class="video-toggle"></div>');
