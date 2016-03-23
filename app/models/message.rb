@@ -16,39 +16,4 @@ class Message < ActiveRecord::Base
     json
   end
 
-  ##### PERMISSIONS ######
-  
-  def authorize_to_delete(user)
-    if (self.user != user)
-      return false
-    end
-    return self
-  end
-
-  # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)
-    if (self.resource && self.resource.permission == "private" && self.resource.user != user)
-  		return false
-  	end
-  	return self
-  end
-  
-  # returns false if user not allowed to 'edit' Topic, Synapse, or Map
-  def authorize_to_edit(user)  
-  	if !user
-      return false
-    elsif (self.user != user)
-  		return false
-  	end
-  	return self
-  end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-  	if (self.resource && self.resource.permission == "private" && self.resource.user != user)
-  		return false
-  	end
-  	return true
-  end
-
 end

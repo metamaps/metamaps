@@ -1,10 +1,12 @@
 class MessagesController < ApplicationController
 
-  before_filter :require_user, except: [:show]
+  before_action :require_user, except: [:show]
+  after_action :verify_authorized
 
   # GET /messages/1.json
   def show
     @message = Message.find(params[:id])
+    authorize @message
 
     respond_to do |format|
       format.json { render json: @message }
@@ -15,8 +17,8 @@ class MessagesController < ApplicationController
   # POST /messages.json
   def create
     @message = Message.new(message_params)
-
     @message.user = current_user
+    authorize @message
 
     respond_to do |format|
       if @message.save
@@ -31,6 +33,7 @@ class MessagesController < ApplicationController
   # PUT /messages/1.json
   def update
     @message = Message.find(params[:id])
+    authorize @message
 
     respond_to do |format|
       if @message.update_attributes(message_params)
@@ -45,6 +48,8 @@ class MessagesController < ApplicationController
   # DELETE /messages/1.json
   def destroy
     @message = Message.find(params[:id])
+    authorize @message
+
     @message.destroy
 
     respond_to do |format|
