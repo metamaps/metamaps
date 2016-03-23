@@ -1933,7 +1933,6 @@ Metamaps.Realtime = {
     chatOpen: false,
     status: true, // stores whether realtime is True/On or False/Off,
     broadcastingStatus: false,
-    videosInPosition: 1,
     inConversation: false,
     localVideo: null,
     init: function () {
@@ -2036,23 +2035,62 @@ Metamaps.Realtime = {
     },
     handleVideoAdded: function (v, id) {
       var self = Metamaps.Realtime;
-      // random position for now
-      var paddingAboveTop = 72;
-      var heightOfVideo = 150;
-      var padding = 25;
-      var top = paddingAboveTop + (self.videosInPosition * heightOfVideo) + padding;
-      var left = 30;
-      //var right = Math.floor((Math.random() * (468 - 100)) + 1);
+      self.positionVideos();
       v.setParent($('#wrapper'));
-      $('#wrapper').append(v.$container);
-      v.$container.css({
-          top: top + 'px',
-          left: left + 'px'
-      });
       v.$container.find('.video-cutoff').css({
         border: '4px solid ' + self.mappersOnMap[id].color
       });
-      self.videosInPosition += 1;
+      $('#wrapper').append(v.$container);
+    },
+    positionVideos: function () {
+      var self = Metamaps.Realtime;
+      var videoIds = Object.keys(self.room.videos);
+      var numOfVideos = videoIds.length;
+      var numOfVideosToPosition = _.filter(videoIds, function (id) {
+        return !self.room.videos[id].manuallyPositioned;
+      }).length;
+
+      var screenHeight = $(document).height();
+      var screenWidth = $(document).width();
+      var topExtraPadding = 20;
+      var topPadding = 30;
+      var leftPadding = 30;
+      var videoHeight = 150;
+      var videoWidth = 180;
+      var column = 0;
+      var row = 0;
+      var yFormula = function () {
+        var y = topExtraPadding + (topPadding + videoHeight)*row + topPadding;
+        if (y + videoHeight > screenHeight) {
+          row = 0;
+          column += 1;
+          y = yFormula();
+        }
+        row++;
+        return y;
+      };
+      var xFormula = function () {
+        var x = (leftPadding + videoWidth)*column + leftPadding;
+        return x;
+      };
+
+      // do self first
+      var myVideo = Metamaps.Realtime.localVideo.view;
+      if (!myVideo.manuallyPositioned) {
+        myVideo.$container.css({
+          top: yFormula() + 'px',
+          left: xFormula() + 'px'
+        });
+      }
+      videoIds.forEach(function (id) {
+        var video = self.room.videos[id];
+        if (!video.manuallyPositioned) {
+          video.$container.css({
+            top: yFormula() + 'px',
+            left: xFormula() + 'px'
+          });
+        }
+      });
     },
     startActiveMap: function () {
         var self = Metamaps.Realtime;
@@ -2083,7 +2121,6 @@ Metamaps.Realtime = {
         self.room.leave();
         self.room.chat.$container.hide();
         self.room.chat.close();
-        self.videosInPosition = 1;
     },
     reenableRealtime: function() {
         var confirmString = "The layout of your map has fallen out of sync with the saved copy. ";
@@ -2195,7 +2232,6 @@ Metamaps.Realtime = {
       self.room.conversationEnding();
       self.room.leaveVideoOnly();
       self.inConversation = false;
-      self.videosInPosition = 1;
       self.localVideo.view.$container.hide().css({
         top: '72px',
         left: '30px'
@@ -2303,6 +2339,8 @@ Metamaps.Realtime = {
       self.webrtc.once('readyToCall', function () {
         self.videoInitialized = true;
         self.readyToCall = true;
+        self.localVideo.view.manuallyPositioned = false;
+        self.positionVideos();
         self.localVideo.view.$container.show();
         if (self.localVideo && self.status) {
           $('#wrapper').append(self.localVideo.view.$container);
@@ -2329,7 +2367,6 @@ Metamaps.Realtime = {
       self.room.chat.mapperLeftCall(Metamaps.Active.Mapper.id);
       self.room.leaveVideoOnly();
       self.inConversation = false;
-      self.videosInPosition = 1;
       self.localVideo.view.$container.hide();
 
       // if there's only two people in the room, and we're leaving
@@ -4053,6 +4090,7 @@ Metamaps.Listeners = {
         $(window).resize(function () {
             if (Metamaps.Visualize && Metamaps.Visualize.mGraph) Metamaps.Visualize.mGraph.canvas.resize($(window).width(), $(window).height());
             if ((Metamaps.Active.Map || Metamaps.Active.Topic) && Metamaps.Famous && Metamaps.Famous.maps.surf) Metamaps.Famous.maps.reposition();
+            if (Metamaps.Active.Map && Metamaps.Realtime.inConversation) Metamaps.Realtime.positionVideos();
         });
     }
 }; // end Metamaps.Listeners

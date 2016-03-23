@@ -141,8 +141,8 @@ Metamaps.Views.room = (function () {
         var
           v = new VideoView(video, null, id, false, { DOUBLE_CLICK_TOLERANCE: 200, avatar: peer.avatar, username: peer.username });
 
-        if (this._videoAdded) this._videoAdded(v, peer.nick);
         this.videos[peer.id] = v;
+        if (this._videoAdded) this._videoAdded(v, peer.nick);
       }
 
       room.prototype.removeVideo = function (peer) {
