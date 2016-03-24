@@ -6,7 +6,7 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
         return _.omit(this.attributes, this.blacklist);
     },
     save: function (key, val, options) {
-        
+
         var attrs;
 
         // Handle both `"key", value` and `{key: value}` -style arguments.
@@ -204,6 +204,26 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
             self.trigger('successOnFetch', cb);
         }
     }
+});
+
+Metamaps.Backbone.Message = Backbone.Model.extend({
+    urlRoot: '/messages',
+    blacklist: ['created_at', 'updated_at'],
+    toJSON: function (options) {
+        return _.omit(this.attributes, this.blacklist);
+    },
+    prepareLiForFilter: function () {
+        /*var li = '';
+        li += '<li data-id="' + this.id.toString() + '">';      
+        li += '<img src="' + this.get("image") + '" data-id="' + this.id.toString() + '"';
+        li += ' alt="' + this.get('name') + '" />';      
+        li += '<p>' + this.get('name') + '</p></li>';
+        return li;*/
+    }
+});
+Metamaps.Backbone.MessageCollection = Backbone.Collection.extend({
+    model: Metamaps.Backbone.Message,
+    url: '/messages'
 });
 
 Metamaps.Backbone.Mapper = Backbone.Model.extend({

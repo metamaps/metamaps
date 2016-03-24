@@ -1,6 +1,13 @@
-var io = require('socket.io').listen(5001);
+var
+  io = require('socket.io').listen(5001),
+  signalServer = require('./signal'),
+  stunservers = [{"url": "stun:stun.l.google.com:19302"}];
+
+io.set('log', false);
 
 function start() {
+
+    signalServer(io, stunservers);
 
     io.on('connection', function (socket) {
 
@@ -10,9 +17,41 @@ function start() {
                 userid: data.userid,
                 username: data.username,
                 userrealtime: data.userrealtime,
+                userinconversation: data.userinconversation,
                 userimage: data.userimage
             };
             socket.broadcast.emit(data.userToNotify + '-' + data.mapid + '-UpdateMapperList', existingUser);
+        });
+
+        // as a new mapper check whether there's a call in progress to join
+        socket.on('checkForCall', function (data) {
+          var socketsInRoom = io.sockets.clients(data.room);
+          if (socketsInRoom.length) socket.emit('maps-' + data.mapid + '-callInProgress');
+        });
+        // send the invitation to start a call
+        socket.on('inviteACall', function (data) {
+          socket.broadcast.emit(data.invited + '-' + data.mapid + '-invitedToCall', data.inviter);
+        });
+        // send an invitation to join a call in progress
+        socket.on('inviteToJoin', function (data) {
+          socket.broadcast.emit(data.invited + '-' + data.mapid + '-invitedToJoin', data.inviter);
+        });
+        // send response back to the inviter
+        socket.on('callAccepted', function (data) {
+          socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callAccepted', data.invited);
+          socket.broadcast.emit('maps-' + data.mapid + '-callStarting');
+        });
+        socket.on('callDenied', function (data) {
+          socket.broadcast.emit(data.inviter + '-' + data.mapid + '-callDenied', data.invited);
+        });
+        socket.on('inviteDenied', function (data) {
+          socket.broadcast.emit(data.inviter + '-' + data.mapid + '-inviteDenied', data.invited);
+        });
+        socket.on('mapperJoinedCall', function (data) {
+          socket.broadcast.emit('maps-' + data.mapid + '-mapperJoinedCall', data.id);
+        });
+        socket.on('mapperLeftCall', function (data) {
+          socket.broadcast.emit('maps-' + data.mapid + '-mapperLeftCall', data.id);
         });
 
         // this will ping everyone on a map that there's a person just joined the map
@@ -49,7 +88,7 @@ function start() {
         // this will ping everyone on a map that there's a person just left the map
         socket.on('disconnect', end);
         socket.on('endMapperNotify', end);
-        
+
         // this will ping everyone on a map that someone just turned on realtime
         socket.on('notifyStartRealtime', function (data) {
             var newUser = {
@@ -59,7 +98,7 @@ function start() {
 
             socket.broadcast.emit('maps-' + data.mapid + '-newrealtime', newUser);
         });
-        
+
         // this will ping everyone on a map that someone just turned on realtime
         socket.on('notifyStopRealtime', function (data) {
             var newUser = {
@@ -84,6 +123,13 @@ function start() {
             delete data.mapid;
 
             socket.broadcast.emit('maps-' + mapId + '-topicDrag', data);
+        });
+
+        socket.on('newMessage', function (data) {
+            var mapId = data.mapid;
+            delete data.mapid;
+
+            socket.broadcast.emit('maps-' + mapId + '-newMessage', data);
         });
 
         socket.on('newTopic', function (data) {

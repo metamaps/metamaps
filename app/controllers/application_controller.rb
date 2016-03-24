@@ -13,11 +13,11 @@ class ApplicationController < ActionController::Base
 
   # this is for global login
   include ContentHelper
-  
+
   helper_method :user
   helper_method :authenticated?
   helper_method :admin?
-  
+
   def after_sign_in_path_for(resource)
     sign_in_url = url_for(:action => 'new', :controller => 'sessions', :only_path => false, :protocol => 'https')
 
@@ -42,29 +42,29 @@ private
       return false
     end
   end
-  
+
   def require_user
     unless authenticated?
       redirect_to new_user_session_path, notice: "You must be logged in."
       return false
     end
   end
-    
+
   def require_admin
     unless authenticated? && admin?
       redirect_to root_url, notice: "You need to be an admin for that."
       return false
     end
   end
-  
+
   def user
     current_user
   end
-  
+
   def authenticated?
     current_user
   end
-    
+
   def admin?
     authenticated? && current_user.admin
   end

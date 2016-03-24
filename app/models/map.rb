@@ -6,6 +6,7 @@ class Map < ActiveRecord::Base
   has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
   has_many :topics, through: :topicmappings, source: :mappable, source_type: "Topic"
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
+  has_many :messages, as: :resource, dependent: :destroy
 
   has_many :webhooks, as: :hookable
   has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
@@ -16,15 +17,16 @@ class Map < ActiveRecord::Base
    #:full => ['940x630#', :png]
   },
   :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
+
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
-    
+
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
 
-  def mappings 
+  def mappings
   	topicmappings + synapsemappings
   end
 
@@ -35,11 +37,11 @@ class Map < ActiveRecord::Base
   #return an array of the contributors to the map
   def contributors
     contributors = []
-    
+
     self.mappings.each do |m|
       contributors.push(m.user) if !contributors.include?(m.user)
     end
-    
+
     return contributors
   end
 
@@ -81,10 +83,28 @@ class Map < ActiveRecord::Base
     json[:updated_at_clean] = updated_at_str
     json
   end
+
+  def to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << ["id", "name", "metacode", "desc", "link", "user.name", "permission", "synapses"]
+      self.topics.each do |topic|
+        csv << [
+          topic.id,
+          topic.name,
+          topic.metacode.name,
+          topic.desc,
+          topic.link,
+          topic.user.name,
+          topic.permission,
+          topic.synapses_csv("text")
+        ]
+      end
+    end
+  end
   
   def decode_base64(imgBase64)
     decoded_data = Base64.decode64(imgBase64)
- 
+
     data = StringIO.new(decoded_data)
     data.class_eval do
       attr_accessor :content_type, :original_filename

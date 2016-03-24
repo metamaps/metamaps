@@ -19,7 +19,7 @@ Now you are ready to clone the Metamaps git repository:
 
 The third `bundle install` command downloads and installs the rubygem
 dependencies of Metamaps.
-  
+
 At this point you should be in C:\git\metamaps_gen002, or whatever equivalent
 directory you've chosen. The next step is to set up your database
 configuration. From the metamaps_gen002 directory, run
@@ -41,7 +41,7 @@ time with only one command; you don't need to repeat any of the previous steps
 again. The command to run the server is:
 
     rails s
-  
+
 Navigate your browser to localhost:3000 once you have the server running
 
 Sign in with the default account
