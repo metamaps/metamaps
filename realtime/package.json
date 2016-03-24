@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "socket.io": "0.9.12"
+    "socket.io": "0.9.12",
+    "node-uuid": "1.2.0"
   }
 }

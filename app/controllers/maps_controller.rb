@@ -4,7 +4,7 @@ class MapsController < ApplicationController
     after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :usermaps]
     after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :usermaps]
 
-    respond_to :html, :json
+    respond_to :html, :json, :csv
 
     autocomplete :map, :name, :full => true, :extra_data => [:user_id]
 
@@ -72,7 +72,7 @@ class MapsController < ApplicationController
         authorize @map
 
         respond_to do |format|
-            format.html { 
+            format.html {
                 @allmappers = @map.contributors
                 @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
                 @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && current_user.id != s.user_id)) }
@@ -80,10 +80,13 @@ class MapsController < ApplicationController
                     object = m.mappable
                     !object || (object.permission == "private" && (!authenticated? || (authenticated? && current_user.id != object.user_id)))
                 }
+                @allmessages = @map.messages.sort_by(&:created_at)
 
-                respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
+                respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @allmessages, @map)
             }
             format.json { render json: @map }
+            format.csv { send_data @map.to_csv }
+            format.xls
         end
     end
 
@@ -106,6 +109,7 @@ class MapsController < ApplicationController
         @json['synapses'] = @allsynapses
         @json['mappings'] = @allmappings
         @json['mappers'] = @allmappers
+        @json['messages'] = @map.messages.sort_by(&:created_at)
 
         respond_to do |format|
             format.json { render json: @json }
@@ -120,7 +124,7 @@ class MapsController < ApplicationController
         @map.desc = params[:desc]
         @map.permission = params[:permission]
         @map.user = @user
-        @map.arranged = false 
+        @map.arranged = false
 
         if params[:topicsToMap]
             @all = params[:topicsToMap]
