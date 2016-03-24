@@ -21,8 +21,13 @@
     <%= f.text_field :icon %>
     <div class="clearfloat"></div>
   </div>
+  <div class="field">
+    <%= f.label :color, "Color (hex with # sign)" %>
+    <%= f.text_field :color %>
+    <div class="clearfloat"></div>
+  </div>
   <div class="actions">
-    <%= link_to 'Cancel', metacodes_path, { :class => 'button' }%>
+    <%= link_to 'Cancel', metacodes_path, { :class => 'button', 'data-bypass' => 'true' } %>
     <%= f.submit :class => 'add' %>
   </div>
 <% end %>

@@ -1,14 +1,22 @@
 class MetacodesController < ApplicationController
-  
-  before_filter :require_admin  
+  before_filter :require_admin, except: [:index]
     
   # GET /metacodes
   # GET /metacodes.json
   def index
     @metacodes = Metacode.order("name").all
+    @metacodes.map do |metacode|
+      metacode.icon = ActionController::Base.helpers.asset_path(metacode.icon)
+    end
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {
+        unless authenticated? && user.admin
+          redirect_to root_url, notice: "You need to be an admin for that."
+          return false
+        end
+        render action: "index"
+      }
       format.json { render json: @metacodes }
     end
   end
@@ -16,14 +24,14 @@ class MetacodesController < ApplicationController
   ### SHOW IS CURRENTLY DISABLED
   # GET /metacodes/1
   # GET /metacodes/1.json
-  def show
-    @metacode = Metacode.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @metacode }
-    end
-  end
+#  def show
+#    @metacode = Metacode.find(params[:id])
+#
+#    respond_to do |format|
+#      format.html # show.html.erb
+#      format.json { render json: @metacode }
+#    end
+#  end
 
   # GET /metacodes/new
   # GET /metacodes/new.json
@@ -44,7 +52,7 @@ class MetacodesController < ApplicationController
   # POST /metacodes
   # POST /metacodes.json
   def create
-    @metacode = Metacode.new(params[:metacode])
+    @metacode = Metacode.new(metacode_params)
 
     respond_to do |format|
       if @metacode.save
@@ -63,7 +71,7 @@ class MetacodesController < ApplicationController
     @metacode = Metacode.find(params[:id])
 
     respond_to do |format|
-      if @metacode.update_attributes(params[:metacode])
+      if @metacode.update_attributes(metacode_params)
         format.html { redirect_to metacodes_url, notice: 'Metacode was successfully updated.' }
         format.json { head :no_content }
       else
@@ -77,13 +85,20 @@ class MetacodesController < ApplicationController
   ### DESTROY IS CURRENTLY DISABLED
   # DELETE /metacodes/1
   # DELETE /metacodes/1.json
-  def destroy
-    @metacode = Metacode.find(params[:id])
-    @metacode.destroy
+#  def destroy
+#    @metacode = Metacode.find(params[:id])
+#    @metacode.destroy
+#
+#    respond_to do |format|
+#      format.html { redirect_to metacodes_url }
+#      format.json { head :no_content }
+#    end
+#  end
 
-    respond_to do |format|
-      format.html { redirect_to metacodes_url }
-      format.json { head :no_content }
+  private
+
+    # Never trust parameters from the scary internet, only allow the white list through.      
+    def metacode_params
+      params.require(:metacode).permit(:id, :name, :icon, :color)
     end
-  end
 end

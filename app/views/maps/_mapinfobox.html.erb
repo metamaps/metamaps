@@ -2,22 +2,31 @@
   # Partial rendering form for a new topic on a map
   # This code is called when viewing a metamap in show.html.erb in the views/maps folder
   #%>
-<div class="mapInfoBox permission <%= @map.user == user ? " yourMap" : "" %><%= @map.authorize_to_edit(user) ? " canEdit" : "" %>">
+<div class="mapInfoBox mapElement mapElementHidden permission 
+  <%= @map && @map.user == user ? " yourMap" : "" %>
+  <%= @map && @map.authorize_to_edit(user) ? " canEdit" : "" %>
+  <%= @map && @map.permission != 'private' ? " shareable" : "" %>">
   
-  <div class="mapInfoName"><%= best_in_place @map, :name, :type => :input, :classes => 'best_in_place_name' %></div>
+  <% if @map %>
+  <div class="mapInfoName" id="mapInfoName"><%= best_in_place @map, :name, :as => :textarea, :activator => "#mapInfoName", :class => 'best_in_place_name' %></div>
   
   <div class="mapInfoStat">
     <div class="infoStatIcon mapContributors hoverForTip">
-      <%= @map.contributors.count %>
-      <% contributorList = ''
-         @map.contributors.each_with_index do |c, index|
-            comma = (index+1) == @map.contributors.count ? '' : ', '
-            contributorList += c.name + comma
-         end 
-         if @map.contributors.count == 0
-           contributorList = 'No one has added anything yet.'
-         end %>
-      <div class="tip"><%= contributorList %></div>
+      <% if @map.contributors.count == 0 %>
+        <img id="mapContribs" width="25" height="25" src="<%= asset_path('user.png'); %>" />
+      <% elsif @map.contributors.count == 1 %>
+        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:thirtytwo) %>" />
+      <% elsif @map.contributors.count == 2 %>
+        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:thirtytwo) %>" class="multiple mTwo" />
+      <% elsif @map.contributors.count > 2 %>
+        <img id="mapContribs" width="25" height="25" src="<%= @map.contributors[0].image.url(:thirtytwo) %>" class="multiple" />
+      <% end %>
+      <span><%= @map.contributors.count %></span>
+      <div class="tip"> <ul><% @map.contributors.each_with_index do |c, index| %>
+           <li ><a href="/explore/mapper/<%= c.id %>" > <img class="rtUserImage" width="25" height="25" src="<%= asset_path c.image.url(:thirtytwo) %>"  />
+            <%= c.name %></a> 
+            </li>         
+        <% end %></ul></div>
     </div>
     <div class="infoStatIcon mapTopics">
       <%= @map.topics.count %>
@@ -26,27 +35,30 @@
       <%= @map.synapses.count %>
     </div>
     <div class="infoStatIcon mapPermission <%= @map.permission %> hoverForTip">
-      <% if @map.user == user %>
-        <div class="tip">As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>
-      <% end %>
+        <div class="tooltips">As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>
     </div>
     <div class="clearfloat"></div>
   </div>
   
-  <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
-  <div class="mapInfoDesc">
-    <%= best_in_place @map, :desc, :type => :textarea, :nil => "Click to add description.", :classes => 'best_in_place_desc' %>
-  </div>
-  <% end %>
-  
-  <div class="mapInfoMeta">
-    <p>Created by <%= @map.user == user ? "you" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
-    <p>Last edited <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
-  </div>
-  
-  <div class="mapInfoDelete">
-    <% if @map.user == user %>
-      <%= link_to 'Delete', map_path(@map), :class => 'delete', :confirm => 'Delete this map (nodes and synapses will remain)?', :method => :delete %>
+  <div class="mapInfoDesc" id="mapInfoDesc">
+    <% if (authenticated? && @map.authorize_to_edit(user)) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
+      <%= best_in_place @map, :desc, :activator => "#mapInfoDesc", :as => :textarea, :placeholder => "Click to add description...", :class => 'best_in_place_desc' %>
     <% end %>
   </div>
+  
+  <div class="mapInfoMeta">
+    <p class="mapCreatedAt"><span>Created by:</span> <%= @map.user == user ? "You" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
+    <p class="mapEditedAt"><span>Last edited:</span> <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
+    <div class="mapInfoButtonsWrapper">
+      <div class="mapInfoDelete">
+        <div class="deleteMap"></div>
+        <span>Delete</span>
+      </div>
+      <div class="mapInfoShare">
+        <div class="mapInfoShareIcon"></div>
+        <span>Share</span>
+      </div>
+    </div>
+  </div>
+  <% end %>
 </div>

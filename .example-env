@@ -1,0 +1,47 @@
+export DB_USERNAME='postgres'
+export DB_PASSWORD='3112'
+export DB_HOST='localhost'
+export DB_PORT='5432'
+export DB_NAME='metamap002'
+
+export REALTIME_SERVER='http://localhost:5001'
+export MAILER_DEFAULT_URL='localhost:3000'
+export DEVISE_MAILER_SENDER='team@metamaps.cc'
+export DEVISE_SECRET_KEY='f71c467e526f23d614b3b08866cad4788c502bed869c282f06e73ee6c94675b62fe1f6d52fa7ba8196b33031f0d2f3b67e27ea07693c52ecebccb01700cad614'
+
+# # you can safely leave these blank, unless you're deploying an instance, in
+# # which case you'll need to set them up
+#
+# export S3_BUCKET_NAME
+# export AWS_ACCESS_KEY_ID
+# export AWS_SECRET_ACCESS_KEY
+# export SSO_KEY
+# 
+# export SMTP_DOMAIN
+# export SMTP_PASSWORD
+# export SMTP_PORT
+# export SMTP_SERVER
+# export SMTP_USERNAME
+ 
+#ruby garbage collection stuff
+
+export RUBY_GC_TUNE=0 #set to 1 to enable GC test
+export RUBY_GC_TOKEN=4f4380fc9a2857d1f008005a3eb86928
+export RUBY_GC_HEAP_INIT_SLOTS=186426
+export RUBY_GC_HEAP_FREE_SLOTS=559278
+export RUBY_GC_HEAP_GROWTH_FACTOR=1.03
+export RUBY_GC_HEAP_GROWTH_MAX_SLOTS=74570
+export RUBY_GC_HEAP_OLDOBJECT_LIMIT_FACTOR=1.4
+export RUBY_GC_MALLOC_LIMIT=32883406
+export RUBY_GC_MALLOC_LIMIT_MAX=69055153
+export RUBY_GC_MALLOC_LIMIT_GROWTH_FACTOR=1.68
+export RUBY_GC_OLDMALLOC_LIMIT=32509481
+export RUBY_GC_OLDMALLOC_LIMIT_MAX=68269910
+export RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.4
+
+## find the ENV currently in use in the app using : 
+##   grep -rIso -P "(?<=ENV)(\.fetch\(|\[).[A-Z_]+.(\)|\])" 
+
+# for a uniq ordered list of env vars:
+##   grep -rIsoh -P "(?<=ENV)(\.fetch\(|\[).[A-Z_]+.(\)|\])" | grep -oP "[A-Z_]+" | sort -u > temp 
+

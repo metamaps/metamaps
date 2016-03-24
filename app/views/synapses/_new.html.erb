@@ -6,8 +6,5 @@
 <div class="anypage">
 	<%= form_for Synapse.new, url: synapses_url, remote: true do |form| %>
     <%= form.text_field :desc, :placeholder => "describe the connection..." %>
-    <%= form.hidden_field :topic1id, :value => 0 %>
-    <%= form.hidden_field :topic2id, :value => 0 %>
-    <%= form.hidden_field :grabSynapse, :value => "null" %>
 	<% end %>
 </div>

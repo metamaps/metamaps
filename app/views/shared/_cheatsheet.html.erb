@@ -1,0 +1,196 @@
+<%#
+  # @file
+  # The inner HTML of the cheatsheet
+  #%>
+
+<h3>HELP</h3>
+ 
+<div id="cheatSheet">
+<ul id="helpWrapper">
+    <li><a href="#quickReference">QUICK REFERENCE</a></li>
+    <li><a href="#tutorials">TUTORIALS</a></li>
+    <li><a href="#moreResources">MORE RESOURCES</a></li>
+</ul>
+    
+<div id="quickReference">
+  <ul>
+    <li><a href="#csCreatingTopics">Creating Topics</a></li>
+    <li><a href="#csEditingTopics">Editing Topics</a></li>
+    <li><a href="#csCreatingSynapses">Creating Synapses</a></li>
+    <li><a href="#csEditingSynapses">Editing Synapses</a></li>
+    <li><a href="#csNavigation">Navigation</a></li>
+    <li><a href="#csSelection">Selection</a></li>
+    <li><a href="#csSearch">Search</a></li>
+    <li><a href="#csTopicView">Topic View</a></li>
+    <li><a href="#csKeyboardShortcuts">Keyboard Shortcuts</a></li>
+  </ul>
+
+  <div id="csTopicView">    
+    <div class="csItem"><span class="csTitle">Recenter Topics around chosen Topic:</span> Alt + click on the topic OR Right-click + 'center this topic'</div>
+
+  </div>
+  
+  <div id="csCreatingTopics">    
+    <div class="csItem"><span class="csTitle">Double-click on canvas:</span> Bring up the metacode spinner</div>
+    <div class="csItem indented"><span class="csTitle">Scroll:</span> change metacode spinner selection</div>
+    <div class="csItem indented"><span class="csTitle">Tab:</span> rotate spinner counter-clockwise</div>
+    <div class="csItem indented"><span class="csTitle">Shift + tab:</span> rotate spinner clockwise</div>
+    <div class="csItem indented"><span class="csTitle">Esc:</span> Hides auto-suggestion results</div>
+    <div class="csItem indented"><span class="csTitle">Enter:</span> create a new topic</div>
+    <div class="csItem indented"><span class="csTitle">Gear Icon:</span> open up metacode settings</div>
+    <div class="csItem"><br><a href="http://metamapscc.uservoice.com/knowledgebase/articles/425787-creating-and-editing-topics" target= "_blank">Learn More</a></div> 
+  </div>
+
+  <div id="csEditingTopics">    
+    <div class="csItem">
+            <span class="csTitle">Open 'Topic' card:</span> Double-click on topic icon
+    </div>
+    <div class="csItem indented">
+            <span class="csTitle">Move 'Topic' card:</span> Click and drag on topic card metacode
+    </div>
+    <div class="csItem indented">
+            <span class="csTitle">Change/edit metacode:</span> Mouse over metacode icon, then click on solid colored bar
+    </div>
+    <div class="csItem indented">
+            <span class="csTitle">Edit Topic title, description, link:</span> Click on text in respective area
+    </div>
+    <div class="csItem indented">
+        <span class="csTitle">Save Topic title, description, link:</span> Hit enter
+    </div>
+    <div class="csItem indented">
+        <span class="csTitle">Change Topic permission:</span> Click on 'Permission' icon (only for topic creator)
+    </div>
+    <div class="csItem indented">
+        <span class="csTitle">Open Topic view:</span> Click on <img src="<%= asset_path 'synapse16.png' %>" width="16" align="middle" /> icon within topic card bar
+    </div>
+    <div class="csItem indented">
+        <span class="csTitle">Close 'Topic' card:</span> Click on canvas
+    </div>
+    <div class="csItem">
+        <span class="csTitle">Open 'Context Menu':</span> Right-click/alt+click on topic icon or synapse
+    </div>
+    <div class="csItem indented">*Hide/Remove/Delete topic within context menu</div>
+    <div class="csItem"><br><a href="http://metamapscc.uservoice.com/knowledgebase/articles/425787-creating-and-editing-topics" target= "_blank">Learn More</a></div> 
+
+  </div>
+
+  <div id="csCreatingSynapses">    
+    <div class="csItem"><span class="csTitle">Open 'Create Synapse' prompt:</span> Right-click & drag from one topic to another</div>
+    <div class="csItem indented"><span class="csTitle">Enter:</span> Create synapse</div>
+    <div class="csItem indented">*You do not have to add a description</div>
+    <div class="csItem"><span class="csTitle">Create new Topic with Synapse:</span> Right-click + drag from topic to open canvas</div>
+    <div class="csItem indented"><span class="csTitle">Enter:</span> Create topic</div>
+    <div class="csItem indented"><span class="csTitle">Enter:</span> Create synapse</div>
+    <div class="csItem"><br><a href="http://metamapscc.uservoice.com/knowledgebase/articles/425790-creating-and-editing-synapses" target= "_blank">Learn More</a></div> 
+
+  </div>
+
+  <div id="csEditingSynapses">    
+    <div class="csItem"><span class="csTitle">Open 'Synapse' card:</span> Double-click on Synapse </div>
+    <div class="csItem indented"><span class="csTitle">Edit Synapse description:</span> Click on current description text</div>
+    <div class="csItem indented"><span class="csTitle">Save Synapse description:</span> Hit enter</div>
+    <div class="csItem indented"><span class="csTitle">Edit directionality:</span> Select appropriate arrow boxes</div>
+    <div class="csItem indented"><span class="csTitle">Change synapse permission:</span> Click on 'permission' icon (only for synapse creator)</div>
+    <div class="csItem indented"><span class="csTitle">Browse synapses / change visible synapse</span> click on arrow icon and select desired synapse</div>
+    <div class="csItem"><span class="csTitle">Open 'Context Menu':</span> Right-click/alt-click on Synapse</div>
+    <div class="csItem indented">*Hide/Remove/Delete synapse within context menu</div>
+    <div class="csItem"><br><a href="http://metamapscc.uservoice.com/knowledgebase/articles/425790-creating-and-editing-synapses" target= "_blank">Learn More</a></div> 
+
+  </div>
+
+  <div id="csNavigation">    
+    <div class="csItem"><span class="csTitle">Move around Canvas:</span> Click and drag</div>
+    <div class="csItem"><span class="csTitle">Zoom in/out:</span> Scroll OR click on <div id="zoomIn"> </div> & <div id="zoomOut"> </div></div>
+    <div class="csItem"><span class="csTitle">Zoom to see all:</span> Click <div id="centerMap"></div> OR Ctrl + E</div>
+    <div class="csItem"><br><a href="http://metamapscc.uservoice.com/knowledgebase/articles/425784-viewing-existing-maps" target= "_blank">Learn More</a></div> 
+
+  </div>
+
+  <div id="csSelection">    
+    <div class="csItem"><span class="csTitle">Select/Deselect Topic:</span> Click on topic icon</div>
+    <div class="csItem"><span class="csTitle">Select/Deselect Synapse:</span> Click on synapse</div>
+    <div class="csItem"><span class="csTitle">Select multiple Topics/Synapses:</span> Shift + click</div>
+    <div class="csItem"><span class="csTitle">Make Selection box, select multiple Topics/Synapses:</span> Right-click/Shift-click + drag on Canvas</div>
+    <div class="csItem"><span class="csTitle">Move all selected Topics & Synapses:</span> Click + drag on selected topic(s)/synapse(s)</div>
+    <div class="csItem"><span class="csTitle">Open 'Context Menu':</span> Right-click/Alt-click on selected topic(s)</div>
+    <div class="csItem indented">*Hide/Remove/Delete/Change permissions of multiple topics & synapses within context menu</div>
+    <div class="csItem"><span class="csTitle">Zoom to selection box</span> Ctrl-click + drag</div>
+    <div class="csItem"><span class="csTitle">Deselect all topics & Synapses:</span> Click on background or Esc</div>
+  </div>
+
+  <div id="csSearch">    
+    <div class="csItem"><span class="csTitle">Open 'Search' prompt:</span> Ctrl + /</div>
+    <div class="csItem"><span class="csTitle">Close 'Search' prompt:</span> Esc</div>  
+    <% if controller_name == "maps" && action_name == "show" %>
+    <div class="csItem"><span class="csTitle">Add to current Map:</span> Click "+" on a topic result</div>
+    <% end %>
+    <div class="csItem"><span class="csTitle">Search by metacode:</span> type "[name of metacode]:", then your search query. i.e. idea:create...</div>
+    <div class="csItem"><span class="csTitle">Search for map:</span> type "map:", then your search query. i.e. map:exploring...</div>
+    <div class="csItem"><span class="csTitle">Search for mapper:</span> type "mapper:", then your search query. i.e. mapper:Robert</div>
+  </div>
+
+  <div id="csKeyboardShortcuts">    
+    <div class="csItem"><span class="csTitle">Ctrl + /:</span> Open 'Search' prompt</div>
+    <div class="csItem"><span class="csTitle">Ctrl + H:</span> Hide selection on map</div>  
+    <div class="csItem"><span class="csTitle">Ctrl + M:</span> Remove selection from map</div>
+    <div class="csItem"><span class="csTitle">Ctrl + D:</span> Delete selection</div>
+    <div class="csItem"><span class="csTitle">Ctrl + A:</span> Select all topics</div>
+    <div class="csItem"><span class="csTitle">Ctrl + E:</span> See all on map (zoom to extents)</div>
+    <div class="csItem"><span class="csTitle">Esc (while in search):</span> Close search</div>
+    <div class="csItem"><span class="csTitle">Esc (with selection):</span> Deselect all</div>
+  </div>
+</div>
+
+<div id="tutorials">
+    <iframe id="tutorialVideo" src="//player.vimeo.com/video/88334167" width="552" height="320" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <div class="tutorialItem active" id="gettingStarted">1. GETTING STARTED</div>
+    <div class="tutorialItem disable" id="upYourSkillz">2. UP YOUR SKILLZ</div>
+    <div class="tutorialItem disable" id="advancedMapping">3. ADVANCED MAPPING</div>
+</div>
+
+<div id="moreResources">
+    <p>For more information about Metamaps.cc, visit our Knowledge Base or skip directly to a section by clicking on one of the categories below.</p>
+    <div class="resourcesColumnOne resourcesColumn">
+        <a href="http://metamapscc.uservoice.com/forums/262715-general" target="_blank" data-bypass="true" class="button">Feedback Forums</a>
+        <ul>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/61031-getting-started" target="_blank" data-bypass="true">Getting Started</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63372-key-fundamentals" target="_blank" data-bypass="true">Key Fundamentals</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/61033-best-practices" target="_blank" data-bypass="true">Best Practices</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63377-general-troubleshooting" target="_blank" data-bypass="true">General Troubleshooting</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63443-applications-use-cases" target="_blank" data-bypass="true">Applications & Use Cases</a>
+            </li>
+        </ul>
+    </div>
+    <div class="resourcesColumnTwo resourcesColumn">
+        <a href="http://metamapscc.uservoice.com/knowledgebase" target="_blank" data-bypass="true" class="button">KNOWLEDGE BASE</a>
+        <ul>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63440-general-questions" target="_blank" data-bypass="true">General Questions</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63375-getting-involved" target="_blank" data-bypass="true">Getting Involved</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63376-project-organization-governance" target="_blank" data-bypass="true">Organization & Governance</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63378-technical-infrastructure" target="_blank" data-bypass="true">Technical Infrastructure</a>
+            </li>
+            <li>
+                <a href="http://metamapscc.uservoice.com/knowledgebase/topics/63587-theory-references" target="_blank" data-bypass="true">References & Key Theory</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+</div>

@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-ISSAD::Application.load_tasks
+Metamaps::Application.load_tasks

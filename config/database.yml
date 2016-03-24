@@ -1,0 +1,21 @@
+default: &default
+  min_messages: WARNING
+  encoding: unicode
+  pool: 5
+  adapter: postgresql
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+
+development:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_development
+
+test:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_test
+
+production:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_production

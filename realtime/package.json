@@ -2,9 +2,8 @@
   "name": "RoR-real-time",
   "description": "providing real-time sychronization for ruby on rails",
   "version": "0.0.1",
+  "private": true,
   "dependencies": {
-    "socket.io": "0.9.12",
-    "redis": "0.7.3",
-    "express": "3.4.8"
+    "socket.io": "0.9.12"
   }
 }

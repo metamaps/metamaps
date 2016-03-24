@@ -1,243 +1,230 @@
 class MapsController < ApplicationController
-  
-  before_filter :require_user, only: [:new, :create, :edit, :update, :savelayout, :destroy]
-    
-  respond_to :html, :js, :json
-  
-  autocomplete :map, :name, :full => true, :extra_data => [:user_id]
-  
-  # GET /maps/recent
-  # GET /maps/featured
-  # GET /maps/new
-  # GET /maps/mappers/:id
-  def index
-    
-    if request.path == "/maps"
-      redirect_to activemaps_url and return
-    end
-    
-    @current = current_user
-    @user = nil
-    
-    if request.path =="/maps/active"
-      @maps = Map.order("updated_at DESC").limit(20)
-      @request = "active"
-      
-    elsif request.path =="/maps/featured"
-      @maps = Map.order("name ASC").find_all_by_featured(true)
-      @request = "featured"
-      
-    elsif request.path == "/maps/new"
-      @maps = Map.order("created_at DESC").limit(20)
-      @request = "new"
-      
-    elsif request.path.index('/maps/mappers/') != nil  # looking for maps by a mapper
-      @user = User.find(params[:id])
-      @maps = Map.order("name ASC").find_all_by_user_id(@user.id)
-      @request = "you" if authenticated? && @user == @current
-      @request = "other" if authenticated? && @user != @current
-      
-    elsif request.path.index('/maps/topics/') != nil  # looking for maps by a certain topic they include
-      @topic = Topic.find(params[:id]).authorize_to_show(@current)
-      if !@topic
-        redirect_to featuredmaps_url, notice: "Access denied." and return
-      end
-      @maps = @topic.maps
-      @request = "topic"
-    end
-    
-    #read this next line as 'delete a map if its private and you're either 1. logged out or 2. logged in but not the map creator
-    @maps.delete_if {|m| m.permission == "private" && (!authenticated? || (authenticated? && @current.id != m.user_id)) }
-    
-	  respond_with(@maps, @request, @user)
-  end
-  
-  # GET maps/new
-  def new
-  	@map = Map.new
-    @user = current_user
-    
-    respond_with(@map)
-  end
-  
-  # GET maps/:id
-  def show
-  	
-	  @current = current_user
-	  @map = Map.find(params[:id]).authorize_to_show(@current)
-	
-	  if not @map
-	    redirect_to root_url and return
-	  end
-		
-	  @mapjson = @map.self_as_json(@current).html_safe
-	
-	  respond_to do |format|
-      format.html { respond_with(@map, @user) }
-      format.json { respond_with(@mapjson) }
-    end
-  end
-  
-  # GET maps/:id/embed
-  def embed
-  	
-	  @current = current_user
-	  @map = Map.find(params[:id]).authorize_to_show(@current)
-	
-	  if not @map
-	    redirect_to root_url and return
-	  end
-		
-	  @mapjson = @map.self_as_json(@current).html_safe
-	
-	  respond_to do |format|
-      format.html { respond_with(@map, @user) }
-      format.json { respond_with(@mapjson) }
-    end
-  end
-  
-  # GET maps/:id/json
-  def json
-  	
-	  @current = current_user
-	  @map = Map.find(params[:id]).authorize_to_show(@current)
-	
-	  if not @map
-	    redirect_to root_url and return
-	  end
-		
-	  respond_to do |format|
-      format.json { render :json => @map.self_as_json(@current) }
-    end
-  end
-  
-  # POST maps
-  def create
-    
-    @user = current_user
-    @map = Map.new()
-    @map.name = params[:map][:name]
-    @map.desc = params[:map][:desc]
-    @map.permission = params[:map][:permission]
-    @map.user = @user
-    @map.arranged = false    
-    @map.save   
 
-    #this variable specifies to the js file whether it's a brand new map or a forked one
-    @forked = false    
-	  
-    if params[:map][:topicsToMap]
-      @all = params[:map][:topicsToMap]
-      @all = @all.split(',')
-      @all.each do |topic|
-        topic = topic.split('/')
-        @mapping = Mapping.new()
-        @mapping.category = "Topic"
-        @mapping.user = @user
-        @mapping.map  = @map
-        @mapping.topic = Topic.find(topic[0])
-        @mapping.xloc = topic[1]
-        @mapping.yloc = topic[2]
-        @mapping.save
-      end
+    before_filter :require_user, only: [:create, :update, :screenshot, :destroy]
 
-      if params[:map][:synapsesToMap]
-        @synAll = params[:map][:synapsesToMap]
-        @synAll = @synAll.split(',')
-        @synAll.each do |synapse_id|
-          @mapping = Mapping.new()
-          @mapping.category = "Synapse"
-          @mapping.user = @user
-          @mapping.map = @map
-          @mapping.synapse = Synapse.find(synapse_id)
-          @mapping.save
+    respond_to :html, :json
+
+    autocomplete :map, :name, :full => true, :extra_data => [:user_id]
+
+    # GET /explore/active
+    # GET /explore/featured
+    # GET /explore/mapper/:id
+    def index
+
+        if request.path == "/explore"
+            redirect_to activemaps_url and return
         end
-      end
 
-      @map.arranged = true
-      @map.save
-      
-      @forked = true
-    end
-    
-    respond_to do |format|
-      format.js { respond_with(@map, @forked) }
-    end
-  end
-  
-  # GET maps/:id/edit
-  def edit
-	  @current = current_user
-	  @map = Map.find(params[:id]).authorize_to_edit(@current)
-	
-	  if not @map
-	    redirect_to root_url and return
-	  end
-	
-	  @outtopics = @map.topics.order("name ASC").delete_if{|topic| not topic.authorize_to_view(@current)}
-  
-	  respond_with(@user, @map, @outtopics)
-  end
-  
-  # PUT maps/:id
-  def update
-	  @current = current_user
-	  @map = Map.find(params[:id]).authorize_to_edit(@current)
-    
-	  if @map 
-        if params[:map]
-          @map.name = params[:map][:name] if params[:map][:name]
-		      @map.desc = params[:map][:desc] if params[:map][:desc]
-		      @map.permission = params[:map][:permission] if params[:map][:permission]
+        @current = current_user
+        @user = nil
+        @maps = []
+        @mapperId = nil
+
+        if !params[:page] 
+            page = 1
+        else 
+            page = params[:page]
         end
-	    @map.save
+
+        if request.path.index("/explore/active") != nil
+            @maps = Map.where("maps.permission != ?", "private").order("updated_at DESC").page(page).per(20)
+            @request = "active"
+
+        elsif request.path.index("/explore/featured") != nil
+            @maps = Map.where("maps.featured = ? AND maps.permission != ?", true, "private").order("updated_at DESC").page(page).per(20)
+            @request = "featured"
+
+        elsif request.path.index('/explore/mine') != nil  # looking for maps by me
+            if !authenticated?
+                redirect_to activemaps_url and return
+            end
+            # don't need to exclude private maps because they all belong to you
+            @maps = Map.where("maps.user_id = ?", @current.id).order("updated_at DESC").page(page).per(20)
+            @request = "you"
+
+        elsif request.path.index('/explore/mapper/') != nil  # looking for maps by a mapper
+            @user = User.find(params[:id])
+            @maps = Map.where("maps.user_id = ? AND maps.permission != ?", @user.id, "private").order("updated_at DESC").page(page).per(20)
+            @request = "mapper"
+        end
+
+        respond_to do |format|
+            format.html { 
+                if @request == "active" && authenticated?
+                    redirect_to root_url and return
+                end
+                respond_with(@maps, @request, @user)
+            }
+            format.json { render json: @maps }
+        end
     end
 
-    respond_with @map
-  end
-  
-  # PUT maps/:id/savelayout
-  def savelayout
-    @user = current_user
-    @map = Map.find(params[:id])
-  
-    if params[:map][:coordinates]
-      @all = params[:map][:coordinates]
-      @all = @all.split(',')
-      @all.each do |topic|
-        topic = topic.split('/')
-        @mapping = Mapping.find(topic[0])
-        if @mapping
-          @mapping.xloc = topic[1]
-          @mapping.yloc = topic[2]
-          @mapping.save
+    # GET maps/:id
+    def show
+
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_show(@current)
+
+        if not @map
+            redirect_to root_url, notice: "Access denied. That map is private." and return
+        end
+
+        respond_to do |format|
+            format.html { 
+                @allmappers = @map.contributors
+                @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+                @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+                @allmappings = @map.mappings.to_a.delete_if {|m| 
+                    object = m.mappable
+                    !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
+                }
+
+                respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @map) 
+            }
+            format.json { render json: @map }
+        end
+    end
+
+    # GET maps/:id/contains
+    def contains
+
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_show(@current)
+
+        if not @map
+            redirect_to root_url, notice: "Access denied. That map is private." and return
+        end
+
+        @allmappers = @map.contributors
+        @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && @current.id != t.user_id)) }
+        @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && @current.id != s.user_id)) }
+        @allmappings = @map.mappings.to_a.delete_if {|m| 
+            object = m.mappable
+            !object || (object.permission == "private" && (!authenticated? || (authenticated? && @current.id != object.user_id)))
+        }
+
+        @json = Hash.new()
+        @json['map'] = @map
+        @json['topics'] = @alltopics
+        @json['synapses'] = @allsynapses
+        @json['mappings'] = @allmappings
+        @json['mappers'] = @allmappers
+
+        respond_to do |format|
+            format.json { render json: @json }
+        end
+    end
+
+    # POST maps
+    def create
+
+        @user = current_user
+        @map = Map.new()
+        @map.name = params[:name]
+        @map.desc = params[:desc]
+        @map.permission = params[:permission]
+        @map.user = @user
+        @map.arranged = false 
+        @map.save     
+
+        if params[:topicsToMap]
+            @all = params[:topicsToMap]
+            @all = @all.split(',')
+            @all.each do |topic|
+                topic = topic.split('/')
+                @mapping = Mapping.new()
+                @mapping.user = @user
+                @mapping.map  = @map
+                @mapping.mappable = Topic.find(topic[0])
+                @mapping.xloc = topic[1]
+                @mapping.yloc = topic[2]
+                @mapping.save
+            end
+
+            if params[:synapsesToMap]
+                @synAll = params[:synapsesToMap]
+                @synAll = @synAll.split(',')
+                @synAll.each do |synapse_id|
+                    @mapping = Mapping.new()
+                    @mapping.user = @user
+                    @mapping.map = @map
+                    @mapping.mappable = Synapse.find(synapse_id)
+                    @mapping.save
+                end
+            end
+
+            @map.arranged = true
+            @map.save      
+        end
+
+        respond_to do |format|
+            format.json { render :json => @map }
+        end
+    end
+
+    # PUT maps/:id
+    def update
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_edit(@current)
+
+        respond_to do |format|
+            if !@map 
+                format.json { render json: "unauthorized" }
+            elsif @map.update_attributes(map_params)
+                format.json { head :no_content }
+            else
+                format.json { render json: @map.errors, status: :unprocessable_entity }
+            end
+        end
+    end
+
+    # POST maps/:id/upload_screenshot
+    def screenshot
+        @current = current_user
+        @map = Map.find(params[:id]).authorize_to_edit(@current)
+
+        if @map
+          png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length .. -1])
+          StringIO.open(png) do |data|
+            data.class.class_eval { attr_accessor :original_filename, :content_type }
+            data.original_filename = "map-" + @map.id.to_s + "-screenshot.png"
+            data.content_type = "image/png"
+            @map.screenshot = data
+          end
           
-          #push realtime update for location on map
-          @mapping.message 'update',@user.id
+          if @map.save
+            render :json => {:message => "Successfully uploaded the map screenshot."}
+          else
+            render :json => {:message => "Failed to upload image."}
+          end
+        else
+            render :json => {:message => "Unauthorized to set map screenshot."}
         end
-      end
-      @map.arranged = true
-      @map.touch(:updated_at)
-      @map.save
-    end	
-  end
-  
-  # DELETE maps/:id
-  def destroy
-    @current = current_user
-  
-	  @map = Map.find(params[:id])
-	
-	  @mappings = @map.mappings
-	
-	  @mappings.each do |mapping| 
-		  mapping.delete
-	  end
-	
-	  @map.delete
-	
-	  respond_to do |format|
-        format.html { redirect_to "/maps/mappers/" + @current.id.to_s, notice: "Map deleted." }
     end
-  end
+
+    # DELETE maps/:id
+    def destroy
+        @current = current_user
+
+        @map = Map.find(params[:id]).authorize_to_delete(@current)
+
+        @map.delete if @map
+
+        respond_to do |format|
+            format.json { 
+                if @map
+                    render json: "success"
+                else
+                    render json: "unauthorized"
+                end
+            }
+        end
+    end
+
+    private
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def map_params
+      params.require(:map).permit(:id, :name, :arranged, :desc, :permission, :user_id)
+    end
 end

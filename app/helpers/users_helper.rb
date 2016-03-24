@@ -1,19 +1,10 @@
 module UsersHelper
-
-   ## this one is for building our custom JSON autocomplete format for typeahead
+  # build custom json autocomplete for typeahead
   def autocomplete_user_array_json(users)
-    temp = []
-    users.each do |u|
-      user = {}
-      user['id'] = u.id
-      user['label'] = u.name
-      user['value'] = u.name
-      user['mapCount'] = u.maps.count
-      user['rtype'] = "mapper"
-      
-      temp.push user
+    json_users = []
+    users.each do |user|
+     json_users.push user.as_json_for_autocomplete
     end
-    return temp
+    json_users
   end
-  
 end

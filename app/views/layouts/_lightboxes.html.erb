@@ -2,30 +2,218 @@
   # @file
   # The inner HTML of the account box that comes up in the bottom left
   #%>
-
-
-<div id="lightbox_overlay">
+  <div id="lightbox_overlay">
   <div id="lightbox_main">
-    <a id="lightbox_close" onclick="closeLightbox(); return false;" href="#"></a>
+    <a id="lightbox_close" href="#"></a>
     <div id="lightbox_content">
       
       <div class="lightboxContent" id="about">
         <h3>About Metamaps.cc</h3>
-        
-        <p>Metamaps.cc is a free and open source web platform for changemakers, innovators, educators and students. It enables individuals and communities to build and visualize their shared knowledge and unlock their collective intelligence.</p>
+            <div id="aboutParms">
+            <div id="leftAboutParms">
+                <p>STATUS: </p>
+                <p>VERSION:</p>
+                <p>LAST UPDATE:</p>
+            </div> 
+                
+            <div id="rightAboutParms">
+                <p>PRIVATE BETA</p>
+                <p>2.7.1</p>
+                <p>Nov 29, 2014</p>
+            </div>  
+            <div class="clearfloat">  
+            </div>  
+            </div>  
 
-<p>We're creating tools to help connect people, resources and ideas with rich detail and weave those relationships into actionable insights and stories. The platform is evolving for a range of applications amidst a growing network of designers, developers, practitioners, entrepreneurs, and artists.</p>
+                
+        <p>Metamaps.cc is a free and open source web platform that supports real-time sense-making and distributed collaboration between individuals, communities and organizations.</p>
 
-<p>Metamaps.cc is created and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. We are currently based between San Francisco, CA and Waterloo, Ontario, Canada. Learn more in the PAQ link below.</p>
+<p>Using an intuitive graph-based interface, Metamaps.cc helps map out networks of people, ideas, resources, stories, experiences, conversations and much more. The platform is evolving for a range of applications amidst a growing network of designers, developers, facilitators, practitioners, entrepreneurs, and artists.</p>
+
+<p>Metamaps.cc is created and maintained by a distributed community of contributors passionate about the evolution of collaboration, alternative forms of value creation and increase of collective intelligence through the lens of the open culture and the peer-to-peer revolution.</p>
         
-        <ul>
-          <li><a href="/paq">P(ossibly)AQ</a></li>
-          <li><a href="http://blog.metamaps.cc" target="_blank">blog</a></li>
-          <li><a href="https://plus.google.com/u/0/communities/115060009262157699234" target="_blank">community</a></li>
-          <li><a href="https://twitter.com/metamapps" target="_blank">@metamapps</a></li>
-          <li><a href="https://github.com/Connoropolous/metamaps_gen002" target="_blank">source code</a></li>
-          <li><a href="http://metamaps.cc/maps/331" target="_blank">terms</a></li>
+        <ul class="lightbox_links">
+          <li>
+            <a id="lightbox_metamapps" href="https://twitter.com/metamapps" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              @metamapps
+            </a>
+          </li>
+          <li>
+            <a id="lightbox_community" href="https://plus.google.com/u/0/communities/115060009262157699234" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              community
+            </a>
+          </li>
+          <li>
+            <% # TODO enable ssl on blog.metamaps.cc %>
+            <a id="lightbox_blog" href="http://blog.metamaps.cc" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              blog
+            </a>
+          </li>
+          <li>
+            <a id="lightbox_source" href="https://github.com/metamaps/metamaps_gen002" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              source code
+            </a>
+          </li>
+          <li>
+            <% # TODO switch to https:// once we're confident %>
+            <a id="lightbox_term" data-bypass="true" href="//metamaps.cc/maps/331" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              terms
+            </a>
+          </li>
         </ul>
+        <div class="clearfloat"></div>
+      </div>
+
+      <div class="lightboxContent" id="colophon">
+        <h3 id="colophoneHeader">Colophon</h3>
+                
+        <p>Metamaps.cc is an initiative of affiliates of the Metamaps Open Value Network, an evolving network of peers working together to create shared value. Metamaps continues to be a constantly developing experiment in progress.</p>
+
+        <p>The peers behind Metamaps have their own respective backgrounds as artists, designers, engineers, advocates, activitists, filmmakers and systems thinkers and share a deep commitment to the creative culture they support.</p>
+        <h4 id="colophonSection">ACTIVE PEERS (as of 11/2014)</h4>
+        <p>Robert Best, Benjamin Brownell, Marija Coneva, Devin Howard, Bashar Jabbour, Raymon Johnstone, Shai Mor, Ishan Shapiro, Connor Turland </p>
+
+        <h4 id="colophonSection">ICONOGRAPHY</h4>
+
+        <p>Iconography within Metamaps is a distinctive and subtle art. We thank the following creators of icons used throughout Metamaps for the courtesy of sharing their work under Creative Commons licenses:<p>
+
+        <h4 id="colophonSectionIndented">System Icons</h4>
+        <p id="colophonLinks"><a href="http://thenounproject.com/r0" target="_blank">Ryan Oksenhorn</a>, <a href="http://thenounproject.com/leonides.dm" target="_blank">Leonides Delgado</a>, <a href="http://thenounproject.com/matheusanturio" target="_blank">Matheus Antúrio</a>, <a href="http://thenounproject.com/nl_menghini" target="_blank">Nicholas Menghini</a>, <a href="http://thenounproject.com/useiconic.com" target="_blank">useiconic.com</a>, <a href="http://thenounproject.com/Icomatic" target="_blank">Icomatic</a>, <a href="http://thenounproject.com/ansteydesign" target="_blank">AnsteyDesign</a>, <a href="http://thenounproject.com/somerandomdude" target="_blank">P.J. Onori</a>, <a href="http://thenounproject.com/Michzen" target="_blank">Michael Zenaty</a>, <a href="http://thenounproject.com/edward" target="_blank">Edward Boatman</a>, <a href="http://thenounproject.com/garrett.knoll" target="_blank">Garrett Knoll</a>, <a href="http://thenounproject.com/misirlou" target="_blank">misirlou</a>, <a href="http://thenounproject.com/DmitryBaranovskiy" target="_blank">Dmitry Baranovskiy</a>, <a href="http://thenounproject.com/waymanate" target="_blank">Nathan Thomson</a>, <a href="http://thenounproject.com/razerk" target="_blank">Alex Auda Samora</a>, <a href="http://thenounproject.com/bernar.novalyi" target="_blank">Bernar Novalyi</a>, <a href="http://thenounproject.com/jeremy.j.bristol" target="_blank">Jeremy J Bristol</a>, <a href="http://thenounproject.com/FivebyFive/" target="_blank">FivebyFive</a>, <a href="http://thenounproject.com/thibault.geffroy" target="_blank">Thibault Geffroy</a>, <a href="http://cargocollective.com/gavinkeech" target="_blank">Gavin Keech</a></p>
+
+        <p>We are also indebted to <a href="http://thenounproject.com/" target="_blank">The Noun Project</a>, an invaluable resource for iconography on the web, and also where many of the above creators' icons can be found.</p>
+
+        <h4 id="colophonSectionIndented">Metacodes:</h4>
+        <p id="colophonLinks">Legacy:<a href="http://cargocollective.com/gavinkeech" target="_blank">Gavin Keech</a>, <a href="http://notthisbody.com/" target="_blank">Notthisbody</a></p>
+
+        <h4 id="colophonSection">MEDIA</h4>
+        <p>Intro video: <a href="http://notthisbody.com/" target="_blank">Notthisbody</a>, <a href="https://uwaterloo.ca/arts/people-profiles/glenn-stillar" target="_blank">Glenn Stillar</a> <br>Tutorial videos: <a href="http://notthisbody.com/" target="_blank">Notthisbody</a></p>
+
+        <h4 id="colophonSection">OPEN SOURCE CREDITS</h4>
+
+        <p>We make extensive use of open source software for the various technologies, architectures, and interfaces that run Metamaps.cc. We would be unable to offer the service as we envision it without these publicly developed projects.</p>
+
+        <p id="colophonCols">Javascript<br>
+        Ruby-on-rails<br>
+        Javascript Infoviz Toolkit<br>
+        Backbone.js<br>
+        Underscore.js<br>
+        Famo.us<br>
+        Typeahead.js</p><br>
+
+        <h4 id="colophonSection">BUILDING METAMAPS</h4>
+
+        <p> These are the tools and services that the Metamaps team uses to work together and build the platform. Wherever possible, we link directly to a place where we work via a linked asterisk*.</p>
+        <div id="colophonCols">
+        <h4 id="colophonSection">Communication</h4>
+        <ul>
+            <li>Asana</li>
+            <li>Invision App <a href="http://invis.io/541GCFJRM" target="_blank">*</a></li>
+            <li>Docracy <a href="https://www.docracy.com/userprofile/show?userId=7366" target="_blank">*</a></li>
+            <li>Google Plus <a href="https://plus.google.com/communities/115060009262157699234" target="_blank">*</a></li>
+            <li>Hackpad <a href="http://metamaps.hackpad.com/" target="_blank">*</a></li>
+            <li>Loomio <a href="https://www.loomio.org/g/bu3L1tIW/topos-ffo" target="_blank">*</a></li>
+            <li>Twitter <a href="https://twitter.com/metamapps" target="_blank">*</a></li>
+            <li>Hipchat</li>
+            <li>Google Hangouts</li>
+            <li>Vimeo </li>
+            <li>Youtube</li></ul>
+            <br>
+        <h4 id="colophonSection">Design & Development</h4>
+        <ul>
+            <li>Github<a href="https://github.com/metamaps" target="_blank">*</a></li>
+            <li>Pixelapse<a href="https://www.pixelapse.com/poietic/projects/Metamaps.cc/overview" target="_blank">*</a></li>
+        </ul>
+      <h4 id="colophonSection">Documentation</h4>
+        <ul><li>Dropbox <a href="https://www.dropbox.com/sh/qqkesm0pmzaihfa/AAAv9aCVZeawUzDXrdM9y3T5a?dl=0" target="_blank">*</a></li>
+        <li>Google Drive <a href="https://drive.google.com/folderview?id=0B_RQI2WcwEHLckplOHhhdnZkSUE&usp=sharing" target="_blank">*</a></li>
+        <li>Toggl</li></ul>
+        <br>
+      <h4 id="colophonSection">Hosting</h4>
+        <ul><li>Heroku</li>
+        <li>Linode</li>
+        <li>Webhostinghub</li></ul>
+        <br>
+    <h4 id="colophonSection">Monitoring & Metrics</h4>
+       <ul><li>Google Analytics</li></ul>
+      <br>
+    <h4 id="colophonSection">Support</h4>
+        <ul><li>Uservoice <a href="http://metamapscc.uservoice.com/" target="_blank">*</a></li></ul>
+        
+      </div>
+        <div class="clearfloat"></div>
+      </div>
+
+      <div class="lightboxContent" id="noIE">
+        <h3>OOPS! <br> YOUR BROWSER IS NOT SUPPORTED.</h3>
+        <p id="noIEsubheading">To view this experience, please upgrade to the latest one of these browsers:</p>
+        <a id="chromeIcon" href="https://www.google.com/chrome/browser/" target="_blank">Chrome</a>
+        <a id="fireFoxIcon" href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a>
+        <a id="safariIcon" href="http://support.apple.com/downloads/#safari" target="_blank">Safari</a>
+        <% # TODO https for blog.metamaps.cc %>
+        <p id="noIEbody">While it's downloading, explore our <a href="http://blog.metamaps.cc/">blog</a>,<br> watch the <a href="http://vimeo.com/88334167">tutorials</a>, or visit our <a href="http://metamapscc.uservoice.com/">knowledge base</a>!
+
+      </div>
+
+      <div class="lightboxContent" id="donate">
+        <h3>Donate!</h3>
+        <div class="leaveSpace"></div> 
+                
+        <p>The Metamaps.cc project has been bootstrapped through our own pockets, passion, and patrons - including a couple of small grants which have gone to supporting our core contributors. Some of us have used Metamaps.cc as a tool for our own freelance consulting practice, and we are starting to create hosted and customized installations of Metamaps for different clients as one business model.</p>
+
+        <p>We will continue to bootstrap this project and experiment with alternative business models that are aligned with our values and mission and do not involve exploitation of our users, exclusivity or privatization of the technology. </p>
+
+        <p>Financial contributions in the form of patronage/donations/gifts are greatly appreciated in support of our work. You can donate Bitcoin directly or give us a weekly gift of gratitude for the work we do on Gratipay using the links below.</p>
+
+        <p>If you'd like to know what your money is going towards, we publish our financials transparently - everything is recorded through our <a href="https://docs.google.com/spreadsheets/d/1n6aI77zlf1F9biH6wIbFkaOARK_QfvzqVC0vBsBKY2o">value accounting system</a>.</p>
+        <div class="leaveSpace"></div>
+        <script data-gratipay-username="Metamaps.cc" src="//gttp.co/v1.js"></script>
+          <div style="font-size:16px;margin:0 auto;width:300px" class="blockchain-btn"
+            data-address="15z24wj6E9tTsJgEBjnK81CtJ7kZZmxJYN"
+            data-shared="false">
+          <div class="blockchain stage-begin">
+            <img src="https://blockchain.info//Resources/buttons/donate_64.png"/>
+          </div>
+        <div class="blockchain stage-loading" style="text-align:center">
+            <img src="https://blockchain.info//Resources/loading-large.gif"/>
+        </div>
+        <div class="blockchain stage-ready">
+            <p align="center">Please Donate To Bitcoin Address: <b>[[address]]</b></p>
+            <p align="center" class="qr-code"></p>
+        </div>
+        <div class="blockchain stage-paid">
+            Donation of <b>[[value]] BTC</b> Received. Thank You.
+        </div>
+        <div class="blockchain stage-error">
+            <font color="red">[[error]]</font>
+        </div>
+
+        <div class="clearfloat"></div>
+      </div>
+    </div>
+
+
+    <div class="lightboxContent" id="getInvolved">
+        <h3>GET INVOLVED!</h3>
+        <div class="leaveSpace"></div>  
+        
+        <p>Want to help with design, code, community building, or communications for Metamaps? We're an open value network, which for us means we want to invite and empower peers to participate in creating value together.
+
+        <% # TODO change this link to https once it works %>
+        <p>To be a <b>USER</b>, request an invite! We'll expect you to abide by our <a href="http://metamaps.cc/maps/331" target="_blank">terms of service</a>.</p>
+        
+        <p>To be a <b>CONTRIBUTOR</b>, simply <a href="https://docs.google.com/document/d/1z8FsSmYkHbLRLOsXc8i8M5ubKky8_WB2E9bLBoXJapU" target="_blank">enter our spaces</a> and join the conversation! We'll expect you to follow some guidelines.</p>
+        
+        <p><b>MEMBERS</b> are contributors who act as stewards and guardians of the collective and are responsible for maintaining our culture and purpose. We're working on a set of agreements to formalize what it means to be a member.</p>
+
+        <p>We welcome people of all skillsets to create value within our network. There's open possibilities for designers, researchers, academics, strategists, and facilitators to contribute. If you're a developer, help us advance the code and take a look around our <a href="https://github.com/metamaps/metamaps_gen002" target="_blank">Github</a>.</p>
+
+        <p>Thanks for your interest in helping out with Metamaps! Hopefully this gets you pointed in the right direction to get involved. The next step is to read the links on this page and then contribute! </p>
+
         <div class="clearfloat"></div>
       </div>
       
@@ -35,38 +223,40 @@
       </div>
       
       <div class="lightboxContent" id="cheatsheet">
-        <%= render :partial => 'layouts/cheatsheet' %>
+        <%= render :partial => 'shared/cheatsheet' %>
       </div>    
       
       <% if authenticated? %>
         <div class="lightboxContent" id="invite">
-          <h3>Send Invites</h3>
-          <p>You can invite others to the Metamaps platform. Send them this link</p>
-          <p class="green">http://metamaps.cc/users/sign_up</p>
-          <p>and give them the access code shown below.</p>
-          <% mapper = current_user %>
-          <p class="green"><%= mapper.code %></p>
-          <p>We invite you to be conscious as to who you invite to this platform, because much of the collaborative editing is based on trust. We want to cultivate a community here that is fun, wise, creative, and flourishing. Can you help us build a community like that?</p>
+          <h3>SHARE INVITE</h3>
+            
+<div class="leaveSpace"></div>  
+<p>The Metamaps platform is currently in an invite-only beta with the express purpose of creating a high value knowledge ecosystem, a diverse community of contributors and a culture of collaboration and curiosity.</p>
+<p>As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
+<p>Below is a personal invite link containing your unique access code, which can be used multiple times.</p>
+            <div id="joinCodesBox">
+            <p class="joinCodes"><%= @invite_link %>
+            <button class="button" onclick="Metamaps.GlobalUI.shareInvite('<%= @invite_link %>');">COPY INVITE LINK!</button>
+            </div>
+            
         </div>
       
         <% # this is the create new map form %>
         <div class="lightboxContent" id="newmap">  
-          <%= render :partial => 'maps/new' %>
+          <%= render :partial => 'layouts/newmap' %>
         </div>
       
-        <% if (controller_name == "maps" || controller_name == "topics" ) && action_name == "show"  %>
         <div class="lightboxContent" id="forkmap">  
-          <%= render :partial => 'maps/fork' %>
+          <%= render :partial => 'shared/forkmap' %>
         </div>
 
         <div class="lightboxContent" id="switchMetacodes">
-          <%= render :partial => 'layouts/switchmetacodes' %>
+          <%= render :partial => 'shared/switchmetacodes' %>
         </div>
-        <% end %>
       <% end %>
       
     </div>
   </div>
-  <div id="lightbox_screen" onclick="closeLightbox();return false;" style="height: 100%;"></div>
+  <div id="lightbox_screen" style="height: 100%;"></div>
 </div>
 

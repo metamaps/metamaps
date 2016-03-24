@@ -1,26 +1,33 @@
 class Map < ActiveRecord::Base
 
-belongs_to :user
+  belongs_to :user
 
-has_many :topicmappings, :class_name => 'Mapping', :conditions => {:category => 'Topic'}
-has_many :synapsemappings, :class_name => 'Mapping', :conditions => {:category => 'Synapse'}
+  has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
+  has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
+  has_many :topics, through: :topicmappings, source: :mappable, source_type: "Topic"
+  has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
 
-has_many :topics, :through => :topicmappings
-has_many :synapses, :through => :synapsemappings
+  # This method associates the attribute ":image" with a file attachment
+  has_attached_file :screenshot, :styles => {
+   :thumb => ['188x126#', :png]
+   #:full => ['940x630#', :png]
+  },
+  :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
+  validates :name, presence: true
+  validates :arranged, inclusion: { in: [true, false] }
+  validates :permission, presence: true
+  validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
+    
+  # Validate the attached image is image/jpg, image/png, etc
+  validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
 
-def mappings 
-	topicmappings + synapsemappings
-end
-
-def mk_permission
-  if self.permission == "commons"
-    "co"
-  elsif self.permission == "public"
-    "pu"
-  elsif self.permission == "private"
-    "pr"
+  def mappings 
+  	topicmappings + synapsemappings
   end
-end
+
+  def mk_permission
+    Perm.short(permission)
+  end
 
   #return an array of the contributors to the map
   def contributors
@@ -32,115 +39,88 @@ end
     
     return contributors
   end
-  
-  
-  ###### JSON ######
-  #build a json object of a map
-  def self_as_json(current)
-    Jbuilder.encode do |json|
-	  @topics = self.topics
-	  @synapses = self.synapses
-	  
-	  json.array!(@topics.delete_if{|topic| not topic.authorize_to_view(current)}) do |topic|
-		
-		#json.adjacencies topic.synapses2.delete_if{|synapse| (not @topics.include?(synapse.topic1)) || (not @synapses.include?(synapse)) || (not synapse.authorize_to_view(current)) || (not synapse.topic1.authorize_to_view(current)) } do |json, synapse|
-		
-	      json.adjacencies topic.synapses1.delete_if{|synapse| (not @synapses.include?(synapse)) || (not @topics.include?(synapse.topic2)) || (not synapse.authorize_to_view(current)) || (not synapse.topic2.authorize_to_view(current)) } do |json, synapse|
-				json.nodeTo synapse.node2_id
-				json.nodeFrom synapse.node1_id
-				
-				@synapsedata = Hash.new
-				@synapsedata['$desc'] = synapse.desc
-				@synapsedata['$showDesc'] = false
-				@synapsedata['$category'] = synapse.category
-				@synapsedata['$id'] = synapse.id
-				@synapsedata['$userid'] = synapse.user.id
-				@synapsedata['$username'] = synapse.user.name
-				@synapsedata['$direction'] = [synapse.node1_id.to_s(), synapse.node2_id.to_s()]
-        @synapsedata['$permission'] = synapse.permission
-				json.data @synapsedata
-		  end
-		  
-		  @inmaps = Array.new
-      @mapsString = ""
-      topic.maps.each_with_index do |map, index|
-        @inmaps.push(map.id)
-        @mapsString += map.name
-        @mapsString += (index+1) == topic.maps.count ? "" : ", "
-      end
-      
-		  @topicdata = Hash.new
-		  @topicdata['$desc'] = topic.desc
-		  @topicdata['$link'] = topic.link
-		  @topicdata['$metacode'] = topic.metacode.name
-      @topicdata['$inmaps'] = @inmaps
-      @topicdata['$inmapsString'] = @mapsString
-      @topicdata['$synapseCount'] = topic.synapses.count
-		  @topicdata['$userid'] = topic.user.id
-		  @topicdata['$username'] = topic.user.name
-		  @mapping = Mapping.find_by_topic_id_and_map_id(topic.id,self.id)
-		  @topicdata['$xloc'] = @mapping.xloc
-		  @topicdata['$yloc'] = @mapping.yloc
-		  @topicdata['$mappingid'] = @mapping.id
-      @topicdata['$permission'] = topic.permission
-      @topicdata['$date'] = topic.created_at.strftime("%m/%d/%Y")
-		  json.data @topicdata
-		  json.id topic.id
-		  json.name topic.name
-	  end	
-    end
+
+  def topic_count
+    self.topics.length
   end
-  
+
+  def synapse_count
+    self.synapses.length
+  end
+
+  def user_name
+    self.user.name
+  end
+
+  def user_image
+    self.user.image.url
+  end
+
+  def contributor_count 
+    self.contributors.length
+  end
+
+  def screenshot_url
+    self.screenshot.url(:thumb)
+  end
+
+  def created_at_str
+    self.created_at.strftime("%m/%d/%Y")
+  end
+
+  def updated_at_str
+    self.updated_at.strftime("%m/%d/%Y")
+  end
+
+  def as_json(options={})
+    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
+    json[:created_at_clean] = self.created_at_str
+    json[:updated_at_clean] = self.updated_at_str
+    json
+  end
+
   ##### PERMISSIONS ######
   
-  scope :visibleToUser, lambda { |current, user|  
-    if user != nil
-	   if user != current
-		 Map.find_all_by_user_id_and_permission(user.id, "commons") | Map.find_all_by_user_id_and_permission(user.id, "public")
-	   elsif user ==  current
-	     Map.find_all_by_user_id_and_permission(user.id, "commons") | Map.find_all_by_user_id_and_permission(user.id, "public") | current.maps.where(:permission => "private")
-	   end
-	elsif (current != nil && user == nil) 
-		Map.find_all_by_permission("commons") | Map.find_all_by_permission("public") | current.maps.where(:permission => "private")
-	elsif (current == nil) 
-		Map.find_all_by_permission("commons") | Map.find_all_by_permission("public")
-	end
-  }
-  
+  def authorize_to_delete(user)
+    if (self.user != user)
+      return false
+    end
+    return self
+  end
+
   # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return self
+  def authorize_to_show(user)
+    if (self.permission == "private" && self.user != user)
+  		return false
+  	end
+  	return self
   end
   
   # returns false if user not allowed to 'edit' Topic, Synapse, or Map
   def authorize_to_edit(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	elsif (self.permission == "public" && self.user != user)
-		return false
-	end
-	return self
+  	if !user
+      return false
+    elsif (self.permission == "private" && self.user != user)
+  		return false
+  	elsif (self.permission == "public" && self.user != user)
+  		return false
+  	end
+  	return self
   end
-  
-  # returns Boolean if user allowed to view Topic, Synapse, or Map
-  def authorize_to_view(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return true
-  end
-  
-  # returns Boolean based on whether user has permissions to edit or not
-  def authorize_linkto_edit(user)
-    if (self.user == user)
-		return true
-    elsif (self.permission == "commons")
-		return true
-	end
-	return false
+
+  def decode_base64(imgBase64)
+    decoded_data = Base64.decode64(imgBase64)
+ 
+    data = StringIO.new(decoded_data)
+    data.class_eval do
+      attr_accessor :content_type, :original_filename
+    end
+
+    data.content_type = "image/png"
+    data.original_filename = File.basename('map-' + self.id.to_s + '-screenshot.png')
+
+    self.screenshot = data
+    self.save
   end
 
 end

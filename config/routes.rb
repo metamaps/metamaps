@@ -1,51 +1,43 @@
-ISSAD::Application.routes.draw do
+Metamaps::Application.routes.draw do
 
   root to: 'main#home', via: :get
-    
-  get '/join', to: redirect('/users/sign_up')
   
-  match 'request', to: 'main#requestinvite', via: :get, as: :request
-  match 'paq', to: 'main#paq', via: :get, as: :paq
+  get 'request', to: 'main#requestinvite', as: :request
   
-  match '/search/topics', to: 'main#searchtopics', via: :get, as: :searchtopics
-  match '/search/maps', to: 'main#searchmaps', via: :get, as: :searchmaps
-  match '/search/mappers', to: 'main#searchmappers', via: :get, as: :searchmappers
-  match '/search/synapses', to: 'main#searchsynapses', via: :get, as: :searchsynapses
+  get 'search/topics', to: 'main#searchtopics', as: :searchtopics
+  get 'search/maps', to: 'main#searchmaps', as: :searchmaps
+  get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
+  get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
   
-  match 'maps/:id/savelayout', to: 'maps#savelayout', via: :put, as: :savelayout
-  match 'topics/:map_id/:topic_id/removefrommap', to: 'topics#removefrommap', via: :post, as: :removefrommap
-  match 'synapses/:map_id/:synapse_id/removefrommap', to: 'synapses#removefrommap', via: :post, as: :removefrommap
-  
-  resources :in_metacode_sets
+  resources :mappings, except: [:index, :new, :edit]
   resources :metacode_sets, :except => [:show]
   resources :metacodes, :except => [:show, :destroy]
+  resources :synapses, except: [:index, :new, :edit]
   resources :topics, except: [:index, :new, :edit] do
     get :autocomplete_topic, :on => :collection
   end
-  match 'topics/:id/:format', to: 'topics#json', via: :get, as: :json
+  get 'topics/:id/network', to: 'topics#network', as: :network
+  get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
+  get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
   
-  resources :synapses, except: [:index, :new, :edit, :show]
-  match 'synapses/:id/:format', to: 'synapses#json', via: :get, as: :json
-  
-  match 'maps/active', to: 'maps#index', via: :get, as: :activemaps
-  match 'maps/featured', to: 'maps#index', via: :get, as: :featuredmaps
-  match 'maps/new', to: 'maps#index', via: :get, as: :newmaps
-  match 'maps/mappers/:id', to: 'maps#index', via: :get, as: :usermaps
-  match 'maps/topics/:id', to: 'maps#index', via: :get, as: :topicmaps
-  
-  
+  get 'explore/active', to: 'maps#index', as: :activemaps
+  get 'explore/featured', to: 'maps#index', as: :featuredmaps
+  get 'explore/mine', to: 'maps#index', as: :mymaps
+  get 'explore/mapper/:id', to: 'maps#index', as: :usermaps
   resources :maps, except: [:new, :edit]
-  match 'maps/:id/embed', to: 'maps#embed', via: :get, as: :embed
-  match 'maps/:id/:format', to: 'maps#json', via: :get, as: :json
+  get 'maps/:id/contains', to: 'maps#contains', as: :contains
+  post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
   
-  devise_for :users, :controllers => { :registrations => "registrations" }, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
-  devise_scope :user do
-    get "sign_out", :to => "devise/sessions#destroy"
-  end
-  match 'user/updatemetacodes', to: 'users#updatemetacodes', via: :post, as: :updatemetacodes
-  
-  resources :users, except: [:show, :index]
+  devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => :sessions
 
-  resources :mappings
-  
+  devise_scope :user do 
+    get 'login' => 'devise/sessions#new', :as => :new_user_session
+    post 'login' => 'devise/sessions#create', :as => :user_session
+    get 'logout' => 'devise/sessions#destroy', :as => :destroy_user_session
+    get 'join' => 'devise/registrations#new', :as => :new_user_registration_path
+  end
+
+  get 'users/:id/details', to: 'users#details', as: :details
+  post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
+  resources :users, except: [:index, :destroy]
 end

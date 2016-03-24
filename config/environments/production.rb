@@ -1,5 +1,9 @@
-ISSAD::Application.configure do
+Metamaps::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
+
+  config.log_level = :warn
+  config.eager_load = true
+  config.assets.js_compressor = :uglifier
 
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -9,21 +13,36 @@ ISSAD::Application.configure do
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.serve_static_assets = false
+  config.serve_static_files = true
+
+  config.assets.compile = false
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
+    
+
+  # S3 file storage
+  config.paperclip_defaults = {
+    :storage => :s3,
+    s3_credentials: {
+      bucket: ENV['S3_BUCKET_NAME'],
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    },
+    s3_protocol: 'https'
+  }
   
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'mail.metamaps.cc',
-    port:                 587,
-    user_name:            'team@metamaps.cc',
-    password:             'RcxX+s:fht49UX',
+    address:       ENV['SMTP_SERVER'],
+    port:          ENV['SMTP_PORT'],
+    user_name:     ENV['SMTP_USERNAME'],
+    password:      ENV['SMTP_PASSWORD'],
+    #domain:        ENV['SMTP_DOMAIN']
     authentication:       'plain',
     enable_starttls_auto: true,
     openssl_verify_mode: 'none'    }
-  config.action_mailer.default_url_options = { :host => 'metamaps.cc' }
+  config.action_mailer.default_url_options = { :host => ENV['MAILER_DEFAULT_URL'] }
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
@@ -59,7 +78,7 @@ ISSAD::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  # config.assets.precompile += %w( search.js )
+  #config.assets.precompile += %w( )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false

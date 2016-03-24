@@ -4,40 +4,122 @@
   #%>
 
 <div class="templates">
+    
+    <script type="text/template" id="mapInfoBoxTemplate">
+  <div class="mapInfoName" id="mapInfoName">{{{name}}}</div>
+  
+  <div class="mapInfoStat">
+    <div class="infoStatIcon mapContributors hoverForTip">
+      <img id="mapContribs" class="{{contributors_class}}"
+        width="25" height="25" src="{{contributor_image}}" />
+      <span>{{contributor_count}}</span>
+      <div class="tip">{{{contributor_list}}}</div>
+    </div>
+    <div class="infoStatIcon mapTopics">
+      {{topic_count}}
+    </div>
+    <div class="infoStatIcon mapSynapses">
+      {{synapse_count}}
+    </div>
+    <div class="infoStatIcon mapPermission {{permission}} hoverForTip">
+      {{{map_creator_tip}}}
+    </div>
+    <div class="clearfloat"></div>
+  </div>
+  <div class="mapInfoDesc" id="mapInfoDesc">
+    {{{desc}}}
+  </div>
+  
+  <div class="mapInfoMeta">
+    <p class="mapCreatedAt"><span>Created by:</span> {{user_name}} on {{created_at}}</p>
+    <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
+    <div class="mapInfoButtonsWrapper">
+      <div class="mapInfoDelete">
+        <div class="deleteMap"></div>
+        <span>Delete</span>
+      </div>
+      <div class="mapInfoShare">
+        <div class="mapInfoShareIcon"></div>
+        <span>Share</span>
+      </div>
+    </div>
+  </div>
+    </script>
+    
+    <script type="text/template" id="mapCardTemplate">
+  <a href="/maps/{{id}}">
+  <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
+	  <div class="mapCard">                                                   
+      <span class="title" title="{{fullName}}">                                                  
+        {{name}}
+      </span>  
+      <div class="mapScreenshot">
+        {{{screenshot}}}
+      </div>                                                  
+      <div class="scroll">                                                    
+        <div class="desc">                                                  
+          {{desc}}
+          <div class="clearfloat"></div>                              
+        </div>                                                                
+      </div>
+      <div class="mapMetadata">
+         <div class="metadataSection">{{{contributor_count_number}}}{{contributor_count_string}}</div>
+         <div class="metadataSection">{{{topic_count_number}}}{{topic_count_string}}</div>         
+         <div class="metadataSection mapPermission">{{permission}}</div> 
+         <div class="metadataSection">{{{synapse_count_number}}}{{synapse_count_string}}</div>         
+         <div class="clearfloat"></div>                               
+      </div>                                         
+    </div>
+  </div>
+  </a>
+    </script>
 
+    <script type="text/template" id="mapperCardTemplate">
+    <div class="mapperCard">                                                    
+      <div class="mapperImage">
+        <img src="{{image}}" width="96" height="96" />
+      </div> 
+      <div class="mapperName" title="{{name}}">                                                  
+        {{name}}
+      </div>
+      <div class="mapperInfo">
+        <div class="mapperCreatedAt">Mapper since: {{created_at}}</div>
+        <div class="mapperGeneration">Generation: {{generation}}</div>
+      </div>
+      <div class="mapperMetadata">
+         <div class="metadataSection metadataMaps"><div>{{numMaps}}</div>maps</div>
+         <div class="metadataSection metadataTopics"><div>{{numTopics}}</div>topics</div> 
+         <div class="metadataSection metadataSynapses"><div>{{numSynapses}}</div>synapses</div> 
+         <div class="clearfloat"></div>                               
+      </div>                                         
+    </div>
+    </script>
+        
     <script type="text/template" id="topicSearchTemplate">
     <div class="result{{rtype}}">
-      <div class="topicMetacode">
+      <div class="topicMetacode searchResIconWrapper">
         <img src="{{typeImageURL}}" class="topicIcon" />
-        <span class="metacodeTip">{{type}}</span>
+        <div class="metacodeTip">{{type}}</div>
       </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
         <p class="resultDesc">{{description}}</p>
       </div>
       <div class="autoOptions">
-
-        <% if controller_name == 'maps' && action_name == 'show' && authenticated? && @map.authorize_to_edit(@current) %>
-        <button class="addToMap hoverForTip" onclick="return keepFromCommons(event, {{id}})">
+        <button class="addToMap hoverForTip" onclick="return Metamaps.Topic.getTopicFromSearch(event, {{id}})">
           <span class="tip">add to map</span>
         </button>
-        <% end %>
-        <div class="goTo hoverForTip">
-          <span class="tip">open in new tab</span>
-        </div>
-        <div class="mapCount hoverForTip">
-          <span class="tip">appears on this # of maps</span>
+        <div class="mapCount">
           {{mapCount}}
         </div>
-        <div class="synapseCount hoverForTip">
-          <span class="tip"> has this # of synapses</span>
+        <div class="synapseCount">
           {{synapseCount}}
         </div>
         <div class="topicOriginatorIcon hoverForTip">
-          <span class="tip topicOriginator">created by {{originator}}</span>
+            <img width="18" height="18" src="{{originatorImage}}">
+            <span class="tip topicOriginator">{{originator}}</span>
         </div>
-        <div class="topicPermission {{permission}} hoverForTip">
-          <span class="tip">topic is {{permission}}</span>
+        <div class="topicPermission {{permission}}">
         </div>
       </div>
       <div class="clearfloat"></div>
@@ -46,29 +128,30 @@
 
     <script type="text/template" id="mapSearchTemplate">
     <div class="result{{rtype}}">
-      <img class="icon" src="/assets/map.png">
+      <div class="searchResIconWrapper">
+        <img class="icon" src="<%= asset_path('metamap36c.png') %>">
+      </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
         <p class="resultDesc">{{description}}</p>
       </div>
       <div class="autoOptions">
-        <div class="goTo hoverForTip">
-          <span class="tip">open in new tab</span>
-        </div>
-        <div class="topicCount hoverForTip">
-          <span class="tip">has this # of topics</span>
+        <div class="topicCount">
           {{topicCount}}
         </div>
-        <div class="synapseCount hoverForTip">
-          <span class="tip">has this # of synapses</span>
+        <div class="synapseCount">
           {{synapseCount}}
         </div>
         <div class="mapContributorsIcon hoverForTip">
-          <span class="tip mapContributors">{{contributorList}}</span>
-          {{contributorCount}}
+            <img id="mapContribs" width="25" height="25" src="{{mapContributorImage}}" />
+          <div class="tip"> 
+            <ul>
+              {{{contributorTip}}}
+            </ul>
+          </div>
+          <span>{{contributorCount}}</span>
         </div>
-        <div class="mapPermission {{permission}} hoverForTip">
-          <span class="tip">map is {{permission}}</span>
+        <div class="mapPermission {{permission}}">
         </div>
       </div>
       <div class="clearfloat"></div>
@@ -77,16 +160,20 @@
 
     <script type="text/template" id="mapperSearchTemplate">
     <div class="result{{rtype}}">
-      <img class="icon" width="28" height="28" src="/assets/MMCCicon_mapper.png">
+      <div class="searchResIconWrapper">
+        <img class="icon" width="32" height="32" src="{{profile}}">
+      </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>
       </div>
       <div class="autoOptions">
-        <div class="goTo hoverForTip">
-          <span class="tip">open in new tab</span>
+        <div class="mapperCreated">
+          <p>Mapping since: {{created_at}}</p>
         </div>
-        <div class="mapCount hoverForTip">
-          <span class="tip">created this # of maps</span>
+        <div class="mapperGeneration">
+          <p>Generation: {{generation}}</p>
+        </div>
+        <div class="mapCount">
           {{mapCount}}
         </div>
       </div>
@@ -96,60 +183,88 @@
 
     <script type="text/template" id="synapseAutocompleteTemplate">
       <div class="result{{rtype}}">
-      <p class="autocompleteSection synapseDesc">{{label}}</p>
-      <div class="autocompleteSection synapsePermission {{permission}}"></div>
-      <div class="autocompleteSection synapseOriginatorIcon hoverForTip">
-        <span class="tip synapseOriginator">{{originator}}</span>
-      </div>
-      <div class="clearfloat"></div>
+        <p class="autocompleteSection synapseDesc">{{label}}</p>
+        <div class="synapseMetadata">
+          <div class="synapseOriginatorIcon hoverForTip">
+              <img width="24" height="24" src="{{originatorImage}}" />
+              <span class="tooltips synapseOriginator">{{originator}}</span>
+          </div>
+          <div class="synapsePermission {{permission}}"></div>
+        </div>
+        <div class="clearfloat"></div>
       </div>
     </script>
 
     <script type="text/template" id="topicAutocompleteTemplate">
-        <img class="autocompleteSection topicType" width="22" height="22" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}" />
+      <div>
+        <img class="autocompleteSection topicType" width="24" height="24" src="{{typeImageURL}}" alt="{{type}}" title="{{type}}" />
         <p class="autocompleteSection topicTitle">{{label}}</p>
-        <div class="autocompleteSection topicPermission {{permission}}"></div>
-        <div class="autocompleteSection topicOriginatorIcon hoverForTip">
-            <span class="tip topicOriginator">{{originator}}</span>
+        <div class="expandTopicMetadata"></div>
+        <div class="topicMetadata">
+          <div class="topicNumMaps">{{mapCount}}</div>
+          <div class="topicNumSynapses">{{synapseCount}}</div>
+          <div class="topicOriginatorIcon hoverForTip">
+              <img width="24" height="24" src="{{originatorImage}}" />
+              <span class="tooltips topicOriginator">{{originator}}</span>
+          </div>
+          <div class="topicPermission {{permission}}"></div>
         </div>
         <div class="clearfloat"></div>
+      </div>
     </script>
 
 
     <script type="text/template" id="topicCardTemplate">
-    <div class="CardOnGraph" id="topic_{{id}}">
-        <span class="title">                                                  
+    <div class="CardOnGraph {{hasAttachment}}" id="topic_{{id}}">
+        <span class="title"> 
+            <div class="titleWrapper" id="titleActivator">      
               <span class="best_in_place best_in_place_name"                      
                     data-url="/topics/{{id}}"                                     
                     data-object="topic"                                           
-                    data-attribute="name"                                         
-                    data-type="textarea">{{name}}</span> 
+                    data-attribute="name"
+                    data-activator="#titleActivator"           
+                    data-type="textarea">{{name}}</span>
+            </div> 
         </span>
         <div class="links">
             <div class="linkItem icon">
-                <div class="metacodeTitle {{metacode_class}}">{{metacode}}</div>
+                <div class="metacodeTitle {{metacode_class}}">
+                  {{metacode}}
+                  <div class="expandMetacodeSelect"></div>
+                </div>
                 <div class="metacodeImage" style="background-image:url({{imgsrc}});" title="click and drag to move card"></div>
+                <div class="metacodeSelect">{{{metacode_select}}}</div>
             </div>
-            <div class="linkItem contributor hoverForTip">
-                <div class="tip">Created by {{username}} on {{date}}</div>
+            <div class="linkItem contributor">
+                <a href="/explore/mapper/{{userid}}"><img src="<%= asset_path('user.png') %>" class="contributorIcon" width="32" height="32" /></a>
+                <div class="contributorName">{{username}}</div>
             </div>
-            <a href="/maps/topics/{{id}}" class="linkItem mapCount hoverForTip" title="Click to see which maps topic appears on" target="_blank">                  
-                 {{map_count}}                                                    
-               </a> 
-            <div class="linkItem synapseCount">{{synapse_count}}</div>
-            <div class="linkItem mapPerm {{mk_permission}}"></div>
-            <a href="/topics/{{id}}" class="linkItem topicPopout" title="Open topic in new tab" target="_blank"></a>
+            <div class="linkItem mapCount">                  
+                <div class="mapCountIcon"></div>
+                {{map_count}} 
+                <div class ="hoverTip">Click to see which maps topic appears on</div>
+                <div class="tip"><ul>{{{inmaps}}}</ul></div>                              
+            </div>
+
+            <a href="/topics/{{id}}" class="linkItem synapseCount">
+              <div class="synapseCountIcon"></div>
+              {{synapse_count}}
+              <div class="tip">Click to see this topics synapses</div>
+            </a>
+            <div class="linkItem mapPerm {{mk_permission}}" title="{{permission}}"></div>
             <div class="clearfloat"></div>
         </div>
-        <div class="metacodeSelect">{{{metacode_select}}}</div>
         <div class="scroll">
             <div class="desc">
                 <span class="best_in_place best_in_place_desc" data-url="/topics/{{id}}" data-object="topic" data-nil="{{desc_nil}}" data-attribute="desc" data-type="textarea">{{desc}}</span> 
                 <div class="clearfloat"></div>
             </div>
         </div>
-        <div class="link">
-            {{a_tag}}<span class="best_in_place best_in_place_link" data-url="/topics/{{id}}" data-object="topic" data-nil="{{link_nil}}" data-attribute="link" data-type="input">{{link}}</span>{{close_a_tag}} {{{go_link}}}
+        <div class="embeds">
+           {{{embeds}}}
+        </div>
+        <div class="attachments {{attachmentsHidden}}">
+            {{{attachments}}}
         </div>
         <div class="clearfloat"></div>
     </div>

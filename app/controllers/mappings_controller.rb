@@ -1,67 +1,57 @@
 class MappingsController < ApplicationController
-  respond_to :js, :html
+  
+  before_filter :require_user, only: [:create, :update, :destroy]    
+    
+  respond_to :json
+    
+  # GET /mappings/1.json
+  def show
+    @mapping = Mapping.find(params[:id])
 
-  # GET mappings
-  def index
+    render json: @mapping
   end
 
-  # GET mappings/new
-  def new
-    @mapping = Mapping.new
-    @user = current_user
-    respond_with(@mapping)
-  end
-
-  # POST mappings
+  # POST /mappings.json
   def create
-    @user = current_user
-    if @user
-      @mapping = Mapping.new()
+    @mapping = Mapping.new(mapping_params)
 
-      @mapping.user = @user
-      @mapping.xloc = params[:xloc] if params[:xloc]
-      @mapping.yloc = params[:yloc] if params[:yloc]
+    @mapping.map.touch(:updated_at)
 
-      if params[:map]
-        if params[:map][:id]
-          @map = Map.find(params[:map][:id])
-          @map.touch(:updated_at)
-          @mapping.map = @map
-        end
-      end
-      if params[:topic]
-        if params[:topic][:id]
-          @topic = Topic.find(params[:topic][:id])
-          @mapping.topic = @topic
-          @mapping.category = "Topic"
-        end
-      elsif params[:synapse]
-        if params[:synapse][:id]
-          @topic = Synapse.find(params[:synapse][:id])
-          @mapping.synapse = @synapse
-          @mapping.category = "Synapse"
-        end
-      end
-      @mapping.save()
-      
-      #push add to map to realtime viewers of the map
-      @mapping.message 'create',@user.id
+    if @mapping.save
+      render json: @mapping, status: :created
+    else
+      render json: @mapping.errors, status: :unprocessable_entity
     end
   end
 
-  # GET /mappings/:id
-  def show
-  end
-
-  # GET /mappings/:id/edit
-  def edit
-  end
-
-  # PUT /mappings/:id
+  # PUT /mappings/1.json
   def update
+    @mapping = Mapping.find(params[:id])
+
+    @mapping.map.touch(:updated_at)
+
+    if @mapping.update_attributes(mapping_params)
+      head :no_content
+    else
+      render json: @mapping.errors, status: :unprocessable_entity
+    end
   end
 
-  # DELETE /mappings/:id
+  # DELETE /mappings/1.json
   def destroy
+    @mapping = Mapping.find(params[:id])
+    @map = @mapping.map
+
+    @mapping.destroy
+
+    @map.touch(:updated_at)
+
+    head :no_content 
   end
+
+  private
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def mapping_params
+      params.require(:mapping).permit(:id, :xloc, :yloc, :mappable_id, :mappable_type, :map_id, :user_id)
+    end
 end
