@@ -43,7 +43,7 @@ Metamaps.Active = {
 Metamaps.Maps = {};
 
 $(document).ready(function () {
-
+  function init() {
     for (var prop in Metamaps) {
 
         // this runs the init function within each sub-object on the Metamaps one
@@ -55,11 +55,13 @@ $(document).ready(function () {
             Metamaps[prop].init();
         }
     }
+  }
 
     // initialize the famous ui
     var callFamous = function(){
         if (Metamaps.Famous) {
             Metamaps.Famous.build();
+            init();
         }
         else {
             setTimeout(callFamous, 100);

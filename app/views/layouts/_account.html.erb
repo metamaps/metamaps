@@ -3,9 +3,9 @@
   # The inner HTML of the account box that comes up in the bottom left
   #%>
 
-<% if authenticated? %>
+<% if current_user %>
   <% account = current_user %>
-  <%= image_tag user.image.url(:sixtyfour), :size => "48x48", :class => "sidebarAccountImage" %>
+  <%= image_tag account.image.url(:sixtyfour), :size => "48x48", :class => "sidebarAccountImage" %>
   <h3 class="accountHeader"><%= account.name.split[0...1][0] %></h3>
   <ul>
     <li class="accountListItem accountSettings">

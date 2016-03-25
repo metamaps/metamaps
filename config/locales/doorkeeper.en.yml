@@ -3,7 +3,7 @@ en:
     attributes:
       doorkeeper/application:
         name: 'Name'
-        redirect_uri: 'Redirect URI'
+        redirect_uri: 'Redirect URIs'
     errors:
       models:
         doorkeeper/application:
@@ -19,8 +19,9 @@ en:
       confirmations:
         destroy: 'Are you sure?'
       buttons:
+        back: 'Back'
         edit: 'Edit'
-        destroy: 'Destroy'
+        destroy: 'remove'
         submit: 'Submit'
         cancel: 'Cancel'
         authorize: 'Authorize'
@@ -33,26 +34,24 @@ en:
       edit:
         title: 'Edit application'
       index:
-        title: 'Your applications'
-        new: 'New Application'
+        title: 'Registered Apps'
+        new: 'New App'
         name: 'Name'
-        callback_url: 'Callback URL'
+        callback_url: 'Redirect URIs'
       new:
-        title: 'New Application'
+        title: 'New App'
       show:
-        title: 'Application: %{name}'
-        application_id: 'Application Id'
-        secret: 'Secret'
-        scopes: 'Scopes'
-        callback_urls: 'Callback urls'
-        actions: 'Actions'
+        title: '%{name}'
+        application_id: 'App ID'
+        secret: 'App Secret'
+        callback_urls: 'Redirect URIs'
 
     authorizations:
       buttons:
         authorize: 'Authorize'
         deny: 'Deny'
       error:
-        title: 'An error has occurred'
+        title: 'Invalid Authorization Request'
       new:
         title: 'Authorization required'
         prompt: 'Authorize %{client_name} to use your account?'
@@ -66,10 +65,10 @@ en:
       buttons:
         revoke: 'Revoke'
       index:
-        title: 'Your authorized applications'
-        application: 'Application'
-        created_at: 'Created At'
-        date_format: '%Y-%m-%d %H:%M:%S'
+        title: 'Authorized Apps'
+        application: 'App'
+        created_at: 'Date Authorized'
+        date_format: '%Y-%m-%d'
 
     errors:
       messages:
@@ -117,7 +116,7 @@ en:
     layouts:
       admin:
         nav:
-          oauth2_provider: 'OAuth2 Provider'
+          app: 'METAMAPS'
           applications: 'Applications'
       application:
         title: 'OAuth authorization required'

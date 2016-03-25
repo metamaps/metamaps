@@ -4,7 +4,7 @@
 <div class="upperLeftUI">
     <!-- home button -->
     <div class="homeButton">
-        <a href="<%= root_url %>" <% if !authenticated? %><%= 'data-bypass=true' %><% end %>></a>
+        <a href="<%= root_url %>" <% if !current_user || appsPage %><%= 'data-bypass=true' %><% end %>></a>
     </div> <!-- end homeButton -->
 
     <!-- search box -->
@@ -28,7 +28,7 @@
             </div>
         </div> <!-- end sidebarFilter -->
 
-        <% if authenticated? %>
+        <% if current_user %>
         <!-- fork map -->
         <div class="sidebarFork upperRightEl">
             <div class="sidebarForkIcon upperRightIcon"><div class="tooltipsUnder">Save To New Map</div></div>
@@ -38,7 +38,7 @@
         <div class="clearfloat"></div>
     </div> <!-- end mapElement -->
 
-    <% if authenticated? %>
+    <% if current_user %>
     <!-- create new map -->
     <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap"><div class="tooltipsUnder">Create New Map</div>
     </div><!-- end addMap -->
@@ -48,9 +48,9 @@
     <% if !(controller_name == "sessions" && action_name == "new") %>
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon"><div class="tooltipsUnder">Account</div>
-            <% if user && user.image %>
-              <%= image_tag user.image.url(:thirtytwo), :size => "32x32" %>
-            <% elsif !authenticated? %>
+            <% if current_user && current_user.image %>
+              <%= image_tag current_user.image.url(:thirtytwo), :size => "32x32" %>
+            <% elsif !current_user %>
               SIGN IN
               <div class="accountInnerArrow"></div>
             <% end %>

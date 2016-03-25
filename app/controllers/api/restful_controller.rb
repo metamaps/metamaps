@@ -30,16 +30,21 @@ class API::RestfulController < ActionController::Base
   end
 
   def current_user
-    super || token_user || nil
+    super || token_user || doorkeeper_user || nil
   end
 
   def token_user
-    authenticate_with_http_token do |token, options|
-      access_token = Token.find_by_token(token)
-      if access_token
-        @token_user ||= access_token.user
-      end
+    token = params[:access_token]
+    access_token = Token.find_by_token(token)
+    if access_token
+       @token_user ||= access_token.user
     end
+  end
+
+  def doorkeeper_user
+    return unless doorkeeper_token.present?
+    doorkeeper_render_error unless valid_doorkeeper_token?
+    @doorkeeper_user ||= User.find(doorkeeper_token.resource_owner_id)
   end
 
   def permitted_params
