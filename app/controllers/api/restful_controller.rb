@@ -7,9 +7,9 @@ class API::RestfulController < ActionController::Base
   load_and_authorize_resource only: [:show, :update, :destroy]
 
   def create
-    authorize resource_class
     instantiate_resource
     resource.user = current_user
+    authorize resource_class
     create_action
     respond_with_resource
   end
