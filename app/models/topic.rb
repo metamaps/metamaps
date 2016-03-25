@@ -81,6 +81,38 @@ class Topic < ActiveRecord::Base
     super(:methods =>[:user_name, :user_image, :map_count, :synapse_count, :inmaps, :inmapsLinks])
   end
 
+  # TODO move to a decorator?
+  def synapses_csv(output_format = 'array')
+    output = []
+    synapses.each do |synapse|
+      if synapse.category == 'from-to'
+        if synapse.node1_id == id
+          output << synapse.node1_id.to_s + '->' + synapse.node2_id.to_s
+        elsif synapse.node2_id == id
+          output << synapse.node2_id.to_s + '<-' + synapse.node1_id.to_s
+        else
+          fail 'invalid synapse on topic in synapse_csv'
+        end
+      elsif synapse.category == 'both'
+        if synapse.node1_id == id
+          output << synapse.node1_id.to_s + '<->' + synapse.node2_id.to_s
+        elsif synapse.node2_id == id
+          output << synapse.node2_id.to_s + '<->' + synapse.node1_id.to_s
+        else
+          fail 'invalid synapse on topic in synapse_csv'
+        end
+      end
+    end
+    if output_format == 'array'
+      return output
+    elsif output_format == 'text'
+      return output.join('; ')
+    else
+      fail 'invalid argument to synapses_csv'
+    end
+    output
+  end
+
   def topic_autocomplete_method
     "Get: #{self.name}"
   end
