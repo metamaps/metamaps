@@ -4,7 +4,6 @@ class API::RestfulController < ActionController::Base
 
   snorlax_used_rest!
 
-  rescue_from(Pundit::NotAuthorizedError) { |e| respond_with_standard_error e, 403 }
   load_and_authorize_resource only: [:show, :update, :destroy]
 
   def create
