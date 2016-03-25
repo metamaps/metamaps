@@ -1,0 +1,32 @@
+<%= render :partial => 'layouts/lightboxes' %>
+<%= render :partial => 'layouts/templates' %>
+<%= render :partial => 'shared/metacodeBgColors' %>
+<script type="text/javascript" charset="utf-8">
+    <% if current_user %>
+        Metamaps.Active.Mapper = <%= current_user.to_json.html_safe %>
+    <% else %>
+        Metamaps.Active.Mapper = null;
+    <% end %>
+    Metamaps.Metacodes = <%= Metacode.all.to_json.html_safe %>;
+
+    Metamaps.Loading = {
+        loader: new CanvasLoader('loading'),
+        hide: function () {
+          $('#loading').hide();
+        },
+        show: function () {
+          $('#loading').show();
+        }
+    };
+    Metamaps.Loading.loader.setColor('#4fb5c0'); // default is '#000000'
+    Metamaps.Loading.loader.setDiameter(28); // default is 40
+    Metamaps.Loading.loader.setDensity(41); // default is 40
+    Metamaps.Loading.loader.setRange(0.9); // default is 1.3
+    Metamaps.Loading.loader.show(); // Hidden by default
+
+    USERVOICE.load();
+</script>
+
+<%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>
+</body>
+</html>

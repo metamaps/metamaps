@@ -5,77 +5,7 @@
 # displayed within, based on URL
 #%>
 
-<!--
-
-  Do you want to learn more about web development using Ruby or Javascript?
-
-  Metamaps.cc is an open source project, and we are always looking for new
-  developers to help contribute to our codebase! To get involved, send an
-  email to team@metamaps.cc or find us on Github at
-  https://github.com/metamaps/metamaps_gen002.
-
--->
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title><%=h yield(:title) %></title>
-  <%= csrf_meta_tags %>
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-
-  <!-- typekit for vinyl font -->
-  <script type="text/javascript" src="https://use.typekit.net/tki2nyo.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-
-        <!-- app code -->
-        <script type="text/javascript">
-            require.config({baseUrl: '<%= "#{ asset_path '/famous/main.js' }".chomp('main.js') %>'});
-            require(['main']);
-        </script>
-
-  <!--[if (IE)]>
-    <style type="text/css">
-      #lightbox_overlay {
-        display: block;
-      }
-
-      #lightbox_main {
-        top: 50%;
-        margin-top: -281px;
-      }
-
-      #lightbox_screen {
-        height: 100%;
-        opacity: 0.42;
-      }
-
-      .lightboxContent {
-        display: none;
-      }
-
-      #noIE {
-        display: block;
-      }
-
-      #lightbox_close {
-        display: none;
-      }
-
-    </style>
-    <script type="text/javascript">
-      $(document).ready(function(){
-        $("#lightbox_screen").unbind().click(function(event){
-          event.preventDefault();
-          event.stopPropagation();
-          return false;
-        });
-      });
-    </script>
-  <![endif]-->
-</head>
+<%= render :partial => 'layouts/head' %>
 
 <body class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
 
@@ -90,7 +20,7 @@
         <% classes = action_name == "home" ? "homePage" : ""
            classes += action_name == "home" && authenticated? ? " explorePage" : ""
            classes += controller_name == "maps" && action_name == "index" ? " explorePage" : ""
-           if controller_name == "maps" && action_name == "show" 
+           if controller_name == "maps" && action_name == "show"
              classes += " mapPage"
              if policy(@map).update?
                classes += " canEditMap"
@@ -103,7 +33,7 @@
            %>
 
         <div class="wrapper <%= classes %>" id="wrapper">
-            
+
             <%= render :partial => 'layouts/upperelements', :locals => { :appsPage => false }  %>
 
             <%= yield %>
@@ -124,40 +54,4 @@
 
     <% end %>
 
-<%= render :partial => 'layouts/lightboxes' %>
-<%= render :partial => 'layouts/templates' %>
-<%= render :partial => 'shared/metacodeBgColors' %>
-<script type="text/javascript" charset="utf-8">
-    <% if authenticated? %>
-        Metamaps.Active.Mapper = <%= user.to_json.html_safe %>
-    <% else %>
-        Metamaps.Active.Mapper = null;
-    <% end %>
-    Metamaps.Metacodes = <%= Metacode.all.to_json.html_safe %>;
-
-    Metamaps.Loading = {
-        loader: new CanvasLoader('loading'),
-        hide: function () {
-          $('#loading').hide();
-        },
-        show: function () {
-          $('#loading').show();
-        }
-    };
-    Metamaps.Loading.loader.setColor('#4fb5c0'); // default is '#000000'
-    Metamaps.Loading.loader.setDiameter(28); // default is 40
-    Metamaps.Loading.loader.setDensity(41); // default is 40
-    Metamaps.Loading.loader.setRange(0.9); // default is 1.3
-    Metamaps.Loading.loader.show(); // Hidden by default
-
-    // set up uservoice with signed in user
-    <% if authenticated? && ENV['SSO_KEY'] %>
-      USERVOICE.load(Metamaps.Active.Mapper.name, Metamaps.Active.Mapper.id, "<%= user.email %>", "<%= current_sso_token %>");
-    <% else %>
-      USERVOICE.load();
-    <% end %>
-</script>
-
-<%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>
-</body>
-</html>
+<%= render :partial => 'layouts/foot' %>

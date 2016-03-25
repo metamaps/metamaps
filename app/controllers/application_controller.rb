@@ -1,12 +1,12 @@
 class ApplicationController < ActionController::Base
+  include ApplicationHelper
   include Pundit
   include PunditExtra
   rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
   protect_from_forgery
 
-  before_action :get_invite_link
   after_action :allow_embedding
-  
+
   def default_serializer_options
     { root: false }
   end
@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   def handle_unauthorized
     head :forbidden # TODO make this better
   end
-  
+
 private
 
   def require_no_user
@@ -67,10 +67,6 @@ private
 
   def admin?
     authenticated? && current_user.admin
-  end
-
-  def get_invite_link
-    @invite_link = "#{request.base_url}/join" + (current_user ? "?code=#{current_user.code}" : "")
   end
 
   def allow_embedding
