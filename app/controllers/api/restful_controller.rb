@@ -9,7 +9,7 @@ class API::RestfulController < ActionController::Base
 
   def create
     authorize resource_class
-    instantiate_resouce
+    instantiate_resource
     resource.user = current_user
     create_action
     respond_with_resource
