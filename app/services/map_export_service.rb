@@ -68,23 +68,73 @@ class MapExportService
     end.compact
   end
 
+  # iterable: @map.to_spreadsheet.each { |row| ... }
   def to_spreadsheet
-    spreadsheet = []
-    spreadsheet << ['Topics']
-    spreadsheet << topic_headings.map(&:capitalize)
+    yield ["Topics"]
+    yield topic_headings.map(&:capitalize)
     exportable_topics.each do |topics|
       # convert exportable_topics into an array of arrays
-      spreadsheet << topic_headings.map { |h| topics.send(h) }
+      yield topic_headings.map { |h| topics.send(h) }
     end
 
-    spreadsheet << []
-    spreadsheet << ['Synapses']
-    spreadsheet << synapse_headings.map(&:capitalize)
+    yield []
+    yield ["Synapses"]
+    yield synapse_headings.map(&:capitalize)
     exportable_synapses.each do |synapse|
       # convert exportable_synapses into an array of arrays
-      spreadsheet << synapse_headings.map { |h| synapse.send(h) }
+      yield synapse_headings.map { |h| synapse.send(h) }
     end
+  end
 
-    spreadsheet
+  def render_csv
+    set_file_headers(:csv)
+    set_streaming_headers
+
+    @controller.response.status = 200
+    @controller.response_body = csv_lines
+  end
+
+  def render_xls
+    set_file_headers(:xls)
+    set_streaming_headers
+
+    @controller.response.status = 200
+    @controller.response_body = xls_lines
+  end
+
+  def set_file_headers(type)
+    file_name = "metamaps.cc.map.#{@map.id}.#{type}"
+    content_type = type == :xls ? 'application/vnd.ms-excel' : 'text/csv'
+
+    @controller.headers['Content-Type'] = content_type
+    @controller.headers['Content-disposition'] = %Q'attachment; filename="#{filename}"'
+  end
+
+  def set_streaming_headers
+    @controller.headers['X-Accel-Buffering'] = 'no'
+    @controller.headers['Cache-Control'] ||= 'no-cache'
+    @controller.headers.delete('Content-Length')
+  end
+
+  def csv_lines
+    Enumerator.new do |out|
+      @map.to_spreadsheet.each do |row|
+        out << CSV::Row.new(row)
+      end
+    end
+  end
+
+  def xls_lines
+    Enumerator.new do |out|
+      out << '<table><tbody>'
+      @map.to_spreadsheet.each do |row|
+        out << '<tr>'
+        row.each do |field|
+          out << "<td>#{field}</td>"
+        end
+        out << '</tr>'
+      end
+      out << '</tbody></table>'
+    end
   end
 end
