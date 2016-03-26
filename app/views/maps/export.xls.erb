@@ -1,5 +1,5 @@
 <table>
-  <% @map.to_spreadsheet.each do |line| %>
+  <% @spreadsheet.each do |line| %>
     <tr>
       <% line.each do |field| %>
         <td><%= field %></td>

@@ -36,6 +36,8 @@ Metamaps::Application.routes.draw do
   get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
   
   resources :maps, except: [:index, :new, :edit]
+  get 'maps/:id/export', to: 'maps#export'
+
   get 'explore/active', to: 'maps#activemaps'
   get 'explore/featured', to: 'maps#featuredmaps'
   get 'explore/mine', to: 'maps#mymaps'
