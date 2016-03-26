@@ -12,22 +12,23 @@
  * 6	topic6	Action	-425	63			admin	commons
  * 								
  * Synapses								
- * Id	Description	Category	Topic1	Topic2	User	Permission		
- * 43		from-to	6	2	admin	commons		
- * 44		from-to	6	1	admin	commons		
- * 45		from-to	6	5	admin	commons		
- * 46		from-to	2	7	admin	commons		
- * 47		from-to	8	6	admin	commons		
- * 48		from-to	8	1	admin	commons		
+ * Topic1	Topic2	Category	Description	User	Permission		
+ * 6	2	from-to		admin	commons		
+ * 6	1	from-to		admin	commons		
+ * 6	5	from-to		admin	commons		
+ * 2	7	from-to		admin	commons		
+ * 8	6	from-to		admin	commons		
+ * 8	1	from-to		admin	commons		
  *
  */
 
 Metamaps.Import = {
+  // note that user is not imported
   topicWhitelist: [
-    'id', 'name', 'metacode', 'description', 'link', 'permission'
+    'id', 'name', 'metacode', 'x', 'y', 'description', 'link', 'permission'
   ],
   synapseWhitelist: [
-    'id', 'desc', 'description', 'category', 'topic1', 'topic2', 'permission'
+    'topic1', 'topic2', 'category', 'desc', 'description', 'permission'
   ],
   cidMappings: {}, //to be filled by import_id => cid mappings
 
