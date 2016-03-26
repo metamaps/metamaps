@@ -85,8 +85,8 @@ class MapsController < ApplicationController
                 respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @allmessages, @map)
             }
             format.json { render json: @map }
-            format.csv { redirect_to :export }
-            format.xls { redirect_to :export }
+            format.csv { redirect_to action: :export, format: :csv }
+            format.xls { redirect_to action: :export, format: :xls }
         end
     end
 
@@ -94,7 +94,7 @@ class MapsController < ApplicationController
     def export
       map = Map.find(params[:id])
       authorize map
-      exporter = MapExportService(current_user, map)
+      exporter = MapExportService.new(current_user, map)
       respond_to do |format|
         format.json { render json: exporter.json }
         format.csv { send_data exporter.csv }

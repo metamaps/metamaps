@@ -31,6 +31,10 @@ class MapPolicy < ApplicationPolicy
     record.permission == 'commons' || record.permission == 'public' || record.user == user
   end
 
+  def export?
+    show?
+  end
+
   def contains?
     show?
   end

@@ -2,8 +2,8 @@ class MapExportService < Struct.new(:user, :map)
   def json
     # marshal_dump turns OpenStruct into a Hash
     {
-      topics: exportable_topics.map(:marshal_dump),
-      synapses: exportable_synapses.map(:marshal_dump)
+      topics: exportable_topics.map(&:marshal_dump),
+      synapses: exportable_synapses.map(&:marshal_dump)
     }
   end
 
@@ -29,9 +29,9 @@ class MapExportService < Struct.new(:user, :map)
   end
 
   def exportable_topics
-    visible_topics ||= Pundit.policy_scope!(@user, @map.topics)
+    visible_topics ||= Pundit.policy_scope!(user, map.topics)
     topic_mappings = Mapping.includes(mappable: [:metacode, :user])
-                            .where(mappable: visible_topics, map: @map)
+                            .where(mappable: visible_topics, map: map)
     topic_mappings.map do |mapping|
       topic = mapping.mappable
       OpenStruct.new(
@@ -49,7 +49,7 @@ class MapExportService < Struct.new(:user, :map)
   end
 
   def exportable_synapses
-    visible_synapses = Pundit.policy_scope!(@user, @map.synapses)
+    visible_synapses = Pundit.policy_scope!(user, map.synapses)
     visible_synapses.map do |synapse|
       OpenStruct.new(
         topic1: synapse.node1_id,
@@ -65,18 +65,18 @@ class MapExportService < Struct.new(:user, :map)
   def to_spreadsheet
     spreadsheet = []
     spreadsheet << ["Topics"]
-    spreadsheet << topic_headings.map(:capitalize)
+    spreadsheet << topic_headings.map(&:capitalize)
     exportable_topics.each do |topics|
       # convert exportable_topics into an array of arrays
-      topic_headings.map do { |h| topics.send(h) }
+      spreadsheet << topic_headings.map { |h| topics.send(h) }
     end
 
     spreadsheet << []
     spreadsheet << ["Synapses"]
-    spreadsheet << synapse_headings.map(:capitalize)
+    spreadsheet << synapse_headings.map(&:capitalize)
     exportable_synapses.each do |synapse|
       # convert exportable_synapses into an array of arrays
-      synapse_headings.map do { |h| synapse.send(h) }
+      spreadsheet << synapse_headings.map { |h| synapse.send(h) }
     end
 
     spreadsheet
