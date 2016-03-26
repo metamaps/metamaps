@@ -37,7 +37,16 @@ Metamaps.Import = {
     $('body').bind('paste', function(e) {
       var text = e.originalEvent.clipboardData.getData('text/plain');
 
-      var results = self.parseTabbedString(text);
+      var results;
+      if (text[0] === '{') {
+        try {
+          results = JSON.parse(text);
+        } catch (Error e) {
+          results = false;
+        }
+      } else {
+        results = self.parseTabbedString(text);
+      }
       if (results === false) return;
 
       var topics = results.topics;
