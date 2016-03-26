@@ -23,7 +23,10 @@ Metamaps::Application.routes.draw do
   resources :messages, only: [:show, :create, :update, :destroy]
   resources :mappings, except: [:index, :new, :edit]
   resources :metacode_sets, :except => [:show]
-  resources :metacodes, :except => [:show, :destroy]
+
+  resources :metacodes, :except => [:destroy]
+  get 'metacodes/:name', to: 'metacodes#show'
+
   resources :synapses, except: [:index, :new, :edit]
   resources :topics, except: [:index, :new, :edit] do
     get :autocomplete_topic, :on => :collection
