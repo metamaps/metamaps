@@ -76,7 +76,7 @@ body,
 
 html {
 
-} 
+}
 body {
     background: #d8d9da url(<%= asset_data_uri('shattered_@2X.png') %>);
     font-family: 'din-medium', helvetica, sans-serif;
@@ -131,6 +131,17 @@ button.button:active,
 a.button:active,
 input[type="submit"]:active {
     background: #429B46;
+}
+
+button.button.btn-no {
+    background-color: #c04f4f;
+}
+button.button.btn-no:hover {
+    background-color: #A54242;
+}
+.toast .toast-button {
+    margin-top: -10px;
+    margin-left: 10px;
 }
 /*
  * Utility
@@ -628,7 +639,11 @@ label {
     margin: 0 0 0 1.3em;
 }
 .main {
+    position: relative;
     /*overflow:hidden; */
+}
+.main.compressed {
+  width: calc(100% - 300px);
 }
 #infovis-canvas {
     -webkit-touch-callout: none;
@@ -713,7 +728,7 @@ label {
     text-transform: uppercase;
     text-align: left;
     font-size: 14px;
-    line-height: 14px; 
+    line-height: 14px;
     position:relative;
 }
 .accountInnerArrow {
@@ -1022,7 +1037,7 @@ h3.filterBox {
     text-align: center;
 }
 .sidebarFilterBox li:hover {
-    
+
 }
 #filter_by_mapper li img {
     width: 40px;
@@ -1067,93 +1082,15 @@ h3.filterBox {
     margin-top:8px;
 }
 #filter_by_metacode {
-    
+
 }
 #filter_by_mapper {
-    
+
 }
 #filter_by_synapse {
-    
+
 }
 /* end filter by metacode */
-
-/* collaborate */
-
-.sidebarCollaborate {
-    width: 32px;
-    height: 32px;
-}
-.sidebarCollaborateBox {
-    display: none;
-    height: auto;
-    padding: 16px;
-    width: 238px;
-}
-h3.realtimeBoxTitle {
-    margin-bottom: 10px;
-    text-align: left;
-    float: left;
-    font-size:18px;
-    line-height:18px;
-}
-.sidebarCollaborateBox .realtimeOnOff {
-    float: right;
-    padding: 4px;
-    border-radius: 2px;
-    margin-left: 12px;
-    cursor: pointer;
-    text-align: center;
-    font-size:12px;
-}
-.sidebarCollaborateBox .realtimeOnOff:hover, .sidebarCollaborateBox .realtimeOnOff.active {
-    color: #00bcd4;
-}
-.sidebarCollaborateBox .rtOff {
-    
-}
-.sidebarCollaborateBox .rtOn {
-
-}
-.realtimeMapperList .rtMapper {
-    list-style-type: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 10px 34px;
-    display: block;
-    height: 14px;
-    font-family: 'din-regular', helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 14px;
-    position: relative;
-}
-
-.rtMapperSelf img {
-    border: 2px solid #424242;
-}
-
-.rtUserImage {
-    position: absolute;
-    top: 4px;
-    left: 0;
-    border-radius: 14px;
-}
-
-.littleJuntoIcon {
-    width: 24px;
-    height:24px;
-    position: absolute;
-    top: 4px;
-    right: 0;
-    background-image: url(<%= asset_data_uri('junto24_sprite.png') %>);
-}
-.realtimeMapperList .littleRtOff  .littleJuntoIcon {
-    background-position: 0 0;
-}
-.realtimeMapperList .littleRtOn .littleJuntoIcon {
-    background-position: -24px 0;
-}
-/* end collaborate */
 
 .nodemargin {
     padding-top: 120px;
@@ -1189,7 +1126,7 @@ h3.realtimeBoxTitle {
     padding: 0;
 }
 .rightclickmenu > ul {
-    
+
 }
 .rightclickmenu li {
     list-style: none;
@@ -1266,7 +1203,7 @@ h3.realtimeBoxTitle {
 .rc-metacode li img {
     display: inline-block;
 }
-.rightclickmenu .rc-permission ul, 
+.rightclickmenu .rc-permission ul,
 .rightclickmenu .rc-metacode ul,
 .rightclickmenu .rc-siblings ul  {
     display: none;
@@ -1279,7 +1216,7 @@ h3.realtimeBoxTitle {
     border-top-right-radius: 2px;
     box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
-.rightclickmenu .rc-permission:hover > ul, 
+.rightclickmenu .rc-permission:hover > ul,
 .rightclickmenu .rc-metacode:hover > ul,
  .rightclickmenu .rc-siblings:hover > ul {
     display: block;
@@ -1288,7 +1225,7 @@ h3.realtimeBoxTitle {
     padding: 7px;
 }
 .rightclickmenu li.changeP {
-    
+
 }
 .rightclickmenu li.changeP .rc-perm-icon {
     position: absolute;
@@ -1350,13 +1287,13 @@ h3.realtimeBoxTitle {
     top: -7px;
 }
 
-.moveMenusUp .rc-metacode ul, 
+.moveMenusUp .rc-metacode ul,
 .moveMenusUp .rc-permission ul,
 .moveMenusUp .rc-siblings ul {
     top: auto;
     bottom: 0;
 }
-.moveMenusToLeft .rc-metacode ul, 
+.moveMenusToLeft .rc-metacode ul,
 .moveMenusToLeft .rc-permission ul,
 .moveMenusToLeft .rc-siblings ul {
     left: auto;
@@ -1379,7 +1316,7 @@ h3.realtimeBoxTitle {
 #new_synapse .tt-suggestion.tt-cursor {
     background: #E0E0E0;
 }
-#new_topic .tt-suggestion, 
+#new_topic .tt-suggestion,
 #new_synapse .tt-dataset h3,
 #new_synapse .tt-suggestion {
     background: #F5F5F5;
@@ -1403,7 +1340,7 @@ h3.realtimeBoxTitle {
     font-size: 14px;
     padding: 9px 0 9px 4px;
 }
-#new_synapse .synapseDesc, 
+#new_synapse .synapseDesc,
 #new_synapse .genericSynapseDesc {
     width: 190px;
     line-height: 14px;
@@ -2041,7 +1978,7 @@ and it won't be important on password protected instances */
 }
 
 #svi1 > p, #svi2 > p {
-    width: 150px;    
+    width: 150px;
 }
 .lightboxContent {
     font-family: 'din-regular';
@@ -2120,7 +2057,7 @@ and it won't be important on password protected instances */
     display: none !important;
 }
 .ui-tabs-vertical {
-  
+
 }
 .ui-tabs-vertical .ui-tabs-nav {
     float: left;
@@ -2294,7 +2231,7 @@ and it won't be important on password protected instances */
 
 #colophon a {
     color: #c04f4f;
-    text-decoration: underline;  
+    text-decoration: underline;
 }
 
 #colophonCols {
@@ -2365,15 +2302,15 @@ and it won't be important on password protected instances */
     background: url(<%= asset_data_uri 'browser_icons.png' %>) no-repeat -220px 0;
 }
 
-#chromeIcon:hover{ 
+#chromeIcon:hover{
     opacity: 1;
 }
 
-#fireFoxIcon:hover{ 
+#fireFoxIcon:hover{
     opacity: 1;
 }
 
-#safariIcon:hover{ 
+#safariIcon:hover{
     opacity: 1;
 }
 
@@ -2593,7 +2530,7 @@ and it won't be important on password protected instances */
     margin: 5px 0;
     font-size: 14px;
     line-height: 18px;
-    font-family: 'din-regular'; 
+    font-family: 'din-regular';
 }
 
 #cheatSheet .csItem a {
@@ -2793,7 +2730,7 @@ and it won't be important on password protected instances */
     word-wrap: break-word;
 }
 .blackBox td.iconColor {
-    
+
 }
 .blackBox .field {
     margin: 15px 0 5px;
@@ -2919,7 +2856,7 @@ and it won't be important on password protected instances */
     display: none;
     background-color: #4fb5c0;
     color: #FFFFFF;
-    padding: 2px 8px 2px 8px; 
+    padding: 2px 8px 2px 8px;
     position: absolute;
     top: 7px;
     left:28px;
@@ -2952,7 +2889,7 @@ and it won't be important on password protected instances */
     background-position: 16px 8px;
     -webkit-transform-origin: left center;
     transform-origin: left center;
-}   
+}
 .blockchain-btn {
     display: inline;
     float: right;

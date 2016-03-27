@@ -30,5 +30,12 @@ t.logoContent += '</ul>';
   t.featuredAuthContent += '<a href="/" class="activeMaps exploreMapsButton"><div class="exploreMapsIcon"></div>Recently Active</a>';
   t.featuredAuthContent += '<a href="/explore/featured" class="active featuredMaps exploreMapsButton"><div class="exploreMapsIcon"></div>Featured</a>';
 
+/* apps bars */
+  t.registeredAppsContent = '<a href="/oauth/applications" class="active activeMaps exploreMapsButton" data-bypass="true"><div class="exploreMapsIcon"></div>Registered Apps</a>';
+  t.registeredAppsContent += '<a href="/oauth/authorized_applications" class="featuredMaps exploreMapsButton" data-bypass="true"><div class="exploreMapsIcon"></div>Authorized Apps</a>';
+
+  t.authorizedAppsContent = '<a href="/oauth/applications" class="activeMaps exploreMapsButton" data-bypass="true"><div class="exploreMapsIcon"></div>Registered Apps</a>';
+  t.authorizedAppsContent += '<a href="/oauth/authorized_applications" class="active featuredMaps exploreMapsButton" data-bypass="true"><div class="exploreMapsIcon"></div>Authorized Apps</a>';
+
     module.exports = t;
 });

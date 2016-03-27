@@ -1,3 +1,5 @@
+// TODO document this user agent function
+
 var labelType, useGradients, nativeTextSupport, animate;
 
 (function () {
@@ -14,11 +16,11 @@ var labelType, useGradients, nativeTextSupport, animate;
     animate = !(iStuff || !nativeCanvasSupport);
 })();
 
-// TODO eliminate these 4 global variables
-var panningInt; // this variable is used to store a 'setInterval' for the Metamaps.JIT.SmoothPanning() function, so that it can be cleared with window.clearInterval
-var tempNode = null,
-    tempInit = false,
-    tempNode2 = null;
+// TODO eliminate these 4 top-level variables
+Metamaps.panningInt = null;
+Metamaps.tempNode = null;
+Metamaps.tempInit = false;
+Metamaps.tempNode2 = null;
 
 Metamaps.Settings = {
     embed: false, // indicates that the app is on a page that is optimized for embedding in iFrames on other web pages
@@ -41,7 +43,7 @@ Metamaps.Settings = {
 };
 
 Metamaps.Touch = {
-    touchPos: null, // this stores the x and y values of a current touch event 
+    touchPos: null, // this stores the x and y values of a current touch event
     touchDragNode: null // this stores a reference to a JIT node that is being dragged
 };
 
@@ -113,7 +115,7 @@ Metamaps.Backbone.init = function () {
             return _.omit(this.attributes, this.blacklist);
         },
         save: function (key, val, options) {
-            
+
             var attrs;
 
             // Handle both `"key", value` and `{key: value}` -style arguments.
@@ -151,7 +153,7 @@ Metamaps.Backbone.init = function () {
                     "permission": Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons'
                 });
             }
-            
+
             this.on('changeByOther', this.updateCardView);
             this.on('change', this.updateNodeView);
             this.on('saved', this.savedEvent);
@@ -189,9 +191,9 @@ Metamaps.Backbone.init = function () {
             return Metamaps.Metacodes.get(this.get('metacode_id'));
         },
         getMapping: function () {
-            
+
             if (!Metamaps.Active.Map) return false;
-            
+
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
                 mappable_type: "Topic",
@@ -205,7 +207,7 @@ Metamaps.Backbone.init = function () {
                 id: this.isNew() ? this.cid : this.id,
                 name: this.get('name')
             };
-            
+
             if (Metamaps.Active.Map) {
                 mapping = this.getMapping();
                 node.data = {
@@ -213,19 +215,19 @@ Metamaps.Backbone.init = function () {
                     $mappingID: mapping.id
                 };
             }
-            
+
             return node;
         },
         updateNode: function () {
             var mapping;
             var node = this.get('node');
             node.setData('topic', this);
-            
+
             if (Metamaps.Active.Map) {
                 mapping = this.getMapping();
                 node.setData('mapping', mapping);
             }
-            
+
             return node;
         },
         savedEvent: function() {
@@ -241,7 +243,7 @@ Metamaps.Backbone.init = function () {
 
             // update the node on the map
             if (onPageWithTopicCard && node) {
-                node.name = this.get('name'); 
+                node.name = this.get('name');
                 Metamaps.Visualize.mGraph.plot();
             }
         },
@@ -259,7 +261,7 @@ Metamaps.Backbone.init = function () {
 
             // update the node on the map
             if (onPageWithTopicCard && node) {
-                node.name = this.get('name'); 
+                node.name = this.get('name');
                 Metamaps.Visualize.mGraph.plot();
             }
         }
@@ -277,7 +279,7 @@ Metamaps.Backbone.init = function () {
             return _.omit(this.attributes, this.blacklist);
         },
         save: function (key, val, options) {
-            
+
             var attrs;
 
             // Handle both `"key", value` and `{key: value}` -style arguments.
@@ -366,16 +368,16 @@ Metamaps.Backbone.init = function () {
                 ] : false;
         },
         getMapping: function () {
-            
+
             if (!Metamaps.Active.Map) return false;
-            
+
             return Metamaps.Mappings.findWhere({
                 map_id: Metamaps.Active.Map.id,
                 mappable_type: "Synapse",
                 mappable_id: this.isNew() ? this.cid : this.id
             });
         },
-        createEdge: function () {
+        createEdge: function (providedMapping) {
             var mapping, mappingID;
             var synapseID = this.isNew() ? this.cid : this.id;
 
@@ -387,26 +389,26 @@ Metamaps.Backbone.init = function () {
                     $synapseIDs: [synapseID],
                 }
             };
-            
+
             if (Metamaps.Active.Map) {
-                mapping = this.getMapping();
+                mapping = providedMapping || this.getMapping();
                 mappingID = mapping.isNew() ? mapping.cid : mapping.id;
                 edge.data.$mappings = [];
                 edge.data.$mappingIDs = [mappingID];
             }
-            
+
             return edge;
         },
         updateEdge: function () {
             var mapping;
             var edge = this.get('edge');
             edge.getData('synapses').push(this);
-            
+
             if (Metamaps.Active.Map) {
                 mapping = this.getMapping();
                 edge.getData('mappings').push(mapping);
             }
-            
+
             return edge;
         },
         savedEvent: function() {
@@ -489,12 +491,12 @@ Metamaps.Backbone.init = function () {
 
         Metamaps.Active.Map = new self.Map(Metamaps.Active.Map);
     }
-    
+
     if (Metamaps.Active.Topic) Metamaps.Active.Topic = new self.Topic(Metamaps.Active.Topic);
 
     //attach collection event listeners
     self.attachCollectionEvents = function () {
-        
+
         Metamaps.Topics.on("add remove", function(topic){
             Metamaps.Map.InfoBox.updateNumbers();
             Metamaps.Filter.checkMetacodes();
@@ -506,7 +508,7 @@ Metamaps.Backbone.init = function () {
             Metamaps.Filter.checkSynapses();
             Metamaps.Filter.checkMappers();
         });
-        
+
         if (Metamaps.Active.Map) {
             Metamaps.Mappings.on("add remove", function(mapping){
                 Metamaps.Map.InfoBox.updateNumbers();
@@ -602,7 +604,7 @@ Metamaps.Create = {
         metacodeModels.each(function(metacode){
             newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + metacode.get('icon') + '" data-id="' + metacode.id + '" title="' + metacode.get('name') + '" alt="' + metacode.get('name') + '"/>';
         });
-            
+
         $('#metacodeImg').empty().append(newMetacodes).CloudCarousel({
             titleBox: $('#metacodeImgTitle'),
             yRadius: 40,
@@ -661,7 +663,7 @@ Metamaps.Create = {
     },
     newTopic: {
         init: function () {
-            
+
             $('#topic_name').keyup(function () {
                 Metamaps.Create.newTopic.name = $(this).val();
             });
@@ -680,7 +682,7 @@ Metamaps.Create = {
                 {
                     highlight: true,
                     minLength: 2,
-                },    
+                },
                 [{
                     name: 'topic_autocomplete',
                     limit: 8,
@@ -736,10 +738,6 @@ Metamaps.Create = {
         init: function () {
             var self = Metamaps.Create.newSynapse;
 
-            $('#synapse_desc').keyup(function () {
-                Metamaps.Create.newSynapse.description = $(this).val();
-            });
-
             var synapseBloodhound = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -770,12 +768,12 @@ Metamaps.Create = {
                 {
                     highlight: true,
                     minLength: 2,
-                }, 
+                },
                 [{
                     name: 'synapse_autocomplete',
                     display: function(s) { return s.label; },
                     templates: {
-                        suggestion: function(s) { 
+                        suggestion: function(s) {
                             return Hogan.compile("<div class='genericSynapseDesc'>{{label}}</div>").render(s);
                         },
                     },
@@ -795,6 +793,22 @@ Metamaps.Create = {
                 }]
           );
 
+            $('#synapse_desc').keyup(function (e) {
+              var ESC = 27, BACKSPACE = 8, DELETE = 46;
+              if (e.keyCode === BACKSPACE && $(this).val() === "" ||
+                  e.keyCode === DELETE && $(this).val() === "" ||
+                  e.keyCode === ESC) {
+                Metamaps.Create.newSynapse.hide();
+              }//if
+              Metamaps.Create.newSynapse.description = $(this).val();
+            });
+
+            $('#synapse_desc').focusout(function() {
+              if (Metamaps.Create.newSynapse.beingCreated) {
+                Metamaps.Synapse.createSynapseLocally();
+              }
+            });
+
             $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
                 if (datum.id) { // if they clicked on an existing synapse get it
                     Metamaps.Synapse.getSynapseFromAutocomplete(datum.id);
@@ -811,7 +825,7 @@ Metamaps.Create = {
         topic2id: null,
         newSynapseId: null,
         open: function () {
-            $('#new_synapse').fadeIn('fast', function () {
+            $('#new_synapse').fadeIn(100, function () {
                 $('#synapse_desc').focus();
             });
             Metamaps.Create.newSynapse.beingCreated = true;
@@ -923,14 +937,14 @@ Metamaps.TopicCard = {
             $('#addLinkInput input').focus();
         };
         var inputEmbedFunc = function (event) {
-            
+
             var element = this;
             setTimeout(function () {
                 var text = $(element).val();
                 if (event.type=="paste" || (event.type=="keyup" && event.which==13)){
                   // TODO evaluate converting this to '//' no matter what (infer protocol)
                   if (text.slice(0, 7) !== 'http://' &&
-                      text.slice(0, 8) !== 'https://' && 
+                      text.slice(0, 8) !== 'https://' &&
                       text.slice(0, 2) !== '//') {
                         text='//'+text;
                     }
@@ -1022,9 +1036,9 @@ Metamaps.TopicCard = {
             if (!selectingMetacode) {
                 selectingMetacode = true;
 
-                // this is to make sure the metacode 
+                // this is to make sure the metacode
                 // select is accessible onscreen, when opened
-                // while topic card is close to the right 
+                // while topic card is close to the right
                 // edge of the screen
                 windowWidth = $(window).width();
                 showcardLeft = parseInt($('.showcard').css('left'));
@@ -1033,7 +1047,7 @@ Metamaps.TopicCard = {
                     $('.metacodeSelect').addClass('onRightEdge');
                 }
 
-                // this is to make sure the metacode 
+                // this is to make sure the metacode
                 // select is accessible onscreen, when opened
                 // while topic card is close to the bottom
                 // edge of the screen
@@ -1208,13 +1222,13 @@ Metamaps.TopicCard = {
         var self=Metamaps.TopicCard;
 
         var nodeValues = {};
-        
+
         var authorized = topic.authorizeToEdit(Metamaps.Active.Mapper);
 
         if (!authorized) {
-            
+
         } else {
-            
+
         }
 
         var desc_nil = "Click to add description...";
@@ -1293,7 +1307,7 @@ Metamaps.SynapseCard = {
     showCard: function (edge, e) {
         var self = Metamaps.SynapseCard;
 
-        //reset so we don't interfere with other edges, but first, save its x and y 
+        //reset so we don't interfere with other edges, but first, save its x and y
         var myX = $('#edit_synapse').css('left');
         var myY = $('#edit_synapse').css('top');
         $('#edit_synapse').remove();
@@ -1426,7 +1440,7 @@ Metamaps.SynapseCard = {
             $('#editSynLowerBar').append(list);
 
             // attach click listeners to list items that
-            // will cause it to switch the displayed synapse 
+            // will cause it to switch the displayed synapse
             // when you click it
             $('#switchSynapseList li').click(function(e){
                 e.stopPropagation();
@@ -1538,7 +1552,7 @@ Metamaps.SynapseCard = {
 
         if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
             $('#edit_synapse_left, #edit_synapse_right').click(function () {
-                
+
                 $(this).toggleClass('checked');
 
                 var leftChecked = $('#edit_synapse_left').is('.checked');
@@ -1631,7 +1645,7 @@ Metamaps.Visualize = {
                         }
                     }
                 });
-                
+
                 var pos = n.getPos();
                 pos.setc(-200, -200);
             });
@@ -1680,12 +1694,12 @@ Metamaps.Visualize = {
 
             $jit.RGraph.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
             $jit.RGraph.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
-            
+
             RGraphSettings.width = $(document).width();
             RGraphSettings.height = $(document).height();
             RGraphSettings.background = Metamaps.JIT.RGraph.background;
             RGraphSettings.levelDistance = Metamaps.JIT.RGraph.levelDistance;
-            
+
             self.mGraph = new $jit.RGraph(RGraphSettings);
 
         } else if (self.type == "ForceDirected" && (!self.mGraph || self.mGraph instanceof $jit.RGraph)) {
@@ -1694,7 +1708,7 @@ Metamaps.Visualize = {
 
             $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings);
             $jit.ForceDirected.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings);
-            
+
             FDSettings.width = $('body').width();
             FDSettings.height = $('body').height();
 
@@ -1896,7 +1910,7 @@ Metamaps.Util = {
     },
     checkURLisImage: function (url) {
         // when the page reloads the following regular expression will be screwed up
-        // please replace it with this one before you save: /*backslashhere*.(jpeg|jpg|gif|png)$/ 
+        // please replace it with this one before you save: /*backslashhere*.(jpeg|jpg|gif|png)$/
         return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     },
     checkURLisYoutubeVideo: function (url) {
@@ -1910,11 +1924,17 @@ Metamaps.Util = {
  *
  */
 Metamaps.Realtime = {
+    videoId: 'video-wrapper',
     socket: null,
-    isOpen: false,
-    changing: false,
+    webrtc: null,
+    readyToCall: false,
     mappersOnMap: {},
-    status: true, // stores whether realtime is True/On or False/Off
+    disconnected: false,
+    chatOpen: false,
+    status: true, // stores whether realtime is True/On or False/Off,
+    broadcastingStatus: false,
+    inConversation: false,
+    localVideo: null,
     init: function () {
         var self = Metamaps.Realtime;
 
@@ -1927,50 +1947,150 @@ Metamaps.Realtime = {
         $(".rtOn").click(reenableRealtime);
         $(".rtOff").click(turnOff);
 
-        $('.sidebarCollaborateIcon').click(self.toggleBox);
-        $('.sidebarCollaborateBox').click(function(event){ 
-            event.stopPropagation();
-        });
-        $('body').click(self.close);
+        self.addJuntoListeners();
 
-        self.socket = io.connect('<%= ENV['REALTIME_SERVER'] %>');
+        self.socket = new SocketIoConnection({ url: '<%= ENV['REALTIME_SERVER'] %>' });
         self.socket.on('connect', function () {
-            self.startActiveMap();
+            console.log('connected');
+            if (!self.disconnected) {
+              self.startActiveMap();
+            } else self.disconnected = false;
         });
+        self.socket.on('disconnect', function () {
+          self.disconnected = true;
+        });
+
+        if (Metamaps.Active.Mapper) {
+
+          self.webrtc = new SimpleWebRTC({
+            connection: self.socket,
+            localVideoEl: self.videoId,
+            remoteVideosEl: '',
+            detectSpeakingEvents: true,
+            autoAdjustMic: false, //true,
+            autoRequestMedia: false,
+            localVideo: {
+                autoplay: true,
+                mirror: true,
+                muted: true
+            },
+            media: {
+              video: true,
+              audio: true
+            },
+            nick: Metamaps.Active.Mapper.id
+          });
+
+          var
+            $video = $('<video></video>').attr('id', self.videoId);
+          self.localVideo = {
+              $video: $video,
+              view: new Metamaps.Views.videoView($video[0], $('body'), 'me', true, {
+                  DOUBLE_CLICK_TOLERANCE: 200,
+                  avatar: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : ''
+              })
+          };
+
+          self.room = new Metamaps.Views.room({
+            webrtc: self.webrtc,
+            socket: self.socket,
+            username: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('name') : '',
+            image: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : '',
+            room: 'global',
+            $video: self.localVideo.$video,
+            myVideoView: self.localVideo.view,
+            config: { DOUBLE_CLICK_TOLERANCE: 200 }
+          });
+          self.room.videoAdded(self.handleVideoAdded);
+
+          self.room.chat.$container.hide();
+          $('body').prepend(self.room.chat.$container);
+        } // if Metamaps.Active.Mapper
     },
-    toggleBox: function (event) {
-        var self = Metamaps.Realtime;
+    addJuntoListeners: function () {
+      var self = Metamaps.Realtime;
 
-        if (self.isOpen) self.close();
-        else self.open();
-
-        event.stopPropagation();
+      $(document).on(Metamaps.Views.chatView.events.openTray, function () {
+        $('.main').addClass('compressed');
+        self.chatOpen = true;
+        self.positionPeerIcons();
+      });
+      $(document).on(Metamaps.Views.chatView.events.closeTray, function () {
+        $('.main').removeClass('compressed');
+        self.chatOpen = false;
+        self.positionPeerIcons();
+      });
+      $(document).on(Metamaps.Views.chatView.events.videosOn, function () {
+        $('#wrapper').removeClass('hideVideos');
+      });
+      $(document).on(Metamaps.Views.chatView.events.videosOff, function () {
+        $('#wrapper').addClass('hideVideos');
+      });
+      $(document).on(Metamaps.Views.chatView.events.cursorsOn, function () {
+        $('#wrapper').removeClass('hideCursors');
+      });
+      $(document).on(Metamaps.Views.chatView.events.cursorsOff, function () {
+        $('#wrapper').addClass('hideCursors');
+      });
     },
-    open: function () {
-        var self = Metamaps.Realtime;
+    handleVideoAdded: function (v, id) {
+      var self = Metamaps.Realtime;
+      self.positionVideos();
+      v.setParent($('#wrapper'));
+      v.$container.find('.video-cutoff').css({
+        border: '4px solid ' + self.mappersOnMap[id].color
+      });
+      $('#wrapper').append(v.$container);
+    },
+    positionVideos: function () {
+      var self = Metamaps.Realtime;
+      var videoIds = Object.keys(self.room.videos);
+      var numOfVideos = videoIds.length;
+      var numOfVideosToPosition = _.filter(videoIds, function (id) {
+        return !self.room.videos[id].manuallyPositioned;
+      }).length;
 
-        Metamaps.GlobalUI.Account.close();
-        Metamaps.Filter.close();
-        $('.sidebarCollaborateIcon div').addClass('hide');
-
-        if (!self.isOpen && !self.changing) {
-            self.changing = true;
-            $('.sidebarCollaborateBox').fadeIn(200, function () {
-                self.changing = false;
-                self.isOpen = true;
-            });
+      var screenHeight = $(document).height();
+      var screenWidth = $(document).width();
+      var topExtraPadding = 20;
+      var topPadding = 30;
+      var leftPadding = 30;
+      var videoHeight = 150;
+      var videoWidth = 180;
+      var column = 0;
+      var row = 0;
+      var yFormula = function () {
+        var y = topExtraPadding + (topPadding + videoHeight)*row + topPadding;
+        if (y + videoHeight > screenHeight) {
+          row = 0;
+          column += 1;
+          y = yFormula();
         }
-    },
-    close: function () {
-        var self = Metamaps.Realtime;
-        $(".sidebarCollaborateIcon div").removeClass('hide');
-        if (!self.changing) {
-            self.changing = true;
-            $('.sidebarCollaborateBox').fadeOut(200, function () {
-                self.changing = false;
-                self.isOpen = false;
-            });
+        row++;
+        return y;
+      };
+      var xFormula = function () {
+        var x = (leftPadding + videoWidth)*column + leftPadding;
+        return x;
+      };
+
+      // do self first
+      var myVideo = Metamaps.Realtime.localVideo.view;
+      if (!myVideo.manuallyPositioned) {
+        myVideo.$container.css({
+          top: yFormula() + 'px',
+          left: xFormula() + 'px'
+        });
+      }
+      videoIds.forEach(function (id) {
+        var video = self.room.videos[id];
+        if (!video.manuallyPositioned) {
+          video.$container.css({
+            top: yFormula() + 'px',
+            left: xFormula() + 'px'
+          });
         }
+      });
     },
     startActiveMap: function () {
         var self = Metamaps.Realtime;
@@ -1986,6 +2106,7 @@ Metamaps.Realtime = {
             else if (publicMap) {
                 self.attachMapListener();
             }
+            self.room.addMessages(new Metamaps.Backbone.MessageCollection(Metamaps.Messages), true);
         }
     },
     endActiveMap: function () {
@@ -1993,9 +2114,13 @@ Metamaps.Realtime = {
 
         $(document).off('mousemove');
         self.socket.removeAllListeners();
+        if (self.inConversation) self.leaveCall();
         self.socket.emit('endMapperNotify');
         $(".collabCompass").remove();
         self.status = false;
+        self.room.leave();
+        self.room.chat.$container.hide();
+        self.room.chat.close();
     },
     reenableRealtime: function() {
         var confirmString = "The layout of your map has fallen out of sync with the saved copy. ";
@@ -2011,37 +2136,283 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
 
         if (notify) self.sendRealtimeOn();
-        $(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
-        $('.rtOn').addClass('active');
-        $('.rtOff').removeClass('active');
+        //$(".rtMapperSelf").removeClass('littleRtOff').addClass('littleRtOn');
+        //$('.rtOn').addClass('active');
+        //$('.rtOff').removeClass('active');
         self.status = true;
-        $(".sidebarCollaborateIcon").addClass("blue");
+        //$(".sidebarCollaborateIcon").addClass("blue");
         $(".collabCompass").show();
+        self.room.chat.$container.show();
+        self.room.room = 'map-' + Metamaps.Active.Map.id;
+        self.checkForACallToJoin();
+
+        self.activeMapper = {
+            id: Metamaps.Active.Mapper.id,
+            name: Metamaps.Active.Mapper.get('name'),
+            username: Metamaps.Active.Mapper.get('name'),
+            image: Metamaps.Active.Mapper.get('image'),
+            color: Metamaps.Util.getPastelColor(),
+            self: true
+        };
+        self.localVideo.view.$container.find('.video-cutoff').css({
+          border: '4px solid ' + self.activeMapper.color
+        });
+        self.room.chat.addParticipant(self.activeMapper);
+    },
+    checkForACallToJoin: function () {
+      var self = Metamaps.Realtime;
+      self.socket.emit('checkForCall', { room: self.room.room, mapid: Metamaps.Active.Map.id });
+    },
+    promptToJoin: function () {
+      var self = Metamaps.Realtime;
+
+      var notifyText = 'There\'s a conversation happening, want to join?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
+      self.room.conversationInProgress();
+    },
+    conversationHasBegun: function () {
+      var self = Metamaps.Realtime;
+
+      if (self.inConversation) return;
+      var notifyText = 'There\'s a conversation starting, want to join?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
+      self.room.conversationInProgress();
+    },
+    countOthersInConversation: function () {
+      var self = Metamaps.Realtime;
+      var count = 0;
+
+      for (var key in self.mappersOnMap) {
+        if (self.mappersOnMap[key].inConversation) count++;
+      }
+      return count;
+    },
+    mapperJoinedCall: function (id) {
+      var self = Metamaps.Realtime;
+      var mapper = self.mappersOnMap[id];
+
+      if (mapper) {
+        if (self.inConversation) {
+          var username = mapper.name;
+          var notifyText = username + ' joined the call';
+          Metamaps.GlobalUI.notifyUser(notifyText);
+        }
+
+        mapper.inConversation = true;
+        self.room.chat.mapperJoinedCall(id);
+      }
+    },
+    mapperLeftCall: function (id) {
+      var self = Metamaps.Realtime;
+      var mapper = self.mappersOnMap[id];
+
+      if (mapper) {
+        if (self.inConversation) {
+          var username = mapper.name;
+          var notifyText = username + ' left the call';
+          Metamaps.GlobalUI.notifyUser(notifyText);
+        }
+
+        mapper.inConversation = false;
+        self.room.chat.mapperLeftCall(id);
+
+        if ((self.inConversation && self.countOthersInConversation() === 0) ||
+            (!self.inConversation && self.countOthersInConversation() === 1)) {
+          self.callEnded();
+        }
+      }
+    },
+    callEnded: function () {
+      var self = Metamaps.Realtime;
+
+      self.room.conversationEnding();
+      self.room.leaveVideoOnly();
+      self.inConversation = false;
+      self.localVideo.view.$container.hide().css({
+        top: '72px',
+        left: '30px'
+      });
+      self.localVideo.view.audioOn();
+      self.localVideo.view.videoOn();
+      self.webrtc.webrtc.localStreams.forEach(function (stream) {
+        stream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+      });
+      self.webrtc.webrtc.localStreams = [];
+    },
+    invitedToCall: function (inviter) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[inviter].name;
+      var notifyText = username + ' is suggesting a video call. What do you think?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
+    },
+    invitedToJoin: function (inviter) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[inviter].name;
+      var notifyText = username + ' is inviting you to the conversation. Join?';
+      notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>';
+      notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyInvite(' + inviter + ')">No</button>';
+      Metamaps.GlobalUI.notifyUser(notifyText, true);
+    },
+    acceptCall: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('callAccepted', {
+        mapid: Metamaps.Active.Map.id,
+        invited: Metamaps.Active.Mapper.id,
+        inviter: userid
+      });
+      self.joinCall();
+      Metamaps.GlobalUI.clearNotify();
+    },
+    denyCall: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('callDenied', {
+        mapid: Metamaps.Active.Map.id,
+        invited: Metamaps.Active.Mapper.id,
+        inviter: userid
+      });
+      Metamaps.GlobalUI.clearNotify();
+    },
+    denyInvite: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('inviteDenied', {
+        mapid: Metamaps.Active.Map.id,
+        invited: Metamaps.Active.Mapper.id,
+        inviter: userid
+      });
+      Metamaps.GlobalUI.clearNotify();
+    },
+    inviteACall: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('inviteACall', {
+        mapid: Metamaps.Active.Map.id,
+        inviter: Metamaps.Active.Mapper.id,
+        invited: userid
+      });
+      self.room.chat.invitationPending(userid);
+      Metamaps.GlobalUI.clearNotify();
+    },
+    inviteToJoin: function (userid) {
+      var self = Metamaps.Realtime;
+      self.socket.emit('inviteToJoin', {
+        mapid: Metamaps.Active.Map.id,
+        inviter: Metamaps.Active.Mapper.id,
+        invited: userid
+      });
+      self.room.chat.invitationPending(userid);
+    },
+    callAccepted: function (userid) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[userid].name;
+      Metamaps.GlobalUI.notifyUser('Conversation starting...');
+      self.joinCall();
+      self.room.chat.invitationAnswered(userid);
+    },
+    callDenied: function (userid) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[userid].name;
+      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invite.');
+      self.room.chat.invitationAnswered(userid);
+    },
+    inviteDenied: function (userid) {
+      var self = Metamaps.Realtime;
+
+      var username = self.mappersOnMap[userid].name;
+      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invite.');
+      self.room.chat.invitationAnswered(userid);
+    },
+    joinCall: function () {
+      var self = Metamaps.Realtime;
+
+      self.webrtc.off('readyToCall');
+      self.webrtc.once('readyToCall', function () {
+        self.videoInitialized = true;
+        self.readyToCall = true;
+        self.localVideo.view.manuallyPositioned = false;
+        self.positionVideos();
+        self.localVideo.view.$container.show();
+        if (self.localVideo && self.status) {
+          $('#wrapper').append(self.localVideo.view.$container);
+        }
+        self.room.join();
+      });
+      self.inConversation = true;
+      self.socket.emit('mapperJoinedCall', {
+        mapid: Metamaps.Active.Map.id,
+        id: Metamaps.Active.Mapper.id
+      });
+      self.webrtc.startLocalVideo();
+      Metamaps.GlobalUI.clearNotify();
+      self.room.chat.mapperJoinedCall(Metamaps.Active.Mapper.id);
+    },
+    leaveCall: function () {
+      var self = Metamaps.Realtime;
+
+      self.socket.emit('mapperLeftCall', {
+        mapid: Metamaps.Active.Map.id,
+        id: Metamaps.Active.Mapper.id
+      });
+
+      self.room.chat.mapperLeftCall(Metamaps.Active.Mapper.id);
+      self.room.leaveVideoOnly();
+      self.inConversation = false;
+      self.localVideo.view.$container.hide();
+
+      // if there's only two people in the room, and we're leaving
+      // we should shut down the call locally
+      if (self.countOthersInConversation() === 1) {
+        self.callEnded();
+      }
     },
     turnOff: function (silent) {
         var self = Metamaps.Realtime;
 
         if (self.status) {
             if (!silent) self.sendRealtimeOff();
-            $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
-            $('.rtOn').removeClass('active');
-            $('.rtOff').addClass('active');
+            //$(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff');
+            //$('.rtOn').removeClass('active');
+            //$('.rtOff').addClass('active');
             self.status = false;
-            $(".sidebarCollaborateIcon").removeClass("blue");
+            //$(".sidebarCollaborateIcon").removeClass("blue");
             $(".collabCompass").hide();
+            $('#' + self.videoId).remove();
         }
     },
     setupSocket: function () {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
         var myId = Metamaps.Active.Mapper.id;
-        
+
         socket.emit('newMapperNotify', {
             userid: myId,
             username: Metamaps.Active.Mapper.get("name"),
             userimage: Metamaps.Active.Mapper.get("image"),
             mapid: Metamaps.Active.Map.id
         });
+
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToCall', self.invitedToCall); // new call
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToJoin', self.invitedToJoin); // call already in progress
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-callAccepted', self.callAccepted);
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-callDenied', self.callDenied);
+        socket.on(myId + '-' + Metamaps.Active.Map.id + '-inviteDenied', self.inviteDenied);
+
+        // receive word that there's a conversation in progress
+        socket.on('maps-' + Metamaps.Active.Map.id + '-callInProgress', self.promptToJoin);
+        socket.on('maps-' + Metamaps.Active.Map.id + '-callStarting', self.conversationHasBegun);
+
+        socket.on('maps-' + Metamaps.Active.Map.id + '-mapperJoinedCall', self.mapperJoinedCall);
+        socket.on('maps-' + Metamaps.Active.Map.id + '-mapperLeftCall', self.mapperLeftCall);
 
         // if you're the 'new guy' update your list with who's already online
         socket.on(myId + '-' + Metamaps.Active.Map.id + '-UpdateMapperList', self.updateMapperList);
@@ -2065,6 +2436,9 @@ Metamaps.Realtime = {
         socket.on('maps-' + Metamaps.Active.Map.id + '-newTopic', self.newTopic);
 
         //
+        socket.on('maps-' + Metamaps.Active.Map.id + '-newMessage', self.newMessage);
+
+        //
         socket.on('maps-' + Metamaps.Active.Map.id + '-removeTopic', self.removeTopic);
 
         //
@@ -2083,7 +2457,7 @@ Metamaps.Realtime = {
         socket.on('topicChangeFromServer', self.topicChange);
         socket.on('synapseChangeFromServer', self.synapseChange);
         self.attachMapListener();
-    
+
         // local event listeners that trigger events
         var sendCoords = function (event) {
             var pixels = {
@@ -2145,6 +2519,11 @@ Metamaps.Realtime = {
         };
         $(document).on(Metamaps.JIT.events.removeSynapse, sendRemoveSynapse);
 
+        var sendNewMessage = function (event, data) {
+            self.sendNewMessage(data);
+        };
+        $(document).on(Metamaps.Views.room.events.newMessage, sendNewMessage);
+
     },
     attachMapListener: function(){
         var self = Metamaps.Realtime;
@@ -2186,31 +2565,22 @@ Metamaps.Realtime = {
         // data.userrealtime
 
         self.mappersOnMap[data.userid] = {
+            id: data.userid,
             name: data.username,
+            username: data.username,
             image: data.userimage,
             color: Metamaps.Util.getPastelColor(),
             realtime: data.userrealtime,
+            inConversation: data.userinconversation,
             coords: {
-                x: 0, 
+                x: 0,
                 y: 0
-            },
+            }
         };
 
-        var onOff = data.userrealtime ? "On" : "Off";
-        var mapperListItem = '<li id="mapper';
-        mapperListItem += data.userid;
-        mapperListItem += '" class="rtMapper littleRt';
-        mapperListItem += onOff;
-        mapperListItem += '">';
-        mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
-        mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
-        mapperListItem += data.username;
-        mapperListItem += '<div class="littleJuntoIcon"></div>';
-        mapperListItem += '</li>';
-
         if (data.userid !== Metamaps.Active.Mapper.id) {
-            $('#mapper' + data.userid).remove();
-            $('.realtimeMapperList ul').append(mapperListItem);
+            self.room.chat.addParticipant(self.mappersOnMap[data.userid]);
+            if (data.userinconversation) self.room.chat.mapperJoinedCall(data.userid);
 
             // create a div for the collaborators compass
             self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status);
@@ -2224,33 +2594,33 @@ Metamaps.Realtime = {
         // data.username
         // data.userimage
         // data.coords
+        var firstOtherPerson = Object.keys(self.mappersOnMap).length === 0;
 
         self.mappersOnMap[data.userid] = {
+            id: data.userid,
             name: data.username,
+            username: data.username,
             image: data.userimage,
             color: Metamaps.Util.getPastelColor(),
             realtime: true,
             coords: {
-                x: 0, 
+                x: 0,
                 y: 0
             },
         };
 
         // create an item for them in the realtime box
         if (data.userid !== Metamaps.Active.Mapper.id && self.status) {
-            var mapperListItem = '<li id="mapper' + data.userid + '" class="rtMapper littleRtOn">';
-            mapperListItem += '<img style="border: 2px solid ' + self.mappersOnMap[data.userid].color + ';"';
-            mapperListItem += ' src="' + data.userimage + '" width="24" height="24" class="rtUserImage" />';
-            mapperListItem += data.username;
-            mapperListItem += '<div class="littleJuntoIcon"></div>';
-            mapperListItem += '</li>';
-            $('#mapper' + data.userid).remove();
-            $('.realtimeMapperList ul').append(mapperListItem);
+            self.room.chat.addParticipant(self.mappersOnMap[data.userid]);
 
             // create a div for the collaborators compass
             self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status);
-            
-            Metamaps.GlobalUI.notifyUser(data.username + ' just joined the map');
+
+            var notifyMessage = data.username + ' just joined the map';
+            if (firstOtherPerson) {
+              notifyMessage += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.inviteACall(' + data.userid + ')">Suggest A Video Call</button>';
+            }
+            Metamaps.GlobalUI.notifyUser(notifyMessage);
 
             // send this new mapper back your details, and the awareness that you've loaded the map
             var update = {
@@ -2259,6 +2629,7 @@ Metamaps.Realtime = {
                 userimage: Metamaps.Active.Mapper.get("image"),
                 userid: Metamaps.Active.Mapper.id,
                 userrealtime: self.status,
+                userinconversation: self.inConversation,
                 mapid: Metamaps.Active.Map.id
             };
             socket.emit('updateNewMapperList', update);
@@ -2291,10 +2662,16 @@ Metamaps.Realtime = {
 
         delete self.mappersOnMap[data.userid];
 
-        $('#mapper' + data.userid).remove();
+        //$('#mapper' + data.userid).remove();
         $('#compass' + data.userid).remove();
+        self.room.chat.removeParticipant(data.username);
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just left the map');
+
+        if ((self.inConversation && self.countOthersInConversation() === 0) ||
+            (!self.inConversation && self.countOthersInConversation() === 1)) {
+          self.callEnded();
+        }
     },
     newCollaborator: function (data) {
         var self = Metamaps.Realtime;
@@ -2305,7 +2682,7 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid].realtime = true;
 
-        $('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn');
+        //$('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn');
         $('#compass' + data.userid).show();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just turned on realtime');
@@ -2319,7 +2696,7 @@ Metamaps.Realtime = {
 
         self.mappersOnMap[data.userid].realtime = false;
 
-        $('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff');
+        //$('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff');
         $('#compass' + data.userid).hide();
 
         Metamaps.GlobalUI.notifyUser(data.username + ' just turned off realtime');
@@ -2348,12 +2725,13 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
 
+        var boundary = self.chatOpen ? '#wrapper' : document;
         var mapper = self.mappersOnMap[id];
-        var xMax=$(document).width();
-        var yMax=$(document).height();
+        var xMax=$(boundary).width();
+        var yMax=$(boundary).height();
         var compassDiameter=56;
         var compassArrowSize=24;
-        
+
         var origPixels = Metamaps.Util.coordsToPixels(mapper.coords);
         var pixels = self.limitPixelsToScreen(origPixels);
         $('#compass' + id).css({
@@ -2367,12 +2745,12 @@ Metamaps.Realtime = {
             var dx = origPixels.x - pixels.x; // adjacent
             var ratio = dy / dx;
             var angle = Math.atan2(dy, dx);
-            
+
             $('#compassArrow' + id).show().css({
                 transform: 'rotate(' + angle + 'rad)',
                 "-webkit-transform": 'rotate(' + angle + 'rad)',
             });
-            
+
             if (dx > 0) {
                 $('#compass' + id).addClass('labelLeft');
             }
@@ -2385,17 +2763,18 @@ Metamaps.Realtime = {
         var self = Metamaps.Realtime;
         var socket = Metamaps.Realtime.socket;
 
+        var boundary = self.chatOpen ? '#wrapper' : document;
         var xLimit, yLimit;
-        var xMax=$(document).width();
-        var yMax=$(document).height();
+        var xMax=$(boundary).width();
+        var yMax=$(boundary).height();
         var compassDiameter=56;
         var compassArrowSize=24;
-        
+
         xLimit = Math.max(0 + compassArrowSize, pixels.x);
         xLimit = Math.min(xLimit, xMax - compassDiameter);
         yLimit = Math.max(0 + compassArrowSize, pixels.y);
         yLimit = Math.min(yLimit, yMax - compassDiameter);
-        
+
         return {x:xLimit,y:yLimit};
     },
     sendCoords: function (coords) {
@@ -2521,6 +2900,21 @@ Metamaps.Realtime = {
                 }
             });
         }
+    },
+    // newMessage
+    sendNewMessage: function (data) {
+        var self = Metamaps.Realtime;
+        var socket = self.socket;
+
+        var message = data.attributes;
+        message.mapid = Metamaps.Active.Map.id;
+        socket.emit('newMessage', message);
+    },
+    newMessage: function (data) {
+        var self = Metamaps.Realtime;
+        var socket = self.socket;
+
+        self.room.addMessages(new Metamaps.Backbone.MessageCollection(data));
     },
     // newTopic
     sendNewTopic: function (data) {
@@ -2711,7 +3105,7 @@ Metamaps.Realtime = {
             if (edge.getData("mappings").length - 1 === 0) {
                 Metamaps.Control.hideEdge(edge);
             }
-            
+
             var index = _.indexOf(edge.getData("synapses"), synapse);
             edge.getData("mappings").splice(index, 1);
             edge.getData("synapses").splice(index, 1);
@@ -2761,7 +3155,7 @@ Metamaps.Control = {
     deleteSelected: function () {
 
         if (!Metamaps.Active.Map) return;
-        
+
         var n = Metamaps.Selected.Nodes.length;
         var e = Metamaps.Selected.Edges.length;
         var ntext = n == 1 ? "1 topic" : n + " topics";
@@ -2799,7 +3193,7 @@ Metamaps.Control = {
         }
     },
     deleteNode: function (nodeid) { // refers to deleting topics permanently
-        
+
         if (!Metamaps.Active.Map) return;
 
         var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper);
@@ -2811,7 +3205,7 @@ Metamaps.Control = {
 
         var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid);
         var topic = node.getData('topic');
-        
+
         var permToDelete = Metamaps.Active.Mapper.id === topic.get('user_id') || Metamaps.Active.Mapper.get('admin');
         if (permToDelete) {
             var mappableid = topic.id;
@@ -2928,7 +3322,7 @@ Metamaps.Control = {
     },
     deselectEdge: function (edge) {
         edge.setData('showDesc', false, 'current');
-        
+
         edge.setDataset('current', {
             lineWidth: 2,
             color: Metamaps.Settings.colors.synapses.normal
@@ -2980,13 +3374,12 @@ Metamaps.Control = {
 
         var synapse = edge.getData("synapses")[index];
         var mapping = edge.getData("mappings")[index];
-            
+
         var permToDelete = Metamaps.Active.Mapper.id === synapse.get('user_id') || Metamaps.Active.Mapper.get('admin');
         if (permToDelete) {
             if (edge.getData("synapses").length - 1 === 0) {
                 Metamaps.Control.hideEdge(edge);
             }
-        
             var mappableid = synapse.id;
             synapse.destroy();
 
@@ -3206,7 +3599,6 @@ Metamaps.Filter = {
         var self = Metamaps.Filter;
 
         Metamaps.GlobalUI.Account.close();
-        Metamaps.Realtime.close();
         $('.sidebarFilterIcon div').addClass('hide');
 
 
@@ -3244,13 +3636,13 @@ Metamaps.Filter = {
         self.visible.mappers = [];
         self.visible.synapses = [];
 
-        $('#filter_by_metacode ul').empty(); 
+        $('#filter_by_metacode ul').empty();
         $('#filter_by_mapper ul').empty();
         $('#filter_by_synapse ul').empty();
 
         $('.filterBox .showAll').addClass('active');
     },
-    /*  
+    /*
     Most of this data essentially depends on the ruby function which are happening for filter inside view filterBox
     But what these function do is load this data into three accessible array within java : metacodes, mappers and synapses
     */
@@ -3263,7 +3655,7 @@ Metamaps.Filter = {
             metacode = $( this ).attr('data-id');
             self.filters.metacodes.push(metacode);
             self.visible.metacodes.push(metacode);
-        }); 
+        });
 
         $('#filter_by_mapper li').each(function()  {
             mapper = ($( this ).attr('data-id'));
@@ -3272,7 +3664,7 @@ Metamaps.Filter = {
         });
 
         $('#filter_by_synapse li').each(function()  {
-            synapse = ($( this ).attr('data-id'));  
+            synapse = ($( this ).attr('data-id'));
             self.filters.synapses.push(synapse);
             self.visible.synapses.push(synapse);
         });
@@ -3286,15 +3678,15 @@ Metamaps.Filter = {
     // an abstraction function for checkMetacodes, checkMappers, checkSynapses to reduce
     // code redundancy
     /*
-    @param 
+    @param
     */
     updateFilters: function (collection, propertyToCheck, correlatedModel, filtersToUse, listToModify) {
         var self = Metamaps.Filter;
-        
+
         var newList = [];
         var removed = [];
         var added = [];
-        
+
         // the first option enables us to accept
         // ['Topics', 'Synapses'] as 'collection'
         if (typeof collection === "object") {
@@ -3327,10 +3719,10 @@ Metamaps.Filter = {
             }
           });
         }
-        
+
         removed = _.difference(self.filters[filtersToUse], newList);
         added = _.difference(newList, self.filters[filtersToUse]);
-        
+
         // remove the list items for things no longer present on the map
         _.each(removed, function(identifier) {
             $('#filter_by_' + listToModify + ' li[data-id="' + identifier + '"]').fadeOut('fast',function(){
@@ -3339,14 +3731,14 @@ Metamaps.Filter = {
             index = self.visible[filtersToUse].indexOf(identifier);
             self.visible[filtersToUse].splice(index, 1);
         });
-        
+
         var model, li, jQueryLi;
         function sortAlpha(a,b){
-            return a.childNodes[1].innerHTML.toLowerCase() > b.childNodes[1].innerHTML.toLowerCase() ? 1 : -1;  
+            return a.childNodes[1].innerHTML.toLowerCase() > b.childNodes[1].innerHTML.toLowerCase() ? 1 : -1;
         }
         // for each new filter to be added, create a list item for it and fade it in
         _.each(added, function (identifier) {
-            model = Metamaps[correlatedModel].get(identifier) || 
+            model = Metamaps[correlatedModel].get(identifier) ||
                 Metamaps[correlatedModel].find(function (model) {
                     return model.get(propertyToCheck) === identifier;
                 });
@@ -3404,7 +3796,7 @@ Metamaps.Filter = {
         $('.showAllMappers').removeClass('active');
         $('.hideAllMappers').addClass('active');
         self.visible.mappers = [];
-        self.passFilters();       
+        self.passFilters();
     },
     filterNoMappers: function (e) {
         var self = Metamaps.Filter;
@@ -3498,7 +3890,7 @@ Metamaps.Filter = {
             $('.hideAllSynapses').removeClass('active');
         }
     },
-    passFilters: function () {        
+    passFilters: function () {
         var self = Metamaps.Filter;
         var visible = self.visible;
 
@@ -3522,16 +3914,16 @@ Metamaps.Filter = {
             else passesMetacode = true;
 
             if (onMap) {
-                // when on a map, 
-                // we filter by mapper according to the person who added the 
+                // when on a map,
+                // we filter by mapper according to the person who added the
                 // topic or synapse to the map
                 var user_id = topic.getMapping().get("user_id").toString();
                 if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
                 else passesMapper = true;
             }
             else {
-                // when on a topic view, 
-                // we filter by mapper according to the person who created the 
+                // when on a topic view,
+                // we filter by mapper according to the person who created the
                 // topic or synapse
                 var user_id = topic.get("user_id").toString();
                 if (visible.mappers.indexOf(user_id) == -1) passesMapper = false;
@@ -3595,8 +3987,8 @@ Metamaps.Filter = {
                 }
 
                 if (onMap) {
-                    // when on a map, 
-                    // we filter by mapper according to the person who added the 
+                    // when on a map,
+                    // we filter by mapper according to the person who added the
                     // topic or synapse to the map
                     user_id = synapse.getMapping().get("user_id").toString();
                 }
@@ -3617,12 +4009,12 @@ Metamaps.Filter = {
             }
             else if (!e) console.log(synapse);
         });
-            
+
         // run the animation
-        Metamaps.Visualize.mGraph.fx.animate({  
-          modes: ['node-property:alpha',  
-                'edge-property:alpha'],  
-          duration: 200  
+        Metamaps.Visualize.mGraph.fx.animate({
+          modes: ['node-property:alpha',
+                'edge-property:alpha'],
+          duration: 200
         });
     }
 }; // end Metamaps.Filter
@@ -3660,7 +4052,7 @@ Metamaps.Listeners = {
 
                     Metamaps.Visualize.mGraph.plot();
                 }
-                
+
                 break;
             case 69: //if e or E is pressed
                 if (e.ctrlKey){
@@ -3698,6 +4090,7 @@ Metamaps.Listeners = {
         $(window).resize(function () {
             if (Metamaps.Visualize && Metamaps.Visualize.mGraph) Metamaps.Visualize.mGraph.canvas.resize($(window).width(), $(window).height());
             if ((Metamaps.Active.Map || Metamaps.Active.Topic) && Metamaps.Famous && Metamaps.Famous.maps.surf) Metamaps.Famous.maps.reposition();
+            if (Metamaps.Active.Map && Metamaps.Realtime.inConversation) Metamaps.Realtime.positionVideos();
         });
     }
 }; // end Metamaps.Listeners
@@ -3881,7 +4274,7 @@ Metamaps.Topic = {
             Metamaps.JIT.prepareVizData();
 
             // update filters
-            Metamaps.Filter.reset(); 
+            Metamaps.Filter.reset();
 
             // reset selected arrays
             Metamaps.Selected.reset();
@@ -3911,13 +4304,13 @@ Metamaps.Topic = {
                 hideLabels: false,
                 duration: 1000,
                 onComplete: function () {
-                    
+
                 }
             });
         }
     },
     fetchRelatives: function(node, metacode_id) {
-        
+
         var topics = Metamaps.Topics.map(function(t){ return t.id });
         var topics_string = topics.join();
 
@@ -3943,7 +4336,7 @@ Metamaps.Topic = {
             });
 
             var i, l, t, s;
-        
+
             Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
                 t = Metamaps.Topics.get(n.id);
                 t.set({ node: n }, { silent: true });
@@ -3972,7 +4365,7 @@ Metamaps.Topic = {
             url: "/topics/" + topic.id + "/relatives.json?" + paramsString,
             success: successCallback,
             error: function () {
-                
+
             }
         });
     },
@@ -3992,8 +4385,8 @@ Metamaps.Topic = {
         if (!$.isEmptyObject(Metamaps.Visualize.mGraph.graph.nodes)) {
             Metamaps.Visualize.mGraph.graph.addNode(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
-            topic.set('node', nodeOnViz, {silent: true});  
-            topic.updateNode(); // links the topic and the mapping to the node 
+            topic.set('node', nodeOnViz, {silent: true});
+            topic.updateNode(); // links the topic and the mapping to the node
 
             nodeOnViz.setData("dim", 1, "start");
             nodeOnViz.setData("dim", 25, "end");
@@ -4009,11 +4402,11 @@ Metamaps.Topic = {
                 nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), "end");
             }
             if (Metamaps.Create.newTopic.addSynapse && permitCreateSynapseAfter) {
-                Metamaps.Create.newSynapse.topic1id = tempNode.getData('topic').id;
+                Metamaps.Create.newSynapse.topic1id = Metamaps.tempNode.getData('topic').id;
                 
                 // position the form
-                midpoint.x = tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - tempNode.pos.getc().x) / 2;
-                midpoint.y = tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - tempNode.pos.getc().y) / 2;
+                midpoint.x = Metamaps.tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - Metamaps.tempNode.pos.getc().x) / 2;
+                midpoint.y = Metamaps.tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - Metamaps.tempNode.pos.getc().y) / 2;
                 pixelPos = Metamaps.Util.coordsToPixels(midpoint);
                 $('#new_synapse').css('left', pixelPos.x + "px");
                 $('#new_synapse').css('top', pixelPos.y + "px");
@@ -4023,9 +4416,9 @@ Metamaps.Topic = {
                     modes: ["node-property:dim"],
                     duration: 500,
                     onComplete: function () {
-                        tempNode = null;
-                        tempNode2 = null;
-                        tempInit = false;
+                        Metamaps.tempNode = null;
+                        Metamaps.tempNode2 = null;
+                        Metamaps.tempInit = false;
                     }
                 });
             } else {
@@ -4042,7 +4435,7 @@ Metamaps.Topic = {
             Metamaps.Visualize.mGraph.loadJSON(newnode);
             nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id);
             topic.set('node', nodeOnViz, {silent: true});
-            topic.updateNode(); // links the topic and the mapping to the node 
+            topic.updateNode(); // links the topic and the mapping to the node
 
             nodeOnViz.setData("dim", 1, "start");
             nodeOnViz.setData("dim", 25, "end");
@@ -4066,7 +4459,7 @@ Metamaps.Topic = {
             };
 
             $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData]);
-        };  
+        };
         var topicSuccessCallback = function (topicModel, response) {
             if (Metamaps.Active.Map) {
                 mapping.save({ mappable_id: topicModel.id }, {
@@ -4221,7 +4614,7 @@ Metamaps.Synapse = {
 
         var edgeOnViz;
 
-        var newedge = synapse.createEdge();
+        var newedge = synapse.createEdge(mapping);
 
         Metamaps.Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data);
         edgeOnViz = Metamaps.Visualize.mGraph.graph.getAdjacence(node1.id, node2.id);
@@ -4290,7 +4683,7 @@ Metamaps.Synapse = {
             node1 = synapsesToCreate[i];
             topic1 = node1.getData('topic');
             synapse = new Metamaps.Backbone.Synapse({
-                desc: Metamaps.Create.newSynapse.description,// || "",
+                desc: Metamaps.Create.newSynapse.description,
                 node1_id: topic1.isNew() ? topic1.cid : topic1.id,
                 node2_id: topic2.isNew() ? topic2.cid : topic2.id,
             });
@@ -4377,6 +4770,7 @@ Metamaps.Map = {
             Metamaps.Topics = new bb.TopicCollection(data.topics);
             Metamaps.Synapses = new bb.SynapseCollection(data.synapses);
             Metamaps.Mappings = new bb.MappingCollection(data.mappings);
+            Metamaps.Messages = data.messages;
             Metamaps.Backbone.attachCollectionEvents();
 
             var map = Metamaps.Active.Map;
@@ -4401,7 +4795,7 @@ Metamaps.Map = {
             Metamaps.JIT.prepareVizData();
 
             // update filters
-            Metamaps.Filter.reset(); 
+            Metamaps.Filter.reset();
 
             // reset selected arrays
             Metamaps.Selected.reset();
@@ -4468,7 +4862,7 @@ Metamaps.Map = {
             var desc = synapse.get("desc");
 
             var descNotFiltered = Metamaps.Filter.visible.synapses.indexOf(desc) > -1;
-            // make sure that both topics are being added, otherwise, it 
+            // make sure that both topics are being added, otherwise, it
             // doesn't make sense to add the synapse
             var topicsNotFiltered = nodes_array.indexOf(synapse.get('node1_id')) > -1;
             topicsNotFiltered = topicsNotFiltered && nodes_array.indexOf(synapse.get('node2_id')) > -1;
@@ -4522,7 +4916,7 @@ Metamaps.Map = {
         self.timeToTurn += 1;
         // if true, it's time to turn
         if (self.timeToTurn === self.sideLength) {
-            
+
             self.turnCount += 1;
             // if true, it's time to increase side length
             if (self.turnCount % 2 === 0) {
@@ -4603,7 +4997,7 @@ Metamaps.Map = {
                 sy = this.scaleOffsetY;
             this.translateOffsetX += x*sx;
             this.translateOffsetY += y*sy;
-            this.getCtx().translate(x, y); 
+            this.getCtx().translate(x, y);
         };
         canvas.getCtx = function() {
           return this.canvas.getContext("2d");
@@ -4651,7 +5045,7 @@ Metamaps.Map = {
            }
            node.visited = !T;
          });
-        
+
         var imageData = {
             encoded_image: canvas.canvas.toDataURL()
         };
@@ -4664,7 +5058,7 @@ Metamaps.Map = {
         var yyyy = today.getFullYear();
         if(dd<10) {
             dd='0'+dd
-        } 
+        }
         if(mm<10) {
             mm='0'+mm
         }
@@ -4704,7 +5098,7 @@ Metamaps.Map.CheatSheet = {
         $('#cheatSheet').tabs();
         $('#quickReference').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
         $("#quickReference .ui-tabs-nav li").removeClass("ui-corner-top").addClass("ui-corner-left");
-        
+
         // id = the id of a vimeo video
         var switchVideo = function (element, id) {
             $('.tutorialItem').removeClass("active");
@@ -4741,7 +5135,7 @@ Metamaps.Map.InfoBox = {
         var self = Metamaps.Map.InfoBox;
 
         $('.mapInfoIcon').click(self.toggleBox);
-        $('.mapInfoBox').click(function(event){ 
+        $('.mapInfoBox').click(function(event){
             event.stopPropagation();
         });
         $('body').click(self.close);
@@ -4884,7 +5278,7 @@ Metamaps.Map.InfoBox = {
         Metamaps.Mappers.each(function(m){
             string += '<li><a href="/explore/mapper/' + m.get("id") + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get("image") + '" />' + m.get("name") + '</a></li>';
         });
-        
+
         string += "</ul>";
         return string;
     },
@@ -4948,7 +5342,7 @@ Metamaps.Map.InfoBox = {
             Metamaps.Realtime.turnOn();
         }
         else if (permBefore === 'commons' && permission === 'public') {
-            Metamaps.Realtime.turnOff(true); // true is to 'silence' 
+            Metamaps.Realtime.turnOff(true); // true is to 'silence'
             // the notification that would otherwise be sent
         }
         shareable = permission === 'private' ? '' : 'shareable';
@@ -5136,14 +5530,14 @@ Metamaps.Admin = {
         $('#metacodes_value').val(self.selectMetacodes.toString());
     },
     selectAll: function () {
-        var self = Metamaps.Admin; 
+        var self = Metamaps.Admin;
 
         $('.editMetacodes li').removeClass('toggledOff');
         self.selectMetacodes = self.allMetacodes.slice(0);
         $('#metacodes_value').val(self.selectMetacodes.toString());
     },
     deselectAll: function () {
-        var self = Metamaps.Admin; 
+        var self = Metamaps.Admin;
 
         $('.editMetacodes li').addClass('toggledOff');
         self.selectMetacodes = [];
@@ -5173,4 +5567,3 @@ Metamaps.Admin = {
         }
     }
 };
-

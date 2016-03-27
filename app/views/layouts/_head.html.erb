@@ -1,0 +1,71 @@
+<!--
+
+  Do you want to learn more about web development using Ruby or Javascript?
+
+  Metamaps.cc is an open source project, and we are always looking for new
+  developers to help contribute to our codebase! To get involved, send an
+  email to team@metamaps.cc or find us on Github at
+  https://github.com/metamaps/metamaps_gen002.
+
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%=h yield(:title) %></title>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+
+  <!-- typekit for vinyl font -->
+  <script type="text/javascript" src="https://use.typekit.net/tki2nyo.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+        <!-- app code -->
+        <script type="text/javascript">
+            require.config({baseUrl: '<%= "#{ asset_path '/famous/main.js' }".chomp('main.js') %>'});
+            require(['main']);
+        </script>
+
+  <!--[if (IE)]>
+    <style type="text/css">
+      #lightbox_overlay {
+        display: block;
+      }
+
+      #lightbox_main {
+        top: 50%;
+        margin-top: -281px;
+      }
+
+      #lightbox_screen {
+        height: 100%;
+        opacity: 0.42;
+      }
+
+      .lightboxContent {
+        display: none;
+      }
+
+      #noIE {
+        display: block;
+      }
+
+      #lightbox_close {
+        display: none;
+      }
+
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#lightbox_screen").unbind().click(function(event){
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        });
+      });
+    </script>
+  <![endif]-->
+</head>

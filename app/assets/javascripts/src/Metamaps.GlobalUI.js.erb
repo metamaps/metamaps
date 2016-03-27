@@ -1,7 +1,7 @@
 var Metamaps = {}; // this variable declaration defines a Javascript object that will contain all the variables and functions used by us, broken down into 'sub-modules' that look something like this
 /*
 
-* unless you are on a page with the Javascript InfoVis Toolkit (Topic or Map) the only section in the metamaps 
+* unless you are on a page with the Javascript InfoVis Toolkit (Topic or Map) the only section in the metamaps
 * object will be these
 GlobalUI
 Active
@@ -32,7 +32,7 @@ Map
 Mapper
 Topic
 Synapse
-JIT 
+JIT
 */
 
 Metamaps.Active = {
@@ -43,22 +43,25 @@ Metamaps.Active = {
 Metamaps.Maps = {};
 
 $(document).ready(function () {
-
+  function init() {
     for (var prop in Metamaps) {
 
         // this runs the init function within each sub-object on the Metamaps one
         if (Metamaps.hasOwnProperty(prop) &&
+            Metamaps[prop] != null &&
             Metamaps[prop].hasOwnProperty('init') &&
             typeof (Metamaps[prop].init) == 'function'
         ) {
             Metamaps[prop].init();
         }
     }
+  }
 
     // initialize the famous ui
     var callFamous = function(){
         if (Metamaps.Famous) {
             Metamaps.Famous.build();
+            init();
         }
         else {
             setTimeout(callFamous, 100);
@@ -83,9 +86,9 @@ Metamaps.GlobalUI = {
             event.preventDefault();
             return false;
         });
-        
+
         $('#lightbox_screen, #lightbox_close').click(self.closeLightbox);
-        
+
         // initialize global backbone models and collections
         if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
 
@@ -106,26 +109,26 @@ Metamaps.GlobalUI = {
     },
     openLightbox: function (which) {
         var self = Metamaps.GlobalUI;
-        
+
         $('.lightboxContent').hide();
         $('#' + which).show();
-        
+
         self.lightbox = which;
 
         $('#lightbox_overlay').show();
-        
+
         var heightOfContent = '-' + ($('#lightbox_main').height() / 2) + 'px';
         // animate the content in from the bottom
         $('#lightbox_main').animate({
                 'top': '50%',
                 'margin-top': heightOfContent
         }, 200, 'easeOutCubic');
-        
+
         // fade the black overlay in
         $('#lightbox_screen').animate({
                     'opacity': '0.42'
         }, 200);
-        
+
         if (which == "switchMetacodes") {
             Metamaps.Create.isSwitchingSet = true;
         }
@@ -133,22 +136,22 @@ Metamaps.GlobalUI = {
 
     closeLightbox: function (event) {
         var self = Metamaps.GlobalUI;
-        
+
         if (event) event.preventDefault();
-        
+
         // animate the lightbox content offscreen
         $('#lightbox_main').animate({
                 'top': '100%',
                 'margin-top': '0'
         }, 200, 'easeInCubic');
-        
+
         // fade the black overlay out
         $('#lightbox_screen').animate({
                     'opacity': '0.0'
         }, 200, function () {
-            $('#lightbox_overlay').hide();   
+            $('#lightbox_overlay').hide();
         });
-        
+
         if (self.lightbox === 'forkmap') Metamaps.GlobalUI.CreateMap.reset('fork_map');
         if (self.lightbox === 'newmap') Metamaps.GlobalUI.CreateMap.reset('new_map');
         if (Metamaps.Create && Metamaps.Create.isSwitchingSet) {
@@ -159,14 +162,27 @@ Metamaps.GlobalUI = {
     notifyUser: function (message, leaveOpen) {
         var self = Metamaps.GlobalUI;
 
-        Metamaps.Famous.toast.surf.setContent(message);
-        Metamaps.Famous.toast.show();
-        clearTimeout(self.notifyTimeOut);
-        if (!leaveOpen) {
-            self.notifyTimeOut = setTimeout(function () {
-                Metamaps.Famous.toast.hide();
-            }, 8000);
+        function famousReady() {
+          Metamaps.Famous.toast.surf.setContent(message);
+          Metamaps.Famous.toast.show();
+          clearTimeout(self.notifyTimeOut);
+          if (!leaveOpen) {
+              self.notifyTimeOut = setTimeout(function () {
+                  Metamaps.Famous.toast.hide();
+              }, 8000);
+          }
         }
+
+        // initialize the famous ui
+        var callFamous = function(){
+            if (Metamaps.Famous && Metamaps.Famous.toast) {
+                famousReady();
+            }
+            else {
+                setTimeout(callFamous, 100);
+            }
+        }
+        callFamous();
     },
     clearNotify: function() {
         var self = Metamaps.GlobalUI;
@@ -197,13 +213,13 @@ Metamaps.GlobalUI.CreateMap = {
     },
     bindFormEvents: function () {
         var self = Metamaps.GlobalUI.CreateMap;
-        
+
         $('.new_map button.cancel').unbind().bind('click', function (event) {
             event.preventDefault();
             Metamaps.GlobalUI.closeLightbox();
         });
         $('.new_map button.submitMap').unbind().bind('click', self.submit);
-        
+
         // bind permission changer events on the createMap form
         $('.permIcon').unbind().bind('click', self.switchPermission);
     },
@@ -223,17 +239,17 @@ Metamaps.GlobalUI.CreateMap = {
     },
     switchPermission: function () {
         var self = Metamaps.GlobalUI.CreateMap;
-        
+
         self.newMap.set('permission', $(this).attr('data-permission'));
         $(this).siblings('.permIcon').find('.mapPermIcon').removeClass('selected');
         $(this).find('.mapPermIcon').addClass('selected');
-        
+
         var permText = $(this).find('.tip').html();
         $(this).parents('.new_map').find('.permText').html(permText);
     },
     submit: function (event) {
         if (event) event.preventDefault();
-        
+
         var self = Metamaps.GlobalUI.CreateMap;
 
         if (Metamaps.GlobalUI.lightbox === 'forkmap') {
@@ -256,7 +272,7 @@ Metamaps.GlobalUI.CreateMap = {
             success: self.success
             // TODO add error message
         });
-        
+
         Metamaps.GlobalUI.closeLightbox();
         Metamaps.GlobalUI.notifyUser('Working...');
     },
@@ -280,19 +296,19 @@ Metamaps.GlobalUI.CreateMap = {
 
         //push the new map onto the collection of 'my maps'
         Metamaps.Maps.Mine.add(model);
-        
+
         var formId = Metamaps.GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
         var form = $(formId);
-        
+
         Metamaps.GlobalUI.clearNotify();
         $('#wrapper').append(self.generateSuccessMessage(model.id));
-        
+
     },
     reset: function (id) {
         var self = Metamaps.GlobalUI.CreateMap;
 
         var form = $('#' + id);
-                
+
         if (id === "fork_map") {
             self.topicsToMap = [];
             self.synapsesToMap = [];
@@ -301,7 +317,7 @@ Metamaps.GlobalUI.CreateMap = {
         else {
             form.html(self.emptyMapForm);
         }
-        
+
         self.bindFormEvents();
         self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' });
 
@@ -317,7 +333,7 @@ Metamaps.GlobalUI.Account = {
         var self = Metamaps.GlobalUI.Account;
 
         $('.sidebarAccountIcon').click(self.toggleBox);
-        $('.sidebarAccountBox').click(function(event){ 
+        $('.sidebarAccountBox').click(function(event){
             event.stopPropagation();
         });
         $('body').click(self.close);
@@ -333,7 +349,6 @@ Metamaps.GlobalUI.Account = {
     open: function () {
         var self = Metamaps.GlobalUI.Account;
 
-        Metamaps.Realtime.close();
         Metamaps.Filter.close();
         $('.sidebarAccountIcon .tooltipsUnder').addClass('hide');
 
@@ -413,7 +428,7 @@ Metamaps.GlobalUI.Search = {
                     self.close(0, true);
                 }
                 break;
-            
+
             default:
                 break; //console.log(e.which);
             }
@@ -479,7 +494,7 @@ Metamaps.GlobalUI.Search = {
         var topics = {
             name: 'topics',
             limit: 9999,
-            
+
             display: function(s) { return s.label; },
             templates: {
                 notFound: function(s) {
@@ -600,7 +615,7 @@ Metamaps.GlobalUI.Search = {
 
         // tell the autocomplete to launch a new tab with the topic, map, or mapper you clicked on
         $('.sidebarSearchField').bind('typeahead:select', self.handleResultClick);
-        
+
         // don't do it, if they clicked on a 'addToMap' button
         $('.sidebarSearch button.addToMap').click(function (event) {
             event.stopPropagation();

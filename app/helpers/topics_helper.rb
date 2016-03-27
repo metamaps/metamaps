@@ -8,7 +8,7 @@ module TopicsHelper
       topic['id'] = t.id
       topic['label'] = t.name
       topic['value'] = t.name
-      topic['description'] = t.desc.truncate(70) # make this return matched results
+      topic['description'] = t.desc ? t.desc.truncate(70) : '' # make this return matched results
       topic['type'] = t.metacode.name
       topic['typeImageURL'] = t.metacode.icon
       topic['permission'] = t.permission

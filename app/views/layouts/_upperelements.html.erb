@@ -4,7 +4,7 @@
 <div class="upperLeftUI">
     <!-- home button -->
     <div class="homeButton">
-        <a href="<%= root_url %>" <% if !authenticated? %><%= 'data-bypass=true' %><% end %>></a>
+        <a href="<%= root_url %>" <% if !current_user || appsPage %><%= 'data-bypass=true' %><% end %>></a>
     </div> <!-- end homeButton -->
 
     <!-- search box -->
@@ -20,28 +20,6 @@
 <div class="upperRightUI">
     <div class="supportUs upperRightEl openLightbox" data-open="donate">SUPPORT US!</div>
     <div class="mapElement upperRightEl upperRightMapButtons">
-        <% if authenticated? %>
-            <!-- Realtime -->
-            <div class="sidebarCollaborate upperRightEl">
-                <div class="sidebarCollaborateIcon upperRightIcon blue"><div class="tooltipsUnder">Junto</div></div>
-                <div class="sidebarCollaborateBox upperRightBox">
-                    <h3 class="realtimeBoxTitle">REALTIME</h3>
-                    <span class="realtimeOnOff rtOff">OFF</span>
-                    <span class="realtimeOnOff rtOn">ON</span>
-                    <div class="clearfloat"></div>
-                    <div class="realtimeMapperList">
-                        <ul>
-                            <li class="rtMapper littleRtOn rtMapperSelf">
-                                <%= image_tag user.image.url(:thirtytwo), :size => "24x24", :class => "rtUserImage" %>
-                                <%= user.name %> (me)
-                                <div class="littleJuntoIcon"></div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div> <!-- end sidebarCollaborate a.k.a realtime -->
-        <% end %>
-
         <!-- filtering -->
         <div class="sidebarFilter upperRightEl">
             <div class="sidebarFilterIcon upperRightIcon"><div class="tooltipsUnder">Filter</div></div>
@@ -50,7 +28,7 @@
             </div>
         </div> <!-- end sidebarFilter -->
 
-        <% if authenticated? %>
+        <% if current_user %>
         <!-- fork map -->
         <div class="sidebarFork upperRightEl">
             <div class="sidebarForkIcon upperRightIcon"><div class="tooltipsUnder">Save To New Map</div></div>
@@ -58,9 +36,9 @@
         <% end %>
 
         <div class="clearfloat"></div>
-    </div> <!-- end mapElement --> 
+    </div> <!-- end mapElement -->
 
-    <% if authenticated? %>
+    <% if current_user %>
     <!-- create new map -->
     <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap"><div class="tooltipsUnder">Create New Map</div>
     </div><!-- end addMap -->
@@ -70,9 +48,9 @@
     <% if !(controller_name == "sessions" && action_name == "new") %>
     <div class="sidebarAccount upperRightEl">
         <div class="sidebarAccountIcon"><div class="tooltipsUnder">Account</div>
-            <% if user && user.image %>
-              <%= image_tag user.image.url(:thirtytwo), :size => "32x32" %>
-            <% elsif !authenticated? %>
+            <% if current_user && current_user.image %>
+              <%= image_tag current_user.image.url(:thirtytwo), :size => "32x32" %>
+            <% elsif !current_user %>
               SIGN IN
               <div class="accountInnerArrow"></div>
             <% end %>

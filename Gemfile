@@ -6,7 +6,9 @@ gem 'rails', '4.2.4'
 gem 'devise'
 gem 'redis'
 gem 'pg'
-gem 'cancancan'
+gem 'pundit'
+gem 'pundit_extra'
+gem 'doorkeeper'
 gem 'formula'
 gem 'formtastic'
 gem 'json'
@@ -15,6 +17,11 @@ gem 'best_in_place' #in-place editing
 gem 'kaminari' # pagination
 gem 'uservoice-ruby'
 gem 'dotenv'
+gem 'snorlax'
+gem 'httparty'
+gem 'active_model_serializers', '~> 0.8.1'
+gem 'delayed_job', '~> 4.0.2'
+gem 'delayed_job_active_record', '~> 4.0.1'
 
 gem 'paperclip'
 gem 'aws-sdk', '< 2.0'
@@ -42,6 +49,8 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+  gem 'json-schema'
 end
 
 group :production do #this is used on heroku

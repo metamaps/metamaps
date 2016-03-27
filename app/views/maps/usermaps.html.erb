@@ -1,0 +1,18 @@
+<% #
+   # @file
+   # Shows a list of a user's maps
+   # GET /explore/mapper/:id(.:format)
+   # %>
+
+<script>
+  Metamaps.Maps.Mapper = {
+    models: <%= @maps.to_json.html_safe %>,
+    id: <%= params[:id] %>
+  };
+  Metamaps.currentPage = "mapper";
+  <% content_for :title, @user.name + " | Metamaps" %>
+
+  Metamaps.currentSection = "explore";
+  Metamaps.GlobalUI.Search.open();
+  Metamaps.GlobalUI.Search.lock();
+</script>

@@ -5,8 +5,8 @@ class Topic < ActiveRecord::Base
 
   has_many :synapses1, :class_name => 'Synapse', :foreign_key => 'node1_id', dependent: :destroy
   has_many :synapses2, :class_name => 'Synapse', :foreign_key => 'node2_id', dependent: :destroy
-  has_many :topics1, :through => :synapses2, :source => :topic1
-  has_many :topics2, :through => :synapses1, :source => :topic2
+  has_many :topics1, :through => :synapses2, source: :topic1
+  has_many :topics2, :through => :synapses1, source: :topic2
 
   has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
@@ -41,6 +41,18 @@ class Topic < ActiveRecord::Base
 
   belongs_to :metacode
 
+  scope :relatives1, ->(topic_id = nil) { 
+    includes(:topics1)
+    .where('synapses.node1_id = ?', topic_id)
+    .references(:synapses)
+  }
+
+  scope :relatives2, ->(topic_id = nil) {
+    includes(:topics2)
+    .where('synapses.node2_id = ?', topic_id)
+    .references(:synapses)
+  }
+
   def user_name
     user.name
   end
@@ -69,49 +81,43 @@ class Topic < ActiveRecord::Base
     super(:methods =>[:user_name, :user_image, :map_count, :synapse_count, :inmaps, :inmapsLinks])
   end
 
+  # TODO move to a decorator?
+  def synapses_csv(output_format = 'array')
+    output = []
+    synapses.each do |synapse|
+      if synapse.category == 'from-to'
+        if synapse.node1_id == id
+          output << synapse.node1_id.to_s + '->' + synapse.node2_id.to_s
+        elsif synapse.node2_id == id
+          output << synapse.node2_id.to_s + '<-' + synapse.node1_id.to_s
+        else
+          fail 'invalid synapse on topic in synapse_csv'
+        end
+      elsif synapse.category == 'both'
+        if synapse.node1_id == id
+          output << synapse.node1_id.to_s + '<->' + synapse.node2_id.to_s
+        elsif synapse.node2_id == id
+          output << synapse.node2_id.to_s + '<->' + synapse.node1_id.to_s
+        else
+          fail 'invalid synapse on topic in synapse_csv'
+        end
+      end
+    end
+    if output_format == 'array'
+      return output
+    elsif output_format == 'text'
+      return output.join('; ')
+    else
+      fail 'invalid argument to synapses_csv'
+    end
+    output
+  end
+
   def topic_autocomplete_method
     "Get: #{self.name}"
   end
   
   def mk_permission
     Perm.short(permission)
-  end
-
-  # has no viewable synapses helper function
-  def has_viewable_synapses(current)
-  	result = false
-  	synapses.each do |synapse|
-  		if synapse.authorize_to_show(current)
-  			result = true
-  		end
-  	end
-  	result
-  end
-  
-  ##### PERMISSIONS ######
-  
-  # returns false if user not allowed to 'show' Topic, Synapse, or Map
-  def authorize_to_show(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	end
-	return self
-  end
-  
-  # returns false if user not allowed to 'edit' Topic, Synapse, or Map
-  def authorize_to_edit(user)  
-	if (self.permission == "private" && self.user != user)
-		return false
-	elsif (self.permission == "public" && self.user != user)
-		return false
-	end
-	return self
-  end
-
-  def authorize_to_delete(user)  
-    if (self.user == user || user.admin)
-      return self
-    end
-    return false
   end
 end

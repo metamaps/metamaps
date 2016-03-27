@@ -1,23 +1,25 @@
 class ApplicationController < ActionController::Base
+  include ApplicationHelper
+  include Pundit
+  include PunditExtra
+  rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
   protect_from_forgery
 
-  before_filter :get_invite_link
-  
+  after_action :allow_embedding
+
+  def default_serializer_options
+    { root: false }
+  end
+
   # this is for global login
   include ContentHelper
-  
+
   helper_method :user
   helper_method :authenticated?
   helper_method :admin?
-  
+
   def after_sign_in_path_for(resource)
-    unsafe_uri = request.env["REQUEST_URI"]
-    if unsafe_uri.starts_with?('http') && !unsafe_uri.starts_with?('https')
-      protocol = 'http'
-    else
-      protocol = 'https'
-    end
-    sign_in_url = url_for(:action => 'new', :controller => 'sessions', :only_path => false, :protocol => protocol)
+    sign_in_url = url_for(:action => 'new', :controller => 'sessions', :only_path => false, :protocol => 'https')
 
     if request.referer == sign_in_url
       super
@@ -27,7 +29,11 @@ class ApplicationController < ActionController::Base
       stored_location_for(resource) || request.referer || root_path
     end
   end
-  
+
+  def handle_unauthorized
+    head :forbidden # TODO make this better
+  end
+
 private
 
   def require_no_user
@@ -36,37 +42,37 @@ private
       return false
     end
   end
-  
+
   def require_user
     unless authenticated?
       redirect_to new_user_session_path, notice: "You must be logged in."
       return false
     end
   end
-    
+
   def require_admin
     unless authenticated? && admin?
       redirect_to root_url, notice: "You need to be an admin for that."
       return false
     end
   end
-  
+
   def user
     current_user
   end
-  
+
   def authenticated?
     current_user
   end
-    
+
   def admin?
     authenticated? && current_user.admin
   end
 
-  def get_invite_link
-    unsafe_uri = request.env["REQUEST_URI"] || 'https://metamaps.cc'
-    valid_url = /^https?:\/\/([\w\.-]+)(:\d{1,5})?\/?$/
-    safe_uri = (unsafe_uri.match(valid_url)) ? unsafe_uri : '//metamaps.cc/'
-    @invite_link = "#{safe_uri}join" + (current_user ? "?code=#{current_user.code}" : "")
+  def allow_embedding
+    #allow all
+    response.headers.except! 'X-Frame-Options'
+    # or allow a whitelist
+    # response.headers['X-Frame-Options'] = 'ALLOW-FROM http://blog.metamaps.cc'
   end
 end

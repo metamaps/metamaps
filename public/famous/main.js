@@ -296,6 +296,9 @@ Metamaps.Famous.build = function () {
             { duration: 300, curve: 'easeIn' }
         );
     };
+    f.explore.setApps = function (section) {
+      f.explore.surf.setContent(templates[section + 'AppsContent']);
+    };
     f.explore.set = function (section, mapperId) {
         var loggedIn = Metamaps.Active.Mapper ? 'Auth' : '';
         

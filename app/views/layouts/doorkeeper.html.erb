@@ -1,0 +1,42 @@
+<%#
+# @file
+# Main application file. Holds scaffolding present on every page.
+# Then a certain non-partial view (no _ preceding filename) will be
+# displayed within, based on URL
+#%>
+
+<%= render :partial => 'layouts/head' %>
+
+<body class="<%= current_user ? 'authenticated' : 'unauthenticated' %>">
+
+    <% if devise_error_messages? %>
+      <p id="toast"><%= devise_error_messages! %></p>
+    <% elsif notice %>
+      <p id="toast"><%= notice %></p>
+    <% end %>
+
+    <%= content_tag :div, class: "main" do %>
+
+        <div class="wrapper" id="wrapper">
+
+            <%= render :partial => 'layouts/upperelements', :locals => {:appsPage => true } %>
+
+            <%= yield %>
+
+            <div class="showcard mapElement mapElementHidden" id="showcard"></div> <!-- the topic card -->
+            <% if current_user %>
+                <% # for creating and pulling in topics and synapses %>
+                <%= render :partial => 'maps/newtopic' %>
+                <%= render :partial => 'maps/newsynapse' %>
+                <% # for populating the change metacode list on the topic card %>
+                <%= render :partial => 'shared/metacodeoptions' %>
+            <% end %>
+            <%= render :partial => 'layouts/lowermapelements' %>
+
+            <div id="famousOverlay"></div>
+            <div id="loading"></div>
+        </div>
+
+    <% end %>
+
+<%= render :partial => 'layouts/foot' %>
