@@ -6,15 +6,12 @@ class Event < ActiveRecord::Base
   belongs_to :map
   belongs_to :user
 
-  scope :sequenced, -> { where('sequence_id is not null').order('sequence_id asc') }
   scope :chronologically, -> { order('created_at asc') }
 
   after_create :notify_webhooks!, if: :map
 
   validates_inclusion_of :kind, :in => KINDS
   validates_presence_of :eventable
-
-  acts_as_sequenced scope: :map_id, column: :sequence_id, skip: lambda {|e| e.map.nil? || e.map_id.nil? }
 
   #def notify!(user)
   #  notifications.create!(user: user)
