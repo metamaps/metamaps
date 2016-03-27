@@ -70,7 +70,7 @@ Metamaps.Import = {
   },
 
 	simplify: function(string) {
-		return string
+		return string;
       .replace(/(^\s*|\s*$)/g, '')
       .toLowerCase();
 	},
@@ -239,10 +239,28 @@ Metamaps.Import = {
     var self = Metamaps.Import;
 
     parsedSynapses.forEach(function(synapse) {
-      self.createSynapseWithParameters(
-        synapse.desc, synapse.category, synapse.permission,
-        synapse.topic1, synapse.topic2
-      );
+      //only createSynapseWithParameters once both topics are persisted
+      var topic1 = Metamaps.Topics.get(self.cidMappings[node1_id]);
+      var topic2 = Metamaps.Topics.get(self.cidMappings[node2_id]);
+      var synapse_created = false
+      topic1.once('sync', function() {
+        if (topic1.id && topic2.id && !synapse_created) {
+          synaprse_created = true
+          self.createSynapseWithParameters(
+            synapse.desc, synapse.category, synapse.permission,
+            topic1, topic2
+          );
+        }//if
+      });
+      topic2.once('sync', function() {
+        if (topic1.id && topic2.id && !synapse_created) {
+          synaprse_created = true
+          self.createSynapseWithParameters(
+            synapse.desc, synapse.category, synapse.permission,
+            topic1, topic2
+          );
+        }//if
+      });
     });
   },
 
@@ -279,19 +297,15 @@ Metamaps.Import = {
   },
 
   createSynapseWithParameters: function(description, category, permission,
-                                        node1_id, node2_id) {
+                                        topic1, topic2) {
     var self = Metamaps.Import;
-    var topic1 = Metamaps.Topics.get(self.cidMappings[node1_id]);
-    var topic2 = Metamaps.Topics.get(self.cidMappings[node2_id]);
     var node1 = topic1.get('node');
     var node2 = topic2.get('node');
 
-    if (topic1.isNew() || topic2.isNew()) {
-      return setTimeout(function() {
-        self.createSynapseWithParameters(description, category, permission,
-                                         node1_id, node2_id)
-      }, 200);
-    }
+    if (!topic1.id || !topic2.id) {
+      console.error("missing topic id when creating synapse")
+      return;
+    }//if
 
     var synapse = new Metamaps.Backbone.Synapse({
       desc: description,
