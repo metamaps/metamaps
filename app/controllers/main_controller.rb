@@ -4,7 +4,7 @@ class MainController < ApplicationController
   include UsersHelper
   include SynapsesHelper
 
-  after_action :verify_policy_scoped
+  after_action :verify_policy_scoped, except: :requestinvite
    
   respond_to :html, :json
   
