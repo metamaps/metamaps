@@ -1,5 +1,5 @@
 class MetacodesController < ApplicationController
-  before_action :require_admin, except: [:index]
+  before_action :require_admin, except: [:index, :show]
     
   # GET /metacodes
   # GET /metacodes.json
@@ -15,6 +15,18 @@ class MetacodesController < ApplicationController
         render :index
       }
       format.json { render json: @metacodes }
+    end
+  end
+
+  # GET /metacodes/1.json
+  # GET /metacodes/Action.json
+  # GET /metacodes/action.json
+  def show
+    @metacode = Metacode.where('DOWNCASE(name) = ?', downcase(params[:name])).first if params[:name]
+    @metacode = Metacode.find(params[:id]) unless @metacode
+
+    respond_to do |format|
+      format.json { render json: @metacode }
     end
   end
 

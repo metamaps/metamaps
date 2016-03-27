@@ -84,24 +84,6 @@ class Map < ActiveRecord::Base
     json
   end
 
-  def to_csv(options = {})
-    CSV.generate(options) do |csv|
-      csv << ["id", "name", "metacode", "desc", "link", "user.name", "permission", "synapses"]
-      self.topics.each do |topic|
-        csv << [
-          topic.id,
-          topic.name,
-          topic.metacode.name,
-          topic.desc,
-          topic.link,
-          topic.user.name,
-          topic.permission,
-          topic.synapses_csv("text")
-        ]
-      end
-    end
-  end
-  
   def decode_base64(imgBase64)
     decoded_data = Base64.decode64(imgBase64)
 

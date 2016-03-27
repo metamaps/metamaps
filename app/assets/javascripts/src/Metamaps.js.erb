@@ -377,7 +377,7 @@ Metamaps.Backbone.init = function () {
                 mappable_id: this.isNew() ? this.cid : this.id
             });
         },
-        createEdge: function () {
+        createEdge: function (providedMapping) {
             var mapping, mappingID;
             var synapseID = this.isNew() ? this.cid : this.id;
 
@@ -391,7 +391,7 @@ Metamaps.Backbone.init = function () {
             };
 
             if (Metamaps.Active.Map) {
-                mapping = this.getMapping();
+                mapping = providedMapping || this.getMapping();
                 mappingID = mapping.isNew() ? mapping.cid : mapping.id;
                 edge.data.$mappings = [];
                 edge.data.$mappingIDs = [mappingID];
@@ -4614,7 +4614,7 @@ Metamaps.Synapse = {
 
         var edgeOnViz;
 
-        var newedge = synapse.createEdge();
+        var newedge = synapse.createEdge(mapping);
 
         Metamaps.Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data);
         edgeOnViz = Metamaps.Visualize.mGraph.graph.getAdjacence(node1.id, node2.id);
