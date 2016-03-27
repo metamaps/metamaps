@@ -34,14 +34,17 @@ Metamaps.Import = {
 
   init: function() {
     var self = Metamaps.Import;
+
     $('body').bind('paste', function(e) {
+      if (e.target.tagName === "INPUT") return;
+
       var text = e.originalEvent.clipboardData.getData('text/plain');
 
       var results;
       if (text[0] === '{') {
         try {
           results = JSON.parse(text);
-        } catch (Error e) {
+        } catch (e) {
           results = false;
         }
       } else {
@@ -63,7 +66,6 @@ Metamaps.Import = {
   },
 
   abort: function(message) {
-    alert("Sorry, something went wrong!\n\n" + message);
     console.error(message);
   },
 
@@ -283,20 +285,28 @@ Metamaps.Import = {
     var topic2 = Metamaps.Topics.get(self.cidMappings[node2_id]);
     var node1 = topic1.get('node');
     var node2 = topic2.get('node');
-    // TODO check if topic1 and topic2 were sucessfully found...
+
+    if (topic1.isNew() || topic2.isNew()) {
+      return setTimeout(function() {
+        self.createSynapseWithParameters(description, category, permission,
+                                         node1_id, node2_id)
+      }, 200);
+    }
 
     var synapse = new Metamaps.Backbone.Synapse({
       desc: description,
       category: category,
       permission: permission,
-      node1_id: node1.id,
-      node2_id: node2.id,
+      node1_id: topic1.id,
+      node2_id: topic2.id
     });
+    Metamaps.Synapses.add(synapse);
 
     var mapping = new Metamaps.Backbone.Mapping({
       mappable_type: "Synapse",
-      mappable_id: synapse.id,
+      mappable_id: synapse.cid,
     });
+    Metamaps.Mappings.add(mapping);
 
     Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, true);
   },
