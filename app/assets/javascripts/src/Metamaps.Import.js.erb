@@ -240,12 +240,18 @@ Metamaps.Import = {
 
     parsedSynapses.forEach(function(synapse) {
       //only createSynapseWithParameters once both topics are persisted
-      var topic1 = Metamaps.Topics.get(self.cidMappings[node1_id]);
-      var topic2 = Metamaps.Topics.get(self.cidMappings[node2_id]);
+      var topic1 = Metamaps.Topics.get(self.cidMappings[synapse.topic1]);
+      var topic2 = Metamaps.Topics.get(self.cidMappings[synapse.topic2]);
+      if (!topic1 || !topic2) {
+        console.error("One of the two topics doesn't exist!")
+        console.error(synapse)
+        return true;
+      }
+
       var synapse_created = false
       topic1.once('sync', function() {
         if (topic1.id && topic2.id && !synapse_created) {
-          synaprse_created = true
+          synapse_created = true
           self.createSynapseWithParameters(
             synapse.desc, synapse.category, synapse.permission,
             topic1, topic2
@@ -254,7 +260,7 @@ Metamaps.Import = {
       });
       topic2.once('sync', function() {
         if (topic1.id && topic2.id && !synapse_created) {
-          synaprse_created = true
+          synapse_created = true
           self.createSynapseWithParameters(
             synapse.desc, synapse.category, synapse.permission,
             topic1, topic2
