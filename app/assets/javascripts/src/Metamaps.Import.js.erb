@@ -41,7 +41,7 @@ Metamaps.Import = {
       var text = e.originalEvent.clipboardData.getData('text/plain');
 
       var results;
-      if (text[0] === '{') {
+      if (text.trimLeft()[0] === '{') {
         try {
           results = JSON.parse(text);
         } catch (e) {
