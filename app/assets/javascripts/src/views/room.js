@@ -156,6 +156,7 @@ Metamaps.Views.room = (function () {
       room.prototype.sendChatMessage = function (data) {
         var self = this;
           //this.roomRef.child('messages').push(data);
+          if (self.chat.alertSound) self.chat.sound.play('sendchat');
           var m = new Metamaps.Backbone.Message({
             message: data.message,
             resource_id: Metamaps.Active.Map.id,
@@ -163,7 +164,7 @@ Metamaps.Views.room = (function () {
           });
           m.save(null, {
             success: function (model, response) {
-              self.addMessages(new Metamaps.Backbone.MessageCollection(model));
+              self.addMessages(new Metamaps.Backbone.MessageCollection(model), false, true);
               $(document).trigger(room.events.newMessage, [model]);
             },
             error: function (model, response) {
@@ -174,11 +175,11 @@ Metamaps.Views.room = (function () {
 
       // they should be instantiated as backbone models before they get
       // passed to this function
-      room.prototype.addMessages = function (messages, isInitial) {
+      room.prototype.addMessages = function (messages, isInitial, wasMe) {
         var self = this;
 
         messages.models.forEach(function (message) {
-          self.chat.addMessage(message, isInitial);
+          self.chat.addMessage(message, isInitial, wasMe);
         });
       }
 
