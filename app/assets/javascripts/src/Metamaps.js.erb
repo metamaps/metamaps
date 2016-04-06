@@ -1938,15 +1938,6 @@ Metamaps.Realtime = {
     init: function () {
         var self = Metamaps.Realtime;
 
-        var reenableRealtime = function () {
-            self.reenableRealtime();
-        };
-        var turnOff = function () {
-            self.turnOff();
-        };
-        $(".rtOn").click(reenableRealtime);
-        $(".rtOff").click(turnOff);
-
         self.addJuntoListeners();
 
         self.socket = new SocketIoConnection({ url: '<%= ENV['REALTIME_SERVER'] %>' });
@@ -2248,14 +2239,21 @@ Metamaps.Realtime = {
     invitedToCall: function (inviter) {
       var self = Metamaps.Realtime;
 
+      self.room.chat.sound.stop('sessioninvite');
+      self.room.chat.sound.play('sessioninvite');
+
       var username = self.mappersOnMap[inviter].name;
-      var notifyText = username + ' is suggesting a video call. What do you think?';
+      var notifyText = "<img src='<%= asset_path('junto_spinner_darkgrey.gif') %>' style='display: inline-block; margin-top: -12px; vertical-align: top;' />";
+      notifyText += username + ' is inviting you to a conversation. Join live?';
       notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>';
       notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>';
       Metamaps.GlobalUI.notifyUser(notifyText, true);
     },
     invitedToJoin: function (inviter) {
       var self = Metamaps.Realtime;
+
+      self.room.chat.sound.stop('sessioninvite');
+      self.room.chat.sound.play('sessioninvite');
 
       var username = self.mappersOnMap[inviter].name;
       var notifyText = username + ' is inviting you to the conversation. Join?';
@@ -2265,6 +2263,7 @@ Metamaps.Realtime = {
     },
     acceptCall: function (userid) {
       var self = Metamaps.Realtime;
+      self.room.chat.sound.stop('sessioninvite');
       self.socket.emit('callAccepted', {
         mapid: Metamaps.Active.Map.id,
         invited: Metamaps.Active.Mapper.id,
@@ -2275,6 +2274,7 @@ Metamaps.Realtime = {
     },
     denyCall: function (userid) {
       var self = Metamaps.Realtime;
+      self.room.chat.sound.stop('sessioninvite');
       self.socket.emit('callDenied', {
         mapid: Metamaps.Active.Map.id,
         invited: Metamaps.Active.Mapper.id,
@@ -2284,6 +2284,7 @@ Metamaps.Realtime = {
     },
     denyInvite: function (userid) {
       var self = Metamaps.Realtime;
+      self.room.chat.sound.stop('sessioninvite');
       self.socket.emit('inviteDenied', {
         mapid: Metamaps.Active.Map.id,
         invited: Metamaps.Active.Mapper.id,
@@ -2322,14 +2323,14 @@ Metamaps.Realtime = {
       var self = Metamaps.Realtime;
 
       var username = self.mappersOnMap[userid].name;
-      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invite.');
+      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invitation');
       self.room.chat.invitationAnswered(userid);
     },
     inviteDenied: function (userid) {
       var self = Metamaps.Realtime;
 
       var username = self.mappersOnMap[userid].name;
-      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invite.');
+      Metamaps.GlobalUI.notifyUser(username + ' didn\'t accept your invitation');
       self.room.chat.invitationAnswered(userid);
     },
     joinCall: function () {
@@ -2611,6 +2612,7 @@ Metamaps.Realtime = {
 
         // create an item for them in the realtime box
         if (data.userid !== Metamaps.Active.Mapper.id && self.status) {
+            self.room.chat.sound.play('joinmap');
             self.room.chat.addParticipant(self.mappersOnMap[data.userid]);
 
             // create a div for the collaborators compass
@@ -2661,7 +2663,7 @@ Metamaps.Realtime = {
         // data.username
 
         delete self.mappersOnMap[data.userid];
-
+        self.room.chat.sound.play('leavemap');
         //$('#mapper' + data.userid).remove();
         $('#compass' + data.userid).remove();
         self.room.chat.removeParticipant(data.username);

@@ -38,7 +38,7 @@ Metamaps.Views.chatView = (function () {
             this.$participants = $('<div class="participants"></div>');
             this.$conversationInProgress = $('<div class="conversation-live">LIVE <span class="call-action leave" onclick="Metamaps.Realtime.leaveCall();">LEAVE</span><span class="call-action join" onclick="Metamaps.Realtime.joinCall();">JOIN</span></div>');
             this.$chatHeader = $('<div class="chat-header">CHAT</div>');
-            this.$soundToggle = $('<div class="sound-toggle active"></div>');
+            this.$soundToggle = $('<div class="sound-toggle"></div>');
             this.$messages = $('<div class="chat-messages"></div>');
             this.$container = $('<div class="chat-box"></div>');
         },
@@ -94,9 +94,13 @@ Metamaps.Views.chatView = (function () {
         },
         initializeSounds: function() {
             this.sound = new Howl({
-              urls: ["<%= asset_path 'sounds/sounds.mp3' %>", "<%= asset_path 'sounds/sounds.ogg' %>"],
+              urls: ["<%= asset_path 'sounds/MM_sounds.mp3' %>", "<%= asset_path 'sounds/MM_sounds.ogg' %>"],
               sprite: {
-                laser: [3000, 700]
+                joinmap: [0, 561],
+                leavemap: [1000, 592],
+                receivechat: [2000, 318],
+                sendchat: [3000, 296],
+                sessioninvite: [4000, 5393, true]
               }
             });
         },
@@ -105,7 +109,7 @@ Metamaps.Views.chatView = (function () {
             this.$unread.html(this.unreadMessages);
             this.$unread.show();
         },
-        addMessage: function(message, isInitial) {
+        addMessage: function(message, isInitial, wasMe) {
 
             if (!this.isOpen && !isInitial) Private.incrementUnread.call(this);
 
@@ -129,7 +133,7 @@ Metamaps.Views.chatView = (function () {
             this.$messages.append($html);
             if (!isInitial) this.scrollMessages(200);
 
-            if (!isInitial && this.alertSound) this.sound.play('laser');
+            if (!wasMe && !isInitial && this.alertSound) this.sound.play('receivechat');
         },
         initialMessages: function() {
             var messages = this.messages.models;
@@ -203,7 +207,7 @@ Metamaps.Views.chatView = (function () {
         this.messages = messages; // backbone collection
 
         this.isOpen = false;
-        this.alertSound = false; // whether to play sounds on arrival of new messages or not
+        this.alertSound = true; // whether to play sounds on arrival of new messages or not
         this.cursorsShowing = true;
         this.videosShowing = true;
         this.unreadMessages = 0;
@@ -285,9 +289,9 @@ Metamaps.Views.chatView = (function () {
         $(document).trigger(chatView.events.openTray);
     }
 
-    chatView.prototype.addMessage = function(message, isInitial) {
+    chatView.prototype.addMessage = function(message, isInitial, wasMe) {
       this.messages.add(message);
-      Private.addMessage.call(this, message, isInitial);
+      Private.addMessage.call(this, message, isInitial, wasMe);
     }
 
     chatView.prototype.scrollMessages = function(duration) {

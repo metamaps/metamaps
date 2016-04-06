@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
   protect_from_forgery
 
+  before_action :get_invite_link
   after_action :allow_embedding
 
   def default_serializer_options
@@ -35,6 +36,10 @@ class ApplicationController < ActionController::Base
   end
 
 private
+
+  def get_invite_link
+    @invite_link = "#{request.base_url}/join" + (current_user ? "?code=#{current_user.code}" : "")
+  end
 
   def require_no_user
     if authenticated?
