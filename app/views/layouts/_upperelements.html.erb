@@ -2,63 +2,63 @@
 <!-- from left to right on the screen -->
 
 <div class="upperLeftUI">
-    <!-- home button -->
-    <div class="homeButton">
-        <a href="<%= root_url %>" <% if !current_user || appsPage %><%= 'data-bypass=true' %><% end %>></a>
-    </div> <!-- end homeButton -->
+  <!-- home button -->
+  <div class="homeButton">
+    <a href="<%= root_url %>" <% if !current_user || appsPage %><%= 'data-bypass=true' %><% end %>></a>
+  </div> <!-- end homeButton -->
 
-    <!-- search box -->
-    <div class="sidebarSearch">
-        <input type="text" class="sidebarSearchField" placeholder="Search for topics, maps, and mappers..."></input>
-        <div id="searchLoading"></div>
-        <div class="sidebarSearchIcon"></div>
-        <div class="clearfloat"></div>
-    </div> <!-- end sidebarSearch -->
+  <!-- search box -->
+  <div class="sidebarSearch">
+    <input type="text" class="sidebarSearchField" placeholder="Search for topics, maps, and mappers..." />
+    <div id="searchLoading"></div>
+    <div class="sidebarSearchIcon"></div>
     <div class="clearfloat"></div>
+  </div> <!-- end sidebarSearch -->
+  <div class="clearfloat"></div>
 </div><!-- end upperLeftUI -->
 
 <div class="upperRightUI">
-    <div class="supportUs upperRightEl openLightbox" data-open="donate">SUPPORT US!</div>
-    <div class="mapElement upperRightEl upperRightMapButtons">
-        <!-- filtering -->
-        <div class="sidebarFilter upperRightEl">
-            <div class="sidebarFilterIcon upperRightIcon"><div class="tooltipsUnder">Filter</div></div>
-            <div class="sidebarFilterBox upperRightBox">
-                <%= render :partial => 'shared/filterBox' %>
-            </div>
-        </div> <!-- end sidebarFilter -->
-
-        <% if current_user %>
-        <!-- fork map -->
-        <div class="sidebarFork upperRightEl">
-            <div class="sidebarForkIcon upperRightIcon"><div class="tooltipsUnder">Save To New Map</div></div>
-        </div> <!-- end sidebarFork -->
-        <% end %>
-
-        <div class="clearfloat"></div>
-    </div> <!-- end mapElement -->
+  <div class="supportUs upperRightEl openLightbox" data-open="donate">SUPPORT US!</div>
+  <div class="mapElement upperRightEl upperRightMapButtons">
+    <!-- filtering -->
+    <div class="sidebarFilter upperRightEl">
+      <div class="sidebarFilterIcon upperRightIcon"><div class="tooltipsUnder">Filter</div></div>
+      <div class="sidebarFilterBox upperRightBox">
+        <%= render :partial => 'shared/filterBox' %>
+      </div>
+    </div> <!-- end sidebarFilter -->
 
     <% if current_user %>
-    <!-- create new map -->
-    <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap"><div class="tooltipsUnder">Create New Map</div>
-    </div><!-- end addMap -->
+      <!-- fork map -->
+      <div class="sidebarFork upperRightEl">
+        <div class="sidebarForkIcon upperRightIcon"><div class="tooltipsUnder">Save To New Map</div></div>
+      </div> <!-- end sidebarFork -->
     <% end %>
 
-    <!-- Account / Sign in -->
-    <% if !(controller_name == "sessions" && action_name == "new") %>
-    <div class="sidebarAccount upperRightEl">
-        <div class="sidebarAccountIcon"><div class="tooltipsUnder">Account</div>
-            <% if current_user && current_user.image %>
-              <%= image_tag current_user.image.url(:thirtytwo), :size => "32x32" %>
-            <% elsif !current_user %>
-              SIGN IN
-              <div class="accountInnerArrow"></div>
-            <% end %>
-        </div>
-        <div class="sidebarAccountBox upperRightBox">
-            <%= render :partial => 'layouts/account' %>
-        </div>
-    </div><!-- end sidebarAccount -->
-    <% end %>
     <div class="clearfloat"></div>
+  </div> <!-- end mapElement -->
+
+  <% if current_user %>
+  <!-- create new map -->
+  <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap"><div class="tooltipsUnder">Create New Map</div>
+  </div><!-- end addMap -->
+  <% end %>
+
+  <!-- Account / Sign in -->
+  <% if !(controller_name == "sessions" && action_name == "new") %>
+  <div class="sidebarAccount upperRightEl">
+    <div class="sidebarAccountIcon"><div class="tooltipsUnder">Account</div>
+      <% if current_user && current_user.image %>
+        <%= image_tag current_user.image.url(:thirtytwo), :size => "32x32" %>
+      <% elsif !current_user %>
+        SIGN IN
+        <div class="accountInnerArrow"></div>
+      <% end %>
+    </div>
+    <div class="sidebarAccountBox upperRightBox">
+      <%= render :partial => 'layouts/account' %>
+    </div>
+  </div><!-- end sidebarAccount -->
+  <% end %>
+  <div class="clearfloat"></div>
 </div><!-- end upperRightUI -->
