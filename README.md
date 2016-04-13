@@ -1,8 +1,8 @@
 Metamaps
 =======
 
-[![Join the chat at https://gitter.im/metamaps/metamaps_gen002](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps_gen002?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/metamaps/metamaps_gen002.svg)](https://travis-ci.org/metamaps/metamaps_gen002)
+[![Join the chat at https://gitter.im/metamaps/metamaps](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/metamaps/metamaps.svg)](https://travis-ci.org/metamaps/metamaps)
 
 Welcome to the Metamaps GitHub repo.
 
@@ -20,11 +20,11 @@ To get connected with the community interested in Metamaps, join our [Google+ co
 
 If you are on Mac or Ubuntu you can use the following instructions to quickly get a local copy of metamaps up and running using a Vagrant virtualbox. Don't be intimidated, it's easy!
 ```
-git clone git@github.com:metamaps/metamaps_gen002.git
+git clone git@github.com:metamaps/metamaps.git
 ```
 Now ensure you have VirtualBox and Vagrant installed on your computer
 ```
-cd metamaps_gen002
+cd metamaps
 ./bin/configure.sh
 ```
 This will do all the setup steps to make Metamaps work with a bit of behind the scenes ninja magick.
@@ -73,7 +73,7 @@ Copyright (c) 2015 Connor Turland
 [site-blog]: http://blog.metamaps.cc
 [site-beta]: http://metamaps.cc
 [community]: https://plus.google.com/u/0/communities/115060009262157699234
-[license]: https://github.com/metamaps/metamaps_gen002/blob/develop/LICENSE
-[contributing]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/CONTRIBUTING.md
-[contributing-issues]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/CONTRIBUTING.md#reporting-bugs-and-other-issues
-[windows-installation]: https://github.com/metamaps/metamaps_gen002/blob/develop/doc/WindowsInstallation.md
+[license]: https://github.com/metamaps/metamaps/blob/develop/LICENSE
+[contributing]: https://github.com/metamaps/metamaps/blob/develop/doc/CONTRIBUTING.md
+[contributing-issues]: https://github.com/metamaps/metamaps/blob/develop/doc/CONTRIBUTING.md#reporting-bugs-and-other-issues
+[windows-installation]: https://github.com/metamaps/metamaps/blob/develop/doc/WindowsInstallation.md

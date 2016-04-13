@@ -32,7 +32,7 @@ Running this will check your system for requirements as well so you will need to
 
 All right now we can download metamaps from the master using git
 
-    git clone https://github.com/metamaps/metamaps_gen002.git
+    git clone https://github.com/metamaps/metamaps.git
 
 Now there is a couple other things we are going to need which is nodejs, postgresql, libpq-dev and redis-server
 
@@ -48,14 +48,14 @@ ImageMagick in the Ubuntu Software Centre
 
 Install the specific version of ruby needed this will take some time
 
-    rvm install $(cat metamaps_gen002/.ruby-version)
+    rvm install $(cat metamaps/.ruby-version)
 
 Now we also need to copy .example-env to a new file named .env. Review the
 configuration in here to see if you need any changes.
 
     cp .example-env .env
 
-Now run inside your metamaps_gen002 folder:
+Now run inside your metamaps folder:
 
     gem install bundle
     bundle install
