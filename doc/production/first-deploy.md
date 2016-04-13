@@ -36,16 +36,16 @@
 
     sudo su - metamaps
     rvm user gemsets
-    git clone https://github.com/metamaps/metamaps_gen002 \
+    git clone https://github.com/metamaps/metamaps \
       --branch instance/mycoolinstance
-    rvm install $(cat metamaps_gen002/.ruby-version) #ensure ruby is installed
-    cd metamaps_gen002
+    rvm install $(cat metamaps/.ruby-version) #ensure ruby is installed
+    cd metamaps
     gem install bundle
     bundle install
 
 #### Connect rails database
 
-Run this in the metamaps_gen002 directory, still as metamaps:
+Run this in the metamaps directory, still as metamaps:
 
     cp .example-env .env
     nano .env # fill in DB_* values, and realtime server at least. Ctrl+X to save/exit.
@@ -59,7 +59,7 @@ Get an SSL certificate and encrypt it for the realtime video.
 
 #### And finally
 
-    passenger-config restart-app /home/metamaps/metamaps_gen002
+    passenger-config restart-app /home/metamaps/metamaps
 
 If this command fails, it may be helpful for debugging to run a test server to
 see what problems show up:
@@ -71,13 +71,13 @@ see what problems show up:
     sudo aptitude install nodejs npm
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     sudo npm install -g forever
-    (crontab -u metamaps -l 2>/dev/null; echo "@reboot $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps_gen002/realtime/realtime-server.js") | crontab -u metamaps -
+    (crontab -u metamaps -l 2>/dev/null; echo "@reboot $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
 
-    cd /home/metamaps/metamaps_gen002/realtime
+    cd /home/metamaps/metamaps/realtime
     npm install
     mkdir -p /home/metamaps/logs
     forever --append -l /home/metamaps/logs/forever.realtime.log \
-      start /home/metamaps/metamaps_gen002/realtime/realtime-server.js
+      start /home/metamaps/metamaps/realtime/realtime-server.js
 
 #### Upstart service for delayed_worker:
 
@@ -90,11 +90,11 @@ Put the following code into `/etc/init/metamaps_delayed_worker.conf`:
     
     setuid metamaps
     setgid metamaps
-    chdir /home/metamaps/metamaps_gen002
+    chdir /home/metamaps/metamaps
     
     env HOME=/home/metamaps
-    env PATH="/usr/local/rvm/gems/ruby-2.1.3@metamaps_gen002/bin:/usr/local/rvm/gems/ruby-2.1.3@global/bin:/usr/local/rvm/rubies/ruby-2.1.3/bin:/usr/local/rvm/bin:/usr/local/bin:/usr/bin:/bin"
-    env GEM_PATH="/usr/local/rvm/gems/ruby-2.1.3@metamaps_gen002:/usr/local/rvm/gems/ruby-2.1.3@global"
+    env PATH="/usr/local/rvm/gems/ruby-2.1.3@metamaps/bin:/usr/local/rvm/gems/ruby-2.1.3@global/bin:/usr/local/rvm/rubies/ruby-2.1.3/bin:/usr/local/rvm/bin:/usr/local/bin:/usr/bin:/bin"
+    env GEM_PATH="/usr/local/rvm/gems/ruby-2.1.3@metamaps:/usr/local/rvm/gems/ruby-2.1.3@global"
     env RAILS_ENV="production"
     
     respawn

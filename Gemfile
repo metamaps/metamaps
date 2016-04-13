@@ -18,6 +18,7 @@ gem 'kaminari' # pagination
 gem 'uservoice-ruby'
 gem 'dotenv'
 gem 'snorlax'
+gem 'rack-cors'
 gem 'httparty'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'delayed_job', '~> 4.0.2'

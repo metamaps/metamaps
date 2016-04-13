@@ -13,16 +13,16 @@ folder writable by your user account.
 
 Now you are ready to clone the Metamaps git repository:
 
-    git clone https://github.com/metamaps/metamaps_gen002.git --branch develop
-    cd metamaps_gen002
+    git clone https://github.com/metamaps/metamaps.git --branch develop
+    cd metamaps
     bundle install
 
 The third `bundle install` command downloads and installs the rubygem
 dependencies of Metamaps.
 
-At this point you should be in C:\git\metamaps_gen002, or whatever equivalent
+At this point you should be in C:\git\metamaps, or whatever equivalent
 directory you've chosen. The next step is to set up your database
-configuration. From the metamaps_gen002 directory, run
+configuration. From the metamaps directory, run
 
     start config
 
