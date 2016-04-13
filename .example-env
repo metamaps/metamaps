@@ -16,14 +16,17 @@ export DEVISE_SECRET_KEY='f71c467e526f23d614b3b08866cad4788c502bed869c282f06e73e
 # export AWS_ACCESS_KEY_ID
 # export AWS_SECRET_ACCESS_KEY
 # export SSO_KEY
-# 
+#
 # export SMTP_DOMAIN
 # export SMTP_PASSWORD
 # export SMTP_PORT
 # export SMTP_SERVER
 # export SMTP_USERNAME
+
+# # send exception notifications to a slack incoming webhook
+# export SLACK_EN_WEBHOOK_URL
  
-#ruby garbage collection stuff
+# ruby garbage collection stuff
 
 export RUBY_GC_TUNE=0 #set to 1 to enable GC test
 export RUBY_GC_TOKEN=4f4380fc9a2857d1f008005a3eb86928
