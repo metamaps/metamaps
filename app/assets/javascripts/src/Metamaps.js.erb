@@ -16,11 +16,12 @@ var labelType, useGradients, nativeTextSupport, animate;
     animate = !(iStuff || !nativeCanvasSupport);
 })();
 
-// TODO eliminate these 4 top-level variables
+// TODO eliminate these 5 top-level variables
 Metamaps.panningInt = null;
 Metamaps.tempNode = null;
 Metamaps.tempInit = false;
 Metamaps.tempNode2 = null;
+Metamaps.VERSION = '<%= VERSION %>'
 
 Metamaps.Settings = {
     embed: false, // indicates that the app is on a page that is optimized for embedding in iFrames on other web pages
