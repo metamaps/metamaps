@@ -30,7 +30,7 @@ Within the app/ folder, you can find these important folders:
 
 The lifecycle works something like this.
 
-1. run `rake routes` inside the metamaps_gen002 directory on your computer, and it will generate a list  with entries looking something like `GET /maps/:id maps#show`. This tells you which URL will end up at which *controller*. In this example, if you accessed `https://metamaps.cc/maps/2`, you are looking for the maps_controller's `show` function, and there will be a variable params["id"] that is equal to 2.
+1. run `rake routes` inside the metamaps directory on your computer, and it will generate a list  with entries looking something like `GET /maps/:id maps#show`. This tells you which URL will end up at which *controller*. In this example, if you accessed `https://metamaps.cc/maps/2`, you are looking for the maps_controller's `show` function, and there will be a variable params["id"] that is equal to 2.
 2. Now in `app/controllers/maps_controller.rb`, you can find the function. It should do some calculations, create an instance variable @map, and then do one of two things:
   - If it doesn't call anything, ruby on rails will automatically load app/views/map/show.html.erb. (NB: If you loaded `/maps/2.json`, it would look for app/views/map/show.json.erb). Any instance variables assigned (e.g. @map) will be available to the view file (show.html.erb).
   - You can also call the render function directly. See the codebase or http://guides.rubyonrails.org/layouts_and_rendering.html#using-render for details.
