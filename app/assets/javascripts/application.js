@@ -25,6 +25,7 @@
 //= require ./src/views/room
 //= require ./src/JIT
 //= require ./src/Metamaps
+//= require ./src/Metamaps.Map
 //= require ./src/Metamaps.Account
 //= require ./src/Metamaps.Mapper
 //= require ./src/Metamaps.Admin
