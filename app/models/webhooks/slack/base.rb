@@ -37,7 +37,7 @@ Webhooks::Slack::Base = Struct.new(:event) do
   #end
 
   def view_map_on_metamaps(text = nil)
-    "<#{map_url(eventable.map)}|#{text || eventable.map.name}>"
+    "<#{map_url(event.map)}|#{text || event.map.name}>"
   end
 
   #def view_discussion_on_loomio(params = {})

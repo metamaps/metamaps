@@ -1,7 +1,7 @@
 class MapsController < ApplicationController
 
-    before_action :require_user, only: [:create, :update, :screenshot, :destroy]
-    after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :usermaps]
+    before_action :require_user, only: [:create, :update, :screenshot, :events, :destroy]
+    after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :usermaps, :events]
     after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :usermaps]
 
     respond_to :html, :json, :csv
@@ -102,6 +102,24 @@ class MapsController < ApplicationController
       end
     end
 
+    # POST maps/:id/events/:event
+    def events
+      map = Map.find(params[:id])
+      authorize map
+
+      valid_event = false
+      if params[:event] == 'conversation'
+        Events::ConversationStartedOnMap.publish!(map, current_user)
+        valid_event = true
+      end
+
+      respond_to do |format|
+        format.json { 
+          head :ok if valid_event
+          head :bad_request if not valid_event
+        }
+      end
+    end
 
     # GET maps/:id/contains
     def contains
