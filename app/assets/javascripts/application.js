@@ -25,6 +25,7 @@
 //= require ./src/views/room
 //= require ./src/JIT
 //= require ./src/Metamaps
+//= require ./src/Metamaps.Admin
 //= require ./src/Metamaps.Import
 //= require ./src/Metamaps.JIT
 //= require_directory ./shims
