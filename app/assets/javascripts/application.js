@@ -25,6 +25,7 @@
 //= require ./src/views/room
 //= require ./src/JIT
 //= require ./src/Metamaps
+//= require ./src/Metamaps.Listeners
 //= require ./src/Metamaps.Organize
 //= require ./src/Metamaps.Topic
 //= require ./src/Metamaps.Synapse
