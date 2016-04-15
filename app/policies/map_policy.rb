@@ -35,6 +35,10 @@ class MapPolicy < ApplicationPolicy
     show?
   end
 
+  def events?
+    show?
+  end
+
   def contains?
     show?
   end

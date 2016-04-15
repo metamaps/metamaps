@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  KINDS = %w[topic_added_to_map synapse_added_to_map]
+  KINDS = %w[conversation_started_on_map topic_added_to_map synapse_added_to_map]
 
   #has_many :notifications, dependent: :destroy
   belongs_to :eventable, polymorphic: true

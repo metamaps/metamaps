@@ -37,14 +37,15 @@ Metamaps::Application.routes.draw do
   
   resources :maps, except: [:index, :new, :edit]
   get 'maps/:id/export', to: 'maps#export'
+  post 'maps/:id/events/:event', to: 'maps#events'
+  get 'maps/:id/contains', to: 'maps#contains', as: :contains
+  post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
 
   get 'explore/active', to: 'maps#activemaps'
   get 'explore/featured', to: 'maps#featuredmaps'
   get 'explore/mine', to: 'maps#mymaps'
   get 'explore/mapper/:id', to: 'maps#usermaps'
 
-  get 'maps/:id/contains', to: 'maps#contains', as: :contains
-  post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
   
   devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, :skip => :sessions
 
