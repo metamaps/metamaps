@@ -158,35 +158,34 @@ class MapsController < ApplicationController
         @map.arranged = false
 
         if params[:topicsToMap]
-            @all = params[:topicsToMap]
-            @all = @all.split(',')
-            @all.each do |topic|
-                topic = topic.split('/')
-                mapping = Mapping.new()
-                mapping.user = @user
-                mapping.mappable = Topic.find(topic[0])
-                mapping.xloc = topic[1]
-                mapping.yloc = topic[2]
-                @map.topicmappings << mapping
-                authorize mapping, :create
-                mapping.save
-            end
+          @all = params[:topicsToMap]
+          @all = @all.split(',')
+          @all.each do |topic|
+            topic = topic.split('/')
+            mapping = Mapping.new
+            mapping.map = @map
+            mapping.user = @user
+            mapping.mappable = Topic.find(topic[0])
+            mapping.xloc = topic[1]
+            mapping.yloc = topic[2]
+            authorize mapping, :create?
+            mapping.save
+          end
 
-            if params[:synapsesToMap]
-                @synAll = params[:synapsesToMap]
-                @synAll = @synAll.split(',')
-                @synAll.each do |synapse_id|
-                    mapping = Mapping.new()
-                    mapping.user = @user
-                    mapping.map = @map
-                    mapping.mappable = Synapse.find(synapse_id)
-                    @map.synapsemappings << mapping
-                    authorize mapping, :create
-                    mapping.save
-                end
+          if params[:synapsesToMap]
+            @synAll = params[:synapsesToMap]
+            @synAll = @synAll.split(',')
+            @synAll.each do |synapse_id|
+              mapping = Mapping.new
+              mapping.map = @map
+              mapping.user = @user
+              mapping.mappable = Synapse.find(synapse_id)
+              authorize mapping, :create?
+              mapping.save
             end
+          end
 
-            @map.arranged = true
+          @map.arranged = true
         end
 
         authorize @map
