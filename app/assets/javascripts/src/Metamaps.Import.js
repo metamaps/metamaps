@@ -229,7 +229,7 @@ Metamaps.Import = {
   importSynapses: function (parsedSynapses) {
     var self = Metamaps.Import
 
-    parsedSynapses.forEach(function(synapse) {
+    parsedSynapses.forEach(function (synapse) {
       // only createSynapseWithParameters once both topics are persisted
       var topic1 = Metamaps.Topics.get(self.cidMappings[synapse.topic1])
       var topic2 = Metamaps.Topics.get(self.cidMappings[synapse.topic2])

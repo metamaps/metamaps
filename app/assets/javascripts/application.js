@@ -25,6 +25,15 @@
 //= require ./src/views/room
 //= require ./src/JIT
 //= require ./src/Metamaps
+//= require ./src/Metamaps.Control
+//= require ./src/Metamaps.Filter
+//= require ./src/Metamaps.Listeners
+//= require ./src/Metamaps.Organize
+//= require ./src/Metamaps.Topic
+//= require ./src/Metamaps.Synapse
+//= require ./src/Metamaps.Map
+//= require ./src/Metamaps.Account
+//= require ./src/Metamaps.Mapper
 //= require ./src/Metamaps.Admin
 //= require ./src/Metamaps.Import
 //= require ./src/Metamaps.JIT
