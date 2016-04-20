@@ -89,6 +89,9 @@ GEM
       railties (>= 3.2)
     dotenv (2.1.0)
     erubis (2.7.0)
+    exception_notification (4.1.4)
+      actionmailer (~> 4.0)
+      activesupport (~> 4.0)
     execjs (2.6.0)
     ezcrypto (0.7.2)
     factory_girl (4.5.0)
@@ -229,6 +232,7 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    slack-notifier (1.5.1)
     slop (3.6.0)
     snorlax (0.1.5)
       rails (> 4.1)
@@ -270,6 +274,7 @@ DEPENDENCIES
   devise
   doorkeeper
   dotenv
+  exception_notification
   factory_girl_rails
   formtastic
   formula
@@ -296,6 +301,7 @@ DEPENDENCIES
   sass-rails
   shoulda-matchers
   simplecov
+  slack-notifier
   snorlax
   tunemygc
   uglifier

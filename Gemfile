@@ -3,67 +3,59 @@ ruby '2.1.3'
 
 gem 'rails', '4.2.4'
 
+gem 'active_model_serializers', '~> 0.8.1'
+gem 'aws-sdk', '< 2.0'
+gem 'best_in_place' #in-place editing
+gem 'delayed_job', '~> 4.0.2'
+gem 'delayed_job_active_record', '~> 4.0.1'
 gem 'devise'
-gem 'redis'
+gem 'doorkeeper'
+gem 'dotenv'
+gem 'exception_notification'
+gem 'formtastic'
+gem 'formula'
+gem 'httparty'
+gem 'json'
+gem 'kaminari' # pagination
+gem 'paperclip'
 gem 'pg'
 gem 'pundit'
 gem 'pundit_extra'
-gem 'doorkeeper'
-gem 'formula'
-gem 'formtastic'
-gem 'json'
-gem 'rails3-jquery-autocomplete'
-gem 'best_in_place' #in-place editing
-gem 'kaminari' # pagination
-gem 'uservoice-ruby'
-gem 'dotenv'
-gem 'snorlax'
 gem 'rack-cors'
-gem 'httparty'
-gem 'active_model_serializers', '~> 0.8.1'
-gem 'delayed_job', '~> 4.0.2'
-gem 'delayed_job_active_record', '~> 4.0.1'
-
-gem 'paperclip'
-gem 'aws-sdk', '< 2.0'
+gem 'rails3-jquery-autocomplete'
+gem 'redis'
+gem 'slack-notifier'
+gem 'snorlax'
+gem 'uservoice-ruby'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jbuilder'
 
-#gem 'therubyracer' #optional
-#gem 'rb-readline'
-
-# Gems used only for assets and not required
-# in production environments by default.
 group :assets do
-  gem 'sass-rails'
   gem 'coffee-rails'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer'
-
+  gem 'sass-rails'
   gem 'uglifier'
+  # gem 'therubyracer'
 end
 
-group :test do
-  gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'shoulda-matchers'
-  gem 'simplecov', require: false
-  gem 'json-schema'
-end
-
-group :production do #this is used on heroku
- #gem 'rmagick'
+group :production do
  gem 'rails_12factor'
 end
 
+group :test do
+  gem 'factory_girl_rails'
+  gem 'json-schema'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+end
+
 group :development, :test do
-  gem 'pry-rails'
-  gem 'pry-byebug'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'pry-byebug'
+  gem 'pry-rails'
   gem 'quiet_assets'
   gem 'tunemygc'
 end
