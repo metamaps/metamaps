@@ -4,7 +4,7 @@ class SynapsePolicy < ApplicationPolicy
       visible = ['public', 'commons']
       permission = 'synapses.permission IN (?)'
       if user
-        scope.where(permission + ' OR synapses.user_id = ?', visible, user.id)
+        scope.where(permission + ' OR synapses.defer_to_map_id IN (?) OR synapses.user_id = ?', visible, user.shared_maps.map(&:id), user.id)
       else
         scope.where(permission, visible)
       end
@@ -17,14 +17,29 @@ class SynapsePolicy < ApplicationPolicy
   end
 
   def show?
-    record.permission == 'commons' || record.permission == 'public' || record.user == user
+    if record.defer_to_map.present?
+      map_policy.show?
+    else
+      record.permission == 'commons' || record.permission == 'public' || record.user == user
+    end
   end
 
   def update?
-    user.present? && (record.permission == 'commons' || record.user == user)
+    if not user.present?
+      false
+    elsif record.defer_to_map.present?
+      map_policy.update? 
+    else 
+      record.permission == 'commons' || record.user == user
+    end
   end
 
   def destroy?
     record.user == user || admin_override
+  end
+
+  # Helpers
+  def map_policy
+    @map_policy ||= Pundit.policy(user, record.defer_to_map)
   end
 end

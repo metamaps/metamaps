@@ -1569,6 +1569,11 @@ h3.filterBox {
     background-repeat: no-repeat;
     text-align: left;
 }
+
+.commonsMap .mapContributors {
+    visibility: hidden;
+}
+
 .mapContributors {
     position: relative;
     height: 30px;
@@ -1576,6 +1581,7 @@ h3.filterBox {
     padding: 0;
     width: 64px;
 }
+
 #mapContribs {
     float: left;
     border: 2px solid #424242;
@@ -1591,7 +1597,7 @@ h3.filterBox {
 #mapContribs.multiple {
     box-shadow: 1px 1px 0 0 #B5B5B5,3px 2px 0 0 #424242,4px 3px 0 0 #B5B5B5,5px 4px 0 0 #424242;
 }
-.mapContributors span {
+.mapContributors span.count {
     height: 20px;
     padding-top: 5px;
     padding-left: 8px;
@@ -1626,10 +1632,11 @@ h3.filterBox {
 .mapContributors .tip {
     top: 45px;
     left: -10px;
+    min-width: 200px;
 }
 
 .mapContributors .tip ul {
-    max-height: 188px;
+    max-height: 144px;
     overflow-y: auto;
 }
 
@@ -1652,7 +1659,7 @@ h3.filterBox {
 .mapContributors .tip li a {
     color: white;
 }
-.mapContributors div:after {
+.mapContributors div.tip:after {
     content: '';
     position: absolute;
     top: -4px;
@@ -1670,6 +1677,90 @@ h3.filterBox {
     top: 4px;
     left: 4px;
     border-radius: 14px;
+}
+
+.mapContributors span.twitter-typeahead {
+    padding: 0;
+}
+
+.collabSearchField {
+    text-align: left;
+}
+
+.collabNameWrapper {
+    float: left;
+}
+
+.collabIconWrapper img.icon {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.collabIconWrapper {
+    position: relative;
+    float: left;
+    padding: 0 4px;
+}
+
+.mapContributors .collabName {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 28px;
+    color: #424242;
+    padding: 0 4px;
+}
+
+span.removeCollaborator {
+    position: absolute;
+    top: 11px;
+    right: 8px;
+    height: 16px;
+    width: 16px;
+    background-image: url(<%= asset_data_uri('removecollab_sprite.png') %>);
+    cursor: pointer;
+}
+
+span.removeCollaborator:hover {
+    background-position: -16px 0;
+}
+
+span.addCollab {
+    width: 16px;
+    height: 16px;
+    background-image: url(<%= asset_data_uri('addcollab_sprite.png') %>);
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 12px 0 10px;
+}
+
+input.collaboratorSearchField {
+    background: #FFFFFF;
+    height: 14px;
+    margin: 0;
+    padding: 10px 6px;
+    border: none;
+    border-radius: 2px;
+    outline: none;
+    font-size: 14px;
+    line-height: 14px;
+    color: #424242;
+    font-family: 'din-medium', helvetica, sans-serif;
+}
+
+.tt-dataset.tt-dataset-collaborators {
+    padding: 2px;
+    background: #E0E0E0;
+    min-width: 156px;
+    border-radius: 2px;
+}
+
+.tt-dataset.tt-dataset  .collabResult {
+    padding: 4px;
+}
+
+.collabResult.tt-suggestion.tt-cursor, .collabResult.tt-suggestion:hover {
+    background-color: #CCCCCC;
 }
 
 .mapInfoBox .mapPermission .tooltips {

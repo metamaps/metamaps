@@ -1,5 +1,6 @@
 class Synapse < ActiveRecord::Base
   belongs_to :user
+  belongs_to :defer_to_map, :class_name => 'Map',  :foreign_key => 'defer_to_map_id'
 
   belongs_to :topic1, :class_name => "Topic", :foreign_key => "node1_id"
   belongs_to :topic2, :class_name => "Topic", :foreign_key => "node2_id"
@@ -33,8 +34,28 @@ class Synapse < ActiveRecord::Base
   # :nocov:
 
   # :nocov:
+  def collaborator_ids
+    if defer_to_map
+      defer_to_map.editors.select{|mapper| not mapper == self.user }.map(&:id)
+    else
+      []
+    end
+  end
+  # :nocov:
+ 
+   # :nocov:
+  def calculated_permission
+    if defer_to_map
+      defer_to_map.permission
+    else
+      permission
+    end
+  end
+  # :nocov:
+  
+  # :nocov:
   def as_json(options={})
-    super(:methods =>[:user_name, :user_image])
+    super(:methods =>[:user_name, :user_image, :calculated_permission, :collaborator_ids])
   end
   # :nocov:
   

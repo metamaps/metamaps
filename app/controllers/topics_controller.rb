@@ -150,7 +150,7 @@ puts @allsynapses.length
     @topic = Topic.find(params[:id])
     authorize @topic
 
-    @topic.delete
+    @topic.destroy
     respond_to do |format|
       format.json { head :no_content }
     end
@@ -159,6 +159,6 @@ puts @allsynapses.length
   private
 
   def topic_params
-    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :user_id, :metacode_id)
+    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :user_id, :metacode_id, :defer_to_map_id)
   end
 end

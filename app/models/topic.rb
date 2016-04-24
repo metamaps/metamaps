@@ -2,6 +2,7 @@ class Topic < ActiveRecord::Base
   include TopicsHelper
 
   belongs_to :user
+  belongs_to :defer_to_map, :class_name => 'Map',  :foreign_key => 'defer_to_map_id'
 
   has_many :synapses1, :class_name => 'Synapse', :foreign_key => 'node1_id', dependent: :destroy
   has_many :synapses2, :class_name => 'Synapse', :foreign_key => 'node2_id', dependent: :destroy
@@ -10,6 +11,8 @@ class Topic < ActiveRecord::Base
 
   has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, :through => :mappings
+
+  belongs_to :metacode
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
@@ -38,8 +41,6 @@ class Topic < ActiveRecord::Base
   def relatives
      topics1 + topics2
   end
-
-  belongs_to :metacode
 
   scope :relatives1, ->(topic_id = nil) { 
     includes(:topics1)
@@ -77,8 +78,24 @@ class Topic < ActiveRecord::Base
     maps.map(&:id)
   end
 
+  def calculated_permission
+    if defer_to_map
+      defer_to_map.permission
+    else
+      permission
+    end
+  end
+
   def as_json(options={})
-    super(:methods =>[:user_name, :user_image, :map_count, :synapse_count, :inmaps, :inmapsLinks])
+    super(:methods =>[:user_name, :user_image, :map_count, :synapse_count, :inmaps, :inmapsLinks, :calculated_permission, :collaborator_ids])
+  end
+
+  def collaborator_ids
+    if defer_to_map
+      defer_to_map.editors.select{|mapper| not mapper == self.user }.map(&:id)
+    else
+      []
+    end
   end
 
   # TODO move to a decorator?

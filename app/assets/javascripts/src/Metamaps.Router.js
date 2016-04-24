@@ -87,7 +87,7 @@
       // either 'featured', 'mapper', or 'active'
       var capitalize = section.charAt(0).toUpperCase() + section.slice(1)
 
-      if (section === 'featured' || section === 'active') {
+      if (section === 'shared' || section === 'featured' || section === 'active') {
         document.title = 'Explore ' + capitalize + ' Maps | Metamaps'
       } else if (section === 'mapper') {
         $.ajax({

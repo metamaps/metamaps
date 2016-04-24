@@ -4,7 +4,8 @@ class MapPolicy < ApplicationPolicy
       visible = ['public', 'commons']
       permission = 'maps.permission IN (?)'
       if user
-        scope.where(permission + ' OR maps.user_id = ?', visible, user.id)
+        shared_maps = user.shared_maps.map(&:id)
+        scope.where(permission + ' OR maps.id IN (?) OR maps.user_id = ?', visible, shared_maps, user.id)
       else
         scope.where(permission, visible)
       end
@@ -28,7 +29,7 @@ class MapPolicy < ApplicationPolicy
   end
 
   def show?
-    record.permission == 'commons' || record.permission == 'public' || record.user == user
+    record.permission == 'commons' || record.permission == 'public' || record.collaborators.include?(user) || record.user == user
   end
 
   def export?
@@ -48,7 +49,12 @@ class MapPolicy < ApplicationPolicy
   end
 
   def update?
-    user.present? && (record.permission == 'commons' || record.user == user)
+    user.present? && (record.permission == 'commons' || record.collaborators.include?(user) || record.user == user)
+  end
+
+  def access?
+    # note that this is to edit access
+    user.present? && record.user == user
   end
 
   def screenshot?

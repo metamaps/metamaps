@@ -3,7 +3,8 @@
 /*
  * Metamaps.Account.js.erb
  *
- * Dependencies: none!
+ * Dependencies:
+ *  - Metamaps.Erb
  */
 
 Metamaps.Account = {
@@ -95,7 +96,7 @@ Metamaps.Account = {
     var self = Metamaps.Account
 
     $('.userImageDiv canvas').remove()
-    $('.userImageDiv img').attr('src', '<%= asset_path('user.png') %>').show()
+    $('.userImageDiv img').attr('src', Metamaps.Erb['user.png']).show()
     $('.userImageMenu').hide()
 
     var input = $('#user_image')

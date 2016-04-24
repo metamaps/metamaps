@@ -4,17 +4,18 @@
  * Metamaps.Map.js.erb
  *
  * Dependencies:
- *    Metamaps.Create
- *    Metamaps.Filter
- *    Metamaps.JIT
- *    Metamaps.Loading
- *    Metamaps.Maps
- *    Metamaps.Realtime
- *    Metamaps.Router
- *    Metamaps.Selected
- *    Metamaps.SynapseCard
- *    Metamaps.TopicCard
- *    Metamaps.Visualize
+ *  - Metamaps.Create
+ *  - Metamaps.Erb
+ *  - Metamaps.Filter
+ *  - Metamaps.JIT
+ *  - Metamaps.Loading
+ *  - Metamaps.Maps
+ *  - Metamaps.Realtime
+ *  - Metamaps.Router
+ *  - Metamaps.Selected
+ *  - Metamaps.SynapseCard
+ *  - Metamaps.TopicCard
+ *  - Metamaps.Visualize
  *  - Metamaps.Active
  *  - Metamaps.Backbone
  *  - Metamaps.GlobalUI
@@ -64,6 +65,7 @@ Metamaps.Map = {
     var start = function (data) {
       Metamaps.Active.Map = new bb.Map(data.map)
       Metamaps.Mappers = new bb.MapperCollection(data.mappers)
+      Metamaps.Collaborators = new bb.MapperCollection(data.collaborators)
       Metamaps.Topics = new bb.TopicCollection(data.topics)
       Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
       Metamaps.Mappings = new bb.MappingCollection(data.mappings)
@@ -180,13 +182,13 @@ Metamaps.Map = {
     Metamaps.Router.home()
     Metamaps.GlobalUI.notifyUser('Sorry! That map has been changed to Private.')
   },
-  commonsToPublic: function () {
+  cantEditNow: function () {
     Metamaps.Realtime.turnOff(true); // true is for 'silence'
     Metamaps.GlobalUI.notifyUser('Map was changed to Public. Editing is disabled.')
     Metamaps.Active.Map.trigger('changeByOther')
   },
-  publicToCommons: function () {
-    var confirmString = 'This map permission has been changed to Commons! '
+  canEditNow: function () {
+    var confirmString = "You've been granted permission to edit this map. "
     confirmString += 'Do you want to reload and enable realtime collaboration?'
     var c = confirm(confirmString)
     if (c) {
@@ -419,7 +421,7 @@ Metamaps.Map.InfoBox = {
   isOpen: false,
   changing: false,
   selectingPermission: false,
-  changePermissionText: "<div class='tooltips'>As the creator, you can change the permission of this map, but the permissions of the topics and synapses on it must be changed independently.</div>",
+  changePermissionText: "<div class='tooltips'>As the creator, you can change the permission of this map, and the permission of all the topics and synapses you have authority to change will change as well.</div>",
   nameHTML: '<span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea" data-activator="#mapInfoName">{{name}}</span>',
   descHTML: '<span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description..." data-type="textarea" data-activator="#mapInfoDesc">{{desc}}</span>',
   init: function () {
@@ -432,6 +434,8 @@ Metamaps.Map.InfoBox = {
     $('body').click(self.close)
 
     self.attachEventListeners()
+
+    
 
     self.generateBoxHTML = Hogan.compile($('#mapInfoBoxTemplate').html())
   },
@@ -473,19 +477,23 @@ Metamaps.Map.InfoBox = {
 
     var map = Metamaps.Active.Map
 
-    var obj = map.pick('permission', 'contributor_count', 'topic_count', 'synapse_count')
+    var obj = map.pick('permission', 'topic_count', 'synapse_count')
 
     var isCreator = map.authorizePermissionChange(Metamaps.Active.Mapper)
     var canEdit = map.authorizeToEdit(Metamaps.Active.Mapper)
+    var relevantPeople = map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
     var shareable = map.get('permission') !== 'private'
 
     obj['name'] = canEdit ? Hogan.compile(self.nameHTML).render({id: map.id, name: map.get('name')}) : map.get('name')
     obj['desc'] = canEdit ? Hogan.compile(self.descHTML).render({id: map.id, desc: map.get('desc')}) : map.get('desc')
     obj['map_creator_tip'] = isCreator ? self.changePermissionText : ''
-    obj['contributors_class'] = Metamaps.Mappers.length > 1 ? 'multiple' : ''
-    obj['contributors_class'] += Metamaps.Mappers.length === 2 ? ' mTwo' : ''
-    obj['contributor_image'] = Metamaps.Mappers.length > 0 ? Metamaps.Mappers.models[0].get('image') : "<%= asset_path('user.png') %>"
+
+    obj['contributor_count'] = relevantPeople.length
+    obj['contributors_class'] = relevantPeople.length > 1 ? 'multiple' : ''
+    obj['contributors_class'] += relevantPeople.length === 2 ? ' mTwo' : ''
+    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : Metamaps.Erb['user.png']
     obj['contributor_list'] = self.createContributorList()
+
     obj['user_name'] = isCreator ? 'You' : map.get('user_name')
     obj['created_at'] = map.get('created_at_clean')
     obj['updated_at'] = map.get('updated_at_clean')
@@ -554,6 +562,87 @@ Metamaps.Map.InfoBox = {
     $('.mapInfoBox').unbind('.hideTip').bind('click.hideTip', function () {
       $('.mapContributors .tip').hide()
     })
+
+    self.addTypeahead() 
+  },
+  addTypeahead: function () {
+    var self = Metamaps.Map.InfoBox
+
+    if (!Metamaps.Active.Map) return
+
+    // for autocomplete
+    var collaborators = {
+        name: 'collaborators',
+        limit: 9999,
+        display: function(s) { return s.label; },
+        templates: {
+            notFound: function(s) {
+                return Hogan.compile($('#collaboratorSearchTemplate').html()).render({
+                    value: "No results",
+                    label: "No results",
+                    rtype: "noresult",
+                    profile: Metamaps.Erb['user.png'],
+                });
+            },
+            suggestion: function(s) {
+                return Hogan.compile($('#collaboratorSearchTemplate').html()).render(s);
+            },
+        },
+        source: new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/search/mappers?term=%QUERY',
+                wildcard: '%QUERY',
+            },
+        })
+    }
+
+    // for adding map collaborators, who will have edit rights
+    if (Metamaps.Active.Mapper && Metamaps.Active.Mapper.id === Metamaps.Active.Map.get('user_id')) {
+      $('.collaboratorSearchField').typeahead(
+        {
+          highlight: false,
+        },
+        [collaborators]
+      )
+      $('.collaboratorSearchField').bind('typeahead:select', self.handleResultClick)
+      $('.mapContributors .removeCollaborator').click(function () {
+        self.removeCollaborator(parseInt($(this).data('id')))
+      })
+    } 
+  },
+  removeCollaborator: function (collaboratorId) {
+    var self = Metamaps.Map.InfoBox
+    Metamaps.Collaborators.remove(Metamaps.Collaborators.get(collaboratorId))
+    var mapperIds = Metamaps.Collaborators.models.map(function (mapper) { return mapper.id })
+    $.post('/maps/' + Metamaps.Active.Map.id + '/access', { access: mapperIds })
+    self.updateNumbers()
+  },
+  addCollaborator: function (newCollaboratorId) {
+    var self = Metamaps.Map.InfoBox
+
+    if (Metamaps.Collaborators.get(newCollaboratorId)) {
+      Metamaps.GlobalUI.notifyUser('That user already has access')
+      return
+    }
+
+    function callback(mapper) {
+      Metamaps.Collaborators.add(mapper)
+      var mapperIds = Metamaps.Collaborators.models.map(function (mapper) { return mapper.id })
+      $.post('/maps/' + Metamaps.Active.Map.id + '/access', { access: mapperIds })
+      var name =  Metamaps.Collaborators.get(newCollaboratorId).get('name')
+      Metamaps.GlobalUI.notifyUser(name + ' will be notified by email')
+      self.updateNumbers()
+    }
+
+    $.getJSON('/users/' + newCollaboratorId + '.json', callback)
+  },
+  handleResultClick: function (event, item) {
+    var self = Metamaps.Map.InfoBox
+
+   self.addCollaborator(item.id)
+   $('.collaboratorSearchField').typeahead('val', '')
   },
   updateNameDescPerm: function (name, desc, perm) {
     $('.mapInfoName .best_in_place_name').html(name)
@@ -562,33 +651,48 @@ Metamaps.Map.InfoBox = {
   },
   createContributorList: function () {
     var self = Metamaps.Map.InfoBox
-
+    var relevantPeople = Metamaps.Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
+    var activeMapperIsCreator = Metamaps.Active.Mapper && Metamaps.Active.Mapper.id === Metamaps.Active.Map.get('user_id')
     var string = ''
     string += '<ul>'
 
-    Metamaps.Mappers.each(function (m) {
-      string += '<li><a href="/explore/mapper/' + m.get('id') + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get('image') + '" />' + m.get('name') + '</a></li>'
+    relevantPeople.each(function (m) {
+      var isCreator = Metamaps.Active.Map.get('user_id') === m.get('id')
+      string += '<li><a href="/explore/mapper/' + m.get('id') + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get('image') + '" />' + m.get('name')
+      if (isCreator) string += ' (creator)' 
+      string += '</a>'
+      if (activeMapperIsCreator && !isCreator) string += '<span class="removeCollaborator" data-id="' + m.get('id') + '"></span>'
+      string += '</li>'
     })
 
     string += '</ul>'
+
+    if (activeMapperIsCreator) {
+      string += '<div class="collabSearchField"><span class="addCollab"></span><input class="collaboratorSearchField" placeholder="Add a collaborator!"></input></div>'
+    }
     return string
   },
   updateNumbers: function () {
     var self = Metamaps.Map.InfoBox
     var mapper = Metamaps.Active.Mapper
+    var relevantPeople = Metamaps.Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
 
     var contributors_class = ''
-    if (Metamaps.Mappers.length === 2) contributors_class = 'multiple mTwo'
-    else if (Metamaps.Mappers.length > 2) contributors_class = 'multiple'
+    if (relevantPeople.length === 2) contributors_class = 'multiple mTwo'
+    else if (relevantPeople.length > 2) contributors_class = 'multiple'
 
-    var contributors_image = "<%= asset_path('user.png') %>"
-    if (Metamaps.Mappers.length > 0) {
+    var contributors_image = Metamaps.Erb['user.png']
+    if (relevantPeople.length > 0) {
       // get the first contributor and use their image
-      contributors_image = Metamaps.Mappers.models[0].get('image')
+      contributors_image = relevantPeople.models[0].get('image')
     }
     $('.mapContributors img').attr('src', contributors_image).removeClass('multiple mTwo').addClass(contributors_class)
-    $('.mapContributors span').text(Metamaps.Mappers.length)
+    $('.mapContributors span').text(relevantPeople.length)
     $('.mapContributors .tip').html(self.createContributorList())
+    self.addTypeahead()
+    $('.mapContributors .tip').unbind().click(function (event) {
+      event.stopPropagation()
+    })
     $('.mapTopics').text(Metamaps.Topics.length)
     $('.mapSynapses').text(Metamaps.Synapses.length)
 
@@ -623,19 +727,10 @@ Metamaps.Map.InfoBox = {
 
     self.selectingPermission = false
     var permission = $(this).attr('class')
-    var permBefore = Metamaps.Active.Map.get('permission')
     Metamaps.Active.Map.save({
       permission: permission
     })
     Metamaps.Active.Map.updateMapWrapper()
-    if (permBefore !== 'commons' && permission === 'commons') {
-      Metamaps.Realtime.setupSocket()
-      Metamaps.Realtime.turnOn()
-    }
-    else if (permBefore === 'commons' && permission === 'public') {
-      Metamaps.Realtime.turnOff(true); // true is to 'silence'
-    // the notification that would otherwise be sent
-    }
     shareable = permission === 'private' ? '' : 'shareable'
     $('.mapPermission').removeClass('commons public private minimize').addClass(permission)
     $('.mapPermission .permissionSelect').remove()
@@ -656,6 +751,7 @@ Metamaps.Map.InfoBox = {
       Metamaps.Maps.Active.remove(map)
       Metamaps.Maps.Featured.remove(map)
       Metamaps.Maps.Mine.remove(map)
+      Metamaps.Maps.Shared.remove(map)
       map.destroy()
       Metamaps.Router.home()
       Metamaps.GlobalUI.notifyUser('Map eliminated!')

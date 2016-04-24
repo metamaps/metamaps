@@ -45,6 +45,13 @@ class MappingsController < ApplicationController
     @mapping = Mapping.find(params[:id])
     authorize @mapping
 
+    mappable = @mapping.mappable
+    if mappable.defer_to_map
+      mappable.permission = mappable.defer_to_map.permission
+      mappable.defer_to_map_id = nil
+      mappable.save
+    end
+
     @mapping.destroy
 
     head :no_content 

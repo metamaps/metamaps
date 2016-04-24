@@ -29,10 +29,10 @@ Metamaps.JIT = {
     $('.takeScreenshot').click(Metamaps.Map.exportImage)
 
     self.topicDescImage = new Image()
-    self.topicDescImage.src = '<%= asset_path('topic_description_signifier.png') %>'
+    self.topicDescImage.src = Metamaps.Erb['topic_description_signifier.png']
 
     self.topicLinkImage = new Image()
-    self.topicLinkImage.src = '<%= asset_path('topic_link_signifier.png') %>'
+    self.topicLinkImage.src = Metamaps.Erb['topic_link_signifier.png']
   },
   /**
    * convert our topic JSON into something JIT can use

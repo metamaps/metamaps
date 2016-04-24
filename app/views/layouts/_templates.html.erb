@@ -12,7 +12,7 @@
     <div class="infoStatIcon mapContributors hoverForTip">
       <img id="mapContribs" class="{{contributors_class}}"
         width="25" height="25" src="{{contributor_image}}" />
-      <span>{{contributor_count}}</span>
+      <span class="count">{{contributor_count}}</span>
       <div class="tip">{{{contributor_list}}}</div>
     </div>
     <div class="infoStatIcon mapTopics">
@@ -176,6 +176,18 @@
         <div class="mapCount">
           {{mapCount}}
         </div>
+      </div>
+      <div class="clearfloat"></div>
+    </div>
+    </script>
+
+    <script type="text/template" id="collaboratorSearchTemplate">
+    <div class="collabResult">
+      <div class="collabIconWrapper">
+        <img class="icon" width="25" height="25" src="{{profile}}">
+      </div>
+      <div class="collabNameWrapper">
+        <p class="collabName">{{label}}</p>
       </div>
       <div class="clearfloat"></div>
     </div>

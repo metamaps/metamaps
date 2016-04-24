@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160318141618) do
+ActiveRecord::Schema.define(version: 20160401133937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,8 +180,9 @@ ActiveRecord::Schema.define(version: 20160318141618) do
     t.integer  "node1_id"
     t.integer  "node2_id"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "defer_to_map_id"
   end
 
   add_index "synapses", ["node1_id", "node1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
@@ -217,10 +218,21 @@ ActiveRecord::Schema.define(version: 20160318141618) do
     t.string   "audio_content_type"
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
+    t.integer  "defer_to_map_id"
   end
 
   add_index "topics", ["metacode_id"], name: "index_topics_on_metacode_id", using: :btree
   add_index "topics", ["user_id"], name: "index_topics_on_user_id", using: :btree
+
+  create_table "user_maps", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "map_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_maps", ["map_id"], name: "index_user_maps_on_map_id", using: :btree
+  add_index "user_maps", ["user_id"], name: "index_user_maps_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name"

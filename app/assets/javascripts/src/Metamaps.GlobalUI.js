@@ -93,6 +93,7 @@ Metamaps.GlobalUI = {
         if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
 
         var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
+        var sharedCollection = Metamaps.Maps.Shared ? Metamaps.Maps.Shared : [];
         var mapperCollection = [];
         var mapperOptionsObj = {id: 'mapper', sortBy: 'updated_at' };
         if (Metamaps.Maps.Mapper) {
@@ -102,6 +103,7 @@ Metamaps.GlobalUI = {
         var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : [];
         var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : [];
         Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'updated_at' });
+        Metamaps.Maps.Shared = new Metamaps.Backbone.MapsCollection(sharedCollection, {id: 'shared', sortBy: 'updated_at' });
         // 'Mapper' refers to another mapper
         Metamaps.Maps.Mapper = new Metamaps.Backbone.MapsCollection(mapperCollection, mapperOptionsObj);
         Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'updated_at' });
@@ -501,7 +503,7 @@ Metamaps.GlobalUI.Search = {
                     return Hogan.compile(topicheader + $('#topicSearchTemplate').html()).render({
                         value: "No results",
                         label: "No results",
-                        typeImageURL: "<%= asset_path('icons/wildcard.png') %>",
+                        typeImageURL: Metamaps.Erb['icons/wildcard.png'],
                         rtype: "noresult"
                     });
                 },
@@ -569,7 +571,7 @@ Metamaps.GlobalUI.Search = {
                         value: "No results",
                         label: "No results",
                         rtype: "noresult",
-                        profile: "<%= asset_path('user.png') %>",
+                        profile: Metamaps.Erb['user.png']
                     });
                 },
                 header: mapperheader,

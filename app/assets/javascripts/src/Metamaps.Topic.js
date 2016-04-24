@@ -299,7 +299,8 @@ Metamaps.Topic = {
 
     var topic = new Metamaps.Backbone.Topic({
       name: Metamaps.Create.newTopic.name,
-      metacode_id: metacode.id
+      metacode_id: metacode.id,
+      defer_to_map_id: Metamaps.Active.Map.id
     })
     Metamaps.Topics.add(topic)
 

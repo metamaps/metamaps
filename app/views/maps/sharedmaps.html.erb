@@ -1,0 +1,15 @@
+<% #
+   # @file
+   # Shows a list of current user's maps
+   # GET /explore/mine(.:format)
+   # %>
+
+<script>
+  Metamaps.Maps.Shared = <%= @maps.to_json.html_safe %>;
+  Metamaps.currentPage = "shared";
+  <% content_for :title, "Explore Shared Maps | Metamaps" %>
+
+  Metamaps.currentSection = "explore";
+  Metamaps.GlobalUI.Search.open();
+  Metamaps.GlobalUI.Search.lock();
+</script>

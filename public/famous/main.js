@@ -303,7 +303,7 @@ Metamaps.Famous.build = function () {
         var loggedIn = Metamaps.Active.Mapper ? 'Auth' : '';
         
 
-        if (section === "mine" || section === "active" || section === "featured") {
+        if (section === "mine" || section === "shared" || section === "active" || section === "featured") {
             f.explore.surf.setContent(templates[section + loggedIn + 'Content']);
         }
         else if (section === "mapper") {

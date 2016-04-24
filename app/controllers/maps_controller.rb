@@ -1,8 +1,7 @@
 class MapsController < ApplicationController
-
-    before_action :require_user, only: [:create, :update, :screenshot, :events, :destroy]
-    after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :usermaps, :events]
-    after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :usermaps]
+    before_action :require_user, only: [:create, :update, :access, :screenshot, :events, :destroy]
+    after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :usermaps, :events]
+    after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :usermaps]
 
     respond_to :html, :json, :csv
 
@@ -53,6 +52,21 @@ class MapsController < ApplicationController
         end
     end
 
+    # GET /explore/shared
+    def sharedmaps
+        return redirect_to activemaps_url if !authenticated?
+
+        page = params[:page].present? ? params[:page] : 1
+        @maps = policy_scope(
+          Map.where("maps.id IN (?)", current_user.shared_maps.map(&:id))
+        ).order("updated_at DESC").page(page).per(20)
+
+        respond_to do |format|
+            format.html { respond_with(@maps, @user) }
+            format.json { render json: @maps }
+        end
+    end
+
     # GET /explore/mapper/:id
     def usermaps
         page = params[:page].present? ? params[:page] : 1
@@ -74,15 +88,13 @@ class MapsController < ApplicationController
         respond_to do |format|
             format.html {
                 @allmappers = @map.contributors
-                @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
-                @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && current_user.id != s.user_id)) }
-                @allmappings = @map.mappings.to_a.delete_if {|m| 
-                    object = m.mappable
-                    !object || (object.permission == "private" && (!authenticated? || (authenticated? && current_user.id != object.user_id)))
-                }
+                @allcollaborators = @map.editors
+                @alltopics = @map.topics.to_a.delete_if {|t| not policy(t).show? }
+                @allsynapses = @map.synapses.to_a.delete_if {|s| not policy(s).show? }
+                @allmappings = @map.mappings.to_a.delete_if {|m| not policy(m).show? }
                 @allmessages = @map.messages.sort_by(&:created_at)
 
-                respond_with(@allmappers, @allmappings, @allsynapses, @alltopics, @allmessages, @map)
+                respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses, @alltopics, @allmessages, @map)
             }
             format.json { render json: @map }
             format.csv { redirect_to action: :export, format: :csv }
@@ -127,12 +139,11 @@ class MapsController < ApplicationController
         authorize @map
 
         @allmappers = @map.contributors
-        @alltopics = @map.topics.to_a.delete_if {|t| t.permission == "private" && (!authenticated? || (authenticated? && current_user.id != t.user_id)) }
-        @allsynapses = @map.synapses.to_a.delete_if {|s| s.permission == "private" && (!authenticated? || (authenticated? && current_user.id != s.user_id)) }
-        @allmappings = @map.mappings.to_a.delete_if {|m| 
-            object = m.mappable
-            !object || (object.permission == "private" && (!authenticated? || (authenticated? && current_user.id != object.user_id)))
-        }
+        @allcollaborators = @map.editors
+        @alltopics = @map.topics.to_a.delete_if {|t| not policy(t).show? }
+        @allsynapses = @map.synapses.to_a.delete_if {|s| not policy(s).show? }
+        @allmappings = @map.mappings.to_a.delete_if {|m| not policy(m).show? }
+
 
         @json = Hash.new()
         @json['map'] = @map
@@ -140,6 +151,7 @@ class MapsController < ApplicationController
         @json['synapses'] = @allsynapses
         @json['mappings'] = @allmappings
         @json['mappers'] = @allmappers
+        @json['collaborators'] = @allcollaborators
         @json['messages'] = @map.messages.sort_by(&:created_at)
 
         respond_to do |format|
@@ -215,6 +227,36 @@ class MapsController < ApplicationController
         end
     end
 
+    # POST maps/:id/access
+    def access
+        @map = Map.find(params[:id])
+        authorize @map
+        userIds = params[:access] || []
+        added = userIds.select { |uid|
+          user = User.find(uid)
+          if user.nil? || (current_user && user == current_user)
+            false
+          else 
+            not @map.collaborators.include?(user)
+          end
+        }
+        removed = @map.collaborators.select { |user| not userIds.include?(user.id.to_s) }.map(&:id)
+        added.each { |uid|
+          um = UserMap.create({ user_id: uid.to_i, map_id: @map.id })
+          user = User.find(uid.to_i)
+          MapMailer.invite_to_edit_email(@map, current_user, user).deliver_later
+        }
+        removed.each { |uid|
+          @map.user_maps.select{ |um| um.user_id == uid }.each{ |um| um.destroy }
+        }
+
+      respond_to do |format|
+        format.json do
+          render :json => { :message => "Successfully altered edit permissions" }
+        end
+      end
+    end
+    
     # POST maps/:id/upload_screenshot
     def screenshot
       @map = Map.find(params[:id])

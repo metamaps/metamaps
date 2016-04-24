@@ -24,7 +24,14 @@
 //= require ./src/views/videoView
 //= require ./src/views/room
 //= require ./src/JIT
+//= require ./src/check-canvas-support
 //= require ./src/Metamaps
+//= require ./src/Metamaps.Create
+//= require ./src/Metamaps.TopicCard
+//= require ./src/Metamaps.SynapseCard
+//= require ./src/Metamaps.Visualize
+//= require ./src/Metamaps.Util
+//= require ./src/Metamaps.Realtime
 //= require ./src/Metamaps.Control
 //= require ./src/Metamaps.Filter
 //= require ./src/Metamaps.Listeners
