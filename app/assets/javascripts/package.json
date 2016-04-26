@@ -1,0 +1,22 @@
+{
+  "name": "metamaps-frontend",
+  "version": "1.0.0",
+  "description": "Metamaps frontend - currently just tests",
+  "scripts": {
+    "test": "mocha test || echo 'Run `npm install` to setup testing'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metamaps/metamaps.git"
+  },
+  "author": "",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/metamaps/metamaps/issues"
+  },
+  "homepage": "https://github.com/metamaps/metamaps#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  }
+}

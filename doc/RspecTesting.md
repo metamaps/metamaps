@@ -1,3 +1,7 @@
+## Testing Javascript
+
+Javascript tests are under construction, but you can read more in the README in `app/assets/javascripts`.
+
 ## Testing with RSpec
 
 RSpec is a ruby gem that allows you to test your code base. This is great -
