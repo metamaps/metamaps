@@ -123,6 +123,9 @@ class MapsController < ApplicationController
       if params[:event] == 'conversation'
         Events::ConversationStartedOnMap.publish!(map, current_user)
         valid_event = true
+      elsif params[:event] == 'user_presence'
+        Events::UserPresentOnMap.publish!(map, current_user)
+        valid_event = true
       end
 
       respond_to do |format|

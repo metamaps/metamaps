@@ -143,6 +143,9 @@ Metamaps.Visualize = {
       self.mGraph.graph.empty()
     }
 
+
+    if (self.type == 'ForceDirected' && Metamaps.Active.Mapper) $.post('/maps/' + Metamaps.Active.Map.id + '/events/user_presence')
+
     function runAnimation () {
       Metamaps.Loading.hide()
       // load JSON data, if it's not empty
