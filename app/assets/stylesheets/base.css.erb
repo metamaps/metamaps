@@ -188,10 +188,13 @@
   height: 48px;
 }
 .linkItem.contributor {
-  margin-left:40px;
+  margin-left:76px;
   z-index:1;
   padding:17px 16px 17px 30px;
   position: relative;
+}
+.yourTopic .linkItem.contributor {
+  margin-left: 40px;
 }
 .contributor .contributorIcon {
   position: absolute;
@@ -376,6 +379,7 @@
 
 
 .mapPerm {
+  display: none;
   width: 32px;
   height: 32px;
   padding: 0;
@@ -384,6 +388,9 @@
   margin-left: 8px;
   background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
   background-position: 0 0;
+}
+.yourTopic .mapPerm {
+  display: block;
 }
 .mapPerm.co {
   background-position: 0 0;
