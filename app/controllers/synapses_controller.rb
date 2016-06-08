@@ -51,7 +51,7 @@ class SynapsesController < ApplicationController
   def destroy
     @synapse = Synapse.find(params[:id])
     authorize @synapse
-    @synapse.delete
+    @synapse.destroy
       
     respond_to do |format|
       format.json { head :no_content }

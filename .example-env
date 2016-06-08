@@ -7,7 +7,9 @@ export DB_NAME='metamap002'
 export REALTIME_SERVER='http://localhost:5001'
 export MAILER_DEFAULT_URL='localhost:3000'
 export DEVISE_MAILER_SENDER='team@metamaps.cc'
+
 export DEVISE_SECRET_KEY='f71c467e526f23d614b3b08866cad4788c502bed869c282f06e73ee6c94675b62fe1f6d52fa7ba8196b33031f0d2f3b67e27ea07693c52ecebccb01700cad614'
+export SECRET_KEY_BASE='267c8a84f63963282f45bc3010eaddf027abfab58fc759d6e239c8005f85ee99d6d01b1ab6394cdee9ca7f8c9213a0cf91d3d8d3350f096123e2caccbcc0924f'
 
 # # you can safely leave these blank, unless you're deploying an instance, in
 # # which case you'll need to set them up

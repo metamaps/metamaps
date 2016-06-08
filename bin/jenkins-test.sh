@@ -3,6 +3,7 @@
 # jenkins machine prerequisites
 # sudo aptitude -q -y install libpq-dev
 # install rvm with user gemsets
+# install node and npm
 
 source "$HOME/.rvm/scripts/rvm"
 rvm use $(cat .ruby-version) || \
@@ -19,10 +20,15 @@ export RAILS_ENV=test
 cp .example-env .env
 sed -i -e "s/DB_USERNAME='.*'/DB_USERNAME='jenkins'/" .env
 
-#test
+# rspec tests
 bundle install
 rake db:drop
 rake db:create
 rake db:schema:load
 rake db:migrate
 COVERAGE=on bundle exec rspec
+
+# javascript tests
+cd app/assets/javascripts
+npm install
+npm test

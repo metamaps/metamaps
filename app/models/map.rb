@@ -8,6 +8,9 @@ class Map < ActiveRecord::Base
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
   has_many :messages, as: :resource, dependent: :destroy
 
+  has_many :user_maps, dependent: :destroy
+  has_many :collaborators, through: :user_maps, source: :user
+
   has_many :webhooks, as: :hookable
   has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
 
@@ -45,6 +48,10 @@ class Map < ActiveRecord::Base
     return contributors
   end
 
+  def editors
+    collaborators + [self.user]
+  end
+
   def topic_count
     topics.length
   end
@@ -65,6 +72,10 @@ class Map < ActiveRecord::Base
     contributors.length
   end
 
+  def collaborator_ids
+    collaborators.map(&:id)
+  end
+
   def screenshot_url
     screenshot.url(:thumb)
   end
@@ -78,7 +89,7 @@ class Map < ActiveRecord::Base
   end
 
   def as_json(options={})
-    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
+    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
     json[:created_at_clean] = created_at_str
     json[:updated_at_clean] = updated_at_str
     json

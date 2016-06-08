@@ -5,10 +5,10 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 #assety stuff
-realtime/node_modules
 public/assets
 public/metamaps_mobile
 vendor/
+node_modules
 
 #secrets and config
 .env

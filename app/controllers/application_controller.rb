@@ -32,7 +32,11 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_unauthorized
-    head :forbidden # TODO make this better
+    if authenticated?
+      head :forbidden # TODO make this better
+    else
+     redirect_to new_user_session_path, notice: "Try signing in to do that." 
+    end
   end
 
 private
