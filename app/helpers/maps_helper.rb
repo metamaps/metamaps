@@ -8,7 +8,7 @@ module MapsHelper
       map['id'] = m.id
       map['label'] = m.name
       map['value'] = m.name
-      map['description'] = m.desc.truncate(30)
+      map['description'] = m.desc.try(:truncate, 30)
       map['permission'] = m.permission
       map['topicCount'] = m.topics.count
       map['synapseCount'] = m.synapses.count
