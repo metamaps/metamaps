@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   include PunditExtra
   rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
-  protect_from_forgery
+  protect_from_forgery(with: :exception)
 
   before_action :get_invite_link
   after_action :allow_embedding

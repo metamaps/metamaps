@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.1.3'
 
-gem 'rails', '4.2.4'
+gem 'rails'
 
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'aws-sdk', '< 2.0'
@@ -49,6 +49,7 @@ group :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
+  gem 'brakeman', require: false
 end
 
 group :development, :test do
