@@ -47,10 +47,17 @@
 
 Run this in the metamaps directory, still as metamaps:
 
+    # fill in DB_* values, and realtime server at least. Change the 
+    # SECRET_KEY_BASE to something new. Ctrl+X to save/exit from nano.
     cp .example-env .env
-    nano .env # fill in DB_* values, and realtime server at least. Ctrl+X to save/exit.
+    nano .env
+
+    # Set up environment variables in your current session
+    source .env
     export RAILS_ENV=production
-    rake db:setup #create, load schema, seed
+
+    # create, load schema, seed
+    rake db:setup
 
 Now set up nginx - config stored on Linode, including relevant environment 
 variables.
@@ -61,8 +68,8 @@ Get an SSL certificate and encrypt it for the realtime video.
 
     passenger-config restart-app /home/metamaps/metamaps
 
-If this command fails, it may be helpful for debugging to run a test server to
-see what problems show up:
+If this command fails, it may be helpful for debugging to run a test
+server to see what problems show up:
 
     RAILS_ENV=production rails server
 

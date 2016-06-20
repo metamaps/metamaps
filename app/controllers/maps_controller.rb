@@ -39,7 +39,10 @@ class MapsController < ApplicationController
 
     # GET /explore/mine
     def mymaps
-        return redirect_to activemaps_url if !authenticated?
+      if !authenticated?
+        skip_policy_scope
+        return redirect_to explore_active_path
+      end
 
         page = params[:page].present? ? params[:page] : 1
         @maps = policy_scope(
@@ -54,7 +57,10 @@ class MapsController < ApplicationController
 
     # GET /explore/shared
     def sharedmaps
-        return redirect_to activemaps_url if !authenticated?
+      if !authenticated?
+        skip_policy_scope
+        return redirect_to explore_active_path
+      end
 
         page = params[:page].present? ? params[:page] : 1
         @maps = policy_scope(
