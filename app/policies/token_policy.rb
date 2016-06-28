@@ -4,7 +4,7 @@ class TokenPolicy < ApplicationPolicy
       if user
         scope.where('tokens.user_id = ?', user.id)
       else
-        where(:id => nil).where("id IS NOT ?", nil) # to just return none
+        scope.where(:id => nil).where("id IS NOT ?", nil) # to just return none
       end
     end
   end
