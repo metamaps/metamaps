@@ -16,7 +16,7 @@ class MappingPolicy < ApplicationPolicy
   end
 
   def show?
-    map_policy.show? && mappable_policy.show?
+    map_policy.show? && mappable_policy.try(:show?)
   end
 
   def create?
