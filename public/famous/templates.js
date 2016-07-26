@@ -3,12 +3,6 @@ define(function(require, exports, module) {
 var t = {};
 
 t.logoContent = '<div class="logo">METAMAPS</div>';
-t.logoContent += '<ul class="bottomLinks">';
-t.logoContent += '<li onclick="Metamaps.GlobalUI.openLightbox(\'about\')">About /&nbsp;</li>';
-t.logoContent += '<li onclick="Metamaps.GlobalUI.openLightbox(\'colophon\')">Colophon /&nbsp;</li>';
-t.logoContent += '<li onclick="Metamaps.GlobalUI.openLightbox(\'donate\')">Donate! /&nbsp;</li>';
-t.logoContent += '<li onclick="Metamaps.GlobalUI.openLightbox(\'getInvolved\')">Get Involved!</li>';
-t.logoContent += '</ul>';
 
 /* logged out explore maps bars */
   t.activeContent = '<a href="/explore/active" class="active activeMaps exploreMapsButton"><div class="exploreMapsIcon"></div>Recently Active Maps</a>';
