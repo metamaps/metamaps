@@ -266,7 +266,10 @@ Metamaps.Import = {
     var self = Metamaps.Import
     $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null
-    if (metacode === null) return console.error('metacode not found')
+    if (metacode === null) {
+      metacode = Metamaps.Metacodes.where({ name: 'Wildcard' })[0]
+      console.warn("Couldn't find metacode " + metacode_name + ' so used Wildcard instead.')
+    }
 
     var topic = new Metamaps.Backbone.Topic({
       name: name,
