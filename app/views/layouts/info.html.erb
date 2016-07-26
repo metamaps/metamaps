@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Metamaps</title>
+</head>
+
+<style>
+  body {
+    margin:0;
+    padding:0;
+  }
+
+  .center {
+    width: 1024px;
+    margin: 0 auto;
+  }
+
+  .splash {
+    background: url(<%= asset_path 'splash_bg.png' %>) no-repeat 0 0;
+    height: 399px;
+    text-align: center; 
+  }
+
+  .splash h2 {
+    font-family: Helvetica, sans-serif;
+    color: #FFFFFF;
+    font-size: 48px;
+    padding: 120px 0 20px 0;
+    margin: 0;
+    text-shadow: 2px 2px #444;
+  }
+
+  .splash button {
+    border: none;
+    height: 40px;
+    width: 160px;
+    outline: none;
+    padding: 0 18px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    vertical-align: top;
+    color: #FFF;
+    margin: 10px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: center;
+    text-decoration: none;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-user-select: none;
+    font-family: helvetica, sans-serif;
+    -webkit-font-smoothing: inherit;
+    box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+  }
+
+  .button--blue {
+    background-color: #4fb5c0;
+  }
+  .button--purple {
+    background-color: #a354cd;
+  }
+  .button--blue:hover {
+    background-color: #419599;
+  }
+  .button--purple:hover {
+    background-color: #9150bc;
+  }
+
+  .section {
+    margin: 60px 0;
+  }
+
+  .graph {
+    background: url(<%= asset_path 'big_picture.png' %>) no-repeat 0 0;
+    height: 399px;
+  }
+
+  .code {
+    background: url(<%= asset_path 'metamaps_code.png' %>) no-repeat 0 -239px;
+    height: 399px;
+  }
+
+  .rich_media {
+    background: url(<%= asset_path 'rich_media.png' %>) no-repeat 0 0;
+    height: 403px;
+  }
+
+  .connected {
+    background: url(<%= asset_path 'connected.png' %>) no-repeat 0 0;
+    height: 600px;
+    background-size: contain;
+  }
+
+  .junto {
+    background: url(<%= asset_path 'junto_screen.png' %>) no-repeat top right;
+    background-size: contain;
+    height: 399px;
+  }
+</style>
+
+<body>
+
+  <div class="center">
+    <div class="splash">
+      <h2>make sense with metamaps</h2>
+      <button class="button--blue" href="/request">Request Invite</button>
+      <button class="button--purple" href="/login">Log In</button>
+    </div>
+    <div class="section junto">
+    
+    </div>
+    <div class="section connected">
+    
+    </div>
+    <div class="section rich_media">
+
+    </div>
+    <div class="section graph">
+
+    </div>
+    <div class="section code">
+
+    </div>
+  </div>
+</body>
+
+</html>
