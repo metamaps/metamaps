@@ -11,5 +11,4 @@ class NewSynapseSerializer < ActiveModel::Serializer
   has_one :topic1, root: :topics, serializer: NewTopicSerializer
   has_one :topic2, root: :topics, serializer: NewTopicSerializer
   has_one :user, serializer: NewUserSerializer
-
 end

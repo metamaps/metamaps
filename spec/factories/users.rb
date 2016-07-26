@@ -15,8 +15,8 @@ FactoryGirl.define do
     password 'omgwtfbbq'
 
     factory :simple_user, aliases: [:user] do
-      joinedwithcode { "qwertyui" }
-      code { "qwertyui" }
+      joinedwithcode { 'qwertyui' }
+      code { 'qwertyui' }
 
       transient do
         validate false

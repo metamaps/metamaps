@@ -2,15 +2,15 @@ Webhooks::Slack::Base = Struct.new(:event) do
   include Routing
 
   def username
-    "Metamaps Bot"
+    'Metamaps Bot'
   end
 
   def icon_url
-    "https://pbs.twimg.com/profile_images/539300245029392385/dJ1bwnw7.jpeg"
+    'https://pbs.twimg.com/profile_images/539300245029392385/dJ1bwnw7.jpeg'
   end
 
   def text
-    "something"
+    'something'
   end
 
   def attachments
@@ -22,11 +22,11 @@ Webhooks::Slack::Base = Struct.new(:event) do
     }]
   end
 
-  alias :read_attribute_for_serialization :send
+  alias_method :read_attribute_for_serialization, :send
 
   private
 
-  #def motion_vote_field
+  # def motion_vote_field
   #  {
   #    title: "Vote on this proposal",
   #    value: "#{proposal_link(eventable, "yes")} · " +
@@ -34,23 +34,23 @@ Webhooks::Slack::Base = Struct.new(:event) do
   #           "#{proposal_link(eventable, "no")} · " +
   #           "#{proposal_link(eventable, "block")}"
   #  }
-  #end
+  # end
 
   def view_map_on_metamaps(text = nil)
     "<#{map_url(event.map)}|#{text || event.map.name}>"
   end
 
-  #def view_discussion_on_loomio(params = {})
+  # def view_discussion_on_loomio(params = {})
   #  { value: discussion_link(I18n.t(:"webhooks.slack.view_it_on_loomio"), params) }
-  #end
+  # end
 
-  #def proposal_link(proposal, position = nil)
+  # def proposal_link(proposal, position = nil)
   #  discussion_link position || proposal.name, { proposal: proposal.key, position: position }
-  #end
+  # end
 
-  #def discussion_link(text = nil, params = {})
+  # def discussion_link(text = nil, params = {})
   #  "<#{discussion_url(eventable.map, params)}|#{text || eventable.discussion.title}>"
-  #end
+  # end
 
   def eventable
     @eventable ||= event.eventable
@@ -59,10 +59,9 @@ Webhooks::Slack::Base = Struct.new(:event) do
   def author
     @author ||= eventable.author
   end
-
 end
 
-#webhooks:
+# webhooks:
 #    slack:
 #      motion_closed: "*%{name}* has closed"
 #      motion_closing_soon: "*%{name}* has a proposal closing in 24 hours"

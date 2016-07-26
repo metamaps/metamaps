@@ -4,4 +4,4 @@ class NewMetacodeSerializer < ActiveModel::Serializer
              :manual_icon,
              :color,
              :aws_icon
-end 
+end

@@ -4,5 +4,4 @@ class TokenSerializer < ActiveModel::Serializer
              :description,
              :created_at,
              :updated_at
-
 end

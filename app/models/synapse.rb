@@ -1,12 +1,12 @@
 class Synapse < ActiveRecord::Base
   belongs_to :user
-  belongs_to :defer_to_map, :class_name => 'Map',  :foreign_key => 'defer_to_map_id'
+  belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
 
-  belongs_to :topic1, :class_name => "Topic", :foreign_key => "node1_id"
-  belongs_to :topic2, :class_name => "Topic", :foreign_key => "node2_id"
+  belongs_to :topic1, class_name: 'Topic', foreign_key: 'node1_id'
+  belongs_to :topic2, class_name: 'Topic', foreign_key: 'node2_id'
 
   has_many :mappings, as: :mappable, dependent: :destroy
-  has_many :maps, :through => :mappings
+  has_many :maps, through: :mappings
 
   validates :desc, length: { minimum: 0, allow_nil: false }
 
@@ -17,14 +17,12 @@ class Synapse < ActiveRecord::Base
 
   validates :category, inclusion: { in: ['from-to', 'both'], allow_nil: true }
 
-  scope :for_topic, ->(topic_id = nil) { 
-    where("node1_id = ? OR node2_id = ?", topic_id, topic_id) 
-  } 
+  scope :for_topic, ->(topic_id = nil) {
+    where('node1_id = ? OR node2_id = ?', topic_id, topic_id)
+  }
 
   # :nocov:
-  def user_name
-    user.name
-  end
+  delegate :name, to: :user, prefix: true
   # :nocov:
 
   # :nocov:
@@ -36,14 +34,14 @@ class Synapse < ActiveRecord::Base
   # :nocov:
   def collaborator_ids
     if defer_to_map
-      defer_to_map.editors.select{|mapper| not mapper == self.user }.map(&:id)
+      defer_to_map.editors.select { |mapper| mapper != user }.map(&:id)
     else
       []
     end
   end
   # :nocov:
- 
-   # :nocov:
+
+  # :nocov:
   def calculated_permission
     if defer_to_map
       defer_to_map.permission
@@ -52,11 +50,10 @@ class Synapse < ActiveRecord::Base
     end
   end
   # :nocov:
-  
+
   # :nocov:
-  def as_json(options={})
-    super(:methods =>[:user_name, :user_image, :calculated_permission, :collaborator_ids])
+  def as_json(_options = {})
+    super(methods: [:user_name, :user_image, :calculated_permission, :collaborator_ids])
   end
   # :nocov:
-  
 end

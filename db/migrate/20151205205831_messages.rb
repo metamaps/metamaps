@@ -1,6 +1,6 @@
 class Messages < ActiveRecord::Migration
   def change
-  	create_table :messages do |t|
+    create_table :messages do |t|
       t.text :message
       t.references :user
       t.integer :resource_id

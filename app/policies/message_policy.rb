@@ -1,19 +1,17 @@
 class MessagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      visible = ['public', 'commons']
+      visible = %w(public commons)
       permission = 'maps.permission IN (?)'
       if user
         scope.joins(:maps).where(permission + ' OR maps.user_id = ?', visible, user.id)
       else
         scope.where(permission, visible)
-      end 
+      end
     end
   end
 
-  def show?
-    resource_policy.show?
-  end
+  delegate :show?, to: :resource_policy
 
   def create?
     record.resource.present? && resource_policy.update?
@@ -32,5 +30,4 @@ class MessagePolicy < ApplicationPolicy
   def resource_policy
     @resource_policy ||= Pundit.policy(user, record.resource)
   end
-
 end

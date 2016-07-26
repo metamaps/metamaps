@@ -1,0 +1,14 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'db/**/*'
+    - 'tmp/**/*'
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'app/assets/javascripts/node_modules/**/*'
+
+Rails:
+  Enabled: true
+
+Metrics/LineLength:
+  Max: 100

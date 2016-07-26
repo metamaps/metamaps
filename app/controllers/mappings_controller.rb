@@ -1,11 +1,10 @@
 class MappingsController < ApplicationController
-
-  before_action :require_user, only: [:create, :update, :destroy]    
+  before_action :require_user, only: [:create, :update, :destroy]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
-    
+
   respond_to :json
-    
+
   # GET /mappings/1.json
   def show
     @mapping = Mapping.find(params[:id])
@@ -54,12 +53,13 @@ class MappingsController < ApplicationController
 
     @mapping.destroy
 
-    head :no_content 
+    head :no_content
   end
 
   private
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def mapping_params
-      params.require(:mapping).permit(:id, :xloc, :yloc, :mappable_id, :mappable_type, :map_id)
-    end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def mapping_params
+    params.require(:mapping).permit(:id, :xloc, :yloc, :mappable_id, :mappable_type, :map_id)
+  end
 end

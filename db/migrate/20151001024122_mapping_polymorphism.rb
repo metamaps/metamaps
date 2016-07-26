@@ -5,21 +5,21 @@ class MappingPolymorphism < ActiveRecord::Migration
     add_index :mappings, [:mappable_id, :mappable_type]
 
     Mapping.find_each do |mapping|
-      if mapping.synapse_id.nil? and mapping.topic_id.nil?
+      if mapping.synapse_id.nil? && mapping.topic_id.nil?
         puts "Mapping id=#{mapping.id} has no valid id, skipping!"
         next
       end
-      if not mapping.synapse_id.nil? and not mapping.topic_id.nil?
+      if !mapping.synapse_id.nil? && !mapping.topic_id.nil?
         puts "Mapping id=#{mapping.id} has both topic and synapse ids, skipping!"
         next
       end
 
-      unless mapping.synapse_id.nil?
-        mapping.mappable = Synapse.find_by(id: mapping.synapse_id)
-      else
+      if mapping.synapse_id.nil?
         mapping.mappable = Topic.find_by(id: mapping.topic_id)
+      else
+        mapping.mappable = Synapse.find_by(id: mapping.synapse_id)
       end
-      
+
       if mapping.mappable.nil?
         mapping.delete
       else

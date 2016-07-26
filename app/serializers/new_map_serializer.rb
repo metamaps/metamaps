@@ -13,5 +13,4 @@ class NewMapSerializer < ActiveModel::Serializer
   has_many :mappings, serializer: NewMappingSerializer
   has_many :contributors, root: :users, serializer: NewUserSerializer
   has_many :collaborators, root: :users, serializer: NewUserSerializer
-
 end

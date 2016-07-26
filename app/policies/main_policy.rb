@@ -1,5 +1,5 @@
 class MainPolicy < ApplicationPolicy
-  def initialize(user, record)
+  def initialize(user, _record)
     @user = user
     @record = nil
   end

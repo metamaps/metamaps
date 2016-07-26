@@ -12,4 +12,4 @@ class NewUserSerializer < ActiveModel::Serializer
   def is_admin
     object.admin
   end
-end 
+end

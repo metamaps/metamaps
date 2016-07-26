@@ -10,5 +10,4 @@ class NewTopicSerializer < ActiveModel::Serializer
 
   has_one :user, serializer: NewUserSerializer
   has_one :metacode, serializer: NewMetacodeSerializer
-
 end

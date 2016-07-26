@@ -1,5 +1,4 @@
 module MapsHelper
-
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_map_array_json(maps)
     temp = []
@@ -13,16 +12,16 @@ module MapsHelper
       map['topicCount'] = m.topics.count
       map['synapseCount'] = m.synapses.count
       map['contributorCount'] = m.contributors.count
-      map['rtype'] = "map"
-      
+      map['rtype'] = 'map'
+
       contributorTip = ''
       firstContributorImage = 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
-      if m.contributors.count > 0 
+      if m.contributors.count > 0
         firstContributorImage = m.contributors[0].image.url(:thirtytwo)
-        m.contributors.each_with_index do |c, index|
+        m.contributors.each_with_index do |c, _index|
           userImage = c.image.url(:thirtytwo)
           name = c.name
-          contributorTip += '<li> <img class="tipUserImage" width="25" height="25" src=' + userImage + ' />' + '<span>' + name + '</span> </li>'         
+          contributorTip += '<li> <img class="tipUserImage" width="25" height="25" src=' + userImage + ' />' + '<span>' + name + '</span> </li>'
         end
       end
       map['contributorTip'] = contributorTip
@@ -30,7 +29,6 @@ module MapsHelper
 
       temp.push map
     end
-    return temp
+    temp
   end
-
 end

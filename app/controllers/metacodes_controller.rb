@@ -1,19 +1,19 @@
 class MetacodesController < ApplicationController
   before_action :require_admin, except: [:index, :show]
-    
+
   # GET /metacodes
   # GET /metacodes.json
   def index
-    @metacodes = Metacode.order("name").all
+    @metacodes = Metacode.order('name').all
 
     respond_to do |format|
-      format.html {
+      format.html do
         unless authenticated? && user.admin
-          redirect_to root_url, notice: "You need to be an admin for that."
+          redirect_to root_url, notice: 'You need to be an admin for that.'
           return false
         end
         render :index
-      }
+      end
       format.json { render json: @metacodes }
     end
   end

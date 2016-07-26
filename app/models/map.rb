@@ -1,11 +1,10 @@
 class Map < ActiveRecord::Base
-
   belongs_to :user
 
   has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
   has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
-  has_many :topics, through: :topicmappings, source: :mappable, source_type: "Topic"
-  has_many :synapses, through: :synapsemappings, source: :mappable, source_type: "Synapse"
+  has_many :topics, through: :topicmappings, source: :mappable, source_type: 'Topic'
+  has_many :synapses, through: :synapsemappings, source: :mappable, source_type: 'Synapse'
   has_many :messages, as: :resource, dependent: :destroy
 
   has_many :user_maps, dependent: :destroy
@@ -15,11 +14,11 @@ class Map < ActiveRecord::Base
   has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
 
   # This method associates the attribute ":image" with a file attachment
-  has_attached_file :screenshot, :styles => {
-   :thumb => ['188x126#', :png]
-   #:full => ['940x630#', :png]
+  has_attached_file :screenshot, styles: {
+    thumb: ['188x126#', :png]
+    #:full => ['940x630#', :png]
   },
-  :default_url => 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
+                                 default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }
@@ -27,29 +26,29 @@ class Map < ActiveRecord::Base
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
 
   # Validate the attached image is image/jpg, image/png, etc
-  validates_attachment_content_type :screenshot, :content_type => /\Aimage\/.*\Z/
+  validates_attachment_content_type :screenshot, content_type: /\Aimage\/.*\Z/
 
   def mappings
-  	topicmappings + synapsemappings
+    topicmappings + synapsemappings
   end
 
   def mk_permission
     Perm.short(permission)
   end
 
-  #return an array of the contributors to the map
+  # return an array of the contributors to the map
   def contributors
     contributors = []
 
-    self.mappings.each do |m|
-      contributors.push(m.user) if !contributors.include?(m.user)
+    mappings.each do |m|
+      contributors.push(m.user) unless contributors.include?(m.user)
     end
 
-    return contributors
+    contributors
   end
 
   def editors
-    collaborators + [self.user]
+    collaborators + [user]
   end
 
   def topic_count
@@ -60,15 +59,13 @@ class Map < ActiveRecord::Base
     synapses.length
   end
 
-  def user_name
-    user.name
-  end
+  delegate :name, to: :user, prefix: true
 
   def user_image
     user.image.url
   end
 
-  def contributor_count 
+  def contributor_count
     contributors.length
   end
 
@@ -81,15 +78,15 @@ class Map < ActiveRecord::Base
   end
 
   def created_at_str
-    created_at.strftime("%m/%d/%Y")
+    created_at.strftime('%m/%d/%Y')
   end
 
   def updated_at_str
-    updated_at.strftime("%m/%d/%Y")
+    updated_at.strftime('%m/%d/%Y')
   end
 
-  def as_json(options={})
-    json = super(:methods =>[:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], :except => [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
+  def as_json(_options = {})
+    json = super(methods: [:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
     json[:created_at_clean] = created_at_str
     json[:updated_at_clean] = updated_at_str
     json
@@ -103,11 +100,10 @@ class Map < ActiveRecord::Base
       attr_accessor :content_type, :original_filename
     end
 
-    data.content_type = "image/png"
-    data.original_filename = File.basename('map-' + self.id.to_s + '-screenshot.png')
+    data.content_type = 'image/png'
+    data.original_filename = File.basename('map-' + id.to_s + '-screenshot.png')
 
     self.screenshot = data
-    self.save
+    save
   end
-
 end

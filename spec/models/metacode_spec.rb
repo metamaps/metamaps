@@ -5,10 +5,14 @@ RSpec.describe Metacode, type: :model do
   it { is_expected.to have_many :metacode_sets }
 
   context 'BOTH aws_icon and manual_icon' do
-    let(:icon) { File.open(Rails.root.join('app', 'assets', 'images', 
-                                           'user.png')) }
-    let(:metacode) { build(:metacode, aws_icon: icon,
-                           manual_icon: 'https://metamaps.cc/assets/user.png') }
+    let(:icon) do
+      File.open(Rails.root.join('app', 'assets', 'images',
+                                'user.png'))
+    end
+    let(:metacode) do
+      build(:metacode, aws_icon: icon,
+                       manual_icon: 'https://metamaps.cc/assets/user.png')
+    end
     it 'raises a validation error' do
       expect { metacode.save! }.to raise_error ActiveRecord::RecordInvalid
     end

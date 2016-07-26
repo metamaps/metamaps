@@ -1,35 +1,34 @@
 class Perm
   # e.g. Perm::ISSIONS
-  ISSIONS = [:commons, :public, :private]
+  ISSIONS = [:commons, :public, :private].freeze
 
   class << self
-  
     def short(permission)
       case permission
       when :commons
-        "co"
+        'co'
       when :public
-        "pu"
+        'pu'
       when :private
-        "pr"
+        'pr'
       else
-        fail "Invalid permission"
+        raise 'Invalid permission'
       end
     end
 
     def long(perm)
       case perm
-      when "co"
+      when 'co'
         :commons
-      when "pu"
+      when 'pu'
         :public
-      when "pr"
+      when 'pr'
         :private
       else
-        fail "Invalid short permission"
+        raise 'Invalid short permission'
       end
     end
-  
+
     def valid?(permission)
       ISSIONS.include? permission
     end

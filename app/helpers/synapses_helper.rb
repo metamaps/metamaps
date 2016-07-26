@@ -1,6 +1,4 @@
 module SynapsesHelper
-
-  
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_synapse_generic_json(unique)
     temp = []
@@ -8,29 +6,28 @@ module SynapsesHelper
       synapse = {}
       synapse['label'] = s.desc
       synapse['value'] = s.desc
-      
+
       temp.push synapse
     end
-    return temp
+    temp
   end
-  
+
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_synapse_array_json(synapses)
     temp = []
     synapses.each do |s|
       synapse = {}
       synapse['id'] = s.id
-      synapse['label'] = s.desc == nil || s.desc == "" ? "(no description)" : s.desc
+      synapse['label'] = s.desc.nil? || s.desc == '' ? '(no description)' : s.desc
       synapse['value'] = s.desc
       synapse['permission'] = s.permission
       synapse['mapCount'] = s.maps.count
       synapse['originator'] = s.user.name
       synapse['originatorImage'] = s.user.image.url(:thirtytwo)
-      synapse['rtype'] = "synapse"
-      
+      synapse['rtype'] = 'synapse'
+
       temp.push synapse
     end
-    return temp
+    temp
   end
-
 end

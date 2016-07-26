@@ -11,7 +11,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
 
   def create?
@@ -34,7 +34,7 @@ class ApplicationPolicy
     false
   end
 
-  # TODO update this function to enable some flag in the interface
+  # TODO: update this function to enable some flag in the interface
   # so that admins usually can't do super admin stuff unless they
   # explicitly say they want to (E.g. seeing/editing/deleting private
   # maps - they should be able to, but not by accident)

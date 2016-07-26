@@ -24,6 +24,7 @@ class MapExportService < Struct.new(:user, :map)
   def topic_headings
     [:id, :name, :metacode, :x, :y, :description, :link, :user, :permission]
   end
+
   def synapse_headings
     [:topic1, :topic2, :category, :description, :user, :permission]
   end
@@ -64,7 +65,7 @@ class MapExportService < Struct.new(:user, :map)
 
   def to_spreadsheet
     spreadsheet = []
-    spreadsheet << ["Topics"]
+    spreadsheet << ['Topics']
     spreadsheet << topic_headings.map(&:capitalize)
     exportable_topics.each do |topics|
       # convert exportable_topics into an array of arrays
@@ -72,7 +73,7 @@ class MapExportService < Struct.new(:user, :map)
     end
 
     spreadsheet << []
-    spreadsheet << ["Synapses"]
+    spreadsheet << ['Synapses']
     spreadsheet << synapse_headings.map(&:capitalize)
     exportable_synapses.each do |synapse|
       # convert exportable_synapses into an array of arrays

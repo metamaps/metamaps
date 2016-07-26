@@ -1,7 +1,7 @@
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      visible = ['public', 'commons']
+      visible = %w(public commons)
       permission = 'maps.permission IN (?)'
       if user
         shared_maps = user.shared_maps.map(&:id)

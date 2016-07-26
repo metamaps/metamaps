@@ -7,7 +7,7 @@ Bundler.require(*Rails.groups)
 
 module Metamaps
   class Application < Rails::Application
-    config.active_job.queue_adapter = :delayed_job    
+    config.active_job.queue_adapter = :delayed_job
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -31,12 +31,12 @@ module Metamaps
     # config.i18n.default_locale = :de
 
     # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
 
     config.to_prepare do
-      Doorkeeper::ApplicationsController.layout "doorkeeper"
-      Doorkeeper::AuthorizationsController.layout "doorkeeper"
-      Doorkeeper::AuthorizedApplicationsController.layout "doorkeeper"
+      Doorkeeper::ApplicationsController.layout 'doorkeeper'
+      Doorkeeper::AuthorizationsController.layout 'doorkeeper'
+      Doorkeeper::AuthorizedApplicationsController.layout 'doorkeeper'
       Doorkeeper::ApplicationController.helper ApplicationHelper
     end
 
@@ -50,7 +50,7 @@ module Metamaps
 
     # Enable the asset pipeline
     config.assets.initialize_on_precompile = false
-      
+
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '2.0'
 
@@ -60,6 +60,6 @@ module Metamaps
     config.active_record.raise_in_transactional_callbacks = true
 
     # pundit errors return 403 FORBIDDEN
-    config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
+    config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
   end
 end

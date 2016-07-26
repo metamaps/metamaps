@@ -35,9 +35,7 @@ class API::RestfulController < ActionController::Base
   def token_user
     token = params[:access_token]
     access_token = Token.find_by_token(token)
-    if access_token
-       @token_user ||= access_token.user
-    end
+    @token_user ||= access_token.user if access_token
   end
 
   def doorkeeper_user
@@ -49,5 +47,4 @@ class API::RestfulController < ActionController::Base
   def permitted_params
     @permitted_params ||= PermittedParams.new(params)
   end
-
 end

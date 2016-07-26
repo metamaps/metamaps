@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
-  KINDS = %w[user_present_on_map conversation_started_on_map topic_added_to_map synapse_added_to_map]
+  KINDS = %w(user_present_on_map conversation_started_on_map topic_added_to_map synapse_added_to_map).freeze
 
-  #has_many :notifications, dependent: :destroy
+  # has_many :notifications, dependent: :destroy
   belongs_to :eventable, polymorphic: true
   belongs_to :map
   belongs_to :user
@@ -10,22 +10,21 @@ class Event < ActiveRecord::Base
 
   after_create :notify_webhooks!, if: :map
 
-  validates_inclusion_of :kind, :in => KINDS
-  validates_presence_of :eventable
+  validates :kind, inclusion: { in: KINDS }
+  validates :eventable, presence: true
 
-  #def notify!(user)
+  # def notify!(user)
   #  notifications.create!(user: user)
-  #end
+  # end
 
   def belongs_to?(this_user)
-    self.user_id == this_user.id
+    user_id == this_user.id
   end
 
   def notify_webhooks!
-    #group = self.discussion.group
-    self.map.webhooks.each { |webhook| WebhookService.publish! webhook: webhook, event: self }
-    #group.webhooks.each           { |webhook| WebhookService.publish! webhook: webhook, event: self }
+    # group = self.discussion.group
+    map.webhooks.each { |webhook| WebhookService.publish! webhook: webhook, event: self }
+    # group.webhooks.each           { |webhook| WebhookService.publish! webhook: webhook, event: self }
   end
   handle_asynchronously :notify_webhooks!
-
 end

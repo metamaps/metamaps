@@ -1,8 +1,8 @@
 require 'dotenv/tasks'
 
 namespace :perms do
-  desc "Update the Unix permissions on the public directory"
-  task :fix => :environment do
+  desc 'Update the Unix permissions on the public directory'
+  task fix: :environment do
     # e.g. rake perms:fix user=mmstaging group=mmstaging
     # e.g. rake perms:fix group=www-data #probably don't need this one
     # e.g. rake perms:fix

@@ -4,9 +4,9 @@ class SynapsesController < ApplicationController
   before_action :require_user, only: [:create, :update, :destroy]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
-    
+
   respond_to :json
-  
+
   # GET /synapses/1.json
   def show
     @synapse = Synapse.find(params[:id])
@@ -14,12 +14,12 @@ class SynapsesController < ApplicationController
 
     render json: @synapse
   end
-  
+
   # POST /synapses
   # POST /synapses.json
   def create
     @synapse = Synapse.new(synapse_params)
-    @synapse.desc = "" if @synapse.desc.nil?
+    @synapse.desc = '' if @synapse.desc.nil?
     authorize @synapse
 
     respond_to do |format|
@@ -30,12 +30,12 @@ class SynapsesController < ApplicationController
       end
     end
   end
-  
+
   # PUT /synapses/1
   # PUT /synapses/1.json
   def update
     @synapse = Synapse.find(params[:id])
-    @synapse.desc = "" if @synapse.desc.nil?
+    @synapse.desc = '' if @synapse.desc.nil?
     authorize @synapse
 
     respond_to do |format|
@@ -46,13 +46,13 @@ class SynapsesController < ApplicationController
       end
     end
   end
-  
+
   # DELETE synapses/:id
   def destroy
     @synapse = Synapse.find(params[:id])
     authorize @synapse
     @synapse.destroy
-      
+
     respond_to do |format|
       format.json { head :no_content }
     end

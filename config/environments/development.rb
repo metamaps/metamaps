@@ -12,7 +12,7 @@ Metamaps::Application.configure do
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  
+
   # S3 file storage
   config.paperclip_defaults = {
     storage: :s3,
@@ -23,7 +23,7 @@ Metamaps::Application.configure do
     },
     s3_protocol: 'https'
   }
-    
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:       ENV['SMTP_SERVER'],
@@ -33,8 +33,9 @@ Metamaps::Application.configure do
     domain:        ENV['SMTP_DOMAIN'],
     authentication:       'plain',
     enable_starttls_auto: true,
-    openssl_verify_mode: 'none'    }
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+    openssl_verify_mode: 'none'
+  }
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 

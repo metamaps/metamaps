@@ -6,6 +6,7 @@ class Token < ActiveRecord::Base
   CHARS = 32
 
   private
+
   def assign_token
     self.token = generate_token
   end
@@ -13,10 +14,7 @@ class Token < ActiveRecord::Base
   def generate_token
     loop do
       candidate = SecureRandom.base64(CHARS).gsub(/\W/, '')
-      if candidate.size >= CHARS
-        return candidate[0...CHARS]
-      end
+      return candidate[0...CHARS] if candidate.size >= CHARS
     end
   end
-
 end

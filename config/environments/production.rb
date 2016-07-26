@@ -19,11 +19,10 @@ Metamaps::Application.configure do
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
-    
 
   # S3 file storage
   config.paperclip_defaults = {
-    :storage => :s3,
+    storage: :s3,
     s3_credentials: {
       bucket: ENV['S3_BUCKET_NAME'],
       access_key_id: ENV['AWS_ACCESS_KEY_ID'],
@@ -31,18 +30,19 @@ Metamaps::Application.configure do
     },
     s3_protocol: 'https'
   }
-  
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:       ENV['SMTP_SERVER'],
     port:          ENV['SMTP_PORT'],
     user_name:     ENV['SMTP_USERNAME'],
     password:      ENV['SMTP_PASSWORD'],
-    #domain:        ENV['SMTP_DOMAIN']
+    # domain:        ENV['SMTP_DOMAIN']
     authentication:       'plain',
     enable_starttls_auto: true,
-    openssl_verify_mode: 'none'    }
-  config.action_mailer.default_url_options = { :host => ENV['MAILER_DEFAULT_URL'] }
+    openssl_verify_mode: 'none'
+  }
+  config.action_mailer.default_url_options = { host: ENV['MAILER_DEFAULT_URL'] }
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
@@ -78,7 +78,7 @@ Metamaps::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  #config.assets.precompile += %w( )
+  # config.assets.precompile += %w( )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false

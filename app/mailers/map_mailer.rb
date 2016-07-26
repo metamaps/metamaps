@@ -1,5 +1,5 @@
 class MapMailer < ApplicationMailer
-  default from: "team@metamaps.cc"
+  default from: 'team@metamaps.cc'
 
   def invite_to_edit_email(map, inviter, invitee)
     @inviter = inviter

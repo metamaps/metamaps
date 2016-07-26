@@ -5,7 +5,7 @@ gem 'rails'
 
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'aws-sdk', '< 2.0'
-gem 'best_in_place' #in-place editing
+gem 'best_in_place' # in-place editing
 gem 'delayed_job', '~> 4.0.2'
 gem 'delayed_job_active_record', '~> 4.0.1'
 gem 'devise'
@@ -40,7 +40,7 @@ group :assets do
 end
 
 group :production do
- gem 'rails_12factor'
+  gem 'rails_12factor'
 end
 
 group :test do
@@ -59,4 +59,5 @@ group :development, :test do
   gem 'pry-rails'
   gem 'quiet_assets'
   gem 'tunemygc'
+  gem 'rubocop'
 end
