@@ -44,5 +44,5 @@
 //= require ./src/Metamaps.Import
 //= require ./src/Metamaps.JIT
 //= require_directory ./shims
-//= require_directory ./require
-//= require_directory ./famous
+// require_directory ./require
+// require_directory ./famous

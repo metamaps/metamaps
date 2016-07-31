@@ -99,6 +99,33 @@
     background-size: contain;
     height: 399px;
   }
+
+  .slack {
+    background: url(<%= asset_path 'slack.png' %>) no-repeat top right;
+    background-size: contain;
+    height: 399px;
+  }
+
+  h3 {
+    font-family: helvetica, sans-serif;
+    font-size: 30px;
+    text-align: center;
+    color: #565656;
+  }
+
+  .junto h3 {
+    width: 500px;
+  }
+
+  .slack h3 {
+    width: 400px;
+  }
+
+  .rich_media h3 {
+    width: 500px;
+    float: right;
+  }
+
 </style>
 
 <body>
@@ -110,20 +137,24 @@
       <button class="button--purple" href="/login">Log In</button>
     </div>
     <div class="section junto">
-    
+     <h3>capture all the ideas coming up in live video conversations</h3> 
     </div>
+    <h3>see for yourself how things are connected<br> and how connected things are</h3> 
     <div class="section connected">
-    
     </div>
     <div class="section rich_media">
-
+      <h3>attach links, images, audio, or video to your thoughts</h3> 
     </div>
+    <h3>zoom out and see the big picture</h3> 
     <div class="section graph">
-
     </div>
+    <div class="section slack">
+      <h3>use @metamapper (our slackbot) to capture thoughts from slack on your phone, web, or desktop</h3> 
+    </div>
+    <h3>want metamaps to do something different? we're open source, fork it.</h3> 
     <div class="section code">
-
     </div>
+    <h3>we won't tell you what to do with metamaps, get creative :)</h3>
   </div>
 </body>
 

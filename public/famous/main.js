@@ -340,24 +340,24 @@ Metamaps.Famous.build = function () {
     // LOGO
     f.logo = {};
     f.logo.surf = new Surface({
-        size: [258, 30],
+        size: [30, 30],
         content: templates.logoContent,
         classes: ['footer']
     });
 
     f.logo.mod = new Modifier({
-        origin: [0.5, 0],
-        transform: Transform.translate(0, -40, 0)
+        origin: [0, 1],
+        transform: Transform.translate(-40, 40, 0)
     });
     f.logo.show = function () {
         f.logo.mod.setTransform(
-            Transform.translate(0, 10, 0), 
+            Transform.translate(20, -20, 0), 
             { duration: 300, curve: 'easeOut' }
         );
     };
     f.logo.hide = function () {
         f.logo.mod.setTransform(
-            Transform.translate(0, -40, 0), 
+            Transform.translate(-40, 40, 0), 
             { duration: 300, curve: 'easeIn' }
         );
     };

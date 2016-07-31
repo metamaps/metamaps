@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     
 var t = {};
 
-t.logoContent = '<div class="logo">METAMAPS</div>';
+t.logoContent = '<div class="logo">M</div>';
 
 /* logged out explore maps bars */
   t.activeContent = '<a href="/explore/active" class="active activeMaps exploreMapsButton"><div class="exploreMapsIcon"></div>Recently Active Maps</a>';
