@@ -3,7 +3,7 @@ const chai = require('chai')
 const expect = chai.expect
 
 const Metamaps = {}
-require('../src/Metamaps.Import')
+require('../../app/assets/javascripts/src/Metamaps.Import')
 
 describe('Metamaps.Import.js', function () {
   it('has a topic whitelist', function () {

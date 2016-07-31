@@ -9,6 +9,8 @@ public/assets
 public/metamaps_mobile
 vendor/
 node_modules
+npm-debug.log
+app/assets/javascripts/webpacked
 
 #secrets and config
 .env
