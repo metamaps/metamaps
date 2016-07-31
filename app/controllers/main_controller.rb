@@ -153,18 +153,7 @@ class MainController < ApplicationController
     if term && !term.empty?
       @synapses = policy_scope(Synapse).where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
 
-      # remove any duplicate synapse types that just differ by
-      # leading or trailing whitespaces
-      collectedDesc = []
-      @synapses.to_a.uniq(&:desc).delete_if do |s|
-        desc = s.desc.nil? || s.desc == '' ? '' : s.desc.strip
-        if collectedDesc.index(desc).nil?
-          collectedDesc.push(desc)
-          false # return this value
-        else
-          true # return this value
-        end
-      end
+      @synapses = @synapses.uniq(&:desc)
     elsif topic1id && !topic1id.empty?
       @one = policy_scope(Synapse).where('node1_id = ? AND node2_id = ?', topic1id, topic2id)
       @two = policy_scope(Synapse).where('node2_id = ? AND node1_id = ?', topic1id, topic2id)

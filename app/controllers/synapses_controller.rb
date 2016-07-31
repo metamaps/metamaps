@@ -20,6 +20,7 @@ class SynapsesController < ApplicationController
   def create
     @synapse = Synapse.new(synapse_params)
     @synapse.desc = '' if @synapse.desc.nil?
+    @synapse.desc.strip! # no trailing/leading whitespace
     authorize @synapse
 
     respond_to do |format|
