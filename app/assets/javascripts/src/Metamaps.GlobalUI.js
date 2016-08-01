@@ -1,4 +1,4 @@
-var Metamaps = {}; // this variable declaration defines a Javascript object that will contain all the variables and functions used by us, broken down into 'sub-modules' that look something like this
+var Metamaps = window.Metamaps || {}; // this variable declaration defines a Javascript object that will contain all the variables and functions used by us, broken down into 'sub-modules' that look something like this
 /*
 
 * unless you are on a page with the Javascript InfoVis Toolkit (Topic or Map) the only section in the metamaps

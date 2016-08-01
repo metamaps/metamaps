@@ -1,4 +1,4 @@
-var Metamaps = Metamaps || {}
+/* global Metamaps, $ */
 
 Metamaps.Header = {
   init: function () {
