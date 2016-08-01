@@ -25,11 +25,13 @@
     "babel-preset-react": "^6.11.1",
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
-    "path": "^0.12.7",
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "backbone": "^1.0.0",
     "react": "^15.3.0",
-    "react-dom": "^15.3.0"
+    "react-dom": "^15.3.0",
+    "requirejs": "^2.1.1",
+    "underscore": "^1.4.4"
   }
 }

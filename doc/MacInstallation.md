@@ -15,9 +15,10 @@ Now install homebrew.
 
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-Then install nodejs
+Then install nodejs and frontend code
 
     brew install nodejs
+    (cd frontend && npm install && npm run build)
 
 And postgresql:
 

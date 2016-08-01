@@ -6,7 +6,7 @@ const config = module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
         loaders: [
           "babel-loader?cacheDirectory"

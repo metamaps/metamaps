@@ -55,12 +55,23 @@ Run this in the metamaps directory, still as metamaps:
     # Set up environment variables in your current session
     source .env
     export RAILS_ENV=production
+    export NODE_ENV=production
 
     # create, load schema, seed
     rake db:setup
 
-Now set up nginx - config stored on Linode, including relevant environment 
-variables.
+#### Install js frontend code
+
+    sudo aptitude install nodejs npm
+    sudo ln -s /usr/bin/nodejs /usr/bin/node
+    cd frontend
+    npm install
+    npm run build
+
+#### Nginx and SSL
+
+Now set up nginx - config stored on Linode, including relevant 
+environment variables.
 
 Get an SSL certificate and encrypt it for the realtime video.
 
@@ -75,8 +86,6 @@ server to see what problems show up:
 
 #### Realtime server:
 
-    sudo aptitude install nodejs npm
-    sudo ln -s /usr/bin/nodejs /usr/bin/node
     sudo npm install -g forever
     (crontab -u metamaps -l 2>/dev/null; echo "@reboot $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
 

@@ -50,6 +50,12 @@ Install the specific version of ruby needed this will take some time
 
     rvm install $(cat metamaps/.ruby-version)
 
+While that is running, you can open another terminal and install the npm frontend code
+
+    cd frontend
+    npm install
+    npm run build
+
 Now we also need to copy .example-env to a new file named .env. Review the
 configuration in here to see if you need any changes.
 

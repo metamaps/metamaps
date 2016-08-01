@@ -13,8 +13,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require ./orderedLibraries/underscore
-//= require ./orderedLibraries/backbone
+//= require ./webpacked/metamaps.bundle
 //= require_directory ./lib
 //= require ./src/Metamaps.GlobalUI
 //= require ./src/Metamaps.Router
