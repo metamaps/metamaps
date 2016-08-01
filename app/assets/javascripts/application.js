@@ -42,7 +42,5 @@
 //= require ./src/Metamaps.Mapper
 //= require ./src/Metamaps.Admin
 //= require ./src/Metamaps.Import
+//= require ./src/Metamaps.Header
 //= require ./src/Metamaps.JIT
-//= require_directory ./shims
-// require_directory ./require
-// require_directory ./famous

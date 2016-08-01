@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Backbone from 'backbone'
 import _ from 'underscore'
-import ExploreHeader from './components/ExploreHeader'
+import Header from './components/Header.js'
 
 // this is optional really, if we import components directly React will be
 // in the bundle, so we won't need a global reference
@@ -14,9 +14,5 @@ window._ = _
 
 window.Metamaps = window.Metamaps || {}
 window.Metamaps.ReactComponents = {
-  ExploreHeader
+  Header
 }
-
-ReactDOM.render(
-  <ExploreHeader signedIn={true} active="featured" />, document.getElementById('exploreMapsHeader')
-);

@@ -1,8 +1,8 @@
 <script type="text/javascript">
   Metamaps.Apps = {
     init: function () {
-      Metamaps.Famous.explore.setApps('registered');
-      Metamaps.Famous.explore.show();
+      Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, 'registered');
+      Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
       Metamaps.GlobalUI.Search.open();
       Metamaps.GlobalUI.Search.lock();
     }
