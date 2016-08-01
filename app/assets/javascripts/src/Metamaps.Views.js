@@ -80,24 +80,8 @@ Metamaps.Views.init = function () {
         that.el.appendChild(view.render().el)
       })
       this.$el.append('<div class="clearfloat"></div>')
-      var m = Metamaps.Famous.maps.surf
-      m.setContent(this.el)
-
-      var updateHeight = function () {
-        var height = $(that.el).height() + 32 + 56
-        m.setSize([undefined, height])
-        Metamaps.Famous.maps.lock = false
-        if (cb) cb()
-      }
-
-      if (!Metamaps.Views.initialized) {
-        m.deploy(m._currTarget)
-        Metamaps.Views.initialized = true
-        setTimeout(updateHeight, 100)
-      } else {
-        setTimeout(updateHeight, 100)
-      }
-
+      $('#exploreMaps').empty().html(this.el) 
+      if (cb) cb()
       Metamaps.Loading.hide()
     },
     handleSuccess: function (cb) {

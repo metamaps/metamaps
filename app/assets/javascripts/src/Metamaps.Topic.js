@@ -291,7 +291,7 @@ Metamaps.Topic = {
     }
 
     // hide the 'double-click to add a topic' message
-    Metamaps.Famous.viz.hideInstructions()
+    Metamaps.GlobalUI.hideDiv('#instructions')
 
     $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
 

@@ -2680,10 +2680,7 @@ var Canvas;
           opt.injectInto:opt.injectInto.id,
           type = opt.type,
           idLabel = id + "-label", 
-          // ORIGINAL CODE wrapper = $(id),
-          // START METAMAPS CODE
-          //wrapper = Metamaps.Famous.viz.surf,
-          // END METAMAPS CODE
+          wrapper = $(id),
           width = opt.width, // || wrapper.offsetWidth,
           height = opt.height; // || wrapper.offsetHeight;
       this.id = id;
@@ -2730,15 +2727,7 @@ var Canvas;
         }
       }
       this.element.appendChild(this.labelContainer);
-
-      // START METAMAPS CODE
-      var m = Metamaps.Famous.viz.surf;
-      m.setContent(this.element);
-      m.deploy(m._currTarget);
-
-      // END METAMAPS CODE
-      // ORIGINAL CODE wrapper.appendChild(this.element);
-
+      wrapper.appendChild(this.element);
 
       //Update canvas position when the page is scrolled.
       var timer = null, that = this;

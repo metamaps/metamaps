@@ -9,11 +9,7 @@
 
 <body class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
 
-    <% if devise_error_messages? %>
-      <p id="toast"><%= devise_error_messages! %></p>
-    <% elsif notice %>
-      <p id="toast"><%= notice %></p>
-    <% end %>
+    
 
     <%= content_tag :div, class: "main" do %>
 
@@ -48,7 +44,25 @@
             <% end %>
             <%= render :partial => 'layouts/lowermapelements' %>
 
+            <div id="exploreMaps"></div>
             <div id="exploreMapsHeader"></div>
+            <div id="infovis"></div>
+            <div id="instructions">
+              <div class="addTopic">
+                Double-click to<br>add a topic!
+              </div>
+              <div class="tabKey">
+                Use Tab & Shift+Tab to select a metacode
+              </div>
+              <div class="enterKey">
+                Press Enter to add the topic
+              </div>
+            </div>
+            <% if devise_error_messages? %>
+              <p id="toast"><%= devise_error_messages! %></p>
+            <% elsif notice %>
+              <p id="toast"><%= notice %></p>
+            <% end %>       
             <div id="loading"></div>
         </div>
 

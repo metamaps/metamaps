@@ -1,1 +1,1 @@
-Rails.application.config.assets.precompile += %w( src/react/app.js )
+Rails.application.config.assets.precompile += %w( webpacked/metamaps.bundle.js )

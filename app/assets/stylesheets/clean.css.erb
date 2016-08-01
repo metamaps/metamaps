@@ -24,17 +24,8 @@
     backface-visibility: visible !important;
 }
 
-#famousOverlay {
-  position:absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  margin:0;
-  z-index: 0;
-}
-
 #yield {
-    display:none;
+
 }
 
 #toast {
@@ -68,6 +59,7 @@
 /* loading */
 
 #loading {
+  display: none;
 	width: 28px;
 	height: 28px;
 	position: fixed;
@@ -602,11 +594,17 @@
 
 /* end mapControls */
 
-
-
 /* explore maps */
 
+#exploreMaps {
+  display: none;
+  padding: 110px 5% 40px 5%;
+  position: absolute;
+  width: 90%;
+}
+
 #exploreMapsHeader {
+  display: none;
   position: absolute;
   width: 100%;
 }
@@ -712,6 +710,25 @@
 
 /* end explore maps */
 
+/* instructions */
+
+#instructions {
+  width: 220px;
+  height: 80px;
+  font-family: 'din-regular', helvetica, sans-serif;
+  font-size: 32px;
+  display: none;
+  text-align: center;
+  color: #999999;
+  z-index: 0;
+  top: 50%;
+  position: absolute;
+  left: 50%;
+  margin-top: -40px;
+  margin-left: -110px;
+}
+
+/* end instructions */
 
 /* toast */
 
