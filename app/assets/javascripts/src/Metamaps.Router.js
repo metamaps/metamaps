@@ -46,7 +46,7 @@
       if (Metamaps.Active.Mapper) {
         Metamaps.GlobalUI.hideDiv('#yield')
 
-        //Metamaps.Famous.explore.set('active')
+        Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, 'active')
         //Metamaps.Famous.maps.resetScroll() // sets the scroll back to the top
         Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
         Metamaps.GlobalUI.showDiv('#exploreMaps')
@@ -147,8 +147,11 @@
       Metamaps.GlobalUI.Search.lock()
       Metamaps.GlobalUI.showDiv('#exploreMaps')
       Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
-      // Metamaps.Famous.maps.resetScroll() // sets the scroll back to the top
-      //Metamaps.Famous.explore.set(section, id)
+      // Metamaps.Famous.maps.resetScroll() // sets scroll back to top
+      if (id) {
+        Metamaps.Header.fetchUserThenchangeSection(!!Metamaps.Active.Mapper, id)
+      }
+      else Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, section)
       Metamaps.GlobalUI.hideDiv('#yield')
       Metamaps.GlobalUI.hideDiv('#infovis')
       Metamaps.GlobalUI.hideDiv('#instructions')
