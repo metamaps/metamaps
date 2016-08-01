@@ -100,8 +100,8 @@ Put the following code into `/etc/init/metamaps_delayed_worker.conf`:
     chdir /home/metamaps/metamaps
     
     env HOME=/home/metamaps
-    env PATH="/usr/local/rvm/gems/ruby-2.1.3@metamaps/bin:/usr/local/rvm/gems/ruby-2.1.3@global/bin:/usr/local/rvm/rubies/ruby-2.1.3/bin:/usr/local/rvm/bin:/usr/local/bin:/usr/bin:/bin"
-    env GEM_PATH="/usr/local/rvm/gems/ruby-2.1.3@metamaps:/usr/local/rvm/gems/ruby-2.1.3@global"
+    env PATH="/usr/local/rvm/gems/ruby-2.3.0@metamaps/bin:/usr/local/rvm/gems/ruby-2.3.0@global/bin:/usr/local/rvm/rubies/ruby-2.3.0/bin:/usr/local/rvm/bin:/usr/local/bin:/usr/bin:/bin"
+    env GEM_PATH="/usr/local/rvm/gems/ruby-2.3.0@metamaps:/usr/local/rvm/gems/ruby-2.3.0@global"
     env RAILS_ENV="production"
     
     respawn

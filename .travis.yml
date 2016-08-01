@@ -5,7 +5,7 @@ cache:
   directories:
   - app/assets/javascripts/node_modules
 rvm:
-  - 2.1.3
+  - 2.3.0
 before_script:
   - echo "Rspec setup"
   - export RAILS_ENV=test

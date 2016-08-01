@@ -7,8 +7,8 @@ Some of these steps are pulled from http://www.moncefbelyamani.com/how-to-instal
 Install homebrew
 
     \curl -sSL https://get.rvm.io | bash -s stable --rails
-    rvm install 2.1.3 --with-gcc=clang
-    rvm use 2.1.3
+    rvm install 2.3.0 --with-gcc=clang
+    rvm use 2.3.0
     gem install lunchy 
 
 Now install homebrew. 

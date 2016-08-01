@@ -9,7 +9,7 @@ sudo apt-get install git curl -y
 
 # rvm and ruby
 su - vagrant -c 'curl -sSL https://rvm.io/mpapis.asc | gpg --import -'
-su - vagrant -c 'curl -sSL https://get.rvm.io | bash -s stable --ruby=2.1.3'
+su - vagrant -c 'curl -sSL https://get.rvm.io | bash -s stable --ruby=2.3.0'
 
 # install some other deps
 sudo apt-get install nodejs -y
