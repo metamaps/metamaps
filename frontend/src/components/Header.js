@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react'
 
 class Header extends Component {
   render = () => {
-    const signedIn = this.props.signedIn
-    const section = this.props.section
-    var activeClass = (title) => {
-      var forClass = "exploreMapsButton"
+    const { signedIn, section } = this.props
+
+    const activeClass = (title) => {
+      let forClass = "exploreMapsButton"
       forClass += " " + title + "Maps"
       if (title == "my" && section == "mine" ||
           title == section) forClass += " active"
