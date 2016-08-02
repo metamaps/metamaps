@@ -56,4 +56,11 @@ class Header extends Component {
   }
 }
 
+Header.propTypes = {
+  signedIn: PropTypes.bool.isRequired,
+  section: PropTypes.string.isRequired,
+  userAvatar: PropTypes.string,
+  userName: PropTypes.string
+}
+
 export default Header
