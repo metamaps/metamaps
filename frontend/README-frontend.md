@@ -1,10 +1,10 @@
-To setup javascript dev, `cd frontend` and then run
+To setup javascript dev, first run
 
     npm install
 
 to set up your testing environment. Then use
 
-    npm test
+    npm run test
 
 to see the results of testing the current javascript files.
 

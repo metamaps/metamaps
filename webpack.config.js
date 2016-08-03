@@ -15,10 +15,10 @@ const config = module.exports = {
     ]
   },
   entry: {
-    'metamaps.bundle': './src/index.js'
+    'metamaps.bundle': './frontend/src/index.js'
   },
   output: {
-    path: '../app/assets/javascripts/webpacked',
+    path: './app/assets/javascripts/webpacked',
     filename: '[name].js'
   }
 }

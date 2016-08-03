@@ -23,7 +23,8 @@ Now that you have the code, run these commands:
     source .env
 
     bundle install
-    (cd frontend && npm install && npm run build)
+    npm install
+    npm run build
     rake db:migrate
     rake assets:precompile
     rake perms:fix

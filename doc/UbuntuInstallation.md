@@ -50,9 +50,8 @@ Install the specific version of ruby needed this will take some time
 
     rvm install $(cat metamaps/.ruby-version)
 
-While that is running, you can open another terminal and install the npm frontend code
+While that is running, you can open another terminal and install the ES6 code
 
-    cd frontend
     npm install
     npm run build
 

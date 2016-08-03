@@ -60,11 +60,10 @@ Run this in the metamaps directory, still as metamaps:
     # create, load schema, seed
     rake db:setup
 
-#### Install js frontend code
+#### Install node & ES6 modules
 
     sudo aptitude install nodejs npm
     sudo ln -s /usr/bin/nodejs /usr/bin/node
-    cd frontend
     npm install
     npm run build
 

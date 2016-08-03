@@ -24,6 +24,7 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
     "chai": "^3.5.0",
+    "jquery": "^1.12.1",
     "mocha": "^2.4.5",
     "webpack": "^1.13.1"
   },

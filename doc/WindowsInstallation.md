@@ -20,12 +20,10 @@ Now you are ready to clone the Metamaps git repository:
 The third `bundle install` command downloads and installs the rubygem
 dependencies of Metamaps.
 
-You also need to install the Javascript frontend code from the nodejs repositories:
+You also need to install the ES6 code from the nodejs repositories:
 
-    cd frontend
     npm install
     npm run build
-    cd ..
 
 At this point you should be in C:\git\metamaps, or whatever equivalent
 directory you've chosen. The next step is to set up your database
