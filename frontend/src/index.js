@@ -8,6 +8,7 @@ import ExploreHeader from './components/ExploreHeader'
 // in the bundle, so we won't need a global reference
 window.React = React
 window.ReactDOM = ReactDOM
+Backbone.$ = window.$
 window.Backbone = Backbone
 window._ = _
 
