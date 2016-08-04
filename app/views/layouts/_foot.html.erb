@@ -7,7 +7,6 @@
     <% else %>
         Metamaps.Active.Mapper = null;
     <% end %>
-    Metamaps.Metacodes = <%= Metacode.all.to_json.html_safe %>;
 
     Metamaps.Loading = {
         loader: new CanvasLoader('loading'),
