@@ -20,6 +20,7 @@ Metamaps.Erb['icons/wildcard.png'] = '<%= asset_path('icons/wildcard.png') %>'
 Metamaps.Erb['topic_description_signifier.png'] = '<%= asset_path('topic_description_signifier.png') %>'
 Metamaps.Erb['topic_link_signifier.png'] = '<%= asset_path('topic_link_signifier.png') %>'
 Metamaps.Erb['synapse16.png'] = '<%= asset_path('synapse16.png') %>'
+Metamaps.Metacodes = <%= Metacode.all.to_json.gsub(%r[(icon.*?)(\"},)], '\1?purple=stupid\2').html_safe %>
 
 Metamaps.Settings = {
   embed: false, // indicates that the app is on a page that is optimized for embedding in iFrames on other web pages
