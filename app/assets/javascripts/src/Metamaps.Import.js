@@ -320,5 +320,3 @@ Metamaps.Import = {
     Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, true)
   }
 }
-
-module.exports = Metamaps.Import
