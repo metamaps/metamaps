@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
+import { objectWithoutProperties } from '../utils'
 
 const MapLink = props => {
-  const { show, linkText, href, linkClass, ...otherProps } = props
+  const { show, linkText, href, linkClass } = props
+  const otherProps = objectWithoutProperties(props, ['show', 'linkText', 'href', 'linkClass'])
   if (!show) {
     return null
   }
