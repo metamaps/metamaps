@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { objectWithoutProperties } from '../utils'
 
 const MapLink = props => {
-  const { show, linkText, href, linkClass } = props
-  const otherProps = objectWithoutProperties(props, ['show', 'linkText', 'href', 'linkClass'])
+  const { show, text, href, linkClass } = props
+  const otherProps = objectWithoutProperties(props, ['show', 'text', 'href', 'linkClass'])
   if (!show) {
     return null
   }
@@ -11,7 +11,7 @@ const MapLink = props => {
   return (
     <a { ...otherProps } href={href} className={linkClass}>
       <div className="exploreMapsIcon"></div>
-      {linkText}
+      {text}
     </a>
   )
 }
