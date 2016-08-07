@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "mocha frontend/test || echo 'Run `npm install` to setup testing'"
+    "test": "mocha frontend/test || (echo 'Run `npm install` to setup testing' && false)"
   },
   "repository": {
     "type": "git",

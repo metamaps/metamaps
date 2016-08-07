@@ -2,7 +2,7 @@
 const chai = require('chai')
 const expect = chai.expect
 
-const Metamaps = {}
+Metamaps = {}
 require('../../app/assets/javascripts/src/Metamaps.Import')
 
 describe('Metamaps.Import.js', function () {
