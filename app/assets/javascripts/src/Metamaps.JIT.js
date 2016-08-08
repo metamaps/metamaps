@@ -1335,7 +1335,7 @@ Metamaps.JIT = {
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
 
     if (Metamaps.Active.Topic) {
-      menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>'
+      menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic<div class="rc-keyboard">Ctrl+E</div></li>'
     }
     menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>'
     if (Metamaps.Active.Mapper) {
@@ -1360,10 +1360,10 @@ Metamaps.JIT = {
       // set up the get sibling menu as a "lazy load"
       // only fill in the submenu when they hover over the get siblings list item
       var siblingMenu = '<ul id="fetchSiblingList"> \
-                                <li class="fetchAll">All</li> \
+                                <li class="fetchAll">All<div class="rc-keyboard">Ctrl+R</div></li> \
                                 <li id="loadingSiblings"></li> \
                             </ul>'
-      menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Get siblings' + siblingMenu + '<div class="expandLi"></div></li>'
+      menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Reveal siblings' + siblingMenu + '<div class="expandLi"></div></li>'
     }
 
     menustring += '</ul>'
