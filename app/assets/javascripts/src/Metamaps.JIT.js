@@ -1082,7 +1082,18 @@ Metamaps.JIT = {
     }
     return 'nothing'; // case 4?
   }, //  handleSelectionBeforeDragging
+  getNodeXY: function(node) {
+    if (typeof node.pos.x === "number" && typeof node.pos.y === "number") {
+      return node.pos
+    } else if (typeof node.pos.theta === "number" && typeof node.pos.rho === "number") {
+      return new $jit.Polar(node.pos.theta, node.pos.rho).getc(true)
+    } else {
+      console.error('getNodeXY: unrecognized node pos format')
+      return {}
+    }
+  },
   selectWithBox: function (e) {
+    var self = this
     var sX = Metamaps.Mouse.boxStartCoordinates.x,
       sY = Metamaps.Mouse.boxStartCoordinates.y,
       eX = Metamaps.Mouse.boxEndCoordinates.x,
@@ -1094,11 +1105,17 @@ Metamaps.JIT = {
     }
 
     // select all nodes that are within the box
-    Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-      var x = n.pos.x,
-        y = n.pos.y
+    Metamaps.Visualize.mGraph.graph.eachNode(function(n) {
+      var pos = self.getNodeXY(n)
+      var x = pos.x,
+          y = pos.y
 
-      if ((sX < x && x < eX && sY < y && y < eY) || (sX > x && x > eX && sY > y && y > eY) || (sX > x && x > eX && sY < y && y < eY) || (sX < x && x < eX && sY > y && y > eY)) {
+      // depending on which way the person dragged the box, check that
+      // x and y are between the start and end values of the box
+      if ((sX < x && x < eX && sY < y && y < eY) ||
+          (sX > x && x > eX && sY > y && y > eY) ||
+          (sX > x && x > eX && sY < y && y < eY) ||
+          (sX < x && x < eX && sY > y && y > eY)) {
         if (e.shiftKey) {
           if (n.selected) {
             Metamaps.Control.deselectNode(n)
@@ -1123,10 +1140,12 @@ Metamaps.JIT = {
       }
     })
     edgesToToggle.forEach(function (edge) {
-      var fromNodeX = edge.nodeFrom.pos.x
-      var fromNodeY = -1 * edge.nodeFrom.pos.y
-      var toNodeX = edge.nodeTo.pos.x
-      var toNodeY = -1 * edge.nodeTo.pos.y
+      var fromNodePos = self.getNodeXY(edge.nodeFrom)
+      var fromNodeX = fromNodePos.x
+      var fromNodeY = -1 * fromNodePos.y
+      var toNodePos = self.getNodeXY(edge.nodeTo)
+      var toNodeX = toNodePos.x
+      var toNodeY = -1 * toNodePos.y
 
       var maxX = fromNodeX
       var maxY = fromNodeY
