@@ -111,6 +111,14 @@ Metamaps.Control = {
     }
   },
   removeSelectedNodes: function () { // refers to removing topics permanently from a map
+    if (Metamaps.Active.Topic) {
+      // hideNode will handle synapses as well
+      _.each(Metamaps.Selected.Nodes, function(node) {
+        Metamaps.Control.hideNode(node.id)
+        Metamaps.Topics.remove(node.id)
+      })
+      return
+    }
     if (!Metamaps.Active.Map) return
 
     var l = Metamaps.Selected.Nodes.length,
@@ -285,11 +293,12 @@ Metamaps.Control = {
     }
   },
   removeSelectedEdges: function () {
+    // Topic view is handled by removeSelectedNodes
+    if (!Metamaps.Active.Map) return
+
     var l = Metamaps.Selected.Edges.length,
       i,
       edge
-
-    if (!Metamaps.Active.Map) return
 
     var authorized = Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)
 

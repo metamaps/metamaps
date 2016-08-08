@@ -1332,6 +1332,7 @@ Metamaps.JIT = {
 
     if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Metamaps.Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
 
     if (Metamaps.Active.Topic) {
@@ -1416,7 +1417,7 @@ Metamaps.JIT = {
     }
 
     // remove the selected things from the map
-    if (authorized) {
+    if (Metamaps.Active.Topic || authorized) {
       $('.rc-remove').click(function () {
         $('.rightclickmenu').remove()
         Metamaps.Control.removeSelectedEdges()
@@ -1459,11 +1460,11 @@ Metamaps.JIT = {
     })
 
     // fetch relatives
-    var fetched = false
+    var fetch_sent = false
     $('.rc-siblings').hover(function () {
-      if (!fetched) {
+      if (!fetch_sent) {
         Metamaps.JIT.populateRightClickSiblings(node)
-        fetched = true
+        fetch_sent = true
       }
     })
     $('.rc-siblings .fetchAll').click(function () {
@@ -1476,13 +1477,6 @@ Metamaps.JIT = {
     var self = Metamaps.JIT
 
     // depending on how many topics are selected, do different things
-    /*if (Metamaps.Selected.Nodes.length > 1) {
-        // we don't bother filling the submenu with 
-        // specific numbers, because there are too many topics
-        // selected to find those numbers
-        $('#loadingSiblings').remove()
-        return
-    }*/
 
     var topic = node.getData('topic')
 
@@ -1513,7 +1507,7 @@ Metamaps.JIT = {
     }
 
     $.ajax({
-      type: 'Get',
+      type: 'GET',
       url: '/topics/' + topic.id + '/relative_numbers.json?network=' + topics_string,
       success: successCallback,
       error: function () {}
@@ -1586,6 +1580,7 @@ Metamaps.JIT = {
 
     if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Metamaps.Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
 
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-spacer"></li>'
