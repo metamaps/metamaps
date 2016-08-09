@@ -113,9 +113,14 @@ Metamaps.Control = {
   removeSelectedNodes: function () { // refers to removing topics permanently from a map
     if (Metamaps.Active.Topic) {
       // hideNode will handle synapses as well
-      _.each(Metamaps.Selected.Nodes, function(node) {
-        Metamaps.Control.hideNode(node.id)
-        Metamaps.Topics.remove(node.id)
+      var nodeids = _.map(Metamaps.Selected.Nodes, function(node) {
+        return node.id
+      })
+      _.each(nodeids, function(nodeid) {
+        if (Metamaps.Active.Topic.id !== nodeid) {
+          Metamaps.Topics.remove(nodeid)
+          Metamaps.Control.hideNode(nodeid)
+        }
       })
       return
     }

@@ -44,16 +44,21 @@ Metamaps.Listeners = {
           }
           break
         case 69: // if e or E is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey && Metamaps.Active.Map) {
             e.preventDefault()
+            Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas)
+            break
+          }
+          if (e.altKey && Metamaps.Active.Topic) {
+            e.preventDefault()
+
             if (Metamaps.Active.Topic) {
               self.centerAndReveal(Metamaps.Selected.Nodes, {
                 center: true,
                 reveal: false
               })
-            } else if (Metamaps.Active.Map) {
-              Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas)
             }
+            break
           }
           break
         case 72: // if h or H is pressed
@@ -71,7 +76,7 @@ Metamaps.Listeners = {
           }
           break
         case 82: // if r or R is pressed
-          if (e.ctrlKey && Metamaps.Active.Topic) {
+          if (e.altKey && Metamaps.Active.Topic) {
             e.preventDefault()
             self.centerAndReveal(Metamaps.Selected.Nodes, {
               center: false,
@@ -80,7 +85,7 @@ Metamaps.Listeners = {
           }
           break
         case 84: // if t or T is pressed
-          if (e.ctrlKey && Metamaps.Active.Topic) {
+          if (e.altKey && Metamaps.Active.Topic) {
             e.preventDefault()
             self.centerAndReveal(Metamaps.Selected.Nodes, {
               center: true,
@@ -103,11 +108,14 @@ Metamaps.Listeners = {
   centerAndReveal: function(nodes, opts) {
     if (nodes.length < 1) return
     var node = nodes[nodes.length - 1]
-    if (opts.center) {
+    if (opts.center && opts.reveal) {
+      Metamaps.Topic.centerOn(node.id, function() {
+        Metamaps.Topic.fetchRelatives(nodes)
+      })
+    } else if (opts.center) {
       Metamaps.Topic.centerOn(node.id)
-    }
-    if (opts.reveal) {
-      Metamaps.Topic.fetchRelatives(node)
+    } else if (opts.reveal) {
+      Metamaps.Topic.fetchRelatives(nodes)
     }
   }
 }; // end Metamaps.Listeners
