@@ -14,7 +14,7 @@ class MainController < ApplicationController
     respond_to do |format|
         format.html { 
           if !authenticated?
-            render 'main/home', layout: "info"
+            render 'main/home'
           else 
             render 'maps/activemaps'
           end
