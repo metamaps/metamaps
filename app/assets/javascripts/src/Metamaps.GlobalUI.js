@@ -93,6 +93,8 @@ Metamaps.GlobalUI = {
         self.Search.init();
         self.CreateMap.init();
         self.Account.init();
+        
+        if ($('#toast').html().trim()) self.showDiv('#toast')
 
         //bind lightbox clicks
         $('.openLightbox').click(function (event) {
