@@ -1084,7 +1084,18 @@ Metamaps.JIT = {
     }
     return 'nothing'; // case 4?
   }, //  handleSelectionBeforeDragging
+  getNodeXY: function(node) {
+    if (typeof node.pos.x === "number" && typeof node.pos.y === "number") {
+      return node.pos
+    } else if (typeof node.pos.theta === "number" && typeof node.pos.rho === "number") {
+      return new $jit.Polar(node.pos.theta, node.pos.rho).getc(true)
+    } else {
+      console.error('getNodeXY: unrecognized node pos format')
+      return {}
+    }
+  },
   selectWithBox: function (e) {
+    var self = this
     var sX = Metamaps.Mouse.boxStartCoordinates.x,
       sY = Metamaps.Mouse.boxStartCoordinates.y,
       eX = Metamaps.Mouse.boxEndCoordinates.x,
@@ -1096,11 +1107,17 @@ Metamaps.JIT = {
     }
 
     // select all nodes that are within the box
-    Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-      var x = n.pos.x,
-        y = n.pos.y
+    Metamaps.Visualize.mGraph.graph.eachNode(function(n) {
+      var pos = self.getNodeXY(n)
+      var x = pos.x,
+          y = pos.y
 
-      if ((sX < x && x < eX && sY < y && y < eY) || (sX > x && x > eX && sY > y && y > eY) || (sX > x && x > eX && sY < y && y < eY) || (sX < x && x < eX && sY > y && y > eY)) {
+      // depending on which way the person dragged the box, check that
+      // x and y are between the start and end values of the box
+      if ((sX < x && x < eX && sY < y && y < eY) ||
+          (sX > x && x > eX && sY > y && y > eY) ||
+          (sX > x && x > eX && sY < y && y < eY) ||
+          (sX < x && x < eX && sY > y && y > eY)) {
         if (e.shiftKey) {
           if (n.selected) {
             Metamaps.Control.deselectNode(n)
@@ -1125,10 +1142,12 @@ Metamaps.JIT = {
       }
     })
     edgesToToggle.forEach(function (edge) {
-      var fromNodeX = edge.nodeFrom.pos.x
-      var fromNodeY = -1 * edge.nodeFrom.pos.y
-      var toNodeX = edge.nodeTo.pos.x
-      var toNodeY = -1 * edge.nodeTo.pos.y
+      var fromNodePos = self.getNodeXY(edge.nodeFrom)
+      var fromNodeX = fromNodePos.x
+      var fromNodeY = -1 * fromNodePos.y
+      var toNodePos = self.getNodeXY(edge.nodeTo)
+      var toNodeX = toNodePos.x
+      var toNodeY = -1 * toNodePos.y
 
       var maxX = fromNodeX
       var maxY = fromNodeY
@@ -1315,10 +1334,11 @@ Metamaps.JIT = {
 
     if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Metamaps.Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
 
     if (Metamaps.Active.Topic) {
-      menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic</li>'
+      menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic<div class="rc-keyboard">Alt+E</div></li>'
     }
     menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>'
     if (Metamaps.Active.Mapper) {
@@ -1343,10 +1363,10 @@ Metamaps.JIT = {
       // set up the get sibling menu as a "lazy load"
       // only fill in the submenu when they hover over the get siblings list item
       var siblingMenu = '<ul id="fetchSiblingList"> \
-                                <li class="fetchAll">All</li> \
+                                <li class="fetchAll">All<div class="rc-keyboard">Alt+R</div></li> \
                                 <li id="loadingSiblings"></li> \
                             </ul>'
-      menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Get siblings' + siblingMenu + '<div class="expandLi"></div></li>'
+      menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Reveal siblings' + siblingMenu + '<div class="expandLi"></div></li>'
     }
 
     menustring += '</ul>'
@@ -1399,7 +1419,7 @@ Metamaps.JIT = {
     }
 
     // remove the selected things from the map
-    if (authorized) {
+    if (Metamaps.Active.Topic || authorized) {
       $('.rc-remove').click(function () {
         $('.rightclickmenu').remove()
         Metamaps.Control.removeSelectedEdges()
@@ -1442,11 +1462,11 @@ Metamaps.JIT = {
     })
 
     // fetch relatives
-    var fetched = false
+    var fetch_sent = false
     $('.rc-siblings').hover(function () {
-      if (!fetched) {
+      if (!fetch_sent) {
         Metamaps.JIT.populateRightClickSiblings(node)
-        fetched = true
+        fetch_sent = true
       }
     })
     $('.rc-siblings .fetchAll').click(function () {
@@ -1459,13 +1479,6 @@ Metamaps.JIT = {
     var self = Metamaps.JIT
 
     // depending on how many topics are selected, do different things
-    /*if (Metamaps.Selected.Nodes.length > 1) {
-        // we don't bother filling the submenu with 
-        // specific numbers, because there are too many topics
-        // selected to find those numbers
-        $('#loadingSiblings').remove()
-        return
-    }*/
 
     var topic = node.getData('topic')
 
@@ -1496,7 +1509,7 @@ Metamaps.JIT = {
     }
 
     $.ajax({
-      type: 'Get',
+      type: 'GET',
       url: '/topics/' + topic.id + '/relative_numbers.json?network=' + topics_string,
       success: successCallback,
       error: function () {}
@@ -1569,6 +1582,7 @@ Metamaps.JIT = {
 
     if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Metamaps.Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
 
     if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-spacer"></li>'

@@ -16,6 +16,6 @@ before_script:
   - . $HOME/.nvm/nvm.sh
   - nvm install stable
   - nvm use stable
-  - (cd frontend && npm install)
+  - npm install
 script:
-  - bundle exec rspec && (cd frontend && npm test) && bundle exec brakeman -q -z
+  - bundle exec rspec && npm test && bundle exec brakeman -q -z

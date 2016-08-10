@@ -2,7 +2,7 @@ Metamaps
 =======
 
 [![Join the chat at https://gitter.im/metamaps/metamaps](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/metamaps/metamaps?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/metamaps/metamaps.svg)](https://travis-ci.org/metamaps/metamaps)
+[![Build Status](https://travis-ci.org/metamaps/metamaps.svg?branch=develop)](https://travis-ci.org/metamaps/metamaps)
 
 Welcome to the Metamaps GitHub repo.
 

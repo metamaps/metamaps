@@ -29,30 +29,27 @@ ActiveRecord::Schema.define(version: 20_160_401_133_937) do
     t.datetime 'updated_at'
   end
 
-  add_index 'delayed_jobs', %w(priority run_at), name: 'delayed_jobs_priority', using: :btree
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table 'events', force: :cascade do |t|
-    t.string   'kind', limit: 255
-    t.integer  'eventable_id'
-    t.string   'eventable_type'
-    t.integer  'user_id'
-    t.integer  'map_id'
-    t.integer  'sequence_id'
-    t.datetime 'created_at'
-    t.datetime 'updated_at'
+  create_table "events", force: :cascade do |t|
+    t.string   "kind",           limit: 255
+    t.integer  "eventable_id"
+    t.string   "eventable_type"
+    t.integer  "user_id"
+    t.integer  "map_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index 'events', %w(eventable_type eventable_id), name: 'index_events_on_eventable_type_and_eventable_id', using: :btree
-  add_index 'events', %w(map_id sequence_id), name: 'index_events_on_map_id_and_sequence_id', unique: true, using: :btree
-  add_index 'events', ['map_id'], name: 'index_events_on_map_id', using: :btree
-  add_index 'events', ['sequence_id'], name: 'index_events_on_sequence_id', using: :btree
-  add_index 'events', ['user_id'], name: 'index_events_on_user_id', using: :btree
+  add_index "events", ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id", using: :btree
+  add_index "events", ["map_id"], name: "index_events_on_map_id", using: :btree
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
-  create_table 'in_metacode_sets', force: :cascade do |t|
-    t.integer  'metacode_id'
-    t.integer  'metacode_set_id'
-    t.datetime 'created_at',      null: false
-    t.datetime 'updated_at',      null: false
+  create_table "in_metacode_sets", force: :cascade do |t|
+    t.integer  "metacode_id"
+    t.integer  "metacode_set_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index 'in_metacode_sets', ['metacode_id'], name: 'index_in_metacode_sets_on_metacode_id', using: :btree
@@ -72,25 +69,25 @@ ActiveRecord::Schema.define(version: 20_160_401_133_937) do
     t.string   'mappable_type'
   end
 
-  add_index 'mappings', %w(map_id synapse_id), name: 'index_mappings_on_map_id_and_synapse_id', using: :btree
-  add_index 'mappings', %w(map_id topic_id), name: 'index_mappings_on_map_id_and_topic_id', using: :btree
-  add_index 'mappings', ['map_id'], name: 'index_mappings_on_map_id', using: :btree
-  add_index 'mappings', %w(mappable_id mappable_type), name: 'index_mappings_on_mappable_id_and_mappable_type', using: :btree
-  add_index 'mappings', ['user_id'], name: 'index_mappings_on_user_id', using: :btree
+  add_index "mappings", ["map_id", "synapse_id"], name: "index_mappings_on_map_id_and_synapse_id", using: :btree
+  add_index "mappings", ["map_id", "topic_id"], name: "index_mappings_on_map_id_and_topic_id", using: :btree
+  add_index "mappings", ["map_id"], name: "index_mappings_on_map_id", using: :btree
+  add_index "mappings", ["mappable_id", "mappable_type"], name: "index_mappings_on_mappable_id_and_mappable_type", using: :btree
+  add_index "mappings", ["user_id"], name: "index_mappings_on_user_id", using: :btree
 
-  create_table 'maps', force: :cascade do |t|
-    t.text     'name'
-    t.boolean  'arranged'
-    t.text     'desc'
-    t.text     'permission'
-    t.integer  'user_id'
-    t.datetime 'created_at',              null: false
-    t.datetime 'updated_at',              null: false
-    t.boolean  'featured'
-    t.string   'screenshot_file_name'
-    t.string   'screenshot_content_type'
-    t.integer  'screenshot_file_size'
-    t.datetime 'screenshot_updated_at'
+  create_table "maps", force: :cascade do |t|
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.text     "name"
+    t.text     "desc"
+    t.text     "permission"
+    t.integer  "user_id"
+    t.boolean  "arranged"
+    t.boolean  "featured"
+    t.string   "screenshot_file_name",    limit: 255
+    t.string   "screenshot_content_type", limit: 255
+    t.integer  "screenshot_file_size"
+    t.datetime "screenshot_updated_at"
   end
 
   add_index 'maps', ['user_id'], name: 'index_maps_on_user_id', using: :btree
@@ -104,31 +101,31 @@ ActiveRecord::Schema.define(version: 20_160_401_133_937) do
     t.datetime 'updated_at'
   end
 
-  add_index 'messages', ['resource_id'], name: 'index_messages_on_resource_id', using: :btree
-  add_index 'messages', ['resource_type'], name: 'index_messages_on_resource_type', using: :btree
-  add_index 'messages', ['user_id'], name: 'index_messages_on_user_id', using: :btree
+  add_index "messages", ["resource_id"], name: "index_messages_on_resource_id", using: :btree
+  add_index "messages", ["resource_type"], name: "index_messages_on_resource_type", using: :btree
+  add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
-  create_table 'metacode_sets', force: :cascade do |t|
-    t.string   'name'
-    t.text     'desc'
-    t.integer  'user_id'
-    t.boolean  'mapperContributed'
-    t.datetime 'created_at',        null: false
-    t.datetime 'updated_at',        null: false
+  create_table "metacode_sets", force: :cascade do |t|
+    t.string   "name",              limit: 255
+    t.text     "desc"
+    t.integer  "user_id"
+    t.boolean  "mapperContributed"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
-  add_index 'metacode_sets', ['user_id'], name: 'index_metacode_sets_on_user_id', using: :btree
+  add_index "metacode_sets", ["user_id"], name: "index_metacode_sets_on_user_id", using: :btree
 
-  create_table 'metacodes', force: :cascade do |t|
-    t.text     'name'
-    t.string   'manual_icon'
-    t.datetime 'created_at',            null: false
-    t.datetime 'updated_at',            null: false
-    t.string   'color'
-    t.string   'aws_icon_file_name'
-    t.string   'aws_icon_content_type'
-    t.integer  'aws_icon_file_size'
-    t.datetime 'aws_icon_updated_at'
+  create_table "metacodes", force: :cascade do |t|
+    t.text     "name"
+    t.string   "manual_icon",           limit: 255
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "color",                 limit: 255
+    t.string   "aws_icon_file_name"
+    t.string   "aws_icon_content_type"
+    t.integer  "aws_icon_file_size"
+    t.datetime "aws_icon_updated_at"
   end
 
   create_table 'oauth_access_grants', force: :cascade do |t|
@@ -169,19 +166,19 @@ ActiveRecord::Schema.define(version: 20_160_401_133_937) do
     t.datetime 'updated_at'
   end
 
-  add_index 'oauth_applications', ['uid'], name: 'index_oauth_applications_on_uid', unique: true, using: :btree
+  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
-  create_table 'synapses', force: :cascade do |t|
-    t.text     'desc'
-    t.text     'category'
-    t.text     'weight'
-    t.text     'permission'
-    t.integer  'node1_id'
-    t.integer  'node2_id'
-    t.integer  'user_id'
-    t.datetime 'created_at',      null: false
-    t.datetime 'updated_at',      null: false
-    t.integer  'defer_to_map_id'
+  create_table "synapses", force: :cascade do |t|
+    t.text     "desc"
+    t.text     "category"
+    t.integer  "node1_id"
+    t.integer  "node2_id"
+    t.integer  "user_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.text     "permission"
+    t.text     "weight"
+    t.integer  "defer_to_map_id"
   end
 
   add_index 'synapses', %w(node1_id node1_id), name: 'index_synapses_on_node1_id_and_node1_id', using: :btree
@@ -198,26 +195,26 @@ ActiveRecord::Schema.define(version: 20_160_401_133_937) do
     t.datetime 'updated_at',  null: false
   end
 
-  add_index 'tokens', ['user_id'], name: 'index_tokens_on_user_id', using: :btree
+  add_index "tokens", ["user_id"], name: "index_tokens_on_user_id", using: :btree
 
-  create_table 'topics', force: :cascade do |t|
-    t.text     'name'
-    t.text     'desc'
-    t.text     'link'
-    t.text     'permission'
-    t.integer  'user_id'
-    t.integer  'metacode_id'
-    t.datetime 'created_at',         null: false
-    t.datetime 'updated_at',         null: false
-    t.string   'image_file_name'
-    t.string   'image_content_type'
-    t.integer  'image_file_size'
-    t.datetime 'image_updated_at'
-    t.string   'audio_file_name'
-    t.string   'audio_content_type'
-    t.integer  'audio_file_size'
-    t.datetime 'audio_updated_at'
-    t.integer  'defer_to_map_id'
+  create_table "topics", force: :cascade do |t|
+    t.text     "name"
+    t.text     "desc"
+    t.text     "link"
+    t.integer  "user_id"
+    t.integer  "metacode_id"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.text     "permission"
+    t.string   "image_file_name",    limit: 255
+    t.string   "image_content_type", limit: 255
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "audio_file_name",    limit: 255
+    t.string   "audio_content_type", limit: 255
+    t.integer  "audio_file_size"
+    t.datetime "audio_updated_at"
+    t.integer  "defer_to_map_id"
   end
 
   add_index 'topics', ['metacode_id'], name: 'index_topics_on_metacode_id', using: :btree
@@ -230,37 +227,37 @@ ActiveRecord::Schema.define(version: 20_160_401_133_937) do
     t.datetime 'updated_at'
   end
 
-  add_index 'user_maps', ['map_id'], name: 'index_user_maps_on_map_id', using: :btree
-  add_index 'user_maps', ['user_id'], name: 'index_user_maps_on_user_id', using: :btree
+  add_index "user_maps", ["map_id"], name: "index_user_maps_on_map_id", using: :btree
+  add_index "user_maps", ["user_id"], name: "index_user_maps_on_user_id", using: :btree
 
-  create_table 'users', force: :cascade do |t|
-    t.string   'name'
-    t.string   'email'
-    t.text     'settings'
-    t.string   'code',                   limit: 8
-    t.string   'joinedwithcode',         limit: 8
-    t.string   'crypted_password'
-    t.string   'password_salt'
-    t.string   'persistence_token'
-    t.string   'perishable_token'
-    t.datetime 'created_at',                                      null: false
-    t.datetime 'updated_at',                                      null: false
-    t.string   'encrypted_password', limit: 128, default: ''
-    t.string   'remember_token'
-    t.datetime 'remember_created_at'
-    t.string   'reset_password_token'
-    t.datetime 'last_sign_in_at'
-    t.string   'last_sign_in_ip'
-    t.integer  'sign_in_count', default: 0
-    t.datetime 'current_sign_in_at'
-    t.string   'current_sign_in_ip'
-    t.datetime 'reset_password_sent_at'
-    t.boolean  'admin'
-    t.string   'image_file_name'
-    t.string   'image_content_type'
-    t.integer  'image_file_size'
-    t.datetime 'image_updated_at'
-    t.integer  'generation'
+  create_table "users", force: :cascade do |t|
+    t.string   "name",                   limit: 255
+    t.string   "email",                  limit: 255
+    t.string   "crypted_password",       limit: 255
+    t.string   "password_salt",          limit: 255
+    t.string   "persistence_token",      limit: 255
+    t.string   "perishable_token",       limit: 255
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.string   "code",                   limit: 8
+    t.string   "joinedwithcode",         limit: 8
+    t.text     "settings"
+    t.string   "encrypted_password",     limit: 128, default: ""
+    t.string   "remember_token",         limit: 255
+    t.datetime "remember_created_at"
+    t.string   "reset_password_token",   limit: 255
+    t.datetime "last_sign_in_at"
+    t.string   "last_sign_in_ip",        limit: 255
+    t.integer  "sign_in_count",                      default: 0
+    t.datetime "current_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.datetime "reset_password_sent_at"
+    t.boolean  "admin"
+    t.string   "image_file_name",        limit: 255
+    t.string   "image_content_type",     limit: 255
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.integer  "generation"
   end
 
   add_index 'users', ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true, using: :btree

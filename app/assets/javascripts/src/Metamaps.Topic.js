@@ -99,16 +99,25 @@ Metamaps.Topic = {
       Metamaps.Filter.close()
     }
   },
-  centerOn: function (nodeid) {
+  centerOn: function (nodeid, callback) {
+    // don't clash with fetchRelatives
     if (!Metamaps.Visualize.mGraph.busy) {
       Metamaps.Visualize.mGraph.onClick(nodeid, {
         hideLabels: false,
         duration: 1000,
-        onComplete: function () {}
+        onComplete: function () {
+          if (callback) callback()
+        }
       })
+      Metamaps.Router.navigate('/topics/' + nodeid)
+      Metamaps.Active.Topic = Metamaps.Topics.get(nodeid)
     }
   },
-  fetchRelatives: function (node, metacode_id) {
+  fetchRelatives: function (nodes, metacode_id) {
+    var self = this
+
+    var node = $.isArray(nodes) ? nodes[0] : nodes
+
     var topics = Metamaps.Topics.map(function (t) { return t.id })
     var topics_string = topics.join()
 
@@ -117,7 +126,13 @@ Metamaps.Topic = {
 
     var topic = node.getData('topic')
 
-    var successCallback = function (data) {
+    var successCallback;
+    successCallback = function (data) {
+      if (Metamaps.Visualize.mGraph.busy) {
+        // don't clash with centerOn
+        window.setTimeout(function() { successCallback(data) }, 100)
+        return
+      }
       if (data.creators.length > 0) Metamaps.Creators.add(data.creators)
       if (data.topics.length > 0) Metamaps.Topics.add(data.topics)
       if (data.synapses.length > 0) Metamaps.Synapses.add(data.synapses)
@@ -153,13 +168,16 @@ Metamaps.Topic = {
           }
         })
       })
+      if ($.isArray(nodes) && nodes.length > 1) {
+        self.fetchRelatives(nodes.slice(1), metacode_id)
+      }
     }
 
     var paramsString = metacode_id ? 'metacode=' + metacode_id + '&' : ''
     paramsString += 'network=' + topics_string + '&creators=' + creators_string
 
     $.ajax({
-      type: 'Get',
+      type: 'GET',
       url: '/topics/' + topic.id + '/relatives.json?' + paramsString,
       success: successCallback,
       error: function () {}

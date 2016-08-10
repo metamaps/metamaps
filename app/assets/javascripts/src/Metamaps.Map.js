@@ -673,6 +673,8 @@ Metamaps.Map.InfoBox = {
     return string
   },
   updateNumbers: function () {
+    if (!Metamaps.Active.Map) return
+
     var self = Metamaps.Map.InfoBox
     var mapper = Metamaps.Active.Mapper
     var relevantPeople = Metamaps.Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
