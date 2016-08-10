@@ -29,6 +29,7 @@ Metamaps.Import = {
 
     $('body').bind('paste', function (e) {
       if (e.target.tagName === 'INPUT') return
+      if (e.target.tagName === 'TEXTAREA') return
 
       var text = e.originalEvent.clipboardData.getData('text/plain')
 
