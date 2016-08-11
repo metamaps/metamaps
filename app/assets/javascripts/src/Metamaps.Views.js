@@ -16,7 +16,7 @@ Metamaps.Views.init = function () {
   Metamaps.Views.MapperCard = Backbone.View.extend({
     template: Hogan.compile($('#mapperCardTemplate').html()),
 
-    tagNamea: 'div',
+    tagName: 'div',
 
     className: 'mapper',
 
