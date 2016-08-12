@@ -16,6 +16,9 @@
     width: 96%;
     padding: 0 2%;
   }
+  .homeWrapper.homeText {
+    margin-top: 80px;
+  }
   .homeTitle {
     text-align: left;
   }
@@ -37,7 +40,20 @@
   }
   
   #yield {
-    margin-top: 50px;
+    height: 100%;
+  }
+  
+  .new_session, .new_user, .edit_user, .login, .forgotPassword {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 78%;
+    padding: 16px 10%;
+    margin: 50px auto 0 auto;
+  }
+  
+  .centerGreyForm input[type="text"], .centerGreyForm input[type="email"], .centerGreyForm input[type="password"] {
+    width: 100%;
   }
   
   .wrapper div.mapInfoBox {
@@ -94,4 +110,15 @@
 
 #mobile_menu li {
   padding: 10px;
+  list-style: none;
+}
+
+li.mobileMenuUser {
+  border-bottom: 1px solid #BBB;
+}
+
+.mobileMenuUser img {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
 }
