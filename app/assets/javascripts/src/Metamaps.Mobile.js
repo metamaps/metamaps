@@ -1,5 +1,13 @@
 /* global Metamaps, $ */
 
+/*
+ * Metamaps.Mobile.js
+ *
+ * Dependencies:
+ *  - Metamaps.Active
+ *  - Metamaps.Map
+ */
+
 Metamaps.Mobile = {
   init: function () {
     var self = Metamaps.Mobile
