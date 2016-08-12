@@ -2443,6 +2443,9 @@ Extras.Classes.Navigation = new Class({
   initializePost: function() {
     this.pos = false;
     this.pressed = false;
+    // START METAMAPS CODE
+    this.initDist = false;
+    // END METAMAPS CODE
   },
   
   onMouseWheel: function(e, win, scroll) {      
@@ -2585,7 +2588,120 @@ Extras.Classes.Navigation = new Class({
     
     // END METAMAPS CODE
     
+  },
+  
+  // START METAMAPS CODE
+  onTouchStart: function(e, win, eventInfo) {
+    if(!this.config.panning) return;
+    Metamaps.Mouse.changeInX = 0;
+    Metamaps.Mouse.changeInY = 0;
+    if((this.config.panning == 'avoid nodes' && eventInfo.getNode()) || eventInfo.getEdge()) return;
+    this.pressed = true;
+    var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey); 
+    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
+      Metamaps.Mouse.boxStartCoordinates = eventInfo.getPos();
+    }
+    Metamaps.Mouse.didPan = false;
+    this.pos = eventInfo.getPos();
+    var canvas = this.canvas,
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY;
+    this.pos.x *= sx;
+    this.pos.x += ox;
+    this.pos.y *= sy;
+    this.pos.y += oy;
+  },
+  
+  onTouchMove: function(e, win, eventInfo) {
+    if(!this.config.panning) return;
+    if(!this.pressed) return;
+    if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
+    
+    if (e.touches.length == 1) {
+      var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey);
+      if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
+        Metamaps.Visualize.mGraph.busy = true;
+        Metamaps.boxStartCoordinates = eventInfo.getPos();
+        return;
+      }
+      if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
+        Metamaps.Visualize.mGraph.busy = true;
+        Metamaps.JIT.drawSelectBox(eventInfo,e);
+        return;
+      }
+      if (rightClick){
+        return;
+      }
+      if (e.target.id != 'infovis-canvas') { 
+        this.pressed = false;
+        return;
+      }
+      Metamaps.Mouse.didPan = true;
+      var thispos = this.pos, 
+          currentPos = eventInfo.getPos(),
+          canvas = this.canvas,
+          ox = canvas.translateOffsetX,
+          oy = canvas.translateOffsetY,
+          sx = canvas.scaleOffsetX,
+          sy = canvas.scaleOffsetY;
+      currentPos.x *= sx;
+      currentPos.y *= sy;
+      currentPos.x += ox;
+      currentPos.y += oy;
+      var x = currentPos.x - thispos.x,
+          y = currentPos.y - thispos.y;
+      Metamaps.Mouse.changeInX = x;
+      Metamaps.Mouse.changeInY = y;
+      this.pos = currentPos;
+      this.canvas.translate(x * 1/sx, y * 1/sy);
+      jQuery(document).trigger(Metamaps.JIT.events.pan);
+    } 
+    /*
+    else if (e.touches.length == 2) {
+      var touch1 = e.touches[0]
+      var touch2 = e.touches[1]
+      var canvas = this.canvas
+      
+      callCount++;
+
+      var dist = Metamaps.Util.getDistance({
+        x: touch1.clientX,
+        y: touch1.clientY
+      }, {
+        x: touch2.clientX,
+        y: touch2.clientY
+      })
+
+      if (!this.initDist) {
+        this.initDist = dist
+        this.initScale = canvas.scaleOffsetX
+      }
+      var scale = (dist / this.initDist)
+      
+      document.getElementById("header_content").innerHTML = scale + ' ' + canvas.scaleOffsetX
+      if (30 >= this.initScale * scale && this.initScale * scale >= 0.2) {
+        canvas.scale(this.initScale * scale, this.initScale * scale)
+      }
+      if (canvas.scaleOffsetX < 0.5) {
+        canvas.viz.labels.hideLabels(true)
+      } else if (canvas.scaleOffsetX > 0.5) {
+        canvas.viz.labels.hideLabels(false)
+      }
+      
+      jQuery(document).trigger(Metamaps.JIT.events.zoom);
+    }
+    */
+  },
+  
+  onTouchEnd: function(e, win, eventInfo, isRightClick) {
+    if(!this.config.panning) return;
+    this.pressed = false;
+    if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
+    this.initDist = false
   }
+  // END METAMAPS CODE
 });
 
 

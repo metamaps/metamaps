@@ -337,26 +337,10 @@ Metamaps.JIT = {
           Metamaps.JIT.onDragCancelHandler(node, eventInfo, e, false)
         },
         // Implement the same handler for touchscreens
-        onTouchStart: function (node, eventInfo, e) {
-          Metamaps.Visualize.mGraph.events.touched = true
-
-          var canvas = Metamaps.Visualize.mGraph.canvas
-
-          Metamaps.Touch.touchPos = eventInfo.getPos()
-          Metamaps.Touch.touchPos.x *= canvas.scaleOffsetX
-          Metamaps.Touch.touchPos.y *= canvas.scaleOffsetY
-          Metamaps.Touch.touchPos.x += canvas.translateOffsetX
-          Metamaps.Touch.touchPos.y += canvas.translateOffsetY
-
-          touchDragNode = node
-        },
+        onTouchStart: function (node, eventInfo, e) {},
         // Implement the same handler for touchscreens
         onTouchMove: function (node, eventInfo, e) {
-          if (Metamaps.Touch.touchDragNode) {
-            Metamaps.JIT.onDragMoveTopicHandler(Metamaps.Touch.touchDragNode, eventInfo, e)
-          } else {
-            Metamaps.JIT.touchPanZoomHandler(eventInfo, e)
-          }
+          Metamaps.JIT.onDragMoveTopicHandler(node, eventInfo, e)
         },
         // Implement the same handler for touchscreens
         onTouchEnd: function (node, eventInfo, e) {},
@@ -734,54 +718,6 @@ Metamaps.JIT = {
     Metamaps.Control.deselectAllEdges()
     Metamaps.Control.deselectAllNodes()
   }, // escKeyHandler
-  touchPanZoomHandler: function (eventInfo, e) {
-    if (e.touches.length == 1) {
-      var thispos = Metamaps.Touch.touchPos,
-        currentPos = eventInfo.getPos(),
-        canvas = Metamaps.Visualize.mGraph.canvas,
-        ox = canvas.translateOffsetX,
-        oy = canvas.translateOffsetY,
-        sx = canvas.scaleOffsetX,
-        sy = canvas.scaleOffsetY
-      currentPos.x *= sx
-      currentPos.y *= sy
-      currentPos.x += ox
-      currentPos.y += oy
-      // var x = currentPos.x - thispos.x,
-      //    y = currentPos.y - thispos.y
-      var x = currentPos.x - thispos.x,
-        y = currentPos.y - thispos.y
-      Metamaps.Touch.touchPos = currentPos
-      Metamaps.Visualize.mGraph.canvas.translate(x * 1 / sx, y * 1 / sy)
-    } else if (e.touches.length == 2) {
-      var touch1 = e.touches[0]
-      var touch2 = e.touches[1]
-
-      var dist = Metamaps.Util.getDistance({
-        x: touch1.clientX,
-        y: touch1.clientY
-      }, {
-        x: touch2.clientX,
-        y: touch2.clientY
-      })
-
-      if (!lastDist) {
-        lastDist = dist
-      }
-
-      var scale = dist / lastDist
-
-      if (8 >= Metamaps.Visualize.mGraph.canvas.scaleOffsetX * scale && Metamaps.Visualize.mGraph.canvas.scaleOffsetX * scale >= 1) {
-        Metamaps.Visualize.mGraph.canvas.scale(scale, scale)
-      }
-      if (Metamaps.Visualize.mGraph.canvas.scaleOffsetX < 0.5) {
-        Metamaps.Visualize.mGraph.canvas.viz.labels.hideLabels(true)
-      } else if (Metamaps.Visualize.mGraph.canvas.scaleOffsetX > 0.5) {
-        Metamaps.Visualize.mGraph.canvas.viz.labels.hideLabels(false)
-      }
-      lastDist = dist
-    }
-  }, // touchPanZoomHandler
   onDragMoveTopicHandler: function (node, eventInfo, e) {
     var self = Metamaps.JIT
 
