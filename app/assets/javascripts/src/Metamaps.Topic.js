@@ -84,6 +84,9 @@ Metamaps.Topic = {
       Metamaps.Filter.checkMetacodes()
       Metamaps.Filter.checkSynapses()
       Metamaps.Filter.checkMappers()
+      
+      // for mobile
+      $('#header_content').html(Metamaps.Active.Topic.get('name'))
     }
 
     $.ajax({

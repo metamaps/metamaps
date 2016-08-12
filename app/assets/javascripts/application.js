@@ -40,6 +40,7 @@
 //= require ./src/Metamaps.Map
 //= require ./src/Metamaps.Account
 //= require ./src/Metamaps.Mapper
+//= require ./src/Metamaps.Mobile
 //= require ./src/Metamaps.Admin
 //= require ./src/Metamaps.Import
 //= require ./src/Metamaps.Header

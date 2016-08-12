@@ -16,7 +16,7 @@ Metamaps.Header = {
   changeSection: function (signedIn, section, userAvatar, userName) {
     ReactDOM.render(
       React.createElement(Metamaps.ReactComponents.Header, { signedIn: signedIn, section: section, userAvatar: userAvatar, userName: userName }),
-      document.getElementById('exploreMapsHeader')
+      document.getElementById('headerMenuItems')
     );
   }
 }

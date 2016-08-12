@@ -8,6 +8,7 @@
   Metamaps.Maps.Shared = <%= @maps.to_json.html_safe %>;
   Metamaps.currentPage = "shared";
   <% content_for :title, "Explore Shared Maps | Metamaps" %>
+  <% content_for :mobile_title, "Shared With Me" %>
 
   Metamaps.currentSection = "explore";
   Metamaps.GlobalUI.Search.open();

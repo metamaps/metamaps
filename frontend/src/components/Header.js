@@ -33,52 +33,48 @@ class Header extends Component {
     const apps = section == "registered" || section == "authorized"
 
     return (
-      <div className="exploreMapsBar exploreElement">
-        <div className="exploreMapsMenu">
-          <div className="exploreMapsCenter">
-            <MapLink show={signedIn && explore}
-              href="/explore/mine"
-              linkClass={activeClass("my")}
-              text="My Maps"
-            />
-            <MapLink show={signedIn && explore}
-              href="/explore/shared"
-              linkClass={activeClass("shared")}
-              text="Shared With Me"
-            />
-            <MapLink show={explore}
-              href={signedIn ? "/" : "/explore/active"}
-              linkClass={activeClass("active")}
-              text="Recently Active"
-            />
-            <MapLink show={!signedIn && explore}
-              href="/explore/featured"
-              linkClass={activeClass("featured")}
-              text="Featured Maps"
-            />
-
-            {mapper ? (
-              <div className='exploreMapsButton active mapperButton'>
-                <img className='exploreMapperImage' width='24' height='24' src={this.props.userAvatar} />
-                <div className='exploreMapperName'>{this.props.userName}&rsquo;s Maps</div>
-                <div className='clearfloat'></div>
-              </div>
-            ) : null }
-
-            <MapLink show={apps}
-              href="/oauth/applications"
-              linkClass={"activeMaps exploreMapsButton"  + (section == "registered" ? " active" : "")}
-              data-bypass="true"
-              text="Registered Apps"
-            />
-            <MapLink show={apps}
-              href="/oauth/applications"
-              linkClass={"activeMaps exploreMapsButton"  + (section == "authorized" ? " active" : "")}
-              data-bypass="true"
-              text="Authorized Apps"
-            />
+      <div className="exploreMapsCenter">
+        <MapLink show={signedIn && explore}
+          href="/explore/mine"
+          linkClass={activeClass("my")}
+          text="My Maps"
+        />
+        <MapLink show={signedIn && explore}
+          href="/explore/shared"
+          linkClass={activeClass("shared")}
+          text="Shared With Me"
+        />
+        <MapLink show={explore}
+          href={signedIn ? "/" : "/explore/active"}
+          linkClass={activeClass("active")}
+          text="Recently Active"
+        />
+        <MapLink show={!signedIn && explore}
+          href="/explore/featured"
+          linkClass={activeClass("featured")}
+          text="Featured Maps"
+        />
+  
+        {mapper ? (
+          <div className='exploreMapsButton active mapperButton'>
+            <img className='exploreMapperImage' width='24' height='24' src={this.props.userAvatar} />
+            <div className='exploreMapperName'>{this.props.userName}&rsquo;s Maps</div>
+            <div className='clearfloat'></div>
           </div>
-        </div>
+        ) : null }
+  
+        <MapLink show={apps}
+          href="/oauth/applications"
+          linkClass={"activeMaps exploreMapsButton"  + (section == "registered" ? " active" : "")}
+          data-bypass="true"
+          text="Registered Apps"
+        />
+        <MapLink show={apps}
+          href="/oauth/applications"
+          linkClass={"activeMaps exploreMapsButton"  + (section == "authorized" ? " active" : "")}
+          data-bypass="true"
+          text="Authorized Apps"
+        />
       </div>
     )
   }

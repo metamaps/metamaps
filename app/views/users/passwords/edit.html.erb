@@ -1,4 +1,5 @@
 <% content_for :title, "Change Password | Metamaps" %>
+<% content_for :mobile_title, "Change Password" %>
 
 <div id="yield">
 <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "forgotPassword centerGreyForm forgotPasswordReset" }) do |f| %>

@@ -45,8 +45,14 @@
             <%= render :partial => 'layouts/lowermapelements' %>
 
             <div id="exploreMaps"></div>
-            <div id="exploreMapsHeader"></div>
+            <div id="exploreMapsHeader">
+              <div className="exploreMapsBar exploreElement">
+                <div id="headerMenuItems" className="exploreMapsMenu">
+                </div>
+              </div>
+            </div>
             <div id="infovis"></div>
+            <%= render :partial => 'layouts/mobilemenu' %>
             <div id="instructions">
               <div class="addTopic">
                 Double-click to<br>add a topic!
