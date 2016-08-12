@@ -24,21 +24,10 @@
     backface-visibility: visible !important;
 }
 
-#famousOverlay {
-  position:absolute;
-  top: 0;
+#yield {
+  position: absolute;
   width: 100%;
   height: 100%;
-  margin:0;
-  z-index: 0;
-}
-
-#yield {
-    display:none;
-}
-
-#toast {
-    display: none;
 }
 
 /*.animations {
@@ -68,6 +57,7 @@
 /* loading */
 
 #loading {
+  display: none;
 	width: 28px;
 	height: 28px;
 	position: fixed;
@@ -338,15 +328,6 @@
 .homeWrapper.homePartners {
     padding: 64px 0 280px;
     height: 96px;
-    background: url(<%= asset_data_uri('partner_logos.png') %>) no-repeat 0 64px;
-}
-
-.github-fork-ribbon-wrapper {
-    display:none;
-}
-
-.homePage .github-fork-ribbon-wrapper {
-    display: block;
 }
 
 /* end home page */
@@ -611,26 +592,46 @@
 
 /* end mapControls */
 
-
-
 /* explore maps */
+
+#exploreMaps {
+  display: none;
+  padding: 0 5%;
+  position: absolute;
+  width: 90%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+#exploreMaps > div {
+  margin-top: 110px;
+}
+
+#exploreMapsHeader {
+  display: none;
+  position: absolute;
+  width: 100%;
+}
 
 .exploreMapsBar {
   z-index:2;
   background-color:#FAFAFA;
+  height: 42px;
+  padding-top: 52px;
 }
 
 .exploreMapsMenu {
   display: block;
   width: 100%;
-  margin-top:52px;
   height:42px;
   background-color:#EEEEEE;
   box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
 .exploreMapsCenter {
-    z-index: 3 !important;
+   margin: 0 auto;
+   display: block;
+   width: 419px;
 }
 
 .exploreMapsButton {
@@ -713,10 +714,33 @@
 
 /* end explore maps */
 
+/* instructions */
+
+#instructions {
+  width: 220px;
+  height: 80px;
+  font-family: 'din-regular', helvetica, sans-serif;
+  font-size: 32px;
+  display: none;
+  text-align: center;
+  color: #999999;
+  z-index: 0;
+  top: 50%;
+  position: absolute;
+  left: 50%;
+  margin-top: -40px;
+  margin-left: -110px;
+}
+
+/* end instructions */
 
 /* toast */
 
 .toast {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
     background-color: #323232;
     color: #F5F5F5;
     padding: 16px;

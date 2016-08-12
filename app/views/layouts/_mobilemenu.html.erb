@@ -1,0 +1,52 @@
+<div id="mobile_header">
+  <div id="header_content">
+    <%= yield(:mobile_title) %>
+  </div>
+  <div id="menu_icon"></div>
+</div>
+<div id="mobile_menu">
+  <ul>
+    <% if not current_user %>
+      <li>
+        <%= link_to "Home", root_path, :data => { :bypass => 'true'} %>
+      </li>
+    <% end %>
+    <% if current_user %>
+      <!-- we should add a page where they can create a new map -->
+      <li class="mobileMenuUser">
+         <%= image_tag current_user.image.url(:sixtyfour), :size => "32x32" %>
+         <span><%= current_user.name %></span>
+      </li>
+      <li>
+        <%= link_to "My Maps", explore_mine_path %>
+      </li>
+      <li>
+        <%= link_to "Shared With Me", explore_shared_path %>
+      </li>
+    <% end %>
+    <li>
+      <%= link_to "Recently Active", explore_active_path %>
+    </li>
+    <% if not current_user %>
+      <li>
+        <%= link_to "Featured Maps", explore_featured_path %>
+      </li>
+    <% end %>
+    <% if not current_user %>
+      <li>
+        <%= link_to "Request Invite", request_path, :data => { :bypass => 'true'} %>
+      </li>
+      <li>
+        <%= link_to "Login", new_user_session_path, :data => { :bypass => 'true'} %>
+      </li>
+    <% end %>
+    <% if current_user %>
+      <li>
+        <%= link_to "Account", edit_user_url(current_user), :data => { :bypass => 'true'} %>
+      </li>
+      <li>
+        <%= link_to "Sign Out", "/logout", id: "Logout", :data => { :bypass => 'true'} %>
+      </li>
+    <% end %>
+  </ul>
+</div>

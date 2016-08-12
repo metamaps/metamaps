@@ -5,7 +5,6 @@
  *
  * Dependencies:
  *  - Metamaps.Active
- *  - Metamaps.Famous
  *  - Metamaps.GlobalUI
  *  - Metamaps.JIT
  *  - Metamaps.Loading
@@ -42,15 +41,15 @@
           Metamaps.Router.navigate('')
         }, 300)
       }
+
       // all this only for the logged in home page
       if (Metamaps.Active.Mapper) {
-        Metamaps.Famous.yield.hide()
+        Metamaps.GlobalUI.hideDiv('#yield')
 
-        Metamaps.Famous.explore.set('active')
-        Metamaps.Famous.maps.resetScroll() // sets the scroll back to the top
-        Metamaps.Famous.explore.show()
-
-        Metamaps.Famous.maps.show()
+        Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, 'active')
+        //Metamaps.Famous.maps.resetScroll() // sets the scroll back to the top
+        Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
+        Metamaps.GlobalUI.showDiv('#exploreMaps')
 
         Metamaps.GlobalUI.Search.open()
         Metamaps.GlobalUI.Search.lock()
@@ -63,18 +62,16 @@
         }
       } else {
         // logged out home page
-        Metamaps.Famous.yield.show()
-
-        Metamaps.Famous.explore.hide()
-
+        Metamaps.GlobalUI.hideDiv('#exploreMapsHeader')
+        Metamaps.GlobalUI.hideDiv('#exploreMaps')
+        Metamaps.GlobalUI.showDiv('#yield')
         Metamaps.GlobalUI.Search.unlock()
         Metamaps.GlobalUI.Search.close(0, true)
-
-        Metamaps.Famous.maps.hide()
         Metamaps.Router.timeoutId = setTimeout(navigate, 500)
       }
 
-      Metamaps.Famous.viz.hide()
+      Metamaps.GlobalUI.hideDiv('#infovis')
+      Metamaps.GlobalUI.hideDiv('#instructions')
       Metamaps.Map.end()
       Metamaps.Topic.end()
       Metamaps.Active.Map = null
@@ -148,15 +145,16 @@
 
       Metamaps.GlobalUI.Search.open()
       Metamaps.GlobalUI.Search.lock()
-
-      Metamaps.Famous.yield.hide()
-
-      Metamaps.Famous.maps.resetScroll() // sets the scroll back to the top
-      Metamaps.Famous.maps.show()
-      Metamaps.Famous.explore.set(section, id)
-      Metamaps.Famous.explore.show()
-
-      Metamaps.Famous.viz.hide()
+      Metamaps.GlobalUI.showDiv('#exploreMaps')
+      Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
+      // Metamaps.Famous.maps.resetScroll() // sets scroll back to top
+      if (id) {
+        Metamaps.Header.fetchUserThenchangeSection(!!Metamaps.Active.Mapper, id)
+      }
+      else Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, section)
+      Metamaps.GlobalUI.hideDiv('#yield')
+      Metamaps.GlobalUI.hideDiv('#infovis')
+      Metamaps.GlobalUI.hideDiv('#instructions')
       Metamaps.Map.end()
       Metamaps.Topic.end()
       Metamaps.Active.Map = null
@@ -175,9 +173,9 @@
       // another class will be added to wrapper if you
       // can edit this map '.canEditMap'
 
-      Metamaps.Famous.yield.hide()
-      Metamaps.Famous.maps.hide()
-      Metamaps.Famous.explore.hide()
+      Metamaps.GlobalUI.hideDiv('#yield')
+      Metamaps.GlobalUI.hideDiv('#exploreMaps')
+      Metamaps.GlobalUI.hideDiv('#exploreMapsHeader')
 
       // clear the visualization, if there was one, before showing its div again
       if (Metamaps.Visualize.mGraph) {
@@ -185,7 +183,7 @@
         Metamaps.Visualize.mGraph.plot()
         Metamaps.JIT.centerMap(Metamaps.Visualize.mGraph.canvas)
       }
-      Metamaps.Famous.viz.show()
+      Metamaps.GlobalUI.showDiv('#infovis')
       Metamaps.Topic.end()
       Metamaps.Active.Topic = null
 
@@ -207,9 +205,9 @@
       $('.wrapper').removeClass('homePage explorePage mapPage')
       $('.wrapper').addClass('topicPage')
 
-      Metamaps.Famous.yield.hide()
-      Metamaps.Famous.maps.hide()
-      Metamaps.Famous.explore.hide()
+      Metamaps.GlobalUI.hideDiv('#yield')
+      Metamaps.GlobalUI.hideDiv('#exploreMaps')
+      Metamaps.GlobalUI.hideDiv('#exploreMapsHeader')
 
       // clear the visualization, if there was one, before showing its div again
       if (Metamaps.Visualize.mGraph) {
@@ -217,7 +215,7 @@
         Metamaps.Visualize.mGraph.plot()
         Metamaps.JIT.centerMap(Metamaps.Visualize.mGraph.canvas)
       }
-      Metamaps.Famous.viz.show()
+      Metamaps.GlobalUI.showDiv('#infovis')
       Metamaps.Map.end()
       Metamaps.Active.Map = null
 

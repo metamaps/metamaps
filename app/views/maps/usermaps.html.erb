@@ -11,6 +11,7 @@
   };
   Metamaps.currentPage = "mapper";
   <% content_for :title, @user.name + " | Metamaps" %>
+  <% content_for :mobile_title, @user.name %>
 
   Metamaps.currentSection = "explore";
   Metamaps.GlobalUI.Search.open();

@@ -5,6 +5,7 @@
   #%>
   
 <% content_for :title, @user.name + "'s Settings | Metamaps" %> 
+<% content_for :mobile_title, "Account Settings" %>
 <div id="yield">
 <%= form_for @user, url: user_url, :html =>{ :multipart => true, :class => "edit_user centerGreyForm"} do |form| %>
   <h3>Edit Account</h3>
@@ -51,5 +52,6 @@
 </div>
   <div id="accountPageLoading"></div>
   <%= form.submit "Update", class: "update", onclick: "Metamaps.Account.showLoading()" %>
+  <div class="clearfloat"></div>
 <% end %>
 </div>

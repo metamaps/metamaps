@@ -111,10 +111,12 @@ Metamaps.JIT = {
     })
 
     if (self.vizData.length == 0) {
-      Metamaps.Famous.viz.showInstructions()
+      $('#instructions div').hide()
+      $('#instructions div.addTopic').show()
+      Metamaps.GlobalUI.showDiv('#instructions')
       Metamaps.Visualize.loadLater = true
     }
-    else Metamaps.Famous.viz.hideInstructions()
+    else Metamaps.GlobalUI.hideDiv('#instructions')
 
     Metamaps.Visualize.render()
   }, // prepareVizData

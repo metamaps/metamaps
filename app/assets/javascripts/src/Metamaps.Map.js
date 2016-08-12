@@ -109,6 +109,9 @@ Metamaps.Map = {
 
       Metamaps.Realtime.startActiveMap()
       Metamaps.Loading.hide()
+      
+      // for mobile
+      $('#header_content').html(map.get('name'))
     }
 
     $.ajax({

@@ -114,6 +114,9 @@ Metamaps.Visualize = {
     var self = Metamaps.Visualize, RGraphSettings, FDSettings
 
     if (self.type == 'RGraph' && (!self.mGraph || self.mGraph instanceof $jit.ForceDirected)) {
+      // clear the previous canvas from #infovis
+      $('#infovis').empty()
+      
       RGraphSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings)
 
       $jit.RGraph.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings)
@@ -126,6 +129,9 @@ Metamaps.Visualize = {
 
       self.mGraph = new $jit.RGraph(RGraphSettings)
     } else if (self.type == 'ForceDirected' && (!self.mGraph || self.mGraph instanceof $jit.RGraph)) {
+      // clear the previous canvas from #infovis
+      $('#infovis').empty()
+      
       FDSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings)
 
       $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings)
@@ -136,6 +142,9 @@ Metamaps.Visualize = {
 
       self.mGraph = new $jit.ForceDirected(FDSettings)
     } else if (self.type == 'ForceDirected3D' && !self.mGraph) {
+      // clear the previous canvas from #infovis
+      $('#infovis').empty()
+      
       // init ForceDirected3D
       self.mGraph = new $jit.ForceDirected3D(Metamaps.JIT.ForceDirected3D.graphSettings)
       self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position

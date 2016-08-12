@@ -84,6 +84,9 @@ Metamaps.Topic = {
       Metamaps.Filter.checkMetacodes()
       Metamaps.Filter.checkSynapses()
       Metamaps.Filter.checkMappers()
+      
+      // for mobile
+      $('#header_content').html(Metamaps.Active.Topic.get('name'))
     }
 
     $.ajax({
@@ -309,7 +312,7 @@ Metamaps.Topic = {
     }
 
     // hide the 'double-click to add a topic' message
-    Metamaps.Famous.viz.hideInstructions()
+    Metamaps.GlobalUI.hideDiv('#instructions')
 
     $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
 

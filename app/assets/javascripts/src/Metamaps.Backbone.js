@@ -5,23 +5,23 @@
  *
  * Dependencies:
  *  - Metamaps.Active
- *  - Metamaps.Collaborators 
+ *  - Metamaps.Collaborators
  *  - Metamaps.Creators
  *  - Metamaps.Filter
  *  - Metamaps.JIT
  *  - Metamaps.Loading
  *  - Metamaps.Map
  *  - Metamaps.Mapper
- *  - Metamaps.Mappers 
- *  - Metamaps.Mappings 
- *  - Metamaps.Metacodes 
+ *  - Metamaps.Mappers
+ *  - Metamaps.Mappings
+ *  - Metamaps.Metacodes
  *  - Metamaps.Realtime
  *  - Metamaps.Synapse
  *  - Metamaps.SynapseCard
  *  - Metamaps.Synapses
  *  - Metamaps.Topic
  *  - Metamaps.TopicCard
- *  - Metamaps.Topics 
+ *  - Metamaps.Topics
  *  - Metamaps.Visualize
  */
 

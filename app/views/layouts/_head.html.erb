@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%=h yield(:title) %></title>
+  <title><%= yield(:title) %></title>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, user-scalable=no">
 
@@ -22,12 +22,6 @@
   <!-- typekit for vinyl font -->
   <script type="text/javascript" src="https://use.typekit.net/tki2nyo.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-
-        <!-- app code -->
-        <script type="text/javascript">
-            require.config({baseUrl: '<%= "#{ asset_path '/famous/main.js' }".chomp('main.js') %>'});
-            require(['main']);
-        </script>
 
   <!--[if (IE)]>
     <style type="text/css">
