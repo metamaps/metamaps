@@ -35,6 +35,7 @@ class MapExportService < Struct.new(:user, :map)
                             .where(mappable: visible_topics, map: map)
     topic_mappings.map do |mapping|
       topic = mapping.mappable
+      next nil if topic.nil?
       OpenStruct.new(
         id: topic.id,
         name: topic.name,
@@ -46,12 +47,13 @@ class MapExportService < Struct.new(:user, :map)
         user: topic.user.name,
         permission: topic.permission
       )
-    end
+    end.compact
   end
 
   def exportable_synapses
     visible_synapses = Pundit.policy_scope!(user, map.synapses)
     visible_synapses.map do |synapse|
+      next nil if synapse.nil?
       OpenStruct.new(
         topic1: synapse.node1_id,
         topic2: synapse.node2_id,
@@ -60,7 +62,7 @@ class MapExportService < Struct.new(:user, :map)
         user: synapse.user.name,
         permission: synapse.permission
       )
-    end
+    end.compact
   end
 
   def to_spreadsheet
