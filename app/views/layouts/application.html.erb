@@ -46,8 +46,7 @@
 
             <div id="exploreMaps"></div>
             <div id="exploreMapsHeader"></div>
-            <div id="infovis"></div>
-            <%= render :partial => 'layouts/mobilemenu' %>
+            
             <div id="instructions">
               <div class="addTopic">
                 Double-click to<br>add a topic!
@@ -59,6 +58,9 @@
                 Press Enter to add the topic
               </div>
             </div>
+            
+            <div id="infovis"></div>
+            <%= render :partial => 'layouts/mobilemenu' %>
             
             <p id="toast" class="toast">
               <% if devise_error_messages? %>

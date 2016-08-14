@@ -15,6 +15,11 @@ Metamaps.Mobile = {
     $('#menu_icon').click(self.toggleMenu)
     $('#mobile_menu li a').click(self.liClick)
     $('#header_content').click(self.titleClick)
+    self.resizeTitle()
+  },
+  resizeTitle: function () {
+    // the 70 relates to padding
+    $('#header_content').width($(document).width() - 70)
   },
   liClick: function () {
     var self = Metamaps.Mobile

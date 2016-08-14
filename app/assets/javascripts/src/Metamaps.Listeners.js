@@ -103,6 +103,7 @@ Metamaps.Listeners = {
       if (Metamaps.Visualize && Metamaps.Visualize.mGraph) Metamaps.Visualize.mGraph.canvas.resize($(window).width(), $(window).height())
       if ((Metamaps.Active.Map || Metamaps.Active.Topic) && Metamaps.Famous && Metamaps.Famous.maps.surf) Metamaps.Famous.maps.reposition()
       if (Metamaps.Active.Map && Metamaps.Realtime.inConversation) Metamaps.Realtime.positionVideos()
+      Metamaps.Mobile.resizeTitle()
     })
   },
   centerAndReveal: function(nodes, opts) {
