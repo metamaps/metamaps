@@ -8,7 +8,13 @@
   <%= @map && @map.permission != 'private' ? " shareable" : "" %>">
   
   <% if @map %>
-  <div class="mapInfoName" id="mapInfoName"><%= best_in_place @map, :name, :as => :textarea, :activator => "#mapInfoName", :class => 'best_in_place_name' %></div>
+  <div class="mapInfoName" id="mapInfoName">
+    <% if policy(@map).update? %>
+      <span class="best_in_place best_in_place_name" id="best_in_place_map_<%= @map.id %>_name" data-url="/maps/<%= @map.id %>" data-object="map" data-attribute="name" data-type="textarea" data-activator="#mapInfoName"><%= @map.name %></span>    
+    <% else %>
+      <%= @map.name %>
+    <% end %>
+</div>
   
   <div class="mapInfoStat">
     <div class="infoStatIcon mapContributors hoverForTip">
@@ -54,8 +60,10 @@
   </div>
   
   <div class="mapInfoDesc" id="mapInfoDesc">
-    <% if (authenticated? && policy(@map).update?) || (!authenticated?  && @map.desc != "" && @map.desc != nil )%>
-      <%= best_in_place @map, :desc, :activator => "#mapInfoDesc", :as => :textarea, :placeholder => "Click to add description...", :class => 'best_in_place_desc' %>
+    <% if policy(@map).update? %>
+      <span class="best_in_place best_in_place_desc" id="best_in_place_map_<%= @map.id %>_desc" data-url="/maps/<%= @map.id %>" data-object="map" data-attribute="desc" data-nil="Click to add description..." data-type="textarea" data-activator="#mapInfoDesc"><%= @map.desc %></span>
+    <% else %>
+      <%= @map.desc %>
     <% end %>
   </div>
   
