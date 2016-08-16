@@ -12,10 +12,12 @@
       </li>
     <% end %>
     <% if current_user %>
-      <!-- we should add a page where they can create a new map -->
       <li class="mobileMenuUser">
          <%= image_tag current_user.image.url(:sixtyfour), :size => "32x32" %>
          <span><%= current_user.name %></span>
+      </li>
+      <li>
+        <%= link_to "New Map", new_map_path %>
       </li>
       <li>
         <%= link_to "My Maps", explore_mine_path, :data => { :router => 'true'} %>
