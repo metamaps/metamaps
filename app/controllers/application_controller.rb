@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   helper_method :admin?
 
   def after_sign_in_path_for(resource)
-    sign_in_url = url_for(action: 'new', controller: 'sessions', only_path: false, protocol: 'https')
+    sign_in_url = url_for(action: 'new', controller: 'sessions', only_path: false)
 
     if request.referer == sign_in_url
       super
