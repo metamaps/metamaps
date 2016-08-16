@@ -436,11 +436,25 @@ Metamaps.Map.InfoBox = {
     })
     $('body').click(self.close)
 
-    self.attachEventListeners()
-
-    
+    self.attachEventListeners() 
 
     self.generateBoxHTML = Hogan.compile($('#mapInfoBoxTemplate').html())
+    
+    var querystring = window.location.search.replace(/^\?/, '')
+    if (querystring == 'new') { 
+      self.open()
+      window.setTimeout(self.requestMapTitle, 3000)
+    }
+  },
+  requestMapTitle: function () {
+    var t = prompt('Please enter a name for your map. You can also set it any time using the map info panel.')
+ 
+    if (t) {
+      Metamaps.Active.Map.set('name', t)
+      Metamaps.Active.Map.save()
+      $('#mapInfoName span').text(t)
+      document.title = t + ' | Metamaps'
+    }
   },
   toggleBox: function (event) {
     var self = Metamaps.Map.InfoBox

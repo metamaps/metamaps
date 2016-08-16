@@ -86,6 +86,20 @@ class MapsController < ApplicationController
     end
   end
 
+  # GET maps/new
+  def new
+    @map = Map.new(name: "Untitled Map", permission: "public", arranged: true)
+    authorize @map
+
+    respond_to do |format|
+      format.html do
+        @map.user = current_user
+        @map.save
+        redirect_to(map_path(@map) + '?new') 
+      end
+    end
+  end
+
   # GET maps/:id
   def show
     @map = Map.find(params[:id])

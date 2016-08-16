@@ -66,7 +66,7 @@
         Metamaps.GlobalUI.hideDiv('#exploreMaps')
         Metamaps.GlobalUI.showDiv('#yield')
         Metamaps.GlobalUI.Search.unlock()
-        Metamaps.GlobalUI.Search.close(0, true)
+        //Metamaps.GlobalUI.Search.close(0, true)
         Metamaps.Router.timeoutId = setTimeout(navigate, 500)
       }
 
@@ -187,8 +187,8 @@
       Metamaps.Topic.end()
       Metamaps.Active.Topic = null
 
-      Metamaps.GlobalUI.Search.unlock()
-      Metamaps.GlobalUI.Search.close(0, true)
+      //Metamaps.GlobalUI.Search.unlock()
+      //Metamaps.GlobalUI.Search.close(0, true)
 
       Metamaps.Loading.show()
       Metamaps.Map.end()
@@ -219,8 +219,8 @@
       Metamaps.Map.end()
       Metamaps.Active.Map = null
 
-      Metamaps.GlobalUI.Search.unlock()
-      Metamaps.GlobalUI.Search.close(0, true)
+      //Metamaps.GlobalUI.Search.unlock()
+      //Metamaps.GlobalUI.Search.close(0, true)
 
       Metamaps.Topic.end()
       Metamaps.Topic.launch(id)

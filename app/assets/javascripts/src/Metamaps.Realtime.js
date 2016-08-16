@@ -93,7 +93,9 @@ Metamaps.Realtime = {
       })
       self.room.videoAdded(self.handleVideoAdded)
 
-      self.room.chat.$container.hide()
+      if (!Metamaps.Active.Map) {
+        self.room.chat.$container.hide()
+      }
       $('body').prepend(self.room.chat.$container)
     } // if Metamaps.Active.Mapper
   },

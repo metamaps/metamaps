@@ -8,20 +8,14 @@
 }
 
 .unauthenticated {
-  .homePage .sidebarSearchIcon {
-    border-radius: 2px;
-  }
-
-  .homePage .sidebarSearchField,
-  .homePage .sidebarSearch .tt-hint {
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
+  .homePage .sidebarSearch {
+    display: none;
   }
 }
 
 .sidebarSearchIcon {
   float: left;
-  width: 72px;
+  width: 50px;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   height: 32px;
@@ -99,13 +93,15 @@
 
   .sidebarSearchField {
     float: left;
+    width: 380px;
+    padding: 7px 10px 3px 10px;
     height: 20px;
     border-top: 1px solid #BDBDBD;
     border-bottom: 1px solid #BDBDBD;
-    border-left: none;
+    border-left: 1px solid #BDBDBD;
     border-right: none;
-    padding: 5px 0 5px 0;
-    width: 0px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
     margin: 0;
     outline: none;
     font-size: 14px;
@@ -117,13 +113,13 @@
 
   .tt-hint {
     color: transparent;
+    width: 380px;
+    padding: 7px 10px 3px 10px;
     height: 20px;
     border-top: 1px solid #BDBDBD;
     border-bottom: 1px solid #BDBDBD;
     border-left: none;
     border-right: none;
-    padding: 5px 0 5px 0;
-    width: 0px;
     margin: 0;
     outline: none;
     font-size: 14px;

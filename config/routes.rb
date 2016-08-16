@@ -34,7 +34,7 @@ Metamaps::Application.routes.draw do
   get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
   get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
 
-  resources :maps, except: [:index, :new, :edit]
+  resources :maps, except: [:index, :edit]
   get 'maps/:id/export', to: 'maps#export'
   post 'maps/:id/events/:event', to: 'maps#events'
   get 'maps/:id/contains', to: 'maps#contains', as: :contains

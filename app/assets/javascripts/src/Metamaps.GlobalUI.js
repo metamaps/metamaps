@@ -484,6 +484,9 @@ Metamaps.GlobalUI.Search = {
         }
     },
     close: function (closeAfter, bypass) {
+        // for now
+        return
+
         var self = Metamaps.GlobalUI.Search;
 
         self.timeOut = setTimeout(function () {

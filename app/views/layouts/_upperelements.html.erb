@@ -4,7 +4,7 @@
 <div class="upperLeftUI">
   <!-- home button -->
   <div class="homeButton">
-    <a href="<%= root_url %>" <% if !current_user || appsPage %><%= 'data-bypass=true' %><% end %>></a>
+    <a href="<%= root_url %>" <% if !current_user || appsPage %><%= 'data-bypass=true' %><% end %>>METAMAPS</a>
   </div> <!-- end homeButton -->
 
   <!-- search box -->
@@ -39,8 +39,11 @@
 
   <% if current_user %>
   <!-- create new map -->
-  <div class="addMap openLightbox upperRightEl upperRightIcon" data-open="newmap"><div class="tooltipsUnder">Create New Map</div>
-  </div><!-- end addMap -->
+  <a href="<%= new_map_path %>" data-bypass="true" target="_blank" class="addMap upperRightEl upperRightIcon">
+    <div class="tooltipsUnder">
+      Create New Map
+    </div>
+  </a><!-- end addMap -->
   <% end %>
 
   <!-- Account / Sign in -->

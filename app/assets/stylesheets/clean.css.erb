@@ -110,8 +110,6 @@
 	top: 10px;
 	left: 24px;
 	z-index:3;
-	box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
-	border-radius: 2px;
 }
 .explorePage .upperLeftUI {
 	box-shadow: none;
@@ -121,23 +119,21 @@
     display:none;
 }
 .homeButton {
-	width: 40px;
-    height: 32px;
-    background-color: #757575;
-    background-image: url(<%= asset_data_uri('home_light.png') %>);
-    background-repeat: no-repeat;
-    background-position: center center;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
     float:left;
+    margin-right: 16px;
 }
 .homeButton:hover {
-    background-image: url(<%= asset_data_uri('home_light.png') %>);
+
 }
 .homeButton a {
     display:block;
-    width: 40px;
-    height: 32px;
+    color: #9E9E9E;
+    font-family: "vinyl", sans-serif;
+    font-style: italic;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 38px;
 }
 
 /* end upperLeftUI */
