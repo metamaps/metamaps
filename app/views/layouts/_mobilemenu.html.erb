@@ -8,7 +8,7 @@
   <ul>
     <% if not current_user %>
       <li>
-        <%= link_to "Home", root_path, :data => { :bypass => 'true'} %>
+        <%= link_to "Home", root_path %>
       </li>
     <% end %>
     <% if current_user %>
@@ -18,34 +18,34 @@
          <span><%= current_user.name %></span>
       </li>
       <li>
-        <%= link_to "My Maps", explore_mine_path %>
+        <%= link_to "My Maps", explore_mine_path, :data => { :router => 'true'} %>
       </li>
       <li>
-        <%= link_to "Shared With Me", explore_shared_path %>
+        <%= link_to "Shared With Me", explore_shared_path, :data => { :router => 'true'} %>
       </li>
     <% end %>
     <li>
-      <%= link_to "Recently Active", explore_active_path %>
+      <%= link_to "Recently Active", explore_active_path, :data => { :router => 'true'} %>
     </li>
     <% if not current_user %>
       <li>
-        <%= link_to "Featured Maps", explore_featured_path %>
+        <%= link_to "Featured Maps", explore_featured_path, :data => { :router => 'true'} %>
       </li>
     <% end %>
     <% if not current_user %>
       <li>
-        <%= link_to "Request Invite", request_path, :data => { :bypass => 'true'} %>
+        <%= link_to "Request Invite", request_path %>
       </li>
       <li>
-        <%= link_to "Login", new_user_session_path, :data => { :bypass => 'true'} %>
+        <%= link_to "Login", new_user_session_path %>
       </li>
     <% end %>
     <% if current_user %>
       <li>
-        <%= link_to "Account", edit_user_url(current_user), :data => { :bypass => 'true'} %>
+        <%= link_to "Account", edit_user_url(current_user) %>
       </li>
       <li>
-        <%= link_to "Sign Out", "/logout", id: "Logout", :data => { :bypass => 'true'} %>
+        <%= link_to "Sign Out", "/logout", id: "Logout" %>
       </li>
     <% end %>
   </ul>

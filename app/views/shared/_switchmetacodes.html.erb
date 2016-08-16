@@ -19,9 +19,9 @@
 <div id="metacodeSwitchTabs">
   <ul>
     <% allMetacodeSets.each do |m| %>
-    <li><a href="#metacodeSwitchTabs<%= m.id %>" data-set-id="<%= m.id %>" data-bypass="true"><%= m.name %></a></li>
+    <li><a href="#metacodeSwitchTabs<%= m.id %>" data-set-id="<%= m.id %>"><%= m.name %></a></li>
     <% end %>
-    <li><a href="#metacodeSwitchTabsCustom" data-set-id="custom" data-bypass="true" id="metacodeSetCustom">CUSTOM SELECTION</a></li>
+    <li><a href="#metacodeSwitchTabsCustom" data-set-id="custom" id="metacodeSetCustom">CUSTOM SELECTION</a></li>
   </ul>
   <% allMetacodeSets.each_with_index do |m, localindex| %>
   <div id="metacodeSwitchTabs<%= m.id %>" 

@@ -10,12 +10,12 @@
   <ul>
     <li class="accountListItem accountSettings">
       <div class="accountIcon"></div>
-      <%= link_to "Account", edit_user_url(account), :data => { :bypass => 'true'} %>
+      <%= link_to "Account", edit_user_url(account) %>
     </li>
     <% if account.admin %>
       <li class="accountListItem accountAdmin">
         <div class="accountIcon"></div>
-        <%= link_to "Admin", metacodes_path, :data => { :bypass => 'true'} %>
+        <%= link_to "Admin", metacodes_path %>
       </li>
     <% end %>
     <li class="accountListItem accountInvite openLightbox" data-open="invite">
@@ -24,7 +24,7 @@
     </li>
     <li class="accountListItem accountLogout">
       <div class="accountIcon"></div>
-      <%= link_to "Sign Out", "/logout", id: "Logout", :data => { :bypass => 'true'} %>
+      <%= link_to "Sign Out", "/logout", id: "Logout" %>
     </li>
   </ul>
 <% else %>
@@ -47,8 +47,7 @@
         <div class="clearfloat"></div>
         <div class="accountForgotPass">
           <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-            <%= link_to "Forgot password?", new_password_path(resource_name), 
-              :data => { :bypass => 'true'} %>
+            <%= link_to "Forgot password?", new_password_path(resource_name) %>
           <% end -%>
         </div>
   <% end %>

@@ -47,7 +47,7 @@
     </script>
     
     <script type="text/template" id="mapCardTemplate">
-  <a href="/maps/{{id}}">
+  <a href="/maps/{{id}}" data-router="true">
   <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
 	  <div class="mapCard">                                                   
       <span class="title" title="{{fullName}}">                                                  
@@ -248,7 +248,7 @@
                 <div class="metacodeSelect">{{{metacode_select}}}</div>
             </div>
             <div class="linkItem contributor">
-                <a href="/explore/mapper/{{userid}}"><img src="<%= asset_path('user.png') %>" class="contributorIcon" width="32" height="32" /></a>
+                <a href="/explore/mapper/{{userid}}" target="_blank"><img src="<%= asset_path('user.png') %>" class="contributorIcon" width="32" height="32" /></a>
                 <div class="contributorName">{{username}}</div>
             </div>
             <div class="linkItem mapCount">                  
@@ -258,7 +258,7 @@
                 <div class="tip"><ul>{{{inmaps}}}</ul></div>                              
             </div>
 
-            <a href="/topics/{{id}}" class="linkItem synapseCount">
+            <a href="/topics/{{id}}" target="_blank" class="linkItem synapseCount">
               <div class="synapseCountIcon"></div>
               {{synapse_count}}
               <div class="tip">Click to see this topics synapses</div>

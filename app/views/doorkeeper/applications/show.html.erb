@@ -1,7 +1,7 @@
 <div id="yield">
 <div class="centerContent showApp">
 
-  <%= link_to t('doorkeeper.applications.buttons.back'), oauth_applications_path(), class: 'button link-button button-margin', :data => { :bypass => 'true' } %>
+  <%= link_to t('doorkeeper.applications.buttons.back'), oauth_applications_path(), class: 'button link-button button-margin' %>
 
   <div class="page-header">
     <h2><%= t('.title', name: @application.name) %></h2>
@@ -23,13 +23,13 @@
             <code><%= uri %></code>
           </td>
           <td>
-            <%= link_to t('doorkeeper.applications.buttons.authorize'), oauth_authorization_path(client_id: @application.uid, redirect_uri: uri, response_type: 'code'), class: 'button link-button', target: '_blank', :data => { :bypass => 'true' } %>
+            <%= link_to t('doorkeeper.applications.buttons.authorize'), oauth_authorization_path(client_id: @application.uid, redirect_uri: uri, response_type: 'code'), class: 'button link-button', target: '_blank' %>
           </td>
         </tr>
       <% end %>
     </table>
 
-    <div class="inline-button"><%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(@application), class: 'button link-button', :data => { :bypass => 'true' } %></div>
+    <div class="inline-button"><%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(@application), class: 'button link-button' %></div>
 
     <div class="inline-button"><%= render 'delete_form', application: @application, submit_btn_css: 'button red-button' %></div>
 </div>

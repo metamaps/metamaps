@@ -15,14 +15,14 @@
   <tbody>
   <% @applications.each do |application| %>
     <tr id="application_<%= application.id %>">
-      <td><%= link_to application.name, oauth_application_path(application), :data => { :bypass => 'true' } %></td>
+      <td><%= link_to application.name, oauth_application_path(application) %></td>
       <td><%= application.redirect_uri %></td>
       <td><%= render 'delete_form', application: application %></td>
     </tr>
   <% end %>
   </tbody>
 </table>
-<%= link_to t('.new'), new_oauth_application_path, class: 'button link-button', :data => { :bypass => 'true' } %>
+<%= link_to t('.new'), new_oauth_application_path, class: 'button link-button' %>
 </div>
 </div>
 <%= render 'script' %>

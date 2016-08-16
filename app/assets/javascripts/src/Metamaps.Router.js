@@ -263,6 +263,6 @@
       pushState: true,
       root: '/'
     })
-    $(document).on('click', 'a:not([data-bypass])', Metamaps.Router.intercept)
+    $(document).on('click', 'a[data-router="true"]', Metamaps.Router.intercept)
   }
 })()

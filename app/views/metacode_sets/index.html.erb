@@ -14,11 +14,11 @@
       <td>
         <%= metacode_set.name %><br />
         <%= link_to 'Edit', 
-            edit_metacode_set_path(metacode_set), :data => { :bypass => 'true'} %>
+            edit_metacode_set_path(metacode_set) %>
         <br />
         <%= link_to 'Delete', 
             metacode_set, method: :delete,
-            data: { confirm: 'Are you sure?', bypass: 'true' } %>
+            data: { confirm: 'Are you sure?' } %>
       </td>
       <td class='metacodeSetDesc'><%= metacode_set.desc %></td>
       <td>

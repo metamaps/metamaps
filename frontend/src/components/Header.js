@@ -39,21 +39,25 @@ class Header extends Component {
             <MapLink show={signedIn && explore}
               href="/explore/mine"
               linkClass={activeClass("my")}
+              data-router="true"
               text="My Maps"
             />
             <MapLink show={signedIn && explore}
               href="/explore/shared"
               linkClass={activeClass("shared")}
+              data-router="true"
               text="Shared With Me"
             />
             <MapLink show={explore}
               href={signedIn ? "/" : "/explore/active"}
               linkClass={activeClass("active")}
+              data-router="true"
               text="Recently Active"
             />
             <MapLink show={!signedIn && explore}
               href="/explore/featured"
               linkClass={activeClass("featured")}
+              data-router="true"
               text="Featured Maps"
             />
       
@@ -68,13 +72,11 @@ class Header extends Component {
             <MapLink show={apps}
               href="/oauth/applications"
               linkClass={"activeMaps exploreMapsButton"  + (section == "registered" ? " active" : "")}
-              data-bypass="true"
               text="Registered Apps"
             />
             <MapLink show={apps}
               href="/oauth/applications"
               linkClass={"activeMaps exploreMapsButton"  + (section == "authorized" ? " active" : "")}
-              data-bypass="true"
               text="Authorized Apps"
             />
           </div>

@@ -24,8 +24,7 @@
   <div class="clearfloat"></div>
   <div class="accountForgotPass">
     <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-      <%= link_to "Forgot password?", new_password_path(resource_name), 
-        :data => { :bypass => 'true'} %>
+      <%= link_to "Forgot password?", new_password_path(resource_name) %>
     <% end -%>
   </div>
 <% end %>
