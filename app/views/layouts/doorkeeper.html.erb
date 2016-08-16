@@ -16,8 +16,15 @@
     <% end %>
 
     <%= content_tag :div, class: "main" do %>
+    
+        <% if params[:controller] == 'doorkeeper/applications' || params[:controller] == 'doorkeeper/authorized_applications'
+             classes = 'appsPage'
+           else
+             classes = ''
+           end
+        %>
 
-        <div class="wrapper" id="wrapper">
+        <div class="wrapper <%= classes %>" id="wrapper">
 
             <%= render :partial => 'layouts/upperelements', :locals => {:appsPage => true } %>
 
@@ -33,7 +40,20 @@
             <% end %>
             <%= render :partial => 'layouts/lowermapelements' %>
 
-            <div id="exploreMapsHeader"></div>
+            <div id="exploreMapsHeader">
+                <div class="exploreMapsBar exploreElement">
+                    <div class="exploreMapsMenu">
+                        <div class="exploreMapsCenter">
+                            <a href="<%= oauth_applications_path %>" class="activeMaps exploreMapsButton <%= params[:controller] == 'doorkeeper/applications' ? 'active' : nil %>">
+                                <div class="exploreMapsIcon"></div>Registered Apps
+                            </a>
+                            <a href="<%= oauth_authorized_applications_path %>" class="activeMaps exploreMapsButton <%= params[:controller] == 'doorkeeper/authorized_applications' ? 'active' : nil %>">
+                                <div class="exploreMapsIcon"></div>Authorized Apps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <p id="toast" class="toast">
               <% if devise_error_messages? %>
                 <%= devise_error_messages! %>

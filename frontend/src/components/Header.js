@@ -30,7 +30,6 @@ class Header extends Component {
 
     const explore = section == "mine" || section == "active" || section == "shared" || section == "featured"
     const mapper = section == "mapper"
-    const apps = section == "registered" || section == "authorized"
 
     return (
       <div className="exploreMapsBar exploreElement">
@@ -68,17 +67,6 @@ class Header extends Component {
                 <div className='clearfloat'></div>
               </div>
             ) : null }
-      
-            <MapLink show={apps}
-              href="/oauth/applications"
-              linkClass={"activeMaps exploreMapsButton"  + (section == "registered" ? " active" : "")}
-              text="Registered Apps"
-            />
-            <MapLink show={apps}
-              href="/oauth/authorized_applications"
-              linkClass={"activeMaps exploreMapsButton"  + (section == "authorized" ? " active" : "")}
-              text="Authorized Apps"
-            />
           </div>
         </div>
       </div>
