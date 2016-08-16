@@ -75,7 +75,7 @@ class Header extends Component {
               text="Registered Apps"
             />
             <MapLink show={apps}
-              href="/oauth/applications"
+              href="/oauth/authorized_applications"
               linkClass={"activeMaps exploreMapsButton"  + (section == "authorized" ? " active" : "")}
               text="Authorized Apps"
             />
