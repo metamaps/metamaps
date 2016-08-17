@@ -47,9 +47,9 @@
         Metamaps.GlobalUI.hideDiv('#yield')
 
         Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, 'active')
-        //Metamaps.Famous.maps.resetScroll() // sets the scroll back to the top
         Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
         Metamaps.GlobalUI.showDiv('#exploreMaps')
+        $('#exploreMaps').scrollTop(0)
 
         Metamaps.GlobalUI.Search.open()
         Metamaps.GlobalUI.Search.lock()
@@ -124,7 +124,7 @@
         if (Metamaps.Router.currentPage === 'mapper') {
           path += '/' + Metamaps.Maps.Mapper.mapperId
         }
-
+        
         Metamaps.Router.navigate(path)
       }
       var navigateTimeout = function () {
@@ -147,9 +147,9 @@
       Metamaps.GlobalUI.Search.lock()
       Metamaps.GlobalUI.showDiv('#exploreMaps')
       Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
-      // Metamaps.Famous.maps.resetScroll() // sets scroll back to top
+      $('#exploreMaps').scrollTop(0)
       if (id) {
-        Metamaps.Header.fetchUserThenchangeSection(!!Metamaps.Active.Mapper, id)
+        Metamaps.Header.fetchUserThenChangeSection(!!Metamaps.Active.Mapper, id)
       }
       else Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, section)
       Metamaps.GlobalUI.hideDiv('#yield')

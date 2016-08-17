@@ -552,6 +552,8 @@ Metamaps.Map.InfoBox = {
       var name = $(this).html()
       Metamaps.Active.Map.set('name', name)
       Metamaps.Active.Map.trigger('saved')
+      // mobile menu
+      $('#header_content').html(name)
     })
 
     $('.mapInfoDesc .best_in_place_desc').unbind('ajax:success').bind('ajax:success', function () {

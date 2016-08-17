@@ -157,6 +157,8 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     if (isActiveMap) {
       Metamaps.Map.InfoBox.updateNameDescPerm(this.get('name'), this.get('desc'), this.get('permission'))
       this.updateMapWrapper()
+      // mobile menu
+      $('#header_content').html(this.get('name'))
     }
   },
   updateMapWrapper: function () {
