@@ -43,5 +43,4 @@
 //= require ./src/Metamaps.Mobile
 //= require ./src/Metamaps.Admin
 //= require ./src/Metamaps.Import
-//= require ./src/Metamaps.Header
 //= require ./src/Metamaps.JIT

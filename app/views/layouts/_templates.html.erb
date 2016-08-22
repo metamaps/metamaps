@@ -45,55 +45,6 @@
     </div>
   </div>
     </script>
-    
-    <script type="text/template" id="mapCardTemplate">
-  <a href="/maps/{{id}}" data-router="true">
-  <div class="permission {{editPermission}}"> <!-- must be canEdit or cannotEdit -->
-	  <div class="mapCard">                                                   
-      <span class="title" title="{{fullName}}">                                                  
-        {{name}}
-      </span>  
-      <div class="mapScreenshot">
-        {{{screenshot}}}
-      </div>                                                  
-      <div class="scroll">                                                    
-        <div class="desc">                                                  
-          {{desc}}
-          <div class="clearfloat"></div>                              
-        </div>                                                                
-      </div>
-      <div class="mapMetadata">
-         <div class="metadataSection">{{{contributor_count_number}}}{{contributor_count_string}}</div>
-         <div class="metadataSection">{{{topic_count_number}}}{{topic_count_string}}</div>         
-         <div class="metadataSection mapPermission">{{permission}}</div> 
-         <div class="metadataSection">{{{synapse_count_number}}}{{synapse_count_string}}</div>         
-         <div class="clearfloat"></div>                               
-      </div>                                         
-    </div>
-  </div>
-  </a>
-    </script>
-
-    <script type="text/template" id="mapperCardTemplate">
-    <div class="mapperCard">                                                    
-      <div class="mapperImage">
-        <img src="{{image}}" width="96" height="96" />
-      </div> 
-      <div class="mapperName" title="{{name}}">                                                  
-        {{name}}
-      </div>
-      <div class="mapperInfo">
-        <div class="mapperCreatedAt">Mapper since: {{created_at}}</div>
-        <div class="mapperGeneration">Generation: {{generation}}</div>
-      </div>
-      <div class="mapperMetadata">
-         <div class="metadataSection metadataMaps"><div>{{numMaps}}</div>maps</div>
-         <div class="metadataSection metadataTopics"><div>{{numTopics}}</div>topics</div> 
-         <div class="metadataSection metadataSynapses"><div>{{numSynapses}}</div>synapses</div> 
-         <div class="clearfloat"></div>                               
-      </div>                                         
-    </div>
-    </script>
         
     <script type="text/template" id="topicSearchTemplate">
     <div class="result{{rtype}}">

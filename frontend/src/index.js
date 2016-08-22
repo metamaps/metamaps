@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Backbone from 'backbone'
 import _ from 'underscore'
-import Header from './components/Header.js'
+import Maps from './components/Maps.js'
 
 // this is optional really, if we import components directly React will be
 // in the bundle, so we won't need a global reference
@@ -14,5 +14,5 @@ window._ = _
 
 window.Metamaps = window.Metamaps || {}
 window.Metamaps.ReactComponents = {
-  Header
+  Maps
 }

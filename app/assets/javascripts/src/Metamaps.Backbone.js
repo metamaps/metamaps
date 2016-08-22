@@ -121,36 +121,6 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     }
     return this.get('mappers')
   },
-  attrForCards: function () {
-    function capitalize (string) {
-      return string.charAt(0).toUpperCase() + string.slice(1)
-    }
-
-    var n = this.get('name')
-    var d = this.get('desc')
-
-    var maxNameLength = 32
-    var maxDescLength = 118
-    var truncatedName = n ? (n.length > maxNameLength ? n.substring(0, maxNameLength) + '...' : n) : ''
-    var truncatedDesc = d ? (d.length > maxDescLength ? d.substring(0, maxDescLength) + '...' : d) : ''
-
-    var obj = {
-      id: this.id,
-      name: truncatedName,
-      fullName: n,
-      desc: truncatedDesc,
-      permission: this.get('permission') ? capitalize(this.get('permission')) : 'Commons',
-      editPermission: this.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEdit' : 'cannotEdit',
-      contributor_count_number: '<span class="cCountColor">' + this.get('contributor_count') + '</span>',
-      contributor_count_string: this.get('contributor_count') === 1 ? ' contributor' : ' contributors',
-      topic_count_number: '<span class="tCountColor">' + this.get('topic_count') + '</span>',
-      topic_count_string: this.get('topic_count') === 1 ? ' topic' : ' topics',
-      synapse_count_number: '<span class="sCountColor">' + this.get('synapse_count') + '</span>',
-      synapse_count_string: this.get('synapse_count') === 1 ? ' synapse' : ' synapses',
-      screenshot: '<img src="' + this.get('screenshot_url') + '" />'
-    }
-    return obj
-  },
   updateView: function () {
     var map = Metamaps.Active.Map
     var isActiveMap = this.id === map.id

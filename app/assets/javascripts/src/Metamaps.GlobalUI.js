@@ -51,31 +51,26 @@ $(document).ready(function () {
           Metamaps[prop].hasOwnProperty('init') &&
           typeof (Metamaps[prop].init) == 'function'
       ) {
-          Metamaps[prop].init();
+          Metamaps[prop].init()
       }
   }
   // load whichever page you are on
   if (Metamaps.currentSection === "explore") {
-      var capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1);
+      var capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
-      Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] );
+      Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] )
       if (Metamaps.currentPage === "mapper") {
-          Metamaps.Views.exploreMaps.fetchUserThenRender();
-          Metamaps.Header.fetchUserThenChangeSection(!!Metamaps.Active.Mapper, Metamaps.Maps.Mapper.mapperId)
+          Metamaps.Views.exploreMaps.fetchUserThenRender()
       }
       else {
-          Metamaps.Views.exploreMaps.render();
-          Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, Metamaps.currentPage)
+          Metamaps.Views.exploreMaps.render()
       }
-      Metamaps.GlobalUI.showDiv('#exploreMaps')
-      Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
+      Metamaps.GlobalUI.showDiv('#explore')
   }
   else if (Metamaps.currentSection === "" && Metamaps.Active.Mapper) {
-      Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps.Active );
-      Metamaps.Views.exploreMaps.render();
-      Metamaps.GlobalUI.showDiv('#exploreMaps')
-      Metamaps.Header.changeSection(!!Metamaps.Active.Mapper, 'active')
-      Metamaps.GlobalUI.showDiv('#exploreMapsHeader')
+      Metamaps.Views.exploreMaps.setCollection(Metamaps.Maps.Active)
+      Metamaps.Views.exploreMaps.render()
+      Metamaps.GlobalUI.showDiv('#explore')
   }
   else if (Metamaps.Active.Map || Metamaps.Active.Topic) {
     Metamaps.Loading.show()

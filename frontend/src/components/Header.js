@@ -32,41 +32,43 @@ class Header extends Component {
     const mapper = section == "mapper"
 
     return (
-      <div className="exploreMapsBar exploreElement">
-        <div className="exploreMapsMenu">
-          <div className="exploreMapsCenter">
-            <MapLink show={signedIn && explore}
-              href="/explore/mine"
-              linkClass={activeClass("my")}
-              data-router="true"
-              text="My Maps"
-            />
-            <MapLink show={signedIn && explore}
-              href="/explore/shared"
-              linkClass={activeClass("shared")}
-              data-router="true"
-              text="Shared With Me"
-            />
-            <MapLink show={explore}
-              href={signedIn ? "/" : "/explore/active"}
-              linkClass={activeClass("active")}
-              data-router="true"
-              text="Recently Active"
-            />
-            <MapLink show={!signedIn && explore}
-              href="/explore/featured"
-              linkClass={activeClass("featured")}
-              data-router="true"
-              text="Featured Maps"
-            />
-      
-            {mapper ? (
-              <div className='exploreMapsButton active mapperButton'>
-                <img className='exploreMapperImage' width='24' height='24' src={this.props.userAvatar} />
-                <div className='exploreMapperName'>{this.props.userName}&rsquo;s Maps</div>
-                <div className='clearfloat'></div>
-              </div>
-            ) : null }
+      <div id="exploreMapsHeader">
+        <div className="exploreMapsBar exploreElement">
+          <div className="exploreMapsMenu">
+            <div className="exploreMapsCenter">
+              <MapLink show={signedIn && explore}
+                href="/explore/mine"
+                linkClass={activeClass("my")}
+                data-router="true"
+                text="My Maps"
+              />
+              <MapLink show={signedIn && explore}
+                href="/explore/shared"
+                linkClass={activeClass("shared")}
+                data-router="true"
+                text="Shared With Me"
+              />
+              <MapLink show={explore}
+                href={signedIn ? "/" : "/explore/active"}
+                linkClass={activeClass("active")}
+                data-router="true"
+                text="Recently Active"
+              />
+              <MapLink show={!signedIn && explore}
+                href="/explore/featured"
+                linkClass={activeClass("featured")}
+                data-router="true"
+                text="Featured Maps"
+              />
+        
+              {mapper ? (
+                <div className='exploreMapsButton active mapperButton'>
+                  <img className='exploreMapperImage' width='24' height='24' src={this.props.user.image} />
+                  <div className='exploreMapperName'>{this.props.user.name}&rsquo;s Maps</div>
+                  <div className='clearfloat'></div>
+                </div>
+              ) : null }
+            </div>
           </div>
         </div>
       </div>
@@ -77,8 +79,7 @@ class Header extends Component {
 Header.propTypes = {
   signedIn: PropTypes.bool.isRequired,
   section: PropTypes.string.isRequired,
-  userAvatar: PropTypes.string,
-  userName: PropTypes.string
+  user: PropTypes.object
 }
 
 export default Header
