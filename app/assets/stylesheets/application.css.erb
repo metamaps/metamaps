@@ -1522,6 +1522,39 @@ h3.filterBox {
     text-align: center;
     box-shadow: 0 3px 3px rgba(0,0,0,0.23), 0px 3px 3px rgba(0,0,0,0.16);
 }
+.requestTitle {
+    display: none;
+    position: absolute;
+    background: black;
+    text-align: center;
+    text-transform: none;
+    color: white;
+    border-radius: 2px;
+    font-family: din-regular;
+    line-height: 18px;
+    font-size: 15px;
+    padding: 3px 5px 2px;
+    white-space: nowrap;
+    font-style: normal;
+    left: 50%;
+    margin-left: -100px;
+    top: -15px;
+}
+.mapRequestTitle .requestTitle {
+    display: block;
+}
+.requestTitle:after {
+    content: '';
+    position: absolute;
+    top: 23px;
+    left: 50%;
+    margin-left: -8px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #000000;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+}
 .mapInfoName {
     font-size: 18px;
     line-height: 20px;

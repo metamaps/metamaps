@@ -6,6 +6,12 @@
   <%= @map && @map.user == user ? " yourMap" : "" %>
   <%= @map && policy(@map).update? ? " canEdit" : "" %>
   <%= @map && @map.permission != 'private' ? " shareable" : "" %>">
+
+  <% if current_user %>
+    <div class="requestTitle">
+      Click here to name this map!
+    </div>
+  <% end %>
   
   <% if @map %>
   <div class="mapInfoName" id="mapInfoName">

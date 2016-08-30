@@ -129,6 +129,7 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
       this.updateMapWrapper()
       // mobile menu
       $('#header_content').html(this.get('name'))
+      document.title = this.get('name') + ' | Metamaps'
     }
   },
   updateMapWrapper: function () {

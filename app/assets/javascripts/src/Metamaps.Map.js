@@ -443,17 +443,7 @@ Metamaps.Map.InfoBox = {
     var querystring = window.location.search.replace(/^\?/, '')
     if (querystring == 'new') { 
       self.open()
-      window.setTimeout(self.requestMapTitle, 3000)
-    }
-  },
-  requestMapTitle: function () {
-    var t = prompt('Please enter a name for your map. You can also set it any time using the map info panel.')
- 
-    if (t) {
-      Metamaps.Active.Map.set('name', t)
-      Metamaps.Active.Map.save()
-      $('#mapInfoName span').text(t)
-      document.title = t + ' | Metamaps'
+      $('.mapInfoBox').addClass('mapRequestTitle')
     }
   },
   toggleBox: function (event) {
@@ -554,6 +544,8 @@ Metamaps.Map.InfoBox = {
       Metamaps.Active.Map.trigger('saved')
       // mobile menu
       $('#header_content').html(name)
+      $('.mapInfoBox').removeClass('mapRequestTitle')
+      document.title = name + ' | Metamaps'
     })
 
     $('.mapInfoDesc .best_in_place_desc').unbind('ajax:success').bind('ajax:success', function () {
@@ -664,6 +656,7 @@ Metamaps.Map.InfoBox = {
    $('.collaboratorSearchField').typeahead('val', '')
   },
   updateNameDescPerm: function (name, desc, perm) {
+    $('.mapInfoBox').removeClass('mapRequestTitle')
     $('.mapInfoName .best_in_place_name').html(name)
     $('.mapInfoDesc .best_in_place_desc').html(desc)
     $('.mapInfoBox .mapPermission').removeClass('commons public private').addClass(perm)
