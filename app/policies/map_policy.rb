@@ -57,6 +57,14 @@ class MapPolicy < ApplicationPolicy
     user.present? && record.user == user
   end
 
+  def star?
+    unstar?
+  end
+
+  def unstar?
+    user.present?
+  end
+
   def screenshot?
     update?
   end

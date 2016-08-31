@@ -49,12 +49,18 @@ Metamaps.Map = {
       return false
     })
 
+    $('.starMap').click(function () {
+      if ($(this).is('.starred')) self.unstar()
+      else self.star()
+    })
+
     $('.sidebarFork').click(function () {
       self.fork()
     })
 
     Metamaps.GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
 
+    self.updateStar()
     self.InfoBox.init()
     self.CheatSheet.init()
 
@@ -70,6 +76,7 @@ Metamaps.Map = {
       Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
       Metamaps.Mappings = new bb.MappingCollection(data.mappings)
       Metamaps.Messages = data.messages
+      Metamaps.Stars = data.stars
       Metamaps.Backbone.attachCollectionEvents()
 
       var map = Metamaps.Active.Map
@@ -85,6 +92,8 @@ Metamaps.Map = {
       if (map.get('permission') === 'commons') {
         $('.wrapper').addClass('commonsMap')
       }
+
+      Metamaps.Map.updateStar()     
 
       // set filter mapper H3 text
       $('#filter_by_mapper h3').html('MAPPERS')
@@ -133,6 +142,35 @@ Metamaps.Map = {
       Metamaps.Map.InfoBox.close()
       Metamaps.Realtime.endActiveMap()
     }
+  },
+  updateStar: function () {
+    if (!Metamaps.Active.Mapper || !Metamaps.Stars) return
+    // update the star/unstar icon
+    if (Metamaps.Stars.find(function (s) { return s.user_id === Metamaps.Active.Mapper.id })) {
+      $('.starMap').addClass('starred')
+      $('.starMap .tooltipsAbove').html('Unstar')
+    } else {
+      $('.starMap').removeClass('starred')
+      $('.starMap .tooltipsAbove').html('Star')
+    }
+  },
+  star: function () {
+    var self = Metamaps.Map
+
+    if (!Metamaps.Active.Map) return
+    $.post('/maps/' + Metamaps.Active.Map.id + '/star')
+    Metamaps.Stars.push({ user_id: Metamaps.Active.Mapper.id, map_id: Metamaps.Active.Map.id })
+    Metamaps.Maps.Starred.add(Metamaps.Active.Map)
+    self.updateStar()
+  },
+  unstar: function () {
+    var self = Metamaps.Map
+
+    if (!Metamaps.Active.Map) return
+    $.post('/maps/' + Metamaps.Active.Map.id + '/unstar')
+    Metamaps.Stars = Metamaps.Stars.filter(function (s) { return s.user_id != Metamaps.Active.Mapper.id })
+    Metamaps.Maps.Starred.remove(Metamaps.Active.Map)
+    self.updateStar() 
   },
   fork: function () {
     Metamaps.GlobalUI.openLightbox('forkmap')

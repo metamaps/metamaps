@@ -6,6 +6,7 @@ class Map < ActiveRecord::Base
   has_many :topics, through: :topicmappings, source: :mappable, source_type: 'Topic'
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: 'Synapse'
   has_many :messages, as: :resource, dependent: :destroy
+  has_many :stars
 
   has_many :user_maps, dependent: :destroy
   has_many :collaborators, through: :user_maps, source: :user

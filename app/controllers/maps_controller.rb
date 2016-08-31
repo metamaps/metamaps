@@ -1,7 +1,7 @@
 class MapsController < ApplicationController
-  before_action :require_user, only: [:create, :update, :access, :screenshot, :events, :destroy]
-  after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :usermaps, :events]
-  after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :usermaps]
+  before_action :require_user, only: [:create, :update, :access, :star, :unstar, :screenshot, :events, :destroy]
+  after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps, :events]
+  after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps]
 
   respond_to :html, :json, :csv
 
@@ -73,6 +73,25 @@ class MapsController < ApplicationController
     end
   end
 
+  # GET /explore/starred
+  def starredmaps
+    unless authenticated?
+      skip_policy_scope
+      return redirect_to explore_active_path
+    end
+
+    page = params[:page].present? ? params[:page] : 1
+    stars = current_user.stars.map(&:map_id)
+    @maps = policy_scope(
+      Map.where('maps.id IN (?)', stars)
+    ).order('updated_at DESC').page(page).per(20)
+
+    respond_to do |format|
+      format.html { respond_with(@maps, @user) }
+      format.json { render json: @maps }
+    end
+  end
+
   # GET /explore/mapper/:id
   def usermaps
     page = params[:page].present? ? params[:page] : 1
@@ -113,8 +132,9 @@ class MapsController < ApplicationController
         @allsynapses = @map.synapses.to_a.delete_if { |s| !policy(s).show? }
         @allmappings = @map.mappings.to_a.delete_if { |m| !policy(m).show? }
         @allmessages = @map.messages.sort_by(&:created_at)
+        @allstars = @map.stars
 
-        respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses, @alltopics, @allmessages, @map)
+        respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses, @alltopics, @allmessages, @allstars, @map)
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }
@@ -175,6 +195,7 @@ class MapsController < ApplicationController
     @json['mappers'] = @allmappers
     @json['collaborators'] = @allcollaborators
     @json['messages'] = @map.messages.sort_by(&:created_at)
+    @json['stars'] = @map.stars
 
     respond_to do |format|
       format.json { render json: @json }
@@ -275,6 +296,38 @@ class MapsController < ApplicationController
     respond_to do |format|
       format.json do
         render json: { message: 'Successfully altered edit permissions' }
+      end
+    end
+  end
+
+  # POST maps/:id/star
+  def star
+    @map = Map.find(params[:id])
+    authorize @map
+    star = Star.find_by_map_id_and_user_id(@map.id, current_user.id)
+    if not star
+      star = Star.create(map_id: @map.id, user_id: current_user.id)
+    end
+
+    respond_to do |format|
+      format.json do
+        render json: { message: 'Successfully starred map' }
+      end
+    end
+  end
+
+  # POST maps/:id/unstar
+  def unstar
+    @map = Map.find(params[:id])
+    authorize @map
+    star = Star.find_by_map_id_and_user_id(@map.id, current_user.id)
+    if star
+      star.delete
+    end
+
+    respond_to do |format|
+      format.json do
+        render json: { message: 'Successfully unstarred map' }
       end
     end
   end

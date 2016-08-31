@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :maps
   has_many :mappings
   has_many :tokens
+  has_many :stars
   has_many :user_maps, dependent: :destroy
   has_many :shared_maps, through: :user_maps, source: :map
 
@@ -76,6 +77,10 @@ class User < ActiveRecord::Base
     else
       update(generation: User.find_by_code(joinedwithcode).generation + 1)
     end
+  end
+
+  def starred_map?(map) 
+    return !!self.stars.index{|s| s.map_id == map.id }
   end
 
   def settings

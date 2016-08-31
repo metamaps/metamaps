@@ -334,7 +334,8 @@
     right: 70px;
 }
 .mapPage .openCheatsheet .tooltipsAbove, .topicPage .openCheatsheet .tooltipsAbove {
-    left: 29px;
+  right: 1px;
+  left: auto;
 }
 
 .unauthenticated .homePage .infoAndHelp {
@@ -375,7 +376,22 @@
 .mapPage .mapInfoIcon {
 	top: 0;
 }
+.starMap {
+  background-image: url(<%= asset_data_uri('star.png') %>);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  width: 32px;
+}
+.starMap:hover, .starMap.starred {
+  background-position: 0 -32px;
+}
+.starMap.starred:hover {
+  background-position: 0 0;
+}
 
+.unauthenticated .mapPage .starMap {
+  display: none;
+}
 /* end infoAndHelp */
 
 
@@ -433,7 +449,7 @@
 }
 
 .zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
- .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips {
+ .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .starMap:hover .tooltipsAbove {
     display: block;
 }
 
@@ -517,6 +533,13 @@
     top: 10px;
 }
 
+.starMap .tooltipsAbove {
+    left: -2px;
+}
+.starMap.starred .tooltipsAbove {
+    left: -8px;
+}
+
 .openCheatsheet .tooltipsAbove {
     left: -4px;
 }
@@ -554,7 +577,7 @@
     right: 37% !important;
 }
 
-.mapInfoIcon div:after, .openCheatsheet div:after {
+.mapInfoIcon div:after, .openCheatsheet div:after, .starMap div:after {
    content: '';
     position: absolute;
     top: 76%;
@@ -700,6 +723,10 @@
     background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
     background-position: -64px 0;
 }
+.exploreMapsCenter .starredMaps .exploreMapsIcon {
+    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-position: -64px 0;
+}
 .myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
     background-position: 0 -32px;
 }
@@ -707,6 +734,9 @@
     background-position: -32px -32px;
 }
 .featuredMaps:hover .exploreMapsIcon, .featuredMaps.active .exploreMapsIcon {
+    background-position: -64px -32px;
+}
+.starredMaps:hover .exploreMapsIcon, .starredMaps.active .exploreMapsIcon {
     background-position: -64px -32px;
 }
 .sharedMaps:hover .exploreMapsIcon, .sharedMaps.active .exploreMapsIcon {

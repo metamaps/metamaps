@@ -105,6 +105,7 @@ Metamaps.GlobalUI = {
 
         var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
         var sharedCollection = Metamaps.Maps.Shared ? Metamaps.Maps.Shared : [];
+        var starredCollection = Metamaps.Maps.Starred ? Metamaps.Maps.Starred : [];
         var mapperCollection = [];
         var mapperOptionsObj = {id: 'mapper', sortBy: 'updated_at' };
         if (Metamaps.Maps.Mapper) {
@@ -115,6 +116,7 @@ Metamaps.GlobalUI = {
         var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : [];
         Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'updated_at' });
         Metamaps.Maps.Shared = new Metamaps.Backbone.MapsCollection(sharedCollection, {id: 'shared', sortBy: 'updated_at' });
+        Metamaps.Maps.Starred = new Metamaps.Backbone.MapsCollection(starredCollection, {id: 'starred', sortBy: 'updated_at' });
         // 'Mapper' refers to another mapper
         Metamaps.Maps.Mapper = new Metamaps.Backbone.MapsCollection(mapperCollection, mapperOptionsObj);
         Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'updated_at' });
