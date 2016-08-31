@@ -44,6 +44,7 @@
 
       // all this only for the logged in home page
       if (Metamaps.Active.Mapper) {
+        $('.homeButton a').attr('href', '/')
         Metamaps.GlobalUI.hideDiv('#yield')
 
         Metamaps.GlobalUI.showDiv('#explore')
@@ -89,6 +90,7 @@
         document.title = 'Explore My Maps | Metamaps'
       }
 
+      if (Metamaps.Active.Mapper) $('.homeButton a').attr('href', '/explore/' + section + (id ? '/' + id : ''))
       $('.wrapper').removeClass('homePage mapPage topicPage')
       $('.wrapper').addClass('explorePage')
 

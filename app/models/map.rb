@@ -19,7 +19,7 @@ class Map < ActiveRecord::Base
     thumb: ['188x126#', :png]
     #:full => ['940x630#', :png]
   },
-                                 default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map.png'
+  default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }

@@ -25,9 +25,12 @@
       <li>
         <%= link_to "Shared With Me", explore_shared_path, :data => { :router => 'true'} %>
       </li>
+      <li>
+        <%= link_to "Starred By Me", explore_starred_path, :data => { :router => 'true'} %>
+      </li>
     <% end %>
     <li>
-      <%= link_to "Recently Active", explore_active_path, :data => { :router => 'true'} %>
+      <%= link_to "Global Maps", explore_active_path, :data => { :router => 'true'} %>
     </li>
     <% if not current_user %>
       <li>

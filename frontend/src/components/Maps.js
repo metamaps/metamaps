@@ -25,6 +25,7 @@ class Maps extends Component {
         <div id='exploreMaps'>
           <div>
             { user ? <MapperCard user={ user } /> : null }
+            { currentUser && !user ? <div className="map newMap"><a href="/maps/new"><div className="newMapImage"></div><span>Create new map...</span></a></div> : null }
             { mapElements }
             <div className='clearfloat'></div>
             { moreToLoad ? 

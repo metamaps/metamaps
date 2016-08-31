@@ -127,13 +127,16 @@
 }
 .homeButton a {
     display:block;
-    color: #9E9E9E;
+    color: #747474;
     font-family: "vinyl", sans-serif;
     font-style: italic;
     text-transform: uppercase;
     font-weight: 400;
     font-size: 30px;
     line-height: 38px;
+}
+.homeButton a:hover {
+  color: #616161;
 }
 
 /* end upperLeftUI */
@@ -377,13 +380,16 @@
 	top: 0;
 }
 .starMap {
-  background-image: url(<%= asset_data_uri('star.png') %>);
+  background-image: url(<%= asset_data_uri('starmap_sprite.png') %>);
   background-position: 0 0;
   background-repeat: no-repeat;
   width: 32px;
 }
-.starMap:hover, .starMap.starred {
-  background-position: 0 -32px;
+.starMap:hover {
+  background-position: 0 -32px !important;
+}
+ .starMap.starred {
+  background-position: 0 -64px;
 }
 .starMap.starred:hover {
   background-position: 0 0;
@@ -670,7 +676,7 @@
 	font-family: 'din-medium';
 	font-size: 14px;
 	height: 14px;
-	padding: 14px 16px 12px 40px;
+	padding: 14px 8px 12px 40px;
     border-bottom: 2px solid rgba(0,0,0,0);
 	display: inline-block;
     cursor: pointer;
@@ -709,38 +715,38 @@
 }
 .exploreMapsCenter .myMaps .exploreMapsIcon {
     background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
-    background-position: 0 0;
+    background-position: -32px 0;
 }
 .exploreMapsCenter .sharedMaps .exploreMapsIcon {
     background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
-    background-position: -96px 0;
+    background-position: -128px 0;
 }
 .exploreMapsCenter .activeMaps .exploreMapsIcon {
     background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
-    background-position: -32px 0;
+    background-position: 0 0;
 }
 .exploreMapsCenter .featuredMaps .exploreMapsIcon {
     background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
-    background-position: -64px 0;
+    background-position: -96px 0;
 }
 .exploreMapsCenter .starredMaps .exploreMapsIcon {
     background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
-    background-position: -64px 0;
+    background-position: -96px 0;
 }
 .myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
-    background-position: 0 -32px;
-}
-.activeMaps:hover .exploreMapsIcon, .activeMaps.active .exploreMapsIcon {
     background-position: -32px -32px;
 }
+.activeMaps:hover .exploreMapsIcon, .activeMaps.active .exploreMapsIcon {
+    background-position: 0 -32px;
+}
 .featuredMaps:hover .exploreMapsIcon, .featuredMaps.active .exploreMapsIcon {
-    background-position: -64px -32px;
+    background-position: -96px -32px;
 }
 .starredMaps:hover .exploreMapsIcon, .starredMaps.active .exploreMapsIcon {
-    background-position: -64px -32px;
+    background-position: -96px -32px;
 }
 .sharedMaps:hover .exploreMapsIcon, .sharedMaps.active .exploreMapsIcon {
-    background-position: -96px -32px;
+    background-position: -128px -32px;
 }
 
 .mapsWrapper {

@@ -161,6 +161,7 @@ Metamaps.Map = {
     $.post('/maps/' + Metamaps.Active.Map.id + '/star')
     Metamaps.Stars.push({ user_id: Metamaps.Active.Mapper.id, map_id: Metamaps.Active.Map.id })
     Metamaps.Maps.Starred.add(Metamaps.Active.Map)
+    Metamaps.GlobalUI.notifyUser('Map is now starred')
     self.updateStar()
   },
   unstar: function () {
