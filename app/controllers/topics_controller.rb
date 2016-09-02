@@ -24,7 +24,7 @@ class TopicsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @alltopics = [@topic].concat(policy_scope(Topic.relatives1(@topic.id)).to_a).concat(policy_scope(Topic.relatives2(@topic.id)).to_a)
+        @alltopics = [@topic].concat(policy_scope(Topic.relatives1(@topic.id, current_user)).to_a).concat(policy_scope(Topic.relatives2(@topic.id, current_user)).to_a)
         @allsynapses = policy_scope(Synapse.for_topic(@topic.id)).to_a
         puts @alltopics.length
         puts @allsynapses.length
@@ -42,7 +42,7 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
     authorize @topic
 
-    @alltopics = [@topic].concat(policy_scope(Topic.relatives1(@topic.id)).to_a).concat(policy_scope(Topic.relatives2(@topic.id)).to_a)
+    @alltopics = [@topic].concat(policy_scope(Topic.relatives1(@topic.id, current_user)).to_a).concat(policy_scope(Topic.relatives2(@topic.id, current_user)).to_a)
     @allsynapses = policy_scope(Synapse.for_topic(@topic.id))
 
     @allcreators = @alltopics.map(&:user).uniq
