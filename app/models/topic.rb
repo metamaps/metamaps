@@ -42,16 +42,12 @@ class Topic < ActiveRecord::Base
     topics1 + topics2
   end
 
-  scope :relatives1, ->(topic_id = nil) {
-    includes(:topics1)
-      .where('synapses.node1_id = ?', topic_id)
-      .references(:synapses)
-  }
-
-  scope :relatives2, ->(topic_id = nil) {
-    includes(:topics2)
-      .where('synapses.node2_id = ?', topic_id)
-      .references(:synapses)
+  scope :relatives, ->(topic_id = nil, user = nil) {
+    # should only see topics through *visible* synapses
+    # e.g. Topic A (commons) -> synapse (private) -> Topic B (commons) must be filtered out
+    synapses = Pundit.policy_scope(user, Synapse.where(node1_id: topic_id)).pluck(:node2_id)
+    synapses += Pundit.policy_scope(user, Synapse.where(node2_id: topic_id)).pluck(:node1_id)
+    where(id: synapses.uniq)
   }
 
   delegate :name, to: :user, prefix: true
