@@ -42,6 +42,12 @@ class Topic < ActiveRecord::Base
     topics1 + topics2
   end
 
+  scope :relatives, ->(topic_id = nil, user = nil) {
+    synapses = Pundit.policy_scope(user, Synapse.where(node1_id: topic_id)).pluck(:node2_id)
+    synapses += Pundit.policy_scope(user, Synapse.where(node2_id: topic_id)).pluck(:node1_id)
+    where(id: synapses.uniq)
+  }
+
   scope :relatives1, ->(topic_id = nil, user = nil) {
      visible = %w(public commons)
      permission = 'synapses.permission IN (?)'
