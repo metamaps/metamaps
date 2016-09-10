@@ -90,7 +90,7 @@
         document.title = 'Explore My Maps | Metamaps'
       }
 
-      if (Metamaps.Active.Mapper) $('.homeButton a').attr('href', '/explore/' + section + (id ? '/' + id : ''))
+      if (Metamaps.Active.Mapper && section != 'mapper') $('.homeButton a').attr('href', '/explore/' + section)
       $('.wrapper').removeClass('homePage mapPage topicPage')
       $('.wrapper').addClass('explorePage')
 
