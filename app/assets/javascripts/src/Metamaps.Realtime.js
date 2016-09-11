@@ -200,7 +200,7 @@ Metamaps.Realtime = {
   endActiveMap: function () {
     var self = Metamaps.Realtime
 
-    $(document).off('mousemove')
+    $(document).off('.map')
     self.socket.removeAllListeners()
     if (self.inConversation) self.leaveCall()
     self.socket.emit('endMapperNotify')
@@ -552,7 +552,7 @@ Metamaps.Realtime = {
       var coords = Metamaps.Util.pixelsToCoords(pixels)
       self.sendCoords(coords)
     }
-    $(document).mousemove(sendCoords)
+    $(document).on('mousemove.map', sendCoords)
 
     var zoom = function (event, e) {
       if (e) {
@@ -565,49 +565,49 @@ Metamaps.Realtime = {
       }
       self.positionPeerIcons()
     }
-    $(document).on(Metamaps.JIT.events.zoom, zoom)
+    $(document).on(Metamaps.JIT.events.zoom + '.map', zoom)
 
-    $(document).on(Metamaps.JIT.events.pan, self.positionPeerIcons)
+    $(document).on(Metamaps.JIT.events.pan + '.map', self.positionPeerIcons)
 
     var sendTopicDrag = function (event, positions) {
       self.sendTopicDrag(positions)
     }
-    $(document).on(Metamaps.JIT.events.topicDrag, sendTopicDrag)
+    $(document).on(Metamaps.JIT.events.topicDrag + '.map', sendTopicDrag)
 
     var sendNewTopic = function (event, data) {
       self.sendNewTopic(data)
     }
-    $(document).on(Metamaps.JIT.events.newTopic, sendNewTopic)
+    $(document).on(Metamaps.JIT.events.newTopic + '.map', sendNewTopic)
 
     var sendDeleteTopic = function (event, data) {
       self.sendDeleteTopic(data)
     }
-    $(document).on(Metamaps.JIT.events.deleteTopic, sendDeleteTopic)
+    $(document).on(Metamaps.JIT.events.deleteTopic + '.map', sendDeleteTopic)
 
     var sendRemoveTopic = function (event, data) {
       self.sendRemoveTopic(data)
     }
-    $(document).on(Metamaps.JIT.events.removeTopic, sendRemoveTopic)
+    $(document).on(Metamaps.JIT.events.removeTopic + '.map', sendRemoveTopic)
 
     var sendNewSynapse = function (event, data) {
       self.sendNewSynapse(data)
     }
-    $(document).on(Metamaps.JIT.events.newSynapse, sendNewSynapse)
+    $(document).on(Metamaps.JIT.events.newSynapse + '.map', sendNewSynapse)
 
     var sendDeleteSynapse = function (event, data) {
       self.sendDeleteSynapse(data)
     }
-    $(document).on(Metamaps.JIT.events.deleteSynapse, sendDeleteSynapse)
+    $(document).on(Metamaps.JIT.events.deleteSynapse + '.map', sendDeleteSynapse)
 
     var sendRemoveSynapse = function (event, data) {
       self.sendRemoveSynapse(data)
     }
-    $(document).on(Metamaps.JIT.events.removeSynapse, sendRemoveSynapse)
+    $(document).on(Metamaps.JIT.events.removeSynapse + '.map', sendRemoveSynapse)
 
     var sendNewMessage = function (event, data) {
       self.sendNewMessage(data)
     }
-    $(document).on(Metamaps.Views.room.events.newMessage, sendNewMessage)
+    $(document).on(Metamaps.Views.room.events.newMessage + '.map', sendNewMessage)
   },
   attachMapListener: function () {
     var self = Metamaps.Realtime
