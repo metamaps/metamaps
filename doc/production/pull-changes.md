@@ -24,9 +24,8 @@ Now that you have the code, run these commands:
 
     bundle install
     npm install
-    npm run build
     rake db:migrate
-    rake assets:precompile
+    rake assets:precompile # includes `npm run build`
     rake perms:fix
     passenger-config restart-app .
 
