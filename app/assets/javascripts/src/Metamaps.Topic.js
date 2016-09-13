@@ -370,7 +370,7 @@ Metamaps.Topic = {
 
     var topic = self.get(id)
 
-    var nextCoords = Metamaps.Map.getNextCoord()
+    var nextCoords = Metamaps.AutoLayout.getNextCoord()
     var mapping = new Metamaps.Backbone.Mapping({
       xloc: nextCoords.x,
       yloc: nextCoords.y,
