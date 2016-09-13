@@ -44,3 +44,4 @@
 //= require ./src/Metamaps.Admin
 //= require ./src/Metamaps.Import
 //= require ./src/Metamaps.JIT
+//= require ./src/Metamaps.Debug
