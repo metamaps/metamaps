@@ -63,7 +63,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 The license can be read [here][license].
 
-Copyright (c) 2015 Connor Turland
+Copyright (c) 2016 Connor Turland
 
 [site-blog]: http://blog.metamaps.cc
 [site-beta]: http://metamaps.cc
