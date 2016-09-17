@@ -206,9 +206,11 @@ Metamaps.Realtime = {
     self.socket.emit('endMapperNotify')
     $('.collabCompass').remove()
     self.status = false
-    self.room.leave()
-    self.room.chat.$container.hide()
-    self.room.chat.close()
+    if (self.room) {
+      self.room.leave()
+      self.room.chat.$container.hide()
+      self.room.chat.close()
+    }
   },
   turnOn: function (notify) {
     var self = Metamaps.Realtime
