@@ -64,13 +64,14 @@ class TopicsController < ApplicationController
 
     topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
-    @alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
-    @alltopics.delete_if do |topic|
+    alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
+    alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i } if params[:metacode].present?
+    alltopics.delete_if do |topic|
       !topicsAlreadyHas.index(topic.id).nil?
     end
 
     @json = Hash.new(0)
-    @alltopics.each do |t|
+    alltopics.each do |t|
       @json[t.metacode.id] += 1
     end
 
@@ -87,6 +88,7 @@ class TopicsController < ApplicationController
     topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
     alltopics = policy_scope(Topic.relatives(@topic.id)).to_a
+    alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i } if params[:metacode].present?
     alltopics.delete_if do |topic|
       !topicsAlreadyHas.index(topic.id.to_s).nil?
     end
