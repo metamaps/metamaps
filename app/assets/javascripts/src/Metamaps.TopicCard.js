@@ -25,7 +25,10 @@ Metamaps.TopicCard = {
 
     // initialize topic card draggability and resizability
     $('.showcard').draggable({
-      handle: '.metacodeImage'
+      handle: '.metacodeImage',
+      stop: function() {
+        $(this).height('auto')
+      }
     })
 
     embedly('on', 'card.rendered', self.embedlyCardRendered)
