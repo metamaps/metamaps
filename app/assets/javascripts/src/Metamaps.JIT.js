@@ -706,7 +706,7 @@ Metamaps.JIT = {
       Metamaps.GlobalUI.CreateMap.submit()
     }
     // this is to submit new topic creation
-    else if (Metamaps.Create.newTopic.beingCreated) {
+    else if (Metamaps.Create.newTopic.beingCreated && !Metamaps.Create.newTopic.metacodeSelectorOpen) {
       Metamaps.Topic.createTopicLocally()
     }
     // to submit new synapse creation 

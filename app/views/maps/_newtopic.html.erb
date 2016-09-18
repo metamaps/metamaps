@@ -1,14 +1,20 @@
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
   <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes"></div>
   <div id="metacodeImg">
-    <% @metacodes = user_metacodes() %>
+    <% @metacodes = [user_metacode()].concat(user_metacodes()).uniq %>
     <% set = get_metacodeset() %>
     <% @metacodes.each do |metacode| %>
       <img class="cloudcarousel" width="40" height="40" src="<%= asset_path metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
     <% end %>
-  </div> 
+  </div>
+  <div class="selectedMetacode">
+    <img src="<%= asset_path user_metacode().icon %>" />
+    <span><%= user_metacode().name %></span>
+    <div class="downArrow"></div>
+  </div>
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>
-  <div id="metacodeImgTitle"></div>
+  <div class="clearfloat"></div>
+  <div id="metacodeSelector"></div>
   <div class="clearfloat"></div>
 <script>
 <% @metacodes.each do |metacode| %>
@@ -19,5 +25,11 @@
     Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
   <% end %>
 <% end %> 
+<% current_user.recentMetacodes.each do |id| %>
+    Metamaps.Create.recentMetacodes.push(<%= id %>);
+<% end %>
+<% current_user.mostUsedMetacodes.each do |id| %>
+    Metamaps.Create.mostUsedMetacodes.push(<%= id %>);
+<% end %>
 </script>
 <% end %>

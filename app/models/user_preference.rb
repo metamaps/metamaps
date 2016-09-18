@@ -1,5 +1,5 @@
 class UserPreference
-  attr_accessor :metacodes
+  attr_accessor :metacodes, :metacode_focus
 
   def initialize
     array = []
@@ -8,5 +8,6 @@ class UserPreference
       array.push(metacode.id.to_s) if metacode
     end
     @metacodes = array
+    @metacode_focus = array[0]
   end
 end

@@ -15,6 +15,10 @@ module ApplicationHelper
                  end
     @metacodes.sort! { |m1, m2| m2.name.downcase <=> m1.name.downcase }.rotate!(-1)
   end
+  
+  def user_metacode
+    current_user.settings.metacode_focus ? Metacode.find(current_user.settings.metacode_focus.to_i) || user_metacodes()[0]  : user_metacodes()[0]
+  end
 
   def determine_invite_link
     "#{request.base_url}/join" + (current_user ? "?code=#{current_user.code}" : '')

@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global Metamaps, $, ReactDOM, React */
 
 /*
  * Metamaps.Create.js
@@ -22,6 +22,8 @@ Metamaps.Create = {
   newSelectedMetacodeNames: [],
   selectedMetacodes: [],
   newSelectedMetacodes: [],
+  recentMetacodes: [],
+  mostUsedMetacodes: [],
   init: function () {
     var self = Metamaps.Create
     self.newTopic.init()
@@ -82,7 +84,6 @@ Metamaps.Create = {
     }
     metacodeModels.sort()
 
-    $('#metacodeImg, #metacodeImgTitle').empty()
     $('#metacodeImg').removeData('cloudcarousel')
     var newMetacodes = ''
     metacodeModels.each(function (metacode) {
@@ -90,13 +91,11 @@ Metamaps.Create = {
     })
 
     $('#metacodeImg').empty().append(newMetacodes).CloudCarousel({
-      titleBox: $('#metacodeImgTitle'),
       yRadius: 40,
       xRadius: 190,
       xPos: 170,
       yPos: 40,
       speed: 0.3,
-      mouseWheel: true,
       bringToFront: true
     })
 
@@ -147,9 +146,23 @@ Metamaps.Create = {
   },
   newTopic: {
     init: function () {
-      $('#topic_name').keyup(function () {
+      var DOWN_ARROW = 40
+
+      $('#topic_name').keyup(function (e) {
         Metamaps.Create.newTopic.name = $(this).val()
+        if (e.which == DOWN_ARROW && !Metamaps.Create.newTopic.name.length) {
+          Metamaps.Create.newTopic.openSelector()
+        }
       })
+      
+      $('.selectedMetacode').click(function() {
+        if (Metamaps.Create.newTopic.metacodeSelectorOpen) {
+          Metamaps.Create.newTopic.hideSelector()
+          $('#topic_name').focus()
+        } else Metamaps.Create.newTopic.openSelector()
+      })
+      
+      Metamaps.Create.newTopic.initSelector()
 
       var topicBloodhound = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -183,16 +196,15 @@ Metamaps.Create = {
       $('#topic_name').bind('typeahead:select', function (event, datum, dataset) {
         Metamaps.Topic.getTopicFromAutocomplete(datum.id)
       })
+      $('#topic_name').click(function() { Metamaps.Create.newTopic.hideSelector() })
 
       // initialize metacode spinner and then hide it
       $('#metacodeImg').CloudCarousel({
-        titleBox: $('#metacodeImgTitle'),
         yRadius: 40,
         xRadius: 190,
         xPos: 170,
         yPos: 40,
         speed: 0.3,
-        mouseWheel: true,
         bringToFront: true
       })
       $('.new_topic').hide()
@@ -200,10 +212,59 @@ Metamaps.Create = {
     name: null,
     newId: 1,
     beingCreated: false,
+    metacodeSelectorOpen: false,
     metacode: null,
     x: null,
     y: null,
     addSynapse: false,
+    initSelector: function () {
+      ReactDOM.render(
+        React.createElement(Metamaps.ReactComponents.MetacodeSelect, {
+          onClick: function (id) {
+            Metamaps.Create.newTopic.setMetacode(id)
+            Metamaps.Create.newTopic.hideSelector()
+            $('#topic_name').focus()
+          },
+          close: function () {
+            Metamaps.Create.newTopic.hideSelector()
+            $('#topic_name').focus()
+          },
+          metacodes: Metamaps.Metacodes.models,
+          recent: Metamaps.Create.recentMetacodes,
+          mostUsed: Metamaps.Create.mostUsedMetacodes
+        }),
+        document.getElementById('metacodeSelector')
+      )
+    },
+    openSelector: function () {
+      Metamaps.Create.newTopic.initSelector()
+      $('#metacodeSelector').show()
+      Metamaps.Create.newTopic.metacodeSelectorOpen = true
+      $('.metacodeFilterInput').focus()
+      $('.selectedMetacode').addClass('isBeingSelected')
+    },
+    hideSelector: function () {
+      ReactDOM.unmountComponentAtNode(document.getElementById('metacodeSelector'))
+      $('#metacodeSelector').hide()
+      Metamaps.Create.newTopic.metacodeSelectorOpen = false
+      $('.selectedMetacode').removeClass('isBeingSelected')
+    },
+    setMetacode: function (id) {
+      Metamaps.Create.newTopic.metacode = id
+      var metacode = Metamaps.Metacodes.get(id)
+      $('.selectedMetacode img').attr('src', metacode.get('icon'))
+      $('.selectedMetacode span').html(metacode.get('name'))
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: '/user/update_metacode_focus',
+        data: { value: id },
+        success: function (data) {},
+        error: function () {
+          console.log('failed to save metacode focus')
+        }
+      })
+    },
     open: function () {
       $('#new_topic').fadeIn('fast', function () {
         $('#topic_name').focus()
@@ -215,6 +276,7 @@ Metamaps.Create = {
       $('#new_topic').fadeOut('fast')
       $('#topic_name').typeahead('val', '')
       Metamaps.Create.newTopic.beingCreated = false
+      Metamaps.Create.newTopic.hideSelector()
     }
   },
   newSynapse: {

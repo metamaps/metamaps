@@ -61,5 +61,6 @@ Metamaps::Application.routes.draw do
 
   get 'users/:id/details', to: 'users#details', as: :details
   post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
+  post 'user/update_metacode_focus', to: 'users#update_metacode_focus'
   resources :users, except: [:index, :destroy]
 end
