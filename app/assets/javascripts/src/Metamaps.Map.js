@@ -136,7 +136,7 @@ Metamaps.Map = {
       $('.rightclickmenu').remove()
       Metamaps.TopicCard.hideCard()
       Metamaps.SynapseCard.hideCard()
-      Metamaps.Create.newTopic.hide()
+      Metamaps.Create.newTopic.hide(true) // true means force (and override pinned)
       Metamaps.Create.newSynapse.hide()
       Metamaps.Filter.close()
       Metamaps.Map.InfoBox.close()
@@ -284,7 +284,13 @@ Metamaps.Map = {
       }
     }
 
-    return {
+    // this is so that if someone has relied on the auto-placement feature on this map,
+    // it will at least start placing nodes at the first empty spot
+    // this will only work up to the point in the spiral at which someone manually moved a node
+    if (Metamaps.Mappings.findWhere({ xloc: nextX, yloc: nextY })) {
+      return self.getNextCoord()
+    }
+    else return {
       x: nextX,
       y: nextY
     }

@@ -458,7 +458,7 @@
 }
 
 .zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
- .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .starMap:hover .tooltipsAbove {
+ .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
     display: block;
 }
 
@@ -520,6 +520,29 @@
 
 .sidebarForkIcon .tooltipsUnder {
     margin-left: -34px;
+}
+
+.openMetacodeSwitcher .tooltipsAbove {
+    left: -50px;
+    top: -5px;
+}
+.pinCarousel .tooltipsAbove {
+    top: -5px;
+}
+.pinCarousel .tooltipsAbove.helpPin {
+    left: -24px;
+}
+.pinCarousel .tooltipsAbove.helpUnpin {
+    left: -14px;
+}
+.openMetacodeSwitcher .tooltipsAbove:after {
+    left: 50%;
+}
+.pinCarousel .tooltipsAbove.helpPin:after {
+    left: 46%;
+}
+.pinCarousel .tooltipsAbove.helpUnpin:after {
+    left: 42%;
 }
 
 .sidebarForkIcon div:after{
@@ -586,7 +609,7 @@
     right: 37% !important;
 }
 
-.mapInfoIcon div:after, .openCheatsheet div:after, .starMap div:after {
+.mapInfoIcon div:after, .openCheatsheet div:after, .starMap div:after, .openMetacodeSwitcher div:after, .pinCarousel div:after {
    content: '';
     position: absolute;
     top: 76%;

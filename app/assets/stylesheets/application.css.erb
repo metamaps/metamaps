@@ -567,6 +567,26 @@ button.button.btn-no:hover {
 .openMetacodeSwitcher:hover {
     background-position: -16px 0;
 }
+.pinCarousel {
+    cursor: pointer;
+    display: block;
+    height: 16px;
+    width: 16px;
+    background-image: url(<%= asset_data_uri('pincarousel_sprite.png') %>);
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    right: 16px;
+}
+.pinCarousel:hover {
+    background-position: 0 -16px;
+}
+.pinCarousel.isPinned {
+    background-position: -16px 0;
+}
+.pinCarousel.isPinned:hover {
+    background-position: -16px -16px;
+}
 #metacodeImg {
     height: 120px;
 }

@@ -325,9 +325,12 @@ Metamaps.Topic = {
     })
     Metamaps.Topics.add(topic)
 
+    if (Metamaps.Create.newTopic.pinned) {
+      var nextCoords = Metamaps.Map.getNextCoord()
+    }
     var mapping = new Metamaps.Backbone.Mapping({
-      xloc: Metamaps.Create.newTopic.x,
-      yloc: Metamaps.Create.newTopic.y,
+      xloc: nextCoords ? nextCoords.x : Metamaps.Create.newTopic.x,
+      yloc: nextCoords ? nextCoords.y : Metamaps.Create.newTopic.y,
       mappable_id: topic.cid,
       mappable_type: 'Topic',
     })
@@ -347,9 +350,12 @@ Metamaps.Topic = {
 
     var topic = self.get(id)
 
+    if (Metamaps.Create.newTopic.pinned) {
+      var nextCoords = Metamaps.Map.getNextCoord()
+    }
     var mapping = new Metamaps.Backbone.Mapping({
-      xloc: Metamaps.Create.newTopic.x,
-      yloc: Metamaps.Create.newTopic.y,
+      xloc: nextCoords ? nextCoords.x : Metamaps.Create.newTopic.x,
+      yloc: nextCoords ? nextCoords.y : Metamaps.Create.newTopic.y,
       mappable_type: 'Topic',
       mappable_id: topic.id,
     })

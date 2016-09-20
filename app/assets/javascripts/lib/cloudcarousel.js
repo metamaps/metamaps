@@ -179,7 +179,9 @@ jQuery.browser = browser;
 		{
 			// START METAMAPS CODE
 			$('body').bind('mousewheel',this,function(event, delta) {					 
-					 if (Metamaps.Create.newTopic.beingCreated && !Metamaps.Create.isSwitchingSet) {
+					 if (Metamaps.Create.newTopic.beingCreated && 
+					     !Metamaps.Create.isSwitchingSet &&
+					     !Metamaps.Create.newTopic.pinned) {
 					 	event.data.rotate(delta);
 					 	return false;
 					 }
