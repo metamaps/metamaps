@@ -247,7 +247,7 @@ Metamaps.Map = {
     var nextX = self.nextX
     var nextY = self.nextY
 
-    var DISTANCE_BETWEEN = 120
+    var DISTANCE_BETWEEN = 250
 
     self.nextX = self.nextX + DISTANCE_BETWEEN * self.nextXshift
     self.nextY = self.nextY + DISTANCE_BETWEEN * self.nextYshift

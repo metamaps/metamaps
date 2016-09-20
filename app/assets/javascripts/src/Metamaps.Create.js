@@ -293,7 +293,6 @@ Metamaps.Create = {
         Metamaps.Create.newTopic.pinned = false
       }
       $('#topic_name').typeahead('val', '')
-      Metamaps.Create.newTopic.beingCreated = false
       Metamaps.Create.newTopic.hideSelector()
     }
   },

@@ -31,6 +31,7 @@
     Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
   <% end %>
 <% end %> 
+Metamaps.Create.newTopic.metacode = <%= user_metacode().id %>
 <% current_user.recentMetacodes.each do |id| %>
     Metamaps.Create.recentMetacodes.push(<%= id %>);
 <% end %>

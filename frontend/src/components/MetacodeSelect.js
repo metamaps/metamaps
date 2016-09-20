@@ -62,11 +62,11 @@ class MetacodeSelect extends Component {
     } else if (activeTab == 1) { // recent
       selectMetacodes = recent.map(id => {
         return metacodes.find(m => m.id == id)
-      })
+      }).filter(m => m)
     } else if (activeTab == 2) { // mostUsed
       selectMetacodes = mostUsed.map(id => {
         return metacodes.find(m => m.id == id)
-      })
+      }).filter(m => m)
     }
     return selectMetacodes
   }
