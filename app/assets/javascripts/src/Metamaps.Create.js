@@ -163,6 +163,16 @@ Metamaps.Create = {
       })
       
       Metamaps.Create.newTopic.initSelector()
+      $('.pinCarousel').click(function() {
+        if (Metamaps.Create.newTopic.pinned) {
+          $('.pinCarousel').removeClass('isPinned')
+          Metamaps.Create.newTopic.pinned = false
+        }
+        else {
+          $('.pinCarousel').addClass('isPinned')
+          Metamaps.Create.newTopic.pinned = true
+        }
+      })
 
       var topicBloodhound = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -217,6 +227,7 @@ Metamaps.Create = {
     x: null,
     y: null,
     addSynapse: false,
+    pinned: false,
     initSelector: function () {
       ReactDOM.render(
         React.createElement(Metamaps.ReactComponents.MetacodeSelect, {
@@ -272,8 +283,15 @@ Metamaps.Create = {
       Metamaps.Create.newTopic.beingCreated = true
       Metamaps.Create.newTopic.name = ''
     },
-    hide: function () {
-      $('#new_topic').fadeOut('fast')
+    hide: function (force) {
+      if (force || !Metamaps.Create.newTopic.pinned) {
+        $('#new_topic').fadeOut('fast')
+        Metamaps.Create.newTopic.beingCreated = false
+      }
+      if (force) {
+        $('.pinCarousel').removeClass('isPinned')
+        Metamaps.Create.newTopic.pinned = false
+      }
       $('#topic_name').typeahead('val', '')
       Metamaps.Create.newTopic.beingCreated = false
       Metamaps.Create.newTopic.hideSelector()

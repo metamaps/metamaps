@@ -2454,7 +2454,7 @@ Extras.Classes.Navigation = new Class({
     // START METAMAPS CODE
     e.preventDefault();
 	  if (e.target.id != 'infovis-canvas') return;
-    if (Metamaps.Create.newTopic.beingCreated) return;
+    if (Metamaps.Create.newTopic.beingCreated && !Metamaps.Create.newTopic.pinned) return;
 	  // END METAMAPS CODE
   
     //$.event.stop($.event.get(e, win));

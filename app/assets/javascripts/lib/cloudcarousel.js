@@ -180,8 +180,10 @@ jQuery.browser = browser;
 		if (options.mouseWheel)
 		{
 			// START METAMAPS CODE
-			/*$('body').bind('mousewheel',this,function(event, delta) {					 
-					 if (Metamaps.Create.newTopic.beingCreated && !Metamaps.Create.isSwitchingSet) {
+			$('body').bind('mousewheel',this,function(event, delta) {					 
+					 if (Metamaps.Create.newTopic.beingCreated && 
+					     !Metamaps.Create.isSwitchingSet &&
+					     !Metamaps.Create.newTopic.pinned) {
 					 	event.data.rotate(delta);
 					 	return false;
 					 }
