@@ -331,7 +331,7 @@ Metamaps.Topic = {
     Metamaps.Topics.add(topic)
 
     if (Metamaps.Create.newTopic.pinned) {
-      var nextCoords = Metamaps.Map.getNextCoord()
+      var nextCoords = Metamaps.AutoLayout.getNextCoord()
     }
     var mapping = new Metamaps.Backbone.Mapping({
       xloc: nextCoords ? nextCoords.x : Metamaps.Create.newTopic.x,
@@ -356,7 +356,7 @@ Metamaps.Topic = {
     var topic = self.get(id)
 
     if (Metamaps.Create.newTopic.pinned) {
-      var nextCoords = Metamaps.Map.getNextCoord()
+      var nextCoords = Metamaps.AutoLayout.getNextCoord()
     }
     var mapping = new Metamaps.Backbone.Mapping({
       xloc: nextCoords ? nextCoords.x : Metamaps.Create.newTopic.x,
