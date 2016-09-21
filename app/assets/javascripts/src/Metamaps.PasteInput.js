@@ -80,43 +80,24 @@ Metamaps.PasteInput = {
     var import_id = null  // don't store a cidMapping
     var permission = null // use default
 
-    // try {
-    //   // fetch title in 150ms or less
-    //   Promise.race([
-    //     new Promise(function(resolve, reject) {
-    //       fetch(text).then(function(response) {
-    //         return response.text()
-    //       }).then(function(html) {
-    //         title = html.replace(/[\s\S]*<title>(.*)<\/title>[\s\S]*/m, '$1')
-    //         resolve()
-    //       })
-    //     }), new Promise(function(resolve, reject) {
-    //       window.setTimeout(function() {
-    //         resolve()
-    //       }, 150)
-    //     })
-    //   ]).then(function() {
-    //     finish()
-    //   }).catch(function(error) {
-    //     throw error
-    //   })
-    // } catch (err) {
-    //   console.warn("Your browser can't fetch the title") // TODO move to webpack to avoid this error
-    // }
-    finish()
-
-    function finish() {
-      Metamaps.Import.createTopicWithParameters(
-        title,
-        'Reference', // metacode - todo fix
-        permission,
-        text, // desc - todo load from url?
-        text, // link - todo fix because this isn't being POSTed
-        coords.x,
-        coords.y,
-        import_id
-      )
-    }
+    Metamaps.Import.createTopicWithParameters(
+      title,
+      'Reference', // metacode - todo fix
+      permission,
+      text, // desc - todo load from url?
+      text, // link - todo fix because this isn't being POSTed
+      coords.x,
+      coords.y,
+      import_id,
+      {
+        success: function(topic) {
+          Metamaps.TopicCard.showCard(topic.get('node'), function() {
+            $('#showcard #titleActivator').click()
+              .find('textarea, input').focus()
+          })
+        }
+      }
+    )
   },
 
   handleJSON: function (text) {

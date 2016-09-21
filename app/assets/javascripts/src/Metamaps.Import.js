@@ -254,7 +254,7 @@ Metamaps.Import = {
   },
 
   createTopicWithParameters: function (name, metacode_name, permission, desc,
-    link, xloc, yloc, import_id) {
+    link, xloc, yloc, import_id, opts) {
     var self = Metamaps.Import
     $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null
@@ -271,7 +271,8 @@ Metamaps.Import = {
       permission: topic_permission,
       defer_to_map_id: defer_to_map_id,
       desc: desc || "",
-      link: link || ""
+      link: link || "",
+      calculated_permission: Metamaps.Active.Map.get('permission')
     })
     Metamaps.Topics.add(topic)
 
@@ -288,7 +289,9 @@ Metamaps.Import = {
     Metamaps.Mappings.add(mapping)
 
     // this function also includes the creation of the topic in the database
-    Metamaps.Topic.renderTopic(mapping, topic, true, true)
+    Metamaps.Topic.renderTopic(mapping, topic, true, true, {
+      success: opts.success
+    })
 
     Metamaps.GlobalUI.hideDiv('#instructions')
   },

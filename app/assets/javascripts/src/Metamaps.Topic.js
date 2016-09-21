@@ -186,11 +186,10 @@ Metamaps.Topic = {
       error: function () {}
     })
   },
-  /*
-   *
-   *
-   */
-  renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter) {
+
+  // opts is additional options in a hash
+  // TODO: move createNewInDB and permitCerateSYnapseAfter into opts
+  renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter, opts) {
     var self = Metamaps.Topic
 
     var nodeOnViz, tempPos
@@ -265,18 +264,24 @@ Metamaps.Topic = {
       })
     }
 
-    var mappingSuccessCallback = function (mappingModel, response) {
+    var mappingSuccessCallback = function (mappingModel, response, topicModel) {
       var newTopicData = {
         mappingid: mappingModel.id,
         mappableid: mappingModel.get('mappable_id')
       }
 
       $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData])
+      // call a success callback if provided
+      if (opts.success) {
+        opts.success(topicModel)
+      }
     }
     var topicSuccessCallback = function (topicModel, response) {
       if (Metamaps.Active.Map) {
         mapping.save({ mappable_id: topicModel.id }, {
-          success: mappingSuccessCallback,
+          success: function (model, response) {
+            mappingSuccessCallback(model, response, topicModel)
+          },
           error: function (model, response) {
             console.log('error saving mapping to database')
           }

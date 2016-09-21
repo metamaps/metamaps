@@ -63,7 +63,7 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
   authorizeToEdit: function (mapper) {
     if (mapper && (
       this.get('permission') === 'commons' ||
-      this.get('collaborator_ids').includes(mapper.get('id')) ||
+      (this.get('collaborator_ids') || []).includes(mapper.get('id')) ||
       this.get('user_id') === mapper.get('id'))) {
       return true
     } else {
@@ -350,9 +350,9 @@ Metamaps.Backbone.init = function () {
     },
     authorizeToEdit: function (mapper) {
       if (mapper &&
-        (this.get('calculated_permission') === 'commons' ||
-        this.get('collaborator_ids').includes(mapper.get('id')) ||
-        this.get('user_id') === mapper.get('id'))) {
+        (this.get('user_id') === mapper.get('id') ||
+         this.get('calculated_permission') === 'commons' ||
+         this.get('collaborator_ids').includes(mapper.get('id')))) {
         return true
       } else {
         return false

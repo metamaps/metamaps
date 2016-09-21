@@ -37,7 +37,7 @@ Metamaps.TopicCard = {
    * Will open the Topic Card for the node that it's passed
    * @param {$jit.Graph.Node} node
    */
-  showCard: function (node) {
+  showCard: function (node, opts) {
     var self = Metamaps.TopicCard
 
     var topic = node.getData('topic')
@@ -46,7 +46,11 @@ Metamaps.TopicCard = {
     self.authorizedToEdit = topic.authorizeToEdit(Metamaps.Active.Mapper)
     // populate the card that's about to show with the right topics data
     self.populateShowCard(topic)
-    $('.showcard').fadeIn('fast')
+    return $('.showcard').fadeIn('fast', function() {
+      if (opts.complete) {
+        opts.complete()
+      }
+    })
   },
   hideCard: function () {
     var self = Metamaps.TopicCard
@@ -413,8 +417,8 @@ Metamaps.TopicCard = {
       nodeValues.attachments = ''
     }
 
-    var inmapsAr = topic.get('inmaps')
-    var inmapsLinks = topic.get('inmapsLinks')
+    var inmapsAr = topic.get('inmaps') || []
+    var inmapsLinks = topic.get('inmapsLinks') || []
     nodeValues.inmaps = ''
     if (inmapsAr.length < 6) {
       for (i = 0; i < inmapsAr.length; i++) {
