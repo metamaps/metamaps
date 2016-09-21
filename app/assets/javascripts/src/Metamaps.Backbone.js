@@ -321,8 +321,8 @@ Metamaps.Backbone.init = function () {
       if (this.isNew()) {
         this.set({
           'user_id': Metamaps.Active.Mapper.id,
-          'desc': '',
-          'link': '',
+          'desc': this.get('desc') || '',
+          'link': this.get('link') || '',
           'permission': Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons'
         })
       }

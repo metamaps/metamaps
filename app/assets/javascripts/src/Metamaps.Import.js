@@ -270,10 +270,9 @@ Metamaps.Import = {
       metacode_id: metacode.id,
       permission: topic_permission,
       defer_to_map_id: defer_to_map_id,
-      desc: desc || ""
+      desc: desc || "",
+      link: link || ""
     })
-    topic.set('desc', desc || '') // TODO why is this necessary?
-    topic.set('link', link) // TODO why is this necessary?
     Metamaps.Topics.add(topic)
 
     if (import_id !== null && import_id !== undefined) {
