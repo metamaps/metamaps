@@ -8,11 +8,15 @@ class MappingPolicy < ApplicationPolicy
       visible = %w(public commons)
       permission = 'maps.permission IN (?)'
       if user
-        scope.joins(:maps).where(permission + ' OR maps.user_id = ?', visible, user.id)
+        scope.joins(:map).where(permission, visible).or(scope.joins(:map).where(user_id: user.id))
       else
-        scope.where(permission, visible)
+        scope.joins(:map).where(permission, visible)
       end
     end
+  end
+
+  def index?
+    true
   end
 
   def show?

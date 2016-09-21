@@ -6,5 +6,6 @@ FactoryGirl.define do
     association :topic1, factory: :topic
     association :topic2, factory: :topic
     user
+    weight 1 # todo drop this column
   end
 end

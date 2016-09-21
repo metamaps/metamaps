@@ -9,13 +9,26 @@ Metamaps::Application.routes.draw do
   get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
   get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
 
-  namespace :api, path: '/api/v1', defaults: { format: :json } do
-    resources :maps, only: [:create, :show, :update, :destroy]
-    resources :synapses, only: [:create, :show, :update, :destroy]
-    resources :topics, only: [:create, :show, :update, :destroy]
-    resources :mappings, only: [:create, :show, :update, :destroy]
-    resources :tokens, only: [:create, :destroy] do
-      get :my_tokens, on: :collection
+  namespace :api, path: '/api', default: { format: :json } do
+    namespace :v2, path: '/v2' do
+      resources :maps, only: [:index, :create, :show, :update, :destroy]
+      resources :synapses, only: [:index, :create, :show, :update, :destroy]
+      resources :topics, only: [:index, :create, :show, :update, :destroy]
+      resources :mappings, only: [:index, :create, :show, :update, :destroy]
+      resources :tokens, only: [:create, :destroy] do
+        get :my_tokens, on: :collection
+      end
+    end
+    namespace :v1, path: '/v1' do
+      # api v1 routes all lead to a deprecation error method
+      # see app/controllers/api/v1/deprecated_controller.rb
+      resources :maps, only: [:create, :show, :update, :destroy]
+      resources :synapses, only: [:create, :show, :update, :destroy]
+      resources :topics, only: [:create, :show, :update, :destroy]
+      resources :mappings, only: [:create, :show, :update, :destroy]
+      resources :tokens, only: [:create, :destroy] do
+        get :my_tokens, on: :collection
+      end
     end
   end
 

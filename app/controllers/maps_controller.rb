@@ -1,6 +1,6 @@
 class MapsController < ApplicationController
   before_action :require_user, only: [:create, :update, :access, :star, :unstar, :screenshot, :events, :destroy]
-  after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps, :events]
+  after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps]
   after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps]
 
   respond_to :html, :json, :csv

@@ -1,0 +1,37 @@
+{
+  "data": [
+    {
+      "id": 2,
+      "name": "Emergent Network Phenomena",
+      "desc": "Example map for the API",
+      "permission": "commons",
+      "screenshot": "https://s3.amazonaws.com/metamaps-assets/site/missing-map.png",
+      "created_at": "2016-03-26T08:02:05.379Z",
+      "updated_at": "2016-03-27T07:20:18.047Z",
+      "topic_ids": [
+        58,
+        59
+      ],
+      "synapse_ids": [
+        2
+      ],
+      "mapping_ids": [
+        94,
+        95,
+        96
+      ],
+      "collaborator_ids": [],
+      "contributor_ids": [
+        2
+      ]
+    }
+  ],
+  "page": {
+    "current_page": 1,
+    "next_page": 2,
+    "prev_page": 0,
+    "total_pages": 5,
+    "total_count": 5,
+    "per": 1
+  }
+}

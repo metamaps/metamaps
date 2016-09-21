@@ -1,0 +1,72 @@
+type: collection
+get:
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include ../examples/topics.json
+post:
+  body:
+    application/json:
+      properties:
+        name:
+          description: name
+        desc:
+          description: description
+        link:
+          description: (optional) link to content on the web
+        permission:
+          description: commons, public, or private
+        metacode_id:
+          description: Topic's metacode
+  responses:
+    201:
+      body:
+        application/json:
+          example: !include ../examples/topic.json
+/{id}:
+  type: item
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/topic.json
+  put:
+    body:
+      application/json:
+        properties:
+          name:
+            description: name
+          desc:
+            description: description
+          link:
+            description: (optional) link to content on the web
+          permission:
+            description: commons, public, or private
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/topic.json
+  patch:
+    body:
+      application/json:
+        properties:
+          name:
+            description: name
+          desc:
+            description: description
+          link:
+            description: (optional) link to content on the web
+          permission:
+            description: commons, public, or private
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/topic.json
+  delete:
+    responses:
+      204:
+        description: No content

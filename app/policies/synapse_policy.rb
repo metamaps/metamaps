@@ -11,6 +11,10 @@ class SynapsePolicy < ApplicationPolicy
     end
   end
 
+  def index?
+    true # really only for the API. should be policy scoped!
+  end
+
   def create?
     user.present?
     # TODO: add validation against whether you can see both topics

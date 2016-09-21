@@ -1,4 +1,4 @@
-class Synapse < ActiveRecord::Base
+class Synapse < ApplicationRecord
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
 

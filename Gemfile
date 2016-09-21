@@ -1,28 +1,27 @@
 source 'https://rubygems.org'
 ruby '2.3.0'
 
-gem 'rails'
+gem 'rails', '~> 5.0.0'
 
-gem 'active_model_serializers', '~> 0.8.1'
+gem 'active_model_serializers'
 gem 'aws-sdk', '< 2.0'
-gem 'best_in_place' # in-place editing
-gem 'delayed_job', '~> 4.0.2'
-gem 'delayed_job_active_record', '~> 4.0.1'
+gem 'best_in_place'
+gem 'delayed_job'
+gem 'delayed_job_active_record'
 gem 'devise'
-gem 'doorkeeper'
+gem 'doorkeeper', '~> 4.0.0.rc4'
 gem 'dotenv-rails'
 gem 'exception_notification'
 gem 'formtastic'
 gem 'formula'
 gem 'httparty'
 gem 'json'
-gem 'kaminari' # pagination
-gem 'paperclip'
+gem 'kaminari'
+gem 'paperclip', '~> 4.3.6'
 gem 'pg'
 gem 'pundit'
 gem 'pundit_extra'
 gem 'rack-cors'
-gem 'rails3-jquery-autocomplete'
 gem 'redis'
 gem 'slack-notifier'
 gem 'snorlax'
@@ -31,12 +30,12 @@ gem 'uservoice-ruby'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jbuilder'
+gem 'rails3-jquery-autocomplete'
 
 group :assets do
   gem 'coffee-rails'
   gem 'sass-rails'
   gem 'uglifier'
-  # gem 'therubyracer'
 end
 
 group :production do
@@ -57,7 +56,6 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'quiet_assets'
   gem 'tunemygc'
   gem 'rubocop'
 end

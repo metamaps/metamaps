@@ -1,6 +1,6 @@
 require 'open-uri'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_many :topics
   has_many :synapses
   has_many :maps
@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
   end
 
   def starred_map?(map) 
-    return !!self.stars.index{|s| s.map_id == map.id }
+    return self.stars.where(map_id: map.id).exists?
   end
 
   def settings

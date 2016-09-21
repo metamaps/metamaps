@@ -15,11 +15,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def configure_sign_up_params
-    devise_parameter_sanitizer.for(:sign_up) << [:name, :joinedwithcode]
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :joinedwithcode])
   end
 
   def configure_account_update_params
-    puts devise_parameter_sanitizer_for(:account_update)
-    devise_parameter_sanitizer.for(:account_update) << [:image]
+    devise_parameter_sanitizer.permit(:account_update, keys: [:image])
   end
 end

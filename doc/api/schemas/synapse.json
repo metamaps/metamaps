@@ -1,0 +1,12 @@
+{
+  "name": "Synapse Envelope",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "_synapse.json"
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

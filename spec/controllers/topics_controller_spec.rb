@@ -5,14 +5,7 @@ RSpec.describe TopicsController, type: :controller do
   let(:valid_attributes) { topic.attributes.except('id') }
   let(:invalid_attributes) { { permission: :invalid_lol } }
   before :each do
-    sign_in
-  end
-
-  describe 'GET #show' do
-    it 'assigns the requested topic as @topic' do
-      get :show, id: topic.to_param, format: :json
-      expect(assigns(:topic)).to eq(topic)
-    end
+    sign_in create(:user)
   end
 
   describe 'POST #create' do
@@ -20,26 +13,33 @@ RSpec.describe TopicsController, type: :controller do
       it 'creates a new Topic' do
         topic.reload # ensure it's created
         expect do
-          post :create, topic: valid_attributes, format: :json
+          post :create, format: :json, params: {
+            topic: valid_attributes
+          }
         end.to change(Topic, :count).by(1)
       end
 
       it 'assigns a newly created topic as @topic' do
-        post :create, topic: valid_attributes, format: :json
-        expect(assigns(:topic)).to be_a(Topic)
-        expect(assigns(:topic)).to be_persisted
+        post :create, format: :json, params: {
+          topic: valid_attributes
+        }
+        expect(comparable(Topic.last)).to eq comparable(topic)
       end
 
       it 'returns 201 CREATED' do
-        post :create, topic: valid_attributes, format: :json
+        post :create, format: :json, params: {
+          topic: valid_attributes
+        }
         expect(response.status).to eq 201
       end
     end
 
     context 'with invalid params' do
       it 'assigns a newly created but unsaved topic as @topic' do
-        post :create, topic: invalid_attributes, format: :json
-        expect(assigns(:topic)).to be_a_new(Topic)
+        post :create, format: :json, params: {
+          topic: invalid_attributes
+        }
+        expect(Topic.count).to eq 0
       end
     end
   end
@@ -54,8 +54,9 @@ RSpec.describe TopicsController, type: :controller do
       end
 
       it 'updates the requested topic' do
-        put :update,
-            id: topic.to_param, topic: new_attributes, format: :json
+        put :update, format: :json, params: {
+          id: topic.to_param, topic: new_attributes
+        }
         topic.reload
         expect(topic.name).to eq 'Cool Topic with no number'
         expect(topic.desc).to eq 'This is a cool topic.'
@@ -64,23 +65,26 @@ RSpec.describe TopicsController, type: :controller do
       end
 
       it 'assigns the requested topic as @topic' do
-        put :update,
-            id: topic.to_param, topic: valid_attributes, format: :json
-        expect(assigns(:topic)).to eq(topic)
+        put :update, format: :json, params: {
+          id: topic.to_param, topic: valid_attributes
+        }
+        expect(Topic.last).to eq(topic)
       end
 
       it 'returns status of no content' do
-        put :update,
-            id: topic.to_param, topic: valid_attributes, format: :json
+        put :update, format: :json, params: {
+          id: topic.to_param, topic: valid_attributes
+        }
         expect(response.status).to eq 204
       end
     end
 
     context 'with invalid params' do
       it 'assigns the topic as @topic' do
-        put :update,
-            id: topic.to_param, topic: invalid_attributes, format: :json
-        expect(assigns(:topic)).to eq(topic)
+        put :update, format: :json, params: {
+          id: topic.to_param, topic: invalid_attributes
+        }
+        expect(Topic.last).to eq topic
       end
     end
   end
@@ -90,7 +94,9 @@ RSpec.describe TopicsController, type: :controller do
     it 'destroys the requested topic' do
       owned_topic.reload # ensure it's there
       expect do
-        delete :destroy, id: owned_topic.to_param, format: :json
+        delete :destroy, format: :json, params: {
+          id: owned_topic.to_param
+        }
       end.to change(Topic, :count).by(-1)
       expect(response.body).to eq ''
       expect(response.status).to eq 204

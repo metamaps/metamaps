@@ -1,0 +1,43 @@
+{
+  "name": "Topic",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "_id.json"
+    },
+    "name": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "link": {
+      "format": "uri",
+      "type": "string"
+    },
+    "permission": {
+      "$ref": "_permission.json"
+    },
+    "created_at": {
+      "$ref": "_datetimestamp.json"
+    },
+    "updated_at": {
+      "$ref": "_datetimestamp.json"
+    },
+    "user_id": {
+      "$ref": "_id.json"
+    },
+    "metacode_id": {
+      "$ref": "_id.json"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "desc",
+    "link",
+    "permission",
+    "created_at",
+    "updated_at"
+  ]
+}

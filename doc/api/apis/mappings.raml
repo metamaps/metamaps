@@ -1,0 +1,68 @@
+type: collection
+get:
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include ../examples/mappings.json
+post:
+  body:
+    application/json:
+      properties:
+        mappable_id:
+          description: id of the topic/synapse to be mapped
+        mappable_type:
+          description: Topic or Synapse
+        map_id:
+          description: id of the map
+        xloc:
+          description: (for Topic mappings only) x location on the canvas
+        yloc:
+          description: (for Topic mappings only) y location on the canvas
+  responses:
+    201:
+      body:
+        application/json:
+          example: !include ../examples/mapping.json
+/{id}:
+  type: item
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/mapping.json
+  put:
+    body:
+      application/json:
+        properties:
+          mappable_id:
+            description: id of the topic/synapse to be mapped
+          mappable_type:
+            description: Topic or Synapse
+          map_id:
+            description: id of the map
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/mapping.json
+  patch:
+    body:
+      application/json:
+        properties:
+          mappable_id:
+            description: id of the topic/synapse to be mapped
+          mappable_type:
+            description: Topic or Synapse
+          map_id:
+            description: id of the map
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/mapping.json
+  delete:
+    responses:
+      204:
+        description: No content

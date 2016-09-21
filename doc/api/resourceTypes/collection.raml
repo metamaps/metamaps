@@ -1,0 +1,22 @@
+type: base
+get?:
+  description: Get all <<resourcePathName>>
+  queryParameters:
+    page:
+      description: The page number
+      type: integer
+    per:
+      description: Number of records per page
+      type: integer
+  responses:
+    200:
+      body:
+        application/json:
+          schema: <<resourcePathName>>
+post?:
+  description: Create a new <<resourcePathName | !singularize>>
+  responses:
+    200:
+      body:
+        application/json:
+          schema: <<resourcePathName | !singularize>>

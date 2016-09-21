@@ -1,0 +1,54 @@
+{
+  "data": [
+    {
+      "created_at": "2016-03-25T08:44:07.152Z",
+      "id": 1,
+      "map_id": 1,
+      "mappable_id": 1,
+      "mappable_type": "Topic",
+      "updated_at": "2016-03-25T08:44:07.152Z",
+      "user_id": 1,
+      "xloc": -271,
+      "yloc": 22
+    },
+    {
+      "created_at": "2016-03-25T08:44:13.907Z",
+      "id": 2,
+      "map_id": 1,
+      "mappable_id": 2,
+      "mappable_type": "Topic",
+      "updated_at": "2016-03-25T08:44:13.907Z",
+      "user_id": 1,
+      "xloc": -12,
+      "yloc": 61
+    },
+    {
+      "created_at": "2016-03-25T08:44:19.333Z",
+      "id": 3,
+      "map_id": 1,
+      "mappable_id": 3,
+      "mappable_type": "Topic",
+      "updated_at": "2016-03-25T08:44:19.333Z",
+      "user_id": 1,
+      "xloc": -93,
+      "yloc": -90
+    },
+    {
+      "created_at": "2016-03-25T08:44:21.337Z",
+      "id": 4,
+      "map_id": 1,
+      "mappable_id": 1,
+      "mappable_type": "Synapse",
+      "updated_at": "2016-03-25T08:44:21.337Z",
+      "user_id": 1
+    }
+  ],
+  "page": {
+    "current_page": 1,
+    "next_page": 2,
+    "per": 4,
+    "prev_page": 0,
+    "total_count": 303,
+    "total_pages": 76
+  }
+}

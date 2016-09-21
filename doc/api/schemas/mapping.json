@@ -1,0 +1,12 @@
+{
+  "name": "Mapping Envelope",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "_mapping.json"
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

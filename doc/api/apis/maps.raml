@@ -1,0 +1,82 @@
+type: collection
+get:
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include ../examples/maps.json
+post:
+  body:
+    application/json:
+      properties:
+        name:
+          description: name
+        desc:
+          description: description
+        permission:
+          description: commons, public, or private
+        screenshot:
+          description: url to a screenshot of the map
+        contributor_ids:
+          description: the topic being linked from
+        collaborator_ids:
+          description: the topic being linked to
+  responses:
+    201:
+      body:
+        application/json:
+          example: !include ../examples/map.json
+/{id}:
+  type: item
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/map.json
+  put:
+    body:
+      application/json:
+        properties:
+          name:
+            description: name
+          desc:
+            description: description
+          permission:
+            description: commons, public, or private
+          screenshot:
+            description: url to a screenshot of the map
+          contributor_ids:
+            description: the topic being linked from
+          collaborator_ids:
+            description: the topic being linked to
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/map.json
+  patch:
+    body:
+      application/json:
+        properties:
+          name:
+            description: name
+          desc:
+            description: description
+          permission:
+            description: commons, public, or private
+          screenshot:
+            description: url to a screenshot of the map
+          contributor_ids:
+            description: the topic being linked from
+          collaborator_ids:
+            description: the topic being linked to
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/map.json
+  delete:
+    responses:
+      204:
+        description: No content

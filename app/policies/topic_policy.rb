@@ -11,6 +11,10 @@ class TopicPolicy < ApplicationPolicy
     end
   end
 
+  def index?
+    user.present?
+  end
+
   def create?
     user.present?
   end

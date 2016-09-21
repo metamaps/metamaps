@@ -1,4 +1,4 @@
-class Webhook < ActiveRecord::Base
+class Webhook < ApplicationRecord
   belongs_to :hookable, polymorphic: true
 
   validates :uri, presence: true

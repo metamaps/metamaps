@@ -1,4 +1,4 @@
-class Map < ActiveRecord::Base
+class Map < ApplicationRecord
   belongs_to :user
 
   has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy

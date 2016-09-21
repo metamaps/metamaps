@@ -1,0 +1,67 @@
+{
+  "name": "Map",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "_id.json"
+    },
+    "name": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "permission": {
+      "$ref": "_permission.json"
+    },
+    "screenshot": {
+      "format": "uri",
+      "type": "string"
+    },
+    "created_at": {
+      "$ref": "_datetimestamp.json"
+    },
+    "updated_at": {
+      "$ref": "_datetimestamp.json"
+    },
+    "topic_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "_id.json"
+      }
+    },
+    "synapse_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "_id.json"
+      }
+    },
+    "mapping_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "_id.json"
+      }
+    },
+    "contributor_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "_id.json"
+      }
+    },
+    "collaborator_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "_id.json"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "desc",
+    "permission",
+    "screenshot",
+    "created_at",
+    "updated_at"
+  ]
+}

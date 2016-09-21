@@ -1,0 +1,42 @@
+{
+  "name": "Synapse",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "_id.json"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "pattern": "(from-to|both)"
+    },
+    "permission": {
+      "$ref": "_permission.json"
+    },
+    "created_at": {
+      "$ref": "_datetimestamp.json"
+    },
+    "updated_at": {
+      "$ref": "_datetimestamp.json"
+    },
+    "topic1_id": {
+      "$ref": "_id.json"
+    },
+    "topic2_id": {
+      "$ref": "_id.json"
+    },
+    "user_id": {
+      "$ref": "_id.json"
+    }
+  },
+  "required": [
+    "id",
+    "desc",
+    "category",
+    "permission",
+    "created_at",
+    "updated_at"
+  ]
+}

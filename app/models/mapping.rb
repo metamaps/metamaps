@@ -1,4 +1,4 @@
-class Mapping < ActiveRecord::Base
+class Mapping < ApplicationRecord
   scope :topicmapping, -> { where(mappable_type: :Topic) }
   scope :synapsemapping, -> { where(mappable_type: :Synapse) }
 

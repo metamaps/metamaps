@@ -1,0 +1,25 @@
+type: collection
+post:
+  body:
+    application/json:
+      properties:
+        description:
+          description: short string describing this token
+  responses:
+    201:
+      body:
+        application/json:
+          example: !include ../examples/token.json
+/my_tokens:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/tokens.json
+/{id}:
+  type: item
+  delete:
+    responses:
+      204:
+        description: No content

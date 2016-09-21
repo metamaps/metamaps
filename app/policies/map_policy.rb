@@ -12,36 +12,12 @@ class MapPolicy < ApplicationPolicy
     end
   end
 
-  def activemaps?
-    user.blank? # redirect to root url if authenticated for some reason
-  end
-
-  def featuredmaps?
-    true
-  end
-
-  def mymaps?
-    user.present?
-  end
-
-  def usermaps?
+  def index?
     true
   end
 
   def show?
     record.permission == 'commons' || record.permission == 'public' || record.collaborators.include?(user) || record.user == user
-  end
-
-  def export?
-    show?
-  end
-
-  def events?
-    show?
-  end
-
-  def contains?
-    show?
   end
 
   def create?
@@ -52,9 +28,37 @@ class MapPolicy < ApplicationPolicy
     user.present? && (record.permission == 'commons' || record.collaborators.include?(user) || record.user == user)
   end
 
+  def destroy?
+    record.user == user || admin_override
+  end
+
   def access?
     # note that this is to edit access
     user.present? && record.user == user
+  end
+
+  def activemaps?
+    user.blank? # redirect to root url if authenticated for some reason
+  end
+
+  def contains?
+    show?
+  end
+
+  def events?
+    show?
+  end
+
+  def export?
+    show?
+  end
+
+  def featuredmaps?
+    true
+  end
+
+  def mymaps?
+    user.present?
   end
 
   def star?
@@ -69,7 +73,7 @@ class MapPolicy < ApplicationPolicy
     update?
   end
 
-  def destroy?
-    record.user == user || admin_override
+  def usermaps?
+    true
   end
 end
