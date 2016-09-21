@@ -9,16 +9,19 @@
  */
 
 Metamaps.PasteInput = {
+  // thanks to https://github.com/kevva/url-regex
+  URL_REGEX: new RegExp('^(?:(?:(?:[a-z]+:)?//)|www\.)(?:\S+(?::\S*)?@)?(?:localhost|(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])(?:\.(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])){3}|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#][^\s"]*)?$'),
+
   init: function () {
     var self = Metamaps.PasteInput
 
     // intercept dragged files
     // see http://stackoverflow.com/questions/6756583
-    window.addEventListener("dragover", function(e){
+    window.addEventListener("dragover", function(e) {
       e = e || event;
       e.preventDefault();
     }, false);
-    window.addEventListener("drop", function(e){
+    window.addEventListener("drop", function(e) {
       e = e || event;
       e.preventDefault();
       var coords = Metamaps.Util.pixelsToCoords({ x: e.clientX, y: e.clientY })
@@ -34,6 +37,14 @@ Metamaps.PasteInput = {
           self.handle(text, coords)
         }
       }
+      // OMG import bookmarks 😍
+      if (e.dataTransfer.items.length > 0) {
+        e.dataTransfer.items[0].getAsString(function(text) {
+          if (text.match(self.URL_REGEX)) {
+            self.handle(text, coords)
+          }
+        })
+      }
     }, false);
 
     // allow pasting onto canvas (but don't break existing inputs/textareas)
@@ -48,10 +59,8 @@ Metamaps.PasteInput = {
 
   handle: function(text, coords) {
     var self = Metamaps.PasteInput
-    // thanks to https://github.com/kevva/url-regex
-    const URL_REGEX = new RegExp('^(?:(?:(?:[a-z]+:)?//)|www\.)(?:\S+(?::\S*)?@)?(?:localhost|(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])(?:\.(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])){3}|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#][^\s"]*)?$')
 
-    if (text.match(URL_REGEX)) {
+    if (text.match(self.URL_REGEX)) {
       self.handleURL(text, coords)
     } else if (text[0] === '{') {
       self.handleJSON(text)
