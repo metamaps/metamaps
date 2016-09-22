@@ -678,3 +678,5 @@ Metamaps.GlobalUI.Search = {
     $('#searchLoading').show();
   }
 }
+
+export default Metamaps.GlobalUI

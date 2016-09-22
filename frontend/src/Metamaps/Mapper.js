@@ -1,21 +1,21 @@
-window.Metamaps = window.Metamaps || {}
-/* global Metamaps, $ */
+/* global Metamaps */
 
 /*
- * Metamaps.Mapper.js.erb
- *
- * Dependencies: none!
+ * Dependencies:
+ *  - Metamaps.Backbone
  */
-
-Metamaps.Mapper = {
+const Mapper = {
   // this function is to retrieve a mapper JSON object from the database
   // @param id = the id of the mapper to retrieve
   get: function (id, callback) {
-    return $.ajax({
-      url: '/users/' + id + '.json',
-      success: function (data) {
-        callback(new Metamaps.Backbone.Mapper(data))
-      }
+    return fetch(`/users/${id}.json`, {
+    }).then(response => {
+      if (!response.ok) throw response
+      return response.json()
+    }).then(payload => {
+      callback(new Metamaps.Backbone.Mapper(payload))
     })
   }
-}; // end Metamaps.Mapper
+}
+
+export default Mapper

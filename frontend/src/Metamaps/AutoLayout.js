@@ -1,13 +1,4 @@
-window.Metamaps = window.Metamaps || {}
-/* global Metamaps */
-
-/*
- * Metmaaps.AutoLayout.js
- *
- * Dependencies: none!
- */
-
-Metamaps.AutoLayout = {
+const AutoLayout = {
   nextX: 0,
   nextY: 0,
   sideLength: 1,
@@ -74,3 +65,5 @@ Metamaps.AutoLayout = {
     self.turnCount = 0
   }
 }
+
+export default AutoLayout

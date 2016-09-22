@@ -695,3 +695,5 @@ Metamaps.Backbone.init = function () {
   }
   self.attachCollectionEvents()
 }; // end Metamaps.Backbone.init
+
+export default Metamaps.Backbone

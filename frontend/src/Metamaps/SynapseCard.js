@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -10,10 +9,10 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Mapper
  *  - Metamaps.Visualize
  */
-Metamaps.SynapseCard = {
+const SynapseCard = {
   openSynapseCard: null,
   showCard: function (edge, e) {
-    var self = Metamaps.SynapseCard
+    var self = SynapseCard
 
     // reset so we don't interfere with other edges, but first, save its x and y
     var myX = $('#edit_synapse').css('left')
@@ -59,11 +58,11 @@ Metamaps.SynapseCard = {
 
   hideCard: function () {
     $('#edit_synapse').remove()
-    Metamaps.SynapseCard.openSynapseCard = null
+    SynapseCard.openSynapseCard = null
   },
 
   populateShowCard: function (edge, synapse) {
-    var self = Metamaps.SynapseCard
+    var self = SynapseCard
 
     self.add_synapse_count(edge)
     self.add_desc_form(synapse)
@@ -154,7 +153,7 @@ Metamaps.SynapseCard = {
         var index = parseInt($(this).attr('data-synapse-index'))
         edge.setData('displayIndex', index)
         Metamaps.Visualize.mGraph.plot()
-        Metamaps.SynapseCard.showCard(edge, false)
+        SynapseCard.showCard(edge, false)
       })
     }
   },
@@ -286,4 +285,6 @@ Metamaps.SynapseCard = {
       })
     } // if
   } // add_direction_form
-}; // end Metamaps.SynapseCard
+}
+
+export default SynapseCard

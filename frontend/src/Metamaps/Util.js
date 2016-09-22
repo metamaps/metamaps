@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps */
 
 /*
@@ -8,7 +7,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Visualize
  */
 
-Metamaps.Util = {
+const Util = {
   // helper function to determine how many lines are needed
   // Line Splitter Function
   // copyright Stephen Chapman, 19th April 2006
@@ -92,7 +91,7 @@ Metamaps.Util = {
     var r = (Math.round(Math.random() * 127) + 127).toString(16)
     var g = (Math.round(Math.random() * 127) + 127).toString(16)
     var b = (Math.round(Math.random() * 127) + 127).toString(16)
-    return Metamaps.Util.colorLuminance('#' + r + g + b, -0.4)
+    return Util.colorLuminance('#' + r + g + b, -0.4)
   },
   // darkens a hex value by 'lum' percentage
   colorLuminance: function (hex, lum) {
@@ -128,4 +127,6 @@ Metamaps.Util = {
   checkURLisYoutubeVideo: function (url) {
     return (url.match(/^https?:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$/) != null)
   }
-}; // end Metamaps.Util
+}
+
+export default Util

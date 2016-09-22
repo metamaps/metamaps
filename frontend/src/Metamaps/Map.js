@@ -1,4 +1,5 @@
 window.Metamaps = window.Metamaps || {}
+
 /* global Metamaps, $ */
 
 /*
@@ -753,3 +754,5 @@ Metamaps.Map.InfoBox = {
     }
   }
 }; // end Metamaps.Map.InfoBox
+
+export default Metamaps.Map

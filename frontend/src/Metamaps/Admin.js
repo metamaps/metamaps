@@ -1,13 +1,6 @@
-window.Metamaps = window.Metamaps || {}
-/* global Metamaps, $ */
+/* global $ */
 
-/*
- * Metamaps.Admin.js.erb
- *
- * Dependencies: none!
- */
-
-Metamaps.Admin = {
+const Admin = {
   selectMetacodes: [],
   allMetacodes: [],
   init: function () {
@@ -53,3 +46,5 @@ Metamaps.Admin = {
     }
   }
 }
+
+export default Admin

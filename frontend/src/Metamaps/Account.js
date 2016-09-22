@@ -121,3 +121,5 @@ Metamaps.Account = {
     $('#user_password_confirmation').val('')
   }
 }
+
+export default Metamaps.Account

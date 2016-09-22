@@ -15,7 +15,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Visualize
  */
 
-Metamaps.Create = {
+const Create = {
   isSwitchingSet: false, // indicates whether the metacode set switch lightbox is open
   selectedMetacodeSet: null,
   selectedMetacodeSetIndex: null,
@@ -24,7 +24,7 @@ Metamaps.Create = {
   selectedMetacodes: [],
   newSelectedMetacodes: [],
   init: function () {
-    var self = Metamaps.Create
+    var self = Create
     self.newTopic.init()
     self.newSynapse.init()
 
@@ -37,7 +37,7 @@ Metamaps.Create = {
     $('.customMetacodeList li').click(self.toggleMetacodeSelected) // within the custom metacode set tab
   },
   toggleMetacodeSelected: function () {
-    var self = Metamaps.Create
+    var self = Create
 
     if ($(this).attr('class') != 'toggledOff') {
       $(this).addClass('toggledOff')
@@ -52,29 +52,29 @@ Metamaps.Create = {
     }
   },
   updateMetacodeSet: function (set, index, custom) {
-    if (custom && Metamaps.Create.newSelectedMetacodes.length == 0) {
+    if (custom && Create.newSelectedMetacodes.length == 0) {
       alert('Please select at least one metacode to use!')
       return false
     }
 
     var codesToSwitchToIds
     var metacodeModels = new Metamaps.Backbone.MetacodeCollection()
-    Metamaps.Create.selectedMetacodeSetIndex = index
-    Metamaps.Create.selectedMetacodeSet = 'metacodeset-' + set
+    Create.selectedMetacodeSetIndex = index
+    Create.selectedMetacodeSet = 'metacodeset-' + set
 
     if (!custom) {
       codesToSwitchToIds = $('#metacodeSwitchTabs' + set).attr('data-metacodes').split(',')
       $('.customMetacodeList li').addClass('toggledOff')
-      Metamaps.Create.selectedMetacodes = []
-      Metamaps.Create.selectedMetacodeNames = []
-      Metamaps.Create.newSelectedMetacodes = []
-      Metamaps.Create.newSelectedMetacodeNames = []
+      Create.selectedMetacodes = []
+      Create.selectedMetacodeNames = []
+      Create.newSelectedMetacodes = []
+      Create.newSelectedMetacodeNames = []
     }
     else if (custom) {
       // uses .slice to avoid setting the two arrays to the same actual array
-      Metamaps.Create.selectedMetacodes = Metamaps.Create.newSelectedMetacodes.slice(0)
-      Metamaps.Create.selectedMetacodeNames = Metamaps.Create.newSelectedMetacodeNames.slice(0)
-      codesToSwitchToIds = Metamaps.Create.selectedMetacodes.slice(0)
+      Create.selectedMetacodes = Create.newSelectedMetacodes.slice(0)
+      Create.selectedMetacodeNames = Create.newSelectedMetacodeNames.slice(0)
+      codesToSwitchToIds = Create.selectedMetacodes.slice(0)
     }
 
     // sort by name
@@ -106,7 +106,7 @@ Metamaps.Create = {
 
     var mdata = {
       'metacodes': {
-        'value': custom ? Metamaps.Create.selectedMetacodes.toString() : Metamaps.Create.selectedMetacodeSet
+        'value': custom ? Create.selectedMetacodes.toString() : Create.selectedMetacodeSet
       }
     }
     $.ajax({
@@ -124,7 +124,7 @@ Metamaps.Create = {
   },
 
   cancelMetacodeSetSwitch: function () {
-    var self = Metamaps.Create
+    var self = Create
     self.isSwitchingSet = false
 
     if (self.selectedMetacodeSet != 'metacodeset-custom') {
@@ -149,17 +149,17 @@ Metamaps.Create = {
   newTopic: {
     init: function () {
       $('#topic_name').keyup(function () {
-        Metamaps.Create.newTopic.name = $(this).val()
+        Create.newTopic.name = $(this).val()
       })
       
       $('.pinCarousel').click(function() {
-        if (Metamaps.Create.newTopic.pinned) {
+        if (Create.newTopic.pinned) {
           $('.pinCarousel').removeClass('isPinned')
-          Metamaps.Create.newTopic.pinned = false
+          Create.newTopic.pinned = false
         }
         else {
           $('.pinCarousel').addClass('isPinned')
-          Metamaps.Create.newTopic.pinned = true
+          Create.newTopic.pinned = true
         }
       })
 
@@ -221,24 +221,24 @@ Metamaps.Create = {
       $('#new_topic').fadeIn('fast', function () {
         $('#topic_name').focus()
       })
-      Metamaps.Create.newTopic.beingCreated = true
-      Metamaps.Create.newTopic.name = ''
+      Create.newTopic.beingCreated = true
+      Create.newTopic.name = ''
     },
     hide: function (force) {
-      if (force || !Metamaps.Create.newTopic.pinned) {
+      if (force || !Create.newTopic.pinned) {
         $('#new_topic').fadeOut('fast')
-        Metamaps.Create.newTopic.beingCreated = false
+        Create.newTopic.beingCreated = false
       }
       if (force) {
         $('.pinCarousel').removeClass('isPinned')
-        Metamaps.Create.newTopic.pinned = false
+        Create.newTopic.pinned = false
       }
       $('#topic_name').typeahead('val', '')
     }
   },
   newSynapse: {
     init: function () {
-      var self = Metamaps.Create.newSynapse
+      var self = Create.newSynapse
 
       var synapseBloodhound = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -254,7 +254,7 @@ Metamaps.Create = {
         remote: {
           url: '/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
           prepare: function (query, settings) {
-            var self = Metamaps.Create.newSynapse
+            var self = Create.newSynapse
             if (Metamaps.Selected.Nodes.length < 2) {
               settings.url = settings.url.replace('%TOPIC1', self.topic1id).replace('%TOPIC2', self.topic2id)
               return settings
@@ -300,13 +300,13 @@ Metamaps.Create = {
         if (e.keyCode === BACKSPACE && $(this).val() === '' ||
           e.keyCode === DELETE && $(this).val() === '' ||
           e.keyCode === ESC) {
-          Metamaps.Create.newSynapse.hide()
+          Create.newSynapse.hide()
         } // if
-        Metamaps.Create.newSynapse.description = $(this).val()
+        Create.newSynapse.description = $(this).val()
       })
 
       $('#synapse_desc').focusout(function () {
-        if (Metamaps.Create.newSynapse.beingCreated) {
+        if (Create.newSynapse.beingCreated) {
           Metamaps.Synapse.createSynapseLocally()
         }
       })
@@ -315,7 +315,7 @@ Metamaps.Create = {
         if (datum.id) { // if they clicked on an existing synapse get it
           Metamaps.Synapse.getSynapseFromAutocomplete(datum.id)
         } else {
-          Metamaps.Create.newSynapse.description = datum.value
+          Create.newSynapse.description = datum.value
           Metamaps.Synapse.createSynapseLocally()
         }
       })
@@ -329,17 +329,19 @@ Metamaps.Create = {
       $('#new_synapse').fadeIn(100, function () {
         $('#synapse_desc').focus()
       })
-      Metamaps.Create.newSynapse.beingCreated = true
+      Create.newSynapse.beingCreated = true
     },
     hide: function () {
       $('#new_synapse').fadeOut('fast')
       $('#synapse_desc').typeahead('val', '')
-      Metamaps.Create.newSynapse.beingCreated = false
-      Metamaps.Create.newTopic.addSynapse = false
-      Metamaps.Create.newSynapse.topic1id = 0
-      Metamaps.Create.newSynapse.topic2id = 0
+      Create.newSynapse.beingCreated = false
+      Create.newTopic.addSynapse = false
+      Create.newSynapse.topic1id = 0
+      Create.newSynapse.topic2id = 0
       Metamaps.Mouse.synapseStartCoordinates = []
       Metamaps.Visualize.mGraph.plot()
     },
   }
-}; // end Metamaps.Create
+}
+
+export default Create

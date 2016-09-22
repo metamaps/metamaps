@@ -1,7 +1,7 @@
-window.Metamaps = window.Metamaps || {}
-
 import Maps from '../components/Maps'
 
-Metamaps.ReactComponents = {
+const ReactComponents = {
   Maps
 }
+
+export default ReactComponents

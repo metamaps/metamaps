@@ -1,12 +1,10 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
- * Metamaps.Control.js.erb
+ * Metamaps.Control.js
  *
  * Dependencies:
  *  - Metamaps.Active
- *  - Metamaps.Control
  *  - Metamaps.Filter
  *  - Metamaps.GlobalUI
  *  - Metamaps.JIT
@@ -20,7 +18,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Visualize
  */
 
-Metamaps.Control = {
+const Control = {
   init: function () {},
   selectNode: function (node, e) {
     var filtered = node.getData('alpha') === 0
@@ -34,7 +32,7 @@ Metamaps.Control = {
     var l = Metamaps.Selected.Nodes.length
     for (var i = l - 1; i >= 0; i -= 1) {
       var node = Metamaps.Selected.Nodes[i]
-      Metamaps.Control.deselectNode(node)
+      Control.deselectNode(node)
     }
     Metamaps.Visualize.mGraph.plot()
   },
@@ -64,8 +62,8 @@ Metamaps.Control = {
 
     var r = confirm(text + 'Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.')
     if (r == true) {
-      Metamaps.Control.deleteSelectedEdges()
-      Metamaps.Control.deleteSelectedNodes()
+      Control.deleteSelectedEdges()
+      Control.deleteSelectedNodes()
     }
   },
   deleteSelectedNodes: function () { // refers to deleting topics permanently
@@ -81,7 +79,7 @@ Metamaps.Control = {
     var l = Metamaps.Selected.Nodes.length
     for (var i = l - 1; i >= 0; i -= 1) {
       var node = Metamaps.Selected.Nodes[i]
-      Metamaps.Control.deleteNode(node.id)
+      Control.deleteNode(node.id)
     }
   },
   deleteNode: function (nodeid) { // refers to deleting topics permanently
@@ -106,7 +104,7 @@ Metamaps.Control = {
       $(document).trigger(Metamaps.JIT.events.deleteTopic, [{
         mappableid: mappableid
       }])
-      Metamaps.Control.hideNode(nodeid)
+      Control.hideNode(nodeid)
     } else {
       Metamaps.GlobalUI.notifyUser('Only topics you created can be deleted')
     }
@@ -120,7 +118,7 @@ Metamaps.Control = {
       _.each(nodeids, function(nodeid) {
         if (Metamaps.Active.Topic.id !== nodeid) {
           Metamaps.Topics.remove(nodeid)
-          Metamaps.Control.hideNode(nodeid)
+          Control.hideNode(nodeid)
         }
       })
       return
@@ -139,7 +137,7 @@ Metamaps.Control = {
 
     for (i = l - 1; i >= 0; i -= 1) {
       node = Metamaps.Selected.Nodes[i]
-      Metamaps.Control.removeNode(node.id)
+      Control.removeNode(node.id)
     }
   },
   removeNode: function (nodeid) { // refers to removing topics permanently from a map
@@ -161,7 +159,7 @@ Metamaps.Control = {
     $(document).trigger(Metamaps.JIT.events.removeTopic, [{
       mappableid: mappableid
     }])
-    Metamaps.Control.hideNode(nodeid)
+    Control.hideNode(nodeid)
   },
   hideSelectedNodes: function () {
     var l = Metamaps.Selected.Nodes.length,
@@ -170,14 +168,14 @@ Metamaps.Control = {
 
     for (i = l - 1; i >= 0; i -= 1) {
       node = Metamaps.Selected.Nodes[i]
-      Metamaps.Control.hideNode(node.id)
+      Control.hideNode(node.id)
     }
   },
   hideNode: function (nodeid) {
     var node = Metamaps.Visualize.mGraph.graph.getNode(nodeid)
     var graph = Metamaps.Visualize.mGraph
 
-    Metamaps.Control.deselectNode(node)
+    Control.deselectNode(node)
 
     node.setData('alpha', 0, 'end')
     node.eachAdjacency(function (adj) {
@@ -218,7 +216,7 @@ Metamaps.Control = {
     var l = Metamaps.Selected.Edges.length
     for (var i = l - 1; i >= 0; i -= 1) {
       var edge = Metamaps.Selected.Edges[i]
-      Metamaps.Control.deselectEdge(edge)
+      Control.deselectEdge(edge)
     }
     Metamaps.Visualize.mGraph.plot()
   },
@@ -258,7 +256,7 @@ Metamaps.Control = {
 
     for (var i = l - 1; i >= 0; i -= 1) {
       edge = Metamaps.Selected.Edges[i]
-      Metamaps.Control.deleteEdge(edge)
+      Control.deleteEdge(edge)
     }
   },
   deleteEdge: function (edge) {
@@ -279,7 +277,7 @@ Metamaps.Control = {
     var permToDelete = Metamaps.Active.Mapper.id === synapse.get('user_id') || Metamaps.Active.Mapper.get('admin')
     if (permToDelete) {
       if (edge.getData('synapses').length - 1 === 0) {
-        Metamaps.Control.hideEdge(edge)
+        Control.hideEdge(edge)
       }
       var mappableid = synapse.id
       synapse.destroy()
@@ -315,7 +313,7 @@ Metamaps.Control = {
 
     for (i = l - 1; i >= 0; i -= 1) {
       edge = Metamaps.Selected.Edges[i]
-      Metamaps.Control.removeEdge(edge)
+      Control.removeEdge(edge)
     }
     Metamaps.Selected.Edges = [ ]
   },
@@ -330,7 +328,7 @@ Metamaps.Control = {
     }
 
     if (edge.getData('mappings').length - 1 === 0) {
-      Metamaps.Control.hideEdge(edge)
+      Control.hideEdge(edge)
     }
 
     var index = edge.getData('displayIndex') ? edge.getData('displayIndex') : 0
@@ -357,7 +355,7 @@ Metamaps.Control = {
       i
     for (i = l - 1; i >= 0; i -= 1) {
       edge = Metamaps.Selected.Edges[i]
-      Metamaps.Control.hideEdge(edge)
+      Control.hideEdge(edge)
     }
     Metamaps.Selected.Edges = [ ]
   },
@@ -365,7 +363,7 @@ Metamaps.Control = {
     var from = edge.nodeFrom.id
     var to = edge.nodeTo.id
     edge.setData('alpha', 0, 'end')
-    Metamaps.Control.deselectEdge(edge)
+    Control.deselectEdge(edge)
     Metamaps.Visualize.mGraph.fx.animate({
       modes: ['edge-property:alpha'],
       duration: 500
@@ -449,4 +447,6 @@ Metamaps.Control = {
     Metamaps.GlobalUI.notifyUser(message)
     Metamaps.Visualize.mGraph.plot()
   },
-}; // end Metamaps.Control
+}
+
+export default Control

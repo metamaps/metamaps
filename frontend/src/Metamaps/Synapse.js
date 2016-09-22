@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -18,7 +17,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Visualize
  */
 
-Metamaps.Synapse = {
+const Synapse = {
   // this function is to retrieve a synapse JSON object from the database
   // @param id = the id of the synapse to retrieve
   get: function (id, callback) {
@@ -98,7 +97,7 @@ Metamaps.Synapse = {
     }
   },
   createSynapseLocally: function () {
-    var self = Metamaps.Synapse,
+    var self = Synapse,
       topic1,
       topic2,
       node1,
@@ -145,7 +144,7 @@ Metamaps.Synapse = {
     Metamaps.Create.newSynapse.hide()
   },
   getSynapseFromAutocomplete: function (id) {
-    var self = Metamaps.Synapse,
+    var self = Synapse,
       topic1,
       topic2,
       node1,
@@ -167,4 +166,6 @@ Metamaps.Synapse = {
 
     self.renderSynapse(mapping, synapse, node1, node2, true)
   }
-}; // end Metamaps.Synapse
+}
+
+export default Synapse

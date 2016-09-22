@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -16,7 +15,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Topics
  *  - Metamaps.Visualize
  */
-Metamaps.Filter = {
+const Filter = {
   filters: {
     name: '',
     metacodes: [],
@@ -31,7 +30,7 @@ Metamaps.Filter = {
   isOpen: false,
   changing: false,
   init: function () {
-    var self = Metamaps.Filter
+    var self = Filter
 
     $('.sidebarFilterIcon').click(self.toggleBox)
 
@@ -46,7 +45,7 @@ Metamaps.Filter = {
     self.getFilterData()
   },
   toggleBox: function (event) {
-    var self = Metamaps.Filter
+    var self = Filter
 
     if (self.isOpen) self.close()
     else self.open()
@@ -54,7 +53,7 @@ Metamaps.Filter = {
     event.stopPropagation()
   },
   open: function () {
-    var self = Metamaps.Filter
+    var self = Filter
 
     Metamaps.GlobalUI.Account.close()
     $('.sidebarFilterIcon div').addClass('hide')
@@ -70,7 +69,7 @@ Metamaps.Filter = {
     }
   },
   close: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     $('.sidebarFilterIcon div').removeClass('hide')
 
     if (!self.changing) {
@@ -83,7 +82,7 @@ Metamaps.Filter = {
     }
   },
   reset: function () {
-    var self = Metamaps.Filter
+    var self = Filter
 
     self.filters.metacodes = []
     self.filters.mappers = []
@@ -103,7 +102,7 @@ Metamaps.Filter = {
   But what these function do is load this data into three accessible array within java : metacodes, mappers and synapses
   */
   getFilterData: function () {
-    var self = Metamaps.Filter
+    var self = Filter
 
     var metacode, mapper, synapse
 
@@ -126,7 +125,7 @@ Metamaps.Filter = {
     })
   },
   bindLiClicks: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     $('#filter_by_metacode ul li').unbind().click(self.toggleMetacode)
     $('#filter_by_mapper ul li').unbind().click(self.toggleMapper)
     $('#filter_by_synapse ul li').unbind().click(self.toggleSynapse)
@@ -137,7 +136,7 @@ Metamaps.Filter = {
   @param
   */
   updateFilters: function (collection, propertyToCheck, correlatedModel, filtersToUse, listToModify) {
-    var self = Metamaps.Filter
+    var self = Filter
 
     var newList = []
     var removed = []
@@ -212,11 +211,11 @@ Metamaps.Filter = {
     self.bindLiClicks()
   },
   checkMetacodes: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     self.updateFilters('Topics', 'metacode_id', 'Metacodes', 'metacodes', 'metacode')
   },
   checkMappers: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     var onMap = Metamaps.Active.Map ? true : false
     if (onMap) {
       self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper')
@@ -226,11 +225,11 @@ Metamaps.Filter = {
     }
   },
   checkSynapses: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     self.updateFilters('Synapses', 'desc', 'Synapses', 'synapses', 'synapse')
   },
   filterAllMetacodes: function (e) {
-    var self = Metamaps.Filter
+    var self = Filter
     $('#filter_by_metacode ul li').addClass('toggledOff')
     $('.showAllMetacodes').removeClass('active')
     $('.hideAllMetacodes').addClass('active')
@@ -238,7 +237,7 @@ Metamaps.Filter = {
     self.passFilters()
   },
   filterNoMetacodes: function (e) {
-    var self = Metamaps.Filter
+    var self = Filter
     $('#filter_by_metacode ul li').removeClass('toggledOff')
     $('.showAllMetacodes').addClass('active')
     $('.hideAllMetacodes').removeClass('active')
@@ -246,7 +245,7 @@ Metamaps.Filter = {
     self.passFilters()
   },
   filterAllMappers: function (e) {
-    var self = Metamaps.Filter
+    var self = Filter
     $('#filter_by_mapper ul li').addClass('toggledOff')
     $('.showAllMappers').removeClass('active')
     $('.hideAllMappers').addClass('active')
@@ -254,7 +253,7 @@ Metamaps.Filter = {
     self.passFilters()
   },
   filterNoMappers: function (e) {
-    var self = Metamaps.Filter
+    var self = Filter
     $('#filter_by_mapper ul li').removeClass('toggledOff')
     $('.showAllMappers').addClass('active')
     $('.hideAllMappers').removeClass('active')
@@ -262,7 +261,7 @@ Metamaps.Filter = {
     self.passFilters()
   },
   filterAllSynapses: function (e) {
-    var self = Metamaps.Filter
+    var self = Filter
     $('#filter_by_synapse ul li').addClass('toggledOff')
     $('.showAllSynapses').removeClass('active')
     $('.hideAllSynapses').addClass('active')
@@ -270,7 +269,7 @@ Metamaps.Filter = {
     self.passFilters()
   },
   filterNoSynapses: function (e) {
-    var self = Metamaps.Filter
+    var self = Filter
     $('#filter_by_synapse ul li').removeClass('toggledOff')
     $('.showAllSynapses').addClass('active')
     $('.hideAllSynapses').removeClass('active')
@@ -281,7 +280,7 @@ Metamaps.Filter = {
   // to reduce code redundancy
   // gets called in the context of a list item in a filter box
   toggleLi: function (whichToFilter) {
-    var self = Metamaps.Filter, index
+    var self = Filter, index
     var id = $(this).attr('data-id')
     if (self.visible[whichToFilter].indexOf(id) == -1) {
       self.visible[whichToFilter].push(id)
@@ -294,7 +293,7 @@ Metamaps.Filter = {
     self.passFilters()
   },
   toggleMetacode: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     self.toggleLi.call(this, 'metacodes')
 
     if (self.visible.metacodes.length === self.filters.metacodes.length) {
@@ -310,7 +309,7 @@ Metamaps.Filter = {
     }
   },
   toggleMapper: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     self.toggleLi.call(this, 'mappers')
 
     if (self.visible.mappers.length === self.filters.mappers.length) {
@@ -326,7 +325,7 @@ Metamaps.Filter = {
     }
   },
   toggleSynapse: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     self.toggleLi.call(this, 'synapses')
 
     if (self.visible.synapses.length === self.filters.synapses.length) {
@@ -342,7 +341,7 @@ Metamaps.Filter = {
     }
   },
   passFilters: function () {
-    var self = Metamaps.Filter
+    var self = Filter
     var visible = self.visible
 
     var passesMetacode, passesMapper, passesSynapse
@@ -464,4 +463,6 @@ Metamaps.Filter = {
       duration: 200
     })
   }
-}; // end Metamaps.Filter
+}
+
+export default Filter

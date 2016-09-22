@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 /*
  * Metamaps.Visualize
@@ -13,16 +12,15 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.TopicCard
  *  - Metamaps.Topics
  *  - Metamaps.Touch
- *  - Metamaps.Visualize
  */
 
-Metamaps.Visualize = {
+const Visualize = {
   mGraph: null, // a reference to the graph object.
   cameraPosition: null, // stores the camera position when using a 3D visualization
   type: 'ForceDirected', // the type of graph we're building, could be "RGraph", "ForceDirected", or "ForceDirected3D"
   loadLater: false, // indicates whether there is JSON that should be loaded right in the offset, or whether to wait till the first topic is created
   init: function () {
-    var self = Metamaps.Visualize
+    var self = Visualize
     // disable awkward dragging of the canvas element that would sometimes happen
     $('#infovis-canvas').on('dragstart', function (event) {
       event.preventDefault()
@@ -48,7 +46,7 @@ Metamaps.Visualize = {
     })
   },
   computePositions: function () {
-    var self = Metamaps.Visualize,
+    var self = Visualize,
       mapping
 
     if (self.type == 'RGraph') {
@@ -112,7 +110,7 @@ Metamaps.Visualize = {
    *
    */
   render: function () {
-    var self = Metamaps.Visualize, RGraphSettings, FDSettings
+    var self = Visualize, RGraphSettings, FDSettings
 
     if (self.type == 'RGraph' && (!self.mGraph || self.mGraph instanceof $jit.ForceDirected)) {
       // clear the previous canvas from #infovis
@@ -217,4 +215,6 @@ Metamaps.Visualize = {
       }
     }, 800)
   }
-}; // end Metamaps.Visualize
+}
+
+export default Visualize

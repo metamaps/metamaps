@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -28,7 +27,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.tempNode2
  */
 
-Metamaps.Topic = {
+const Topic = {
   // this function is to retrieve a topic JSON object from the database
   // @param id = the id of the topic to retrieve
   get: function (id, callback) {
@@ -393,4 +392,6 @@ Metamaps.Topic = {
     event.preventDefault()
     return false
   }
-}; // end Metamaps.Topic
+}
+
+export default Topic

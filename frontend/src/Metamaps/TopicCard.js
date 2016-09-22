@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -13,16 +12,16 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Util
  *  - Metamaps.Visualize
  */
-Metamaps.TopicCard = {
+const TopicCard = {
   openTopicCard: null, // stores the topic that's currently open
   authorizedToEdit: false, // stores boolean for edit permission for open topic card
   init: function () {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
 
     // initialize best_in_place editing
     $('.authenticated div.permission.canEdit .best_in_place').best_in_place()
 
-    Metamaps.TopicCard.generateShowcardHTML = Hogan.compile($('#topicCardTemplate').html())
+    TopicCard.generateShowcardHTML = Hogan.compile($('#topicCardTemplate').html())
 
     // initialize topic card draggability and resizability
     $('.showcard').draggable({
@@ -39,7 +38,7 @@ Metamaps.TopicCard = {
    * @param {$jit.Graph.Node} node
    */
   showCard: function (node, opts) {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
 
     var topic = node.getData('topic')
 
@@ -54,14 +53,14 @@ Metamaps.TopicCard = {
     })
   },
   hideCard: function () {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
 
     $('.showcard').fadeOut('fast')
     self.openTopicCard = null
     self.authorizedToEdit = false
   },
   embedlyCardRendered: function (iframe) {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
 
     $('#embedlyLinkLoader').hide()
 
@@ -78,7 +77,7 @@ Metamaps.TopicCard = {
     }
   },
   removeLink: function () {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
     self.openTopicCard.save({
       link: null
     })
@@ -88,7 +87,7 @@ Metamaps.TopicCard = {
     $('.CardOnGraph').removeClass('hasAttachment')
   },
   bindShowCardListeners: function (topic) {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
     var showCard = document.getElementById('showcard')
 
     var authorized = self.authorizedToEdit
@@ -350,13 +349,13 @@ Metamaps.TopicCard = {
     })
   },
   handleInvalidLink: function () {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
 
     self.removeLink()
     Metamaps.GlobalUI.notifyUser('Invalid link')
   },
   populateShowCard: function (topic) {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
 
     var showCard = document.getElementById('showcard')
 
@@ -380,12 +379,12 @@ Metamaps.TopicCard = {
       showCard.appendChild(perm)
     }
 
-    Metamaps.TopicCard.bindShowCardListeners(topic)
+    TopicCard.bindShowCardListeners(topic)
   },
   generateShowcardHTML: null, // will be initialized into a Hogan template within init function
   // generateShowcardHTML
   buildObject: function (topic) {
-    var self = Metamaps.TopicCard
+    var self = TopicCard
 
     var nodeValues = {}
 
@@ -456,4 +455,6 @@ Metamaps.TopicCard = {
     nodeValues.desc = (topic.get('desc') == '' && authorized) ? desc_nil : topic.get('desc')
     return nodeValues
   }
-}; // end Metamaps.TopicCard
+}
+
+export default TopicCard

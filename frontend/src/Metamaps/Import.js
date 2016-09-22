@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -14,7 +13,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Topics
  */
 
-Metamaps.Import = {
+const Import = {
   // note that user is not imported
   topicWhitelist: [
     'id', 'name', 'metacode', 'x', 'y', 'description', 'link', 'permission'
@@ -25,19 +24,19 @@ Metamaps.Import = {
   cidMappings: {}, // to be filled by import_id => cid mappings
 
   handleTSV: function (text) {
-    var self = Metamaps.Import
+    var self = Import
     results = self.parseTabbedString(text)
     self.handle(results)
   },
 
   handleJSON: function (text) {
-    var self = Metamaps.Import
+    var self = Import
     results = JSON.parse(text)
     self.handle(results)
   },
 
   handle: function(results) {
-    var self = Metamaps.Import
+    var self = Import
     var topics = results.topics
     var synapses = results.synapses
 
@@ -61,7 +60,7 @@ Metamaps.Import = {
   },
 
   parseTabbedString: function (text) {
-    var self = Metamaps.Import
+    var self = Import
 
     // determine line ending and split lines
     var delim = '\n'
@@ -187,7 +186,7 @@ Metamaps.Import = {
   },
 
   importTopics: function (parsedTopics) {
-    var self = Metamaps.Import
+    var self = Import
 
     // up to 25 topics: scale 100
     // up to 81 topics: scale 200
@@ -220,7 +219,7 @@ Metamaps.Import = {
   },
 
   importSynapses: function (parsedSynapses) {
-    var self = Metamaps.Import
+    var self = Import
 
     parsedSynapses.forEach(function (synapse) {
       // only createSynapseWithParameters once both topics are persisted
@@ -256,7 +255,7 @@ Metamaps.Import = {
 
   createTopicWithParameters: function (name, metacode_name, permission, desc,
     link, xloc, yloc, import_id, opts) {
-    var self = Metamaps.Import
+    var self = Import
     $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null
     if (metacode === null) {
@@ -325,3 +324,5 @@ Metamaps.Import = {
     Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, true)
   }
 }
+
+export default Import

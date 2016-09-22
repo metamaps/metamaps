@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -7,8 +6,7 @@ window.Metamaps = window.Metamaps || {}
  * Dependencies:
  *  - Metamaps.Visualize
  */
-Metamaps.Organize = {
-  init: function () {},
+const Organize = {
   arrange: function (layout, centerNode) {
     // first option for layout to implement is 'grid', will do an evenly spaced grid with its center at the 0,0 origin
     if (layout == 'grid') {
@@ -115,4 +113,6 @@ Metamaps.Organize = {
       var newOriginY = (lowY + highY) / 2
     } else alert('please call function with a valid layout dammit!')
   }
-}; // end Metamaps.Organize
+}
+
+export default Organize

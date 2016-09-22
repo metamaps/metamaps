@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -10,10 +9,10 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.ReactComponents
  */
 
-Metamaps.Views = {
+const Views = {
   exploreMaps: {
     setCollection: function (collection) {
-      var self = Metamaps.Views.exploreMaps
+      var self = Views.exploreMaps
 
       if (self.collection) {
         self.collection.off('add', self.render)
@@ -26,7 +25,7 @@ Metamaps.Views = {
       self.collection.on('errorOnFetch', self.handleError)
     },
     render: function (mapperObj, cb) {
-      var self = Metamaps.Views.exploreMaps
+      var self = Views.exploreMaps
   
       if (typeof mapperObj === 'function') {
         cb = mapperObj
@@ -51,7 +50,7 @@ Metamaps.Views = {
       Metamaps.Loading.hide()
     },
     loadMore: function () {
-      var self = Metamaps.Views.exploreMaps
+      var self = Views.exploreMaps
 
       if (self.collection.page != "loadedAll") {
         self.collection.getMaps()
@@ -59,7 +58,7 @@ Metamaps.Views = {
       else self.render()
     },
     handleSuccess: function (cb) {
-      var self = Metamaps.Views.exploreMaps
+      var self = Views.exploreMaps
 
       if (self.collection && self.collection.id === 'mapper') {
         self.fetchUserThenRender(cb)
@@ -71,7 +70,7 @@ Metamaps.Views = {
       console.log('error loading maps!') // TODO
     },
     fetchUserThenRender: function (cb) {
-      var self = Metamaps.Views.exploreMaps
+      var self = Views.exploreMaps
       
       // first load the mapper object and then call the render function
       $.ajax({
@@ -86,3 +85,5 @@ Metamaps.Views = {
     }
   }
 }
+
+export default Views

@@ -1,15 +1,6 @@
-window.Metamaps = window.Metamaps || {}
-/*
- * Metamaps.Debug.js.erb
- *
- * Dependencies: none!
- */
+const Debug = () => {
+  console.debug(window.Metamaps)
+  console.debug(`Metamaps Version: ${window.Metamaps.VERSION}`)
+}
 
-Metamaps.Debug = function () {
-  console.debug(Metamaps)
-  console.debug('Metamaps Version: ' + Metamaps.VERSION)
-}
-Metamaps.debug = function () {
-  Metamaps.Debug()
-window.Metamaps = window.Metamaps || {}
-}
+export default Debug

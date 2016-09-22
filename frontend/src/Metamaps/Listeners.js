@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -10,7 +9,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.JIT
  *  - Metamaps.Visualize
  */
-Metamaps.Listeners = {
+const Listeners = {
   init: function () {
     var self = this
     $(document).on('keydown', function (e) {
@@ -120,4 +119,6 @@ Metamaps.Listeners = {
       Metamaps.Topic.fetchRelatives(nodes)
     }
   }
-}; // end Metamaps.Listeners
+}
+
+export default Listeners

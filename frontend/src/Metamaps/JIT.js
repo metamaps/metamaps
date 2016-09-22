@@ -1,6 +1,8 @@
-window.Metamaps = window.Metamaps || {}
+/* global Metamaps */
 
-Metamaps.JIT = {
+let panningInt
+
+const JIT = {
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
     newTopic: 'Metamaps:JIT:events:newTopic',
@@ -18,7 +20,7 @@ Metamaps.JIT = {
    * This method will bind the event handlers it is interested and initialize the class.
    */
   init: function () {
-    var self = Metamaps.JIT
+    var self = JIT
 
     $('.zoomIn').click(self.zoomIn)
     $('.zoomOut').click(self.zoomOut)
@@ -94,7 +96,7 @@ Metamaps.JIT = {
     return [jitReady, synapsesToRemove]
   },
   prepareVizData: function () {
-    var self = Metamaps.JIT
+    var self = JIT
     var mapping
 
     // reset/empty vizData
@@ -148,7 +150,7 @@ Metamaps.JIT = {
       var color = Metamaps.Settings.colors.synapses.normal
       canvas.getCtx().fillStyle = canvas.getCtx().strokeStyle = color
     }
-    Metamaps.JIT.renderEdgeArrows($jit.Graph.Plot.edgeHelper, adj, synapse, canvas)
+    JIT.renderEdgeArrows($jit.Graph.Plot.edgeHelper, adj, synapse, canvas)
 
     // check for edge label in data  
     var desc = synapse.get('desc')
@@ -253,7 +255,7 @@ Metamaps.JIT = {
       duration: 800,
       onComplete: function () {
         Metamaps.Visualize.mGraph.busy = false
-        $(document).trigger(Metamaps.JIT.events.animationDone)
+        $(document).trigger(JIT.events.animationDone)
       }
     },
     animateFDLayout: {
@@ -323,26 +325,26 @@ Metamaps.JIT = {
         enable: true,
         enableForEdges: true,
         onMouseMove: function (node, eventInfo, e) {
-          Metamaps.JIT.onMouseMoveHandler(node, eventInfo, e)
+          JIT.onMouseMoveHandler(node, eventInfo, e)
         // console.log('called mouse move handler')
         },
         // Update node positions when dragged
         onDragMove: function (node, eventInfo, e) {
-          Metamaps.JIT.onDragMoveTopicHandler(node, eventInfo, e)
+          JIT.onDragMoveTopicHandler(node, eventInfo, e)
         // console.log('called drag move handler')
         },
         onDragEnd: function (node, eventInfo, e) {
-          Metamaps.JIT.onDragEndTopicHandler(node, eventInfo, e, false)
+          JIT.onDragEndTopicHandler(node, eventInfo, e, false)
         // console.log('called drag end handler')
         },
         onDragCancel: function (node, eventInfo, e) {
-          Metamaps.JIT.onDragCancelHandler(node, eventInfo, e, false)
+          JIT.onDragCancelHandler(node, eventInfo, e, false)
         },
         // Implement the same handler for touchscreens
         onTouchStart: function (node, eventInfo, e) {},
         // Implement the same handler for touchscreens
         onTouchMove: function (node, eventInfo, e) {
-          Metamaps.JIT.onDragMoveTopicHandler(node, eventInfo, e)
+          JIT.onDragMoveTopicHandler(node, eventInfo, e)
         },
         // Implement the same handler for touchscreens
         onTouchEnd: function (node, eventInfo, e) {},
@@ -361,7 +363,7 @@ Metamaps.JIT = {
               var bS = Metamaps.Mouse.boxStartCoordinates
               var bE = Metamaps.Mouse.boxEndCoordinates
               if (Math.abs(bS.x - bE.x) > 20 && Math.abs(bS.y - bE.y) > 20) {
-                Metamaps.JIT.zoomToBox(e)
+                JIT.zoomToBox(e)
                 return
               } else {
                 Metamaps.Mouse.boxStartCoordinates = null
@@ -373,7 +375,7 @@ Metamaps.JIT = {
             if (e.shiftKey) {
               Metamaps.Visualize.mGraph.busy = false
               Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos()
-              Metamaps.JIT.selectWithBox(e)
+              JIT.selectWithBox(e)
               // console.log('called select with box')
               return
             }
@@ -383,13 +385,13 @@ Metamaps.JIT = {
 
           // clicking on a edge, node, or clicking on blank part of canvas?
           if (node.nodeFrom) {
-            Metamaps.JIT.selectEdgeOnClickHandler(node, e)
+            JIT.selectEdgeOnClickHandler(node, e)
           // console.log('called selectEdgeOnClickHandler')
           } else if (node && !node.nodeFrom) {
-            Metamaps.JIT.selectNodeOnClickHandler(node, e)
+            JIT.selectNodeOnClickHandler(node, e)
           // console.log('called selectNodeOnClickHandler')
           } else {
-            Metamaps.JIT.canvasClickHandler(eventInfo.getPos(), e)
+            JIT.canvasClickHandler(eventInfo.getPos(), e)
           // console.log('called canvasClickHandler')
           } // if
         },
@@ -401,7 +403,7 @@ Metamaps.JIT = {
           if (Metamaps.Mouse.boxStartCoordinates) {
             Metamaps.Visualize.mGraph.busy = false
             Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos()
-            Metamaps.JIT.selectWithBox(e)
+            JIT.selectWithBox(e)
             return
           }
 
@@ -409,9 +411,9 @@ Metamaps.JIT = {
 
           // clicking on a edge, node, or clicking on blank part of canvas?
           if (node.nodeFrom) {
-            Metamaps.JIT.selectEdgeOnRightClickHandler(node, e)
+            JIT.selectEdgeOnRightClickHandler(node, e)
           } else if (node && !node.nodeFrom) {
-            Metamaps.JIT.selectNodeOnRightClickHandler(node, e)
+            JIT.selectNodeOnRightClickHandler(node, e)
           } else {
             // console.log('right clicked on open space')
           }
@@ -455,7 +457,7 @@ Metamaps.JIT = {
 
           // if the topic has a link, draw a small image to indicate that
           var hasLink = topic && topic.get('link') !== '' && topic.get('link') !== null
-          var linkImage = Metamaps.JIT.topicLinkImage
+          var linkImage = JIT.topicLinkImage
           var linkImageLoaded = linkImage.complete ||
           (typeof linkImage.naturalWidth !== 'undefined' &&
           linkImage.naturalWidth !== 0)
@@ -465,7 +467,7 @@ Metamaps.JIT = {
 
           // if the topic has a desc, draw a small image to indicate that
           var hasDesc = topic && topic.get('desc') !== '' && topic.get('desc') !== null
-          var descImage = Metamaps.JIT.topicDescImage
+          var descImage = JIT.topicDescImage
           var descImageLoaded = descImage.complete ||
           (typeof descImage.naturalWidth !== 'undefined' &&
           descImage.naturalWidth !== 0)
@@ -500,7 +502,7 @@ Metamaps.JIT = {
     edgeSettings: {
       'customEdge': {
         'render': function (adj, canvas) {
-          Metamaps.JIT.edgeRender(adj, canvas)
+          JIT.edgeRender(adj, canvas)
         },
         'contains': function (adj, pos) {
           var from = adj.nodeFrom.pos.getc(),
@@ -667,7 +669,7 @@ Metamaps.JIT = {
     Metamaps.Visualize.mGraph.plot()
   }, // onMouseLeave
   onMouseMoveHandler: function (node, eventInfo, e) {
-    var self = Metamaps.JIT
+    var self = JIT
 
     if (Metamaps.Visualize.mGraph.busy) return
 
@@ -721,7 +723,7 @@ Metamaps.JIT = {
     Metamaps.Control.deselectAllNodes()
   }, // escKeyHandler
   onDragMoveTopicHandler: function (node, eventInfo, e) {
-    var self = Metamaps.JIT
+    var self = JIT
 
     // this is used to send nodes that are moving to 
     // other realtime collaborators on the same map
@@ -751,7 +753,7 @@ Metamaps.JIT = {
             // to be the same as on other collaborators
             // maps
             positionsToSend[topic.id] = pos
-            $(document).trigger(Metamaps.JIT.events.topicDrag, [positionsToSend])
+            $(document).trigger(JIT.events.topicDrag, [positionsToSend])
           }
         } else {
           var len = Metamaps.Selected.Nodes.length
@@ -782,7 +784,7 @@ Metamaps.JIT = {
           } // for
 
           if (Metamaps.Active.Map) {
-            $(document).trigger(Metamaps.JIT.events.topicDrag, [positionsToSend])
+            $(document).trigger(JIT.events.topicDrag, [positionsToSend])
           }
         } // if
 
@@ -1201,7 +1203,7 @@ Metamaps.JIT = {
   selectNodeOnClickHandler: function (node, e) {
     if (Metamaps.Visualize.mGraph.busy) return
 
-    var self = Metamaps.JIT
+    var self = JIT
 
     // catch right click on mac, which is often like ctrl+click
     if (navigator.platform.indexOf('Mac') != -1 && e.ctrlKey) {
@@ -1222,7 +1224,7 @@ Metamaps.JIT = {
     } else {
       // wait a certain length of time, then check again, then run this code
       setTimeout(function () {
-        if (!Metamaps.JIT.nodeWasDoubleClicked()) {
+        if (!JIT.nodeWasDoubleClicked()) {
           var nodeAlreadySelected = node.selected
 
           if (!e.shiftKey) {
@@ -1403,7 +1405,7 @@ Metamaps.JIT = {
     var fetch_sent = false
     $('.rc-siblings').hover(function () {
       if (!fetch_sent) {
-        Metamaps.JIT.populateRightClickSiblings(node)
+        JIT.populateRightClickSiblings(node)
         fetch_sent = true
       }
     })
@@ -1414,7 +1416,7 @@ Metamaps.JIT = {
     })
   }, // selectNodeOnRightClickHandler,
   populateRightClickSiblings: function (node) {
-    var self = Metamaps.JIT
+    var self = JIT
 
     // depending on how many topics are selected, do different things
 
@@ -1456,7 +1458,7 @@ Metamaps.JIT = {
   selectEdgeOnClickHandler: function (adj, e) {
     if (Metamaps.Visualize.mGraph.busy) return
 
-    var self = Metamaps.JIT
+    var self = JIT
 
     // catch right click on mac, which is often like ctrl+click
     if (navigator.platform.indexOf('Mac') != -1 && e.ctrlKey) {
@@ -1471,7 +1473,7 @@ Metamaps.JIT = {
     } else {
       // wait a certain length of time, then check again, then run this code
       setTimeout(function () {
-        if (!Metamaps.JIT.nodeWasDoubleClicked()) {
+        if (!JIT.nodeWasDoubleClicked()) {
           var edgeAlreadySelected = Metamaps.Selected.Edges.indexOf(adj) !== -1
 
           if (!e.shiftKey) {
@@ -1611,17 +1613,17 @@ Metamaps.JIT = {
       easing = 1 // frictional value
 
     easing = 1
-    window.clearInterval(Metamaps.panningInt)
-    Metamaps.panningInt = setInterval(function () {
+    window.clearInterval(panningInt)
+    panningInt = setInterval(function () {
       myTimer()
     }, 1)
 
     function myTimer () {
       Metamaps.Visualize.mGraph.canvas.translate(x_velocity * easing * 1 / sx, y_velocity * easing * 1 / sy)
-      $(document).trigger(Metamaps.JIT.events.pan)
+      $(document).trigger(JIT.events.pan)
       easing = easing * 0.75
 
-      if (easing < 0.1) window.clearInterval(Metamaps.panningInt)
+      if (easing < 0.1) window.clearInterval(panningInt)
     }
   }, // SmoothPanning
   renderMidArrow: function (from, to, dim, swap, canvas, placement, newSynapse) {
@@ -1666,7 +1668,7 @@ Metamaps.JIT = {
     ctx.stroke()
   }, // renderMidArrow
   renderEdgeArrows: function (edgeHelper, adj, synapse, canvas) {
-    var self = Metamaps.JIT
+    var self = JIT
 
     var directionCat = synapse.get('category')
     var direction = synapse.getDirection()
@@ -1720,11 +1722,11 @@ Metamaps.JIT = {
   }, // renderEdgeArrows
   zoomIn: function (event) {
     Metamaps.Visualize.mGraph.canvas.scale(1.25, 1.25)
-    $(document).trigger(Metamaps.JIT.events.zoom, [event])
+    $(document).trigger(JIT.events.zoom, [event])
   },
   zoomOut: function (event) {
     Metamaps.Visualize.mGraph.canvas.scale(0.8, 0.8)
-    $(document).trigger(Metamaps.JIT.events.zoom, [event])
+    $(document).trigger(JIT.events.zoom, [event])
   },
   centerMap: function (canvas) {
     var offsetScale = canvas.scaleOffsetX
@@ -1743,7 +1745,7 @@ Metamaps.JIT = {
       eY = Metamaps.Mouse.boxEndCoordinates.y
 
     var canvas = Metamaps.Visualize.mGraph.canvas
-    Metamaps.JIT.centerMap(canvas)
+    JIT.centerMap(canvas)
 
     var height = $(document).height(),
       width = $(document).width()
@@ -1770,14 +1772,14 @@ Metamaps.JIT = {
     var cogY = (sY + eY) / 2
 
     canvas.translate(-1 * cogX, -1 * cogY)
-    $(document).trigger(Metamaps.JIT.events.zoom, [event])
+    $(document).trigger(JIT.events.zoom, [event])
 
     Metamaps.Mouse.boxStartCoordinates = false
     Metamaps.Mouse.boxEndCoordinates = false
     Metamaps.Visualize.mGraph.plot()
   },
   zoomExtents: function (event, canvas, denySelected) {
-    Metamaps.JIT.centerMap(canvas)
+    JIT.centerMap(canvas)
     var height = canvas.getSize().height,
       width = canvas.getSize().width,
       maxX, minX, maxY, minY, counter = 0
@@ -1847,7 +1849,7 @@ Metamaps.JIT = {
         canvas.scale(scaleMultiplier, scaleMultiplier)
       }
 
-      $(document).trigger(Metamaps.JIT.events.zoom, [event])
+      $(document).trigger(JIT.events.zoom, [event])
     }
     else if (nodes.length == 1) {
       nodes.forEach(function (n) {
@@ -1855,8 +1857,10 @@ Metamaps.JIT = {
           y = n.pos.y
 
         canvas.translate(-1 * x, -1 * y)
-        $(document).trigger(Metamaps.JIT.events.zoom, [event])
+        $(document).trigger(JIT.events.zoom, [event])
       })
     }
   }
 }
+
+export default JIT

@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -9,7 +8,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Map
  */
 
-Metamaps.Mobile = {
+const Mobile = {
   init: function () {
     var self = Metamaps.Mobile
     
@@ -23,7 +22,7 @@ Metamaps.Mobile = {
     $('#header_content').width($(document).width() - 70)
   },
   liClick: function () {
-    var self = Metamaps.Mobile
+    var self = Mobile
     $('#header_content').html($(this).text())
     self.toggleMenu()
   },
@@ -36,3 +35,5 @@ Metamaps.Mobile = {
     }
   }
 }
+
+export default Mobile

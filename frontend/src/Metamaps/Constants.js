@@ -1,7 +1,6 @@
 window.Metamaps = window.Metamaps || {}
 
 // TODO eliminate these 5 top-level variables
-Metamaps.panningInt = null
 Metamaps.tempNode = null
 Metamaps.tempInit = false
 Metamaps.tempNode2 = null

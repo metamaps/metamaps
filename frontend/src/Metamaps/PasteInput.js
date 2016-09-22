@@ -1,4 +1,3 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -9,12 +8,12 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.AutoLayout
  */
 
-Metamaps.PasteInput = {
+const PasteInput = {
   // thanks to https://github.com/kevva/url-regex
   URL_REGEX: new RegExp('^(?:(?:(?:[a-z]+:)?//)|www\.)(?:\S+(?::\S*)?@)?(?:localhost|(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])(?:\.(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])){3}|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#][^\s"]*)?$'),
 
   init: function () {
-    var self = Metamaps.PasteInput
+    var self = PasteInput
 
     // intercept dragged files
     // see http://stackoverflow.com/questions/6756583
@@ -59,7 +58,7 @@ Metamaps.PasteInput = {
   },
 
   handle: function(text, coords) {
-    var self = Metamaps.PasteInput
+    var self = PasteInput
 
     if (text.match(self.URL_REGEX)) {
       self.handleURL(text, coords)
@@ -109,3 +108,5 @@ Metamaps.PasteInput = {
     Metamaps.Import.handleTSV(text)
   }
 }
+
+export default PasteInput
