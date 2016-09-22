@@ -1,4 +1,5 @@
 window.Metamaps = window.Metamaps || {}
+
 Metamaps.JIT = {
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
