@@ -43,5 +43,7 @@
 //= require ./src/Metamaps.Mobile
 //= require ./src/Metamaps.Admin
 //= require ./src/Metamaps.Import
+//= require ./src/Metamaps.AutoLayout
+//= require ./src/Metamaps.PasteInput
 //= require ./src/Metamaps.JIT
 //= require ./src/Metamaps.Debug

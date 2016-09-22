@@ -6,7 +6,6 @@
  * Dependencies:
  *  - Metamaps.Active
  *  - Metamaps.Backbone
- *  - Metamaps.Famous    // TODO remove dependency
  *  - Metamaps.Map
  *  - Metamaps.Mappings
  *  - Metamaps.Metacodes
@@ -24,38 +23,30 @@ Metamaps.Import = {
   ],
   cidMappings: {}, // to be filled by import_id => cid mappings
 
-  init: function () {
+  handleTSV: function (text) {
     var self = Metamaps.Import
+    results = self.parseTabbedString(text)
+    self.handle(results)
+  },
 
-    $('body').bind('paste', function (e) {
-      if (e.target.tagName === 'INPUT') return
-      if (e.target.tagName === 'TEXTAREA') return
+  handleJSON: function (text) {
+    var self = Metamaps.Import
+    results = JSON.parse(text)
+    self.handle(results)
+  },
 
-      var text = e.originalEvent.clipboardData.getData('text/plain')
+  handle: function(results) {
+    var self = Metamaps.Import
+    var topics = results.topics
+    var synapses = results.synapses
 
-      var results
-      if (text.trimLeft()[0] === '{') {
-        try {
-          results = JSON.parse(text)
-        } catch (e) {
-          results = false
-        }
-      } else {
-        results = self.parseTabbedString(text)
-      }
-      if (results === false) return
-
-      var topics = results.topics
-      var synapses = results.synapses
-
-      if (topics.length > 0 || synapses.length > 0) {
-        if (window.confirm('Are you sure you want to create ' + topics.length +
-            ' new topics and ' + synapses.length + ' new synapses?')) {
-          self.importTopics(topics)
-          self.importSynapses(synapses)
-        } // if
+    if (topics.length > 0 || synapses.length > 0) {
+      if (window.confirm('Are you sure you want to create ' + topics.length +
+          ' new topics and ' + synapses.length + ' new synapses?')) {
+        self.importTopics(topics)
+        self.importSynapses(synapses)
       } // if
-    })
+    } // if
   },
 
   abort: function (message) {
@@ -263,7 +254,7 @@ Metamaps.Import = {
   },
 
   createTopicWithParameters: function (name, metacode_name, permission, desc,
-    link, xloc, yloc, import_id) {
+    link, xloc, yloc, import_id, opts) {
     var self = Metamaps.Import
     $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null
@@ -272,15 +263,22 @@ Metamaps.Import = {
       console.warn("Couldn't find metacode " + metacode_name + ' so used Wildcard instead.')
     }
 
+    var topic_permission = permission || Metamaps.Active.Map.get('permission')
+    var defer_to_map_id = permission === topic_permission ? Metamaps.Active.Map.get('id') : null
     var topic = new Metamaps.Backbone.Topic({
       name: name,
       metacode_id: metacode.id,
-      permission: permission || Metamaps.Active.Map.get('permission'),
+      permission: topic_permission,
+      defer_to_map_id: defer_to_map_id,
       desc: desc || "",
-      link: link
+      link: link || "",
+      calculated_permission: Metamaps.Active.Map.get('permission')
     })
     Metamaps.Topics.add(topic)
-    self.cidMappings[import_id] = topic.cid
+
+    if (import_id !== null && import_id !== undefined) {
+      self.cidMappings[import_id] = topic.cid
+    }
 
     var mapping = new Metamaps.Backbone.Mapping({
       xloc: xloc,
@@ -291,9 +289,11 @@ Metamaps.Import = {
     Metamaps.Mappings.add(mapping)
 
     // this function also includes the creation of the topic in the database
-    Metamaps.Topic.renderTopic(mapping, topic, true, true)
+    Metamaps.Topic.renderTopic(mapping, topic, true, true, {
+      success: opts.success
+    })
 
-    Metamaps.Famous.viz.hideInstructions()
+    Metamaps.GlobalUI.hideDiv('#instructions')
   },
 
   createSynapseWithParameters: function (desc, category, permission,
