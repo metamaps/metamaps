@@ -1,3 +1,4 @@
+window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
@@ -421,18 +422,18 @@ Metamaps.TopicCard = {
     var inmapsLinks = topic.get('inmapsLinks') || []
     nodeValues.inmaps = ''
     if (inmapsAr.length < 6) {
-      for (i = 0; i < inmapsAr.length; i++) {
+      for (let i = 0; i < inmapsAr.length; i++) {
         var url = '/maps/' + inmapsLinks[i]
         nodeValues.inmaps += '<li><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
       }
     } else {
-      for (i = 0; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
         var url = '/maps/' + inmapsLinks[i]
         nodeValues.inmaps += '<li><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
       }
       extra = inmapsAr.length - 5
       nodeValues.inmaps += '<li><span class="showMore">See ' + extra + ' more...</span></li>'
-      for (i = 5; i < inmapsAr.length; i++) {
+      for (let i = 5; i < inmapsAr.length; i++) {
         var url = '/maps/' + inmapsLinks[i]
         nodeValues.inmaps += '<li class="hideExtra extraText"><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
       }

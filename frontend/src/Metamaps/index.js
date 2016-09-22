@@ -1,26 +1,10 @@
-/* global Metamaps */
-
-/*
- * Metamaps.js.erb
- */
+window.Metamaps = window.Metamaps || {}
 
 // TODO eliminate these 5 top-level variables
 Metamaps.panningInt = null
 Metamaps.tempNode = null
 Metamaps.tempInit = false
 Metamaps.tempNode2 = null
-Metamaps.VERSION = '<%= METAMAPS_VERSION %>'
-
-/* erb variables from rails */
-Metamaps.Erb = {}
-Metamaps.Erb['REALTIME_SERVER'] = '<%= ENV['REALTIME_SERVER'] %>'
-Metamaps.Erb['junto_spinner_darkgrey.gif'] = '<%= asset_path('junto_spinner_darkgrey.gif') %>'
-Metamaps.Erb['user.png'] = '<%= asset_path('user.png') %>'
-Metamaps.Erb['icons/wildcard.png'] = '<%= asset_path('icons/wildcard.png') %>'
-Metamaps.Erb['topic_description_signifier.png'] = '<%= asset_path('topic_description_signifier.png') %>'
-Metamaps.Erb['topic_link_signifier.png'] = '<%= asset_path('topic_link_signifier.png') %>'
-Metamaps.Erb['synapse16.png'] = '<%= asset_path('synapse16.png') %>'
-Metamaps.Metacodes = <%= Metacode.all.to_json.gsub(%r[(icon.*?)(\"},)], '\1?purple=stupid\2').html_safe %>
 
 Metamaps.Settings = {
   embed: false, // indicates that the app is on a page that is optimized for embedding in iFrames on other web pages
@@ -65,10 +49,39 @@ Metamaps.Mouse = {
 Metamaps.Selected = {
   reset: function () {
     var self = Metamaps.Selected
-
     self.Nodes = []
     self.Edges = []
   },
   Nodes: [],
   Edges: []
 }
+
+require('./Metamaps.Account')
+require('./Metamaps.Admin')
+require('./Metamaps.AutoLayout')
+require('./Metamaps.Backbone')
+require('./Metamaps.Control')
+require('./Metamaps.Create')
+require('./Metamaps.Debug')
+require('./Metamaps.Filter')
+require('./Metamaps.GlobalUI')
+require('./Metamaps.Import')
+require('./Metamaps.JIT')
+require('./Metamaps.Listeners')
+require('./Metamaps.Map')
+require('./Metamaps.Mapper')
+require('./Metamaps.Mobile')
+require('./Metamaps.Organize')
+require('./Metamaps.PasteInput')
+require('./Metamaps.Realtime')
+require('./Metamaps.Router')
+require('./Metamaps.Synapse')
+require('./Metamaps.SynapseCard')
+require('./Metamaps.Topic')
+require('./Metamaps.TopicCard')
+require('./Metamaps.Util')
+require('./Metamaps.Views')
+require('./Metamaps.Visualize')
+require('./Metamaps.ReactComponents')
+
+export default window.Metamaps

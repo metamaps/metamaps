@@ -1,3 +1,4 @@
+window.Metamaps = window.Metamaps || {}
 /*
  * Metamaps.Debug.js.erb
  *
@@ -10,4 +11,5 @@ Metamaps.Debug = function () {
 }
 Metamaps.debug = function () {
   Metamaps.Debug()
+window.Metamaps = window.Metamaps || {}
 }

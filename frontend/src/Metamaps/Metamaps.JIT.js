@@ -1,3 +1,4 @@
+window.Metamaps = window.Metamaps || {}
 Metamaps.JIT = {
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
@@ -819,7 +820,7 @@ Metamaps.JIT = {
           }
         }
         //
-        temp = eventInfo.getNode()
+        let temp = eventInfo.getNode()
         if (temp != false && temp.id != node.id && Metamaps.Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
           Metamaps.tempNode2 = temp
 

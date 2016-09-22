@@ -1,3 +1,4 @@
+window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
 
 /*
