@@ -1,5 +1,7 @@
 /* global Metamaps, $ */
 
+import _ from 'lodash'
+
 import Active from './Active'
 import JIT from './JIT'
 import Router from './Router'

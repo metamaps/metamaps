@@ -1,5 +1,7 @@
 /* global Metamaps, $ */
 
+import _ from 'lodash'
+
 import Active from './Active'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'

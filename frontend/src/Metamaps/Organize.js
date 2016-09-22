@@ -1,5 +1,7 @@
 /* global $ */
 
+import _ from 'lodash'
+
 import Visualize from './Visualize'
 import JIT from './JIT'
 

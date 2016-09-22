@@ -1,5 +1,6 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, Backbone, _, $ */
+
+import _ from 'lodash'
 
 /*
  * Metamaps.Backbone.js.erb
