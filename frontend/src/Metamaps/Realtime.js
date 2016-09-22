@@ -77,13 +77,13 @@ const Realtime = {
       var $video = $('<video></video>').attr('id', self.videoId)
       self.localVideo = {
         $video: $video,
-        view: new Views.videoView($video[0], $('body'), 'me', true, {
+        view: new Views.VideoView($video[0], $('body'), 'me', true, {
           DOUBLE_CLICK_TOLERANCE: 200,
           avatar: Active.Mapper ? Active.Mapper.get('image') : ''
         })
       }
 
-      self.room = new Views.room({
+      self.room = new Views.Room({
         webrtc: self.webrtc,
         socket: self.socket,
         username: Active.Mapper ? Active.Mapper.get('name') : '',
@@ -104,26 +104,26 @@ const Realtime = {
   addJuntoListeners: function () {
     var self = Realtime
 
-    $(document).on(Views.chatView.events.openTray, function () {
+    $(document).on(Views.ChatView.events.openTray, function () {
       $('.main').addClass('compressed')
       self.chatOpen = true
       self.positionPeerIcons()
     })
-    $(document).on(Views.chatView.events.closeTray, function () {
+    $(document).on(Views.ChatView.events.closeTray, function () {
       $('.main').removeClass('compressed')
       self.chatOpen = false
       self.positionPeerIcons()
     })
-    $(document).on(Views.chatView.events.videosOn, function () {
+    $(document).on(Views.ChatView.events.videosOn, function () {
       $('#wrapper').removeClass('hideVideos')
     })
-    $(document).on(Views.chatView.events.videosOff, function () {
+    $(document).on(Views.ChatView.events.videosOff, function () {
       $('#wrapper').addClass('hideVideos')
     })
-    $(document).on(Views.chatView.events.cursorsOn, function () {
+    $(document).on(Views.ChatView.events.cursorsOn, function () {
       $('#wrapper').removeClass('hideCursors')
     })
-    $(document).on(Views.chatView.events.cursorsOff, function () {
+    $(document).on(Views.ChatView.events.cursorsOff, function () {
       $('#wrapper').addClass('hideCursors')
     })
   },
@@ -611,7 +611,7 @@ const Realtime = {
     var sendNewMessage = function (event, data) {
       self.sendNewMessage(data)
     }
-    $(document).on(Views.room.events.newMessage + '.map', sendNewMessage)
+    $(document).on(Views.Room.events.newMessage + '.map', sendNewMessage)
   },
   attachMapListener: function () {
     var self = Realtime

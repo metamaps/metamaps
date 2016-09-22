@@ -28,7 +28,7 @@ import SynapseCard from './SynapseCard'
 import Topic from './Topic'
 import TopicCard from './TopicCard'
 import Util from './Util'
-import Views from './Views'
+import * as Views from './Views'
 import Visualize from './Visualize'
 import ReactComponents from './ReactComponents'
 
@@ -83,18 +83,18 @@ document.addEventListener("DOMContentLoaded", function() {
   if (Metamaps.currentSection === "explore") {
       const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
-      Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] )
+      Metamaps.Views.ExploreMaps.setCollection( Metamaps.Maps[capitalize] )
       if (Metamaps.currentPage === "mapper") {
-          Views.exploreMaps.fetchUserThenRender()
+          Views.ExploreMaps.fetchUserThenRender()
       }
       else {
-          Views.exploreMaps.render()
+          Views.ExploreMaps.render()
       }
       GlobalUI.showDiv('#explore')
   }
   else if (Metamaps.currentSection === "" && Active.Mapper) {
-      Views.exploreMaps.setCollection(Metamaps.Maps.Active)
-      Views.exploreMaps.render()
+      Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
+      Views.ExploreMaps.render()
       GlobalUI.showDiv('#explore')
   }
   else if (Active.Map || Active.Topic) {

@@ -49,11 +49,11 @@ const _Router = Backbone.Router.extend({
 
       GlobalUI.showDiv('#explore')
 
-      Views.exploreMaps.setCollection(Metamaps.Maps.Active)
+      Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
       if (Metamaps.Maps.Active.length === 0) {
         Metamaps.Maps.Active.getMaps(navigate) // this will trigger an explore maps render
       } else {
-        Views.exploreMaps.render(navigate)
+        Views.ExploreMaps.render(navigate)
       }
     } else {
       // logged out home page
@@ -108,7 +108,7 @@ const _Router = Backbone.Router.extend({
       Metamaps.Maps.Mapper.mapperId = id
     }
 
-    Views.exploreMaps.setCollection(Metamaps.Maps[capitalize])
+    Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
 
     var navigate = function () {
       var path = '/explore/' + this.currentPage
@@ -130,9 +130,9 @@ const _Router = Backbone.Router.extend({
       }, 300) // wait 300 milliseconds till the other animations are done to do the fetch
     } else {
       if (id) {
-        Views.exploreMaps.fetchUserThenRender(navigateTimeout)
+        Views.ExploreMaps.fetchUserThenRender(navigateTimeout)
       } else {
-        Views.exploreMaps.render(navigateTimeout)
+        Views.ExploreMaps.render(navigateTimeout)
       }
     }
 
