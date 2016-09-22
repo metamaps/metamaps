@@ -1,19 +1,20 @@
 /* global Metamaps, $ */
 
+import Active from './Active'
+import Control from './Control'
+import Settings from './Settings'
+import Visualize from './Visualize'
+
 /*
  * Metamaps.Filter.js.erb
  *
  * Dependencies:
- *  - Metamaps.Active
- *  - Metamaps.Control
  *  - Metamaps.Creators
  *  - Metamaps.GlobalUI
  *  - Metamaps.Mappers
  *  - Metamaps.Metacodes
- *  - Metamaps.Settings
  *  - Metamaps.Synapses
  *  - Metamaps.Topics
- *  - Metamaps.Visualize
  */
 const Filter = {
   filters: {
@@ -216,7 +217,7 @@ const Filter = {
   },
   checkMappers: function () {
     var self = Filter
-    var onMap = Metamaps.Active.Map ? true : false
+    var onMap = Active.Map ? true : false
     if (onMap) {
       self.updateFilters('Mappings', 'user_id', 'Mappers', 'mappers', 'mapper')
     } else {
@@ -347,10 +348,10 @@ const Filter = {
     var passesMetacode, passesMapper, passesSynapse
     var onMap
 
-    if (Metamaps.Active.Map) {
+    if (Active.Map) {
       onMap = true
     }
-    else if (Metamaps.Active.Topic) {
+    else if (Active.Topic) {
       onMap = false
     }
 
@@ -386,10 +387,10 @@ const Filter = {
         else console.log(topic)
       } else {
         if (n) {
-          Metamaps.Control.deselectNode(n, true)
+          Control.deselectNode(n, true)
           n.setData('alpha', opacityForFilter, 'end')
           n.eachAdjacency(function (e) {
-            Metamaps.Control.deselectEdge(e, true)
+            Control.deselectEdge(e, true)
           })
         }
         else console.log(topic)
@@ -442,12 +443,12 @@ const Filter = {
         if (visible.mappers.indexOf(user_id) == -1) passesMapper = false
         else passesMapper = true
 
-        var color = Metamaps.Settings.colors.synapses.normal
+        var color = Settings.colors.synapses.normal
         if (passesSynapse && passesMapper) {
           e.setData('alpha', 1, 'end')
           e.setData('color', color, 'end')
         } else {
-          Metamaps.Control.deselectEdge(e, true)
+          Control.deselectEdge(e, true)
           e.setData('alpha', opacityForFilter, 'end')
         }
 
@@ -457,7 +458,7 @@ const Filter = {
     })
 
     // run the animation
-    Metamaps.Visualize.mGraph.fx.animate({
+    Visualize.mGraph.fx.animate({
       modes: ['node-property:alpha',
         'edge-property:alpha'],
       duration: 200

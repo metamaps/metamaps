@@ -1,10 +1,12 @@
 /* global Metamaps, $ */
+
+import Active from './Active'
+import JIT from './JIT'
+
 /*
  * Metamaps.Visualize
  *
  * Dependencies:
- *  - Metamaps.Active
- *  - Metamaps.JIT
  *  - Metamaps.Loading
  *  - Metamaps.Metacodes
  *  - Metamaps.Router
@@ -34,7 +36,7 @@ const Visualize = {
 
     // prevent touch events on the canvas from default behaviour
     $('#infovis-canvas').bind('touchmove', function (event) {
-      // Metamaps.JIT.touchPanZoomHandler(event)
+      // JIT.touchPanZoomHandler(event)
     })
 
     // prevent touch events on the canvas from default behaviour
@@ -116,25 +118,25 @@ const Visualize = {
       // clear the previous canvas from #infovis
       $('#infovis').empty()
       
-      RGraphSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings)
+      RGraphSettings = $.extend(true, {}, JIT.ForceDirected.graphSettings)
 
-      $jit.RGraph.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings)
-      $jit.RGraph.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings)
+      $jit.RGraph.Plot.NodeTypes.implement(JIT.ForceDirected.nodeSettings)
+      $jit.RGraph.Plot.EdgeTypes.implement(JIT.ForceDirected.edgeSettings)
 
       RGraphSettings.width = $(document).width()
       RGraphSettings.height = $(document).height()
-      RGraphSettings.background = Metamaps.JIT.RGraph.background
-      RGraphSettings.levelDistance = Metamaps.JIT.RGraph.levelDistance
+      RGraphSettings.background = JIT.RGraph.background
+      RGraphSettings.levelDistance = JIT.RGraph.levelDistance
 
       self.mGraph = new $jit.RGraph(RGraphSettings)
     } else if (self.type == 'ForceDirected' && (!self.mGraph || self.mGraph instanceof $jit.RGraph)) {
       // clear the previous canvas from #infovis
       $('#infovis').empty()
       
-      FDSettings = $.extend(true, {}, Metamaps.JIT.ForceDirected.graphSettings)
+      FDSettings = $.extend(true, {}, JIT.ForceDirected.graphSettings)
 
-      $jit.ForceDirected.Plot.NodeTypes.implement(Metamaps.JIT.ForceDirected.nodeSettings)
-      $jit.ForceDirected.Plot.EdgeTypes.implement(Metamaps.JIT.ForceDirected.edgeSettings)
+      $jit.ForceDirected.Plot.NodeTypes.implement(JIT.ForceDirected.nodeSettings)
+      $jit.ForceDirected.Plot.EdgeTypes.implement(JIT.ForceDirected.edgeSettings)
 
       FDSettings.width = $('body').width()
       FDSettings.height = $('body').height()
@@ -145,14 +147,14 @@ const Visualize = {
       $('#infovis').empty()
       
       // init ForceDirected3D
-      self.mGraph = new $jit.ForceDirected3D(Metamaps.JIT.ForceDirected3D.graphSettings)
+      self.mGraph = new $jit.ForceDirected3D(JIT.ForceDirected3D.graphSettings)
       self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position
     } else {
       self.mGraph.graph.empty()
     }
 
 
-    if (self.type == 'ForceDirected' && Metamaps.Active.Mapper) $.post('/maps/' + Metamaps.Active.Map.id + '/events/user_presence')
+    if (self.type == 'ForceDirected' && Active.Mapper) $.post('/maps/' + Active.Map.id + '/events/user_presence')
 
     function runAnimation () {
       Metamaps.Loading.hide()
@@ -160,22 +162,22 @@ const Visualize = {
       if (!self.loadLater) {
         // load JSON data.
         var rootIndex = 0
-        if (Metamaps.Active.Topic) {
-          var node = _.find(Metamaps.JIT.vizData, function (node) {
-            return node.id === Metamaps.Active.Topic.id
+        if (Active.Topic) {
+          var node = _.find(JIT.vizData, function (node) {
+            return node.id === Active.Topic.id
           })
-          rootIndex = _.indexOf(Metamaps.JIT.vizData, node)
+          rootIndex = _.indexOf(JIT.vizData, node)
         }
-        self.mGraph.loadJSON(Metamaps.JIT.vizData, rootIndex)
+        self.mGraph.loadJSON(JIT.vizData, rootIndex)
         // compute positions and plot.
         self.computePositions()
         self.mGraph.busy = true
         if (self.type == 'RGraph') {
-          self.mGraph.fx.animate(Metamaps.JIT.RGraph.animate)
+          self.mGraph.fx.animate(JIT.RGraph.animate)
         } else if (self.type == 'ForceDirected') {
-          self.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout)
+          self.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
         } else if (self.type == 'ForceDirected3D') {
-          self.mGraph.animate(Metamaps.JIT.ForceDirected.animateFDLayout)
+          self.mGraph.animate(JIT.ForceDirected.animateFDLayout)
         }
       }
     }
@@ -204,8 +206,8 @@ const Visualize = {
     // update the url now that the map is ready
     clearTimeout(Metamaps.Router.timeoutId)
     Metamaps.Router.timeoutId = setTimeout(function () {
-      var m = Metamaps.Active.Map
-      var t = Metamaps.Active.Topic
+      var m = Active.Map
+      var t = Active.Topic
 
       if (m && window.location.pathname !== '/maps/' + m.id) {
         Metamaps.Router.navigate('/maps/' + m.id)

@@ -1,14 +1,9 @@
 /* global Metamaps, $ */
+import Active from './Active'
+import Control from './Control'
+import Mapper from './Mapper'
+import Visualize from './Visualize'
 
-/*
- * Metamaps.SynapseCard.js
- *
- * Dependencies:
- *  - Metamaps.Active
- *  - Metamaps.Control
- *  - Metamaps.Mapper
- *  - Metamaps.Visualize
- */
 const SynapseCard = {
   openSynapseCard: null,
   showCard: function (edge, e) {
@@ -20,7 +15,7 @@ const SynapseCard = {
     $('#edit_synapse').remove()
 
     // so label is missing while editing
-    Metamaps.Control.deselectEdge(edge)
+    Control.deselectEdge(edge)
 
     var index = edge.getData('displayIndex') ? edge.getData('displayIndex') : 0
     var synapse = edge.getData('synapses')[index]; // for now, just get the first synapse
@@ -30,9 +25,9 @@ const SynapseCard = {
     var edit_div = document.createElement('div')
     edit_div.innerHTML = '<div id="editSynUpperBar"></div><div id="editSynLowerBar"></div>'
     edit_div.setAttribute('id', 'edit_synapse')
-    if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
+    if (synapse.authorizeToEdit(Active.Mapper)) {
       edit_div.className = 'permission canEdit'
-      edit_div.className += synapse.authorizePermissionChange(Metamaps.Active.Mapper) ? ' yourEdge' : ''
+      edit_div.className += synapse.authorizePermissionChange(Active.Mapper) ? ' yourEdge' : ''
     } else {
       edit_div.className = 'permission cannotEdit'
     }
@@ -94,7 +89,7 @@ const SynapseCard = {
 
     // if edge data is blank or just whitespace, populate it with data_nil
     if ($('#edit_synapse_desc').html().trim() == '') {
-      if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
+      if (synapse.authorizeToEdit(Active.Mapper)) {
         $('#edit_synapse_desc').html(data_nil)
       } else {
         $('#edit_synapse_desc').html('(no description)')
@@ -109,8 +104,8 @@ const SynapseCard = {
         synapse.set('desc', desc)
       }
       synapse.trigger('saved')
-      Metamaps.Control.selectEdge(synapse.get('edge'))
-      Metamaps.Visualize.mGraph.plot()
+      Control.selectEdge(synapse.get('edge'))
+      Visualize.mGraph.plot()
     })
   },
   add_drop_down: function (edge, synapse) {
@@ -152,7 +147,7 @@ const SynapseCard = {
         e.stopPropagation()
         var index = parseInt($(this).attr('data-synapse-index'))
         edge.setData('displayIndex', index)
-        Metamaps.Visualize.mGraph.plot()
+        Visualize.mGraph.plot()
         SynapseCard.showCard(edge, false)
       })
     }
@@ -167,7 +162,7 @@ const SynapseCard = {
     var setMapperImage = function (mapper) {
       $('#edgeUser img').attr('src', mapper.get('image'))
     }
-    Metamaps.Mapper.get(synapse.get('user_id'), setMapperImage)
+    Mapper.get(synapse.get('user_id'), setMapperImage)
   },
 
   add_perms_form: function (synapse) {
@@ -210,7 +205,7 @@ const SynapseCard = {
       $('#edit_synapse .permissionSelect').remove()
     }
 
-    if (synapse.authorizePermissionChange(Metamaps.Active.Mapper)) {
+    if (synapse.authorizePermissionChange(Active.Mapper)) {
       $('#edit_synapse.yourEdge .mapPerm').click(openPermissionSelect)
       $('#edit_synapse').click(hidePermissionSelect)
     }
@@ -257,7 +252,7 @@ const SynapseCard = {
       $('#edit_synapse_right').addClass('checked')
     }
 
-    if (synapse.authorizeToEdit(Metamaps.Active.Mapper)) {
+    if (synapse.authorizeToEdit(Active.Mapper)) {
       $('#edit_synapse_left, #edit_synapse_right').click(function () {
         $(this).toggleClass('checked')
 
@@ -281,7 +276,7 @@ const SynapseCard = {
           node1_id: dir[0],
           node2_id: dir[1]
         })
-        Metamaps.Visualize.mGraph.plot()
+        Visualize.mGraph.plot()
       })
     } // if
   } // add_direction_form

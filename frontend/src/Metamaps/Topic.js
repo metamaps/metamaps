@@ -1,26 +1,25 @@
 /* global Metamaps, $ */
 
+import Active from './Active'
+import JIT from './JIT'
+import Selected from './Selected'
+import Settings from './Settings'
+import Util from './Util'
+
 /*
  * Metamaps.Topic.js.erb
  *
  * Dependencies:
- *  - Metamaps.Active
- *  - Metamaps.Backbone
  *  - Metamaps.Backbone
  *  - Metamaps.Create
  *  - Metamaps.Creators
- *  - Metamaps.Famous
  *  - Metamaps.Filter
  *  - Metamaps.GlobalUI
- *  - Metamaps.JIT
  *  - Metamaps.Mappings
- *  - Metamaps.Selected
- *  - Metamaps.Settings
  *  - Metamaps.SynapseCard
  *  - Metamaps.Synapses
  *  - Metamaps.TopicCard
  *  - Metamaps.Topics
- *  - Metamaps.Util
  *  - Metamaps.Visualize
  */
 
@@ -58,7 +57,7 @@ const Topic = {
   launch: function (id) {
     var bb = Metamaps.Backbone
     var start = function (data) {
-      Metamaps.Active.Topic = new bb.Topic(data.topic)
+      Active.Topic = new bb.Topic(data.topic)
       Metamaps.Creators = new bb.MapperCollection(data.creators)
       Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives))
       Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
@@ -69,13 +68,13 @@ const Topic = {
 
       // build and render the visualization
       Metamaps.Visualize.type = 'RGraph'
-      Metamaps.JIT.prepareVizData()
+      JIT.prepareVizData()
 
       // update filters
       Metamaps.Filter.reset()
 
       // reset selected arrays
-      Metamaps.Selected.reset()
+      Selected.reset()
 
       // these three update the actual filter box with the right list items
       Metamaps.Filter.checkMetacodes()
@@ -83,7 +82,7 @@ const Topic = {
       Metamaps.Filter.checkMappers()
       
       // for mobile
-      $('#header_content').html(Metamaps.Active.Topic.get('name'))
+      $('#header_content').html(Active.Topic.get('name'))
     }
 
     $.ajax({
@@ -92,7 +91,7 @@ const Topic = {
     })
   },
   end: function () {
-    if (Metamaps.Active.Topic) {
+    if (Active.Topic) {
       $('.rightclickmenu').remove()
       Metamaps.TopicCard.hideCard()
       Metamaps.SynapseCard.hideCard()
@@ -110,7 +109,7 @@ const Topic = {
         }
       })
       Metamaps.Router.navigate('/topics/' + nodeid)
-      Metamaps.Active.Topic = Metamaps.Topics.get(nodeid)
+      Active.Topic = Metamaps.Topics.get(nodeid)
     }
   },
   fetchRelatives: function (nodes, metacode_id) {
@@ -141,7 +140,7 @@ const Topic = {
       topicColl.add(topic)
       var synapseColl = new Metamaps.Backbone.SynapseCollection(data.synapses)
 
-      var graph = Metamaps.JIT.convertModelsToJIT(topicColl, synapseColl)[0]
+      var graph = JIT.convertModelsToJIT(topicColl, synapseColl)[0]
       Metamaps.Visualize.mGraph.op.sum(graph, {
         type: 'fade',
         duration: 500,
@@ -267,14 +266,14 @@ const Topic = {
         mappableid: mappingModel.get('mappable_id')
       }
 
-      $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData])
+      $(document).trigger(JIT.events.newTopic, [newTopicData])
       // call a success callback if provided
       if (opts.success) {
         opts.success(topicModel)
       }
     }
     var topicSuccessCallback = function (topicModel, response) {
-      if (Metamaps.Active.Map) {
+      if (Active.Map) {
         mapping.save({ mappable_id: topicModel.id }, {
           success: function (model, response) {
             mappingSuccessCallback(model, response, topicModel)
@@ -290,7 +289,7 @@ const Topic = {
       }
     }
 
-    if (!Metamaps.Settings.sandbox && createNewInDB) {
+    if (!Settings.sandbox && createNewInDB) {
       if (topic.isNew()) {
         topic.save(null, {
           success: topicSuccessCallback,
@@ -298,7 +297,7 @@ const Topic = {
             console.log('error saving topic to database')
           }
         })
-      } else if (!topic.isNew() && Metamaps.Active.Map) {
+      } else if (!topic.isNew() && Active.Map) {
         mapping.save(null, {
           success: mappingSuccessCallback
         })
@@ -323,7 +322,7 @@ const Topic = {
     var topic = new Metamaps.Backbone.Topic({
       name: Metamaps.Create.newTopic.name,
       metacode_id: metacode.id,
-      defer_to_map_id: Metamaps.Active.Map.id
+      defer_to_map_id: Active.Map.id
     })
     Metamaps.Topics.add(topic)
 

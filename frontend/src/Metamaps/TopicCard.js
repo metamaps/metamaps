@@ -1,16 +1,17 @@
 /* global Metamaps, $ */
 
+import Active from './Active'
+import Mapper from './Mapper'
+import Util from './Util'
+import Visualize from './Visualize'
+
 /*
  * Metamaps.TopicCard.js
  *
  * Dependencies:
- *  - Metamaps.Active
  *  - Metamaps.GlobalUI
- *  - Metamaps.Mapper
  *  - Metamaps.Metacodes
  *  - Metamaps.Router
- *  - Metamaps.Util
- *  - Metamaps.Visualize
  */
 const TopicCard = {
   openTopicCard: null, // stores the topic that's currently open
@@ -43,7 +44,7 @@ const TopicCard = {
     var topic = node.getData('topic')
 
     self.openTopicCard = topic
-    self.authorizedToEdit = topic.authorizeToEdit(Metamaps.Active.Mapper)
+    self.authorizedToEdit = topic.authorizeToEdit(Active.Mapper)
     // populate the card that's about to show with the right topics data
     self.populateShowCard(topic)
     return $('.showcard').fadeIn('fast', function() {
@@ -96,7 +97,7 @@ const TopicCard = {
     var setMapperImage = function (mapper) {
       $('.contributorIcon').attr('src', mapper.get('image'))
     }
-    Metamaps.Mapper.get(topic.get('user_id'), setMapperImage)
+    Mapper.get(topic.get('user_id'), setMapperImage)
 
     // starting embed.ly
     var resetFunc = function () {
@@ -179,7 +180,7 @@ const TopicCard = {
       topic.save({
         metacode_id: metacode.id
       })
-      Metamaps.Visualize.mGraph.plot()
+      Visualize.mGraph.plot()
       $('.metacodeSelect').hide().removeClass('onRightEdge onBottomEdge')
       $('.metacodeTitle').hide()
       $('.showcard .icon').css('z-index', '1')
@@ -265,7 +266,7 @@ const TopicCard = {
 
       // bind best_in_place ajax callbacks
       bipName.bind('ajax:success', function () {
-        var name = Metamaps.Util.decodeEntities($(this).html())
+        var name = Util.decodeEntities($(this).html())
         topic.set('name', name)
         topic.trigger('saved')
       })
@@ -313,7 +314,7 @@ const TopicCard = {
     }
     // ability to change permission
     var selectingPermission = false
-    if (topic.authorizePermissionChange(Metamaps.Active.Mapper)) {
+    if (topic.authorizePermissionChange(Active.Mapper)) {
       $('.showcard .yourTopic .mapPerm').click(openPermissionSelect)
       $('.showcard').click(hidePermissionSelect)
     }
@@ -364,11 +365,11 @@ const TopicCard = {
     var topicForTemplate = self.buildObject(topic)
     var html = self.generateShowcardHTML.render(topicForTemplate)
 
-    if (topic.authorizeToEdit(Metamaps.Active.Mapper)) {
+    if (topic.authorizeToEdit(Active.Mapper)) {
       var perm = document.createElement('div')
 
       var string = 'permission canEdit'
-      if (topic.authorizePermissionChange(Metamaps.Active.Mapper)) string += ' yourTopic'
+      if (topic.authorizePermissionChange(Active.Mapper)) string += ' yourTopic'
       perm.className = string
       perm.innerHTML = html
       showCard.appendChild(perm)
@@ -388,7 +389,7 @@ const TopicCard = {
 
     var nodeValues = {}
 
-    var authorized = topic.authorizeToEdit(Metamaps.Active.Mapper)
+    var authorized = topic.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
     } else {

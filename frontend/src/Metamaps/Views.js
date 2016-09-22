@@ -1,12 +1,14 @@
 /* global Metamaps, $ */
 
+import Active from './Active'
+import ReactComponents from './ReactComponents'
+import ReactDOM from 'react-dom' // TODO ensure this isn't a double import
+
 /*
  * Metamaps.Views.js.erb
  *
  * Dependencies:
  *  - Metamaps.Loading
- *  - Metamaps.Active
- *  - Metamaps.ReactComponents
  */
 
 const Views = {
@@ -33,7 +35,7 @@ const Views = {
       }
       
       var exploreObj = { 
-        currentUser: Metamaps.Active.Mapper,
+        currentUser: Active.Mapper,
         section: self.collection.id,
         displayStyle: 'grid',
         maps: self.collection,
@@ -42,7 +44,7 @@ const Views = {
         loadMore: self.loadMore
       }
       ReactDOM.render(
-        React.createElement(Metamaps.ReactComponents.Maps, exploreObj),
+        React.createElement(ReactComponents.Maps, exploreObj),
         document.getElementById('explore')
       )
       

@@ -1,5 +1,10 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, $ */
+
+import Mouse from './Mouse'
+import Selected from './Selected'
+import Synapse from './Synapse'
+import Topic from './Topic'
+import Visualize from './Visualize'
 
 /*
  * Metamaps.Create.js
@@ -8,11 +13,6 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Backbone
  *  - Metamaps.GlobalUI
  *  - Metamaps.Metacodes
- *  - Metamaps.Mouse
- *  - Metamaps.Selected
- *  - Metamaps.Synapse
- *  - Metamaps.Topic
- *  - Metamaps.Visualize
  */
 
 const Create = {
@@ -193,7 +193,7 @@ const Create = {
 
       // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
       $('#topic_name').bind('typeahead:select', function (event, datum, dataset) {
-        Metamaps.Topic.getTopicFromAutocomplete(datum.id)
+        Topic.getTopicFromAutocomplete(datum.id)
       })
 
       // initialize metacode spinner and then hide it
@@ -255,7 +255,7 @@ const Create = {
           url: '/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
           prepare: function (query, settings) {
             var self = Create.newSynapse
-            if (Metamaps.Selected.Nodes.length < 2) {
+            if (Selected.Nodes.length < 2) {
               settings.url = settings.url.replace('%TOPIC1', self.topic1id).replace('%TOPIC2', self.topic2id)
               return settings
             } else {
@@ -307,16 +307,16 @@ const Create = {
 
       $('#synapse_desc').focusout(function () {
         if (Create.newSynapse.beingCreated) {
-          Metamaps.Synapse.createSynapseLocally()
+          Synapse.createSynapseLocally()
         }
       })
 
       $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
         if (datum.id) { // if they clicked on an existing synapse get it
-          Metamaps.Synapse.getSynapseFromAutocomplete(datum.id)
+          Synapse.getSynapseFromAutocomplete(datum.id)
         } else {
           Create.newSynapse.description = datum.value
-          Metamaps.Synapse.createSynapseLocally()
+          Synapse.createSynapseLocally()
         }
       })
     },
@@ -338,8 +338,8 @@ const Create = {
       Create.newTopic.addSynapse = false
       Create.newSynapse.topic1id = 0
       Create.newSynapse.topic2id = 0
-      Metamaps.Mouse.synapseStartCoordinates = []
-      Metamaps.Visualize.mGraph.plot()
+      Mouse.synapseStartCoordinates = []
+      Visualize.mGraph.plot()
     },
   }
 }

@@ -1,12 +1,7 @@
-/* global Metamaps, $ */
+/* global $ */
 
-/*
- * Metamaps.Mobile.js
- *
- * Dependencies:
- *  - Metamaps.Active
- *  - Metamaps.Map
- */
+import Active from './Active'
+import Map from './Map'
 
 const Mobile = {
   init: function () {
@@ -30,8 +25,8 @@ const Mobile = {
     $('#mobile_menu').toggle()
   },
   titleClick: function () {
-    if (Metamaps.Active.Map) {
-      Metamaps.Map.InfoBox.open()
+    if (Active.Map) {
+      Map.InfoBox.open()
     }
   }
 }

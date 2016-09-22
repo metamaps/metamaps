@@ -1,12 +1,13 @@
 /* global Metamaps, $ */
 
+import Active from './Active'
+import Map from './Map'
+
 /*
  * Metamaps.Import.js.erb
  *
  * Dependencies:
- *  - Metamaps.Active
  *  - Metamaps.Backbone
- *  - Metamaps.Map
  *  - Metamaps.Mappings
  *  - Metamaps.Metacodes
  *  - Metamaps.Synapses
@@ -256,15 +257,15 @@ const Import = {
   createTopicWithParameters: function (name, metacode_name, permission, desc,
     link, xloc, yloc, import_id, opts) {
     var self = Import
-    $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
+    $(document).trigger(Map.events.editedByActiveMapper)
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null
     if (metacode === null) {
       metacode = Metamaps.Metacodes.where({ name: 'Wildcard' })[0]
       console.warn("Couldn't find metacode " + metacode_name + ' so used Wildcard instead.')
     }
 
-    var topic_permission = permission || Metamaps.Active.Map.get('permission')
-    var defer_to_map_id = permission === topic_permission ? Metamaps.Active.Map.get('id') : null
+    var topic_permission = permission || Active.Map.get('permission')
+    var defer_to_map_id = permission === topic_permission ? Active.Map.get('id') : null
     var topic = new Metamaps.Backbone.Topic({
       name: name,
       metacode_id: metacode.id,
@@ -272,7 +273,7 @@ const Import = {
       defer_to_map_id: defer_to_map_id,
       desc: desc || "",
       link: link || "",
-      calculated_permission: Metamaps.Active.Map.get('permission')
+      calculated_permission: Active.Map.get('permission')
     })
     Metamaps.Topics.add(topic)
 
