@@ -1,3 +1,4 @@
+/* global $ */
 window.Metamaps = window.Metamaps || {}
 
 import './Constants'
@@ -57,5 +58,42 @@ Metamaps.TopicCard = TopicCard
 Metamaps.Util = Util
 Metamaps.Views = Views
 Metamaps.Visualize = Visualize
+
+$(document).ready(function () {
+  // initialize all the modules
+  for (var prop in Metamaps) {
+      // this runs the init function within each sub-object on the Metamaps one
+      if (Metamaps.hasOwnProperty(prop) &&
+          Metamaps[prop] != null &&
+          Metamaps[prop].hasOwnProperty('init') &&
+          typeof (Metamaps[prop].init) == 'function'
+      ) {
+          Metamaps[prop].init()
+      }
+  }
+  // load whichever page you are on
+  if (Metamaps.currentSection === "explore") {
+      var capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
+
+      Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] )
+      if (Metamaps.currentPage === "mapper") {
+          Metamaps.Views.exploreMaps.fetchUserThenRender()
+      }
+      else {
+          Metamaps.Views.exploreMaps.render()
+      }
+      Metamaps.GlobalUI.showDiv('#explore')
+  }
+  else if (Metamaps.currentSection === "" && Metamaps.Active.Mapper) {
+      Metamaps.Views.exploreMaps.setCollection(Metamaps.Maps.Active)
+      Metamaps.Views.exploreMaps.render()
+      Metamaps.GlobalUI.showDiv('#explore')
+  }
+  else if (Metamaps.Active.Map || Metamaps.Active.Topic) {
+    Metamaps.Loading.show()
+    Metamaps.JIT.prepareVizData()
+    Metamaps.GlobalUI.showDiv('#infovis')
+  }
+});
 
 export default window.Metamaps
