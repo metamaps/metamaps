@@ -1,4 +1,9 @@
 /* global Metamaps, $ */
+
+import Backbone from 'backbone'
+// TODO is this line good or bad
+// Backbone.$ = window.$
+
 import Active from '../Active'
 import Realtime from '../Realtime'
 
@@ -6,7 +11,8 @@ import ChatView from './ChatView'
 import VideoView from './VideoView'
 
 /*
- * Metamaps.Backbone
+ * Dependencies:
+ *   Metamaps.Backbone
  */
 
 const Room = function(opts) {

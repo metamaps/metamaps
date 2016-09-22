@@ -1,4 +1,8 @@
-/* global Metamaps, Backbone, $ */
+/* global Metamaps, $ */
+
+import Backbone from 'backbone'
+//TODO is this line good or bad?
+//Backbone.$ = window.$
 
 import Active from './Active'
 import GlobalUI from './GlobalUI'

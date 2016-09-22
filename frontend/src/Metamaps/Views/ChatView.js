@@ -1,4 +1,9 @@
 /* global Autolinker, $ */
+
+import Backbone from 'backbone'
+// TODO is this line good or bad
+// Backbone.$ = window.$
+
 var linker = new Autolinker({ newWindow: true, truncate: 50, email: false, phone: false, twitter: false });
 
 var Private = {

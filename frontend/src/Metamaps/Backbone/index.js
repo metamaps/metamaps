@@ -1,6 +1,8 @@
-/* global Metamaps, Backbone, _, $ */
+/* global Metamaps, Backbone, $ */
 
 import _ from 'lodash'
+import Backbone from 'backbone'
+Backbone.$ = window.$
 
 /*
  * Metamaps.Backbone.js.erb
