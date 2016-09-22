@@ -1,11 +1,4 @@
-/* global Metamaps */
-
-/*
- * Metamaps.Util.js
- *
- * Dependencies:
- *  - Metamaps.Visualize
- */
+import Visualize from './Visualize'
 
 const Util = {
   // helper function to determine how many lines are needed
@@ -45,8 +38,8 @@ const Util = {
     return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2))
   },
   coordsToPixels: function (coords) {
-    if (Metamaps.Visualize.mGraph) {
-      var canvas = Metamaps.Visualize.mGraph.canvas,
+    if (Visualize.mGraph) {
+      var canvas = Visualize.mGraph.canvas,
         s = canvas.getSize(),
         p = canvas.getPos(),
         ox = canvas.translateOffsetX,
@@ -67,8 +60,8 @@ const Util = {
   },
   pixelsToCoords: function (pixels) {
     var coords
-    if (Metamaps.Visualize.mGraph) {
-      var canvas = Metamaps.Visualize.mGraph.canvas,
+    if (Visualize.mGraph) {
+      var canvas = Visualize.mGraph.canvas,
         s = canvas.getSize(),
         p = canvas.getPos(),
         ox = canvas.translateOffsetX,
