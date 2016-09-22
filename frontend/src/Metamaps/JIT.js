@@ -3,6 +3,10 @@
 let panningInt
 
 const JIT = {
+  tempInit: false,
+  tempNode: null,
+  tempNode2: null,
+
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
     newTopic: 'Metamaps:JIT:events:newTopic',
@@ -795,9 +799,9 @@ const JIT = {
       }
       // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
       else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && authorized) {
-        if (Metamaps.tempInit == false) {
-          Metamaps.tempNode = node
-          Metamaps.tempInit = true
+        if (JIT.tempInit == false) {
+          JIT.tempNode = node
+          JIT.tempInit = true
 
           Metamaps.Create.newTopic.hide()
           Metamaps.Create.newSynapse.hide()
@@ -813,8 +817,8 @@ const JIT = {
             }
           } else {
             Metamaps.Mouse.synapseStartCoordinates = [{
-              x: Metamaps.tempNode.pos.getc().x,
-              y: Metamaps.tempNode.pos.getc().y
+              x: JIT.tempNode.pos.getc().x,
+              y: JIT.tempNode.pos.getc().y
             }]
           }
           Metamaps.Mouse.synapseEndCoordinates = {
@@ -825,11 +829,11 @@ const JIT = {
         //
         let temp = eventInfo.getNode()
         if (temp != false && temp.id != node.id && Metamaps.Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
-          Metamaps.tempNode2 = temp
+          JIT.tempNode2 = temp
 
           Metamaps.Mouse.synapseEndCoordinates = {
-            x: Metamaps.tempNode2.pos.getc().x,
-            y: Metamaps.tempNode2.pos.getc().y
+            x: JIT.tempNode2.pos.getc().x,
+            y: JIT.tempNode2.pos.getc().y
           }
 
           // before making the highlighted one bigger, make sure all the others are regular size
@@ -839,7 +843,7 @@ const JIT = {
           temp.setData('dim', 35, 'current')
           Metamaps.Visualize.mGraph.plot()
         } else if (!temp) {
-          Metamaps.tempNode2 = null
+          JIT.tempNode2 = null
           Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
             n.setData('dim', 25, 'current')
           })
@@ -867,10 +871,10 @@ const JIT = {
     }
   }, // onDragMoveTopicHandler
   onDragCancelHandler: function (node, eventInfo, e) {
-    Metamaps.tempNode = null
-    if (Metamaps.tempNode2) Metamaps.tempNode2.setData('dim', 25, 'current')
-    Metamaps.tempNode2 = null
-    Metamaps.tempInit = false
+    JIT.tempNode = null
+    if (JIT.tempNode2) JIT.tempNode2.setData('dim', 25, 'current')
+    JIT.tempNode2 = null
+    JIT.tempInit = false
     // reset the draw synapse positions to false
     Metamaps.Mouse.synapseStartCoordinates = []
     Metamaps.Mouse.synapseEndCoordinates = null
@@ -879,27 +883,27 @@ const JIT = {
   onDragEndTopicHandler: function (node, eventInfo, e) {
     var midpoint = {}, pixelPos, mapping
 
-    if (Metamaps.tempInit && Metamaps.tempNode2 == null) {
+    if (JIT.tempInit && JIT.tempNode2 == null) {
       // this means you want to add a new topic, and then a synapse
       Metamaps.Create.newTopic.addSynapse = true
       Metamaps.Create.newTopic.open()
-    } else if (Metamaps.tempInit && Metamaps.tempNode2 != null) {
+    } else if (JIT.tempInit && JIT.tempNode2 != null) {
       // this means you want to create a synapse between two existing topics
       Metamaps.Create.newTopic.addSynapse = false
-      Metamaps.Create.newSynapse.topic1id = Metamaps.tempNode.getData('topic').id
-      Metamaps.Create.newSynapse.topic2id = Metamaps.tempNode2.getData('topic').id
-      Metamaps.tempNode2.setData('dim', 25, 'current')
+      Metamaps.Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
+      Metamaps.Create.newSynapse.topic2id = JIT.tempNode2.getData('topic').id
+      JIT.tempNode2.setData('dim', 25, 'current')
       Metamaps.Visualize.mGraph.plot()
-      midpoint.x = Metamaps.tempNode.pos.getc().x + (Metamaps.tempNode2.pos.getc().x - Metamaps.tempNode.pos.getc().x) / 2
-      midpoint.y = Metamaps.tempNode.pos.getc().y + (Metamaps.tempNode2.pos.getc().y - Metamaps.tempNode.pos.getc().y) / 2
+      midpoint.x = JIT.tempNode.pos.getc().x + (JIT.tempNode2.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
+      midpoint.y = JIT.tempNode.pos.getc().y + (JIT.tempNode2.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
       pixelPos = Metamaps.Util.coordsToPixels(midpoint)
       $('#new_synapse').css('left', pixelPos.x + 'px')
       $('#new_synapse').css('top', pixelPos.y + 'px')
       Metamaps.Create.newSynapse.open()
-      Metamaps.tempNode = null
-      Metamaps.tempNode2 = null
-      Metamaps.tempInit = false
-    } else if (!Metamaps.tempInit && node && !node.nodeFrom) {
+      JIT.tempNode = null
+      JIT.tempNode2 = null
+      JIT.tempInit = false
+    } else if (!JIT.tempInit && node && !node.nodeFrom) {
       // this means you dragged an existing node, autosave that to the database
 
       // check whether to save mappings
@@ -977,9 +981,9 @@ const JIT = {
       // reset the draw synapse positions to false
       Metamaps.Mouse.synapseStartCoordinates = []
       Metamaps.Mouse.synapseEndCoordinates = null
-      Metamaps.tempInit = false
-      Metamaps.tempNode = null
-      Metamaps.tempNode2 = null
+      JIT.tempInit = false
+      JIT.tempNode = null
+      JIT.tempNode2 = null
       if (!e.ctrlKey && !e.shiftKey) {
         Metamaps.Control.deselectAllEdges()
         Metamaps.Control.deselectAllNodes()

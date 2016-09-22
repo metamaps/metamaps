@@ -22,9 +22,6 @@
  *  - Metamaps.Topics
  *  - Metamaps.Util
  *  - Metamaps.Visualize
- *  - Metamaps.tempInit
- *  - Metamaps.tempNode
- *  - Metamaps.tempNode2
  */
 
 const Topic = {
@@ -218,11 +215,11 @@ const Topic = {
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'end')
       }
       if (Metamaps.Create.newTopic.addSynapse && permitCreateSynapseAfter) {
-        Metamaps.Create.newSynapse.topic1id = Metamaps.tempNode.getData('topic').id
+        Metamaps.Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
 
         // position the form
-        midpoint.x = Metamaps.tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - Metamaps.tempNode.pos.getc().x) / 2
-        midpoint.y = Metamaps.tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - Metamaps.tempNode.pos.getc().y) / 2
+        midpoint.x = JIT.tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
+        midpoint.y = JIT.tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
         pixelPos = Metamaps.Util.coordsToPixels(midpoint)
         $('#new_synapse').css('left', pixelPos.x + 'px')
         $('#new_synapse').css('top', pixelPos.y + 'px')
@@ -232,9 +229,9 @@ const Topic = {
           modes: ['node-property:dim'],
           duration: 500,
           onComplete: function () {
-            Metamaps.tempNode = null
-            Metamaps.tempNode2 = null
-            Metamaps.tempInit = false
+            JIT.tempNode = null
+            JIT.tempNode2 = null
+            JIT.tempInit = false
           }
         })
       } else {

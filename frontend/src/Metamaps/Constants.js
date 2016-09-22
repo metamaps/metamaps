@@ -3,11 +3,6 @@ window.Metamaps = window.Metamaps || {}
 // TODO everything in this file should be moved into one of the other modules
 // Either as a local constant, or as a local constant with a globally available getter/setter
 
-Metamaps.tempNode = null
-Metamaps.tempInit = false
-Metamaps.tempNode2 = null
-
-
 Metamaps.Maps = Metamaps.Maps || {}
 
 Metamaps.Settings = {
