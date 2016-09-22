@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global $ */
 import Active from './Active'
 import Control from './Control'
 import Mapper from './Mapper'

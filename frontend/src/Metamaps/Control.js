@@ -2,6 +2,7 @@
 
 import Active from './Active'
 import Filter from './Filter'
+import GlobalUI from './GlobalUI'
 import JIT from './JIT'
 import Mouse from './Mouse'
 import Selected from './Selected'
@@ -12,7 +13,6 @@ import Visualize from './Visualize'
  * Metamaps.Control.js
  *
  * Dependencies:
- *  - Metamaps.GlobalUI
  *  - Metamaps.Mappings
  *  - Metamaps.Metacodes
  *  - Metamaps.Synapses
@@ -57,7 +57,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -73,7 +73,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -89,7 +89,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -107,7 +107,7 @@ const Control = {
       }])
       Control.hideNode(nodeid)
     } else {
-      Metamaps.GlobalUI.notifyUser('Only topics you created can be deleted')
+      GlobalUI.notifyUser('Only topics you created can be deleted')
     }
   },
   removeSelectedNodes: function () { // refers to removing topics permanently from a map
@@ -132,7 +132,7 @@ const Control = {
       authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -148,7 +148,7 @@ const Control = {
     var node = Visualize.mGraph.graph.getNode(nodeid)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -251,7 +251,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -266,7 +266,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -294,7 +294,7 @@ const Control = {
         mappableid: mappableid
       }])
     } else {
-      Metamaps.GlobalUI.notifyUser('Only synapses you created can be deleted')
+      GlobalUI.notifyUser('Only synapses you created can be deleted')
     }
   },
   removeSelectedEdges: function () {
@@ -308,7 +308,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -324,7 +324,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
@@ -378,7 +378,7 @@ const Control = {
   updateSelectedPermissions: function (permission) {
     var edge, synapse, node, topic
 
-    Metamaps.GlobalUI.notifyUser('Working...')
+    GlobalUI.notifyUser('Working...')
 
     // variables to keep track of how many nodes and synapses you had the ability to change the permission of
     var nCount = 0,
@@ -416,12 +416,12 @@ const Control = {
     var sString = sCount == 1 ? (sCount.toString() + ' synapse') : (sCount.toString() + ' synapses')
 
     var message = nString + sString + ' you created updated to ' + permission
-    Metamaps.GlobalUI.notifyUser(message)
+    GlobalUI.notifyUser(message)
   },
   updateSelectedMetacodes: function (metacode_id) {
     var node, topic
 
-    Metamaps.GlobalUI.notifyUser('Working...')
+    GlobalUI.notifyUser('Working...')
 
     var metacode = Metamaps.Metacodes.get(metacode_id)
 
@@ -445,7 +445,7 @@ const Control = {
     var nString = nCount == 1 ? (nCount.toString() + ' topic') : (nCount.toString() + ' topics')
 
     var message = nString + ' you can edit updated to ' + metacode.get('name')
-    Metamaps.GlobalUI.notifyUser(message)
+    GlobalUI.notifyUser(message)
     Visualize.mGraph.plot()
   },
 }

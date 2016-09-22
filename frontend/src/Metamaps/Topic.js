@@ -1,26 +1,29 @@
 /* global Metamaps, $ */
 
 import Active from './Active'
+import AutoLayout from './AutoLayout'
+import Create from './Create'
+import Filter from './Filter'
+import GlobalUI from './GlobalUI'
 import JIT from './JIT'
+import Map from './Map'
+import Router from './Router'
 import Selected from './Selected'
 import Settings from './Settings'
+import SynapseCard from './SynapseCard'
+import TopicCard from './TopicCard'
 import Util from './Util'
+import Visualize from './Visualize'
 
 /*
  * Metamaps.Topic.js.erb
  *
  * Dependencies:
  *  - Metamaps.Backbone
- *  - Metamaps.Create
  *  - Metamaps.Creators
- *  - Metamaps.Filter
- *  - Metamaps.GlobalUI
  *  - Metamaps.Mappings
- *  - Metamaps.SynapseCard
  *  - Metamaps.Synapses
- *  - Metamaps.TopicCard
  *  - Metamaps.Topics
- *  - Metamaps.Visualize
  */
 
 const Topic = {
@@ -67,19 +70,19 @@ const Topic = {
       $('#filter_by_mapper h3').html('CREATORS')
 
       // build and render the visualization
-      Metamaps.Visualize.type = 'RGraph'
+      Visualize.type = 'RGraph'
       JIT.prepareVizData()
 
       // update filters
-      Metamaps.Filter.reset()
+      Filter.reset()
 
       // reset selected arrays
       Selected.reset()
 
       // these three update the actual filter box with the right list items
-      Metamaps.Filter.checkMetacodes()
-      Metamaps.Filter.checkSynapses()
-      Metamaps.Filter.checkMappers()
+      Filter.checkMetacodes()
+      Filter.checkSynapses()
+      Filter.checkMappers()
       
       // for mobile
       $('#header_content').html(Active.Topic.get('name'))
@@ -93,22 +96,22 @@ const Topic = {
   end: function () {
     if (Active.Topic) {
       $('.rightclickmenu').remove()
-      Metamaps.TopicCard.hideCard()
-      Metamaps.SynapseCard.hideCard()
-      Metamaps.Filter.close()
+      TopicCard.hideCard()
+      SynapseCard.hideCard()
+      Filter.close()
     }
   },
   centerOn: function (nodeid, callback) {
     // don't clash with fetchRelatives
-    if (!Metamaps.Visualize.mGraph.busy) {
-      Metamaps.Visualize.mGraph.onClick(nodeid, {
+    if (!Visualize.mGraph.busy) {
+      Visualize.mGraph.onClick(nodeid, {
         hideLabels: false,
         duration: 1000,
         onComplete: function () {
           if (callback) callback()
         }
       })
-      Metamaps.Router.navigate('/topics/' + nodeid)
+      Router.navigate('/topics/' + nodeid)
       Active.Topic = Metamaps.Topics.get(nodeid)
     }
   },
@@ -127,7 +130,7 @@ const Topic = {
 
     var successCallback;
     successCallback = function (data) {
-      if (Metamaps.Visualize.mGraph.busy) {
+      if (Visualize.mGraph.busy) {
         // don't clash with centerOn
         window.setTimeout(function() { successCallback(data) }, 100)
         return
@@ -141,7 +144,7 @@ const Topic = {
       var synapseColl = new Metamaps.Backbone.SynapseCollection(data.synapses)
 
       var graph = JIT.convertModelsToJIT(topicColl, synapseColl)[0]
-      Metamaps.Visualize.mGraph.op.sum(graph, {
+      Visualize.mGraph.op.sum(graph, {
         type: 'fade',
         duration: 500,
         hideLabels: false
@@ -149,7 +152,7 @@ const Topic = {
 
       var i, l, t, s
 
-      Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+      Visualize.mGraph.graph.eachNode(function (n) {
         t = Metamaps.Topics.get(n.id)
         t.set({ node: n }, { silent: true })
         t.updateNode()
@@ -186,7 +189,7 @@ const Topic = {
   // opts is additional options in a hash
   // TODO: move createNewInDB and permitCerateSYnapseAfter into opts
   renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter, opts) {
-    var self = Metamaps.Topic
+    var self = Topic
 
     var nodeOnViz, tempPos
 
@@ -194,37 +197,37 @@ const Topic = {
 
     var midpoint = {}, pixelPos
 
-    if (!$.isEmptyObject(Metamaps.Visualize.mGraph.graph.nodes)) {
-      Metamaps.Visualize.mGraph.graph.addNode(newnode)
-      nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id)
+    if (!$.isEmptyObject(Visualize.mGraph.graph.nodes)) {
+      Visualize.mGraph.graph.addNode(newnode)
+      nodeOnViz = Visualize.mGraph.graph.getNode(newnode.id)
       topic.set('node', nodeOnViz, {silent: true})
       topic.updateNode() // links the topic and the mapping to the node
 
       nodeOnViz.setData('dim', 1, 'start')
       nodeOnViz.setData('dim', 25, 'end')
-      if (Metamaps.Visualize.type === 'RGraph') {
+      if (Visualize.type === 'RGraph') {
         tempPos = new $jit.Complex(mapping.get('xloc'), mapping.get('yloc'))
         tempPos = tempPos.toPolar()
         nodeOnViz.setPos(tempPos, 'current')
         nodeOnViz.setPos(tempPos, 'start')
         nodeOnViz.setPos(tempPos, 'end')
-      } else if (Metamaps.Visualize.type === 'ForceDirected') {
+      } else if (Visualize.type === 'ForceDirected') {
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'current')
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'start')
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'end')
       }
-      if (Metamaps.Create.newTopic.addSynapse && permitCreateSynapseAfter) {
-        Metamaps.Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
+      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) {
+        Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
 
         // position the form
         midpoint.x = JIT.tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
         midpoint.y = JIT.tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
-        pixelPos = Metamaps.Util.coordsToPixels(midpoint)
+        pixelPos = Util.coordsToPixels(midpoint)
         $('#new_synapse').css('left', pixelPos.x + 'px')
         $('#new_synapse').css('top', pixelPos.y + 'px')
         // show the form
-        Metamaps.Create.newSynapse.open()
-        Metamaps.Visualize.mGraph.fx.animate({
+        Create.newSynapse.open()
+        Visualize.mGraph.fx.animate({
           modes: ['node-property:dim'],
           duration: 500,
           onComplete: function () {
@@ -234,16 +237,16 @@ const Topic = {
           }
         })
       } else {
-        Metamaps.Visualize.mGraph.fx.plotNode(nodeOnViz, Metamaps.Visualize.mGraph.canvas)
-        Metamaps.Visualize.mGraph.fx.animate({
+        Visualize.mGraph.fx.plotNode(nodeOnViz, Visualize.mGraph.canvas)
+        Visualize.mGraph.fx.animate({
           modes: ['node-property:dim'],
           duration: 500,
           onComplete: function () {}
         })
       }
     } else {
-      Metamaps.Visualize.mGraph.loadJSON(newnode)
-      nodeOnViz = Metamaps.Visualize.mGraph.graph.getNode(newnode.id)
+      Visualize.mGraph.loadJSON(newnode)
+      nodeOnViz = Visualize.mGraph.graph.getNode(newnode.id)
       topic.set('node', nodeOnViz, {silent: true})
       topic.updateNode() // links the topic and the mapping to the node
 
@@ -252,8 +255,8 @@ const Topic = {
       nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'current')
       nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'start')
       nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'end')
-      Metamaps.Visualize.mGraph.fx.plotNode(nodeOnViz, Metamaps.Visualize.mGraph.canvas)
-      Metamaps.Visualize.mGraph.fx.animate({
+      Visualize.mGraph.fx.plotNode(nodeOnViz, Visualize.mGraph.canvas)
+      Visualize.mGraph.fx.animate({
         modes: ['node-property:dim'],
         duration: 500,
         onComplete: function () {}
@@ -284,8 +287,8 @@ const Topic = {
         })
       }
 
-      if (Metamaps.Create.newTopic.addSynapse) {
-        Metamaps.Create.newSynapse.topic2id = topicModel.id
+      if (Create.newTopic.addSynapse) {
+        Create.newSynapse.topic2id = topicModel.id
       }
     }
 
@@ -305,58 +308,58 @@ const Topic = {
     }
   },
   createTopicLocally: function () {
-    var self = Metamaps.Topic
+    var self = Topic
 
-    if (Metamaps.Create.newTopic.name === '') {
-      Metamaps.GlobalUI.notifyUser('Please enter a topic title...')
+    if (Create.newTopic.name === '') {
+      GlobalUI.notifyUser('Please enter a topic title...')
       return
     }
 
     // hide the 'double-click to add a topic' message
-    Metamaps.GlobalUI.hideDiv('#instructions')
+    GlobalUI.hideDiv('#instructions')
 
-    $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
+    $(document).trigger(Map.events.editedByActiveMapper)
 
-    var metacode = Metamaps.Metacodes.get(Metamaps.Create.newTopic.metacode)
+    var metacode = Metamaps.Metacodes.get(Create.newTopic.metacode)
 
     var topic = new Metamaps.Backbone.Topic({
-      name: Metamaps.Create.newTopic.name,
+      name: Create.newTopic.name,
       metacode_id: metacode.id,
       defer_to_map_id: Active.Map.id
     })
     Metamaps.Topics.add(topic)
 
-    if (Metamaps.Create.newTopic.pinned) {
-      var nextCoords = Metamaps.AutoLayout.getNextCoord()
+    if (Create.newTopic.pinned) {
+      var nextCoords = AutoLayout.getNextCoord()
     }
     var mapping = new Metamaps.Backbone.Mapping({
-      xloc: nextCoords ? nextCoords.x : Metamaps.Create.newTopic.x,
-      yloc: nextCoords ? nextCoords.y : Metamaps.Create.newTopic.y,
+      xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
+      yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
       mappable_id: topic.cid,
       mappable_type: 'Topic',
     })
     Metamaps.Mappings.add(mapping)
 
     // these can't happen until the value is retrieved, which happens in the line above
-    Metamaps.Create.newTopic.hide()
+    Create.newTopic.hide()
 
     self.renderTopic(mapping, topic, true, true) // this function also includes the creation of the topic in the database
   },
   getTopicFromAutocomplete: function (id) {
-    var self = Metamaps.Topic
+    var self = Topic
 
-    $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
+    $(document).trigger(Map.events.editedByActiveMapper)
 
-    Metamaps.Create.newTopic.hide()
+    Create.newTopic.hide()
 
     var topic = self.get(id)
 
-    if (Metamaps.Create.newTopic.pinned) {
-      var nextCoords = Metamaps.AutoLayout.getNextCoord()
+    if (Create.newTopic.pinned) {
+      var nextCoords = AutoLayout.getNextCoord()
     }
     var mapping = new Metamaps.Backbone.Mapping({
-      xloc: nextCoords ? nextCoords.x : Metamaps.Create.newTopic.x,
-      yloc: nextCoords ? nextCoords.y : Metamaps.Create.newTopic.y,
+      xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
+      yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
       mappable_type: 'Topic',
       mappable_id: topic.id,
     })
@@ -365,13 +368,13 @@ const Topic = {
     self.renderTopic(mapping, topic, true, true)
   },
   getTopicFromSearch: function (event, id) {
-    var self = Metamaps.Topic
+    var self = Topic
 
-    $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
+    $(document).trigger(Map.events.editedByActiveMapper)
 
     var topic = self.get(id)
 
-    var nextCoords = Metamaps.AutoLayout.getNextCoord()
+    var nextCoords = AutoLayout.getNextCoord()
     var mapping = new Metamaps.Backbone.Mapping({
       xloc: nextCoords.x,
       yloc: nextCoords.y,
@@ -382,7 +385,7 @@ const Topic = {
 
     self.renderTopic(mapping, topic, true, true)
 
-    Metamaps.GlobalUI.notifyUser('Topic was added to your map!')
+    GlobalUI.notifyUser('Topic was added to your map!')
 
     event.stopPropagation()
     event.preventDefault()

@@ -1,317 +1,326 @@
-window.Metamaps = window.Metamaps || {}; 
+import Active from './Active'
+import Create from './Create'
+import Filter from './Filter'
+import Router from './Router'
+
+/*
+ * Metamaps.Backbone
+ * Metamaps.Erb
+ * Metamaps.Maps
+ */
 
 const GlobalUI = {
-    notifyTimeout: null,
-    lightbox: null,
-    init: function () {
-        var self = GlobalUI;
+  notifyTimeout: null,
+  lightbox: null,
+  init: function () {
+    var self = GlobalUI;
 
-        self.Search.init();
-        self.CreateMap.init();
-        self.Account.init();
-        
-        if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
+    self.Search.init();
+    self.CreateMap.init();
+    self.Account.init();
 
-        //bind lightbox clicks
-        $('.openLightbox').click(function (event) {
-            self.openLightbox($(this).attr('data-open'));
-            event.preventDefault();
-            return false;
-        });
+    if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
 
-        $('#lightbox_screen, #lightbox_close').click(self.closeLightbox);
+    //bind lightbox clicks
+    $('.openLightbox').click(function (event) {
+      self.openLightbox($(this).attr('data-open'));
+      event.preventDefault();
+      return false;
+    });
 
-        // initialize global backbone models and collections
-        if (Metamaps.Active.Mapper) Metamaps.Active.Mapper = new Metamaps.Backbone.Mapper(Metamaps.Active.Mapper);
+    $('#lightbox_screen, #lightbox_close').click(self.closeLightbox);
 
-        var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
-        var sharedCollection = Metamaps.Maps.Shared ? Metamaps.Maps.Shared : [];
-        var starredCollection = Metamaps.Maps.Starred ? Metamaps.Maps.Starred : [];
-        var mapperCollection = [];
-        var mapperOptionsObj = {id: 'mapper', sortBy: 'updated_at' };
-        if (Metamaps.Maps.Mapper) {
-            mapperCollection = Metamaps.Maps.Mapper.models;
-            mapperOptionsObj.mapperId = Metamaps.Maps.Mapper.id;
-        }
-        var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : [];
-        var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : [];
-        Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'updated_at' });
-        Metamaps.Maps.Shared = new Metamaps.Backbone.MapsCollection(sharedCollection, {id: 'shared', sortBy: 'updated_at' });
-        Metamaps.Maps.Starred = new Metamaps.Backbone.MapsCollection(starredCollection, {id: 'starred', sortBy: 'updated_at' });
-        // 'Mapper' refers to another mapper
-        Metamaps.Maps.Mapper = new Metamaps.Backbone.MapsCollection(mapperCollection, mapperOptionsObj);
-        Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'updated_at' });
-        Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, {id: 'active', sortBy: 'updated_at' });
-    },
-    showDiv: function (selector) {
-      $(selector).show()
-      $(selector).animate({
-        opacity: 1
-      }, 200, 'easeOutCubic')
-    },
-    hideDiv: function (selector) {
-      $(selector).animate({
-        opacity: 0
-      }, 200, 'easeInCubic', function () { $(this).hide() })
-    },
-    openLightbox: function (which) {
-        var self = GlobalUI;
+    // initialize global backbone models and collections
+    if (Active.Mapper) Active.Mapper = new Metamaps.Backbone.Mapper(Active.Mapper);
 
-        $('.lightboxContent').hide();
-        $('#' + which).show();
-
-        self.lightbox = which;
-
-        $('#lightbox_overlay').show();
-
-        var heightOfContent = '-' + ($('#lightbox_main').height() / 2) + 'px';
-        // animate the content in from the bottom
-        $('#lightbox_main').animate({
-                'top': '50%',
-                'margin-top': heightOfContent
-        }, 200, 'easeOutCubic');
-
-        // fade the black overlay in
-        $('#lightbox_screen').animate({
-                    'opacity': '0.42'
-        }, 200);
-
-        if (which == "switchMetacodes") {
-            Metamaps.Create.isSwitchingSet = true;
-        }
-    },
-
-    closeLightbox: function (event) {
-        var self = GlobalUI;
-
-        if (event) event.preventDefault();
-
-        // animate the lightbox content offscreen
-        $('#lightbox_main').animate({
-                'top': '100%',
-                'margin-top': '0'
-        }, 200, 'easeInCubic');
-
-        // fade the black overlay out
-        $('#lightbox_screen').animate({
-                    'opacity': '0.0'
-        }, 200, function () {
-            $('#lightbox_overlay').hide();
-        });
-
-        if (self.lightbox === 'forkmap') GlobalUI.CreateMap.reset('fork_map');
-        if (self.lightbox === 'newmap') GlobalUI.CreateMap.reset('new_map');
-        if (Metamaps.Create && Metamaps.Create.isSwitchingSet) {
-            Metamaps.Create.cancelMetacodeSetSwitch();
-        }
-        self.lightbox = null;
-    },
-    notifyUser: function (message, leaveOpen) {
-        var self = GlobalUI;
-
-         $('#toast').html(message)
-         self.showDiv('#toast')
-         clearTimeout(self.notifyTimeOut);
-         if (!leaveOpen) {
-             self.notifyTimeOut = setTimeout(function () {
-                 self.hideDiv('#toast')
-             }, 8000);
-         }
-    },
-    clearNotify: function() {
-        var self = GlobalUI;
-
-        clearTimeout(self.notifyTimeOut);
-        self.hideDiv('#toast')
-    },
-    shareInvite: function(inviteLink) {
-        window.prompt("To copy the invite link, press: Ctrl+C, Enter", inviteLink);
+    var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : [];
+    var sharedCollection = Metamaps.Maps.Shared ? Metamaps.Maps.Shared : [];
+    var starredCollection = Metamaps.Maps.Starred ? Metamaps.Maps.Starred : [];
+    var mapperCollection = [];
+    var mapperOptionsObj = {id: 'mapper', sortBy: 'updated_at' };
+    if (Metamaps.Maps.Mapper) {
+      mapperCollection = Metamaps.Maps.Mapper.models;
+      mapperOptionsObj.mapperId = Metamaps.Maps.Mapper.id;
     }
+    var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : [];
+    var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : [];
+    Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, {id: 'mine', sortBy: 'updated_at' });
+    Metamaps.Maps.Shared = new Metamaps.Backbone.MapsCollection(sharedCollection, {id: 'shared', sortBy: 'updated_at' });
+    Metamaps.Maps.Starred = new Metamaps.Backbone.MapsCollection(starredCollection, {id: 'starred', sortBy: 'updated_at' });
+    // 'Mapper' refers to another mapper
+    Metamaps.Maps.Mapper = new Metamaps.Backbone.MapsCollection(mapperCollection, mapperOptionsObj);
+    Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, {id: 'featured', sortBy: 'updated_at' });
+    Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, {id: 'active', sortBy: 'updated_at' });
+  },
+  showDiv: function (selector) {
+    $(selector).show()
+    $(selector).animate({
+      opacity: 1
+    }, 200, 'easeOutCubic')
+  },
+  hideDiv: function (selector) {
+    $(selector).animate({
+      opacity: 0
+    }, 200, 'easeInCubic', function () { $(this).hide() })
+  },
+  openLightbox: function (which) {
+    var self = GlobalUI;
+
+    $('.lightboxContent').hide();
+    $('#' + which).show();
+
+    self.lightbox = which;
+
+    $('#lightbox_overlay').show();
+
+    var heightOfContent = '-' + ($('#lightbox_main').height() / 2) + 'px';
+    // animate the content in from the bottom
+    $('#lightbox_main').animate({
+      'top': '50%',
+      'margin-top': heightOfContent
+    }, 200, 'easeOutCubic');
+
+    // fade the black overlay in
+    $('#lightbox_screen').animate({
+      'opacity': '0.42'
+    }, 200);
+
+    if (which == "switchMetacodes") {
+      Create.isSwitchingSet = true;
+    }
+  },
+
+  closeLightbox: function (event) {
+    var self = GlobalUI;
+
+    if (event) event.preventDefault();
+
+    // animate the lightbox content offscreen
+    $('#lightbox_main').animate({
+      'top': '100%',
+      'margin-top': '0'
+    }, 200, 'easeInCubic');
+
+    // fade the black overlay out
+    $('#lightbox_screen').animate({
+      'opacity': '0.0'
+    }, 200, function () {
+      $('#lightbox_overlay').hide();
+    });
+
+    if (self.lightbox === 'forkmap') GlobalUI.CreateMap.reset('fork_map');
+    if (self.lightbox === 'newmap') GlobalUI.CreateMap.reset('new_map');
+    if (Create && Create.isSwitchingSet) {
+      Create.cancelMetacodeSetSwitch();
+    }
+    self.lightbox = null;
+  },
+  notifyUser: function (message, leaveOpen) {
+    var self = GlobalUI;
+
+    $('#toast').html(message)
+    self.showDiv('#toast')
+    clearTimeout(self.notifyTimeOut);
+    if (!leaveOpen) {
+      self.notifyTimeOut = setTimeout(function () {
+        self.hideDiv('#toast')
+      }, 8000);
+    }
+  },
+  clearNotify: function() {
+    var self = GlobalUI;
+
+    clearTimeout(self.notifyTimeOut);
+    self.hideDiv('#toast')
+  },
+  shareInvite: function(inviteLink) {
+    window.prompt("To copy the invite link, press: Ctrl+C, Enter", inviteLink);
+  }
 }
 
 GlobalUI.CreateMap = {
-    newMap: null,
-    emptyMapForm: "",
-    emptyForkMapForm: "",
-    topicsToMap: [],
-    synapsesToMap: [],
-    init: function () {
-        var self = GlobalUI.CreateMap;
+  newMap: null,
+  emptyMapForm: "",
+  emptyForkMapForm: "",
+  topicsToMap: [],
+  synapsesToMap: [],
+  init: function () {
+    var self = GlobalUI.CreateMap;
 
-        self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' });
+    self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' });
 
-        self.bindFormEvents();
+    self.bindFormEvents();
 
-        self.emptyMapForm = $('#new_map').html();
+    self.emptyMapForm = $('#new_map').html();
 
-    },
-    bindFormEvents: function () {
-        var self = GlobalUI.CreateMap;
+  },
+  bindFormEvents: function () {
+    var self = GlobalUI.CreateMap;
 
-        $('.new_map input, .new_map div').unbind('keypress').bind('keypress', function(event) {
-          if (event.keyCode === 13) self.submit()
-        })
+    $('.new_map input, .new_map div').unbind('keypress').bind('keypress', function(event) {
+      if (event.keyCode === 13) self.submit()
+    })
 
-        $('.new_map button.cancel').unbind().bind('click', function (event) {
-            event.preventDefault();
-            GlobalUI.closeLightbox();
-        });
-        $('.new_map button.submitMap').unbind().bind('click', self.submit);
+    $('.new_map button.cancel').unbind().bind('click', function (event) {
+      event.preventDefault();
+      GlobalUI.closeLightbox();
+    });
+    $('.new_map button.submitMap').unbind().bind('click', self.submit);
 
-        // bind permission changer events on the createMap form
-        $('.permIcon').unbind().bind('click', self.switchPermission);
-    },
-    closeSuccess: function () {
-        $('#mapCreatedSuccess').fadeOut(300, function(){
-            $(this).remove();
-        });
-    },
-    generateSuccessMessage: function (id) {
-        var stringStart = "<div id='mapCreatedSuccess'><h6>SUCCESS!</h6>Your map has been created. Do you want to: <a id='mapGo' href='/maps/";
-        stringStart += id;
-        stringStart += "' onclick='GlobalUI.CreateMap.closeSuccess();'>Go to your new map</a>";
-        stringStart += "<span>OR</span><a id='mapStay' href='#' onclick='GlobalUI.CreateMap.closeSuccess(); return false;'>Stay on this ";
-        var page = Metamaps.Active.Map ? 'map' : 'page';
-        var stringEnd = "</a></div>";
-        return stringStart + page + stringEnd;
-    },
-    switchPermission: function () {
-        var self = GlobalUI.CreateMap;
+    // bind permission changer events on the createMap form
+    $('.permIcon').unbind().bind('click', self.switchPermission);
+  },
+  closeSuccess: function () {
+    $('#mapCreatedSuccess').fadeOut(300, function(){
+      $(this).remove();
+    });
+  },
+  generateSuccessMessage: function (id) {
+    var stringStart = "<div id='mapCreatedSuccess'><h6>SUCCESS!</h6>Your map has been created. Do you want to: <a id='mapGo' href='/maps/";
+    stringStart += id;
+    stringStart += "' onclick='GlobalUI.CreateMap.closeSuccess();'>Go to your new map</a>";
+    stringStart += "<span>OR</span><a id='mapStay' href='#' onclick='GlobalUI.CreateMap.closeSuccess(); return false;'>Stay on this ";
+    var page = Active.Map ? 'map' : 'page';
+    var stringEnd = "</a></div>";
+    return stringStart + page + stringEnd;
+  },
+  switchPermission: function () {
+    var self = GlobalUI.CreateMap;
 
-        self.newMap.set('permission', $(this).attr('data-permission'));
-        $(this).siblings('.permIcon').find('.mapPermIcon').removeClass('selected');
-        $(this).find('.mapPermIcon').addClass('selected');
+    self.newMap.set('permission', $(this).attr('data-permission'));
+    $(this).siblings('.permIcon').find('.mapPermIcon').removeClass('selected');
+    $(this).find('.mapPermIcon').addClass('selected');
 
-        var permText = $(this).find('.tip').html();
-        $(this).parents('.new_map').find('.permText').html(permText);
-    },
-    submit: function (event) {
-        if (event) event.preventDefault();
+    var permText = $(this).find('.tip').html();
+    $(this).parents('.new_map').find('.permText').html(permText);
+  },
+  submit: function (event) {
+    if (event) event.preventDefault();
 
-        var self = GlobalUI.CreateMap;
+    var self = GlobalUI.CreateMap;
 
-        if (GlobalUI.lightbox === 'forkmap') {
-            self.newMap.set('topicsToMap', self.topicsToMap);
-            self.newMap.set('synapsesToMap', self.synapsesToMap);
-        }
+    if (GlobalUI.lightbox === 'forkmap') {
+      self.newMap.set('topicsToMap', self.topicsToMap);
+      self.newMap.set('synapsesToMap', self.synapsesToMap);
+    }
 
-        var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
-        var $form = $(formId);
+    var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
+    var $form = $(formId);
 
-        self.newMap.set('name', $form.find('#map_name').val());
-        self.newMap.set('desc', $form.find('#map_desc').val());
+    self.newMap.set('name', $form.find('#map_name').val());
+    self.newMap.set('desc', $form.find('#map_desc').val());
 
-        if (self.newMap.get('name').length===0){
-            self.throwMapNameError();
-            return;
-        }
+    if (self.newMap.get('name').length===0){
+      self.throwMapNameError();
+      return;
+    }
 
-        self.newMap.save(null, {
-            success: self.success
-            // TODO add error message
-        });
+    self.newMap.save(null, {
+      success: self.success
+      // TODO add error message
+    });
 
-        GlobalUI.closeLightbox();
-        GlobalUI.notifyUser('Working...');
-    },
-    throwMapNameError: function () {
-        var self = GlobalUI.CreateMap;
+    GlobalUI.closeLightbox();
+    GlobalUI.notifyUser('Working...');
+  },
+  throwMapNameError: function () {
+    var self = GlobalUI.CreateMap;
 
-        var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
-        var $form = $(formId);
+    var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
+    var $form = $(formId);
 
-        var message = $("<div class='feedback_message'>Please enter a map name...</div>");
+    var message = $("<div class='feedback_message'>Please enter a map name...</div>");
 
-        $form.find('#map_name').after(message);
-        setTimeout(function(){
-            message.fadeOut('fast', function(){
-                message.remove();
-            });
-        }, 5000);
-    },
-    success: function (model) {
-        var self = GlobalUI.CreateMap;
+    $form.find('#map_name').after(message);
+    setTimeout(function(){
+      message.fadeOut('fast', function(){
+        message.remove();
+      });
+    }, 5000);
+  },
+  success: function (model) {
+    var self = GlobalUI.CreateMap;
 
-        //push the new map onto the collection of 'my maps'
-        Metamaps.Maps.Mine.add(model);
+    //push the new map onto the collection of 'my maps'
+    Metamaps.Maps.Mine.add(model);
 
-        var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
-        var form = $(formId);
+    var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map';
+    var form = $(formId);
 
-        GlobalUI.clearNotify();
-        $('#wrapper').append(self.generateSuccessMessage(model.id));
+    GlobalUI.clearNotify();
+    $('#wrapper').append(self.generateSuccessMessage(model.id));
 
-    },
-    reset: function (id) {
-        var self = GlobalUI.CreateMap;
+  },
+  reset: function (id) {
+    var self = GlobalUI.CreateMap;
 
-        var form = $('#' + id);
+    var form = $('#' + id);
 
-        if (id === "fork_map") {
-            self.topicsToMap = [];
-            self.synapsesToMap = [];
-            form.html(self.emptyForkMapForm);
-        }
-        else {
-            form.html(self.emptyMapForm);
-        }
+    if (id === "fork_map") {
+      self.topicsToMap = [];
+      self.synapsesToMap = [];
+      form.html(self.emptyForkMapForm);
+    }
+    else {
+      form.html(self.emptyMapForm);
+    }
 
-        self.bindFormEvents();
-        self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' });
+    self.bindFormEvents();
+    self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' });
 
-        return false;
-    },
+    return false;
+  },
 }
 
 GlobalUI.Account = {
-    isOpen: false,
-    changing: false,
-    init: function () {
-        var self = GlobalUI.Account;
+  isOpen: false,
+  changing: false,
+  init: function () {
+    var self = GlobalUI.Account;
 
-        $('.sidebarAccountIcon').click(self.toggleBox);
-        $('.sidebarAccountBox').click(function(event){
-            event.stopPropagation();
-        });
-        $('body').click(self.close);
-    },
-    toggleBox: function (event) {
-        var self = GlobalUI.Account;
+    $('.sidebarAccountIcon').click(self.toggleBox);
+    $('.sidebarAccountBox').click(function(event){
+      event.stopPropagation();
+    });
+    $('body').click(self.close);
+  },
+  toggleBox: function (event) {
+    var self = GlobalUI.Account;
 
-        if (self.isOpen) self.close();
-        else self.open();
+    if (self.isOpen) self.close();
+    else self.open();
 
-        event.stopPropagation();
-    },
-    open: function () {
-        var self = GlobalUI.Account;
+    event.stopPropagation();
+  },
+  open: function () {
+    var self = GlobalUI.Account;
 
-        Metamaps.Filter.close();
-        $('.sidebarAccountIcon .tooltipsUnder').addClass('hide');
+    Filter.close();
+    $('.sidebarAccountIcon .tooltipsUnder').addClass('hide');
 
 
-        if (!self.isOpen && !self.changing) {
-            self.changing = true;
-            $('.sidebarAccountBox').fadeIn(200, function () {
-                self.changing = false;
-                self.isOpen = true;
-                $('.sidebarAccountBox #user_email').focus();
-            });
-        }
-    },
-    close: function () {
-        var self = GlobalUI.Account;
-
-        $('.sidebarAccountIcon .tooltipsUnder').removeClass('hide');
-        if (!self.changing) {
-            self.changing = true;
-            $('.sidebarAccountBox #user_email').blur();
-            $('.sidebarAccountBox').fadeOut(200, function () {
-                self.changing = false;
-                self.isOpen = false;
-            });
-        }
+    if (!self.isOpen && !self.changing) {
+      self.changing = true;
+      $('.sidebarAccountBox').fadeIn(200, function () {
+        self.changing = false;
+        self.isOpen = true;
+        $('.sidebarAccountBox #user_email').focus();
+      });
     }
+  },
+  close: function () {
+    var self = GlobalUI.Account;
+
+    $('.sidebarAccountIcon .tooltipsUnder').removeClass('hide');
+    if (!self.changing) {
+      self.changing = true;
+      $('.sidebarAccountBox #user_email').blur();
+      $('.sidebarAccountBox').fadeOut(200, function () {
+        self.changing = false;
+        self.isOpen = false;
+      });
+    }
+  }
 }
 
 GlobalUI.Search = {
@@ -425,8 +434,8 @@ GlobalUI.Search = {
   startTypeahead: function () {
     var self = GlobalUI.Search;
 
-    var mapheader = Metamaps.Active.Mapper ? '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>' : '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>';
-    var topicheader = Metamaps.Active.Mapper ? '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>' : '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>';
+    var mapheader = Active.Mapper ? '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>' : '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>';
+    var topicheader = Active.Mapper ? '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Topics</h3><input type="checkbox" class="limitToMe" id="limitTopicsToMe"></input><label for="limitTopicsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>' : '<div class="searchTopicsHeader searchHeader"><h3 class="search-heading">Topics</h3><div class="minimizeResults minimizeTopicResults"></div><div class="clearfloat"></div></div>';
     var mapperheader = '<div class="searchMappersHeader searchHeader"><h3 class="search-heading">Mappers</h3><div class="minimizeResults minimizeMapperResults"></div><div class="clearfloat"></div></div>';
 
     var topics = {
@@ -455,8 +464,8 @@ GlobalUI.Search = {
           url: '/search/topics',
           prepare: function(query, settings) {
             settings.url += '?term=' + query;
-            if (Metamaps.Active.Mapper && self.limitTopicsToMe) {
-              settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
+            if (Active.Mapper && self.limitTopicsToMe) {
+              settings.url += "&user=" + Active.Mapper.id.toString();
             }
             return settings;
           },
@@ -488,8 +497,8 @@ GlobalUI.Search = {
           url: '/search/maps',
           prepare: function(query, settings) {
             settings.url += '?term=' + query;
-            if (Metamaps.Active.Mapper && self.limitMapsToMe) {
-              settings.url += "&user=" + Metamaps.Active.Mapper.id.toString();
+            if (Active.Mapper && self.limitMapsToMe) {
+              settings.url += "&user=" + Active.Mapper.id.toString();
             }
             return settings;
           },
@@ -578,11 +587,11 @@ GlobalUI.Search = {
       self.close(0, true);
       var win;
       if (datum.rtype == "topic") {
-        Metamaps.Router.topics(datum.id);
+        Router.topics(datum.id);
       } else if (datum.rtype == "map") {
-        Metamaps.Router.maps(datum.id);
+        Router.maps(datum.id);
       } else if (datum.rtype == "mapper") {
-        Metamaps.Router.explore("mapper", datum.id);
+        Router.explore("mapper", datum.id);
       }
     }
   },

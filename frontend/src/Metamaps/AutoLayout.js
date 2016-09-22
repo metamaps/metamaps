@@ -8,7 +8,7 @@ const AutoLayout = {
   timeToTurn: 0,
 
   getNextCoord: function () {
-    var self = Metamaps.AutoLayout
+    var self = AutoLayout
     var nextX = self.nextX
     var nextY = self.nextY
 
@@ -55,7 +55,7 @@ const AutoLayout = {
     }
   },
   resetSpiral: function () {
-    var self = Metamaps.AutoLayout
+    var self = AutoLayout
     self.nextX = 0
     self.nextY = 0
     self.nextXshift = 1

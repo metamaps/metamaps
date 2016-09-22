@@ -1,19 +1,19 @@
-window.Metamaps = window.Metamaps || {}
 /* global Metamaps, Backbone, $ */
+
+import Active from './Active'
+import GlobalUI from './GlobalUI'
+import JIT from './JIT'
+import Map from './Map'
+import Topic from './Topic'
+import Views from './Views'
+import Visualize from './Visualize'
 
 /*
  * Metamaps.Router.js.erb
  *
  * Dependencies:
- *  - Metamaps.Active
- *  - Metamaps.GlobalUI
- *  - Metamaps.JIT
  *  - Metamaps.Loading
- *  - Metamaps.Map
  *  - Metamaps.Maps
- *  - Metamaps.Topic
- *  - Metamaps.Views
- *  - Metamaps.Visualize
  */
 
 const _Router = Backbone.Router.extend({
@@ -24,53 +24,53 @@ const _Router = Backbone.Router.extend({
     'maps/:id': 'maps' // #maps/7
   },
   home: function () {
-    clearTimeout(Metamaps.Router.timeoutId)
+    clearTimeout(this.timeoutId)
 
-    if (Metamaps.Active.Mapper) document.title = 'Explore Active Maps | Metamaps'
+    if (Active.Mapper) document.title = 'Explore Active Maps | Metamaps'
     else document.title = 'Home | Metamaps'
 
-    Metamaps.Router.currentSection = ''
-    Metamaps.Router.currentPage = ''
+    this.currentSection = ''
+    this.currentPage = ''
     $('.wrapper').removeClass('mapPage topicPage')
 
-    var classes = Metamaps.Active.Mapper ? 'homePage explorePage' : 'homePage'
+    var classes = Active.Mapper ? 'homePage explorePage' : 'homePage'
     $('.wrapper').addClass(classes)
 
     var navigate = function () {
-      Metamaps.Router.timeoutId = setTimeout(function () {
-        Metamaps.Router.navigate('')
+      this.timeoutId = setTimeout(function () {
+        this.navigate('')
       }, 300)
     }
 
     // all this only for the logged in home page
-    if (Metamaps.Active.Mapper) {
+    if (Active.Mapper) {
       $('.homeButton a').attr('href', '/')
-      Metamaps.GlobalUI.hideDiv('#yield')
+      GlobalUI.hideDiv('#yield')
 
-      Metamaps.GlobalUI.showDiv('#explore')
+      GlobalUI.showDiv('#explore')
 
-      Metamaps.Views.exploreMaps.setCollection(Metamaps.Maps.Active)
+      Views.exploreMaps.setCollection(Metamaps.Maps.Active)
       if (Metamaps.Maps.Active.length === 0) {
         Metamaps.Maps.Active.getMaps(navigate) // this will trigger an explore maps render
       } else {
-        Metamaps.Views.exploreMaps.render(navigate)
+        Views.exploreMaps.render(navigate)
       }
     } else {
       // logged out home page
-      Metamaps.GlobalUI.hideDiv('#explore')
-      Metamaps.GlobalUI.showDiv('#yield')
-      Metamaps.Router.timeoutId = setTimeout(navigate, 500)
+      GlobalUI.hideDiv('#explore')
+      GlobalUI.showDiv('#yield')
+      this.timeoutId = setTimeout(navigate, 500)
     }
 
-    Metamaps.GlobalUI.hideDiv('#infovis')
-    Metamaps.GlobalUI.hideDiv('#instructions')
-    Metamaps.Map.end()
-    Metamaps.Topic.end()
-    Metamaps.Active.Map = null
-    Metamaps.Active.Topic = null
+    GlobalUI.hideDiv('#infovis')
+    GlobalUI.hideDiv('#instructions')
+    Map.end()
+    Topic.end()
+    Active.Map = null
+    Active.Topic = null
   },
   explore: function (section, id) {
-    clearTimeout(Metamaps.Router.timeoutId)
+    clearTimeout(this.timeoutId)
 
     // just capitalize the variable section
     // either 'featured', 'mapper', or 'active'
@@ -90,12 +90,12 @@ const _Router = Backbone.Router.extend({
       document.title = 'Explore My Maps | Metamaps'
     }
 
-    if (Metamaps.Active.Mapper && section != 'mapper') $('.homeButton a').attr('href', '/explore/' + section)
+    if (Active.Mapper && section != 'mapper') $('.homeButton a').attr('href', '/explore/' + section)
     $('.wrapper').removeClass('homePage mapPage topicPage')
     $('.wrapper').addClass('explorePage')
 
-    Metamaps.Router.currentSection = 'explore'
-    Metamaps.Router.currentPage = section
+    this.currentSection = 'explore'
+    this.currentPage = section
 
     // this will mean it's a mapper page being loaded
     if (id) {
@@ -108,20 +108,20 @@ const _Router = Backbone.Router.extend({
       Metamaps.Maps.Mapper.mapperId = id
     }
 
-    Metamaps.Views.exploreMaps.setCollection(Metamaps.Maps[capitalize])
+    Views.exploreMaps.setCollection(Metamaps.Maps[capitalize])
 
     var navigate = function () {
-      var path = '/explore/' + Metamaps.Router.currentPage
+      var path = '/explore/' + this.currentPage
 
       // alter url if for mapper profile page
-      if (Metamaps.Router.currentPage === 'mapper') {
+      if (this.currentPage === 'mapper') {
         path += '/' + Metamaps.Maps.Mapper.mapperId
       }
       
-      Metamaps.Router.navigate(path)
+      this.navigate(path)
     }
     var navigateTimeout = function () {
-      Metamaps.Router.timeoutId = setTimeout(navigate, 300)
+      this.timeoutId = setTimeout(navigate, 300)
     }
     if (Metamaps.Maps[capitalize].length === 0) {
       Metamaps.Loading.show()
@@ -130,77 +130,77 @@ const _Router = Backbone.Router.extend({
       }, 300) // wait 300 milliseconds till the other animations are done to do the fetch
     } else {
       if (id) {
-        Metamaps.Views.exploreMaps.fetchUserThenRender(navigateTimeout)
+        Views.exploreMaps.fetchUserThenRender(navigateTimeout)
       } else {
-        Metamaps.Views.exploreMaps.render(navigateTimeout)
+        Views.exploreMaps.render(navigateTimeout)
       }
     }
 
-    Metamaps.GlobalUI.showDiv('#explore')
-    Metamaps.GlobalUI.hideDiv('#yield')
-    Metamaps.GlobalUI.hideDiv('#infovis')
-    Metamaps.GlobalUI.hideDiv('#instructions')
-    Metamaps.Map.end()
-    Metamaps.Topic.end()
-    Metamaps.Active.Map = null
-    Metamaps.Active.Topic = null
+    GlobalUI.showDiv('#explore')
+    GlobalUI.hideDiv('#yield')
+    GlobalUI.hideDiv('#infovis')
+    GlobalUI.hideDiv('#instructions')
+    Map.end()
+    Topic.end()
+    Active.Map = null
+    Active.Topic = null
   },
   maps: function (id) {
-    clearTimeout(Metamaps.Router.timeoutId)
+    clearTimeout(this.timeoutId)
 
     document.title = 'Map ' + id + ' | Metamaps'
 
-    Metamaps.Router.currentSection = 'map'
-    Metamaps.Router.currentPage = id
+    this.currentSection = 'map'
+    this.currentPage = id
 
     $('.wrapper').removeClass('homePage explorePage topicPage')
     $('.wrapper').addClass('mapPage')
     // another class will be added to wrapper if you
     // can edit this map '.canEditMap'
 
-    Metamaps.GlobalUI.hideDiv('#yield')
-    Metamaps.GlobalUI.hideDiv('#explore')
+    GlobalUI.hideDiv('#yield')
+    GlobalUI.hideDiv('#explore')
 
     // clear the visualization, if there was one, before showing its div again
-    if (Metamaps.Visualize.mGraph) {
-      Metamaps.Visualize.mGraph.graph.empty()
-      Metamaps.Visualize.mGraph.plot()
-      Metamaps.JIT.centerMap(Metamaps.Visualize.mGraph.canvas)
+    if (Visualize.mGraph) {
+      Visualize.mGraph.graph.empty()
+      Visualize.mGraph.plot()
+      JIT.centerMap(Visualize.mGraph.canvas)
     }
-    Metamaps.GlobalUI.showDiv('#infovis')
-    Metamaps.Topic.end()
-    Metamaps.Active.Topic = null
+    GlobalUI.showDiv('#infovis')
+    Topic.end()
+    Active.Topic = null
 
     Metamaps.Loading.show()
-    Metamaps.Map.end()
-    Metamaps.Map.launch(id)
+    Map.end()
+    Map.launch(id)
   },
   topics: function (id) {
-    clearTimeout(Metamaps.Router.timeoutId)
+    clearTimeout(this.timeoutId)
 
     document.title = 'Topic ' + id + ' | Metamaps'
 
-    Metamaps.Router.currentSection = 'topic'
-    Metamaps.Router.currentPage = id
+    this.currentSection = 'topic'
+    this.currentPage = id
 
     $('.wrapper').removeClass('homePage explorePage mapPage')
     $('.wrapper').addClass('topicPage')
 
-    Metamaps.GlobalUI.hideDiv('#yield')
-    Metamaps.GlobalUI.hideDiv('#explore')
+    GlobalUI.hideDiv('#yield')
+    GlobalUI.hideDiv('#explore')
 
     // clear the visualization, if there was one, before showing its div again
-    if (Metamaps.Visualize.mGraph) {
-      Metamaps.Visualize.mGraph.graph.empty()
-      Metamaps.Visualize.mGraph.plot()
-      Metamaps.JIT.centerMap(Metamaps.Visualize.mGraph.canvas)
+    if (Visualize.mGraph) {
+      Visualize.mGraph.graph.empty()
+      Visualize.mGraph.plot()
+      JIT.centerMap(Visualize.mGraph.canvas)
     }
-    Metamaps.GlobalUI.showDiv('#infovis')
-    Metamaps.Map.end()
-    Metamaps.Active.Map = null
+    GlobalUI.showDiv('#infovis')
+    Map.end()
+    Active.Map = null
 
-    Metamaps.Topic.end()
-    Metamaps.Topic.launch(id)
+    Topic.end()
+    Topic.launch(id)
   }
 })
 
@@ -227,9 +227,9 @@ Router.intercept = function (evt) {
     segments.splice(0, 1) // pop off the element created by the first /
 
     if (href.attr === '') {
-      Metamaps.Router.home()
+      Router.home()
     } else {
-      Metamaps.Router[segments[0]](segments[1], segments[2])
+      Router[segments[0]](segments[1], segments[2])
     }
   }
 }
@@ -240,7 +240,7 @@ Router.init = function () {
     pushState: true,
     root: '/'
   })
-  $(document).on('click', 'a[data-router="true"]', Metamaps.Router.intercept)
+  $(document).on('click', 'a[data-router="true"]', Router.intercept)
 }
 
 export default Router

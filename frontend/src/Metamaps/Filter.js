@@ -2,6 +2,7 @@
 
 import Active from './Active'
 import Control from './Control'
+import GlobalUI from './GlobalUI'
 import Settings from './Settings'
 import Visualize from './Visualize'
 
@@ -10,7 +11,6 @@ import Visualize from './Visualize'
  *
  * Dependencies:
  *  - Metamaps.Creators
- *  - Metamaps.GlobalUI
  *  - Metamaps.Mappers
  *  - Metamaps.Metacodes
  *  - Metamaps.Synapses
@@ -56,7 +56,7 @@ const Filter = {
   open: function () {
     var self = Filter
 
-    Metamaps.GlobalUI.Account.close()
+    GlobalUI.Account.close()
     $('.sidebarFilterIcon div').addClass('hide')
 
     if (!self.isOpen && !self.changing) {

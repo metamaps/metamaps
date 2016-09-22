@@ -1,12 +1,11 @@
-/* uses window.Metamaps.Erb */
+/* 
+ * Metamaps.Erb
+ */
 
 const Account = {
   listenersInitialized: false,
-  init: function () {
-    var self = Metamaps.Account
-  },
   initListeners: function () {
-    var self = Metamaps.Account
+    var self = Account
 
     $('#user_image').change(self.showImagePreview)
     self.listenersInitialized = true

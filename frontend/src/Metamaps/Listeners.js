@@ -1,57 +1,59 @@
-/* global Metamaps, $ */
+/* global $ */
 
-/*
- * Dependencies:
- *  - Metamaps.Active
- *  - Metamaps.Control
- *  - Metamaps.JIT
- *  - Metamaps.Visualize
- */
+import Active from './Active'
+import Control from './Control'
+import JIT from './JIT'
+import Mobile from './Mobile'
+import Realtime from './Realtime'
+import Selected from './Selected'
+import Topic from './Topic'
+import Visualize from './Visualize'
+
 const Listeners = {
   init: function () {
     var self = this
     $(document).on('keydown', function (e) {
-      if (!(Metamaps.Active.Map || Metamaps.Active.Topic)) return
+      if (!(Active.Map || Active.Topic)) return
 
       switch (e.which) {
         case 13: // if enter key is pressed
-          Metamaps.JIT.enterKeyHandler()
+          JIT.enterKeyHandler()
           e.preventDefault()
           break
         case 27: // if esc key is pressed
-          Metamaps.JIT.escKeyHandler()
+          JIT.escKeyHandler()
           break
         case 65: // if a or A is pressed
           if (e.ctrlKey) {
-            Metamaps.Control.deselectAllNodes()
-            Metamaps.Control.deselectAllEdges()
+            Control.deselectAllNodes()
+            Control.deselectAllEdges()
 
             e.preventDefault()
-            Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
-              Metamaps.Control.selectNode(n, e)
+            Visualize.mGraph.graph.eachNode(function (n) {
+              Control.selectNode(n, e)
             })
 
-            Metamaps.Visualize.mGraph.plot()
+            Visualize.mGraph.plot()
           }
 
           break
         case 68: // if d or D is pressed
           if (e.ctrlKey) {
             e.preventDefault()
-            Metamaps.Control.deleteSelected()
+            Control.deleteSelected()
           }
           break
         case 69: // if e or E is pressed
-          if (e.ctrlKey && Metamaps.Active.Map) {
+          if (e.ctrlKey && Active.Map) {
             e.preventDefault()
-            Metamaps.JIT.zoomExtents(null, Metamaps.Visualize.mGraph.canvas)
+            JIT.zoomExtents(null, Visualize.mGraph.canvas)
             break
           }
-          if (e.altKey && Metamaps.Active.Topic) {
+          if (e.altKey && Active.Topic) {
             e.preventDefault()
 
-            if (Metamaps.Active.Topic) {
-              self.centerAndReveal(Metamaps.Selected.Nodes, {
+            if (Active.Topic) {
+              self.centerAndReveal(Selected.Nodes, {
                 center: true,
                 reveal: false
               })
@@ -62,30 +64,30 @@ const Listeners = {
         case 72: // if h or H is pressed
           if (e.ctrlKey) {
             e.preventDefault()
-            Metamaps.Control.hideSelectedNodes()
-            Metamaps.Control.hideSelectedEdges()
+            Control.hideSelectedNodes()
+            Control.hideSelectedEdges()
           }
           break
         case 77: // if m or M is pressed
           if (e.ctrlKey) {
             e.preventDefault()
-            Metamaps.Control.removeSelectedNodes()
-            Metamaps.Control.removeSelectedEdges()
+            Control.removeSelectedNodes()
+            Control.removeSelectedEdges()
           }
           break
         case 82: // if r or R is pressed
-          if (e.altKey && Metamaps.Active.Topic) {
+          if (e.altKey && Active.Topic) {
             e.preventDefault()
-            self.centerAndReveal(Metamaps.Selected.Nodes, {
+            self.centerAndReveal(Selected.Nodes, {
               center: false,
               reveal: true
             })
           }
           break
         case 84: // if t or T is pressed
-          if (e.altKey && Metamaps.Active.Topic) {
+          if (e.altKey && Active.Topic) {
             e.preventDefault()
-            self.centerAndReveal(Metamaps.Selected.Nodes, {
+            self.centerAndReveal(Selected.Nodes, {
               center: true,
               reveal: true
             })
@@ -98,23 +100,22 @@ const Listeners = {
     })
 
     $(window).resize(function () {
-      if (Metamaps.Visualize && Metamaps.Visualize.mGraph) Metamaps.Visualize.mGraph.canvas.resize($(window).width(), $(window).height())
-      if ((Metamaps.Active.Map || Metamaps.Active.Topic) && Metamaps.Famous && Metamaps.Famous.maps.surf) Metamaps.Famous.maps.reposition()
-      if (Metamaps.Active.Map && Metamaps.Realtime.inConversation) Metamaps.Realtime.positionVideos()
-      Metamaps.Mobile.resizeTitle()
+      if (Visualize && Visualize.mGraph) Visualize.mGraph.canvas.resize($(window).width(), $(window).height())
+      if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
+      Mobile.resizeTitle()
     })
   },
   centerAndReveal: function(nodes, opts) {
     if (nodes.length < 1) return
     var node = nodes[nodes.length - 1]
     if (opts.center && opts.reveal) {
-      Metamaps.Topic.centerOn(node.id, function() {
-        Metamaps.Topic.fetchRelatives(nodes)
+      Topic.centerOn(node.id, function() {
+        Topic.fetchRelatives(nodes)
       })
     } else if (opts.center) {
-      Metamaps.Topic.centerOn(node.id)
+      Topic.centerOn(node.id)
     } else if (opts.reveal) {
-      Metamaps.Topic.fetchRelatives(nodes)
+      Topic.fetchRelatives(nodes)
     }
   }
 }

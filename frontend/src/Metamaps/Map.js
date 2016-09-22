@@ -1,30 +1,29 @@
-window.Metamaps = window.Metamaps || {}
-
 /* global Metamaps, $ */
+
+import Active from './Active'
+import AutoLayout from './AutoLayout'
+import Create from './Create'
+import Filter from './Filter'
+import GlobalUI from './GlobalUI'
+import JIT from './JIT'
+import Realtime from './Realtime'
+import Selected from './Selected'
+import SynapseCard from './SynapseCard'
+import TopicCard from './TopicCard'
+import Visualize from './Visualize'
 
 /*
  * Metamaps.Map.js.erb
  *
  * Dependencies:
- *  - Metamaps.AutoLayout
- *  - Metamaps.Create
- *  - Metamaps.Erb
- *  - Metamaps.Filter
- *  - Metamaps.JIT
- *  - Metamaps.Loading
- *  - Metamaps.Maps
- *  - Metamaps.Realtime
- *  - Metamaps.Router
- *  - Metamaps.Selected
- *  - Metamaps.SynapseCard
- *  - Metamaps.TopicCard
- *  - Metamaps.Visualize
- *  - Metamaps.Active
  *  - Metamaps.Backbone
- *  - Metamaps.GlobalUI
+ *  - Metamaps.Erb
+ *  - Metamaps.Loading
  *  - Metamaps.Mappers
  *  - Metamaps.Mappings
+ *  - Metamaps.Maps
  *  - Metamaps.Messages
+ *  - Metamaps.Router
  *  - Metamaps.Synapses
  *  - Metamaps.Topics
  *
@@ -33,6 +32,7 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Map.InfoBox
  */
 
+window.Metamaps = window.Metamaps || {}
 Metamaps.Map = {
   events: {
     editedByActiveMapper: 'Metamaps:Map:events:editedByActiveMapper'
@@ -54,7 +54,7 @@ Metamaps.Map = {
       self.fork()
     })
 
-    Metamaps.GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
+    GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
 
     self.updateStar()
     self.InfoBox.init()
@@ -65,7 +65,7 @@ Metamaps.Map = {
   launch: function (id) {
     var bb = Metamaps.Backbone
     var start = function (data) {
-      Metamaps.Active.Map = new bb.Map(data.map)
+      Active.Map = new bb.Map(data.map)
       Metamaps.Mappers = new bb.MapperCollection(data.mappers)
       Metamaps.Collaborators = new bb.MapperCollection(data.collaborators)
       Metamaps.Topics = new bb.TopicCollection(data.topics)
@@ -75,8 +75,8 @@ Metamaps.Map = {
       Metamaps.Stars = data.stars
       Metamaps.Backbone.attachCollectionEvents()
 
-      var map = Metamaps.Active.Map
-      var mapper = Metamaps.Active.Mapper
+      var map = Active.Map
+      var mapper = Active.Mapper
 
       // add class to .wrapper for specifying whether you can edit the map
       if (map.authorizeToEdit(mapper)) {
@@ -95,24 +95,24 @@ Metamaps.Map = {
       $('#filter_by_mapper h3').html('MAPPERS')
 
       // build and render the visualization
-      Metamaps.Visualize.type = 'ForceDirected'
-      Metamaps.JIT.prepareVizData()
+      Visualize.type = 'ForceDirected'
+      JIT.prepareVizData()
 
       // update filters
-      Metamaps.Filter.reset()
+      Filter.reset()
 
       // reset selected arrays
-      Metamaps.Selected.reset()
+      Selected.reset()
 
       // set the proper mapinfobox content
       Metamaps.Map.InfoBox.load()
 
       // these three update the actual filter box with the right list items
-      Metamaps.Filter.checkMetacodes()
-      Metamaps.Filter.checkSynapses()
-      Metamaps.Filter.checkMappers()
+      Filter.checkMetacodes()
+      Filter.checkSynapses()
+      Filter.checkMappers()
 
-      Metamaps.Realtime.startActiveMap()
+      Realtime.startActiveMap()
       Metamaps.Loading.hide()
       
       // for mobile
@@ -125,24 +125,24 @@ Metamaps.Map = {
     })
   },
   end: function () {
-    if (Metamaps.Active.Map) {
+    if (Active.Map) {
       $('.wrapper').removeClass('canEditMap commonsMap')
-      Metamaps.AutoLayout.resetSpiral()
+      AutoLayout.resetSpiral()
 
       $('.rightclickmenu').remove()
-      Metamaps.TopicCard.hideCard()
-      Metamaps.SynapseCard.hideCard()
-      Metamaps.Create.newTopic.hide(true) // true means force (and override pinned)
-      Metamaps.Create.newSynapse.hide()
-      Metamaps.Filter.close()
+      TopicCard.hideCard()
+      SynapseCard.hideCard()
+      Create.newTopic.hide(true) // true means force (and override pinned)
+      Create.newSynapse.hide()
+      Filter.close()
       Metamaps.Map.InfoBox.close()
-      Metamaps.Realtime.endActiveMap()
+      Realtime.endActiveMap()
     }
   },
   updateStar: function () {
-    if (!Metamaps.Active.Mapper || !Metamaps.Stars) return
+    if (!Active.Mapper || !Metamaps.Stars) return
     // update the star/unstar icon
-    if (Metamaps.Stars.find(function (s) { return s.user_id === Metamaps.Active.Mapper.id })) {
+    if (Metamaps.Stars.find(function (s) { return s.user_id === Active.Mapper.id })) {
       $('.starMap').addClass('starred')
       $('.starMap .tooltipsAbove').html('Unstar')
     } else {
@@ -153,31 +153,31 @@ Metamaps.Map = {
   star: function () {
     var self = Metamaps.Map
 
-    if (!Metamaps.Active.Map) return
-    $.post('/maps/' + Metamaps.Active.Map.id + '/star')
-    Metamaps.Stars.push({ user_id: Metamaps.Active.Mapper.id, map_id: Metamaps.Active.Map.id })
-    Metamaps.Maps.Starred.add(Metamaps.Active.Map)
-    Metamaps.GlobalUI.notifyUser('Map is now starred')
+    if (!Active.Map) return
+    $.post('/maps/' + Active.Map.id + '/star')
+    Metamaps.Stars.push({ user_id: Active.Mapper.id, map_id: Active.Map.id })
+    Metamaps.Maps.Starred.add(Active.Map)
+    GlobalUI.notifyUser('Map is now starred')
     self.updateStar()
   },
   unstar: function () {
     var self = Metamaps.Map
 
-    if (!Metamaps.Active.Map) return
-    $.post('/maps/' + Metamaps.Active.Map.id + '/unstar')
-    Metamaps.Stars = Metamaps.Stars.filter(function (s) { return s.user_id != Metamaps.Active.Mapper.id })
-    Metamaps.Maps.Starred.remove(Metamaps.Active.Map)
+    if (!Active.Map) return
+    $.post('/maps/' + Active.Map.id + '/unstar')
+    Metamaps.Stars = Metamaps.Stars.filter(function (s) { return s.user_id != Active.Mapper.id })
+    Metamaps.Maps.Starred.remove(Active.Map)
     self.updateStar() 
   },
   fork: function () {
-    Metamaps.GlobalUI.openLightbox('forkmap')
+    GlobalUI.openLightbox('forkmap')
 
     var nodes_data = '',
       synapses_data = ''
     var nodes_array = []
     var synapses_array = []
     // collect the unfiltered topics
-    Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+    Visualize.mGraph.graph.eachNode(function (n) {
       // if the opacity is less than 1 then it's filtered
       if (n.getData('alpha') === 1) {
         var id = n.getData('topic').id
@@ -197,7 +197,7 @@ Metamaps.Map = {
     Metamaps.Synapses.each(function (synapse) {
       var desc = synapse.get('desc')
 
-      var descNotFiltered = Metamaps.Filter.visible.synapses.indexOf(desc) > -1
+      var descNotFiltered = Filter.visible.synapses.indexOf(desc) > -1
       // make sure that both topics are being added, otherwise, it
       // doesn't make sense to add the synapse
       var topicsNotFiltered = nodes_array.indexOf(synapse.get('node1_id')) > -1
@@ -210,32 +210,32 @@ Metamaps.Map = {
     synapses_data = synapses_array.join()
     nodes_data = nodes_data.slice(0, -1)
 
-    Metamaps.GlobalUI.CreateMap.topicsToMap = nodes_data
-    Metamaps.GlobalUI.CreateMap.synapsesToMap = synapses_data
+    GlobalUI.CreateMap.topicsToMap = nodes_data
+    GlobalUI.CreateMap.synapsesToMap = synapses_data
   },
   leavePrivateMap: function () {
-    var map = Metamaps.Active.Map
+    var map = Active.Map
     Metamaps.Maps.Active.remove(map)
     Metamaps.Maps.Featured.remove(map)
     Metamaps.Router.home()
-    Metamaps.GlobalUI.notifyUser('Sorry! That map has been changed to Private.')
+    GlobalUI.notifyUser('Sorry! That map has been changed to Private.')
   },
   cantEditNow: function () {
-    Metamaps.Realtime.turnOff(true); // true is for 'silence'
-    Metamaps.GlobalUI.notifyUser('Map was changed to Public. Editing is disabled.')
-    Metamaps.Active.Map.trigger('changeByOther')
+    Realtime.turnOff(true); // true is for 'silence'
+    GlobalUI.notifyUser('Map was changed to Public. Editing is disabled.')
+    Active.Map.trigger('changeByOther')
   },
   canEditNow: function () {
     var confirmString = "You've been granted permission to edit this map. "
     confirmString += 'Do you want to reload and enable realtime collaboration?'
     var c = confirm(confirmString)
     if (c) {
-      Metamaps.Router.maps(Metamaps.Active.Map.id)
+      Metamaps.Router.maps(Active.Map.id)
     }
   },
   editedByActiveMapper: function () {
-    if (Metamaps.Active.Mapper) {
-      Metamaps.Mappers.add(Metamaps.Active.Mapper)
+    if (Active.Mapper) {
+      Metamaps.Mappers.add(Active.Mapper)
     }
   },
   exportImage: function () {
@@ -282,14 +282,14 @@ Metamaps.Map = {
     // center it
     canvas.getCtx().translate(1880 / 2, 1260 / 2)
 
-    var mGraph = Metamaps.Visualize.mGraph
+    var mGraph = Visualize.mGraph
 
     var id = mGraph.root
     var root = mGraph.graph.getNode(id)
     var T = !!root.visited
 
     // pass true to avoid basing it on a selection
-    Metamaps.JIT.zoomExtents(null, canvas, true)
+    JIT.zoomExtents(null, canvas, true)
 
     var c = canvas.canvas,
       ctx = canvas.getCtx(),
@@ -327,7 +327,7 @@ Metamaps.Map = {
       encoded_image: canvas.canvas.toDataURL()
     }
 
-    var map = Metamaps.Active.Map
+    var map = Active.Map
 
     var today = new Date()
     var dd = today.getDate()
@@ -346,12 +346,12 @@ Metamaps.Map = {
     downloadMessage += 'Captured map screenshot! '
     downloadMessage += "<a href='" + imageData.encoded_image + "' "
     downloadMessage += "download='metamap-" + map.id + '-' + mapName + '-' + today + ".png'>DOWNLOAD</a>"
-    Metamaps.GlobalUI.notifyUser(downloadMessage)
+    GlobalUI.notifyUser(downloadMessage)
 
     $.ajax({
       type: 'POST',
       dataType: 'json',
-      url: '/maps/' + Metamaps.Active.Map.id + '/upload_screenshot',
+      url: '/maps/' + Active.Map.id + '/upload_screenshot',
       data: imageData,
       success: function (data) {
         console.log('successfully uploaded map screenshot')
@@ -461,12 +461,12 @@ Metamaps.Map.InfoBox = {
   load: function () {
     var self = Metamaps.Map.InfoBox
 
-    var map = Metamaps.Active.Map
+    var map = Active.Map
 
     var obj = map.pick('permission', 'topic_count', 'synapse_count')
 
-    var isCreator = map.authorizePermissionChange(Metamaps.Active.Mapper)
-    var canEdit = map.authorizeToEdit(Metamaps.Active.Mapper)
+    var isCreator = map.authorizePermissionChange(Active.Mapper)
+    var canEdit = map.authorizeToEdit(Active.Mapper)
     var relevantPeople = map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
     var shareable = map.get('permission') !== 'private'
 
@@ -519,8 +519,8 @@ Metamaps.Map.InfoBox = {
 
     $('.mapInfoName .best_in_place_name').unbind('ajax:success').bind('ajax:success', function () {
       var name = $(this).html()
-      Metamaps.Active.Map.set('name', name)
-      Metamaps.Active.Map.trigger('saved')
+      Active.Map.set('name', name)
+      Active.Map.trigger('saved')
       // mobile menu
       $('#header_content').html(name)
       $('.mapInfoBox').removeClass('mapRequestTitle')
@@ -529,8 +529,8 @@ Metamaps.Map.InfoBox = {
 
     $('.mapInfoDesc .best_in_place_desc').unbind('ajax:success').bind('ajax:success', function () {
       var desc = $(this).html()
-      Metamaps.Active.Map.set('desc', desc)
-      Metamaps.Active.Map.trigger('saved')
+      Active.Map.set('desc', desc)
+      Active.Map.trigger('saved')
     })
 
     $('.yourMap .mapPermission').unbind().click(self.onPermissionClick)
@@ -558,7 +558,7 @@ Metamaps.Map.InfoBox = {
   addTypeahead: function () {
     var self = Metamaps.Map.InfoBox
 
-    if (!Metamaps.Active.Map) return
+    if (!Active.Map) return
 
     // for autocomplete
     var collaborators = {
@@ -589,7 +589,7 @@ Metamaps.Map.InfoBox = {
     }
 
     // for adding map collaborators, who will have edit rights
-    if (Metamaps.Active.Mapper && Metamaps.Active.Mapper.id === Metamaps.Active.Map.get('user_id')) {
+    if (Active.Mapper && Active.Mapper.id === Active.Map.get('user_id')) {
       $('.collaboratorSearchField').typeahead(
         {
           highlight: false,
@@ -606,23 +606,23 @@ Metamaps.Map.InfoBox = {
     var self = Metamaps.Map.InfoBox
     Metamaps.Collaborators.remove(Metamaps.Collaborators.get(collaboratorId))
     var mapperIds = Metamaps.Collaborators.models.map(function (mapper) { return mapper.id })
-    $.post('/maps/' + Metamaps.Active.Map.id + '/access', { access: mapperIds })
+    $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
     self.updateNumbers()
   },
   addCollaborator: function (newCollaboratorId) {
     var self = Metamaps.Map.InfoBox
 
     if (Metamaps.Collaborators.get(newCollaboratorId)) {
-      Metamaps.GlobalUI.notifyUser('That user already has access')
+      GlobalUI.notifyUser('That user already has access')
       return
     }
 
     function callback(mapper) {
       Metamaps.Collaborators.add(mapper)
       var mapperIds = Metamaps.Collaborators.models.map(function (mapper) { return mapper.id })
-      $.post('/maps/' + Metamaps.Active.Map.id + '/access', { access: mapperIds })
+      $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
       var name =  Metamaps.Collaborators.get(newCollaboratorId).get('name')
-      Metamaps.GlobalUI.notifyUser(name + ' will be notified by email')
+      GlobalUI.notifyUser(name + ' will be notified by email')
       self.updateNumbers()
     }
 
@@ -642,13 +642,13 @@ Metamaps.Map.InfoBox = {
   },
   createContributorList: function () {
     var self = Metamaps.Map.InfoBox
-    var relevantPeople = Metamaps.Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
-    var activeMapperIsCreator = Metamaps.Active.Mapper && Metamaps.Active.Mapper.id === Metamaps.Active.Map.get('user_id')
+    var relevantPeople = Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
+    var activeMapperIsCreator = Active.Mapper && Active.Mapper.id === Active.Map.get('user_id')
     var string = ''
     string += '<ul>'
 
     relevantPeople.each(function (m) {
-      var isCreator = Metamaps.Active.Map.get('user_id') === m.get('id')
+      var isCreator = Active.Map.get('user_id') === m.get('id')
       string += '<li><a href="/explore/mapper/' + m.get('id') + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get('image') + '" />' + m.get('name')
       if (isCreator) string += ' (creator)' 
       string += '</a>'
@@ -664,11 +664,11 @@ Metamaps.Map.InfoBox = {
     return string
   },
   updateNumbers: function () {
-    if (!Metamaps.Active.Map) return
+    if (!Active.Map) return
 
     var self = Metamaps.Map.InfoBox
-    var mapper = Metamaps.Active.Mapper
-    var relevantPeople = Metamaps.Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
+    var mapper = Active.Mapper
+    var relevantPeople = Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
 
     var contributors_class = ''
     if (relevantPeople.length === 2) contributors_class = 'multiple mTwo'
@@ -720,10 +720,10 @@ Metamaps.Map.InfoBox = {
 
     self.selectingPermission = false
     var permission = $(this).attr('class')
-    Metamaps.Active.Map.save({
+    Active.Map.save({
       permission: permission
     })
-    Metamaps.Active.Map.updateMapWrapper()
+    Active.Map.updateMapWrapper()
     shareable = permission === 'private' ? '' : 'shareable'
     $('.mapPermission').removeClass('commons public private minimize').addClass(permission)
     $('.mapPermission .permissionSelect').remove()
@@ -735,8 +735,8 @@ Metamaps.Map.InfoBox = {
     confirmString += 'This action is irreversible. It will not delete the topics and synapses on the map.'
 
     var doIt = confirm(confirmString)
-    var map = Metamaps.Active.Map
-    var mapper = Metamaps.Active.Mapper
+    var map = Active.Map
+    var mapper = Active.Mapper
     var authorized = map.authorizePermissionChange(mapper)
 
     if (doIt && authorized) {
@@ -747,7 +747,7 @@ Metamaps.Map.InfoBox = {
       Metamaps.Maps.Shared.remove(map)
       map.destroy()
       Metamaps.Router.home()
-      Metamaps.GlobalUI.notifyUser('Map eliminated!')
+      GlobalUI.notifyUser('Map eliminated!')
     }
     else if (!authorized) {
       alert("Hey now. We can't just go around willy nilly deleting other people's maps now can we? Run off and find something constructive to do, eh?")

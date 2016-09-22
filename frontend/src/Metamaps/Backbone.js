@@ -26,9 +26,9 @@ window.Metamaps = window.Metamaps || {}
  *  - Metamaps.Visualize
  */
 
-Metamaps.Backbone = {}
+const _Backbone = {}
 
-Metamaps.Backbone.Map = Backbone.Model.extend({
+_Backbone.Map = Backbone.Model.extend({
   urlRoot: '/maps',
   blacklist: ['created_at', 'updated_at', 'created_at_clean', 'updated_at_clean', 'user_name', 'contributor_count', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
   toJSON: function (options) {
@@ -82,7 +82,7 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     return Metamaps.Mapper.get(this.get('user_id'))
   },
   fetchContained: function () {
-    var bb = Metamaps.Backbone
+    var bb = _Backbone
     var that = this
     var start = function (data) {
       that.set('mappers', new bb.MapperCollection(data.mappers))
@@ -143,8 +143,8 @@ Metamaps.Backbone.Map = Backbone.Model.extend({
     }
   }
 })
-Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
-  model: Metamaps.Backbone.Map,
+_Backbone.MapsCollection = Backbone.Collection.extend({
+  model: _Backbone.Map,
   initialize: function (models, options) {
     this.id = options.id
     this.sortBy = options.sortBy
@@ -211,7 +211,7 @@ Metamaps.Backbone.MapsCollection = Backbone.Collection.extend({
   }
 })
 
-Metamaps.Backbone.Message = Backbone.Model.extend({
+_Backbone.Message = Backbone.Model.extend({
   urlRoot: '/messages',
   blacklist: ['created_at', 'updated_at'],
   toJSON: function (options) {
@@ -227,12 +227,12 @@ Metamaps.Backbone.Message = Backbone.Model.extend({
      */
   }
 })
-Metamaps.Backbone.MessageCollection = Backbone.Collection.extend({
-  model: Metamaps.Backbone.Message,
+_Backbone.MessageCollection = Backbone.Collection.extend({
+  model: _Backbone.Message,
   url: '/messages'
 })
 
-Metamaps.Backbone.Mapper = Backbone.Model.extend({
+_Backbone.Mapper = Backbone.Model.extend({
   urlRoot: '/users',
   blacklist: ['created_at', 'updated_at'],
   toJSON: function (options) {
@@ -248,13 +248,13 @@ Metamaps.Backbone.Mapper = Backbone.Model.extend({
   }
 })
 
-Metamaps.Backbone.MapperCollection = Backbone.Collection.extend({
-  model: Metamaps.Backbone.Mapper,
+_Backbone.MapperCollection = Backbone.Collection.extend({
+  model: _Backbone.Mapper,
   url: '/users'
 })
 
-Metamaps.Backbone.init = function () {
-  var self = Metamaps.Backbone
+_Backbone.init = function () {
+  var self = _Backbone
 
   self.Metacode = Backbone.Model.extend({
     initialize: function () {
@@ -694,6 +694,6 @@ Metamaps.Backbone.init = function () {
     }
   }
   self.attachCollectionEvents()
-}; // end Metamaps.Backbone.init
+}; // end _Backbone.init
 
-export default Metamaps.Backbone
+export default _Backbone

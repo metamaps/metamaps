@@ -2,6 +2,8 @@
 
 import Active from './Active'
 import JIT from './JIT'
+import Router from './Router'
+import TopicCard from './TopicCard'
 
 /*
  * Metamaps.Visualize
@@ -9,9 +11,7 @@ import JIT from './JIT'
  * Dependencies:
  *  - Metamaps.Loading
  *  - Metamaps.Metacodes
- *  - Metamaps.Router
  *  - Metamaps.Synapses
- *  - Metamaps.TopicCard
  *  - Metamaps.Topics
  */
 
@@ -42,7 +42,7 @@ const Visualize = {
     // prevent touch events on the canvas from default behaviour
     $('#infovis-canvas').bind('touchend touchcancel', function (event) {
       lastDist = 0
-      if (!self.mGraph.events.touchMoved && !Visualize.touchDragNode) Metamaps.TopicCard.hideCurrentCard()
+      if (!self.mGraph.events.touchMoved && !Visualize.touchDragNode) TopicCard.hideCurrentCard()
       self.mGraph.events.touched = self.mGraph.events.touchMoved = false
       Visualize.touchDragNode = false
     })
@@ -204,16 +204,16 @@ const Visualize = {
     hold()
 
     // update the url now that the map is ready
-    clearTimeout(Metamaps.Router.timeoutId)
-    Metamaps.Router.timeoutId = setTimeout(function () {
+    clearTimeout(Router.timeoutId)
+    Router.timeoutId = setTimeout(function () {
       var m = Active.Map
       var t = Active.Topic
 
       if (m && window.location.pathname !== '/maps/' + m.id) {
-        Metamaps.Router.navigate('/maps/' + m.id)
+        Router.navigate('/maps/' + m.id)
       }
       else if (t && window.location.pathname !== '/topics/' + t.id) {
-        Metamaps.Router.navigate('/topics/' + t.id)
+        Router.navigate('/topics/' + t.id)
       }
     }, 800)
   }

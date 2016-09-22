@@ -5,13 +5,13 @@ import Selected from './Selected'
 import Synapse from './Synapse'
 import Topic from './Topic'
 import Visualize from './Visualize'
+import GlobalUI from './GlobalUI'
 
 /*
  * Metamaps.Create.js
  *
  * Dependencies:
  *  - Metamaps.Backbone
- *  - Metamaps.GlobalUI
  *  - Metamaps.Metacodes
  */
 
@@ -101,7 +101,7 @@ const Create = {
       bringToFront: true
     })
 
-    Metamaps.GlobalUI.closeLightbox()
+    GlobalUI.closeLightbox()
     $('#topic_name').focus()
 
     var mdata = {

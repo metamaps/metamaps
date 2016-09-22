@@ -1,4 +1,6 @@
-import Backbone from './Backbone'
+/*
+ * Metamaps.Backbone
+ */
 
 const Mapper = {
   // this function is to retrieve a mapper JSON object from the database
@@ -9,7 +11,7 @@ const Mapper = {
       if (!response.ok) throw response
       return response.json()
     }).then(payload => {
-      callback(new Backbone.Mapper(payload))
+      callback(new Metamaps.Backbone.Mapper(payload))
     })
   }
 }

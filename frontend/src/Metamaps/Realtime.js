@@ -1,27 +1,27 @@
 /* global Metamaps, $ */
 
+import Active from './Active'
+import Control from './Control'
+import GlobalUI from './GlobalUI'
+import JIT from './JIT'
+import Map from './Map'
+import Mapper from './Mapper'
+import Topic from './Topic'
+import Util from './Util'
+import Views from './Views'
+import Visualize from './Visualize'
+
 /*
  * Metamaps.Realtime.js
  *
  * Dependencies:
- *  - Metamaps.Active
  *  - Metamaps.Backbone
- *  - Metamaps.Backbone
- *  - Metamaps.Control
  *  - Metamaps.Erb
- *  - Metamaps.GlobalUI
- *  - Metamaps.JIT
- *  - Metamaps.Map
- *  - Metamaps.Mapper
  *  - Metamaps.Mappers
  *  - Metamaps.Mappings
  *  - Metamaps.Messages
  *  - Metamaps.Synapses
- *  - Metamaps.Topic
  *  - Metamaps.Topics
- *  - Metamaps.Util
- *  - Metamaps.Views
- *  - Metamaps.Visualize
  */
 
 const Realtime = {
@@ -52,7 +52,7 @@ const Realtime = {
       self.disconnected = true
     })
 
-    if (Metamaps.Active.Mapper) {
+    if (Active.Mapper) {
       self.webrtc = new SimpleWebRTC({
         connection: self.socket,
         localVideoEl: self.videoId,
@@ -69,23 +69,23 @@ const Realtime = {
           video: true,
           audio: true
         },
-        nick: Metamaps.Active.Mapper.id
+        nick: Active.Mapper.id
       })
 
       var $video = $('<video></video>').attr('id', self.videoId)
       self.localVideo = {
         $video: $video,
-        view: new Metamaps.Views.videoView($video[0], $('body'), 'me', true, {
+        view: new Views.videoView($video[0], $('body'), 'me', true, {
           DOUBLE_CLICK_TOLERANCE: 200,
-          avatar: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : ''
+          avatar: Active.Mapper ? Active.Mapper.get('image') : ''
         })
       }
 
-      self.room = new Metamaps.Views.room({
+      self.room = new Views.room({
         webrtc: self.webrtc,
         socket: self.socket,
-        username: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('name') : '',
-        image: Metamaps.Active.Mapper ? Metamaps.Active.Mapper.get('image') : '',
+        username: Active.Mapper ? Active.Mapper.get('name') : '',
+        image: Active.Mapper ? Active.Mapper.get('image') : '',
         room: 'global',
         $video: self.localVideo.$video,
         myVideoView: self.localVideo.view,
@@ -93,35 +93,35 @@ const Realtime = {
       })
       self.room.videoAdded(self.handleVideoAdded)
 
-      if (!Metamaps.Active.Map) {
+      if (!Active.Map) {
         self.room.chat.$container.hide()
       }
       $('body').prepend(self.room.chat.$container)
-    } // if Metamaps.Active.Mapper
+    } // if Active.Mapper
   },
   addJuntoListeners: function () {
     var self = Realtime
 
-    $(document).on(Metamaps.Views.chatView.events.openTray, function () {
+    $(document).on(Views.chatView.events.openTray, function () {
       $('.main').addClass('compressed')
       self.chatOpen = true
       self.positionPeerIcons()
     })
-    $(document).on(Metamaps.Views.chatView.events.closeTray, function () {
+    $(document).on(Views.chatView.events.closeTray, function () {
       $('.main').removeClass('compressed')
       self.chatOpen = false
       self.positionPeerIcons()
     })
-    $(document).on(Metamaps.Views.chatView.events.videosOn, function () {
+    $(document).on(Views.chatView.events.videosOn, function () {
       $('#wrapper').removeClass('hideVideos')
     })
-    $(document).on(Metamaps.Views.chatView.events.videosOff, function () {
+    $(document).on(Views.chatView.events.videosOff, function () {
       $('#wrapper').addClass('hideVideos')
     })
-    $(document).on(Metamaps.Views.chatView.events.cursorsOn, function () {
+    $(document).on(Views.chatView.events.cursorsOn, function () {
       $('#wrapper').removeClass('hideCursors')
     })
-    $(document).on(Metamaps.Views.chatView.events.cursorsOff, function () {
+    $(document).on(Views.chatView.events.cursorsOff, function () {
       $('#wrapper').addClass('hideCursors')
     })
   },
@@ -187,8 +187,8 @@ const Realtime = {
   startActiveMap: function () {
     var self = Realtime
 
-    if (Metamaps.Active.Map && Metamaps.Active.Mapper) {
-      if (Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)) {
+    if (Active.Map && Active.Mapper) {
+      if (Active.Map.authorizeToEdit(Active.Mapper)) {
         self.turnOn()
         self.setupSocket()
       } else {
@@ -219,15 +219,15 @@ const Realtime = {
     self.status = true
     $('.collabCompass').show()
     self.room.chat.$container.show()
-    self.room.room = 'map-' + Metamaps.Active.Map.id
+    self.room.room = 'map-' + Active.Map.id
     self.checkForACallToJoin()
 
     self.activeMapper = {
-      id: Metamaps.Active.Mapper.id,
-      name: Metamaps.Active.Mapper.get('name'),
-      username: Metamaps.Active.Mapper.get('name'),
-      image: Metamaps.Active.Mapper.get('image'),
-      color: Metamaps.Util.getPastelColor(),
+      id: Active.Mapper.id,
+      name: Active.Mapper.get('name'),
+      username: Active.Mapper.get('name'),
+      image: Active.Mapper.get('image'),
+      color: Util.getPastelColor(),
       self: true
     }
     self.localVideo.view.$container.find('.video-cutoff').css({
@@ -237,7 +237,7 @@ const Realtime = {
   },
   checkForACallToJoin: function () {
     var self = Realtime
-    self.socket.emit('checkForCall', { room: self.room.room, mapid: Metamaps.Active.Map.id })
+    self.socket.emit('checkForCall', { room: self.room.room, mapid: Active.Map.id })
   },
   promptToJoin: function () {
     var self = Realtime
@@ -245,7 +245,7 @@ const Realtime = {
     var notifyText = "There's a conversation happening, want to join?"
     notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
     notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>'
-    Metamaps.GlobalUI.notifyUser(notifyText, true)
+    GlobalUI.notifyUser(notifyText, true)
     self.room.conversationInProgress()
   },
   conversationHasBegun: function () {
@@ -255,7 +255,7 @@ const Realtime = {
     var notifyText = "There's a conversation starting, want to join?"
     notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
     notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>'
-    Metamaps.GlobalUI.notifyUser(notifyText, true)
+    GlobalUI.notifyUser(notifyText, true)
     self.room.conversationInProgress()
   },
   countOthersInConversation: function () {
@@ -275,7 +275,7 @@ const Realtime = {
       if (self.inConversation) {
         var username = mapper.name
         var notifyText = username + ' joined the call'
-        Metamaps.GlobalUI.notifyUser(notifyText)
+        GlobalUI.notifyUser(notifyText)
       }
 
       mapper.inConversation = true
@@ -290,7 +290,7 @@ const Realtime = {
       if (self.inConversation) {
         var username = mapper.name
         var notifyText = username + ' left the call'
-        Metamaps.GlobalUI.notifyUser(notifyText)
+        GlobalUI.notifyUser(notifyText)
       }
 
       mapper.inConversation = false
@@ -332,7 +332,7 @@ const Realtime = {
     notifyText += username + ' is inviting you to a conversation. Join live?'
     notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>'
     notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>'
-    Metamaps.GlobalUI.notifyUser(notifyText, true)
+    GlobalUI.notifyUser(notifyText, true)
   },
   invitedToJoin: function (inviter) {
     var self = Realtime
@@ -344,55 +344,55 @@ const Realtime = {
     var notifyText = username + ' is inviting you to the conversation. Join?'
     notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
     notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyInvite(' + inviter + ')">No</button>'
-    Metamaps.GlobalUI.notifyUser(notifyText, true)
+    GlobalUI.notifyUser(notifyText, true)
   },
   acceptCall: function (userid) {
     var self = Realtime
     self.room.chat.sound.stop('sessioninvite')
     self.socket.emit('callAccepted', {
-      mapid: Metamaps.Active.Map.id,
-      invited: Metamaps.Active.Mapper.id,
+      mapid: Active.Map.id,
+      invited: Active.Mapper.id,
       inviter: userid
     })
-    $.post('/maps/' + Metamaps.Active.Map.id + '/events/conversation')
+    $.post('/maps/' + Active.Map.id + '/events/conversation')
     self.joinCall()
-    Metamaps.GlobalUI.clearNotify()
+    GlobalUI.clearNotify()
   },
   denyCall: function (userid) {
     var self = Realtime
     self.room.chat.sound.stop('sessioninvite')
     self.socket.emit('callDenied', {
-      mapid: Metamaps.Active.Map.id,
-      invited: Metamaps.Active.Mapper.id,
+      mapid: Active.Map.id,
+      invited: Active.Mapper.id,
       inviter: userid
     })
-    Metamaps.GlobalUI.clearNotify()
+    GlobalUI.clearNotify()
   },
   denyInvite: function (userid) {
     var self = Realtime
     self.room.chat.sound.stop('sessioninvite')
     self.socket.emit('inviteDenied', {
-      mapid: Metamaps.Active.Map.id,
-      invited: Metamaps.Active.Mapper.id,
+      mapid: Active.Map.id,
+      invited: Active.Mapper.id,
       inviter: userid
     })
-    Metamaps.GlobalUI.clearNotify()
+    GlobalUI.clearNotify()
   },
   inviteACall: function (userid) {
     var self = Realtime
     self.socket.emit('inviteACall', {
-      mapid: Metamaps.Active.Map.id,
-      inviter: Metamaps.Active.Mapper.id,
+      mapid: Active.Map.id,
+      inviter: Active.Mapper.id,
       invited: userid
     })
     self.room.chat.invitationPending(userid)
-    Metamaps.GlobalUI.clearNotify()
+    GlobalUI.clearNotify()
   },
   inviteToJoin: function (userid) {
     var self = Realtime
     self.socket.emit('inviteToJoin', {
-      mapid: Metamaps.Active.Map.id,
-      inviter: Metamaps.Active.Mapper.id,
+      mapid: Active.Map.id,
+      inviter: Active.Mapper.id,
       invited: userid
     })
     self.room.chat.invitationPending(userid)
@@ -401,7 +401,7 @@ const Realtime = {
     var self = Realtime
 
     var username = self.mappersOnMap[userid].name
-    Metamaps.GlobalUI.notifyUser('Conversation starting...')
+    GlobalUI.notifyUser('Conversation starting...')
     self.joinCall()
     self.room.chat.invitationAnswered(userid)
   },
@@ -409,14 +409,14 @@ const Realtime = {
     var self = Realtime
 
     var username = self.mappersOnMap[userid].name
-    Metamaps.GlobalUI.notifyUser(username + " didn't accept your invitation")
+    GlobalUI.notifyUser(username + " didn't accept your invitation")
     self.room.chat.invitationAnswered(userid)
   },
   inviteDenied: function (userid) {
     var self = Realtime
 
     var username = self.mappersOnMap[userid].name
-    Metamaps.GlobalUI.notifyUser(username + " didn't accept your invitation")
+    GlobalUI.notifyUser(username + " didn't accept your invitation")
     self.room.chat.invitationAnswered(userid)
   },
   joinCall: function () {
@@ -436,22 +436,22 @@ const Realtime = {
     })
     self.inConversation = true
     self.socket.emit('mapperJoinedCall', {
-      mapid: Metamaps.Active.Map.id,
-      id: Metamaps.Active.Mapper.id
+      mapid: Active.Map.id,
+      id: Active.Mapper.id
     })
     self.webrtc.startLocalVideo()
-    Metamaps.GlobalUI.clearNotify()
-    self.room.chat.mapperJoinedCall(Metamaps.Active.Mapper.id)
+    GlobalUI.clearNotify()
+    self.room.chat.mapperJoinedCall(Active.Mapper.id)
   },
   leaveCall: function () {
     var self = Realtime
 
     self.socket.emit('mapperLeftCall', {
-      mapid: Metamaps.Active.Map.id,
-      id: Metamaps.Active.Mapper.id
+      mapid: Active.Map.id,
+      id: Active.Mapper.id
     })
 
-    self.room.chat.mapperLeftCall(Metamaps.Active.Mapper.id)
+    self.room.chat.mapperLeftCall(Active.Mapper.id)
     self.room.leaveVideoOnly()
     self.inConversation = false
     self.localVideo.view.$container.hide()
@@ -479,63 +479,63 @@ const Realtime = {
   setupSocket: function () {
     var self = Realtime
     var socket = Realtime.socket
-    var myId = Metamaps.Active.Mapper.id
+    var myId = Active.Mapper.id
 
     socket.emit('newMapperNotify', {
       userid: myId,
-      username: Metamaps.Active.Mapper.get('name'),
-      userimage: Metamaps.Active.Mapper.get('image'),
-      mapid: Metamaps.Active.Map.id
+      username: Active.Mapper.get('name'),
+      userimage: Active.Mapper.get('image'),
+      mapid: Active.Map.id
     })
 
-    socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToCall', self.invitedToCall) // new call
-    socket.on(myId + '-' + Metamaps.Active.Map.id + '-invitedToJoin', self.invitedToJoin) // call already in progress
-    socket.on(myId + '-' + Metamaps.Active.Map.id + '-callAccepted', self.callAccepted)
-    socket.on(myId + '-' + Metamaps.Active.Map.id + '-callDenied', self.callDenied)
-    socket.on(myId + '-' + Metamaps.Active.Map.id + '-inviteDenied', self.inviteDenied)
+    socket.on(myId + '-' + Active.Map.id + '-invitedToCall', self.invitedToCall) // new call
+    socket.on(myId + '-' + Active.Map.id + '-invitedToJoin', self.invitedToJoin) // call already in progress
+    socket.on(myId + '-' + Active.Map.id + '-callAccepted', self.callAccepted)
+    socket.on(myId + '-' + Active.Map.id + '-callDenied', self.callDenied)
+    socket.on(myId + '-' + Active.Map.id + '-inviteDenied', self.inviteDenied)
 
     // receive word that there's a conversation in progress
-    socket.on('maps-' + Metamaps.Active.Map.id + '-callInProgress', self.promptToJoin)
-    socket.on('maps-' + Metamaps.Active.Map.id + '-callStarting', self.conversationHasBegun)
+    socket.on('maps-' + Active.Map.id + '-callInProgress', self.promptToJoin)
+    socket.on('maps-' + Active.Map.id + '-callStarting', self.conversationHasBegun)
 
-    socket.on('maps-' + Metamaps.Active.Map.id + '-mapperJoinedCall', self.mapperJoinedCall)
-    socket.on('maps-' + Metamaps.Active.Map.id + '-mapperLeftCall', self.mapperLeftCall)
+    socket.on('maps-' + Active.Map.id + '-mapperJoinedCall', self.mapperJoinedCall)
+    socket.on('maps-' + Active.Map.id + '-mapperLeftCall', self.mapperLeftCall)
 
     // if you're the 'new guy' update your list with who's already online
-    socket.on(myId + '-' + Metamaps.Active.Map.id + '-UpdateMapperList', self.updateMapperList)
+    socket.on(myId + '-' + Active.Map.id + '-UpdateMapperList', self.updateMapperList)
 
     // receive word that there's a new mapper on the map
-    socket.on('maps-' + Metamaps.Active.Map.id + '-newmapper', self.newPeerOnMap)
+    socket.on('maps-' + Active.Map.id + '-newmapper', self.newPeerOnMap)
 
     // receive word that a mapper left the map
-    socket.on('maps-' + Metamaps.Active.Map.id + '-lostmapper', self.lostPeerOnMap)
+    socket.on('maps-' + Active.Map.id + '-lostmapper', self.lostPeerOnMap)
 
     // receive word that there's a mapper turned on realtime
-    socket.on('maps-' + Metamaps.Active.Map.id + '-newrealtime', self.newCollaborator)
+    socket.on('maps-' + Active.Map.id + '-newrealtime', self.newCollaborator)
 
     // receive word that there's a mapper turned on realtime
-    socket.on('maps-' + Metamaps.Active.Map.id + '-lostrealtime', self.lostCollaborator)
+    socket.on('maps-' + Active.Map.id + '-lostrealtime', self.lostCollaborator)
 
     //
-    socket.on('maps-' + Metamaps.Active.Map.id + '-topicDrag', self.topicDrag)
+    socket.on('maps-' + Active.Map.id + '-topicDrag', self.topicDrag)
 
     //
-    socket.on('maps-' + Metamaps.Active.Map.id + '-newTopic', self.newTopic)
+    socket.on('maps-' + Active.Map.id + '-newTopic', self.newTopic)
 
     //
-    socket.on('maps-' + Metamaps.Active.Map.id + '-newMessage', self.newMessage)
+    socket.on('maps-' + Active.Map.id + '-newMessage', self.newMessage)
 
     //
-    socket.on('maps-' + Metamaps.Active.Map.id + '-removeTopic', self.removeTopic)
+    socket.on('maps-' + Active.Map.id + '-removeTopic', self.removeTopic)
 
     //
-    socket.on('maps-' + Metamaps.Active.Map.id + '-newSynapse', self.newSynapse)
+    socket.on('maps-' + Active.Map.id + '-newSynapse', self.newSynapse)
 
     //
-    socket.on('maps-' + Metamaps.Active.Map.id + '-removeSynapse', self.removeSynapse)
+    socket.on('maps-' + Active.Map.id + '-removeSynapse', self.removeSynapse)
 
     // update mapper compass position
-    socket.on('maps-' + Metamaps.Active.Map.id + '-updatePeerCoords', self.updatePeerCoords)
+    socket.on('maps-' + Active.Map.id + '-updatePeerCoords', self.updatePeerCoords)
 
     // deletions
     socket.on('deleteTopicFromServer', self.removeTopic)
@@ -551,7 +551,7 @@ const Realtime = {
         x: event.pageX,
         y: event.pageY
       }
-      var coords = Metamaps.Util.pixelsToCoords(pixels)
+      var coords = Util.pixelsToCoords(pixels)
       self.sendCoords(coords)
     }
     $(document).on('mousemove.map', sendCoords)
@@ -562,54 +562,54 @@ const Realtime = {
           x: e.pageX,
           y: e.pageY
         }
-        var coords = Metamaps.Util.pixelsToCoords(pixels)
+        var coords = Util.pixelsToCoords(pixels)
         self.sendCoords(coords)
       }
       self.positionPeerIcons()
     }
-    $(document).on(Metamaps.JIT.events.zoom + '.map', zoom)
+    $(document).on(JIT.events.zoom + '.map', zoom)
 
-    $(document).on(Metamaps.JIT.events.pan + '.map', self.positionPeerIcons)
+    $(document).on(JIT.events.pan + '.map', self.positionPeerIcons)
 
     var sendTopicDrag = function (event, positions) {
       self.sendTopicDrag(positions)
     }
-    $(document).on(Metamaps.JIT.events.topicDrag + '.map', sendTopicDrag)
+    $(document).on(JIT.events.topicDrag + '.map', sendTopicDrag)
 
     var sendNewTopic = function (event, data) {
       self.sendNewTopic(data)
     }
-    $(document).on(Metamaps.JIT.events.newTopic + '.map', sendNewTopic)
+    $(document).on(JIT.events.newTopic + '.map', sendNewTopic)
 
     var sendDeleteTopic = function (event, data) {
       self.sendDeleteTopic(data)
     }
-    $(document).on(Metamaps.JIT.events.deleteTopic + '.map', sendDeleteTopic)
+    $(document).on(JIT.events.deleteTopic + '.map', sendDeleteTopic)
 
     var sendRemoveTopic = function (event, data) {
       self.sendRemoveTopic(data)
     }
-    $(document).on(Metamaps.JIT.events.removeTopic + '.map', sendRemoveTopic)
+    $(document).on(JIT.events.removeTopic + '.map', sendRemoveTopic)
 
     var sendNewSynapse = function (event, data) {
       self.sendNewSynapse(data)
     }
-    $(document).on(Metamaps.JIT.events.newSynapse + '.map', sendNewSynapse)
+    $(document).on(JIT.events.newSynapse + '.map', sendNewSynapse)
 
     var sendDeleteSynapse = function (event, data) {
       self.sendDeleteSynapse(data)
     }
-    $(document).on(Metamaps.JIT.events.deleteSynapse + '.map', sendDeleteSynapse)
+    $(document).on(JIT.events.deleteSynapse + '.map', sendDeleteSynapse)
 
     var sendRemoveSynapse = function (event, data) {
       self.sendRemoveSynapse(data)
     }
-    $(document).on(Metamaps.JIT.events.removeSynapse + '.map', sendRemoveSynapse)
+    $(document).on(JIT.events.removeSynapse + '.map', sendRemoveSynapse)
 
     var sendNewMessage = function (event, data) {
       self.sendNewMessage(data)
     }
-    $(document).on(Metamaps.Views.room.events.newMessage + '.map', sendNewMessage)
+    $(document).on(Views.room.events.newMessage + '.map', sendNewMessage)
   },
   attachMapListener: function () {
     var self = Realtime
@@ -623,9 +623,9 @@ const Realtime = {
 
     // send this new mapper back your details, and the awareness that you're online
     var update = {
-      username: Metamaps.Active.Mapper.get('name'),
-      userid: Metamaps.Active.Mapper.id,
-      mapid: Metamaps.Active.Map.id
+      username: Active.Mapper.get('name'),
+      userid: Active.Mapper.id,
+      mapid: Active.Map.id
     }
     socket.emit('notifyStartRealtime', update)
   },
@@ -635,9 +635,9 @@ const Realtime = {
 
     // send this new mapper back your details, and the awareness that you're online
     var update = {
-      username: Metamaps.Active.Mapper.get('name'),
-      userid: Metamaps.Active.Mapper.id,
-      mapid: Metamaps.Active.Map.id
+      username: Active.Mapper.get('name'),
+      userid: Active.Mapper.id,
+      mapid: Active.Map.id
     }
     socket.emit('notifyStopRealtime', update)
   },
@@ -655,7 +655,7 @@ const Realtime = {
       name: data.username,
       username: data.username,
       image: data.userimage,
-      color: Metamaps.Util.getPastelColor(),
+      color: Util.getPastelColor(),
       realtime: data.userrealtime,
       inConversation: data.userinconversation,
       coords: {
@@ -664,7 +664,7 @@ const Realtime = {
       }
     }
 
-    if (data.userid !== Metamaps.Active.Mapper.id) {
+    if (data.userid !== Active.Mapper.id) {
       self.room.chat.addParticipant(self.mappersOnMap[data.userid])
       if (data.userinconversation) self.room.chat.mapperJoinedCall(data.userid)
 
@@ -687,7 +687,7 @@ const Realtime = {
       name: data.username,
       username: data.username,
       image: data.userimage,
-      color: Metamaps.Util.getPastelColor(),
+      color: Util.getPastelColor(),
       realtime: true,
       coords: {
         x: 0,
@@ -696,7 +696,7 @@ const Realtime = {
     }
 
     // create an item for them in the realtime box
-    if (data.userid !== Metamaps.Active.Mapper.id && self.status) {
+    if (data.userid !== Active.Mapper.id && self.status) {
       self.room.chat.sound.play('joinmap')
       self.room.chat.addParticipant(self.mappersOnMap[data.userid])
 
@@ -707,17 +707,17 @@ const Realtime = {
       if (firstOtherPerson) {
         notifyMessage += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.inviteACall(' + data.userid + ')">Suggest A Video Call</button>'
       }
-      Metamaps.GlobalUI.notifyUser(notifyMessage)
+      GlobalUI.notifyUser(notifyMessage)
 
       // send this new mapper back your details, and the awareness that you've loaded the map
       var update = {
         userToNotify: data.userid,
-        username: Metamaps.Active.Mapper.get('name'),
-        userimage: Metamaps.Active.Mapper.get('image'),
-        userid: Metamaps.Active.Mapper.id,
+        username: Active.Mapper.get('name'),
+        userimage: Active.Mapper.get('image'),
+        userid: Active.Mapper.id,
         userrealtime: self.status,
         userinconversation: self.inConversation,
-        mapid: Metamaps.Active.Map.id
+        mapid: Active.Map.id
       }
       socket.emit('updateNewMapperList', update)
     }
@@ -753,7 +753,7 @@ const Realtime = {
     $('#compass' + data.userid).remove()
     self.room.chat.removeParticipant(data.username)
 
-    Metamaps.GlobalUI.notifyUser(data.username + ' just left the map')
+    GlobalUI.notifyUser(data.username + ' just left the map')
 
     if ((self.inConversation && self.countOthersInConversation() === 0) ||
       (!self.inConversation && self.countOthersInConversation() === 1)) {
@@ -772,7 +772,7 @@ const Realtime = {
     // $('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn')
     $('#compass' + data.userid).show()
 
-    Metamaps.GlobalUI.notifyUser(data.username + ' just turned on realtime')
+    GlobalUI.notifyUser(data.username + ' just turned on realtime')
   },
   lostCollaborator: function (data) {
     var self = Realtime
@@ -786,7 +786,7 @@ const Realtime = {
     // $('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff')
     $('#compass' + data.userid).hide()
 
-    Metamaps.GlobalUI.notifyUser(data.username + ' just turned off realtime')
+    GlobalUI.notifyUser(data.username + ' just turned off realtime')
   },
   updatePeerCoords: function (data) {
     var self = Realtime
@@ -819,7 +819,7 @@ const Realtime = {
     var compassDiameter = 56
     var compassArrowSize = 24
 
-    var origPixels = Metamaps.Util.coordsToPixels(mapper.coords)
+    var origPixels = Util.coordsToPixels(mapper.coords)
     var pixels = self.limitPixelsToScreen(origPixels)
     $('#compass' + id).css({
       left: pixels.x + 'px',
@@ -867,14 +867,14 @@ const Realtime = {
     var self = Realtime
     var socket = Realtime.socket
 
-    var map = Metamaps.Active.Map
-    var mapper = Metamaps.Active.Mapper
+    var map = Active.Map
+    var mapper = Active.Mapper
 
     if (self.status && map.authorizeToEdit(mapper) && socket) {
       var update = {
         usercoords: coords,
-        userid: Metamaps.Active.Mapper.id,
-        mapid: Metamaps.Active.Map.id
+        userid: Active.Mapper.id,
+        mapid: Active.Map.id
       }
       socket.emit('updateMapperCoords', update)
     }
@@ -883,8 +883,8 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Metamaps.Active.Map && self.status) {
-      positions.mapid = Metamaps.Active.Map.id
+    if (Active.Map && self.status) {
+      positions.mapid = Active.Map.id
       socket.emit('topicDrag', positions)
     }
   },
@@ -895,13 +895,13 @@ const Realtime = {
     var topic
     var node
 
-    if (Metamaps.Active.Map && self.status) {
+    if (Active.Map && self.status) {
       for (var key in positions) {
         topic = Metamaps.Topics.get(key)
         if (topic) node = topic.get('node')
         if (node) node.pos.setc(positions[key].x, positions[key].y)
       } // for
-      Metamaps.Visualize.mGraph.plot()
+      Visualize.mGraph.plot()
     }
   },
   sendTopicChange: function (topic) {
@@ -960,23 +960,23 @@ const Realtime = {
     socket.emit('mapChangeFromClient', data)
   },
   mapChange: function (data) {
-    var map = Metamaps.Active.Map
+    var map = Active.Map
     var isActiveMap = map && data.mapId === map.id
     if (isActiveMap) {
-      var couldEditBefore = map.authorizeToEdit(Metamaps.Active.Mapper)
+      var couldEditBefore = map.authorizeToEdit(Active.Mapper)
       var idBefore = map.id
       map.fetch({
         success: function (model, response) {
           var idNow = model.id
-          var canEditNow = model.authorizeToEdit(Metamaps.Active.Mapper)
+          var canEditNow = model.authorizeToEdit(Active.Mapper)
           if (idNow !== idBefore) {
-            Metamaps.Map.leavePrivateMap() // this means the map has been changed to private
+            Map.leavePrivateMap() // this means the map has been changed to private
           }
           else if (couldEditBefore && !canEditNow) {
-            Metamaps.Map.cantEditNow()
+            Map.cantEditNow()
           }
           else if (!couldEditBefore && canEditNow) {
-            Metamaps.Map.canEditNow()
+            Map.canEditNow()
           } else {
             model.fetchContained()
             model.trigger('changeByOther')
@@ -991,7 +991,7 @@ const Realtime = {
     var socket = self.socket
 
     var message = data.attributes
-    message.mapid = Metamaps.Active.Map.id
+    message.mapid = Active.Map.id
     socket.emit('newMessage', message)
   },
   newMessage: function (data) {
@@ -1005,14 +1005,14 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Metamaps.Active.Map && self.status) {
-      data.mapperid = Metamaps.Active.Mapper.id
-      data.mapid = Metamaps.Active.Map.id
+    if (Active.Map && self.status) {
+      data.mapperid = Active.Mapper.id
+      data.mapid = Active.Map.id
       socket.emit('newTopic', data)
     }
   },
   newTopic: function (data) {
-    var topic, mapping, mapper, mapperCallback, cancel
+    var topic, mapping, mapper, cancel
 
     var self = Realtime
     var socket = self.socket
@@ -1021,7 +1021,7 @@ const Realtime = {
 
     function waitThenRenderTopic () {
       if (topic && mapping && mapper) {
-        Metamaps.Topic.renderTopic(mapping, topic, false, false)
+        Topic.renderTopic(mapping, topic, false, false)
       }
       else if (!cancel) {
         setTimeout(waitThenRenderTopic, 10)
@@ -1030,11 +1030,10 @@ const Realtime = {
 
     mapper = Metamaps.Mappers.get(data.mapperid)
     if (mapper === undefined) {
-      mapperCallback = function (m) {
+      Mapper.get(data.mapperid, function(m) {
         Metamaps.Mappers.add(m)
         mapper = m
-      }
-      Metamaps.Mapper.get(data.mapperid, mapperCallback)
+      })
     }
     $.ajax({
       url: '/topics/' + data.mappableid + '.json',
@@ -1064,7 +1063,7 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Metamaps.Active.Map) {
+    if (Active.Map) {
       socket.emit('deleteTopicFromClient', data)
     }
   },
@@ -1073,8 +1072,8 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Metamaps.Active.Map) {
-      data.mapid = Metamaps.Active.Map.id
+    if (Active.Map) {
+      data.mapid = Active.Map.id
       socket.emit('removeTopic', data)
     }
   },
@@ -1088,7 +1087,7 @@ const Realtime = {
     if (topic) {
       var node = topic.get('node')
       var mapping = topic.getMapping()
-      Metamaps.Control.hideNode(node.id)
+      Control.hideNode(node.id)
       Metamaps.Topics.remove(topic)
       Metamaps.Mappings.remove(mapping)
     }
@@ -1098,9 +1097,9 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Metamaps.Active.Map) {
-      data.mapperid = Metamaps.Active.Mapper.id
-      data.mapid = Metamaps.Active.Map.id
+    if (Active.Map) {
+      data.mapperid = Active.Mapper.id
+      data.mapid = Active.Map.id
       socket.emit('newSynapse', data)
     }
   },
@@ -1119,7 +1118,7 @@ const Realtime = {
         topic2 = synapse.getTopic2()
         node2 = topic2.get('node')
 
-        Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, false)
+        Synapse.renderSynapse(mapping, synapse, node1, node2, false)
       }
       else if (!cancel) {
         setTimeout(waitThenRenderSynapse, 10)
@@ -1128,11 +1127,10 @@ const Realtime = {
 
     mapper = Metamaps.Mappers.get(data.mapperid)
     if (mapper === undefined) {
-      mapperCallback = function (m) {
+      Mapper.get(data.mapperid, function(m) {
         Metamaps.Mappers.add(m)
         mapper = m
-      }
-      Metamaps.Mapper.get(data.mapperid, mapperCallback)
+      })
     }
     $.ajax({
       url: '/synapses/' + data.mappableid + '.json',
@@ -1161,8 +1159,8 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Metamaps.Active.Map) {
-      data.mapid = Metamaps.Active.Map.id
+    if (Active.Map) {
+      data.mapid = Active.Map.id
       socket.emit('deleteSynapseFromClient', data)
     }
   },
@@ -1171,8 +1169,8 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Metamaps.Active.Map) {
-      data.mapid = Metamaps.Active.Map.id
+    if (Active.Map) {
+      data.mapid = Active.Map.id
       socket.emit('removeSynapse', data)
     }
   },
@@ -1187,7 +1185,7 @@ const Realtime = {
       var edge = synapse.get('edge')
       var mapping = synapse.getMapping()
       if (edge.getData('mappings').length - 1 === 0) {
-        Metamaps.Control.hideEdge(edge)
+        Control.hideEdge(edge)
       }
 
       var index = _.indexOf(edge.getData('synapses'), synapse)

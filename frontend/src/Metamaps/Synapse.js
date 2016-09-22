@@ -1,20 +1,22 @@
 /* global Metamaps, $ */
 
+import Active from './Active'
+import Control from './Control'
+import Create from './Create'
+import JIT from './JIT'
+import Map from './Map'
+import Selected from './Selected'
+import Settings from './Settings'
+import Visualize from './Visualize'
+
 /*
  * Metamaps.Synapse.js.erb
  *
  * Dependencies:
  *  - Metamaps.Backbone
- *  - Metamaps.Control
- *  - Metamaps.Create
- *  - Metamaps.JIT
- *  - Metamaps.Map
  *  - Metamaps.Mappings
- *  - Metamaps.Selected
- *  - Metamaps.Settings
  *  - Metamaps.Synapses
  *  - Metamaps.Topics
- *  - Metamaps.Visualize
  */
 
 const Synapse = {
@@ -52,18 +54,18 @@ const Synapse = {
    *
    */
   renderSynapse: function (mapping, synapse, node1, node2, createNewInDB) {
-    var self = Metamaps.Synapse
+    var self = Synapse
 
     var edgeOnViz
 
     var newedge = synapse.createEdge(mapping)
 
-    Metamaps.Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data)
-    edgeOnViz = Metamaps.Visualize.mGraph.graph.getAdjacence(node1.id, node2.id)
+    Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data)
+    edgeOnViz = Visualize.mGraph.graph.getAdjacence(node1.id, node2.id)
     synapse.set('edge', edgeOnViz)
     synapse.updateEdge() // links the synapse and the mapping to the edge
 
-    Metamaps.Control.selectEdge(edgeOnViz)
+    Control.selectEdge(edgeOnViz)
 
     var mappingSuccessCallback = function (mappingModel, response) {
       var newSynapseData = {
@@ -71,17 +73,17 @@ const Synapse = {
         mappableid: mappingModel.get('mappable_id')
       }
 
-      $(document).trigger(Metamaps.JIT.events.newSynapse, [newSynapseData])
+      $(document).trigger(JIT.events.newSynapse, [newSynapseData])
     }
     var synapseSuccessCallback = function (synapseModel, response) {
-      if (Metamaps.Active.Map) {
+      if (Active.Map) {
         mapping.save({ mappable_id: synapseModel.id }, {
           success: mappingSuccessCallback
         })
       }
     }
 
-    if (!Metamaps.Settings.sandbox && createNewInDB) {
+    if (!Settings.sandbox && createNewInDB) {
       if (synapse.isNew()) {
         synapse.save(null, {
           success: synapseSuccessCallback,
@@ -89,7 +91,7 @@ const Synapse = {
             console.log('error saving synapse to database')
           }
         })
-      } else if (!synapse.isNew() && Metamaps.Active.Map) {
+      } else if (!synapse.isNew() && Active.Map) {
         mapping.save(null, {
           success: mappingSuccessCallback
         })
@@ -105,27 +107,27 @@ const Synapse = {
       synapse,
       mapping
 
-    $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
+    $(document).trigger(Map.events.editedByActiveMapper)
 
     // for each node in this array we will create a synapse going to the position2 node.
     var synapsesToCreate = []
 
-    topic2 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic2id)
+    topic2 = Metamaps.Topics.get(Create.newSynapse.topic2id)
     node2 = topic2.get('node')
 
-    var len = Metamaps.Selected.Nodes.length
+    var len = Selected.Nodes.length
     if (len == 0) {
-      topic1 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic1id)
+      topic1 = Metamaps.Topics.get(Create.newSynapse.topic1id)
       synapsesToCreate[0] = topic1.get('node')
     } else if (len > 0) {
-      synapsesToCreate = Metamaps.Selected.Nodes
+      synapsesToCreate = Selected.Nodes
     }
 
     for (var i = 0; i < synapsesToCreate.length; i++) {
       node1 = synapsesToCreate[i]
       topic1 = node1.getData('topic')
       synapse = new Metamaps.Backbone.Synapse({
-        desc: Metamaps.Create.newSynapse.description,
+        desc: Create.newSynapse.description,
         node1_id: topic1.isNew() ? topic1.cid : topic1.id,
         node2_id: topic2.isNew() ? topic2.cid : topic2.id,
       })
@@ -141,7 +143,7 @@ const Synapse = {
       self.renderSynapse(mapping, synapse, node1, node2, true)
     } // for each in synapsesToCreate
 
-    Metamaps.Create.newSynapse.hide()
+    Create.newSynapse.hide()
   },
   getSynapseFromAutocomplete: function (id) {
     var self = Synapse,
@@ -158,11 +160,11 @@ const Synapse = {
     })
     Metamaps.Mappings.add(mapping)
 
-    topic1 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic1id)
+    topic1 = Metamaps.Topics.get(Create.newSynapse.topic1id)
     node1 = topic1.get('node')
-    topic2 = Metamaps.Topics.get(Metamaps.Create.newSynapse.topic2id)
+    topic2 = Metamaps.Topics.get(Create.newSynapse.topic2id)
     node2 = topic2.get('node')
-    Metamaps.Create.newSynapse.hide()
+    Create.newSynapse.hide()
 
     self.renderSynapse(mapping, synapse, node1, node2, true)
   }

@@ -1,6 +1,6 @@
-const Debug = () => {
-  console.debug(window.Metamaps)
-  console.debug(`Metamaps Version: ${window.Metamaps.VERSION}`)
+const Debug = (arg = window.Metamaps) => {
+  console.debug(arg)
+  console.debug(`Metamaps Version: ${arg.VERSION}`)
 }
 
 export default Debug

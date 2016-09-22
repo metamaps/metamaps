@@ -1,5 +1,30 @@
 /* global Metamaps */
 
+import Active from './Active'
+import Control from './Control'
+import Create from './Create'
+import Filter from './Filter'
+import GlobalUI from './GlobalUI'
+import Map from './Map'
+import Mouse from './Mouse'
+import Realtime from './Realtime'
+import Selected from './Selected'
+import Settings from './Settings'
+import Synapse from './Synapse'
+import SynapseCard from './SynapseCard'
+import Topic from './Topic'
+import TopicCard from './TopicCard'
+import Util from './Util'
+import Visualize from './Visualize'
+
+/*
+ * Metamaps.Erb
+ * Metamaps.Mappings
+ * Metamaps.Metacodes
+ * Metamaps.Synapses
+ * Metamaps.Topics
+ */
+
 let panningInt
 
 const JIT = {
@@ -30,11 +55,11 @@ const JIT = {
     $('.zoomOut').click(self.zoomOut)
 
     var zoomExtents = function (event) {
-      self.zoomExtents(event, Metamaps.Visualize.mGraph.canvas)
+      self.zoomExtents(event, Visualize.mGraph.canvas)
     }
     $('.zoomExtents').click(zoomExtents)
 
-    $('.takeScreenshot').click(Metamaps.Map.exportImage)
+    $('.takeScreenshot').click(Map.exportImage)
 
     self.topicDescImage = new Image()
     self.topicDescImage.src = Metamaps.Erb['topic_description_signifier.png']
@@ -80,7 +105,7 @@ const JIT = {
 
         if (existingEdge) {
           // for when you're dealing with multiple relationships between the same two topics
-          if (Metamaps.Active.Map) {
+          if (Active.Map) {
             mapping = s.getMapping()
             existingEdge.data['$mappingIDs'].push(mapping.id)
           }
@@ -105,7 +130,7 @@ const JIT = {
 
     // reset/empty vizData
     self.vizData = []
-    Metamaps.Visualize.loadLater = false
+    Visualize.loadLater = false
 
     var results = self.convertModelsToJIT(Metamaps.Topics, Metamaps.Synapses)
 
@@ -121,12 +146,12 @@ const JIT = {
     if (self.vizData.length == 0) {
       $('#instructions div').hide()
       $('#instructions div.addTopic').show()
-      Metamaps.GlobalUI.showDiv('#instructions')
-      Metamaps.Visualize.loadLater = true
+      GlobalUI.showDiv('#instructions')
+      Visualize.loadLater = true
     }
-    else Metamaps.GlobalUI.hideDiv('#instructions')
+    else GlobalUI.hideDiv('#instructions')
 
-    Metamaps.Visualize.render()
+    Visualize.render()
   }, // prepareVizData
   edgeRender: function (adj, canvas) {
     // get nodes cartesian coordinates 
@@ -151,7 +176,7 @@ const JIT = {
 
     // label placement on edges
     if (canvas.denySelected) {
-      var color = Metamaps.Settings.colors.synapses.normal
+      var color = Settings.colors.synapses.normal
       canvas.getCtx().fillStyle = canvas.getCtx().strokeStyle = color
     }
     JIT.renderEdgeArrows($jit.Graph.Plot.edgeHelper, adj, synapse, canvas)
@@ -191,7 +216,7 @@ const JIT = {
 
     if (!canvas.denySelected && desc != '' && showDesc) {
       // '&amp;' to '&'
-      desc = Metamaps.Util.decodeEntities(desc)
+      desc = Util.decodeEntities(desc)
 
       // now adjust the label placement 
       var ctx = canvas.getCtx()
@@ -199,7 +224,7 @@ const JIT = {
       ctx.fillStyle = '#FFF'
       ctx.textBaseline = 'alphabetic'
 
-      var arrayOfLabelLines = Metamaps.Util.splitLine(desc, 30).split('\n')
+      var arrayOfLabelLines = Util.splitLine(desc, 30).split('\n')
       var index, lineWidths = []
       for (index = 0; index < arrayOfLabelLines.length; ++index) {
         lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
@@ -258,7 +283,7 @@ const JIT = {
       transition: $jit.Trans.Quad.easeInOut,
       duration: 800,
       onComplete: function () {
-        Metamaps.Visualize.mGraph.busy = false
+        Visualize.mGraph.busy = false
         $(document).trigger(JIT.events.animationDone)
       }
     },
@@ -267,7 +292,7 @@ const JIT = {
       transition: $jit.Trans.Elastic.easeOut,
       duration: 800,
       onComplete: function () {
-        Metamaps.Visualize.mGraph.busy = false
+        Visualize.mGraph.busy = false
       }
     },
     graphSettings: {
@@ -306,7 +331,7 @@ const JIT = {
       },
       Edge: {
         overridable: true,
-        color: Metamaps.Settings.colors.synapses.normal,
+        color: Settings.colors.synapses.normal,
         type: 'customEdge',
         lineWidth: 2,
         alpha: 1
@@ -317,7 +342,7 @@ const JIT = {
         size: 20,
         family: 'arial',
         textBaseline: 'alphabetic',
-        color: Metamaps.Settings.colors.labels.text
+        color: Settings.colors.labels.text
       },
       // Add Tips
       Tips: {
@@ -359,26 +384,26 @@ const JIT = {
           // remove the rightclickmenu
           $('.rightclickmenu').remove()
 
-          if (Metamaps.Mouse.boxStartCoordinates) {
+          if (Mouse.boxStartCoordinates) {
             if (e.ctrlKey) {
-              Metamaps.Visualize.mGraph.busy = false
-              Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos()
+              Visualize.mGraph.busy = false
+              Mouse.boxEndCoordinates = eventInfo.getPos()
 
-              var bS = Metamaps.Mouse.boxStartCoordinates
-              var bE = Metamaps.Mouse.boxEndCoordinates
+              var bS = Mouse.boxStartCoordinates
+              var bE = Mouse.boxEndCoordinates
               if (Math.abs(bS.x - bE.x) > 20 && Math.abs(bS.y - bE.y) > 20) {
                 JIT.zoomToBox(e)
                 return
               } else {
-                Metamaps.Mouse.boxStartCoordinates = null
-                Metamaps.Mouse.boxEndCoordinates = null
+                Mouse.boxStartCoordinates = null
+                Mouse.boxEndCoordinates = null
               }
             // console.log('called zoom to box')
             }
 
             if (e.shiftKey) {
-              Metamaps.Visualize.mGraph.busy = false
-              Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos()
+              Visualize.mGraph.busy = false
+              Mouse.boxEndCoordinates = eventInfo.getPos()
               JIT.selectWithBox(e)
               // console.log('called select with box')
               return
@@ -404,9 +429,9 @@ const JIT = {
           // remove the rightclickmenu
           $('.rightclickmenu').remove()
 
-          if (Metamaps.Mouse.boxStartCoordinates) {
-            Metamaps.Visualize.mGraph.busy = false
-            Metamaps.Mouse.boxEndCoordinates = eventInfo.getPos()
+          if (Mouse.boxStartCoordinates) {
+            Visualize.mGraph.busy = false
+            Mouse.boxEndCoordinates = eventInfo.getPos()
             JIT.selectWithBox(e)
             return
           }
@@ -441,7 +466,7 @@ const JIT = {
           if (!canvas.denySelected && node.selected) {
             ctx.beginPath()
             ctx.arc(pos.x, pos.y, dim + 3, 0, 2 * Math.PI, false)
-            ctx.strokeStyle = Metamaps.Settings.colors.topics.selected
+            ctx.strokeStyle = Settings.colors.topics.selected
             ctx.lineWidth = 2
             ctx.stroke()
           }
@@ -482,8 +507,8 @@ const JIT = {
         'contains': function (node, pos) {
           var npos = node.pos.getc(true),
             dim = node.getData('dim'),
-            arrayOfLabelLines = Metamaps.Util.splitLine(node.name, 30).split('\n'),
-            ctx = Metamaps.Visualize.mGraph.canvas.getCtx()
+            arrayOfLabelLines = Util.splitLine(node.name, 30).split('\n'),
+            ctx = Visualize.mGraph.canvas.getCtx()
 
           var height = 25 * arrayOfLabelLines.length
 
@@ -528,7 +553,7 @@ const JIT = {
       transition: $jit.Trans.Elastic.easeOut,
       duration: 2500,
       onComplete: function () {
-        Metamaps.Visualize.mGraph.busy = false
+        Visualize.mGraph.busy = false
       }
     },
     graphSettings: {
@@ -589,13 +614,13 @@ const JIT = {
         onMouseMove: function (node, eventInfo, e) {
           // if(this.i++ % 3) return
           var pos = eventInfo.getPos()
-          Metamaps.Visualize.cameraPosition.x += (pos.x - Metamaps.Visualize.cameraPosition.x) * 0.5
-          Metamaps.Visualize.cameraPosition.y += (-pos.y - Metamaps.Visualize.cameraPosition.y) * 0.5
-          Metamaps.Visualize.mGraph.plot()
+          Visualize.cameraPosition.x += (pos.x - Visualize.cameraPosition.x) * 0.5
+          Visualize.cameraPosition.y += (-pos.y - Visualize.cameraPosition.y) * 0.5
+          Visualize.mGraph.plot()
         },
         onMouseWheel: function (delta) {
-          Metamaps.Visualize.cameraPosition.z += -delta * 20
-          Metamaps.Visualize.mGraph.plot()
+          Visualize.cameraPosition.z += -delta * 20
+          Visualize.mGraph.plot()
         },
         onClick: function () {}
       },
@@ -616,7 +641,7 @@ const JIT = {
       modes: ['polar'],
       duration: 800,
       onComplete: function () {
-        Metamaps.Visualize.mGraph.busy = false
+        Visualize.mGraph.busy = false
       }
     },
     // this will just be used to patch the ForceDirected graphsettings with the few things which actually differ
@@ -636,10 +661,10 @@ const JIT = {
 
     // don't do anything if the edge is filtered
     // or if the canvas is animating        
-    if (filtered || Metamaps.Visualize.mGraph.busy) return
+    if (filtered || Visualize.mGraph.busy) return
 
     $('canvas').css('cursor', 'pointer')
-    var edgeIsSelected = Metamaps.Selected.Edges.indexOf(edge)
+    var edgeIsSelected = Selected.Edges.indexOf(edge)
     // following if statement only executes if the edge being hovered over is not selected
     if (edgeIsSelected == -1) {
       edge.setData('showDesc', true, 'current')
@@ -648,16 +673,16 @@ const JIT = {
     edge.setDataset('end', {
       lineWidth: 4
     })
-    Metamaps.Visualize.mGraph.fx.animate({
+    Visualize.mGraph.fx.animate({
       modes: ['edge-property:lineWidth'],
       duration: 100
     })
-    Metamaps.Visualize.mGraph.plot()
+    Visualize.mGraph.plot()
   }, // onMouseEnter
   onMouseLeave: function (edge) {
     if (edge.getData('alpha') === 0) return; // don't do anything if the edge is filtered
     $('canvas').css('cursor', 'default')
-    var edgeIsSelected = Metamaps.Selected.Edges.indexOf(edge)
+    var edgeIsSelected = Selected.Edges.indexOf(edge)
     // following if statement only executes if the edge being hovered over is not selected
     if (edgeIsSelected == -1) {
       edge.setData('showDesc', false, 'current')
@@ -666,65 +691,65 @@ const JIT = {
     edge.setDataset('end', {
       lineWidth: 2
     })
-    Metamaps.Visualize.mGraph.fx.animate({
+    Visualize.mGraph.fx.animate({
       modes: ['edge-property:lineWidth'],
       duration: 100
     })
-    Metamaps.Visualize.mGraph.plot()
+    Visualize.mGraph.plot()
   }, // onMouseLeave
   onMouseMoveHandler: function (node, eventInfo, e) {
     var self = JIT
 
-    if (Metamaps.Visualize.mGraph.busy) return
+    if (Visualize.mGraph.busy) return
 
     var node = eventInfo.getNode()
     var edge = eventInfo.getEdge()
 
     // if we're on top of a node object, act like there aren't edges under it
     if (node != false) {
-      if (Metamaps.Mouse.edgeHoveringOver) {
-        self.onMouseLeave(Metamaps.Mouse.edgeHoveringOver)
+      if (Mouse.edgeHoveringOver) {
+        self.onMouseLeave(Mouse.edgeHoveringOver)
       }
       $('canvas').css('cursor', 'pointer')
       return
     }
 
-    if (edge == false && Metamaps.Mouse.edgeHoveringOver != false) {
+    if (edge == false && Mouse.edgeHoveringOver != false) {
       // mouse not on an edge, but we were on an edge previously
-      self.onMouseLeave(Metamaps.Mouse.edgeHoveringOver)
-    } else if (edge != false && Metamaps.Mouse.edgeHoveringOver == false) {
+      self.onMouseLeave(Mouse.edgeHoveringOver)
+    } else if (edge != false && Mouse.edgeHoveringOver == false) {
       // mouse is on an edge, but there isn't a stored edge
       self.onMouseEnter(edge)
-    } else if (edge != false && Metamaps.Mouse.edgeHoveringOver != edge) {
+    } else if (edge != false && Mouse.edgeHoveringOver != edge) {
       // mouse is on an edge, but a different edge is stored
-      self.onMouseLeave(Metamaps.Mouse.edgeHoveringOver)
+      self.onMouseLeave(Mouse.edgeHoveringOver)
       self.onMouseEnter(edge)
     }
 
     // could be false
-    Metamaps.Mouse.edgeHoveringOver = edge
+    Mouse.edgeHoveringOver = edge
 
     if (!node && !edge) {
       $('canvas').css('cursor', 'default')
     }
   }, // onMouseMoveHandler
   enterKeyHandler: function () {
-    var creatingMap = Metamaps.GlobalUI.lightbox
+    var creatingMap = GlobalUI.lightbox
     if (creatingMap === 'newmap' || creatingMap === 'forkmap') {
-      Metamaps.GlobalUI.CreateMap.submit()
+      GlobalUI.CreateMap.submit()
     }
     // this is to submit new topic creation
-    else if (Metamaps.Create.newTopic.beingCreated) {
-      Metamaps.Topic.createTopicLocally()
+    else if (Create.newTopic.beingCreated) {
+      Topic.createTopicLocally()
     }
     // to submit new synapse creation 
-    else if (Metamaps.Create.newSynapse.beingCreated) {
-      Metamaps.Synapse.createSynapseLocally()
+    else if (Create.newSynapse.beingCreated) {
+      Synapse.createSynapseLocally()
     }
   }, // enterKeyHandler
   escKeyHandler: function () {
-    Metamaps.Control.deselectAllEdges()
-    Metamaps.Control.deselectAllNodes()
+    Control.deselectAllEdges()
+    Control.deselectAllNodes()
   }, // escKeyHandler
   onDragMoveTopicHandler: function (node, eventInfo, e) {
     var self = JIT
@@ -734,7 +759,7 @@ const JIT = {
     var positionsToSend = {}
     var topic
 
-    var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)
+    var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     if (node && !node.nodeFrom) {
       var pos = eventInfo.getPos()
@@ -750,7 +775,7 @@ const JIT = {
         } else if (whatToDo == 'only-drag-this-one') {
           node.pos.setc(pos.x, pos.y)
 
-          if (Metamaps.Active.Map) {
+          if (Active.Map) {
             topic = node.getData('topic')
             // we use the topic ID not the node id
             // because we can't depend on the node id
@@ -760,24 +785,24 @@ const JIT = {
             $(document).trigger(JIT.events.topicDrag, [positionsToSend])
           }
         } else {
-          var len = Metamaps.Selected.Nodes.length
+          var len = Selected.Nodes.length
 
           // first define offset for each node
           var xOffset = []
           var yOffset = []
           for (var i = 0; i < len; i += 1) {
-            var n = Metamaps.Selected.Nodes[i]
+            var n = Selected.Nodes[i]
             xOffset[i] = n.pos.x - node.pos.x
             yOffset[i] = n.pos.y - node.pos.y
           } // for
 
           for (var i = 0; i < len; i += 1) {
-            var n = Metamaps.Selected.Nodes[i]
+            var n = Selected.Nodes[i]
             var x = pos.x + xOffset[i]
             var y = pos.y + yOffset[i]
             n.pos.setc(x, y)
 
-            if (Metamaps.Active.Map) {
+            if (Active.Map) {
               topic = n.getData('topic')
               // we use the topic ID not the node id
               // because we can't depend on the node id
@@ -787,15 +812,15 @@ const JIT = {
             }
           } // for
 
-          if (Metamaps.Active.Map) {
+          if (Active.Map) {
             $(document).trigger(JIT.events.topicDrag, [positionsToSend])
           }
         } // if
 
         if (whatToDo == 'deselect') {
-          Metamaps.Control.deselectNode(node)
+          Control.deselectNode(node)
         }
-        Metamaps.Visualize.mGraph.plot()
+        Visualize.mGraph.plot()
       }
       // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
       else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && authorized) {
@@ -803,48 +828,48 @@ const JIT = {
           JIT.tempNode = node
           JIT.tempInit = true
 
-          Metamaps.Create.newTopic.hide()
-          Metamaps.Create.newSynapse.hide()
+          Create.newTopic.hide()
+          Create.newSynapse.hide()
           // set the draw synapse start positions
-          var l = Metamaps.Selected.Nodes.length
+          var l = Selected.Nodes.length
           if (l > 0) {
             for (var i = l - 1; i >= 0; i -= 1) {
-              var n = Metamaps.Selected.Nodes[i]
-              Metamaps.Mouse.synapseStartCoordinates.push({
+              var n = Selected.Nodes[i]
+              Mouse.synapseStartCoordinates.push({
                 x: n.pos.getc().x,
                 y: n.pos.getc().y
               })
             }
           } else {
-            Metamaps.Mouse.synapseStartCoordinates = [{
+            Mouse.synapseStartCoordinates = [{
               x: JIT.tempNode.pos.getc().x,
               y: JIT.tempNode.pos.getc().y
             }]
           }
-          Metamaps.Mouse.synapseEndCoordinates = {
+          Mouse.synapseEndCoordinates = {
             x: pos.x,
             y: pos.y
           }
         }
         //
         let temp = eventInfo.getNode()
-        if (temp != false && temp.id != node.id && Metamaps.Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
+        if (temp != false && temp.id != node.id && Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
           JIT.tempNode2 = temp
 
-          Metamaps.Mouse.synapseEndCoordinates = {
+          Mouse.synapseEndCoordinates = {
             x: JIT.tempNode2.pos.getc().x,
             y: JIT.tempNode2.pos.getc().y
           }
 
           // before making the highlighted one bigger, make sure all the others are regular size
-          Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+          Visualize.mGraph.graph.eachNode(function (n) {
             n.setData('dim', 25, 'current')
           })
           temp.setData('dim', 35, 'current')
-          Metamaps.Visualize.mGraph.plot()
+          Visualize.mGraph.plot()
         } else if (!temp) {
           JIT.tempNode2 = null
-          Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+          Visualize.mGraph.graph.eachNode(function (n) {
             n.setData('dim', 25, 'current')
           })
           // pop up node creation :)
@@ -852,21 +877,21 @@ const JIT = {
           var myY = e.clientY - 30
           $('#new_topic').css('left', myX + 'px')
           $('#new_topic').css('top', myY + 'px')
-          Metamaps.Create.newTopic.x = eventInfo.getPos().x
-          Metamaps.Create.newTopic.y = eventInfo.getPos().y
-          Metamaps.Visualize.mGraph.plot()
+          Create.newTopic.x = eventInfo.getPos().x
+          Create.newTopic.y = eventInfo.getPos().y
+          Visualize.mGraph.plot()
 
-          Metamaps.Mouse.synapseEndCoordinates = {
+          Mouse.synapseEndCoordinates = {
             x: pos.x,
             y: pos.y
           }
         }
       }
-      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Metamaps.Active.Topic) {
-        Metamaps.GlobalUI.notifyUser('Cannot create in Topic view.')
+      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Active.Topic) {
+        GlobalUI.notifyUser('Cannot create in Topic view.')
       }
       else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && !authorized) {
-        Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+        GlobalUI.notifyUser('Cannot edit Public map.')
       }
     }
   }, // onDragMoveTopicHandler
@@ -876,30 +901,30 @@ const JIT = {
     JIT.tempNode2 = null
     JIT.tempInit = false
     // reset the draw synapse positions to false
-    Metamaps.Mouse.synapseStartCoordinates = []
-    Metamaps.Mouse.synapseEndCoordinates = null
-    Metamaps.Visualize.mGraph.plot()
+    Mouse.synapseStartCoordinates = []
+    Mouse.synapseEndCoordinates = null
+    Visualize.mGraph.plot()
   }, // onDragCancelHandler
   onDragEndTopicHandler: function (node, eventInfo, e) {
     var midpoint = {}, pixelPos, mapping
 
     if (JIT.tempInit && JIT.tempNode2 == null) {
       // this means you want to add a new topic, and then a synapse
-      Metamaps.Create.newTopic.addSynapse = true
-      Metamaps.Create.newTopic.open()
+      Create.newTopic.addSynapse = true
+      Create.newTopic.open()
     } else if (JIT.tempInit && JIT.tempNode2 != null) {
       // this means you want to create a synapse between two existing topics
-      Metamaps.Create.newTopic.addSynapse = false
-      Metamaps.Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
-      Metamaps.Create.newSynapse.topic2id = JIT.tempNode2.getData('topic').id
+      Create.newTopic.addSynapse = false
+      Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
+      Create.newSynapse.topic2id = JIT.tempNode2.getData('topic').id
       JIT.tempNode2.setData('dim', 25, 'current')
-      Metamaps.Visualize.mGraph.plot()
+      Visualize.mGraph.plot()
       midpoint.x = JIT.tempNode.pos.getc().x + (JIT.tempNode2.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
       midpoint.y = JIT.tempNode.pos.getc().y + (JIT.tempNode2.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
-      pixelPos = Metamaps.Util.coordsToPixels(midpoint)
+      pixelPos = Util.coordsToPixels(midpoint)
       $('#new_synapse').css('left', pixelPos.x + 'px')
       $('#new_synapse').css('top', pixelPos.y + 'px')
-      Metamaps.Create.newSynapse.open()
+      Create.newSynapse.open()
       JIT.tempNode = null
       JIT.tempNode2 = null
       JIT.tempInit = false
@@ -908,17 +933,17 @@ const JIT = {
 
       // check whether to save mappings
       var checkWhetherToSave = function () {
-        var map = Metamaps.Active.Map
+        var map = Active.Map
 
         if (!map) return false
 
-        var mapper = Metamaps.Active.Mapper
+        var mapper = Active.Mapper
         // this case
         // covers when it is a public map owned by you
         // and also when it's a private map
         var activeMappersMap = map.authorizePermissionChange(mapper)
         var commonsMap = map.get('permission') === 'commons'
-        var realtimeOn = Metamaps.Realtime.status
+        var realtimeOn = Realtime.status
 
         // don't save if commons map, and you have realtime off, 
         // even if you're map creator
@@ -932,9 +957,9 @@ const JIT = {
           yloc: node.getPos().y
         })
         // also save any other selected nodes that also got dragged along
-        var l = Metamaps.Selected.Nodes.length
+        var l = Selected.Nodes.length
         for (var i = l - 1; i >= 0; i -= 1) {
-          var n = Metamaps.Selected.Nodes[i]
+          var n = Selected.Nodes[i]
           if (n !== node) {
             mapping = n.getData('mapping')
             mapping.save({
@@ -948,61 +973,61 @@ const JIT = {
   }, // onDragEndTopicHandler
   canvasClickHandler: function (canvasLoc, e) {
     // grab the location and timestamp of the click 
-    var storedTime = Metamaps.Mouse.lastCanvasClick
+    var storedTime = Mouse.lastCanvasClick
     var now = Date.now() // not compatible with IE8 FYI 
-    Metamaps.Mouse.lastCanvasClick = now
+    Mouse.lastCanvasClick = now
 
-    var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)
+    var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
-    if (now - storedTime < Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE && !Metamaps.Mouse.didPan) {
-      if (Metamaps.Active.Map && !authorized) {
-        Metamaps.GlobalUI.notifyUser('Cannot edit Public map.')
+    if (now - storedTime < Mouse.DOUBLE_CLICK_TOLERANCE && !Mouse.didPan) {
+      if (Active.Map && !authorized) {
+        GlobalUI.notifyUser('Cannot edit Public map.')
         return
       }
-      else if (Metamaps.Active.Topic) {
-        Metamaps.GlobalUI.notifyUser('Cannot create in Topic view.')
+      else if (Active.Topic) {
+        GlobalUI.notifyUser('Cannot create in Topic view.')
         return
       }
       // DOUBLE CLICK
       // pop up node creation :) 
-      Metamaps.Create.newTopic.addSynapse = false
-      Metamaps.Create.newTopic.x = canvasLoc.x
-      Metamaps.Create.newTopic.y = canvasLoc.y
+      Create.newTopic.addSynapse = false
+      Create.newTopic.x = canvasLoc.x
+      Create.newTopic.y = canvasLoc.y
       $('#new_topic').css('left', e.clientX + 'px')
       $('#new_topic').css('top', e.clientY + 'px')
-      Metamaps.Create.newTopic.open()
-    } else if (!Metamaps.Mouse.didPan) {
+      Create.newTopic.open()
+    } else if (!Mouse.didPan) {
       // SINGLE CLICK, no pan
-      Metamaps.Filter.close()
-      Metamaps.TopicCard.hideCard()
-      Metamaps.SynapseCard.hideCard()
-      Metamaps.Create.newTopic.hide()
+      Filter.close()
+      TopicCard.hideCard()
+      SynapseCard.hideCard()
+      Create.newTopic.hide()
       $('.rightclickmenu').remove()
       // reset the draw synapse positions to false
-      Metamaps.Mouse.synapseStartCoordinates = []
-      Metamaps.Mouse.synapseEndCoordinates = null
+      Mouse.synapseStartCoordinates = []
+      Mouse.synapseEndCoordinates = null
       JIT.tempInit = false
       JIT.tempNode = null
       JIT.tempNode2 = null
       if (!e.ctrlKey && !e.shiftKey) {
-        Metamaps.Control.deselectAllEdges()
-        Metamaps.Control.deselectAllNodes()
+        Control.deselectAllEdges()
+        Control.deselectAllNodes()
       }
     }
   }, // canvasClickHandler 
   nodeDoubleClickHandler: function (node, e) {
-    Metamaps.TopicCard.showCard(node)
+    TopicCard.showCard(node)
   }, // nodeDoubleClickHandler
   edgeDoubleClickHandler: function (adj, e) {
-    Metamaps.SynapseCard.showCard(adj, e)
+    SynapseCard.showCard(adj, e)
   }, // nodeDoubleClickHandler
   nodeWasDoubleClicked: function () {
     // grab the timestamp of the click 
-    var storedTime = Metamaps.Mouse.lastNodeClick
+    var storedTime = Mouse.lastNodeClick
     var now = Date.now() // not compatible with IE8 FYI 
-    Metamaps.Mouse.lastNodeClick = now
+    Mouse.lastNodeClick = now
 
-    if (now - storedTime < Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE) {
+    if (now - storedTime < Mouse.DOUBLE_CLICK_TOLERANCE) {
       return true
     } else {
       return false
@@ -1015,12 +1040,12 @@ const JIT = {
     // 3 others are selected only, no shift: drag only this one
     // 4 this node and others were selected, so drag them (just return false)
     // return value: deselect node again after?
-    if (Metamaps.Selected.Nodes.length == 0) {
+    if (Selected.Nodes.length == 0) {
       return 'only-drag-this-one'
     }
-    if (Metamaps.Selected.Nodes.indexOf(node) == -1) {
+    if (Selected.Nodes.indexOf(node) == -1) {
       if (e.shiftKey) {
-        Metamaps.Control.selectNode(node, e)
+        Control.selectNode(node, e)
         return 'nothing'
       } else {
         return 'only-drag-this-one'
@@ -1040,18 +1065,18 @@ const JIT = {
   },
   selectWithBox: function (e) {
     var self = this
-    var sX = Metamaps.Mouse.boxStartCoordinates.x,
-      sY = Metamaps.Mouse.boxStartCoordinates.y,
-      eX = Metamaps.Mouse.boxEndCoordinates.x,
-      eY = Metamaps.Mouse.boxEndCoordinates.y
+    var sX = Mouse.boxStartCoordinates.x,
+      sY = Mouse.boxStartCoordinates.y,
+      eX = Mouse.boxEndCoordinates.x,
+      eY = Mouse.boxEndCoordinates.y
 
     if (!e.shiftKey) {
-      Metamaps.Control.deselectAllNodes()
-      Metamaps.Control.deselectAllEdges()
+      Control.deselectAllNodes()
+      Control.deselectAllEdges()
     }
 
     // select all nodes that are within the box
-    Metamaps.Visualize.mGraph.graph.eachNode(function(n) {
+    Visualize.mGraph.graph.eachNode(function(n) {
       var pos = self.getNodeXY(n)
       var x = pos.x,
           y = pos.y
@@ -1064,12 +1089,12 @@ const JIT = {
           (sX < x && x < eX && sY > y && y > eY)) {
         if (e.shiftKey) {
           if (n.selected) {
-            Metamaps.Control.deselectNode(n)
+            Control.deselectNode(n)
           } else {
-            Metamaps.Control.selectNode(n, e)
+            Control.selectNode(n, e)
           }
         } else {
-          Metamaps.Control.selectNode(n, e)
+          Control.selectNode(n, e)
         }
       }
     })
@@ -1170,30 +1195,30 @@ const JIT = {
       if (selectTest) {
         // shiftKey = toggleSelect, otherwise 
         if (e.shiftKey) {
-          if (Metamaps.Selected.Edges.indexOf(edge) != -1) {
-            Metamaps.Control.deselectEdge(edge)
+          if (Selected.Edges.indexOf(edge) != -1) {
+            Control.deselectEdge(edge)
           } else {
-            Metamaps.Control.selectEdge(edge)
+            Control.selectEdge(edge)
           }
         } else {
-          Metamaps.Control.selectEdge(edge)
+          Control.selectEdge(edge)
         }
       }
     })
-    Metamaps.Mouse.boxStartCoordinates = false
-    Metamaps.Mouse.boxEndCoordinates = false
-    Metamaps.Visualize.mGraph.plot()
+    Mouse.boxStartCoordinates = false
+    Mouse.boxEndCoordinates = false
+    Visualize.mGraph.plot()
   }, // selectWithBox
   drawSelectBox: function (eventInfo, e) {
-    var ctx = Metamaps.Visualize.mGraph.canvas.getCtx()
+    var ctx = Visualize.mGraph.canvas.getCtx()
 
-    var startX = Metamaps.Mouse.boxStartCoordinates.x,
-      startY = Metamaps.Mouse.boxStartCoordinates.y,
+    var startX = Mouse.boxStartCoordinates.x,
+      startY = Mouse.boxStartCoordinates.y,
       currX = eventInfo.getPos().x,
       currY = eventInfo.getPos().y
 
-    Metamaps.Visualize.mGraph.canvas.clear()
-    Metamaps.Visualize.mGraph.plot()
+    Visualize.mGraph.canvas.clear()
+    Visualize.mGraph.plot()
 
     ctx.beginPath()
     ctx.moveTo(startX, startY)
@@ -1205,7 +1230,7 @@ const JIT = {
     ctx.stroke()
   }, // drawSelectBox
   selectNodeOnClickHandler: function (node, e) {
-    if (Metamaps.Visualize.mGraph.busy) return
+    if (Visualize.mGraph.busy) return
 
     var self = JIT
 
@@ -1216,8 +1241,8 @@ const JIT = {
     }
 
     // if on a topic page, let alt+click center you on a new topic
-    if (Metamaps.Active.Topic && e.altKey) {
-      Metamaps.RGraph.centerOn(node.id)
+    if (Active.Topic && e.altKey) {
+      JIT.RGraph.centerOn(node.id)
       return
     }
 
@@ -1232,24 +1257,24 @@ const JIT = {
           var nodeAlreadySelected = node.selected
 
           if (!e.shiftKey) {
-            Metamaps.Control.deselectAllNodes()
-            Metamaps.Control.deselectAllEdges()
+            Control.deselectAllNodes()
+            Control.deselectAllEdges()
           }
 
           if (nodeAlreadySelected) {
-            Metamaps.Control.deselectNode(node)
+            Control.deselectNode(node)
           } else {
-            Metamaps.Control.selectNode(node, e)
+            Control.selectNode(node, e)
           }
 
           // trigger animation to final styles
-          Metamaps.Visualize.mGraph.fx.animate({
+          Visualize.mGraph.fx.animate({
             modes: ['edge-property:lineWidth:color:alpha'],
             duration: 500
           })
-          Metamaps.Visualize.mGraph.plot()
+          Visualize.mGraph.plot()
         }
-      }, Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE)
+      }, Mouse.DOUBLE_CLICK_TOLERANCE)
     }
   }, // selectNodeOnClickHandler
   selectNodeOnRightClickHandler: function (node, e) {
@@ -1259,10 +1284,10 @@ const JIT = {
     e.preventDefault()
     e.stopPropagation()
 
-    if (Metamaps.Visualize.mGraph.busy) return
+    if (Visualize.mGraph.busy) return
 
     // select the node
-    Metamaps.Control.selectNode(node, e)
+    Control.selectNode(node, e)
 
     // delete old right click menu
     $('.rightclickmenu').remove()
@@ -1272,20 +1297,20 @@ const JIT = {
     // add the proper options to the menu
     var menustring = '<ul>'
 
-    var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)
+    var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     var disabled = authorized ? '' : 'disabled'
 
-    if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
-    if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Metamaps.Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
+    if (Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
+    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Active.Map && Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
 
-    if (Metamaps.Active.Topic) {
+    if (Active.Topic) {
       menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic<div class="rc-keyboard">Alt+E</div></li>'
     }
     menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>'
-    if (Metamaps.Active.Mapper) {
+    if (Active.Mapper) {
       var options = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
                          <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li> \
                          <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
@@ -1299,8 +1324,8 @@ const JIT = {
 
       menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode' + metacodeOptions + '<div class="expandLi"></div></li>'
     }
-    if (Metamaps.Active.Topic) {
-      if (!Metamaps.Active.Mapper) {
+    if (Active.Topic) {
+      if (!Active.Mapper) {
         menustring += '<li class="rc-spacer"></li>'
       }
 
@@ -1358,30 +1383,30 @@ const JIT = {
     if (authorized) {
       $('.rc-delete').click(function () {
         $('.rightclickmenu').remove()
-        Metamaps.Control.deleteSelected()
+        Control.deleteSelected()
       })
     }
 
     // remove the selected things from the map
-    if (Metamaps.Active.Topic || authorized) {
+    if (Active.Topic || authorized) {
       $('.rc-remove').click(function () {
         $('.rightclickmenu').remove()
-        Metamaps.Control.removeSelectedEdges()
-        Metamaps.Control.removeSelectedNodes()
+        Control.removeSelectedEdges()
+        Control.removeSelectedNodes()
       })
     }
 
     // hide selected nodes and synapses until refresh
     $('.rc-hide').click(function () {
       $('.rightclickmenu').remove()
-      Metamaps.Control.hideSelectedEdges()
-      Metamaps.Control.hideSelectedNodes()
+      Control.hideSelectedEdges()
+      Control.hideSelectedNodes()
     })
 
     // when in radial, center on the topic you picked
     $('.rc-center').click(function () {
       $('.rightclickmenu').remove()
-      Metamaps.Topic.centerOn(node.id)
+      Topic.centerOn(node.id)
     })
 
     // open the entity in a new tab
@@ -1395,14 +1420,14 @@ const JIT = {
     $('.rc-permission li').click(function () {
       $('.rightclickmenu').remove()
       // $(this).text() will be 'commons' 'public' or 'private'
-      Metamaps.Control.updateSelectedPermissions($(this).text())
+      Control.updateSelectedPermissions($(this).text())
     })
 
     // change the metacode of all the selected nodes that you have edit permission for
     $('.rc-metacode li li').click(function () {
       $('.rightclickmenu').remove()
       //
-      Metamaps.Control.updateSelectedMetacodes($(this).attr('data-id'))
+      Control.updateSelectedMetacodes($(this).attr('data-id'))
     })
 
     // fetch relatives
@@ -1416,7 +1441,7 @@ const JIT = {
     $('.rc-siblings .fetchAll').click(function () {
       $('.rightclickmenu').remove()
       // data-id is a metacode id
-      Metamaps.Topic.fetchRelatives(node)
+      Topic.fetchRelatives(node)
     })
   }, // selectNodeOnRightClickHandler,
   populateRightClickSiblings: function (node) {
@@ -1448,7 +1473,7 @@ const JIT = {
       $('.rc-siblings .getSiblings').click(function () {
         $('.rightclickmenu').remove()
         // data-id is a metacode id
-        Metamaps.Topic.fetchRelatives(node, $(this).attr('data-id'))
+        Topic.fetchRelatives(node, $(this).attr('data-id'))
       })
     }
 
@@ -1460,7 +1485,7 @@ const JIT = {
     })
   },
   selectEdgeOnClickHandler: function (adj, e) {
-    if (Metamaps.Visualize.mGraph.busy) return
+    if (Visualize.mGraph.busy) return
 
     var self = JIT
 
@@ -1478,22 +1503,22 @@ const JIT = {
       // wait a certain length of time, then check again, then run this code
       setTimeout(function () {
         if (!JIT.nodeWasDoubleClicked()) {
-          var edgeAlreadySelected = Metamaps.Selected.Edges.indexOf(adj) !== -1
+          var edgeAlreadySelected = Selected.Edges.indexOf(adj) !== -1
 
           if (!e.shiftKey) {
-            Metamaps.Control.deselectAllNodes()
-            Metamaps.Control.deselectAllEdges()
+            Control.deselectAllNodes()
+            Control.deselectAllEdges()
           }
 
           if (edgeAlreadySelected) {
-            Metamaps.Control.deselectEdge(adj)
+            Control.deselectEdge(adj)
           } else {
-            Metamaps.Control.selectEdge(adj)
+            Control.selectEdge(adj)
           }
 
-          Metamaps.Visualize.mGraph.plot()
+          Visualize.mGraph.plot()
         }
-      }, Metamaps.Mouse.DOUBLE_CLICK_TOLERANCE)
+      }, Mouse.DOUBLE_CLICK_TOLERANCE)
     }
   }, // selectEdgeOnClickHandler
   selectEdgeOnRightClickHandler: function (adj, e) {
@@ -1507,9 +1532,9 @@ const JIT = {
     e.preventDefault()
     e.stopPropagation()
 
-    if (Metamaps.Visualize.mGraph.busy) return
+    if (Visualize.mGraph.busy) return
 
-    Metamaps.Control.selectEdge(adj)
+    Control.selectEdge(adj)
 
     // delete old right click menu
     $('.rightclickmenu').remove()
@@ -1520,18 +1545,18 @@ const JIT = {
     // add the proper options to the menu
     var menustring = '<ul>'
 
-    var authorized = Metamaps.Active.Map && Metamaps.Active.Map.authorizeToEdit(Metamaps.Active.Mapper)
+    var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     var disabled = authorized ? '' : 'disabled'
 
-    if (Metamaps.Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
-    if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Metamaps.Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
+    if (Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
+    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
+    if (Active.Map && Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
 
-    if (Metamaps.Active.Map && Metamaps.Active.Mapper) menustring += '<li class="rc-spacer"></li>'
+    if (Active.Map && Active.Mapper) menustring += '<li class="rc-spacer"></li>'
 
-    if (Metamaps.Active.Mapper) {
+    if (Active.Mapper) {
       var permOptions = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
                          <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li> \
                          <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
@@ -1582,7 +1607,7 @@ const JIT = {
     if (authorized) {
       $('.rc-delete').click(function () {
         $('.rightclickmenu').remove()
-        Metamaps.Control.deleteSelected()
+        Control.deleteSelected()
       })
     }
 
@@ -1590,30 +1615,30 @@ const JIT = {
     if (authorized) {
       $('.rc-remove').click(function () {
         $('.rightclickmenu').remove()
-        Metamaps.Control.removeSelectedEdges()
-        Metamaps.Control.removeSelectedNodes()
+        Control.removeSelectedEdges()
+        Control.removeSelectedNodes()
       })
     }
 
     // hide selected nodes and synapses until refresh
     $('.rc-hide').click(function () {
       $('.rightclickmenu').remove()
-      Metamaps.Control.hideSelectedEdges()
-      Metamaps.Control.hideSelectedNodes()
+      Control.hideSelectedEdges()
+      Control.hideSelectedNodes()
     })
 
     // change the permission of all the selected nodes and synapses that you were the originator of
     $('.rc-permission li').click(function () {
       $('.rightclickmenu').remove()
       // $(this).text() will be 'commons' 'public' or 'private'
-      Metamaps.Control.updateSelectedPermissions($(this).text())
+      Control.updateSelectedPermissions($(this).text())
     })
   }, // selectEdgeOnRightClickHandler
   SmoothPanning: function () {
-    var sx = Metamaps.Visualize.mGraph.canvas.scaleOffsetX,
-      sy = Metamaps.Visualize.mGraph.canvas.scaleOffsetY,
-      y_velocity = Metamaps.Mouse.changeInY, // initial y velocity
-      x_velocity = Metamaps.Mouse.changeInX, // initial x velocity
+    var sx = Visualize.mGraph.canvas.scaleOffsetX,
+      sy = Visualize.mGraph.canvas.scaleOffsetY,
+      y_velocity = Mouse.changeInY, // initial y velocity
+      x_velocity = Mouse.changeInX, // initial x velocity
       easing = 1 // frictional value
 
     easing = 1
@@ -1623,7 +1648,7 @@ const JIT = {
     }, 1)
 
     function myTimer () {
-      Metamaps.Visualize.mGraph.canvas.translate(x_velocity * easing * 1 / sx, y_velocity * easing * 1 / sy)
+      Visualize.mGraph.canvas.translate(x_velocity * easing * 1 / sx, y_velocity * easing * 1 / sy)
       $(document).trigger(JIT.events.pan)
       easing = easing * 0.75
 
@@ -1725,11 +1750,11 @@ const JIT = {
     }
   }, // renderEdgeArrows
   zoomIn: function (event) {
-    Metamaps.Visualize.mGraph.canvas.scale(1.25, 1.25)
+    Visualize.mGraph.canvas.scale(1.25, 1.25)
     $(document).trigger(JIT.events.zoom, [event])
   },
   zoomOut: function (event) {
-    Metamaps.Visualize.mGraph.canvas.scale(0.8, 0.8)
+    Visualize.mGraph.canvas.scale(0.8, 0.8)
     $(document).trigger(JIT.events.zoom, [event])
   },
   centerMap: function (canvas) {
@@ -1743,12 +1768,12 @@ const JIT = {
     canvas.translate(-1 * offsetX, -1 * offsetY)
   },
   zoomToBox: function (event) {
-    var sX = Metamaps.Mouse.boxStartCoordinates.x,
-      sY = Metamaps.Mouse.boxStartCoordinates.y,
-      eX = Metamaps.Mouse.boxEndCoordinates.x,
-      eY = Metamaps.Mouse.boxEndCoordinates.y
+    var sX = Mouse.boxStartCoordinates.x,
+      sY = Mouse.boxStartCoordinates.y,
+      eX = Mouse.boxEndCoordinates.x,
+      eY = Mouse.boxEndCoordinates.y
 
-    var canvas = Metamaps.Visualize.mGraph.canvas
+    var canvas = Visualize.mGraph.canvas
     JIT.centerMap(canvas)
 
     var height = $(document).height(),
@@ -1778,9 +1803,9 @@ const JIT = {
     canvas.translate(-1 * cogX, -1 * cogY)
     $(document).trigger(JIT.events.zoom, [event])
 
-    Metamaps.Mouse.boxStartCoordinates = false
-    Metamaps.Mouse.boxEndCoordinates = false
-    Metamaps.Visualize.mGraph.plot()
+    Mouse.boxStartCoordinates = false
+    Mouse.boxEndCoordinates = false
+    Visualize.mGraph.plot()
   },
   zoomExtents: function (event, canvas, denySelected) {
     JIT.centerMap(canvas)
@@ -1788,10 +1813,10 @@ const JIT = {
       width = canvas.getSize().width,
       maxX, minX, maxY, minY, counter = 0
 
-    if (!denySelected && Metamaps.Selected.Nodes.length > 0) {
-      var nodes = Metamaps.Selected.Nodes
+    if (!denySelected && Selected.Nodes.length > 0) {
+      var nodes = Selected.Nodes
     } else {
-      var nodes = _.values(Metamaps.Visualize.mGraph.graph.nodes)
+      var nodes = _.values(Visualize.mGraph.graph.nodes)
     }
 
     if (nodes.length > 1) {
@@ -1806,7 +1831,7 @@ const JIT = {
           minY = y
         }
 
-        var arrayOfLabelLines = Metamaps.Util.splitLine(n.name, 30).split('\n'),
+        var arrayOfLabelLines = Util.splitLine(n.name, 30).split('\n'),
           dim = n.getData('dim'),
           ctx = canvas.getCtx()
 

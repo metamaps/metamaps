@@ -1,7 +1,10 @@
 /* global Metamaps, $ */
 
 import Active from './Active'
+import GlobalUI from './GlobalUI'
 import Map from './Map'
+import Synapse from './Synapse'
+import Topic from './Topic'
 
 /*
  * Metamaps.Import.js.erb
@@ -290,11 +293,11 @@ const Import = {
     Metamaps.Mappings.add(mapping)
 
     // this function also includes the creation of the topic in the database
-    Metamaps.Topic.renderTopic(mapping, topic, true, true, {
+    Topic.renderTopic(mapping, topic, true, true, {
       success: opts.success
     })
 
-    Metamaps.GlobalUI.hideDiv('#instructions')
+    GlobalUI.hideDiv('#instructions')
   },
 
   createSynapseWithParameters: function (desc, category, permission,
@@ -322,7 +325,7 @@ const Import = {
     })
     Metamaps.Mappings.add(mapping)
 
-    Metamaps.Synapse.renderSynapse(mapping, synapse, node1, node2, true)
+    Synapse.renderSynapse(mapping, synapse, node1, node2, true)
   }
 }
 

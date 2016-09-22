@@ -1,7 +1,9 @@
 /* global Metamaps, $ */
 
 import Active from './Active'
+import GlobalUI from './GlobalUI'
 import Mapper from './Mapper'
+import Router from './Router'
 import Util from './Util'
 import Visualize from './Visualize'
 
@@ -9,9 +11,7 @@ import Visualize from './Visualize'
  * Metamaps.TopicCard.js
  *
  * Dependencies:
- *  - Metamaps.GlobalUI
  *  - Metamaps.Metacodes
- *  - Metamaps.Router
  */
 const TopicCard = {
   openTopicCard: null, // stores the topic that's currently open
@@ -332,7 +332,7 @@ const TopicCard = {
       $('.showcard .hoverTip').removeClass('hide')
     })
 
-    $('.mapCount .tip li a').click(Metamaps.Router.intercept)
+    $('.mapCount .tip li a').click(Router.intercept)
 
     var originalText = $('.showMore').html()
     $('.mapCount .tip .showMore').unbind().toggle(
@@ -353,7 +353,7 @@ const TopicCard = {
     var self = TopicCard
 
     self.removeLink()
-    Metamaps.GlobalUI.notifyUser('Invalid link')
+    GlobalUI.notifyUser('Invalid link')
   },
   populateShowCard: function (topic) {
     var self = TopicCard

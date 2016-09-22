@@ -2,6 +2,8 @@
 
 import AutoLayout from './AutoLayout'
 import Import from './Import'
+import TopicCard from './TopicCard'
+import Util from './Util'
 
 const PasteInput = {
   // thanks to https://github.com/kevva/url-regex
@@ -19,7 +21,7 @@ const PasteInput = {
     window.addEventListener("drop", function(e) {
       e = e || event;
       e.preventDefault();
-      var coords = Metamaps.Util.pixelsToCoords({ x: e.clientX, y: e.clientY })
+      var coords = Util.pixelsToCoords({ x: e.clientX, y: e.clientY })
       if (e.dataTransfer.files.length > 0) {
         var fileReader = new FileReader()
         var text = fileReader.readAsText(e.dataTransfer.files[0])
@@ -86,7 +88,7 @@ const PasteInput = {
       import_id,
       {
         success: function(topic) {
-          Metamaps.TopicCard.showCard(topic.get('node'), function() {
+          TopicCard.showCard(topic.get('node'), function() {
             $('#showcard #titleActivator').click()
               .find('textarea, input').focus()
           })
