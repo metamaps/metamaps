@@ -1,7 +1,5 @@
 /* global $ */
 
-import './Constants'
-
 import Account from './Account'
 import Active from './Active'
 import Admin from './Admin'
@@ -18,10 +16,13 @@ import Listeners from './Listeners'
 import Map from './Map'
 import Mapper from './Mapper'
 import Mobile from './Mobile'
+import Mouse from './Mouse'
 import Organize from './Organize'
 import PasteInput from './PasteInput'
 import Realtime from './Realtime'
 import Router from './Router'
+import Selected from './Selected'
+import Settings from './Settings'
 import Synapse from './Synapse'
 import SynapseCard from './SynapseCard'
 import Topic from './Topic'
@@ -45,13 +46,17 @@ Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
 Metamaps.Map = Map
+Metamaps.Maps = {}
 Metamaps.Mapper = Mapper
 Metamaps.Mobile = Mobile
+Metamaps.Mouse = Mouse
 Metamaps.Organize = Organize
 Metamaps.PasteInput = PasteInput
 Metamaps.Realtime = Realtime
 Metamaps.ReactComponents = ReactComponents
 Metamaps.Router = Router
+Metamaps.Selected = Selected
+Metamaps.Settings = Settings
 Metamaps.Synapse = Synapse
 Metamaps.SynapseCard = SynapseCard
 Metamaps.Topic = Topic

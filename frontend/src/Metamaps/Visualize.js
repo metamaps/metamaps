@@ -11,7 +11,6 @@
  *  - Metamaps.Synapses
  *  - Metamaps.TopicCard
  *  - Metamaps.Topics
- *  - Metamaps.Touch
  */
 
 const Visualize = {
@@ -19,6 +18,7 @@ const Visualize = {
   cameraPosition: null, // stores the camera position when using a 3D visualization
   type: 'ForceDirected', // the type of graph we're building, could be "RGraph", "ForceDirected", or "ForceDirected3D"
   loadLater: false, // indicates whether there is JSON that should be loaded right in the offset, or whether to wait till the first topic is created
+  touchDragNode: null,
   init: function () {
     var self = Visualize
     // disable awkward dragging of the canvas element that would sometimes happen
@@ -40,9 +40,9 @@ const Visualize = {
     // prevent touch events on the canvas from default behaviour
     $('#infovis-canvas').bind('touchend touchcancel', function (event) {
       lastDist = 0
-      if (!self.mGraph.events.touchMoved && !Metamaps.Touch.touchDragNode) Metamaps.TopicCard.hideCurrentCard()
+      if (!self.mGraph.events.touchMoved && !Visualize.touchDragNode) Metamaps.TopicCard.hideCurrentCard()
       self.mGraph.events.touched = self.mGraph.events.touchMoved = false
-      Metamaps.Touch.touchDragNode = false
+      Visualize.touchDragNode = false
     })
   },
   computePositions: function () {
