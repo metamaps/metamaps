@@ -13,7 +13,7 @@ import GlobalUI from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
 import Listeners from './Listeners'
-import Map from './Map'
+import Map, { CheatSheet, InfoBox } from './Map'
 import Mapper from './Mapper'
 import Mobile from './Mobile'
 import Mouse from './Mouse'
@@ -46,6 +46,8 @@ Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
 Metamaps.Map = Map
+Metamaps.Map.CheatSheet = CheatSheet
+Metamaps.Map.InfoBox = InfoBox
 Metamaps.Maps = {}
 Metamaps.Mapper = Mapper
 Metamaps.Mobile = Mobile
