@@ -1,12 +1,7 @@
-/* global Metamaps, $ */
+/* global $ */
 
-/*
- * Metamaps.PasteInput.js.erb
- *
- * Dependencies:
- *  - Metamaps.Import
- *  - Metamaps.AutoLayout
- */
+import AutoLayout from './AutoLayout'
+import Import from './Import'
 
 const PasteInput = {
   // thanks to https://github.com/kevva/url-regex
@@ -74,13 +69,13 @@ const PasteInput = {
   handleURL: function (text, coords) {
     var title = 'Link'
     if (!coords || !coords.x || !coords.y) {
-      coords = Metamaps.AutoLayout.getNextCoord()
+      coords = AutoLayout.getNextCoord()
     }
 
     var import_id = null  // don't store a cidMapping
     var permission = null // use default
 
-    Metamaps.Import.createTopicWithParameters(
+    Import.createTopicWithParameters(
       title,
       'Reference', // metacode - todo fix
       permission,
@@ -101,11 +96,11 @@ const PasteInput = {
   },
 
   handleJSON: function (text) {
-    Metamaps.Import.handleJSON(text)
+    Import.handleJSON(text)
   },
 
   handleTSV: function (text) {
-    Metamaps.Import.handleTSV(text)
+    Import.handleTSV(text)
   }
 }
 

@@ -10,7 +10,7 @@
 
 const Mobile = {
   init: function () {
-    var self = Metamaps.Mobile
+    var self = Mobile
     
     $('#menu_icon').click(self.toggleMenu)
     $('#mobile_menu li a').click(self.liClick)

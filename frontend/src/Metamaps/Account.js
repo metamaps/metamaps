@@ -1,14 +1,6 @@
-window.Metamaps = window.Metamaps || {}
-/* global Metamaps, $ */
+/* uses window.Metamaps.Erb */
 
-/*
- * Metamaps.Account.js.erb
- *
- * Dependencies:
- *  - Metamaps.Erb
- */
-
-Metamaps.Account = {
+const Account = {
   listenersInitialized: false,
   init: function () {
     var self = Metamaps.Account
@@ -20,24 +12,24 @@ Metamaps.Account = {
     self.listenersInitialized = true
   },
   toggleChangePicture: function () {
-    var self = Metamaps.Account
+    var self = Account
 
     $('.userImageMenu').toggle()
     if (!self.listenersInitialized) self.initListeners()
   },
   openChangePicture: function () {
-    var self = Metamaps.Account
+    var self = Account
 
     $('.userImageMenu').show()
     if (!self.listenersInitialized) self.initListeners()
   },
   closeChangePicture: function () {
-    var self = Metamaps.Account
+    var self = Account
 
     $('.userImageMenu').hide()
   },
   showLoading: function () {
-    var self = Metamaps.Account
+    var self = Account
 
     var loader = new CanvasLoader('accountPageLoading')
     loader.setColor('#4FC059'); // default is '#000000'
@@ -48,7 +40,7 @@ Metamaps.Account = {
     $('#accountPageLoading').show()
   },
   showImagePreview: function () {
-    var self = Metamaps.Account
+    var self = Account
 
     var file = $('#user_image')[0].files[0]
 
@@ -94,10 +86,10 @@ Metamaps.Account = {
     }
   },
   removePicture: function () {
-    var self = Metamaps.Account
+    var self = Account
 
     $('.userImageDiv canvas').remove()
-    $('.userImageDiv img').attr('src', Metamaps.Erb['user.png']).show()
+    $('.userImageDiv img').attr('src', window.Metamaps.Erb['user.png']).show()
     $('.userImageMenu').hide()
 
     var input = $('#user_image')
@@ -122,4 +114,4 @@ Metamaps.Account = {
   }
 }
 
-export default Metamaps.Account
+export default Account

@@ -1,8 +1,6 @@
 /* global Metamaps, $ */
 
 /*
- * Metamaps.Listeners.js.erb
- *
  * Dependencies:
  *  - Metamaps.Active
  *  - Metamaps.Control

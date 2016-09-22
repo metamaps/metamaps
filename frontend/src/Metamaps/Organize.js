@@ -1,21 +1,18 @@
-/* global Metamaps, $ */
+/* global $ */
 
-/*
- * Metamaps.Organize.js.erb
- *
- * Dependencies:
- *  - Metamaps.Visualize
- */
+import Visualize from './Visualize'
+import JIT from './JIT'
+
 const Organize = {
   arrange: function (layout, centerNode) {
     // first option for layout to implement is 'grid', will do an evenly spaced grid with its center at the 0,0 origin
     if (layout == 'grid') {
-      var numNodes = _.size(Metamaps.Visualize.mGraph.graph.nodes); // this will always be an integer, the # of nodes on your graph visualization
+      var numNodes = _.size(Visualize.mGraph.graph.nodes); // this will always be an integer, the # of nodes on your graph visualization
       var numColumns = Math.floor(Math.sqrt(numNodes)) // the number of columns to make an even grid
       var GRIDSPACE = 400
       var row = 0
       var column = 0
-      Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+      Visualize.mGraph.graph.eachNode(function (n) {
         if (column == numColumns) {
           column = 0
           row += 1
@@ -26,14 +23,14 @@ const Organize = {
         n.setPos(newPos, 'end')
         column += 1
       })
-      Metamaps.Visualize.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout)
+      Visualize.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
     } else if (layout == 'grid_full') {
       // this will always be an integer, the # of nodes on your graph visualization
-      var numNodes = _.size(Metamaps.Visualize.mGraph.graph.nodes)
+      var numNodes = _.size(Visualize.mGraph.graph.nodes)
       // var numColumns = Math.floor(Math.sqrt(numNodes)) // the number of columns to make an even grid
       // var GRIDSPACE = 400
-      var height = Metamaps.Visualize.mGraph.canvas.getSize(0).height
-      var width = Metamaps.Visualize.mGraph.canvas.getSize(0).width
+      var height = Visualize.mGraph.canvas.getSize(0).height
+      var width = Visualize.mGraph.canvas.getSize(0).width
       var totalArea = height * width
       var cellArea = totalArea / numNodes
       var ratio = height / width
@@ -44,7 +41,7 @@ const Organize = {
       var totalCells = row * column
 
       if (totalCells)
-        Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+        Visualize.mGraph.graph.eachNode(function (n) {
           if (column == numColumns) {
             column = 0
             row += 1
@@ -55,7 +52,7 @@ const Organize = {
           n.setPos(newPos, 'end')
           column += 1
         })
-      Metamaps.Visualize.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout)
+      Visualize.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
     } else if (layout == 'radial') {
       var centerX = centerNode.getPos().x
       var centerY = centerNode.getPos().y
@@ -87,16 +84,16 @@ const Organize = {
         })
       }
       radial(centerNode, 1, 0)
-      Metamaps.Visualize.mGraph.animate(Metamaps.JIT.ForceDirected.animateSavedLayout)
+      Visualize.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
     } else if (layout == 'center_viewport') {
       var lowX = 0,
         lowY = 0,
         highX = 0,
         highY = 0
-      var oldOriginX = Metamaps.Visualize.mGraph.canvas.translateOffsetX
-      var oldOriginY = Metamaps.Visualize.mGraph.canvas.translateOffsetY
+      var oldOriginX = Visualize.mGraph.canvas.translateOffsetX
+      var oldOriginY = Visualize.mGraph.canvas.translateOffsetY
 
-      Metamaps.Visualize.mGraph.graph.eachNode(function (n) {
+      Visualize.mGraph.graph.eachNode(function (n) {
         if (n.id === 1) {
           lowX = n.getPos().x
           lowY = n.getPos().y

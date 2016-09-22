@@ -4,26 +4,26 @@ const Admin = {
   selectMetacodes: [],
   allMetacodes: [],
   init: function () {
-    var self = Metamaps.Admin
+    var self = Admin
 
     $('#metacodes_value').val(self.selectMetacodes.toString())
   },
   selectAll: function () {
-    var self = Metamaps.Admin
+    var self = Admin
 
     $('.editMetacodes li').removeClass('toggledOff')
     self.selectMetacodes = self.allMetacodes.slice(0)
     $('#metacodes_value').val(self.selectMetacodes.toString())
   },
   deselectAll: function () {
-    var self = Metamaps.Admin
+    var self = Admin
 
     $('.editMetacodes li').addClass('toggledOff')
     self.selectMetacodes = []
     $('#metacodes_value').val(0)
   },
   liClickHandler: function () {
-    var self = Metamaps.Admin
+    var self = Admin
 
     if ($(this).attr('class') != 'toggledOff') {
       $(this).addClass('toggledOff')
@@ -38,7 +38,7 @@ const Admin = {
     }
   },
   validate: function () {
-    var self = Metamaps.Admin
+    var self = Admin
 
     if (self.selectMetacodes.length == 0) {
       alert('Would you pretty please select at least one metacode for the set?')

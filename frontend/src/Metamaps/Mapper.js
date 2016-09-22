@@ -1,9 +1,5 @@
-/* global Metamaps */
+import Backbone from './Backbone'
 
-/*
- * Dependencies:
- *  - Metamaps.Backbone
- */
 const Mapper = {
   // this function is to retrieve a mapper JSON object from the database
   // @param id = the id of the mapper to retrieve
@@ -13,7 +9,7 @@ const Mapper = {
       if (!response.ok) throw response
       return response.json()
     }).then(payload => {
-      callback(new Metamaps.Backbone.Mapper(payload))
+      callback(new Backbone.Mapper(payload))
     })
   }
 }
