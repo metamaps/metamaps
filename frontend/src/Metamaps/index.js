@@ -1,9 +1,9 @@
 /* global $ */
-window.Metamaps = window.Metamaps || {}
 
 import './Constants'
 
 import Account from './Account'
+import Active from './Active'
 import Admin from './Admin'
 import AutoLayout from './AutoLayout'
 import Backbone from './Backbone'
@@ -32,6 +32,7 @@ import Visualize from './Visualize'
 import ReactComponents from './ReactComponents'
 
 Metamaps.Account = Account
+Metamaps.Active = Active
 Metamaps.Admin = Admin
 Metamaps.AutoLayout = AutoLayout
 Metamaps.Backbone = Backbone
@@ -59,9 +60,9 @@ Metamaps.Util = Util
 Metamaps.Views = Views
 Metamaps.Visualize = Visualize
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function() {
   // initialize all the modules
-  for (var prop in Metamaps) {
+  for (const prop in Metamaps) {
       // this runs the init function within each sub-object on the Metamaps one
       if (Metamaps.hasOwnProperty(prop) &&
           Metamaps[prop] != null &&
@@ -73,7 +74,7 @@ $(document).ready(function () {
   }
   // load whichever page you are on
   if (Metamaps.currentSection === "explore") {
-      var capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
+      const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
       Metamaps.Views.exploreMaps.setCollection( Metamaps.Maps[capitalize] )
       if (Metamaps.currentPage === "mapper") {
@@ -96,4 +97,4 @@ $(document).ready(function () {
   }
 });
 
-export default window.Metamaps
+export default Metamaps

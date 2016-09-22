@@ -7,11 +7,6 @@ Metamaps.tempNode = null
 Metamaps.tempInit = false
 Metamaps.tempNode2 = null
 
-Metamaps.Active = Metamaps.Active || {
-  Map: null,
-  Topic: null,
-  Mapper: null
-};
 
 Metamaps.Maps = Metamaps.Maps || {}
 
