@@ -4,29 +4,30 @@ import _ from 'lodash'
 import Backbone from 'backbone'
 Backbone.$ = window.$
 
+import Active from '../Active'
+import Filter from '../Filter'
+import JIT from '../JIT'
+import Map, { InfoBox } from '../Map'
+import Mapper from '../Mapper'
+import Realtime from '../Realtime'
+import Synapse from '../Synapse'
+import SynapseCard from '../SynapseCard'
+import Topic from '../Topic'
+import TopicCard from '../TopicCard'
+import Visualize from '../Visualize'
+
 /*
  * Metamaps.Backbone.js.erb
  *
  * Dependencies:
- *  - Metamaps.Active
  *  - Metamaps.Collaborators
  *  - Metamaps.Creators
- *  - Metamaps.Filter
- *  - Metamaps.JIT
  *  - Metamaps.Loading
- *  - Metamaps.Map
- *  - Metamaps.Mapper
  *  - Metamaps.Mappers
  *  - Metamaps.Mappings
  *  - Metamaps.Metacodes
- *  - Metamaps.Realtime
- *  - Metamaps.Synapse
- *  - Metamaps.SynapseCard
  *  - Metamaps.Synapses
- *  - Metamaps.Topic
- *  - Metamaps.TopicCard
  *  - Metamaps.Topics
- *  - Metamaps.Visualize
  */
 
 const _Backbone = {}
@@ -62,7 +63,7 @@ _Backbone.Map = Backbone.Model.extend({
     this.on('saved', this.savedEvent)
   },
   savedEvent: function () {
-    Metamaps.Realtime.sendMapChange(this)
+    Realtime.sendMapChange(this)
   },
   authorizeToEdit: function (mapper) {
     if (mapper && (
@@ -82,7 +83,7 @@ _Backbone.Map = Backbone.Model.extend({
     }
   },
   getUser: function () {
-    return Metamaps.Mapper.get(this.get('user_id'))
+    return Mapper.get(this.get('user_id'))
   },
   fetchContained: function () {
     var bb = _Backbone
@@ -126,10 +127,10 @@ _Backbone.Map = Backbone.Model.extend({
     return this.get('mappers')
   },
   updateView: function () {
-    var map = Metamaps.Active.Map
+    var map = Active.Map
     var isActiveMap = this.id === map.id
     if (isActiveMap) {
-      Metamaps.Map.InfoBox.updateNameDescPerm(this.get('name'), this.get('desc'), this.get('permission'))
+      InfoBox.updateNameDescPerm(this.get('name'), this.get('desc'), this.get('permission'))
       this.updateMapWrapper()
       // mobile menu
       $('#header_content').html(this.get('name'))
@@ -137,9 +138,9 @@ _Backbone.Map = Backbone.Model.extend({
     }
   },
   updateMapWrapper: function () {
-    var map = Metamaps.Active.Map
+    var map = Active.Map
     var isActiveMap = this.id === map.id
-    var authorized = map && map.authorizeToEdit(Metamaps.Active.Mapper) ? 'canEditMap' : ''
+    var authorized = map && map.authorizeToEdit(Active.Mapper) ? 'canEditMap' : ''
     var commonsMap = map && map.get('permission') === 'commons' ? 'commonsMap' : ''
     if (isActiveMap) {
       $('.wrapper').removeClass('canEditMap commonsMap').addClass(authorized + ' ' + commonsMap)
@@ -324,10 +325,10 @@ _Backbone.init = function () {
     initialize: function () {
       if (this.isNew()) {
         this.set({
-          'user_id': Metamaps.Active.Mapper.id,
+          'user_id': Active.Mapper.id,
           'desc': this.get('desc') || '',
           'link': this.get('link') || '',
-          'permission': Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons'
+          'permission': Active.Map ? Active.Map.get('permission') : 'commons'
         })
       }
 
@@ -339,7 +340,7 @@ _Backbone.init = function () {
           mappableid: this.id
         }
 
-        $(document).trigger(Metamaps.JIT.events.removeTopic, [removeTopicData])
+        $(document).trigger(JIT.events.removeTopic, [removeTopicData])
       })
       this.on('noLongerPrivate', function () {
         var newTopicData = {
@@ -347,10 +348,10 @@ _Backbone.init = function () {
           mappableid: this.id
         }
 
-        $(document).trigger(Metamaps.JIT.events.newTopic, [newTopicData])
+        $(document).trigger(JIT.events.newTopic, [newTopicData])
       })
 
-      this.on('change:metacode_id', Metamaps.Filter.checkMetacodes, this)
+      this.on('change:metacode_id', Filter.checkMetacodes, this)
     },
     authorizeToEdit: function (mapper) {
       if (mapper &&
@@ -371,10 +372,10 @@ _Backbone.init = function () {
       return Metamaps.Metacodes.get(this.get('metacode_id'))
     },
     getMapping: function () {
-      if (!Metamaps.Active.Map) return false
+      if (!Active.Map) return false
 
       return Metamaps.Mappings.findWhere({
-        map_id: Metamaps.Active.Map.id,
+        map_id: Active.Map.id,
         mappable_type: 'Topic',
         mappable_id: this.isNew() ? this.cid : this.id
       })
@@ -387,7 +388,7 @@ _Backbone.init = function () {
         name: this.get('name')
       }
 
-      if (Metamaps.Active.Map) {
+      if (Active.Map) {
         mapping = this.getMapping()
         node.data = {
           $mapping: null,
@@ -402,7 +403,7 @@ _Backbone.init = function () {
       var node = this.get('node')
       node.setData('topic', this)
 
-      if (Metamaps.Active.Map) {
+      if (Active.Map) {
         mapping = this.getMapping()
         node.setData('mapping', mapping)
       }
@@ -410,38 +411,38 @@ _Backbone.init = function () {
       return node
     },
     savedEvent: function () {
-      Metamaps.Realtime.sendTopicChange(this)
+      Realtime.sendTopicChange(this)
     },
     updateViews: function () {
-      var onPageWithTopicCard = Metamaps.Active.Map || Metamaps.Active.Topic
+      var onPageWithTopicCard = Active.Map || Active.Topic
       var node = this.get('node')
       // update topic card, if this topic is the one open there
-      if (onPageWithTopicCard && this == Metamaps.TopicCard.openTopicCard) {
-        Metamaps.TopicCard.showCard(node)
+      if (onPageWithTopicCard && this == TopicCard.openTopicCard) {
+        TopicCard.showCard(node)
       }
 
       // update the node on the map
       if (onPageWithTopicCard && node) {
         node.name = this.get('name')
-        Metamaps.Visualize.mGraph.plot()
+        Visualize.mGraph.plot()
       }
     },
     updateCardView: function () {
-      var onPageWithTopicCard = Metamaps.Active.Map || Metamaps.Active.Topic
+      var onPageWithTopicCard = Active.Map || Active.Topic
       var node = this.get('node')
       // update topic card, if this topic is the one open there
-      if (onPageWithTopicCard && this == Metamaps.TopicCard.openTopicCard) {
-        Metamaps.TopicCard.showCard(node)
+      if (onPageWithTopicCard && this == TopicCard.openTopicCard) {
+        TopicCard.showCard(node)
       }
     },
     updateNodeView: function () {
-      var onPageWithTopicCard = Metamaps.Active.Map || Metamaps.Active.Topic
+      var onPageWithTopicCard = Active.Map || Active.Topic
       var node = this.get('node')
 
       // update the node on the map
       if (onPageWithTopicCard && node) {
         node.name = this.get('name')
-        Metamaps.Visualize.mGraph.plot()
+        Visualize.mGraph.plot()
       }
     }
   })
@@ -489,8 +490,8 @@ _Backbone.init = function () {
     initialize: function () {
       if (this.isNew()) {
         this.set({
-          'user_id': Metamaps.Active.Mapper.id,
-          'permission': Metamaps.Active.Map ? Metamaps.Active.Map.get('permission') : 'commons',
+          'user_id': Active.Mapper.id,
+          'permission': Active.Map ? Active.Map.get('permission') : 'commons',
           'category': 'from-to'
         })
       }
@@ -504,15 +505,15 @@ _Backbone.init = function () {
           mappableid: this.id
         }
 
-        $(document).trigger(Metamaps.JIT.events.newSynapse, [newSynapseData])
+        $(document).trigger(JIT.events.newSynapse, [newSynapseData])
       })
       this.on('nowPrivate', function () {
-        $(document).trigger(Metamaps.JIT.events.removeSynapse, [{
+        $(document).trigger(JIT.events.removeSynapse, [{
           mappableid: this.id
         }])
       })
 
-      this.on('change:desc', Metamaps.Filter.checkSynapses, this)
+      this.on('change:desc', Filter.checkSynapses, this)
     },
     prepareLiForFilter: function () {
       var li = ''
@@ -546,10 +547,10 @@ _Backbone.init = function () {
       ] : false
     },
     getMapping: function () {
-      if (!Metamaps.Active.Map) return false
+      if (!Active.Map) return false
 
       return Metamaps.Mappings.findWhere({
-        map_id: Metamaps.Active.Map.id,
+        map_id: Active.Map.id,
         mappable_type: 'Synapse',
         mappable_id: this.isNew() ? this.cid : this.id
       })
@@ -567,7 +568,7 @@ _Backbone.init = function () {
         }
       }
 
-      if (Metamaps.Active.Map) {
+      if (Active.Map) {
         mapping = providedMapping || this.getMapping()
         mappingID = mapping.isNew() ? mapping.cid : mapping.id
         edge.data.$mappings = []
@@ -581,7 +582,7 @@ _Backbone.init = function () {
       var edge = this.get('edge')
       edge.getData('synapses').push(this)
 
-      if (Metamaps.Active.Map) {
+      if (Active.Map) {
         mapping = this.getMapping()
         edge.getData('mappings').push(mapping)
       }
@@ -589,28 +590,28 @@ _Backbone.init = function () {
       return edge
     },
     savedEvent: function () {
-      Metamaps.Realtime.sendSynapseChange(this)
+      Realtime.sendSynapseChange(this)
     },
     updateViews: function () {
       this.updateCardView()
       this.updateEdgeView()
     },
     updateCardView: function () {
-      var onPageWithSynapseCard = Metamaps.Active.Map || Metamaps.Active.Topic
+      var onPageWithSynapseCard = Active.Map || Active.Topic
       var edge = this.get('edge')
 
       // update synapse card, if this synapse is the one open there
-      if (onPageWithSynapseCard && edge == Metamaps.SynapseCard.openSynapseCard) {
-        Metamaps.SynapseCard.showCard(edge)
+      if (onPageWithSynapseCard && edge == SynapseCard.openSynapseCard) {
+        SynapseCard.showCard(edge)
       }
     },
     updateEdgeView: function () {
-      var onPageWithSynapseCard = Metamaps.Active.Map || Metamaps.Active.Topic
+      var onPageWithSynapseCard = Active.Map || Active.Topic
       var edge = this.get('edge')
 
       // update the edge on the map
       if (onPageWithSynapseCard && edge) {
-        Metamaps.Visualize.mGraph.plot()
+        Visualize.mGraph.plot()
       }
     }
   })
@@ -629,20 +630,20 @@ _Backbone.init = function () {
     initialize: function () {
       if (this.isNew()) {
         this.set({
-          'user_id': Metamaps.Active.Mapper.id,
-          'map_id': Metamaps.Active.Map ? Metamaps.Active.Map.id : null
+          'user_id': Active.Mapper.id,
+          'map_id': Active.Map ? Active.Map.id : null
         })
       }
     },
     getMap: function () {
-      return Metamaps.Map.get(this.get('map_id'))
+      return Map.get(this.get('map_id'))
     },
     getTopic: function () {
-      if (this.get('mappable_type') === 'Topic') return Metamaps.Topic.get(this.get('mappable_id'))
+      if (this.get('mappable_type') === 'Topic') return Topic.get(this.get('mappable_id'))
       else return false
     },
     getSynapse: function () {
-      if (this.get('mappable_type') === 'Synapse') return Metamaps.Synapse.get(this.get('mappable_id'))
+      if (this.get('mappable_type') === 'Synapse') return Synapse.get(this.get('mappable_id'))
       else return false
     }
   })
@@ -665,34 +666,34 @@ _Backbone.init = function () {
   // this is for topic view
   Metamaps.Creators = Metamaps.Creators ? new self.MapperCollection(Metamaps.Creators) : new self.MapperCollection()
 
-  if (Metamaps.Active.Map) {
+  if (Active.Map) {
     Metamaps.Mappings = Metamaps.Mappings ? new self.MappingCollection(Metamaps.Mappings) : new self.MappingCollection()
 
-    Metamaps.Active.Map = new self.Map(Metamaps.Active.Map)
+    Active.Map = new self.Map(Active.Map)
   }
 
-  if (Metamaps.Active.Topic) Metamaps.Active.Topic = new self.Topic(Metamaps.Active.Topic)
+  if (Active.Topic) Active.Topic = new self.Topic(Active.Topic)
 
   // attach collection event listeners
   self.attachCollectionEvents = function () {
     Metamaps.Topics.on('add remove', function (topic) {
-      Metamaps.Map.InfoBox.updateNumbers()
-      Metamaps.Filter.checkMetacodes()
-      Metamaps.Filter.checkMappers()
+      InfoBox.updateNumbers()
+      Filter.checkMetacodes()
+      Filter.checkMappers()
     })
 
     Metamaps.Synapses.on('add remove', function (synapse) {
-      Metamaps.Map.InfoBox.updateNumbers()
-      Metamaps.Filter.checkSynapses()
-      Metamaps.Filter.checkMappers()
+      InfoBox.updateNumbers()
+      Filter.checkSynapses()
+      Filter.checkMappers()
     })
 
-    if (Metamaps.Active.Map) {
+    if (Active.Map) {
       Metamaps.Mappings.on('add remove', function (mapping) {
-        Metamaps.Map.InfoBox.updateNumbers()
-        Metamaps.Filter.checkSynapses()
-        Metamaps.Filter.checkMetacodes()
-        Metamaps.Filter.checkMappers()
+        InfoBox.updateNumbers()
+        Filter.checkSynapses()
+        Filter.checkMetacodes()
+        Filter.checkMappers()
       })
     }
   }
