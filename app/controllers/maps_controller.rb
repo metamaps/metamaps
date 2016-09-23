@@ -183,7 +183,7 @@ class MapsController < ApplicationController
   end
 
   def create_map_params
-    params.require(:map).permit(:name, :desc, :permission)
+    params.permit(:name, :desc, :permission)
   end
 
   def update_map_params
