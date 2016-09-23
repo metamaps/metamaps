@@ -191,7 +191,7 @@ const Topic = {
 
   // opts is additional options in a hash
   // TODO: move createNewInDB and permitCerateSYnapseAfter into opts
-  renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter, opts) {
+  renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter, opts = {}) {
     var self = Topic
 
     var nodeOnViz, tempPos

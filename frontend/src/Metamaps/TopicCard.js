@@ -187,17 +187,9 @@ const TopicCard = {
     }
 
     var openMetacodeSelect = function (event) {
-      var windowWidth
-      var showcardLeft
       var TOPICCARD_WIDTH = 300
       var METACODESELECT_WIDTH = 404
-      var distanceFromEdge
-
       var MAX_METACODELIST_HEIGHT = 270
-      var windowHeight
-      var showcardTop
-      var topicTitleHeight
-      var distanceFromBottom
 
       if (!selectingMetacode) {
         selectingMetacode = true
@@ -206,9 +198,9 @@ const TopicCard = {
         // select is accessible onscreen, when opened
         // while topic card is close to the right
         // edge of the screen
-        windowWidth = $(window).width()
-        showcardLeft = parseInt($('.showcard').css('left'))
-        distanceFromEdge = windowWidth - (showcardLeft + TOPICCARD_WIDTH)
+        var windowWidth = $(window).width()
+        var showcardLeft = parseInt($('.showcard').css('left'))
+        var distanceFromEdge = windowWidth - (showcardLeft + TOPICCARD_WIDTH)
         if (distanceFromEdge < METACODESELECT_WIDTH) {
           $('.metacodeSelect').addClass('onRightEdge')
         }
@@ -217,11 +209,11 @@ const TopicCard = {
         // select is accessible onscreen, when opened
         // while topic card is close to the bottom
         // edge of the screen
-        windowHeight = $(window).height()
-        showcardTop = parseInt($('.showcard').css('top'))
-        topicTitleHeight = $('.showcard .title').height() + parseInt($('.showcard .title').css('padding-top')) + parseInt($('.showcard .title').css('padding-bottom'))
-        heightOfSetList = $('.showcard .metacodeSelect').height()
-        distanceFromBottom = windowHeight - (showcardTop + topicTitleHeight)
+        var windowHeight = $(window).height()
+        var showcardTop = parseInt($('.showcard').css('top'))
+        var topicTitleHeight = $('.showcard .title').height() + parseInt($('.showcard .title').css('padding-top')) + parseInt($('.showcard .title').css('padding-bottom'))
+        var heightOfSetList = $('.showcard .metacodeSelect').height()
+        var distanceFromBottom = windowHeight - (showcardTop + topicTitleHeight)
         if (distanceFromBottom < MAX_METACODELIST_HEIGHT) {
           $('.metacodeSelect').addClass('onBottomEdge')
         }

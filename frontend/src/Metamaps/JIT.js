@@ -99,11 +99,11 @@ const JIT = {
         synapsesToRemove.push(s)
       }
       else if (nodes[edge.nodeFrom] && nodes[edge.nodeTo]) {
-        existingEdge = _.findWhere(edges, {
+        existingEdge = _.find(edges, {
           nodeFrom: edge.nodeFrom,
           nodeTo: edge.nodeTo
         }) ||
-        _.findWhere(edges, {
+        _.find(edges, {
           nodeFrom: edge.nodeTo,
           nodeTo: edge.nodeFrom
         })

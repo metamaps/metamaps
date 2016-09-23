@@ -3,6 +3,7 @@
 import Active from '../Active'
 import GlobalUI from '../GlobalUI'
 import Router from '../Router'
+import Util from '../Util'
 
 /*
  * Metamaps.Collaborators

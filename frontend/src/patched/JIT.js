@@ -3125,9 +3125,15 @@ var Canvas;
       };
     },
     translateToCenter: function(ps) {
-      var size = this.getSize(),
-          width = ps? (size.width - ps.width - this.translateOffsetX*2) : size.width;
-          height = ps? (size.height - ps.height - this.translateOffsetY*2) : size.height;
+      // START METAMAPS CODE
+      var size = this.getSize();
+      var width = ps ? (size.width - ps.width - this.translateOffsetX*2) : size.width;
+      var height = ps ? (size.height - ps.height - this.translateOffsetY*2) : size.height;
+      // ORIGINAL CODE
+      // var size = this.getSize(),
+      //     width = ps? (size.width - ps.width - this.translateOffsetX*2) : size.width;
+      //     height = ps? (size.height - ps.height - this.translateOffsetY*2) : size.height;
+      // END METAMAPS CODE
       var ctx = this.getCtx();
       ps && ctx.scale(1/this.scaleOffsetX, 1/this.scaleOffsetY);
       ctx.translate(width/2, height/2);
@@ -5637,7 +5643,11 @@ Graph.Op = {
                 break;
             
             case 'fade:seq': case 'fade': case 'fade:con':
-                that = this;
+                // START METAMAPS CODE
+                var that = this;
+                // ORIGINAL CODE:
+                // that = this;
+                // END METAMAPS CODE
                 graph = viz.construct(json);
 
                 //set alpha to 0 for nodes to add.
@@ -5773,7 +5783,11 @@ Graph.Op = {
                 break;
                 
             case 'fade:seq': case 'fade': case 'fade:con':
-                that = this;
+                // START METAMAPS CODE
+                var that = this;
+                // ORIGINAL CODE:
+                // that = this;
+                // END METAMAPS CODE
                 graph = viz.construct(json);
                 //preprocessing for nodes to delete.
                 //get node property modes to interpolate
