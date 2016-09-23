@@ -1,11 +1,32 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
-  before_action :require_user, only: [:create, :update, :access, :star, :unstar, :screenshot, :events, :destroy]
+  before_action :require_user, only: [:create, :update, :destroy, :access, :events, :screenshot, :star, :unstar]
+  before_action :set_map, only: [:show, :update, :destroy, :access, :contains, :events, :export, :screenshot, :star, :unstar]
   after_action :verify_authorized
 
   respond_to :html, :json, :csv
 
   autocomplete :map, :name, full: true, extra_data: [:user_id]
+
+  # GET maps/:id
+  def show
+    respond_to do |format|
+      format.html do
+        @allmappers = @map.contributors
+        @allcollaborators = @map.editors
+        @alltopics = policy_scope(@map.topics)
+        @allsynapses = policy_scope(@map.synapses)
+        @allmappings = policy_scope(@map.mappings)
+        @allmessages = @map.messages.sort_by(&:created_at)
+        @allstars = @map.stars
+
+        respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses, @alltopics, @allmessages, @allstars, @map)
+      end
+      format.json { render json: @map }
+      format.csv { redirect_to action: :export, format: :csv }
+      format.xls { redirect_to action: :export, format: :xls }
+    end
+  end
 
   # GET maps/new
   def new
@@ -18,73 +39,6 @@ class MapsController < ApplicationController
         @map.save
         redirect_to(map_path(@map) + '?new')
       end
-    end
-  end
-
-  # GET maps/:id
-  def show
-    @map = Map.find(params[:id])
-    authorize @map
-
-    respond_to do |format|
-      format.html do
-        @allmappers = @map.contributors
-        @allcollaborators = @map.editors
-        @alltopics = @map.topics.to_a.delete_if { |t| !policy(t).show? }
-        @allsynapses = @map.synapses.to_a.delete_if { |s| !policy(s).show? }
-        @allmappings = @map.mappings.to_a.delete_if { |m| !policy(m).show? }
-        @allmessages = @map.messages.sort_by(&:created_at)
-        @allstars = @map.stars
-
-        respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses, @alltopics, @allmessages, @allstars, @map)
-      end
-      format.json { render json: @map }
-      format.csv { redirect_to action: :export, format: :csv }
-      format.xls { redirect_to action: :export, format: :xls }
-    end
-  end
-
-  # GET maps/:id/export
-  def export
-    map = Map.find(params[:id])
-    authorize map
-    exporter = MapExportService.new(current_user, map)
-    respond_to do |format|
-      format.json { render json: exporter.json }
-      format.csv { send_data exporter.csv }
-      format.xls { @spreadsheet = exporter.xls }
-    end
-  end
-
-  # POST maps/:id/events/:event
-  def events
-    map = Map.find(params[:id])
-    authorize map
-
-    valid_event = false
-    if params[:event] == 'conversation'
-      Events::ConversationStartedOnMap.publish!(map, current_user)
-      valid_event = true
-    elsif params[:event] == 'user_presence'
-      Events::UserPresentOnMap.publish!(map, current_user)
-      valid_event = true
-    end
-
-    respond_to do |format|
-      format.json do
-        head :ok if valid_event
-        head :bad_request unless valid_event
-      end
-    end
-  end
-
-  # GET maps/:id/contains
-  def contains
-    @map = Map.find(params[:id])
-    authorize @map
-
-    respond_to do |format|
-      format.json { render json: @map.contains(current_user) }
     end
   end
 
@@ -104,18 +58,16 @@ class MapsController < ApplicationController
     authorize @map
 
     respond_to do |format|
-    if @map.save
-      format.json { render json: @map }
-    else
-      format.json { render json: 'invalid params' }
+      if @map.save
+        format.json { render json: @map }
+      else
+        format.json { render json: 'invalid params' }
+      end
     end
   end
 
   # PUT maps/:id
   def update
-    @map = Map.find(params[:id])
-    authorize @map
-
     respond_to do |format|
       if @map.update_attributes(update_map_params)
         format.json { head :no_content }
@@ -125,10 +77,19 @@ class MapsController < ApplicationController
     end
   end
 
+  # DELETE maps/:id
+  def destroy
+    @map.delete
+
+    respond_to do |format|
+      format.json do
+        head :no_content
+      end
+    end
+  end
+
   # POST maps/:id/access
   def access
-    @map = Map.find(params[:id])
-    authorize @map
     userIds = params[:access] || []
     added = userIds.select do |uid|
       user = User.find(uid)
@@ -155,39 +116,44 @@ class MapsController < ApplicationController
     end
   end
 
-  # POST maps/:id/star
-  def star
-    @map = Map.find(params[:id])
-    authorize @map
-    star = Star.find_by_map_id_and_user_id(@map.id, current_user.id)
-    star = Star.create(map_id: @map.id, user_id: current_user.id) unless star
-
+  # GET maps/:id/contains
+  def contains
     respond_to do |format|
-      format.json do
-        render json: { message: 'Successfully starred map' }
-      end
+      format.json { render json: @map.contains(current_user) }
     end
   end
 
-  # POST maps/:id/unstar
-  def unstar
-    @map = Map.find(params[:id])
-    authorize @map
-    star = Star.find_by_map_id_and_user_id(@map.id, current_user.id)
-    star&.delete
+  # GET maps/:id/export
+  def export
+    exporter = MapExportService.new(current_user, @map)
+    respond_to do |format|
+      format.json { render json: exporter.json }
+      format.csv { send_data exporter.csv }
+      format.xls { @spreadsheet = exporter.xls }
+    end
+  end
+
+  # POST maps/:id/events/:event
+  def events
+    valid_event = false
+    if params[:event] == 'conversation'
+      Events::ConversationStartedOnMap.publish!(@map, current_user)
+      valid_event = true
+    elsif params[:event] == 'user_presence'
+      Events::UserPresentOnMap.publish!(@map, current_user)
+      valid_event = true
+    end
 
     respond_to do |format|
       format.json do
-        render json: { message: 'Successfully unstarred map' }
+        head :bad_request unless valid_event
+        head :ok
       end
     end
   end
 
   # POST maps/:id/upload_screenshot
   def screenshot
-    @map = Map.find(params[:id])
-    authorize @map
-
     png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length..-1])
     StringIO.open(png) do |data|
       data.class.class_eval { attr_accessor :original_filename, :content_type }
@@ -203,23 +169,36 @@ class MapsController < ApplicationController
     end
   end
 
-  # DELETE maps/:id
-  def destroy
-    @map = Map.find(params[:id])
-    authorize @map
-
-    @map.delete
+  # POST maps/:id/star
+  def star
+    star = Star.find_or_create_by(map_id: @map.id, user_id: current_user.id)
 
     respond_to do |format|
       format.json do
-        head :no_content
+        render json: { message: 'Successfully starred map' }
+      end
+    end
+  end
+
+  # POST maps/:id/unstar
+  def unstar
+    star = Star.find_by(map_id: @map.id, user_id: current_user.id)
+    star&.delete
+
+    respond_to do |format|
+      format.json do
+        render json: { message: 'Successfully unstarred map' }
       end
     end
   end
 
   private
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  def set_map
+    @map = Map.find(params[:id])
+    authorize @map
+  end
+
   def create_map_params
     params.require(:map).permit(:name, :desc, :permission)
   end
@@ -228,32 +207,32 @@ class MapsController < ApplicationController
     params.require(:map).permit(:id, :name, :arranged, :desc, :permission)
   end
 
-	def create_topics!
-		topics = params[:topicsToMap]
-		topics = topics.split(',')
-		topics.each do |topic|
-			topic = topic.split('/')
-			mapping = Mapping.new
-			mapping.map = @map
-			mapping.user = @user
-			mapping.mappable = Topic.find(topic[0])
-			mapping.xloc = topic[1]
-			mapping.yloc = topic[2]
-			authorize mapping, :create?
-			mapping.save
-		end
-	end
+  def create_topics!
+    topics = params[:topicsToMap]
+    topics = topics.split(',')
+    topics.each do |topic|
+      topic = topic.split('/')
+      mapping = Mapping.new
+      mapping.map = @map
+      mapping.user = @user
+      mapping.mappable = Topic.find(topic[0])
+      mapping.xloc = topic[1]
+      mapping.yloc = topic[2]
+      authorize mapping, :create?
+      mapping.save
+    end
+  end
 
-	def create_synapses!
-		@synAll = params[:synapsesToMap]
-		@synAll = @synAll.split(',')
-		@synAll.each do |synapse_id|
-			mapping = Mapping.new
-			mapping.map = @map
-			mapping.user = @user
-			mapping.mappable = Synapse.find(synapse_id)
-			authorize mapping, :create?
-			mapping.save
-		end
-	end
+  def create_synapses!
+    @synAll = params[:synapsesToMap]
+    @synAll = @synAll.split(',')
+    @synAll.each do |synapse_id|
+      mapping = Mapping.new
+      mapping.map = @map
+      mapping.user = @user
+      mapping.mappable = Synapse.find(synapse_id)
+      authorize mapping, :create?
+      mapping.save
+    end
+  end
 end
