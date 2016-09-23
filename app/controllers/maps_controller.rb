@@ -1,110 +1,11 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
   before_action :require_user, only: [:create, :update, :access, :star, :unstar, :screenshot, :events, :destroy]
-  after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps]
-  after_action :verify_policy_scoped, only: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps]
+  after_action :verify_authorized
 
   respond_to :html, :json, :csv
 
   autocomplete :map, :name, full: true, extra_data: [:user_id]
-
-  # GET /explore/active
-  def activemaps
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(Map).order('updated_at DESC')
-                             .page(page).per(20)
-
-    respond_to do |format|
-      format.html do
-        # root url => main/home. main/home renders maps/activemaps view.
-        redirect_to(root_url) && return if authenticated?
-        respond_with(@maps, @user)
-      end
-      format.json { render json: @maps.to_json }
-    end
-  end
-
-  # GET /explore/featured
-  def featuredmaps
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(
-      Map.where('maps.featured = ? AND maps.permission != ?',
-                true, 'private')
-    ).order('updated_at DESC').page(page).per(20)
-
-    respond_to do |format|
-      format.html { respond_with(@maps, @user) }
-      format.json { render json: @maps.to_json }
-    end
-  end
-
-  # GET /explore/mine
-  def mymaps
-    unless authenticated?
-      skip_policy_scope
-      return redirect_to explore_active_path
-    end
-
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(
-      Map.where('maps.user_id = ?', current_user.id)
-    ).order('updated_at DESC').page(page).per(20)
-
-    respond_to do |format|
-      format.html { respond_with(@maps, @user) }
-      format.json { render json: @maps.to_json }
-    end
-  end
-
-  # GET /explore/shared
-  def sharedmaps
-    unless authenticated?
-      skip_policy_scope
-      return redirect_to explore_active_path
-    end
-
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(
-      Map.where('maps.id IN (?)', current_user.shared_maps.map(&:id))
-    ).order('updated_at DESC').page(page).per(20)
-
-    respond_to do |format|
-      format.html { respond_with(@maps, @user) }
-      format.json { render json: @maps.to_json }
-    end
-  end
-
-  # GET /explore/starred
-  def starredmaps
-    unless authenticated?
-      skip_policy_scope
-      return redirect_to explore_active_path
-    end
-
-    page = params[:page].present? ? params[:page] : 1
-    stars = current_user.stars.map(&:map_id)
-    @maps = policy_scope(
-      Map.where('maps.id IN (?)', stars)
-    ).order('updated_at DESC').page(page).per(20)
-
-    respond_to do |format|
-      format.html { respond_with(@maps, @user) }
-      format.json { render json: @maps.to_json }
-    end
-  end
-
-  # GET /explore/mapper/:id
-  def usermaps
-    page = params[:page].present? ? params[:page] : 1
-    @user = User.find(params[:id])
-    @maps = policy_scope(Map.where(user: @user))
-            .order('updated_at DESC').page(page).per(20)
-
-    respond_to do |format|
-      format.html { respond_with(@maps, @user) }
-      format.json { render json: @maps.to_json }
-    end
-  end
 
   # GET maps/new
   def new
@@ -182,78 +83,31 @@ class MapsController < ApplicationController
     @map = Map.find(params[:id])
     authorize @map
 
-    @allmappers = @map.contributors
-    @allcollaborators = @map.editors
-    @alltopics = @map.topics.to_a.delete_if { |t| !policy(t).show? }
-    @allsynapses = @map.synapses.to_a.delete_if { |s| !policy(s).show? }
-    @allmappings = @map.mappings.to_a.delete_if { |m| !policy(m).show? }
-
-    @json = {}
-    @json['map'] = @map
-    @json['topics'] = @alltopics
-    @json['synapses'] = @allsynapses
-    @json['mappings'] = @allmappings
-    @json['mappers'] = @allmappers
-    @json['collaborators'] = @allcollaborators
-    @json['messages'] = @map.messages.sort_by(&:created_at)
-    @json['stars'] = @map.stars
-
     respond_to do |format|
-      format.json { render json: @json }
+      format.json { render json: @map.contains(current_user) }
     end
   end
 
   # POST maps
   def create
     @user = current_user
-    @map = Map.new
-    @map.name = params[:name]
-    @map.desc = params[:desc]
-    @map.permission = params[:permission]
+    @map = Map.new(create_map_params)
     @map.user = @user
     @map.arranged = false
 
-    if params[:topicsToMap]
-      @all = params[:topicsToMap]
-      @all = @all.split(',')
-      @all.each do |topic|
-        topic = topic.split('/')
-        mapping = Mapping.new
-        mapping.map = @map
-        mapping.user = @user
-        mapping.mappable = Topic.find(topic[0])
-        mapping.xloc = topic[1]
-        mapping.yloc = topic[2]
-        authorize mapping, :create?
-        mapping.save
-      end
-
-      if params[:synapsesToMap]
-        @synAll = params[:synapsesToMap]
-        @synAll = @synAll.split(',')
-        @synAll.each do |synapse_id|
-          mapping = Mapping.new
-          mapping.map = @map
-          mapping.user = @user
-          mapping.mappable = Synapse.find(synapse_id)
-          authorize mapping, :create?
-          mapping.save
-        end
-      end
-
+    if params[:topicsToMap].present?
+      create_topics!
+      create_synapses! if params[:synapsesToMap].present?
       @map.arranged = true
     end
 
     authorize @map
 
+    respond_to do |format|
     if @map.save
-      respond_to do |format|
-        format.json { render json: @map }
-      end
+      format.json { render json: @map }
     else
-      respond_to do |format|
-        format.json { render json: 'invalid params' }
-      end
+      format.json { render json: 'invalid params' }
     end
   end
 
@@ -263,7 +117,7 @@ class MapsController < ApplicationController
     authorize @map
 
     respond_to do |format|
-      if @map.update_attributes(map_params)
+      if @map.update_attributes(update_map_params)
         format.json { head :no_content }
       else
         format.json { render json: @map.errors, status: :unprocessable_entity }
@@ -366,7 +220,40 @@ class MapsController < ApplicationController
   private
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def map_params
+  def create_map_params
+    params.require(:map).permit(:name, :desc, :permission)
+  end
+
+  def update_map_params
     params.require(:map).permit(:id, :name, :arranged, :desc, :permission)
   end
+
+	def create_topics!
+		topics = params[:topicsToMap]
+		topics = topics.split(',')
+		topics.each do |topic|
+			topic = topic.split('/')
+			mapping = Mapping.new
+			mapping.map = @map
+			mapping.user = @user
+			mapping.mappable = Topic.find(topic[0])
+			mapping.xloc = topic[1]
+			mapping.yloc = topic[2]
+			authorize mapping, :create?
+			mapping.save
+		end
+	end
+
+	def create_synapses!
+		@synAll = params[:synapsesToMap]
+		@synAll = @synAll.split(',')
+		@synAll.each do |synapse_id|
+			mapping = Mapping.new
+			mapping.map = @map
+			mapping.user = @user
+			mapping.mappable = Synapse.find(synapse_id)
+			authorize mapping, :create?
+			mapping.save
+		end
+	end
 end
