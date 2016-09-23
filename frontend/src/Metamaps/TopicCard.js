@@ -40,7 +40,7 @@ const TopicCard = {
    */
   showCard: function (node, opts) {
     var self = TopicCard
-
+    if (!opts) opts = {}
     var topic = node.getData('topic')
 
     self.openTopicCard = topic
