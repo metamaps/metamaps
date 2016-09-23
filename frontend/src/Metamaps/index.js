@@ -28,7 +28,7 @@ import SynapseCard from './SynapseCard'
 import Topic from './Topic'
 import TopicCard from './TopicCard'
 import Util from './Util'
-import * as Views from './Views'
+import Views from './Views'
 import Visualize from './Visualize'
 import ReactComponents from './ReactComponents'
 
