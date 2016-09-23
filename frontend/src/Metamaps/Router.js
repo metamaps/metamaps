@@ -157,8 +157,6 @@ const _Router = Backbone.Router.extend({
   maps: function (id) {
     clearTimeout(this.timeoutId)
 
-    document.title = 'Map ' + id + ' | Metamaps'
-
     this.currentSection = 'map'
     this.currentPage = id
 
