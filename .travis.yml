@@ -18,4 +18,4 @@ before_script:
   - nvm use stable
   - npm install
 script:
-  - bundle exec rspec && bundle exec brakeman -q -z || npm test
+  - bundle exec rspec && bundle exec brakeman -q -z && npm test
