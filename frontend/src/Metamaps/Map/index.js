@@ -76,7 +76,7 @@ const Map = {
       var map = Active.Map
       var mapper = Active.Mapper
 
-      document.title = map.attributes.name + ' | Metamaps'
+      document.title = map.get('name') + ' | Metamaps'
 
       // add class to .wrapper for specifying whether you can edit the map
       if (map.authorizeToEdit(mapper)) {
