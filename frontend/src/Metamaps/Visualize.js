@@ -2,6 +2,8 @@
 
 import _ from 'lodash'
 
+import $jit from '../patched/JIT'
+
 import Active from './Active'
 import JIT from './JIT'
 import Router from './Router'

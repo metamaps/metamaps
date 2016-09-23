@@ -1,5 +1,7 @@
 /* global Metamaps, $ */
 
+import $jit from '../patched/JIT'
+
 import Active from './Active'
 import AutoLayout from './AutoLayout'
 import Create from './Create'
@@ -14,6 +16,7 @@ import SynapseCard from './SynapseCard'
 import TopicCard from './TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
+
 
 /*
  * Metamaps.Topic.js.erb

@@ -1,8 +1,8 @@
 /* global Metamaps, $jit */
 
-const $jit = $jit || {}
-
 import _ from 'lodash'
+
+import $jit from '../patched/JIT'
 
 import Active from './Active'
 import Control from './Control'
@@ -20,6 +20,7 @@ import Topic from './Topic'
 import TopicCard from './TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
+
 
 /*
  * Metamaps.Erb
@@ -284,7 +285,8 @@ const JIT = {
   ForceDirected: {
     animateSavedLayout: {
       modes: ['linear'],
-      transition: $jit.Trans.Quad.easeInOut,
+      // TODO fix tests so we don't need _.get
+      transition: _.get($jit, 'Trans.Quad.easeInOut'),
       duration: 800,
       onComplete: function () {
         Visualize.mGraph.busy = false
@@ -293,7 +295,8 @@ const JIT = {
     },
     animateFDLayout: {
       modes: ['linear'],
-      transition: $jit.Trans.Elastic.easeOut,
+      // TODO fix tests so we don't need _.get
+      transition: _.get($jit, 'Trans.Elastic.easeOut'),
       duration: 800,
       onComplete: function () {
         Visualize.mGraph.busy = false
@@ -554,7 +557,8 @@ const JIT = {
   ForceDirected3D: {
     animate: {
       modes: ['linear'],
-      transition: $jit.Trans.Elastic.easeOut,
+      // TODO fix tests so we don't need _.get
+      transition: _.get($jit, 'Trans.Elastic.easeOut'),
       duration: 2500,
       onComplete: function () {
         Visualize.mGraph.busy = false

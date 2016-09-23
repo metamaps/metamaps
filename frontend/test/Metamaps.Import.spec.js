@@ -2,10 +2,7 @@
 
 import chai from 'chai'
 
-// JIT needs window.$jit
-require('../../app/assets/javascripts/src/JIT.js')
-
-const Import = require('../src/Metamaps/Import')
+import Import from '../src/Metamaps/Import'
 
 const { expect } = chai
 

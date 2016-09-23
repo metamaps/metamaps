@@ -2,6 +2,8 @@
 
 import _ from 'lodash'
 
+import $jit from '../patched/JIT'
+
 import Visualize from './Visualize'
 import JIT from './JIT'
 

@@ -20,7 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
  */
- (function () { 
 
 /*
   File: Core.js
@@ -34,7 +33,11 @@ THE SOFTWARE.
  This variable is the *only* global variable defined in the Toolkit. 
  There are also other interesting properties attached to this variable described below.
  */
-window.$jit = function(w) {
+// START METAMAPS CODE
+const $jit = function(w) {
+// ORIGINAL:
+// window.$jit = function(w) {
+// END METAMAPS CODE
   w = w || window;
   for(var k in $jit) {
     if($jit[k].$extend) {
@@ -11312,7 +11315,4 @@ $jit.ForceDirected3D.$extend = true;
 
 })($jit.ForceDirected3D);
 
-
-
-
- })();
+export default $jit
