@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "mocha frontend/test || (echo 'Run `npm install` to setup testing' && false)"
+    "test": "mocha --compilers js:babel-core/register frontend/test || (echo 'Run `npm install` to setup testing' && false)"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/metamaps/metamaps#readme",
   "dependencies": {
+    "autolinker": "^0.17.1",
     "babel-cli": "^6.11.4",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-class-properties": "^6.11.5",
@@ -27,9 +28,12 @@
     "chai": "^3.5.0",
     "jquery": "1.12.1",
     "mocha": "^3.0.2",
+    "mocha-jsdom": "^1.1.0",
+    "node-uuid": "1.2.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "requirejs": "^2.1.1",
+    "socket.io": "0.9.12",
     "underscore": "^1.4.4",
     "webpack": "^1.13.1"
   }

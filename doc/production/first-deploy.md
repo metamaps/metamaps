@@ -87,8 +87,6 @@ server to see what problems show up:
     sudo npm install -g forever
     (crontab -u metamaps -l 2>/dev/null; echo "@reboot $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
 
-    cd /home/metamaps/metamaps/realtime
-    npm install
     mkdir -p /home/metamaps/logs
     forever --append -l /home/metamaps/logs/forever.realtime.log \
       start /home/metamaps/metamaps/realtime/realtime-server.js
