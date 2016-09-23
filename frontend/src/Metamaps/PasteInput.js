@@ -88,6 +88,18 @@ const PasteInput = {
       import_id,
       {
         success: function(topic) {
+          $.get('/hacks/load_url_title', {
+            url: text
+          }, function success(data, textStatus) {
+            var selector = '#showcard #topic_' + topic.get('id') + ' .best_in_place'
+            if ($(selector).find('form').length > 0) {
+              $(selector).find('textarea, input').val(data.title)
+            } else {
+              $(selector).html(data.title)
+            }
+            topic.set('name', data.title)
+            topic.save()
+          })
           TopicCard.showCard(topic.get('node'), function() {
             $('#showcard #titleActivator').click()
               .find('textarea, input').focus()
