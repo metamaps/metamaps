@@ -147,7 +147,7 @@ var Private = {
             message: this.$messageInput.val(),
         };
         this.$messageInput.val('');
-        $(document).trigger(chatView.events.message + '-' + this.room, [message]);
+        $(document).trigger(ChatView.events.message + '-' + this.room, [message]);
     },
     addParticipant: function(participant) {
         var p = _.clone(participant.attributes);
@@ -174,12 +174,12 @@ var Handlers = {
     videoToggleClick: function() {
         this.$videoToggle.toggleClass('active');
         this.videosShowing = !this.videosShowing;
-        $(document).trigger(this.videosShowing ? chatView.events.videosOn : chatView.events.videosOff);
+        $(document).trigger(this.videosShowing ? ChatView.events.videosOn : ChatView.events.videosOff);
     },
     cursorToggleClick: function() {
         this.$cursorToggle.toggleClass('active');
         this.cursorsShowing = !this.cursorsShowing;
-        $(document).trigger(this.cursorsShowing ? chatView.events.cursorsOn : chatView.events.cursorsOff);
+        $(document).trigger(this.cursorsShowing ? ChatView.events.cursorsOn : ChatView.events.cursorsOff);
     },
     soundToggleClick: function() {
         this.alertSound = !this.alertSound;
@@ -193,10 +193,10 @@ var Handlers = {
         }
     },
     inputFocus: function() {
-        $(document).trigger(chatView.events.inputFocus);
+        $(document).trigger(ChatView.events.inputFocus);
     },
     inputBlur: function() {
-        $(document).trigger(chatView.events.inputBlur);
+        $(document).trigger(ChatView.events.inputBlur);
     }
 };
 

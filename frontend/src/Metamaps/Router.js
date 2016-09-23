@@ -21,6 +21,9 @@ import Visualize from './Visualize'
  */
 
 const _Router = Backbone.Router.extend({
+  currentPage: '',
+  currentSection: '',
+  timeoutId: undefined,
   routes: {
     '': 'home', // #home
     'explore/:section': 'explore', // #explore/active
@@ -28,6 +31,7 @@ const _Router = Backbone.Router.extend({
     'maps/:id': 'maps' // #maps/7
   },
   home: function () {
+    let self = this
     clearTimeout(this.timeoutId)
 
     if (Active.Mapper) document.title = 'Explore Active Maps | Metamaps'
@@ -41,8 +45,8 @@ const _Router = Backbone.Router.extend({
     $('.wrapper').addClass(classes)
 
     var navigate = function () {
-      this.timeoutId = setTimeout(function () {
-        this.navigate('')
+      self.timeoutId = setTimeout(function () {
+        self.navigate('')
       }, 300)
     }
 
@@ -74,6 +78,7 @@ const _Router = Backbone.Router.extend({
     Active.Topic = null
   },
   explore: function (section, id) {
+    var self = this
     clearTimeout(this.timeoutId)
 
     // just capitalize the variable section
@@ -115,17 +120,17 @@ const _Router = Backbone.Router.extend({
     Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
 
     var navigate = function () {
-      var path = '/explore/' + this.currentPage
+      var path = '/explore/' + self.currentPage
 
       // alter url if for mapper profile page
-      if (this.currentPage === 'mapper') {
+      if (self.currentPage === 'mapper') {
         path += '/' + Metamaps.Maps.Mapper.mapperId
       }
       
-      this.navigate(path)
+      self.navigate(path)
     }
     var navigateTimeout = function () {
-      this.timeoutId = setTimeout(navigate, 300)
+      self.timeoutId = setTimeout(navigate, 300)
     }
     if (Metamaps.Maps[capitalize].length === 0) {
       Metamaps.Loading.show()
@@ -209,9 +214,6 @@ const _Router = Backbone.Router.extend({
 })
 
 const Router = new _Router()
-Router.currentPage = ''
-Router.currentSection = undefined
-Router.timeoutId = undefined
 
 Router.intercept = function (evt) {
   var segments
