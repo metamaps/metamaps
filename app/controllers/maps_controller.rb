@@ -90,24 +90,13 @@ class MapsController < ApplicationController
 
   # POST maps/:id/access
   def access
-    userIds = params[:access] || []
-    added = userIds.select do |uid|
-      user = User.find(uid)
-      if user.nil? || (current_user && user == current_user)
-        false
-      else
-        !@map.collaborators.include?(user)
-      end
+    user_ids = params[:access] || []
+
+    added = @map.add_new_collaborators(user_ids)
+    added.each do |user_id|
+      MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id)).deliver_later
     end
-    removed = @map.collaborators.select { |user| !userIds.include?(user.id.to_s) }.map(&:id)
-    added.each do |uid|
-      UserMap.create(user_id: uid.to_i, map_id: @map.id)
-      user = User.find(uid.to_i)
-      MapMailer.invite_to_edit_email(@map, current_user, user).deliver_later
-    end
-    removed.each do |uid|
-      @map.user_maps.select { |um| um.user_id == uid }.each(&:destroy)
-    end
+    @map.remove_old_collaborators(user_ids)
 
     respond_to do |format|
       format.json do
@@ -154,13 +143,7 @@ class MapsController < ApplicationController
 
   # POST maps/:id/upload_screenshot
   def screenshot
-    png = Base64.decode64(params[:encoded_image]['data:image/png;base64,'.length..-1])
-    StringIO.open(png) do |data|
-      data.class.class_eval { attr_accessor :original_filename, :content_type }
-      data.original_filename = 'map-' + @map.id.to_s + '-screenshot.png'
-      data.content_type = 'image/png'
-      @map.screenshot = data
-    end
+    @map.base64_screenshot(params[:encoded_image])
 
     if @map.save
       render json: { message: 'Successfully uploaded the map screenshot.' }

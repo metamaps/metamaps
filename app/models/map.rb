@@ -127,4 +127,38 @@ class Map < ApplicationRecord
     json['messages'] = messages.sort_by(&:created_at)
     json['stars'] = stars
   end
+
+  def add_new_collaborators(user_ids)
+    added = []
+    users = User.where(id: user_ids)
+    users.each do |user|
+      if user && user != current_user && !collaborators.include?(user)
+        UserMap.create(user_id: uid.to_i, map_id: id)
+        user = User.find(uid.to_i)
+        added << user.id
+      end
+    end
+    added
+  end
+
+  def remove_old_collaborators(user_ids)
+    removed = []
+    collaborators.map(&:id).each do |user_id|
+      if !user_ids.include?(user_id)
+        user_maps.select { |um| um.user_id == user_id }.each(&:destroy)
+        removed << user_id
+      end
+    end
+    removed
+  end
+
+  def base64_screenshot(encoded_image)
+    png = Base64.decode64(encoded_image['data:image/png;base64,'.length..-1])
+    StringIO.open(png) do |data|
+      data.class.class_eval { attr_accessor :original_filename, :content_type }
+      data.original_filename = 'map-' + @map.id.to_s + '-screenshot.png'
+      data.content_type = 'image/png'
+      @map.screenshot = data
+    end
+  end
 end
