@@ -95,7 +95,7 @@ var Private = {
     },
     initializeSounds: function() {
         this.sound = new Howl({
-          urls: [Metamaps.Erb['sounds/MM_sounds.mp3'], Metamaps.Erb['sounds/MM_sounds.ogg'],
+          urls: [Metamaps.Erb['sounds/MM_sounds.mp3'], Metamaps.Erb['sounds/MM_sounds.ogg']],
           sprite: {
             joinmap: [0, 561],
             leavemap: [1000, 592],

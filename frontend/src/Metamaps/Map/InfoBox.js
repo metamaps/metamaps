@@ -1,6 +1,6 @@
 /* global Metamaps, $ */
 
-import Active from './Active'
+import Active from '../Active'
 import GlobalUI from '../GlobalUI'
 import Router from '../Router'
 

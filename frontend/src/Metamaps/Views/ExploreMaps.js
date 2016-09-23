@@ -1,8 +1,9 @@
 /* global Metamaps, $ */
 
-import Active from './Active'
-import ReactComponents from './ReactComponents'
 import ReactDOM from 'react-dom' // TODO ensure this isn't a double import
+
+import Active from '../Active'
+import ReactComponents from '../ReactComponents'
 
 /*
  *  - Metamaps.Loading

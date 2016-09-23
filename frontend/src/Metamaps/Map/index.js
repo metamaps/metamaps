@@ -1,17 +1,17 @@
 /* global Metamaps, $ */
 
-import Active from './Active'
-import AutoLayout from './AutoLayout'
-import Create from './Create'
-import Filter from './Filter'
-import GlobalUI from './GlobalUI'
-import JIT from './JIT'
-import Realtime from './Realtime'
-import Router from './Router'
-import Selected from './Selected'
-import SynapseCard from './SynapseCard'
-import TopicCard from './TopicCard'
-import Visualize from './Visualize'
+import Active from '../Active'
+import AutoLayout from '../AutoLayout'
+import Create from '../Create'
+import Filter from '../Filter'
+import GlobalUI from '../GlobalUI'
+import JIT from '../JIT'
+import Realtime from '../Realtime'
+import Router from '../Router'
+import Selected from '../Selected'
+import SynapseCard from '../SynapseCard'
+import TopicCard from '../TopicCard'
+import Visualize from '../Visualize'
 
 import CheatSheet from './CheatSheet'
 import InfoBox from './InfoBox'
@@ -361,5 +361,5 @@ const Map = {
   }
 }
 
-export CheatSheet, InfoBox
+export { CheatSheet, InfoBox }
 export default Map
