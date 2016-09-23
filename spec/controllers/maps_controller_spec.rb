@@ -8,6 +8,21 @@ RSpec.describe MapsController, type: :controller do
     sign_in create(:user)
   end
 
+  describe 'GET #activemaps' do
+    context 'always returns an array' do
+      it 'with 0 records' do
+        Map.delete_all
+        get :activemaps, format: :json
+        expect(JSON.parse(response.body)).to eq []
+      end
+      it 'with 1 record' do
+        map = create(:map)
+        get :activemaps, format: :json
+        expect(JSON.parse(response.body).class).to be Array
+      end
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new Map' do
