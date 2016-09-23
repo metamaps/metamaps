@@ -3232,7 +3232,7 @@ var Canvas;
           ctx = base.getCtx(),
           scale = base.scaleOffsetX;
       //var pattern = new Image();
-      //pattern.src = "<%= asset_path('cubes.png') %>";
+      //pattern.src = Metamaps.Erb['cubes.png']
       //var ptrn = ctx.createPattern(pattern, 'repeat');
       //ctx.fillStyle = ptrn;
       ctx.fillStyle = Metamaps.Settings.colors.background;

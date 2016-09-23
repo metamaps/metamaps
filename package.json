@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/metamaps/metamaps#readme",
   "dependencies": {
+    "autolinker": "^0.17.1",
     "babel-cli": "^6.11.4",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-class-properties": "^6.11.5",
@@ -27,6 +28,7 @@
     "chai": "^3.5.0",
     "jquery": "1.12.1",
     "mocha": "^3.0.2",
+    "mocha-jsdom": "^1.1.0",
     "node-uuid": "1.2.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",

@@ -1,4 +1,6 @@
-/* global Metamaps */
+/* global Metamaps, $jit */
+
+const $jit = $jit || {}
 
 import _ from 'lodash'
 

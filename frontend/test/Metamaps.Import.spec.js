@@ -1,7 +1,11 @@
 /* global describe, it */
 
 import chai from 'chai'
-import Import from '../src/Metamaps/Import'
+
+// JIT needs window.$jit
+require('../../app/assets/javascripts/src/JIT.js')
+
+const Import = require('../src/Metamaps/Import')
 
 const { expect } = chai
 
