@@ -147,10 +147,9 @@ module Api
         search_column = -> (column) { table[column].matches(safe_query) }
 
         condition = searchable_columns.reduce(nil) do |prev, column|
-          next search_column.(column) if prev.nil?
-          search_column.(column).or(prev)
+          next search_column.call(column) if prev.nil?
+          search_column.call(column).or(prev)
         end
-        puts collection.where(condition).to_sql
         collection.where(condition)
       end
 
