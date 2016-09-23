@@ -108,4 +108,23 @@ class Map < ApplicationRecord
     self.screenshot = data
     save
   end
+
+  # user param helps determine what records are visible
+  def contains(user)
+    allmappers = contributors
+    allcollaborators = editors
+    alltopics = Pundit.policy_scope(user, topics).to_a
+    allsynapses = Pundit.policy_scope(user, synapses).to_a
+    allmappings = Pundit.policy_scope(user, mappings).to_a
+
+    json = {}
+    json['map'] = self
+    json['topics'] = alltopics
+    json['synapses'] = allsynapses
+    json['mappings'] = allmappings
+    json['mappers'] = allmappers
+    json['collaborators'] = allcollaborators
+    json['messages'] = messages.sort_by(&:created_at)
+    json['stars'] = stars
+  end
 end
