@@ -9,7 +9,7 @@ class ExploreController < ApplicationController
   #autocomplete :map, :name, full: true, extra_data: [:user_id]
 
   # GET /explore/active
-  def activemaps
+  def active
     page = params[:page].present? ? params[:page] : 1
     @maps = policy_scope(Map).order('updated_at DESC')
                              .page(page).per(20)
@@ -25,7 +25,7 @@ class ExploreController < ApplicationController
   end
 
   # GET /explore/featured
-  def featuredmaps
+  def featured
     page = params[:page].present? ? params[:page] : 1
     @maps = policy_scope(
       Map.where('maps.featured = ? AND maps.permission != ?',
@@ -39,7 +39,7 @@ class ExploreController < ApplicationController
   end
 
   # GET /explore/mine
-  def mymaps
+  def mine
     unless authenticated?
       skip_policy_scope
       return redirect_to explore_active_path
@@ -57,7 +57,7 @@ class ExploreController < ApplicationController
   end
 
   # GET /explore/shared
-  def sharedmaps
+  def shared
     unless authenticated?
       skip_policy_scope
       return redirect_to explore_active_path
@@ -75,7 +75,7 @@ class ExploreController < ApplicationController
   end
 
   # GET /explore/starred
-  def starredmaps
+  def starred
     unless authenticated?
       skip_policy_scope
       return redirect_to explore_active_path
@@ -94,7 +94,7 @@ class ExploreController < ApplicationController
   end
 
   # GET /explore/mapper/:id
-  def usermaps
+  def mapper
     page = params[:page].present? ? params[:page] : 1
     @user = User.find(params[:id])
     @maps = policy_scope(Map.where(user: @user))
