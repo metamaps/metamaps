@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 module Api
   module V2
     class SynapseSerializer < ApplicationSerializer
       attributes :id,
-        :desc,
-        :category,
-        :permission,
-        :created_at,
-        :updated_at
+                 :desc,
+                 :category,
+                 :permission,
+                 :created_at,
+                 :updated_at
 
       def self.embeddable
         {
@@ -16,7 +17,7 @@ module Api
         }
       end
 
-      self.class_eval do
+      class_eval do
         embed_dat
       end
     end

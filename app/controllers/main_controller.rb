@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MainController < ApplicationController
   include TopicsHelper
   include MapsHelper
@@ -12,13 +13,13 @@ class MainController < ApplicationController
   def home
     @maps = policy_scope(Map).order('updated_at DESC').page(1).per(20)
     respond_to do |format|
-        format.html { 
-          if !authenticated?
-            render 'main/home'
-          else 
-            render 'maps/activemaps'
-          end
-        }
+      format.html do
+        if !authenticated?
+          render 'main/home'
+        else
+          render 'maps/activemaps'
+        end
+      end
     end
   end
 
@@ -163,8 +164,8 @@ class MainController < ApplicationController
       @synapses = []
     end
 
-    #limit to 5 results
-    @synapses = @synapses.to_a.slice(0,5)
+    # limit to 5 results
+    @synapses = @synapses.to_a.slice(0, 5)
 
     render json: autocomplete_synapse_array_json(@synapses)
   end

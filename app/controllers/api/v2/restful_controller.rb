@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Api
   module V2
     class RestfulController < ActionController::Base
@@ -101,9 +102,9 @@ module Api
         next_page = current_page < total_pages ? current_page + 1 : 0
 
         base_url = request.base_url + request.path
-        nxt = request.query_parameters.merge(page: next_page).map{|x| x.join('=')}.join('&')
-        prev = request.query_parameters.merge(page: prev_page).map{|x| x.join('=')}.join('&')
-        last = request.query_parameters.merge(page: total_pages).map{|x| x.join('=')}.join('&')
+        nxt = request.query_parameters.merge(page: next_page).map { |x| x.join('=') }.join('&')
+        prev = request.query_parameters.merge(page: prev_page).map { |x| x.join('=') }.join('&')
+        last = request.query_parameters.merge(page: total_pages).map { |x| x.join('=') }.join('&')
         response.headers['Link'] = [
           %(<#{base_url}?#{nxt}>; rel="next"),
           %(<#{base_url}?#{prev}>; rel="prev"),
@@ -163,7 +164,7 @@ module Api
             builder = builder.order(sort => direction)
           end
         end
-        return builder
+        builder
       end
 
       def visible_records

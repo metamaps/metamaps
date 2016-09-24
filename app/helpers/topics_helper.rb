@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module TopicsHelper
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_array_json(topics)
@@ -7,7 +8,7 @@ module TopicsHelper
       topic['id'] = t.id
       topic['label'] = t.name
       topic['value'] = t.name
-      topic['description'] = t.desc ? t.desc.truncate(70) : '' # make this return matched results
+      topic['description'] = t.desc ? t.desc&.truncate(70) # make this return matched results
       topic['type'] = t.metacode.name
       topic['typeImageURL'] = t.metacode.icon
       topic['permission'] = t.permission
@@ -34,7 +35,7 @@ module TopicsHelper
     # add the node to the array
     array.push(node)
 
-    return array if count == 0
+    return array if count.zero?
 
     count -= 1
 

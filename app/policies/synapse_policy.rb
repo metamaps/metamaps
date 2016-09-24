@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SynapsePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve

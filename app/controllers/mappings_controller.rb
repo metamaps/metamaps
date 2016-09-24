@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MappingsController < ApplicationController
   before_action :require_user, only: [:create, :update, :destroy]
   after_action :verify_authorized, except: :index

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Synapse < ApplicationRecord
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
@@ -44,10 +45,7 @@ class Synapse < ApplicationRecord
   # :nocov:
   def calculated_permission
     if defer_to_map
-      defer_to_map.permission
-    else
-      permission
-    end
+      defer_to_map&.permission
   end
   # :nocov:
 

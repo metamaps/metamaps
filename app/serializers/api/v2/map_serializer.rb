@@ -1,13 +1,14 @@
+# frozen_string_literal: true
 module Api
   module V2
     class MapSerializer < ApplicationSerializer
       attributes :id,
-        :name,
-        :desc,
-        :permission,
-        :screenshot,
-        :created_at,
-        :updated_at
+                 :name,
+                 :desc,
+                 :permission,
+                 :screenshot,
+                 :created_at,
+                 :updated_at
 
       def self.embeddable
         {
@@ -20,7 +21,7 @@ module Api
         }
       end
 
-      self.class_eval do
+      class_eval do
         embed_dat
       end
     end

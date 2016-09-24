@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Event < ApplicationRecord
   KINDS = %w(user_present_on_map conversation_started_on_map topic_added_to_map synapse_added_to_map).freeze
 

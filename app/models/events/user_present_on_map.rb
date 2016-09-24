@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Events::UserPresentOnMap < Event
   # after_create :notify_users!
 

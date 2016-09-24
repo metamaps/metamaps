@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec::Matchers.define :match_json_schema do |schema_name|
   match do |response|
     schema_directory = Rails.root.join('doc', 'api', 'schemas').to_s

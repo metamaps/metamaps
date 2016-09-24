@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ApplicationController < ActionController::Base
   include ApplicationHelper
   include Pundit
@@ -60,10 +61,9 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin
-    unless authenticated? && admin?
-      redirect_to root_url, notice: 'You need to be an admin for that.'
-      return false
-    end
+    return true if authenticated? && admin?
+    redirect_to root_url, notice: 'You need to be an admin for that.'
+    false
   end
 
   def user

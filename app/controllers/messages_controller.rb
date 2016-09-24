@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MessagesController < ApplicationController
   before_action :require_user, except: [:show]
   after_action :verify_authorized

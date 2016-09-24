@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 namespace :assets do
   task :js_compile do
-    system "npm install"
-    system "npm run build"
+    system 'npm install'
+    system 'npm run build'
   end
 end
 

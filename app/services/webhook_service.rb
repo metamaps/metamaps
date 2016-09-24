@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class WebhookService
   def self.publish!(webhook:, event:)
     return false unless webhook.event_types.include? event.kind

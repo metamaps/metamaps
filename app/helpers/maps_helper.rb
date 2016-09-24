@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module MapsHelper
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_map_array_json(maps)
@@ -16,7 +17,7 @@ module MapsHelper
 
       contributorTip = ''
       firstContributorImage = 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
-      if m.contributors.count > 0
+      if m.contributors.count.positive?
         firstContributorImage = m.contributors[0].image.url(:thirtytwo)
         m.contributors.each_with_index do |c, _index|
           userImage = c.image.url(:thirtytwo)

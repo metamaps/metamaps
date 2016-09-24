@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def get_metacodeset
     @m = current_user.settings.metacodes

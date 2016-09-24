@@ -1,11 +1,12 @@
+# frozen_string_literal: true
 module Api
   module V2
     class UserSerializer < ApplicationSerializer
       attributes :id,
-        :name,
-        :avatar,
-        :is_admin,
-        :generation
+                 :name,
+                 :avatar,
+                 :is_admin,
+                 :generation
 
       def avatar
         object.image.url(:sixtyfour)

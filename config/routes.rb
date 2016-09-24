@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Metamaps::Application.routes.draw do
   use_doorkeeper
   root to: 'main#home', via: :get

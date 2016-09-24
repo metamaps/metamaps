@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MapExportService < Struct.new(:user, :map)
   def json
     # marshal_dump turns OpenStruct into a Hash

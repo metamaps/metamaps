@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve

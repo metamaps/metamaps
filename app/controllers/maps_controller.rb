@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MapsController < ApplicationController
   before_action :require_user, only: [:create, :update, :access, :star, :unstar, :screenshot, :events, :destroy]
   after_action :verify_authorized, except: [:activemaps, :featuredmaps, :mymaps, :sharedmaps, :starredmaps, :usermaps]
@@ -107,14 +108,14 @@ class MapsController < ApplicationController
 
   # GET maps/new
   def new
-    @map = Map.new(name: "Untitled Map", permission: "public", arranged: true)
+    @map = Map.new(name: 'Untitled Map', permission: 'public', arranged: true)
     authorize @map
 
     respond_to do |format|
       format.html do
         @map.user = current_user
         @map.save
-        redirect_to(map_path(@map) + '?new') 
+        redirect_to(map_path(@map) + '?new')
       end
     end
   end
@@ -305,9 +306,7 @@ class MapsController < ApplicationController
     @map = Map.find(params[:id])
     authorize @map
     star = Star.find_by_map_id_and_user_id(@map.id, current_user.id)
-    if not star
-      star = Star.create(map_id: @map.id, user_id: current_user.id)
-    end
+    star = Star.create(map_id: @map.id, user_id: current_user.id) unless star
 
     respond_to do |format|
       format.json do
@@ -321,9 +320,7 @@ class MapsController < ApplicationController
     @map = Map.find(params[:id])
     authorize @map
     star = Star.find_by_map_id_and_user_id(@map.id, current_user.id)
-    if star
-      star.delete
-    end
+    star&.delete
 
     respond_to do |format|
       format.json do
