@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'open-uri'
 
 class User < ApplicationRecord
@@ -41,7 +42,7 @@ class User < ApplicationRecord
                             default_url: 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
 
   # Validate the attached image is image/jpg, image/png, etc
-  validates_attachment_content_type :image, content_type: %r(\Aimage/.*\Z)
+  validates_attachment_content_type :image, content_type: %r{\Aimage/.*\Z}
 
   # override default as_json
   def as_json(_options = {})
@@ -79,8 +80,8 @@ class User < ApplicationRecord
     end
   end
 
-  def starred_map?(map) 
-    return self.stars.where(map_id: map.id).exists?
+  def starred_map?(map)
+    stars.where(map_id: map.id).exists?
   end
 
   def settings

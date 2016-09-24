@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Webhooks::Slack::TopicAddedToMap < Webhooks::Slack::Base
   def text
     "New #{eventable.mappable.metacode.name} topic *#{eventable.mappable.name}* was added to the map *#{view_map_on_metamaps}*"

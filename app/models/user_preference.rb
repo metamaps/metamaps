@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UserPreference
   attr_accessor :metacodes
 
@@ -9,7 +10,7 @@ class UserPreference
         array.push(metacode.id.to_s) if metacode
       rescue ActiveRecord::StatementInvalid
         if m == 'Action'
-          Rails.logger.warn("TODO: remove this travis workaround in user_preference.rb")
+          Rails.logger.warn('TODO: remove this travis workaround in user_preference.rb')
         end
       end
     end

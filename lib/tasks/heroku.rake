@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 require 'dotenv/tasks'
 
 namespace :heroku do
   desc 'Generate the Heroku gems manifest from gem dependencies'
   task gems: :dotenv do
-    RAILS_ENV = 'production'.freeze
+    RAILS_ENV = 'production'
     Rake::Task[:environment].invoke
     list = Rails.configuration.gems.collect do |g|
       _command, *options = g.send(:install_command)

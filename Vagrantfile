@@ -31,7 +31,7 @@ sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '3112';"
 
 SCRIPT
 
-VAGRANTFILE_API_VERSION = '2'.freeze
+VAGRANTFILE_API_VERSION = '2'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = 'trusty64'

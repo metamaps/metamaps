@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Webhook < ApplicationRecord
   belongs_to :hookable, polymorphic: true
 

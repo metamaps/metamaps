@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Map < ApplicationRecord
   belongs_to :user
 
@@ -19,7 +20,7 @@ class Map < ApplicationRecord
     thumb: ['188x126#', :png]
     #:full => ['940x630#', :png]
   },
-  default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
+                                 default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }

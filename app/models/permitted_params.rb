@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PermittedParams < Struct.new(:params)
   %w(map synapse topic mapping token).each do |kind|
     define_method(kind) do

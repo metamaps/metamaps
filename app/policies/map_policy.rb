@@ -1,14 +1,13 @@
+# frozen_string_literal: true
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       visible = %w(public commons)
-      permission = 'maps.permission IN (?)'
-      if user
-        shared_maps = user.shared_maps.map(&:id)
-        scope.where(permission + ' OR maps.id IN (?) OR maps.user_id = ?', visible, shared_maps, user.id)
-      else
-        scope.where(permission, visible)
-      end
+      return scope.where(permission: visible) unless user
+
+      scope.where(permission: visible)
+           .or(scope.where(id: user.shared_maps.map(&:id)))
+           .or(scope.where(user_id: user.id))
     end
   end
 
@@ -17,7 +16,9 @@ class MapPolicy < ApplicationPolicy
   end
 
   def show?
-    record.permission == 'commons' || record.permission == 'public' || record.collaborators.include?(user) || record.user == user
+    record.permission.in?(['commons', 'public']) ||
+      record.collaborators.include?(user) ||
+      record.user == user
   end
 
   def create?
@@ -25,7 +26,10 @@ class MapPolicy < ApplicationPolicy
   end
 
   def update?
-    user.present? && (record.permission == 'commons' || record.collaborators.include?(user) || record.user == user)
+    return false unless user.present?
+    record.permission == 'commons' ||
+      record.collaborators.include?(user) ||
+      record.user == user
   end
 
   def destroy?
@@ -33,7 +37,7 @@ class MapPolicy < ApplicationPolicy
   end
 
   def access?
-    # note that this is to edit access
+    # note that this is to edit who can access the map
     user.present? && record.user == user
   end
 

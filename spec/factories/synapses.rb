@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :synapse do
     sequence(:desc) { |n| "Cool synapse ##{n}" }
@@ -6,6 +7,6 @@ FactoryGirl.define do
     association :topic1, factory: :topic
     association :topic2, factory: :topic
     user
-    weight 1 # todo drop this column
+    weight 1 # TODO: drop this column
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Webhooks::Slack::SynapseAddedToMap < Webhooks::Slack::Base
   def text
     "\"*#{eventable.mappable.topic1.name}* #{eventable.mappable.desc || '->'} *#{eventable.mappable.topic2.name}*\" was added as a connection to the map *#{view_map_on_metamaps}*"

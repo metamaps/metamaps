@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Topic < ApplicationRecord
   include TopicsHelper
 
@@ -73,11 +74,7 @@ class Topic < ApplicationRecord
   end
 
   def calculated_permission
-    if defer_to_map
-      defer_to_map.permission
-    else
-      permission
-    end
+    defer_to_map&.permission || permission
   end
 
   def as_json(_options = {})

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Metamaps::Application.routes.draw do
   use_doorkeeper
   root to: 'main#home', via: :get
@@ -63,7 +64,11 @@ Metamaps::Application.routes.draw do
   get 'explore/starred', to: 'maps#starredmaps'
   get 'explore/mapper/:id', to: 'maps#usermaps'
 
-  devise_for :users, controllers: { registrations: 'users/registrations', passwords: 'users/passwords', sessions: 'devise/sessions' }, skip: :sessions
+  devise_for :users, skip: :sessions, controllers: {
+    registrations: 'users/registrations',
+    passwords: 'users/passwords',
+    sessions: 'devise/sessions'
+  }
 
   devise_scope :user do
     get 'login' => 'devise/sessions#new', :as => :new_user_session

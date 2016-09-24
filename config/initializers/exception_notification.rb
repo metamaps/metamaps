@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'exception_notification/rails'
 
 ExceptionNotification.configure do |config|

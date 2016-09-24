@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe 'mappings API', type: :request do
@@ -23,7 +24,9 @@ RSpec.describe 'mappings API', type: :request do
   end
 
   it 'POST /api/v2/mappings' do
-    post '/api/v2/mappings', params: { mapping: mapping.attributes, access_token: token }
+    post '/api/v2/mappings', params: {
+      mapping: mapping.attributes, access_token: token
+    }
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:mapping)
@@ -31,7 +34,9 @@ RSpec.describe 'mappings API', type: :request do
   end
 
   it 'PATCH /api/v2/mappings/:id' do
-    patch "/api/v2/mappings/#{mapping.id}", params: { mapping: mapping.attributes, access_token: token }
+    patch "/api/v2/mappings/#{mapping.id}", params: {
+      mapping: mapping.attributes, access_token: token
+    }
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:mapping)
