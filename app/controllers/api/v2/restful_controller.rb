@@ -99,19 +99,24 @@ module Api
       end
 
       def pagination(collection)
-        @pagination_data ||= {
-          current_page: (params[:page] || 1).to_i,
+        return @pagination_data unless @pagination_data.nil?
+
+        current_page = (params[:page] || 1).to_i
+        per = (params[:per] || 25).to_i
+        total_pages = (collection.total_count.to_f / per).ceil
+        @pagination_data = {
+          current_page: current_page,
           next_page: current_page < total_pages ? current_page + 1 : 0,
           prev_page: current_page > 1 ? current_page - 1 : 0,
-          total_pages: (collection.total_count.to_f / per).ceil,
+          total_pages: total_pages,
           total_count: collection.total_count,
-          per: (params[:per] || 25).to_i
+          per: per
         }
       end
 
       def pagination_link_headers!(data)
         base_url = request.base_url + request.path
-        old_query = request_query_parameters
+        old_query = request.query_parameters
         nxt = old_query.merge(page: data[:next_page]).map { |x| x.join('=') }.join('&')
         prev = old_query.merge(page: data[:prev_page]).map { |x| x.join('=') }.join('&')
         last = old_query.merge(page: data[:total_pages]).map { |x| x.join('=') }.join('&')
@@ -123,7 +128,7 @@ module Api
         ].join(',')
         response.headers['X-Total-Pages'] = data[:total_pages].to_s
         response.headers['X-Total-Count'] = data[:total_count].to_s
-        response.headers['X-Per-Page'] = per.to_s
+        response.headers['X-Per-Page'] = data[:per].to_s
       end
 
       def instantiate_collection

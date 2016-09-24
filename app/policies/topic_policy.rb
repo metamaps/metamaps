@@ -23,7 +23,7 @@ class TopicPolicy < ApplicationPolicy
     if record.defer_to_map.present?
       map_policy.show?
     else
-      record.permission.in?('commons', 'public') || record.user == user
+      record.permission.in?(['commons', 'public']) || record.user == user
     end
   end
 
