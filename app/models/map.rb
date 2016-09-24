@@ -111,45 +111,37 @@ class Map < ApplicationRecord
 
   # user param helps determine what records are visible
   def contains(user)
-    allmappers = contributors
-    allcollaborators = editors
-    alltopics = Pundit.policy_scope(user, topics).to_a
-    allsynapses = Pundit.policy_scope(user, synapses).to_a
-    allmappings = Pundit.policy_scope(user, mappings).to_a
-
-    json = {}
-    json['map'] = self
-    json['topics'] = alltopics
-    json['synapses'] = allsynapses
-    json['mappings'] = allmappings
-    json['mappers'] = allmappers
-    json['collaborators'] = allcollaborators
-    json['messages'] = messages.sort_by(&:created_at)
-    json['stars'] = stars
+    {
+      map: self,
+      topics: Pundit.policy_scope(user, topics).to_a,
+      synapses: Pundit.policy_scope(user, synapses).to_a,
+      mappings: Pundit.policy_scope(user, mappings).to_a,
+      mappers: contributors,
+      collaborators: editors,
+      messages: messages.sort_by(&:created_at),
+      stars: stars
+    }
   end
 
   def add_new_collaborators(user_ids)
-    added = []
     users = User.where(id: user_ids)
-    users.each do |user|
-      if user && user != current_user && !collaborators.include?(user)
-        UserMap.create(user_id: uid.to_i, map_id: id)
-        user = User.find(uid.to_i)
-        added << user.id
-      end
+    current_collaborators = collaborators + [user]
+    added = users.map do |new_user|
+      next nil if current_collaborators.include?(new_user)
+      UserMap.create(user_id: new_user.id, map_id: id)
+      new_user.id
     end
-    added
+    added.compact
   end
 
   def remove_old_collaborators(user_ids)
-    removed = []
-    collaborators.map(&:id).each do |user_id|
-      if !user_ids.include?(user_id)
-        user_maps.select { |um| um.user_id == user_id }.each(&:destroy)
-        removed << user_id
-      end
+    current_collaborators = collaborators + [user]
+    removed = current_collaborators.map(&:id).map do |old_user_id|
+      next nil if user_ids.include?(old_user_id)
+      user_maps.where(user_id: old_user_id).find_each(&:destroy)
+      old_user_id
     end
-    removed
+    removed.compact
   end
 
   def base64_screenshot(encoded_image)
