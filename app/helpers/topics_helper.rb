@@ -2,56 +2,38 @@
 module TopicsHelper
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_array_json(topics)
-    temp = []
-    topics.each do |t|
-      topic = {}
-      topic['id'] = t.id
-      topic['label'] = t.name
-      topic['value'] = t.name
-      topic['description'] = t.desc ? t.desc&.truncate(70) # make this return matched results
-      topic['type'] = t.metacode.name
-      topic['typeImageURL'] = t.metacode.icon
-      topic['permission'] = t.permission
-      topic['mapCount'] = t.maps.count
-      topic['synapseCount'] = t.synapses.count
-      topic['originator'] = t.user.name
-      topic['originatorImage'] = t.user.image.url(:thirtytwo)
-      topic['rtype'] = 'topic'
-      topic['inmaps'] = t.inmaps
-      topic['inmapsLinks'] = t.inmapsLinks
-
-      temp.push topic
+    topics.map do |t|
+      {
+        id: t.id,
+        label: t.name,
+        value: t.name,
+        description: t.desc ? t.desc&.truncate(70) : '', # make this return matched results
+        type: t.metacode.name,
+        typeImageURL: t.metacode.icon,
+        permission: t.permission,
+        mapCount: t.maps.count,
+        synapseCount: t.synapses.count,
+        originator: t.user.name,
+        originatorImage: t.user.image.url(:thirtytwo),
+        rtype: :topic,
+        inmaps: t.inmaps,
+        inmapsLinks: t.inmapsLinks
+      }
     end
-    temp
   end
 
-  # find all nodes in any given nodes network
+  # recursively find all nodes in any given nodes network
   def network(node, array, count)
-    # recurse starting with a node to find all connected nodes and return an array of topics that constitutes the starting nodes network
-
-    # if the array of nodes is empty initialize it
     array = [] if array.nil?
-
-    # add the node to the array
     array.push(node)
-
     return array if count.zero?
 
-    count -= 1
-
     # check if each relative is already in the array and if not, call the network function again
-    if !node.relatives.empty?
-      if (node.relatives - array).empty?
-        return array
-      else
-        (node.relatives - array).each do |relative|
-          array = (array | network(relative, array, count))
-        end
-        return array
-      end
-
-    elsif node.relatives.empty?
-      return array
+    remaining_relatives = node.relatives.to_a - array
+    remaining_relatives.each do |relative|
+      array = (array | network(relative, array, count - 1))
     end
+
+    array
   end
 end

@@ -2,33 +2,24 @@
 module SynapsesHelper
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_synapse_generic_json(unique)
-    temp = []
-    unique.each do |s|
-      synapse = {}
-      synapse['label'] = s.desc
-      synapse['value'] = s.desc
-
-      temp.push synapse
+    unique.map do |s|
+      { label: s.desc, value: s.desc }
     end
-    temp
   end
 
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_synapse_array_json(synapses)
-    temp = []
-    synapses.each do |s|
-      synapse = {}
-      synapse['id'] = s.id
-      synapse['label'] = s.desc.nil? || s.desc == '' ? '(no description)' : s.desc
-      synapse['value'] = s.desc
-      synapse['permission'] = s.permission
-      synapse['mapCount'] = s.maps.count
-      synapse['originator'] = s.user.name
-      synapse['originatorImage'] = s.user.image.url(:thirtytwo)
-      synapse['rtype'] = 'synapse'
-
-      temp.push synapse
+    synapses.map do |s|
+      {
+        id: s.id,
+        label: s.desc.blank? ? '(no description)' : s.desc,
+        value: s.desc,
+        permission: s.permission,
+        mapCount: s.maps.count,
+        originator: s.user.name,
+        originatorImage: s.user.image.url(:thirtytwo),
+        rtype: 'synapse'
+      }
     end
-    temp
   end
 end

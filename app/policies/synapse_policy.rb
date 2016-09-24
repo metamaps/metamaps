@@ -3,12 +3,12 @@ class SynapsePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       visible = %w(public commons)
-      permission = 'synapses.permission IN (?)'
-      if user
-        scope.where(permission + ' OR synapses.defer_to_map_id IN (?) OR synapses.user_id = ?', visible, user.shared_maps.map(&:id), user.id)
-      else
-        scope.where(permission, visible)
-      end
+
+      return scope.where(permission: visible) unless user
+
+      scope.where(permission: visible)
+           .or(scope.where(defer_to_map_id: user.shared_maps.map(&:id)))
+           .or(scope.where(user_id: user.id))
     end
   end
 
