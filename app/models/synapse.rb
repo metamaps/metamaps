@@ -22,17 +22,12 @@ class Synapse < ApplicationRecord
     where('node1_id = ? OR node2_id = ?', topic_id, topic_id)
   }
 
-  # :nocov:
   delegate :name, to: :user, prefix: true
-  # :nocov:
 
-  # :nocov:
   def user_image
     user.image.url
   end
-  # :nocov:
 
-  # :nocov:
   def collaborator_ids
     if defer_to_map
       defer_to_map.editors.select { |mapper| mapper != user }.map(&:id)
@@ -40,18 +35,12 @@ class Synapse < ApplicationRecord
       []
     end
   end
-  # :nocov:
 
-  # :nocov:
   def calculated_permission
-    if defer_to_map
-      defer_to_map&.permission
+    defer_to_map&.permission || permission
   end
-  # :nocov:
 
-  # :nocov:
   def as_json(_options = {})
     super(methods: [:user_name, :user_image, :calculated_permission, :collaborator_ids])
   end
-  # :nocov:
 end

@@ -74,8 +74,7 @@ class Topic < ApplicationRecord
   end
 
   def calculated_permission
-    if defer_to_map
-      defer_to_map&.permission
+    defer_to_map&.permission || permission
   end
 
   def as_json(_options = {})
