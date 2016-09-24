@@ -1526,9 +1526,8 @@ h3.filterBox {
     background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
 }
 /* map info box */
-/* map info box */
 
-.wrapper div.mapInfoBox {
+.wrapper .mapInfoBox {
     display: none;
     position: absolute;
     bottom: 40px;
@@ -1536,12 +1535,34 @@ h3.filterBox {
     background-color: #424242;
     color: #F5F5F5;
     border-radius: 2px;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.23), 0px 3px 3px rgba(0,0,0,0.16);
+    text-align: center;
+    font-style: normal;
+}
+.import-dialog{
+  button {
+    margin: 1em 0.5em;
+  }
+  .import-blue-button {
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0.75em;
+    padding: 0.75em;
+    height: 3em;
+    background-color: #AAB0FB;
+    border-radius: 0.3em;
+    color: white;
+    cursor: pointer;
+  }
+  .fileupload {
+    width: 75%;
+    text-align: center;
+  }
+}
+.wrapper .mapInfoBox {
     width: 360px;
     min-height: 300px;
     padding: 0;
-    font-style: normal;
-    text-align: center;
-    box-shadow: 0 3px 3px rgba(0,0,0,0.23), 0px 3px 3px rgba(0,0,0,0.16);
 }
 .requestTitle {
     display: none;

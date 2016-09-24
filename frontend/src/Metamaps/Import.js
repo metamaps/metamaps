@@ -411,6 +411,7 @@ const Import = {
     newKey = newKey.replace(/\s/g, '') // remove whitespace
     if (newKey === 'url') newKey = 'link'
     if (newKey === 'title') newKey = 'name'
+    if (newKey === 'label') newKey = 'desc'
     if (newKey === 'description') newKey = 'desc'
     if (newKey === 'direction') newKey = 'category'
     return newKey

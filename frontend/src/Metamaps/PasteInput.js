@@ -21,16 +21,7 @@ const PasteInput = {
       e.preventDefault();
       var coords = Util.pixelsToCoords({ x: e.clientX, y: e.clientY })
       if (e.dataTransfer.files.length > 0) {
-        var fileReader = new window.FileReader()
-        fileReader.readAsText(e.dataTransfer.files[0])
-        fileReader.onload = function(e) {
-          var text = e.currentTarget.result
-          if (text.substring(0,5) === '<?xml') {
-            // assume this is a macOS .webloc link
-            text = text.replace(/[\s\S]*<string>(.*)<\/string>[\s\S]*/m, '$1')
-          }
-          self.handle(text, coords)
-        }
+        self.handleFile(e.dataTransfer.files[0], coords)
       }
       // OMG import bookmarks 😍
       if (e.dataTransfer.items.length > 0) {
@@ -52,7 +43,21 @@ const PasteInput = {
     })
   },
 
-  handle: function(text, coords) {
+  handleFile: (file, coords = null) => {
+    var self = PasteInput
+    var fileReader = new FileReader()
+    fileReader.readAsText(file)
+    fileReader.onload = function(e) {
+      var text = e.currentTarget.result
+      if (text.substring(0,5) === '<?xml') {
+        // assume this is a macOS .webloc link
+        text = text.replace(/[\s\S]*<string>(.*)<\/string>[\s\S]*/m, '$1')
+      }
+      self.handle(text, coords)
+    }
+  },
+
+  handle: function(text, coords = null) {
     var self = PasteInput
 
     if (text.match(self.URL_REGEX)) {
