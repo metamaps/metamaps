@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
-import { objectWithoutProperties } from '../utils'
+import _ from 'lodash'
 
 const MapLink = props => {
   const { show, text, href, linkClass } = props
-  const otherProps = objectWithoutProperties(props, ['show', 'text', 'href', 'linkClass'])
+  const otherProps = _.omit(props, ['show', 'text', 'href', 'linkClass'])
   if (!show) {
     return null
   }

@@ -186,7 +186,7 @@ const Filter = {
       $('#filter_by_' + listToModify + ' li[data-id="' + identifier + '"]').fadeOut('fast', function () {
         $(this).remove()
       })
-      index = self.visible[filtersToUse].indexOf(identifier)
+      const index = self.visible[filtersToUse].indexOf(identifier)
       self.visible[filtersToUse].splice(index, 1)
     })
 
