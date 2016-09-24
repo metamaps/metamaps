@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ExploreController < ApplicationController
   before_action :authorize_explore
   after_action :verify_authorized
@@ -5,8 +6,8 @@ class ExploreController < ApplicationController
 
   respond_to :html, :json, :csv
 
-  # TODO remove?
-  #autocomplete :map, :name, full: true, extra_data: [:user_id]
+  # TODO: remove?
+  # autocomplete :map, :name, full: true, extra_data: [:user_id]
 
   # GET /explore/active
   def active
