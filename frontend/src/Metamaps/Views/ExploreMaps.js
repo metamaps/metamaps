@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom' // TODO ensure this isn't a double import
 
 import Active from '../Active'
-import ReactComponents from '../ReactComponents'
+import Maps from '../../components/Maps'
 
 /*
  *  - Metamaps.Loading
@@ -42,7 +42,7 @@ const ExploreMaps = {
       loadMore: self.loadMore
     }
     ReactDOM.render(
-      React.createElement(ReactComponents.Maps, exploreObj),
+      React.createElement(Maps, exploreObj),
       document.getElementById('explore')
     )
     

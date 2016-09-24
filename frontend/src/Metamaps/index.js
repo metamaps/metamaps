@@ -30,7 +30,6 @@ import TopicCard from './TopicCard'
 import Util from './Util'
 import Views from './Views'
 import Visualize from './Visualize'
-import ReactComponents from './ReactComponents'
 
 Metamaps.Account = Account
 Metamaps.Active = Active
@@ -55,7 +54,6 @@ Metamaps.Mouse = Mouse
 Metamaps.Organize = Organize
 Metamaps.PasteInput = PasteInput
 Metamaps.Realtime = Realtime
-Metamaps.ReactComponents = ReactComponents
 Metamaps.Router = Router
 Metamaps.Selected = Selected
 Metamaps.Settings = Settings
