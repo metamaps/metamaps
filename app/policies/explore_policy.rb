@@ -1,25 +1,25 @@
 class ExplorePolicy < ApplicationPolicy
-  def activemaps?
+  def active?
     true
   end
 
-  def featuredmaps?
+  def featured?
     true
   end
 
-  def mymaps?
+  def mine?
     true
   end
 
-  def sharedmaps?
+  def shared?
     true
   end
 
-  def starredmaps?
+  def starred?
     true
   end
 
-  def usermaps?
+  def mapper?
     true
   end
 end
