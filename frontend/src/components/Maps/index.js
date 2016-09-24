@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import Header from './Header.js'
-import MapperCard from './MapperCard.js'
-import MapCard from './MapCard.js'
-import MapListItem from './MapListItem.js'
+import Header from './Header'
+import MapperCard from './MapperCard'
+import MapCard from './MapCard'
+import MapListItem from './MapListItem'
 
 class Maps extends Component {
   render = () => {
