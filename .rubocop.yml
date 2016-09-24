@@ -12,3 +12,9 @@ Rails:
 
 Metrics/LineLength:
   Max: 100
+
+Metrics/AbcSize:
+  Max: 16
+
+Style/Documentation:
+  Enabled: false

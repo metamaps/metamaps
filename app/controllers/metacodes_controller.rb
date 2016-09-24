@@ -1,5 +1,7 @@
+# frozen_string_literal: true
 class MetacodesController < ApplicationController
   before_action :require_admin, except: [:index, :show]
+  before_action :set_metacode, only: [:edit, :update]
 
   # GET /metacodes
   # GET /metacodes.json
@@ -8,10 +10,7 @@ class MetacodesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        unless authenticated? && user.admin
-          redirect_to root_url, notice: 'You need to be an admin for that.'
-          return false
-        end
+        return unless require_admin
         render :index
       end
       format.json { render json: @metacodes }
@@ -23,7 +22,7 @@ class MetacodesController < ApplicationController
   # GET /metacodes/action.json
   def show
     @metacode = Metacode.where('DOWNCASE(name) = ?', downcase(params[:name])).first if params[:name]
-    @metacode = Metacode.find(params[:id]) unless @metacode
+    set_metacode unless @metacode
 
     respond_to do |format|
       format.json { render json: @metacode }
@@ -36,14 +35,13 @@ class MetacodesController < ApplicationController
     @metacode = Metacode.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html
       format.json { render json: @metacode }
     end
   end
 
   # GET /metacodes/1/edit
   def edit
-    @metacode = Metacode.find(params[:id])
   end
 
   # POST /metacodes
@@ -65,8 +63,6 @@ class MetacodesController < ApplicationController
   # PUT /metacodes/1
   # PUT /metacodes/1.json
   def update
-    @metacode = Metacode.find(params[:id])
-
     respond_to do |format|
       if @metacode.update(metacode_params)
         format.html { redirect_to metacodes_url, notice: 'Metacode was successfully updated.' }
@@ -83,5 +79,9 @@ class MetacodesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def metacode_params
     params.require(:metacode).permit(:id, :name, :aws_icon, :manual_icon, :color)
+  end
+
+  def set_metacode
+    @metacode = Metacode.find(params[:id])
   end
 end
