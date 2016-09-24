@@ -41,10 +41,6 @@ class MapPolicy < ApplicationPolicy
     user.present? && record.user == user
   end
 
-  def activemaps?
-    user.blank? # redirect to root url if authenticated for some reason
-  end
-
   def contains?
     show?
   end
@@ -57,14 +53,6 @@ class MapPolicy < ApplicationPolicy
     show?
   end
 
-  def featuredmaps?
-    true
-  end
-
-  def mymaps?
-    user.present?
-  end
-
   def star?
     unstar?
   end
@@ -75,9 +63,5 @@ class MapPolicy < ApplicationPolicy
 
   def screenshot?
     update?
-  end
-
-  def usermaps?
-    true
   end
 end
