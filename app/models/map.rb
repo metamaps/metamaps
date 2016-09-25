@@ -16,11 +16,12 @@ class Map < ApplicationRecord
   has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
 
   # This method associates the attribute ":image" with a file attachment
-  has_attached_file :screenshot, styles: {
-    thumb: ['188x126#', :png]
-    #:full => ['940x630#', :png]
-  },
-                                 default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
+  has_attached_file :screenshot,
+    styles: {
+      thumb: ['188x126#', :png]
+      #:full => ['940x630#', :png]
+    },
+    default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }
@@ -31,7 +32,7 @@ class Map < ApplicationRecord
   validates_attachment_content_type :screenshot, content_type: /\Aimage\/.*\Z/
 
   def mappings
-    topicmappings + synapsemappings
+    topicmappings.or(synapsemappings)
   end
 
   def mk_permission
@@ -107,5 +108,50 @@ class Map < ApplicationRecord
 
     self.screenshot = data
     save
+  end
+
+  # user param helps determine what records are visible
+  def contains(user)
+    {
+      map: self,
+      topics: Pundit.policy_scope(user, topics).to_a,
+      synapses: Pundit.policy_scope(user, synapses).to_a,
+      mappings: Pundit.policy_scope(user, mappings).to_a,
+      mappers: contributors,
+      collaborators: editors,
+      messages: messages.sort_by(&:created_at),
+      stars: stars
+    }
+  end
+
+  def add_new_collaborators(user_ids)
+    users = User.where(id: user_ids)
+    current_collaborators = collaborators + [user]
+    added = users.map do |new_user|
+      next nil if current_collaborators.include?(new_user)
+      UserMap.create(user_id: new_user.id, map_id: id)
+      new_user.id
+    end
+    added.compact
+  end
+
+  def remove_old_collaborators(user_ids)
+    current_collaborators = collaborators + [user]
+    removed = current_collaborators.map(&:id).map do |old_user_id|
+      next nil if user_ids.include?(old_user_id)
+      user_maps.where(user_id: old_user_id).find_each(&:destroy)
+      old_user_id
+    end
+    removed.compact
+  end
+
+  def base64_screenshot(encoded_image)
+    png = Base64.decode64(encoded_image['data:image/png;base64,'.length..-1])
+    StringIO.open(png) do |data|
+      data.class.class_eval { attr_accessor :original_filename, :content_type }
+      data.original_filename = 'map-' + @map.id.to_s + '-screenshot.png'
+      data.content_type = 'image/png'
+      @map.screenshot = data
+    end
   end
 end

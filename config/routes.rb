@@ -57,12 +57,14 @@ Metamaps::Application.routes.draw do
   post 'maps/:id/star', to: 'maps#star', defaults: { format: :json }
   post 'maps/:id/unstar', to: 'maps#unstar', defaults: { format: :json }
 
-  get 'explore/active', to: 'maps#activemaps'
-  get 'explore/featured', to: 'maps#featuredmaps'
-  get 'explore/mine', to: 'maps#mymaps'
-  get 'explore/shared', to: 'maps#sharedmaps'
-  get 'explore/starred', to: 'maps#starredmaps'
-  get 'explore/mapper/:id', to: 'maps#usermaps'
+  namespace :explore do
+    get 'active'
+    get 'featured'
+    get 'mine'
+    get 'shared'
+    get 'starred'
+    get 'mapper/:id', action: 'mapper'
+  end
 
   devise_for :users, skip: :sessions, controllers: {
     registrations: 'users/registrations',
