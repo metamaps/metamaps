@@ -3,4 +3,8 @@ class MainPolicy < ApplicationPolicy
   def home?
     true
   end
+
+  def requestinvite?
+    true
+  end
 end
