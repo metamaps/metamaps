@@ -9,6 +9,7 @@ const plugins = [
   })
 ]
 if (NODE_ENV === 'production') {
+  plugins.push(new webpack.optimize.DedupePlugin())
   plugins.push(new webpack.optimize.UglifyJsPlugin({
     compress: { warnings: false }
   }))
