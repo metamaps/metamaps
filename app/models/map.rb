@@ -16,11 +16,12 @@ class Map < ApplicationRecord
   has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
 
   # This method associates the attribute ":image" with a file attachment
-  has_attached_file :screenshot, styles: {
-    thumb: ['188x126#', :png]
-    #:full => ['940x630#', :png]
-  },
-                                 default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
+  has_attached_file :screenshot,
+    styles: {
+      thumb: ['188x126#', :png]
+      #:full => ['940x630#', :png]
+    },
+    default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }
@@ -31,7 +32,7 @@ class Map < ApplicationRecord
   validates_attachment_content_type :screenshot, content_type: /\Aimage\/.*\Z/
 
   def mappings
-    topicmappings + synapsemappings
+    topicmappings.or(synapsemappings)
   end
 
   def mk_permission
