@@ -1,16 +1,9 @@
 # frozen_string_literal: true
 Metamaps::Application.routes.draw do
   use_doorkeeper
+
   root to: 'main#home', via: :get
-
   get 'request', to: 'main#requestinvite', as: :request
-
-  namespace :search do
-    get :topics
-    get :maps
-    get :mappers
-    get :synapses
-  end
 
   namespace :explore do
     get 'active'
@@ -42,17 +35,29 @@ Metamaps::Application.routes.draw do
   resources :metacodes, except: [:destroy]
   get 'metacodes/:name', to: 'metacodes#show'
 
+  namespace :search do
+    get :topics
+    get :maps
+    get :mappers
+    get :synapses
+  end
+
   resources :synapses, except: [:index, :new, :edit]
 
   resources :topics, except: [:index, :new, :edit] do
-    get :autocomplete_topic, on: :collection
+    get :autocomplete_topic
+    member do
+      get :network
+      get :relative_numbers
+      get :relatives
+    end
   end
-  get 'topics/:id/network', to: 'topics#network', as: :network
-  get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
-  get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
 
-  resources :users, except: [:index, :destroy]
-  get 'users/:id/details', to: 'users#details', as: :details
+  resources :users, except: [:index, :destroy] do
+    member do
+      get :details
+    end
+  end
   post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
 
   namespace :api, path: '/api', default: { format: :json } do
