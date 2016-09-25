@@ -6,7 +6,6 @@ import Backbone from 'backbone'
 
 import Active from './Active'
 import GlobalUI from './GlobalUI'
-import JIT from './JIT'
 import Map from './Map'
 import Topic from './Topic'
 import Views from './Views'
@@ -170,9 +169,7 @@ const _Router = Backbone.Router.extend({
 
     // clear the visualization, if there was one, before showing its div again
     if (Visualize.mGraph) {
-      Visualize.mGraph.graph.empty()
-      Visualize.mGraph.plot()
-      JIT.centerMap(Visualize.mGraph.canvas)
+      Visualize.clearVisualization()
     }
     GlobalUI.showDiv('#infovis')
     Topic.end()
@@ -198,9 +195,7 @@ const _Router = Backbone.Router.extend({
 
     // clear the visualization, if there was one, before showing its div again
     if (Visualize.mGraph) {
-      Visualize.mGraph.graph.empty()
-      Visualize.mGraph.plot()
-      JIT.centerMap(Visualize.mGraph.canvas)
+      Visualize.clearVisualization()
     }
     GlobalUI.showDiv('#infovis')
     Map.end()
