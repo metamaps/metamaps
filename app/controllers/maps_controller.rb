@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
-  before_action :require_user, only: [:create, :update, :destroy, :access, :events, :screenshot, :star, :unstar]
-  before_action :set_map, only: [:show, :update, :destroy, :access, :contains, :events, :export, :screenshot, :star, :unstar]
+  before_action :require_user, only: [:create, :update, :destroy, :access, :events,
+                                      :screenshot, :star, :unstar]
+  before_action :set_map, only: [:show, :update, :destroy, :access, :contains,
+                                 :events, :export, :screenshot, :star, :unstar]
   after_action :verify_authorized
 
   autocomplete :map, :name, full: true, extra_data: [:user_id]
@@ -18,7 +20,8 @@ class MapsController < ApplicationController
         @allmessages = @map.messages.sort_by(&:created_at)
         @allstars = @map.stars
 
-        respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses, @alltopics, @allmessages, @allstars, @map)
+        respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses,
+                     @alltopics, @allmessages, @allstars, @map)
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }
@@ -41,18 +44,16 @@ class MapsController < ApplicationController
 
   # POST maps
   def create
-    @user = current_user
     @map = Map.new(create_map_params)
-    @map.user = @user
+    @map.user = current_user
     @map.arranged = false
+    authorize @map
 
     if params[:topicsToMap].present?
       create_topics!
       create_synapses! if params[:synapsesToMap].present?
       @map.arranged = true
     end
-
-    authorize @map
 
     respond_to do |format|
       if @map.save
@@ -89,8 +90,9 @@ class MapsController < ApplicationController
   def access
     user_ids = params[:access] || []
 
-    added = @map.add_new_collaborators(user_ids)
-    added.each do |user_id|
+    @map.add_new_collaborators(user_ids).each do |user_id|
+      # add_new_collaborators returns array of added users,
+      # who we then send an email to
       MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id)).deliver_later
     end
     @map.remove_old_collaborators(user_ids)
@@ -150,7 +152,7 @@ class MapsController < ApplicationController
 
   # POST maps/:id/star
   def star
-    star = Star.find_or_create_by(map_id: @map.id, user_id: current_user.id)
+    Star.find_or_create_by(map_id: @map.id, user_id: current_user.id)
 
     respond_to do |format|
       format.json do
@@ -187,29 +189,20 @@ class MapsController < ApplicationController
   end
 
   def create_topics!
-    topics = params[:topicsToMap]
-    topics = topics.split(',')
-    topics.each do |topic|
+    params[:topicsToMap].split(',').each do |topic|
       topic = topic.split('/')
-      mapping = Mapping.new
-      mapping.map = @map
-      mapping.user = @user
-      mapping.mappable = Topic.find(topic[0])
-      mapping.xloc = topic[1]
-      mapping.yloc = topic[2]
+      mapping = Mapping.new(map: @map, user: current_user,
+                            mappable: Topic.find(topic[0]),
+                            xloc: topic[1], yloc: topic[2])
       authorize mapping, :create?
       mapping.save
     end
   end
 
   def create_synapses!
-    @synAll = params[:synapsesToMap]
-    @synAll = @synAll.split(',')
-    @synAll.each do |synapse_id|
-      mapping = Mapping.new
-      mapping.map = @map
-      mapping.user = @user
-      mapping.mappable = Synapse.find(synapse_id)
+    params[:synapsesToMap].split(',').each do |synapse_id|
+      mapping = Mapping.new(map: @map, user: current_user,
+                            mappable: Synapse.find(synapse_id))
       authorize mapping, :create?
       mapping.save
     end
