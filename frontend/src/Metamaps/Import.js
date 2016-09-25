@@ -1,5 +1,8 @@
 /* global Metamaps, $ */
 
+import parse from 'csv-parse'
+import _ from 'lodash'
+
 import Active from './Active'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
@@ -33,6 +36,40 @@ const Import = {
     self.handle(results)
   },
 
+  handleCSV: function (text, parserOpts = {}) {
+    var self = Import
+
+    const topicsRegex = /("?Topics"?)([\s\S]*)/mi
+    const synapsesRegex = /("?Synapses"?)([\s\S]*)/mi
+    let topicsText = text.match(topicsRegex)
+    if (topicsText) topicsText = topicsText[2].replace(synapsesRegex, '')
+    let synapsesText = text.match(synapsesRegex)
+    if (synapsesText) synapsesText = synapsesText[2].replace(topicsRegex, '')
+
+    // merge default options and extra options passed in parserOpts argument
+    const csv_parser_options = Object.assign({
+      columns: true, // get headers
+      relax_column_count: true,
+      skip_empty_lines: true
+    }, parserOpts)
+
+    const topicsPromise = $.Deferred()
+    parse(topicsText, csv_parser_options, (err, data) => {
+      if (err) topicsPromise.reject(err)
+      topicsPromise.resolve(data.map(row => self.lowercaseKeys(row)))
+    })
+
+    const synapsesPromise = $.Deferred()
+    parse(synapsesText, csv_parser_options, (err, data) => {
+      if (err) synapsesPromise.reject(err)
+      synapsesPromise.resolve(data.map(row => self.lowercaseKeys(row)))
+    })
+
+    $.when(topicsPromise, synapsesPromise).done((topics, synapses) => {
+      self.handle({ topics, synapses})
+    })
+  },
+
   handleJSON: function (text) {
     var self = Import
     results = JSON.parse(text)
@@ -51,16 +88,6 @@ const Import = {
         self.importSynapses(synapses)
       } // if
     } // if
-  },
-
-  abort: function (message) {
-    console.error(message)
-  },
-
-  simplify: function (string) {
-    return string
-      .replace(/(^\s*|\s*$)/g, '')
-      .toLowerCase()
   },
 
   parseTabbedString: function (text) {
@@ -235,30 +262,22 @@ const Import = {
         return true
       }
 
-      var synapse_created = false
-      topic1.once('sync', function () {
-        if (topic1.id && topic2.id && !synapse_created) {
-          synapse_created = true
-          self.createSynapseWithParameters(
-            synapse.desc, synapse.category, synapse.permission,
-            topic1, topic2
-          )
-        } // if
-      })
-      topic2.once('sync', function () {
-        if (topic1.id && topic2.id && !synapse_created) {
-          synapse_created = true
-          self.createSynapseWithParameters(
-            synapse.desc, synapse.category, synapse.permission,
-            topic1, topic2
-          )
-        } // if
+      // ensure imported topics have a chance to get a real id attr before creating synapses
+      const topic1Promise = $.Deferred()
+      topic1.once('sync', () => topic1Promise.resolve())
+      const topic2Promise = $.Deferred()
+      topic2.once('sync', () => topic2Promise.resolve())
+      $.when(topic1Promise, topic2Promise).done(() => {
+        self.createSynapseWithParameters(
+          synapse.desc, synapse.category, synapse.permission,
+          topic1, topic2
+        )
       })
     })
   },
 
   createTopicWithParameters: function (name, metacode_name, permission, desc,
-    link, xloc, yloc, import_id, opts) {
+    link, xloc, yloc, import_id, opts = {}) {
     var self = Import
     $(document).trigger(Map.events.editedByActiveMapper)
     var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null
@@ -326,6 +345,28 @@ const Import = {
     Metamaps.Mappings.add(mapping)
 
     Synapse.renderSynapse(mapping, synapse, node1, node2, true)
+  },
+
+  /*
+   * helper functions
+   */
+
+  abort: function (message) {
+    console.error(message)
+  },
+
+  simplify: function (string) {
+    return string
+      .replace(/(^\s*|\s*$)/g, '')
+      .toLowerCase()
+  },
+
+
+  // thanks to http://stackoverflow.com/a/25290114/5332286
+  lowercaseKeys: function(obj) {
+    return _.transform(obj, (result, val, key) => {
+      result[key.toLowerCase()] = val
+    })
   }
 }
 

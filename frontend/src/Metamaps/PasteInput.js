@@ -60,11 +60,11 @@ const PasteInput = {
     if (text.match(self.URL_REGEX)) {
       self.handleURL(text, coords)
     } else if (text[0] === '{') {
-      self.handleJSON(text)
+      Import.handleJSON(text)
     } else if (text.match(/\t/)) {
-      self.handleTSV(text)
-    } else {
-      // fail silently
+      Import.handleTSV(text)
+    } else if (text.match(/","/)) {
+      Import.handleCSV(text)
     }
   },
 
@@ -95,14 +95,6 @@ const PasteInput = {
         }
       }
     )
-  },
-
-  handleJSON: function (text) {
-    Import.handleJSON(text)
-  },
-
-  handleTSV: function (text) {
-    Import.handleTSV(text)
   }
 }
 
