@@ -150,7 +150,9 @@ const JIT = {
 
     if (self.vizData.length == 0) {
       $('#instructions div').hide()
-      $('#instructions div.addTopic').show()
+      if (Metamaps.Active.Map.authorizeToEdit()) {
+        $('#instructions div.addTopic').show()
+      }
       GlobalUI.showDiv('#instructions')
       Visualize.loadLater = true
     }
