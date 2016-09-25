@@ -1,16 +1,18 @@
-# bad code that should be seriously checked over before entering one of the
-# other prim and proper files in the nice section of this repo
+# bad code that should be checked over before entering one of the
+# nice files from the right side of this repo
 class HacksController < ApplicationController
   include ActionView::Helpers::TextHelper # string truncate method
 
+  # rate limited by rack-attack - currently 5r/s
+  # TODO: what else can we do to make get_with_redirects safer?
   def load_url_title
     authorize :Hack
-    url = params[:url] # TODO verify!?!?!?!
+    url = params[:url]
     response, url = get_with_redirects(url)
     title = get_encoded_title(response)
     render json: { success: true, title: title, url: url }
   rescue StandardError => e
-    render json: { success: false, error_type: e.class.name, error_message: e.message }
+    render json: { success: false }
   end
 
   private
