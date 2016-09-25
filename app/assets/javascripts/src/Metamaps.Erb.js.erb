@@ -18,3 +18,5 @@ Metamaps.Erb['sounds/MM_sounds.mp3'] = '<%= asset_path 'sounds/MM_sounds.mp3' %>
 Metamaps.Erb['sounds/MM_sounds.ogg'] = '<%= asset_path 'sounds/MM_sounds.ogg' %>'
 Metamaps.Metacodes = <%= Metacode.all.to_json.gsub(%r[(icon.*?)(\"},)], '\1?purple=stupid\2').html_safe %>
 Metamaps.VERSION = '<%= METAMAPS_VERSION %>'
+Metamaps.BUILD = '<%= METAMAPS_BUILD %>'
+Metamaps.LAST_UPDATED = '<%= METAMAPS_LAST_UPDATED %>'
