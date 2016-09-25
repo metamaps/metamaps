@@ -48,14 +48,17 @@ Metamaps::Application.routes.draw do
   get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
   get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
 
-  resources :maps, except: [:index, :edit]
-  get 'maps/:id/export', to: 'maps#export'
-  post 'maps/:id/events/:event', to: 'maps#events'
-  get 'maps/:id/contains', to: 'maps#contains', as: :contains
-  post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
-  post 'maps/:id/access', to: 'maps#access', as: :access, defaults: { format: :json }
-  post 'maps/:id/star', to: 'maps#star', defaults: { format: :json }
-  post 'maps/:id/unstar', to: 'maps#unstar', defaults: { format: :json }
+  resources :maps, except: [:index, :edit] do
+    member do
+      get :export
+      post 'events/:event', action: :events
+      get :contains
+      post :upload_screenshot, action: :screenshot
+      post :access, default: { format: :json }
+      post :star, to: 'stars#create', defaults: { format: :json }
+      post :unstar, to: 'stars#destroy', defaults: { format: :json }
+    end
+  end
 
   namespace :explore do
     get 'active'

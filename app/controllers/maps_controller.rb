@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
   before_action :require_user, only: [:create, :update, :destroy, :access, :events,
-                                      :screenshot, :star, :unstar]
+                                      :screenshot]
   before_action :set_map, only: [:show, :update, :destroy, :access, :contains,
-                                 :events, :export, :screenshot, :star, :unstar]
+                                 :events, :export, :screenshot]
   after_action :verify_authorized
 
   autocomplete :map, :name, full: true, extra_data: [:user_id]
@@ -147,29 +147,6 @@ class MapsController < ApplicationController
       render json: { message: 'Successfully uploaded the map screenshot.' }
     else
       render json: { message: 'Failed to upload image.' }
-    end
-  end
-
-  # POST maps/:id/star
-  def star
-    Star.find_or_create_by(map_id: @map.id, user_id: current_user.id)
-
-    respond_to do |format|
-      format.json do
-        render json: { message: 'Successfully starred map' }
-      end
-    end
-  end
-
-  # POST maps/:id/unstar
-  def unstar
-    star = Star.find_by(map_id: @map.id, user_id: current_user.id)
-    star&.delete
-
-    respond_to do |format|
-      format.json do
-        render json: { message: 'Successfully unstarred map' }
-      end
     end
   end
 
