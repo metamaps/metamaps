@@ -148,11 +148,14 @@ const JIT = {
       if (Metamaps.Mappings) Metamaps.Mappings.remove(mapping)
     })
 
+    // set up addTopic instructions in case they delete all the topics
+    // i.e. if there are 0 topics at any time, it should have instructions again
+    $('#instructions div').hide()
+    if (Metamaps.Active.Map.authorizeToEdit(Active.Mapper)) {
+      $('#instructions div.addTopic').show()
+    }
+
     if (self.vizData.length == 0) {
-      $('#instructions div').hide()
-      if (Metamaps.Active.Map.authorizeToEdit(Active.Mapper)) {
-        $('#instructions div.addTopic').show()
-      }
       GlobalUI.showDiv('#instructions')
       Visualize.loadLater = true
     } else {

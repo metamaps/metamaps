@@ -29,6 +29,7 @@
     "csv-parse": "1.1.7",
     "lodash": "4.16.1",
     "node-uuid": "1.4.7",
+    "outdent": "0.2.1",
     "react": "15.3.2",
     "react-dom": "15.3.2",
     "socket.io": "0.9.12",
