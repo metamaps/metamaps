@@ -5,10 +5,12 @@ Metamaps::Application.routes.draw do
 
   get 'request', to: 'main#requestinvite', as: :request
 
-  get 'search/topics', to: 'main#searchtopics', as: :searchtopics
-  get 'search/maps', to: 'main#searchmaps', as: :searchmaps
-  get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
-  get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
+  namespace :search do
+    get :topics
+    get :maps
+    get :mappers
+    get :synapses
+  end
 
   namespace :api, path: '/api', default: { format: :json } do
     namespace :v2, path: '/v2' do
