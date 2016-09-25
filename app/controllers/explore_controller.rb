@@ -1,19 +1,16 @@
 # frozen_string_literal: true
 class ExploreController < ApplicationController
+  before_action :require_authentication, only: [:mine, :shared, :starred]
   before_action :authorize_explore
   after_action :verify_authorized
   after_action :verify_policy_scoped
 
   respond_to :html, :json, :csv
 
-  # TODO: remove?
-  # autocomplete :map, :name, full: true, extra_data: [:user_id]
-
   # GET /explore/active
   def active
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(Map).order('updated_at DESC')
-                             .page(page).per(20)
+    @maps = policy_scope(Map).order(updated_at: :desc)
+                             .page(params[:page]).per(20)
 
     respond_to do |format|
       format.html do
@@ -27,11 +24,8 @@ class ExploreController < ApplicationController
 
   # GET /explore/featured
   def featured
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(
-      Map.where('maps.featured = ? AND maps.permission != ?',
-                true, 'private')
-    ).order('updated_at DESC').page(page).per(20)
+    @maps = policy_scope(Map).where(featured: true).order(updated_at: :desc)
+                             .page(params[:page]).per(20)
 
     respond_to do |format|
       format.html { respond_with(@maps, @user) }
@@ -41,15 +35,8 @@ class ExploreController < ApplicationController
 
   # GET /explore/mine
   def mine
-    unless authenticated?
-      skip_policy_scope
-      return redirect_to explore_active_path
-    end
-
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(
-      Map.where('maps.user_id = ?', current_user.id)
-    ).order('updated_at DESC').page(page).per(20)
+    @maps = policy_scope(Map).where(user_id: current_user.id)
+                             .order(updated_at: :desc).page(params[:page]).per(20)
 
     respond_to do |format|
       format.html { respond_with(@maps, @user) }
@@ -59,15 +46,8 @@ class ExploreController < ApplicationController
 
   # GET /explore/shared
   def shared
-    unless authenticated?
-      skip_policy_scope
-      return redirect_to explore_active_path
-    end
-
-    page = params[:page].present? ? params[:page] : 1
-    @maps = policy_scope(
-      Map.where('maps.id IN (?)', current_user.shared_maps.map(&:id))
-    ).order('updated_at DESC').page(page).per(20)
+    @maps = policy_scope(Map).where(id: current_user.shared_maps.map(&:id))
+                             .order(updated_at: :desc).page(params[:page]).per(20)
 
     respond_to do |format|
       format.html { respond_with(@maps, @user) }
@@ -77,16 +57,9 @@ class ExploreController < ApplicationController
 
   # GET /explore/starred
   def starred
-    unless authenticated?
-      skip_policy_scope
-      return redirect_to explore_active_path
-    end
-
-    page = params[:page].present? ? params[:page] : 1
     stars = current_user.stars.map(&:map_id)
-    @maps = policy_scope(
-      Map.where('maps.id IN (?)', stars)
-    ).order('updated_at DESC').page(page).per(20)
+    @maps = policy_scope(Map).where(id: stars).order(updated_at: :desc)
+                             .page(params[:page]).per(20)
 
     respond_to do |format|
       format.html { respond_with(@maps, @user) }
@@ -96,10 +69,9 @@ class ExploreController < ApplicationController
 
   # GET /explore/mapper/:id
   def mapper
-    page = params[:page].present? ? params[:page] : 1
     @user = User.find(params[:id])
     @maps = policy_scope(Map.where(user: @user))
-            .order('updated_at DESC').page(page).per(20)
+            .order(updated_at: :desc).page(params[:page]).per(20)
 
     respond_to do |format|
       format.html { respond_with(@maps, @user) }
@@ -111,5 +83,10 @@ class ExploreController < ApplicationController
 
   def authorize_explore
     authorize :Explore
+  end
+
+  def require_authentication
+    # skip_policy_scope
+    redirect_to explore_active_path unless authenticated?
   end
 end
