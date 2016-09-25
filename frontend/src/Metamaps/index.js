@@ -31,6 +31,7 @@ import Util from './Util'
 import Views from './Views'
 import Visualize from './Visualize'
 
+Metamaps = window.Metamaps || {}
 Metamaps.Account = Account
 Metamaps.Active = Active
 Metamaps.Admin = Admin
