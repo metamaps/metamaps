@@ -26,6 +26,8 @@ module Metamaps
       Doorkeeper::ApplicationController.helper ApplicationHelper
     end
 
+    config.middleware.use Rack::Attack
+
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 

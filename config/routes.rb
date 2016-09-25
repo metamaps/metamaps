@@ -80,4 +80,8 @@ Metamaps::Application.routes.draw do
   get 'users/:id/details', to: 'users#details', as: :details
   post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
   resources :users, except: [:index, :destroy]
+
+  namespace :hacks do
+    get 'load_url_title'
+  end
 end
