@@ -4,6 +4,7 @@
     "es2015"
   ],
   "plugins": [
+    "lodash",
     "transform-class-properties"
   ]
 }
