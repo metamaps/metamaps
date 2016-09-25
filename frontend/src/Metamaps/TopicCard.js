@@ -72,9 +72,11 @@ const TopicCard = {
     }
 
     $('.CardOnGraph').addClass('hasAttachment')
-    if (self.authorizedToEdit) {
+  },
+  showLinkRemover: function() {
+    if (TopicCard.authorizedToEdit && $('#linkremove').length === 0) {
       $('.embeds').append('<div id="linkremove"></div>')
-      $('#linkremove').click(self.removeLink)
+      $('#linkremove').click(TopicCard.removeLink)
     }
   },
   removeLink: function () {
@@ -151,6 +153,7 @@ const TopicCard = {
       loader.setRange(0.9); // default is 1.3
       loader.show() // Hidden by default
       var e = embedly('card', document.getElementById('embedlyLink'))
+      self.showLinkRemover()
       if (!e) {
         self.handleInvalidLink()
       }
