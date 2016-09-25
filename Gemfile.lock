@@ -177,6 +177,8 @@ GEM
       activesupport (>= 3.0.0)
     pundit_extra (0.3.0)
     rack (2.0.1)
+    rack-attack (5.0.1)
+      rack
     rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -316,6 +318,7 @@ DEPENDENCIES
   pry-rails
   pundit
   pundit_extra
+  rack-attack
   rack-cors
   rails (~> 5.0.0)
   rails3-jquery-autocomplete
