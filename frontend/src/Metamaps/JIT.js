@@ -150,13 +150,14 @@ const JIT = {
 
     if (self.vizData.length == 0) {
       $('#instructions div').hide()
-      if (Metamaps.Active.Map.authorizeToEdit()) {
+      if (Metamaps.Active.Map.authorizeToEdit(Active.Mapper)) {
         $('#instructions div.addTopic').show()
       }
       GlobalUI.showDiv('#instructions')
       Visualize.loadLater = true
+    } else {
+      GlobalUI.hideDiv('#instructions')
     }
-    else GlobalUI.hideDiv('#instructions')
 
     Visualize.render()
   }, // prepareVizData
