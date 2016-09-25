@@ -17,7 +17,7 @@ class MainController < ApplicationController
         if !authenticated?
           render 'main/home'
         else
-          render 'maps/activemaps'
+          render 'explore/active'
         end
       end
     end
