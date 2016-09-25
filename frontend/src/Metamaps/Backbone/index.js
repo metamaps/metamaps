@@ -98,7 +98,6 @@ _Backbone.Map = Backbone.Model.extend({
     $.ajax({
       url: '/maps/' + this.id + '/contains.json',
       success: start,
-      error: errorFunc,
       async: false
     })
   },

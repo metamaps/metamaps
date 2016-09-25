@@ -1,6 +1,7 @@
 /* global Metamaps, $ */
 
 import _ from 'lodash'
+import outdent from 'outdent'
 
 import Active from './Active'
 import Filter from './Filter'
@@ -52,9 +53,8 @@ const Control = {
 
     var n = Selected.Nodes.length
     var e = Selected.Edges.length
-    var ntext = n == 1 ? '1 topic' : n + ' topics'
-    var etext = e == 1 ? '1 synapse' : e + ' synapses'
-    var text = 'You have ' + ntext + ' and ' + etext + ' selected. '
+    var ntext = n === 1 ? '1 topic' : n + ' topics'
+    var etext = e === 1 ? '1 synapse' : e + ' synapses'
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
@@ -63,10 +63,17 @@ const Control = {
       return
     }
 
-    var r = confirm(text + 'Are you sure you want to permanently delete them all? This will remove them from all maps they appear on.')
-    if (r == true) {
+    var r = confirm(outdent`
+      You have ${ntext} and ${etext} selected. Are you sure you want
+      to permanently delete them all? This will remove them from all
+      maps they appear on.`)
+    if (r) {
       Control.deleteSelectedEdges()
       Control.deleteSelectedNodes()
+    }
+
+    if (Metamaps.Topics.length === 0) {
+      GlobalUI.showDiv('#instructions')
     }
   },
   deleteSelectedNodes: function () { // refers to deleting topics permanently
@@ -191,7 +198,7 @@ const Control = {
       duration: 500
     })
     setTimeout(function () {
-      if (nodeid == Visualize.mGraph.root) { // && Visualize.type === "RGraph"
+      if (nodeid === Visualize.mGraph.root) { // && Visualize.type === "RGraph"
         var newroot = _.find(graph.graph.nodes, function (n) { return n.id !== nodeid; })
         graph.root = newroot ? newroot.id : null
       }
@@ -231,7 +238,7 @@ const Control = {
       color: Settings.colors.synapses.normal
     })
 
-    if (Mouse.edgeHoveringOver == edge) {
+    if (Mouse.edgeHoveringOver === edge) {
       edge.setDataset('current', {
         showDesc: true,
         lineWidth: 4
@@ -414,8 +421,8 @@ const Control = {
       }
     }
 
-    var nString = nCount == 1 ? (nCount.toString() + ' topic and ') : (nCount.toString() + ' topics and ')
-    var sString = sCount == 1 ? (sCount.toString() + ' synapse') : (sCount.toString() + ' synapses')
+    var nString = nCount === 1 ? (nCount.toString() + ' topic and ') : (nCount.toString() + ' topics and ')
+    var sString = sCount === 1 ? (sCount.toString() + ' synapse') : (sCount.toString() + ' synapses')
 
     var message = nString + sString + ' you created updated to ' + permission
     GlobalUI.notifyUser(message)
@@ -444,7 +451,7 @@ const Control = {
       }
     }
 
-    var nString = nCount == 1 ? (nCount.toString() + ' topic') : (nCount.toString() + ' topics')
+    var nString = nCount === 1 ? (nCount.toString() + ' topic') : (nCount.toString() + ' topics')
 
     var message = nString + ' you can edit updated to ' + metacode.get('name')
     GlobalUI.notifyUser(message)

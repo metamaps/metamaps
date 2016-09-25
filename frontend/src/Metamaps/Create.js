@@ -13,6 +13,7 @@ import GlobalUI from './GlobalUI'
  * Dependencies:
  *  - Metamaps.Backbone
  *  - Metamaps.Metacodes
+ *  - Metamaps.Topics
  */
 
 const Create = {
@@ -223,8 +224,10 @@ const Create = {
       })
       Create.newTopic.beingCreated = true
       Create.newTopic.name = ''
+      GlobalUI.hideDiv('#instructions')
     },
     hide: function (force) {
+      if (Create.newTopic.beingCreated === false) return
       if (force || !Create.newTopic.pinned) {
         $('#new_topic').fadeOut('fast')
         Create.newTopic.beingCreated = false
@@ -234,6 +237,9 @@ const Create = {
         Create.newTopic.pinned = false
       }
       $('#topic_name').typeahead('val', '')
+      if (Metamaps.Topics.length === 0) {
+        GlobalUI.showDiv('#instructions')
+      }
     }
   },
   newSynapse: {
