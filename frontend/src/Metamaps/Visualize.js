@@ -220,7 +220,13 @@ const Visualize = {
         Router.navigate('/topics/' + t.id)
       }
     }, 800)
-  }
+  },
+  clearVisualization: function() {
+    Visualize.mGraph.graph.empty()
+    Visualize.mGraph.plot()
+    JIT.centerMap(Visualize.mGraph.canvas)
+    $('#infovis').empty()
+  },
 }
 
 export default Visualize
