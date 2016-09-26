@@ -1,7 +1,13 @@
-/* global $ */
+/* global Metamaps, $, Howl */
+
+/*
+ * Dependencies:
+ *  Metamaps.Erb
+ */
 
 import Backbone from 'backbone'
 import Autolinker from 'autolinker'
+import _ from 'lodash'
 // TODO is this line good or bad
 // Backbone.$ = window.$
 

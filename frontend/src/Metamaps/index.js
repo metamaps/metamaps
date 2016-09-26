@@ -1,4 +1,4 @@
-/* global $ */
+/* global Metamaps */
 
 import Account from './Account'
 import Active from './Active'
