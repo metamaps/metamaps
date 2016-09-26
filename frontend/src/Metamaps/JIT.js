@@ -151,7 +151,7 @@ const JIT = {
     // set up addTopic instructions in case they delete all the topics
     // i.e. if there are 0 topics at any time, it should have instructions again
     $('#instructions div').hide()
-    if (Metamaps.Active.Map.authorizeToEdit(Active.Mapper)) {
+    if (Active.Map && Active.Map.authorizeToEdit(Active.Mapper)) {
       $('#instructions div.addTopic').show()
     }
 
