@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global Metamaps, $, Hogan, Bloodhound, Countable */
 
 import Active from '../Active'
 import GlobalUI from '../GlobalUI'
@@ -236,7 +236,7 @@ const InfoBox = {
       Metamaps.Collaborators.add(mapper)
       var mapperIds = Metamaps.Collaborators.models.map(function (mapper) { return mapper.id })
       $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
-      var name =  Metamaps.Collaborators.get(newCollaboratorId).get('name')
+      var name = Metamaps.Collaborators.get(newCollaboratorId).get('name')
       GlobalUI.notifyUser(name + ' will be notified by email')
       self.updateNumbers()
     }
@@ -349,7 +349,7 @@ const InfoBox = {
     var confirmString = 'Are you sure you want to delete this map? '
     confirmString += 'This action is irreversible. It will not delete the topics and synapses on the map.'
 
-    var doIt = confirm(confirmString)
+    var doIt = window.confirm(confirmString)
     var map = Active.Map
     var mapper = Active.Mapper
     var authorized = map.authorizePermissionChange(mapper)

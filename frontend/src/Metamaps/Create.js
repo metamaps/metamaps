@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global Metamaps, $, Hogan, Bloodhound */
 
 import Mouse from './Mouse'
 import Selected from './Selected'
@@ -54,7 +54,7 @@ const Create = {
   },
   updateMetacodeSet: function (set, index, custom) {
     if (custom && Create.newSelectedMetacodes.length == 0) {
-      alert('Please select at least one metacode to use!')
+      window.alert('Please select at least one metacode to use!')
       return false
     }
 

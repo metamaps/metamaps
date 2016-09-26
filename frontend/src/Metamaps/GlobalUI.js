@@ -1,3 +1,4 @@
+/* global Metamaps, $, Hogan, Bloodhound */
 import Active from './Active'
 import Create from './Create'
 import Filter from './Filter'
@@ -585,7 +586,6 @@ GlobalUI.Search = {
 
     if (["topic", "map", "mapper"].indexOf(datum.rtype) !== -1) {
       self.close(0, true);
-      var win;
       if (datum.rtype == "topic") {
         Router.topics(datum.id);
       } else if (datum.rtype == "map") {

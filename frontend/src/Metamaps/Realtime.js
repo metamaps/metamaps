@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global Metamaps, $, SocketIoConnection, SimpleWebRTC */
 
 import _ from 'lodash'
 
@@ -1106,7 +1106,7 @@ const Realtime = {
     }
   },
   newSynapse: function (data) {
-    var topic1, topic2, node1, node2, synapse, mapping, cancel
+    var topic1, topic2, node1, node2, synapse, mapping, cancel, mapper
 
     var self = Realtime
     var socket = self.socket

@@ -1,4 +1,4 @@
-/* global Metamaps, $jit */
+/* global Metamaps, $, Image, CanvasLoader */
 
 import _ from 'lodash'
 
@@ -79,7 +79,6 @@ const JIT = {
     var jitReady = []
 
     var synapsesToRemove = []
-    var topic
     var mapping
     var node
     var nodes = {}
@@ -183,8 +182,6 @@ const JIT = {
     if (!synapse) return // this means there are no corresponding synapses for
     // this edge, don't render it
 
-    var directionCat = synapse.get('category')
-
     // label placement on edges
     if (canvas.denySelected) {
       var color = Settings.colors.synapses.normal
@@ -282,8 +279,8 @@ const JIT = {
 
       if (synapseNum > 1) {
         var ctx = canvas.getCtx()
-        var x = (pos.x + posChild.x) / 2
-        var y = (pos.y + posChild.y) / 2
+        const x = (pos.x + posChild.x) / 2
+        const y = (pos.y + posChild.y) / 2
         drawSynapseCount(ctx, x, y, synapseNum)
       }
     }
@@ -847,8 +844,8 @@ const JIT = {
           // set the draw synapse start positions
           var l = Selected.Nodes.length
           if (l > 0) {
-            for (var i = l - 1; i >= 0; i -= 1) {
-              var n = Selected.Nodes[i]
+            for (let i = l - 1; i >= 0; i -= 1) {
+              const n = Selected.Nodes[i]
               Mouse.synapseStartCoordinates.push({
                 x: n.pos.getc().x,
                 y: n.pos.getc().y
@@ -1541,8 +1538,6 @@ const JIT = {
 
     if (adj.getData('alpha') === 0) return; // don't do anything if the edge is filtered
 
-    var authorized
-
     e.preventDefault()
     e.stopPropagation()
 
@@ -1827,10 +1822,11 @@ const JIT = {
       width = canvas.getSize().width,
       maxX, minX, maxY, minY, counter = 0
 
+    let nodes
     if (!denySelected && Selected.Nodes.length > 0) {
-      var nodes = Selected.Nodes
+      nodes = Selected.Nodes
     } else {
-      var nodes = _.values(Visualize.mGraph.graph.nodes)
+      nodes = _.values(Visualize.mGraph.graph.nodes)
     }
 
     if (nodes.length > 1) {
