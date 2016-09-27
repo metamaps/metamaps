@@ -8,6 +8,7 @@
 import Backbone from 'backbone'
 import Autolinker from 'autolinker'
 import _ from 'lodash'
+import underscore from 'underscore'
 // TODO is this line good or bad
 // Backbone.$ = window.$
 
@@ -29,12 +30,12 @@ var Private = {
             "<div class='clearfloat'></div>" +
           "</div>",
     templates: function() {
-        _.templateSettings = {
+        underscore.templateSettings = {
           interpolate: /\{\{(.+?)\}\}/g
         };
-        this.messageTemplate = _.template(Private.messageHTML);
+        this.messageTemplate = underscore.template(Private.messageHTML);
 
-        this.participantTemplate = _.template(Private.participantHTML);
+        this.participantTemplate = underscore.template(Private.participantHTML);
     },
     createElements: function() {
         this.$unread = $('<div class="chat-unread"></div>');
