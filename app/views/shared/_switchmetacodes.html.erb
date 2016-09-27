@@ -5,7 +5,7 @@
 
 <% metacodes = current_user.settings.metacodes %>
 <% selectedSet = metacodes[0].include?("metacodeset") ? metacodes[0].sub("metacodeset-","")  : "custom" %>
-<% allMetacodeSets = MetacodeSet.order("name").all %>
+<% allMetacodeSets = MetacodeSet.order("name").all.to_a %>
 <% if selectedSet == "custom" 
      index = allMetacodeSets.length
    else
