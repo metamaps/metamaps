@@ -38,6 +38,11 @@ const Map = {
   init: function () {
     var self = Map
 
+    // prevent right clicks on the main canvas, so as to not get in the way of our right clicks
+    $('#wrapper').on('contextmenu', function (e) {
+      return false
+    })
+
     $('.starMap').click(function () {
       if ($(this).is('.starred')) self.unstar()
       else self.star()
