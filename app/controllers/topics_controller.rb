@@ -96,7 +96,7 @@ class TopicsController < ApplicationController
 
     # find synapses between topics in alltopics array
     allsynapses = policy_scope(Synapse.for_topic(@topic.id)).to_a
-    synapse_ids = (allsynapses.map(&:node1_id) + allsynapses.map(&:node2_id)).uniq
+    synapse_ids = (allsynapses.map(&:topic1_id) + allsynapses.map(&:topic2_id)).uniq
     allsynapses.delete_if do |synapse|
       !synapse_ids.index(synapse.id).nil?
     end

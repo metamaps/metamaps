@@ -62,8 +62,8 @@ class MapExportService
     visible_synapses.map do |synapse|
       next nil if synapse.nil?
       OpenStruct.new(
-        topic1: synapse.node1_id,
-        topic2: synapse.node2_id,
+        topic1: synapse.topic1_id,
+        topic2: synapse.topic2_id,
         category: synapse.category,
         description: synapse.desc,
         user: synapse.user.name,

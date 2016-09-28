@@ -14,8 +14,7 @@ module Api
       end
 
       # self.embeddable might look like this:
-      #   topic1: { attr: :node1, serializer: TopicSerializer }
-      #   topic2: { attr: :node2, serializer: TopicSerializer }
+      #   creator: { attr: :first_creator, serializer: UserSerializer }
       #   contributors: { serializer: UserSerializer}
       # This method will remove the :attr key if the underlying attribute name
       # is different than the name provided in the final json output. All other keys
@@ -24,9 +23,9 @@ module Api
       #
       # This setup means if you passed this self.embeddable config and sent no
       # ?embed= query param with your API request, you would get the regular attributes
-      # plus topic1_id, topic2_id, and contributor_ids. If you pass
-      # ?embed=topic1,topic2,contributors, then instead of two ids and an array of ids,
-      # you would get two serialized topics and an array of serialized users
+      # plus creator_id and contributor_ids. If you passed ?embed=creator,contributors
+      # then instead of an id and an array of ids, you would get a serialized user
+      # (the first_creator) and an array of serialized users (the contributors).
       def self.embed_dat
         embeddable.each_pair do |key, opts|
           attr = opts.delete(:attr) || key

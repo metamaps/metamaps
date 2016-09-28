@@ -11,8 +11,8 @@ module Api
 
       def self.embeddable
         {
-          topic1: { attr: :node1, serializer: TopicSerializer },
-          topic2: { attr: :node2, serializer: TopicSerializer },
+          topic1: { serializer: TopicSerializer },
+          topic2: { serializer: TopicSerializer },
           user: {}
         }
       end

@@ -531,10 +531,10 @@ _Backbone.init = function () {
       else return false
     },
     getTopic1: function () {
-      return Metamaps.Topics.get(this.get('node1_id'))
+      return Metamaps.Topics.get(this.get('topic1_id'))
     },
     getTopic2: function () {
-      return Metamaps.Topics.get(this.get('node2_id'))
+      return Metamaps.Topics.get(this.get('topic2_id'))
     },
     getDirection: function () {
       var t1 = this.getTopic1(),
@@ -559,8 +559,8 @@ _Backbone.init = function () {
       var synapseID = this.isNew() ? this.cid : this.id
 
       var edge = {
-        nodeFrom: this.get('node1_id'),
-        nodeTo: this.get('node2_id'),
+        nodeFrom: this.get('topic1_id'),
+        nodeTo: this.get('topic2_id'),
         data: {
           $synapses: [],
           $synapseIDs: [synapseID],

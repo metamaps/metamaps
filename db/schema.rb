@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160820231717) do
+ActiveRecord::Schema.define(version: 20160928022635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,16 +175,16 @@ ActiveRecord::Schema.define(version: 20160820231717) do
     t.text     "category"
     t.text     "weight"
     t.text     "permission"
-    t.integer  "node1_id"
-    t.integer  "node2_id"
+    t.integer  "topic1_id"
+    t.integer  "topic2_id"
     t.integer  "user_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "defer_to_map_id"
-    t.index ["node1_id", "node1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
-    t.index ["node1_id"], name: "index_synapses_on_node1_id", using: :btree
-    t.index ["node2_id", "node2_id"], name: "index_synapses_on_node2_id_and_node2_id", using: :btree
-    t.index ["node2_id"], name: "index_synapses_on_node2_id", using: :btree
+    t.index ["topic1_id", "topic1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
+    t.index ["topic1_id"], name: "index_synapses_on_topic1_id", using: :btree
+    t.index ["topic2_id", "topic2_id"], name: "index_synapses_on_node2_id_and_node2_id", using: :btree
+    t.index ["topic2_id"], name: "index_synapses_on_topic2_id", using: :btree
     t.index ["user_id"], name: "index_synapses_on_user_id", using: :btree
   end
 

@@ -93,7 +93,7 @@ const JIT = {
     synapses.each(function (s) {
       edge = s.createEdge()
 
-      if (topics.get(s.get('node1_id')) === undefined || topics.get(s.get('node2_id')) === undefined) {
+      if (topics.get(s.get('topic1_id')) === undefined || topics.get(s.get('topic2_id')) === undefined) {
         // this means it's an invalid synapse
         synapsesToRemove.push(s)
       }

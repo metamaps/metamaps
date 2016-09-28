@@ -200,8 +200,8 @@ const Map = {
       var descNotFiltered = Filter.visible.synapses.indexOf(desc) > -1
       // make sure that both topics are being added, otherwise, it
       // doesn't make sense to add the synapse
-      var topicsNotFiltered = nodes_array.indexOf(synapse.get('node1_id')) > -1
-      topicsNotFiltered = topicsNotFiltered && nodes_array.indexOf(synapse.get('node2_id')) > -1
+      var topicsNotFiltered = nodes_array.indexOf(synapse.get('topic1_id')) > -1
+      topicsNotFiltered = topicsNotFiltered && nodes_array.indexOf(synapse.get('topic2_id')) > -1
       if (descNotFiltered && topicsNotFiltered) {
         synapses_array.push(synapse.id)
       }

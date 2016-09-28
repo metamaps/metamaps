@@ -128,8 +128,8 @@ const Synapse = {
       topic1 = node1.getData('topic')
       synapse = new Metamaps.Backbone.Synapse({
         desc: Create.newSynapse.description,
-        node1_id: topic1.isNew() ? topic1.cid : topic1.id,
-        node2_id: topic2.isNew() ? topic2.cid : topic2.id,
+        topic1_id: topic1.isNew() ? topic1.cid : topic1.id,
+        topic2_id: topic2.isNew() ? topic2.cid : topic2.id,
       })
       Metamaps.Synapses.add(synapse)
 

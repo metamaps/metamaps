@@ -5,8 +5,8 @@ class Topic < ApplicationRecord
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
 
-  has_many :synapses1, class_name: 'Synapse', foreign_key: 'node1_id', dependent: :destroy
-  has_many :synapses2, class_name: 'Synapse', foreign_key: 'node2_id', dependent: :destroy
+  has_many :synapses1, class_name: 'Synapse', foreign_key: 'topic1_id', dependent: :destroy
+  has_many :synapses2, class_name: 'Synapse', foreign_key: 'topic2_id', dependent: :destroy
   has_many :topics1, through: :synapses2, source: :topic1
   has_many :topics2, through: :synapses1, source: :topic2
 
@@ -46,8 +46,8 @@ class Topic < ApplicationRecord
   scope :relatives, ->(topic_id = nil, user = nil) {
     # should only see topics through *visible* synapses
     # e.g. Topic A (commons) -> synapse (private) -> Topic B (commons) must be filtered out
-    synapses = Pundit.policy_scope(user, Synapse.where(node1_id: topic_id)).pluck(:node2_id)
-    synapses += Pundit.policy_scope(user, Synapse.where(node2_id: topic_id)).pluck(:node1_id)
+    synapses = Pundit.policy_scope(user, Synapse.where(topic1_id: topic_id)).pluck(:topic2_id)
+    synapses += Pundit.policy_scope(user, Synapse.where(topic2_id: topic_id)).pluck(:topic1_id)
     where(id: synapses.uniq)
   }
 
@@ -94,18 +94,18 @@ class Topic < ApplicationRecord
     output = []
     synapses.each do |synapse|
       if synapse.category == 'from-to'
-        if synapse.node1_id == id
-          output << synapse.node1_id.to_s + '->' + synapse.node2_id.to_s
-        elsif synapse.node2_id == id
-          output << synapse.node2_id.to_s + '<-' + synapse.node1_id.to_s
+        if synapse.topic1_id == id
+          output << synapse.topic1_id.to_s + '->' + synapse.topic2_id.to_s
+        elsif synapse.topic2_id == id
+          output << synapse.topic2_id.to_s + '<-' + synapse.topic1_id.to_s
         else
           raise 'invalid synapse on topic in synapse_csv'
         end
       elsif synapse.category == 'both'
-        if synapse.node1_id == id
-          output << synapse.node1_id.to_s + '<->' + synapse.node2_id.to_s
-        elsif synapse.node2_id == id
-          output << synapse.node2_id.to_s + '<->' + synapse.node1_id.to_s
+        if synapse.topic1_id == id
+          output << synapse.topic1_id.to_s + '<->' + synapse.topic2_id.to_s
+        elsif synapse.topic2_id == id
+          output << synapse.topic2_id.to_s + '<->' + synapse.topic1_id.to_s
         else
           raise 'invalid synapse on topic in synapse_csv'
         end

@@ -63,6 +63,6 @@ class SynapsesController < ApplicationController
   private
 
   def synapse_params
-    params.require(:synapse).permit(:id, :desc, :category, :weight, :permission, :node1_id, :node2_id, :user_id)
+    params.require(:synapse).permit(:id, :desc, :category, :weight, :permission, :topic1_id, :topic2_id, :user_id)
   end
 end
