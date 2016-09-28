@@ -1,14 +1,64 @@
 # frozen_string_literal: true
 Metamaps::Application.routes.draw do
   use_doorkeeper
-  root to: 'main#home', via: :get
 
+  root to: 'main#home', via: :get
   get 'request', to: 'main#requestinvite', as: :request
 
-  get 'search/topics', to: 'main#searchtopics', as: :searchtopics
-  get 'search/maps', to: 'main#searchmaps', as: :searchmaps
-  get 'search/mappers', to: 'main#searchmappers', as: :searchmappers
-  get 'search/synapses', to: 'main#searchsynapses', as: :searchsynapses
+  namespace :explore do
+    get 'active'
+    get 'featured'
+    get 'mine'
+    get 'shared'
+    get 'starred'
+    get 'mapper/:id', action: 'mapper'
+  end
+
+  resources :maps, except: [:index, :edit] do
+    member do
+      get :export
+      post 'events/:event', action: :events
+      get :contains
+      post :upload_screenshot, action: :screenshot
+      post :access, default: { format: :json }
+      post :star, to: 'stars#create', defaults: { format: :json }
+      post :unstar, to: 'stars#destroy', defaults: { format: :json }
+    end
+  end
+
+  resources :mappings, except: [:index, :new, :edit]
+
+  resources :messages, only: [:show, :create, :update, :destroy]
+
+  resources :metacode_sets, except: [:show]
+
+  resources :metacodes, except: [:destroy]
+  get 'metacodes/:name', to: 'metacodes#show'
+
+  namespace :search do
+    get :topics
+    get :maps
+    get :mappers
+    get :synapses
+  end
+
+  resources :synapses, except: [:index, :new, :edit]
+
+  resources :topics, except: [:index, :new, :edit] do
+    get :autocomplete_topic
+    member do
+      get :network
+      get :relative_numbers
+      get :relatives
+    end
+  end
+
+  resources :users, except: [:index, :destroy] do
+    member do
+      get :details
+    end
+  end
+  post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
 
   namespace :api, path: '/api', default: { format: :json } do
     namespace :v2, path: '/v2' do
@@ -33,39 +83,6 @@ Metamaps::Application.routes.draw do
     end
   end
 
-  resources :messages, only: [:show, :create, :update, :destroy]
-  resources :mappings, except: [:index, :new, :edit]
-  resources :metacode_sets, except: [:show]
-
-  resources :metacodes, except: [:destroy]
-  get 'metacodes/:name', to: 'metacodes#show'
-
-  resources :synapses, except: [:index, :new, :edit]
-  resources :topics, except: [:index, :new, :edit] do
-    get :autocomplete_topic, on: :collection
-  end
-  get 'topics/:id/network', to: 'topics#network', as: :network
-  get 'topics/:id/relative_numbers', to: 'topics#relative_numbers', as: :relative_numbers
-  get 'topics/:id/relatives', to: 'topics#relatives', as: :relatives
-
-  resources :maps, except: [:index, :edit]
-  get 'maps/:id/export', to: 'maps#export'
-  post 'maps/:id/events/:event', to: 'maps#events'
-  get 'maps/:id/contains', to: 'maps#contains', as: :contains
-  post 'maps/:id/upload_screenshot', to: 'maps#screenshot', as: :screenshot
-  post 'maps/:id/access', to: 'maps#access', as: :access, defaults: { format: :json }
-  post 'maps/:id/star', to: 'maps#star', defaults: { format: :json }
-  post 'maps/:id/unstar', to: 'maps#unstar', defaults: { format: :json }
-
-  namespace :explore do
-    get 'active'
-    get 'featured'
-    get 'mine'
-    get 'shared'
-    get 'starred'
-    get 'mapper/:id', action: 'mapper'
-  end
-
   devise_for :users, skip: :sessions, controllers: {
     registrations: 'users/registrations',
     passwords: 'users/passwords',
@@ -78,10 +95,6 @@ Metamaps::Application.routes.draw do
     get 'logout' => 'devise/sessions#destroy', :as => :destroy_user_session
     get 'join' => 'devise/registrations#new', :as => :new_user_registration_path
   end
-
-  get 'users/:id/details', to: 'users#details', as: :details
-  post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
-  resources :users, except: [:index, :destroy]
 
   namespace :hacks do
     get 'load_url_title'

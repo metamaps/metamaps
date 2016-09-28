@@ -1,27 +1,10 @@
 # frozen_string_literal: true
 class MainPolicy < ApplicationPolicy
-  def initialize(user, _record)
-    @user = user
-    @record = nil
-  end
-
   def home?
     true
   end
 
-  def searchtopics?
-    true
-  end
-
-  def searchmaps?
-    true
-  end
-
-  def searchmappers?
-    true
-  end
-
-  def searchsynapses?
+  def requestinvite?
     true
   end
 end
