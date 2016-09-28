@@ -209,6 +209,7 @@ const Create = {
         bringToFront: true
       })
       $('.new_topic').hide()
+      $('#new_topic').attr('oncontextmenu','return false') //prevents the mouse up event from opening the default context menu on this element
     },
     name: null,
     newId: 1,
