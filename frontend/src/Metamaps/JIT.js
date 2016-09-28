@@ -1305,6 +1305,9 @@ const JIT = {
     // create new menu for clicked on node
     var rightclickmenu = document.createElement('div')
     rightclickmenu.className = 'rightclickmenu'
+    //prevent the custom context menu from immediately opening the default context menu as well
+    rightclickmenu.setAttribute('oncontextmenu','return false')
+    
     // add the proper options to the menu
     var menustring = '<ul>'
 
@@ -1550,6 +1553,8 @@ const JIT = {
     // create new menu for clicked on node
     var rightclickmenu = document.createElement('div')
     rightclickmenu.className = 'rightclickmenu'
+    //prevent the custom context menu from immediately opening the default context menu as well
+    rightclickmenu.setAttribute('oncontextmenu','return false')
 
     // add the proper options to the menu
     var menustring = '<ul>'
