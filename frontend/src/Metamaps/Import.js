@@ -333,8 +333,8 @@ const Import = {
       desc: desc || "",
       category: category,
       permission: permission,
-      node1_id: topic1.id,
-      node2_id: topic2.id
+      topic1_id: topic1.id,
+      topic2_id: topic2.id
     })
     Metamaps.Synapses.add(synapse)
 

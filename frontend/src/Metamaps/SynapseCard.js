@@ -238,7 +238,7 @@ const SynapseCard = {
 
     var directionCat = synapse.get('category'); // both, none, from-to
     if (directionCat == 'from-to') {
-      var from_to = [synapse.get('node1_id'), synapse.get('node2_id')]
+      var from_to = [synapse.get('topic1_id'), synapse.get('topic2_id')]
       if (from_to[0] == left.id) {
         // check left checkbox
         $('#edit_synapse_left').addClass('checked')
@@ -273,8 +273,8 @@ const SynapseCard = {
 
         synapse.save({
           category: dirCat,
-          node1_id: dir[0],
-          node2_id: dir[1]
+          topic1_id: dir[0],
+          topic2_id: dir[1]
         })
         Visualize.mGraph.plot()
       })

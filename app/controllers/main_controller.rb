@@ -156,8 +156,8 @@ class MainController < ApplicationController
 
       @synapses = @synapses.uniq(&:desc)
     elsif topic1id && !topic1id.empty?
-      @one = policy_scope(Synapse).where('node1_id = ? AND node2_id = ?', topic1id, topic2id)
-      @two = policy_scope(Synapse).where('node2_id = ? AND node1_id = ?', topic1id, topic2id)
+      @one = policy_scope(Synapse).where('topic1_id = ? AND topic2_id = ?', topic1id, topic2id)
+      @two = policy_scope(Synapse).where('topic2_id = ? AND topic1_id = ?', topic1id, topic2id)
       @synapses = @one + @two
       @synapses.sort! { |s1, s2| s1.desc <=> s2.desc }.to_a
     else

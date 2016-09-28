@@ -19,7 +19,7 @@ class PermittedParams < Struct.new(:params)
   end
 
   def synapse_attributes
-    [:desc, :category, :weight, :permission, :node1_id, :node2_id]
+    [:desc, :category, :weight, :permission, :topic1_id, :topic2_id]
   end
 
   def topic_attributes
