@@ -22,10 +22,6 @@ class MapExportService
     end
   end
 
-  def xls
-    to_spreadsheet
-  end
-
   private
 
   def topic_headings

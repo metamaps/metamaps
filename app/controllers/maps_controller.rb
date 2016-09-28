@@ -4,8 +4,6 @@ class MapsController < ApplicationController
   before_action :set_map, only: [:show, :update, :destroy, :access, :contains, :events, :export, :screenshot, :star, :unstar]
   after_action :verify_authorized
 
-  respond_to :html, :json, :csv
-
   autocomplete :map, :name, full: true, extra_data: [:user_id]
 
   # GET maps/:id
@@ -24,7 +22,6 @@ class MapsController < ApplicationController
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }
-      format.xls { redirect_to action: :export, format: :xls }
     end
   end
 
@@ -118,7 +115,6 @@ class MapsController < ApplicationController
     respond_to do |format|
       format.json { render json: exporter.json }
       format.csv { send_data exporter.csv }
-      format.xls { @spreadsheet = exporter.xls }
     end
   end
 
