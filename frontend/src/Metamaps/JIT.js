@@ -888,6 +888,7 @@ const JIT = {
           var myY = e.clientY - 30
           $('#new_topic').css('left', myX + 'px')
           $('#new_topic').css('top', myY + 'px')
+          $('#new_topic').attr('oncontextmenu','return false') //prevents the mouse up event from opening the default context menu on this element
           Create.newTopic.x = eventInfo.getPos().x
           Create.newTopic.y = eventInfo.getPos().y
           Visualize.mGraph.plot()
