@@ -9,26 +9,41 @@ import Backbone from 'backbone'
 import Autolinker from 'autolinker'
 import _ from 'lodash'
 import underscore from 'underscore'
+import outdent from 'outdent'
 // TODO is this line good or bad
 // Backbone.$ = window.$
 
 const linker = new Autolinker({ newWindow: true, truncate: 50, email: false, phone: false, twitter: false })
 
 var Private = {
-  messageHTML: "<div class='chat-message'>" +
-    "<div class='chat-message-user'><img src='{{ user_image }}' title='{{user_name }}'/></div>" +
-    "<div class='chat-message-text'>{{ message }}</div>" +
-    "<div class='chat-message-time'>{{ timestamp }}</div>" +
-    "<div class='clearfloat'></div>" +
-    '</div>',
-  participantHTML: "<div class='participant participant-{{ id }} {{ selfClass }}'>" +
-    "<div class='chat-participant-image'><img src='{{ image }}' style='border: 2px solid {{ color }};' /></div>" +
-    "<div class='chat-participant-name'>{{ username }} {{ selfName }}</div>" +
-    "<button type='button' class='button chat-participant-invite-call' onclick='Metamaps.Realtime.inviteACall({{ id}});'></button>" +
-    "<button type='button' class='button chat-participant-invite-join' onclick='Metamaps.Realtime.inviteToJoin({{ id}});'></button>" +
-    "<span class='chat-participant-participating'><div class='green-dot'></div></span>" +
-    "<div class='clearfloat'></div>" +
-    '</div>',
+  messageHTML: outdent`
+    <div class='chat-message'>
+      <div class='chat-message-user'><img src='{{ user_image }}' title='{{user_name }}'/></div>
+      <div class='chat-message-text'>{{ message }}</div>
+      <div class='chat-message-time'>{{ timestamp }}</div>
+      <div class='clearfloat'></div>
+    </div>`,
+  participantHTML: outdent`
+    <div class='participant participant-{{ id }} {{ selfClass }}'>
+      <div class='chat-participant-image'>
+        <img src='{{ image }}' style='border: 2px solid {{ color }};' />
+      </div>
+      <div class='chat-participant-name'>
+        {{ username }} {{ selfName }}
+      </div>
+      <button type='button'
+        class='button chat-participant-invite-call'
+        onclick='Metamaps.Realtime.inviteACall({{ id}});'
+      ></button>
+      <button type='button'
+        class='button chat-participant-invite-join'
+        onclick='Metamaps.Realtime.inviteToJoin({{ id}});'
+      ></button>
+      <span class='chat-participant-participating'>
+        <div class='green-dot'></div>
+      </span>
+      <div class='clearfloat'></div>
+    </div>`,
   templates: function () {
     underscore.templateSettings = {
       interpolate: /\{\{(.+?)\}\}/g
@@ -45,7 +60,16 @@ var Private = {
     this.$videoToggle = $('<div class="video-toggle"></div>')
     this.$cursorToggle = $('<div class="cursor-toggle"></div>')
     this.$participants = $('<div class="participants"></div>')
-    this.$conversationInProgress = $('<div class="conversation-live">LIVE <span class="call-action leave" onclick="Metamaps.Realtime.leaveCall();">LEAVE</span><span class="call-action join" onclick="Metamaps.Realtime.joinCall();">JOIN</span></div>')
+    this.$conversationInProgress = $(outdent`
+      <div class="conversation-live">
+        LIVE
+        <span class="call-action leave" onclick="Metamaps.Realtime.leaveCall();">
+          LEAVE
+        </span>
+        <span class="call-action join" onclick="Metamaps.Realtime.joinCall();">
+          JOIN
+        </span>
+      </div>`)
     this.$chatHeader = $('<div class="chat-header">CHAT</div>')
     this.$soundToggle = $('<div class="sound-toggle"></div>')
     this.$messages = $('<div class="chat-messages"></div>')
