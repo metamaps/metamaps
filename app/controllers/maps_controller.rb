@@ -19,9 +19,6 @@ class MapsController < ApplicationController
         @allmappings = policy_scope(@map.mappings)
         @allmessages = @map.messages.sort_by(&:created_at)
         @allstars = @map.stars
-
-        respond_with(@allmappers, @allcollaborators, @allmappings, @allsynapses,
-                     @alltopics, @allmessages, @allstars, @map)
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class MainController < ApplicationController
+class SearchController < ApplicationController
   include TopicsHelper
   include MapsHelper
   include UsersHelper
@@ -73,7 +73,7 @@ class MainController < ApplicationController
       @topics = []
     end
 
-    render json: autocomplete_array_json(@topics)
+    render json: autocomplete_array_json(@topics).to_json
   end
 
   # get /search/maps?term=SOMETERM
@@ -107,7 +107,7 @@ class MainController < ApplicationController
       @maps = []
     end
 
-    render json: autocomplete_map_array_json(@maps)
+    render json: autocomplete_map_array_json(@maps).to_json
   end
 
   # get /search/mappers?term=SOMETERM
@@ -125,7 +125,7 @@ class MainController < ApplicationController
     else
       @mappers = []
     end
-    render json: autocomplete_user_array_json(@mappers)
+    render json: autocomplete_user_array_json(@mappers).to_json
   end
 
   # get /search/synapses?term=SOMETERM OR
@@ -151,7 +151,7 @@ class MainController < ApplicationController
     # limit to 5 results
     @synapses = @synapses.to_a.slice(0, 5)
 
-    render json: autocomplete_synapse_array_json(@synapses)
+    render json: autocomplete_synapse_array_json(@synapses).to_json
   end
 
   private
