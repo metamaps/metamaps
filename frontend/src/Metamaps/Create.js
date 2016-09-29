@@ -262,7 +262,7 @@ const Create = {
           url: '/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
           prepare: function (query, settings) {
             var self = Create.newSynapse
-            if (Selected.Nodes.length < 2) {
+            if (Selected.Nodes.length < 2 && self.topic1id && self.topic2id) {
               settings.url = settings.url.replace('%TOPIC1', self.topic1id).replace('%TOPIC2', self.topic2id)
               return settings
             } else {
