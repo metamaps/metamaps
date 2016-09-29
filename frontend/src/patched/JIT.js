@@ -2468,16 +2468,36 @@ Extras.Classes.Navigation = new Class({
         ans = 1 + scroll * val;
         
     // START METAMAPS CODE
-	  if (ans > 1) {
-      if (5 >= this.canvas.scaleOffsetX) {
-		    this.canvas.scale(ans, ans);
-	    }
+	  if (((ans > 1) && (5 >= this.canvas.scaleOffsetX)) || ((ans < 1) && (this.canvas.scaleOffsetX >= 0.2))) {
+	    var s = this.canvas.getSize(),
+          p = this.canvas.getPos(),
+          ox = this.canvas.translateOffsetX,
+          oy = this.canvas.translateOffsetY,
+          sx = this.canvas.scaleOffsetX,
+          sy = this.canvas.scaleOffsetY;
+	    
+	    //Basically this is just a duplication of the Util function pixelsToCoords, it finds the canvas coordinate of the mouse pointer
+      var pointerCoordX = (e.x - p.x - s.width / 2 - ox) * (1 / sx),
+          pointerCoordY = (e.y - p.y - s.height / 2 - oy) * (1 / sy);
+
+      //This translates the canvas to be centred over the mouse pointer, then the canvas is zoomed as intended.
+      this.canvas.translate(-pointerCoordX,-pointerCoordY);
+      this.canvas.scale(ans, ans);
+      
+      //Get the canvas attributes again now that is has changed
+      s = this.canvas.getSize(),
+      p = this.canvas.getPos(),
+      ox = this.canvas.translateOffsetX,
+      oy = this.canvas.translateOffsetY,
+      sx = this.canvas.scaleOffsetX,
+      sy = this.canvas.scaleOffsetY;
+      var newX = (e.x - p.x - s.width / 2 - ox) * (1 / sx),
+          newY = (e.y - p.y - s.height / 2 - oy) * (1 / sy);
+          
+      //Translate the canvas to put the pointer back over top the same coordinate it was over before
+      this.canvas.translate(newX-pointerCoordX,newY-pointerCoordY);
 	  }
-	  else if (ans < 1) {
-      if (this.canvas.scaleOffsetX >= 0.2) {
-		    this.canvas.scale(ans, ans);
-	    }
-	  }
+	  
     // END METAMAPS CODE
     // ORIGINAL CODE this.canvas.scale(ans, ans);
 
