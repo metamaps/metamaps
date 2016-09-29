@@ -4,9 +4,9 @@ class Rack::Attack
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle('req/ip', :limit => 300, :period => 5.minutes) do |req|
-    req.ip # unless req.path.start_with?('/assets')
-  end
+  # throttle('req/ip', :limit => 300, :period => 5.minutes) do |req|
+  #   req.ip # unless req.path.start_with?('/assets')
+  # end
 
   # Throttle POST requests to /login by IP address
   #
@@ -32,7 +32,10 @@ class Rack::Attack
     end
   end
 
-  throttle('load_url_title/req/ip', :limit => 5, :period => 1.second) do |req|
+  throttle('load_url_title/req/5mins/ip', :limit => 300, :period => 5.minutes) do |req|
+    req.ip if req.path == 'hacks/load_url_title'
+  end
+  throttle('load_url_title/req/1s/ip', :limit => 5, :period => 1.second) do |req|
     # If the return value is truthy, the cache key for the return value
     # is incremented and compared with the limit. In this case:
     #   "rack::attack:#{Time.now.to_i/1.second}:load_url_title/req/ip:#{req.ip}"
