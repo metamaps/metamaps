@@ -9,6 +9,7 @@ class MainController < ApplicationController
     respond_to do |format|
       format.html do
         if !authenticated?
+          skip_policy_scope
           render 'main/home'
         else
           @maps = policy_scope(Map).order(updated_at: :desc).page(1).per(20)
