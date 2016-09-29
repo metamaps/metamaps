@@ -118,7 +118,7 @@ const Visualize = {
   render: function () {
     var self = Visualize, RGraphSettings, FDSettings
 
-    if (self.type == 'RGraph' && (!self.mGraph || self.mGraph instanceof $jit.ForceDirected)) {
+    if (self.type == 'RGraph') {
       // clear the previous canvas from #infovis
       $('#infovis').empty()
       
@@ -133,7 +133,7 @@ const Visualize = {
       RGraphSettings.levelDistance = JIT.RGraph.levelDistance
 
       self.mGraph = new $jit.RGraph(RGraphSettings)
-    } else if (self.type == 'ForceDirected' && (!self.mGraph || self.mGraph instanceof $jit.RGraph)) {
+    } else if (self.type == 'ForceDirected') {
       // clear the previous canvas from #infovis
       $('#infovis').empty()
       
