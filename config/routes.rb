@@ -45,11 +45,13 @@ Metamaps::Application.routes.draw do
   resources :synapses, except: [:index, :new, :edit]
 
   resources :topics, except: [:index, :new, :edit] do
-    get :autocomplete_topic
     member do
       get :network
       get :relative_numbers
       get :relatives
+    end
+    collection do
+      get :autocomplete_topic
     end
   end
 
