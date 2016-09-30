@@ -9,7 +9,9 @@ import Control from './Control'
 import Create from './Create'
 import Debug from './Debug'
 import Filter from './Filter'
-import GlobalUI from './GlobalUI'
+import GlobalUI, {
+  Search, CreateMap, Account as GlobalUI_Account
+} from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
 import Listeners from './Listeners'
@@ -42,6 +44,9 @@ Metamaps.Create = Create
 Metamaps.Debug = Debug
 Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
+Metamaps.GlobalUI.Search = Search
+Metamaps.GlobalUI.CreateMap = CreateMap
+Metamaps.GlobalUI.Account = GlobalUI_Account
 Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
@@ -66,41 +71,38 @@ Metamaps.Util = Util
 Metamaps.Views = Views
 Metamaps.Visualize = Visualize
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function () {
   // initialize all the modules
   for (const prop in Metamaps) {
-      // this runs the init function within each sub-object on the Metamaps one
-      if (Metamaps.hasOwnProperty(prop) &&
-          Metamaps[prop] != null &&
-          Metamaps[prop].hasOwnProperty('init') &&
-          typeof (Metamaps[prop].init) == 'function'
-      ) {
-          Metamaps[prop].init()
-      }
+    // this runs the init function within each sub-object on the Metamaps one
+    if (Metamaps.hasOwnProperty(prop) &&
+      Metamaps[prop] != null &&
+      Metamaps[prop].hasOwnProperty('init') &&
+      typeof (Metamaps[prop].init) === 'function'
+    ) {
+      Metamaps[prop].init()
+    }
   }
   // load whichever page you are on
-  if (Metamaps.currentSection === "explore") {
-      const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
+  if (Metamaps.currentSection === 'explore') {
+    const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
-      Metamaps.Views.ExploreMaps.setCollection( Metamaps.Maps[capitalize] )
-      if (Metamaps.currentPage === "mapper") {
-          Views.ExploreMaps.fetchUserThenRender()
-      }
-      else {
-          Views.ExploreMaps.render()
-      }
-      GlobalUI.showDiv('#explore')
-  }
-  else if (Metamaps.currentSection === "" && Active.Mapper) {
-      Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
+    Metamaps.Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
+    if (Metamaps.currentPage === 'mapper') {
+      Views.ExploreMaps.fetchUserThenRender()
+    } else {
       Views.ExploreMaps.render()
-      GlobalUI.showDiv('#explore')
-  }
-  else if (Active.Map || Active.Topic) {
+    }
+    GlobalUI.showDiv('#explore')
+  } else if (Metamaps.currentSection === '' && Active.Mapper) {
+    Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
+    Views.ExploreMaps.render()
+    GlobalUI.showDiv('#explore')
+  } else if (Active.Map || Active.Topic) {
     Metamaps.Loading.show()
     JIT.prepareVizData()
     GlobalUI.showDiv('#infovis')
   }
-});
+})
 
 export default Metamaps
