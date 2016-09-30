@@ -31,13 +31,12 @@ const Import = {
   cidMappings: {}, // to be filled by import_id => cid mappings
 
   handleTSV: function (text) {
-    var self = Import
-    results = self.parseTabbedString(text)
-    self.handle(results)
+    const results = Import.parseTabbedString(text)
+    Import.handle(results)
   },
 
   handleCSV: function (text, parserOpts = {}) {
-    var self = Import
+    const self = Import
 
     const topicsRegex = /("?Topics"?)([\s\S]*)/mi
     const synapsesRegex = /("?Synapses"?)([\s\S]*)/mi
@@ -71,9 +70,8 @@ const Import = {
   },
 
   handleJSON: function (text) {
-    var self = Import
-    results = JSON.parse(text)
-    self.handle(results)
+    const results = JSON.parse(text)
+    Import.handle(results)
   },
 
   handle: function(results) {
