@@ -13,7 +13,6 @@ const Search = {
   isOpen: false,
   limitTopicsToMe: false,
   limitMapsToMe: false,
-  timeOut: null,
   changing: false,
   optionsInitialized: false,
   init: function () {
@@ -28,95 +27,17 @@ const Search = {
     loader.setRange(0.9) // default is 1.3
     loader.show() // Hidden by default
 
-    // bind the hover events
-    $('.sidebarSearch').hover(function () {
-      self.open()
-    }, function () {
-      self.close(800, false)
-    })
-
     $('.sidebarSearchIcon').click(function (e) {
       $('.sidebarSearchField').focus()
     })
     $('.sidebarSearch').click(function (e) {
       e.stopPropagation()
     })
-    $('body').click(function (e) {
-      self.close(0, false)
-    })
-
-    // open if the search is closed and user hits ctrl+/
-    // close if they hit ESC
-    $('body').bind('keyup', function (e) {
-      switch (e.which) {
-        case 191:
-          if ((e.ctrlKey && !self.isOpen) || (e.ctrlKey && self.locked)) {
-            self.open(true) // true for focus
-          }
-          break
-        case 27:
-          if (self.isOpen) {
-            self.close(0, true)
-          }
-          break
-
-        default:
-          break // console.log(e.which)
-      }
-    })
 
     self.startTypeahead()
   },
-  lock: function () {
-    var self = Search
-    self.locked = true
-  },
-  unlock: function () {
-    var self = Search
-    self.locked = false
-  },
-  open: function (focus) {
-    var self = Search
-
-    clearTimeout(self.timeOut)
-    if (!self.isOpen && !self.changing && !self.locked) {
-      self.changing = true
-      $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
-        width: '400px'
-      }, 300, function () {
-        if (focus) $('.sidebarSearchField').focus()
-        $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
-          padding: '7px 10px 3px 10px',
-          width: '380px'
-        })
-        self.changing = false
-        self.isOpen = true
-      })
-    }
-  },
-  close: function (closeAfter, bypass) {
-    // for now
-    return
-
-    var self = Search
-
-    self.timeOut = setTimeout(function () {
-      if (!self.locked && !self.changing && self.isOpen && (bypass || $('.sidebarSearchField.tt-input').val() === '')) {
-        self.changing = true
-        $('.sidebarSearchField, .sidebarSearch .tt-hint').css({
-          padding: '7px 0 3px 0',
-          width: '400px'
-        })
-        $('.sidebarSearch .twitter-typeahead, .sidebarSearch .tt-hint, .sidebarSearchField').animate({
-          width: '0'
-        }, 300, function () {
-          $('.sidebarSearchField').typeahead('val', '')
-          $('.sidebarSearchField').blur()
-          self.changing = false
-          self.isOpen = false
-        })
-      }
-    }, closeAfter)
+  focus: function() {
+    $('.sidebarSearchField').focus()
   },
   startTypeahead: function () {
     var self = Search
@@ -270,7 +191,6 @@ const Search = {
     self.hideLoader()
 
     if (['topic', 'map', 'mapper'].indexOf(datum.rtype) !== -1) {
-      self.close(0, true)
       if (datum.rtype === 'topic') {
         Router.topics(datum.id)
       } else if (datum.rtype === 'map') {
