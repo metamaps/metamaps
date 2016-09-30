@@ -8,6 +8,7 @@ import Realtime from './Realtime'
 import Selected from './Selected'
 import Topic from './Topic'
 import Visualize from './Visualize'
+import { Search } from './GlobalUI'
 
 const Listeners = {
   init: function () {
@@ -91,6 +92,11 @@ const Listeners = {
               center: true,
               reveal: true
             })
+          }
+          break
+        case 191: // if / is pressed
+          if (e.ctrlKey) {
+            Search.focus()
           }
           break
         default:
