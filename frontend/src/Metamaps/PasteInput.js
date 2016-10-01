@@ -2,7 +2,6 @@
 
 import AutoLayout from './AutoLayout'
 import Import from './Import'
-import TopicCard from './TopicCard'
 import Util from './Util'
 
 const PasteInput = {
@@ -100,10 +99,6 @@ const PasteInput = {
             }
             topic.set('name', data.title)
             topic.save()
-          })
-          TopicCard.showCard(topic.get('node'), function() {
-            $('#showcard #titleActivator').click()
-              .find('textarea, input').focus()
           })
         }
       }
