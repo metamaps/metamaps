@@ -1,4 +1,3 @@
-const path = require('path')
 const webpack = require('webpack')
 
 const NODE_ENV = process.env.NODE_ENV || 'development'
@@ -15,9 +14,12 @@ if (NODE_ENV === 'production') {
   }))
 }
 
+const devtool = NODE_ENV === 'production' ? undefined : 'cheap-module-eval-source-map'
+
 const config = module.exports = {
   context: __dirname,
   plugins,
+  devtool,
   module: {
     loaders: [
       {

@@ -5,11 +5,13 @@ engines:
   bundler-audit:
     enabled: true
   duplication:
-    enabled: false
+    enabled: true
     config:
       languages:
-      - ruby
-      - javascript
+        ruby:
+          mass_threshold: 36 # default: 18
+        javascript:
+          mass_threshold: 80 # default: 40
   eslint:
     enabled: true
     channel: "eslint-3"
