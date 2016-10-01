@@ -1,3 +1,5 @@
+import Active from './Active'
+
 const AutoLayout = {
   nextX: 0,
   nextY: 0,
@@ -7,7 +9,7 @@ const AutoLayout = {
   nextYshift: 0,
   timeToTurn: 0,
 
-  getNextCoord: function () {
+  getNextCoord: function (opts = {}) {
     var self = AutoLayout
     var nextX = self.nextX
     var nextY = self.nextY
@@ -49,9 +51,22 @@ const AutoLayout = {
       }
     }
 
-    return {
-      x: nextX,
-      y: nextY
+    if (opts.map && self.coordsTaken(nextX, nextY, opts.map)) {
+      // check if the coordinate is already taken on the current map
+      return self.getNextCoord(opts)
+    } else {
+      return {
+        x: nextX,
+        y: nextY
+      }
+    }
+  },
+  coordsTaken: function(x, y, map) {
+    const mappings = map.getMappings()
+    if (mappings.findWhere({ xloc: x, yloc: y })) {
+      return true
+    } else {
+      return false
     }
   },
   resetSpiral: function () {

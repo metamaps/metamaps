@@ -227,7 +227,7 @@ const Import = {
     parsedTopics.forEach(function (topic) {
       let coords = { x: topic.x, y: topic.y }
       if (!coords.x || !coords.y) {
-        coords = AutoLayout.getNextCoord()
+        coords = AutoLayout.getNextCoord({ map: Active.Map })
       }
 
       if (!topic.name && topic.link ||
@@ -349,7 +349,7 @@ const Import = {
   handleURL: function (url, opts = {}) {
     let coords = opts.coords
     if (!coords || coords.x === undefined || coords.y === undefined) {
-      coords = AutoLayout.getNextCoord()
+      coords = AutoLayout.getNextCoord({ map: Active.Map })
     }
 
     const name = opts.name || 'Link'
