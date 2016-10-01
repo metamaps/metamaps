@@ -4,6 +4,7 @@ import parse from 'csv-parse'
 import _ from 'lodash'
 
 import Active from './Active'
+import AutoLayout from './AutoLayout'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
 import Synapse from './Synapse'
@@ -40,9 +41,9 @@ const Import = {
 
     const topicsRegex = /("?Topics"?)([\s\S]*)/mi
     const synapsesRegex = /("?Synapses"?)([\s\S]*)/mi
-    let topicsText = text.match(topicsRegex)
+    let topicsText = text.match(topicsRegex) || ''
     if (topicsText) topicsText = topicsText[2].replace(synapsesRegex, '')
-    let synapsesText = text.match(synapsesRegex)
+    let synapsesText = text.match(synapsesRegex) || ''
     if (synapsesText) synapsesText = synapsesText[2].replace(topicsRegex, '')
 
     // merge default options and extra options passed in parserOpts argument
@@ -54,14 +55,20 @@ const Import = {
 
     const topicsPromise = $.Deferred()
     parse(topicsText, csv_parser_options, (err, data) => {
-      if (err) return topicsPromise.reject(err)
-      topicsPromise.resolve(data.map(row => self.lowercaseKeys(row)))
+      if (err) {
+        console.warn(err)
+        return topicsPromise.resolve([])
+      }
+      topicsPromise.resolve(data.map(row => self.normalizeKeys(row)))
     })
 
     const synapsesPromise = $.Deferred()
     parse(synapsesText, csv_parser_options, (err, data) => {
-      if (err) return synapsesPromise.reject(err)
-      synapsesPromise.resolve(data.map(row => self.lowercaseKeys(row)))
+      if (err) {
+        console.warn(err)
+        return synapsesPromise.resolve([])
+      }
+      synapsesPromise.resolve(data.map(row => self.normalizeKeys(row)))
     })
 
     $.when(topicsPromise, synapsesPromise).done((topics, synapses) => {
@@ -217,32 +224,26 @@ const Import = {
   importTopics: function (parsedTopics) {
     var self = Import
 
-    // up to 25 topics: scale 100
-    // up to 81 topics: scale 200
-    // up to 169 topics: scale 300
-    var scale = Math.floor((Math.sqrt(parsedTopics.length) - 1) / 4) * 100
-    if (scale < 100) scale = 100
-    var autoX = -scale
-    var autoY = -scale
-
     parsedTopics.forEach(function (topic) {
-      var x, y
-      if (topic.x && topic.y) {
-        x = topic.x
-        y = topic.y
-      } else {
-        x = autoX
-        y = autoY
-        autoX += 50
-        if (autoX > scale) {
-          autoY += 50
-          autoX = -scale
-        }
+      let coords = { x: topic.x, y: topic.y }
+      if (!coords.x || !coords.y) {
+        coords = AutoLayout.getNextCoord({ map: Active.Map })
+      }
+
+      if (!topic.name && topic.link ||
+          topic.name && topic.link && !topic.metacode) {
+        self.handleURL(topic.link, {
+          coords,
+          name: topic.name,
+          permission: topic.permission,
+          import_id: topic.id
+        })
+        return // "continue"
       }
 
       self.createTopicWithParameters(
         topic.name, topic.metacode, topic.permission,
-        topic.desc, topic.link, x, y, topic.id
+        topic.desc, topic.link, coords.x, coords.y, topic.id
       )
     })
   },
@@ -345,6 +346,47 @@ const Import = {
     Synapse.renderSynapse(mapping, synapse, node1, node2, true)
   },
 
+  handleURL: function (url, opts = {}) {
+    let coords = opts.coords
+    if (!coords || coords.x === undefined || coords.y === undefined) {
+      coords = AutoLayout.getNextCoord({ map: Active.Map })
+    }
+
+    const name = opts.name || 'Link'
+    const metacode = opts.metacode || 'Reference'
+    const import_id = opts.import_id || null // don't store a cidMapping
+    const permission = opts.permission || null // use default
+    const desc = opts.desc || url
+
+    Import.createTopicWithParameters(
+      name,
+      metacode,
+      permission,
+      desc,
+      url,
+      coords.x,
+      coords.y,
+      import_id,
+      {
+        success: function(topic) {
+          if (topic.get('name') !== 'Link') return
+          $.get('/hacks/load_url_title', {
+            url
+          }, function success(data, textStatus) {
+            var selector = '#showcard #topic_' + topic.get('id') + ' .best_in_place'
+            if ($(selector).find('form').length > 0) {
+              $(selector).find('textarea, input').val(data.title)
+            } else {
+              $(selector).html(data.title)
+            }
+            topic.set('name', data.title)
+            topic.save()
+          })
+        }
+      }
+    )
+  },
+
   /*
    * helper functions
    */
@@ -353,6 +395,7 @@ const Import = {
     console.error(message)
   },
 
+  // TODO investigate replacing with es6 (?) trim()
   simplify: function (string) {
     return string
       .replace(/(^\s*|\s*$)/g, '')
@@ -361,9 +404,13 @@ const Import = {
 
 
   // thanks to http://stackoverflow.com/a/25290114/5332286
-  lowercaseKeys: function(obj) {
+  normalizeKeys: function(obj) {
     return _.transform(obj, (result, val, key) => {
-      result[key.toLowerCase()] = val
+      let newKey = key.toLowerCase()
+      if (newKey === 'url') key = 'link'
+      if (newKey === 'title') key = 'name'
+      if (newKey === 'description') key = 'desc'
+      result[newKey] = val
     })
   }
 }

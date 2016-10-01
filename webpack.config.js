@@ -26,7 +26,7 @@ const config = module.exports = {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
         loaders: [
-          "babel-loader?cacheDirectory"
+          'babel-loader?cacheDirectory&retainLines=true'
         ]
       }
     ]
@@ -36,6 +36,7 @@ const config = module.exports = {
   },
   output: {
     path: './app/assets/javascripts/webpacked',
-    filename: '[name].js'
+    filename: '[name].js',
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]'
   }
 }
