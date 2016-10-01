@@ -54,13 +54,13 @@ const Import = {
 
     const topicsPromise = $.Deferred()
     parse(topicsText, csv_parser_options, (err, data) => {
-      if (err) topicsPromise.reject(err)
+      if (err) return topicsPromise.reject(err)
       topicsPromise.resolve(data.map(row => self.lowercaseKeys(row)))
     })
 
     const synapsesPromise = $.Deferred()
     parse(synapsesText, csv_parser_options, (err, data) => {
-      if (err) synapsesPromise.reject(err)
+      if (err) return synapsesPromise.reject(err)
       synapsesPromise.resolve(data.map(row => self.lowercaseKeys(row)))
     })
 
