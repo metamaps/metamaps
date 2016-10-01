@@ -40,9 +40,9 @@ const Import = {
 
     const topicsRegex = /("?Topics"?)([\s\S]*)/mi
     const synapsesRegex = /("?Synapses"?)([\s\S]*)/mi
-    let topicsText = text.match(topicsRegex)
+    let topicsText = text.match(topicsRegex) || ""
     if (topicsText) topicsText = topicsText[2].replace(synapsesRegex, '')
-    let synapsesText = text.match(synapsesRegex)
+    let synapsesText = text.match(synapsesRegex) || ""
     if (synapsesText) synapsesText = synapsesText[2].replace(topicsRegex, '')
 
     // merge default options and extra options passed in parserOpts argument
@@ -54,13 +54,19 @@ const Import = {
 
     const topicsPromise = $.Deferred()
     parse(topicsText, csv_parser_options, (err, data) => {
-      if (err) return topicsPromise.reject(err)
+      if (err) {
+        console.warn(err)
+        return topicsPromise.resolve([])
+      }
       topicsPromise.resolve(data.map(row => self.lowercaseKeys(row)))
     })
 
     const synapsesPromise = $.Deferred()
     parse(synapsesText, csv_parser_options, (err, data) => {
-      if (err) return synapsesPromise.reject(err)
+      if (err) {
+        console.warn(err)
+        return synapsesPromise.resolve([])
+      }
       synapsesPromise.resolve(data.map(row => self.lowercaseKeys(row)))
     })
 
@@ -238,6 +244,10 @@ const Import = {
           autoY += 50
           autoX = -scale
         }
+      }
+
+      if (topic.name && topic.link && !topic.metacode) {
+        topic.metacode = "Reference"
       }
 
       self.createTopicWithParameters(
