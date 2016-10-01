@@ -65,8 +65,7 @@ const PasteInput = {
       // just try to see if CSV works
       Import.handleCSV(text)
     }
-  },
-
+  }
 }
 
 export default PasteInput

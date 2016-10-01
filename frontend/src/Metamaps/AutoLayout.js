@@ -1,5 +1,3 @@
-import Active from './Active'
-
 const AutoLayout = {
   nextX: 0,
   nextY: 0,
@@ -61,7 +59,7 @@ const AutoLayout = {
       }
     }
   },
-  coordsTaken: function(x, y, map) {
+  coordsTaken: function (x, y, map) {
     const mappings = map.getMappings()
     if (mappings.findWhere({ xloc: x, yloc: y })) {
       return true
