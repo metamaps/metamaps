@@ -36,19 +36,19 @@ class Topic < ApplicationRecord
   validates_attachment_content_type :audio, content_type: /\Aaudio\/.*\Z/
 
   def synapses
-    synapses1 + synapses2
+    synapses1.or(synapses2)
   end
 
   def relatives
-    topics1 + topics2
+    topics1.or(topics2)
   end
 
   scope :relatives, ->(topic_id = nil, user = nil) {
     # should only see topics through *visible* synapses
     # e.g. Topic A (commons) -> synapse (private) -> Topic B (commons) must be filtered out
-    synapses = Pundit.policy_scope(user, Synapse.where(topic1_id: topic_id)).pluck(:topic2_id)
-    synapses += Pundit.policy_scope(user, Synapse.where(topic2_id: topic_id)).pluck(:topic1_id)
-    where(id: synapses.uniq)
+    topic_ids = Pundit.policy_scope(user, Synapse.where(topic1_id: topic_id)).pluck(:topic2_id)
+    topic_ids += Pundit.policy_scope(user, Synapse.where(topic2_id: topic_id)).pluck(:topic1_id)
+    where(id: topic_ids.uniq)
   }
 
   delegate :name, to: :user, prefix: true
