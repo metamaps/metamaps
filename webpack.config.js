@@ -26,7 +26,7 @@ const config = module.exports = {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
         loaders: [
-          "babel-loader?cacheDirectory&retainLines=true"
+          'babel-loader?cacheDirectory&retainLines=true'
         ]
       }
     ]

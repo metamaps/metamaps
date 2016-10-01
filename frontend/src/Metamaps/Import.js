@@ -4,6 +4,7 @@ import parse from 'csv-parse'
 import _ from 'lodash'
 
 import Active from './Active'
+import AutoLayout from './AutoLayout'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
 import Synapse from './Synapse'
@@ -40,9 +41,9 @@ const Import = {
 
     const topicsRegex = /("?Topics"?)([\s\S]*)/mi
     const synapsesRegex = /("?Synapses"?)([\s\S]*)/mi
-    let topicsText = text.match(topicsRegex) || ""
+    let topicsText = text.match(topicsRegex) || ''
     if (topicsText) topicsText = topicsText[2].replace(synapsesRegex, '')
-    let synapsesText = text.match(synapsesRegex) || ""
+    let synapsesText = text.match(synapsesRegex) || ''
     if (synapsesText) synapsesText = synapsesText[2].replace(topicsRegex, '')
 
     // merge default options and extra options passed in parserOpts argument
@@ -223,31 +224,19 @@ const Import = {
   importTopics: function (parsedTopics) {
     var self = Import
 
-    // up to 25 topics: scale 100
-    // up to 81 topics: scale 200
-    // up to 169 topics: scale 300
-    var scale = Math.floor((Math.sqrt(parsedTopics.length) - 1) / 4) * 100
-    if (scale < 100) scale = 100
-    var autoX = -scale
-    var autoY = -scale
-
     parsedTopics.forEach(function (topic) {
       var x, y
       if (topic.x && topic.y) {
         x = topic.x
         y = topic.y
       } else {
-        x = autoX
-        y = autoY
-        autoX += 50
-        if (autoX > scale) {
-          autoY += 50
-          autoX = -scale
-        }
+        const coords = AutoLayout.getNextCoord()
+        x = coords.x
+        y = coords.y
       }
 
       if (topic.name && topic.link && !topic.metacode) {
-        topic.metacode = "Reference"
+        topic.metacode = 'Reference'
       }
 
       self.createTopicWithParameters(
