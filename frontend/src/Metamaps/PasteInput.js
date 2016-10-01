@@ -1,6 +1,5 @@
 /* global $ */
 
-import AutoLayout from './AutoLayout'
 import Import from './Import'
 import Util from './Util'
 
@@ -57,7 +56,7 @@ const PasteInput = {
     var self = PasteInput
 
     if (text.match(self.URL_REGEX)) {
-      self.handleURL(text, coords)
+      Import.handleURL(text, coords)
     } else if (text[0] === '{') {
       Import.handleJSON(text)
     } else if (text.match(/\t/)) {
@@ -68,42 +67,6 @@ const PasteInput = {
     }
   },
 
-  handleURL: function (text, coords) {
-    var title = 'Link'
-    if (!coords || !coords.x || !coords.y) {
-      coords = AutoLayout.getNextCoord()
-    }
-
-    var import_id = null  // don't store a cidMapping
-    var permission = null // use default
-
-    Import.createTopicWithParameters(
-      title,
-      'Reference', // metacode - todo fix
-      permission,
-      text, // desc - todo load from url?
-      text, // link - todo fix because this isn't being POSTed
-      coords.x,
-      coords.y,
-      import_id,
-      {
-        success: function(topic) {
-          $.get('/hacks/load_url_title', {
-            url: text
-          }, function success(data, textStatus) {
-            var selector = '#showcard #topic_' + topic.get('id') + ' .best_in_place'
-            if ($(selector).find('form').length > 0) {
-              $(selector).find('textarea, input').val(data.title)
-            } else {
-              $(selector).html(data.title)
-            }
-            topic.set('name', data.title)
-            topic.save()
-          })
-        }
-      }
-    )
-  }
 }
 
 export default PasteInput
