@@ -63,7 +63,8 @@ const PasteInput = {
       Import.handleJSON(text)
     } else if (text.match(/\t/)) {
       Import.handleTSV(text)
-    } else if (text.match(/","/)) {
+    } else {
+      // just try to see if CSV works
       Import.handleCSV(text)
     }
   },
