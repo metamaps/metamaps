@@ -69,6 +69,8 @@ const Topic = {
       Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
       Metamaps.Backbone.attachCollectionEvents()
 
+      document.title = Active.Topic.get('name') + ' | Metamaps'
+
       // set filter mapper H3 text
       $('#filter_by_mapper h3').html('CREATORS')
 

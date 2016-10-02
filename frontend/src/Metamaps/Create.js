@@ -346,7 +346,7 @@ const Create = {
       Create.newSynapse.topic1id = 0
       Create.newSynapse.topic2id = 0
       Mouse.synapseStartCoordinates = []
-      Visualize.mGraph.plot()
+      if (Visualize.mGraph) Visualize.mGraph.plot()
     },
   }
 }

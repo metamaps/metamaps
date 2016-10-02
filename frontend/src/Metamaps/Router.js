@@ -27,7 +27,8 @@ const _Router = Backbone.Router.extend({
     '': 'home', // #home
     'explore/:section': 'explore', // #explore/active
     'explore/:section/:id': 'explore', // #explore/mapper/1234
-    'maps/:id': 'maps' // #maps/7
+    'maps/:id': 'maps', // #maps/7
+    'topics/:id': 'topics' // #topics/7
   },
   home: function () {
     let self = this
@@ -181,8 +182,6 @@ const _Router = Backbone.Router.extend({
   },
   topics: function (id) {
     clearTimeout(this.timeoutId)
-
-    document.title = 'Topic ' + id + ' | Metamaps'
 
     this.currentSection = 'topic'
     this.currentPage = id
