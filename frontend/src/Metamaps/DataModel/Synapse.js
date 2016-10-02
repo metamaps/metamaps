@@ -11,7 +11,6 @@ import Realtime from '../Realtime'
 import SynapseCard from '../SynapseCard'
 import Visualize from '../Visualize'
 
-
 /*
  * Dependencies:
  *  - Metamaps.Mappings
@@ -46,8 +45,7 @@ const Synapse = Backbone.Model.extend({
 
       if (permBefore === 'private' && model.get('permission') !== 'private') {
         model.trigger('noLongerPrivate')
-      }
-      else if (permBefore !== 'private' && model.get('permission') === 'private') {
+      } else if (permBefore !== 'private' && model.get('permission') === 'private') {
         model.trigger('nowPrivate')
       }
     }
@@ -104,8 +102,8 @@ const Synapse = Backbone.Model.extend({
     return Metamaps.Topics.get(this.get('topic2_id'))
   },
   getDirection: function () {
-    var t1 = this.getTopic1(),
-      t2 = this.getTopic2()
+    var t1 = this.getTopic1()
+    var t2 = this.getTopic2()
 
     return t1 && t2 ? [
       t1.get('node').id,
@@ -130,7 +128,7 @@ const Synapse = Backbone.Model.extend({
       nodeTo: this.get('topic2_id'),
       data: {
         $synapses: [],
-        $synapseIDs: [synapseID],
+        $synapseIDs: [synapseID]
       }
     }
 
@@ -167,7 +165,7 @@ const Synapse = Backbone.Model.extend({
     var edge = this.get('edge')
 
     // update synapse card, if this synapse is the one open there
-    if (onPageWithSynapseCard && edge == SynapseCard.openSynapseCard) {
+    if (onPageWithSynapseCard && edge === SynapseCard.openSynapseCard) {
       SynapseCard.showCard(edge)
     }
   },

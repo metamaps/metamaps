@@ -49,7 +49,7 @@ const DataModel = {
   Mapping: Mapping,
   MappingCollection: MappingCollection,
 
-  init: function() {
+  init: function () {
     var self = DataModel
 
     Metamaps.Metacodes = Metamaps.Metacodes ? new self.MetacodeCollection(Metamaps.Metacodes) : new self.MetacodeCollection()
@@ -93,10 +93,6 @@ const DataModel = {
   }
 }
 
-export {
-  Map, MapCollection, Mapper, MapperCollection, Mapping, MappingCollection,
-  Message, MessageCollection, Metacode, MetacodeCollection,
-  Synapse, SynapseCollection, Topic, TopicCollection
-}
+export { Map, MapCollection, Mapper, MapperCollection, Mapping, MappingCollection, Message, MessageCollection, Metacode, MetacodeCollection, Synapse, SynapseCollection, Topic, TopicCollection }
 
 export default DataModel

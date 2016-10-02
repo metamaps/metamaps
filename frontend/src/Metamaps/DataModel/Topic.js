@@ -46,8 +46,7 @@ const Topic = Backbone.Model.extend({
 
       if (permBefore === 'private' && model.get('permission') !== 'private') {
         model.trigger('noLongerPrivate')
-      }
-      else if (permBefore !== 'private' && model.get('permission') === 'private') {
+      } else if (permBefore !== 'private' && model.get('permission') === 'private') {
         model.trigger('nowPrivate')
       }
     }
@@ -87,8 +86,8 @@ const Topic = Backbone.Model.extend({
   authorizeToEdit: function (mapper) {
     if (mapper &&
       (this.get('user_id') === mapper.get('id') ||
-       this.get('calculated_permission') === 'commons' ||
-       this.get('collaborator_ids').includes(mapper.get('id')))) {
+      this.get('calculated_permission') === 'commons' ||
+      this.get('collaborator_ids').includes(mapper.get('id')))) {
       return true
     } else {
       return false
@@ -148,7 +147,7 @@ const Topic = Backbone.Model.extend({
     var onPageWithTopicCard = Active.Map || Active.Topic
     var node = this.get('node')
     // update topic card, if this topic is the one open there
-    if (onPageWithTopicCard && this == TopicCard.openTopicCard) {
+    if (onPageWithTopicCard && this === TopicCard.openTopicCard) {
       TopicCard.showCard(node)
     }
 
@@ -162,7 +161,7 @@ const Topic = Backbone.Model.extend({
     var onPageWithTopicCard = Active.Map || Active.Topic
     var node = this.get('node')
     // update topic card, if this topic is the one open there
-    if (onPageWithTopicCard && this == TopicCard.openTopicCard) {
+    if (onPageWithTopicCard && this === TopicCard.openTopicCard) {
       TopicCard.showCard(node)
     }
   },

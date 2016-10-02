@@ -4,7 +4,7 @@ import outdent from 'outdent'
 
 const Metacode = Backbone.Model.extend({
   initialize: function () {
-    var image = new Image()
+    var image = new window.Image()
     image.crossOrigin = 'Anonymous'
     image.src = this.get('icon')
     this.set('image', image)
