@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-Metamaps::Application.configure do
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   config.log_level = :info
@@ -46,5 +46,6 @@ Metamaps::Application.configure do
   config.action_mailer.preview_path = '/vagrant/spec/mailers/previews'
 
   # Expands the lines which load the assets
-  config.assets.debug = true
+  config.assets.debug = false
+  config.assets.quiet = true
 end
