@@ -18,8 +18,7 @@ const Search = {
   init: function () {
     var self = Search
 
-    // TODO does this overlap with Metamaps.Loading?
-    // devin sez: I'd like to remove Metamaps.Loading from the rails code
+    // this is similar to Metamaps.Loading, but it's for the search element
     var loader = new CanvasLoader('searchLoading')
     loader.setColor('#4fb5c0') // default is '#000000'
     loader.setDiameter(24) // default is 40

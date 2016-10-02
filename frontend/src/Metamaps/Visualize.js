@@ -6,6 +6,7 @@ import $jit from '../patched/JIT'
 
 import Active from './Active'
 import JIT from './JIT'
+import Loading from './Loading'
 import Router from './Router'
 import TopicCard from './TopicCard'
 
@@ -13,7 +14,6 @@ import TopicCard from './TopicCard'
  * Metamaps.Visualize
  *
  * Dependencies:
- *  - Metamaps.Loading
  *  - Metamaps.Metacodes
  *  - Metamaps.Synapses
  *  - Metamaps.Topics
@@ -161,7 +161,7 @@ const Visualize = {
     if (self.type == 'ForceDirected' && Active.Mapper) $.post('/maps/' + Active.Map.id + '/events/user_presence')
 
     function runAnimation () {
-      Metamaps.Loading.hide()
+      Loading.hide()
       // load JSON data, if it's not empty
       if (!self.loadLater) {
         // load JSON data.

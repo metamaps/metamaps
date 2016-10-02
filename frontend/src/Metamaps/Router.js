@@ -6,6 +6,7 @@ import Backbone from 'backbone'
 
 import Active from './Active'
 import GlobalUI from './GlobalUI'
+import Loading from './Loading'
 import Map from './Map'
 import Topic from './Topic'
 import Views from './Views'
@@ -15,7 +16,6 @@ import Visualize from './Visualize'
  * Metamaps.Router.js.erb
  *
  * Dependencies:
- *  - Metamaps.Loading
  *  - Metamaps.Maps
  */
 
@@ -134,7 +134,7 @@ const _Router = Backbone.Router.extend({
       self.timeoutId = setTimeout(navigate, 300)
     }
     if (Metamaps.Maps[capitalize].length === 0) {
-      Metamaps.Loading.show()
+      Loading.show()
       Views.ExploreMaps.pending = true
       setTimeout(function () {
         Metamaps.Maps[capitalize].getMaps(navigate) // this will trigger an explore maps render
@@ -178,7 +178,7 @@ const _Router = Backbone.Router.extend({
     Topic.end()
     Active.Topic = null
 
-    Metamaps.Loading.show()
+    Loading.show()
     Map.end()
     Map.launch(id)
   },

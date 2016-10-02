@@ -8,6 +8,7 @@ import Create from '../Create'
 import Filter from '../Filter'
 import GlobalUI from '../GlobalUI'
 import JIT from '../JIT'
+import Loading from '../Loading'
 import Realtime from '../Realtime'
 import Router from '../Router'
 import Selected from '../Selected'
@@ -24,7 +25,6 @@ import InfoBox from './InfoBox'
  * Dependencies:
  *  - Metamaps.DataModel
  *  - Metamaps.Erb
- *  - Metamaps.Loading
  *  - Metamaps.Mappers
  *  - Metamaps.Mappings
  *  - Metamaps.Maps
@@ -136,7 +136,7 @@ const Map = {
       Filter.checkMappers()
 
       Realtime.startActiveMap()
-      Metamaps.Loading.hide()
+      Loading.hide()
       
       // for mobile
       $('#header_content').html(map.get('name'))

@@ -3,12 +3,9 @@
 import Backbone from 'backbone'
 Backbone.$ = window.$
 
-import Map from './Map'
+import Loading from '../Loading'
 
-/*
- * Dependencies:
- *  - Metamaps.Loading
- */
+import Map from './Map'
 
 const MapCollection = Backbone.Collection.extend({
   model: Map,
@@ -50,7 +47,7 @@ const MapCollection = Backbone.Collection.extend({
   getMaps: function (cb) {
     var self = this
 
-    Metamaps.Loading.show()
+    Loading.show()
 
     if (this.page !== 'loadedAll') {
       var numBefore = this.length

@@ -25,7 +25,6 @@ import MappingCollection from './MappingCollection'
  * Dependencies:
  *  - Metamaps.Collaborators
  *  - Metamaps.Creators
- *  - Metamaps.Loading
  *  - Metamaps.Mappers
  *  - Metamaps.Mappings
  *  - Metamaps.Metacodes

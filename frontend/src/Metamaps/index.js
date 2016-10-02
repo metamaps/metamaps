@@ -15,6 +15,7 @@ import GlobalUI, {
 import Import from './Import'
 import JIT from './JIT'
 import Listeners from './Listeners'
+import Loading from './Loading'
 import Map, { CheatSheet, InfoBox } from './Map'
 import Mapper from './Mapper'
 import Mobile from './Mobile'
@@ -51,6 +52,7 @@ Metamaps.GlobalUI.ImportDialog = ImportDialog
 Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
+Metamaps.Loading = Loading
 Metamaps.Map = Map
 Metamaps.Map.CheatSheet = CheatSheet
 Metamaps.Map.InfoBox = InfoBox
