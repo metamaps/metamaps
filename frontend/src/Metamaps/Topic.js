@@ -22,7 +22,7 @@ import Visualize from './Visualize'
  * Metamaps.Topic.js.erb
  *
  * Dependencies:
- *  - Metamaps.Backbone
+ *  - Metamaps.DataModel
  *  - Metamaps.Creators
  *  - Metamaps.Mappings
  *  - Metamaps.Synapses
@@ -45,13 +45,13 @@ const Topic = {
     } else callback(Metamaps.Topics.get(id))
   },
   launch: function (id) {
-    var bb = Metamaps.Backbone
+    var bb = Metamaps.DataModel
     var start = function (data) {
       Active.Topic = new bb.Topic(data.topic)
       Metamaps.Creators = new bb.MapperCollection(data.creators)
       Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives))
       Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
-      Metamaps.Backbone.attachCollectionEvents()
+      Metamaps.DataModel.attachCollectionEvents()
 
       document.title = Active.Topic.get('name') + ' | Metamaps'
 
@@ -128,9 +128,9 @@ const Topic = {
       if (data.topics.length > 0) Metamaps.Topics.add(data.topics)
       if (data.synapses.length > 0) Metamaps.Synapses.add(data.synapses)
 
-      var topicColl = new Metamaps.Backbone.TopicCollection(data.topics)
+      var topicColl = new Metamaps.DataModel.TopicCollection(data.topics)
       topicColl.add(topic)
-      var synapseColl = new Metamaps.Backbone.SynapseCollection(data.synapses)
+      var synapseColl = new Metamaps.DataModel.SynapseCollection(data.synapses)
 
       var graph = JIT.convertModelsToJIT(topicColl, synapseColl)[0]
       Visualize.mGraph.op.sum(graph, {
@@ -311,7 +311,7 @@ const Topic = {
 
     var metacode = Metamaps.Metacodes.get(Create.newTopic.metacode)
 
-    var topic = new Metamaps.Backbone.Topic({
+    var topic = new Metamaps.DataModel.Topic({
       name: Create.newTopic.name,
       metacode_id: metacode.id,
       defer_to_map_id: Active.Map.id
@@ -321,7 +321,7 @@ const Topic = {
     if (Create.newTopic.pinned) {
       var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
     }
-    var mapping = new Metamaps.Backbone.Mapping({
+    var mapping = new Metamaps.DataModel.Mapping({
       xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
       yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
       mappable_id: topic.cid,
@@ -377,7 +377,7 @@ const Topic = {
     })
     Metamaps.Topics.add(topic)
 
-    var mapping = new Metamaps.Backbone.Mapping({
+    var mapping = new Metamaps.DataModel.Mapping({
       xloc: Metamaps.Create.newTopic.x,
       yloc: Metamaps.Create.newTopic.y,
       mappable_id: topic.cid,
@@ -400,7 +400,7 @@ const Topic = {
 
     self.get(id, (topic) => {
       var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
-      var mapping = new Metamaps.Backbone.Mapping({
+      var mapping = new Metamaps.DataModel.Mapping({
         xloc: nextCoords.x,
         yloc: nextCoords.y,
         mappable_type: 'Topic',

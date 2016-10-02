@@ -22,7 +22,7 @@ import InfoBox from './InfoBox'
  * Metamaps.Map.js.erb
  *
  * Dependencies:
- *  - Metamaps.Backbone
+ *  - Metamaps.DataModel
  *  - Metamaps.Erb
  *  - Metamaps.Loading
  *  - Metamaps.Mappers
@@ -82,17 +82,16 @@ const Map = {
     $('.viewOnly').removeClass('sendRequest sentRequest requestDenied').addClass(className)
   },
   launch: function (id) {
-    var bb = Metamaps.Backbone
     var start = function (data) {
-      Active.Map = new bb.Map(data.map)
-      Metamaps.Mappers = new bb.MapperCollection(data.mappers)
-      Metamaps.Collaborators = new bb.MapperCollection(data.collaborators)
-      Metamaps.Topics = new bb.TopicCollection(data.topics)
-      Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
-      Metamaps.Mappings = new bb.MappingCollection(data.mappings)
+      Active.Map = new Metamaps.DataModel.Map(data.map)
+      Metamaps.Mappers = new Metamaps.DataModel.MapperCollection(data.mappers)
+      Metamaps.Collaborators = new Metamaps.DataModel.MapperCollection(data.collaborators)
+      Metamaps.Topics = new Metamaps.DataModel.TopicCollection(data.topics)
+      Metamaps.Synapses = new Metamaps.DataModel.SynapseCollection(data.synapses)
+      Metamaps.Mappings = new Metamaps.DataModel.MappingCollection(data.mappings)
       Metamaps.Messages = data.messages
       Metamaps.Stars = data.stars
-      Metamaps.Backbone.attachCollectionEvents()
+      Metamaps.DataModel.attachCollectionEvents()
 
       var map = Active.Map
       var mapper = Active.Mapper

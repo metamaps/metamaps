@@ -4,7 +4,7 @@ import Active from '../Active'
 import GlobalUI from './index'
 
 /*
- * Metamaps.Backbone
+ * Metamaps.DataModel
  * Metamaps.Maps
  */
 
@@ -17,7 +17,7 @@ const CreateMap = {
   init: function () {
     var self = CreateMap
 
-    self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' })
+    self.newMap = new Metamaps.DataModel.Map({ permission: 'commons' })
 
     self.bindFormEvents()
 
@@ -128,7 +128,7 @@ const CreateMap = {
     }
 
     self.bindFormEvents()
-    self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' })
+    self.newMap = new Metamaps.DataModel.Map({ permission: 'commons' })
 
     return false
   }

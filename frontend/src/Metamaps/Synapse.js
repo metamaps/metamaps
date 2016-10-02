@@ -13,7 +13,7 @@ import Visualize from './Visualize'
  * Metamaps.Synapse.js.erb
  *
  * Dependencies:
- *  - Metamaps.Backbone
+ *  - Metamaps.DataModel
  *  - Metamaps.Mappings
  *  - Metamaps.Synapses
  *  - Metamaps.Topics
@@ -112,14 +112,14 @@ const Synapse = {
     for (var i = 0; i < synapsesToCreate.length; i++) {
       node1 = synapsesToCreate[i]
       topic1 = node1.getData('topic')
-      synapse = new Metamaps.Backbone.Synapse({
+      synapse = new Metamaps.DataModel.Synapse({
         desc: Create.newSynapse.description,
         topic1_id: topic1.isNew() ? topic1.cid : topic1.id,
         topic2_id: topic2.isNew() ? topic2.cid : topic2.id,
       })
       Metamaps.Synapses.add(synapse)
 
-      mapping = new Metamaps.Backbone.Mapping({
+      mapping = new Metamaps.DataModel.Mapping({
         mappable_type: 'Synapse',
         mappable_id: synapse.cid,
       })
@@ -139,7 +139,7 @@ const Synapse = {
       node2
 
     self.get(id, synapse => {
-      var mapping = new Metamaps.Backbone.Mapping({
+      var mapping = new Metamaps.DataModel.Mapping({
         mappable_type: 'Synapse',
         mappable_id: synapse.id,
       })

@@ -11,7 +11,7 @@ import GlobalUI from './GlobalUI'
  * Metamaps.Create.js
  *
  * Dependencies:
- *  - Metamaps.Backbone
+ *  - Metamaps.DataModel
  *  - Metamaps.Metacodes
  *  - Metamaps.Topics
  */
@@ -59,7 +59,7 @@ const Create = {
     }
 
     var codesToSwitchToIds
-    var metacodeModels = new Metamaps.Backbone.MetacodeCollection()
+    var metacodeModels = new Metamaps.DataModel.MetacodeCollection()
     Create.selectedMetacodeSetIndex = index
     Create.selectedMetacodeSet = 'metacodeset-' + set
 

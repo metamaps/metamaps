@@ -17,7 +17,7 @@ import TopicCard from '../TopicCard'
 import Visualize from '../Visualize'
 
 /*
- * Metamaps.Backbone.js.erb
+ * Metamaps.DataModel.js
  *
  * Dependencies:
  *  - Metamaps.Collaborators
@@ -30,9 +30,9 @@ import Visualize from '../Visualize'
  *  - Metamaps.Topics
  */
 
-const _Backbone = {}
+const DataModel = {}
 
-_Backbone.Map = Backbone.Model.extend({
+DataModel.Map = Backbone.Model.extend({
   urlRoot: '/maps',
   blacklist: ['created_at', 'updated_at', 'created_at_clean', 'updated_at_clean', 'user_name', 'contributor_count', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
   toJSON: function (options) {
@@ -106,8 +106,8 @@ _Backbone.Map = Backbone.Model.extend({
     }
   }
 })
-_Backbone.MapsCollection = Backbone.Collection.extend({
-  model: _Backbone.Map,
+DataModel.MapsCollection = Backbone.Collection.extend({
+  model: DataModel.Map,
   initialize: function (models, options) {
     this.id = options.id
     this.sortBy = options.sortBy
@@ -174,7 +174,7 @@ _Backbone.MapsCollection = Backbone.Collection.extend({
   }
 })
 
-_Backbone.Message = Backbone.Model.extend({
+DataModel.Message = Backbone.Model.extend({
   urlRoot: '/messages',
   blacklist: ['created_at', 'updated_at'],
   toJSON: function (options) {
@@ -190,12 +190,12 @@ _Backbone.Message = Backbone.Model.extend({
      */
   }
 })
-_Backbone.MessageCollection = Backbone.Collection.extend({
-  model: _Backbone.Message,
+DataModel.MessageCollection = Backbone.Collection.extend({
+  model: DataModel.Message,
   url: '/messages'
 })
 
-_Backbone.Mapper = Backbone.Model.extend({
+DataModel.Mapper = Backbone.Model.extend({
   urlRoot: '/users',
   blacklist: ['created_at', 'updated_at'],
   toJSON: function (options) {
@@ -211,13 +211,13 @@ _Backbone.Mapper = Backbone.Model.extend({
   }
 })
 
-_Backbone.MapperCollection = Backbone.Collection.extend({
-  model: _Backbone.Mapper,
+DataModel.MapperCollection = Backbone.Collection.extend({
+  model: DataModel.Mapper,
   url: '/users'
 })
 
-_Backbone.init = function () {
-  var self = _Backbone
+DataModel.init = function () {
+  var self = DataModel
 
   self.Metacode = Backbone.Model.extend({
     initialize: function () {
@@ -658,6 +658,6 @@ _Backbone.init = function () {
     }
   }
   self.attachCollectionEvents()
-}; // end _Backbone.init
+}; // end DataModel.init
 
-export default _Backbone
+export default DataModel

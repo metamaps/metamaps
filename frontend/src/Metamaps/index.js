@@ -4,7 +4,7 @@ import Account from './Account'
 import Active from './Active'
 import Admin from './Admin'
 import AutoLayout from './AutoLayout'
-import Backbone from './Backbone'
+import DataModel from './DataModel'
 import Control from './Control'
 import Create from './Create'
 import Debug from './Debug'
@@ -38,7 +38,7 @@ Metamaps.Account = Account
 Metamaps.Active = Active
 Metamaps.Admin = Admin
 Metamaps.AutoLayout = AutoLayout
-Metamaps.Backbone = Backbone
+Metamaps.DataModel = DataModel
 Metamaps.Control = Control
 Metamaps.Create = Create
 Metamaps.Debug = Debug

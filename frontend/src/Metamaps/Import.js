@@ -14,7 +14,7 @@ import Topic from './Topic'
  * Metamaps.Import.js.erb
  *
  * Dependencies:
- *  - Metamaps.Backbone
+ *  - Metamaps.DataModel
  *  - Metamaps.Mappings
  *  - Metamaps.Metacodes
  *  - Metamaps.Synapses
@@ -299,7 +299,7 @@ const Import = {
 
     var topic_permission = permission || Active.Map.get('permission')
     var defer_to_map_id = permission === topic_permission ? Active.Map.get('id') : null
-    var topic = new Metamaps.Backbone.Topic({
+    var topic = new Metamaps.DataModel.Topic({
       name: name,
       metacode_id: metacode.id,
       permission: topic_permission,
@@ -314,7 +314,7 @@ const Import = {
       self.cidMappings[import_id] = topic.cid
     }
 
-    var mapping = new Metamaps.Backbone.Mapping({
+    var mapping = new Metamaps.DataModel.Mapping({
       xloc: xloc,
       yloc: yloc,
       mappable_id: topic.cid,
@@ -340,7 +340,7 @@ const Import = {
       return
     } // if
 
-    var synapse = new Metamaps.Backbone.Synapse({
+    var synapse = new Metamaps.DataModel.Synapse({
       desc: desc || '',
       category: category || 'from-to',
       permission: permission,
@@ -349,7 +349,7 @@ const Import = {
     })
     Metamaps.Synapses.add(synapse)
 
-    var mapping = new Metamaps.Backbone.Mapping({
+    var mapping = new Metamaps.DataModel.Mapping({
       mappable_type: 'Synapse',
       mappable_id: synapse.cid
     })

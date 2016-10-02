@@ -2,7 +2,7 @@
 
 /*
  * Dependencies:
- *  Metamaps.Backbone
+ *  Metamaps.DataModel
  */
 
 const Mapper = {
@@ -12,7 +12,7 @@ const Mapper = {
     $.ajax({
       url: `/users/${id}.json`,
       success: data => {
-        callback(new Metamaps.Backbone.Mapper(data))
+        callback(new Metamaps.DataModel.Mapper(data))
       }
     })
   }
