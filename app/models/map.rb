@@ -95,21 +95,6 @@ class Map < ApplicationRecord
     json
   end
 
-  def decode_base64(imgBase64)
-    decoded_data = Base64.decode64(imgBase64)
-
-    data = StringIO.new(decoded_data)
-    data.class_eval do
-      attr_accessor :content_type, :original_filename
-    end
-
-    data.content_type = 'image/png'
-    data.original_filename = File.basename('map-' + id.to_s + '-screenshot.png')
-
-    self.screenshot = data
-    save
-  end
-
   # user param helps determine what records are visible
   def contains(user)
     {
@@ -143,15 +128,5 @@ class Map < ApplicationRecord
       old_user_id
     end
     removed.compact
-  end
-
-  def base64_screenshot(encoded_image)
-    png = Base64.decode64(encoded_image['data:image/png;base64,'.length..-1])
-    StringIO.open(png) do |data|
-      data.class.class_eval { attr_accessor :original_filename, :content_type }
-      data.original_filename = 'map-' + @map.id.to_s + '-screenshot.png'
-      data.content_type = 'image/png'
-      @map.screenshot = data
-    end
   end
 end

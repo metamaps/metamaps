@@ -19,7 +19,6 @@ Metamaps::Application.routes.draw do
       get :export
       post 'events/:event', action: :events
       get :contains
-      post :upload_screenshot, action: :screenshot
       post :access, default: { format: :json }
       post :star, to: 'stars#create', defaults: { format: :json }
       post :unstar, to: 'stars#destroy', defaults: { format: :json }

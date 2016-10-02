@@ -60,8 +60,4 @@ class MapPolicy < ApplicationPolicy
   def unstar?
     user.present?
   end
-
-  def screenshot?
-    update?
-  end
 end

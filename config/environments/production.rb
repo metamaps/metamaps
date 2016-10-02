@@ -5,6 +5,11 @@ Rails.application.configure do
   config.log_level = :warn
   config.eager_load = true
 
+  # 12 factor: log to stdout
+  logger = ActiveSupport::Logger.new(STDOUT)
+  logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
+
   # Code is not reloaded between requests
   config.cache_classes = true
 
@@ -13,23 +18,12 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.public_file_server.enabled = false
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
 
   config.assets.js_compressor = :uglifier
-
-  # S3 file storage
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_credentials: {
-      bucket: ENV['S3_BUCKET_NAME'],
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    },
-    s3_protocol: 'https'
-  }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {

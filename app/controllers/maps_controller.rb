@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
-  before_action :require_user, only: [:create, :update, :destroy, :access, :events,
-                                      :screenshot]
+  before_action :require_user, only: [:create, :update, :destroy, :access, :events]
   before_action :set_map, only: [:show, :update, :destroy, :access, :contains,
-                                 :events, :export, :screenshot]
+                                 :events, :export]
   after_action :verify_authorized
-
-  autocomplete :map, :name, full: true, extra_data: [:user_id]
 
   # GET maps/:id
   def show
@@ -136,17 +133,6 @@ class MapsController < ApplicationController
     end
   end
 
-  # POST maps/:id/upload_screenshot
-  def screenshot
-    @map.base64_screenshot(params[:encoded_image])
-
-    if @map.save
-      render json: { message: 'Successfully uploaded the map screenshot.' }
-    else
-      render json: { message: 'Failed to upload image.' }
-    end
-  end
-
   private
 
   def set_map
@@ -159,7 +145,7 @@ class MapsController < ApplicationController
   end
 
   def update_map_params
-    params.require(:map).permit(:id, :name, :arranged, :desc, :permission)
+    params.require(:map).permit(:id, :name, :arranged, :desc, :permission, :screenshot)
   end
 
   def create_topics!

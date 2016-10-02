@@ -14,6 +14,7 @@ export SECRET_KEY_BASE='267c8a84f63963282f45bc3010eaddf027abfab58fc759d6e239c800
 # # you can safely leave these blank, unless you're deploying an instance, in
 # # which case you'll need to set them up
 #
+# export S3_REGION
 # export S3_BUCKET_NAME
 # export AWS_ACCESS_KEY_ID
 # export AWS_SECRET_ACCESS_KEY

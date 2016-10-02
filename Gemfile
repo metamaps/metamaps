@@ -5,44 +5,34 @@ ruby '2.3.0'
 gem 'rails', '~> 5.0.0'
 
 gem 'active_model_serializers'
-gem 'aws-sdk', '< 2.0'
+gem 'aws-sdk'
 gem 'best_in_place'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'devise'
-gem 'doorkeeper', '~> 4.0.0.rc4'
+gem 'doorkeeper'
 gem 'dotenv-rails'
 gem 'exception_notification'
-gem 'formtastic'
-gem 'formula'
 gem 'httparty'
 gem 'json'
 gem 'kaminari'
-gem 'paperclip', '~> 4.3.6'
+gem 'paperclip'
 gem 'pg'
 gem 'pundit'
 gem 'pundit_extra'
-gem 'rack-cors'
 gem 'rack-attack'
+gem 'rack-cors'
 gem 'redis'
 gem 'slack-notifier'
 gem 'snorlax'
 gem 'uservoice-ruby'
 
+# asset stuff
+gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'jbuilder'
-gem 'rails3-jquery-autocomplete'
-
-group :assets do
-  gem 'coffee-rails'
-  gem 'sass-rails'
-  gem 'uglifier'
-end
-
-group :production do
-  gem 'rails_12factor'
-end
+gem 'sass-rails'
+gem 'uglifier'
 
 group :test do
   gem 'factory_girl_rails'

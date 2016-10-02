@@ -1,5 +1,7 @@
 /* global Metamaps, $ */
 
+import outdent from 'outdent'
+
 import Active from '../Active'
 import AutoLayout from '../AutoLayout'
 import Create from '../Create'
@@ -323,9 +325,7 @@ const Map = {
       node.visited = !T
     })
 
-    var imageData = {
-      encoded_image: canvas.canvas.toDataURL()
-    }
+    var imageData = canvas.canvas.toDataURL()
 
     var map = Active.Map
 
@@ -341,24 +341,31 @@ const Map = {
     }
     today = mm + '/' + dd + '/' + yyyy
 
-    var mapName = map.get('name').split(' ').join([separator = '-'])
-    var downloadMessage = ''
-    downloadMessage += 'Captured map screenshot! '
-    downloadMessage += "<a href='" + imageData.encoded_image + "' "
-    downloadMessage += "download='metamap-" + map.id + '-' + mapName + '-' + today + ".png'>DOWNLOAD</a>"
+    var mapName = map.get('name').split(' ').join(['-'])
+    const filename = `metamap-${map.id}-${mapName}-${today}.png`
+
+    var downloadMessage = outdent`
+      Captured map screenshot!
+      <a href="${imageData.encodedImage}" download="${filename}">DOWNLOAD</a>`
     GlobalUI.notifyUser(downloadMessage)
 
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: '/maps/' + Active.Map.id + '/upload_screenshot',
-      data: imageData,
-      success: function (data) {
-        console.log('successfully uploaded map screenshot')
-      },
-      error: function () {
-        console.log('failed to save map screenshot')
-      }
+    canvas.canvas.toBlob(imageBlob => {
+      const formData = new window.FormData();
+      formData.append('map[screenshot]', imageBlob, filename)
+      $.ajax({
+        type: 'PATCH',
+        dataType: 'json',
+        url: `/maps/${map.id}`,
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+          console.log('successfully uploaded map screenshot')
+        },
+        error: function () {
+          console.log('failed to save map screenshot')
+        }
+      })
     })
   }
 }
