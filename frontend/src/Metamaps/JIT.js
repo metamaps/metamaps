@@ -1,4 +1,4 @@
-/* global Metamaps, $, Image, CanvasLoader */
+/* global $, Image, CanvasLoader */
 
 import _ from 'lodash'
 import outdent from 'outdent'
@@ -23,10 +23,6 @@ import TopicCard from './TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
 import clipboard from 'clipboard-js'
-
-/*
- * Metamaps.Erb
- */
 
 let panningInt
 
@@ -69,10 +65,10 @@ const JIT = {
     $('.takeScreenshot').click(Map.exportImage)
 
     self.topicDescImage = new Image()
-    self.topicDescImage.src = Metamaps.Erb['topic_description_signifier.png']
+    self.topicDescImage.src = Metamaps.ServerData['topic_description_signifier.png']
 
     self.topicLinkImage = new Image()
-    self.topicLinkImage.src = Metamaps.Erb['topic_link_signifier.png']
+    self.topicLinkImage.src = Metamaps.ServerData['topic_link_signifier.png']
   },
   /**
    * convert our topic JSON into something JIT can use

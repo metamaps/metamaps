@@ -14,5 +14,5 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require_directory ./lib
-//= require ./src/Metamaps.Erb
 //= require ./webpacked/metamaps.bundle
+//= require ./Metamaps.ServerData

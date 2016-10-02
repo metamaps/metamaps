@@ -21,13 +21,6 @@ import Visualize from '../Visualize'
 import CheatSheet from './CheatSheet'
 import InfoBox from './InfoBox'
 
-/*
- * Metamaps.Map.js.erb
- *
- * Dependencies:
- *  - Metamaps.Erb
- */
-
 const Map = {
   events: {
     editedByActiveMapper: 'Metamaps:Map:events:editedByActiveMapper'

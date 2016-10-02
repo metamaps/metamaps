@@ -1,9 +1,4 @@
-/* global Metamaps, $ */
-
-/*
- * Dependencies:
- *  Metamaps.Erb
- */
+/* global $ */
 
 import Backbone from 'backbone'
 import { Howl } from 'howler'
@@ -128,7 +123,7 @@ var Private = {
   },
   initializeSounds: function () {
     this.sound = new Howl({
-      src: [Metamaps.Erb['sounds/MM_sounds.mp3'], Metamaps.Erb['sounds/MM_sounds.ogg']],
+      src: [Metamaps.ServerData['sounds/MM_sounds.mp3'], Metamaps.ServerData['sounds/MM_sounds.ogg']],
       sprite: {
         joinmap: [0, 561],
         leavemap: [1000, 592],

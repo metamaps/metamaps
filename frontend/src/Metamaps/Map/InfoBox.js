@@ -1,4 +1,4 @@
-/* global Metamaps, $, Hogan, Bloodhound, Countable */
+/* global $, Hogan, Bloodhound, Countable */
 
 import outdent from 'outdent'
 
@@ -7,10 +7,6 @@ import DataModel from '../DataModel'
 import GlobalUI from '../GlobalUI'
 import Router from '../Router'
 import Util from '../Util'
-
-/*
- * Metamaps.Erb
- */
 
 const InfoBox = {
   isOpen: false,
@@ -112,7 +108,7 @@ const InfoBox = {
     obj['contributor_count'] = relevantPeople.length
     obj['contributors_class'] = relevantPeople.length > 1 ? 'multiple' : ''
     obj['contributors_class'] += relevantPeople.length === 2 ? ' mTwo' : ''
-    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : Metamaps.Erb['user.png']
+    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : Metamaps.ServerData['user.png']
     obj['contributor_list'] = self.createContributorList()
 
     obj['user_name'] = isCreator ? 'You' : map.get('user_name')
@@ -214,7 +210,7 @@ const InfoBox = {
                     value: "No results",
                     label: "No results",
                     rtype: "noresult",
-                    profile: Metamaps.Erb['user.png'],
+                    profile: Metamaps.ServerData['user.png'],
                 });
             },
             suggestion: function(s) {
@@ -317,7 +313,7 @@ const InfoBox = {
     if (relevantPeople.length === 2) contributors_class = 'multiple mTwo'
     else if (relevantPeople.length > 2) contributors_class = 'multiple'
 
-    var contributors_image = Metamaps.Erb['user.png']
+    var contributors_image = Metamaps.ServerData['user.png']
     if (relevantPeople.length > 0) {
       // get the first contributor and use their image
       contributors_image = relevantPeople.models[0].get('image')

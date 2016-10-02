@@ -1,11 +1,7 @@
-/* global Metamaps, $, Hogan, Bloodhound, CanvasLoader */
+/* global $, Hogan, Bloodhound, CanvasLoader */
 
 import Active from '../Active'
 import Router from '../Router'
-
-/*
- * Metamaps.Erb
- */
 
 const Search = {
   locked: false,
@@ -54,7 +50,7 @@ const Search = {
           return Hogan.compile(topicheader + $('#topicSearchTemplate').html()).render({
             value: 'No results',
             label: 'No results',
-            typeImageURL: Metamaps.Erb['icons/wildcard.png'],
+            typeImageURL: Metamaps.ServerData['icons/wildcard.png'],
             rtype: 'noresult'
           })
         },
@@ -122,7 +118,7 @@ const Search = {
             value: 'No results',
             label: 'No results',
             rtype: 'noresult',
-            profile: Metamaps.Erb['user.png']
+            profile: Metamaps.ServerData['user.png']
           })
         },
         header: mapperheader,

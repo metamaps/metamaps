@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import _ from 'lodash'
 import Backbone from 'backbone'
@@ -12,10 +12,6 @@ import SynapseCard from '../SynapseCard'
 import Visualize from '../Visualize'
 
 import DataModel from './index'
-
-/*
- * Metamaps.Erb
- */
 
 const Synapse = Backbone.Model.extend({
   urlRoot: '/synapses',
@@ -82,7 +78,7 @@ const Synapse = Backbone.Model.extend({
   prepareLiForFilter: function () {
     var li = ''
     li += '<li data-id="' + this.get('desc') + '">'
-    li += '<img src="' + Metamaps.Erb['synapse16.png'] + '"'
+    li += '<img src="' + Metamaps.ServerData['synapse16.png'] + '"'
     li += ' alt="synapse icon" />'
     li += '<p>' + this.get('desc') + '</p></li>'
     return li
