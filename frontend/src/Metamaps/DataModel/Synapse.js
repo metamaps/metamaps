@@ -11,10 +11,10 @@ import Realtime from '../Realtime'
 import SynapseCard from '../SynapseCard'
 import Visualize from '../Visualize'
 
+import DataModel from './index'
+
 /*
- * Dependencies:
- *  - Metamaps.Mappings
- *  - Metamaps.Topics
+ * Metamaps.Erb
  */
 
 const Synapse = Backbone.Model.extend({
@@ -96,10 +96,10 @@ const Synapse = Backbone.Model.extend({
     else return false
   },
   getTopic1: function () {
-    return Metamaps.Topics.get(this.get('topic1_id'))
+    return DataModel.Topics.get(this.get('topic1_id'))
   },
   getTopic2: function () {
-    return Metamaps.Topics.get(this.get('topic2_id'))
+    return DataModel.Topics.get(this.get('topic2_id'))
   },
   getDirection: function () {
     var t1 = this.getTopic1()
@@ -113,7 +113,7 @@ const Synapse = Backbone.Model.extend({
   getMapping: function () {
     if (!Active.Map) return false
 
-    return Metamaps.Mappings.findWhere({
+    return DataModel.Mappings.findWhere({
       map_id: Active.Map.id,
       mappable_type: 'Synapse',
       mappable_id: this.isNew() ? this.cid : this.id

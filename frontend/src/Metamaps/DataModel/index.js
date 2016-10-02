@@ -1,5 +1,3 @@
-/* global Metamaps */
-
 import Active from '../Active'
 import Filter from '../Filter'
 import { InfoBox } from '../Map'
@@ -19,19 +17,6 @@ import SynapseCollection from './SynapseCollection'
 import Mapping from './Mapping'
 import MappingCollection from './MappingCollection'
 
-/*
- * DataModel.js
- *
- * Dependencies:
- *  - Metamaps.Collaborators
- *  - Metamaps.Creators
- *  - Metamaps.Mappers
- *  - Metamaps.Mappings
- *  - Metamaps.Metacodes
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
-
 const DataModel = {
   Map: Map,
   MapCollection: MapCollection,
@@ -48,45 +33,50 @@ const DataModel = {
   Mapping: Mapping,
   MappingCollection: MappingCollection,
 
-  Metacodes: new MetacodeCollection(),
-  Topics: new TopicCollection(),
-  Synapses: new SynapseCollection(),
-  Mappings: new MappingCollection(),
-  Mappers: new MapperCollection(),
   Collaborators: new MapperCollection(),
   Creators: new MapperCollection(),
+  Mappers: new MapperCollection(),
+  Mappings: new MappingCollection(),
+  Messages: [],
+  Metacodes: new MetacodeCollection(),
+  Stars: [],
+  Synapses: new SynapseCollection(),
+  Topics: new TopicCollection(),
 
   init: function (serverData) {
     var self = DataModel
 
+    if (serverData.Collaborators) self.Collaborators = new MapperCollection(serverData.Collaborators)
+    if (serverData.Creators) self.Creators = new MapperCollection(serverData.Creators)
+    if (serverData.Mappers) self.Mappers = new MapperCollection(serverData.Mappers)
+    if (serverData.Mappings) self.Mappings = new MappingCollection(serverData.Mappings)
+    if (serverData.Messages) self.Messages = serverData.Messages
     if (serverData.Metacodes) self.Metacodes = new MetacodeCollection(serverData.Metacodes)
-
-    // attach collection event listeners
+    if (serverData.Stars) self.Stars = serverData.Stars
+    if (serverData.Synapses) self.Synapses = new SynapseCollection(serverData.Synapses)
     if (serverData.Topics) self.Topics = new TopicCollection(serverData.Topics)
+
+    self.attachCollectionEvents()
+  },
+
+  attachCollectionEvents: function () {
+    var self = DataModel
     self.Topics.on('add remove', function (topic) {
       InfoBox.updateNumbers()
       Filter.checkMetacodes()
       Filter.checkMappers()
     })
-
-    if (serverData.Synapses) self.Synapses = new SynapseCollection(serverData.Synapses)
     self.Synapses.on('add remove', function (synapse) {
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMappers()
     })
-
-    if (serverData.Mappings) self.Mappings = new MappingCollection(serverData.Mappings)
     self.Mappings.on('add remove', function (mapping) {
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMetacodes()
       Filter.checkMappers()
     })
-
-    if (serverData.Mappers) self.Mappers = new MapperCollection(serverData.Mappers)
-    if (serverData.Collaborators) self.Collaborators = new MapperCollection(serverData.Collaborators)
-    if (serverData.Creators) self.Creators = new MapperCollection(serverData.Creators)
   }
 }
 

@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import Active from './Active'
 import Control from './Control'
@@ -9,36 +9,24 @@ import Selected from './Selected'
 import Settings from './Settings'
 import Visualize from './Visualize'
 
-/*
- * Metamaps.Synapse.js.erb
- *
- * Dependencies:
- *  - Metamaps.DataModel
- *  - Metamaps.Mappings
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
-
 const noOp = () => {}
+
 const Synapse = {
   // this function is to retrieve a synapse JSON object from the database
   // @param id = the id of the synapse to retrieve
   get: function (id, callback = noOp) {
     // if the desired topic is not yet in the local topic repository, fetch it
-    if (Metamaps.Synapses.get(id) == undefined) {
+    if (DataModel.Synapses.get(id) == undefined) {
       $.ajax({
         url: '/synapses/' + id + '.json',
         success: function (data) {
-          Metamaps.Synapses.add(data)
-          callback(Metamaps.Synapses.get(id))
+          DataModel.Synapses.add(data)
+          callback(DataModel.Synapses.get(id))
         }
       })
-    } else callback(Metamaps.Synapses.get(id))
+    } else callback(DataModel.Synapses.get(id))
   },
-  /*
-   *
-   *
-   */
+
   renderSynapse: function (mapping, synapse, node1, node2, createNewInDB) {
     var self = Synapse
 
@@ -98,12 +86,12 @@ const Synapse = {
     // for each node in this array we will create a synapse going to the position2 node.
     var synapsesToCreate = []
 
-    topic2 = Metamaps.Topics.get(Create.newSynapse.topic2id)
+    topic2 = DataModel.Topics.get(Create.newSynapse.topic2id)
     node2 = topic2.get('node')
 
     var len = Selected.Nodes.length
     if (len == 0) {
-      topic1 = Metamaps.Topics.get(Create.newSynapse.topic1id)
+      topic1 = DataModel.Topics.get(Create.newSynapse.topic1id)
       synapsesToCreate[0] = topic1.get('node')
     } else if (len > 0) {
       synapsesToCreate = Selected.Nodes
@@ -112,18 +100,18 @@ const Synapse = {
     for (var i = 0; i < synapsesToCreate.length; i++) {
       node1 = synapsesToCreate[i]
       topic1 = node1.getData('topic')
-      synapse = new Metamaps.DataModel.Synapse({
+      synapse = new DataModel.Synapse({
         desc: Create.newSynapse.description,
         topic1_id: topic1.isNew() ? topic1.cid : topic1.id,
         topic2_id: topic2.isNew() ? topic2.cid : topic2.id,
       })
-      Metamaps.Synapses.add(synapse)
+      DataModel.Synapses.add(synapse)
 
-      mapping = new Metamaps.DataModel.Mapping({
+      mapping = new DataModel.Mapping({
         mappable_type: 'Synapse',
         mappable_id: synapse.cid,
       })
-      Metamaps.Mappings.add(mapping)
+      DataModel.Mappings.add(mapping)
 
       // this function also includes the creation of the synapse in the database
       self.renderSynapse(mapping, synapse, node1, node2, true)
@@ -139,14 +127,14 @@ const Synapse = {
       node2
 
     self.get(id, synapse => {
-      var mapping = new Metamaps.DataModel.Mapping({
+      var mapping = new DataModel.Mapping({
         mappable_type: 'Synapse',
         mappable_id: synapse.id,
       })
-      Metamaps.Mappings.add(mapping)
-      topic1 = Metamaps.Topics.get(Create.newSynapse.topic1id)
+      DataModel.Mappings.add(mapping)
+      topic1 = DataModel.Topics.get(Create.newSynapse.topic1id)
       node1 = topic1.get('node')
-      topic2 = Metamaps.Topics.get(Create.newSynapse.topic2id)
+      topic2 = DataModel.Topics.get(Create.newSynapse.topic2id)
       node2 = topic2.get('node')
       Create.newSynapse.hide()
       self.renderSynapse(mapping, synapse, node1, node2, true)

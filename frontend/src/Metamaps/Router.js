@@ -1,8 +1,7 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import Backbone from 'backbone'
-//TODO is this line good or bad?
-//Backbone.$ = window.$
+Backbone.$ = window.$
 
 import Active from './Active'
 import GlobalUI from './GlobalUI'
@@ -11,13 +10,6 @@ import Map from './Map'
 import Topic from './Topic'
 import Views from './Views'
 import Visualize from './Visualize'
-
-/*
- * Metamaps.Router.js.erb
- *
- * Dependencies:
- *  - Metamaps.Maps
- */
 
 const _Router = Backbone.Router.extend({
   currentPage: '',
@@ -57,10 +49,10 @@ const _Router = Backbone.Router.extend({
 
       GlobalUI.showDiv('#explore')
 
-      Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
-      if (Metamaps.Maps.Active.length === 0) {
+      Views.ExploreMaps.setCollection(DataModel.Maps.Active)
+      if (DataModel.Maps.Active.length === 0) {
         Views.ExploreMaps.pending = true
-        Metamaps.Maps.Active.getMaps(navigate) // this will trigger an explore maps render
+        DataModel.Maps.Active.getMaps(navigate) // this will trigger an explore maps render
       } else {
         Views.ExploreMaps.render(navigate)
       }
@@ -109,23 +101,23 @@ const _Router = Backbone.Router.extend({
 
     // this will mean it's a mapper page being loaded
     if (id) {
-      if (Metamaps.Maps.Mapper.mapperId !== id) {
+      if (DataModel.Maps.Mapper.mapperId !== id) {
         // empty the collection if we are trying to load the maps
         // collection of a different mapper than we had previously
-        Metamaps.Maps.Mapper.reset()
-        Metamaps.Maps.Mapper.page = 1
+        DataModel.Maps.Mapper.reset()
+        DataModel.Maps.Mapper.page = 1
       }
-      Metamaps.Maps.Mapper.mapperId = id
+      DataModel.Maps.Mapper.mapperId = id
     }
 
-    Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
+    Views.ExploreMaps.setCollection(DataModel.Maps[capitalize])
 
     var navigate = function () {
       var path = '/explore/' + self.currentPage
 
       // alter url if for mapper profile page
       if (self.currentPage === 'mapper') {
-        path += '/' + Metamaps.Maps.Mapper.mapperId
+        path += '/' + DataModel.Maps.Mapper.mapperId
       }
       
       self.navigate(path)
@@ -133,11 +125,11 @@ const _Router = Backbone.Router.extend({
     var navigateTimeout = function () {
       self.timeoutId = setTimeout(navigate, 300)
     }
-    if (Metamaps.Maps[capitalize].length === 0) {
+    if (DataModel.Maps[capitalize].length === 0) {
       Loading.show()
       Views.ExploreMaps.pending = true
       setTimeout(function () {
-        Metamaps.Maps[capitalize].getMaps(navigate) // this will trigger an explore maps render
+        DataModel.Maps[capitalize].getMaps(navigate) // this will trigger an explore maps render
       }, 300) // wait 300 milliseconds till the other animations are done to do the fetch
     } else {
       if (id) {

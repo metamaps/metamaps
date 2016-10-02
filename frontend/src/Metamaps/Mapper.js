@@ -1,9 +1,6 @@
 /* global $ */
 
-/*
- * Dependencies:
- *  Metamaps.DataModel
- */
+import DataModel from './DataModel'
 
 const Mapper = {
   // this function is to retrieve a mapper JSON object from the database
@@ -12,7 +9,7 @@ const Mapper = {
     $.ajax({
       url: `/users/${id}.json`,
       success: data => {
-        callback(new Metamaps.DataModel.Mapper(data))
+        callback(new DataModel.Mapper(data))
       }
     })
   }

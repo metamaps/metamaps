@@ -1,9 +1,10 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import _ from 'lodash'
 import outdent from 'outdent'
 
 import Active from './Active'
+import DataModel from './DataModel'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'
 import JIT from './JIT'
@@ -11,16 +12,6 @@ import Mouse from './Mouse'
 import Selected from './Selected'
 import Settings from './Settings'
 import Visualize from './Visualize'
-
-/*
- * Metamaps.Control.js
- *
- * Dependencies:
- *  - Metamaps.Mappings
- *  - Metamaps.Metacodes
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
 
 const Control = {
   init: function () {},
@@ -72,7 +63,7 @@ const Control = {
       Control.deleteSelectedNodes()
     }
 
-    if (Metamaps.Topics.length === 0) {
+    if (DataModel.Topics.length === 0) {
       GlobalUI.showDiv('#instructions')
     }
   },
@@ -110,7 +101,7 @@ const Control = {
       var mappableid = topic.id
       var mapping = node.getData('mapping')
       topic.destroy()
-      Metamaps.Mappings.remove(mapping)
+      DataModel.Mappings.remove(mapping)
       $(document).trigger(JIT.events.deleteTopic, [{
         mappableid: mappableid
       }])
@@ -127,7 +118,7 @@ const Control = {
       })
       _.each(nodeids, function(nodeid) {
         if (Active.Topic.id !== nodeid) {
-          Metamaps.Topics.remove(nodeid)
+          DataModel.Topics.remove(nodeid)
           Control.hideNode(nodeid)
         }
       })
@@ -165,7 +156,7 @@ const Control = {
     var mappableid = topic.id
     var mapping = node.getData('mapping')
     mapping.destroy()
-    Metamaps.Topics.remove(topic)
+    DataModel.Topics.remove(topic)
     $(document).trigger(JIT.events.removeTopic, [{
       mappableid: mappableid
     }])
@@ -293,7 +284,7 @@ const Control = {
       synapse.destroy()
 
       // the server will destroy the mapping, we just need to remove it here
-      Metamaps.Mappings.remove(mapping)
+      DataModel.Mappings.remove(mapping)
       edge.getData('mappings').splice(index, 1)
       edge.getData('synapses').splice(index, 1)
       if (edge.getData('displayIndex')) {
@@ -348,7 +339,7 @@ const Control = {
     var mappableid = synapse.id
     mapping.destroy()
 
-    Metamaps.Synapses.remove(synapse)
+    DataModel.Synapses.remove(synapse)
 
     edge.getData('mappings').splice(index, 1)
     edge.getData('synapses').splice(index, 1)
@@ -432,7 +423,7 @@ const Control = {
 
     GlobalUI.notifyUser('Working...')
 
-    var metacode = Metamaps.Metacodes.get(metacode_id)
+    var metacode = DataModel.Metacodes.get(metacode_id)
 
     // variables to keep track of how many nodes and synapses you had the ability to change the permission of
     var nCount = 0

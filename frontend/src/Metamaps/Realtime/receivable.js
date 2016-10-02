@@ -302,9 +302,10 @@ export const newMapper = self => data => {
 
     var notifyMessage = data.username + ' just joined the map'
     if (firstOtherPerson) {
-      notifyMessage += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.inviteACall(' + data.userid + ')">Suggest A Video Call</button>'
+      notifyMessage += ' <button type="button" class="toast-button button">Suggest A Video Call</button>'
     }
     GlobalUI.notifyUser(notifyMessage)
+    $('#toast button').click(e => self.inviteACall(data.userid))
     self.sendMapperInfo(data.userid)
   }
 }
@@ -335,9 +336,11 @@ export const invitedToCall = self => inviter => {
   var username = self.mappersOnMap[inviter].name
   var notifyText = '<img src="' + self['junto_spinner_darkgrey.gif'] + '" style="display: inline-block; margin-top: -12px; margin-bottom: -6px; vertical-align: top;" />'
   notifyText += username + ' is inviting you to a conversation. Join live?'
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>'
+  notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.acceptCall(inviter))
+  $('#toast button.no').click(e => self.denyCall(inviter))
 }
 
 export const invitedToJoin = self => inviter => {
@@ -346,9 +349,11 @@ export const invitedToJoin = self => inviter => {
 
   var username = self.mappersOnMap[inviter].name
   var notifyText = username + ' is inviting you to the conversation. Join?'
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyInvite(' + inviter + ')">No</button>'
+  notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.joinCall())
+  $('#toast button.no').click(e => self.denyInvite(inviter))
 }
 
 export const mapperJoinedCall = self => id => {
@@ -385,18 +390,24 @@ export const mapperLeftCall = self => id => {
 
 export const callInProgress = self => () => {
   var notifyText = "There's a conversation happening, want to join?"
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>'
+  notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.joinCall())
+  $('#toast button.no').click(e => GlobalUI.clearNotify())
+
   self.room.conversationInProgress()
 }
 
 export const callStarted = self => () => {
   if (self.inConversation) return
   var notifyText = "There's a conversation starting, want to join?"
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>'
+  notifyText += ' <button type="button" class="toast-button button">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.joinCall())
+  $('#toast button.no').click(e => GlobalUI.clearNotify())
+
   self.room.conversationInProgress()
 }
 

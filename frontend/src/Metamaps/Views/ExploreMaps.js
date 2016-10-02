@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import React from 'react'
 import ReactDOM from 'react-dom' // TODO ensure this isn't a double import

@@ -1,5 +1,3 @@
-/* global Metamaps */
-
 import Backbone from 'backbone'
 Backbone.$ = window.$
 

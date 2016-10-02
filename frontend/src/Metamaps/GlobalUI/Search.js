@@ -5,7 +5,6 @@ import Router from '../Router'
 
 /*
  * Metamaps.Erb
- * Metamaps.Maps
  */
 
 const Search = {

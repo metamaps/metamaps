@@ -8,6 +8,7 @@ import $jit from '../patched/JIT'
 import Active from './Active'
 import Control from './Control'
 import Create from './Create'
+import DataModel from './DataModel'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
@@ -25,10 +26,6 @@ import clipboard from 'clipboard-js'
 
 /*
  * Metamaps.Erb
- * Metamaps.Mappings
- * Metamaps.Metacodes
- * Metamaps.Synapses
- * Metamaps.Topics
  */
 
 let panningInt
@@ -140,15 +137,15 @@ const JIT = {
     self.vizData = []
     Visualize.loadLater = false
 
-    const results = self.convertModelsToJIT(Metamaps.Topics, Metamaps.Synapses)
+    const results = self.convertModelsToJIT(DataModel.Topics, DataModel.Synapses)
 
     self.vizData = results[0]
 
     // clean up the synapses array in case of any faulty data
     _.each(results[1], function (synapse) {
       mapping = synapse.getMapping()
-      Metamaps.Synapses.remove(synapse)
-      if (Metamaps.Mappings) Metamaps.Mappings.remove(mapping)
+      DataModel.Synapses.remove(synapse)
+      if (DataModel.Mappings) DataModel.Mappings.remove(mapping)
     })
 
     // set up addTopic instructions in case they delete all the topics
@@ -1191,7 +1188,7 @@ const JIT = {
     eY = -1 * eY
 
     const edgesToToggle = []
-    Metamaps.Synapses.each(function (synapse) {
+    DataModel.Synapses.each(function (synapse) {
       const e = synapse.get('edge')
       if (edgesToToggle.indexOf(e) === -1) {
         edgesToToggle.push(e)
@@ -1579,15 +1576,15 @@ const JIT = {
     loader.setRange(0.9) // default is 1.3
     loader.show() // Hidden by default
 
-    const topics = Metamaps.Topics.map(function (t) { return t.id })
-    const topicsString = topics.join()
+    const topics = DataModel.Topics.map(function (t) { return t.id })
+    const topics_string = topics.join()
 
     const successCallback = function (data) {
       $('#loadingSiblings').remove()
 
       for (var key in data) {
-        const string = Metamaps.Metacodes.get(key).get('name') + ' (' + data[key] + ')'
-        $('#fetchSiblingList').append('<li class="getSiblings" data-id="' + key + '">' + string + '</li>')
+        const string = `${DataModel.Metacodes.get(key).get('name')} (${data[key]})`
+        $('#fetchSiblingList').append(`<li class="getSiblings" data-id="${key}">${string}</li>`)
       }
 
       $('.rc-siblings .getSiblings').click(function () {

@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import _ from 'lodash'
 import Backbone from 'backbone'
@@ -11,11 +11,7 @@ import Realtime from '../Realtime'
 import TopicCard from '../TopicCard'
 import Visualize from '../Visualize'
 
-/*
- * Dependencies:
- *  - Metamaps.Mappings
- *  - Metamaps.Metacodes
- */
+import DataModel from './index'
 
 const Topic = Backbone.Model.extend({
   urlRoot: '/topics',
@@ -99,12 +95,12 @@ const Topic = Backbone.Model.extend({
   },
   getDate: function () {},
   getMetacode: function () {
-    return Metamaps.Metacodes.get(this.get('metacode_id'))
+    return DataModel.Metacodes.get(this.get('metacode_id'))
   },
   getMapping: function () {
     if (!Active.Map) return false
 
-    return Metamaps.Mappings.findWhere({
+    return DataModel.Mappings.findWhere({
       map_id: Active.Map.id,
       mappable_type: 'Topic',
       mappable_id: this.isNew() ? this.cid : this.id

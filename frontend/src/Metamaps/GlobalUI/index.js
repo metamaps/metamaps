@@ -1,19 +1,15 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import clipboard from 'clipboard-js'
 
 import Active from '../Active'
 import Create from '../Create'
+import DataModel from '../DataModel'
 
 import Search from './Search'
 import CreateMap from './CreateMap'
 import Account from './Account'
 import ImportDialog from './ImportDialog'
-
-/*
- * Metamaps.DataModel
- * Metamaps.Maps
- */
 
 const GlobalUI = {
   notifyTimeout: null,
@@ -38,26 +34,26 @@ const GlobalUI = {
     $('#lightbox_screen, #lightbox_close').click(self.closeLightbox)
 
     // initialize global backbone models and collections
-    if (Active.Mapper) Active.Mapper = new Metamaps.DataModel.Mapper(Active.Mapper)
+    if (Active.Mapper) Active.Mapper = new DataModel.Mapper(Active.Mapper)
 
-    var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : []
-    var sharedCollection = Metamaps.Maps.Shared ? Metamaps.Maps.Shared : []
-    var starredCollection = Metamaps.Maps.Starred ? Metamaps.Maps.Starred : []
+    var myCollection = DataModel.Maps.Mine ? DataModel.Maps.Mine : []
+    var sharedCollection = DataModel.Maps.Shared ? DataModel.Maps.Shared : []
+    var starredCollection = DataModel.Maps.Starred ? DataModel.Maps.Starred : []
     var mapperCollection = []
     var mapperOptionsObj = { id: 'mapper', sortBy: 'updated_at' }
-    if (Metamaps.Maps.Mapper) {
-      mapperCollection = Metamaps.Maps.Mapper.models
-      mapperOptionsObj.mapperId = Metamaps.Maps.Mapper.id
+    if (DataModel.Maps.Mapper) {
+      mapperCollection = DataModel.Maps.Mapper.models
+      mapperOptionsObj.mapperId = DataModel.Maps.Mapper.id
     }
-    var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : []
-    var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : []
-    Metamaps.Maps.Mine = new Metamaps.DataModel.MapCollection(myCollection, { id: 'mine', sortBy: 'updated_at' })
-    Metamaps.Maps.Shared = new Metamaps.DataModel.MapCollection(sharedCollection, { id: 'shared', sortBy: 'updated_at' })
-    Metamaps.Maps.Starred = new Metamaps.DataModel.MapCollection(starredCollection, { id: 'starred', sortBy: 'updated_at' })
+    var featuredCollection = DataModel.Maps.Featured ? DataModel.Maps.Featured : []
+    var activeCollection = DataModel.Maps.Active ? DataModel.Maps.Active : []
+    DataModel.Maps.Mine = new DataModel.MapCollection(myCollection, { id: 'mine', sortBy: 'updated_at' })
+    DataModel.Maps.Shared = new DataModel.MapCollection(sharedCollection, { id: 'shared', sortBy: 'updated_at' })
+    DataModel.Maps.Starred = new DataModel.MapCollection(starredCollection, { id: 'starred', sortBy: 'updated_at' })
     // 'Mapper' refers to another mapper
-    Metamaps.Maps.Mapper = new Metamaps.DataModel.MapCollection(mapperCollection, mapperOptionsObj)
-    Metamaps.Maps.Featured = new Metamaps.DataModel.MapCollection(featuredCollection, { id: 'featured', sortBy: 'updated_at' })
-    Metamaps.Maps.Active = new Metamaps.DataModel.MapCollection(activeCollection, { id: 'active', sortBy: 'updated_at' })
+    DataModel.Maps.Mapper = new DataModel.MapCollection(mapperCollection, mapperOptionsObj)
+    DataModel.Maps.Featured = new DataModel.MapCollection(featuredCollection, { id: 'featured', sortBy: 'updated_at' })
+    DataModel.Maps.Active = new DataModel.MapCollection(activeCollection, { id: 'active', sortBy: 'updated_at' })
   },
   showDiv: function (selector) {
     $(selector).show()

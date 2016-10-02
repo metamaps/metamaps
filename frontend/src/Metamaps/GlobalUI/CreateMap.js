@@ -1,12 +1,8 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import Active from '../Active'
+import DataModel from '../DataModel'
 import GlobalUI from './index'
-
-/*
- * Metamaps.DataModel
- * Metamaps.Maps
- */
 
 const CreateMap = {
   newMap: null,
@@ -17,7 +13,7 @@ const CreateMap = {
   init: function () {
     var self = CreateMap
 
-    self.newMap = new Metamaps.DataModel.Map({ permission: 'commons' })
+    self.newMap = new DataModel.Map({ permission: 'commons' })
 
     self.bindFormEvents()
 
@@ -109,7 +105,7 @@ const CreateMap = {
   success: function (model) {
     var self = CreateMap
     // push the new map onto the collection of 'my maps'
-    Metamaps.Maps.Mine.add(model)
+    DataModel.Maps.Mine.add(model)
 
     GlobalUI.clearNotify()
     $('#wrapper').append(self.generateSuccessMessage(model.id))
@@ -128,7 +124,7 @@ const CreateMap = {
     }
 
     self.bindFormEvents()
-    self.newMap = new Metamaps.DataModel.Map({ permission: 'commons' })
+    self.newMap = new DataModel.Map({ permission: 'commons' })
 
     return false
   }

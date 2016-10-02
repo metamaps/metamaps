@@ -1,18 +1,13 @@
-/* global Metamaps, $, CanvasLoader, Countable, Hogan, embedly */
+/* global $, CanvasLoader, Countable, Hogan, embedly */
 
 import Active from './Active'
+import DataModel from './DataModel'
 import GlobalUI from './GlobalUI'
 import Mapper from './Mapper'
 import Router from './Router'
 import Util from './Util'
 import Visualize from './Visualize'
 
-/*
- * Metamaps.TopicCard.js
- *
- * Dependencies:
- *  - Metamaps.Metacodes
- */
 const TopicCard = {
   openTopicCard: null, // stores the topic that's currently open
   authorizedToEdit: false, // stores boolean for edit permission for open topic card
@@ -182,7 +177,7 @@ const TopicCard = {
     var metacodeLiClick = function () {
       selectingMetacode = false
       var metacodeId = parseInt($(this).attr('data-id'))
-      var metacode = Metamaps.Metacodes.get(metacodeId)
+      var metacode = DataModel.Metacodes.get(metacodeId)
       $('.CardOnGraph').find('.metacodeTitle').html(metacode.get('name'))
         .append('<div class="expandMetacodeSelect"></div>')
         .attr('class', 'metacodeTitle mbg' + metacode.id)

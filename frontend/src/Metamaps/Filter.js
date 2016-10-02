@@ -1,23 +1,14 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import _ from 'lodash'
 
 import Active from './Active'
 import Control from './Control'
+import DataModel from './DataModel'
 import GlobalUI from './GlobalUI'
 import Settings from './Settings'
 import Visualize from './Visualize'
 
-/*
- * Metamaps.Filter.js.erb
- *
- * Dependencies:
- *  - Metamaps.Creators
- *  - Metamaps.Mappers
- *  - Metamaps.Metacodes
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
 const Filter = {
   filters: {
     name: '',
@@ -148,7 +139,7 @@ const Filter = {
     // the first option enables us to accept
     // ['Topics', 'Synapses'] as 'collection'
     if (typeof collection === 'object') {
-      Metamaps[collection[0]].each(function (model) {
+      DataModel[collection[0]].each(function (model) {
         var prop = model.get(propertyToCheck)
         if (prop !== null) {
           prop = prop.toString()
@@ -157,7 +148,7 @@ const Filter = {
           }
         }
       })
-      Metamaps[collection[1]].each(function (model) {
+      DataModel[collection[1]].each(function (model) {
         var prop = model.get(propertyToCheck)
         if (prop !== null) {
           prop = prop.toString()
@@ -167,7 +158,7 @@ const Filter = {
         }
       })
     } else if (typeof collection === 'string') {
-      Metamaps[collection].each(function (model) {
+      DataModel[collection].each(function (model) {
         var prop = model.get(propertyToCheck)
         if (prop !== null) {
           prop = prop.toString()
@@ -196,8 +187,8 @@ const Filter = {
     }
     // for each new filter to be added, create a list item for it and fade it in
     _.each(added, function (identifier) {
-      model = Metamaps[correlatedModel].get(identifier) ||
-      Metamaps[correlatedModel].find(function (model) {
+      model = DataModel[correlatedModel].get(identifier) ||
+      DataModel[correlatedModel].find(function (model) {
         return model.get(propertyToCheck) === identifier
       })
       li = model.prepareLiForFilter()
@@ -359,7 +350,7 @@ const Filter = {
 
     var opacityForFilter = onMap ? 0 : 0.4
 
-    Metamaps.Topics.each(function (topic) {
+    DataModel.Topics.each(function (topic) {
       var n = topic.get('node')
       var metacode_id = topic.get('metacode_id').toString()
 
@@ -400,11 +391,11 @@ const Filter = {
     })
 
     // flag all the edges back to 'untouched'
-    Metamaps.Synapses.each(function (synapse) {
+    DataModel.Synapses.each(function (synapse) {
       var e = synapse.get('edge')
       e.setData('touched', false)
     })
-    Metamaps.Synapses.each(function (synapse) {
+    DataModel.Synapses.each(function (synapse) {
       var e = synapse.get('edge')
       var desc
       var user_id = synapse.get('user_id').toString()
