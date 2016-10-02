@@ -48,49 +48,50 @@ const DataModel = {
   Mapping: Mapping,
   MappingCollection: MappingCollection,
 
-  init: function () {
+  Metacodes: new MetacodeCollection(),
+  Topics: new TopicCollection(),
+  Synapses: new SynapseCollection(),
+  Mappings: new MappingCollection(),
+  Mappers: new MapperCollection(),
+  Collaborators: new MapperCollection(),
+  Creators: new MapperCollection(),
+
+  init: function (serverData) {
     var self = DataModel
 
-    Metamaps.Metacodes = Metamaps.Metacodes ? new self.MetacodeCollection(Metamaps.Metacodes) : new self.MetacodeCollection()
+    if (serverData.Metacodes) self.Metacodes = new MetacodeCollection(serverData.Metacodes)
 
     // attach collection event listeners
-    Metamaps.Topics = Metamaps.Topics ? new self.TopicCollection(Metamaps.Topics) : new self.TopicCollection()
-    Metamaps.Topics.on('add remove', function (topic) {
+    if (serverData.Topics) self.Topics = new TopicCollection(serverData.Topics)
+    self.Topics.on('add remove', function (topic) {
       InfoBox.updateNumbers()
       Filter.checkMetacodes()
       Filter.checkMappers()
     })
 
-    Metamaps.Synapses = Metamaps.Synapses ? new self.SynapseCollection(Metamaps.Synapses) : new self.SynapseCollection()
-    Metamaps.Synapses.on('add remove', function (synapse) {
+    if (serverData.Synapses) self.Synapses = new SynapseCollection(serverData.Synapses)
+    self.Synapses.on('add remove', function (synapse) {
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMappers()
     })
 
-    if (Active.Map) {
-      Metamaps.Mappings = Metamaps.Mappings ? new self.MappingCollection(Metamaps.Mappings) : new self.MappingCollection()
-      Metamaps.Mappings.on('add remove', function (mapping) {
-        InfoBox.updateNumbers()
-        Filter.checkSynapses()
-        Filter.checkMetacodes()
-        Filter.checkMappers()
-      })
-    }
+    if (serverData.Mappings) self.Mappings = new MappingCollection(serverData.Mappings)
+    self.Mappings.on('add remove', function (mapping) {
+      InfoBox.updateNumbers()
+      Filter.checkSynapses()
+      Filter.checkMetacodes()
+      Filter.checkMappers()
+    })
 
-    Metamaps.Mappers = Metamaps.Mappers ? new self.MapperCollection(Metamaps.Mappers) : new self.MapperCollection()
-    Metamaps.Collaborators = Metamaps.Collaborators ? new self.MapperCollection(Metamaps.Collaborators) : new self.MapperCollection()
-    Metamaps.Creators = Metamaps.Creators ? new self.MapperCollection(Metamaps.Creators) : new self.MapperCollection()
-
-    if (Active.Map) {
-      Active.Map = new self.Map(Active.Map)
-    }
-
-    if (Active.Topic) {
-      Active.Topic = new self.Topic(Active.Topic)
-    }
+    if (serverData.Mappers) self.Mappers = new MapperCollection(serverData.Mappers)
+    if (serverData.Collaborators) self.Collaborators = new MapperCollection(serverData.Collaborators)
+    if (serverData.Creators) self.Creators = new MapperCollection(serverData.Creators)
   }
 }
+
+// Note: Topics, Metacodes, Synapses, Mappers, Mappings, Collaborators, Creators are not exported
+// You can access them by importing DataModel
 
 export { Map, MapCollection, Mapper, MapperCollection, Mapping, MappingCollection, Message, MessageCollection, Metacode, MetacodeCollection, Synapse, SynapseCollection, Topic, TopicCollection }
 

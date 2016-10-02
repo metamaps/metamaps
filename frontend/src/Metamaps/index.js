@@ -10,7 +10,7 @@ import Create from './Create'
 import Debug from './Debug'
 import Filter from './Filter'
 import GlobalUI, {
-  Search, CreateMap, ImportDialog, Account as GlobalUI_Account
+  Search, CreateMap, ImportDialog, Account as GlobalUIAccount
 } from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
@@ -47,7 +47,7 @@ Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
 Metamaps.GlobalUI.Search = Search
 Metamaps.GlobalUI.CreateMap = CreateMap
-Metamaps.GlobalUI.Account = GlobalUI_Account
+Metamaps.GlobalUI.Account = GlobalUIAccount
 Metamaps.GlobalUI.ImportDialog = ImportDialog
 Metamaps.Import = Import
 Metamaps.JIT = JIT
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
       Metamaps[prop].hasOwnProperty('init') &&
       typeof (Metamaps[prop].init) === 'function'
     ) {
-      Metamaps[prop].init()
+      Metamaps[prop].init(Metamaps.ServerData)
     }
   }
   // load whichever page you are on
