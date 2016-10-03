@@ -38,6 +38,9 @@ const InfoBox = {
     if (querystring == 'new') { 
       self.open()
       $('.mapInfoBox').addClass('mapRequestTitle')
+      $('#mapInfoName').trigger('click')
+      $('#mapInfoName textarea').focus()
+      $('#mapInfoName textarea').select()
     }
   },
   toggleBox: function (event) {
@@ -139,7 +142,8 @@ const InfoBox = {
       // mobile menu
       $('#header_content').html(name)
       $('.mapInfoBox').removeClass('mapRequestTitle')
-      document.title = name + ' | Metamaps'
+      document.title = `${name} | Metamaps`
+      window.history.replaceState('', `${name} | Metamaps`, window.location.pathname)
     })
 
     $('.mapInfoDesc .best_in_place_desc').unbind('ajax:success').bind('ajax:success', function () {

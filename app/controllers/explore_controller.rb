@@ -9,7 +9,7 @@ class ExploreController < ApplicationController
 
   # GET /explore/active
   def active
-    @maps = map_scope(Map)
+    @maps = map_scope(Map.where.not(name: 'Untitled Map'))
 
     respond_to do |format|
       format.html do
