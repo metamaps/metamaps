@@ -15,4 +15,6 @@ const Views = {
   VideoView,
   Room
 }
+
+export { ExploreMaps, ChatView, VideoView, Room }
 export default Views

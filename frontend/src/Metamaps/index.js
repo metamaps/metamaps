@@ -1,5 +1,3 @@
-/* global Metamaps */
-
 import Account from './Account'
 import Active from './Active'
 import Admin from './Admin'
@@ -34,7 +32,7 @@ import Util from './Util'
 import Views from './Views'
 import Visualize from './Visualize'
 
-Metamaps = window.Metamaps || {}
+const Metamaps = window.Metamaps || {}
 Metamaps.Account = Account
 Metamaps.Active = Active
 Metamaps.Admin = Admin
@@ -72,6 +70,10 @@ Metamaps.Topic = Topic
 Metamaps.TopicCard = TopicCard
 Metamaps.Util = Util
 Metamaps.Views = Views
+Metamaps.Views.ExploreMaps = ExploreMaps
+Metamaps.Views.ChatView = ChatView
+Metamaps.Views.VideoView = VideoView
+Metamaps.Views.Room = Room
 Metamaps.Visualize = Visualize
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -90,19 +92,19 @@ document.addEventListener('DOMContentLoaded', function () {
   if (Metamaps.currentSection === 'explore') {
     const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
-    Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
+    Views.ExploreMaps.setCollection(DataModel.Maps[capitalize])
     if (Metamaps.currentPage === 'mapper') {
-      Views.ExploreMaps.fetchUserThenRender()
+      ExploreMaps.fetchUserThenRender()
     } else {
-      Views.ExploreMaps.render()
+      ExploreMaps.render()
     }
     GlobalUI.showDiv('#explore')
   } else if (Metamaps.currentSection === '' && Active.Mapper) {
-    Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
-    Views.ExploreMaps.render()
+    ExploreMaps.setCollection(DataModel.Maps.Active)
+    ExploreMaps.render()
     GlobalUI.showDiv('#explore')
   } else if (Active.Map || Active.Topic) {
-    Metamaps.Loading.show()
+    Loading.show()
     JIT.prepareVizData()
     GlobalUI.showDiv('#infovis')
   }

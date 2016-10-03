@@ -10,7 +10,7 @@
 
   Metamaps.currentSection = "explore";
   Metamaps.currentPage = "mapper";
-  Metamaps.Maps.Mapper = {
+  Metamaps.ServerData.Mapper = {
     models: <%= @maps.to_json.html_safe %>,
     id: <%= params[:id] %>
   };

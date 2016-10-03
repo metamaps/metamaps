@@ -13,7 +13,7 @@ import Realtime from '../Realtime'
 import ChatView from './ChatView'
 import VideoView from './VideoView'
 
-const Room = function(opts) {
+const Room = function(opts = {}) {
   var self = this
 
   this.isActiveRoom = false
@@ -31,6 +31,7 @@ const Room = function(opts) {
   this.chat = new ChatView(this.messages, this.currentMapper, this.room)
 
   this.videos = {}
+  this.soundUrls = opts.soundUrls
 
   this.init()
 }

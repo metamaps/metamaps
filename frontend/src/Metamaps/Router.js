@@ -1,9 +1,10 @@
 /* global $ */
 
 import Backbone from 'backbone'
-Backbone.$ = window.$
+try { Backbone.$ = window.$ } catch (err) {}
 
 import Active from './Active'
+import DataModel from './DataModel'
 import GlobalUI from './GlobalUI'
 import Loading from './Loading'
 import Map from './Map'

@@ -25,7 +25,7 @@ const Map = {
   events: {
     editedByActiveMapper: 'Metamaps:Map:events:editedByActiveMapper'
   },
-  init: function () {
+  init: function (serverData) {
     var self = Map
     
     $('#wrapper').mousedown(function (e){
@@ -44,8 +44,8 @@ const Map = {
     GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
 
     self.updateStar()
-    InfoBox.init()
-    CheatSheet.init()
+    InfoBox.init(serverData)
+    CheatSheet.init(serverData)
 
     $('.viewOnly .requestAccess').click(self.requestAccess)
 

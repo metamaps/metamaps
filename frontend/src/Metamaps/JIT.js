@@ -51,7 +51,7 @@ const JIT = {
   /**
    * This method will bind the event handlers it is interested and initialize the class.
    */
-  init: function () {
+  init: function (serverData) {
     const self = JIT
 
     $('.zoomIn').click(self.zoomIn)
@@ -65,10 +65,10 @@ const JIT = {
     $('.takeScreenshot').click(Map.exportImage)
 
     self.topicDescImage = new Image()
-    self.topicDescImage.src = Metamaps.ServerData['topic_description_signifier.png']
+    self.topicDescImage.src = serverData['topic_description_signifier.png']
 
     self.topicLinkImage = new Image()
-    self.topicLinkImage.src = Metamaps.ServerData['topic_link_signifier.png']
+    self.topicLinkImage.src = serverData['topic_link_signifier.png']
   },
   /**
    * convert our topic JSON into something JIT can use
@@ -313,17 +313,6 @@ const JIT = {
         panning: 'avoid nodes',
         zooming: 28 // zoom speed. higher is more sensible
       },
-      // background: {
-      //    type: 'Metamaps'
-      // },
-      // NodeStyles: {
-      //  enable: true,
-      //  type: 'Native',
-      //  stylesHover: {
-      //    dim: 30
-      //  },
-      //  duration: 300
-      // },
       // Change node and edge styles such as
       // color and width.
       // These properties are also set per node
@@ -649,7 +638,6 @@ const JIT = {
     },
     // this will just be used to patch the ForceDirected graphsettings with the few things which actually differ
     background: {
-      // type: 'Metamaps',
       levelDistance: 200,
       numberOfCircles: 4,
       CanvasStyles: {
@@ -1573,7 +1561,7 @@ const JIT = {
     loader.show() // Hidden by default
 
     const topics = DataModel.Topics.map(function (t) { return t.id })
-    const topics_string = topics.join()
+    const topicsString = topics.join()
 
     const successCallback = function (data) {
       $('#loadingSiblings').remove()

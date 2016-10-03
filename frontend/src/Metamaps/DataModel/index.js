@@ -37,6 +37,17 @@ const DataModel = {
   Creators: new MapperCollection(),
   Mappers: new MapperCollection(),
   Mappings: new MappingCollection(),
+  Maps: {
+    Mine: [],
+    Shared: [],
+    Starred: [],
+    Mapper: {
+      models: [],
+      mapperId: null
+    },
+    Featured: [],
+    Active: []
+  },
   Messages: [],
   Metacodes: new MetacodeCollection(),
   Stars: [],
@@ -45,6 +56,15 @@ const DataModel = {
 
   init: function (serverData) {
     var self = DataModel
+
+    // workaround circular import problem
+    if (!self.MapCollection.model) self.MapCollection.model = Map
+
+    self.synapseIconUrl = serverData['synapse16.png']
+
+    if (serverData.ActiveMap) Active.Map = new Map(serverData.ActiveMap)
+    if (serverData.ActiveMapper) Active.Mapper = new Mapper(serverData.ActiveMapper)
+    if (serverData.ActiveTopic) Active.Topic = new Topic(serverData.ActiveTopic)
 
     if (serverData.Collaborators) self.Collaborators = new MapperCollection(serverData.Collaborators)
     if (serverData.Creators) self.Creators = new MapperCollection(serverData.Creators)
@@ -56,22 +76,43 @@ const DataModel = {
     if (serverData.Synapses) self.Synapses = new SynapseCollection(serverData.Synapses)
     if (serverData.Topics) self.Topics = new TopicCollection(serverData.Topics)
 
+    // initialize global backbone models and collections
+    if (Active.Mapper) Active.Mapper = new self.Mapper(Active.Mapper)
+
+    var myCollection = serverData.Mine ? serverData.Mine : []
+    var sharedCollection = serverData.Shared ? serverData.Shared : []
+    var starredCollection = serverData.Starred ? serverData.Starred : []
+    var mapperCollection = []
+    var mapperOptionsObj = { id: 'mapper', sortBy: 'updated_at' }
+    if (self.Maps.Mapper.mapperId) {
+      mapperCollection = serverData.Mapper.models
+      mapperOptionsObj.mapperId = serverData.Mapper.id
+    }
+    var featuredCollection = serverData.Featured ? serverData.Featured : []
+    var activeCollection = serverData.Active ? serverData.Active : []
+
+    self.Maps.Mine = new MapCollection(myCollection, { id: 'mine', sortBy: 'updated_at' })
+    self.Maps.Shared = new MapCollection(sharedCollection, { id: 'shared', sortBy: 'updated_at' })
+    self.Maps.Starred = new MapCollection(starredCollection, { id: 'starred', sortBy: 'updated_at' })
+    // 'Mapper' refers to another mapper
+    self.Maps.Mapper = new MapCollection(mapperCollection, mapperOptionsObj)
+    self.Maps.Featured = new MapCollection(featuredCollection, { id: 'featured', sortBy: 'updated_at' })
+    self.Maps.Active = new MapCollection(activeCollection, { id: 'active', sortBy: 'updated_at' })
+
     self.attachCollectionEvents()
   },
-
   attachCollectionEvents: function () {
-    var self = DataModel
-    self.Topics.on('add remove', function (topic) {
+    DataModel.Topics.on('add remove', function (topic) {
       InfoBox.updateNumbers()
       Filter.checkMetacodes()
       Filter.checkMappers()
     })
-    self.Synapses.on('add remove', function (synapse) {
+    DataModel.Synapses.on('add remove', function (synapse) {
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMappers()
     })
-    self.Mappings.on('add remove', function (mapping) {
+    DataModel.Mappings.on('add remove', function (mapping) {
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMetacodes()

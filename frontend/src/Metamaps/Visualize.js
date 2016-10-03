@@ -17,7 +17,7 @@ const Visualize = {
   type: 'ForceDirected', // the type of graph we're building, could be "RGraph", "ForceDirected", or "ForceDirected3D"
   loadLater: false, // indicates whether there is JSON that should be loaded right in the offset, or whether to wait till the first topic is created
   touchDragNode: null,
-  init: function () {
+  init: function (serverData) {
     var self = Visualize
 
     if (serverData.VisualizeType) self.type = serverData.VisualizeType

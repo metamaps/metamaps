@@ -10,8 +10,11 @@ const Search = {
   limitMapsToMe: false,
   changing: false,
   optionsInitialized: false,
-  init: function () {
+  init: function (serverData) {
     var self = Search
+
+    self.wildcardIconUrl = serverData['icons/wildcard.png']
+    self.userIconUrl = serverData['user.png']
 
     // this is similar to Metamaps.Loading, but it's for the search element
     var loader = new CanvasLoader('searchLoading')
@@ -50,7 +53,7 @@ const Search = {
           return Hogan.compile(topicheader + $('#topicSearchTemplate').html()).render({
             value: 'No results',
             label: 'No results',
-            typeImageURL: Metamaps.ServerData['icons/wildcard.png'],
+            typeImageURL: self.wildcardIconUrl,
             rtype: 'noresult'
           })
         },
@@ -118,7 +121,7 @@ const Search = {
             value: 'No results',
             label: 'No results',
             rtype: 'noresult',
-            profile: Metamaps.ServerData['user.png']
+            profile: self.userIconUrl
           })
         },
         header: mapperheader,

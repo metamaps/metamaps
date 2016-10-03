@@ -121,9 +121,9 @@ var Private = {
       Handlers.inputBlur.call(self)
     })
   },
-  initializeSounds: function () {
+  initializeSounds: function (soundUrls) {
     this.sound = new Howl({
-      src: [Metamaps.ServerData['sounds/MM_sounds.mp3'], Metamaps.ServerData['sounds/MM_sounds.ogg']],
+      src: soundUrls,
       sprite: {
         joinmap: [0, 561],
         leavemap: [1000, 592],
@@ -243,7 +243,7 @@ const ChatView = function (messages, mapper, room) {
   Private.attachElements.call(this)
   Private.addEventListeners.call(this)
   Private.initialMessages.call(this)
-  Private.initializeSounds.call(this)
+  Private.initializeSounds.call(this, room.soundUrls)
   this.$container.css({
     right: '-300px'
   })

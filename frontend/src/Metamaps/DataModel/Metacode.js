@@ -1,5 +1,5 @@
 import Backbone from 'backbone'
-Backbone.$ = window.$
+try { Backbone.$ = window.$ } catch (err) {}
 import outdent from 'outdent'
 
 const Metacode = Backbone.Model.extend({

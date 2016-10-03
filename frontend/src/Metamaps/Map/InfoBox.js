@@ -34,7 +34,8 @@ const InfoBox = {
       data-bip-activator="#mapInfoDesc"
       data-bip-value="{{desc}}"
     >{{desc}}</span>`,
-  init: function () {
+  userImageUrl: '',
+  init: function (serverData) {
     var self = InfoBox
 
     $('.mapInfoIcon').click(self.toggleBox)
@@ -46,7 +47,9 @@ const InfoBox = {
     self.attachEventListeners() 
 
     self.generateBoxHTML = Hogan.compile($('#mapInfoBoxTemplate').html())
-    
+
+    self.userImageUrl = serverData['user.png']
+
     var querystring = window.location.search.replace(/^\?/, '')
     if (querystring == 'new') { 
       self.open()
@@ -108,7 +111,7 @@ const InfoBox = {
     obj['contributor_count'] = relevantPeople.length
     obj['contributors_class'] = relevantPeople.length > 1 ? 'multiple' : ''
     obj['contributors_class'] += relevantPeople.length === 2 ? ' mTwo' : ''
-    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : Metamaps.ServerData['user.png']
+    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : self.userImageUrl
     obj['contributor_list'] = self.createContributorList()
 
     obj['user_name'] = isCreator ? 'You' : map.get('user_name')
@@ -210,7 +213,7 @@ const InfoBox = {
                     value: "No results",
                     label: "No results",
                     rtype: "noresult",
-                    profile: Metamaps.ServerData['user.png'],
+                    profile: self.userImageUrl
                 });
             },
             suggestion: function(s) {
@@ -313,7 +316,7 @@ const InfoBox = {
     if (relevantPeople.length === 2) contributors_class = 'multiple mTwo'
     else if (relevantPeople.length > 2) contributors_class = 'multiple'
 
-    var contributors_image = Metamaps.ServerData['user.png']
+    var contributors_image = self.userImageUrl
     if (relevantPeople.length > 0) {
       // get the first contributor and use their image
       contributors_image = relevantPeople.models[0].get('image')

@@ -16,7 +16,7 @@
   Metamaps.ServerData.Topics = <%= @alltopics.to_json(user: current_user).html_safe %>;
   Metamaps.ServerData.Synapses = <%= @allsynapses.to_json.html_safe %>;
   Metamaps.ServerData.Mappings = <%= @allmappings.to_json.html_safe %>;
-  Metamaps.Messages = <%= @allmessages.to_json.html_safe %>;
-  Metamaps.Stars = <%= @allstars.to_json.html_safe %>;
+  Metamaps.ServerData.Messages = <%= @allmessages.to_json.html_safe %>;
+  Metamaps.ServerData.Stars = <%= @allstars.to_json.html_safe %>;
   Metamaps.ServerData.VisualizeType = "ForceDirected";
 </script>

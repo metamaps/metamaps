@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 import Active from './Active'
 import AutoLayout from './AutoLayout'
-import DataModel from './DataModel' 
+import DataModel from './DataModel'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
 import Synapse from './Synapse'
@@ -218,7 +218,7 @@ const Import = {
     parsedTopics.forEach(topic => {
       let coords = { x: topic.x, y: topic.y }
       if (!coords.x || !coords.y) {
-        coords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+        coords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
       }
 
       if (!topic.name && topic.link ||
@@ -351,7 +351,7 @@ const Import = {
   handleURL: function (url, opts = {}) {
     let coords = opts.coords
     if (!coords || coords.x === undefined || coords.y === undefined) {
-      coords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+      coords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
     }
 
     const name = opts.name || 'Link'

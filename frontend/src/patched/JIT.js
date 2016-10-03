@@ -11349,4 +11349,6 @@ $jit.ForceDirected3D.$extend = true;
 
 })($jit.ForceDirected3D);
 
+// START METAMAPS CODE
 export default $jit
+// END METAMAPS CODE

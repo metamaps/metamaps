@@ -2,9 +2,7 @@
 
 import clipboard from 'clipboard-js'
 
-import Active from '../Active'
 import Create from '../Create'
-import DataModel from '../DataModel'
 
 import Search from './Search'
 import CreateMap from './CreateMap'
@@ -14,13 +12,13 @@ import ImportDialog from './ImportDialog'
 const GlobalUI = {
   notifyTimeout: null,
   lightbox: null,
-  init: function () {
+  init: function (serverData) {
     var self = GlobalUI
 
-    self.Search.init()
-    self.CreateMap.init()
-    self.Account.init()
-    self.ImportDialog.init(Metamaps.Erb, self.openLightbox, self.closeLightbox)
+    self.Search.init(serverData)
+    self.CreateMap.init(serverData)
+    self.Account.init(serverData)
+    self.ImportDialog.init(serverData, self.openLightbox, self.closeLightbox)
 
     if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
 
@@ -32,28 +30,6 @@ const GlobalUI = {
     })
 
     $('#lightbox_screen, #lightbox_close').click(self.closeLightbox)
-
-    // initialize global backbone models and collections
-    if (Active.Mapper) Active.Mapper = new DataModel.Mapper(Active.Mapper)
-
-    var myCollection = DataModel.Maps.Mine ? DataModel.Maps.Mine : []
-    var sharedCollection = DataModel.Maps.Shared ? DataModel.Maps.Shared : []
-    var starredCollection = DataModel.Maps.Starred ? DataModel.Maps.Starred : []
-    var mapperCollection = []
-    var mapperOptionsObj = { id: 'mapper', sortBy: 'updated_at' }
-    if (DataModel.Maps.Mapper) {
-      mapperCollection = DataModel.Maps.Mapper.models
-      mapperOptionsObj.mapperId = DataModel.Maps.Mapper.id
-    }
-    var featuredCollection = DataModel.Maps.Featured ? DataModel.Maps.Featured : []
-    var activeCollection = DataModel.Maps.Active ? DataModel.Maps.Active : []
-    DataModel.Maps.Mine = new DataModel.MapCollection(myCollection, { id: 'mine', sortBy: 'updated_at' })
-    DataModel.Maps.Shared = new DataModel.MapCollection(sharedCollection, { id: 'shared', sortBy: 'updated_at' })
-    DataModel.Maps.Starred = new DataModel.MapCollection(starredCollection, { id: 'starred', sortBy: 'updated_at' })
-    // 'Mapper' refers to another mapper
-    DataModel.Maps.Mapper = new DataModel.MapCollection(mapperCollection, mapperOptionsObj)
-    DataModel.Maps.Featured = new DataModel.MapCollection(featuredCollection, { id: 'featured', sortBy: 'updated_at' })
-    DataModel.Maps.Active = new DataModel.MapCollection(activeCollection, { id: 'active', sortBy: 'updated_at' })
   },
   showDiv: function (selector) {
     $(selector).show()

@@ -1,6 +1,9 @@
 /* global $, CanvasLoader */
 
 const Account = {
+  init: function (serverData) {
+    Account.userIconUrl = serverData['user.png']
+  },
   listenersInitialized: false,
   userIconUrl: null,
   initListeners: function () {
@@ -8,9 +11,6 @@ const Account = {
 
     $('#user_image').change(self.showImagePreview)
     self.listenersInitialized = true
-  },
-  init: function (serverData) {
-    Account.userIconUrl = serverData['user.png']
   },
   toggleChangePicture: function () {
     var self = Account

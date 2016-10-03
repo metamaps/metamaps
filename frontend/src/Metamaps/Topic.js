@@ -359,13 +359,13 @@ const Topic = {
     $(document).trigger(Map.events.editedByActiveMapper)
 
     var metacode = DataModel.Metacodes.findWhere({ name: 'Metamap' })
-    var topic = new Metamaps.Backbone.Topic({
+    var topic = new DataModel.Topic({
       name: data.name,
       metacode_id: metacode.id,
-      defer_to_map_id: Metamaps.Active.Map.id,
+      defer_to_map_id: Active.Map.id,
       link: window.location.origin + '/maps/' + data.id
     })
-    Metamaps.Topics.add(topic)
+    DataModel.Topics.add(topic)
 
     var mapping = new DataModel.Mapping({
       xloc: Create.newTopic.x,

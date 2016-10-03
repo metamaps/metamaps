@@ -2,10 +2,10 @@
 
 import _ from 'lodash'
 import Backbone from 'backbone'
-Backbone.$ = window.$
+try { Backbone.$ = window.$ } catch (err) {}
 
 import Active from '../Active'
-import { InfoBox } from '../Map'
+import InfoBox from '../Map/InfoBox'
 import Mapper from '../Mapper'
 import Realtime from '../Realtime'
 

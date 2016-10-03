@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import Backbone from 'backbone'
-Backbone.$ = window.$
+try { Backbone.$ = window.$ } catch (err) {}
 
 const Message = Backbone.Model.extend({
   urlRoot: '/messages',
