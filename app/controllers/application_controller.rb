@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery(with: :exception)
 
   before_action :invite_link
+  before_action :prepare_exception_notifier
   after_action :allow_embedding
 
   def default_serializer_options
@@ -81,5 +82,11 @@ class ApplicationController < ActionController::Base
     response.headers.except! 'X-Frame-Options'
     # or allow a whitelist
     # response.headers['X-Frame-Options'] = 'ALLOW-FROM http://blog.metamaps.cc'
+  end
+
+  def prepare_exception_notifier
+    request.env['exception_notifier.exception_data'] = {
+      current_user: current_user
+    }
   end
 end
