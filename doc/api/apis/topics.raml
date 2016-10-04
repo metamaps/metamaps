@@ -1,5 +1,6 @@
-type: collection
+#type: collection
 get:
+  is: [ searchable: { searchFields: "name, desc, link" }, embeddable: { embedFields: "user,metacode" }, orderable, pageable ]
   responses:
     200:
       body:
@@ -10,11 +11,12 @@ post:
     application/json:
       properties:
         name:
-          description: name
+          description: Topic name; this will be visible on the map
         desc:
-          description: description
+          description: Longer topic description visible when opening a map card
         link:
-          description: (optional) link to content on the web
+          description: embed a link to content on the web in the topic card
+          required: false
         permission:
           description: commons, public, or private
         metacode_id:
@@ -25,8 +27,9 @@ post:
         application/json:
           example: !include ../examples/topic.json
 /{id}:
-  type: item
+  #type: item
   get:
+    is: [ embeddable: { embedFields: "user,metacode" } ]
     responses:
       200:
         body:
@@ -37,13 +40,20 @@ post:
       application/json:
         properties:
           name:
-            description: name
+            description: Topic name; this will be visible on the map
+            required: false
           desc:
-            description: description
+            description: Longer topic description visible when opening a map card
+            required: false
           link:
-            description: (optional) link to content on the web
+            description: embed a link to content on the web in the topic card
+            required: false
           permission:
             description: commons, public, or private
+            required: false
+          metacode_id:
+            description: Topic's metacode
+            required: false
     responses:
       200:
         body:
@@ -54,13 +64,20 @@ post:
       application/json:
         properties:
           name:
-            description: name
+            description: Topic name; this will be visible on the map
+            required: false
           desc:
-            description: description
+            description: Longer topic description visible when opening a map card
+            required: false
           link:
-            description: (optional) link to content on the web
+            description: embed a link to content on the web in the topic card
+            required: false
           permission:
             description: commons, public, or private
+            required: false
+          metacode_id:
+            description: Topic's metacode
+            required: false
     responses:
       200:
         body:

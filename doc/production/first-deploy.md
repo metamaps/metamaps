@@ -65,7 +65,14 @@ Run this in the metamaps directory, still as metamaps:
     sudo aptitude install nodejs npm
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     npm install
-    npm run build
+
+#### Precompile assets
+
+This step depends on running npm install first; assets:precompile will run `NODE_ENV=production npm run build`, and the build-apidocs.sh script requires the raml2html npm package.
+
+    rake assets:precompile
+    rake perms:fix
+    bin/build-apidocs.sh
 
 #### Nginx and SSL
 

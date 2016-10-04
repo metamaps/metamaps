@@ -1,5 +1,6 @@
-type: collection
+#type: collection
 get:
+  is: [ embeddable: { embedFields: "user,map" }, orderable, pageable ]
   responses:
     200:
       body:
@@ -16,17 +17,20 @@ post:
         map_id:
           description: id of the map
         xloc:
-          description: (for Topic mappings only) x location on the canvas
+          description: (only for Topic mappings) x location on the canvas
+          required: false
         yloc:
-          description: (for Topic mappings only) y location on the canvas
+          description: (only for Topic mappings) y location on the canvas
+          required: false
   responses:
     201:
       body:
         application/json:
           example: !include ../examples/mapping.json
 /{id}:
-  type: item
+  #type: item
   get:
+    is: [ embeddable: { embedFields: "user,map" } ]
     responses:
       200:
         body:
@@ -38,10 +42,20 @@ post:
         properties:
           mappable_id:
             description: id of the topic/synapse to be mapped
+            required: false
           mappable_type:
             description: Topic or Synapse
+            required: false
           map_id:
             description: id of the map
+            required: false
+          xloc:
+            description: (only for Topic mappings) x location on the canvas
+            required: false
+          yloc:
+            description: (only for Topic mappings) y location on the canvas
+            required: false
+
     responses:
       200:
         body:
@@ -53,10 +67,19 @@ post:
         properties:
           mappable_id:
             description: id of the topic/synapse to be mapped
+            required: false
           mappable_type:
             description: Topic or Synapse
+            required: false
           map_id:
             description: id of the map
+            required: false
+          xloc:
+            description: (only for Topic mappings) x location on the canvas
+            required: false
+          yloc:
+            description: (only for Topic mappings) y location on the canvas
+            required: false
     responses:
       200:
         body:

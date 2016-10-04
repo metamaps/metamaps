@@ -7,6 +7,7 @@
 #assety stuff
 public/assets
 public/metamaps_mobile
+public/api/index.html
 vendor/
 node_modules
 npm-debug.log

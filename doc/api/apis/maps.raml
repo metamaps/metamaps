@@ -1,5 +1,6 @@
-type: collection
+#type: collection
 get:
+  is: [ searchable: { searchFields: "name, desc" }, embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" }, orderable, pageable ]
   responses:
     200:
       body:
@@ -27,8 +28,9 @@ post:
         application/json:
           example: !include ../examples/map.json
 /{id}:
-  type: item
+  #type: item
   get:
+    is: [ embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" } ]
     responses:
       200:
         body:
@@ -40,16 +42,22 @@ post:
         properties:
           name:
             description: name
+            required: false
           desc:
             description: description
+            required: false
           permission:
             description: commons, public, or private
+            required: false
           screenshot:
             description: url to a screenshot of the map
+            required: false
           contributor_ids:
             description: the topic being linked from
+            required: false
           collaborator_ids:
             description: the topic being linked to
+            required: false
     responses:
       200:
         body:
@@ -61,16 +69,22 @@ post:
         properties:
           name:
             description: name
+            required: false
           desc:
             description: description
+            required: false
           permission:
             description: commons, public, or private
+            required: false
           screenshot:
             description: url to a screenshot of the map
+            required: false
           contributor_ids:
             description: the topic being linked from
+            required: false
           collaborator_ids:
             description: the topic being linked to
+            required: false
     responses:
       200:
         body:
