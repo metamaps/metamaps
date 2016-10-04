@@ -1,5 +1,6 @@
 #type: collection
 get:
+  is: [ embeddable: { embedFields: "user,map" }, orderable, pageable ]
   responses:
     200:
       body:
@@ -27,6 +28,7 @@ post:
 /{id}:
   #type: item
   get:
+    is: [ embeddable: { embedFields: "user,map" } ]
     responses:
       200:
         body:

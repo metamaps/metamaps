@@ -1,5 +1,6 @@
 #type: collection
 get:
+  is: [ searchable: { searchFields: "name, desc, link" }, embeddable: { embedFields: "user,metacode" }, orderable, pageable ]
   responses:
     200:
       body:
@@ -14,7 +15,8 @@ post:
         desc:
           description: description
         link:
-          description: (optional) link to content on the web
+          description: link to content on the web
+          required: false
         permission:
           description: commons, public, or private
         metacode_id:
@@ -27,6 +29,7 @@ post:
 /{id}:
   #type: item
   get:
+    is: [ embeddable: { embedFields: "user,metacode" } ]
     responses:
       200:
         body:

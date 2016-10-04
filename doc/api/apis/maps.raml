@@ -1,5 +1,6 @@
 #type: collection
 get:
+  is: [ searchable: { searchFields: "name, desc" }, embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" }, orderable, pageable ]
   responses:
     200:
       body:
@@ -29,6 +30,7 @@ post:
 /{id}:
   #type: item
   get:
+    is: [ embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" } ]
     responses:
       200:
         body:

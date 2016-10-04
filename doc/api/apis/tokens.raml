@@ -12,6 +12,7 @@ post:
           example: !include ../examples/token.json
 /my_tokens:
   get:
+    is: [ searchable: { searchFields: description }, pageable, orderable ]
     responses:
       200:
         body:

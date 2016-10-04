@@ -2,6 +2,10 @@
 module Api
   module V2
     class TokensController < RestfulController
+      def searchable_columns
+        [:description]
+      end
+
       def my_tokens
         authorize resource_class
         instantiate_collection

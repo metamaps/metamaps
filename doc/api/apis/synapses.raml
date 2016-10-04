@@ -1,5 +1,6 @@
 #type: collection
 get:
+  is: [ searchable: { searchFields: "desc" }, embeddable: { embedFields: "topic1,topic2,user" }, orderable, pageable ]
   responses:
     200:
       body:
@@ -29,6 +30,7 @@ post:
 /{id}:
   #type: item
   get:
+    is: [ embeddable: { embedFields: "topic1,topic2,user" } ]
     responses:
       200:
         body:
