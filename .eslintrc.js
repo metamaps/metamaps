@@ -11,5 +11,8 @@ module.exports = {
     "promise",
     "standard",
     "react"
-  ]
+  ],
+  "rules": {
+    "yoda": [2, "never", { "exceptRange": true }]
+  }
 }
