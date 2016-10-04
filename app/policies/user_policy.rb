@@ -1,14 +1,15 @@
+# frozen_string_literal: true
 class UserPolicy < ApplicationPolicy
   def index?
-    user.present?
+    true
   end
 
   def show?
-    user.present?
+    true
   end
 
   def create?
-    fail 'Create should be handled by Devise'
+    raise 'Create should be handled by Devise'
   end
 
   def update?
@@ -34,8 +35,7 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope.all if user.present?
-      scope.none
+      scope.all
     end
   end
 end

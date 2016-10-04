@@ -5,9 +5,9 @@ module Api
       def current
         @user = current_user
         authorize @user
-        return show
+        show # delegate to the normal show function
       end
-      
+
       private
 
       def searchable_columns
