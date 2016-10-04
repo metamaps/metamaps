@@ -1,0 +1,28 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "_id.json"
+    },
+    "name": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "string"
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "is_admin": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "avatar",
+    "generation"
+  ]
+}

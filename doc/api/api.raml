@@ -16,19 +16,23 @@ traits:
   searchable: !include traits/searchable.raml
 
 schemas:
-  topic: !include schemas/_topic.json
-  synapse: !include schemas/_synapse.json
   map: !include schemas/_map.json
   mapping: !include schemas/_mapping.json
+  metacode: !include schemas/_metacode.json
+  synapse: !include schemas/_synapse.json
   token: !include schemas/_token.json
+  topic: !include schemas/_topic.json
+  user: !include schemas/_user.json
 
 #resourceTypes:
 #  base: !include resourceTypes/base.raml
 #  item: !include resourceTypes/item.raml
 #  collection: !include resourceTypes/collection.raml
 
-/topics: !include apis/topics.raml
-/synapses: !include apis/synapses.raml
 /maps: !include apis/maps.raml
 /mappings: !include apis/mappings.raml
+/metacodes: !include api/metacodes.raml
+/synapses: !include apis/synapses.raml
 /tokens: !include apis/tokens.raml
+/topics: !include apis/topics.raml
+/users: !include apis/users.raml

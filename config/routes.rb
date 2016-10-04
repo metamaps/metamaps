@@ -63,12 +63,16 @@ Metamaps::Application.routes.draw do
 
   namespace :api, path: '/api', default: { format: :json } do
     namespace :v2, path: '/v2' do
+      resources :metacodes, only: [:index, :show]
+      resources :mappings, only: [:index, :create, :show, :update, :destroy]
       resources :maps, only: [:index, :create, :show, :update, :destroy]
       resources :synapses, only: [:index, :create, :show, :update, :destroy]
-      resources :topics, only: [:index, :create, :show, :update, :destroy]
-      resources :mappings, only: [:index, :create, :show, :update, :destroy]
       resources :tokens, only: [:create, :destroy] do
         get :my_tokens, on: :collection
+      end
+      resources :topics, only: [:index, :create, :show, :update, :destroy]
+      resources :users, only: [:index, :show] do
+        get :current, on: :collection
       end
     end
     namespace :v1, path: '/v1' do

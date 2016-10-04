@@ -1,0 +1,12 @@
+{
+  "name": "User Envelope",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "_user.json"
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

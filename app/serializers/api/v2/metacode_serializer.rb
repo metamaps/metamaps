@@ -4,9 +4,8 @@ module Api
     class MetacodeSerializer < ApplicationSerializer
       attributes :id,
                  :name,
-                 :manual_icon,
                  :color,
-                 :aws_icon
+                 :icon
     end
   end
 end

@@ -70,7 +70,8 @@ module Api
 
       def default_scope
         {
-          embeds: embeds
+          embeds: embeds,
+          current_user: current_user
         }
       end
 

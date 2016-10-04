@@ -1,0 +1,16 @@
+#type: collection
+get:
+  is: [ searchable: { searchFields: "name" }, orderable, pageable ]
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include ../examples/metacodes.json
+/{id}:
+  #type: item
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/metacode.json

@@ -1,0 +1,24 @@
+{
+  "name": "Metacode",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "_id.json"
+    },
+    "name": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "color",
+    "icon"
+  ]
+}
