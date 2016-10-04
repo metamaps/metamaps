@@ -3,6 +3,7 @@
     "id": 1,
     "name": "user",
     "avatar": "https://s3.amazonaws.com/metamaps-assets/site/user.png",
-    "generation": 0
+    "generation": 0,
+    "is_admin": false
   }
 }
