@@ -11,9 +11,11 @@ post:
     application/json:
       properties:
         desc:
-          description: name
+          description: text description of this synapse
+          required: false
         category:
-          description: from to or both
+          description: |
+            <code>from-to</code> or <code>both</code>
         permission:
           description: commons, public, or private
         topic1_id:
@@ -41,17 +43,24 @@ post:
       application/json:
         properties:
           desc:
-            description: name
+            description: text description of this synapse
+            required: false
           category:
-            description: from-to or both
+            description: |
+              <code>from-to</code> or <code>both</code>
+            required: false
           permission:
             description: commons, public, or private
+            required: false
           topic1_id:
             description: the topic being linked from
+            required: false
           topic2_id:
             description: the topic being linked to
+            required: false
           user_id:
             description: the creator of the topic
+            required: false
     responses:
       200:
         body:
@@ -62,17 +71,24 @@ post:
       application/json:
         properties:
           desc:
-            description: name
+            description: text description of this synapse
+            required: false
           category:
-            description: from-to or both
+            description: |
+              <code>from-to</code> or <code>both</code>
+            required: false
           permission:
             description: commons, public, or private
+            required: false
           topic1_id:
             description: the topic being linked from
+            required: false
           topic2_id:
             description: the topic being linked to
+            required: false
           user_id:
             description: the creator of the topic
+            required: false
     responses:
       200:
         body:
