@@ -41,6 +41,7 @@
     "chai": "^3.5.0",
     "eslint": "^3.5.0",
     "eslint-plugin-react": "^6.3.0",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "raml2html": "^4.0.0-beta5"
   }
 }

@@ -2,35 +2,29 @@
 ---
 title: Metamaps
 version: v2
-baseUri: http://metamaps.cc/api/v2
+baseUri: https://metamaps.cc/api/v2
 mediaType: application/json
 
 securitySchemes:
-  - oauth_2_0:
-      description: |
-        OAuth 2.0 implementation
-      type: OAuth 2.0
-      settings:
-        authorizationUri: https://metamaps.cc/api/v2/oauth/authorize
-        accessTokenUri: https://metamaps.cc/api/v2/oauth/token
-        authorizationGrants: [ authorization_code, password, client_credentials, implicit, refresh_token ]
+  oauth_2_0: !include securitySchemes/oauth_2_0.raml
+securedBy: [ oauth_2_0 ]
 
 traits:
-  - pageable: !include traits/pageable.raml
-  - orderable: !include traits/orderable.raml
-  - searchable: !include traits/searchable.raml
+  pageable: !include traits/pageable.raml
+  orderable: !include traits/orderable.raml
+  searchable: !include traits/searchable.raml
 
 schemas:
-  - topic: !include schemas/_topic.json
-  - synapse: !include schemas/_synapse.json
-  - map: !include schemas/_map.json
-  - mapping: !include schemas/_mapping.json
-  - token: !include schemas/_token.json
+  topic: !include schemas/_topic.json
+  synapse: !include schemas/_synapse.json
+  map: !include schemas/_map.json
+  mapping: !include schemas/_mapping.json
+  token: !include schemas/_token.json
 
-resourceTypes:
-  - base: !include resourceTypes/base.raml
-  - item: !include resourceTypes/item.raml
-  - collection: !include resourceTypes/collection.raml
+#resourceTypes:
+#  base: !include resourceTypes/base.raml
+#  item: !include resourceTypes/item.raml
+#  collection: !include resourceTypes/collection.raml
 
 /topics: !include apis/topics.raml
 /synapses: !include apis/synapses.raml
