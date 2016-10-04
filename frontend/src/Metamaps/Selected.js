@@ -1,6 +1,6 @@
 const Selected = {
   reset: function () {
-    var self = Metamaps.Selected
+    var self = Selected
     self.Nodes = []
     self.Edges = []
   },

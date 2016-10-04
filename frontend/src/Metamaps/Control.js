@@ -63,7 +63,7 @@ const Control = {
       return
     }
 
-    var r = confirm(outdent`
+    var r = window.confirm(outdent`
       You have ${ntext} and ${etext} selected. Are you sure you want
       to permanently delete them all? This will remove them from all
       maps they appear on.`)
@@ -456,7 +456,7 @@ const Control = {
     var message = nString + ' you can edit updated to ' + metacode.get('name')
     GlobalUI.notifyUser(message)
     Visualize.mGraph.plot()
-  },
+  }
 }
 
 export default Control

@@ -1,3 +1,5 @@
+/* global $, CanvasLoader */
+
 /* 
  * Metamaps.Erb
  */
@@ -43,7 +45,7 @@ const Account = {
 
     var file = $('#user_image')[0].files[0]
 
-    var reader = new FileReader()
+    var reader = new window.FileReader()
 
     reader.onload = function (e) {
       var $canvas = $('<canvas>').attr({
@@ -51,7 +53,7 @@ const Account = {
         height: 84
       })
       var context = $canvas[0].getContext('2d')
-      var imageObj = new Image()
+      var imageObj = new window.Image()
 
       imageObj.onload = function () {
         $('.userImageDiv canvas').remove()

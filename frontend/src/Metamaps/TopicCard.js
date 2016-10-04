@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global Metamaps, $, CanvasLoader, Countable, Hogan, embedly */
 
 import Active from './Active'
 import GlobalUI from './GlobalUI'

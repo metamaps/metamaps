@@ -1,6 +1,7 @@
 /* global Metamaps, $, Image, CanvasLoader */
 
 import _ from 'lodash'
+import outdent from 'outdent'
 
 import $jit from '../patched/JIT'
 
@@ -1323,16 +1324,26 @@ const JIT = {
     if (Active.Topic) {
       menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic<div class="rc-keyboard">Alt+E</div></li>'
     }
+
     menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>'
+
     if (Active.Mapper) {
-      var options = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
-                         <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li> \
-                         <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
-                     </ul>'
+      var options = outdent`
+        <ul>
+          <li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li>
+          <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li>
+          <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li>
+        </ul>`
 
       menustring += '<li class="rc-spacer"></li>'
 
-      menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + options + '<div class="expandLi"></div></li>'
+      menustring += outdent`
+        <li class="rc-permission">
+          <div class="rc-icon"></div>
+          Change permissions
+          ${options}
+          <div class="expandLi"></div>
+        </li>`
 
       var metacodeOptions = $('#metacodeOptions').html()
 
@@ -1345,10 +1356,11 @@ const JIT = {
 
       // set up the get sibling menu as a "lazy load"
       // only fill in the submenu when they hover over the get siblings list item
-      var siblingMenu = '<ul id="fetchSiblingList"> \
-                                <li class="fetchAll">All<div class="rc-keyboard">Alt+R</div></li> \
-                                <li id="loadingSiblings"></li> \
-                            </ul>'
+      var siblingMenu = outdent`
+        <ul id="fetchSiblingList">
+          <li class="fetchAll">All<div class="rc-keyboard">Alt+R</div></li>
+          <li id="loadingSiblings"></li>
+        </ul>`
       menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Reveal siblings' + siblingMenu + '<div class="expandLi"></div></li>'
     }
 
@@ -1571,10 +1583,12 @@ const JIT = {
     if (Active.Map && Active.Mapper) menustring += '<li class="rc-spacer"></li>'
 
     if (Active.Mapper) {
-      var permOptions = '<ul><li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li> \
-                         <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li> \
-                         <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
-                     </ul>'
+      var permOptions = outdent`
+        <ul>
+          <li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li>
+          <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li> \
+          <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li> \
+        </ul>`
 
       menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + permOptions + '<div class="expandLi"></div></li>'
     }
