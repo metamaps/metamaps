@@ -31,6 +31,7 @@
     "lodash": "4.16.1",
     "node-uuid": "1.4.7",
     "outdent": "0.2.1",
+    "raml2html": "^4.0.0-beta5",
     "react": "15.3.2",
     "react-dom": "15.3.2",
     "socket.io": "0.9.12",
@@ -41,7 +42,6 @@
     "chai": "^3.5.0",
     "eslint": "^3.5.0",
     "eslint-plugin-react": "^6.3.0",
-    "mocha": "^3.0.2",
-    "raml2html": "^4.0.0-beta5"
+    "mocha": "^3.0.2"
   }
 }

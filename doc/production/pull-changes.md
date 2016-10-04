@@ -26,6 +26,7 @@ Now that you have the code, run these commands:
     npm install
     rake db:migrate
     rake assets:precompile # includes `npm run build`
+    bin/build-apidocs.sh
     rake perms:fix
     passenger-config restart-app .
 
