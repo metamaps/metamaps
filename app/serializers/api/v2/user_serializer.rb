@@ -5,8 +5,10 @@ module Api
       attributes :id,
                  :name,
                  :avatar,
-                 :is_admin,
                  :generation
+
+      attribute :is_admin,
+                if: -> { scope[:show_is_admin] && scope[:current_user] == object }
 
       def avatar
         object.image.url(:sixtyfour)

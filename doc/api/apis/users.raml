@@ -1,0 +1,24 @@
+#type: collection
+get:
+  is: [ searchable: { searchFields: "name" }, orderable, pageable ]
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include ../examples/users.json
+/current:
+  #type: item
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/current_user.json
+/{id}:
+  #type: item
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/user.json
