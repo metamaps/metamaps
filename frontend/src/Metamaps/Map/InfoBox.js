@@ -343,7 +343,7 @@ const InfoBox = {
       permission: permission
     })
     Active.Map.updateMapWrapper()
-    shareable = permission === 'private' ? '' : 'shareable'
+    const shareable = permission === 'private' ? '' : 'shareable'
     $('.mapPermission').removeClass('commons public private minimize').addClass(permission)
     $('.mapPermission .permissionSelect').remove()
     $('.mapInfoBox').removeClass('shareable').addClass(shareable)
@@ -369,7 +369,7 @@ const InfoBox = {
       GlobalUI.notifyUser('Map eliminated!')
     }
     else if (!authorized) {
-      alert("Hey now. We can't just go around willy nilly deleting other people's maps now can we? Run off and find something constructive to do, eh?")
+      window.alert("Hey now. We can't just go around willy nilly deleting other people's maps now can we? Run off and find something constructive to do, eh?")
     }
   }
 }

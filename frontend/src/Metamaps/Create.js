@@ -169,15 +169,15 @@ const Create = {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
           url: '/topics/autocomplete_topic?term=%QUERY',
-          wildcard: '%QUERY',
-        },
+          wildcard: '%QUERY'
+        }
       })
 
       // initialize the autocomplete results for the metacode spinner
       $('#topic_name').typeahead(
         {
           highlight: true,
-          minLength: 2,
+          minLength: 2
         },
         [{
           name: 'topic_autocomplete',
@@ -186,7 +186,7 @@ const Create = {
           templates: {
             suggestion: function (s) {
               return Hogan.compile($('#topicAutocompleteTemplate').html()).render(s)
-            },
+            }
           },
           source: topicBloodhound,
         }]

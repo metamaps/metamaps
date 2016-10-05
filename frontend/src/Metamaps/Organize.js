@@ -1,5 +1,3 @@
-/* global $ */
-
 import _ from 'lodash'
 
 import $jit from '../patched/JIT'
@@ -44,7 +42,7 @@ const Organize = {
       var column = floor(width / cellWidth)
       var totalCells = row * column
 
-      if (totalCells)
+      if (totalCells) {
         Visualize.mGraph.graph.eachNode(function (n) {
           if (column == numColumns) {
             column = 0
@@ -56,6 +54,7 @@ const Organize = {
           n.setPos(newPos, 'end')
           column += 1
         })
+      }
       Visualize.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
     } else if (layout == 'radial') {
       var centerX = centerNode.getPos().x
@@ -112,7 +111,7 @@ const Organize = {
       console.log(lowX, lowY, highX, highY)
       var newOriginX = (lowX + highX) / 2
       var newOriginY = (lowY + highY) / 2
-    } else alert('please call function with a valid layout dammit!')
+    } else window.alert('please call function with a valid layout dammit!')
   }
 }
 

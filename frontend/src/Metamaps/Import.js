@@ -143,7 +143,7 @@ const Import = {
           // FALL THROUGH - if we're not sure what to do, pretend
           // we're on the TOPICS_NEED_HEADERS state and parse some headers
 
-        case STATES.TOPICS_NEED_HEADERS: // eslint-disable-line
+        case STATES.TOPICS_NEED_HEADERS: // eslint-disable-line no-fallthrough
           if (noblanks.length < 2) {
             self.abort('Not enough topic headers on line ' + index)
             state = STATES.ABORT
@@ -207,8 +207,8 @@ const Import = {
           }
           break
         case STATES.ABORT:
-
-        default:
+          // FALL THROUGH
+        default: // eslint-disable-line no-fallthrough
           self.abort('Invalid state while parsing import data. Check code.')
           state = STATES.ABORT
       }

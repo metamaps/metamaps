@@ -1,3 +1,5 @@
+/* global $ */
+
 const CheatSheet = {
   init: function () {
     // tab the cheatsheet

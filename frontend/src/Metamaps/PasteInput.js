@@ -13,16 +13,16 @@ const PasteInput = {
     // intercept dragged files
     // see http://stackoverflow.com/questions/6756583
     window.addEventListener("dragover", function(e) {
-      e = e || event;
+      e = e || window.event;
       e.preventDefault();
     }, false);
     window.addEventListener("drop", function(e) {
-      e = e || event;
+      e = e || window.event;
       e.preventDefault();
       var coords = Util.pixelsToCoords({ x: e.clientX, y: e.clientY })
       if (e.dataTransfer.files.length > 0) {
-        var fileReader = new FileReader()
-        var text = fileReader.readAsText(e.dataTransfer.files[0])
+        var fileReader = new window.FileReader()
+        fileReader.readAsText(e.dataTransfer.files[0])
         fileReader.onload = function(e) {
           var text = e.currentTarget.result
           if (text.substring(0,5) === '<?xml') {

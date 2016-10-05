@@ -230,7 +230,7 @@ const Map = {
   canEditNow: function () {
     var confirmString = "You've been granted permission to edit this map. "
     confirmString += 'Do you want to reload and enable realtime collaboration?'
-    var c = confirm(confirmString)
+    var c = window.confirm(confirmString)
     if (c) {
       Router.maps(Active.Map.id)
     }
@@ -256,10 +256,11 @@ const Map = {
     canvas.getSize = function () {
       if (this.size) return this.size
       var canvas = this.canvas
-      return this.size = {
+      this.size = {
         width: canvas.width,
         height: canvas.height
       }
+      return this.size
     }
     canvas.scale = function (x, y) {
       var px = this.scaleOffsetX * x,

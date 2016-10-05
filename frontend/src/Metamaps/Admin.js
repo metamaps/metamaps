@@ -41,7 +41,7 @@ const Admin = {
     var self = Admin
 
     if (self.selectMetacodes.length == 0) {
-      alert('Would you pretty please select at least one metacode for the set?')
+      window.alert('Would you pretty please select at least one metacode for the set?')
       return false
     }
   }

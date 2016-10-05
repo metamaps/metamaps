@@ -15,7 +15,7 @@ const Settings = {
       background: '#18202E',
       text: '#DDD'
     }
-  },
+  }
 }
 
 export default Settings
