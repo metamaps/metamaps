@@ -7,8 +7,13 @@ module Api
                  :desc,
                  :permission,
                  :screenshot,
+                 :starred,
                  :created_at,
                  :updated_at
+
+      def starred
+        object.starred_by_user?(scope[:current_user])
+      end
 
       def self.embeddable
         {

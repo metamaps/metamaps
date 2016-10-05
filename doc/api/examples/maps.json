@@ -6,6 +6,7 @@
       "desc": "Example map for the API",
       "permission": "commons",
       "screenshot": "https://s3.amazonaws.com/metamaps-assets/site/missing-map.png",
+      "starred": false,
       "created_at": "2016-03-26T08:02:05.379Z",
       "updated_at": "2016-03-27T07:20:18.047Z",
       "topic_ids": [

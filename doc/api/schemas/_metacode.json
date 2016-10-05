@@ -12,6 +12,7 @@
       "type": "string"
     },
     "icon": {
+      "format": "uri",
       "type": "string"
     }
   },

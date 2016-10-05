@@ -65,7 +65,10 @@ Metamaps::Application.routes.draw do
     namespace :v2, path: '/v2' do
       resources :metacodes, only: [:index, :show]
       resources :mappings, only: [:index, :create, :show, :update, :destroy]
-      resources :maps, only: [:index, :create, :show, :update, :destroy]
+      resources :maps, only: [:index, :create, :show, :update, :destroy] do
+        post :stars, to: 'stars#create', on: :member
+        delete :stars, to: 'stars#destroy', on: :member
+      end
       resources :synapses, only: [:index, :create, :show, :update, :destroy]
       resources :tokens, only: [:create, :destroy] do
         get :my_tokens, on: :collection

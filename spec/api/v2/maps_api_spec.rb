@@ -16,7 +16,7 @@ RSpec.describe 'maps API', type: :request do
   end
 
   it 'GET /api/v2/maps/:id' do
-    get "/api/v2/maps/#{map.id}"
+    get "/api/v2/maps/#{map.id}", params: { access_token: token }
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:map)
@@ -43,6 +43,23 @@ RSpec.describe 'maps API', type: :request do
 
     expect(response).to have_http_status(:no_content)
     expect(Map.count).to eq 0
+  end
+
+  it 'POST /api/v2/maps/:id/stars' do
+    post "/api/v2/maps/#{map.id}/stars", params: { access_token: token }
+    expect(response).to have_http_status(:success)
+    expect(response).to match_json_schema(:map)
+    expect(user.stars.count).to eq 1
+    expect(map.stars.count).to eq 1
+  end
+
+  it 'DELETE /api/v2/maps/:id/stars' do
+    create(:star, map: map, user: user)
+    delete "/api/v2/maps/#{map.id}/stars", params: { access_token: token }
+
+    expect(response).to have_http_status(:no_content)
+    expect(user.stars.count).to eq 0
+    expect(map.stars.count).to eq 0
   end
 
   context 'RAML example' do

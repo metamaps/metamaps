@@ -39,15 +39,8 @@ class Map < ApplicationRecord
     Perm.short(permission)
   end
 
-  # return an array of the contributors to the map
   def contributors
-    contributors = []
-
-    mappings.each do |m|
-      contributors.push(m.user) unless contributors.include?(m.user)
-    end
-
-    contributors
+    mappings.map(&:user).uniq
   end
 
   def editors
@@ -86,6 +79,10 @@ class Map < ApplicationRecord
 
   def updated_at_str
     updated_at.strftime('%m/%d/%Y')
+  end
+
+  def starred_by_user?(user)
+    user.stars.where(map: self).exists?
   end
 
   def as_json(_options = {})

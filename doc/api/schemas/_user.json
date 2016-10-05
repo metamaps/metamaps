@@ -9,6 +9,7 @@
       "type": "string"
     },
     "avatar": {
+      "format": "uri",
       "type": "string"
     },
     "generation": {

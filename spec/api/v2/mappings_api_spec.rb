@@ -16,7 +16,8 @@ RSpec.describe 'mappings API', type: :request do
   end
 
   it 'GET /api/v2/mappings/:id' do
-    get "/api/v2/mappings/#{mapping.id}"
+    get "/api/v2/mappings/#{mapping.id}", params: { access_token: token }
+
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:mapping)

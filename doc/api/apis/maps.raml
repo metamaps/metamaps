@@ -94,3 +94,15 @@ post:
     responses:
       204:
         description: No content
+  /stars:
+    post:
+      responses:
+        201:
+          description: Created
+          body:
+            application/json:
+              example: !include ../examples/map.json
+    delete:
+      responses:
+        204:
+          description: No content

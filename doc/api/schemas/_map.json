@@ -18,6 +18,9 @@
       "format": "uri",
       "type": "string"
     },
+    "starred": {
+      "type": "boolean"
+    },
     "created_at": {
       "$ref": "_datetimestamp.json"
     },
@@ -61,6 +64,7 @@
     "desc",
     "permission",
     "screenshot",
+    "starred",
     "created_at",
     "updated_at"
   ]
