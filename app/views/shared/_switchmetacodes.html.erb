@@ -7,10 +7,14 @@
 <% selectedSet = metacodes[0].include?("metacodeset") ? metacodes[0].sub("metacodeset-","")  : "custom" %>
 <% allMetacodeSets = MetacodeSet.order("name").all.to_a %>
 <% if selectedSet == "custom" 
-     index = allMetacodeSets.length
+     index = allMetacodeSets.length + 2
+   elsif selectedSet == 'Recent'
+     index = 0
+   elsif selectedSet == 'Most'
+     index = 1
    else
      set = MetacodeSet.find(selectedSet.to_i)
-     index = allMetacodeSets.index(set)   
+     index = allMetacodeSets.index(set) + 2 
    end %>
 <h3>Switch Metacode Set</h3>
 
@@ -18,11 +22,53 @@
         
 <div id="metacodeSwitchTabs">
   <ul>
+    <li><a href="#metacodeSwitchTabsRecent" data-set-id="recent" id="metacodeSetRecent">RECENTLY USED</a></li>
+    <li><a href="#metacodeSwitchTabsMost" data-set-id="most" id="metacodeSetMost">MOST USED</a></li>
     <% allMetacodeSets.each do |m| %>
     <li><a href="#metacodeSwitchTabs<%= m.id %>" data-set-id="<%= m.id %>"><%= m.name %></a></li>
     <% end %>
     <li><a href="#metacodeSwitchTabsCustom" data-set-id="custom" id="metacodeSetCustom">CUSTOM SELECTION</a></li>
   </ul>
+  <% recent = user_recent_metacodes() %>
+  <div id="metacodeSwitchTabsRecent" 
+       data-metacodes="<%= recent.map(&:id).join(',') %>">
+    <% @list = '' %>
+    <% recent.each_with_index do |m, index| %>
+      <% @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
+    <% end %>
+    <div class="metacodeSwitchTab">
+      <p class="setDesc">The 5 Metacodes you've used most recently.</p>
+      <div class="metacodeSetList">
+        <ul>
+          <%= @list.html_safe %>
+        </ul>
+        <div class="clearfloat"></div>
+      </div>
+    </div>
+    <button class="button" onclick="Metamaps.Create.updateMetacodeSet('Recent', 0, false);">
+        Switch Set
+    </button>
+  </div>
+  <% most_used = user_most_used_metacodes() %>
+  <div id="metacodeSwitchTabsMost" 
+       data-metacodes="<%= most_used.map(&:id).join(',') %>">
+    <% @list = '' %>
+    <% most_used.each_with_index do |m, index| %>
+      <% @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
+    <% end %>
+    <div class="metacodeSwitchTab">
+      <p class="setDesc">The 5 Metacodes you've used the most.</p>
+      <div class="metacodeSetList">
+        <ul>
+          <%= @list.html_safe %>
+        </ul>
+        <div class="clearfloat"></div>
+      </div>
+    </div>
+    <button class="button" onclick="Metamaps.Create.updateMetacodeSet('Most', 1, false);">
+        Switch Set
+    </button>
+  </div>
   <% allMetacodeSets.each_with_index do |m, localindex| %>
   <div id="metacodeSwitchTabs<%= m.id %>" 
        data-metacodes="<%= m.metacodes.map(&:id).join(',') %>">
@@ -39,7 +85,7 @@
         <div class="clearfloat"></div>
       </div>
     </div>
-    <button class="button" onclick="Metamaps.Create.updateMetacodeSet(<%= m.id %>, <%= localindex %>, false);">
+    <button class="button" onclick="Metamaps.Create.updateMetacodeSet(<%= m.id %>, <%= localindex + 2 %>, false);">
         Switch Set
     </button>
   </div>
@@ -62,7 +108,7 @@
           </ul>
           <div class="clearfloat"></div>
         </div>
-        <button class="button" onclick="Metamaps.Create.updateMetacodeSet('custom', <%= allMetacodeSets.length %>, true);">
+        <button class="button" onclick="Metamaps.Create.updateMetacodeSet('custom', <%= allMetacodeSets.length + 2 %>, true);">
             Switch to Custom Set
         </button>
     </div>

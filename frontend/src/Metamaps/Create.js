@@ -32,7 +32,7 @@ const Create = {
     // // SWITCHING METACODE SETS
 
     $('#metacodeSwitchTabs').tabs({
-      selected: self.selectedMetacodeSetIndex
+      active: self.selectedMetacodeSetIndex
     }).addClass('ui-tabs-vertical ui-helper-clearfix')
     $('#metacodeSwitchTabs .ui-tabs-nav li').removeClass('ui-corner-top').addClass('ui-corner-left')
     $('.customMetacodeList li').click(self.toggleMetacodeSelected) // within the custom metacode set tab
