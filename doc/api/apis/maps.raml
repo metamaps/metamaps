@@ -19,9 +19,9 @@ post:
         screenshot:
           description: url to a screenshot of the map
         contributor_ids:
-          description: the topic being linked from
+          description: the ids of people who have contributed to the map
         collaborator_ids:
-          description: the topic being linked to
+          description: the ids of people who have edit access to the map
   responses:
     201:
       body:
@@ -52,12 +52,6 @@ post:
           screenshot:
             description: url to a screenshot of the map
             required: false
-          contributor_ids:
-            description: the topic being linked from
-            required: false
-          collaborator_ids:
-            description: the topic being linked to
-            required: false
     responses:
       200:
         body:
@@ -78,12 +72,6 @@ post:
             required: false
           screenshot:
             description: url to a screenshot of the map
-            required: false
-          contributor_ids:
-            description: the topic being linked from
-            required: false
-          collaborator_ids:
-            description: the topic being linked to
             required: false
     responses:
       200:
