@@ -16,6 +16,7 @@ const Listeners = {
     $(document).on('keydown', function (e) {
       if (!(Active.Map || Active.Topic)) return
 
+      const creatingTopic = e.target.id === 'topic_name'
       switch (e.which) {
         case 13: // if enter key is pressed
           // prevent topic creation if sending a message
@@ -28,16 +29,16 @@ const Listeners = {
           JIT.escKeyHandler()
           break
         case 37: // if Left arrow key is pressed
-          Visualize.mGraph.canvas.translate(-20, 0)
+          if (!creatingTopic) Visualize.mGraph.canvas.translate(-20, 0)
           break
         case 38: // if Up arrow key is pressed
-          Visualize.mGraph.canvas.translate(0, -20)
+          if (!creatingTopic) Visualize.mGraph.canvas.translate(0, -20)
           break
         case 39: // if Right arrow key is pressed
-          Visualize.mGraph.canvas.translate(20, 0)
+          if (!creatingTopic) Visualize.mGraph.canvas.translate(20, 0)
           break
         case 40: // if Down arrow key is pressed
-          Visualize.mGraph.canvas.translate(0, 20)
+          if (!creatingTopic) Visualize.mGraph.canvas.translate(0, 20)
           break
         case 65: // if a or A is pressed
           if (e.ctrlKey) {
