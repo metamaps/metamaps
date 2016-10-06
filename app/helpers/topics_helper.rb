@@ -4,6 +4,7 @@ module TopicsHelper
   def autocomplete_array_json(topics)
     topics.map do |t|
       is_map = t.is_a?(Map)
+      metamapMetacode = Metacode.find_by_name('Metamap')
       {
         id: t.id,
         label: t.name,
@@ -16,7 +17,7 @@ module TopicsHelper
         rtype: is_map ? 'map' : 'topic',
         inmaps: is_map ? [] : t.inmaps,
         inmapsLinks: is_map ? [] : t.inmapsLinks,
-        type: is_map ? metamapsMetacode.name : t.metacode.name,
+        type: is_map ? metamapMetacode.name : t.metacode.name,
         typeImageURL: is_map ? metamapMetacode.icon : t.metacode.icon,
         mapCount: is_map ? 0 : t.maps.count,
         synapseCount: is_map ? 0 : t.synapses.count,
