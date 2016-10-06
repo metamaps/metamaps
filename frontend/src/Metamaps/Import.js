@@ -27,7 +27,7 @@ const Import = {
     'id', 'name', 'metacode', 'x', 'y', 'description', 'link', 'permission'
   ],
   synapseWhitelist: [
-    'topic1', 'topic2', 'category', 'desc', 'description', 'permission'
+    'topic1', 'topic2', 'category', 'direction', 'desc', 'description', 'permission'
   ],
   cidMappings: {}, // to be filled by import_id => cid mappings
 
@@ -59,7 +59,7 @@ const Import = {
         console.warn(err)
         return topicsPromise.resolve([])
       }
-      topicsPromise.resolve(data.map(row => self.normalizeKeys(row)))
+      topicsPromise.resolve(data)
     })
 
     const synapsesPromise = $.Deferred()
@@ -68,7 +68,7 @@ const Import = {
         console.warn(err)
         return synapsesPromise.resolve([])
       }
-      synapsesPromise.resolve(data.map(row => self.normalizeKeys(row)))
+      synapsesPromise.resolve(data)
     })
 
     $.when(topicsPromise, synapsesPromise).done((topics, synapses) => {
@@ -83,8 +83,8 @@ const Import = {
 
   handle: function(results) {
     var self = Import
-    var topics = results.topics
-    var synapses = results.synapses
+    var topics = results.topics.map(topic => self.normalizeKeys(topic))
+    var synapses = results.synapses.map(synapse => self.normalizeKeys(synapse))
 
     if (topics.length > 0 || synapses.length > 0) {
       if (window.confirm('Are you sure you want to create ' + topics.length +
@@ -149,7 +149,7 @@ const Import = {
             state = STATES.ABORT
           }
           topicHeaders = line.map(function (header, index) {
-            return header.toLowerCase().replace('description', 'desc')
+            return self.normalizeKey(header)
           })
           state = STATES.TOPICS
           break
@@ -160,7 +160,7 @@ const Import = {
             state = STATES.ABORT
           }
           synapseHeaders = line.map(function (header, index) {
-            return header.toLowerCase().replace('description', 'desc')
+            return self.normalizeKey(header)
           })
           state = STATES.SYNAPSES
           break
@@ -406,15 +406,20 @@ const Import = {
       .toLowerCase()
   },
 
+  normalizeKey: function(key) {
+    let newKey = key.toLowerCase()
+    newKey = newKey.replace(/\s/g, '') // remove whitespace
+    if (newKey === 'url') newKey = 'link'
+    if (newKey === 'title') newKey = 'name'
+    if (newKey === 'description') newKey = 'desc'
+    if (newKey === 'direction') newKey = 'category'
+    return newKey
+  },
 
   // thanks to http://stackoverflow.com/a/25290114/5332286
   normalizeKeys: function(obj) {
     return _.transform(obj, (result, val, key) => {
-      let newKey = key.toLowerCase()
-      newKey = newKey.replace(/\s/g, '') // remove whitespace
-      if (newKey === 'url') key = 'link'
-      if (newKey === 'title') key = 'name'
-      if (newKey === 'description') key = 'desc'
+      const newKey = Import.normalizeKey(key)
       result[newKey] = val
     })
   }
