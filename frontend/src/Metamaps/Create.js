@@ -194,6 +194,7 @@ const Create = {
 
       // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
       $('#topic_name').bind('typeahead:select', function (event, datum, dataset) {
+        Create.newTopic.beingCreated = false
         if (datum.rtype === 'topic') {
           Topic.getTopicFromAutocomplete(datum.id)
         } else if (datum.rtype === 'map') {
@@ -235,19 +236,20 @@ const Create = {
       GlobalUI.hideDiv('#instructions')
     },
     hide: function (force) {
-      if (Create.newTopic.beingCreated === false) return
       if (force || !Create.newTopic.pinned) {
         $('#new_topic').fadeOut('fast')
-        Create.newTopic.beingCreated = false
       }
       if (force) {
         $('.pinCarousel').removeClass('isPinned')
         Create.newTopic.pinned = false
       }
-      $('#topic_name').typeahead('val', '')
       if (Metamaps.Topics.length === 0) {
         GlobalUI.showDiv('#instructions')
       }
+      Create.newTopic.beingCreated = false
+    },
+    reset: function () {
+      $('#topic_name').typeahead('val', '')
     }
   },
   newSynapse: {
