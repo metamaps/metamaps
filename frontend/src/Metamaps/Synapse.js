@@ -19,35 +19,21 @@ import Visualize from './Visualize'
  *  - Metamaps.Topics
  */
 
+const noOp = () => {}
 const Synapse = {
   // this function is to retrieve a synapse JSON object from the database
   // @param id = the id of the synapse to retrieve
-  get: function (id, callback) {
+  get: function (id, callback = noOp) {
     // if the desired topic is not yet in the local topic repository, fetch it
     if (Metamaps.Synapses.get(id) == undefined) {
-      if (!callback) {
-        var e = $.ajax({
-          url: '/synapses/' + id + '.json',
-          async: false
-        })
-        Metamaps.Synapses.add($.parseJSON(e.responseText))
-        return Metamaps.Synapses.get(id)
-      } else {
-        return $.ajax({
-          url: '/synapses/' + id + '.json',
-          success: function (data) {
-            Metamaps.Synapses.add(data)
-            callback(Metamaps.Synapses.get(id))
-          }
-        })
-      }
-    } else {
-      if (!callback) {
-        return Metamaps.Synapses.get(id)
-      } else {
-        return callback(Metamaps.Synapses.get(id))
-      }
-    }
+      $.ajax({
+        url: '/synapses/' + id + '.json',
+        success: function (data) {
+          Metamaps.Synapses.add(data)
+          callback(Metamaps.Synapses.get(id))
+        }
+      })
+    } else callback(Metamaps.Synapses.get(id))
   },
   /*
    *
@@ -152,21 +138,19 @@ const Synapse = {
       node1,
       node2
 
-    var synapse = self.get(id)
-
-    var mapping = new Metamaps.Backbone.Mapping({
-      mappable_type: 'Synapse',
-      mappable_id: synapse.id,
+    self.get(id, synapse => {
+      var mapping = new Metamaps.Backbone.Mapping({
+        mappable_type: 'Synapse',
+        mappable_id: synapse.id,
+      })
+      Metamaps.Mappings.add(mapping)
+      topic1 = Metamaps.Topics.get(Create.newSynapse.topic1id)
+      node1 = topic1.get('node')
+      topic2 = Metamaps.Topics.get(Create.newSynapse.topic2id)
+      node2 = topic2.get('node')
+      Create.newSynapse.hide()
+      self.renderSynapse(mapping, synapse, node1, node2, true)
     })
-    Metamaps.Mappings.add(mapping)
-
-    topic1 = Metamaps.Topics.get(Create.newSynapse.topic1id)
-    node1 = topic1.get('node')
-    topic2 = Metamaps.Topics.get(Create.newSynapse.topic2id)
-    node2 = topic2.get('node')
-    Create.newSynapse.hide()
-
-    self.renderSynapse(mapping, synapse, node1, node2, true)
   }
 }
 

@@ -85,46 +85,6 @@ _Backbone.Map = Backbone.Model.extend({
   getUser: function () {
     return Mapper.get(this.get('user_id'))
   },
-  fetchContained: function () {
-    var bb = _Backbone
-    var that = this
-    var start = function (data) {
-      that.set('mappers', new bb.MapperCollection(data.mappers))
-      that.set('topics', new bb.TopicCollection(data.topics))
-      that.set('synapses', new bb.SynapseCollection(data.synapses))
-      that.set('mappings', new bb.MappingCollection(data.mappings))
-    }
-
-    $.ajax({
-      url: '/maps/' + this.id + '/contains.json',
-      success: start,
-      async: false
-    })
-  },
-  getTopics: function () {
-    if (!this.get('topics')) {
-      this.fetchContained()
-    }
-    return this.get('topics')
-  },
-  getSynapses: function () {
-    if (!this.get('synapses')) {
-      this.fetchContained()
-    }
-    return this.get('synapses')
-  },
-  getMappings: function () {
-    if (!this.get('mappings')) {
-      this.fetchContained()
-    }
-    return this.get('mappings')
-  },
-  getMappers: function () {
-    if (!this.get('mappers')) {
-      this.fetchContained()
-    }
-    return this.get('mappers')
-  },
   updateView: function () {
     var map = Active.Map
     var isActiveMap = this.id === map.id

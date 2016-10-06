@@ -49,7 +49,7 @@ const AutoLayout = {
       }
     }
 
-    if (opts.map && self.coordsTaken(nextX, nextY, opts.map)) {
+    if (opts.mappings && self.coordsTaken(nextX, nextY, opts.mappings)) {
       // check if the coordinate is already taken on the current map
       return self.getNextCoord(opts)
     } else {
@@ -59,8 +59,7 @@ const AutoLayout = {
       }
     }
   },
-  coordsTaken: function (x, y, map) {
-    const mappings = map.getMappings()
+  coordsTaken: function (x, y, mappings) {
     if (mappings.findWhere({ xloc: x, yloc: y })) {
       return true
     } else {

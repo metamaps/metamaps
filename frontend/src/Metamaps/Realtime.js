@@ -981,7 +981,6 @@ const Realtime = {
           else if (!couldEditBefore && canEditNow) {
             Map.canEditNow()
           } else {
-            model.fetchContained()
             model.trigger('changeByOther')
           }
         }

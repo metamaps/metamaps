@@ -28,37 +28,21 @@ import Visualize from './Visualize'
  *  - Metamaps.Synapses
  *  - Metamaps.Topics
  */
-
+const noOp = () => {}
 const Topic = {
   // this function is to retrieve a topic JSON object from the database
   // @param id = the id of the topic to retrieve
-  get: function (id, callback) {
+  get: function (id, callback = noOp) {
     // if the desired topic is not yet in the local topic repository, fetch it
     if (Metamaps.Topics.get(id) == undefined) {
-      // console.log("Ajax call!")
-      if (!callback) {
-        var e = $.ajax({
-          url: '/topics/' + id + '.json',
-          async: false
-        })
-        Metamaps.Topics.add($.parseJSON(e.responseText))
-        return Metamaps.Topics.get(id)
-      } else {
-        return $.ajax({
-          url: '/topics/' + id + '.json',
-          success: function (data) {
-            Metamaps.Topics.add(data)
-            callback(Metamaps.Topics.get(id))
-          }
-        })
-      }
-    } else {
-      if (!callback) {
-        return Metamaps.Topics.get(id)
-      } else {
-        return callback(Metamaps.Topics.get(id))
-      }
-    }
+      $.ajax({
+        url: '/topics/' + id + '.json',
+        success: function (data) {
+          Metamaps.Topics.add(data)
+          callback(Metamaps.Topics.get(id))
+        }
+      })
+    } else callback(Metamaps.Topics.get(id))
   },
   launch: function (id) {
     var bb = Metamaps.Backbone
@@ -192,7 +176,7 @@ const Topic = {
   },
 
   // opts is additional options in a hash
-  // TODO: move createNewInDB and permitCerateSYnapseAfter into opts
+  // TODO: move createNewInDB and permitCreateSynapseAfter into opts
   renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter, opts = {}) {
     var self = Topic
 
@@ -335,7 +319,7 @@ const Topic = {
     Metamaps.Topics.add(topic)
 
     if (Create.newTopic.pinned) {
-      var nextCoords = AutoLayout.getNextCoord()
+      var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
     }
     var mapping = new Metamaps.Backbone.Mapping({
       xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
@@ -357,40 +341,38 @@ const Topic = {
 
     Create.newTopic.hide()
 
-    var topic = self.get(id)
+    self.get(id, (topic) => {
+      if (Create.newTopic.pinned) {
+        var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+      }
+      var mapping = new Metamaps.Backbone.Mapping({
+        xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
+        yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
+        mappable_type: 'Topic',
+        mappable_id: topic.id,
+      })
+      Metamaps.Mappings.add(mapping)
 
-    if (Create.newTopic.pinned) {
-      var nextCoords = AutoLayout.getNextCoord()
-    }
-    var mapping = new Metamaps.Backbone.Mapping({
-      xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
-      yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
-      mappable_type: 'Topic',
-      mappable_id: topic.id,
+      self.renderTopic(mapping, topic, true, true)
     })
-    Metamaps.Mappings.add(mapping)
-
-    self.renderTopic(mapping, topic, true, true)
   },
   getTopicFromSearch: function (event, id) {
     var self = Topic
 
     $(document).trigger(Map.events.editedByActiveMapper)
 
-    var topic = self.get(id)
-
-    var nextCoords = AutoLayout.getNextCoord()
-    var mapping = new Metamaps.Backbone.Mapping({
-      xloc: nextCoords.x,
-      yloc: nextCoords.y,
-      mappable_type: 'Topic',
-      mappable_id: topic.id,
+    self.get(id, (topic) => {
+      var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+      var mapping = new Metamaps.Backbone.Mapping({
+        xloc: nextCoords.x,
+        yloc: nextCoords.y,
+        mappable_type: 'Topic',
+        mappable_id: topic.id,
+      })
+      Metamaps.Mappings.add(mapping)
+      self.renderTopic(mapping, topic, true, true)
+      GlobalUI.notifyUser('Topic was added to your map!')
     })
-    Metamaps.Mappings.add(mapping)
-
-    self.renderTopic(mapping, topic, true, true)
-
-    GlobalUI.notifyUser('Topic was added to your map!')
 
     event.stopPropagation()
     event.preventDefault()
