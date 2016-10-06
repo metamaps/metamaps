@@ -20,7 +20,7 @@ class TopicsController < ApplicationController
       @topics = []
       @maps = []
     end
-    @all= @topics.concat(@maps).sort { |a, b| a.name <=> b.name }
+    @all= @topics.to_a.concat(@maps.to_a).sort { |a, b| a.name <=> b.name }
     
     render json: autocomplete_array_json(@all)
   end
