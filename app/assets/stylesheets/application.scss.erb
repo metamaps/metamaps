@@ -2049,17 +2049,17 @@ and it won't be important on password protected instances */
     left: 0;
     width: 100%;
     height: 100%;
-    position: fixed;
+    position: absolute;
     z-index: 1000000;
     display: none;
 }
 #lightbox_main {
     width: 800px;
-    height: auto;
     margin: 0 auto;
     z-index: 2;
     position: relative;
-    top: 50%;
+    top: 5vh;
+    height: 90vh;
     background-color: transparent;
     color: black;
 }
@@ -2098,8 +2098,11 @@ and it won't be important on password protected instances */
     background-position: center center;
 }
 #lightbox_content {
-    width: 552px;
-    height: 434px;
+    width: 800px;
+    height: 500px;
+    max-height: 90vh;
+    box-sizing: border-box;
+    overflow-y: auto;
     background-color: #e0e0e0;
     padding: 64px 124px 64px 124px;
     box-shadow: 0px 6px 3px rgba(0, 0, 0, 0.23), 10px 10px 10px rgba(0, 0, 0, 0.19);
