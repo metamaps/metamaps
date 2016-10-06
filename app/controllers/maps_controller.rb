@@ -116,8 +116,12 @@ class MapsController < ApplicationController
 
   # GET maps/:id/export
   def export
-    exporter = MapExportService.new(current_user, @map, base_url: request.base_url)
-
+    topic_ids = params[:topic_ids].split(',').map(&:to_i)
+    synapse_ids = params[:synapse_ids].split(',').map(&:to_i)
+    exporter = MapExportService.new(current_user, @map,
+                                    topic_ids: topic_ids,
+                                    synapse_ids: synapse_ids,
+                                    base_url: request.base_url)
     respond_to do |format|
       format.json { render json: exporter.json }
       format.csv { send_data exporter.csv }

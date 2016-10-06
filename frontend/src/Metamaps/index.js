@@ -7,6 +7,7 @@ import Control from './Control'
 import Create from './Create'
 import DataModel from './DataModel'
 import Debug from './Debug'
+import Export from './Export'
 import Filter from './Filter'
 import GlobalUI, {
   Notifications, ReactApp, Search, CreateMap, ImportDialog
@@ -40,6 +41,7 @@ Metamaps.Control = Control
 Metamaps.Create = Create
 Metamaps.DataModel = DataModel
 Metamaps.Debug = Debug
+Metamaps.Export = Export
 Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
 Metamaps.GlobalUI.Notifications = Notifications

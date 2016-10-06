@@ -4,6 +4,7 @@ import Active from './Active'
 import Create from './Create'
 import Control from './Control'
 import DataModel from './DataModel'
+import Export from './Export'
 import JIT from './JIT'
 import Realtime from './Realtime'
 import Selected from './Selected'
@@ -72,6 +73,11 @@ const Listeners = {
             Visualize.mGraph.plot()
           }
 
+          break
+        case 67: // if c or C is pressed
+          if (e.ctrlKey && e.target.tagName === 'BODY') {
+            Export.copySelection()
+          }
           break
         case 68: // if d or D is pressed
           if (e.ctrlKey || e.metaKey) {
