@@ -253,12 +253,16 @@ const Import = {
 
     parsedSynapses.forEach(function (synapse) {
       // only createSynapseWithParameters once both topics are persisted
+      // if there isn't a cidMapping, check by topic name instead
       var topic1 = Metamaps.Topics.get(self.cidMappings[synapse.topic1])
+      if (!topic1) topic1 = Metamaps.Topics.findWhere({ name: synapse.topic1 })
       var topic2 = Metamaps.Topics.get(self.cidMappings[synapse.topic2])
+      if (!topic1) topic1 = Metamaps.Topics.findWhere({ name: synapse.topic1 })
+
       if (!topic1 || !topic2) {
         console.error("One of the two topics doesn't exist!")
         console.error(synapse)
-        return true
+        return // next
       }
 
       // ensure imported topics have a chance to get a real id attr before creating synapses
@@ -407,6 +411,7 @@ const Import = {
   normalizeKeys: function(obj) {
     return _.transform(obj, (result, val, key) => {
       let newKey = key.toLowerCase()
+      newKey = newKey.replace(/\s/g, '') // remove whitespace
       if (newKey === 'url') key = 'link'
       if (newKey === 'title') key = 'name'
       if (newKey === 'description') key = 'desc'
