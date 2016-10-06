@@ -10,12 +10,19 @@ class TopicsController < ApplicationController
   # GET /topics/autocomplete_topic
   def autocomplete_topic
     term = params[:term]
-    @topics = if term && !term.empty?
-                policy_scope(Topic.where('LOWER("name") like ?', term.downcase + '%')).order('"name"')
-              else
-                []
-              end
-    render json: autocomplete_array_json(@topics)
+    if term && !term.empty?
+      @topics = policy_scope(Topic.where('LOWER("name") like ?', term.downcase + '%')).order('"name"')
+      @mapTopics = @topics.select { |t| t.metacode.name == 'Metamap' }
+      # prioritize topics which point to maps, over maps
+      @exclude = @mapTopics.length > 0 ? @mapTopics.map(&:name) : ['']
+      @maps = policy_scope(Map.where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', @exclude)).order('"name"')
+    else
+      @topics = []
+      @maps = []
+    end
+    @all= @topics.concat(@maps).sort { |a, b| a.name <=> b.name }
+    
+    render json: autocomplete_array_json(@all)
   end
 
   # GET topics/:id

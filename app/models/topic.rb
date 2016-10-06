@@ -15,6 +15,8 @@ class Topic < ApplicationRecord
 
   belongs_to :metacode
 
+  before_create :create_metamap?
+
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
 
@@ -128,4 +130,12 @@ class Topic < ApplicationRecord
   def mk_permission
     Perm.short(permission)
   end
+
+  protected
+    def create_metamap?
+      if link == '' and metacode.name == 'Metamap'
+        @map = Map.create({ name: name, permission: permission, desc: '', arranged: true, user_id: user_id })
+        self.link = Rails.application.routes.url_helpers.map_url(:host => ENV['MAILER_DEFAULT_URL'], :id => @map.id)
+      end
+    end
 end

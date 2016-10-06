@@ -356,6 +356,37 @@ const Topic = {
       self.renderTopic(mapping, topic, true, true)
     })
   },
+  getMapFromAutocomplete: function (data) {
+    var self = Metamaps.Topic
+
+    // hide the 'double-click to add a topic' message
+    Metamaps.GlobalUI.hideDiv('#instructions')
+
+    $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
+
+    var metacode = Metamaps.Metacodes.findWhere({ name: 'Metamap' })
+
+    var topic = new Metamaps.Backbone.Topic({
+      name: data.name,
+      metacode_id: metacode.id,
+      defer_to_map_id: Metamaps.Active.Map.id,
+      link: window.location.origin + '/maps/' + data.id
+    })
+    Metamaps.Topics.add(topic)
+
+    var mapping = new Metamaps.Backbone.Mapping({
+      xloc: Metamaps.Create.newTopic.x,
+      yloc: Metamaps.Create.newTopic.y,
+      mappable_id: topic.cid,
+      mappable_type: 'Topic',
+    })
+    Metamaps.Mappings.add(mapping)
+
+    // these can't happen until the value is retrieved, which happens in the line above
+    Metamaps.Create.newTopic.hide()
+
+    self.renderTopic(mapping, topic, true, true) // this function also includes the creation of the topic in the database
+  },
   getTopicFromSearch: function (event, id) {
     var self = Topic
 

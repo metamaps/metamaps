@@ -3,21 +3,23 @@ module TopicsHelper
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_array_json(topics)
     topics.map do |t|
+      is_map = t.is_a?(Map)
       {
         id: t.id,
         label: t.name,
         value: t.name,
         description: t.desc ? t.desc&.truncate(70) : '', # make this return matched results
-        type: t.metacode.name,
-        typeImageURL: t.metacode.icon,
-        permission: t.permission,
-        mapCount: t.maps.count,
-        synapseCount: t.synapses.count,
         originator: t.user.name,
         originatorImage: t.user.image.url(:thirtytwo),
-        rtype: :topic,
-        inmaps: t.inmaps,
-        inmapsLinks: t.inmapsLinks
+        permission: t.permission,
+
+        rtype: is_map ? 'map' : 'topic',
+        inmaps: is_map ? [] : t.inmaps,
+        inmapsLinks: is_map ? [] : t.inmapsLinks
+        type: is_map ? metamapsMetacode.name : t.metacode.name,
+        typeImageURL: is_map ? metamapMetacode.icon : t.metacode.icon,
+        mapCount: is_map ? 0 : t.maps.count,
+        synapseCount: is_map ? 0 : t.synapses.count,
       }
     end
   end

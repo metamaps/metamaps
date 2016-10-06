@@ -135,8 +135,12 @@ const TopicCard = {
           loader.setRange(0.9); // default is 1.3
           loader.show() // Hidden by default
           var e = embedly('card', document.getElementById('embedlyLink'))
-          if (!e) {
+          if (!e && Metamaps.Erb.RAILS_ENV != 'development') {
             self.handleInvalidLink()
+          }
+          else if (!e) {
+            $('#embedlyLink').attr('target', '_blank').html(topic.get('link')).show()
+            $('#embedlyLinkLoader').hide()
           }
         }
       }, 100)
@@ -154,8 +158,11 @@ const TopicCard = {
       loader.show() // Hidden by default
       var e = embedly('card', document.getElementById('embedlyLink'))
       self.showLinkRemover()
-      if (!e) {
+      if (!e && Metamaps.Erb.RAILS_ENV != 'development') {
         self.handleInvalidLink()
+      } else if (!e) {
+        $('#embedlyLink').attr('target', '_blank').html(topic.get('link')).show()
+        $('#embedlyLinkLoader').hide()
       }
     }
 

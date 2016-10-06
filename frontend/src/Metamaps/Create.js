@@ -194,7 +194,14 @@ const Create = {
 
       // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
       $('#topic_name').bind('typeahead:select', function (event, datum, dataset) {
-        Topic.getTopicFromAutocomplete(datum.id)
+        if (datum.rtype === 'topic') {
+          Topic.getTopicFromAutocomplete(datum.id)
+        } else if (datum.rtype === 'map') {
+          Topic.getMapFromAutocomplete({
+            id: datum.id,
+            name: datum.label
+          })
+        }
       })
 
       // initialize metacode spinner and then hide it
