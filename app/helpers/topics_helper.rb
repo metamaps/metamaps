@@ -15,7 +15,7 @@ module TopicsHelper
 
         rtype: is_map ? 'map' : 'topic',
         inmaps: is_map ? [] : t.inmaps,
-        inmapsLinks: is_map ? [] : t.inmapsLinks
+        inmapsLinks: is_map ? [] : t.inmapsLinks,
         type: is_map ? metamapsMetacode.name : t.metacode.name,
         typeImageURL: is_map ? metamapMetacode.icon : t.metacode.icon,
         mapCount: is_map ? 0 : t.maps.count,
