@@ -124,6 +124,7 @@ const Listeners = {
 
     $(window).resize(function () {
       if (Visualize && Visualize.mGraph){
+        //Find the current canvas scale and map-coordinate at the centre of the user's screen
         var canvas = Visualize.mGraph.canvas,
           scaleX = canvas.scaleOffsetX,
           scaleY = canvas.scaleOffsetY,
@@ -131,8 +132,10 @@ const Listeners = {
           centrePixY = Visualize.mGraph.canvas.canvases[0].size.height / 2,
           centreCoords = Util.pixelsToCoords({x:centrePixX ,y:centrePixY});
         
+        //Resize the canvas to fill the new indow size, based on how JIT works, this also resets the map back to scale 1 and tranlations = 0
         Visualize.mGraph.canvas.resize($(window).width(), $(window).height())
   
+        //Return the map to the original scale, and then put the previous central map-coordinate back to the centre of user's newly resized screen
         canvas.scale(scaleX,scaleY);
         var newCentrePixX = Visualize.mGraph.canvas.canvases[0].size.width / 2,
             newCentrePixY = Visualize.mGraph.canvas.canvases[0].size.height / 2,
