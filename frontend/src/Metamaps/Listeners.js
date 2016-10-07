@@ -1,7 +1,5 @@
 /* global $ */
 
-import clipboard from 'clipboard-js'
-
 import Active from './Active'
 import Create from './Create'
 import Control from './Control'
@@ -94,7 +92,8 @@ const Listeners = {
 
           break
         case 67: // if c or C is pressed
-          if (e.ctrlKey && e.target.tagName === 'BODY') {
+          // metaKey is OSX command key for Cmd+C
+          if ((e.ctrlKey || e.metaKey) && e.target.tagName === 'BODY') {
             Export.copySelection()
           }
           break

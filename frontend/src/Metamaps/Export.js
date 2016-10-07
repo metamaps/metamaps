@@ -11,7 +11,9 @@ import Selected from './Selected'
 
 const Export = {
   data: null,
-  copySelection: function() {
+  copySelection: function () {
+    // clipboard.copy can't be called in a different callback - it has to be directly
+    // inside an event listener. So to work around this, we require two Ctrl+C presses
     if (Export.data === null) {
       Export.loadCopyData()
     } else {
@@ -27,16 +29,16 @@ const Export = {
     }
   },
 
-  loadCopyData: function() {
+  loadCopyData: function () {
     if (!Active.Map) return // someday we can expand this
     const topics = Selected.Nodes.map(node => node.getData('topic').id)
 
     // deselect synapses not joined to a selected topic
     Selected.Edges.slice(0).forEach(edge => {
       const synapse = edge.getData('synapses')[edge.getData('displayIndex')]
-      const topic1_id = synapse.get('topic1_id')
-      const topic2_id = synapse.get('topic2_id')
-      if (topics.indexOf(topic1_id) === -1 || topics.indexOf(topic2_id) === -1) {
+      const topic1Id = synapse.get('topic1_id')
+      const topic2Id = synapse.get('topic2_id')
+      if (topics.indexOf(topic1Id) === -1 || topics.indexOf(topic2Id) === -1) {
         Control.deselectEdge(edge)
       }
     })
@@ -44,7 +46,7 @@ const Export = {
     const synapses = Selected.Edges.map(edge => {
       return edge.getData('synapses')[edge.getData('displayIndex')].id
     })
-    
+
     const url = `/maps/${Active.Map.id}/export.json`
     const query = `topic_ids=${topics.join(',')}&synapse_ids=${synapses.join(',')}`
     $.ajax(`${url}?${query}`, {
