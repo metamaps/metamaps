@@ -128,17 +128,17 @@ const Listeners = {
         var canvas = Visualize.mGraph.canvas,
           scaleX = canvas.scaleOffsetX,
           scaleY = canvas.scaleOffsetY,
-          centrePixX = Visualize.mGraph.canvas.canvases[0].size.width / 2,
-          centrePixY = Visualize.mGraph.canvas.canvases[0].size.height / 2,
+          centrePixX = canvas.canvases[0].size.width / 2,
+          centrePixY = canvas.canvases[0].size.height / 2,
           centreCoords = Util.pixelsToCoords({x:centrePixX ,y:centrePixY});
         
         //Resize the canvas to fill the new window size. Based on how JIT works, this also resets the map back to scale 1 and tranlations = 0
-        Visualize.mGraph.canvas.resize($(window).width(), $(window).height())
+        canvas.resize($(window).width(), $(window).height())
   
         //Return the map to the original scale, and then put the previous central map-coordinate back to the centre of user's newly resized screen
         canvas.scale(scaleX,scaleY);
-        var newCentrePixX = Visualize.mGraph.canvas.canvases[0].size.width / 2,
-            newCentrePixY = Visualize.mGraph.canvas.canvases[0].size.height / 2,
+        var newCentrePixX = canvas.canvases[0].size.width / 2,
+            newCentrePixY = canvas.canvases[0].size.height / 2,
             newCentreCoords = Util.pixelsToCoords({x:newCentrePixX ,y:newCentrePixY});
         
         canvas.translate(newCentreCoords.x - centreCoords.x, newCentreCoords.y - centreCoords.y);
