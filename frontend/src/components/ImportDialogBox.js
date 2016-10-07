@@ -41,7 +41,7 @@ class ImportDialogBox extends Component {
         <h3>IMPORT</h3>
         <p>To upload a file, drop it here:</p>
         <Dropzone onDropAccepted={this.handleFile}
-          className="import-blue-button fileupload"
+          className="fileupload"
         >
           Drop files here!
         </Dropzone>
@@ -56,7 +56,7 @@ class ImportDialogBox extends Component {
             The file should be in comma-separated format (when you save, change the
             filetype from .xls to .csv).
           </p>
-          <img src={this.props.exampleImageUrl} style={{ maxWidth: '75%', float: 'right', margin: '1em' }}/>
+          <img src={this.props.exampleImageUrl} style={{ width: '100%' }} />
           <p style={{ marginTop: '1em' }}>You can choose which columns to include in your data. Topics must have a name field. Synapses must have Topic 1 and Topic 2.</p>
           <p>&nbsp;</p>
           <p> * There are many valid import formats. Try exporting a map to see what columns you can include in your import data. You can also copy-paste from Excel to import, or import JSON.</p>

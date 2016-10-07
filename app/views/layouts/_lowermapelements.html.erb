@@ -8,12 +8,11 @@
 <div class="infoAndHelp">
 	<%= render :partial => 'maps/mapinfobox' %>
 
-  <div class="importDialog infoElement mapElement openLightbox" data-open="import-dialog-lightbox"><div class="tooltipsAbove">Import data</div></div>
-    <% starred = current_user && @map && current_user.starred_map?(@map)
-       starClass = starred ? 'starred' : ''
-       tooltip = starred ? 'Star' : 'Unstar'  %> 
-    <div class="starMap infoElement mapElement <%= starClass %>"><div class="tooltipsAbove"><%= tooltip %></div></div>
-    <div class="mapInfoIcon infoElement mapElement"><div class="tooltipsAbove">Map Info</div></div>
-    <div class="openCheatsheet openLightbox infoElement mapElement" data-open="cheatsheet"><div class="tooltipsAbove">Help</div></div>
-    <div class="clearfloat"></div>
+  <% starred = current_user && @map && current_user.starred_map?(@map)
+     starClass = starred ? 'starred' : ''
+     tooltip = starred ? 'Star' : 'Unstar'  %> 
+  <div class="starMap infoElement mapElement <%= starClass %>"><div class="tooltipsAbove"><%= tooltip %></div></div>
+  <div class="mapInfoIcon infoElement mapElement"><div class="tooltipsAbove">Map Info</div></div>
+  <div class="openCheatsheet openLightbox infoElement mapElement" data-open="cheatsheet"><div class="tooltipsAbove">Help</div></div>
+  <div class="clearfloat"></div>
 </div>
