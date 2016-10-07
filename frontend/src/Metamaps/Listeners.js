@@ -41,7 +41,7 @@ const Listeners = {
           if (!creatingTopic) Visualize.mGraph.canvas.translate(0, 20)
           break
         case 65: // if a or A is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             Control.deselectAllNodes()
             Control.deselectAllEdges()
 
@@ -55,13 +55,13 @@ const Listeners = {
 
           break
         case 68: // if d or D is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
             Control.deleteSelected()
           }
           break
         case 69: // if e or E is pressed
-          if (e.ctrlKey && Active.Map) {
+          if ((e.ctrlKey || e.metaKey) && Active.Map) {
             e.preventDefault()
             JIT.zoomExtents(null, Visualize.mGraph.canvas)
             break
@@ -79,14 +79,14 @@ const Listeners = {
           }
           break
         case 72: // if h or H is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
             Control.hideSelectedNodes()
             Control.hideSelectedEdges()
           }
           break
         case 77: // if m or M is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
             Control.removeSelectedNodes()
             Control.removeSelectedEdges()
@@ -111,7 +111,7 @@ const Listeners = {
           }
           break
         case 191: // if / is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             Search.focus()
           }
           break
