@@ -1,3 +1,5 @@
+/* global $ */
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import outdent from 'outdent'
@@ -10,7 +12,7 @@ const ImportDialog = {
   openLightbox: null,
   closeLightbox: null,
 
-  init: function(serverData, openLightbox, closeLightbox) {
+  init: function (serverData, openLightbox, closeLightbox) {
     const self = ImportDialog
     self.openLightbox = openLightbox
     self.closeLightbox = closeLightbox
@@ -22,14 +24,14 @@ const ImportDialog = {
     `))
     ReactDOM.render(React.createElement(ImportDialogBox, {
       onFileAdded: PasteInput.handleFile,
-      exampleImageUrl: serverData['import-example.png'],
+      exampleImageUrl: serverData['import-example.png']
     }), $('.importDialogWrapper').get(0))
   },
-  show: function() {
-    self.openLightbox('import-dialog')
+  show: function () {
+    ImportDialog.openLightbox('import-dialog')
   },
-  hide: function() {
-    self.closeLightbox('import-dialog')
+  hide: function () {
+    ImportDialog.closeLightbox('import-dialog')
   }
 }
 

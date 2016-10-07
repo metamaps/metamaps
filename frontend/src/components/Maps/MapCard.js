@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react'
 class MapCard extends Component {
   render = () => {
     const { map, currentUser } = this.props
-    
+
     function capitalize (string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
     }
@@ -16,12 +16,12 @@ class MapCard extends Component {
     const truncatedName = n ? (n.length > maxNameLength ? n.substring(0, maxNameLength) + '...' : n) : ''
     const truncatedDesc = d ? (d.length > maxDescLength ? d.substring(0, maxDescLength) + '...' : d) : ''
     const editPermission = map.authorizeToEdit(currentUser) ? 'canEdit' : 'cannotEdit'
-    
+
     return (
       <div className="map" id={ map.id }>
         <a href={ '/maps/' + map.id } data-router="true">
           <div className={ 'permission ' + editPermission }>
-  	        <div className="mapCard">                                         
+            <div className="mapCard">
               <span className="title" title={ map.get('name') }>
                 { truncatedName }
               </span>
@@ -46,7 +46,7 @@ class MapCard extends Component {
                     { map.get('topic_count') }
                   </span>
                   { map.get('topic_count') === 1 ? ' topic' : ' topics' }
-                  </div> 
+                  </div>
                 <div className="metadataSection mapPermission">
                   { map.get('permission') ? capitalize(map.get('permission')) : 'Commons' }
                 </div>
@@ -57,7 +57,7 @@ class MapCard extends Component {
                   { map.get('synapse_count') === 1 ? ' synapse' : ' synapses' }
                 </div>
                 <div className="clearfloat"></div>
-              </div>                                         
+              </div>
             </div>
           </div>
         </a>

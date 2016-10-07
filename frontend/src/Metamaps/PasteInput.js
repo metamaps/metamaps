@@ -45,7 +45,7 @@ const PasteInput = {
 
   handleFile: (file, coords = null) => {
     var self = PasteInput
-    var fileReader = new FileReader()
+    var fileReader = new window.FileReader()
     fileReader.readAsText(file)
     fileReader.onload = function(e) {
       var text = e.currentTarget.result

@@ -1,8 +1,6 @@
 /* global Metamaps, $ */
 
 import outdent from 'outdent'
-import React from 'react'
-import ReactDOM from 'react-dom'
 
 import Active from '../Active'
 import AutoLayout from '../AutoLayout'
@@ -46,7 +44,6 @@ const Map = {
     $('#wrapper').on('contextmenu', function (e) {
       return false
     })
-
 
     $('.starMap').click(function () {
       if ($(this).is('.starred')) self.unstar()

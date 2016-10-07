@@ -21,15 +21,15 @@ class Header extends Component {
     const { signedIn, section } = this.props
 
     const activeClass = (title) => {
-      let forClass = "exploreMapsButton"
-      forClass += " " + title + "Maps"
-      if (title == "my" && section == "mine" ||
-          title == section) forClass += " active"
+      let forClass = 'exploreMapsButton'
+      forClass += ' ' + title + 'Maps'
+      if (title === 'my' && section === 'mine' ||
+          title === section) forClass += ' active'
       return forClass
     }
 
-    const explore = section == "mine" || section == "active" || section == "starred" || section == "shared" || section == "featured"
-    const mapper = section == "mapper"
+    const explore = section === 'mine' || section === 'active' || section === 'starred' || section === 'shared' || section === 'featured'
+    const mapper = section === 'mapper'
 
     return (
       <div id="exploreMapsHeader">
@@ -38,31 +38,31 @@ class Header extends Component {
             <div className="exploreMapsCenter">
               <MapLink show={signedIn && explore}
                 href="/explore/mine"
-                linkClass={activeClass("my")}
+                linkClass={activeClass('my')}
                 data-router="true"
                 text="My Maps"
               />
               <MapLink show={signedIn && explore}
                 href="/explore/shared"
-                linkClass={activeClass("shared")}
+                linkClass={activeClass('shared')}
                 data-router="true"
                 text="Shared With Me"
               />
               <MapLink show={signedIn && explore}
                 href="/explore/starred"
-                linkClass={activeClass("starred")}
+                linkClass={activeClass('starred')}
                 data-router="true"
                 text="Starred By Me"
               />
               <MapLink show={explore}
-                href={signedIn ? "/" : "/explore/active"}
-                linkClass={activeClass("active")}
+                href={signedIn ? '/' : '/explore/active'}
+                linkClass={activeClass('active')}
                 data-router="true"
                 text="Global"
               />
               <MapLink show={!signedIn && explore}
                 href="/explore/featured"
-                linkClass={activeClass("featured")}
+                linkClass={activeClass('featured')}
                 data-router="true"
                 text="Featured Maps"
               />
