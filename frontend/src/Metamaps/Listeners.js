@@ -7,6 +7,7 @@ import Mobile from './Mobile'
 import Realtime from './Realtime'
 import Selected from './Selected'
 import Topic from './Topic'
+import Util from './Util'
 import Visualize from './Visualize'
 import { Search } from './GlobalUI'
 
@@ -122,7 +123,22 @@ const Listeners = {
     })
 
     $(window).resize(function () {
+      var canvas = Visualize.mGraph.canvas,
+          scaleX = canvas.scaleOffsetX,
+          scaleY = canvas.scaleOffsetY,
+          centrePixX = Visualize.mGraph.canvas.canvases[0].size.width / 2,
+          centrePixY = Visualize.mGraph.canvas.canvases[0].size.height / 2,
+          centreCoords = Util.pixelsToCoords({x:centrePixX ,y:centrePixY});
+              
       if (Visualize && Visualize.mGraph) Visualize.mGraph.canvas.resize($(window).width(), $(window).height())
+
+      canvas.scale(scaleX,scaleY);
+      var newCentrePixX = Visualize.mGraph.canvas.canvases[0].size.width / 2,
+          newCentrePixY = Visualize.mGraph.canvas.canvases[0].size.height / 2,
+          newCentreCoords = Util.pixelsToCoords({x:newCentrePixX ,y:newCentrePixY});
+      
+      canvas.translate(newCentreCoords.x - centreCoords.x, newCentreCoords.y - centreCoords.y);
+      
       if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
       Mobile.resizeTitle()
     })
