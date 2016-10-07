@@ -6,6 +6,7 @@ import _ from 'lodash'
 import Active from './Active'
 import AutoLayout from './AutoLayout'
 import DataModel from './DataModel'
+import Control from './Control'
 import Map from './Map'
 import Synapse from './Synapse'
 import Topic from './Topic'
@@ -78,6 +79,8 @@ const Import = {
     if (topics.length > 0 || synapses.length > 0) {
       if (window.confirm('Are you sure you want to create ' + topics.length +
           ' new topics and ' + synapses.length + ' new synapses?')) {
+        Control.deselectAllNodes()
+        Control.deselectAllEdges()
         self.importTopics(topics)
         // window.setTimeout(() => self.importSynapses(synapses), 5000)
         self.importSynapses(synapses)
@@ -122,10 +125,10 @@ const Import = {
           if (noblanks.length === 0) {
             state = STATES.UNKNOWN
             break
-          } else if (noblanks.length === 1 && self.simplify(line[0]) === 'topics') {
+          } else if (noblanks.length === 1 && self.normalizeKey(line[0]) === 'topics') {
             state = STATES.TOPICS_NEED_HEADERS
             break
-          } else if (noblanks.length === 1 && self.simplify(line[0]) === 'synapses') {
+          } else if (noblanks.length === 1 && self.normalizeKey(line[0]) === 'synapses') {
             state = STATES.SYNAPSES_NEED_HEADERS
             break
           }
@@ -233,7 +236,11 @@ const Import = {
 
       self.createTopicWithParameters(
         topic.name, topic.metacode, topic.permission,
-        topic.desc, topic.link, coords.x, coords.y, topic.id
+        topic.desc, topic.link, coords.x, coords.y, topic.id, {
+          success: topic => {
+            Control.selectNode(topic.get('node'))
+          }
+        }
       )
     })
   },
@@ -270,7 +277,11 @@ const Import = {
       $.when(topic1Promise, topic2Promise).done(() => {
         self.createSynapseWithParameters(
           synapse.desc, synapse.category, synapse.permission,
-          topic1, topic2
+          topic1, topic2, {
+            success: synapse => {
+              Control.selectEdge(synapse.get('edge'))
+           }
+         }
         )
       })
     })
@@ -369,6 +380,7 @@ const Import = {
       importId,
       {
         success: function(topic) {
+          Control.selectNode(topic.get('node'))
           if (topic.get('name') !== 'Link') return
           $.get('/hacks/load_url_title', {
             url
@@ -419,13 +431,6 @@ const Import = {
 
   abort: function(message) {
     console.error(message)
-  },
-
-  // TODO investigate replacing with es6 (?) trim()
-  simplify: function(string) {
-    return string
-      .replace(/(^\s*|\s*$)/g, '')
-      .toLowerCase()
   },
 
   normalizeKey: function(key) {

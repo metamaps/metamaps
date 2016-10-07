@@ -29,7 +29,7 @@ const Export = {
 
   loadCopyData: function() {
     if (!Active.Map) return // someday we can expand this
-    const topics = Selected.Nodes.map(node => node.id)
+    const topics = Selected.Nodes.map(node => node.getData('topic').id)
 
     // deselect synapses not joined to a selected topic
     Selected.Edges.slice(0).forEach(edge => {
