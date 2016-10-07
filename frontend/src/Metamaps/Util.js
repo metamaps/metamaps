@@ -1,3 +1,5 @@
+import { Parser, HtmlRenderer } from 'commonmark'
+
 import Visualize from './Visualize'
 
 const Util = {
@@ -119,6 +121,9 @@ const Util = {
   },
   checkURLisYoutubeVideo: function (url) {
     return (url.match(/^https?:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$/) != null)
+  },
+  mdToHTML: text => {
+    return new HtmlRenderer().render(new Parser().parse(text))
   }
 }
 
