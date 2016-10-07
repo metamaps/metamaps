@@ -274,12 +274,13 @@ const TopicCard = {
       })
 
       // this is for all subsequent renders after in-place editing the desc field
-      $(showCard).find('.best_in_place_desc').bind('ajax:success', function () {
-        var desc = $(this).html() === $(this).data('nil')
+      const bipDesc = $(showCard).find('.best_in_place_desc')
+      bipDesc.bind('ajax:success', function () {
+        var desc = $(this).html() === $(this).data('bip-nil')
           ? ''
           : $(this).text()
         topic.set('desc', desc)
-        $(this).data('bestInPlaceEditor').original_content = desc
+        $(this).data('bip-value', desc)
         this.innerHTML = Util.mdToHTML(desc)
         topic.trigger('saved')
       })
@@ -458,7 +459,7 @@ const TopicCard = {
     nodeValues.metacode_select = $('#metacodeOptions').html()
     nodeValues.desc_nil = 'Click to add description...'
     nodeValues.desc_markdown = (topic.get('desc') === '' && authorized)
-     ? desc_nil
+     ? nodeValues.desc_nil
      : topic.get('desc')
     nodeValues.desc_html = Util.mdToHTML(nodeValues.desc_markdown)
     return nodeValues

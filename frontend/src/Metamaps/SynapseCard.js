@@ -80,11 +80,12 @@ const SynapseCard = {
     // desc editing form
     $('#editSynUpperBar').append('<div id="edit_synapse_desc"></div>')
     $('#edit_synapse_desc').attr('class', 'best_in_place best_in_place_desc')
-    $('#edit_synapse_desc').attr('data-object', 'synapse')
-    $('#edit_synapse_desc').attr('data-attribute', 'desc')
-    $('#edit_synapse_desc').attr('data-type', 'textarea')
-    $('#edit_synapse_desc').attr('data-nil', data_nil)
-    $('#edit_synapse_desc').attr('data-url', '/synapses/' + synapse.id)
+    $('#edit_synapse_desc').attr('data-bip-object', 'synapse')
+    $('#edit_synapse_desc').attr('data-bip-attribute', 'desc')
+    $('#edit_synapse_desc').attr('data-bip-type', 'textarea')
+    $('#edit_synapse_desc').attr('data-bip-nil', data_nil)
+    $('#edit_synapse_desc').attr('data-bip-url', '/synapses/' + synapse.id)
+    $('#edit_synapse_desc').attr('data-bip-value', synapse.get('desc'))
     $('#edit_synapse_desc').html(synapse.get('desc'))
 
     // if edge data is blank or just whitespace, populate it with data_nil
