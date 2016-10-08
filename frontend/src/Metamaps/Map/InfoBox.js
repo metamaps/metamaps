@@ -173,6 +173,13 @@ const InfoBox = {
       Active.Map.trigger('saved')
     })
 
+    $('.mapInfoDesc .best_in_place_desc, .mapInfoName .best_in_place_name').unbind('keypress').keypress(function(e) {
+      const ENTER = 13
+      if (e.which === ENTER) {
+        $(this).data('bestInPlaceEditor').update()
+      }
+    })
+
     $('.yourMap .mapPermission').unbind().click(self.onPermissionClick)
     // .yourMap in the unbind/bind is just a namespace for the events
     // not a reference to the class .yourMap on the .mapInfoBox

@@ -265,6 +265,12 @@ const TopicCard = {
       bipName.bind('best_in_place:deactivate', function () {
         $('.nameCounter.forTopic').remove()
       })
+      bipName.keypress(function(e) {
+        const ENTER = 13
+        if (e.which === ENTER) { // enter
+          $(this).data('bestInPlaceEditor').update()
+        }
+      })
 
       // bind best_in_place ajax callbacks
       bipName.bind('ajax:success', function () {
@@ -283,6 +289,13 @@ const TopicCard = {
         $(this).data('bip-value', desc)
         this.innerHTML = Util.mdToHTML(desc)
         topic.trigger('saved')
+      })
+      bipDesc.keypress(function(e) {
+        // allow typing Enter with Shift+Enter
+        const ENTER = 13
+        if (e.shiftKey === false && e.which === ENTER) {
+          $(this).data('bestInPlaceEditor').update()
+        }
       })
     }
 

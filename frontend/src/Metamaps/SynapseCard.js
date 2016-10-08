@@ -97,6 +97,12 @@ const SynapseCard = {
       }
     }
 
+    $('#edit_synapse_desc').keypress(function (e) {
+      const ENTER = 13
+      if (e.which === ENTER) {
+        $(this).data('bestInPlaceEditor').update()
+      }
+    })
     $('#edit_synapse_desc').bind('ajax:success', function () {
       var desc = $(this).html()
       if (desc == data_nil) {
