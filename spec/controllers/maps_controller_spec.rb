@@ -79,8 +79,8 @@ RSpec.describe MapsController, type: :controller do
           id: unowned_map.to_param
         }
       end.to change(Map, :count).by(0)
-      expect(response.body).to eq ''
-      expect(response.status).to eq 403
+      expect(response.headers['Location']).to eq(request.base_url + root_path)
+      expect(response.status).to eq 302
     end
 
     it 'deletes owned map' do
