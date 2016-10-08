@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# rubocop:disable Metrics/MethodLength
 class MapExportService
   attr_reader :user, :map, :base_url
 
@@ -114,3 +114,4 @@ class MapExportService
     spreadsheet
   end
 end
+# rubocop:disable Metrics/MethodLength
