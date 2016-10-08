@@ -33,6 +33,7 @@
     "outdent": "0.2.1",
     "react": "15.3.2",
     "react-dom": "15.3.2",
+    "react-dropzone": "3.6.0",
     "socket.io": "0.9.12",
     "webpack": "1.13.2"
   },

@@ -6,6 +6,7 @@ import Create from '../Create'
 import Search from './Search'
 import CreateMap from './CreateMap'
 import Account from './Account'
+import ImportDialog from './ImportDialog'
 
 /*
  * Metamaps.Backbone
@@ -21,6 +22,7 @@ const GlobalUI = {
     self.Search.init()
     self.CreateMap.init()
     self.Account.init()
+    self.ImportDialog.init(Metamaps.Erb, self.openLightbox, self.closeLightbox)
 
     if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
 
@@ -141,5 +143,5 @@ const GlobalUI = {
   }
 }
 
-export { Search, CreateMap, Account }
+export { Search, CreateMap, Account, ImportDialog }
 export default GlobalUI

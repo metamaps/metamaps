@@ -40,6 +40,11 @@ const Map = {
   init: function () {
     var self = Map
 
+    // prevent right clicks on the main canvas, so as to not get in the way of our right clicks
+    $('#wrapper').on('contextmenu', function (e) {
+      return false
+    })
+
     $('.starMap').click(function () {
       if ($(this).is('.starred')) self.unstar()
       else self.star()
@@ -52,7 +57,7 @@ const Map = {
     GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
 
     self.updateStar()
-    self.InfoBox.init()
+    InfoBox.init()
     CheatSheet.init()
 
     $(document).on(Map.events.editedByActiveMapper, self.editedByActiveMapper)
@@ -102,7 +107,7 @@ const Map = {
       Selected.reset()
 
       // set the proper mapinfobox content
-      Map.InfoBox.load()
+      InfoBox.load()
 
       // these three update the actual filter box with the right list items
       Filter.checkMetacodes()
@@ -132,7 +137,7 @@ const Map = {
       Create.newTopic.hide(true) // true means force (and override pinned)
       Create.newSynapse.hide()
       Filter.close()
-      Map.InfoBox.close()
+      InfoBox.close()
       Realtime.endActiveMap()
     }
   },

@@ -1,6 +1,11 @@
 module.exports = {
   "sourceType": "module",
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "extends": "standard",
   "installedESLint": true,
   "env": {
@@ -13,6 +18,8 @@ module.exports = {
     "react"
   ],
   "rules": {
+    "react/jsx-uses-react": [2],
+    "react/jsx-uses-vars": [2],
     "yoda": [2, "never", { "exceptRange": true }]
   }
 }

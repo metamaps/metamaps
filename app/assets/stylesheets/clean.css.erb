@@ -188,7 +188,7 @@
 .upperRightIcon {
     width: 32px;
     height: 32px;
-    background-image: url(<%= asset_data_uri('topright_sprite.png') %>);
+    background-image: url(<%= asset_path('topright_sprite.png') %>);
     background-repeat: no-repeat;
     cursor: pointer;
 }
@@ -325,7 +325,7 @@
 }
 
 .fullWidthWrapper.withPartners {
-    background: url(<%= asset_data_uri('homepage_bg_fade.png') %>) no-repeat center -300px;
+    background: url(<%= asset_path('homepage_bg_fade.png') %>) no-repeat center -300px;
 }
 .homeWrapper.homePartners {
     padding: 64px 0 280px;
@@ -364,7 +364,7 @@
     cursor: pointer;
 }
 .openCheatsheet {
-    background-image: url(<%= asset_data_uri('help_sprite.png') %>);
+    background-image: url(<%= asset_path('help_sprite.png') %>);
     background-repeat:no-repeat;
 }
 .openCheatsheet:hover {
@@ -373,7 +373,7 @@
 .mapInfoIcon {
 	position: relative;
 	top: 56px; /* puts it just offscreen */
-    background-image: url(<%= asset_data_uri('mapinfo_sprite.png') %>);
+    background-image: url(<%= asset_path('mapinfo_sprite.png') %>);
     background-repeat:no-repeat;
 }
 .mapInfoIcon:hover {
@@ -382,8 +382,14 @@
 .mapPage .mapInfoIcon {
 	top: 0;
 }
+.importDialog {
+  background-image: url(<%= asset_path('import.png') %>);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  width: 32px;
+}
 .starMap {
-  background-image: url(<%= asset_data_uri('starmap_sprite.png') %>);
+  background-image: url(<%= asset_path('starmap_sprite.png') %>);
   background-position: 0 0;
   background-repeat: no-repeat;
   width: 32px;
@@ -437,7 +443,7 @@
 .takeScreenshot {
     margin-bottom: 5px;
     border-radius: 2px;
-    background-image: url(<%= asset_data_uri 'screenshot_sprite.png' %>);
+    background-image: url(<%= asset_path 'screenshot_sprite.png' %>);
     display: none;
 }
 .takeScreenshot:hover {
@@ -450,7 +456,7 @@
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
-    background-image: url(<%= asset_data_uri('extents_sprite.png') %>);
+    background-image: url(<%= asset_path('extents_sprite.png') %>);
 }
 
 .zoomExtents:hover {
@@ -458,7 +464,7 @@
 }
 
 .zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
- .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
+ .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, importDialog:hover .tooltipsAbove, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
     display: block;
 }
 
@@ -623,7 +629,7 @@
 }
 
 .zoomIn {
-    background-image: url(<%= asset_data_uri('zoom_sprite.png') %>);
+    background-image: url(<%= asset_path('zoom_sprite.png') %>);
     background-position: 0 /…0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
@@ -632,7 +638,7 @@
     background-position: -32px 0;
 }
 .zoomOut {
-    background-image: url(<%= asset_data_uri('zoom_sprite.png') %>);
+    background-image: url(<%= asset_path('zoom_sprite.png') %>);
     background-position:0 -32px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
@@ -740,23 +746,23 @@
     left:5px;
 }
 .exploreMapsCenter .myMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -32px 0;
 }
 .exploreMapsCenter .sharedMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -128px 0;
 }
 .exploreMapsCenter .activeMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: 0 0;
 }
 .exploreMapsCenter .featuredMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
 }
 .exploreMapsCenter .starredMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
 }
 .myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
