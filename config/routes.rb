@@ -77,6 +77,7 @@ Metamaps::Application.routes.draw do
       resources :users, only: [:index, :show] do
         get :current, on: :collection
       end
+      match '*path', to: 'restful#catch_404', via: :all
     end
     namespace :v1, path: '/v1' do
       # api v1 routes all lead to a deprecation error method
@@ -88,7 +89,9 @@ Metamaps::Application.routes.draw do
       resources :tokens, only: [:create, :destroy] do
         get :my_tokens, on: :collection
       end
+      match '*path', to: 'deprecated#method_missing', via: :all
     end
+    match '*path', to: 'v2/restful#catch_404', via: :all
   end
 
   devise_for :users, skip: :sessions, controllers: {

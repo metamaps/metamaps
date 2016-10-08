@@ -4,7 +4,7 @@ module Api
     class DeprecatedController < ApplicationController
       # rubocop:disable Style/MethodMissing
       def method_missing
-        render json: { error: '/api/v1 is deprecated! Please use /api/v2 instead.' }
+        render json: { error: '/api/v1 is deprecated! Please use /api/v2 instead.' }, status: :gone
       end
       # rubocop:enable Style/MethodMissing
     end
