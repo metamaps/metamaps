@@ -80,16 +80,8 @@ Metamaps::Application.routes.draw do
       match '*path', to: 'restful#catch_404', via: :all
     end
     namespace :v1, path: '/v1' do
-      # api v1 routes all lead to a deprecation error method
-      # see app/controllers/api/v1/deprecated_controller.rb
-      resources :maps, only: [:create, :show, :update, :destroy]
-      resources :synapses, only: [:create, :show, :update, :destroy]
-      resources :topics, only: [:create, :show, :update, :destroy]
-      resources :mappings, only: [:create, :show, :update, :destroy]
-      resources :tokens, only: [:create, :destroy] do
-        get :my_tokens, on: :collection
-      end
-      match '*path', to: 'deprecated#method_missing', via: :all
+      root to: 'deprecated#deprecated', via: :all
+      match '*path', to: 'deprecated#deprecated', via: :all
     end
     match '*path', to: 'v2/restful#catch_404', via: :all
   end
