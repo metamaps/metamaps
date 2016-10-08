@@ -21,6 +21,9 @@ const config = module.exports = {
   plugins,
   devtool,
   module: {
+    preLoaders: [
+      { test: /\.json$/, loader: 'json' }
+    ],
     loaders: [
       {
         test: /\.(js|jsx)?$/,

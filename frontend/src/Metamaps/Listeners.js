@@ -23,7 +23,6 @@ const Listeners = {
           if (e.target.className !== 'chat-input') {
             JIT.enterKeyHandler()
           }
-          e.preventDefault()
           break
         case 27: // if esc key is pressed
           JIT.escKeyHandler()
