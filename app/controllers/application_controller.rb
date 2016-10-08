@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
 
   def handle_unauthorized
     if authenticated?
-      head :forbidden # TODO: make this better
+      redirect_to root_path, notice: "You don't have permission to see that page."
     else
       redirect_to new_user_session_path, notice: 'Try signing in to do that.'
     end
