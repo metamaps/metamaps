@@ -124,7 +124,7 @@ const Util = {
   },
   mdToHTML: text => {
     // use safe: true to filter xss
-    return new HtmlRenderer({ safe: true, smart: true })
+    return new HtmlRenderer({ safe: true })
       .render(new Parser().parse(text))
   }
 }
