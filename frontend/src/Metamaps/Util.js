@@ -123,7 +123,9 @@ const Util = {
     return (url.match(/^https?:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$/) != null)
   },
   mdToHTML: text => {
-    return new HtmlRenderer().render(new Parser().parse(text))
+    // use safe: true to filter xss
+    return new HtmlRenderer({ safe: true, smart: true })
+      .render(new Parser().parse(text))
   }
 }
 
