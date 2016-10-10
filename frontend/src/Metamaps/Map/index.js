@@ -326,8 +326,6 @@ const Map = {
       node.visited = !T
     })
 
-    var imageData = canvas.canvas.toDataURL()
-
     var map = Active.Map
 
     var today = new Date()
@@ -347,7 +345,7 @@ const Map = {
 
     var downloadMessage = outdent`
       Captured map screenshot!
-      <a href="${imageData.encodedImage}" download="${filename}">DOWNLOAD</a>`
+      <a href="${canvas.canvas.toDataURL()}" download="${filename}">DOWNLOAD</a>`
     GlobalUI.notifyUser(downloadMessage)
 
     canvas.canvas.toBlob(imageBlob => {
