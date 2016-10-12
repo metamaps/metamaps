@@ -70,9 +70,7 @@ Metamaps::Application.routes.draw do
         delete :stars, to: 'stars#destroy', on: :member
       end
       resources :synapses, only: [:index, :create, :show, :update, :destroy]
-      resources :tokens, only: [:create, :destroy] do
-        get :my_tokens, on: :collection
-      end
+      resources :tokens, only: [:index, :create, :destroy]
       resources :topics, only: [:index, :create, :show, :update, :destroy]
       resources :users, only: [:index, :show] do
         get :current, on: :collection

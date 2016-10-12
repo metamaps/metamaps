@@ -1,4 +1,5 @@
 #type: collection
+securedBy: [ null, cookie, token, oauth_2_0 ]
 get:
   is: [ searchable: { searchFields: "name" }, orderable, pageable ]
   responses:
@@ -6,6 +7,15 @@ get:
       body:
         application/json:
           example: !include ../examples/users.json
+/{id}:
+  #type: item
+  securedBy: [ null, cookie, token, oauth_2_0 ]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/user.json
 /current:
   #type: item
   get:
@@ -14,11 +24,3 @@ get:
         body:
           application/json:
             example: !include ../examples/current_user.json
-/{id}:
-  #type: item
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            example: !include ../examples/user.json
