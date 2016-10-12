@@ -1,6 +1,6 @@
 [Skip ahead to the endpoints.](#endpoints)
 
-There are three ways to log in: cookie-based authentication, token-based authentication, or OAuth 2.
+There are three ways to log in: cookie-based authentication, token-based authentication, or OAuth 2. If you're testing the API or making simple scripts, cookie-based or token-based is the best. If you're developing and app and want users to be able to log into Metamaps inside your app, you'll be able to use the OAuth 2 mechanism.
 
 ### 1. Cookie-based authentication
 
@@ -14,7 +14,7 @@ If you are logged into the API via another means, you can create a token. Once y
 
 To get a list of your current tokens, you can log in using cookie-based authentication and run the following fetch request in your browser console (assuming the current tab is on some page within the `metamaps.cc` website.
 
-```
+```javascript
 fetch('/api/v2/tokens', {
   method: 'GET',
   credentials: 'same-origin' // needed to use the cookie-based auth
@@ -25,13 +25,15 @@ fetch('/api/v2/tokens', {
 
 If this is your first time accessing the API, this list wil be empty. You can create a token using a similar method:
 
-```
+```javascript
 fetch('/api/v2/tokens', {
   method: 'POST',
   credentials: 'same-origin'
 }).then(response => {
   return response.json()
-}).then(console.log).catch(console.error)
+}).then(payload => {
+  console.log(payload)
+}).catch(console.error)
 ```
 
 `payload.data.token` will contain a string which you can use to append to requests to access the API from anywhere.
@@ -68,8 +70,11 @@ fetch('https://metamaps.cc/oauth/token?client_id=THE_ID&client_secret=THE_SECRET
 }).then(response => {
   return response.json()
 }).then(console.log).catch(console.error)
+```
 
-# The response will be like
+The response will look like
+
+```json
 {
  "access_token": "de6780bc506a0446309bd9362820ba8aed28aa506c71eedbe1c5c4f9dd350e54",
  "token_type": "bearer", 
