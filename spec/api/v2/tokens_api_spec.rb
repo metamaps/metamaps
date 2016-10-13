@@ -6,13 +6,14 @@ RSpec.describe 'tokens API', type: :request do
   let(:auth_token) { create(:token, user: user).token }
   let(:token) { create(:token, user: user) }
 
-  it 'GET /api/v2/tokens/my_tokens' do
+  it 'GET /api/v2/tokens' do
     create_list(:token, 5, user: user)
-    get '/api/v2/tokens/my_tokens', params: { access_token: auth_token }
+    get '/api/v2/tokens', params: { access_token: auth_token }
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:tokens)
-    expect(Token.count).to eq 6 # 5 + the extra auth token; let(:token) wasn't used
+    # 5 + the auth_token; let(:token) wasn't used
+    expect(Token.count).to eq 6
   end
 
   it 'POST /api/v2/tokens' do
