@@ -333,8 +333,8 @@ const Import = {
     } // if
 
     var synapse = new Metamaps.Backbone.Synapse({
-      desc: desc || "",
-      category: category,
+      desc: desc || ''
+      category: category || 'from-to',
       permission: permission,
       topic1_id: topic1.id,
       topic2_id: topic2.id
