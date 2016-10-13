@@ -28,7 +28,6 @@ gem 'snorlax'
 gem 'uservoice-ruby'
 
 # asset stuff
-gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'sass-rails'
