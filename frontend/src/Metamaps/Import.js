@@ -296,8 +296,8 @@ const Import = {
       metacode_id: metacode.id,
       permission: topic_permission,
       defer_to_map_id: defer_to_map_id,
-      desc: desc || "",
-      link: link || "",
+      desc: desc || '',
+      link: link || '',
       calculated_permission: Active.Map.get('permission')
     })
     Metamaps.Topics.add(topic)
@@ -333,7 +333,7 @@ const Import = {
     } // if
 
     var synapse = new Metamaps.Backbone.Synapse({
-      desc: desc || ''
+      desc: desc || '',
       category: category || 'from-to',
       permission: permission,
       topic1_id: topic1.id,
