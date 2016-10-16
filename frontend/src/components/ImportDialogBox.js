@@ -15,12 +15,13 @@ class ImportDialogBox extends Component {
   }
 
   handleFile = (files, e) => {
-    // for some reason it uploads twice, so we need this debouncer
-    // eslint-disable-next-line no-return-assign
-    this.debouncer = this.debouncer || window.setTimeout(() => this.debouncer = null, 10)
-    if (!this.debouncer) {
-      this.props.onFileAdded(files[0])
-    }
+    // // for some reason it uploads twice, so we need this debouncer
+    // // eslint-disable-next-line no-return-assign
+    // this.debouncer = this.debouncer || window.setTimeout(() => this.debouncer = null, 10)
+    // if (!this.debouncer) {
+    //  this.props.onFileAdded(files[0])
+    // }
+    this.props.onFileAdded(files[0])
   }
 
   toggleShowInstructions = e => {
