@@ -4,4 +4,9 @@ class MapMailerPreview < ActionMailer::Preview
   def invite_to_edit_email
     MapMailer.invite_to_edit_email(Map.first, User.first, User.second)
   end
+
+  def access_request_email
+    request = AccessRequest.first
+    MapMailer.access_request_email(request, request.map)
+  end
 end

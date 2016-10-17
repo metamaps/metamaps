@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
-  before_action :require_user, only: [:create, :update, :destroy, :access, :events]
-  before_action :set_map, only: [:show, :update, :destroy, :access, :contains,
-                                 :events, :export]
+  before_action :require_user, only: [:create, :update, :destroy, :events]
+  before_action :set_map, only: [:show, :update, :destroy, :contains, :events, :export]
   after_action :verify_authorized
 
   # GET maps/:id
@@ -16,6 +15,7 @@ class MapsController < ApplicationController
         @allmappings = policy_scope(@map.mappings)
         @allmessages = @map.messages.sort_by(&:created_at)
         @allstars = @map.stars
+        @allrequests = @map.access_requests
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }
@@ -76,24 +76,6 @@ class MapsController < ApplicationController
     respond_to do |format|
       format.json do
         head :no_content
-      end
-    end
-  end
-
-  # POST maps/:id/access
-  def access
-    user_ids = params[:access] || []
-
-    @map.add_new_collaborators(user_ids).each do |user_id|
-      # add_new_collaborators returns array of added users,
-      # who we then send an email to
-      MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id)).deliver_later
-    end
-    @map.remove_old_collaborators(user_ids)
-
-    respond_to do |format|
-      format.json do
-        render json: { message: 'Successfully altered edit permissions' }
       end
     end
   end

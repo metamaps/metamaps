@@ -9,6 +9,7 @@ class Map < ApplicationRecord
   has_many :messages, as: :resource, dependent: :destroy
   has_many :stars
 
+  has_many :access_requests, dependent: :destroy
   has_many :user_maps, dependent: :destroy
   has_many :collaborators, through: :user_maps, source: :user
 
@@ -102,7 +103,8 @@ class Map < ApplicationRecord
       mappers: contributors,
       collaborators: editors,
       messages: messages.sort_by(&:created_at),
-      stars: stars
+      stars: stars,
+      requests: access_requests
     }
   end
 
@@ -122,6 +124,7 @@ class Map < ApplicationRecord
     removed = current_collaborators.map(&:id).map do |old_user_id|
       next nil if user_ids.include?(old_user_id)
       user_maps.where(user_id: old_user_id).find_each(&:destroy)
+      access_requests.where(user_id: old_user_id).find_each(&:destroy)
       old_user_id
     end
     removed.compact

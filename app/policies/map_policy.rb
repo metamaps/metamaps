@@ -37,8 +37,34 @@ class MapPolicy < ApplicationPolicy
   end
 
   def access?
-    # note that this is to edit who can access the map
+    # this is for the map creator to bulk change who can access the map
     user.present? && record.user == user
+  end
+
+  def request_access?
+    # this is to access the page where you can request access to a map
+    user.present?
+  end
+
+  def access_request?
+    # this is to actually request access
+    user.present?
+  end
+
+  def approve_access?
+    record.user == user
+  end
+
+  def deny_access?
+    approve_access?
+  end
+
+  def approve_access_post?
+    approve_access?
+  end
+
+  def deny_access_post?
+    approve_access?
   end
 
   def contains?

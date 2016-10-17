@@ -19,9 +19,17 @@ Metamaps::Application.routes.draw do
       get :export
       post 'events/:event', action: :events
       get :contains
-      post :access, default: { format: :json }
-      post :star, to: 'stars#create', defaults: { format: :json }
-      post :unstar, to: 'stars#destroy', defaults: { format: :json }
+
+      get :request_access, to: 'access#request_access'
+      get 'approve_access/:request_id', to: 'access#approve_access', as: :approve_access
+      get 'deny_access/:request_id', to: 'access#deny_access', as: :deny_access
+      post :access_request, to: 'access#access_request', default: { format: :json }
+      post 'approve_access/:request_id', to: 'access#approve_access_post', default: { format: :json }
+      post 'deny_access/:request_id', to: 'access#deny_access_post', default: { format: :json }
+      post :access, to: 'access#access', default: { format: :json }
+
+      post :star, to: 'stars#create', default: { format: :json }
+      post :unstar, to: 'stars#destroy', default: { format: :json }
     end
   end
 
@@ -54,6 +62,19 @@ Metamaps::Application.routes.draw do
     end
   end
 
+  devise_for :users, skip: :sessions, controllers: {
+    registrations: 'users/registrations',
+    passwords: 'users/passwords',
+    sessions: 'devise/sessions'
+  }
+
+  devise_scope :user do
+    get 'login' => 'devise/sessions#new', :as => :new_user_session
+    post 'login' => 'devise/sessions#create', :as => :user_session
+    get 'logout' => 'devise/sessions#destroy', :as => :destroy_user_session
+    get 'join' => 'devise/registrations#new', :as => :new_user_registration_path
+  end
+
   resources :users, except: [:index, :destroy] do
     member do
       get :details
@@ -82,19 +103,6 @@ Metamaps::Application.routes.draw do
       match '*path', to: 'deprecated#deprecated', via: :all
     end
     match '*path', to: 'v2/restful#catch_404', via: :all
-  end
-
-  devise_for :users, skip: :sessions, controllers: {
-    registrations: 'users/registrations',
-    passwords: 'users/passwords',
-    sessions: 'devise/sessions'
-  }
-
-  devise_scope :user do
-    get 'login' => 'devise/sessions#new', :as => :new_user_session
-    post 'login' => 'devise/sessions#create', :as => :user_session
-    get 'logout' => 'devise/sessions#destroy', :as => :destroy_user_session
-    get 'join' => 'devise/registrations#new', :as => :new_user_registration_path
   end
 
   namespace :hacks do

@@ -60,7 +60,27 @@ const Map = {
     InfoBox.init()
     CheatSheet.init()
 
+    $('.viewOnly .requestAccess').click(self.requestAccess)
+
     $(document).on(Map.events.editedByActiveMapper, self.editedByActiveMapper)
+  },
+  requestAccess: function () {
+    $('.viewOnly').removeClass('sendRequest').addClass('sentRequest')
+    const mapId = Active.Map.id
+    $.post({
+      url: `/maps/${mapId}/access_request`
+    })
+    GlobalUI.notifyUser('Map creator will be notified of your request') 
+  },
+  setAccessRequest: function (requests, activeMapper) {
+    let className = 'isViewOnly '
+    if (activeMapper) {
+      const request = _.find(requests, r => r.user_id === activeMapper.id)
+      if (!request) className += 'sendRequest' 
+      else if (request && !request.answered) className += 'sentRequest' 
+      else if (request && request.answered && !request.approved) className += 'requestDenied'
+    }
+    $('.viewOnly').removeClass('sendRequest sentRequest requestDenied').addClass(className)
   },
   launch: function (id) {
     var bb = Metamaps.Backbone
@@ -83,6 +103,9 @@ const Map = {
       // add class to .wrapper for specifying whether you can edit the map
       if (map.authorizeToEdit(mapper)) {
         $('.wrapper').addClass('canEditMap')
+      }
+      else {
+        Map.setAccessRequest(data.requests, mapper)
       }
 
       // add class to .wrapper for specifying if the map can
@@ -139,6 +162,7 @@ const Map = {
       Filter.close()
       InfoBox.close()
       Realtime.endActiveMap()
+      $('.viewOnly').removeClass('isViewOnly')
     }
   },
   updateStar: function () {

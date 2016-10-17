@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160928022635) do
+ActiveRecord::Schema.define(version: 20161013162214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "access_requests", force: :cascade do |t|
+    t.integer  "user_id"
+    t.boolean  "approved"
+    t.boolean  "answered"
+    t.integer  "map_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["map_id"], name: "index_access_requests_on_map_id", using: :btree
+    t.index ["user_id"], name: "index_access_requests_on_user_id", using: :btree
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -268,5 +279,7 @@ ActiveRecord::Schema.define(version: 20160928022635) do
     t.index ["hookable_type", "hookable_id"], name: "index_webhooks_on_hookable_type_and_hookable_id", using: :btree
   end
 
+  add_foreign_key "access_requests", "maps"
+  add_foreign_key "access_requests", "users"
   add_foreign_key "tokens", "users"
 end
