@@ -16,4 +16,3 @@
 //= require_directory ./lib
 //= require ./src/Metamaps.Erb
 //= require ./webpacked/metamaps.bundle
-//= require ./src/check-canvas-support
