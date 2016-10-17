@@ -17,11 +17,11 @@ ActiveRecord::Schema.define(version: 20161013162214) do
 
   create_table "access_requests", force: :cascade do |t|
     t.integer  "user_id"
-    t.boolean  "approved"
-    t.boolean  "answered"
+    t.boolean  "approved",   default: false
+    t.boolean  "answered",   default: false
     t.integer  "map_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.index ["map_id"], name: "index_access_requests_on_map_id", using: :btree
     t.index ["user_id"], name: "index_access_requests_on_user_id", using: :btree
   end
