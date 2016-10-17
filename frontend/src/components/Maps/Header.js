@@ -58,7 +58,7 @@ class Header extends Component {
                 href={signedIn ? '/' : '/explore/active'}
                 linkClass={activeClass('active')}
                 data-router="true"
-                text="Global"
+                text="All Maps"
               />
               <MapLink show={!signedIn && explore}
                 href="/explore/featured"
