@@ -1,4 +1,4 @@
-/* global Metamaps, $, Howl */
+/* global Metamaps, $ */
 
 /*
  * Dependencies:
@@ -6,6 +6,7 @@
  */
 
 import Backbone from 'backbone'
+import { Howl } from 'howler'
 import Autolinker from 'autolinker'
 import _ from 'lodash'
 import underscore from 'underscore'
@@ -127,7 +128,7 @@ var Private = {
   },
   initializeSounds: function () {
     this.sound = new Howl({
-      urls: [Metamaps.Erb['sounds/MM_sounds.mp3'], Metamaps.Erb['sounds/MM_sounds.ogg']],
+      src: [Metamaps.Erb['sounds/MM_sounds.mp3'], Metamaps.Erb['sounds/MM_sounds.ogg']],
       sprite: {
         joinmap: [0, 561],
         leavemap: [1000, 592],

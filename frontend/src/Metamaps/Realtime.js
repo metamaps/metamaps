@@ -1,6 +1,7 @@
-/* global Metamaps, $, SocketIoConnection, SimpleWebRTC */
+/* global Metamaps, $, SocketIoConnection */
 
 import _ from 'lodash'
+import SimpleWebRTC from 'simplewebrtc'
 
 import Active from './Active'
 import Control from './Control'
@@ -36,6 +37,7 @@ const Realtime = {
   disconnected: false,
   chatOpen: false,
   status: true, // stores whether realtime is True/On or False/Off,
+  soundId: null,
   broadcastingStatus: false,
   inConversation: false,
   localVideo: null,
@@ -327,8 +329,8 @@ const Realtime = {
   invitedToCall: function (inviter) {
     var self = Realtime
 
-    self.room.chat.sound.stop('sessioninvite')
-    self.room.chat.sound.play('sessioninvite')
+    self.room.chat.sound.stop(self.soundId)
+    self.soundId = self.room.chat.sound.play('sessioninvite')
 
     var username = self.mappersOnMap[inviter].name
     var notifyText = '<img src="' + Metamaps.Erb['junto_spinner_darkgrey.gif'] + '" style="display: inline-block; margin-top: -12px; vertical-align: top;" />'
@@ -340,8 +342,8 @@ const Realtime = {
   invitedToJoin: function (inviter) {
     var self = Realtime
 
-    self.room.chat.sound.stop('sessioninvite')
-    self.room.chat.sound.play('sessioninvite')
+    self.room.chat.sound.stop(self.soundId)
+    self.soundId = self.room.chat.sound.play('sessioninvite')
 
     var username = self.mappersOnMap[inviter].name
     var notifyText = username + ' is inviting you to the conversation. Join?'
@@ -351,7 +353,7 @@ const Realtime = {
   },
   acceptCall: function (userid) {
     var self = Realtime
-    self.room.chat.sound.stop('sessioninvite')
+    self.room.chat.sound.stop(self.soundId)
     self.socket.emit('callAccepted', {
       mapid: Active.Map.id,
       invited: Active.Mapper.id,
@@ -363,7 +365,7 @@ const Realtime = {
   },
   denyCall: function (userid) {
     var self = Realtime
-    self.room.chat.sound.stop('sessioninvite')
+    self.room.chat.sound.stop(self.soundId)
     self.socket.emit('callDenied', {
       mapid: Active.Map.id,
       invited: Active.Mapper.id,
@@ -373,7 +375,7 @@ const Realtime = {
   },
   denyInvite: function (userid) {
     var self = Realtime
-    self.room.chat.sound.stop('sessioninvite')
+    self.room.chat.sound.stop(self.soundId)
     self.socket.emit('inviteDenied', {
       mapid: Active.Map.id,
       invited: Active.Mapper.id,
