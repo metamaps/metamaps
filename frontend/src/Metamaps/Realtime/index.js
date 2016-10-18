@@ -522,7 +522,6 @@ const sendables = [
   ['updateMap',updateMap]
 ]
 sendables.forEach(sendable => {
-  console.log(sendable, sendable[0])
   Realtime[sendable[0]] = sendable[1](Realtime)
 })
 
