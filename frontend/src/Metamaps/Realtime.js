@@ -36,7 +36,6 @@ const Realtime = {
   mappersOnMap: {},
   disconnected: false,
   chatOpen: false,
-  status: true, // stores whether realtime is True/On or False/Off,
   soundId: null,
   broadcastingStatus: false,
   inConversation: false,
@@ -51,6 +50,7 @@ const Realtime = {
       console.log('connected')
       if (!self.disconnected) {
         self.startActiveMap()
+        self.subscribeToLiveMaps()
       } else self.disconnected = false
     })
     self.socket.on('disconnect', function () {
@@ -103,6 +103,22 @@ const Realtime = {
       }
       $('body').prepend(self.room.chat.$container)
     } // if Active.Mapper
+  },
+  subscribeToLiveMaps: function () {
+    var self = Metamaps.Realtime
+    // Handles livemaps array on the UI
+    var liveMaps = []
+    self.socket.emit('requestLiveMaps')
+    self.socket.on('receiveLiveMaps', function (maps) {
+      console.log(maps)
+      liveMaps.push(maps)
+    })
+    self.socket.on('map_went_live', function (map) {
+      liveMaps.push(map)
+    })
+    self.socket.on('map_no_longer_live', function (data) {
+      // remove from liveMaps
+    })
   },
   addJuntoListeners: function () {
     var self = Realtime
@@ -210,7 +226,6 @@ const Realtime = {
     if (self.inConversation) self.leaveCall()
     self.socket.emit('endMapperNotify')
     $('.collabCompass').remove()
-    self.status = false
     if (self.room) {
       self.room.leave()
       self.room.chat.$container.hide()
@@ -220,8 +235,6 @@ const Realtime = {
   turnOn: function (notify) {
     var self = Realtime
 
-    if (notify) self.sendRealtimeOn()
-    self.status = true
     $('.collabCompass').show()
     self.room.chat.$container.show()
     self.room.room = 'map-' + Active.Map.id
@@ -434,7 +447,7 @@ const Realtime = {
       self.localVideo.view.manuallyPositioned = false
       self.positionVideos()
       self.localVideo.view.$container.show()
-      if (self.localVideo && self.status) {
+      if (self.localVideo) {
         $('#wrapper').append(self.localVideo.view.$container)
       }
       self.room.join()
@@ -467,20 +480,6 @@ const Realtime = {
       self.callEnded()
     }
   },
-  turnOff: function (silent) {
-    var self = Realtime
-
-    if (self.status) {
-      if (!silent) self.sendRealtimeOff()
-      // $(".rtMapperSelf").removeClass('littleRtOn').addClass('littleRtOff')
-      // $('.rtOn').removeClass('active')
-      // $('.rtOff').addClass('active')
-      self.status = false
-      // $(".sidebarCollaborateIcon").removeClass("blue")
-      $('.collabCompass').hide()
-      $('#' + self.videoId).remove()
-    }
-  },
   setupSocket: function () {
     var self = Realtime
     var socket = Realtime.socket
@@ -490,7 +489,8 @@ const Realtime = {
       userid: myId,
       username: Active.Mapper.get('name'),
       userimage: Active.Mapper.get('image'),
-      mapid: Active.Map.id
+      mapid: Active.Map.id,
+      map: Active.Map.attributes
     })
 
     socket.on(myId + '-' + Active.Map.id + '-invitedToCall', self.invitedToCall) // new call
@@ -514,12 +514,6 @@ const Realtime = {
 
     // receive word that a mapper left the map
     socket.on('maps-' + Active.Map.id + '-lostmapper', self.lostPeerOnMap)
-
-    // receive word that there's a mapper turned on realtime
-    socket.on('maps-' + Active.Map.id + '-newrealtime', self.newCollaborator)
-
-    // receive word that there's a mapper turned on realtime
-    socket.on('maps-' + Active.Map.id + '-lostrealtime', self.lostCollaborator)
 
     //
     socket.on('maps-' + Active.Map.id + '-topicDrag', self.topicDrag)
@@ -622,30 +616,6 @@ const Realtime = {
 
     socket.on('mapChangeFromServer', self.mapChange)
   },
-  sendRealtimeOn: function () {
-    var self = Realtime
-    var socket = Realtime.socket
-
-    // send this new mapper back your details, and the awareness that you're online
-    var update = {
-      username: Active.Mapper.get('name'),
-      userid: Active.Mapper.id,
-      mapid: Active.Map.id
-    }
-    socket.emit('notifyStartRealtime', update)
-  },
-  sendRealtimeOff: function () {
-    var self = Realtime
-    var socket = Realtime.socket
-
-    // send this new mapper back your details, and the awareness that you're online
-    var update = {
-      username: Active.Mapper.get('name'),
-      userid: Active.Mapper.id,
-      mapid: Active.Map.id
-    }
-    socket.emit('notifyStopRealtime', update)
-  },
   updateMapperList: function (data) {
     var self = Realtime
     var socket = Realtime.socket
@@ -653,7 +623,6 @@ const Realtime = {
     // data.userid
     // data.username
     // data.userimage
-    // data.userrealtime
 
     self.mappersOnMap[data.userid] = {
       id: data.userid,
@@ -661,7 +630,6 @@ const Realtime = {
       username: data.username,
       image: data.userimage,
       color: Util.getPastelColor(),
-      realtime: data.userrealtime,
       inConversation: data.userinconversation,
       coords: {
         x: 0,
@@ -674,7 +642,7 @@ const Realtime = {
       if (data.userinconversation) self.room.chat.mapperJoinedCall(data.userid)
 
       // create a div for the collaborators compass
-      self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status)
+      self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color)
     }
   },
   newPeerOnMap: function (data) {
@@ -701,12 +669,12 @@ const Realtime = {
     }
 
     // create an item for them in the realtime box
-    if (data.userid !== Active.Mapper.id && self.status) {
+    if (data.userid !== Active.Mapper.id) {
       self.room.chat.sound.play('joinmap')
       self.room.chat.addParticipant(self.mappersOnMap[data.userid])
 
       // create a div for the collaborators compass
-      self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color, !self.status)
+      self.createCompass(data.username, data.userid, data.userimage, self.mappersOnMap[data.userid].color)
 
       var notifyMessage = data.username + ' just joined the map'
       if (firstOtherPerson) {
@@ -720,14 +688,13 @@ const Realtime = {
         username: Active.Mapper.get('name'),
         userimage: Active.Mapper.get('image'),
         userid: Active.Mapper.id,
-        userrealtime: self.status,
         userinconversation: self.inConversation,
         mapid: Active.Map.id
       }
       socket.emit('updateNewMapperList', update)
     }
   },
-  createCompass: function (name, id, image, color, hide) {
+  createCompass: function (name, id, image, color) {
     var str = '<img width="28" height="28" src="' + image + '" /><p>' + name + '</p>'
     str += '<div id="compassArrow' + id + '" class="compassArrow"></div>'
     $('#compass' + id).remove()
@@ -735,9 +702,6 @@ const Realtime = {
       id: 'compass' + id,
       class: 'collabCompass'
     }).html(str).appendTo('#wrapper')
-    if (hide) {
-      $('#compass' + id).hide()
-    }
     $('#compass' + id + ' img').css({
       'border': '2px solid ' + color
     })
@@ -765,37 +729,10 @@ const Realtime = {
       self.callEnded()
     }
   },
-  newCollaborator: function (data) {
-    var self = Realtime
-    var socket = Realtime.socket
-
-    // data.userid
-    // data.username
-
-    self.mappersOnMap[data.userid].realtime = true
-
-    // $('#mapper' + data.userid).removeClass('littleRtOff').addClass('littleRtOn')
-    $('#compass' + data.userid).show()
-
-    GlobalUI.notifyUser(data.username + ' just turned on realtime')
-  },
-  lostCollaborator: function (data) {
-    var self = Realtime
-    var socket = Realtime.socket
-
-    // data.userid
-    // data.username
-
-    self.mappersOnMap[data.userid].realtime = false
-
-    // $('#mapper' + data.userid).removeClass('littleRtOn').addClass('littleRtOff')
-    $('#compass' + data.userid).hide()
-
-    GlobalUI.notifyUser(data.username + ' just turned off realtime')
-  },
   updatePeerCoords: function (data) {
     var self = Realtime
     var socket = Realtime.socket
+    if (!self.mappersOnMap[data.userid]) return
 
     self.mappersOnMap[data.userid].coords = {x: data.usercoords.x,y: data.usercoords.y}
     self.positionPeerIcon(data.userid)
@@ -804,13 +741,8 @@ const Realtime = {
     var self = Realtime
     var socket = Realtime.socket
 
-    if (self.status) { // if i have realtime turned on
-      for (var key in self.mappersOnMap) {
-        var mapper = self.mappersOnMap[key]
-        if (mapper.realtime) {
-          self.positionPeerIcon(key)
-        }
-      }
+    for (var key in self.mappersOnMap) {
+      self.positionPeerIcon(key)
     }
   },
   positionPeerIcon: function (id) {
@@ -875,7 +807,7 @@ const Realtime = {
     var map = Active.Map
     var mapper = Active.Mapper
 
-    if (self.status && map.authorizeToEdit(mapper) && socket) {
+    if (map.authorizeToEdit(mapper) && socket) {
       var update = {
         usercoords: coords,
         userid: Active.Mapper.id,
@@ -888,7 +820,7 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Active.Map && self.status) {
+    if (Active.Map) {
       positions.mapid = Active.Map.id
       socket.emit('topicDrag', positions)
     }
@@ -900,7 +832,7 @@ const Realtime = {
     var topic
     var node
 
-    if (Active.Map && self.status) {
+    if (Active.Map) {
       for (var key in positions) {
         topic = Metamaps.Topics.get(key)
         if (topic) node = topic.get('node')
@@ -1009,7 +941,7 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (Active.Map && self.status) {
+    if (Active.Map) {
       data.mapperid = Active.Mapper.id
       data.mapid = Active.Map.id
       socket.emit('newTopic', data)
@@ -1020,8 +952,6 @@ const Realtime = {
 
     var self = Realtime
     var socket = self.socket
-
-    if (!self.status) return
 
     function waitThenRenderTopic () {
       if (topic && mapping && mapper) {
@@ -1085,8 +1015,6 @@ const Realtime = {
     var self = Realtime
     var socket = self.socket
 
-    if (!self.status) return
-
     var topic = Metamaps.Topics.get(data.mappableid)
     if (topic) {
       var node = topic.get('node')
@@ -1112,8 +1040,6 @@ const Realtime = {
 
     var self = Realtime
     var socket = self.socket
-
-    if (!self.status) return
 
     function waitThenRenderSynapse () {
       if (synapse && mapping && mapper) {
@@ -1181,8 +1107,6 @@ const Realtime = {
   removeSynapse: function (data) {
     var self = Realtime
     var socket = self.socket
-
-    if (!self.status) return
 
     var synapse = Metamaps.Synapses.get(data.mappableid)
     if (synapse) {

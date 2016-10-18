@@ -938,20 +938,8 @@ const JIT = {
       // check whether to save mappings
       const checkWhetherToSave = function () {
         const map = Active.Map
-
         if (!map) return false
-
-        const mapper = Active.Mapper
-        // this case
-        // covers when it is a public map owned by you
-        // and also when it's a private map
-        const activeMappersMap = map.authorizePermissionChange(mapper)
-        const commonsMap = map.get('permission') === 'commons'
-        const realtimeOn = Realtime.status
-
-        // don't save if commons map, and you have realtime off,
-        // even if you're map creator
-        return map && mapper && ((commonsMap && realtimeOn) || (activeMappersMap && !commonsMap))
+        return map.authorizeToEdit(Active.Mapper)
       }
 
       if (checkWhetherToSave()) {

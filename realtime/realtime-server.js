@@ -6,11 +6,17 @@ var
 io.set('log', false);
 
 function start() {
+    var livemaps = {}
 
     signalServer(io, stunservers);
 
     io.on('connection', function (socket) {
-
+ 
+        socket.on('requestLiveMaps', function (activeUser) {
+            //constrain response to maps visible to user
+            var maps = Object.keys(livemaps).map(function(key) { return livemaps[key] })
+            socket.emit('receiveLiveMaps', maps)
+        })
         // this will ping a new person with awareness of who's already on the map
         socket.on('updateNewMapperList', function (data) {
             var existingUser = {
@@ -56,6 +62,16 @@ function start() {
 
         // this will ping everyone on a map that there's a person just joined the map
         socket.on('newMapperNotify', function (data) {
+    
+            if (!livemaps[data.mapid]) {
+                livemaps[data.mapid] = data.map // { name: '', desc: '', numTopics: '' }
+                livemaps[data.mapid].mapper_count = 1
+                io.sockets.emit('map_went_live', livemaps[data.mapid])
+            }
+            else {
+                livemaps[data.mapid].mapper_count++
+            }
+ 
             socket.set('mapid', data.mapid);
             socket.set('userid', data.userid);
             socket.set('username', data.username);
@@ -70,6 +86,7 @@ function start() {
         });
 
         var end = function () {
+ 
             var socketUserName, socketUserID;
             socket.get('userid', function (err, id) {
                 socketUserID = id;
@@ -82,32 +99,19 @@ function start() {
                 userid: socketUserID
             };
             socket.get('mapid', function (err, mapid) {
+                if (livemaps[mapid] && livemaps[mapid].mapper_count == 1) {
+                    delete livemaps[mapid]
+                    io.sockets.emit('map_no_longer_live', { id: mapid })
+                }
+                else if (livemaps[mapid]) {
+                    livemaps[mapid].mapper_count--
+                }
                 socket.broadcast.emit('maps-' + mapid + '-lostmapper', data);
             });
         };
         // this will ping everyone on a map that there's a person just left the map
         socket.on('disconnect', end);
         socket.on('endMapperNotify', end);
-
-        // this will ping everyone on a map that someone just turned on realtime
-        socket.on('notifyStartRealtime', function (data) {
-            var newUser = {
-                userid: data.userid,
-                username: data.username
-            };
-
-            socket.broadcast.emit('maps-' + data.mapid + '-newrealtime', newUser);
-        });
-
-        // this will ping everyone on a map that someone just turned on realtime
-        socket.on('notifyStopRealtime', function (data) {
-            var newUser = {
-                userid: data.userid,
-                username: data.username
-            };
-
-            socket.broadcast.emit('maps-' + data.mapid + '-lostrealtime', newUser);
-        });
 
         socket.on('updateMapperCoords', function (data) {
             var peer = {
