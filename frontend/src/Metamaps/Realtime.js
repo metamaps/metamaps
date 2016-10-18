@@ -76,6 +76,14 @@ const Realtime = {
         },
         nick: Active.Mapper.id
       })
+      self.webrtc.webrtc.on('iceFailed', function (peer) {
+        console.log('local ice failure', peer)
+        // local ice failure
+      })
+      self.webrtc.webrtc.on('connectivityError', function (peer) {
+        console.log('remote ice failure', peer)
+        // remote ice failure
+      })
 
       var $video = $('<video></video>').attr('id', self.videoId)
       self.localVideo = {
