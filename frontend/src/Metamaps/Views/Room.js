@@ -60,6 +60,7 @@ Room.prototype.leaveVideoOnly = function() {
   }
   this.isActiveRoom = false
   this.webrtc.leaveRoom()
+  this.webrtc.stopLocalVideo()
 }
 
 Room.prototype.leave = function() {
@@ -68,6 +69,7 @@ Room.prototype.leave = function() {
   }
   this.isActiveRoom = false
   this.webrtc.leaveRoom()
+  this.webrtc.stopLocalVideo()
   this.chat.conversationEnded()
   this.chat.removeParticipants()
   this.chat.clearMessages()

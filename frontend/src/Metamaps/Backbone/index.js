@@ -63,7 +63,7 @@ _Backbone.Map = Backbone.Model.extend({
     this.on('saved', this.savedEvent)
   },
   savedEvent: function () {
-    Realtime.sendMapChange(this)
+    Realtime.updateMap(this)
   },
   authorizeToEdit: function (mapper) {
     if (mapper && (
@@ -370,7 +370,7 @@ _Backbone.init = function () {
       return node
     },
     savedEvent: function () {
-      Realtime.sendTopicChange(this)
+      Realtime.updateTopic(this)
     },
     updateViews: function () {
       var onPageWithTopicCard = Active.Map || Active.Topic
@@ -549,7 +549,7 @@ _Backbone.init = function () {
       return edge
     },
     savedEvent: function () {
-      Realtime.sendSynapseChange(this)
+      Realtime.updateSynapse(this)
     },
     updateViews: function () {
       this.updateCardView()
