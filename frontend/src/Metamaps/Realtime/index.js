@@ -111,7 +111,7 @@ import {
   updateMap
 } from './sendable'
 
-const Realtime = {
+let Realtime = {
   videoId: 'video-wrapper',
   socket: null,
   webrtc: null,
@@ -129,9 +129,7 @@ const Realtime = {
     self.addJuntoListeners()
 
     self.socket = new SocketIoConnection({ url: Metamaps.Erb['REALTIME_SERVER']})
-
-    setupSendables(self)
-
+    
     self.socket.on('connect', function () {
       console.log('connected')
       subscribeToEvents(self, self.socket)
@@ -498,31 +496,35 @@ const Realtime = {
   }
 }
 
-const setupSendables = Realtime => {
-  [requestLiveMaps,
-  joinMap,
-  leaveMap,
-  checkForCall,
-  acceptCall,
-  denyCall,
-  denyInvite,
-  inviteToJoin,
-  inviteACall,
-  joinCall,
-  leaveCall,
-  sendMapperInfo,
-  sendCoords,
-  dragTopic,
-  createTopic,
-  updateTopic,
-  removeTopic,
-  deleteTopic,
-  createSynapse,
-  updateSynapse,
-  removeSynapse,
-  deleteSynapse,
-  updateMap].forEach(sendable => Realtime[sendable.name] = sendable(Realtime, Realtime.socket))
-}
+const sendables = [
+  ['requestLiveMaps',requestLiveMaps],
+  ['joinMap',joinMap],
+  ['leaveMap',leaveMap],
+  ['checkForCall',checkForCall],
+  ['acceptCall',acceptCall],
+  ['denyAll',denyCall],
+  ['denyInvite',denyInvite],
+  ['inviteToJoin',inviteToJoin],
+  ['inviteACall',inviteACall],
+  ['joinCall',joinCall],
+  ['leaveCall',leaveCall],
+  ['sendMapperInfo',sendMapperInfo],
+  ['sendCoords',sendCoords],
+  ['dragTopic',dragTopic],
+  ['createTopic',createTopic],
+  ['updateTopic',updateTopic],
+  ['removeTopic',removeTopic],
+  ['deleteTopic',deleteTopic],
+  ['createSynapse',createSynapse],
+  ['updateSynapse',updateSynapse],
+  ['removeSynapse',removeSynapse],
+  ['deleteSynapse',deleteSynapse],
+  ['updateMap',updateMap]
+]
+sendables.forEach(sendable => {
+  console.log(sendable, sendable[0])
+  Realtime[sendable[0]] = sendable[1](Realtime)
+})
 
 const subscribeToEvents = (Realtime, socket) => {
     socket.on(INVITED_TO_CALL, invitedToCall(Realtime))

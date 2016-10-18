@@ -28,12 +28,12 @@ import {
   UPDATE_MAP
 } from './events'
 
-export const requestLiveMaps = (self, socket) => () => {
-  socket.emit(REQUEST_LIVE_MAPS)
+export const requestLiveMaps = self => () => {
+  self.socket.emit(REQUEST_LIVE_MAPS)
 }
 
-export const joinMap = (self, socket) => () => {
-  socket.emit(JOIN_MAP, {
+export const joinMap = self => () => {
+  self.socket.emit(JOIN_MAP, {
     userid: Active.Mapper.id,
     username: Active.Mapper.get('name'),
     userimage: Active.Mapper.get('image'),
@@ -42,15 +42,15 @@ export const joinMap = (self, socket) => () => {
   })
 }
 
-export const leaveMap = (self, socket) => () => {
-  socket.emit(LEAVE_MAP)
+export const leaveMap = self => () => {
+  self.socket.emit(LEAVE_MAP)
 }
 
-export const checkForCall = (self, socket) => () => {
- socket.emit(CHECK_FOR_CALL, { room: self.room.room, mapid: Active.Map.id })
+export const checkForCall = self => () => {
+ self.socket.emit(CHECK_FOR_CALL, { room: self.room.room, mapid: Active.Map.id })
 }
 
-export const sendMapperInfo = (self, socket) => userid => {
+export const sendMapperInfo = self => userid => {
   // send this new mapper back your details, and the awareness that you've loaded the map
   var update = {
     userToNotify: userid,
@@ -60,10 +60,10 @@ export const sendMapperInfo = (self, socket) => userid => {
     userinconversation: self.inConversation,
     mapid: Active.Map.id
   }
-  socket.emit(SEND_MAPPER_INFO, update)
+  self.socket.emit(SEND_MAPPER_INFO, update)
 }
 
-export const joinCall = (self, socket) => () => {
+export const joinCall = self => () => {
   self.webrtc.off('readyToCall')
   self.webrtc.once('readyToCall', function () {
     self.videoInitialized = true
@@ -77,7 +77,7 @@ export const joinCall = (self, socket) => () => {
     self.room.join()
   })
   self.inConversation = true
-  socket.emit(JOIN_CALL, {
+  self.socket.emit(JOIN_CALL, {
     mapid: Active.Map.id,
     id: Active.Mapper.id
   })
@@ -86,8 +86,8 @@ export const joinCall = (self, socket) => () => {
   self.room.chat.mapperJoinedCall(Active.Mapper.id)
 }
 
-export const leaveCall = (self, socket) => () => {
-  socket.emit(LEAVE_CALL, {
+export const leaveCall = self => () => {
+  self.socket.emit(LEAVE_CALL, {
     mapid: Active.Map.id,
     id: Active.Mapper.id
   })
@@ -104,9 +104,9 @@ export const leaveCall = (self, socket) => () => {
   }
 }
 
-export const acceptCall = (self, socket) => userid => {
+export const acceptCall = self => userid => {
   self.room.chat.sound.stop(self.soundId)
-  socket.emit(ACCEPT_CALL, {
+  self.socket.emit(ACCEPT_CALL, {
     mapid: Active.Map.id,
     invited: Active.Mapper.id,
     inviter: userid
@@ -116,9 +116,9 @@ export const acceptCall = (self, socket) => userid => {
   GlobalUI.clearNotify()
 }
 
-export const denyCall = (self, socket) => userid => {
+export const denyCall = self => userid => {
   self.room.chat.sound.stop(self.soundId)
-  socket.emit(DENY_CALL, {
+  self.socket.emit(DENY_CALL, {
     mapid: Active.Map.id,
     invited: Active.Mapper.id,
     inviter: userid
@@ -126,9 +126,9 @@ export const denyCall = (self, socket) => userid => {
   GlobalUI.clearNotify()
 }
 
-export const denyInvite = (self, socket) => userid => {
+export const denyInvite = self => userid => {
   self.room.chat.sound.stop(self.soundId)
-  socket.emit(DENY_INVITE, {
+  self.socket.emit(DENY_INVITE, {
     mapid: Active.Map.id,
     invited: Active.Mapper.id,
     inviter: userid
@@ -136,8 +136,8 @@ export const denyInvite = (self, socket) => userid => {
   GlobalUI.clearNotify()
 }
 
-export const inviteACall = (self, socket) => userid => {
-  socket.emit(INVITE_A_CALL, {
+export const inviteACall = self => userid => {
+  self.socket.emit(INVITE_A_CALL, {
     mapid: Active.Map.id,
     inviter: Active.Mapper.id,
     invited: userid
@@ -146,8 +146,8 @@ export const inviteACall = (self, socket) => userid => {
   GlobalUI.clearNotify()
 }
 
-export const inviteToJoin = (self, socket) => userid => {
-  socket.emit(INVITE_TO_JOIN, {
+export const inviteToJoin = self => userid => {
+  self.socket.emit(INVITE_TO_JOIN, {
     mapid: Active.Map.id,
     inviter: Active.Mapper.id,
     invited: userid
@@ -155,7 +155,7 @@ export const inviteToJoin = (self, socket) => userid => {
   self.room.chat.invitationPending(userid)
 }
 
-export const sendCoords = (self, socket) => coords => {
+export const sendCoords = self => coords => {
   var map = Active.Map
   var mapper = Active.Mapper
   if (map.authorizeToEdit(mapper)) {
@@ -164,83 +164,83 @@ export const sendCoords = (self, socket) => coords => {
       userid: Active.Mapper.id,
       mapid: Active.Map.id
     }
-    socket.emit(SEND_COORDS, update)
+    self.socket.emit(SEND_COORDS, update)
   }
 }
 
-export const dragTopic = (self, socket) => positions => {
+export const dragTopic = self => positions => {
   if (Active.Map) {
     positions.mapid = Active.Map.id
-    socket.emit(DRAG_TOPIC, positions)
+    self.socket.emit(DRAG_TOPIC, positions)
   }
 }
 
-export const updateTopic = (self, socket) => topic => {
+export const updateTopic = self => topic => {
   var data = {
     topicId: topic.id
   }
-  socket.emit(UPDATE_TOPIC, data)
+  self.socket.emit(UPDATE_TOPIC, data)
 }
 
-export const updateSynapse = (self, socket) => synapse => {
+export const updateSynapse = self => synapse => {
   var data = {
     synapseId: synapse.id
   }
-  socket.emit(UPDATE_SYNAPSE, data)
+  self.socket.emit(UPDATE_SYNAPSE, data)
 }
 
-export const updateMap = (self, socket) => map => {
+export const updateMap = self => map => {
   var data = {
     mapId: map.id
   }
-  socket.emit(UPDATE_MAP, data)
+  self.socket.emit(UPDATE_MAP, data)
 }
 
-export const createMessage = (self, socket) => data => {
+export const createMessage = self => data => {
   var message = data.attributes
   message.mapid = Active.Map.id
-  socket.emit(CREATE_MESSAGE, message)
+  self.socket.emit(CREATE_MESSAGE, message)
 }
 
-export const createTopic = (self, socket) => data => {
+export const createTopic = self => data => {
   if (Active.Map) {
     data.mapperid = Active.Mapper.id
     data.mapid = Active.Map.id
-    socket.emit(CREATE_TOPIC, data)
+    self.socket.emit(CREATE_TOPIC, data)
   }
 }
 
-export const deleteTopic = (self, socket) => data => {
+export const deleteTopic = self => data => {
   if (Active.Map) {
-    socket.emit(DELETE_TOPIC, data)
+    self.socket.emit(DELETE_TOPIC, data)
   }
 }
 
-export const removeTopic = (self, socket) => data => {
+export const removeTopic = self => data => {
   if (Active.Map) {
     data.mapid = Active.Map.id
-    socket.emit(REMOVE_TOPIC, data)
+    self.socket.emit(REMOVE_TOPIC, data)
   }
 }
 
-export const createSynapse = (self, socket) => data => {
+export const createSynapse = self => data => {
   if (Active.Map) {
     data.mapperid = Active.Mapper.id
     data.mapid = Active.Map.id
-    socket.emit(CREATE_SYNAPSE, data)
+    self.socket.emit(CREATE_SYNAPSE, data)
   }
 }
 
-export const deleteSynapse = (self, socket) => data => {
+export const deleteSynapse = self => data => {
   if (Active.Map) {
     data.mapid = Active.Map.id
-    socket.emit(DELETE_SYNAPSE, data)
+    self.socket.emit(DELETE_SYNAPSE, data)
   }
 }
 
-export const removeSynapse = (self, socket) => data => {
+export const removeSynapse = self => data => {
   if (Active.Map) {
     data.mapid = Active.Map.id
-    socket.emit(REMOVE_SYNAPSE, data)
+    self.socket.emit(REMOVE_SYNAPSE, data)
   }
 }
