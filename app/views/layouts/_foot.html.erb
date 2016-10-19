@@ -2,12 +2,14 @@
 <%= render :partial => 'layouts/templates' %>
 <%= render :partial => 'shared/metacodeBgColors' %>
 <script type="text/javascript" charset="utf-8">
+    // TODO move this into Metamaps.ServerData somehow
     <% if current_user %>
         Metamaps.Active.Mapper = <%= current_user.to_json.html_safe %>
     <% else %>
         Metamaps.Active.Mapper = null;
     <% end %>
 
+    // TODO move this into frontend/
     Metamaps.Loading = {
         loader: new CanvasLoader('loading'),
         hide: function () {
@@ -22,8 +24,6 @@
     Metamaps.Loading.loader.setDensity(41); // default is 40
     Metamaps.Loading.loader.setRange(0.9); // default is 1.3
     Metamaps.Loading.loader.show(); // Hidden by default
-
-    USERVOICE.load();
 </script>
 <%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>
 </body>

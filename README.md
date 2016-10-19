@@ -11,9 +11,12 @@ You can find a version of this software running at [metamaps.cc][site-beta], whe
 
 Metamaps is created and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. You can get in touch by using whichever of these channels you prefer:
 
-## Community
-
-- To send us a personal message or request an invite to the open beta, get in touch with us at team@metamaps.cc or @metamapps on Twitter.
+## How do I learn more?
+     
+- To send us a personal message or request an invite to the open beta, get in touch with us via email, Twitter, or Hylo
+- User Documentation: [docs.metamaps.cc](https://docs.metamaps.cc)
+- User Community: [hylo.com/c/metamaps](https://www.hylo.com/c/metamaps)
+- Development Roadmap: [github.com/metamaps/metamaps/milestones](https://github.com/metamaps/metamaps/milestones)
 - If you would like to report a bug, please check the [issues][contributing-issues] section in our [contributing instructions][contributing].
 - If you would like to get set up as a developer, that's great! Read on for help getting your development environment set up.
 
@@ -51,10 +54,6 @@ We haven't set up instructions for using Vagrant on Windows, but there are instr
 
 - [For Windows][windows-installation]
 
-## Contributing guidelines
-
-Cloning this repository directly is primarily for those wishing to contribute to our codebase. Check out our [contributing instructions][contributing] to get involved.
-
 ## Licensing information
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
@@ -65,7 +64,6 @@ The license can be read [here][license].
 
 Copyright (c) 2016 Connor Turland
 
-[site-blog]: http://blog.metamaps.cc
 [site-beta]: http://metamaps.cc
 [license]: https://github.com/metamaps/metamaps/blob/develop/LICENSE
 [contributing]: https://github.com/metamaps/metamaps/blob/develop/doc/CONTRIBUTING.md

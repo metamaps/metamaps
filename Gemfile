@@ -25,7 +25,6 @@ gem 'rack-cors'
 gem 'redis'
 gem 'slack-notifier'
 gem 'snorlax'
-gem 'uservoice-ruby'
 
 # asset stuff
 gem 'jquery-rails'
