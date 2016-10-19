@@ -13,10 +13,11 @@ Metamaps is created and maintained by a distributed, nomadic community comprised
 
 ## How do I learn more?
      
-- To send us a personal message or request an invite to the open beta, get in touch with us via email, Twitter, or Hylo
+- Contact: [team@metamaps.cc](mailto:team@metamaps.cc) or [@metamapps](https://twitter.com/metamapps) on Twitter
 - User Documentation: [docs.metamaps.cc](https://docs.metamaps.cc)
 - User Community: [hylo.com/c/metamaps](https://www.hylo.com/c/metamaps)
 - Development Roadmap: [github.com/metamaps/metamaps/milestones](https://github.com/metamaps/metamaps/milestones)
+- To send us a personal message or request an invite to the open beta, get in touch with us via email, Twitter, or Hylo
 - If you would like to report a bug, please check the [issues][contributing-issues] section in our [contributing instructions][contributing].
 - If you would like to get set up as a developer, that's great! Read on for help getting your development environment set up.
 
