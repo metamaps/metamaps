@@ -35,7 +35,6 @@ const ExploreMaps = {
     var exploreObj = { 
       currentUser: Active.Mapper,
       section: self.collection.id,
-      displayStyle: 'grid',
       maps: self.collection,
       moreToLoad: self.collection.page != 'loadedAll',
       user: mapperObj,
