@@ -47,13 +47,10 @@ ActiveRecord::Schema.define(version: 20161013162214) do
     t.string   "eventable_type"
     t.integer  "user_id"
     t.integer  "map_id"
-    t.integer  "sequence_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id", using: :btree
-    t.index ["map_id", "sequence_id"], name: "index_events_on_map_id_and_sequence_id", unique: true, using: :btree
     t.index ["map_id"], name: "index_events_on_map_id", using: :btree
-    t.index ["sequence_id"], name: "index_events_on_sequence_id", using: :btree
     t.index ["user_id"], name: "index_events_on_user_id", using: :btree
   end
 
@@ -78,6 +75,7 @@ ActiveRecord::Schema.define(version: 20161013162214) do
     t.datetime "updated_at",    null: false
     t.integer  "mappable_id"
     t.string   "mappable_type"
+    t.boolean  "in_trash"
     t.index ["map_id", "synapse_id"], name: "index_mappings_on_map_id_and_synapse_id", using: :btree
     t.index ["map_id", "topic_id"], name: "index_mappings_on_map_id_and_topic_id", using: :btree
     t.index ["map_id"], name: "index_mappings_on_map_id", using: :btree
@@ -86,16 +84,16 @@ ActiveRecord::Schema.define(version: 20161013162214) do
   end
 
   create_table "maps", force: :cascade do |t|
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.text     "name"
-    t.boolean  "arranged"
     t.text     "desc"
     t.text     "permission"
     t.integer  "user_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.boolean  "arranged"
     t.boolean  "featured"
-    t.string   "screenshot_file_name"
-    t.string   "screenshot_content_type"
+    t.string   "screenshot_file_name",    limit: 255
+    t.string   "screenshot_content_type", limit: 255
     t.integer  "screenshot_file_size"
     t.datetime "screenshot_updated_at"
     t.index ["user_id"], name: "index_maps_on_user_id", using: :btree
@@ -114,21 +112,21 @@ ActiveRecord::Schema.define(version: 20161013162214) do
   end
 
   create_table "metacode_sets", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",              limit: 255
     t.text     "desc"
     t.integer  "user_id"
     t.boolean  "mapperContributed"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.index ["user_id"], name: "index_metacode_sets_on_user_id", using: :btree
   end
 
   create_table "metacodes", force: :cascade do |t|
     t.text     "name"
-    t.string   "manual_icon"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.string   "color"
+    t.string   "manual_icon",           limit: 255
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "color",                 limit: 255
     t.string   "aws_icon_file_name"
     t.string   "aws_icon_content_type"
     t.integer  "aws_icon_file_size"
@@ -184,14 +182,15 @@ ActiveRecord::Schema.define(version: 20161013162214) do
   create_table "synapses", force: :cascade do |t|
     t.text     "desc"
     t.text     "category"
-    t.text     "weight"
-    t.text     "permission"
     t.integer  "topic1_id"
     t.integer  "topic2_id"
     t.integer  "user_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.text     "permission"
+    t.text     "weight"
     t.integer  "defer_to_map_id"
+    t.boolean  "in_trash"
     t.index ["topic1_id", "topic1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
     t.index ["topic1_id"], name: "index_synapses_on_topic1_id", using: :btree
     t.index ["topic2_id", "topic2_id"], name: "index_synapses_on_node2_id_and_node2_id", using: :btree
@@ -212,20 +211,21 @@ ActiveRecord::Schema.define(version: 20161013162214) do
     t.text     "name"
     t.text     "desc"
     t.text     "link"
-    t.text     "permission"
     t.integer  "user_id"
     t.integer  "metacode_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.string   "image_file_name"
-    t.string   "image_content_type"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.text     "permission"
+    t.string   "image_file_name",    limit: 255
+    t.string   "image_content_type", limit: 255
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.string   "audio_file_name"
-    t.string   "audio_content_type"
+    t.string   "audio_file_name",    limit: 255
+    t.string   "audio_content_type", limit: 255
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
     t.integer  "defer_to_map_id"
+    t.boolean  "in_trash"
     t.index ["metacode_id"], name: "index_topics_on_metacode_id", using: :btree
     t.index ["user_id"], name: "index_topics_on_user_id", using: :btree
   end
@@ -240,30 +240,30 @@ ActiveRecord::Schema.define(version: 20161013162214) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.text     "settings"
-    t.string   "code",                   limit: 8
-    t.string   "joinedwithcode",         limit: 8
-    t.string   "crypted_password"
-    t.string   "password_salt"
-    t.string   "persistence_token"
-    t.string   "perishable_token"
+    t.string   "name",                   limit: 255
+    t.string   "email",                  limit: 255
+    t.string   "crypted_password",       limit: 255
+    t.string   "password_salt",          limit: 255
+    t.string   "persistence_token",      limit: 255
+    t.string   "perishable_token",       limit: 255
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+    t.string   "code",                   limit: 8
+    t.string   "joinedwithcode",         limit: 8
+    t.text     "settings"
     t.string   "encrypted_password",     limit: 128, default: ""
-    t.string   "remember_token"
+    t.string   "remember_token",         limit: 255
     t.datetime "remember_created_at"
-    t.string   "reset_password_token"
+    t.string   "reset_password_token",   limit: 255
     t.datetime "last_sign_in_at"
-    t.string   "last_sign_in_ip"
+    t.string   "last_sign_in_ip",        limit: 255
     t.integer  "sign_in_count",                      default: 0
     t.datetime "current_sign_in_at"
-    t.string   "current_sign_in_ip"
+    t.string   "current_sign_in_ip",     limit: 255
     t.datetime "reset_password_sent_at"
     t.boolean  "admin"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
+    t.string   "image_file_name",        limit: 255
+    t.string   "image_content_type",     limit: 255
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.integer  "generation"
