@@ -22,7 +22,7 @@ class TopicsController < ApplicationController
     end
     @all= @topics.to_a.concat(@maps.to_a).sort { |a, b| a.name <=> b.name }
     
-    render json: autocomplete_array_json(@all)
+    render json: autocomplete_array_json(@all).to_json
   end
 
   # GET topics/:id
