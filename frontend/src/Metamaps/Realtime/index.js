@@ -1,4 +1,4 @@
-/* global Metamaps, $, SocketIoConnection */
+/* global Metamaps, $ */
 
 /*
  * Metamaps.Realtime.js
@@ -15,6 +15,7 @@
 
 import _ from 'lodash'
 import SimpleWebRTC from 'simplewebrtc'
+import SocketIoConnection from 'simplewebrtc/socketioconnection'
 
 import Active from '../Active'
 import GlobalUI from '../GlobalUI'
@@ -99,6 +100,7 @@ import {
   leaveCall,
   sendMapperInfo,
   sendCoords,
+  createMessage,
   dragTopic,
   createTopic,
   updateTopic,
@@ -510,6 +512,7 @@ const sendables = [
   ['leaveCall',leaveCall],
   ['sendMapperInfo',sendMapperInfo],
   ['sendCoords',sendCoords],
+  ['createMessage',createMessage],
   ['dragTopic',dragTopic],
   ['createTopic',createTopic],
   ['updateTopic',updateTopic],
