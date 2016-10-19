@@ -21,20 +21,6 @@ class ApplicationController < ActionController::Base
   helper_method :authenticated?
   helper_method :admin?
 
-  def after_sign_in_path_for(resource)
-    sign_in_url = new_user_session_url
-    sign_up_url = new_user_registration_url
-    stored = stored_location_for(User) 
-
-    if stored
-      stored
-    elsif request.referer.include?(sign_in_url) || request.referer.include?(sign_up_url)
-      super
-    else
-      request.referer || root_path
-    end
-  end
-
   def handle_unauthorized
     if authenticated? and params[:controller] == 'maps' and params[:action] == 'show'
       redirect_to request_access_map_path(params[:id])
@@ -42,7 +28,7 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, notice: "You don't have permission to see that page."
     else
       store_location_for(resource, request.fullpath)
-      redirect_to new_user_session_path, notice: 'Try signing in to do that.'
+      redirect_to sign_in_path, notice: 'Try signing in to do that.'
     end
   end
 
@@ -60,7 +46,7 @@ class ApplicationController < ActionController::Base
 
   def require_user
     return true if authenticated?
-    redirect_to new_user_session_path, notice: 'You must be logged in.'
+    redirect_to sign_in_path, notice: 'You must be logged in.'
     return false
   end
 

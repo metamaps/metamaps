@@ -65,14 +65,14 @@ Metamaps::Application.routes.draw do
   devise_for :users, skip: :sessions, controllers: {
     registrations: 'users/registrations',
     passwords: 'users/passwords',
-    sessions: 'devise/sessions'
+    sessions: 'users/sessions'
   }
 
   devise_scope :user do
-    get 'login' => 'devise/sessions#new', :as => :new_user_session
-    post 'login' => 'devise/sessions#create', :as => :user_session
-    get 'logout' => 'devise/sessions#destroy', :as => :destroy_user_session
-    get 'join' => 'devise/registrations#new', :as => :new_user_registration_path
+    get 'login' => 'users/sessions#new', :as => :sign_in
+    post 'login' => 'users/sessions#create', :as => :user_session
+    get 'logout' => 'users/sessions#destroy', :as => :destroy_user_session
+    get 'join' => 'users/registrations#new', :as => :sign_up
   end
 
   resources :users, except: [:index, :destroy] do
