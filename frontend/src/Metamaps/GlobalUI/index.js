@@ -1,5 +1,7 @@
 /* global Metamaps, $ */
 
+import clipboard from 'clipboard-js'
+
 import Active from '../Active'
 import Create from '../Create'
 
@@ -139,7 +141,17 @@ const GlobalUI = {
     self.hideDiv('#toast')
   },
   shareInvite: function (inviteLink) {
-    window.prompt('To copy the invite link, press: Ctrl+C, Enter', inviteLink)
+    clipboard.copy({
+      'text/plain': inviteLink
+    }).then(() => {
+      $('#joinCodesBox .popup').remove()
+      $('#joinCodesBox').append('<p class="popup" style="text-align: center">Copied!</p>')
+      window.setTimeout(() => $('#joinCodesBox .popup').remove(), 1500)
+    }, () => {
+      $('#joinCodesBox .popup').remove()
+      $('#joinCodesBox').append(`<p class="popup" style="text-align: center">Your browser doesn't support copying, please copy manually.</p>`)
+      window.setTimeout(() => $('#joinCodesBox .popup').remove(), 1500)
+    })
   }
 }
 
