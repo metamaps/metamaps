@@ -18,8 +18,14 @@ class Maps extends Component {
     this.resize()
   }
 
-  componentDidUpdate() {
-    this.resize()
+  componentDidUpdate(oldProps) {
+    const { maps, user, currentUser } = this.props
+    const oldMaps = oldProps.maps
+    const oldUser = oldProps.user
+    const oldCurrentUser = oldProps.currentUser
+    const numCards = maps.length + (user || currentUser ? 1 : 0)
+    const oldNumCards = oldMaps.length + (oldUser || oldCurrentUser ? 1 : 0)
+    if (numCards !== oldNumCards) this.resize()
   }
 
   componentWillUnmount() {
