@@ -4,6 +4,7 @@ import MapperCard from './MapperCard'
 import MapCard from './MapCard'
 
 const MAP_WIDTH = 252
+const MAX_COLUMNS = 4
 
 class Maps extends Component {
 
@@ -17,13 +18,20 @@ class Maps extends Component {
     this.resize()
   }
 
+  componentDidUpdate() {
+    this.resize()
+  }
+
   componentWillUnmount() {
     window && window.removeEventListener('resize', this.resize)
   }
 
   resize = () => {
+    const { maps, user, currentUser } = this.props
+    const numCards = maps.length + (user || currentUser ? 1 : 0)
     const mapSpaces = Math.floor(document.body.clientWidth / MAP_WIDTH)
-    this.setState({ mapsWidth: mapSpaces * MAP_WIDTH })
+    const mapsWidth = Math.min(MAX_COLUMNS, Math.min(numCards, mapSpaces)) * MAP_WIDTH
+    this.setState({ mapsWidth })
   }
 
   render = () => {
