@@ -980,7 +980,6 @@ const JIT = {
     self.dragFlag = 0;
     self.dragTolerance = 0;
 
-
     if (JIT.tempInit && JIT.tempNode2 == null) {
       // this means you want to add a new topic, and then a synapse
       Create.newTopic.addSynapse = true
