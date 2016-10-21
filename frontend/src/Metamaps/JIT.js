@@ -773,14 +773,14 @@ const JIT = {
           
       //self.virtualPointer = pos;
       // if it's a left click, or a touch, move the node
-      if (e.touches || (e.button == 0 && !e.altKey && !e.ctrlKey && (e.buttons == 0 || e.buttons == 1 || e.buttons == undefined))) {
+      if (e.touches || (e.button === 0 && !e.altKey && !e.ctrlKey && (e.buttons === 0 || e.buttons === 1 || e.buttons === undefined))) {
 
         var width = Metamaps.Visualize.mGraph.canvas.getSize().width,
             height = Metamaps.Visualize.mGraph.canvas.getSize().height,
             xPix = Metamaps.Util.coordsToPixels(pos).x,
             yPix = Metamaps.Util.coordsToPixels(pos).y;
             
-        if(self.dragFlag == 0){
+        if(self.dragFlag === 0){
           self.mouseDownPix = Metamaps.Util.coordsToPixels(eventInfo.getPos());
           self.dragFlag = 1;
         }
@@ -881,8 +881,8 @@ const JIT = {
         }
       }
       // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
-      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && authorized) {
-        if (JIT.tempInit == false) {
+      else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && authorized) {
+        if (JIT.tempInit === false) {
           JIT.tempNode = node
           JIT.tempInit = true
 
@@ -911,7 +911,7 @@ const JIT = {
         }
         //
         let temp = eventInfo.getNode()
-        if (temp != false && temp.id != node.id && Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
+        if (temp !== false && temp.id !== node.id && Selected.Nodes.indexOf(temp) === -1) { // this means a Node has been returned
           JIT.tempNode2 = temp
 
           Mouse.synapseEndCoordinates = {
@@ -945,10 +945,10 @@ const JIT = {
           }
         }
       }
-      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Active.Topic) {
+      else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && Active.Topic) {
         GlobalUI.notifyUser('Cannot create in Topic view.')
       }
-      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && !authorized) {
+      else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && !authorized) {
         GlobalUI.notifyUser('Cannot edit Public map.')
       }
     }
@@ -980,11 +980,11 @@ const JIT = {
     self.dragFlag = 0;
     self.dragTolerance = 0;
 
-    if (JIT.tempInit && JIT.tempNode2 == null) {
+    if (JIT.tempInit && JIT.tempNode2 === null) {
       // this means you want to add a new topic, and then a synapse
       Create.newTopic.addSynapse = true
       Create.newTopic.open()
-    } else if (JIT.tempInit && JIT.tempNode2 != null) {
+    } else if (JIT.tempInit && JIT.tempNode2 !== null) {
       // this means you want to create a synapse between two existing topics
       Create.newTopic.addSynapse = false
       Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
@@ -1135,7 +1135,7 @@ const JIT = {
     // 2 others are selected only and shift, so additionally select this one
     // 3 others are selected only, no shift: drag only this one
     // 4 this node and others were selected, so drag them (just return false)
-    if (Selected.Nodes.length == 0) {
+    if (Selected.Nodes.length === 0) {
       Control.selectNode(node, e)
       return 'only-drag-this-one'
     }
