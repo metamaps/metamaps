@@ -9,7 +9,7 @@ const {
 const NOT_IN_CONVERSATION = 0
 const IN_CONVERSATION = 1
 
-const addMapperToMap = (map, userId) => { return { ...map, [userId]: NOT_IN_CONVERSATION }}
+const addMapperToMap = (map, userId) => { return Object.assign({}, map, { [userId]: NOT_IN_CONVERSATION })}
 
 const reducer = (state = { connectedPeople: {}, liveMaps: {} }, action) => {
   const { type, payload } = action
@@ -29,7 +29,7 @@ const reducer = (state = { connectedPeople: {}, liveMaps: {} }, action) => {
         }
       }),
       liveMaps: Object.assign({}, liveMaps, {
-        [payload.mapid]: addMapperToMap(map || {}, payload.userid) 
+        [payload.mapid]: addMapperToMap(map || {}, payload.userid)
       })
     })
   case LEAVE_MAP:
@@ -46,7 +46,7 @@ const reducer = (state = { connectedPeople: {}, liveMaps: {} }, action) => {
     // update the user (payload.id is user id) in the given map to be marked in the conversation
     return Object.assign({}, state, {
       liveMaps: Object.assign({}, liveMaps, {
-        [payload.mapid]: Object.assign({}, map, { 
+        [payload.mapid]: Object.assign({}, map, {
           [payload.id]: IN_CONVERSATION
         })
       })
@@ -60,12 +60,12 @@ const reducer = (state = { connectedPeople: {}, liveMaps: {} }, action) => {
       liveMaps: Object.assign({}, liveMaps, { map: newMap })
     })
   case 'DISCONNECT':
-    const mapWithoutUser = omit(map, payload.userid) 
-    const newMap = callWillFinish ? mapValues(mapWithoutUser, () => NOT_IN_CONVERSATION) : mapWithoutUser 
-    const newLiveMaps = mapWillEmpty ? omit(liveMaps, payload.mapid) : Object.assign({}, liveMaps, { [payload.mapid]: newMap })
+    const mapWithoutUser = omit(map, payload.userid)
+    const newMapWithoutUser = callWillFinish ? mapValues(mapWithoutUser, () => NOT_IN_CONVERSATION) : mapWithoutUser
+    const newLiveMapsWithoutUser = mapWillEmpty ? omit(liveMaps, payload.mapid) : Object.assign({}, liveMaps, { [payload.mapid]: newMapWithoutUser })
     return {
       connectedPeople: omit(connectedPeople, payload.userid),
-      liveMaps: omitBy(newLiveMaps, isNil)
+      liveMaps: omitBy(newLiveMapsWithoutUser, isNil)
     }
   default:
     return state
