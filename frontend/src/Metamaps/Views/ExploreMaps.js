@@ -62,7 +62,7 @@ const ExploreMaps = {
     ReactDOM.render(
       React.createElement(Maps, exploreObj),
       document.getElementById('explore')
-    )
+    ).resize()
     
     if (cb) cb()
     Metamaps.Loading.hide()
