@@ -761,28 +761,15 @@ const JIT = {
     Control.deselectAllNodes()
   }, // escKeyHandler
   onDragMoveTopicHandler: function (node, eventInfo, e) {
-    const self = JIT
+    var self = JIT
 
-<<<<<<< HEAD
-    // this is used to send nodes that are moving to
-    // other realtime collaborators on the same map
-    const positionsToSend = {}
-    let topic
-
-    const authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
-
-    if (node && !node.nodeFrom) {
-      const pos = eventInfo.getPos()
-      // if it's a left click, or a touch, move the node
-      if (e.touches || (e.button === 0 && !e.altKey && !e.ctrlKey && !e.shiftKey && (e.buttons === 0 || e.buttons === 1 || e.buttons === undefined))) {
-=======
     var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     if (node && !node.nodeFrom) {
       var pos = eventInfo.getPos(),
-          EDGE_THICKNESS = 50 * Metamaps.Visualize.mGraph.canvas.scaleOffsetX,
-          SHIFT = 10 / Metamaps.Visualize.mGraph.canvas.scaleOffsetX,
-          PERIOD = 50;
+          EDGE_THICKNESS = 30 /** Metamaps.Visualize.mGraph.canvas.scaleOffsetX*/,
+          SHIFT = 2 / Metamaps.Visualize.mGraph.canvas.scaleOffsetX,
+          PERIOD = 5;
           
       //self.virtualPointer = pos;
       // if it's a left click, or a touch, move the node
@@ -802,57 +789,72 @@ const JIT = {
           self.dragTolerance = 1;
         }
 
-        if(xPix < EDGE_THICKNESS && !self.hasOwnProperty('dragLeftEdge') && self.dragTolerance ){
+        if(xPix < EDGE_THICKNESS && self.dragTolerance ){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:EDGE_THICKNESS,y:yPix}).x - SHIFT,y:pos.y};
           Metamaps.Visualize.mGraph.canvas.translate(SHIFT,0);
-          self.virtualPointer = {x:pos.x - SHIFT,y:pos.y};
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
-          
+        
           self.dragLeftEdge = setInterval( function(){
+            self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:EDGE_THICKNESS,y:yPix}).x - SHIFT,y:pos.y};
             Metamaps.Visualize.mGraph.canvas.translate(SHIFT,0);
-            self.virtualPointer = {x:self.virtualPointer.x - SHIFT,y:self.virtualPointer.y};
             self.updateTopicPositions(node,self.virtualPointer);
             Visualize.mGraph.plot();
           } , PERIOD);
+          
         }
-        if(width - xPix < EDGE_THICKNESS && !self.hasOwnProperty('dragRightEdge') && self.dragTolerance){
+        if(width - xPix < EDGE_THICKNESS && self.dragTolerance){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:width - EDGE_THICKNESS,y:yPix}).x + SHIFT,y:pos.y};
           Metamaps.Visualize.mGraph.canvas.translate(-SHIFT,0);
-          self.virtualPointer = {x:pos.x + SHIFT,y:pos.y};
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
           
           self.dragRightEdge = setInterval( function(){
+            self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:width - EDGE_THICKNESS,y:yPix}).x + SHIFT,y:pos.y};
             Metamaps.Visualize.mGraph.canvas.translate(-SHIFT,0);
-            self.virtualPointer = {x:self.virtualPointer.x + SHIFT,y:self.virtualPointer.y};
-            self.updateTopicPositions(node,self.virtualPointer);
+            self.updateTopicPositions(node, self.virtualPointer);
             Visualize.mGraph.plot();
           } , PERIOD);
         }
-        if(yPix < EDGE_THICKNESS && !self.hasOwnProperty('dragTopEdge') && self.dragTolerance){
-          console.log(xPix,yPix);
-        console.log(width,height);
+        if(yPix < EDGE_THICKNESS && self.dragTolerance){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:EDGE_THICKNESS}).y - SHIFT};
           Metamaps.Visualize.mGraph.canvas.translate(0,SHIFT);
-          self.virtualPointer = {x:pos.x, y:pos.y - SHIFT };
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
           
           self.dragTopEdge = setInterval( function(){
+            self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:EDGE_THICKNESS}).y - SHIFT};
             Metamaps.Visualize.mGraph.canvas.translate(0,SHIFT);
-            self.virtualPointer = {x:self.virtualPointer.x,y:self.virtualPointer.y - SHIFT};
-            self.updateTopicPositions(node,self.virtualPointer);
+            self.updateTopicPositions(node, self.virtualPointer);
             Visualize.mGraph.plot();
           } , PERIOD);
         }
-        if(height - yPix < EDGE_THICKNESS && !self.hasOwnProperty('dragBottomEdge') && self.dragTolerance){
+        if(height - yPix < EDGE_THICKNESS && self.dragTolerance){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:height - EDGE_THICKNESS}).y + SHIFT};
           Metamaps.Visualize.mGraph.canvas.translate(0,-SHIFT);
-          self.virtualPointer = {x:pos.x, y:pos.y + SHIFT };
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
           
           self.dragBottomEdge = setInterval( function(){
+            self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:height - EDGE_THICKNESS}).y + SHIFT};
             Metamaps.Visualize.mGraph.canvas.translate(0,-SHIFT);
-            self.virtualPointer = {x:self.virtualPointer.x,y:self.virtualPointer.y + SHIFT};
-            self.updateTopicPositions(node,self.virtualPointer);
+            self.updateTopicPositions(node, self.virtualPointer);
             Visualize.mGraph.plot();
           } , PERIOD);
         }
@@ -862,86 +864,32 @@ const JIT = {
           clearInterval(self.dragRightEdge);
           clearInterval(self.dragTopEdge);
           clearInterval(self.dragBottomEdge);
-          
-          delete self.dragLeftEdge;
-          delete self.dragRightEdge;
-          delete self.dragTopEdge;
-          delete self.dragBottomEdge;
 
+          self.updateTopicPositions(node,pos);
+          Visualize.mGraph.plot()
         }
         
->>>>>>> 21a48de... Made it so that the map pans when you drag a selection of topics near the edge of the window
         // if the node dragged isn't already selected, select it
-        const whatToDo = self.handleSelectionBeforeDragging(node, e)
+        var whatToDo = self.handleSelectionBeforeDragging(node, e)
         if (node.pos.rho || node.pos.rho === 0) {
           // this means we're in topic view
-          const rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y)
-          const theta = Math.atan2(pos.y, pos.x)
+          var rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y)
+          var theta = Math.atan2(pos.y, pos.x)
           node.pos.setp(theta, rho)
-<<<<<<< HEAD
-        } else if (whatToDo === 'only-drag-this-one') {
-          node.pos.setc(pos.x, pos.y)
-
-          if (Active.Map) {
-            topic = node.getData('topic')
-            // we use the topic ID not the node id
-            // because we can't depend on the node id
-            // to be the same as on other collaborators
-            // maps
-            positionsToSend[topic.id] = pos
-            $(document).trigger(JIT.events.topicDrag, [positionsToSend])
-          }
         } else {
-          const len = Selected.Nodes.length
-
-          // first define offset for each node
-          const xOffset = []
-          const yOffset = []
-          for (let i = 0; i < len; i += 1) {
-            const n = Selected.Nodes[i]
-            xOffset[i] = n.pos.x - node.pos.x
-            yOffset[i] = n.pos.y - node.pos.y
-          } // for
-
-          for (let i = 0; i < len; i += 1) {
-            const n = Selected.Nodes[i]
-            const x = pos.x + xOffset[i]
-            const y = pos.y + yOffset[i]
-            n.pos.setc(x, y)
-
-            if (Active.Map) {
-              topic = n.getData('topic')
-              // we use the topic ID not the node id
-              // because we can't depend on the node id
-              // to be the same as on other collaborators
-              // maps
-              positionsToSend[topic.id] = n.pos
-            }
-          } // for
-
-          if (Active.Map) {
-            $(document).trigger(JIT.events.topicDrag, [positionsToSend])
-          }
-        } // if
-
-        if (whatToDo === 'deselect') {
-          Control.deselectNode(node)
-=======
-        } else {
-          self.updateTopicPositions(node,pos);
->>>>>>> 21a48de... Made it so that the map pans when you drag a selection of topics near the edge of the window
+          //self.updateTopicPositions(node,pos);
         }
-        Visualize.mGraph.plot()
-      } else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && authorized) {
-        // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
-        if (JIT.tempInit === false) {
+      }
+      // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
+      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && authorized) {
+        if (JIT.tempInit == false) {
           JIT.tempNode = node
           JIT.tempInit = true
 
           Create.newTopic.hide()
           Create.newSynapse.hide()
           // set the draw synapse start positions
-          const l = Selected.Nodes.length
+          var l = Selected.Nodes.length
           if (l > 0) {
             for (let i = l - 1; i >= 0; i -= 1) {
               const n = Selected.Nodes[i]
@@ -963,7 +911,7 @@ const JIT = {
         }
         //
         let temp = eventInfo.getNode()
-        if (temp !== false && temp.id !== node.id && Selected.Nodes.indexOf(temp) === -1) { // this means a Node has been returned
+        if (temp != false && temp.id != node.id && Selected.Nodes.indexOf(temp) == -1) { // this means a Node has been returned
           JIT.tempNode2 = temp
 
           Mouse.synapseEndCoordinates = {
@@ -983,8 +931,8 @@ const JIT = {
             n.setData('dim', 25, 'current')
           })
           // pop up node creation :)
-          const myX = e.clientX - 110
-          const myY = e.clientY - 30
+          var myX = e.clientX - 110
+          var myY = e.clientY - 30
           $('#new_topic').css('left', myX + 'px')
           $('#new_topic').css('top', myY + 'px')
           Create.newTopic.x = eventInfo.getPos().x
@@ -996,9 +944,11 @@ const JIT = {
             y: pos.y
           }
         }
-      } else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && Active.Topic) {
+      }
+      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && Active.Topic) {
         GlobalUI.notifyUser('Cannot create in Topic view.')
-      } else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && !authorized) {
+      }
+      else if ((e.button == 2 || (e.button == 0 && e.altKey) || e.buttons == 2) && !authorized) {
         GlobalUI.notifyUser('Cannot edit Public map.')
       }
     }
@@ -1014,11 +964,6 @@ const JIT = {
     Visualize.mGraph.plot()
   }, // onDragCancelHandler
   onDragEndTopicHandler: function (node, eventInfo, e) {
-<<<<<<< HEAD
-    let midpoint = {}
-    let pixelPos
-    let mapping
-=======
     var self = JIT;
     var midpoint = {}, pixelPos, mapping
     
@@ -1034,7 +979,7 @@ const JIT = {
 
     self.dragFlag = 0;
     self.dragTolerance = 0;
->>>>>>> 21a48de... Made it so that the map pans when you drag a selection of topics near the edge of the window
+
 
     if (JIT.tempInit && JIT.tempNode2 == null) {
       // this means you want to add a new topic, and then a synapse
@@ -1129,9 +1074,6 @@ const JIT = {
         Control.deselectAllNodes()
       }
     }
-<<<<<<< HEAD
-  }, // canvasClickHandler
-=======
   }, // canvasClickHandler 
   updateTopicPositions: function (node, pos){
     var len = Selected.Nodes.length;
@@ -1169,7 +1111,7 @@ const JIT = {
       $(document).trigger(JIT.events.topicDrag, [positionsToSend])
     }
   },
->>>>>>> 21a48de... Made it so that the map pans when you drag a selection of topics near the edge of the window
+
   nodeDoubleClickHandler: function (node, e) {
     TopicCard.showCard(node)
   }, // nodeDoubleClickHandler
@@ -1194,13 +1136,8 @@ const JIT = {
     // 2 others are selected only and shift, so additionally select this one
     // 3 others are selected only, no shift: drag only this one
     // 4 this node and others were selected, so drag them (just return false)
-<<<<<<< HEAD
-    // return value: deselect node again after?
-    if (Selected.Nodes.length === 0) {
-=======
     if (Selected.Nodes.length == 0) {
       Control.selectNode(node, e)
->>>>>>> 21a48de... Made it so that the map pans when you drag a selection of topics near the edge of the window
       return 'only-drag-this-one'
     }
     if (Selected.Nodes.indexOf(node) === -1) {
@@ -1214,11 +1151,8 @@ const JIT = {
         return 'only-drag-this-one'
       }
     }
-<<<<<<< HEAD
-    return 'nothing' // case 4?
-=======
     return 'move-all'; // case 4?
->>>>>>> 21a48de... Made it so that the map pans when you drag a selection of topics near the edge of the window
+
   }, //  handleSelectionBeforeDragging
   getNodeXY: function (node) {
     if (typeof node.pos.x === 'number' && typeof node.pos.y === 'number') {
