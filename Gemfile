@@ -25,7 +25,6 @@ gem 'rack-cors'
 gem 'redis'
 gem 'slack-notifier'
 gem 'snorlax'
-gem 'rails_12factor'
 
 # asset stuff
 gem 'jquery-rails'
