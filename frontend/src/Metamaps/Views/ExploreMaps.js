@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom' // TODO ensure this isn't a double import
 
 import Active from '../Active'
+import GlobalUI from '../GlobalUI'
 import Realtime from '../Realtime'
 import Maps from '../../components/Maps'
 
@@ -42,7 +43,21 @@ const ExploreMaps = {
       juntoState: Realtime.juntoState,
       moreToLoad: self.collection.page != 'loadedAll',
       user: mapperObj,
-      loadMore: self.loadMore
+      loadMore: self.loadMore,
+      onStar: function (map) {
+        $.post('/maps/' + map.id + '/star')
+        map.set('star_count', map.get('star_count') + 1)
+        if (Metamaps.Stars) Metamaps.Stars.push({ user_id: Active.Mapper.id, map_id: map.id })
+        Metamaps.Maps.Starred.add(map)
+        GlobalUI.notifyUser('Map is now starred')
+        self.render()
+      },
+      onRequest: function (map) {
+        $.post({
+          url: `/maps/${map.id}/access_request`
+        })
+        GlobalUI.notifyUser('You will be notified by email if request accepted') 
+      }
     }
     ReactDOM.render(
       React.createElement(Maps, exploreObj),

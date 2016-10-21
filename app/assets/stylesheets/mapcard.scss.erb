@@ -61,18 +61,113 @@
     padding: 0 0 16px 0;
     color: #424242;
 
+    &:hover {
+      .dropdownMenu .menuToggle .circle {
+        background-color: #FFF;
+      }
+      .dropdownMenu .menuToggle:hover .circle {
+        background-color: #DDD;
+      }
+
+     .mainContent {
+        filter: blur(2px);
+      }
+
+      .mapMetadata {
+        display: block;
+      }
+    }
+
     .mapHasMapper, .mapHasConversation {
       position: absolute;
-      top: 5px;
-      left: 5px;
-      width: 32px;
-      height: 32px;
+      top: 8px;
+      left: 8px;
+      min-width: 32px;
+      min-height: 32px;
+
+      &:hover {
+        background-color: #FFF;
+        border-radius: 2px;
+
+        .mapperList {
+          display: block;
+        }
+      }
+
+      .mapperList {
+        display: none;
+        padding: 8px; 
+        list-style-type: none;
+
+        li {
+          &.live {
+            height: 32px;
+            padding-left: 32px;
+            font-size: 16px;
+          }
+
+          img {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+          }
+          span {
+            padding-left: 10px;
+            font-size: 14px;
+          }
+        } 
+      }
     }
     .mapHasMapper {
-      background: url('<%= asset_path('junto.png') %>');
+      background: url('<%= asset_path('junto.png') %>') no-repeat 4px 0;
     }
     .mapHasConversation {
-      background: url('<%= asset_path('junto.gif') %>');
+      background: url('<%= asset_path('junto.gif') %>') no-repeat 4px 0;
+    }
+
+    .dropdownMenu {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      cursor: pointer;
+
+      .menuToggle {
+        width: 30px;
+        height: 10px;
+
+        .circle {
+          display: inline-block;
+          background-color: #454545;
+          width: 6px;
+          height: 6px;
+          border-radius: 3px;
+          margin: 2px;
+        }
+
+        &:hover .circle {
+          background-color: #222;
+        }
+      } 
+
+      .menuItems {
+        position: absolute;
+        top: 18px;
+        right: 0px;
+        background: #FFF;
+        border-radius: 2px;
+        list-style-type: none;
+        color: #454545;
+
+        li {
+          white-space: nowrap;
+          padding: 6px;
+
+          &:hover {
+            background-color: #DDD;
+          }
+        } 
+      } 
     }
 
     .mapScreenshot {
@@ -117,6 +212,12 @@
       margin-left: 8px;
     }
 
+    .cardViewOnly {
+      float: right;
+      line-height: 32px;
+      padding-right: 10px;
+      color: #454545;
+    }
 
     .scroll {
        display:block;
@@ -127,13 +228,7 @@
        margin-top: 16px;
     }
 
-    &:hover .mainContent {
-      filter: blur(2px);
-    }
 
-    &:hover .mapMetadata {
-      display: block;
-    }
 
     .mapMetadata {
       display: none;
