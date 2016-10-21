@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (Metamaps.currentSection === 'explore') {
     const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
-    Metamaps.Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
+    Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
     if (Metamaps.currentPage === 'mapper') {
       Views.ExploreMaps.fetchUserThenRender()
     } else {

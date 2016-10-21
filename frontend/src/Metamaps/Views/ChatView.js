@@ -159,7 +159,7 @@ var Private = {
     var date = (m.timestamp.getMonth() + 1) + '/' + m.timestamp.getDate()
     date += ' ' + addZero(m.timestamp.getHours()) + ':' + addZero(m.timestamp.getMinutes())
     m.timestamp = date
-    m.image = m.user_image || 'http://www.hotpepper.ca/wp-content/uploads/2014/11/default_profile_1_200x200.png' // TODO: remove
+    m.image = m.user_image
     m.message = linker.link(m.message)
     var $html = $(this.messageTemplate(m))
     this.$messages.append($html)

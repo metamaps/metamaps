@@ -1,17 +1,15 @@
-
-import {
+const {
   // server sendable, client receivable
   TOPIC_UPDATED,
   TOPIC_DELETED,
   SYNAPSE_UPDATED,
   SYNAPSE_DELETED,
-  LIVE_MAPS_RECEIVED,
-  MAP_WENT_LIVE,
-  MAP_CEASED_LIVE,
   MAP_UPDATED,
+  JUNTO_UPDATED,
 
   // server receivable, client sendable
-  REQUEST_LIVE_MAPS,
+  JOIN_CALL,
+  LEAVE_CALL,
   JOIN_MAP,
   LEAVE_MAP,
   UPDATE_TOPIC,
@@ -19,43 +17,23 @@ import {
   UPDATE_SYNAPSE,
   DELETE_SYNAPSE,
   UPDATE_MAP
-} from '../frontend/src/Metamaps/Realtime/events'
+} = require('../frontend/src/Metamaps/Realtime/events')
 
-const adjustAndBroadcast = (io, socket, state, event, data) => {
-  if (event === JOIN_MAP) {
-    if (!state.liveMaps[data.mapid]) {
-      state.liveMaps[data.mapid] = data.map // { name: '', desc: '', numTopics: '' }
-      state.liveMaps[data.mapid].mapper_count = 1
-      io.sockets.emit(MAP_WENT_LIVE, state.liveMaps[data.mapid])
-    }
-    else {
-      state.liveMaps[data.mapid].mapper_count++
-    }
-  }
-  else if (event === LEAVE_MAP) {
-    const mapid = socket.mapid
-    if (state.liveMaps[mapid] && state.liveMaps[mapid].mapper_count == 1) {
-      delete state.liveMaps[mapid]
-      io.sockets.emit(MAP_CEASED_LIVE, { id: mapid })
-    }
-    else if (state.liveMaps[mapid]) {
-      state.liveMaps[mapid].mapper_count--
-    }
-  }
-}
+module.exports = function (io, store) {
+  store.subscribe(() => {
+    console.log(store.getState())
+    io.sockets.emit(JUNTO_UPDATED, store.getState())
+  })
 
-module.exports = function (io, state) {
   io.on('connection', function (socket) {
 
-    socket.on(REQUEST_LIVE_MAPS, function (activeUser) {
-      //constrain response to maps visible to user
-      var maps = Object.keys(state.liveMaps).map(function(key) { return state.liveMaps[key] })
-      socket.emit(LIVE_MAPS_RECEIVED, maps)
-    })
+    io.sockets.emit(JUNTO_UPDATED, store.getState())
 
-    socket.on(JOIN_MAP, data => adjustAndBroadcast(io, socket, state, JOIN_MAP, data))
-    socket.on(LEAVE_MAP, () => adjustAndBroadcast(io, socket, state, LEAVE_MAP))
-    socket.on('disconnect', () => adjustAndBroadcast(io, socket, state, LEAVE_MAP))
+    socket.on(JOIN_MAP, data => store.dispatch({ type: JOIN_MAP, payload: data }))
+    socket.on(LEAVE_MAP, () => store.dispatch({ type: LEAVE_MAP, payload: socket }))
+    socket.on(JOIN_CALL, data => store.dispatch({ type: JOIN_CALL, payload: data }))
+    socket.on(LEAVE_CALL, () => store.dispatch({ type: LEAVE_CALL, payload: socket }))
+    socket.on('disconnect', () => store.dispatch({ type: 'DISCONNECT', payload: socket }))
 
     socket.on(UPDATE_TOPIC, function (data) {
       socket.broadcast.emit(TOPIC_UPDATED, data)

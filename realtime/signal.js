@@ -1,4 +1,4 @@
-var uuid = require('node-uuid')
+const uuid = require('node-uuid')
 
 // based off of https://github.com/andyet/signalmaster
 // since it was updated to socket.io 1.3.7
@@ -12,7 +12,6 @@ function safeCb(cb) {
 }
 
 module.exports = function(io, stunservers, state) {
-
   io.on('connection', function (socket) {
     socket.resources = {
       screen: false,

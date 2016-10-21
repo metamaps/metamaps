@@ -6,13 +6,14 @@ map = require('./map'),
 global = require('./global'),
 stunservers = [{"url": "stun:stun.l.google.com:19302"}]
 
-var state = {
-  connectedPeople: {},
-  liveMaps: {}
-}
-signalling(io, stunservers, state)
-junto(io, state)
-map(io, state)
-global(io, state)
-io.listen(5001)
+const { createStore } = require('redux')
+const { reducer } = require('./reducer')
 
+let store = createStore(reducer)
+
+global(io, store)
+signalling(io, stunservers, store)
+junto(io, store)
+map(io, store)
+
+io.listen(5001)

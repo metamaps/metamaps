@@ -1,8 +1,19 @@
 import React, { Component, PropTypes } from 'react'
+import { find, values } from 'lodash'
+
+const IN_CONVERSATION = 1 // shared with /realtime/reducer.js
+
+const MapperList = (props) => {
+
+}
 
 class MapCard extends Component {
   render = () => {
-    const { map, currentUser } = this.props
+    const { map, juntoState, currentUser } = this.props
+
+    const hasMap = juntoState.liveMaps[map.id]
+    const hasConversation = hasMap && find(values(hasMap), v => v === IN_CONVERSATION) 
+    const hasMapper = hasMap && !hasConversation
 
     function capitalize (string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
@@ -59,6 +70,8 @@ class MapCard extends Component {
                   </div>
                 </div>
               </div>
+              { hasMapper && <div className='mapHasMapper'></div> }
+              { hasConversation && <div className='mapHasConversation'></div> }
             </div>
           </div>
         </a>
@@ -69,6 +82,7 @@ class MapCard extends Component {
 
 MapCard.propTypes = {
   map: PropTypes.object.isRequired,
+  juntoState: PropTypes.object,
   currentUser: PropTypes.object
 }
 

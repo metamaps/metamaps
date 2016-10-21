@@ -27,6 +27,7 @@ import Views from '../Views'
 import Visualize from '../Visualize'
 
 import {
+  JUNTO_UPDATED,
   INVITED_TO_CALL,
   INVITED_TO_JOIN,
   CALL_ACCEPTED,
@@ -34,9 +35,9 @@ import {
   INVITE_DENIED,
   CALL_IN_PROGRESS,
   CALL_STARTED,
+  MAPPER_LIST_UPDATED,
   MAPPER_JOINED_CALL,
   MAPPER_LEFT_CALL,
-  MAPPER_LIST_UPDATED,
   NEW_MAPPER,
   LOST_MAPPER,
   MESSAGE_CREATED,
@@ -50,13 +51,11 @@ import {
   SYNAPSE_REMOVED,
   SYNAPSE_DELETED,
   PEER_COORDS_UPDATED,
-  LIVE_MAPS_RECEIVED,
-  MAP_WENT_LIVE,
-  MAP_CEASED_LIVE,
   MAP_UPDATED
 } from './events'
 
 import {
+  juntoUpdated,
   invitedToCall,
   invitedToJoin,
   callAccepted,
@@ -64,9 +63,9 @@ import {
   inviteDenied,
   callInProgress,
   callStarted,
+  mapperListUpdated,
   mapperJoinedCall,
   mapperLeftCall,
-  mapperListUpdated,
   peerCoordsUpdated,
   newMapper,
   lostMapper,
@@ -81,13 +80,9 @@ import {
   synapseRemoved,
   synapseDeleted,
   mapUpdated,
-  liveMapsReceived,
-  mapWentLive,
-  mapCeasedLive
 } from './receivable'
 
 import {
-  requestLiveMaps,
   joinMap,
   leaveMap,
   checkForCall,
@@ -98,8 +93,8 @@ import {
   inviteACall,
   joinCall,
   leaveCall,
-  sendMapperInfo,
   sendCoords,
+  sendMapperInfo,
   createMessage,
   dragTopic,
   createTopic,
@@ -114,6 +109,7 @@ import {
 } from './sendable'
 
 let Realtime = {
+  juntoState: { connectedPeople: {}, liveMaps: {} },
   videoId: 'video-wrapper',
   socket: null,
   webrtc: null,
@@ -499,12 +495,11 @@ let Realtime = {
 }
 
 const sendables = [
-  ['requestLiveMaps',requestLiveMaps],
   ['joinMap',joinMap],
   ['leaveMap',leaveMap],
   ['checkForCall',checkForCall],
   ['acceptCall',acceptCall],
-  ['denyAll',denyCall],
+  ['denyCall',denyCall],
   ['denyInvite',denyInvite],
   ['inviteToJoin',inviteToJoin],
   ['inviteACall',inviteACall],
@@ -529,6 +524,7 @@ sendables.forEach(sendable => {
 })
 
 const subscribeToEvents = (Realtime, socket) => {
+    socket.on(JUNTO_UPDATED, juntoUpdated(Realtime))
     socket.on(INVITED_TO_CALL, invitedToCall(Realtime))
     socket.on(INVITED_TO_JOIN, invitedToJoin(Realtime))
     socket.on(CALL_ACCEPTED, callAccepted(Realtime))
@@ -536,9 +532,9 @@ const subscribeToEvents = (Realtime, socket) => {
     socket.on(INVITE_DENIED, inviteDenied(Realtime))
     socket.on(CALL_IN_PROGRESS, callInProgress(Realtime))
     socket.on(CALL_STARTED, callStarted(Realtime))
+    socket.on(MAPPER_LIST_UPDATED, mapperListUpdated(Realtime))
     socket.on(MAPPER_JOINED_CALL, mapperJoinedCall(Realtime))
     socket.on(MAPPER_LEFT_CALL, mapperLeftCall(Realtime))
-    socket.on(MAPPER_LIST_UPDATED, mapperListUpdated(Realtime))
     socket.on(PEER_COORDS_UPDATED, peerCoordsUpdated(Realtime))
     socket.on(NEW_MAPPER, newMapper(Realtime))
     socket.on(LOST_MAPPER, lostMapper(Realtime))
@@ -553,9 +549,6 @@ const subscribeToEvents = (Realtime, socket) => {
     socket.on(SYNAPSE_REMOVED, synapseRemoved(Realtime))
     socket.on(SYNAPSE_DELETED, synapseDeleted(Realtime))
     socket.on(MAP_UPDATED, mapUpdated(Realtime))
-    socket.on(LIVE_MAPS_RECEIVED, liveMapsReceived(Realtime))
-    socket.on(MAP_WENT_LIVE, mapWentLive(Realtime))
-    socket.on(MAP_CEASED_LIVE, mapCeasedLive(Realtime))
 }
 
 export default Realtime

@@ -2,7 +2,6 @@ import Active from '../Active'
 import GlobalUI from '../GlobalUI'
 
 import {
-  REQUEST_LIVE_MAPS,
   JOIN_MAP,
   LEAVE_MAP,
   CHECK_FOR_CALL,
@@ -28,15 +27,11 @@ import {
   UPDATE_MAP
 } from './events'
 
-export const requestLiveMaps = self => () => {
-  self.socket.emit(REQUEST_LIVE_MAPS)
-}
-
 export const joinMap = self => () => {
   self.socket.emit(JOIN_MAP, {
     userid: Active.Mapper.id,
     username: Active.Mapper.get('name'),
-    userimage: Active.Mapper.get('image'),
+    avatar: Active.Mapper.get('image'),
     mapid: Active.Map.id,
     map: Active.Map.attributes
   })
@@ -55,7 +50,7 @@ export const sendMapperInfo = self => userid => {
   var update = {
     userToNotify: userid,
     username: Active.Mapper.get('name'),
-    userimage: Active.Mapper.get('image'),
+    avatar: Active.Mapper.get('image'),
     userid: Active.Mapper.id,
     userinconversation: self.inConversation,
     mapid: Active.Map.id

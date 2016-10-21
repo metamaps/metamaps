@@ -1,5 +1,4 @@
-
-import {
+const {
   MAPPER_LIST_UPDATED,
   NEW_MAPPER,
   LOST_MAPPER,
@@ -13,19 +12,19 @@ import {
 
   JOIN_MAP,
   LEAVE_MAP,
-  SEND_MAPPER_INFO,
   SEND_COORDS,
+  SEND_MAPPER_INFO,
   CREATE_MESSAGE,
   DRAG_TOPIC,
   CREATE_TOPIC,
   REMOVE_TOPIC,
   CREATE_SYNAPSE,
   REMOVE_SYNAPSE
-} from '../frontend/src/Metamaps/Realtime/events'
+} = require('../frontend/src/Metamaps/Realtime/events')
 
 const { mapRoom, userMapRoom } = require('./rooms')
 
-module.exports = function (io, state) {
+module.exports = function (io, store) {
   io.on('connection', function (socket) {
 
     // this will ping everyone on a map that there's a person just joined the map
@@ -33,11 +32,11 @@ module.exports = function (io, state) {
       socket.mapid = data.mapid
       socket.userid = data.userid
       socket.username = data.username
-      socket.userimage = data.userimage
+      socket.avatar = data.avatar
       var newUser = {
         userid: data.userid,
         username: data.username,
-        userimage: data.userimage
+        avatar: data.avatar
       }
       socket.join(mapRoom(data.mapid))
       socket.join(userMapRoom(data.userid, data.mapid))
@@ -63,7 +62,7 @@ module.exports = function (io, state) {
         userid: data.userid,
         username: data.username,
         userinconversation: data.userinconversation,
-        userimage: data.userimage
+        avatar: data.avatar
       }
       socket.broadcast.in(userMapRoom(data.userToNotify, data.mapid)).emit(MAPPER_LIST_UPDATED, existingUser)
     })
