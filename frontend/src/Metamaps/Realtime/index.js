@@ -266,7 +266,6 @@ let Realtime = {
   },
   setupSocket: function () {
     var self = Realtime
-    // subscribe to rooms on the websocket?
     self.checkForCall()
     self.joinMap()
   },
