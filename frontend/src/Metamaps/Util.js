@@ -1,3 +1,5 @@
+/* global $ */
+
 import { Parser, HtmlRenderer } from 'commonmark'
 
 import Visualize from './Visualize'
@@ -126,6 +128,25 @@ const Util = {
     // use safe: true to filter xss
     return new HtmlRenderer({ safe: true })
       .render(new Parser().parse(text))
+  },
+  logCanvasAttributes: function(canvas){
+    return {
+      scaleX: canvas.scaleOffsetX,
+      scaleY: canvas.scaleOffsetY,
+      centreCoords: Util.pixelsToCoords({ x: canvas.canvases[0].size.width / 2, y: canvas.canvases[0].size.height / 2 }),
+    };
+  },
+  resizeCanvas: function(canvas){
+    // Store the current canvas attributes, i.e. scale and map-coordinate at the centre of the user's screen
+    const oldAttr = Util.logCanvasAttributes(canvas);
+        
+    // Resize the canvas to fill the new window size. Based on how JIT works, this also resets the map back to scale 1 and tranlations = 0
+    canvas.resize($(window).width(), $(window).height())
+  
+    // Return the map to the original scale, and then put the previous central map-coordinate back to the centre of user's newly resized screen
+    canvas.scale(oldAttr.scaleX, oldAttr.scaleY)
+    const newAttr = Util.logCanvasAttributes(canvas);
+    canvas.translate(newAttr.centreCoords.x - oldAttr.centreCoords.x, newAttr.centreCoords.y - oldAttr.centreCoords.y)
   }
 }
 

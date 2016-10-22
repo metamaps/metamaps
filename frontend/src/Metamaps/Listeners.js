@@ -7,6 +7,7 @@ import Mobile from './Mobile'
 import Realtime from './Realtime'
 import Selected from './Selected'
 import Topic from './Topic'
+import Util from './Util'
 import Visualize from './Visualize'
 import { Search } from './GlobalUI'
 
@@ -108,16 +109,19 @@ const Listeners = {
     })
 
     $(window).resize(function () {
-      if (Visualize && Visualize.mGraph) Visualize.mGraph.canvas.resize($(window).width(), $(window).height())
+      if (Visualize && Visualize.mGraph) {
+        Util.resizeCanvas(Visualize.mGraph.canvas)
+      }
+
       if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
       Mobile.resizeTitle()
     })
   },
-  centerAndReveal: function(nodes, opts) {
+  centerAndReveal: function (nodes, opts) {
     if (nodes.length < 1) return
     var node = nodes[nodes.length - 1]
     if (opts.center && opts.reveal) {
-      Topic.centerOn(node.id, function() {
+      Topic.centerOn(node.id, function () {
         Topic.fetchRelatives(nodes)
       })
     } else if (opts.center) {
