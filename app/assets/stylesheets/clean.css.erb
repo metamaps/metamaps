@@ -192,24 +192,34 @@
     background-repeat: no-repeat;
     cursor: pointer;
 }
+.mapPage .mapElement .importDialog {
+    display: none;
+    background-position: 0 0;
+}
+.mapPage.canEditMap .mapElement .importDialog {
+  display: block;
+}
 .sidebarFilterIcon {
-    background-position: -64px 0;
+    background-position: -32px 0;
 }
 .sidebarForkIcon {
-    background-position: -96px 0;
+    background-position: -64px 0;
 }
 .addMap {
-    background-position: -128px 0;
+    background-position: -96px 0;
     margin-right:10px;
 }
+.importDialog:hover {
+    background-position: 0 -32px;
+}
 .sidebarFilterIcon:hover {
-    background-position: -64px -32px;
+    background-position: -32px -32px;
 }
 .sidebarForkIcon:hover {
-    background-position: -96px -32px;
+    background-position: -64px -32px;
 }
 .addMap:hover {
-    background-position: -128px -32px;
+    background-position: -96px -32px;
     margin-right:10px;
 }
 
@@ -382,12 +392,7 @@
 .mapPage .mapInfoIcon {
 	top: 0;
 }
-.importDialog {
-  background-image: url(<%= asset_path('import.png') %>);
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  width: 32px;
-}
+
 .starMap {
   background-image: url(<%= asset_path('starmap_sprite.png') %>);
   background-position: 0 0;
@@ -464,7 +469,7 @@
 }
 
 .zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
- .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, importDialog:hover .tooltipsAbove, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
+ .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .importDialog:hover .tooltipsUnder, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
     display: block;
 }
 
@@ -518,6 +523,10 @@
     white-space: nowrap;
     margin-top: -23px;
     font-style: normal;
+}
+
+.importDialog .tooltipsUnder {
+    left: -22px;
 }
 
 .sidebarFilterIcon .tooltipsUnder {
@@ -600,7 +609,7 @@
     border-bottom: 5px solid transparent;
 }
 
-.sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
+.importDialog div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
     content: '';
     position: absolute;
     right: 40%;
