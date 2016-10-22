@@ -110,17 +110,8 @@ const Listeners = {
 
     $(window).resize(function () {
       if (Visualize && Visualize.mGraph) {
-        // Store the current canvas attributes, i.e. scale and map-coordinate at the centre of the user's screen
-        let canvas = Visualize.mGraph.canvas;
-        const oldAttr = Util.logCanvasAttributes(canvas);
-            
-        // Resize the canvas to fill the new window size. Based on how JIT works, this also resets the map back to scale 1 and tranlations = 0
-        canvas.resize($(window).width(), $(window).height())
-
-        // Return the map to the original scale, and then put the previous central map-coordinate back to the centre of user's newly resized screen
-        canvas.scale(oldAttr.scaleX, oldAttr.scaleY)
-        const newAttr = Util.logCanvasAttributes(canvas);
-        canvas.translate(newAttr.centreCoords.x - oldAttr.centreCoords.x, newAttr.centreCoords.y - oldAttr.centreCoords.y)
+        Util.resizeCanvas(Visualize.mGraph.canvas)
+        
       }
 
       if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
