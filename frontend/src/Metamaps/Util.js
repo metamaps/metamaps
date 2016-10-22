@@ -126,6 +126,13 @@ const Util = {
     // use safe: true to filter xss
     return new HtmlRenderer({ safe: true })
       .render(new Parser().parse(text))
+  },
+  logCanvasAttributes: function(canvas){
+    return {
+      scaleX: canvas.scaleOffsetX,
+      scaleY: canvas.scaleOffsetY,
+      centreCoords: Util.pixelsToCoords({ x: canvas.canvases[0].size.width / 2, y: canvas.canvases[0].size.height / 2 }),
+    };
   }
 }
 
