@@ -109,36 +109,36 @@ const Listeners = {
     })
 
     $(window).resize(function () {
-      if (Visualize && Visualize.mGraph){
-        //Find the current canvas scale and map-coordinate at the centre of the user's screen
-        var canvas = Visualize.mGraph.canvas,
-          scaleX = canvas.scaleOffsetX,
-          scaleY = canvas.scaleOffsetY,
-          centrePixX = canvas.canvases[0].size.width / 2,
-          centrePixY = canvas.canvases[0].size.height / 2,
-          centreCoords = Util.pixelsToCoords({x:centrePixX ,y:centrePixY});
-        
-        //Resize the canvas to fill the new window size. Based on how JIT works, this also resets the map back to scale 1 and tranlations = 0
+      if (Visualize && Visualize.mGraph) {
+        // Find the current canvas scale and map-coordinate at the centre of the user's screen
+        let canvas = Visualize.mGraph.canvas
+        const scaleX = canvas.scaleOffsetX
+        const scaleY = canvas.scaleOffsetY
+        const centrePixX = canvas.canvases[0].size.width / 2
+        const centrePixY = canvas.canvases[0].size.height / 2
+        const centreCoords = Util.pixelsToCoords({ x: centrePixX, y: centrePixY })
+
+        // Resize the canvas to fill the new window size. Based on how JIT works, this also resets the map back to scale 1 and tranlations = 0
         canvas.resize($(window).width(), $(window).height())
-  
-        //Return the map to the original scale, and then put the previous central map-coordinate back to the centre of user's newly resized screen
-        canvas.scale(scaleX,scaleY);
-        var newCentrePixX = canvas.canvases[0].size.width / 2,
-            newCentrePixY = canvas.canvases[0].size.height / 2,
-            newCentreCoords = Util.pixelsToCoords({x:newCentrePixX ,y:newCentrePixY});
-        
-        canvas.translate(newCentreCoords.x - centreCoords.x, newCentreCoords.y - centreCoords.y);
+
+        // Return the map to the original scale, and then put the previous central map-coordinate back to the centre of user's newly resized screen
+        canvas.scale(scaleX, scaleY)
+        const newCentrePixX = canvas.canvases[0].size.width / 2
+        const newCentrePixY = canvas.canvases[0].size.height / 2
+        const newCentreCoords = Util.pixelsToCoords({ x: newCentrePixX, y: newCentrePixY })
+
+        canvas.translate(newCentreCoords.x - centreCoords.x, newCentreCoords.y - centreCoords.y)
       }
-      
+
       if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
       Mobile.resizeTitle()
     })
   },
-  centerAndReveal: function(nodes, opts) {
+  centerAndReveal: function (nodes, opts) {
     if (nodes.length < 1) return
     var node = nodes[nodes.length - 1]
     if (opts.center && opts.reveal) {
-      Topic.centerOn(node.id, function() {
+      Topic.centerOn(node.id, function () {
         Topic.fetchRelatives(nodes)
       })
     } else if (opts.center) {
