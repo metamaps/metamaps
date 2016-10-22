@@ -753,6 +753,11 @@
     top:5px;
     left:5px;
 }
+
+.exploreMapsCenter .authedApps .exploreMapsIcon {
+    background-image: url(<%= asset_data_uri('user_sprite.png') %>);
+    background-position: 0 -32px;
+}
 .exploreMapsCenter .myMaps .exploreMapsIcon {
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -32px 0;
@@ -772,6 +777,9 @@
 .exploreMapsCenter .starredMaps .exploreMapsIcon {
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
+}
+.authedApps:hover .exploreMapsIcon, .authedApps.active .exploreMapsIcon {
+    background-position-x: -32px;
 }
 .myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
     background-position: -32px -32px;
