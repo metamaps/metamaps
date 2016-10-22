@@ -13,6 +13,7 @@ import Maps from '../../components/Maps'
  */
 
 const ExploreMaps = {
+  pending: false,
   setCollection: function (collection) {
     var self = ExploreMaps
 
@@ -35,8 +36,8 @@ const ExploreMaps = {
       cb = mapperObj
       mapperObj = null
     }
-    
-    var exploreObj = { 
+
+    var exploreObj = {
       currentUser: Active.Mapper,
       section: self.collection.id,
       maps: self.collection,
@@ -44,6 +45,7 @@ const ExploreMaps = {
       moreToLoad: self.collection.page != 'loadedAll',
       user: mapperObj,
       loadMore: self.loadMore,
+      pending: self.pending,
       onStar: function (map) {
         $.post('/maps/' + map.id + '/star')
         map.set('star_count', map.get('star_count') + 1)
@@ -56,48 +58,51 @@ const ExploreMaps = {
         $.post({
           url: `/maps/${map.id}/access_request`
         })
-        GlobalUI.notifyUser('You will be notified by email if request accepted') 
+        GlobalUI.notifyUser('You will be notified by email if request accepted')
       }
     }
     ReactDOM.render(
       React.createElement(Maps, exploreObj),
       document.getElementById('explore')
     ).resize()
-    
+
     if (cb) cb()
-    Metamaps.Loading.hide()
   },
   loadMore: function () {
     var self = ExploreMaps
-
     if (self.collection.page != "loadedAll") {
       self.collection.getMaps()
+      self.pending = true
     }
-    else self.render()
+    self.render()
   },
   handleSuccess: function (cb) {
     var self = ExploreMaps
-
+    self.pending = false
     if (self.collection && self.collection.id === 'mapper') {
       self.fetchUserThenRender(cb)
     } else {
       self.render(cb)
+      Metamaps.Loading.hide()
     }
   },
   handleError: function () {
     console.log('error loading maps!') // TODO
+    Metamaps.Loading.hide()
   },
   fetchUserThenRender: function (cb) {
     var self = ExploreMaps
-    
+
     // first load the mapper object and then call the render function
     $.ajax({
       url: '/users/' + self.collection.mapperId + '/details.json',
       success: function (response) {
         self.render(response, cb)
+        Metamaps.Loading.hide()
       },
       error: function () {
         self.render(cb)
+        Metamaps.Loading.hide()
       }
     })
   }
