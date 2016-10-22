@@ -44,6 +44,10 @@ const Map = {
     $('#wrapper').on('contextmenu', function (e) {
       return false
     })
+    
+    $('#wrapper').mousedown(function (e){
+      if(e.button === 1)return false;
+    });
 
     $('.starMap').click(function () {
       if ($(this).is('.starred')) self.unstar()
