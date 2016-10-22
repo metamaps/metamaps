@@ -111,7 +111,6 @@ const Listeners = {
     $(window).resize(function () {
       if (Visualize && Visualize.mGraph) {
         Util.resizeCanvas(Visualize.mGraph.canvas)
-        
       }
 
       if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
