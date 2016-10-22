@@ -1,4 +1,4 @@
-/* global Metamaps, $, Howl */
+/* global Metamaps, $ */
 
 /*
  * Dependencies:
@@ -6,6 +6,7 @@
  */
 
 import Backbone from 'backbone'
+import { Howl } from 'howler'
 import Autolinker from 'autolinker'
 import _ from 'lodash'
 import underscore from 'underscore'
@@ -127,7 +128,7 @@ var Private = {
   },
   initializeSounds: function () {
     this.sound = new Howl({
-      urls: [Metamaps.Erb['sounds/MM_sounds.mp3'], Metamaps.Erb['sounds/MM_sounds.ogg']],
+      src: [Metamaps.Erb['sounds/MM_sounds.mp3'], Metamaps.Erb['sounds/MM_sounds.ogg']],
       sprite: {
         joinmap: [0, 561],
         leavemap: [1000, 592],
@@ -158,7 +159,7 @@ var Private = {
     var date = (m.timestamp.getMonth() + 1) + '/' + m.timestamp.getDate()
     date += ' ' + addZero(m.timestamp.getHours()) + ':' + addZero(m.timestamp.getMinutes())
     m.timestamp = date
-    m.image = m.user_image || 'http://www.hotpepper.ca/wp-content/uploads/2014/11/default_profile_1_200x200.png' // TODO: remove
+    m.image = m.user_image
     m.message = linker.link(m.message)
     var $html = $(this.messageTemplate(m))
     this.$messages.append($html)

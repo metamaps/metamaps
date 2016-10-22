@@ -9,6 +9,7 @@ class Map < ApplicationRecord
   has_many :messages, as: :resource, dependent: :destroy
   has_many :stars
 
+  has_many :access_requests, dependent: :destroy
   has_many :user_maps, dependent: :destroy
   has_many :collaborators, through: :user_maps, source: :user
 
@@ -18,10 +19,10 @@ class Map < ApplicationRecord
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot,
     styles: {
-      thumb: ['188x126#', :png]
+      thumb: ['220x220#', :png]
       #:full => ['940x630#', :png]
     },
-    default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
+    default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-square.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }
@@ -58,11 +59,15 @@ class Map < ApplicationRecord
   delegate :name, to: :user, prefix: true
 
   def user_image
-    user.image.url
+    user.image.url(:thirtytwo)
   end
 
   def contributor_count
     contributors.length
+  end
+
+  def star_count
+    stars.length
   end
 
   def collaborator_ids
@@ -86,7 +91,7 @@ class Map < ApplicationRecord
   end
 
   def as_json(_options = {})
-    json = super(methods: [:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
+    json = super(methods: [:user_name, :user_image, :star_count, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
     json[:created_at_clean] = created_at_str
     json[:updated_at_clean] = updated_at_str
     json
@@ -102,7 +107,8 @@ class Map < ApplicationRecord
       mappers: contributors,
       collaborators: editors,
       messages: messages.sort_by(&:created_at),
-      stars: stars
+      stars: stars,
+      requests: access_requests
     }
   end
 
@@ -122,6 +128,7 @@ class Map < ApplicationRecord
     removed = current_collaborators.map(&:id).map do |old_user_id|
       next nil if user_ids.include?(old_user_id)
       user_maps.where(user_id: old_user_id).find_each(&:destroy)
+      access_requests.where(user_id: old_user_id).find_each(&:destroy)
       old_user_id
     end
     removed.compact

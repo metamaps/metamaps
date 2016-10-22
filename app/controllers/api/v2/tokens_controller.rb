@@ -18,12 +18,6 @@ module Api
         create_action
         respond_with_resource
       end
-
-      def my_tokens
-        authorize resource_class
-        instantiate_collection
-        respond_with_collection
-      end
     end
   end
 end

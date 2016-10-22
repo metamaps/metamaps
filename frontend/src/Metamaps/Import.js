@@ -296,8 +296,8 @@ const Import = {
       metacode_id: metacode.id,
       permission: topic_permission,
       defer_to_map_id: defer_to_map_id,
-      desc: desc || "",
-      link: link || "",
+      desc: desc || '',
+      link: link || '',
       calculated_permission: Active.Map.get('permission')
     })
     Metamaps.Topics.add(topic)
@@ -333,8 +333,8 @@ const Import = {
     } // if
 
     var synapse = new Metamaps.Backbone.Synapse({
-      desc: desc || "",
-      category: category,
+      desc: desc || '',
+      category: category || 'from-to',
       permission: permission,
       topic1_id: topic1.id,
       topic2_id: topic2.id
@@ -411,6 +411,7 @@ const Import = {
     newKey = newKey.replace(/\s/g, '') // remove whitespace
     if (newKey === 'url') newKey = 'link'
     if (newKey === 'title') newKey = 'name'
+    if (newKey === 'label') newKey = 'desc'
     if (newKey === 'description') newKey = 'desc'
     if (newKey === 'direction') newKey = 'category'
     return newKey

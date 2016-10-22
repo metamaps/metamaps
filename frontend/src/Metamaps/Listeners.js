@@ -17,32 +17,18 @@ const Listeners = {
     $(document).on('keydown', function (e) {
       if (!(Active.Map || Active.Topic)) return
 
-      const creatingTopic = e.target.id === 'topic_name'
       switch (e.which) {
         case 13: // if enter key is pressed
           // prevent topic creation if sending a message
           if (e.target.className !== 'chat-input') {
             JIT.enterKeyHandler()
           }
-          e.preventDefault()
           break
         case 27: // if esc key is pressed
           JIT.escKeyHandler()
           break
-        case 37: // if Left arrow key is pressed
-          if (!creatingTopic) Visualize.mGraph.canvas.translate(-20, 0)
-          break
-        case 38: // if Up arrow key is pressed
-          if (!creatingTopic) Visualize.mGraph.canvas.translate(0, -20)
-          break
-        case 39: // if Right arrow key is pressed
-          if (!creatingTopic) Visualize.mGraph.canvas.translate(20, 0)
-          break
-        case 40: // if Down arrow key is pressed
-          if (!creatingTopic) Visualize.mGraph.canvas.translate(0, 20)
-          break
         case 65: // if a or A is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             Control.deselectAllNodes()
             Control.deselectAllEdges()
 
@@ -56,13 +42,13 @@ const Listeners = {
 
           break
         case 68: // if d or D is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
             Control.deleteSelected()
           }
           break
         case 69: // if e or E is pressed
-          if (e.ctrlKey && Active.Map) {
+          if ((e.ctrlKey || e.metaKey) && Active.Map) {
             e.preventDefault()
             JIT.zoomExtents(null, Visualize.mGraph.canvas)
             break
@@ -80,14 +66,14 @@ const Listeners = {
           }
           break
         case 72: // if h or H is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
             Control.hideSelectedNodes()
             Control.hideSelectedEdges()
           }
           break
         case 77: // if m or M is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
             Control.removeSelectedNodes()
             Control.removeSelectedEdges()
@@ -112,7 +98,7 @@ const Listeners = {
           }
           break
         case 191: // if / is pressed
-          if (e.ctrlKey) {
+          if (e.ctrlKey || e.metaKey) {
             Search.focus()
           }
           break

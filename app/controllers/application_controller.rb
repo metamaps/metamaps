@@ -21,23 +21,14 @@ class ApplicationController < ActionController::Base
   helper_method :authenticated?
   helper_method :admin?
 
-  def after_sign_in_path_for(resource)
-    sign_in_url = url_for(action: 'new', controller: 'sessions', only_path: false)
-
-    if request.referer == sign_in_url
-      super
-    elsif params[:uv_login] == '1'
-      'http://support.metamaps.cc/login_success?sso=' + current_sso_token
-    else
-      stored_location_for(resource) || request.referer || root_path
-    end
-  end
-
   def handle_unauthorized
-    if authenticated?
-      head :forbidden # TODO: make this better
+    if authenticated? and params[:controller] == 'maps' and params[:action] == 'show'
+      redirect_to request_access_map_path(params[:id])
+    elsif authenticated?
+      redirect_to root_path, notice: "You don't have permission to see that page."
     else
-      redirect_to new_user_session_path, notice: 'Try signing in to do that.'
+      store_location_for(resource, request.fullpath)
+      redirect_to sign_in_path, notice: 'Try signing in to do that.'
     end
   end
 
@@ -55,7 +46,7 @@ class ApplicationController < ActionController::Base
 
   def require_user
     return true if authenticated?
-    redirect_to new_user_session_path, notice: 'You must be logged in.'
+    redirect_to sign_in_path, notice: 'You must be logged in.'
     return false
   end
 

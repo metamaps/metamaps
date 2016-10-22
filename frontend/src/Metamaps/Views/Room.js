@@ -1,6 +1,8 @@
 /* global Metamaps, $ */
 
 import Backbone from 'backbone'
+import attachMediaStream from 'attachmediastream'
+
 // TODO is this line good or bad
 // Backbone.$ = window.$
 
@@ -21,7 +23,6 @@ const Room = function(opts) {
   this.isActiveRoom = false
   this.socket = opts.socket
   this.webrtc = opts.webrtc
-  //this.roomRef = opts.firebase
   this.room = opts.room
   this.config = opts.config
   this.peopleCount = 0
@@ -59,6 +60,7 @@ Room.prototype.leaveVideoOnly = function() {
   }
   this.isActiveRoom = false
   this.webrtc.leaveRoom()
+  this.webrtc.stopLocalVideo()
 }
 
 Room.prototype.leave = function() {
@@ -67,6 +69,7 @@ Room.prototype.leave = function() {
   }
   this.isActiveRoom = false
   this.webrtc.leaveRoom()
+  this.webrtc.stopLocalVideo()
   this.chat.conversationEnded()
   this.chat.removeParticipants()
   this.chat.clearMessages()

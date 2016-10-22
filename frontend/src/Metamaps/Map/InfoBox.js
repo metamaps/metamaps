@@ -1,5 +1,7 @@
 /* global Metamaps, $, Hogan, Bloodhound, Countable */
 
+import outdent from 'outdent'
+
 import Active from '../Active'
 import GlobalUI from '../GlobalUI'
 import Router from '../Router'
@@ -19,8 +21,27 @@ const InfoBox = {
   changing: false,
   selectingPermission: false,
   changePermissionText: "<div class='tooltips'>As the creator, you can change the permission of this map, and the permission of all the topics and synapses you have authority to change will change as well.</div>",
-  nameHTML: '<span class="best_in_place best_in_place_name" id="best_in_place_map_{{id}}_name" data-url="/maps/{{id}}" data-object="map" data-attribute="name" data-type="textarea" data-activator="#mapInfoName">{{name}}</span>',
-  descHTML: '<span class="best_in_place best_in_place_desc" id="best_in_place_map_{{id}}_desc" data-url="/maps/{{id}}" data-object="map" data-attribute="desc" data-nil="Click to add description..." data-type="textarea" data-activator="#mapInfoDesc">{{desc}}</span>',
+  nameHTML: outdent`
+    <span class="best_in_place best_in_place_name"
+      id="best_in_place_map_{{id}}_name"
+      data-bip-url="/maps/{{id}}"
+      data-bip-object="map"
+      data-bip-attribute="name"
+      data-bip-type="textarea"
+      data-bip-activator="#mapInfoName"
+      data-bip-value="{{name}}"
+    >{{name}}</span>`,
+  descHTML: outdent`
+    <span class="best_in_place best_in_place_desc"
+      id="best_in_place_map_{{id}}_desc"
+      data-bip-url="/maps/{{id}}"
+      data-bip-object="map"
+      data-bip-attribute="desc"
+      data-bip-nil="Click to add description..."
+      data-bip-type="textarea"
+      data-bip-activator="#mapInfoDesc"
+      data-bip-value="{{desc}}"
+    >{{desc}}</span>`,
   init: function () {
     var self = InfoBox
 
@@ -150,6 +171,13 @@ const InfoBox = {
       var desc = $(this).html()
       Active.Map.set('desc', desc)
       Active.Map.trigger('saved')
+    })
+
+    $('.mapInfoDesc .best_in_place_desc, .mapInfoName .best_in_place_name').unbind('keypress').keypress(function(e) {
+      const ENTER = 13
+      if (e.which === ENTER) {
+        $(this).data('bestInPlaceEditor').update()
+      }
     })
 
     $('.yourMap .mapPermission').unbind().click(self.onPermissionClick)

@@ -17,7 +17,6 @@
   
 }
 
-
 #center-container {
   position:relative;
 	height:100%;
@@ -141,6 +140,16 @@
 .CardOnGraph .desc h3 {
   font-style:normal;
   margin-top:5px;
+}
+
+.CardOnGraph .desc ol,
+.CardOnGraph .desc ul {
+  margin-left: 1em;
+
+}
+.CardOnGraph .desc a:hover {
+  text-decoration: underline;
+  opacity: 0.9;
 }
 
 .CardOnGraph .best_in_place_desc {
@@ -582,10 +591,10 @@ background-color: #E0E0E0;
   position: relative;
 }
 
-.CardOnGraph .hoverForTip:hover .tip, .mapCard .hoverForTip:hover .tip, #mapContribs:hover .tip {
+.CardOnGraph .hoverForTip:hover .tip, #mapContribs:hover .tip {
   display:block;
 }
-.CardOnGraph .tip, .mapCard .tip {
+.CardOnGraph .tip {
  display:none;
  position: absolute;
  background: black;
@@ -942,154 +951,7 @@ font-family: 'din-regular', helvetica, sans-serif;
  background-position: 0 -24px;
 }
 
-/* Map Cards */
 
-.map {
-    display:inline-block;
-    width:220px;
-    height:340px;
-    font-size: 12px;
-    text-align: left;
-    overflow: visible;
-    background: #e8e8e8;
-    border-radius:2px;
-    margin:16px 16px 16px 19px;
-    box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
-}
-.map:hover {
-  background: #dcdcdc;
-}
-.map.newMap {
-  float: left;
-  position: relative;
-}
-.map.newMap a {
-  height: 340px;
-  display: block;
-  position: relative;
-}
-.newMap .newMapImage {
-  display: block;
-  width: 72px;
-  height: 72px;
-  background-image: url("<%= asset_data_uri('newmap_sprite.png') %>");
-  background-repeat: no-repeat;
-  background-position: 0 0; 
-  position: absolute;
-  left: 50%;
-  margin-left: -36px;
-  top: 50%;
-  margin-top: -36px;
-}
-.map:hover .newMapImage {
-  background-position: 0 -72px;
-}
-.newMap span {
-    font-family: 'din-regular', sans-serif;
-    font-size: 18px;
-    line-height: 22px;
-    text-align: center;
-    display: block;
-    padding-top: 220px;
-}
-
-.mapCard {
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -moz-box-direction: normal;
-  -ms-flex-direction: column;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  position:relative;
-  width:100%;
-  height:308px;
-  padding: 16px 0;
-  color: #424242;
-}
-
-.mapCard .title {
-  word-wrap: break-word;
-  font-size:18px;
-  line-height:22px;
-  height: 44px;
-  display:block;
-  padding: 0 16px;
-  text-align: center;
-  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: none;         /* OLD - Firefox 19- */
-  -webkit-flex: none;          /* Chrome */
-  -ms-flex: none;              /* IE 10 */
-  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  font-family: 'din-regular', sans-serif;
-}
-
-.mapCard .mapScreenshot {
-  width: 188px;
-  height: 126px;
-  padding: 8px 16px;
-}
-.mapCard .mapScreenshot img {
-  width: 188px;
-  height: 126px;
-  border-radius: 2px;
-}
-
-.mapCard .scroll {
-   display:block;
-   -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: 1;         /* OLD - Firefox 19- */
-  -webkit-flex: 1;          /* Chrome */
-  -ms-flex: 1;              /* IE 10 */
-  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-   padding:0 16px 8px;
-   font-family: helvetica, sans-serif;
-   font-style: italic;
-   font-size: 12px;
-   word-wrap: break-word;
-}
-.mCS_no_scrollbar {
-  padding-right: 5px;
-}
-
-.mapCard .mapMetadata {
-  font-family: 'din-regular', sans-serif;
-  font-size: 12px;
-  position:relative;
-  border-top: 1px solid #BDBDBD;
-  -webkit-box-flex: none;      /* OLD - iOS 6-, Safari 3.1-6 */
-  -moz-box-flex: none;         /* OLD - Firefox 19- */
-  -webkit-flex: none;          /* Chrome */
-  -ms-flex: none;              /* IE 10 */
-  flex: none;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-}
-
-.mapCard .metadataSection {
-  padding: 8px 16px 0 16px;
-  width: 78px;
-  float: left;
-}
-
-.mapPermission {
-  font-family: 'din-medium', sans-serif;
-}
-.cCountColor {
-  font-family: 'din-medium', sans-serif;
-  color: #DB5D5D;
-}
-.tCountColor {
-  font-family: 'din-medium', sans-serif;
-  color: #4FC059;
-}
-.sCountColor {
-  font-family: 'din-medium', sans-serif;
-  color: #DAB539;
-}
 
 
 /* mapper card */

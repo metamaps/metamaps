@@ -40,6 +40,11 @@ const Map = {
   init: function () {
     var self = Map
 
+    // prevent right clicks on the main canvas, so as to not get in the way of our right clicks
+    $('#wrapper').on('contextmenu', function (e) {
+      return false
+    })
+
     $('.starMap').click(function () {
       if ($(this).is('.starred')) self.unstar()
       else self.star()
@@ -52,10 +57,30 @@ const Map = {
     GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
 
     self.updateStar()
-    self.InfoBox.init()
+    InfoBox.init()
     CheatSheet.init()
 
+    $('.viewOnly .requestAccess').click(self.requestAccess)
+
     $(document).on(Map.events.editedByActiveMapper, self.editedByActiveMapper)
+  },
+  requestAccess: function () {
+    $('.viewOnly').removeClass('sendRequest').addClass('sentRequest')
+    const mapId = Active.Map.id
+    $.post({
+      url: `/maps/${mapId}/access_request`
+    })
+    GlobalUI.notifyUser('Map creator will be notified of your request') 
+  },
+  setAccessRequest: function (requests, activeMapper) {
+    let className = 'isViewOnly '
+    if (activeMapper) {
+      const request = _.find(requests, r => r.user_id === activeMapper.id)
+      if (!request) className += 'sendRequest' 
+      else if (request && !request.answered) className += 'sentRequest' 
+      else if (request && request.answered && !request.approved) className += 'requestDenied'
+    }
+    $('.viewOnly').removeClass('sendRequest sentRequest requestDenied').addClass(className)
   },
   launch: function (id) {
     var bb = Metamaps.Backbone
@@ -78,6 +103,9 @@ const Map = {
       // add class to .wrapper for specifying whether you can edit the map
       if (map.authorizeToEdit(mapper)) {
         $('.wrapper').addClass('canEditMap')
+      }
+      else {
+        Map.setAccessRequest(data.requests, mapper)
       }
 
       // add class to .wrapper for specifying if the map can
@@ -102,7 +130,7 @@ const Map = {
       Selected.reset()
 
       // set the proper mapinfobox content
-      Map.InfoBox.load()
+      InfoBox.load()
 
       // these three update the actual filter box with the right list items
       Filter.checkMetacodes()
@@ -132,8 +160,9 @@ const Map = {
       Create.newTopic.hide(true) // true means force (and override pinned)
       Create.newSynapse.hide()
       Filter.close()
-      Map.InfoBox.close()
+      InfoBox.close()
       Realtime.endActiveMap()
+      $('.viewOnly').removeClass('isViewOnly')
     }
   },
   updateStar: function () {
@@ -321,8 +350,6 @@ const Map = {
       node.visited = !T
     })
 
-    var imageData = canvas.canvas.toDataURL()
-
     var map = Active.Map
 
     var today = new Date()
@@ -342,7 +369,7 @@ const Map = {
 
     var downloadMessage = outdent`
       Captured map screenshot!
-      <a href="${imageData.encodedImage}" download="${filename}">DOWNLOAD</a>`
+      <a href="${canvas.canvas.toDataURL()}" download="${filename}">DOWNLOAD</a>`
     GlobalUI.notifyUser(downloadMessage)
 
     canvas.canvas.toBlob(imageBlob => {

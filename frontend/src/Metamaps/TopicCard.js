@@ -265,6 +265,12 @@ const TopicCard = {
       bipName.bind('best_in_place:deactivate', function () {
         $('.nameCounter.forTopic').remove()
       })
+      bipName.keypress(function(e) {
+        const ENTER = 13
+        if (e.which === ENTER) { // enter
+          $(this).data('bestInPlaceEditor').update()
+        }
+      })
 
       // bind best_in_place ajax callbacks
       bipName.bind('ajax:success', function () {
@@ -273,11 +279,23 @@ const TopicCard = {
         topic.trigger('saved')
       })
 
-      $(showCard).find('.best_in_place_desc').bind('ajax:success', function () {
-        this.innerHTML = this.innerHTML.replace(/\r/g, '')
-        var desc = $(this).html() === $(this).data('nil') ? '' : $(this).html()
+      // this is for all subsequent renders after in-place editing the desc field
+      const bipDesc = $(showCard).find('.best_in_place_desc')
+      bipDesc.bind('ajax:success', function () {
+        var desc = $(this).html() === $(this).data('bip-nil')
+          ? ''
+          : $(this).text()
         topic.set('desc', desc)
+        $(this).data('bip-value', desc)
+        this.innerHTML = Util.mdToHTML(desc)
         topic.trigger('saved')
+      })
+      bipDesc.keypress(function(e) {
+        // allow typing Enter with Shift+Enter
+        const ENTER = 13
+        if (e.shiftKey === false && e.which === ENTER) {
+          $(this).data('bestInPlaceEditor').update()
+        }
       })
     }
 
@@ -397,8 +415,6 @@ const TopicCard = {
     } else {
     }
 
-    var desc_nil = 'Click to add description...'
-
     nodeValues.attachmentsHidden = ''
     if (topic.get('link') && topic.get('link') !== '') {
       nodeValues.embeds = '<a href="' + topic.get('link') + '" id="embedlyLink" target="_blank" data-card-description="0">'
@@ -454,8 +470,11 @@ const TopicCard = {
     nodeValues.date = topic.getDate()
     // the code for this is stored in /views/main/_metacodeOptions.html.erb
     nodeValues.metacode_select = $('#metacodeOptions').html()
-    nodeValues.desc_nil = desc_nil
-    nodeValues.desc = (topic.get('desc') == '' && authorized) ? desc_nil : topic.get('desc')
+    nodeValues.desc_nil = 'Click to add description...'
+    nodeValues.desc_markdown = (topic.get('desc') === '' && authorized)
+     ? nodeValues.desc_nil
+     : topic.get('desc')
+    nodeValues.desc_html = Util.mdToHTML(nodeValues.desc_markdown)
     return nodeValues
   }
 }

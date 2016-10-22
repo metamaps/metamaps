@@ -1,13 +1,19 @@
 #%RAML 1.0
 ---
 title: Metamaps
-version: v2.0
+version: 2.0
 baseUri: https://metamaps.cc/api/v2
 mediaType: application/json
+protocols: [ HTTPS ]
+documentation:
+  - title: Getting Started
+    content: !include pages/getting-started.md
 
 securitySchemes:
+  cookie: !include securitySchemes/cookie.raml
+  token: !include securitySchemes/token.raml
   oauth_2_0: !include securitySchemes/oauth_2_0.raml
-securedBy: [ oauth_2_0 ]
+securedBy: [ cookie, token, oauth_2_0 ]
 
 traits:
   pageable: !include traits/pageable.raml

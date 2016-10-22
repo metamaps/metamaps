@@ -10,11 +10,11 @@ class TokenPolicy < ApplicationPolicy
     end
   end
 
-  def create?
+  def index?
     user.present?
   end
 
-  def my_tokens?
+  def create?
     user.present?
   end
 

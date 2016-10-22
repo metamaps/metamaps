@@ -29,6 +29,11 @@ module Api
         head :no_content
       end
 
+      def catch_404
+        skip_authorization
+        render json: { error: '404 Not found' }, status: :not_found
+      end
+
       private
 
       def accessible_records

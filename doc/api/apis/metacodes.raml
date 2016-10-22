@@ -1,4 +1,5 @@
 #type: collection
+securedBy: [ null, cookie, token, oauth_2_0 ]
 get:
   is: [ searchable: { searchFields: "name" }, orderable, pageable ]
   responses:
@@ -7,6 +8,7 @@ get:
         application/json:
           example: !include ../examples/metacodes.json
 /{id}:
+  securedBy: [ null, cookie, token, oauth_2_0 ]
   #type: item
   get:
     responses:

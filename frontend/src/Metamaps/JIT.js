@@ -36,6 +36,10 @@ const JIT = {
   tempInit: false,
   tempNode: null,
   tempNode2: null,
+  mouseDownPix: {},
+  dragFlag : 0,
+  dragTolerance: 0,
+  virtualPointer: {},
 
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
@@ -757,77 +761,127 @@ const JIT = {
     Control.deselectAllNodes()
   }, // escKeyHandler
   onDragMoveTopicHandler: function (node, eventInfo, e) {
-    const self = JIT
+    var self = JIT
 
-    // this is used to send nodes that are moving to
-    // other realtime collaborators on the same map
-    const positionsToSend = {}
-    let topic
-
-    const authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
+    var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     if (node && !node.nodeFrom) {
-      const pos = eventInfo.getPos()
+      var pos = eventInfo.getPos(),
+          EDGE_THICKNESS = 30 /** Metamaps.Visualize.mGraph.canvas.scaleOffsetX*/,
+          SHIFT = 2 / Metamaps.Visualize.mGraph.canvas.scaleOffsetX,
+          PERIOD = 5;
+          
+      //self.virtualPointer = pos;
       // if it's a left click, or a touch, move the node
-      if (e.touches || (e.button === 0 && !e.altKey && !e.ctrlKey && !e.shiftKey && (e.buttons === 0 || e.buttons === 1 || e.buttons === undefined))) {
+      if (e.touches || (e.button === 0 && !e.altKey && !e.ctrlKey && (e.buttons === 0 || e.buttons === 1 || e.buttons === undefined))) {
+
+        var width = Metamaps.Visualize.mGraph.canvas.getSize().width,
+            height = Metamaps.Visualize.mGraph.canvas.getSize().height,
+            xPix = Metamaps.Util.coordsToPixels(pos).x,
+            yPix = Metamaps.Util.coordsToPixels(pos).y;
+            
+        if(self.dragFlag === 0){
+          self.mouseDownPix = Metamaps.Util.coordsToPixels(eventInfo.getPos());
+          self.dragFlag = 1;
+        }
+        
+        if(Metamaps.Util.getDistance(Metamaps.Util.coordsToPixels(pos),self.mouseDownPix) > 2 && !self.dragTolerance){
+          self.dragTolerance = 1;
+        }
+
+        if(xPix < EDGE_THICKNESS && self.dragTolerance ){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:EDGE_THICKNESS,y:yPix}).x - SHIFT,y:pos.y};
+          Metamaps.Visualize.mGraph.canvas.translate(SHIFT,0);
+          self.updateTopicPositions(node, self.virtualPointer);
+          Visualize.mGraph.plot();
+        
+          self.dragLeftEdge = setInterval( function(){
+            self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:EDGE_THICKNESS,y:yPix}).x - SHIFT,y:pos.y};
+            Metamaps.Visualize.mGraph.canvas.translate(SHIFT,0);
+            self.updateTopicPositions(node,self.virtualPointer);
+            Visualize.mGraph.plot();
+          } , PERIOD);
+          
+        }
+        if(width - xPix < EDGE_THICKNESS && self.dragTolerance){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:width - EDGE_THICKNESS,y:yPix}).x + SHIFT,y:pos.y};
+          Metamaps.Visualize.mGraph.canvas.translate(-SHIFT,0);
+          self.updateTopicPositions(node, self.virtualPointer);
+          Visualize.mGraph.plot();
+          
+          self.dragRightEdge = setInterval( function(){
+            self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:width - EDGE_THICKNESS,y:yPix}).x + SHIFT,y:pos.y};
+            Metamaps.Visualize.mGraph.canvas.translate(-SHIFT,0);
+            self.updateTopicPositions(node, self.virtualPointer);
+            Visualize.mGraph.plot();
+          } , PERIOD);
+        }
+        if(yPix < EDGE_THICKNESS && self.dragTolerance){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:EDGE_THICKNESS}).y - SHIFT};
+          Metamaps.Visualize.mGraph.canvas.translate(0,SHIFT);
+          self.updateTopicPositions(node, self.virtualPointer);
+          Visualize.mGraph.plot();
+          
+          self.dragTopEdge = setInterval( function(){
+            self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:EDGE_THICKNESS}).y - SHIFT};
+            Metamaps.Visualize.mGraph.canvas.translate(0,SHIFT);
+            self.updateTopicPositions(node, self.virtualPointer);
+            Visualize.mGraph.plot();
+          } , PERIOD);
+        }
+        if(height - yPix < EDGE_THICKNESS && self.dragTolerance){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+          self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:height - EDGE_THICKNESS}).y + SHIFT};
+          Metamaps.Visualize.mGraph.canvas.translate(0,-SHIFT);
+          self.updateTopicPositions(node, self.virtualPointer);
+          Visualize.mGraph.plot();
+          
+          self.dragBottomEdge = setInterval( function(){
+            self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:height - EDGE_THICKNESS}).y + SHIFT};
+            Metamaps.Visualize.mGraph.canvas.translate(0,-SHIFT);
+            self.updateTopicPositions(node, self.virtualPointer);
+            Visualize.mGraph.plot();
+          } , PERIOD);
+        }
+        
+        if(xPix >= EDGE_THICKNESS && width - xPix >= EDGE_THICKNESS && yPix >= EDGE_THICKNESS && height - yPix >= EDGE_THICKNESS){
+          clearInterval(self.dragLeftEdge);
+          clearInterval(self.dragRightEdge);
+          clearInterval(self.dragTopEdge);
+          clearInterval(self.dragBottomEdge);
+
+          self.updateTopicPositions(node,pos);
+          Visualize.mGraph.plot()
+        }
+        
         // if the node dragged isn't already selected, select it
-        const whatToDo = self.handleSelectionBeforeDragging(node, e)
+        var whatToDo = self.handleSelectionBeforeDragging(node, e)
         if (node.pos.rho || node.pos.rho === 0) {
           // this means we're in topic view
-          const rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y)
-          const theta = Math.atan2(pos.y, pos.x)
+          var rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y)
+          var theta = Math.atan2(pos.y, pos.x)
           node.pos.setp(theta, rho)
-        } else if (whatToDo === 'only-drag-this-one') {
-          node.pos.setc(pos.x, pos.y)
-
-          if (Active.Map) {
-            topic = node.getData('topic')
-            // we use the topic ID not the node id
-            // because we can't depend on the node id
-            // to be the same as on other collaborators
-            // maps
-            positionsToSend[topic.id] = pos
-            $(document).trigger(JIT.events.topicDrag, [positionsToSend])
-          }
         } else {
-          const len = Selected.Nodes.length
-
-          // first define offset for each node
-          const xOffset = []
-          const yOffset = []
-          for (let i = 0; i < len; i += 1) {
-            const n = Selected.Nodes[i]
-            xOffset[i] = n.pos.x - node.pos.x
-            yOffset[i] = n.pos.y - node.pos.y
-          } // for
-
-          for (let i = 0; i < len; i += 1) {
-            const n = Selected.Nodes[i]
-            const x = pos.x + xOffset[i]
-            const y = pos.y + yOffset[i]
-            n.pos.setc(x, y)
-
-            if (Active.Map) {
-              topic = n.getData('topic')
-              // we use the topic ID not the node id
-              // because we can't depend on the node id
-              // to be the same as on other collaborators
-              // maps
-              positionsToSend[topic.id] = n.pos
-            }
-          } // for
-
-          if (Active.Map) {
-            $(document).trigger(JIT.events.topicDrag, [positionsToSend])
-          }
-        } // if
-
-        if (whatToDo === 'deselect') {
-          Control.deselectNode(node)
+          //self.updateTopicPositions(node,pos);
         }
-        Visualize.mGraph.plot()
-      } else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && authorized) {
-        // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
+      }
+      // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
+      else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && authorized) {
         if (JIT.tempInit === false) {
           JIT.tempNode = node
           JIT.tempInit = true
@@ -835,7 +889,7 @@ const JIT = {
           Create.newTopic.hide()
           Create.newSynapse.hide()
           // set the draw synapse start positions
-          const l = Selected.Nodes.length
+          var l = Selected.Nodes.length
           if (l > 0) {
             for (let i = l - 1; i >= 0; i -= 1) {
               const n = Selected.Nodes[i]
@@ -877,8 +931,8 @@ const JIT = {
             n.setData('dim', 25, 'current')
           })
           // pop up node creation :)
-          const myX = e.clientX - 110
-          const myY = e.clientY - 30
+          var myX = e.clientX - 110
+          var myY = e.clientY - 30
           $('#new_topic').css('left', myX + 'px')
           $('#new_topic').css('top', myY + 'px')
           Create.newTopic.x = eventInfo.getPos().x
@@ -890,9 +944,11 @@ const JIT = {
             y: pos.y
           }
         }
-      } else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && Active.Topic) {
+      }
+      else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && Active.Topic) {
         GlobalUI.notifyUser('Cannot create in Topic view.')
-      } else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && !authorized) {
+      }
+      else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && !authorized) {
         GlobalUI.notifyUser('Cannot edit Public map.')
       }
     }
@@ -908,15 +964,27 @@ const JIT = {
     Visualize.mGraph.plot()
   }, // onDragCancelHandler
   onDragEndTopicHandler: function (node, eventInfo, e) {
-    let midpoint = {}
-    let pixelPos
-    let mapping
+    var self = JIT;
+    var midpoint = {}, pixelPos, mapping
+    
+    clearInterval(self.dragLeftEdge);
+    clearInterval(self.dragRightEdge);
+    clearInterval(self.dragTopEdge);
+    clearInterval(self.dragBottomEdge);
+    
+    delete self.dragLeftEdge;
+    delete self.dragRightEdge;
+    delete self.dragTopEdge;
+    delete self.dragBottomEdge;
 
-    if (JIT.tempInit && JIT.tempNode2 == null) {
+    self.dragFlag = 0;
+    self.dragTolerance = 0;
+
+    if (JIT.tempInit && JIT.tempNode2 === null) {
       // this means you want to add a new topic, and then a synapse
       Create.newTopic.addSynapse = true
       Create.newTopic.open()
-    } else if (JIT.tempInit && JIT.tempNode2 != null) {
+    } else if (JIT.tempInit && JIT.tempNode2 !== null) {
       // this means you want to create a synapse between two existing topics
       Create.newTopic.addSynapse = false
       Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
@@ -938,20 +1006,8 @@ const JIT = {
       // check whether to save mappings
       const checkWhetherToSave = function () {
         const map = Active.Map
-
         if (!map) return false
-
-        const mapper = Active.Mapper
-        // this case
-        // covers when it is a public map owned by you
-        // and also when it's a private map
-        const activeMappersMap = map.authorizePermissionChange(mapper)
-        const commonsMap = map.get('permission') === 'commons'
-        const realtimeOn = Realtime.status
-
-        // don't save if commons map, and you have realtime off,
-        // even if you're map creator
-        return map && mapper && ((commonsMap && realtimeOn) || (activeMappersMap && !commonsMap))
+        return map.authorizeToEdit(Active.Mapper)
       }
 
       if (checkWhetherToSave()) {
@@ -1017,7 +1073,44 @@ const JIT = {
         Control.deselectAllNodes()
       }
     }
-  }, // canvasClickHandler
+  }, // canvasClickHandler 
+  updateTopicPositions: function (node, pos){
+    var len = Selected.Nodes.length;
+    var topic;
+    // this is used to send nodes that are moving to 
+    // other realtime collaborators on the same map
+    var positionsToSend = {};
+
+    // first define offset for each node
+    var xOffset = []
+    var yOffset = []
+    for (var i = 0; i < len; i += 1) {
+      var n = Selected.Nodes[i]
+      xOffset[i] = n.pos.x - node.pos.x
+      yOffset[i] = n.pos.y - node.pos.y
+    } // for
+
+    for (var i = 0; i < len; i += 1) {
+      var n = Selected.Nodes[i]
+      var x = pos.x + xOffset[i]
+      var y = pos.y + yOffset[i]
+      n.pos.setc(x, y)
+
+      if (Active.Map) {
+        topic = n.getData('topic')
+        // we use the topic ID not the node id
+        // because we can't depend on the node id
+        // to be the same as on other collaborators
+        // maps
+        positionsToSend[topic.id] = n.pos
+      }
+    } // for
+
+    if (Active.Map) {
+      $(document).trigger(JIT.events.topicDrag, [positionsToSend])
+    }
+  },
+
   nodeDoubleClickHandler: function (node, e) {
     TopicCard.showCard(node)
   }, // nodeDoubleClickHandler
@@ -1042,19 +1135,23 @@ const JIT = {
     // 2 others are selected only and shift, so additionally select this one
     // 3 others are selected only, no shift: drag only this one
     // 4 this node and others were selected, so drag them (just return false)
-    // return value: deselect node again after?
     if (Selected.Nodes.length === 0) {
+      Control.selectNode(node, e)
       return 'only-drag-this-one'
     }
     if (Selected.Nodes.indexOf(node) === -1) {
       if (e.shiftKey) {
         Control.selectNode(node, e)
-        return 'nothing'
+        return 'move-all-incuding-this-one'
       } else {
+        Control.deselectAllEdges()
+        Control.deselectAllNodes()
+        Control.selectNode(node, e)
         return 'only-drag-this-one'
       }
     }
-    return 'nothing' // case 4?
+    return 'move-all'; // case 4?
+
   }, //  handleSelectionBeforeDragging
   getNodeXY: function (node) {
     if (typeof node.pos.x === 'number' && typeof node.pos.y === 'number') {

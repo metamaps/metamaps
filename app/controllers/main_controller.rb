@@ -8,7 +8,7 @@ class MainController < ApplicationController
     respond_to do |format|
       format.html do
         if authenticated?
-          @maps = policy_scope(Map).where.not(name: 'Untitled Map')
+          @maps = policy_scope(Map).where.not(name: 'Untitled Map').where.not(permission: 'private')
                                    .order(updated_at: :desc).page(1).per(20)
           render 'explore/active'
         else

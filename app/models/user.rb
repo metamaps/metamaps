@@ -65,6 +65,11 @@ class User < ApplicationRecord
     json
   end
   
+  def all_accessible_maps
+    #TODO: is there a way to keep this an ActiveRecord relation?
+    maps + shared_maps
+  end
+
   def recentMetacodes
     array = []
     self.topics.sort{|a,b| b.created_at <=> a.created_at }.each do |t|

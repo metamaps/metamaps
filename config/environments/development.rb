@@ -32,7 +32,7 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
-  config.action_mailer.preview_path = '/vagrant/spec/mailers/previews'
+  config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 
   # Expands the lines which load the assets
   config.assets.debug = false

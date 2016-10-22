@@ -10,7 +10,7 @@ import Create from './Create'
 import Debug from './Debug'
 import Filter from './Filter'
 import GlobalUI, {
-  Search, CreateMap, Account as GlobalUI_Account
+  Search, CreateMap, ImportDialog, Account as GlobalUI_Account
 } from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
@@ -47,6 +47,7 @@ Metamaps.GlobalUI = GlobalUI
 Metamaps.GlobalUI.Search = Search
 Metamaps.GlobalUI.CreateMap = CreateMap
 Metamaps.GlobalUI.Account = GlobalUI_Account
+Metamaps.GlobalUI.ImportDialog = ImportDialog
 Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (Metamaps.currentSection === 'explore') {
     const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
-    Metamaps.Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
+    Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
     if (Metamaps.currentPage === 'mapper') {
       Views.ExploreMaps.fetchUserThenRender()
     } else {
