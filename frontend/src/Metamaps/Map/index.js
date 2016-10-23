@@ -39,11 +39,6 @@ const Map = {
   },
   init: function () {
     var self = Map
-
-    // prevent right clicks on the main canvas, so as to not get in the way of our right clicks
-    $('#wrapper').on('contextmenu', function (e) {
-      return false
-    })
     
     $('#wrapper').mousedown(function (e){
       if(e.button === 1)return false;
