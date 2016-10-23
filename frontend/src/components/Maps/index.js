@@ -41,7 +41,7 @@ class Maps extends Component {
   }
 
   render = () => {
-    const { maps, currentUser, juntoState, section, user, moreToLoad, loadMore, onStar, onRequest } = this.props
+    const { maps, currentUser, juntoState, pending, section, user, moreToLoad, loadMore, onStar, onRequest } = this.props
     const style = { width: this.state.mapsWidth + 'px' }
 
     return (
@@ -49,7 +49,7 @@ class Maps extends Component {
         <div id='exploreMaps' ref='maps'>
           <div style={ style }>
             { user ? <MapperCard user={ user } /> : null }
-            { currentUser && !user ? <div className="map newMap"><a href="/maps/new"><div className="newMapImage"></div><span>Create new map...</span></a></div> : null }
+            { currentUser && !user && !(pending && maps.length === 0) ? <div className="map newMap"><a href="/maps/new"><div className="newMapImage"></div><span>Create new map...</span></a></div> : null }
             { maps.models.map(map => <MapCard key={ map.id } map={ map } juntoState={ juntoState } currentUser={ currentUser } onStar={ onStar } onRequest={ onRequest } />) }
             <div className='clearfloat'></div>
           </div>

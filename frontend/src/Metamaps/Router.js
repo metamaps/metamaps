@@ -59,6 +59,7 @@ const _Router = Backbone.Router.extend({
 
       Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
       if (Metamaps.Maps.Active.length === 0) {
+        Views.ExploreMaps.pending = true
         Metamaps.Maps.Active.getMaps(navigate) // this will trigger an explore maps render
       } else {
         Views.ExploreMaps.render(navigate)
@@ -134,6 +135,7 @@ const _Router = Backbone.Router.extend({
     }
     if (Metamaps.Maps[capitalize].length === 0) {
       Metamaps.Loading.show()
+      Views.ExploreMaps.pending = true
       setTimeout(function () {
         Metamaps.Maps[capitalize].getMaps(navigate) // this will trigger an explore maps render
       }, 300) // wait 300 milliseconds till the other animations are done to do the fetch
