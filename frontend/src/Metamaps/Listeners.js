@@ -17,6 +17,8 @@ const Listeners = {
     $(document).on('keydown', function (e) {
       if (!(Active.Map || Active.Topic)) return
 
+      const onCanvas = e.target.tagName === 'BODY'
+
       switch (e.which) {
         case 13: // if enter key is pressed
           // prevent topic creation if sending a message
@@ -28,7 +30,7 @@ const Listeners = {
           JIT.escKeyHandler()
           break
         case 65: // if a or A is pressed
-          if (e.ctrlKey || e.metaKey) {
+          if ((e.ctrlKey || e.metaKey) && onCanvas) {
             Control.deselectAllNodes()
             Control.deselectAllEdges()
 
