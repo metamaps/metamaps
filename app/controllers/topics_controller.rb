@@ -11,11 +11,11 @@ class TopicsController < ApplicationController
   def autocomplete_topic
     term = params[:term]
     if term && !term.empty?
-      @topics = policy_scope(Topic.where('LOWER("name") like ?', term.downcase + '%')).order('"name"')
+      @topics = policy_scope(Topic).where('LOWER("name") like ?', term.downcase + '%').order('"name"')
       @mapTopics = @topics.select { |t| t.metacode.name == 'Metamap' }
       # prioritize topics which point to maps, over maps
       @exclude = @mapTopics.length > 0 ? @mapTopics.map(&:name) : ['']
-      @maps = policy_scope(Map.where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', @exclude)).order('"name"')
+      @maps = policy_scope(Map).where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', @exclude).order('"name"')
     else
       @topics = []
       @maps = []
@@ -39,7 +39,7 @@ class TopicsController < ApplicationController
 
         respond_with(@allsynapses, @alltopics, @allcreators, @topic)
       end
-      format.json { render json: @topic }
+      format.json { render json: @topic.to_json(user: current_user) }
     end
   end
 
@@ -55,9 +55,9 @@ class TopicsController < ApplicationController
     @allcreators += @allsynapses.map(&:user).uniq
 
     @json = {}
-    @json['topic'] = @topic
+    @json['topic'] = @topic.to_json(user: current_user)
     @json['creators'] = @allcreators
-    @json['relatives'] = @alltopics
+    @json['relatives'] = @alltopics.to_json(user: current_user)
     @json['synapses'] = @allsynapses
 
     respond_to do |format|
@@ -114,7 +114,7 @@ class TopicsController < ApplicationController
     end
 
     @json = {}
-    @json['topics'] = alltopics
+    @json['topics'] = alltopics.to_json(user: current_user)
     @json['synapses'] = allsynapses
     @json['creators'] = allcreators
 
@@ -131,7 +131,7 @@ class TopicsController < ApplicationController
 
     respond_to do |format|
       if @topic.save
-        format.json { render json: @topic, status: :created }
+        format.json { render json: @topic.to_json(user: current_user), status: :created }
       else
         format.json { render json: @topic.errors, status: :unprocessable_entity }
       end

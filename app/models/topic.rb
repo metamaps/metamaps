@@ -59,28 +59,31 @@ class Topic < ApplicationRecord
     user.image.url
   end
 
-  def map_count
-    maps.count
+  def map_count(user)
+    Pundit.policy_scope(user, maps).count
   end
 
-  def synapse_count
-    synapses.count
+  def synapse_count(user)
+    Pundit.policy_scope(user, synapses).count
   end
 
-  def inmaps
-    maps.map(&:name)
+  def inmaps(user)
+    Pundit.policy_scope(user, maps).map(&:name)
   end
 
-  def inmapsLinks
-    maps.map(&:id)
+  def inmapsLinks(user)
+    Pundit.policy_scope(user, maps).map(&:id)
   end
 
   def calculated_permission
     defer_to_map&.permission || permission
   end
 
-  def as_json(_options = {})
-    super(methods: [:user_name, :user_image, :map_count, :synapse_count, :inmaps, :inmapsLinks, :calculated_permission, :collaborator_ids])
+  def as_json(options = {})
+    raise 'You must pass a user' unless options[:user].is_a? User
+    super(methods: [:user_name, :user_image, :calculated_permission, :collaborator_ids])
+      .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
+             map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
   end
 
   def collaborator_ids
