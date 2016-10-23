@@ -2,16 +2,33 @@
   display: none;
 }
 
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen and (max-device-width : 480px) {
-  .upperLeftUI, .upperRightUI, .openCheatsheet, .mapInfoIcon, .uv-icon, .chat-box, #exploreMapsHeader {
+@media only screen and (max-device-width : 720px) and (min-device-width : 504px) {
+  .sidebarSearch .tt-hint, .sidebarSearch .sidebarSearchField {
+    width: 160px !important;
+  }
+}
+
+@media only screen and (max-device-width : 390px) {
+  .map .mapCard .mobileMetadata {
+    width: 190px;
+  }
+}
+@media only screen and (min-device-width : 390px) {
+  .map .mapCard .mobileMetadata {
+    width: 390px;
+  }
+}
+
+/* Smartphones (portrait and landscape) ----------- the minimum space that two map cards can fit side by side */
+@media only screen and (max-device-width : 504px) {
+  .upperLeftUI, .upperRightUI, .openCheatsheet, .mapInfoIcon, .feedback-icon, .chat-box, #exploreMapsHeader {
     display: none !important;
   }
-  
+
   #mobile_header {
     display: block;
   }
-  
+
   .homeWrapper {
     width: 96%;
     padding: 0 2%;
@@ -38,11 +55,11 @@
   .learnMoreCTA {
     display: none !important;
   }
-  
+
   #yield {
     height: 100%;
   }
-  
+
   .new_session, .new_user, .edit_user, .login, .forgotPassword {
     position: relative;
     top: auto;
@@ -51,11 +68,11 @@
     padding: 16px 10%;
     margin: 50px auto 0 auto;
   }
-  
+
   .centerGreyForm input[type="text"], .centerGreyForm input[type="email"], .centerGreyForm input[type="password"] {
     width: 100%;
   }
-  
+
   .wrapper .mapInfoBox {
     position: fixed;
     top: 50px;
@@ -64,12 +81,12 @@
     width: 100%;
     max-width: 360px;
   }
-  
+
   #wrapper .requestInvite {
     width: 100%;
     padding: 0;
   }
-  
+
   #exploreMaps > div {
     margin-top: 70px;
   }
@@ -94,35 +111,73 @@
     span {
       vertical-align: middle;
       padding: 16px;
-      display: inline-block; 
+      display: inline-block;
     }
   }
   .map.newMap:hover .newMapImage {
     background-position: 0 -40px;
   }
-}
-
-/* Smartphones (portrait) ----------- */
-@media only screen and (max-width : 400px) {
 
   .map {
     width: 100%;
     margin: 0 0 30px 0;
     height: auto;
-  }
-  
-  .mapCard {
-    height: auto;
-  }
-  
-  .mapCard .title {
-    text-align: left;
-  }
-  
-  .mapCard .mapScreenshot {
-    display: none;
-  }
 
+    .mapCard {
+      height: auto;
+      padding: 0;
+
+      &:hover {
+        .mainContent {
+          filter: none;
+        }
+      }
+      .mobileHasMapper, .mobileHasConversation {
+        .mapperList {
+          padding: 8px 16px;
+          list-style-type: none;
+
+          li {
+            &.live {
+              height: 32px;
+              padding-left: 32px;
+              font-size: 16px;
+            }
+
+            img {
+              width: 24px;
+              height: 24px;
+              border-radius: 12px;
+              display: inline-block;
+              vertical-align: middle;
+            }
+            span {
+              padding-left: 10px;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+      .mobileHasMapper {
+        background: url('<%= asset_path('junto.png') %>') no-repeat 12px 0;
+      }
+      .mobileHasConversation {
+        background: url('<%= asset_path('junto.gif') %>') no-repeat 12px 0;
+      }
+      .mobileMetadata {
+        margin: 0 auto;
+      }
+      .title {
+        text-align: left;
+        display: block;
+        height: auto;
+        padding: 16px;
+      }
+      .desc {
+        padding: 0 16px;
+      }
+    }
+  }
 }
 
 #mobile_header {

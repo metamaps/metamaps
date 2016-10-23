@@ -36,7 +36,7 @@
       height: 72px;
       background-image: url("<%= asset_data_uri('newmap_sprite.png') %>");
       background-repeat: no-repeat;
-      background-position: 0 0; 
+      background-position: 0 0;
       position: absolute;
       left: 50%;
       margin-left: -36px;
@@ -96,7 +96,7 @@
 
       .mapperList {
         display: none;
-        padding: 8px; 
+        padding: 8px;
         list-style-type: none;
 
         li {
@@ -117,7 +117,7 @@
             padding-left: 10px;
             font-size: 14px;
           }
-        } 
+        }
       }
     }
     .mapHasMapper {
@@ -149,7 +149,7 @@
         &:hover .circle {
           background-color: #222;
         }
-      } 
+      }
 
       .menuItems {
         position: absolute;
@@ -167,8 +167,8 @@
           &:hover {
             background-color: #DDD;
           }
-        } 
-      } 
+        }
+      }
     }
 
     .mapScreenshot {
@@ -253,6 +253,25 @@
       float: left;
       font-family: 'din-medium', sans-serif;
       text-align: center;
+
+      div {
+        background: url('<%= asset_path('metadata.png') %>') no-repeat;
+        width: 32px;
+        height: 32px;
+        margin: 0 auto;
+      }
+      .numTopicsIcon {
+        background-position: 0 -32px;
+      }
+      .numStarsIcon {
+        background-position: 0 0;
+      }
+      .numSynapsesIcon {
+        background-position: -32px -32px;
+      }
+      .numContributorsIcon {
+        background-position: -32px 0;
+      }
     }
 
   }

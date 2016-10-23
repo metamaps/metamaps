@@ -5,6 +5,8 @@ import MapperCard from './MapperCard'
 import MapCard from './MapCard'
 
 const MAP_WIDTH = 252
+const MOBILE_VIEW_BREAKPOINT = 504
+const MOBILE_VIEW_PADDING = 20
 const MAX_COLUMNS = 4
 
 class Maps extends Component {
@@ -28,7 +30,9 @@ class Maps extends Component {
     const { maps, user, currentUser } = this.props
     const numCards = maps.length + (user || currentUser ? 1 : 0)
     const mapSpaces = Math.floor(document.body.clientWidth / MAP_WIDTH)
-    const mapsWidth = Math.min(MAX_COLUMNS, Math.min(numCards, mapSpaces)) * MAP_WIDTH
+    const mapsWidth = document.body.clientWidth <= MOBILE_VIEW_BREAKPOINT ?
+                        document.body.clientWidth - MOBILE_VIEW_PADDING :
+                        Math.min(MAX_COLUMNS, Math.min(numCards, mapSpaces)) * MAP_WIDTH
     this.setState({ mapsWidth })
   }
 
@@ -43,6 +47,7 @@ class Maps extends Component {
   render = () => {
     const { maps, currentUser, juntoState, pending, section, user, moreToLoad, loadMore, onStar, onRequest } = this.props
     const style = { width: this.state.mapsWidth + 'px' }
+    const mobile = document && document.body.clientWidth <= MOBILE_VIEW_BREAKPOINT
 
     return (
       <div>
@@ -50,7 +55,7 @@ class Maps extends Component {
           <div style={ style }>
             { user ? <MapperCard user={ user } /> : null }
             { currentUser && !user && !(pending && maps.length === 0) ? <div className="map newMap"><a href="/maps/new"><div className="newMapImage"></div><span>Create new map...</span></a></div> : null }
-            { maps.models.map(map => <MapCard key={ map.id } map={ map } juntoState={ juntoState } currentUser={ currentUser } onStar={ onStar } onRequest={ onRequest } />) }
+            { maps.models.map(map => <MapCard key={ map.id } map={ map } mobile={ mobile } juntoState={ juntoState } currentUser={ currentUser } onStar={ onStar } onRequest={ onRequest } />) }
             <div className='clearfloat'></div>
           </div>
         </div>
