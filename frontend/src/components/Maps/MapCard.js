@@ -95,7 +95,7 @@ class MapCard extends Component {
     const d = map.get('desc')
 
     const maxNameLength = 32
-    const maxDescLength = 236
+    const maxDescLength = 180
     const truncatedName = n ? (n.length > maxNameLength ? n.substring(0, maxNameLength) + '...' : n) : ''
     const truncatedDesc = d ? (d.length > maxDescLength ? d.substring(0, maxDescLength) + '...' : d) : ''
     const editPermission = map.authorizeToEdit(currentUser) ? 'canEdit' : 'cannotEdit'
