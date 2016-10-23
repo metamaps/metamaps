@@ -179,13 +179,13 @@ jQuery.browser = browser;
 		{
 			// START METAMAPS CODE
 			$('body').bind('mousewheel',this,function(event, delta) {					 
-					 if (Metamaps.Create.newTopic.beingCreated && 
-					     !Metamaps.Create.isSwitchingSet &&
-					     !Metamaps.Create.newTopic.pinned) {
-					 	event.data.rotate(delta);
-					 	return false;
-					 }
-				 });
+					if (Metamaps.Create.newTopic.beingCreated && 
+					    !Metamaps.Create.isSwitchingSet &&
+					    !Metamaps.Create.newTopic.pinned) {
+						event.data.rotate(delta);
+						return false;
+					}
+				});
 			// END METAMAPS CODE
 			/* ORIGINAL CODE
 			$(container).bind('mousewheel',this,function(event, delta) {					 
@@ -194,7 +194,7 @@ jQuery.browser = browser;
 				 });
 			*/
 		}
-		$(container).bind('mouseover click',this,function(event){
+		$(container).unbind('mouseover click').bind('mouseover click',this,function(event){
 			
 			clearInterval(event.data.autoRotateTimer);		// Stop auto rotation if mouse over.
 			var	text = $(event.target).attr('alt');		
@@ -208,22 +208,27 @@ jQuery.browser = browser;
 				//$(options.titleBox).html( ($(event.target).attr('title') ));							
 				if ( options.bringToFront && event.type == 'click' )				
 				{
-                    $(options.titleBox).html( ($(event.target).attr('title') ));
-				    // METAMAPS CODE
-			        Metamaps.Create.newTopic.metacode = $(event.target).attr('data-id');
-			        // NOT METAMAPS CODE
+					options.titleBox).html( ($(event.target).attr('title') ));
+					// START METAMAPS CODE
+					Metamaps.Create.newTopic.metacode = $(event.target).attr('data-id');
+					// END METAMAPS CODE
 					var	idx = $(event.target).data('itemIndex');	
 					var	frontIndex = event.data.frontIndex;
 					//var	diff = idx - frontIndex;                    
-                    var        diff = (idx - frontIndex) % images.length;
-                    if (Math.abs(diff) > images.length / 2) {
-                        diff += (diff > 0 ? -images.length : images.length);
-                    }
-                    
+					var diff = (idx - frontIndex) % images.length;
+					if (Math.abs(diff) > images.length / 2) {
+						diff += (diff > 0 ? -images.length : images.length);
+					}
+
 					event.data.rotate(-diff);
 				}
 			}
 		});
+		// START METAMAPS CODE - initialize newTopic.metacode
+		var first = $(this.container).find('img').get(0)
+		Metamaps.Create.newTopic.metacode = $(first).data('id')
+		// END METAMAPS CODE
+
 		// If we have moved out of a carousel item (or the container itself),
 		// restore the text of the front item in 1 second.
 		$(container).bind('mouseout',this,function(event){
@@ -247,11 +252,6 @@ jQuery.browser = browser;
 		this.showFrontText = function()
 		{	
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
-            // METAMAPS CODE
-			Metamaps.Create.newTopic.metacode = $(items[this.frontIndex].image).attr('data-id');
-        //$('img.cloudcarousel').css({"background":"none", "width":"","height":""});
-        //$(items[this.frontIndex].image).css({"width":"45px","height":"45px"});
-			// NOT METAMAPS CODE
 			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
 			$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				
 		};
