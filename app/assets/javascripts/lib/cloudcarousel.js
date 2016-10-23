@@ -208,7 +208,7 @@ jQuery.browser = browser;
 				//$(options.titleBox).html( ($(event.target).attr('title') ));							
 				if ( options.bringToFront && event.type == 'click' )				
 				{
-					options.titleBox).html( ($(event.target).attr('title') ));
+					$(options.titleBox).html( ($(event.target).attr('title') ));
 					// START METAMAPS CODE
 					Metamaps.Create.newTopic.metacode = $(event.target).attr('data-id');
 					// END METAMAPS CODE
