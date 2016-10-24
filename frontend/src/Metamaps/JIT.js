@@ -1069,6 +1069,9 @@ const JIT = {
         Control.deselectAllEdges()
         Control.deselectAllNodes()
       }
+    } else {
+      // SINGLE CLICK, resulting from pan
+      Create.newTopic.hide()
     }
   }, // canvasClickHandler 
   updateTopicPositions: function (node, pos){
