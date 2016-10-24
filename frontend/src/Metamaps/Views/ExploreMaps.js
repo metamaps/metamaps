@@ -14,6 +14,7 @@ import Maps from '../../components/Maps'
 
 const ExploreMaps = {
   pending: false,
+  mapper: null,
   setCollection: function (collection) {
     var self = ExploreMaps
 
@@ -27,15 +28,10 @@ const ExploreMaps = {
     self.collection.on('successOnFetch', self.handleSuccess)
     self.collection.on('errorOnFetch', self.handleError)
   },
-  render: function (mapperObj, cb) {
+  render: function (cb) {
     var self = ExploreMaps
 
     if (!self.collection) return
-
-    if (typeof mapperObj === 'function') {
-      cb = mapperObj
-      mapperObj = null
-    }
 
     var exploreObj = {
       currentUser: Active.Mapper,
@@ -43,7 +39,7 @@ const ExploreMaps = {
       maps: self.collection,
       juntoState: Realtime.juntoState,
       moreToLoad: self.collection.page != 'loadedAll',
-      user: mapperObj,
+      user: self.collection.id === 'mapper' ? self.mapper : null,
       loadMore: self.loadMore,
       pending: self.pending,
       onStar: function (map) {
@@ -93,11 +89,17 @@ const ExploreMaps = {
   fetchUserThenRender: function (cb) {
     var self = ExploreMaps
 
+    if (self.mapper && self.mapper.id === self.collection.mapperId) {
+      self.render(cb)
+      return Metamaps.Loading.hide()
+    }
+
     // first load the mapper object and then call the render function
     $.ajax({
       url: '/users/' + self.collection.mapperId + '/details.json',
       success: function (response) {
-        self.render(response, cb)
+        self.mapper = response
+        self.render(cb)
         Metamaps.Loading.hide()
       },
       error: function () {
