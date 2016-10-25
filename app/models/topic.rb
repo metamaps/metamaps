@@ -80,7 +80,6 @@ class Topic < ApplicationRecord
   end
 
   def as_json(options = {})
-    raise 'You must pass a user' unless options[:user].is_a? User
     super(methods: [:user_name, :user_image, :calculated_permission, :collaborator_ids])
       .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
              map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
