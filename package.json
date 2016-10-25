@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "mocha --compilers js:babel-core/register frontend/test || (echo 'Run `npm install` to setup testing' && false)"
+    "test": "mocha --compilers js:babel-core/register frontend/test"
   },
   "repository": {
     "type": "git",

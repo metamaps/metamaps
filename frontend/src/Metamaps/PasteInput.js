@@ -2,6 +2,7 @@
 
 import Import from './Import'
 import Util from './Util'
+import Visualize from './Visualize'
 
 const PasteInput = {
   // thanks to https://github.com/kevva/url-regex
@@ -19,7 +20,7 @@ const PasteInput = {
     window.addEventListener("drop", function(e) {
       e = e || window.event;
       e.preventDefault();
-      var coords = Util.pixelsToCoords({ x: e.clientX, y: e.clientY })
+      var coords = Util.pixelsToCoords(Visualize.mGraph, { x: e.clientX, y: e.clientY })
       if (e.dataTransfer.files.length > 0) {
         self.handleFile(e.dataTransfer.files[0], coords)
       }

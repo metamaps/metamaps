@@ -211,7 +211,7 @@ const Topic = {
         // position the form
         midpoint.x = JIT.tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
         midpoint.y = JIT.tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
-        pixelPos = Util.coordsToPixels(midpoint)
+        pixelPos = Util.coordsToPixels(Visualize.mGraph, midpoint)
         $('#new_synapse').css('left', pixelPos.x + 'px')
         $('#new_synapse').css('top', pixelPos.y + 'px')
         // show the form

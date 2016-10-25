@@ -2,8 +2,6 @@
 
 import { Parser, HtmlRenderer } from 'commonmark'
 
-import Visualize from './Visualize'
-
 const Util = {
   // helper function to determine how many lines are needed
   // Line Splitter Function
@@ -23,14 +21,15 @@ const Util = {
     }
     return b + s
   },
-  nowDateFormatted: function () {
-    var date = new Date(Date.now())
-    var month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)
-    var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-    var year = date.getFullYear()
+
+  nowDateFormatted: function (date = new Date(Date.now())) {
+    const month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)
+    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+    const year = date.getFullYear()
 
     return month + '/' + day + '/' + year
   },
+
   decodeEntities: function (desc) {
     var str, temp = document.createElement('p')
     temp.innerHTML = desc // browser handles the topics
@@ -38,12 +37,15 @@ const Util = {
     temp = null // delete the element
     return str
   }, // decodeEntities
+
   getDistance: function (p1, p2) {
     return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2))
   },
-  coordsToPixels: function (coords) {
-    if (Visualize.mGraph) {
-      var canvas = Visualize.mGraph.canvas,
+
+  // Try using Visualize.mGraph
+  coordsToPixels: function (mGraph, coords) {
+    if (mGraph) {
+      var canvas = mGraph.canvas,
         s = canvas.getSize(),
         p = canvas.getPos(),
         ox = canvas.translateOffsetX,
@@ -62,10 +64,12 @@ const Util = {
       }
     }
   },
-  pixelsToCoords: function (pixels) {
+
+  // Try using Visualize.mGraph
+  pixelsToCoords: function (mGraph, pixels) {
     var coords
-    if (Visualize.mGraph) {
-      var canvas = Visualize.mGraph.canvas,
+    if (mGraph) {
+      var canvas = mGraph.canvas,
         s = canvas.getSize(),
         p = canvas.getPos(),
         ox = canvas.translateOffsetX,
@@ -84,10 +88,13 @@ const Util = {
     }
     return coords
   },
-  getPastelColor: function () {
-    var r = (Math.round(Math.random() * 127) + 127).toString(16)
-    var g = (Math.round(Math.random() * 127) + 127).toString(16)
-    var b = (Math.round(Math.random() * 127) + 127).toString(16)
+  getPastelColor: function ({ rseed, gseed, bseed }) {
+    if (rseed === undefined) rseed = Math.random()
+    if (gseed === undefined) gseed = Math.random()
+    if (bseed === undefined) bseed = Math.random()
+    var r = (Math.round(rseed * 127) + 127).toString(16)
+    var g = (Math.round(gseed * 127) + 127).toString(16)
+    var b = (Math.round(bseed * 127) + 127).toString(16)
     return Util.colorLuminance('#' + r + g + b, -0.4)
   },
   // darkens a hex value by 'lum' percentage
@@ -108,21 +115,6 @@ const Util = {
     }
 
     return rgb
-  },
-  generateOptionsList: function (data) {
-    var newlist = ''
-    for (var i = 0; i < data.length; i++) {
-      newlist = newlist + '<option value="' + data[i]['id'] + '">' + data[i]['1'][1] + '</option>'
-    }
-    return newlist
-  },
-  checkURLisImage: function (url) {
-    // when the page reloads the following regular expression will be screwed up
-    // please replace it with this one before you save: /*backslashhere*.(jpeg|jpg|gif|png)$/
-    return (url.match(/\.(jpeg|jpg|gif|png)$/) != null)
-  },
-  checkURLisYoutubeVideo: function (url) {
-    return (url.match(/^https?:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$/) != null)
   },
   openLink: function(url){
     var win = (url !== "") ? window.open(url, '_blank') : "empty";

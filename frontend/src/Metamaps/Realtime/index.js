@@ -278,7 +278,7 @@ let Realtime = {
         x: event.pageX,
         y: event.pageY
       }
-      var coords = Util.pixelsToCoords(pixels)
+      var coords = Util.pixelsToCoords(Visualize.mGraph, pixels)
       self.sendCoords(coords)
     }
     $(document).on('mousemove.map', sendCoords)
@@ -289,7 +289,7 @@ let Realtime = {
           x: e.pageX,
           y: e.pageY
         }
-        var coords = Util.pixelsToCoords(pixels)
+        var coords = Util.pixelsToCoords(Visualize.mGraph, pixels)
         self.sendCoords(coords)
       }
       self.positionPeerIcons()
@@ -448,7 +448,7 @@ let Realtime = {
     var compassDiameter = 56
     var compassArrowSize = 24
 
-    var origPixels = Util.coordsToPixels(mapper.coords)
+    var origPixels = Util.coordsToPixels(Visualize.mGraph, mapper.coords)
     var pixels = self.limitPixelsToScreen(origPixels)
     $('#compass' + id).css({
       left: pixels.x + 'px',

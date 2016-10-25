@@ -990,7 +990,7 @@ const JIT = {
       Visualize.mGraph.plot()
       midpoint.x = JIT.tempNode.pos.getc().x + (JIT.tempNode2.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
       midpoint.y = JIT.tempNode.pos.getc().y + (JIT.tempNode2.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
-      pixelPos = Util.coordsToPixels(midpoint)
+      pixelPos = Util.coordsToPixels(Visualize.mGraph, midpoint)
       $('#new_synapse').css('left', pixelPos.x + 'px')
       $('#new_synapse').css('top', pixelPos.y + 'px')
       Create.newSynapse.open()
