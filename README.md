@@ -5,11 +5,11 @@ Metamaps
 
 ## What is Metamaps?
 
-Metamaps is a free and open source technology for changemakers, innovators, educators and students. It enables individuals and communities to build and visualize their shared knowledge and unlock their collective intelligence.
+Metamaps is a free and open-source technology for changemakers, innovators, educators and students. It enables individuals and communities to build and visualize their shared knowledge and unlock their collective intelligence.
 
-You can find a version of this software running at [metamaps.cc][site-beta], where the technology is being tested in a private beta.
+You can find a version of this software running at [metamaps.cc][site-beta], where the technology is being tested in an open beta.
 
-Metamaps is created and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. You can get in touch by using whichever of these channels you prefer:
+Metamaps is developed and maintained by a distributed, nomadic community comprised of technologists, artists and storytellers. You can get in touch by using whichever of these channels you prefer:
 
 ## How do I learn more?
      
