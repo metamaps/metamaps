@@ -44,15 +44,15 @@ describe('Metamaps.Util.js', function () {
   })
   describe('coordsToPixels', function () {
     it('returns 0,0 for null canvas', function () {
-      expect(Util.coordsToPixels(null).x).to.equal(0)
-      expect(Util.coordsToPixels(null).y).to.equal(0)
+      expect(Util.coordsToPixels(null, {}).x).to.equal(0)
+      expect(Util.coordsToPixels(null, {}).y).to.equal(0)
     })
     it.skip('TODO need initialized mGraph to test further')
   })
   describe('pixelsToCoords', function () {
     it('returns 0,0 for null canvas', function () {
-      expect(Util.pixelsToCoords(null).x).to.equal(0)
-      expect(Util.pixelsToCoords(null).y).to.equal(0)
+      expect(Util.pixelsToCoords(null, {}).x).to.equal(0)
+      expect(Util.pixelsToCoords(null, {}).y).to.equal(0)
     })
     it.skip('TODO need initialized mGraph to test further')
   })

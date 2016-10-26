@@ -772,17 +772,17 @@ const JIT = {
       // if it's a left click, or a touch, move the node
       if (e.touches || (e.button === 0 && !e.altKey && !e.ctrlKey && (e.buttons === 0 || e.buttons === 1 || e.buttons === undefined))) {
 
-        var width = Metamaps.Visualize.mGraph.canvas.getSize().width,
-            height = Metamaps.Visualize.mGraph.canvas.getSize().height,
-            xPix = Metamaps.Util.coordsToPixels(pos).x,
-            yPix = Metamaps.Util.coordsToPixels(pos).y;
+        var width = Visualize.mGraph.canvas.getSize().width,
+            height = Visualize.mGraph.canvas.getSize().height,
+            xPix = Util.coordsToPixels(Visualize.mGraph, pos).x,
+            yPix = Util.coordsToPixels(Visualize.mGraph, pos).y;
             
         if(self.dragFlag === 0){
-          self.mouseDownPix = Metamaps.Util.coordsToPixels(eventInfo.getPos());
+          self.mouseDownPix = Util.coordsToPixels(eventInfo.getPos());
           self.dragFlag = 1;
         }
         
-        if(Metamaps.Util.getDistance(Metamaps.Util.coordsToPixels(pos),self.mouseDownPix) > 2 && !self.dragTolerance){
+        if(Util.getDistance(Util.coordsToPixels(pos),self.mouseDownPix) > 2 && !self.dragTolerance){
           self.dragTolerance = 1;
         }
 
@@ -791,14 +791,14 @@ const JIT = {
           clearInterval(self.dragRightEdge);
           clearInterval(self.dragTopEdge);
           clearInterval(self.dragBottomEdge);
-          self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:EDGE_THICKNESS,y:yPix}).x - SHIFT,y:pos.y};
-          Metamaps.Visualize.mGraph.canvas.translate(SHIFT,0);
+          self.virtualPointer = { x: Util.pixelsToCoords(Visualize.mGraph, { x: EDGE_THICKNESS, y: yPix }).x - SHIFT, y: pos.y }
+          Visualize.mGraph.canvas.translate(SHIFT, 0);
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
         
           self.dragLeftEdge = setInterval( function(){
-            self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:EDGE_THICKNESS,y:yPix}).x - SHIFT,y:pos.y};
-            Metamaps.Visualize.mGraph.canvas.translate(SHIFT,0);
+            self.virtualPointer = { x: Util.pixelsToCoords(Visualize.mGraph, { x: EDGE_THICKNESS, y: yPix }).x - SHIFT, y: pos.y }
+            Visualize.mGraph.canvas.translate(SHIFT, 0);
             self.updateTopicPositions(node,self.virtualPointer);
             Visualize.mGraph.plot();
           } , PERIOD);
@@ -809,14 +809,14 @@ const JIT = {
           clearInterval(self.dragRightEdge);
           clearInterval(self.dragTopEdge);
           clearInterval(self.dragBottomEdge);
-          self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:width - EDGE_THICKNESS,y:yPix}).x + SHIFT,y:pos.y};
-          Metamaps.Visualize.mGraph.canvas.translate(-SHIFT,0);
+          self.virtualPointer = { x: Util.pixelsToCoords(Visualize.mGraph, { x: width - EDGE_THICKNESS, y: yPix }).x + SHIFT, y: pos.y }
+          Visualize.mGraph.canvas.translate(-SHIFT, 0);
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
           
           self.dragRightEdge = setInterval( function(){
-            self.virtualPointer = {x:Metamaps.Util.pixelsToCoords({x:width - EDGE_THICKNESS,y:yPix}).x + SHIFT,y:pos.y};
-            Metamaps.Visualize.mGraph.canvas.translate(-SHIFT,0);
+            self.virtualPointer = { x: Util.pixelsToCoords(Visualize.mGraph, { x: width - EDGE_THICKNESS, y: yPix }).x + SHIFT, y: pos.y }
+            Visualize.mGraph.canvas.translate(-SHIFT, 0);
             self.updateTopicPositions(node, self.virtualPointer);
             Visualize.mGraph.plot();
           } , PERIOD);
@@ -826,14 +826,14 @@ const JIT = {
           clearInterval(self.dragRightEdge);
           clearInterval(self.dragTopEdge);
           clearInterval(self.dragBottomEdge);
-          self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:EDGE_THICKNESS}).y - SHIFT};
-          Metamaps.Visualize.mGraph.canvas.translate(0,SHIFT);
+          self.virtualPointer = { x:pos.x, y: Util.pixelsToCoords(Visualize.mGraph, { x: xPix, y: EDGE_THICKNESS }).y - SHIFT }
+          Visualize.mGraph.canvas.translate(0, SHIFT);
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
           
           self.dragTopEdge = setInterval( function(){
-            self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:EDGE_THICKNESS}).y - SHIFT};
-            Metamaps.Visualize.mGraph.canvas.translate(0,SHIFT);
+            self.virtualPointer = { x: pos.x, y: Util.pixelsToCoords(Visualize.mGraph, { x: xPix, y: EDGE_THICKNESS }).y - SHIFT }
+            Visualize.mGraph.canvas.translate(0, SHIFT);
             self.updateTopicPositions(node, self.virtualPointer);
             Visualize.mGraph.plot();
           } , PERIOD);
@@ -843,20 +843,20 @@ const JIT = {
           clearInterval(self.dragRightEdge);
           clearInterval(self.dragTopEdge);
           clearInterval(self.dragBottomEdge);
-          self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:height - EDGE_THICKNESS}).y + SHIFT};
-          Metamaps.Visualize.mGraph.canvas.translate(0,-SHIFT);
+          self.virtualPointer = { x: pos.x, y: Util.pixelsToCoords(Visualize.mGraph, { x: xPix, y: height - EDGE_THICKNESS }).y + SHIFT }
+          Visualize.mGraph.canvas.translate(0, -SHIFT);
           self.updateTopicPositions(node, self.virtualPointer);
           Visualize.mGraph.plot();
           
-          self.dragBottomEdge = setInterval( function(){
-            self.virtualPointer = {x:pos.x,y:Metamaps.Util.pixelsToCoords({x:xPix,y:height - EDGE_THICKNESS}).y + SHIFT};
-            Metamaps.Visualize.mGraph.canvas.translate(0,-SHIFT);
+          self.dragBottomEdge = setInterval(function () {
+            self.virtualPointer = { x: pos.x, y: Util.pixelsToCoords(Visualize.mGraph, { x: xPix, y: height - EDGE_THICKNESS }).y + SHIFT }
+            Visualize.mGraph.canvas.translate(0, -SHIFT);
             self.updateTopicPositions(node, self.virtualPointer);
             Visualize.mGraph.plot();
-          } , PERIOD);
+          }, PERIOD)
         }
         
-        if(xPix >= EDGE_THICKNESS && width - xPix >= EDGE_THICKNESS && yPix >= EDGE_THICKNESS && height - yPix >= EDGE_THICKNESS){
+        if(xPix >= EDGE_THICKNESS && width - xPix >= EDGE_THICKNESS && yPix >= EDGE_THICKNESS && height - yPix >= EDGE_THICKNESS) {
           clearInterval(self.dragLeftEdge);
           clearInterval(self.dragRightEdge);
           clearInterval(self.dragTopEdge);

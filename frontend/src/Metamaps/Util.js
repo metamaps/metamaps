@@ -88,10 +88,10 @@ const Util = {
     }
     return coords
   },
-  getPastelColor: function ({ rseed, gseed, bseed }) {
-    if (rseed === undefined) rseed = Math.random()
-    if (gseed === undefined) gseed = Math.random()
-    if (bseed === undefined) bseed = Math.random()
+  getPastelColor: function (opts = {}) {
+    const rseed = opts.rseed === undefined ? Math.random() : opts.rseed
+    const gseed = opts.gseed === undefined ? Math.random() : opts.gseed
+    const bseed = opts.bseed === undefined ? Math.random() : opts.bseed
     var r = (Math.round(rseed * 127) + 127).toString(16)
     var g = (Math.round(gseed * 127) + 127).toString(16)
     var b = (Math.round(bseed * 127) + 127).toString(16)
