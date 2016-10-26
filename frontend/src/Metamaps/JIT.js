@@ -778,11 +778,11 @@ const JIT = {
             yPix = Util.coordsToPixels(Visualize.mGraph, pos).y;
             
         if(self.dragFlag === 0){
-          self.mouseDownPix = Util.coordsToPixels(eventInfo.getPos());
+          self.mouseDownPix = Util.coordsToPixels(Visualize.mGraph, eventInfo.getPos());
           self.dragFlag = 1;
         }
         
-        if(Util.getDistance(Util.coordsToPixels(pos),self.mouseDownPix) > 2 && !self.dragTolerance){
+        if(Util.getDistance(Util.coordsToPixels(Visualize.mGraph, pos),self.mouseDownPix) > 2 && !self.dragTolerance){
           self.dragTolerance = 1;
         }
 
