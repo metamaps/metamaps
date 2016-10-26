@@ -8,7 +8,7 @@ RSpec.describe 'maps API', type: :request do
 
   it 'GET /api/v2/maps' do
     create_list(:map, 5)
-    get '/api/v2/maps', params: { access_token: token }
+    get '/api/v2/maps'
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:maps)
@@ -16,13 +16,13 @@ RSpec.describe 'maps API', type: :request do
   end
 
   it 'GET /api/v2/maps/:id' do
-    get "/api/v2/maps/#{map.id}", params: { access_token: token }
+    get "/api/v2/maps/#{map.id}"
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:map)
     expect(JSON.parse(response.body)['data']['id']).to eq map.id
   end
-
+  
   it 'POST /api/v2/maps' do
     post '/api/v2/maps', params: { map: map.attributes, access_token: token }
 

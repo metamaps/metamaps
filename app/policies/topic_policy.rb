@@ -12,7 +12,7 @@ class TopicPolicy < ApplicationPolicy
   end
 
   def index?
-    user.present?
+    true
   end
 
   def create?

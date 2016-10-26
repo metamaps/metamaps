@@ -8,7 +8,7 @@ RSpec.describe 'synapses API', type: :request do
 
   it 'GET /api/v2/synapses' do
     create_list(:synapse, 5)
-    get '/api/v2/synapses', params: { access_token: token }
+    get '/api/v2/synapses'
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:synapses)

@@ -41,11 +41,11 @@ class Map < ApplicationRecord
   end
 
   def contributors
-    mappings.map(&:user).uniq
+    User.where(id: mappings.map(&:user_id).uniq)
   end
 
   def editors
-    collaborators + [user]
+    User.where(id: user_id).or(User.where(id: collaborators))
   end
 
   def topic_count
@@ -87,7 +87,7 @@ class Map < ApplicationRecord
   end
 
   def starred_by_user?(user)
-    user.stars.where(map: self).exists?
+    user&.stars&.where(map: self)&.exists? || false # return false, not nil
   end
 
   def as_json(_options = {})
@@ -114,9 +114,8 @@ class Map < ApplicationRecord
 
   def add_new_collaborators(user_ids)
     users = User.where(id: user_ids)
-    current_collaborators = collaborators + [user]
     added = users.map do |new_user|
-      next nil if current_collaborators.include?(new_user)
+      next nil if editors.include?(new_user)
       UserMap.create(user_id: new_user.id, map_id: id)
       new_user.id
     end
@@ -124,8 +123,7 @@ class Map < ApplicationRecord
   end
 
   def remove_old_collaborators(user_ids)
-    current_collaborators = collaborators + [user]
-    removed = current_collaborators.map(&:id).map do |old_user_id|
+    removed = editors.map(&:id).map do |old_user_id|
       next nil if user_ids.include?(old_user_id)
       user_maps.where(user_id: old_user_id).find_each(&:destroy)
       access_requests.where(user_id: old_user_id).find_each(&:destroy)

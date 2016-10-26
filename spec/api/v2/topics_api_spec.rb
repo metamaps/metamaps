@@ -8,7 +8,7 @@ RSpec.describe 'topics API', type: :request do
 
   it 'GET /api/v2/topics' do
     create_list(:topic, 5)
-    get '/api/v2/topics', params: { access_token: token }
+    get '/api/v2/topics'
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:topics)
@@ -16,7 +16,7 @@ RSpec.describe 'topics API', type: :request do
   end
 
   it 'GET /api/v2/topics/:id' do
-    get "/api/v2/topics/#{topic.id}", params: { access_token: token }
+    get "/api/v2/topics/#{topic.id}"
 
 
     expect(response).to have_http_status(:success)
