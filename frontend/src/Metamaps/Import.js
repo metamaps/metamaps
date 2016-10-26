@@ -90,7 +90,7 @@ const Import = {
       if (window.confirm('Are you sure you want to create ' + topics.length +
           ' new topics and ' + synapses.length + ' new synapses?')) {
         self.importTopics(topics)
-        self.importSynapses(synapses)
+        window.setTimeout(() => self.importSynapses(synapses), 5000)
       } // if
     } // if
   },
@@ -224,7 +224,7 @@ const Import = {
   importTopics: function (parsedTopics) {
     var self = Import
 
-    parsedTopics.forEach(function (topic) {
+    parsedTopics.forEach(topic => {
       let coords = { x: topic.x, y: topic.y }
       if (!coords.x || !coords.y) {
         coords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
@@ -257,7 +257,7 @@ const Import = {
       var topic1 = Metamaps.Topics.get(self.cidMappings[synapse.topic1])
       if (!topic1) topic1 = Metamaps.Topics.findWhere({ name: synapse.topic1 })
       var topic2 = Metamaps.Topics.get(self.cidMappings[synapse.topic2])
-      if (!topic1) topic1 = Metamaps.Topics.findWhere({ name: synapse.topic1 })
+      if (!topic2) topic2 = Metamaps.Topics.findWhere({ name: synapse.topic2 })
 
       if (!topic1 || !topic2) {
         console.error("One of the two topics doesn't exist!")
@@ -265,17 +265,10 @@ const Import = {
         return // next
       }
 
-      // ensure imported topics have a chance to get a real id attr before creating synapses
-      const topic1Promise = $.Deferred()
-      topic1.once('sync', () => topic1Promise.resolve())
-      const topic2Promise = $.Deferred()
-      topic2.once('sync', () => topic2Promise.resolve())
-      $.when(topic1Promise, topic2Promise).done(() => {
-        self.createSynapseWithParameters(
-          synapse.desc, synapse.category, synapse.permission,
-          topic1, topic2
-        )
-      })
+      self.createSynapseWithParameters(
+        synapse.desc, synapse.category, synapse.permission,
+        topic1, topic2
+      )
     })
   },
 
