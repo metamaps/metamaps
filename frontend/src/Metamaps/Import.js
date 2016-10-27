@@ -90,7 +90,8 @@ const Import = {
       if (window.confirm('Are you sure you want to create ' + topics.length +
           ' new topics and ' + synapses.length + ' new synapses?')) {
         self.importTopics(topics)
-        window.setTimeout(() => self.importSynapses(synapses), 5000)
+        //window.setTimeout(() => self.importSynapses(synapses), 5000)
+        self.importSynapses(synapses)
       } // if
     } // if
   },
@@ -265,10 +266,24 @@ const Import = {
         return // next
       }
 
-      self.createSynapseWithParameters(
-        synapse.desc, synapse.category, synapse.permission,
-        topic1, topic2
-      )
+      const topic1Promise = $.Deferred()
+      if (topic1.id) {
+        topic1Promise.resolve()
+      } else {
+        topic1.on('sync', () => topic1Promise.resolve())
+      }
+      const topic2Promise = $.Deferred()
+      if (topic2.id) {
+        topic2Promise.resolve()
+      } else {
+        topic2.on('sync', () => topic2Promise.resolve())
+      }
+      $.when(topic1Promise, topic2Promise).done(() => {
+        self.createSynapseWithParameters(
+          synapse.desc, synapse.category, synapse.permission,
+          topic1, topic2
+        )
+      })
     })
   },
 
