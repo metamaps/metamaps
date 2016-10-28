@@ -7,7 +7,7 @@
 
 <%= render :partial => 'layouts/head' %>
 
-<body class="<%= authenticated? ? "authenticated" : "unauthenticated" %>">
+<body class="<%= authenticated? ? "authenticated" : "unauthenticated" %> controller-<%= controller_name %> action-<%= action_name %>">
 
     <a class='feedback-icon' target='_blank' href='https://hylo.com/c/metamaps'></a>    
 
