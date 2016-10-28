@@ -22,10 +22,18 @@ class SynapsesController < ApplicationController
     @synapse = Synapse.new(synapse_params)
     @synapse.desc = '' if @synapse.desc.nil?
     @synapse.desc.strip! # no trailing/leading whitespace
-    authorize @synapse
+
+    # we want invalid params to return :unprocessable_entity
+    # so we have to authorize AFTER saving. But if authorize
+    # fails, we need to rollback the SQL transaction
+    success = nil
+    ActiveRecord::Base.transaction do
+      success = @synapse.save
+      success ? authorize(@synapse) : skip_authorization
+    end
 
     respond_to do |format|
-      if @synapse.save
+      if success
         format.json { render json: @synapse, status: :created }
       else
         format.json { render json: @synapse.errors, status: :unprocessable_entity }

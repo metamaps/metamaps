@@ -35,12 +35,29 @@ RSpec.describe SynapsesController, type: :controller do
       end
     end
 
+    context 'with private topics' do
+      it 'redirects to /' do
+        post :create, format: :json, params: {
+          synapse: valid_attributes.merge(topic1_id: create(:topic, permission: 'private'), topic2_id: create(:topic, permission: 'private'))
+        }
+        expect(response.status).to eq 302
+        expect(response).to redirect_to('/')
+      end
+    end
+
     context 'with invalid params' do
       it 'returns 422 UNPROCESSABLE ENTITY' do
         post :create, format: :json, params: {
           synapse: invalid_attributes
         }
         expect(response.status).to eq 422
+      end
+      it 'does not create a synapse' do
+        expect {
+          post :create, format: :json, params: { synapse: invalid_attributes }
+        }.to change {
+          Synapse.count
+        }.by 0
       end
     end
   end
