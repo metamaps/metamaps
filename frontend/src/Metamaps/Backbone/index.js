@@ -271,6 +271,7 @@ _Backbone.init = function () {
       newOptions.success = function (model, response, opt) {
         if (s) s(model, response, opt)
         model.trigger('saved')
+        model.set('calculated_permission', model.get('permission'))
 
         if (permBefore === 'private' && model.get('permission') !== 'private') {
           model.trigger('noLongerPrivate')
