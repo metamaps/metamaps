@@ -1,7 +1,7 @@
 #type: collection
 get:
   is: [ searchable: { searchFields: "name, desc" }, embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" }, orderable, pageable ]
-  securedBy: [ null, cookie, token, oauth_2_0 ]
+  securedBy: [ null, token, oauth_2_0, cookie ]
   responses:
     200:
       body:
@@ -32,7 +32,7 @@ post:
   #type: item
   get:
     is: [ embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" } ]
-    securedBy: [ null, cookie, token, oauth_2_0 ]
+    securedBy: [ null, token, oauth_2_0, cookie ]
     responses:
       200:
         body:

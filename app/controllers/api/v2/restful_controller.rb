@@ -45,7 +45,7 @@ module Api
       end
 
       def current_user
-        token_user || super || doorkeeper_user || nil
+        token_user || doorkeeper_user || super
       end
 
       def load_resource
