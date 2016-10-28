@@ -134,10 +134,11 @@ const Util = {
       .render(new Parser().parse(text))
   },
   logCanvasAttributes: function(canvas){
+    const fakeMgraph = { canvas }
     return {
       scaleX: canvas.scaleOffsetX,
       scaleY: canvas.scaleOffsetY,
-      centreCoords: Util.pixelsToCoords({ x: canvas.canvases[0].size.width / 2, y: canvas.canvases[0].size.height / 2 }),
+      centreCoords: Util.pixelsToCoords(fakeMgraph, { x: canvas.canvases[0].size.width / 2, y: canvas.canvases[0].size.height / 2 }),
     };
   },
   resizeCanvas: function(canvas){
