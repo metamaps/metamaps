@@ -17,7 +17,7 @@ module Api
       # only ask serializer to return is_admin field if we're on the
       # current_user action
       def default_scope
-        super.merge(show_is_admin: action_name == 'current')
+        super.merge(show_full_user: action_name == 'current')
       end
     end
   end

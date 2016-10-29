@@ -24,11 +24,20 @@
     "topic1_id": {
       "$ref": "_id.json"
     },
+    "topic1": {
+      "$ref": "_topic.json"
+    },
     "topic2_id": {
       "$ref": "_id.json"
     },
+    "topic2": {
+      "$ref": "_topic.json"
+    },
     "user_id": {
       "$ref": "_id.json"
+    },
+    "user": {
+      "$ref": "_user.json"
     }
   },
   "required": [
@@ -38,5 +47,25 @@
     "permission",
     "created_at",
     "updated_at"
+  ],
+  "allOf": [
+    {
+      "oneOf": [
+        { "required": [ "topic1_id" ] },
+        { "required": [ "topic1" ] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": [ "topic2_id" ] },
+        { "required": [ "topic2" ] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": [ "user_id" ] },
+        { "required": [ "user" ] }
+      ]
+    }
   ]
 }

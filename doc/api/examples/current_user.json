@@ -4,6 +4,7 @@
     "name": "user",
     "avatar": "https://s3.amazonaws.com/metamaps-assets/site/user.png",
     "generation": 0,
-    "is_admin": false
+    "is_admin": false,
+    "email": "user@example.com"
   }
 }

@@ -27,8 +27,14 @@
     "user_id": {
       "$ref": "_id.json"
     },
+    "user": {
+      "$ref": "_user.json"
+    },
     "metacode_id": {
       "$ref": "_id.json"
+    },
+    "metacode": {
+      "$ref": "_metacode.json"
     }
   },
   "required": [
@@ -39,5 +45,19 @@
     "permission",
     "created_at",
     "updated_at"
+  ],
+  "allOf": [
+    {
+      "oneOf": [
+        { "required": [ "user_id" ] },
+        { "required": [ "user" ] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": [ "metacode_id" ] },
+        { "required": [ "metacode" ] }
+      ]
+    }
   ]
 }

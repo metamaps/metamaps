@@ -30,4 +30,22 @@ RSpec.describe 'users API', type: :request do
     expect(response).to match_json_schema(:user)
     expect(JSON.parse(response.body)['data']['id']).to eq user.id
   end
+
+  context 'RAML example' do
+    let(:resource) { get_json_example(:user) }
+    let(:collection) { get_json_example(:users) }
+    let(:current) { get_json_example(:current_user) }
+
+    it 'resource matches schema' do
+      expect(resource).to match_json_schema(:user)
+    end
+
+    it 'collection matches schema' do
+      expect(collection).to match_json_schema(:users)
+    end
+
+    it 'current_user resource matches schema' do
+      expect(current).to match_json_schema(:current_user)
+    end
+  end
 end

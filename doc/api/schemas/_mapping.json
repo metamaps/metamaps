@@ -27,8 +27,14 @@
     "map_id": {
       "$ref": "_id.json"
     },
+    "map": {
+      "$ref": "_map.json"
+    },
     "user_id": {
       "$ref": "_id.json"
+    },
+    "user": {
+      "$ref": "_user.json"
     }
   },
   "required": [
@@ -37,5 +43,19 @@
     "mappable_type",
     "created_at",
     "updated_at"
+  ],
+  "allOf": [
+    {
+      "oneOf": [
+        { "required": [ "map_id" ] },
+        { "required": [ "map" ] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": [ "user_id" ] },
+        { "required": [ "user" ] }
+      ]
+    }
   ]
 }

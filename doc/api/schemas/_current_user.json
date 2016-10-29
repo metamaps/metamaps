@@ -15,12 +15,20 @@
     "generation": {
       "type": "integer",
       "minimum": 0
+    },
+    "is_admin": {
+      "type": "boolean"
+    },
+    "email": {
+      "type": "string"
     }
   },
   "required": [
     "id",
     "name",
     "avatar",
-    "generation"
+    "generation",
+    "is_admin",
+    "email"
   ]
 }

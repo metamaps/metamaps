@@ -8,7 +8,9 @@ module Api
                  :generation
 
       attribute :is_admin,
-                if: -> { scope[:show_is_admin] && scope[:current_user] == object }
+                if: -> { scope[:show_full_user] && scope[:current_user] == object }
+      attribute :email,
+                if: -> { scope[:show_full_user] && scope[:current_user] == object }
 
       def avatar
         object.image.url(:sixtyfour)
