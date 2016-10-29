@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+#t frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe 'maps API', type: :request do
@@ -6,13 +6,26 @@ RSpec.describe 'maps API', type: :request do
   let(:token) { create(:token, user: user).token }
   let(:map) { create(:map, user: user) }
 
-  it 'GET /api/v2/maps' do
-    create_list(:map, 5)
-    get '/api/v2/maps'
+  describe 'GET /api/v2/maps' do
+    it 'returns all maps' do
+      create_list(:map, 5)
+      get '/api/v2/maps'
 
-    expect(response).to have_http_status(:success)
-    expect(response).to match_json_schema(:maps)
-    expect(JSON.parse(response.body)['data'].count).to eq 5
+      expect(response).to have_http_status(:success)
+      expect(response).to match_json_schema(:maps)
+      expect(JSON.parse(response.body)['data'].count).to eq 5
+    end
+
+    it 'filters by user id' do
+      create(:map, user_id: 1)
+      create(:map, user_id: 2)
+      create(:map, user_id: 2, permission: :private)
+      get '/api/v2/maps', params: { user_id: 2 }
+
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body)['data'].count).to eq 1
+      expect(JSON.parse(response.body)['data'][0]['user_id']).to eq 2
+    end
   end
 
   it 'GET /api/v2/maps/:id' do

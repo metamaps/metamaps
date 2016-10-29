@@ -141,6 +141,7 @@ module Api
         collection = accessible_records
         collection = yield collection if block_given?
         collection = search_by_q(collection) if params[:q]
+        collection = apply_filters(collection)
         collection = order_by_sort(collection) if params[:sort]
         collection = collection.page(params[:page]).per(params[:per])
         self.collection = collection
@@ -165,6 +166,11 @@ module Api
           search_column.call(column).or(prev)
         end
         collection.where(condition)
+      end
+
+      def apply_filters(collection)
+        # override this function for specific filters
+        collection
       end
 
       def order_by_sort(collection)

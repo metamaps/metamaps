@@ -2,6 +2,12 @@
 get:
   is: [ searchable: { searchFields: "name, desc" }, embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" }, orderable, pageable ]
   securedBy: [ null, token, oauth_2_0, cookie ]
+  queryParameters:
+    user_id:
+      description: |
+        Pass a user_id to only return maps created by that user. For example, `/api/v2/maps?user_id=1` would return maps created by the Metamaps user with id 1.
+      required: false
+      type: number
   responses:
     200:
       body:
@@ -91,7 +97,7 @@ post:
           description: Created
           body:
             application/json:
-              example: !include ../examples/map.json
+              example: !include ../examples/map_starred.json
     delete:
       responses:
         204:

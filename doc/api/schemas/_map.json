@@ -27,6 +27,9 @@
     "updated_at": {
       "$ref": "_datetimestamp.json"
     },
+    "user_id": {
+      "$ref": "_id.json"
+    },
     "topic_ids": {
       "type": "array",
       "items": {
