@@ -83,7 +83,7 @@ class MapsController < ApplicationController
   # GET maps/:id/contains
   def contains
     respond_to do |format|
-      format.json { render json: @map.contains(current_user).to_json(user: current_user) }
+      format.json { render json: @map.contains(current_user).as_json(user: current_user) }
     end
   end
 
