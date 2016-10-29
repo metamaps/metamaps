@@ -156,23 +156,26 @@ jQuery.browser = browser;
 			event.data.rotate(-1);	
 			return false;
 		});
-		$(options.buttonRight).bind('mouseup',this,function(event){															
+		$(options.buttonRight).bind('mouseup',this,function(event){
 			event.data.rotate(1);	
 			return false;
 		});
 		
+		// START METAMAPS CODE
 		// Add code that makes tab and shift+tab scroll through metacodes
 		$('.new_topic').bind('keydown',this,function(event){
-            if (event.keyCode == 9 && event.shiftKey) {
-				event.data.rotate(-1);
-                event.preventDefault();
-                event.stopPropagation();
-			} else if (event.keyCode == 9) {
-				event.data.rotate(1);
-                event.preventDefault();
-                event.stopPropagation();
-            }
+			if (event.keyCode == 9) {
+				if (event.shiftKey) {
+					event.data.rotate(-1)
+				} else {
+					event.data.rotate(1)
+				}
+				event.preventDefault();
+				event.stopPropagation();
+				Metamaps.Create.newTopic.metacode = $(items[event.data.frontIndex].image).attr('data-id');
+			}
 		});
+		// END METAMAPS CODE
 		
 		// You will need this plugin for the mousewheel to work: http://plugins.jquery.com/project/mousewheel
 		if (options.mouseWheel)
@@ -187,12 +190,12 @@ jQuery.browser = browser;
 					}
 				});
 			// END METAMAPS CODE
-			/* ORIGINAL CODE
-			$(container).bind('mousewheel',this,function(event, delta) {					 
-					 event.data.rotate(delta);
-					 return false;
-				 });
-			*/
+			// ORIGINAL CODE
+			// $(container).bind('mousewheel',this,function(event, delta) {
+			// 	event.data.rotate(delta);
+			// 	return false;
+			// });
+			//
 		}
 		$(container).unbind('mouseover click').bind('mouseover click',this,function(event){
 			
