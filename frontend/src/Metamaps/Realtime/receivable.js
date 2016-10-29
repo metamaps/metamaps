@@ -42,7 +42,7 @@ export const synapseRemoved = self => data => {
 }
 
 export const synapseDeleted = self => data => {
-  self.synapseRemoved(data)
+  synapseRemoved(self)(data)
 }
 
 export const synapseCreated = self => data => {
@@ -105,7 +105,7 @@ export const topicRemoved = self => data => {
 }
 
 export const topicDeleted = self => data => {
-  self.topicRemoved(data)
+  topicRemoved(self)(data)
 }
 
 export const topicCreated = self => data => {
