@@ -9,6 +9,7 @@ import DataModel from './DataModel'
 import JIT from './JIT'
 import Loading from './Loading'
 import TopicCard from './Views/TopicCard'
+import Util from './Util'
 
 const Visualize = {
   mGraph: null, // a reference to the graph object.
@@ -146,6 +147,16 @@ const Visualize = {
       self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position
     } else {
       self.mGraph.graph.empty()
+    }
+
+    const queryParams = Util.queryParams()
+    if (typeof queryParams.scale === 'string') {
+      const scale = parseFloat(queryParams.scale) || 0
+      self.mGraph.canvas.scale(scale, scale)
+    }
+    if (typeof queryParams.translate === 'string') {
+      const [x, y] = queryParams.translate.split(',').map(n => parseFloat(n) || 0)
+      self.mGraph.canvas.translate(x, y)
     }
 
     function runAnimation() {

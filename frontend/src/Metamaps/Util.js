@@ -172,7 +172,7 @@ const Util = {
     canvas.resize($(window).width(), $(window).height())
 
     // Return the map to the original scale, and then put the previous central map-coordinate back to the centre of user's newly resized screen
-    canvas.scale(oldAttr.scaleX, oldAttr.scaleY)
+    canvas.scale(oldAttr.scaleX, oldAttr.scaleY) // should be equal
     const newAttr = Util.logCanvasAttributes(canvas)
     canvas.translate(newAttr.centreCoords.x - oldAttr.centreCoords.x, newAttr.centreCoords.y - oldAttr.centreCoords.y)
   },
@@ -229,6 +229,13 @@ const Util = {
 
       // Translate the canvas to put the pointer back over top the same coordinate it was over before
     graph.canvas.translate(newX - pointerCoordX, newY - pointerCoordY)
+  },
+  queryParams: function() {
+    return window.location.search.replace(/(^\?)/, '').split('&').reduce((obj, item) => {
+      item = item.split('=')
+      obj[item[0]] = item[1]
+      return obj
+    }, {})
   }
 }
 
