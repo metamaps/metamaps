@@ -138,20 +138,34 @@
   resize: none;
 }
 
-.CardOnGraph .desc h3 {
-  font-style:normal;
-  margin-top:5px;
+/*
+ * Styling for Markdown in topic cards
+ */
+
+.CardOnGraph .desc {
+  p, ol, ul {
+    padding: 0.15em 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-style: normal;
+    padding: 0.25em 0;
+  }
+
+  ol,
+  ul {
+    margin-left: 1em;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+  }
 }
 
-.CardOnGraph .desc ol,
-.CardOnGraph .desc ul {
-  margin-left: 1em;
-
-}
-.CardOnGraph .desc a:hover {
-  text-decoration: underline;
-  opacity: 0.9;
-}
+/*
+ * End Markdown styling
+ */
 
 .CardOnGraph .best_in_place_desc {
   display:block;
