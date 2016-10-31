@@ -13,8 +13,8 @@ module MapsHelper
         synapseCount: m.synapses.count,
         contributorCount: m.contributors.count,
         rtype: 'map',
-        contributorTip: contributor_tip(map),
-        mapContributorImage: first_contributor_image(map)
+        contributorTip: contributor_tip(m),
+        mapContributorImage: first_contributor_image(m)
       }
     end
   end
