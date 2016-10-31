@@ -2199,41 +2199,34 @@ and it won't be important on password protected instances */
     color: #00bcd4;
 }
 .lightbox_links .lightboxAboutIcon {
-    background-image: url(<%= asset_data_uri('about_sprite.png') %>);
-    background-repeat: no-repeat;
     width:32px;
     height:32px;
     margin:10px auto;
 }
-#lightbox_metamapps .lightboxAboutIcon {
+.icon_twitter .lightboxAboutIcon,
+.icon_source_code .lightboxAboutIcon,
+.icon_terms .lightboxAboutIcon {
+    background-image: url(<%= asset_data_uri('about_sprite.png') %>);
+    background-repeat: no-repeat;
     background-position: 0 0;
 }
-#lightbox_community .lightboxAboutIcon {
-    background-position: -32px 0;
-}
-#lightbox_source .lightboxAboutIcon {
-    background-position: -64px 0;
-}
-#lightbox_blog .lightboxAboutIcon {
-    background-position: -96px 0;
-}
-#lightbox_term .lightboxAboutIcon {
-    background-position: -128px 0;
-}
-#lightbox_metamapps:hover .lightboxAboutIcon {
+.icon_twitter .lightboxAboutIcon {
+  background-position: 0 0;
+  &:hover {
     background-position: 0 -32px;
+  }
 }
-#lightbox_community:hover .lightboxAboutIcon {
-    background-position: -32px -32px;
-}
-#lightbox_source:hover .lightboxAboutIcon {
+.icon_source_code .lightboxAboutIcon {
+  background-position: -64px 0;
+  &:hover {
     background-position: -64px -32px;
+  }
 }
-#lightbox_blog:hover .lightboxAboutIcon {
-    background-position: -96px -32px;
-}
-#lightbox_term:hover .lightboxAboutIcon {
+.icon_terms .lightboxAboutIcon {
+  background-position: -128px 0;
+  &:hover {
     background-position: -128px -32px;
+  }
 }
 
 /* jquery ui tabs */
