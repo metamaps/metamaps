@@ -449,7 +449,7 @@ const TopicCard = {
         var url = '/maps/' + inmapsLinks[i]
         nodeValues.inmaps += '<li><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
       }
-      extra = inmapsAr.length - 5
+      var extra = inmapsAr.length - 5
       nodeValues.inmaps += '<li><span class="showMore">See ' + extra + ' more...</span></li>'
       for (let i = 5; i < inmapsAr.length; i++) {
         var url = '/maps/' + inmapsLinks[i]
