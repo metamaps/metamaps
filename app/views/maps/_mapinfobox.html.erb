@@ -16,7 +16,7 @@
   <% if @map %>
   <div class="mapInfoName" id="mapInfoName">
     <% if policy(@map).update? %>
-      <span class="best_in_place best_in_place_name" id="best_in_place_map_<%= @map.id %>_name" data-url="/maps/<%= @map.id %>" data-object="map" data-attribute="name" data-type="textarea" data-activator="#mapInfoName"><%= @map.name %></span>    
+      <span class="best_in_place best_in_place_name" id="best_in_place_map_<%= @map.id %>_name" data-bip-url="/maps/<%= @map.id %>" data-bip-object="map" data-bip-attribute="name" data-bip-type="textarea" data-bip-activator="#mapInfoName" data-bip-value="<%= @map.name %>"><%= @map.name %></span>    
     <% else %>
       <%= @map.name %>
     <% end %>
@@ -67,7 +67,7 @@
   
   <div class="mapInfoDesc" id="mapInfoDesc">
     <% if policy(@map).update? %>
-      <span class="best_in_place best_in_place_desc" id="best_in_place_map_<%= @map.id %>_desc" data-url="/maps/<%= @map.id %>" data-object="map" data-attribute="desc" data-nil="Click to add description..." data-type="textarea" data-activator="#mapInfoDesc"><%= @map.desc %></span>
+      <span class="best_in_place best_in_place_desc" id="best_in_place_map_<%= @map.id %>_desc" data-bip-url="/maps/<%= @map.id %>" data-bip-object="map" data-bip-attribute="desc" data-bip-nil="Click to add description..." data-bip-type="textarea" data-bip-activator="#mapInfoDesc" data-bip-value="<%= @map.desc %>"><%= @map.desc %></span>
     <% else %>
       <%= @map.desc %>
     <% end %>

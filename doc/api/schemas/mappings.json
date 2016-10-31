@@ -1,0 +1,19 @@
+{
+  "name": "Mappings",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "_mapping.json"
+      }
+    },
+    "page": {
+      "$ref": "_page.json"
+    }
+  },
+  "required": [
+    "data",
+    "page"
+  ]
+}

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MappingPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
@@ -7,12 +8,18 @@ class MappingPolicy < ApplicationPolicy
       # a private topic, since you can't see the private topic anyways
       visible = %w(public commons)
       permission = 'maps.permission IN (?)'
-      if user
-        scope.joins(:maps).where(permission + ' OR maps.user_id = ?', visible, user.id)
-      else
-        scope.where(permission, visible)
-      end
+      return scope.joins(:map).where(permission, visible) unless user
+
+      # if this is getting changed, the policy_scope for messages should also be changed
+      # as it is based entirely on the map to which it belongs
+      scope.joins(:map).where(permission, visible)
+           .or(scope.joins(:map).where('maps.id IN (?)', user.shared_maps.map(&:id)))
+           .or(scope.joins(:map).where('maps.user_id = ?', user.id))
     end
+  end
+
+  def index?
+    true
   end
 
   def show?

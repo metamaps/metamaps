@@ -12,7 +12,7 @@
     Metamaps.Active.Map = <%= @map.to_json.html_safe %>;
     Metamaps.Mappers = <%= @allmappers.to_json.html_safe %>;
     Metamaps.Collaborators = <%= @allcollaborators.to_json.html_safe %>;
-    Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
+    Metamaps.Topics = <%= @alltopics.to_json(user: current_user).html_safe %>;
     Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;
     Metamaps.Mappings = <%= @allmappings.to_json.html_safe %>;
     Metamaps.Messages = <%= @allmessages.to_json.html_safe %>;

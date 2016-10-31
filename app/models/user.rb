@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 require 'open-uri'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_many :topics
   has_many :synapses
   has_many :maps
@@ -41,7 +42,7 @@ class User < ActiveRecord::Base
                             default_url: 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
 
   # Validate the attached image is image/jpg, image/png, etc
-  validates_attachment_content_type :image, content_type: %r(\Aimage/.*\Z)
+  validates_attachment_content_type :image, content_type: %r{\Aimage/.*\Z}
 
   # override default as_json
   def as_json(_options = {})
@@ -63,6 +64,33 @@ class User < ActiveRecord::Base
     json['rtype'] = 'mapper'
     json
   end
+  
+  def all_accessible_maps
+    #TODO: is there a way to keep this an ActiveRecord relation?
+    maps + shared_maps
+  end
+
+  def recentMetacodes
+    array = []
+    self.topics.sort{|a,b| b.created_at <=> a.created_at }.each do |t|
+      if array.length < 5 and array.index(t.metacode_id) == nil
+        array.push(t.metacode_id)
+      end
+    end
+    array
+  end
+
+  def mostUsedMetacodes
+    self.topics.to_a.reduce({}) { |memo, topic| 
+      if memo[topic.metacode_id] == nil
+        memo[topic.metacode_id] = 1 
+      else 
+        memo[topic.metacode_id] = memo[topic.metacode_id] + 1
+      end
+      
+      memo
+    }.to_a.sort{ |a, b| b[1] <=> a[1] }.map{|i| i[0]}.slice(0, 5)
+  end
 
   # generate a random 8 letter/digit code that they can use to invite people
   def generate_code
@@ -79,8 +107,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def starred_map?(map) 
-    return !!self.stars.index{|s| s.map_id == map.id }
+  def starred_map?(map)
+    stars.where(map_id: map.id).exists?
   end
 
   def settings

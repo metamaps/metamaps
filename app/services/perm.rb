@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Perm
   # e.g. Perm::ISSIONS
   ISSIONS = [:commons, :public, :private].freeze

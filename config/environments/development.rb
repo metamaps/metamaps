@@ -1,4 +1,5 @@
-Metamaps::Application.configure do
+# frozen_string_literal: true
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   config.log_level = :info
@@ -12,17 +13,6 @@ Metamaps::Application.configure do
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-
-  # S3 file storage
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_credentials: {
-      bucket: ENV['S3_BUCKET_NAME'],
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    },
-    s3_protocol: 'https'
-  }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
@@ -42,8 +32,9 @@ Metamaps::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
-  config.action_mailer.preview_path = '/vagrant/spec/mailers/previews'
+  config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 
   # Expands the lines which load the assets
-  config.assets.debug = true
+  config.assets.debug = false
+  config.assets.quiet = true
 end

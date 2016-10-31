@@ -1,4 +1,5 @@
-class Mapping < ActiveRecord::Base
+# frozen_string_literal: true
+class Mapping < ApplicationRecord
   scope :topicmapping, -> { where(mappable_type: :Topic) }
   scope :synapsemapping, -> { where(mappable_type: :Synapse) }
 

@@ -1,23 +1,34 @@
+<% @metacodes = user_metacodes() %>
+
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
-  <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes"></div>
+  <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes">
+    <div class="tooltipsAbove">Switch Metacodes</div>
+  </div>
+
+  <div class="pinCarousel">
+    <div class="tooltipsAbove helpPin">Pin Open</div>
+    <div class="tooltipsAbove helpUnpin">Unpin</div>
+  </div>
+
   <div id="metacodeImg">
-    <% @metacodes = user_metacodes() %>
-    <% set = get_metacodeset() %>
     <% @metacodes.each do |metacode| %>
       <img class="cloudcarousel" width="40" height="40" src="<%= asset_path metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
     <% end %>
   </div> 
+
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>
+
   <div id="metacodeImgTitle"></div>
   <div class="clearfloat"></div>
-<script>
-<% @metacodes.each do |metacode| %>
-  <% if !set %>
-    Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
-    Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
-    Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
-    Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
-  <% end %>
-<% end %> 
-</script>
+
+  <script>
+    <% @metacodes.each do |metacode| %>
+      <% if !metacodeset() %>
+        Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
+        Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
+        Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
+        Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
+      <% end %>
+    <% end %> 
+  </script>
 <% end %>

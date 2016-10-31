@@ -1,11 +1,12 @@
-class Topic < ActiveRecord::Base
+# frozen_string_literal: true
+class Topic < ApplicationRecord
   include TopicsHelper
 
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
 
-  has_many :synapses1, class_name: 'Synapse', foreign_key: 'node1_id', dependent: :destroy
-  has_many :synapses2, class_name: 'Synapse', foreign_key: 'node2_id', dependent: :destroy
+  has_many :synapses1, class_name: 'Synapse', foreign_key: 'topic1_id', dependent: :destroy
+  has_many :synapses2, class_name: 'Synapse', foreign_key: 'topic2_id', dependent: :destroy
   has_many :topics1, through: :synapses2, source: :topic1
   has_many :topics2, through: :synapses1, source: :topic2
 
@@ -13,6 +14,8 @@ class Topic < ActiveRecord::Base
   has_many :maps, through: :mappings
 
   belongs_to :metacode
+
+  before_create :create_metamap?
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
@@ -35,19 +38,19 @@ class Topic < ActiveRecord::Base
   validates_attachment_content_type :audio, content_type: /\Aaudio\/.*\Z/
 
   def synapses
-    synapses1 + synapses2
+    synapses1.or(synapses2)
   end
 
   def relatives
-    topics1 + topics2
+    topics1.or(topics2)
   end
 
   scope :relatives, ->(topic_id = nil, user = nil) {
     # should only see topics through *visible* synapses
     # e.g. Topic A (commons) -> synapse (private) -> Topic B (commons) must be filtered out
-    synapses = Pundit.policy_scope(user, Synapse.where(node1_id: topic_id)).pluck(:node2_id)
-    synapses += Pundit.policy_scope(user, Synapse.where(node2_id: topic_id)).pluck(:node1_id)
-    where(id: synapses.uniq)
+    topic_ids = Pundit.policy_scope(user, Synapse.where(topic1_id: topic_id)).pluck(:topic2_id)
+    topic_ids += Pundit.policy_scope(user, Synapse.where(topic2_id: topic_id)).pluck(:topic1_id)
+    where(id: topic_ids.uniq)
   }
 
   delegate :name, to: :user, prefix: true
@@ -56,32 +59,30 @@ class Topic < ActiveRecord::Base
     user.image.url
   end
 
-  def map_count
-    maps.count
+  def map_count(user)
+    Pundit.policy_scope(user, maps).count
   end
 
-  def synapse_count
-    synapses.count
+  def synapse_count(user)
+    Pundit.policy_scope(user, synapses).count
   end
 
-  def inmaps
-    maps.map(&:name)
+  def inmaps(user)
+    Pundit.policy_scope(user, maps).map(&:name)
   end
 
-  def inmapsLinks
-    maps.map(&:id)
+  def inmapsLinks(user)
+    Pundit.policy_scope(user, maps).map(&:id)
   end
 
   def calculated_permission
-    if defer_to_map
-      defer_to_map.permission
-    else
-      permission
-    end
+    defer_to_map&.permission || permission
   end
 
-  def as_json(_options = {})
-    super(methods: [:user_name, :user_image, :map_count, :synapse_count, :inmaps, :inmapsLinks, :calculated_permission, :collaborator_ids])
+  def as_json(options = {})
+    super(methods: [:user_name, :user_image, :calculated_permission, :collaborator_ids])
+      .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
+             map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
   end
 
   def collaborator_ids
@@ -97,18 +98,18 @@ class Topic < ActiveRecord::Base
     output = []
     synapses.each do |synapse|
       if synapse.category == 'from-to'
-        if synapse.node1_id == id
-          output << synapse.node1_id.to_s + '->' + synapse.node2_id.to_s
-        elsif synapse.node2_id == id
-          output << synapse.node2_id.to_s + '<-' + synapse.node1_id.to_s
+        if synapse.topic1_id == id
+          output << synapse.topic1_id.to_s + '->' + synapse.topic2_id.to_s
+        elsif synapse.topic2_id == id
+          output << synapse.topic2_id.to_s + '<-' + synapse.topic1_id.to_s
         else
           raise 'invalid synapse on topic in synapse_csv'
         end
       elsif synapse.category == 'both'
-        if synapse.node1_id == id
-          output << synapse.node1_id.to_s + '<->' + synapse.node2_id.to_s
-        elsif synapse.node2_id == id
-          output << synapse.node2_id.to_s + '<->' + synapse.node1_id.to_s
+        if synapse.topic1_id == id
+          output << synapse.topic1_id.to_s + '<->' + synapse.topic2_id.to_s
+        elsif synapse.topic2_id == id
+          output << synapse.topic2_id.to_s + '<->' + synapse.topic1_id.to_s
         else
           raise 'invalid synapse on topic in synapse_csv'
         end
@@ -131,4 +132,12 @@ class Topic < ActiveRecord::Base
   def mk_permission
     Perm.short(permission)
   end
+
+  protected
+    def create_metamap?
+      if link == '' and metacode.name == 'Metamap'
+        @map = Map.create({ name: name, permission: permission, desc: '', arranged: true, user_id: user_id })
+        self.link = Rails.application.routes.url_helpers.map_url(:host => ENV['MAILER_DEFAULT_URL'], :id => @map.id)
+      end
+    end
 end

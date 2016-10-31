@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ApplicationPolicy
   attr_reader :user, :record
 
@@ -39,7 +40,7 @@ class ApplicationPolicy
   # explicitly say they want to (E.g. seeing/editing/deleting private
   # maps - they should be able to, but not by accident)
   def admin_override
-    user && user.admin
+    user&.admin
   end
 
   def scope

@@ -16,6 +16,9 @@ before_script:
   - . $HOME/.nvm/nvm.sh
   - nvm install stable
   - nvm use stable
-  - npm install
+  - npm install --no-optional
 script:
-  - bundle exec rspec && npm test && bundle exec brakeman -q -z
+  - bundle exec rspec && bundle exec brakeman -q -z && npm test
+addons:
+  code_climate:
+    repo_token: 479d3bf56798fbc7fff3fc8151a5ed09e8ac368fd5af332c437b9e07dbebb44e

@@ -1,14 +1,18 @@
+# frozen_string_literal: true
 class TopicPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       visible = %w(public commons)
-      permission = 'topics.permission IN (?)'
-      if user
-        scope.where(permission + ' OR topics.defer_to_map_id IN (?) OR topics.user_id = ?', visible, user.shared_maps.map(&:id), user.id)
-      else
-        scope.where(permission, visible)
-      end
+      return scope.where(permission: visible) unless user
+
+      scope.where(permission: visible)
+           .or(scope.where.not(defer_to_map_id: nil).where(defer_to_map_id: user.all_accessible_maps.map(&:id)))
+           .or(scope.where(user_id: user.id))
     end
+  end
+
+  def index?
+    true
   end
 
   def create?
@@ -19,14 +23,13 @@ class TopicPolicy < ApplicationPolicy
     if record.defer_to_map.present?
       map_policy.show?
     else
-      record.permission == 'commons' || record.permission == 'public' || record.user == user
+      record.permission.in?(['commons', 'public']) || record.user == user
     end
   end
 
   def update?
-    if !user.present?
-      false
-    elsif record.defer_to_map.present?
+    return false unless user.present?
+    if record.defer_to_map.present?
       map_policy.update?
     else
       record.permission == 'commons' || record.user == user

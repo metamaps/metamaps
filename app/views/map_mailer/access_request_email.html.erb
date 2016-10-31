@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body style="font-family: sans-serif; width: 100%; padding: 24px 16px 16px 16px; background-color: #f5f5f5; text-align: center;">
+
+  <div style="padding: 16px; background: white; text-align: left;">
+    <% button_style = "background-color:#4fc059;border-radius:2px;color:white;display:inline-block;font-family:Roboto,Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;min-height:29px;line-height:29px;min-width:54px;outline:0px;padding:0 8px;text-align:center;text-decoration:none" %>
+
+    <p><span style="font-weight: bold;"><%= @request.user.name %></span> is requesting access to <span style="font-weight: bold">collaboratively edit</span> the following metamap:</p>
+
+    <p><%= @map.name %></p>
+
+    <p><%= link_to "Grant", approve_access_map_url(id: @map.id, request_id: @request.id), target: "_blank", style: "font-size: 18px; text-decoration: none; color: #4fc059;" %>
+    <p><%= link_to "Deny", deny_access_map_url(id: @map.id, request_id: @request.id), target: "_blank", style: "font-size: 18px; text-decoration: none; color: #DB5D5D;" %></p>
+
+    <%= link_to 'Open in Metamaps', map_url(@map), target: "_blank", style: button_style %> 
+
+    <p style="font-size: 12px;">Make sense with Metamaps</p>
+  </div>
+  </body>
+</html>

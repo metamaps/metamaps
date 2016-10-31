@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TopicsController < ApplicationController
   include TopicsHelper
 
@@ -9,12 +10,19 @@ class TopicsController < ApplicationController
   # GET /topics/autocomplete_topic
   def autocomplete_topic
     term = params[:term]
-    @topics = if term && !term.empty?
-                policy_scope(Topic.where('LOWER("name") like ?', term.downcase + '%')).order('"name"')
-              else
-                []
-              end
-    render json: autocomplete_array_json(@topics)
+    if term && !term.empty?
+      @topics = policy_scope(Topic).where('LOWER("name") like ?', term.downcase + '%').order('"name"')
+      @mapTopics = @topics.select { |t| t.metacode.name == 'Metamap' }
+      # prioritize topics which point to maps, over maps
+      @exclude = @mapTopics.length > 0 ? @mapTopics.map(&:name) : ['']
+      @maps = policy_scope(Map).where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', @exclude).order('"name"')
+    else
+      @topics = []
+      @maps = []
+    end
+    @all= @topics.to_a.concat(@maps.to_a).sort { |a, b| a.name <=> b.name }
+    
+    render json: autocomplete_array_json(@all).to_json
   end
 
   # GET topics/:id
@@ -31,7 +39,7 @@ class TopicsController < ApplicationController
 
         respond_with(@allsynapses, @alltopics, @allcreators, @topic)
       end
-      format.json { render json: @topic }
+      format.json { render json: @topic.as_json(user: current_user).to_json }
     end
   end
 
@@ -47,9 +55,9 @@ class TopicsController < ApplicationController
     @allcreators += @allsynapses.map(&:user).uniq
 
     @json = {}
-    @json['topic'] = @topic
+    @json['topic'] = @topic.as_json(user: current_user)
     @json['creators'] = @allcreators
-    @json['relatives'] = @alltopics
+    @json['relatives'] = @alltopics.as_json(user: current_user)
     @json['synapses'] = @allsynapses
 
     respond_to do |format|
@@ -64,13 +72,14 @@ class TopicsController < ApplicationController
 
     topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
-    @alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
-    @alltopics.delete_if do |topic|
+    alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
+    alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i } if params[:metacode].present?
+    alltopics.delete_if do |topic|
       !topicsAlreadyHas.index(topic.id).nil?
     end
 
     @json = Hash.new(0)
-    @alltopics.each do |t|
+    alltopics.each do |t|
       @json[t.metacode.id] += 1
     end
 
@@ -86,14 +95,15 @@ class TopicsController < ApplicationController
 
     topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
-    alltopics = policy_scope(Topic.relatives(@topic.id)).to_a
+    alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
+    alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i } if params[:metacode].present?
     alltopics.delete_if do |topic|
       !topicsAlreadyHas.index(topic.id.to_s).nil?
     end
 
     # find synapses between topics in alltopics array
     allsynapses = policy_scope(Synapse.for_topic(@topic.id)).to_a
-    synapse_ids = (allsynapses.map(&:node1_id) + allsynapses.map(&:node2_id)).uniq
+    synapse_ids = (allsynapses.map(&:topic1_id) + allsynapses.map(&:topic2_id)).uniq
     allsynapses.delete_if do |synapse|
       !synapse_ids.index(synapse.id).nil?
     end
@@ -104,7 +114,7 @@ class TopicsController < ApplicationController
     end
 
     @json = {}
-    @json['topics'] = alltopics
+    @json['topics'] = alltopics.as_json(user: current_user)
     @json['synapses'] = allsynapses
     @json['creators'] = allcreators
 
@@ -121,7 +131,7 @@ class TopicsController < ApplicationController
 
     respond_to do |format|
       if @topic.save
-        format.json { render json: @topic, status: :created }
+        format.json { render json: @topic.as_json(user: current_user), status: :created }
       else
         format.json { render json: @topic.errors, status: :unprocessable_entity }
       end

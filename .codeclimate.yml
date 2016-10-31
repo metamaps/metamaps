@@ -1,0 +1,35 @@
+---
+engines:
+  brakeman:
+    enabled: true
+  bundler-audit:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        ruby:
+          mass_threshold: 36 # default: 18
+        javascript:
+          mass_threshold: 80 # default: 40
+  eslint:
+    enabled: true
+    channel: "eslint-3"
+  fixme:
+    enabled: true
+  rubocop:
+    enabled: true
+ratings:
+  paths:
+  - 'Gemfile.lock'
+  - '**.erb'
+  - '**.rb'
+  - '**.js'
+  - '**.jsx'
+exclude_paths:
+- app/assets/images/
+- app/assets/javascripts/lib/
+- frontend/src/patched/
+- db/
+- script/
+- spec/

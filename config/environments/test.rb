@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Metamaps::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -10,8 +11,10 @@ Metamaps::Application.configure do
   config.cache_classes = true
 
   # Configure static asset server for tests with Cache-Control for performance
-  config.serve_static_files = true
-  config.static_cache_control = 'public, max-age=3600'
+  config.public_file_server.enabled = true
+  config.public_file_server.headers = {
+    'Cache-Control' => 'public, max-age=3600'
+  }
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -27,6 +30,7 @@ Metamaps::Application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
