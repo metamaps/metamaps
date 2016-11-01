@@ -213,8 +213,17 @@
   line-height: 50px;
 }
 
+#mobile_header #menu_icon .unread-notifications-dot {
+  top: 5px;
+  left: 29px;
+  width: 12px;
+  height: 12px;
+  border: 3px solid #eee;
+  border-radius: 9px;
+}
+
 #mobile_menu {
- display: none;
+  display: none;
   background: #EEE;
   position: fixed;
   top: 50px;
@@ -222,11 +231,20 @@
   padding: 10px;
   width: 200px;
   box-shadow: 3px 3px 3px rgba(0,0,0,0.23), 3px 3px 3px rgba(0,0,0,0.16);
-}
 
-#mobile_menu li {
-  padding: 10px;
-  list-style: none;
+  li {
+    padding: 10px;
+    list-style: none;
+
+    &.notifications {
+      position: relative;
+
+      .unread-notifications-dot {
+        top: 17px;
+        left: 0px;
+      }
+    }
+  }
 }
 
 /*

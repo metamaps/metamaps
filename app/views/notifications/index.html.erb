@@ -1,0 +1,33 @@
+<% content_for :title, 'Notifications | Metamaps' %>
+<% content_for :mobile_title, 'Notifications' %>
+
+<div id="yield">
+  <div class="centerContent notificationsPage">
+    <h2 class="title">My Notifications</h4>
+    <ul class="notifications">
+      <% @notifications.each do |notification| %>
+        <% receipt = @receipts.find_by(notification_id: notification.id) %>
+        <li class="notification <%= receipt.is_read? ? 'read' : 'unread' %>" id="notification-<%= notification.id %>">
+          <%= link_to notification_path(notification.id) do %>
+            <div class="notification-subject">
+              <%= notification.subject %>
+            </div>
+            <div class="notification-body">
+              <%= notification.body.truncate(70) %>
+            </div>
+          <% end %>
+          <div class="notification-read-unread">
+            <% if receipt.is_read? %>
+              <%= link_to 'mark as unread', mark_unread_notification_path(notification.id), remote: true, method: :put %>
+            <% else %>
+              <%= link_to 'mark as read', mark_read_notification_path(notification.id), remote: true, method: :put %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <%= render partial: 'shared/back_to_mapping' %>
+</div>
+
+<%= render partial: 'notifications/header' %>

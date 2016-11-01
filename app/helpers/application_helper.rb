@@ -37,4 +37,20 @@ module ApplicationHelper
   def invite_link
     "#{request.base_url}/join" + (current_user ? "?code=#{current_user.code}" : '')
   end
+
+  def user_has_unread_notifications?
+    return @user_has_unread_notifications unless @user_has_unread_notifications.nil?
+    return (@user_has_unread_notifications = false) if current_user.nil?
+    current_user.mailboxer_notification_receipts.each do |receipt|
+      return (@user_has_unread_notifications = true) if receipt.is_read == false
+    end
+    @user_has_unread_notifications = false
+  end
+
+  def user_unread_notification_count
+    return 0 if current_user.nil?
+    current_user.mailboxer_notification_receipts.reduce(0) do |total, receipt|
+      receipt.is_read ? total : total + 1
+    end
+  end
 end

@@ -21,7 +21,8 @@ class AccessController < ApplicationController
   def access_request
     request = AccessRequest.create(user: current_user, map: @map)
     # what about push notification to map owner?
-    MapMailer.access_request_email(request, @map).deliver_later
+    mail = MapMailer.access_request_email(request, @map)
+    @map.user.notify(mail.subject, mail.body)
 
     respond_to do |format|
       format.json do
@@ -37,7 +38,9 @@ class AccessController < ApplicationController
     @map.add_new_collaborators(user_ids).each do |user_id|
       # add_new_collaborators returns array of added users,
       # who we then send an email to
-      MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id)).deliver_later
+      user = User.find(user_id)
+      mail = MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id))
+      user.notify(mail.subject, mail.body)
     end
     @map.remove_old_collaborators(user_ids)
 
@@ -51,7 +54,7 @@ class AccessController < ApplicationController
   # GET maps/:id/approve_access/:request_id
   def approve_access
     request = AccessRequest.find(params[:request_id])
-    request.approve()
+    request.approve
     respond_to do |format|
       format.html { redirect_to map_path(@map), notice: 'Request was approved' }
     end
@@ -60,7 +63,7 @@ class AccessController < ApplicationController
   # GET maps/:id/deny_access/:request_id
   def deny_access
     request = AccessRequest.find(params[:request_id])
-    request.deny()
+    request.deny
     respond_to do |format|
       format.html { redirect_to map_path(@map), notice: 'Request was turned down' }
     end
@@ -69,7 +72,7 @@ class AccessController < ApplicationController
   # POST maps/:id/approve_access/:request_id
   def approve_access_post
     request = AccessRequest.find(params[:request_id])
-    request.approve()
+    request.approve
     respond_to do |format|
       format.json do
         head :ok
@@ -80,7 +83,7 @@ class AccessController < ApplicationController
   # POST maps/:id/deny_access/:request_id
   def deny_access_post
     request = AccessRequest.find(params[:request_id])
-    request.deny()
+    request.deny
     respond_to do |format|
       format.json do
         head :ok
@@ -94,5 +97,4 @@ class AccessController < ApplicationController
     @map = Map.find(params[:id])
     authorize @map
   end
-
 end

@@ -20,6 +20,8 @@ engines:
     enabled: true
   rubocop:
     enabled: true
+    exclude_fingerprints:
+      - 74f18007b920e8d81148d2f6a2756534
 ratings:
   paths:
   - 'Gemfile.lock'

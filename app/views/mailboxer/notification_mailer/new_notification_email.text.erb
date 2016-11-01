@@ -1,0 +1,2 @@
+<% body = @notification.body.parts[0].encoded %>
+<%= body.html_safe? ? body : strip_tags(body) %>

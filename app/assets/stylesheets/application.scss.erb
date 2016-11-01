@@ -826,7 +826,7 @@ label {
     position:absolute;
     pointer-events:none;
     background-repeat:no-repeat;
-    background-image: url(<%= asset_data_uri('user_sprite.png') %>);
+    background-image: url(<%= asset_path('user_sprite.png') %>);
 }
 .accountSettings .accountIcon {
     background-position: 0 0;
@@ -3075,4 +3075,8 @@ and it won't be important on password protected instances */
 script.data-gratipay-username {
     display: inline;
     float: left;
+}
+
+.inline {
+  display: inline-block;
 }

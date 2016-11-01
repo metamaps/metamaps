@@ -33,23 +33,35 @@
     <div class="nameEdit"><%= @user.name %></div>
   </div>
   <div class="changeName">
-    <%= form.label :name, "Name:", :class => "firstFieldText" %>
-    <%= form.text_field :name  %>
+    <%= form.label :name, "Name:", class: 'firstFieldText' %>
+    <%= form.text_field :name %>
   </div>
-  <div><%= form.label :email, "Email:", :class => "firstFieldText" %>
-  <%= form.email_field :email  %></div>
+  <div>
+    <%= form.label :email, "Email:", class: 'firstFieldText' %>
+    <%= form.email_field :email %>
+  </div>
+  <div>
+    <%= form.label :emails_allowed, class: 'firstFieldText' do %>
+      <%= form.check_box :emails_allowed, class: 'inline' %>
+      Send Metamaps notifications to my email.
+    <% end %>
+  </div>
   <div class="changePass" onclick="Metamaps.Account.showPass()">Change Password</div>
   <div class="toHide">
-  <div>
-    <%= form.label :current_password, "Current Password:", :class => "firstFieldText" %>
-    <%= password_field_tag :current_password, params[:current_password] %>
+    <div>
+      <%= form.label :current_password, "Current Password:", :class => "firstFieldText" %>
+      <%= password_field_tag :current_password, params[:current_password] %>
+    </div>
+    <div>
+      <%= form.label :password, "New Password:", :class => "firstFieldText" %>
+      <%= form.password_field :password, :autocomplete => :off%>
+    </div>
+    <div>
+      <%= form.label :password_confirmation, "Confirm New Password:", :class => "firstFieldText" %>
+      <%= form.password_field :password_confirmation, :autocomplete => :off%>
+    </div>
+    <div class="noChangePass" onclick="Metamaps.Account.hidePass()">Oops, don't change password</div>
   </div>
-   <div><%= form.label :password, "New Password:", :class => "firstFieldText" %>
-  <%= form.password_field :password, :autocomplete => :off%></div>
-   <div><%= form.label :password_confirmation, "Confirm New Password:", :class => "firstFieldText" %>
-  <%= form.password_field :password_confirmation, :autocomplete => :off%></div>
-  <div class="noChangePass" onclick="Metamaps.Account.hidePass()">Oops, don't change password</div>
-</div>
   <div id="accountPageLoading"></div>
   <%= form.submit "Update", class: "update", onclick: "Metamaps.Account.showLoading()" %>
   <div class="clearfloat"></div>
