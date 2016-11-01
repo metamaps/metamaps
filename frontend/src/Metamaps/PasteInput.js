@@ -58,7 +58,7 @@ const PasteInput = {
     }
   },
 
-  handle: function(text, coords = null) {
+  handle: function(text, coords = {}) {
     var self = PasteInput
 
     if (text.match(self.URL_REGEX)) {
