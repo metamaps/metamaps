@@ -24,9 +24,9 @@ Now that you have the code, run these commands:
 
     bundle install
     npm install
-    rails db:migrate
-    rails assets:precompile # includes `npm run build` and `bin/build-apidocs.sh`
-    rails perms:fix
+    bundle exec rails db:migrate
+    bundle exec rails assets:precompile # includes `npm run build` and `bin/build-apidocs.sh`
+    bundle exec rails perms:fix
     passenger-config restart-app .
 
     forever list #find the uid of the realtime server, e.g. xQKv

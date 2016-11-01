@@ -40,8 +40,8 @@
       --branch instance/mycoolinstance
     rvm install $(cat metamaps/.ruby-version) #ensure ruby is installed
     cd metamaps
-    gem install bundle
-    bundle install
+    gem install bundler
+    RAILS_ENV=production bundle install
 
 #### Connect rails database
 
@@ -58,7 +58,7 @@ Run this in the metamaps directory, still as metamaps:
     export NODE_ENV=production
 
     # create, load schema, seed
-    rails db:setup
+    bundle exec rails db:setup
 
 #### Install node & ES6 modules
 
@@ -68,15 +68,16 @@ Run this in the metamaps directory, still as metamaps:
 
 #### Precompile assets
 
-This step depends on running npm install first; assets:precompile will run `NODE_ENV=production npm run build`, and the build-apidocs.sh script requires the raml2html npm package.
+This step depends on running npm install first; assets:precompile calls `npm install` and `bin/build-apidocs.sh`, both of which require node_modules to be installed. We suggest you run the commands separately this time to better catch any errors.
 
+    npm run build
     bin/build-apidocs.sh
-    rails assets:precompile
-    rails perms:fix
+    bundle exec rails assets:precompile
+    bundle exec rails perms:fix
 
 #### Nginx and SSL
 
-Now set up nginx - config stored on Linode, including relevant environment variables.
+We recommand using Passenger + Nginx to serve your website. You can contact us for our nginx configuration.
 
 Get an SSL certificate and encrypt it for the realtime video.
 
@@ -95,7 +96,9 @@ server to see what problems show up:
     (crontab -u metamaps -l 2>/dev/null; echo "@reboot $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
 
     mkdir -p /home/metamaps/logs
-    forever --append -l /home/metamaps/logs/forever.realtime.log \
+    forever --append \
+      -c /home/metamaps/metamaps/node_modules/.bin/babel-node \
+      -l /home/metamaps/logs/forever.realtime.log \
       start /home/metamaps/metamaps/realtime/realtime-server.js
 
 #### Upstart service for delayed_worker:
