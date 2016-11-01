@@ -1,4 +1,4 @@
-If you are logged into the API via another means, you can create a token. Once you have this token, you can append it to a request. For example, opening a private window in your browser and browsing to `https://metamaps.cc/api/v2/user/current?token=...token here...` would show you your current user, even without logging in by another means.
+If you are logged into the API via another means, you can create a token. Once you have this token, you can append it to a request. For example, opening a private window in your browser and browsing to `https://metamaps.cc/api/v2/users/current?token=...token here...` would show you your current user, even without logging in by another means.
 
 To get a list of your current tokens, you can log in using cookie-based authentication and run the following fetch request in your browser console (assuming the current tab is on some page within the `metamaps.cc` website.
 

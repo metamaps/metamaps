@@ -58,7 +58,7 @@ Run this in the metamaps directory, still as metamaps:
     export NODE_ENV=production
 
     # create, load schema, seed
-    rake db:setup
+    rails db:setup
 
 #### Install node & ES6 modules
 
@@ -70,9 +70,9 @@ Run this in the metamaps directory, still as metamaps:
 
 This step depends on running npm install first; assets:precompile will run `NODE_ENV=production npm run build`, and the build-apidocs.sh script requires the raml2html npm package.
 
-    rake assets:precompile
-    rake perms:fix
     bin/build-apidocs.sh
+    rails assets:precompile
+    rails perms:fix
 
 #### Nginx and SSL
 
@@ -119,7 +119,7 @@ Put the following code into `/etc/init/metamaps_delayed_worker.conf`:
     respawn
     respawn limit 3 30
     
-    exec bundle exec rake jobs:work
+    exec bundle exec rails jobs:work
 
 Then start the service and check the last ten lines of the log file to make sure it's running OK:
 
