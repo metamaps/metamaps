@@ -27,7 +27,7 @@ module ExceptionNotifier
     def new_fields(exception, env)
       new_fields = []
 
-      backtrace = exception.backtrace.reject { |line| line !~ %r{metamaps/(app|config|lib)} }
+      backtrace = exception.backtrace.reject { |line| line =~ %r{/(vendor/bundle|vendor_ruby)/} }
       backtrace = backtrace[0..3] if backtrace.length > 4
       backtrace = "```\n#{backtrace.join("\n")}\n```"
       new_fields << { title: 'Backtrace', value: backtrace }
