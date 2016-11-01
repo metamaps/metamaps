@@ -2,6 +2,8 @@
 require 'open-uri'
 
 class User < ApplicationRecord
+  acts_as_messageable # mailboxer notifications
+
   has_many :topics
   has_many :synapses
   has_many :maps
