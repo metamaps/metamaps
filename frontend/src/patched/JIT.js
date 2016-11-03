@@ -2477,8 +2477,8 @@ Extras.Classes.Navigation = new Class({
           sy = this.canvas.scaleOffsetY;
 	    
 	    //Basically this is just a duplication of the Util function pixelsToCoords, it finds the canvas coordinate of the mouse pointer
-      var pointerCoordX = (e.x - p.x - s.width / 2 - ox) * (1 / sx),
-          pointerCoordY = (e.y - p.y - s.height / 2 - oy) * (1 / sy);
+      var pointerCoordX = (e.pageX - p.x - s.width / 2 - ox) * (1 / sx),
+          pointerCoordY = (e.pageY - p.y - s.height / 2 - oy) * (1 / sy);
 
       //This translates the canvas to be centred over the mouse pointer, then the canvas is zoomed as intended.
       this.canvas.translate(-pointerCoordX,-pointerCoordY);
@@ -2491,8 +2491,8 @@ Extras.Classes.Navigation = new Class({
       oy = this.canvas.translateOffsetY,
       sx = this.canvas.scaleOffsetX,
       sy = this.canvas.scaleOffsetY;
-      var newX = (e.x - p.x - s.width / 2 - ox) * (1 / sx),
-          newY = (e.y - p.y - s.height / 2 - oy) * (1 / sy);
+      var newX = (e.pageX - p.x - s.width / 2 - ox) * (1 / sx),
+          newY = (e.pageY - p.y - s.height / 2 - oy) * (1 / sy);
           
       //Translate the canvas to put the pointer back over top the same coordinate it was over before
       this.canvas.translate(newX-pointerCoordX,newY-pointerCoordY);
