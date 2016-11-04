@@ -1,9 +1,9 @@
-<%= @request.user.name %> has requested to collaboratively edit the following metamap:
+<%= @request.user.name %> has requested to collaboratively edit the following map:
 
 <%= @map.name %> [<%= map_url(@map) %>]
 
-Approve Request [<%= approve_access_map_url(id: @map.id, request_id: @request.id) %>]
-Deny Request [<%= deny_access_map_url(id: @map.id, request_id: @request.id) %>]
+Allow [<%= approve_access_map_url(id: @map.id, request_id: @request.id) %>]
+Decline [<%= deny_access_map_url(id: @map.id, request_id: @request.id) %>]
 
 Make sense with Metamaps
 
