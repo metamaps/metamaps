@@ -763,6 +763,8 @@ const JIT = {
     var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     if (node && !node.nodeFrom) {
+      self.handleSelectionBeforeDragging(node, e)
+
       var pos = eventInfo.getPos(),
           EDGE_THICKNESS = 30 /** Metamaps.Visualize.mGraph.canvas.scaleOffsetX*/,
           SHIFT = 2 / Metamaps.Visualize.mGraph.canvas.scaleOffsetX,
@@ -865,17 +867,6 @@ const JIT = {
           self.updateTopicPositions(node,pos);
           Visualize.mGraph.plot()
         }
-        
-        // if the node dragged isn't already selected, select it
-        var whatToDo = self.handleSelectionBeforeDragging(node, e)
-        if (node.pos.rho || node.pos.rho === 0) {
-          // this means we're in topic view
-          var rho = Math.sqrt(pos.x * pos.x + pos.y * pos.y)
-          var theta = Math.atan2(pos.y, pos.x)
-          node.pos.setp(theta, rho)
-        } else {
-          //self.updateTopicPositions(node,pos);
-        }
       }
       // if it's a right click or holding down alt, start synapse creation  ->third option is for firefox
       else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && authorized) {
@@ -946,7 +937,7 @@ const JIT = {
         GlobalUI.notifyUser('Cannot create in Topic view.')
       }
       else if ((e.button === 2 || (e.button === 0 && e.altKey) || e.buttons === 2) && !authorized) {
-        GlobalUI.notifyUser('Cannot edit Public map.')
+        GlobalUI.notifyUser('Cannot edit this map.')
       }
     }
   }, // onDragMoveTopicHandler
@@ -1086,15 +1077,21 @@ const JIT = {
     var yOffset = []
     for (var i = 0; i < len; i += 1) {
       var n = Selected.Nodes[i]
-      xOffset[i] = n.pos.x - node.pos.x
-      yOffset[i] = n.pos.y - node.pos.y
+      xOffset[i] = n.pos.getc().x - node.pos.getc().x
+      yOffset[i] = n.pos.getc().y - node.pos.getc().y
     } // for
 
     for (var i = 0; i < len; i += 1) {
       var n = Selected.Nodes[i]
       var x = pos.x + xOffset[i]
       var y = pos.y + yOffset[i]
-      n.pos.setc(x, y)
+      if (n.pos.rho || n.pos.rho === 0) {
+        // this means we're in topic view
+        var rho = Math.sqrt(x * x + y * y)
+        var theta = Math.atan2(y, x)
+        n.pos.setp(theta, rho)
+      }
+      else n.pos.setc(x, y)
 
       if (Active.Map) {
         topic = n.getData('topic')
@@ -1130,28 +1127,18 @@ const JIT = {
     }
   }, // nodeWasDoubleClicked
   handleSelectionBeforeDragging: function (node, e) {
-    // four cases:
-    // 1 nothing is selected, so pretend you aren't selecting
-    // 2 others are selected only and shift, so additionally select this one
-    // 3 others are selected only, no shift: drag only this one
-    // 4 this node and others were selected, so drag them (just return false)
     if (Selected.Nodes.length === 0) {
       Control.selectNode(node, e)
-      return 'only-drag-this-one'
     }
     if (Selected.Nodes.indexOf(node) === -1) {
       if (e.shiftKey) {
         Control.selectNode(node, e)
-        return 'move-all-incuding-this-one'
       } else {
         Control.deselectAllEdges()
         Control.deselectAllNodes()
         Control.selectNode(node, e)
-        return 'only-drag-this-one'
       }
     }
-    return 'move-all'; // case 4?
-
   }, //  handleSelectionBeforeDragging
   getNodeXY: function (node) {
     if (typeof node.pos.x === 'number' && typeof node.pos.y === 'number') {
