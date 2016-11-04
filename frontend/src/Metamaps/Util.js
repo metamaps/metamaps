@@ -129,9 +129,10 @@ const Util = {
     }
   },
   mdToHTML: text => {
+    const safeText = text || ''
     // use safe: true to filter xss
     return new HtmlRenderer({ safe: true })
-      .render(new Parser().parse(text))
+      .render(new Parser().parse(safeText))
   },
   logCanvasAttributes: function(canvas){
     const fakeMgraph = { canvas }
