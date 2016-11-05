@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-Webhooks::Slack::Base = Struct.new(:event) do
+Webhooks::Slack::Base = Struct.new(:webhook, :event) do
   include Routing
 
   def username
@@ -12,6 +12,10 @@ Webhooks::Slack::Base = Struct.new(:event) do
 
   def text
     'something'
+  end
+
+  def channel
+    webhook.channel
   end
 
   def attachments

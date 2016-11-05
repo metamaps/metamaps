@@ -11,7 +11,7 @@ class WebhookService
     end
 
     def webhook_object_for(webhook, event)
-      "Webhooks::#{webhook.kind.classify}::#{event.kind.classify}".constantize.new(event)
+      "Webhooks::#{webhook.kind.classify}::#{event.kind.classify}".constantize.new(webhook, event)
     end
   end
 end

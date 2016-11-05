@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013162214) do
+ActiveRecord::Schema.define(version: 20161105160340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -276,6 +276,7 @@ ActiveRecord::Schema.define(version: 20161013162214) do
     t.string  "kind",                       null: false
     t.string  "uri",                        null: false
     t.text    "event_types",   default: [],              array: true
+    t.string  "channel"
     t.index ["hookable_type", "hookable_id"], name: "index_webhooks_on_hookable_type_and_hookable_id", using: :btree
   end
 
