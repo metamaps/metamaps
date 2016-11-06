@@ -12,7 +12,7 @@ class MainController < ApplicationController
                                    .order(updated_at: :desc).page(1).per(20)
           render 'explore/active'
         else
-          render 'main/home'
+          render 'main/home', layout: "pages"
         end
       end
     end

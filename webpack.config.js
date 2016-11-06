@@ -40,7 +40,8 @@ const config = module.exports = {
     ]
   },
   entry: {
-    'metamaps.bundle': './frontend/src/index.js'
+    'metamaps.bundle': './frontend/src/index.js',
+    'homepage': './frontend/src/homepage.js',
   },
   output: {
     path: './app/assets/javascripts/webpacked',

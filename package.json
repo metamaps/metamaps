@@ -37,6 +37,7 @@
     "lodash": "4.16.1",
     "node-uuid": "1.4.7",
     "outdent": "0.2.1",
+    "particles.js": "2.0.0",
     "react": "15.3.2",
     "react-dom": "15.3.2",
     "react-dropzone": "3.6.0",

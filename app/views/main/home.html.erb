@@ -1,40 +1,7 @@
-<%#
-  # @file
-  # Located at /
-  # Shows 3 most recently created topics, synapses, and maps.
-  #
-%>  
- 
-<% content_for :title, "Home | Metamaps" %> 
-<% content_for :mobile_title, "Home" %> 
-<div id="yield">
-  <div class="homeWrapper homeText">
-    <div class="homeTitle">Make Sense with Metamaps</div>
-    <div class="homeIntro">
-    <span class="green din-medium">METAMAPS.CC</span> is a free and open source platform that supports real-time sense-making, distributed collaboration, and the creative intelligence of individuals, organizations and communities. We are currently in an <span class="din-medium">invite-only beta.</span>
-    </div>
-  </div>
-  <div class="fullWidthWrapper withVideo">
-    <div class="homeWrapper">
-      <iframe class="homeVideo" src="https://player.vimeo.com/video/113154814" width="560" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-      <div class="callToAction">
-        <h3>Who finds it useful?</h3>
-        <p>Designers, inventors, artists, educators, strategists, consultants, facilitators, entrepreneurs, systems thinkers, changemakers, analysts, students, researchers... maybe you!</p>
-        <button type="button" class="button learnMoreCTA" onclick="Metamaps.GlobalUI.openLightbox('about');">LEARN MORE</button>
-        <a href="/explore/featured" data-router="true" class="exploreFeaturedCTA">EXPLORE FEATURED MAPS</a>
-        <a href="/request" class="requestInviteCTA">REQUEST INVITE</a>
-      </div>
-      <div class="clearfloat"></div>
-    </div>
-  </div>
-  <div class="fullWidthWrapper withPartners">
-    <div class="homeWrapper homePartners">
-      <% # our partners %>
-    </div>
-  </div>
-</div><!-- end yield -->
-
-<script>
-  Metamaps.currentSection = ''
-  Metamaps.currentPage = ''
-</script>
+<div id='homepage'>
+  <div id='particles-1' class='particles'></div>
+  <div id='particles-2' class='particles'></div>
+  <div id='particles-3' class='particles'></div>
+</div>
+<%= javascript_include_tag 'webpacked/homepage' %>
+<%= stylesheet_link_tag "home" %>
