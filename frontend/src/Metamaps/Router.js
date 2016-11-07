@@ -23,7 +23,7 @@ const _Router = Backbone.Router.extend({
     'maps/:id': 'maps', // #maps/7
     'topics/:id': 'topics' // #topics/7
   },
-  home: function () {
+  home: function() {
     let self = this
     clearTimeout(this.timeoutId)
 
@@ -37,8 +37,8 @@ const _Router = Backbone.Router.extend({
     var classes = Active.Mapper ? 'homePage explorePage' : 'homePage'
     $('.wrapper').addClass(classes)
 
-    var navigate = function () {
-      self.timeoutId = setTimeout(function () {
+    var navigate = function() {
+      self.timeoutId = setTimeout(function() {
         self.navigate('')
       }, 300)
     }
@@ -71,7 +71,7 @@ const _Router = Backbone.Router.extend({
     Active.Map = null
     Active.Topic = null
   },
-  explore: function (section, id) {
+  explore: function(section, id) {
     var self = this
     clearTimeout(this.timeoutId)
 
@@ -84,16 +84,16 @@ const _Router = Backbone.Router.extend({
     } else if (section === 'mapper') {
       $.ajax({
         url: '/users/' + id + '.json',
-        success: function (response) {
+        success: function(response) {
           document.title = response.name + ' | Metamaps'
         },
-        error: function () {}
+        error: function() {}
       })
     } else if (section === 'mine') {
       document.title = 'Explore My Maps | Metamaps'
     }
 
-    if (Active.Mapper && section != 'mapper') $('.homeButton a').attr('href', '/explore/' + section)
+    if (Active.Mapper && section !== 'mapper') $('.homeButton a').attr('href', '/explore/' + section)
     $('.wrapper').removeClass('homePage mapPage topicPage')
     $('.wrapper').addClass('explorePage')
 
@@ -113,23 +113,23 @@ const _Router = Backbone.Router.extend({
 
     Views.ExploreMaps.setCollection(DataModel.Maps[capitalize])
 
-    var navigate = function () {
+    var navigate = function() {
       var path = '/explore/' + self.currentPage
 
       // alter url if for mapper profile page
       if (self.currentPage === 'mapper') {
         path += '/' + DataModel.Maps.Mapper.mapperId
       }
-      
+
       self.navigate(path)
     }
-    var navigateTimeout = function () {
+    var navigateTimeout = function() {
       self.timeoutId = setTimeout(navigate, 300)
     }
     if (DataModel.Maps[capitalize].length === 0) {
       Loading.show()
       Views.ExploreMaps.pending = true
-      setTimeout(function () {
+      setTimeout(function() {
         DataModel.Maps[capitalize].getMaps(navigate) // this will trigger an explore maps render
       }, 300) // wait 300 milliseconds till the other animations are done to do the fetch
     } else {
@@ -149,7 +149,7 @@ const _Router = Backbone.Router.extend({
     Active.Map = null
     Active.Topic = null
   },
-  maps: function (id) {
+  maps: function(id) {
     clearTimeout(this.timeoutId)
 
     this.currentSection = 'map'
@@ -175,7 +175,7 @@ const _Router = Backbone.Router.extend({
     Map.end()
     Map.launch(id)
   },
-  topics: function (id) {
+  topics: function(id) {
     clearTimeout(this.timeoutId)
 
     this.currentSection = 'topic'
@@ -202,7 +202,7 @@ const _Router = Backbone.Router.extend({
 
 const Router = new _Router()
 
-Router.intercept = function (evt) {
+Router.intercept = function(evt) {
   var segments
 
   var href = {
@@ -227,7 +227,7 @@ Router.intercept = function (evt) {
   }
 }
 
-Router.init = function () {
+Router.init = function() {
   Backbone.history.start({
     silent: true,
     pushState: true,

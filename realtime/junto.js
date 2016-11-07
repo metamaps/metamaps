@@ -21,41 +21,40 @@ const {
 
 const { mapRoom, userMapRoom } = require('./rooms')
 
-module.exports = function (io, store) {
-  io.on('connection', function (socket) {
-
-    socket.on(CHECK_FOR_CALL, function (data) {
+module.exports = function(io, store) {
+  io.on('connection', function(socket) {
+    socket.on(CHECK_FOR_CALL, function(data) {
       var callInProgress = Object.keys(io.nsps['/'].adapter.rooms[data.room] || {}).length
       if (callInProgress) socket.emit(CALL_IN_PROGRESS)
     })
 
-    socket.on(INVITE_A_CALL, function (data) {
+    socket.on(INVITE_A_CALL, function(data) {
       socket.broadcast.in(userMapRoom(data.invited, data.mapid)).emit(INVITED_TO_CALL, data.inviter)
     })
 
-    socket.on(INVITE_TO_JOIN, function (data) {
+    socket.on(INVITE_TO_JOIN, function(data) {
       socket.broadcast.in(userMapRoom(data.invited, data.mapid)).emit(INVITED_TO_JOIN, data.inviter)
     })
 
-    socket.on(ACCEPT_CALL, function (data) {
+    socket.on(ACCEPT_CALL, function(data) {
       socket.broadcast.in(userMapRoom(data.inviter, data.mapid)).emit(CALL_ACCEPTED, data.invited)
       socket.broadcast.in(mapRoom(data.mapid)).emit(CALL_STARTED)
     })
 
-    socket.on(DENY_CALL, function (data) {
+    socket.on(DENY_CALL, function(data) {
       socket.broadcast.in(userMapRoom(data.inviter, data.mapid)).emit(CALL_DENIED, data.invited)
     })
 
-    socket.on(DENY_INVITE, function (data) {
+    socket.on(DENY_INVITE, function(data) {
       socket.broadcast.in(userMapRoom(data.inviter, data.mapid)).emit(INVITE_DENIED, data.invited)
     })
 
-    socket.on(JOIN_CALL, function (data) {
+    socket.on(JOIN_CALL, function(data) {
       socket.broadcast.in(mapRoom(data.mapid)).emit(MAPPER_JOINED_CALL, data.id)
     })
 
-    socket.on(LEAVE_CALL, function (data) {
+    socket.on(LEAVE_CALL, function(data) {
       socket.broadcast.in(mapRoom(data.mapid)).emit(MAPPER_LEFT_CALL, data.id)
     })
   })
-}   
+}

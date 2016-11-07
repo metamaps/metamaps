@@ -10,7 +10,7 @@ const Search = {
   limitMapsToMe: false,
   changing: false,
   optionsInitialized: false,
-  init: function (serverData) {
+  init: function(serverData) {
     var self = Search
 
     self.wildcardIconUrl = serverData['icons/wildcard.png']
@@ -24,10 +24,10 @@ const Search = {
     loader.setRange(0.9) // default is 1.3
     loader.show() // Hidden by default
 
-    $('.sidebarSearchIcon').click(function (e) {
+    $('.sidebarSearchIcon').click(function(e) {
       $('.sidebarSearchField').focus()
     })
-    $('.sidebarSearch').click(function (e) {
+    $('.sidebarSearch').click(function(e) {
       e.stopPropagation()
     })
 
@@ -36,7 +36,7 @@ const Search = {
   focus: function() {
     $('.sidebarSearchField').focus()
   },
-  startTypeahead: function () {
+  startTypeahead: function() {
     var self = Search
 
     var mapheader = Active.Mapper ? '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><input type="checkbox" class="limitToMe" id="limitMapsToMe"></input><label for="limitMapsToMe" class="limitToMeLabel">added by me</label><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>' : '<div class="searchMapsHeader searchHeader"><h3 class="search-heading">Maps</h3><div class="minimizeResults minimizeMapResults"></div><div class="clearfloat"></div></div>'
@@ -49,7 +49,7 @@ const Search = {
 
       display: s => s.label,
       templates: {
-        notFound: function (s) {
+        notFound: function(s) {
           return Hogan.compile(topicheader + $('#topicSearchTemplate').html()).render({
             value: 'No results',
             label: 'No results',
@@ -58,7 +58,7 @@ const Search = {
           })
         },
         header: topicheader,
-        suggestion: function (s) {
+        suggestion: function(s) {
           return Hogan.compile($('#topicSearchTemplate').html()).render(s)
         }
       },
@@ -67,7 +67,7 @@ const Search = {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
           url: '/search/topics',
-          prepare: function (query, settings) {
+          prepare: function(query, settings) {
             settings.url += '?term=' + query
             if (Active.Mapper && self.limitTopicsToMe) {
               settings.url += '&user=' + Active.Mapper.id.toString()
@@ -83,7 +83,7 @@ const Search = {
       limit: 9999,
       display: s => s.label,
       templates: {
-        notFound: function (s) {
+        notFound: function(s) {
           return Hogan.compile(mapheader + $('#mapSearchTemplate').html()).render({
             value: 'No results',
             label: 'No results',
@@ -91,7 +91,7 @@ const Search = {
           })
         },
         header: mapheader,
-        suggestion: function (s) {
+        suggestion: function(s) {
           return Hogan.compile($('#mapSearchTemplate').html()).render(s)
         }
       },
@@ -100,7 +100,7 @@ const Search = {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
           url: '/search/maps',
-          prepare: function (query, settings) {
+          prepare: function(query, settings) {
             settings.url += '?term=' + query
             if (Active.Mapper && self.limitMapsToMe) {
               settings.url += '&user=' + Active.Mapper.id.toString()
@@ -116,7 +116,7 @@ const Search = {
       limit: 9999,
       display: s => s.label,
       templates: {
-        notFound: function (s) {
+        notFound: function(s) {
           return Hogan.compile(mapperheader + $('#mapperSearchTemplate').html()).render({
             value: 'No results',
             label: 'No results',
@@ -125,7 +125,7 @@ const Search = {
           })
         },
         header: mapperheader,
-        suggestion: function (s) {
+        suggestion: function(s) {
           return Hogan.compile($('#mapperSearchTemplate').html()).render(s)
         }
       },
@@ -148,7 +148,7 @@ const Search = {
     )
 
     // Set max height of the search results box to prevent it from covering bottom left footer
-    $('.sidebarSearchField').bind('typeahead:render', function (event) {
+    $('.sidebarSearchField').bind('typeahead:render', function(event) {
       self.initSearchOptions()
       self.hideLoader()
       var h = $(window).height()
@@ -160,7 +160,7 @@ const Search = {
         $('#limitMapsToMe').prop('checked', true)
       }
     })
-    $(window).resize(function () {
+    $(window).resize(function() {
       var h = $(window).height()
       $('.tt-dropdown-menu').css('max-height', h - 100)
     })
@@ -169,12 +169,12 @@ const Search = {
     $('.sidebarSearchField').bind('typeahead:select', self.handleResultClick)
 
     // don't do it, if they clicked on a 'addToMap' button
-    $('.sidebarSearch button.addToMap').click(function (event) {
+    $('.sidebarSearch button.addToMap').click(function(event) {
       event.stopPropagation()
     })
 
     // make sure that when you click on 'limit to me' or 'toggle section' it works
-    $('.sidebarSearchField.tt-input').keyup(function () {
+    $('.sidebarSearchField.tt-input').keyup(function() {
       if ($('.sidebarSearchField.tt-input').val() === '') {
         self.hideLoader()
       } else {
@@ -182,7 +182,7 @@ const Search = {
       }
     })
   },
-  handleResultClick: function (event, datum, dataset) {
+  handleResultClick: function(event, datum, dataset) {
     var self = Search
 
     self.hideLoader()
@@ -197,10 +197,10 @@ const Search = {
       }
     }
   },
-  initSearchOptions: function () {
+  initSearchOptions: function() {
     var self = Search
 
-    function toggleResultSet (set) {
+    function toggleResultSet(set) {
       var s = $('.tt-dataset-' + set + ' .tt-suggestion, .tt-dataset-' + set + ' .resultnoresult')
       if (s.is(':visible')) {
         s.hide()
@@ -211,7 +211,7 @@ const Search = {
       }
     }
 
-    $('.limitToMe').unbind().bind('change', function (e) {
+    $('.limitToMe').unbind().bind('change', function(e) {
       if ($(this).attr('id') === 'limitTopicsToMe') {
         self.limitTopicsToMe = !self.limitTopicsToMe
       }
@@ -227,20 +227,20 @@ const Search = {
     })
 
     // when the user clicks minimize section, hide the results for that section
-    $('.minimizeMapperResults').unbind().click(function (e) {
+    $('.minimizeMapperResults').unbind().click(function(e) {
       toggleResultSet.call(this, 'mappers')
     })
-    $('.minimizeTopicResults').unbind().click(function (e) {
+    $('.minimizeTopicResults').unbind().click(function(e) {
       toggleResultSet.call(this, 'topics')
     })
-    $('.minimizeMapResults').unbind().click(function (e) {
+    $('.minimizeMapResults').unbind().click(function(e) {
       toggleResultSet.call(this, 'maps')
     })
   },
-  hideLoader: function () {
+  hideLoader: function() {
     $('#searchLoading').hide()
   },
-  showLoader: function () {
+  showLoader: function() {
     $('#searchLoading').show()
   }
 }

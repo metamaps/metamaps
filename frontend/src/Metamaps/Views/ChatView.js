@@ -40,7 +40,7 @@ var Private = {
       </span>
       <div class='clearfloat'></div>
     </div>`,
-  templates: function () {
+  templates: function() {
     underscore.templateSettings = {
       interpolate: /\{\{(.+?)\}\}/g
     }
@@ -48,7 +48,7 @@ var Private = {
 
     this.participantTemplate = underscore.template(Private.participantHTML)
   },
-  createElements: function () {
+  createElements: function() {
     this.$unread = $('<div class="chat-unread"></div>')
     this.$button = $('<div class="chat-button"><div class="tooltips">Chat</div></div>')
     this.$messageInput = $('<textarea placeholder="Send a message..." class="chat-input"></textarea>')
@@ -71,7 +71,7 @@ var Private = {
     this.$messages = $('<div class="chat-messages"></div>')
     this.$container = $('<div class="chat-box"></div>')
   },
-  attachElements: function () {
+  attachElements: function() {
     this.$button.append(this.$unread)
 
     this.$juntoHeader.append(this.$videoToggle)
@@ -88,40 +88,40 @@ var Private = {
     this.$container.append(this.$messages)
     this.$container.append(this.$messageInput)
   },
-  addEventListeners: function () {
+  addEventListeners: function() {
     var self = this
 
-    this.participants.on('add', function (participant) {
+    this.participants.on('add', function(participant) {
       Private.addParticipant.call(self, participant)
     })
 
-    this.participants.on('remove', function (participant) {
+    this.participants.on('remove', function(participant) {
       Private.removeParticipant.call(self, participant)
     })
 
-    this.$button.on('click', function () {
+    this.$button.on('click', function() {
       Handlers.buttonClick.call(self)
     })
-    this.$videoToggle.on('click', function () {
+    this.$videoToggle.on('click', function() {
       Handlers.videoToggleClick.call(self)
     })
-    this.$cursorToggle.on('click', function () {
+    this.$cursorToggle.on('click', function() {
       Handlers.cursorToggleClick.call(self)
     })
-    this.$soundToggle.on('click', function () {
+    this.$soundToggle.on('click', function() {
       Handlers.soundToggleClick.call(self)
     })
-    this.$messageInput.on('keyup', function (event) {
+    this.$messageInput.on('keyup', function(event) {
       Handlers.keyUp.call(self, event)
     })
-    this.$messageInput.on('focus', function () {
+    this.$messageInput.on('focus', function() {
       Handlers.inputFocus.call(self)
     })
-    this.$messageInput.on('blur', function () {
+    this.$messageInput.on('blur', function() {
       Handlers.inputBlur.call(self)
     })
   },
-  initializeSounds: function (soundUrls) {
+  initializeSounds: function(soundUrls) {
     this.sound = new Howl({
       src: soundUrls,
       sprite: {
@@ -133,15 +133,15 @@ var Private = {
       }
     })
   },
-  incrementUnread: function () {
+  incrementUnread: function() {
     this.unreadMessages++
     this.$unread.html(this.unreadMessages)
     this.$unread.show()
   },
-  addMessage: function (message, isInitial, wasMe) {
+  addMessage: function(message, isInitial, wasMe) {
     if (!this.isOpen && !isInitial) Private.incrementUnread.call(this)
 
-    function addZero (i) {
+    function addZero(i) {
       if (i < 10) {
         i = '0' + i
       }
@@ -162,20 +162,20 @@ var Private = {
 
     if (!wasMe && !isInitial && this.alertSound) this.sound.play('receivechat')
   },
-  initialMessages: function () {
+  initialMessages: function() {
     var messages = this.messages.models
     for (var i = 0; i < messages.length; i++) {
       Private.addMessage.call(this, messages[i], true)
     }
   },
-  handleInputMessage: function () {
+  handleInputMessage: function() {
     var message = {
       message: this.$messageInput.val()
     }
     this.$messageInput.val('')
     $(document).trigger(ChatView.events.message + '-' + this.room, [message])
   },
-  addParticipant: function (participant) {
+  addParticipant: function(participant) {
     var p = _.clone(participant.attributes)
     if (p.self) {
       p.selfClass = 'is-self'
@@ -187,46 +187,46 @@ var Private = {
     var html = this.participantTemplate(p)
     this.$participants.append(html)
   },
-  removeParticipant: function (participant) {
+  removeParticipant: function(participant) {
     this.$container.find('.participant-' + participant.get('id')).remove()
   }
 }
 
 var Handlers = {
-  buttonClick: function () {
+  buttonClick: function() {
     if (this.isOpen) this.close()
     else if (!this.isOpen) this.open()
   },
-  videoToggleClick: function () {
+  videoToggleClick: function() {
     this.$videoToggle.toggleClass('active')
     this.videosShowing = !this.videosShowing
     $(document).trigger(this.videosShowing ? ChatView.events.videosOn : ChatView.events.videosOff)
   },
-  cursorToggleClick: function () {
+  cursorToggleClick: function() {
     this.$cursorToggle.toggleClass('active')
     this.cursorsShowing = !this.cursorsShowing
     $(document).trigger(this.cursorsShowing ? ChatView.events.cursorsOn : ChatView.events.cursorsOff)
   },
-  soundToggleClick: function () {
+  soundToggleClick: function() {
     this.alertSound = !this.alertSound
     this.$soundToggle.toggleClass('active')
   },
-  keyUp: function (event) {
+  keyUp: function(event) {
     switch (event.which) {
       case 13: // enter
         Private.handleInputMessage.call(this)
         break
     }
   },
-  inputFocus: function () {
+  inputFocus: function() {
     $(document).trigger(ChatView.events.inputFocus)
   },
-  inputBlur: function () {
+  inputBlur: function() {
     $(document).trigger(ChatView.events.inputBlur)
   }
 }
 
-const ChatView = function (messages, mapper, room) {
+const ChatView = function(messages, mapper, room) {
   this.room = room
   this.mapper = mapper
   this.messages = messages // backbone collection
@@ -249,7 +249,7 @@ const ChatView = function (messages, mapper, room) {
   })
 }
 
-ChatView.prototype.conversationInProgress = function (participating) {
+ChatView.prototype.conversationInProgress = function(participating) {
   this.$conversationInProgress.show()
   this.$participants.addClass('is-live')
   if (participating) this.$participants.addClass('is-participating')
@@ -258,7 +258,7 @@ ChatView.prototype.conversationInProgress = function (participating) {
 // hide invite to call buttons
 }
 
-ChatView.prototype.conversationEnded = function () {
+ChatView.prototype.conversationEnded = function() {
   this.$conversationInProgress.hide()
   this.$participants.removeClass('is-live')
   this.$participants.removeClass('is-participating')
@@ -267,42 +267,42 @@ ChatView.prototype.conversationEnded = function () {
   this.$participants.find('.participant').removeClass('pending')
 }
 
-ChatView.prototype.leaveConversation = function () {
+ChatView.prototype.leaveConversation = function() {
   this.$participants.removeClass('is-participating')
 }
 
-ChatView.prototype.mapperJoinedCall = function (id) {
+ChatView.prototype.mapperJoinedCall = function(id) {
   this.$participants.find('.participant-' + id).addClass('active')
 }
 
-ChatView.prototype.mapperLeftCall = function (id) {
+ChatView.prototype.mapperLeftCall = function(id) {
   this.$participants.find('.participant-' + id).removeClass('active')
 }
 
-ChatView.prototype.invitationPending = function (id) {
+ChatView.prototype.invitationPending = function(id) {
   this.$participants.find('.participant-' + id).addClass('pending')
 }
 
-ChatView.prototype.invitationAnswered = function (id) {
+ChatView.prototype.invitationAnswered = function(id) {
   this.$participants.find('.participant-' + id).removeClass('pending')
 }
 
-ChatView.prototype.addParticipant = function (participant) {
+ChatView.prototype.addParticipant = function(participant) {
   this.participants.add(participant)
 }
 
-ChatView.prototype.removeParticipant = function (username) {
+ChatView.prototype.removeParticipant = function(username) {
   var p = this.participants.find(p => p.get('username') === username)
   if (p) {
     this.participants.remove(p)
   }
 }
 
-ChatView.prototype.removeParticipants = function () {
+ChatView.prototype.removeParticipants = function() {
   this.participants.remove(this.participants.models)
 }
 
-ChatView.prototype.open = function () {
+ChatView.prototype.open = function() {
   this.$container.css({
     right: '0'
   })
@@ -314,12 +314,12 @@ ChatView.prototype.open = function () {
   $(document).trigger(ChatView.events.openTray)
 }
 
-ChatView.prototype.addMessage = function (message, isInitial, wasMe) {
+ChatView.prototype.addMessage = function(message, isInitial, wasMe) {
   this.messages.add(message)
   Private.addMessage.call(this, message, isInitial, wasMe)
 }
 
-ChatView.prototype.scrollMessages = function (duration) {
+ChatView.prototype.scrollMessages = function(duration) {
   duration = duration || 0
 
   this.$messages.animate({
@@ -327,13 +327,13 @@ ChatView.prototype.scrollMessages = function (duration) {
   }, duration)
 }
 
-ChatView.prototype.clearMessages = function () {
+ChatView.prototype.clearMessages = function() {
   this.unreadMessages = 0
   this.$unread.hide()
   this.$messages.empty()
 }
 
-ChatView.prototype.close = function () {
+ChatView.prototype.close = function() {
   this.$container.css({
     right: '-300px'
   })
@@ -342,7 +342,7 @@ ChatView.prototype.close = function () {
   $(document).trigger(ChatView.events.closeTray)
 }
 
-ChatView.prototype.remove = function () {
+ChatView.prototype.remove = function() {
   this.$button.off()
   this.$container.remove()
 }

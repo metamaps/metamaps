@@ -12,7 +12,7 @@ const ImportDialog = {
   openLightbox: null,
   closeLightbox: null,
 
-  init: function (serverData, openLightbox, closeLightbox) {
+  init: function(serverData, openLightbox, closeLightbox) {
     const self = ImportDialog
     self.openLightbox = openLightbox
     self.closeLightbox = closeLightbox
@@ -27,10 +27,10 @@ const ImportDialog = {
       exampleImageUrl: serverData['import-example.png']
     }), $('.importDialogWrapper').get(0))
   },
-  show: function () {
+  show: function() {
     ImportDialog.openLightbox('import-dialog')
   },
-  hide: function () {
+  hide: function() {
     ImportDialog.closeLightbox('import-dialog')
   }
 }

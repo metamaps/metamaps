@@ -10,10 +10,10 @@ import Topic from '../Topic'
 const Mapping = Backbone.Model.extend({
   urlRoot: '/mappings',
   blacklist: ['created_at', 'updated_at'],
-  toJSON: function (options) {
+  toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)
   },
-  initialize: function () {
+  initialize: function() {
     if (this.isNew()) {
       this.set({
         'user_id': Active.Mapper.id,
@@ -21,14 +21,14 @@ const Mapping = Backbone.Model.extend({
       })
     }
   },
-  getMap: function () {
+  getMap: function() {
     return Map.get(this.get('map_id'))
   },
-  getTopic: function () {
+  getTopic: function() {
     if (this.get('mappable_type') !== 'Topic') return false
     return Topic.get(this.get('mappable_id'))
   },
-  getSynapse: function () {
+  getSynapse: function() {
     if (this.get('mappable_type') !== 'Synapse') return false
     return Synapse.get(this.get('mappable_id'))
   }

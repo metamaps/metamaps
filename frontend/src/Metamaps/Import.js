@@ -19,14 +19,14 @@ const Import = {
   synapseWhitelist: [
     'topic1', 'topic2', 'category', 'direction', 'desc', 'description', 'permission'
   ],
-  cidMappings: {}, // to be filled by import_id => cid mappings
+  cidMappings: {}, // to be filled by importId => cid mappings
 
-  handleTSV: function (text) {
+  handleTSV: function(text) {
     const results = Import.parseTabbedString(text)
     Import.handle(results)
   },
 
-  handleCSV: function (text, parserOpts = {}) {
+  handleCSV: function(text, parserOpts = {}) {
     const self = Import
 
     const topicsRegex = /("?Topics"?)([\s\S]*)/mi
@@ -37,14 +37,14 @@ const Import = {
     if (synapsesText) synapsesText = synapsesText[2].replace(topicsRegex, '')
 
     // merge default options and extra options passed in parserOpts argument
-    const csv_parser_options = Object.assign({
+    const csvParserOptions = Object.assign({
       columns: true, // get headers
       relax_column_count: true,
       skip_empty_lines: true
     }, parserOpts)
 
     const topicsPromise = $.Deferred()
-    parse(topicsText, csv_parser_options, (err, data) => {
+    parse(topicsText, csvParserOptions, (err, data) => {
       if (err) {
         console.warn(err)
         return topicsPromise.resolve([])
@@ -53,7 +53,7 @@ const Import = {
     })
 
     const synapsesPromise = $.Deferred()
-    parse(synapsesText, csv_parser_options, (err, data) => {
+    parse(synapsesText, csvParserOptions, (err, data) => {
       if (err) {
         console.warn(err)
         return synapsesPromise.resolve([])
@@ -62,11 +62,11 @@ const Import = {
     })
 
     $.when(topicsPromise, synapsesPromise).done((topics, synapses) => {
-      self.handle({ topics, synapses})
+      self.handle({ topics, synapses })
     })
   },
 
-  handleJSON: function (text) {
+  handleJSON: function(text) {
     const results = JSON.parse(text)
     Import.handle(results)
   },
@@ -80,13 +80,13 @@ const Import = {
       if (window.confirm('Are you sure you want to create ' + topics.length +
           ' new topics and ' + synapses.length + ' new synapses?')) {
         self.importTopics(topics)
-        //window.setTimeout(() => self.importSynapses(synapses), 5000)
+        // window.setTimeout(() => self.importSynapses(synapses), 5000)
         self.importSynapses(synapses)
       } // if
     } // if
   },
 
-  parseTabbedString: function (text) {
+  parseTabbedString: function(text) {
     var self = Import
 
     // determine line ending and split lines
@@ -113,9 +113,9 @@ const Import = {
     var topicHeaders = []
     var synapseHeaders = []
 
-    lines.forEach(function (line_raw, index) {
-      var line = line_raw.split('\t')
-      var noblanks = line.filter(function (elt) {
+    lines.forEach(function(lineRaw, index) {
+      const line = lineRaw.split('\t')
+      var noblanks = line.filter(function(elt) {
         return elt !== ''
       })
       switch (state) {
@@ -139,7 +139,7 @@ const Import = {
             self.abort('Not enough topic headers on line ' + index)
             state = STATES.ABORT
           }
-          topicHeaders = line.map(function (header, index) {
+          topicHeaders = line.map(function(header, index) {
             return self.normalizeKey(header)
           })
           state = STATES.TOPICS
@@ -150,7 +150,7 @@ const Import = {
             self.abort('Not enough synapse headers on line ' + index)
             state = STATES.ABORT
           }
-          synapseHeaders = line.map(function (header, index) {
+          synapseHeaders = line.map(function(header, index) {
             return self.normalizeKey(header)
           })
           state = STATES.SYNAPSES
@@ -165,7 +165,7 @@ const Import = {
             state = STATES.SYNAPSES_NEED_HEADERS
           } else {
             var topic = {}
-            line.forEach(function (field, index) {
+            line.forEach(function(field, index) {
               var header = topicHeaders[index]
               if (self.topicWhitelist.indexOf(header) === -1) return
               topic[header] = field
@@ -186,7 +186,7 @@ const Import = {
             state = STATES.SYNAPSES_NEED_HEADERS
           } else {
             var synapse = {}
-            line.forEach(function (field, index) {
+            line.forEach(function(field, index) {
               var header = synapseHeaders[index]
               if (self.synapseWhitelist.indexOf(header) === -1) return
               synapse[header] = field
@@ -212,7 +212,7 @@ const Import = {
     }
   },
 
-  importTopics: function (parsedTopics) {
+  importTopics: function(parsedTopics) {
     var self = Import
 
     parsedTopics.forEach(topic => {
@@ -227,7 +227,7 @@ const Import = {
           coords,
           name: topic.name,
           permission: topic.permission,
-          import_id: topic.id
+          importId: topic.id
         })
         return // "continue"
       }
@@ -239,10 +239,10 @@ const Import = {
     })
   },
 
-  importSynapses: function (parsedSynapses) {
+  importSynapses: function(parsedSynapses) {
     var self = Import
 
-    parsedSynapses.forEach(function (synapse) {
+    parsedSynapses.forEach(function(synapse) {
       // only createSynapseWithParameters once both topics are persisted
       // if there isn't a cidMapping, check by topic name instead
       var topic1 = DataModel.Topics.get(self.cidMappings[synapse.topic1])
@@ -277,31 +277,31 @@ const Import = {
     })
   },
 
-  createTopicWithParameters: function (name, metacode_name, permission, desc,
-    link, xloc, yloc, import_id, opts = {}) {
+  createTopicWithParameters: function(name, metacodeName, permission, desc,
+    link, xloc, yloc, importId, opts = {}) {
     var self = Import
     $(document).trigger(Map.events.editedByActiveMapper)
-    var metacode = DataModel.Metacodes.where({name: metacode_name})[0] || null
+    var metacode = DataModel.Metacodes.where({name: metacodeName})[0] || null
     if (metacode === null) {
       metacode = DataModel.Metacodes.where({ name: 'Wildcard' })[0]
-      console.warn("Couldn't find metacode " + metacode_name + ' so used Wildcard instead.')
+      console.warn("Couldn't find metacode " + metacodeName + ' so used Wildcard instead.')
     }
 
-    var topic_permission = permission || Active.Map.get('permission')
-    var defer_to_map_id = permission === topic_permission ? Active.Map.get('id') : null
+    const topicPermision = permission || Active.Map.get('permission')
+    var deferToMapId = permission === topicPermision ? Active.Map.get('id') : null
     var topic = new DataModel.Topic({
       name: name,
       metacode_id: metacode.id,
-      permission: topic_permission,
-      defer_to_map_id: defer_to_map_id,
+      permission: topicPermision,
+      defer_to_map_id: deferToMapId,
       desc: desc || '',
       link: link || '',
       calculated_permission: Active.Map.get('permission')
     })
     DataModel.Topics.add(topic)
 
-    if (import_id !== null && import_id !== undefined) {
-      self.cidMappings[import_id] = topic.cid
+    if (importId !== null && importId !== undefined) {
+      self.cidMappings[importId] = topic.cid
     }
 
     var mapping = new DataModel.Mapping({
@@ -320,7 +320,7 @@ const Import = {
     GlobalUI.hideDiv('#instructions')
   },
 
-  createSynapseWithParameters: function (desc, category, permission,
+  createSynapseWithParameters: function(desc, category, permission,
     topic1, topic2) {
     var node1 = topic1.get('node')
     var node2 = topic2.get('node')
@@ -348,7 +348,7 @@ const Import = {
     Synapse.renderSynapse(mapping, synapse, node1, node2, true)
   },
 
-  handleURL: function (url, opts = {}) {
+  handleURL: function(url, opts = {}) {
     let coords = opts.coords
     if (!coords || coords.x === undefined || coords.y === undefined) {
       coords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
@@ -356,7 +356,7 @@ const Import = {
 
     const name = opts.name || 'Link'
     const metacode = opts.metacode || 'Reference'
-    const import_id = opts.import_id || null // don't store a cidMapping
+    const importId = opts.importId || null // don't store a cidMapping
     const permission = opts.permission || null // use default
     const desc = opts.desc || url
 
@@ -368,7 +368,7 @@ const Import = {
       url,
       coords.x,
       coords.y,
-      import_id,
+      importId,
       {
         success: function(topic) {
           if (topic.get('name') !== 'Link') return
@@ -393,12 +393,12 @@ const Import = {
    * helper functions
    */
 
-  abort: function (message) {
+  abort: function(message) {
     console.error(message)
   },
 
   // TODO investigate replacing with es6 (?) trim()
-  simplify: function (string) {
+  simplify: function(string) {
     return string
       .replace(/(^\s*|\s*$)/g, '')
       .toLowerCase()

@@ -1,5 +1,5 @@
 const Selected = {
-  reset: function () {
+  reset: function() {
     var self = Selected
     self.Nodes = []
     self.Edges = []

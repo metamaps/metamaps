@@ -14,16 +14,16 @@ import Settings from './Settings'
 import Visualize from './Visualize'
 
 const Control = {
-  init: function () {},
-  selectNode: function (node, e) {
+  init: function() {},
+  selectNode: function(node, e) {
     var filtered = node.getData('alpha') === 0
 
-    if (filtered || Selected.Nodes.indexOf(node) != -1) return
+    if (filtered || Selected.Nodes.indexOf(node) !== -1) return
     node.selected = true
     node.setData('dim', 30, 'current')
     Selected.Nodes.push(node)
   },
-  deselectAllNodes: function () {
+  deselectAllNodes: function() {
     var l = Selected.Nodes.length
     for (var i = l - 1; i >= 0; i -= 1) {
       var node = Selected.Nodes[i]
@@ -31,7 +31,7 @@ const Control = {
     }
     Visualize.mGraph.plot()
   },
-  deselectNode: function (node) {
+  deselectNode: function(node) {
     delete node.selected
     node.setData('dim', 25, 'current')
 
@@ -39,7 +39,7 @@ const Control = {
     Selected.Nodes.splice(
       Selected.Nodes.indexOf(node), 1)
   },
-  deleteSelected: function () {
+  deleteSelected: function() {
     if (!Active.Map) return
 
     var n = Selected.Nodes.length
@@ -67,7 +67,7 @@ const Control = {
       GlobalUI.showDiv('#instructions')
     }
   },
-  deleteSelectedNodes: function () { // refers to deleting topics permanently
+  deleteSelectedNodes: function() { // refers to deleting topics permanently
     if (!Active.Map) return
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
@@ -83,7 +83,7 @@ const Control = {
       Control.deleteNode(node.id)
     }
   },
-  deleteNode: function (nodeid) { // refers to deleting topics permanently
+  deleteNode: function(nodeid) { // refers to deleting topics permanently
     if (!Active.Map) return
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
@@ -110,7 +110,7 @@ const Control = {
       GlobalUI.notifyUser('Only topics you created can be deleted')
     }
   },
-  removeSelectedNodes: function () { // refers to removing topics permanently from a map
+  removeSelectedNodes: function() { // refers to removing topics permanently from a map
     if (Active.Topic) {
       // hideNode will handle synapses as well
       var nodeids = _.map(Selected.Nodes, function(node) {
@@ -126,22 +126,20 @@ const Control = {
     }
     if (!Active.Map) return
 
-    var l = Selected.Nodes.length,
-      i,
-      node,
-      authorized = Active.Map.authorizeToEdit(Active.Mapper)
+    const l = Selected.Nodes.length
+    const authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
       GlobalUI.notifyUser('Cannot edit Public map.')
       return
     }
 
-    for (i = l - 1; i >= 0; i -= 1) {
-      node = Selected.Nodes[i]
+    for (let i = l - 1; i >= 0; i -= 1) {
+      const node = Selected.Nodes[i]
       Control.removeNode(node.id)
     }
   },
-  removeNode: function (nodeid) { // refers to removing topics permanently from a map
+  removeNode: function(nodeid) { // refers to removing topics permanently from a map
     if (!Active.Map) return
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
@@ -162,24 +160,21 @@ const Control = {
     }])
     Control.hideNode(nodeid)
   },
-  hideSelectedNodes: function () {
-    var l = Selected.Nodes.length,
-      i,
-      node
-
-    for (i = l - 1; i >= 0; i -= 1) {
-      node = Selected.Nodes[i]
+  hideSelectedNodes: function() {
+    const l = Selected.Nodes.length
+    for (let i = l - 1; i >= 0; i -= 1) {
+      const node = Selected.Nodes[i]
       Control.hideNode(node.id)
     }
   },
-  hideNode: function (nodeid) {
+  hideNode: function(nodeid) {
     var node = Visualize.mGraph.graph.getNode(nodeid)
     var graph = Visualize.mGraph
 
     Control.deselectNode(node)
 
     node.setData('alpha', 0, 'end')
-    node.eachAdjacency(function (adj) {
+    node.eachAdjacency(function(adj) {
       adj.setData('alpha', 0, 'end')
     })
     Visualize.mGraph.fx.animate({
@@ -188,9 +183,9 @@ const Control = {
       ],
       duration: 500
     })
-    setTimeout(function () {
+    setTimeout(function() {
       if (nodeid === Visualize.mGraph.root) { // && Visualize.type === "RGraph"
-        var newroot = _.find(graph.graph.nodes, function (n) { return n.id !== nodeid; })
+        var newroot = _.find(graph.graph.nodes, function(n) { return n.id !== nodeid })
         graph.root = newroot ? newroot.id : null
       }
       Visualize.mGraph.graph.removeNode(nodeid)
@@ -198,10 +193,10 @@ const Control = {
     Filter.checkMetacodes()
     Filter.checkMappers()
   },
-  selectEdge: function (edge) {
-    var filtered = edge.getData('alpha') === 0; // don't select if the edge is filtered
+  selectEdge: function(edge) {
+    var filtered = edge.getData('alpha') === 0 // don't select if the edge is filtered
 
-    if (filtered || Selected.Edges.indexOf(edge) != -1) return
+    if (filtered || Selected.Edges.indexOf(edge) !== -1) return
 
     var width = Mouse.edgeHoveringOver === edge ? 4 : 2
     edge.setDataset('current', {
@@ -213,7 +208,7 @@ const Control = {
 
     Selected.Edges.push(edge)
   },
-  deselectAllEdges: function () {
+  deselectAllEdges: function() {
     var l = Selected.Edges.length
     for (var i = l - 1; i >= 0; i -= 1) {
       var edge = Selected.Edges[i]
@@ -221,7 +216,7 @@ const Control = {
     }
     Visualize.mGraph.plot()
   },
-  deselectEdge: function (edge) {
+  deselectEdge: function(edge) {
     edge.setData('showDesc', false, 'current')
 
     edge.setDataset('current', {
@@ -242,10 +237,7 @@ const Control = {
     Selected.Edges.splice(
       Selected.Edges.indexOf(edge), 1)
   },
-  deleteSelectedEdges: function () { // refers to deleting topics permanently
-    var edge,
-      l = Selected.Edges.length
-
+  deleteSelectedEdges: function() { // refers to deleting topics permanently
     if (!Active.Map) return
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
@@ -255,12 +247,13 @@ const Control = {
       return
     }
 
-    for (var i = l - 1; i >= 0; i -= 1) {
-      edge = Selected.Edges[i]
+    const l = Selected.Edges.length
+    for (let i = l - 1; i >= 0; i -= 1) {
+      const edge = Selected.Edges[i]
       Control.deleteEdge(edge)
     }
   },
-  deleteEdge: function (edge) {
+  deleteEdge: function(edge) {
     if (!Active.Map) return
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
@@ -297,13 +290,11 @@ const Control = {
       GlobalUI.notifyUser('Only synapses you created can be deleted')
     }
   },
-  removeSelectedEdges: function () {
+  removeSelectedEdges: function() {
     // Topic view is handled by removeSelectedNodes
     if (!Active.Map) return
 
-    var l = Selected.Edges.length,
-      i,
-      edge
+    const l = Selected.Edges.length
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
@@ -312,13 +303,13 @@ const Control = {
       return
     }
 
-    for (i = l - 1; i >= 0; i -= 1) {
-      edge = Selected.Edges[i]
+    for (let i = l - 1; i >= 0; i -= 1) {
+      const edge = Selected.Edges[i]
       Control.removeEdge(edge)
     }
     Selected.Edges = [ ]
   },
-  removeEdge: function (edge) {
+  removeEdge: function(edge) {
     if (!Active.Map) return
 
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
@@ -350,17 +341,15 @@ const Control = {
       mappableid: mappableid
     }])
   },
-  hideSelectedEdges: function () {
-    var edge,
-      l = Selected.Edges.length,
-      i
-    for (i = l - 1; i >= 0; i -= 1) {
-      edge = Selected.Edges[i]
+  hideSelectedEdges: function() {
+    const l = Selected.Edges.length
+    for (let i = l - 1; i >= 0; i -= 1) {
+      const edge = Selected.Edges[i]
       Control.hideEdge(edge)
     }
     Selected.Edges = [ ]
   },
-  hideEdge: function (edge) {
+  hideEdge: function(edge) {
     var from = edge.nodeFrom.id
     var to = edge.nodeTo.id
     edge.setData('alpha', 0, 'end')
@@ -369,24 +358,24 @@ const Control = {
       modes: ['edge-property:alpha'],
       duration: 500
     })
-    setTimeout(function () {
+    setTimeout(function() {
       Visualize.mGraph.graph.removeAdjacence(from, to)
     }, 500)
     Filter.checkSynapses()
     Filter.checkMappers()
   },
-  updateSelectedPermissions: function (permission) {
+  updateSelectedPermissions: function(permission) {
     var edge, synapse, node, topic
 
     GlobalUI.notifyUser('Working...')
 
     // variables to keep track of how many nodes and synapses you had the ability to change the permission of
-    var nCount = 0,
-      sCount = 0
+    var nCount = 0
+    var sCount = 0
 
     // change the permission of the selected synapses, if logged in user is the original creator
-    var l = Selected.Edges.length
-    for (var i = l - 1; i >= 0; i -= 1) {
+    const edgesLength = Selected.Edges.length
+    for (let i = edgesLength - 1; i >= 0; i -= 1) {
       edge = Selected.Edges[i]
       synapse = edge.getData('synapses')[0]
 
@@ -399,8 +388,8 @@ const Control = {
     }
 
     // change the permission of the selected topics, if logged in user is the original creator
-    var l = Selected.Nodes.length
-    for (var i = l - 1; i >= 0; i -= 1) {
+    const nodesLength = Selected.Nodes.length
+    for (let i = nodesLength - 1; i >= 0; i -= 1) {
       node = Selected.Nodes[i]
       topic = node.getData('topic')
 
@@ -418,12 +407,12 @@ const Control = {
     var message = nString + sString + ' you created updated to ' + permission
     GlobalUI.notifyUser(message)
   },
-  updateSelectedMetacodes: function (metacode_id) {
+  updateSelectedMetacodes: function(metacodeId) {
     var node, topic
 
     GlobalUI.notifyUser('Working...')
 
-    var metacode = DataModel.Metacodes.get(metacode_id)
+    var metacode = DataModel.Metacodes.get(metacodeId)
 
     // variables to keep track of how many nodes and synapses you had the ability to change the permission of
     var nCount = 0
@@ -436,7 +425,7 @@ const Control = {
 
       if (topic.authorizeToEdit(Active.Mapper)) {
         topic.save({
-          'metacode_id': metacode_id
+          'metacode_id': metacodeId
         })
         nCount++
       }

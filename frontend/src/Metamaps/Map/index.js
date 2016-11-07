@@ -1,6 +1,7 @@
 /* global $ */
 
 import outdent from 'outdent'
+import { find as _find } from 'lodash'
 
 import Active from '../Active'
 import AutoLayout from '../AutoLayout'
@@ -25,19 +26,19 @@ const Map = {
   events: {
     editedByActiveMapper: 'Metamaps:Map:events:editedByActiveMapper'
   },
-  init: function (serverData) {
+  init: function(serverData) {
     var self = Map
-    
-    $('#wrapper').mousedown(function (e){
-      if(e.button === 1)return false;
-    });
 
-    $('.starMap').click(function () {
+    $('#wrapper').mousedown(function(e) {
+      if (e.button === 1) return false
+    })
+
+    $('.starMap').click(function() {
       if ($(this).is('.starred')) self.unstar()
       else self.star()
     })
 
-    $('.sidebarFork').click(function () {
+    $('.sidebarFork').click(function() {
       self.fork()
     })
 
@@ -51,26 +52,26 @@ const Map = {
 
     $(document).on(Map.events.editedByActiveMapper, self.editedByActiveMapper)
   },
-  requestAccess: function () {
+  requestAccess: function() {
     $('.viewOnly').removeClass('sendRequest').addClass('sentRequest')
     const mapId = Active.Map.id
     $.post({
       url: `/maps/${mapId}/access_request`
     })
-    GlobalUI.notifyUser('Map creator will be notified of your request') 
+    GlobalUI.notifyUser('Map creator will be notified of your request')
   },
-  setAccessRequest: function (requests, activeMapper) {
+  setAccessRequest: function(requests, activeMapper) {
     let className = 'isViewOnly '
     if (activeMapper) {
-      const request = _.find(requests, r => r.user_id === activeMapper.id)
-      if (!request) className += 'sendRequest' 
-      else if (request && !request.answered) className += 'sentRequest' 
+      const request = _find(requests, r => r.user_id === activeMapper.id)
+      if (!request) className += 'sendRequest'
+      else if (request && !request.answered) className += 'sentRequest'
       else if (request && request.answered && !request.approved) className += 'requestDenied'
     }
     $('.viewOnly').removeClass('sendRequest sentRequest requestDenied').addClass(className)
   },
-  launch: function (id) {
-    var start = function (data) {
+  launch: function(id) {
+    var start = function(data) {
       Active.Map = new DataModelMap(data.map)
       DataModel.Mappers = new DataModel.MapperCollection(data.mappers)
       DataModel.Collaborators = new DataModel.MapperCollection(data.collaborators)
@@ -89,8 +90,7 @@ const Map = {
       // add class to .wrapper for specifying whether you can edit the map
       if (map.authorizeToEdit(mapper)) {
         $('.wrapper').addClass('canEditMap')
-      }
-      else {
+      } else {
         Map.setAccessRequest(data.requests, mapper)
       }
 
@@ -100,7 +100,7 @@ const Map = {
         $('.wrapper').addClass('commonsMap')
       }
 
-      Map.updateStar()     
+      Map.updateStar()
 
       // set filter mapper H3 text
       $('#filter_by_mapper h3').html('MAPPERS')
@@ -125,7 +125,7 @@ const Map = {
 
       Realtime.startActiveMap()
       Loading.hide()
-      
+
       // for mobile
       $('#header_content').html(map.get('name'))
     }
@@ -135,7 +135,7 @@ const Map = {
       success: start
     })
   },
-  end: function () {
+  end: function() {
     if (Active.Map) {
       $('.wrapper').removeClass('canEditMap commonsMap')
       AutoLayout.resetSpiral()
@@ -151,10 +151,10 @@ const Map = {
       $('.viewOnly').removeClass('isViewOnly')
     }
   },
-  updateStar: function () {
+  updateStar: function() {
     if (!Active.Mapper || !DataModel.Stars) return
     // update the star/unstar icon
-    if (DataModel.Stars.find(function (s) { return s.user_id === Active.Mapper.id })) {
+    if (DataModel.Stars.find(function(s) { return s.user_id === Active.Mapper.id })) {
       $('.starMap').addClass('starred')
       $('.starMap .tooltipsAbove').html('Unstar')
     } else {
@@ -162,7 +162,7 @@ const Map = {
       $('.starMap .tooltipsAbove').html('Star')
     }
   },
-  star: function () {
+  star: function() {
     var self = Map
 
     if (!Active.Map) return
@@ -172,72 +172,72 @@ const Map = {
     GlobalUI.notifyUser('Map is now starred')
     self.updateStar()
   },
-  unstar: function () {
+  unstar: function() {
     var self = Map
 
     if (!Active.Map) return
     $.post('/maps/' + Active.Map.id + '/unstar')
-    DataModel.Stars = DataModel.Stars.filter(function (s) { return s.user_id != Active.Mapper.id })
+    DataModel.Stars = DataModel.Stars.filter(function(s) { return s.user_id !== Active.Mapper.id })
     DataModel.Maps.Starred.remove(Active.Map)
-    self.updateStar() 
+    self.updateStar()
   },
-  fork: function () {
+  fork: function() {
     GlobalUI.openLightbox('forkmap')
 
-    var nodes_data = '',
-      synapses_data = ''
-    var nodes_array = []
-    var synapses_array = []
+    let nodesData = ''
+    let synapsesData = ''
+    let nodesArray = []
+    let synapsesArray = []
     // collect the unfiltered topics
-    Visualize.mGraph.graph.eachNode(function (n) {
+    Visualize.mGraph.graph.eachNode(function(n) {
       // if the opacity is less than 1 then it's filtered
       if (n.getData('alpha') === 1) {
         var id = n.getData('topic').id
-        nodes_array.push(id)
-        var x, y
+        nodesArray.push(id)
+        let x, y
         if (n.pos.x && n.pos.y) {
           x = n.pos.x
           y = n.pos.y
         } else {
-          var x = Math.cos(n.pos.theta) * n.pos.rho
-          var y = Math.sin(n.pos.theta) * n.pos.rho
+          x = Math.cos(n.pos.theta) * n.pos.rho
+          y = Math.sin(n.pos.theta) * n.pos.rho
         }
-        nodes_data += id + '/' + x + '/' + y + ','
+        nodesData += id + '/' + x + '/' + y + ','
       }
     })
     // collect the unfiltered synapses
-    DataModel.Synapses.each(function (synapse) {
+    DataModel.Synapses.each(function(synapse) {
       var desc = synapse.get('desc')
 
       var descNotFiltered = Filter.visible.synapses.indexOf(desc) > -1
       // make sure that both topics are being added, otherwise, it
       // doesn't make sense to add the synapse
-      var topicsNotFiltered = nodes_array.indexOf(synapse.get('topic1_id')) > -1
-      topicsNotFiltered = topicsNotFiltered && nodes_array.indexOf(synapse.get('topic2_id')) > -1
+      var topicsNotFiltered = nodesArray.indexOf(synapse.get('topic1_id')) > -1
+      topicsNotFiltered = topicsNotFiltered && nodesArray.indexOf(synapse.get('topic2_id')) > -1
       if (descNotFiltered && topicsNotFiltered) {
-        synapses_array.push(synapse.id)
+        synapsesArray.push(synapse.id)
       }
     })
 
-    synapses_data = synapses_array.join()
-    nodes_data = nodes_data.slice(0, -1)
+    synapsesData = synapsesArray.join()
+    nodesData = nodesData.slice(0, -1)
 
-    GlobalUI.CreateMap.topicsToMap = nodes_data
-    GlobalUI.CreateMap.synapsesToMap = synapses_data
+    GlobalUI.CreateMap.topicsToMap = nodesData
+    GlobalUI.CreateMap.synapsesToMap = synapsesData
   },
-  leavePrivateMap: function () {
+  leavePrivateMap: function() {
     var map = Active.Map
     DataModel.Maps.Active.remove(map)
     DataModel.Maps.Featured.remove(map)
     Router.home()
     GlobalUI.notifyUser('Sorry! That map has been changed to Private.')
   },
-  cantEditNow: function () {
-    Realtime.turnOff(true); // true is for 'silence'
+  cantEditNow: function() {
+    Realtime.turnOff(true) // true is for 'silence'
     GlobalUI.notifyUser('Map was changed to Public. Editing is disabled.')
     Active.Map.trigger('changeByOther')
   },
-  canEditNow: function () {
+  canEditNow: function() {
     var confirmString = "You've been granted permission to edit this map. "
     confirmString += 'Do you want to reload and enable realtime collaboration?'
     var c = window.confirm(confirmString)
@@ -245,12 +245,12 @@ const Map = {
       Router.maps(Active.Map.id)
     }
   },
-  editedByActiveMapper: function () {
+  editedByActiveMapper: function() {
     if (Active.Mapper) {
       DataModel.Mappers.add(Active.Mapper)
     }
   },
-  exportImage: function () {
+  exportImage: function() {
     var canvas = {}
 
     canvas.canvas = document.createElement('canvas')
@@ -263,7 +263,7 @@ const Map = {
     canvas.translateOffsetX = 0
     canvas.denySelected = true
 
-    canvas.getSize = function () {
+    canvas.getSize = function() {
       if (this.size) return this.size
       var canvas = this.canvas
       this.size = {
@@ -272,24 +272,24 @@ const Map = {
       }
       return this.size
     }
-    canvas.scale = function (x, y) {
-      var px = this.scaleOffsetX * x,
-        py = this.scaleOffsetY * y
-      var dx = this.translateOffsetX * (x - 1) / px,
-        dy = this.translateOffsetY * (y - 1) / py
+    canvas.scale = function(x, y) {
+      const px = this.scaleOffsetX * x
+      const py = this.scaleOffsetY * y
+      const dx = this.translateOffsetX * (x - 1) / px
+      const dy = this.translateOffsetY * (y - 1) / py
       this.scaleOffsetX = px
       this.scaleOffsetY = py
       this.getCtx().scale(x, y)
       this.translate(dx, dy)
     }
-    canvas.translate = function (x, y) {
-      var sx = this.scaleOffsetX,
-        sy = this.scaleOffsetY
+    canvas.translate = function(x, y) {
+      const sx = this.scaleOffsetX
+      const sy = this.scaleOffsetY
       this.translateOffsetX += x * sx
       this.translateOffsetY += y * sy
       this.getCtx().translate(x, y)
     }
-    canvas.getCtx = function () {
+    canvas.getCtx = function() {
       return this.canvas.getContext('2d')
     }
     // center it
@@ -304,20 +304,20 @@ const Map = {
     // pass true to avoid basing it on a selection
     JIT.zoomExtents(null, canvas, true)
 
-    var c = canvas.canvas,
-      ctx = canvas.getCtx(),
-      scale = canvas.scaleOffsetX
+    const c = canvas.canvas
+    const ctx = canvas.getCtx()
+    const scale = canvas.scaleOffsetX
 
     // draw a grey background
     ctx.fillStyle = '#d8d9da'
-    var xPoint = (-(c.width / scale) / 2) - (canvas.translateOffsetX / scale),
-      yPoint = (-(c.height / scale) / 2) - (canvas.translateOffsetY / scale)
+    const xPoint = (-(c.width / scale) / 2) - (canvas.translateOffsetX / scale)
+    const yPoint = (-(c.height / scale) / 2) - (canvas.translateOffsetY / scale)
     ctx.fillRect(xPoint, yPoint, c.width / scale, c.height / scale)
 
     // draw the graph
-    mGraph.graph.eachNode(function (node) {
+    mGraph.graph.eachNode(function(node) {
       var nodeAlpha = node.getData('alpha')
-      node.eachAdjacency(function (adj) {
+      node.eachAdjacency(function(adj) {
         var nodeTo = adj.nodeTo
         if (!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
           mGraph.fx.plotLine(adj, canvas)
@@ -340,7 +340,7 @@ const Map = {
 
     var today = new Date()
     var dd = today.getDate()
-    var mm = today.getMonth() + 1; // January is 0!
+    var mm = today.getMonth() + 1 // January is 0!
     var yyyy = today.getFullYear()
     if (dd < 10) {
       dd = '0' + dd
@@ -359,7 +359,7 @@ const Map = {
     GlobalUI.notifyUser(downloadMessage)
 
     canvas.canvas.toBlob(imageBlob => {
-      const formData = new window.FormData();
+      const formData = new window.FormData()
       formData.append('map[screenshot]', imageBlob, filename)
       $.ajax({
         type: 'PATCH',
@@ -368,10 +368,10 @@ const Map = {
         data: formData,
         processData: false,
         contentType: false,
-        success: function (data) {
+        success: function(data) {
           console.log('successfully uploaded map screenshot')
         },
-        error: function () {
+        error: function() {
           console.log('failed to save map screenshot')
         }
       })

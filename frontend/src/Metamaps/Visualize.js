@@ -17,54 +17,53 @@ const Visualize = {
   type: 'ForceDirected', // the type of graph we're building, could be "RGraph", "ForceDirected", or "ForceDirected3D"
   loadLater: false, // indicates whether there is JSON that should be loaded right in the offset, or whether to wait till the first topic is created
   touchDragNode: null,
-  init: function (serverData) {
+  init: function(serverData) {
     var self = Visualize
 
     if (serverData.VisualizeType) self.type = serverData.VisualizeType
 
     // disable awkward dragging of the canvas element that would sometimes happen
-    $('#infovis-canvas').on('dragstart', function (event) {
+    $('#infovis-canvas').on('dragstart', function(event) {
       event.preventDefault()
     })
 
     // prevent touch events on the canvas from default behaviour
-    $('#infovis-canvas').bind('touchstart', function (event) {
+    $('#infovis-canvas').bind('touchstart', function(event) {
       event.preventDefault()
       self.mGraph.events.touched = true
     })
 
     // prevent touch events on the canvas from default behaviour
-    $('#infovis-canvas').bind('touchmove', function (event) {
+    $('#infovis-canvas').bind('touchmove', function(event) {
       // JIT.touchPanZoomHandler(event)
     })
 
     // prevent touch events on the canvas from default behaviour
-    $('#infovis-canvas').bind('touchend touchcancel', function (event) {
-      lastDist = 0
+    $('#infovis-canvas').bind('touchend touchcancel', function(event) {
       if (!self.mGraph.events.touchMoved && !Visualize.touchDragNode) TopicCard.hideCurrentCard()
       self.mGraph.events.touched = self.mGraph.events.touchMoved = false
       Visualize.touchDragNode = false
     })
   },
-  computePositions: function () {
-    var self = Visualize,
-      mapping
+  computePositions: function() {
+    const self = Visualize
 
-    if (self.type == 'RGraph') {
-      var i, l, startPos, endPos, topic, synapse
+    if (self.type === 'RGraph') {
+      let i
+      let l
 
-      self.mGraph.graph.eachNode(function (n) {
-        topic = DataModel.Topics.get(n.id)
+      self.mGraph.graph.eachNode(function(n) {
+        const topic = DataModel.Topics.get(n.id)
         topic.set({ node: n }, { silent: true })
         topic.updateNode()
 
-        n.eachAdjacency(function (edge) {
+        n.eachAdjacency(function(edge) {
           if (!edge.getData('init')) {
             edge.setData('init', true)
 
             l = edge.getData('synapseIDs').length
             for (i = 0; i < l; i++) {
-              synapse = DataModel.Synapses.get(edge.getData('synapseIDs')[i])
+              const synapse = DataModel.Synapses.get(edge.getData('synapseIDs')[i])
               synapse.set({ edge: edge }, { silent: true })
               synapse.updateEdge()
             }
@@ -75,34 +74,32 @@ const Visualize = {
         pos.setc(-200, -200)
       })
       self.mGraph.compute('end')
-    } else if (self.type == 'ForceDirected') {
-      var i, l, startPos, endPos, topic, synapse
-
-      self.mGraph.graph.eachNode(function (n) {
-        topic = DataModel.Topics.get(n.id)
+    } else if (self.type === 'ForceDirected') {
+      self.mGraph.graph.eachNode(function(n) {
+        const topic = DataModel.Topics.get(n.id)
         topic.set({ node: n }, { silent: true })
         topic.updateNode()
-        mapping = topic.getMapping()
+        const mapping = topic.getMapping()
 
-        n.eachAdjacency(function (edge) {
+        n.eachAdjacency(function(edge) {
           if (!edge.getData('init')) {
             edge.setData('init', true)
 
-            l = edge.getData('synapseIDs').length
-            for (i = 0; i < l; i++) {
-              synapse = DataModel.Synapses.get(edge.getData('synapseIDs')[i])
+            const l = edge.getData('synapseIDs').length
+            for (let i = 0; i < l; i++) {
+              const synapse = DataModel.Synapses.get(edge.getData('synapseIDs')[i])
               synapse.set({ edge: edge }, { silent: true })
               synapse.updateEdge()
             }
           }
         })
 
-        startPos = new $jit.Complex(0, 0)
-        endPos = new $jit.Complex(mapping.get('xloc'), mapping.get('yloc'))
+        const startPos = new $jit.Complex(0, 0)
+        const endPos = new $jit.Complex(mapping.get('xloc'), mapping.get('yloc'))
         n.setPos(startPos, 'start')
         n.setPos(endPos, 'end')
       })
-    } else if (self.type == 'ForceDirected3D') {
+    } else if (self.type === 'ForceDirected3D') {
       self.mGraph.compute()
     }
   },
@@ -110,14 +107,14 @@ const Visualize = {
    * render does the heavy lifting of creating the engine that renders the graph with the properties we desire
    *
    */
-  render: function () {
-    var self = Visualize, RGraphSettings, FDSettings
+  render: function() {
+    const self = Visualize
 
-    if (self.type == 'RGraph') {
+    if (self.type === 'RGraph') {
       // clear the previous canvas from #infovis
       $('#infovis').empty()
-      
-      RGraphSettings = $.extend(true, {}, JIT.ForceDirected.graphSettings)
+
+      const RGraphSettings = $.extend(true, {}, JIT.ForceDirected.graphSettings)
 
       $jit.RGraph.Plot.NodeTypes.implement(JIT.ForceDirected.nodeSettings)
       $jit.RGraph.Plot.EdgeTypes.implement(JIT.ForceDirected.edgeSettings)
@@ -128,11 +125,11 @@ const Visualize = {
       RGraphSettings.levelDistance = JIT.RGraph.levelDistance
 
       self.mGraph = new $jit.RGraph(RGraphSettings)
-    } else if (self.type == 'ForceDirected') {
+    } else if (self.type === 'ForceDirected') {
       // clear the previous canvas from #infovis
       $('#infovis').empty()
-      
-      FDSettings = $.extend(true, {}, JIT.ForceDirected.graphSettings)
+
+      const FDSettings = $.extend(true, {}, JIT.ForceDirected.graphSettings)
 
       $jit.ForceDirected.Plot.NodeTypes.implement(JIT.ForceDirected.nodeSettings)
       $jit.ForceDirected.Plot.EdgeTypes.implement(JIT.ForceDirected.edgeSettings)
@@ -141,10 +138,10 @@ const Visualize = {
       FDSettings.height = $('body').height()
 
       self.mGraph = new $jit.ForceDirected(FDSettings)
-    } else if (self.type == 'ForceDirected3D' && !self.mGraph) {
+    } else if (self.type === 'ForceDirected3D' && !self.mGraph) {
       // clear the previous canvas from #infovis
       $('#infovis').empty()
-      
+
       // init ForceDirected3D
       self.mGraph = new $jit.ForceDirected3D(JIT.ForceDirected3D.graphSettings)
       self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position
@@ -152,17 +149,16 @@ const Visualize = {
       self.mGraph.graph.empty()
     }
 
+    if (self.type === 'ForceDirected' && Active.Mapper) $.post('/maps/' + Active.Map.id + '/events/user_presence')
 
-    if (self.type == 'ForceDirected' && Active.Mapper) $.post('/maps/' + Active.Map.id + '/events/user_presence')
-
-    function runAnimation () {
+    function runAnimation() {
       Loading.hide()
       // load JSON data, if it's not empty
       if (!self.loadLater) {
         // load JSON data.
         var rootIndex = 0
         if (Active.Topic) {
-          var node = _.find(JIT.vizData, function (node) {
+          var node = _.find(JIT.vizData, function(node) {
             return node.id === Active.Topic.id
           })
           rootIndex = _.indexOf(JIT.vizData, node)
@@ -171,11 +167,11 @@ const Visualize = {
         // compute positions and plot.
         self.computePositions()
         self.mGraph.busy = true
-        if (self.type == 'RGraph') {
+        if (self.type === 'RGraph') {
           self.mGraph.fx.animate(JIT.RGraph.animate)
-        } else if (self.type == 'ForceDirected') {
+        } else if (self.type === 'ForceDirected') {
           self.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
-        } else if (self.type == 'ForceDirected3D') {
+        } else if (self.type === 'ForceDirected3D') {
           self.mGraph.animate(JIT.ForceDirected.animateFDLayout)
         }
       }
@@ -183,35 +179,37 @@ const Visualize = {
     // hold until all the needed metacode images are loaded
     // hold for a maximum of 80 passes, or 4 seconds of waiting time
     var tries = 0
-    function hold () {
-      var unique = _.uniq(DataModel.Topics.models, function (metacode) { return metacode.get('metacode_id'); }),
-        requiredMetacodes = _.map(unique, function (metacode) { return metacode.get('metacode_id'); }),
-        loadedCount = 0
+    function hold() {
+      const unique = _.uniq(DataModel.Topics.models, function(metacode) { return metacode.get('metacode_id') })
+      const requiredMetacodes = _.map(unique, function(metacode) { return metacode.get('metacode_id') })
+      let loadedCount = 0
 
-      _.each(requiredMetacodes, function (metacode_id) {
-        var metacode = DataModel.Metacodes.get(metacode_id),
-          img = metacode ? metacode.get('image') : false
+      _.each(requiredMetacodes, function(metacodeId) {
+        const metacode = DataModel.Metacodes.get(metacodeId)
+        const img = metacode ? metacode.get('image') : false
 
         if (img && (img.complete || (typeof img.naturalWidth !== 'undefined' && img.naturalWidth !== 0))) {
           loadedCount += 1
         }
       })
 
-      if (loadedCount === requiredMetacodes.length || tries > 80) runAnimation()
-      else setTimeout(function () { tries++; hold() }, 50)
+      if (loadedCount === requiredMetacodes.length || tries > 80) {
+        runAnimation()
+      } else {
+        setTimeout(function() { tries++; hold() }, 50)
+      }
     }
     hold()
 
     // update the url now that the map is ready
     clearTimeout(Router.timeoutId)
-    Router.timeoutId = setTimeout(function () {
+    Router.timeoutId = setTimeout(function() {
       var m = Active.Map
       var t = Active.Topic
 
       if (m && window.location.pathname !== '/maps/' + m.id) {
         Router.navigate('/maps/' + m.id)
-      }
-      else if (t && window.location.pathname !== '/topics/' + t.id) {
+      } else if (t && window.location.pathname !== '/topics/' + t.id) {
         Router.navigate('/topics/' + t.id)
       }
     }, 800)
@@ -221,7 +219,7 @@ const Visualize = {
     Visualize.mGraph.plot()
     JIT.centerMap(Visualize.mGraph.canvas)
     $('#infovis').empty()
-  },
+  }
 }
 
 export default Visualize

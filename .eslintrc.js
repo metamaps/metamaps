@@ -20,6 +20,7 @@ module.exports = {
   "rules": {
     "react/jsx-uses-react": [2],
     "react/jsx-uses-vars": [2],
+    "space-before-function-paren": [2, "never"],
     "yoda": [2, "never", { "exceptRange": true }]
   }
 }

@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom' // TODO ensure this isn't a double import
 
 import Active from '../Active'
+import DataModel from '../DataModel'
 import GlobalUI from '../GlobalUI'
 import Realtime from '../Realtime'
 import Loading from '../Loading'
@@ -12,7 +13,7 @@ import Maps from '../../components/Maps'
 const ExploreMaps = {
   pending: false,
   mapper: null,
-  setCollection: function (collection) {
+  setCollection: function(collection) {
     var self = ExploreMaps
 
     if (self.collection) {
@@ -25,7 +26,7 @@ const ExploreMaps = {
     self.collection.on('successOnFetch', self.handleSuccess)
     self.collection.on('errorOnFetch', self.handleError)
   },
-  render: function (cb) {
+  render: function(cb) {
     var self = ExploreMaps
 
     if (!self.collection) return
@@ -35,19 +36,19 @@ const ExploreMaps = {
       section: self.collection.id,
       maps: self.collection,
       juntoState: Realtime.juntoState,
-      moreToLoad: self.collection.page != 'loadedAll',
+      moreToLoad: self.collection.page !== 'loadedAll',
       user: self.collection.id === 'mapper' ? self.mapper : null,
       loadMore: self.loadMore,
       pending: self.pending,
-      onStar: function (map) {
+      onStar: function(map) {
         $.post('/maps/' + map.id + '/star')
         map.set('star_count', map.get('star_count') + 1)
-        if (Metamaps.Stars) Metamaps.Stars.push({ user_id: Active.Mapper.id, map_id: map.id })
-        Metamaps.Maps.Starred.add(map)
+        if (DataModel.Stars) DataModel.Stars.push({ user_id: Active.Mapper.id, map_id: map.id })
+        DataModel.Maps.Starred.add(map)
         GlobalUI.notifyUser('Map is now starred')
         self.render()
       },
-      onRequest: function (map) {
+      onRequest: function(map) {
         $.post({
           url: `/maps/${map.id}/access_request`
         })
@@ -62,47 +63,47 @@ const ExploreMaps = {
     if (cb) cb()
     Loading.hide()
   },
-  loadMore: function () {
+  loadMore: function() {
     var self = ExploreMaps
-    if (self.collection.page != "loadedAll") {
+    if (self.collection.page !== 'loadedAll') {
       self.collection.getMaps()
       self.pending = true
     }
     self.render()
   },
-  handleSuccess: function (cb) {
+  handleSuccess: function(cb) {
     var self = ExploreMaps
     self.pending = false
     if (self.collection && self.collection.id === 'mapper') {
       self.fetchUserThenRender(cb)
     } else {
       self.render(cb)
-      Metamaps.Loading.hide()
+      Loading.hide()
     }
   },
-  handleError: function () {
+  handleError: function() {
     console.log('error loading maps!') // TODO
-    Metamaps.Loading.hide()
+    Loading.hide()
   },
-  fetchUserThenRender: function (cb) {
+  fetchUserThenRender: function(cb) {
     var self = ExploreMaps
 
     if (self.mapper && self.mapper.id === self.collection.mapperId) {
       self.render(cb)
-      return Metamaps.Loading.hide()
+      return Loading.hide()
     }
 
     // first load the mapper object and then call the render function
     $.ajax({
       url: '/users/' + self.collection.mapperId + '/details.json',
-      success: function (response) {
+      success: function(response) {
         self.mapper = response
         self.render(cb)
-        Metamaps.Loading.hide()
+        Loading.hide()
       },
-      error: function () {
+      error: function() {
         self.render(cb)
-        Metamaps.Loading.hide()
+        Loading.hide()
       }
     })
   }

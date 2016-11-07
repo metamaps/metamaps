@@ -16,7 +16,7 @@ const Create = {
   newSelectedMetacodeNames: [],
   selectedMetacodes: [],
   newSelectedMetacodes: [],
-  init: function () {
+  init: function() {
     var self = Create
     self.newTopic.init()
     self.newSynapse.init()
@@ -29,23 +29,23 @@ const Create = {
     $('#metacodeSwitchTabs .ui-tabs-nav li').removeClass('ui-corner-top').addClass('ui-corner-left')
     $('.customMetacodeList li').click(self.toggleMetacodeSelected) // within the custom metacode set tab
   },
-  toggleMetacodeSelected: function () {
+  toggleMetacodeSelected: function() {
     var self = Create
 
-    if ($(this).attr('class') != 'toggledOff') {
+    if ($(this).attr('class') !== 'toggledOff') {
       $(this).addClass('toggledOff')
-      var value_to_remove = $(this).attr('id')
-      var name_to_remove = $(this).attr('data-name')
-      self.newSelectedMetacodes.splice(self.newSelectedMetacodes.indexOf(value_to_remove), 1)
-      self.newSelectedMetacodeNames.splice(self.newSelectedMetacodeNames.indexOf(name_to_remove), 1)
-    } else if ($(this).attr('class') == 'toggledOff') {
+      var valueToRemove = $(this).attr('id')
+      var nameToRemove = $(this).attr('data-name')
+      self.newSelectedMetacodes.splice(self.newSelectedMetacodes.indexOf(valueToRemove), 1)
+      self.newSelectedMetacodeNames.splice(self.newSelectedMetacodeNames.indexOf(nameToRemove), 1)
+    } else if ($(this).attr('class') === 'toggledOff') {
       $(this).removeClass('toggledOff')
       self.newSelectedMetacodes.push($(this).attr('id'))
       self.newSelectedMetacodeNames.push($(this).attr('data-name'))
     }
   },
-  updateMetacodeSet: function (set, index, custom) {
-    if (custom && Create.newSelectedMetacodes.length == 0) {
+  updateMetacodeSet: function(set, index, custom) {
+    if (custom && Create.newSelectedMetacodes.length === 0) {
       window.alert('Please select at least one metacode to use!')
       return false
     }
@@ -62,8 +62,7 @@ const Create = {
       Create.selectedMetacodeNames = []
       Create.newSelectedMetacodes = []
       Create.newSelectedMetacodeNames = []
-    }
-    else if (custom) {
+    } else if (custom) {
       // uses .slice to avoid setting the two arrays to the same actual array
       Create.selectedMetacodes = Create.newSelectedMetacodes.slice(0)
       Create.selectedMetacodeNames = Create.newSelectedMetacodeNames.slice(0)
@@ -79,7 +78,7 @@ const Create = {
     $('#metacodeImg, #metacodeImgTitle').empty()
     $('#metacodeImg').removeData('cloudcarousel')
     var newMetacodes = ''
-    metacodeModels.each(function (metacode) {
+    metacodeModels.each(function(metacode) {
       newMetacodes += '<img class="cloudcarousel" width="40" height="40" src="' + metacode.get('icon') + '" data-id="' + metacode.id + '" title="' + metacode.get('name') + '" alt="' + metacode.get('name') + '"/>'
     })
 
@@ -107,20 +106,20 @@ const Create = {
       dataType: 'json',
       url: '/user/updatemetacodes',
       data: mdata,
-      success: function (data) {
+      success: function(data) {
         console.log('selected metacodes saved')
       },
-      error: function () {
+      error: function() {
         console.log('failed to save selected metacodes')
       }
     })
   },
 
-  cancelMetacodeSetSwitch: function () {
+  cancelMetacodeSetSwitch: function() {
     var self = Create
     self.isSwitchingSet = false
 
-    if (self.selectedMetacodeSet != 'metacodeset-custom') {
+    if (self.selectedMetacodeSet !== 'metacodeset-custom') {
       $('.customMetacodeList li').addClass('toggledOff')
       self.selectedMetacodes = []
       self.selectedMetacodeNames = []
@@ -140,17 +139,16 @@ const Create = {
     $('#topic_name').focus()
   },
   newTopic: {
-    init: function () {
-      $('#topic_name').keyup(function () {
+    init: function() {
+      $('#topic_name').keyup(function() {
         Create.newTopic.name = $(this).val()
       })
-      
+
       $('.pinCarousel').click(function() {
         if (Create.newTopic.pinned) {
           $('.pinCarousel').removeClass('isPinned')
           Create.newTopic.pinned = false
-        }
-        else {
+        } else {
           $('.pinCarousel').addClass('isPinned')
           Create.newTopic.pinned = true
         }
@@ -174,18 +172,18 @@ const Create = {
         [{
           name: 'topic_autocomplete',
           limit: 8,
-          display: function (s) { return s.label; },
+          display: function(s) { return s.label },
           templates: {
-            suggestion: function (s) {
+            suggestion: function(s) {
               return Hogan.compile($('#topicAutocompleteTemplate').html()).render(s)
             }
           },
-          source: topicBloodhound,
+          source: topicBloodhound
         }]
       )
 
       // tell the autocomplete to submit the form with the topic you clicked on if you pick from the autocomplete
-      $('#topic_name').bind('typeahead:select', function (event, datum, dataset) {
+      $('#topic_name').bind('typeahead:select', function(event, datum, dataset) {
         Create.newTopic.beingCreated = false
         if (datum.rtype === 'topic') {
           Topic.getTopicFromAutocomplete(datum.id)
@@ -209,7 +207,7 @@ const Create = {
         bringToFront: true
       })
       $('.new_topic').hide()
-      $('#new_topic').attr('oncontextmenu','return false') //prevents the mouse up event from opening the default context menu on this element
+      $('#new_topic').attr('oncontextmenu', 'return false') // prevents the mouse up event from opening the default context menu on this element
     },
     name: null,
     newId: 1,
@@ -219,15 +217,15 @@ const Create = {
     y: null,
     addSynapse: false,
     pinned: false,
-    open: function () {
-      $('#new_topic').fadeIn('fast', function () {
+    open: function() {
+      $('#new_topic').fadeIn('fast', function() {
         $('#topic_name').focus()
       })
       Create.newTopic.beingCreated = true
       Create.newTopic.name = ''
       GlobalUI.hideDiv('#instructions')
     },
-    hide: function (force) {
+    hide: function(force) {
       if (force || !Create.newTopic.pinned) {
         $('#new_topic').fadeOut('fast')
       }
@@ -240,28 +238,26 @@ const Create = {
       }
       Create.newTopic.beingCreated = false
     },
-    reset: function () {
+    reset: function() {
       $('#topic_name').typeahead('val', '')
     }
   },
   newSynapse: {
-    init: function () {
-      var self = Create.newSynapse
-
+    init: function() {
       var synapseBloodhound = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
           url: '/search/synapses?term=%QUERY',
-          wildcard: '%QUERY',
-        },
+          wildcard: '%QUERY'
+        }
       })
       var existingSynapseBloodhound = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
           url: '/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
-          prepare: function (query, settings) {
+          prepare: function(query, settings) {
             var self = Create.newSynapse
             if (Selected.Nodes.length < 2 && self.topic1id && self.topic2id) {
               settings.url = settings.url.replace('%TOPIC1', self.topic1id).replace('%TOPIC2', self.topic2id)
@@ -269,42 +265,44 @@ const Create = {
             } else {
               return null
             }
-          },
-        },
+          }
+        }
       })
 
       // initialize the autocomplete results for synapse creation
       $('#synapse_desc').typeahead(
         {
           highlight: true,
-          minLength: 2,
+          minLength: 2
         },
         [{
           name: 'synapse_autocomplete',
-          display: function (s) { return s.label; },
+          display: function(s) { return s.label },
           templates: {
-            suggestion: function (s) {
+            suggestion: function(s) {
               return Hogan.compile("<div class='genericSynapseDesc'>{{label}}</div>").render(s)
-            },
+            }
           },
-          source: synapseBloodhound,
+          source: synapseBloodhound
         },
           {
             name: 'existing_synapses',
             limit: 50,
-            display: function (s) { return s.label; },
+            display: function(s) { return s.label },
             templates: {
-              suggestion: function (s) {
+              suggestion: function(s) {
                 return Hogan.compile($('#synapseAutocompleteTemplate').html()).render(s)
               },
               header: '<h3>Existing synapses</h3>'
             },
-            source: existingSynapseBloodhound,
+            source: existingSynapseBloodhound
           }]
       )
 
-      $('#synapse_desc').keyup(function (e) {
-        var ESC = 27, BACKSPACE = 8, DELETE = 46
+      $('#synapse_desc').keyup(function(e) {
+        const ESC = 27
+        const BACKSPACE = 8
+        const DELETE = 46
         if (e.keyCode === BACKSPACE && $(this).val() === '' ||
           e.keyCode === DELETE && $(this).val() === '' ||
           e.keyCode === ESC) {
@@ -313,13 +311,13 @@ const Create = {
         Create.newSynapse.description = $(this).val()
       })
 
-      $('#synapse_desc').focusout(function () {
+      $('#synapse_desc').focusout(function() {
         if (Create.newSynapse.beingCreated) {
           Synapse.createSynapseLocally()
         }
       })
 
-      $('#synapse_desc').bind('typeahead:select', function (event, datum, dataset) {
+      $('#synapse_desc').bind('typeahead:select', function(event, datum, dataset) {
         if (datum.id) { // if they clicked on an existing synapse get it
           Synapse.getSynapseFromAutocomplete(datum.id)
         } else {
@@ -333,13 +331,13 @@ const Create = {
     topic1id: null,
     topic2id: null,
     newSynapseId: null,
-    open: function () {
-      $('#new_synapse').fadeIn(100, function () {
+    open: function() {
+      $('#new_synapse').fadeIn(100, function() {
         $('#synapse_desc').focus()
       })
       Create.newSynapse.beingCreated = true
     },
-    hide: function () {
+    hide: function() {
       $('#new_synapse').fadeOut('fast')
       $('#synapse_desc').typeahead('val', '')
       Create.newSynapse.beingCreated = false
@@ -348,7 +346,7 @@ const Create = {
       Create.newSynapse.topic2id = 0
       Mouse.synapseStartCoordinates = []
       if (Visualize.mGraph) Visualize.mGraph.plot()
-    },
+    }
   }
 }
 

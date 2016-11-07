@@ -4,6 +4,8 @@
 everthing in this file happens as a result of websocket events
 */
 
+import { indexOf } from 'lodash'
+
 import { JUNTO_UPDATED } from './events'
 
 import Active from '../Active'
@@ -31,7 +33,7 @@ export const synapseRemoved = self => data => {
       Control.hideEdge(edge)
     }
 
-    var index = _.indexOf(edge.getData('synapses'), synapse)
+    var index = indexOf(edge.getData('synapses'), synapse)
     edge.getData('mappings').splice(index, 1)
     edge.getData('synapses').splice(index, 1)
     if (edge.getData('displayIndex')) {
@@ -49,8 +51,7 @@ export const synapseDeleted = self => data => {
 export const synapseCreated = self => data => {
   var topic1, topic2, node1, node2, synapse, mapping, cancel, mapper
 
-
-  function waitThenRenderSynapse () {
+  function waitThenRenderSynapse() {
     if (synapse && mapping && mapper) {
       topic1 = synapse.getTopic1()
       node1 = topic1.get('node')
@@ -58,8 +59,7 @@ export const synapseCreated = self => data => {
       node2 = topic2.get('node')
 
       Synapse.renderSynapse(mapping, synapse, node1, node2, false)
-    }
-    else if (!cancel) {
+    } else if (!cancel) {
       setTimeout(waitThenRenderSynapse, 10)
     }
   }
@@ -73,21 +73,21 @@ export const synapseCreated = self => data => {
   }
   $.ajax({
     url: '/synapses/' + data.mappableid + '.json',
-    success: function (response) {
+    success: function(response) {
       DataModel.Synapses.add(response)
       synapse = DataModel.Synapses.get(response.id)
     },
-    error: function () {
+    error: function() {
       cancel = true
     }
   })
   $.ajax({
     url: '/mappings/' + data.mappingid + '.json',
-    success: function (response) {
+    success: function(response) {
       DataModel.Mappings.add(response)
       mapping = DataModel.Mappings.get(response.id)
     },
-    error: function () {
+    error: function() {
       cancel = true
     }
   })
@@ -112,11 +112,10 @@ export const topicDeleted = self => data => {
 export const topicCreated = self => data => {
   var topic, mapping, mapper, cancel
 
-  function waitThenRenderTopic () {
+  function waitThenRenderTopic() {
     if (topic && mapping && mapper) {
       Topic.renderTopic(mapping, topic, false, false)
-    }
-    else if (!cancel) {
+    } else if (!cancel) {
       setTimeout(waitThenRenderTopic, 10)
     }
   }
@@ -130,21 +129,21 @@ export const topicCreated = self => data => {
   }
   $.ajax({
     url: '/topics/' + data.mappableid + '.json',
-    success: function (response) {
+    success: function(response) {
       DataModel.Topics.add(response)
       topic = DataModel.Topics.get(response.id)
     },
-    error: function () {
+    error: function() {
       cancel = true
     }
   })
   $.ajax({
     url: '/mappings/' + data.mappingid + '.json',
-    success: function (response) {
+    success: function(response) {
       DataModel.Mappings.add(response)
       mapping = DataModel.Mappings.get(response.id)
     },
-    error: function () {
+    error: function() {
       cancel = true
     }
   })
@@ -163,20 +162,18 @@ export const mapUpdated = self => data => {
     var couldEditBefore = map.authorizeToEdit(Active.Mapper)
     var idBefore = map.id
     map.fetch({
-      success: function (model, response) {
-	var idNow = model.id
-	var canEditNow = model.authorizeToEdit(Active.Mapper)
-	if (idNow !== idBefore) {
-	  Map.leavePrivateMap() // this means the map has been changed to private
-	}
-	else if (couldEditBefore && !canEditNow) {
-	  Map.cantEditNow()
-	}
-	else if (!couldEditBefore && canEditNow) {
-	  Map.canEditNow()
-	} else {
-	  model.trigger('changeByOther')
-	}
+      success: function(model, response) {
+        var idNow = model.id
+        var canEditNow = model.authorizeToEdit(Active.Mapper)
+        if (idNow !== idBefore) {
+          Map.leavePrivateMap() // this means the map has been changed to private
+        } else if (couldEditBefore && !canEditNow) {
+          Map.cantEditNow()
+        } else if (!couldEditBefore && canEditNow) {
+          Map.canEditNow()
+        } else {
+          model.trigger('changeByOther')
+        }
       }
     })
   }
@@ -187,9 +184,9 @@ export const topicUpdated = self => data => {
   if (topic) {
     var node = topic.get('node')
     topic.fetch({
-      success: function (model) {
-	model.set({ node: node })
-	model.trigger('changeByOther')
+      success: function(model) {
+        model.set({ node: node })
+        model.trigger('changeByOther')
       }
     })
   }
@@ -201,9 +198,9 @@ export const synapseUpdated = self => data => {
     // edge reset necessary because fetch causes model reset
     var edge = synapse.get('edge')
     synapse.fetch({
-      success: function (model) {
-	model.set({ edge: edge })
-	model.trigger('changeByOther')
+      success: function(model) {
+        model.set({ edge: edge })
+        model.trigger('changeByOther')
       }
     })
   }
@@ -225,7 +222,7 @@ export const topicDragged = self => positions => {
 
 export const peerCoordsUpdated = self => data => {
   if (!self.mappersOnMap[data.userid]) return
-  self.mappersOnMap[data.userid].coords = {x: data.usercoords.x,y: data.usercoords.y}
+  self.mappersOnMap[data.userid].coords = {x: data.usercoords.x, y: data.usercoords.y}
   self.positionPeerIcon(data.userid)
 }
 
@@ -311,7 +308,7 @@ export const newMapper = self => data => {
 }
 
 export const callAccepted = self => userid => {
-  var username = self.mappersOnMap[userid].name
+  // const username = self.mappersOnMap[userid].name
   GlobalUI.notifyUser('Conversation starting...')
   self.joinCall()
   self.room.chat.invitationAnswered(userid)

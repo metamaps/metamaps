@@ -1,15 +1,11 @@
 /* global $ */
 
-import _ from 'lodash'
 import SimpleWebRTC from 'simplewebrtc'
 import SocketIoConnection from 'simplewebrtc/socketioconnection'
 
 import Active from '../Active'
 import DataModel from '../DataModel'
-import GlobalUI from '../GlobalUI'
 import JIT from '../JIT'
-import Synapse from '../Synapse'
-import Topic from '../Topic'
 import Util from '../Util'
 import Views from '../Views'
 import Visualize from '../Visualize'
@@ -67,7 +63,7 @@ import {
   synapseUpdated,
   synapseRemoved,
   synapseDeleted,
-  mapUpdated,
+  mapUpdated
 } from './receivable'
 
 import {
@@ -110,15 +106,15 @@ let Realtime = {
   inConversation: false,
   localVideo: null,
   'junto_spinner_darkgrey.gif': '',
-  init: function (serverData) {
+  init: function(serverData) {
     var self = Realtime
 
     self.addJuntoListeners()
 
-    self.socket = new SocketIoConnection({ url: serverData['REALTIME_SERVER']})
+    self.socket = new SocketIoConnection({ url: serverData['REALTIME_SERVER'] })
     self['junto_spinner_darkgrey.gif'] = serverData['junto_spinner_darkgrey.gif']
-    
-    self.socket.on('connect', function () {
+
+    self.socket.on('connect', function() {
       console.log('connected')
       subscribeToEvents(self, self.socket)
 
@@ -126,7 +122,7 @@ let Realtime = {
         self.startActiveMap()
       } else self.disconnected = false
     })
-    self.socket.on('disconnect', function () {
+    self.socket.on('disconnect', function() {
       self.disconnected = true
     })
 
@@ -136,7 +132,7 @@ let Realtime = {
         localVideoEl: self.videoId,
         remoteVideosEl: '',
         debug: true,
-        detectSpeakingEvents: false, //true,
+        detectSpeakingEvents: false, // true,
         autoAdjustMic: false, // true,
         autoRequestMedia: false,
         localVideo: {
@@ -150,11 +146,11 @@ let Realtime = {
         },
         nick: Active.Mapper.id
       })
-      self.webrtc.webrtc.on('iceFailed', function (peer) {
+      self.webrtc.webrtc.on('iceFailed', function(peer) {
         console.log('local ice failure', peer)
         // local ice failure
       })
-      self.webrtc.webrtc.on('connectivityError', function (peer) {
+      self.webrtc.webrtc.on('connectivityError', function(peer) {
         console.log('remote ice failure', peer)
         // remote ice failure
       })
@@ -186,33 +182,33 @@ let Realtime = {
       $('body').prepend(self.room.chat.$container)
     } // if Active.Mapper
   },
-  addJuntoListeners: function () {
+  addJuntoListeners: function() {
     var self = Realtime
 
-    $(document).on(Views.ChatView.events.openTray, function () {
+    $(document).on(Views.ChatView.events.openTray, function() {
       $('.main').addClass('compressed')
       self.chatOpen = true
       self.positionPeerIcons()
     })
-    $(document).on(Views.ChatView.events.closeTray, function () {
+    $(document).on(Views.ChatView.events.closeTray, function() {
       $('.main').removeClass('compressed')
       self.chatOpen = false
       self.positionPeerIcons()
     })
-    $(document).on(Views.ChatView.events.videosOn, function () {
+    $(document).on(Views.ChatView.events.videosOn, function() {
       $('#wrapper').removeClass('hideVideos')
     })
-    $(document).on(Views.ChatView.events.videosOff, function () {
+    $(document).on(Views.ChatView.events.videosOff, function() {
       $('#wrapper').addClass('hideVideos')
     })
-    $(document).on(Views.ChatView.events.cursorsOn, function () {
+    $(document).on(Views.ChatView.events.cursorsOn, function() {
       $('#wrapper').removeClass('hideCursors')
     })
-    $(document).on(Views.ChatView.events.cursorsOff, function () {
+    $(document).on(Views.ChatView.events.cursorsOff, function() {
       $('#wrapper').addClass('hideCursors')
     })
   },
-  startActiveMap: function () {
+  startActiveMap: function() {
     var self = Realtime
     if (Active.Map && Active.Mapper) {
       if (Active.Map.authorizeToEdit(Active.Mapper)) {
@@ -223,7 +219,7 @@ let Realtime = {
       self.room.addMessages(new DataModel.MessageCollection(DataModel.Messages), true)
     }
   },
-  endActiveMap: function () {
+  endActiveMap: function() {
     var self = Realtime
     $(document).off('.map')
     // leave the appropriate rooms to leave
@@ -236,7 +232,7 @@ let Realtime = {
       self.room.chat.close()
     }
   },
-  turnOn: function (notify) {
+  turnOn: function(notify) {
     var self = Realtime
     $('.collabCompass').show()
     self.room.chat.$container.show()
@@ -254,16 +250,16 @@ let Realtime = {
     })
     self.room.chat.addParticipant(self.activeMapper)
   },
-  setupSocket: function () {
+  setupSocket: function() {
     var self = Realtime
     self.checkForCall()
     self.joinMap()
   },
-  setupLocalSendables: function () {
+  setupLocalSendables: function() {
     var self = Realtime
 
     // local event listeners that trigger events
-    var sendCoords = function (event) {
+    var sendCoords = function(event) {
       var pixels = {
         x: event.pageX,
         y: event.pageY
@@ -273,7 +269,7 @@ let Realtime = {
     }
     $(document).on('mousemove.map', sendCoords)
 
-    var zoom = function (event, e) {
+    var zoom = function(event, e) {
       if (e) {
         var pixels = {
           x: e.pageX,
@@ -288,47 +284,47 @@ let Realtime = {
 
     $(document).on(JIT.events.pan + '.map', self.positionPeerIcons)
 
-    var dragTopic = function (event, positions) {
+    var dragTopic = function(event, positions) {
       self.dragTopic(positions)
     }
     $(document).on(JIT.events.topicDrag + '.map', dragTopic)
 
-    var createTopic = function (event, data) {
+    var createTopic = function(event, data) {
       self.createTopic(data)
     }
     $(document).on(JIT.events.newTopic + '.map', createTopic)
 
-    var deleteTopic = function (event, data) {
+    var deleteTopic = function(event, data) {
       self.deleteTopic(data)
     }
     $(document).on(JIT.events.deleteTopic + '.map', deleteTopic)
 
-    var removeTopic = function (event, data) {
+    var removeTopic = function(event, data) {
       self.removeTopic(data)
     }
     $(document).on(JIT.events.removeTopic + '.map', removeTopic)
 
-    var createSynapse = function (event, data) {
+    var createSynapse = function(event, data) {
       self.createSynapse(data)
     }
     $(document).on(JIT.events.newSynapse + '.map', createSynapse)
 
-    var deleteSynapse = function (event, data) {
+    var deleteSynapse = function(event, data) {
       self.deleteSynapse(data)
     }
     $(document).on(JIT.events.deleteSynapse + '.map', deleteSynapse)
 
-    var removeSynapse = function (event, data) {
+    var removeSynapse = function(event, data) {
       self.removeSynapse(data)
     }
     $(document).on(JIT.events.removeSynapse + '.map', removeSynapse)
 
-    var createMessage = function (event, data) {
+    var createMessage = function(event, data) {
       self.createMessage(data)
     }
     $(document).on(Views.Room.events.newMessage + '.map', createMessage)
   },
-  countOthersInConversation: function () {
+  countOthersInConversation: function() {
     var self = Realtime
     var count = 0
     for (var key in self.mappersOnMap) {
@@ -336,7 +332,7 @@ let Realtime = {
     }
     return count
   },
-  handleVideoAdded: function (v, id) {
+  handleVideoAdded: function(v, id) {
     var self = Realtime
     self.positionVideos()
     v.setParent($('#wrapper'))
@@ -345,16 +341,15 @@ let Realtime = {
     })
     $('#wrapper').append(v.$container)
   },
-  positionVideos: function () {
+  positionVideos: function() {
     var self = Realtime
     var videoIds = Object.keys(self.room.videos)
-    var numOfVideos = videoIds.length
-    var numOfVideosToPosition = _.filter(videoIds, function (id) {
-      return !self.room.videos[id].manuallyPositioned
-    }).length
+    // var numOfVideos = videoIds.length
+    // var numOfVideosToPosition = _.filter(videoIds, function(id) {
+    //   return !self.room.videos[id].manuallyPositioned
+    // }).length
 
     var screenHeight = $(document).height()
-    var screenWidth = $(document).width()
     var topExtraPadding = 20
     var topPadding = 30
     var leftPadding = 30
@@ -362,7 +357,7 @@ let Realtime = {
     var videoWidth = 180
     var column = 0
     var row = 0
-    var yFormula = function () {
+    var yFormula = function() {
       var y = topExtraPadding + (topPadding + videoHeight) * row + topPadding
       if (y + videoHeight > screenHeight) {
         row = 0
@@ -372,7 +367,7 @@ let Realtime = {
       row++
       return y
     }
-    var xFormula = function () {
+    var xFormula = function() {
       var x = (leftPadding + videoWidth) * column + leftPadding
       return x
     }
@@ -385,7 +380,7 @@ let Realtime = {
         left: xFormula() + 'px'
       })
     }
-    videoIds.forEach(function (id) {
+    videoIds.forEach(function(id) {
       var video = self.room.videos[id]
       if (!video.manuallyPositioned) {
         video.$container.css({
@@ -395,7 +390,7 @@ let Realtime = {
       }
     })
   },
-  callEnded: function () {
+  callEnded: function() {
     var self = Realtime
 
     self.room.conversationEnding()
@@ -408,7 +403,7 @@ let Realtime = {
     self.localVideo.view.audioOn()
     self.localVideo.view.videoOn()
   },
-  createCompass: function (name, id, image, color) {
+  createCompass: function(name, id, image, color) {
     var str = '<img width="28" height="28" src="' + image + '" /><p>' + name + '</p>'
     str += '<div id="compassArrow' + id + '" class="compassArrow"></div>'
     $('#compass' + id).remove()
@@ -423,20 +418,15 @@ let Realtime = {
       'background-color': color
     })
   },
-  positionPeerIcons: function () {
+  positionPeerIcons: function() {
     var self = Realtime
     for (var key in self.mappersOnMap) {
       self.positionPeerIcon(key)
     }
   },
-  positionPeerIcon: function (id) {
+  positionPeerIcon: function(id) {
     var self = Realtime
-    var boundary = self.chatOpen ? '#wrapper' : document
     var mapper = self.mappersOnMap[id]
-    var xMax = $(boundary).width()
-    var yMax = $(boundary).height()
-    var compassDiameter = 56
-    var compassArrowSize = 24
 
     var origPixels = Util.coordsToPixels(Visualize.mGraph, mapper.coords)
     var pixels = self.limitPixelsToScreen(origPixels)
@@ -448,12 +438,11 @@ let Realtime = {
     if (origPixels.x !== pixels.x || origPixels.y !== pixels.y) {
       var dy = origPixels.y - pixels.y // opposite
       var dx = origPixels.x - pixels.x // adjacent
-      var ratio = dy / dx
       var angle = Math.atan2(dy, dx)
 
       $('#compassArrow' + id).show().css({
         transform: 'rotate(' + angle + 'rad)',
-        '-webkit-transform': 'rotate(' + angle + 'rad)',
+        '-webkit-transform': 'rotate(' + angle + 'rad)'
       })
 
       if (dx > 0) {
@@ -464,7 +453,7 @@ let Realtime = {
       $('#compass' + id).removeClass('labelLeft')
     }
   },
-  limitPixelsToScreen: function (pixels) {
+  limitPixelsToScreen: function(pixels) {
     var self = Realtime
 
     var boundary = self.chatOpen ? '#wrapper' : document
@@ -479,65 +468,65 @@ let Realtime = {
     yLimit = Math.max(0 + compassArrowSize, pixels.y)
     yLimit = Math.min(yLimit, yMax - compassDiameter)
 
-    return {x: xLimit,y: yLimit}
+    return {x: xLimit, y: yLimit}
   }
 }
 
 const sendables = [
-  ['joinMap',joinMap],
-  ['leaveMap',leaveMap],
-  ['checkForCall',checkForCall],
-  ['acceptCall',acceptCall],
-  ['denyCall',denyCall],
-  ['denyInvite',denyInvite],
-  ['inviteToJoin',inviteToJoin],
-  ['inviteACall',inviteACall],
-  ['joinCall',joinCall],
-  ['leaveCall',leaveCall],
-  ['sendMapperInfo',sendMapperInfo],
-  ['sendCoords',sendCoords],
-  ['createMessage',createMessage],
-  ['dragTopic',dragTopic],
-  ['createTopic',createTopic],
-  ['updateTopic',updateTopic],
-  ['removeTopic',removeTopic],
-  ['deleteTopic',deleteTopic],
-  ['createSynapse',createSynapse],
-  ['updateSynapse',updateSynapse],
-  ['removeSynapse',removeSynapse],
-  ['deleteSynapse',deleteSynapse],
-  ['updateMap',updateMap]
+  ['joinMap', joinMap],
+  ['leaveMap', leaveMap],
+  ['checkForCall', checkForCall],
+  ['acceptCall', acceptCall],
+  ['denyCall', denyCall],
+  ['denyInvite', denyInvite],
+  ['inviteToJoin', inviteToJoin],
+  ['inviteACall', inviteACall],
+  ['joinCall', joinCall],
+  ['leaveCall', leaveCall],
+  ['sendMapperInfo', sendMapperInfo],
+  ['sendCoords', sendCoords],
+  ['createMessage', createMessage],
+  ['dragTopic', dragTopic],
+  ['createTopic', createTopic],
+  ['updateTopic', updateTopic],
+  ['removeTopic', removeTopic],
+  ['deleteTopic', deleteTopic],
+  ['createSynapse', createSynapse],
+  ['updateSynapse', updateSynapse],
+  ['removeSynapse', removeSynapse],
+  ['deleteSynapse', deleteSynapse],
+  ['updateMap', updateMap]
 ]
 sendables.forEach(sendable => {
   Realtime[sendable[0]] = sendable[1](Realtime)
 })
 
 const subscribeToEvents = (Realtime, socket) => {
-    socket.on(JUNTO_UPDATED, juntoUpdated(Realtime))
-    socket.on(INVITED_TO_CALL, invitedToCall(Realtime))
-    socket.on(INVITED_TO_JOIN, invitedToJoin(Realtime))
-    socket.on(CALL_ACCEPTED, callAccepted(Realtime))
-    socket.on(CALL_DENIED, callDenied(Realtime))
-    socket.on(INVITE_DENIED, inviteDenied(Realtime))
-    socket.on(CALL_IN_PROGRESS, callInProgress(Realtime))
-    socket.on(CALL_STARTED, callStarted(Realtime))
-    socket.on(MAPPER_LIST_UPDATED, mapperListUpdated(Realtime))
-    socket.on(MAPPER_JOINED_CALL, mapperJoinedCall(Realtime))
-    socket.on(MAPPER_LEFT_CALL, mapperLeftCall(Realtime))
-    socket.on(PEER_COORDS_UPDATED, peerCoordsUpdated(Realtime))
-    socket.on(NEW_MAPPER, newMapper(Realtime))
-    socket.on(LOST_MAPPER, lostMapper(Realtime))
-    socket.on(MESSAGE_CREATED, messageCreated(Realtime))
-    socket.on(TOPIC_DRAGGED, topicDragged(Realtime))
-    socket.on(TOPIC_CREATED, topicCreated(Realtime))
-    socket.on(TOPIC_UPDATED, topicUpdated(Realtime))
-    socket.on(TOPIC_REMOVED, topicRemoved(Realtime))
-    socket.on(TOPIC_DELETED, topicDeleted(Realtime))
-    socket.on(SYNAPSE_CREATED, synapseCreated(Realtime))
-    socket.on(SYNAPSE_UPDATED, synapseUpdated(Realtime))
-    socket.on(SYNAPSE_REMOVED, synapseRemoved(Realtime))
-    socket.on(SYNAPSE_DELETED, synapseDeleted(Realtime))
-    socket.on(MAP_UPDATED, mapUpdated(Realtime))
+  socket.on(JUNTO_UPDATED, juntoUpdated(Realtime))
+  socket.on(INVITED_TO_CALL, invitedToCall(Realtime))
+  socket.on(INVITED_TO_JOIN, invitedToJoin(Realtime))
+  socket.on(CALL_ACCEPTED, callAccepted(Realtime))
+  socket.on(CALL_DENIED, callDenied(Realtime))
+  socket.on(INVITE_DENIED, inviteDenied(Realtime))
+  socket.on(CALL_IN_PROGRESS, callInProgress(Realtime))
+  socket.on(CALL_STARTED, callStarted(Realtime))
+  socket.on(MAPPER_LIST_UPDATED, mapperListUpdated(Realtime))
+  socket.on(MAPPER_JOINED_CALL, mapperJoinedCall(Realtime))
+  socket.on(MAPPER_LEFT_CALL, mapperLeftCall(Realtime))
+  socket.on(PEER_COORDS_UPDATED, peerCoordsUpdated(Realtime))
+  socket.on(NEW_MAPPER, newMapper(Realtime))
+  socket.on(LOST_MAPPER, lostMapper(Realtime))
+  socket.on(MESSAGE_CREATED, messageCreated(Realtime))
+  socket.on(TOPIC_DRAGGED, topicDragged(Realtime))
+  socket.on(TOPIC_CREATED, topicCreated(Realtime))
+  socket.on(TOPIC_UPDATED, topicUpdated(Realtime))
+  socket.on(TOPIC_REMOVED, topicRemoved(Realtime))
+  socket.on(TOPIC_DELETED, topicDeleted(Realtime))
+  socket.on(SYNAPSE_CREATED, synapseCreated(Realtime))
+  socket.on(SYNAPSE_UPDATED, synapseUpdated(Realtime))
+  socket.on(SYNAPSE_REMOVED, synapseRemoved(Realtime))
+  socket.on(SYNAPSE_DELETED, synapseDeleted(Realtime))
+  socket.on(MAP_UPDATED, mapUpdated(Realtime))
 }
 
 export default Realtime

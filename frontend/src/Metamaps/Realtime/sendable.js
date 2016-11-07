@@ -1,3 +1,5 @@
+/* global $ */
+
 import Active from '../Active'
 import GlobalUI from '../GlobalUI'
 
@@ -42,7 +44,7 @@ export const leaveMap = self => () => {
 }
 
 export const checkForCall = self => () => {
- self.socket.emit(CHECK_FOR_CALL, { room: self.room.room, mapid: Active.Map.id })
+  self.socket.emit(CHECK_FOR_CALL, { room: self.room.room, mapid: Active.Map.id })
 }
 
 export const sendMapperInfo = self => userid => {
@@ -60,7 +62,7 @@ export const sendMapperInfo = self => userid => {
 
 export const joinCall = self => () => {
   self.webrtc.off('readyToCall')
-  self.webrtc.once('readyToCall', function () {
+  self.webrtc.once('readyToCall', function() {
     self.videoInitialized = true
     self.readyToCall = true
     self.localVideo.view.manuallyPositioned = false

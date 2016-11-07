@@ -87,10 +87,6 @@ class MapCard extends Component {
     const hasMapper = hasMap && !hasConversation
     const mapperList = hasMap && Object.keys(hasMap).map(id => juntoState.connectedPeople[id])
 
-    function capitalize (string) {
-      return string.charAt(0).toUpperCase() + string.slice(1)
-    }
-
     const n = map.get('name')
     const d = map.get('desc')
 

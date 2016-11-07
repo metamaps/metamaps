@@ -5,14 +5,14 @@ const uuid = require('node-uuid')
 
 function safeCb(cb) {
   if (typeof cb === 'function') {
-    return cb;
+    return cb
   } else {
-    return function () {};
+    return function() {}
   }
 }
 
 module.exports = function(io, stunservers, state) {
-  io.on('connection', function (socket) {
+  io.on('connection', function(socket) {
     socket.resources = {
       screen: false,
       video: true,
@@ -20,7 +20,7 @@ module.exports = function(io, stunservers, state) {
     }
 
     // pass a message to another id
-    socket.on('message', function (details) {
+    socket.on('message', function(details) {
       if (!details) return
 
       var otherClient = io.to(details.to)
@@ -30,11 +30,11 @@ module.exports = function(io, stunservers, state) {
       otherClient.emit('message', details)
     })
 
-    socket.on('shareScreen', function () {
+    socket.on('shareScreen', function() {
       socket.resources.screen = true
     })
 
-    socket.on('unshareScreen', function (type) {
+    socket.on('unshareScreen', function(type) {
       socket.resources.screen = false
       removeFeed('screen')
     })
@@ -66,16 +66,16 @@ module.exports = function(io, stunservers, state) {
 
     // we don't want to pass "leave" directly because the
     // event type string of "socket end" gets passed too.
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function() {
       removeFeed()
     })
-    socket.on('leave', function () {
+    socket.on('leave', function() {
       removeFeed()
     })
 
-    socket.on('create', function (name, cb) {
-      if (arguments.length == 2) {
-        cb = (typeof cb == 'function') ? cb : function () {}
+    socket.on('create', function(name, cb) {
+      if (arguments.length === 2) {
+        cb = (typeof cb === 'function') ? cb : function() {}
         name = name || uuid()
       } else {
         cb = name
@@ -93,7 +93,7 @@ module.exports = function(io, stunservers, state) {
 
     // support for logging full webrtc traces to stdout
     // useful for large-scale error monitoring
-    socket.on('trace', function (data) {
+    socket.on('trace', function(data) {
       console.log('trace', JSON.stringify(
         [data.type, data.session, data.prefix, data.peer, data.time, data.value]
       ))
@@ -106,13 +106,9 @@ module.exports = function(io, stunservers, state) {
     var result = {
       clients: {}
     }
-    Object.keys(sockets).forEach(function (id) {
+    Object.keys(sockets).forEach(function(id) {
       result.clients[id] = adapter.nsp.connected[id].resources
     })
     return result
-  }
-
-  function socketsInRoom(name) {
-    return io.sockets.sockets(name).length
   }
 }

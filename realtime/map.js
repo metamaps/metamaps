@@ -24,11 +24,10 @@ const {
 
 const { mapRoom, userMapRoom } = require('./rooms')
 
-module.exports = function (io, store) {
-  io.on('connection', function (socket) {
-
+module.exports = function(io, store) {
+  io.on('connection', function(socket) {
     // this will ping everyone on a map that there's a person just joined the map
-    socket.on(JOIN_MAP, function (data) {
+    socket.on(JOIN_MAP, function(data) {
       socket.mapid = data.mapid
       socket.userid = data.userid
       socket.username = data.username
@@ -52,12 +51,12 @@ module.exports = function (io, store) {
       socket.leave(userMapRoom(socket.userid, socket.mapid))
       socket.broadcast.in(mapRoom(socket.mapid)).emit(LOST_MAPPER, data)
       socket.mapid = null
-    } 
+    }
     socket.on(LEAVE_MAP, leaveMap)
     socket.on('disconnect', leaveMap)
 
     // this will ping a new person with awareness of who's already on the map
-    socket.on(SEND_MAPPER_INFO, function (data) {
+    socket.on(SEND_MAPPER_INFO, function(data) {
       var existingUser = {
         userid: data.userid,
         username: data.username,
@@ -67,7 +66,7 @@ module.exports = function (io, store) {
       socket.broadcast.in(userMapRoom(data.userToNotify, data.mapid)).emit(MAPPER_LIST_UPDATED, existingUser)
     })
 
-    socket.on(SEND_COORDS, function (data) {
+    socket.on(SEND_COORDS, function(data) {
       var peer = {
         userid: data.userid,
         usercoords: data.usercoords
@@ -75,37 +74,37 @@ module.exports = function (io, store) {
       socket.broadcast.in(mapRoom(data.mapid)).emit(PEER_COORDS_UPDATED, peer)
     })
 
-    socket.on(CREATE_MESSAGE, function (data) {
+    socket.on(CREATE_MESSAGE, function(data) {
       var mapId = data.mapid
       delete data.mapid
       socket.broadcast.in(mapRoom(mapId)).emit(MESSAGE_CREATED, data)
     })
 
-    socket.on(DRAG_TOPIC, function (data) {
+    socket.on(DRAG_TOPIC, function(data) {
       var mapId = data.mapid
       delete data.mapid
       socket.broadcast.in(mapRoom(mapId)).emit(TOPIC_DRAGGED, data)
     })
 
-    socket.on(CREATE_TOPIC, function (data) {
+    socket.on(CREATE_TOPIC, function(data) {
       var mapId = data.mapid
       delete data.mapid
       socket.broadcast.in(mapRoom(mapId)).emit(TOPIC_CREATED, data)
     })
 
-    socket.on(REMOVE_TOPIC, function (data) {
+    socket.on(REMOVE_TOPIC, function(data) {
       var mapId = data.mapid
       delete data.mapid
       socket.broadcast.in(mapRoom(mapId)).emit(TOPIC_REMOVED, data)
     })
 
-    socket.on(CREATE_SYNAPSE, function (data) {
+    socket.on(CREATE_SYNAPSE, function(data) {
       var mapId = data.mapid
       delete data.mapid
       socket.broadcast.in(mapRoom(mapId)).emit(SYNAPSE_CREATED, data)
     })
 
-    socket.on(REMOVE_SYNAPSE, function (data) {
+    socket.on(REMOVE_SYNAPSE, function(data) {
       var mapId = data.mapid
       delete data.mapid
       socket.broadcast.in(mapRoom(mapId)).emit(SYNAPSE_REMOVED, data)

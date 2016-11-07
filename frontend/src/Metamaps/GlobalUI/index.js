@@ -12,7 +12,7 @@ import ImportDialog from './ImportDialog'
 const GlobalUI = {
   notifyTimeout: null,
   lightbox: null,
-  init: function (serverData) {
+  init: function(serverData) {
     var self = GlobalUI
 
     self.Search.init(serverData)
@@ -23,7 +23,7 @@ const GlobalUI = {
     if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
 
     // bind lightbox clicks
-    $('.openLightbox').click(function (event) {
+    $('.openLightbox').click(function(event) {
       self.openLightbox($(this).attr('data-open'))
       event.preventDefault()
       return false
@@ -31,18 +31,18 @@ const GlobalUI = {
 
     $('#lightbox_screen, #lightbox_close').click(self.closeLightbox)
   },
-  showDiv: function (selector) {
+  showDiv: function(selector) {
     $(selector).show()
     $(selector).animate({
       opacity: 1
     }, 200, 'easeOutCubic')
   },
-  hideDiv: function (selector) {
+  hideDiv: function(selector) {
     $(selector).animate({
       opacity: 0
-    }, 200, 'easeInCubic', function () { $(this).hide() })
+    }, 200, 'easeInCubic', function() { $(this).hide() })
   },
-  openLightbox: function (which) {
+  openLightbox: function(which) {
     var self = GlobalUI
 
     $('.lightboxContent').hide()
@@ -69,7 +69,7 @@ const GlobalUI = {
     }
   },
 
-  closeLightbox: function (event) {
+  closeLightbox: function(event) {
     var self = GlobalUI
 
     if (event) event.preventDefault()
@@ -83,7 +83,7 @@ const GlobalUI = {
     // fade the black overlay out
     $('#lightbox_screen').animate({
       'opacity': '0.0'
-    }, 200, function () {
+    }, 200, function() {
       $('#lightbox_overlay').hide()
     })
 
@@ -94,25 +94,25 @@ const GlobalUI = {
     }
     self.lightbox = null
   },
-  notifyUser: function (message, leaveOpen) {
+  notifyUser: function(message, leaveOpen) {
     var self = GlobalUI
 
     $('#toast').html(message)
     self.showDiv('#toast')
     clearTimeout(self.notifyTimeOut)
     if (!leaveOpen) {
-      self.notifyTimeOut = setTimeout(function () {
+      self.notifyTimeOut = setTimeout(function() {
         self.hideDiv('#toast')
       }, 8000)
     }
   },
-  clearNotify: function () {
+  clearNotify: function() {
     var self = GlobalUI
 
     clearTimeout(self.notifyTimeOut)
     self.hideDiv('#toast')
   },
-  shareInvite: function (inviteLink) {
+  shareInvite: function(inviteLink) {
     clipboard.copy({
       'text/plain': inviteLink
     }).then(() => {

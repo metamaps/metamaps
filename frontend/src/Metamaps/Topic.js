@@ -23,20 +23,20 @@ const noOp = () => {}
 const Topic = {
   // this function is to retrieve a topic JSON object from the database
   // @param id = the id of the topic to retrieve
-  get: function (id, callback = noOp) {
+  get: function(id, callback = noOp) {
     // if the desired topic is not yet in the local topic repository, fetch it
-    if (DataModel.Topics.get(id) == undefined) {
+    if (DataModel.Topics.get(id) === undefined) {
       $.ajax({
         url: '/topics/' + id + '.json',
-        success: function (data) {
+        success: function(data) {
           DataModel.Topics.add(data)
           callback(DataModel.Topics.get(id))
         }
       })
     } else callback(DataModel.Topics.get(id))
   },
-  launch: function (id) {
-    var start = function (data) {
+  launch: function(id) {
+    var start = function(data) {
       Active.Topic = new DataModel.Topic(data.topic)
       DataModel.Creators = new DataModel.MapperCollection(data.creators)
       DataModel.Topics = new DataModel.TopicCollection([data.topic].concat(data.relatives))
@@ -62,7 +62,7 @@ const Topic = {
       Filter.checkMetacodes()
       Filter.checkSynapses()
       Filter.checkMappers()
-      
+
       // for mobile
       $('#header_content').html(Active.Topic.get('name'))
     }
@@ -72,7 +72,7 @@ const Topic = {
       success: start
     })
   },
-  end: function () {
+  end: function() {
     if (Active.Topic) {
       $('.rightclickmenu').remove()
       TopicCard.hideCard()
@@ -80,13 +80,13 @@ const Topic = {
       Filter.close()
     }
   },
-  centerOn: function (nodeid, callback) {
+  centerOn: function(nodeid, callback) {
     // don't clash with fetchRelatives
     if (!Visualize.mGraph.busy) {
       Visualize.mGraph.onClick(nodeid, {
         hideLabels: false,
         duration: 1000,
-        onComplete: function () {
+        onComplete: function() {
           if (callback) callback()
         }
       })
@@ -94,21 +94,21 @@ const Topic = {
       Active.Topic = DataModel.Topics.get(nodeid)
     }
   },
-  fetchRelatives: function (nodes, metacode_id) {
+  fetchRelatives: function(nodes, metacodeId) {
     var self = this
 
     var node = $.isArray(nodes) ? nodes[0] : nodes
 
-    var topics = DataModel.Topics.map(function (t) { return t.id })
-    var topics_string = topics.join()
+    var topics = DataModel.Topics.map(function(t) { return t.id })
+    var topicsString = topics.join()
 
-    var creators = DataModel.Creators.map(function (t) { return t.id })
-    var creators_string = creators.join()
+    var creators = DataModel.Creators.map(function(t) { return t.id })
+    var creatorsString = creators.join()
 
     var topic = node.getData('topic')
 
-    var successCallback;
-    successCallback = function (data) {
+    var successCallback
+    successCallback = function(data) {
       if (Visualize.mGraph.busy) {
         // don't clash with centerOn
         window.setTimeout(function() { successCallback(data) }, 100)
@@ -131,12 +131,12 @@ const Topic = {
 
       var i, l, t, s
 
-      Visualize.mGraph.graph.eachNode(function (n) {
+      Visualize.mGraph.graph.eachNode(function(n) {
         t = DataModel.Topics.get(n.id)
         t.set({ node: n }, { silent: true })
         t.updateNode()
 
-        n.eachAdjacency(function (edge) {
+        n.eachAdjacency(function(edge) {
           if (!edge.getData('init')) {
             edge.setData('init', true)
 
@@ -150,31 +150,30 @@ const Topic = {
         })
       })
       if ($.isArray(nodes) && nodes.length > 1) {
-        self.fetchRelatives(nodes.slice(1), metacode_id)
+        self.fetchRelatives(nodes.slice(1), metacodeId)
       }
     }
 
-    var paramsString = metacode_id ? 'metacode=' + metacode_id + '&' : ''
-    paramsString += 'network=' + topics_string + '&creators=' + creators_string
+    let paramsString = metacodeId ? 'metacode=' + metacodeId + '&' : ''
+    paramsString += 'network=' + topicsString + '&creators=' + creatorsString
 
     $.ajax({
       type: 'GET',
       url: '/topics/' + topic.id + '/relatives.json?' + paramsString,
       success: successCallback,
-      error: function () {}
+      error: function() {}
     })
   },
 
   // opts is additional options in a hash
   // TODO: move createNewInDB and permitCreateSynapseAfter into opts
-  renderTopic: function (mapping, topic, createNewInDB, permitCreateSynapseAfter, opts = {}) {
-    var self = Topic
-
+  renderTopic: function(mapping, topic, createNewInDB, permitCreateSynapseAfter, opts = {}) {
     var nodeOnViz, tempPos
 
     var newnode = topic.createNode()
 
-    var midpoint = {}, pixelPos
+    var midpoint = {}
+    var pixelPos
 
     if (!$.isEmptyObject(Visualize.mGraph.graph.nodes)) {
       Visualize.mGraph.graph.addNode(newnode)
@@ -209,7 +208,7 @@ const Topic = {
         Visualize.mGraph.fx.animate({
           modes: ['node-property:dim'],
           duration: 500,
-          onComplete: function () {
+          onComplete: function() {
             JIT.tempNode = null
             JIT.tempNode2 = null
             JIT.tempInit = false
@@ -220,7 +219,7 @@ const Topic = {
         Visualize.mGraph.fx.animate({
           modes: ['node-property:dim'],
           duration: 500,
-          onComplete: function () {}
+          onComplete: function() {}
         })
       }
     } else {
@@ -238,11 +237,11 @@ const Topic = {
       Visualize.mGraph.fx.animate({
         modes: ['node-property:dim'],
         duration: 500,
-        onComplete: function () {}
+        onComplete: function() {}
       })
     }
 
-    var mappingSuccessCallback = function (mappingModel, response, topicModel) {
+    var mappingSuccessCallback = function(mappingModel, response, topicModel) {
       var newTopicData = {
         mappingid: mappingModel.id,
         mappableid: mappingModel.get('mappable_id')
@@ -254,13 +253,13 @@ const Topic = {
         opts.success(topicModel)
       }
     }
-    var topicSuccessCallback = function (topicModel, response) {
+    var topicSuccessCallback = function(topicModel, response) {
       if (Active.Map) {
         mapping.save({ mappable_id: topicModel.id }, {
-          success: function (model, response) {
+          success: function(model, response) {
             mappingSuccessCallback(model, response, topicModel)
           },
-          error: function (model, response) {
+          error: function(model, response) {
             console.log('error saving mapping to database')
           }
         })
@@ -275,7 +274,7 @@ const Topic = {
       if (topic.isNew()) {
         topic.save(null, {
           success: topicSuccessCallback,
-          error: function (model, response) {
+          error: function(model, response) {
             console.log('error saving topic to database')
           }
         })
@@ -286,7 +285,7 @@ const Topic = {
       }
     }
   },
-  createTopicLocally: function () {
+  createTopicLocally: function() {
     var self = Topic
 
     if (Create.newTopic.name === '') {
@@ -315,7 +314,7 @@ const Topic = {
       xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
       yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
       mappable_id: topic.cid,
-      mappable_type: 'Topic',
+      mappable_type: 'Topic'
     })
     DataModel.Mappings.add(mapping)
 
@@ -325,7 +324,7 @@ const Topic = {
 
     self.renderTopic(mapping, topic, true, true) // this function also includes the creation of the topic in the database
   },
-  getTopicFromAutocomplete: function (id) {
+  getTopicFromAutocomplete: function(id) {
     var self = Topic
 
     // hide the 'double-click to add a topic' message
@@ -344,7 +343,7 @@ const Topic = {
         xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
         yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
         mappable_type: 'Topic',
-        mappable_id: topic.id,
+        mappable_id: topic.id
       })
       DataModel.Mappings.add(mapping)
 
@@ -353,7 +352,7 @@ const Topic = {
       if (Create.newTopic.pinned) Create.newTopic.beingCreated = true
     })
   },
-  getMapFromAutocomplete: function (data) {
+  getMapFromAutocomplete: function(data) {
     var self = Topic
 
     $(document).trigger(Map.events.editedByActiveMapper)
@@ -371,7 +370,7 @@ const Topic = {
       xloc: Create.newTopic.x,
       yloc: Create.newTopic.y,
       mappable_id: topic.cid,
-      mappable_type: 'Topic',
+      mappable_type: 'Topic'
     })
     DataModel.Mappings.add(mapping)
 
@@ -383,7 +382,7 @@ const Topic = {
     // this blocked the enterKeyHandler from creating a new topic as well
     if (Create.newTopic.pinned) Create.newTopic.beingCreated = true
   },
-  getTopicFromSearch: function (event, id) {
+  getTopicFromSearch: function(event, id) {
     var self = Topic
 
     $(document).trigger(Map.events.editedByActiveMapper)
@@ -394,7 +393,7 @@ const Topic = {
         xloc: nextCoords.x,
         yloc: nextCoords.y,
         mappable_type: 'Topic',
-        mappable_id: topic.id,
+        mappable_id: topic.id
       })
       DataModel.Mappings.add(mapping)
       self.renderTopic(mapping, topic, true, true)

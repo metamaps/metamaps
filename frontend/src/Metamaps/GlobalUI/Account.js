@@ -5,16 +5,16 @@ import Filter from '../Filter'
 const Account = {
   isOpen: false,
   changing: false,
-  init: function () {
+  init: function() {
     var self = Account
 
     $('.sidebarAccountIcon').click(self.toggleBox)
-    $('.sidebarAccountBox').click(function (event) {
+    $('.sidebarAccountBox').click(function(event) {
       event.stopPropagation()
     })
     $('body').click(self.close)
   },
-  toggleBox: function (event) {
+  toggleBox: function(event) {
     var self = Account
 
     if (self.isOpen) self.close()
@@ -22,7 +22,7 @@ const Account = {
 
     event.stopPropagation()
   },
-  open: function () {
+  open: function() {
     var self = Account
 
     Filter.close()
@@ -30,21 +30,21 @@ const Account = {
 
     if (!self.isOpen && !self.changing) {
       self.changing = true
-      $('.sidebarAccountBox').fadeIn(200, function () {
+      $('.sidebarAccountBox').fadeIn(200, function() {
         self.changing = false
         self.isOpen = true
         $('.sidebarAccountBox #user_email').focus()
       })
     }
   },
-  close: function () {
+  close: function() {
     var self = Account
 
     $('.sidebarAccountIcon .tooltipsUnder').removeClass('hide')
     if (!self.changing) {
       self.changing = true
       $('.sidebarAccountBox #user_email').blur()
-      $('.sidebarAccountBox').fadeOut(200, function () {
+      $('.sidebarAccountBox').fadeOut(200, function() {
         self.changing = false
         self.isOpen = false
       })

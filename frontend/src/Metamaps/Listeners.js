@@ -12,9 +12,9 @@ import Visualize from './Visualize'
 import { Search } from './GlobalUI'
 
 const Listeners = {
-  init: function () {
+  init: function() {
     var self = this
-    $(document).on('keydown', function (e) {
+    $(document).on('keydown', function(e) {
       if (!(Active.Map || Active.Topic)) return
 
       const onCanvas = e.target.tagName === 'BODY'
@@ -35,7 +35,7 @@ const Listeners = {
             Control.deselectAllEdges()
 
             e.preventDefault()
-            Visualize.mGraph.graph.eachNode(function (n) {
+            Visualize.mGraph.graph.eachNode(function(n) {
               Control.selectNode(n, e)
             })
 
@@ -110,7 +110,7 @@ const Listeners = {
       }
     })
 
-    $(window).resize(function () {
+    $(window).resize(function() {
       if (Visualize && Visualize.mGraph) {
         Util.resizeCanvas(Visualize.mGraph.canvas)
       }
@@ -119,11 +119,11 @@ const Listeners = {
       Mobile.resizeTitle()
     })
   },
-  centerAndReveal: function (nodes, opts) {
+  centerAndReveal: function(nodes, opts) {
     if (nodes.length < 1) return
     var node = nodes[nodes.length - 1]
     if (opts.center && opts.reveal) {
-      Topic.centerOn(node.id, function () {
+      Topic.centerOn(node.id, function() {
         Topic.fetchRelatives(nodes)
       })
     } else if (opts.center) {

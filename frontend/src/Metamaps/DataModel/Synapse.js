@@ -17,10 +17,10 @@ import DataModel from './index'
 const Synapse = Backbone.Model.extend({
   urlRoot: '/synapses',
   blacklist: ['edge', 'created_at', 'updated_at'],
-  toJSON: function (options) {
+  toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)
   },
-  save: function (key, val, options) {
+  save: function(key, val, options) {
     var attrs
 
     // Handle both `"key", value` and `{key: value}` -style arguments.
@@ -36,7 +36,7 @@ const Synapse = Backbone.Model.extend({
 
     var permBefore = this.get('permission')
 
-    newOptions.success = function (model, response, opt) {
+    newOptions.success = function(model, response, opt) {
       if (s) s(model, response, opt)
       model.trigger('saved')
 
@@ -48,7 +48,7 @@ const Synapse = Backbone.Model.extend({
     }
     return Backbone.Model.prototype.save.call(this, attrs, newOptions)
   },
-  initialize: function () {
+  initialize: function() {
     if (this.isNew()) {
       this.set({
         'user_id': Active.Mapper.id,
@@ -60,7 +60,7 @@ const Synapse = Backbone.Model.extend({
     this.on('changeByOther', this.updateCardView)
     this.on('change', this.updateEdgeView)
     this.on('saved', this.savedEvent)
-    this.on('noLongerPrivate', function () {
+    this.on('noLongerPrivate', function() {
       var newSynapseData = {
         mappingid: this.getMapping().id,
         mappableid: this.id
@@ -68,7 +68,7 @@ const Synapse = Backbone.Model.extend({
 
       $(document).trigger(JIT.events.newSynapse, [newSynapseData])
     })
-    this.on('nowPrivate', function () {
+    this.on('nowPrivate', function() {
       $(document).trigger(JIT.events.removeSynapse, [{
         mappableid: this.id
       }])
@@ -76,28 +76,28 @@ const Synapse = Backbone.Model.extend({
 
     this.on('change:desc', Filter.checkSynapses, this)
   },
-  prepareLiForFilter: function () {
+  prepareLiForFilter: function() {
     return outdent`
       <li data-id="${this.get('desc')}">
         <img src="${DataModel.synapseIconUrl}" alt="synapse icon" />
         <p>${this.get('desc')}</p>
       </li>`
   },
-  authorizeToEdit: function (mapper) {
+  authorizeToEdit: function(mapper) {
     if (mapper && (this.get('calculated_permission') === 'commons' || this.get('collaborator_ids').includes(mapper.get('id')) || this.get('user_id') === mapper.get('id'))) return true
     else return false
   },
-  authorizePermissionChange: function (mapper) {
+  authorizePermissionChange: function(mapper) {
     if (mapper && this.get('user_id') === mapper.get('id')) return true
     else return false
   },
-  getTopic1: function () {
+  getTopic1: function() {
     return DataModel.Topics.get(this.get('topic1_id'))
   },
-  getTopic2: function () {
+  getTopic2: function() {
     return DataModel.Topics.get(this.get('topic2_id'))
   },
-  getDirection: function () {
+  getDirection: function() {
     var t1 = this.getTopic1()
     var t2 = this.getTopic2()
 
@@ -106,7 +106,7 @@ const Synapse = Backbone.Model.extend({
       t2.get('node').id
     ] : false
   },
-  getMapping: function () {
+  getMapping: function() {
     if (!Active.Map) return false
 
     return DataModel.Mappings.findWhere({
@@ -115,7 +115,7 @@ const Synapse = Backbone.Model.extend({
       mappable_id: this.isNew() ? this.cid : this.id
     })
   },
-  createEdge: function (providedMapping) {
+  createEdge: function(providedMapping) {
     var mapping, mappingID
     var synapseID = this.isNew() ? this.cid : this.id
 
@@ -137,7 +137,7 @@ const Synapse = Backbone.Model.extend({
 
     return edge
   },
-  updateEdge: function () {
+  updateEdge: function() {
     var mapping
     var edge = this.get('edge')
     edge.getData('synapses').push(this)
@@ -149,14 +149,14 @@ const Synapse = Backbone.Model.extend({
 
     return edge
   },
-  savedEvent: function () {
+  savedEvent: function() {
     Realtime.updateSynapse(this)
   },
-  updateViews: function () {
+  updateViews: function() {
     this.updateCardView()
     this.updateEdgeView()
   },
-  updateCardView: function () {
+  updateCardView: function() {
     var onPageWithSynapseCard = Active.Map || Active.Topic
     var edge = this.get('edge')
 
@@ -165,7 +165,7 @@ const Synapse = Backbone.Model.extend({
       SynapseCard.showCard(edge)
     }
   },
-  updateEdgeView: function () {
+  updateEdgeView: function() {
     var onPageWithSynapseCard = Active.Map || Active.Topic
     var edge = this.get('edge')
 

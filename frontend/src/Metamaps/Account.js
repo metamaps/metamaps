@@ -1,33 +1,33 @@
 /* global $, CanvasLoader */
 
 const Account = {
-  init: function (serverData) {
+  init: function(serverData) {
     Account.userIconUrl = serverData['user.png']
   },
   listenersInitialized: false,
   userIconUrl: null,
-  initListeners: function () {
+  initListeners: function() {
     var self = Account
 
     $('#user_image').change(self.showImagePreview)
     self.listenersInitialized = true
   },
-  toggleChangePicture: function () {
+  toggleChangePicture: function() {
     var self = Account
 
     $('.userImageMenu').toggle()
     if (!self.listenersInitialized) self.initListeners()
   },
-  openChangePicture: function () {
+  openChangePicture: function() {
     var self = Account
 
     $('.userImageMenu').show()
     if (!self.listenersInitialized) self.initListeners()
   },
-  closeChangePicture: function () {
+  closeChangePicture: function() {
     $('.userImageMenu').hide()
   },
-  showLoading: function () {
+  showLoading: function() {
     var loader = new CanvasLoader('accountPageLoading')
     loader.setColor('#4FC059') // default is '#000000'
     loader.setDiameter(28) // default is 40
@@ -36,12 +36,12 @@ const Account = {
     loader.show() // Hidden by default
     $('#accountPageLoading').show()
   },
-  showImagePreview: function () {
+  showImagePreview: function() {
     var file = $('#user_image')[0].files[0]
 
     var reader = new window.FileReader()
 
-    reader.onload = function (e) {
+    reader.onload = function(e) {
       var $canvas = $('<canvas>').attr({
         width: 84,
         height: 84
@@ -49,7 +49,7 @@ const Account = {
       var context = $canvas[0].getContext('2d')
       var imageObj = new window.Image()
 
-      imageObj.onload = function () {
+      imageObj.onload = function() {
         $('.userImageDiv canvas').remove()
         $('.userImageDiv img').hide()
 
@@ -80,7 +80,7 @@ const Account = {
       $('#remove_image').val('0')
     }
   },
-  removePicture: function () {
+  removePicture: function() {
     var self = Account
 
     $('.userImageDiv canvas').remove()
@@ -91,15 +91,15 @@ const Account = {
     input.replaceWith(input.val('').clone(true))
     $('#remove_image').val('1')
   },
-  changeName: function () {
+  changeName: function() {
     $('.accountName').hide()
     $('.changeName').show()
   },
-  showPass: function () {
+  showPass: function() {
     $('.toHide').show()
     $('.changePass').hide()
   },
-  hidePass: function () {
+  hidePass: function() {
     $('.toHide').hide()
     $('.changePass').show()
 

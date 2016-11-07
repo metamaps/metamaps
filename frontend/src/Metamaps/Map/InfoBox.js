@@ -35,23 +35,23 @@ const InfoBox = {
       data-bip-value="{{desc}}"
     >{{desc}}</span>`,
   userImageUrl: '',
-  init: function (serverData) {
+  init: function(serverData) {
     var self = InfoBox
 
     $('.mapInfoIcon').click(self.toggleBox)
-    $('.mapInfoBox').click(function (event) {
+    $('.mapInfoBox').click(function(event) {
       event.stopPropagation()
     })
     $('body').click(self.close)
 
-    self.attachEventListeners() 
+    self.attachEventListeners()
 
     self.generateBoxHTML = Hogan.compile($('#mapInfoBoxTemplate').html())
 
     self.userImageUrl = serverData['user.png']
 
     var querystring = window.location.search.replace(/^\?/, '')
-    if (querystring == 'new') { 
+    if (querystring === 'new') {
       self.open()
       $('.mapInfoBox').addClass('mapRequestTitle')
       $('#mapInfoName').trigger('click')
@@ -59,7 +59,7 @@ const InfoBox = {
       $('#mapInfoName textarea').select()
     }
   },
-  toggleBox: function (event) {
+  toggleBox: function(event) {
     var self = InfoBox
 
     if (self.isOpen) self.close()
@@ -67,24 +67,24 @@ const InfoBox = {
 
     event.stopPropagation()
   },
-  open: function () {
+  open: function() {
     var self = InfoBox
     $('.mapInfoIcon div').addClass('hide')
     if (!self.isOpen && !self.changing) {
       self.changing = true
-      $('.mapInfoBox').fadeIn(200, function () {
+      $('.mapInfoBox').fadeIn(200, function() {
         self.changing = false
         self.isOpen = true
       })
     }
   },
-  close: function () {
+  close: function() {
     var self = InfoBox
 
     $('.mapInfoIcon div').removeClass('hide')
     if (!self.changing) {
       self.changing = true
-      $('.mapInfoBox').fadeOut(200, function () {
+      $('.mapInfoBox').fadeOut(200, function() {
         self.changing = false
         self.isOpen = false
         self.hidePermissionSelect()
@@ -92,7 +92,7 @@ const InfoBox = {
       })
     }
   },
-  load: function () {
+  load: function() {
     var self = InfoBox
 
     var map = Active.Map
@@ -127,14 +127,14 @@ const InfoBox = {
 
     self.attachEventListeners()
   },
-  attachEventListeners: function () {
+  attachEventListeners: function() {
     var self = InfoBox
 
     $('.mapInfoBox.canEdit .best_in_place').best_in_place()
 
     // because anyone who can edit the map can change the map title
     var bipName = $('.mapInfoBox .best_in_place_name')
-    bipName.unbind('best_in_place:activate').bind('best_in_place:activate', function () {
+    bipName.unbind('best_in_place:activate').bind('best_in_place:activate', function() {
       var $el = bipName.find('textarea')
       var el = $el[0]
 
@@ -142,16 +142,16 @@ const InfoBox = {
 
       $('.mapInfoName').append('<div class="nameCounter forMap"></div>')
 
-      var callback = function (data) {
+      var callback = function(data) {
         $('.nameCounter.forMap').html(data.all + '/140')
       }
       Countable.live(el, callback)
     })
-    bipName.unbind('best_in_place:deactivate').bind('best_in_place:deactivate', function () {
+    bipName.unbind('best_in_place:deactivate').bind('best_in_place:deactivate', function() {
       $('.nameCounter.forMap').remove()
     })
 
-    $('.mapInfoName .best_in_place_name').unbind('ajax:success').bind('ajax:success', function () {
+    $('.mapInfoName .best_in_place_name').unbind('ajax:success').bind('ajax:success', function() {
       var name = $(this).html()
       Active.Map.set('name', name)
       Active.Map.trigger('saved')
@@ -162,7 +162,7 @@ const InfoBox = {
       window.history.replaceState('', `${name} | Metamaps`, window.location.pathname)
     })
 
-    $('.mapInfoDesc .best_in_place_desc').unbind('ajax:success').bind('ajax:success', function () {
+    $('.mapInfoDesc .best_in_place_desc').unbind('ajax:success').bind('ajax:success', function() {
       var desc = $(this).html()
       Active.Map.set('desc', desc)
       Active.Map.trigger('saved')
@@ -182,76 +182,76 @@ const InfoBox = {
 
     $('.yourMap .mapInfoDelete').unbind().click(self.deleteActiveMap)
 
-    $('.mapContributors span, #mapContribs').unbind().click(function (event) {
+    $('.mapContributors span, #mapContribs').unbind().click(function(event) {
       $('.mapContributors .tip').toggle()
       event.stopPropagation()
     })
-    $('.mapContributors .tip').unbind().click(function (event) {
+    $('.mapContributors .tip').unbind().click(function(event) {
       event.stopPropagation()
     })
     $('.mapContributors .tip li a').click(Router.intercept)
 
-    $('.mapInfoBox').unbind('.hideTip').bind('click.hideTip', function () {
+    $('.mapInfoBox').unbind('.hideTip').bind('click.hideTip', function() {
       $('.mapContributors .tip').hide()
     })
 
-    self.addTypeahead() 
+    self.addTypeahead()
   },
-  addTypeahead: function () {
+  addTypeahead: function() {
     var self = InfoBox
 
     if (!Active.Map) return
 
     // for autocomplete
     var collaborators = {
-        name: 'collaborators',
-        limit: 9999,
-        display: function(s) { return s.label; },
-        templates: {
-            notFound: function(s) {
-                return Hogan.compile($('#collaboratorSearchTemplate').html()).render({
-                    value: "No results",
-                    label: "No results",
-                    rtype: "noresult",
-                    profile: self.userImageUrl
-                });
-            },
-            suggestion: function(s) {
-                return Hogan.compile($('#collaboratorSearchTemplate').html()).render(s);
-            },
+      name: 'collaborators',
+      limit: 9999,
+      display: function(s) { return s.label },
+      templates: {
+        notFound: function(s) {
+          return Hogan.compile($('#collaboratorSearchTemplate').html()).render({
+            value: 'No results',
+            label: 'No results',
+            rtype: 'noresult',
+            profile: self.userImageUrl
+          })
         },
-        source: new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: '/search/mappers?term=%QUERY',
-                wildcard: '%QUERY',
-            },
-        })
+        suggestion: function(s) {
+          return Hogan.compile($('#collaboratorSearchTemplate').html()).render(s)
+        }
+      },
+      source: new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+          url: '/search/mappers?term=%QUERY',
+          wildcard: '%QUERY'
+        }
+      })
     }
 
     // for adding map collaborators, who will have edit rights
     if (Active.Mapper && Active.Mapper.id === Active.Map.get('user_id')) {
       $('.collaboratorSearchField').typeahead(
         {
-          highlight: false,
+          highlight: false
         },
         [collaborators]
       )
       $('.collaboratorSearchField').bind('typeahead:select', self.handleResultClick)
-      $('.mapContributors .removeCollaborator').click(function () {
+      $('.mapContributors .removeCollaborator').click(function() {
         self.removeCollaborator(parseInt($(this).data('id')))
       })
-    } 
+    }
   },
-  removeCollaborator: function (collaboratorId) {
+  removeCollaborator: function(collaboratorId) {
     var self = InfoBox
     DataModel.Collaborators.remove(DataModel.Collaborators.get(collaboratorId))
-    var mapperIds = DataModel.Collaborators.models.map(function (mapper) { return mapper.id })
+    var mapperIds = DataModel.Collaborators.models.map(function(mapper) { return mapper.id })
     $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
     self.updateNumbers()
   },
-  addCollaborator: function (newCollaboratorId) {
+  addCollaborator: function(newCollaboratorId) {
     var self = InfoBox
 
     if (DataModel.Collaborators.get(newCollaboratorId)) {
@@ -261,7 +261,7 @@ const InfoBox = {
 
     function callback(mapper) {
       DataModel.Collaborators.add(mapper)
-      var mapperIds = DataModel.Collaborators.models.map(function (mapper) { return mapper.id })
+      var mapperIds = DataModel.Collaborators.models.map(function(mapper) { return mapper.id })
       $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
       var name = DataModel.Collaborators.get(newCollaboratorId).get('name')
       GlobalUI.notifyUser(name + ' will be notified by email')
@@ -270,29 +270,28 @@ const InfoBox = {
 
     $.getJSON('/users/' + newCollaboratorId + '.json', callback)
   },
-  handleResultClick: function (event, item) {
+  handleResultClick: function(event, item) {
     var self = InfoBox
 
-   self.addCollaborator(item.id)
-   $('.collaboratorSearchField').typeahead('val', '')
+    self.addCollaborator(item.id)
+    $('.collaboratorSearchField').typeahead('val', '')
   },
-  updateNameDescPerm: function (name, desc, perm) {
+  updateNameDescPerm: function(name, desc, perm) {
     $('.mapInfoBox').removeClass('mapRequestTitle')
     $('.mapInfoName .best_in_place_name').html(name)
     $('.mapInfoDesc .best_in_place_desc').html(desc)
     $('.mapInfoBox .mapPermission').removeClass('commons public private').addClass(perm)
   },
-  createContributorList: function () {
-    var self = InfoBox
+  createContributorList: function() {
     var relevantPeople = Active.Map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
     var activeMapperIsCreator = Active.Mapper && Active.Mapper.id === Active.Map.get('user_id')
     var string = ''
     string += '<ul>'
 
-    relevantPeople.each(function (m) {
+    relevantPeople.each(function(m) {
       var isCreator = Active.Map.get('user_id') === m.get('id')
       string += '<li><a href="/explore/mapper/' + m.get('id') + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get('image') + '" />' + m.get('name')
-      if (isCreator) string += ' (creator)' 
+      if (isCreator) string += ' (creator)'
       string += '</a>'
       if (activeMapperIsCreator && !isCreator) string += '<span class="removeCollaborator" data-id="' + m.get('id') + '"></span>'
       string += '</li>'
@@ -305,27 +304,30 @@ const InfoBox = {
     }
     return string
   },
-  updateNumbers: function () {
+  updateNumbers: function() {
     if (!Active.Map) return
 
-    var self = InfoBox
-    var mapper = Active.Mapper
+    const self = InfoBox
+
     var relevantPeople = Active.Map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
 
-    var contributors_class = ''
-    if (relevantPeople.length === 2) contributors_class = 'multiple mTwo'
-    else if (relevantPeople.length > 2) contributors_class = 'multiple'
+    let contributorsClass = ''
+    if (relevantPeople.length === 2) {
+      contributorsClass = 'multiple mTwo'
+    } else if (relevantPeople.length > 2) {
+      contributorsClass = 'multiple'
+    }
 
-    var contributors_image = self.userImageUrl
+    let contributorsImage = self.userImageUrl
     if (relevantPeople.length > 0) {
       // get the first contributor and use their image
-      contributors_image = relevantPeople.models[0].get('image')
+      contributorsImage = relevantPeople.models[0].get('image')
     }
-    $('.mapContributors img').attr('src', contributors_image).removeClass('multiple mTwo').addClass(contributors_class)
+    $('.mapContributors img').attr('src', contributorsImage).removeClass('multiple mTwo').addClass(contributorsClass)
     $('.mapContributors span').text(relevantPeople.length)
     $('.mapContributors .tip').html(self.createContributorList())
     self.addTypeahead()
-    $('.mapContributors .tip').unbind().click(function (event) {
+    $('.mapContributors .tip').unbind().click(function(event) {
       event.stopPropagation()
     })
     $('.mapTopics').text(DataModel.Topics.length)
@@ -333,7 +335,7 @@ const InfoBox = {
 
     $('.mapEditedAt').html('<span>Last edited: </span>' + Util.nowDateFormatted())
   },
-  onPermissionClick: function (event) {
+  onPermissionClick: function(event) {
     var self = InfoBox
 
     if (!self.selectingPermission) {
@@ -350,14 +352,14 @@ const InfoBox = {
       event.stopPropagation()
     }
   },
-  hidePermissionSelect: function () {
+  hidePermissionSelect: function() {
     var self = InfoBox
 
     self.selectingPermission = false
     $('.mapPermission').removeClass('minimize') // this line flips the pull up arrow to a drop down arrow
     $('.mapPermission .permissionSelect').remove()
   },
-  selectPermission: function (event) {
+  selectPermission: function(event) {
     var self = InfoBox
 
     self.selectingPermission = false
@@ -372,7 +374,7 @@ const InfoBox = {
     $('.mapInfoBox').removeClass('shareable').addClass(shareable)
     event.stopPropagation()
   },
-  deleteActiveMap: function () {
+  deleteActiveMap: function() {
     var confirmString = 'Are you sure you want to delete this map? '
     confirmString += 'This action is irreversible. It will not delete the topics and synapses on the map.'
 
@@ -390,8 +392,7 @@ const InfoBox = {
       map.destroy()
       Router.home()
       GlobalUI.notifyUser('Map eliminated!')
-    }
-    else if (!authorized) {
+    } else if (!authorized) {
       window.alert("Hey now. We can't just go around willy nilly deleting other people's maps now can we? Run off and find something constructive to do, eh?")
     }
   }

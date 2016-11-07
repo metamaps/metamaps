@@ -13,7 +13,7 @@ const CreateMap = {
   emptyForkMapForm: '',
   topicsToMap: [],
   synapsesToMap: [],
-  init: function () {
+  init: function() {
     var self = CreateMap
 
     self.newMap = new DataModelMap({ permission: 'commons' })
@@ -22,14 +22,14 @@ const CreateMap = {
 
     self.emptyMapForm = $('#new_map').html()
   },
-  bindFormEvents: function () {
+  bindFormEvents: function() {
     var self = CreateMap
 
-    $('.new_map input, .new_map div').unbind('keypress').bind('keypress', function (event) {
+    $('.new_map input, .new_map div').unbind('keypress').bind('keypress', function(event) {
       if (event.keyCode === 13) self.submit()
     })
 
-    $('.new_map button.cancel').unbind().bind('click', function (event) {
+    $('.new_map button.cancel').unbind().bind('click', function(event) {
       event.preventDefault()
       GlobalUI.closeLightbox()
     })
@@ -38,12 +38,12 @@ const CreateMap = {
     // bind permission changer events on the createMap form
     $('.permIcon').unbind().bind('click', self.switchPermission)
   },
-  closeSuccess: function () {
-    $('#mapCreatedSuccess').fadeOut(300, function () {
+  closeSuccess: function() {
+    $('#mapCreatedSuccess').fadeOut(300, function() {
       $(this).remove()
     })
   },
-  switchPermission: function () {
+  switchPermission: function() {
     var self = CreateMap
 
     self.newMap.set('permission', $(this).attr('data-permission'))
@@ -53,7 +53,7 @@ const CreateMap = {
     var permText = $(this).find('.tip').html()
     $(this).parents('.new_map').find('.permText').html(permText)
   },
-  submit: function (event) {
+  submit: function(event) {
     if (event) event.preventDefault()
 
     var self = CreateMap
@@ -82,22 +82,20 @@ const CreateMap = {
     GlobalUI.closeLightbox()
     GlobalUI.notifyUser('Working...')
   },
-  throwMapNameError: function () {
-
+  throwMapNameError: function() {
     var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map'
     var $form = $(formId)
 
     var message = $("<div class='feedback_message'>Please enter a map name...</div>")
 
     $form.find('#map_name').after(message)
-    setTimeout(function () {
-      message.fadeOut('fast', function () {
+    setTimeout(function() {
+      message.fadeOut('fast', function() {
         message.remove()
       })
     }, 5000)
   },
-  success: function (model) {
-    var self = CreateMap
+  success: function(model) {
     // push the new map onto the collection of 'my maps'
     DataModel.Maps.Mine.add(model)
 
@@ -117,7 +115,7 @@ const CreateMap = {
       return false
     })
   },
-  reset: function (id) {
+  reset: function(id) {
     var self = CreateMap
 
     var form = $('#' + id)

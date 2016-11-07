@@ -54,7 +54,7 @@ const DataModel = {
   Synapses: new SynapseCollection(),
   Topics: new TopicCollection(),
 
-  init: function (serverData) {
+  init: function(serverData) {
     var self = DataModel
 
     // workaround circular import problem
@@ -101,18 +101,18 @@ const DataModel = {
 
     self.attachCollectionEvents()
   },
-  attachCollectionEvents: function () {
-    DataModel.Topics.on('add remove', function (topic) {
+  attachCollectionEvents: function() {
+    DataModel.Topics.on('add remove', function(topic) {
       InfoBox.updateNumbers()
       Filter.checkMetacodes()
       Filter.checkMappers()
     })
-    DataModel.Synapses.on('add remove', function (synapse) {
+    DataModel.Synapses.on('add remove', function(synapse) {
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMappers()
     })
-    DataModel.Mappings.on('add remove', function (mapping) {
+    DataModel.Mappings.on('add remove', function(mapping) {
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMetacodes()

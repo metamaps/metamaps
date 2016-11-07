@@ -16,10 +16,10 @@ import DataModel from './index'
 const Topic = Backbone.Model.extend({
   urlRoot: '/topics',
   blacklist: ['node', 'created_at', 'updated_at', 'user_name', 'user_image', 'map_count', 'synapse_count'],
-  toJSON: function (options) {
+  toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)
   },
-  save: function (key, val, options) {
+  save: function(key, val, options) {
     var attrs
 
     // Handle both `"key", value` and `{key: value}` -style arguments.
@@ -35,7 +35,7 @@ const Topic = Backbone.Model.extend({
 
     var permBefore = this.get('permission')
 
-    newOptions.success = function (model, response, opt) {
+    newOptions.success = function(model, response, opt) {
       if (s) s(model, response, opt)
       model.trigger('saved')
       model.set('calculated_permission', model.get('permission'))
@@ -48,7 +48,7 @@ const Topic = Backbone.Model.extend({
     }
     return Backbone.Model.prototype.save.call(this, attrs, newOptions)
   },
-  initialize: function () {
+  initialize: function() {
     if (this.isNew()) {
       this.set({
         'user_id': Active.Mapper.id,
@@ -61,14 +61,14 @@ const Topic = Backbone.Model.extend({
     this.on('changeByOther', this.updateCardView)
     this.on('change', this.updateNodeView)
     this.on('saved', this.savedEvent)
-    this.on('nowPrivate', function () {
+    this.on('nowPrivate', function() {
       var removeTopicData = {
         mappableid: this.id
       }
 
       $(document).trigger(JIT.events.removeTopic, [removeTopicData])
     })
-    this.on('noLongerPrivate', function () {
+    this.on('noLongerPrivate', function() {
       var newTopicData = {
         mappingid: this.getMapping().id,
         mappableid: this.id
@@ -79,7 +79,7 @@ const Topic = Backbone.Model.extend({
 
     this.on('change:metacode_id', Filter.checkMetacodes, this)
   },
-  authorizeToEdit: function (mapper) {
+  authorizeToEdit: function(mapper) {
     if (mapper &&
       (this.get('user_id') === mapper.get('id') ||
       this.get('calculated_permission') === 'commons' ||
@@ -89,15 +89,15 @@ const Topic = Backbone.Model.extend({
       return false
     }
   },
-  authorizePermissionChange: function (mapper) {
+  authorizePermissionChange: function(mapper) {
     if (mapper && this.get('user_id') === mapper.get('id')) return true
     else return false
   },
-  getDate: function () {},
-  getMetacode: function () {
+  getDate: function() {},
+  getMetacode: function() {
     return DataModel.Metacodes.get(this.get('metacode_id'))
   },
-  getMapping: function () {
+  getMapping: function() {
     if (!Active.Map) return false
 
     return DataModel.Mappings.findWhere({
@@ -106,7 +106,7 @@ const Topic = Backbone.Model.extend({
       mappable_id: this.isNew() ? this.cid : this.id
     })
   },
-  createNode: function () {
+  createNode: function() {
     var mapping
     var node = {
       adjacencies: [],
@@ -124,7 +124,7 @@ const Topic = Backbone.Model.extend({
 
     return node
   },
-  updateNode: function () {
+  updateNode: function() {
     var mapping
     var node = this.get('node')
     node.setData('topic', this)
@@ -136,10 +136,10 @@ const Topic = Backbone.Model.extend({
 
     return node
   },
-  savedEvent: function () {
+  savedEvent: function() {
     Realtime.updateTopic(this)
   },
-  updateViews: function () {
+  updateViews: function() {
     var onPageWithTopicCard = Active.Map || Active.Topic
     var node = this.get('node')
     // update topic card, if this topic is the one open there
@@ -153,7 +153,7 @@ const Topic = Backbone.Model.extend({
       Visualize.mGraph.plot()
     }
   },
-  updateCardView: function () {
+  updateCardView: function() {
     var onPageWithTopicCard = Active.Map || Active.Topic
     var node = this.get('node')
     // update topic card, if this topic is the one open there
@@ -161,7 +161,7 @@ const Topic = Backbone.Model.extend({
       TopicCard.showCard(node)
     }
   },
-  updateNodeView: function () {
+  updateNodeView: function() {
     var onPageWithTopicCard = Active.Map || Active.Topic
     var node = this.get('node')
 

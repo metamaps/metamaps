@@ -6,9 +6,9 @@ import VideoView from './VideoView'
 import Room from './Room'
 import { JUNTO_UPDATED } from '../Realtime/events'
 
-const Views = { 
+const Views = {
   init: () => {
-    $(document).on(JUNTO_UPDATED, () => ExploreMaps.render()) 
+    $(document).on(JUNTO_UPDATED, () => ExploreMaps.render())
   },
   ExploreMaps,
   ChatView,

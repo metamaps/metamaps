@@ -7,7 +7,7 @@ const AutoLayout = {
   nextYshift: 0,
   timeToTurn: 0,
 
-  getNextCoord: function (opts = {}) {
+  getNextCoord: function(opts = {}) {
     var self = AutoLayout
     var nextX = self.nextX
     var nextY = self.nextY
@@ -28,22 +28,19 @@ const AutoLayout = {
       self.timeToTurn = 0
 
       // going right? turn down
-      if (self.nextXshift == 1 && self.nextYshift == 0) {
+      if (self.nextXshift === 1 && self.nextYshift === 0) {
         self.nextXshift = 0
         self.nextYshift = 1
-      }
-      // going down? turn left
-      else if (self.nextXshift == 0 && self.nextYshift == 1) {
+      } else if (self.nextXshift === 0 && self.nextYshift === 1) {
+        // going down? turn left
         self.nextXshift = -1
         self.nextYshift = 0
-      }
-      // going left? turn up
-      else if (self.nextXshift == -1 && self.nextYshift == 0) {
+      } else if (self.nextXshift === -1 && self.nextYshift === 0) {
+        // going left? turn up
         self.nextXshift = 0
         self.nextYshift = -1
-      }
-      // going up? turn right
-      else if (self.nextXshift == 0 && self.nextYshift == -1) {
+      } else if (self.nextXshift === 0 && self.nextYshift === -1) {
+        // going up? turn right
         self.nextXshift = 1
         self.nextYshift = 0
       }
@@ -59,14 +56,14 @@ const AutoLayout = {
       }
     }
   },
-  coordsTaken: function (x, y, mappings) {
+  coordsTaken: function(x, y, mappings) {
     if (mappings.findWhere({ xloc: x, yloc: y })) {
       return true
     } else {
       return false
     }
   },
-  resetSpiral: function () {
+  resetSpiral: function() {
     var self = AutoLayout
     self.nextX = 0
     self.nextY = 0

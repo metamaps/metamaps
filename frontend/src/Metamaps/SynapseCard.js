@@ -6,7 +6,7 @@ import Visualize from './Visualize'
 
 const SynapseCard = {
   openSynapseCard: null,
-  showCard: function (edge, e) {
+  showCard: function(edge, e) {
     var self = SynapseCard
 
     // reset so we don't interfere with other edges, but first, save its x and y
@@ -18,20 +18,20 @@ const SynapseCard = {
     Control.deselectEdge(edge)
 
     var index = edge.getData('displayIndex') ? edge.getData('displayIndex') : 0
-    var synapse = edge.getData('synapses')[index]; // for now, just get the first synapse
+    var synapse = edge.getData('synapses')[index] // for now, just get the first synapse
 
     // create the wrapper around the form elements, including permissions
     // classes to make best_in_place happy
-    var edit_div = document.createElement('div')
-    edit_div.innerHTML = '<div id="editSynUpperBar"></div><div id="editSynLowerBar"></div>'
-    edit_div.setAttribute('id', 'edit_synapse')
+    var editDiv = document.createElement('div')
+    editDiv.innerHTML = '<div id="editSynUpperBar"></div><div id="editSynLowerBar"></div>'
+    editDiv.setAttribute('id', 'edit_synapse')
     if (synapse.authorizeToEdit(Active.Mapper)) {
-      edit_div.className = 'permission canEdit'
-      edit_div.className += synapse.authorizePermissionChange(Active.Mapper) ? ' yourEdge' : ''
+      editDiv.className = 'permission canEdit'
+      editDiv.className += synapse.authorizePermissionChange(Active.Mapper) ? ' yourEdge' : ''
     } else {
-      edit_div.className = 'permission cannotEdit'
+      editDiv.className = 'permission cannotEdit'
     }
-    $('#wrapper').append(edit_div)
+    $('#wrapper').append(editDiv)
 
     self.populateShowCard(edge, synapse)
 
@@ -51,12 +51,12 @@ const SynapseCard = {
     self.openSynapseCard = edge
   },
 
-  hideCard: function () {
+  hideCard: function() {
     $('#edit_synapse').remove()
     SynapseCard.openSynapseCard = null
   },
 
-  populateShowCard: function (edge, synapse) {
+  populateShowCard: function(edge, synapse) {
     var self = SynapseCard
 
     self.add_synapse_count(edge)
@@ -66,13 +66,13 @@ const SynapseCard = {
     self.add_perms_form(synapse)
     self.add_direction_form(synapse)
   },
-  add_synapse_count: function (edge) {
+  add_synapse_count: function(edge) {
     var count = edge.getData('synapses').length
 
     $('#editSynUpperBar').append('<div id="synapseCardCount">' + count + '</div>')
   },
-  add_desc_form: function (synapse) {
-    var data_nil = 'Click to add description.'
+  add_desc_form: function(synapse) {
+    var dataNil = 'Click to add description.'
 
     // TODO make it so that this would work even in sandbox mode,
     // currently with Best_in_place it won't
@@ -83,29 +83,29 @@ const SynapseCard = {
     $('#edit_synapse_desc').attr('data-bip-object', 'synapse')
     $('#edit_synapse_desc').attr('data-bip-attribute', 'desc')
     $('#edit_synapse_desc').attr('data-bip-type', 'textarea')
-    $('#edit_synapse_desc').attr('data-bip-nil', data_nil)
+    $('#edit_synapse_desc').attr('data-bip-nil', dataNil)
     $('#edit_synapse_desc').attr('data-bip-url', '/synapses/' + synapse.id)
     $('#edit_synapse_desc').attr('data-bip-value', synapse.get('desc'))
     $('#edit_synapse_desc').html(synapse.get('desc'))
 
-    // if edge data is blank or just whitespace, populate it with data_nil
-    if ($('#edit_synapse_desc').html().trim() == '') {
+    // if edge data is blank or just whitespace, populate it with dataNil
+    if ($('#edit_synapse_desc').html().trim() === '') {
       if (synapse.authorizeToEdit(Active.Mapper)) {
-        $('#edit_synapse_desc').html(data_nil)
+        $('#edit_synapse_desc').html(dataNil)
       } else {
         $('#edit_synapse_desc').html('(no description)')
       }
     }
 
-    $('#edit_synapse_desc').keypress(function (e) {
+    $('#edit_synapse_desc').keypress(function(e) {
       const ENTER = 13
       if (e.which === ENTER) {
         $(this).data('bestInPlaceEditor').update()
       }
     })
-    $('#edit_synapse_desc').bind('ajax:success', function () {
+    $('#edit_synapse_desc').bind('ajax:success', function() {
       var desc = $(this).html()
-      if (desc == data_nil) {
+      if (desc === dataNil) {
         synapse.set('desc', '')
       } else {
         synapse.set('desc', desc)
@@ -115,7 +115,7 @@ const SynapseCard = {
       Visualize.mGraph.plot()
     })
   },
-  add_drop_down: function (edge, synapse) {
+  add_drop_down: function(edge, synapse) {
     var list, i, synapses, l, desc
 
     synapses = edge.getData('synapses')
@@ -124,13 +124,13 @@ const SynapseCard = {
     if (l > 1) {
       // append the element that you click to show dropdown select
       $('#editSynUpperBar').append('<div id="dropdownSynapses"></div>')
-      $('#dropdownSynapses').click(function (e) {
+      $('#dropdownSynapses').click(function(e) {
         e.preventDefault()
         e.stopPropagation() // stop it from immediately closing it again
         $('#switchSynapseList').toggle()
       })
       // hide the dropdown again if you click anywhere else on the synapse card
-      $('#edit_synapse').click(function () {
+      $('#edit_synapse').click(function() {
         $('#switchSynapseList').hide()
       })
 
@@ -150,7 +150,7 @@ const SynapseCard = {
       // attach click listeners to list items that
       // will cause it to switch the displayed synapse
       // when you click it
-      $('#switchSynapseList li').click(function (e) {
+      $('#switchSynapseList li').click(function(e) {
         e.stopPropagation()
         var index = parseInt($(this).attr('data-synapse-index'))
         edge.setData('displayIndex', index)
@@ -159,26 +159,26 @@ const SynapseCard = {
       })
     }
   },
-  add_user_info: function (synapse) {
+  add_user_info: function(synapse) {
     var u = '<div id="edgeUser" class="hoverForTip">'
     u += '<a href="/explore/mapper/' + synapse.get('user_id') + '"> <img src="" width="24" height="24" /></a>'
     u += '<div class="tip">' + synapse.get('user_name') + '</div></div>'
     $('#editSynLowerBar').append(u)
 
     // get mapper image
-    var setMapperImage = function (mapper) {
+    var setMapperImage = function(mapper) {
       $('#edgeUser img').attr('src', mapper.get('image'))
     }
     Mapper.get(synapse.get('user_id'), setMapperImage)
   },
 
-  add_perms_form: function (synapse) {
+  add_perms_form: function(synapse) {
     // permissions - if owner, also allow permission editing
     $('#editSynLowerBar').append('<div class="mapPerm ' + synapse.get('calculated_permission').substring(0, 2) + '"></div>')
 
     // ability to change permission
     var selectingPermission = false
-    var permissionLiClick = function (event) {
+    var permissionLiClick = function(event) {
       selectingPermission = false
       var permission = $(this).attr('class')
       synapse.save({
@@ -190,7 +190,7 @@ const SynapseCard = {
       event.stopPropagation()
     }
 
-    var openPermissionSelect = function (event) {
+    var openPermissionSelect = function(event) {
       if (!selectingPermission) {
         selectingPermission = true
         $(this).addClass('minimize') // this line flips the drop down arrow to a pull up arrow
@@ -206,7 +206,7 @@ const SynapseCard = {
       }
     }
 
-    var hidePermissionSelect = function () {
+    var hidePermissionSelect = function() {
       selectingPermission = false
       $('#edit_synapse.yourEdge .mapPerm').removeClass('minimize') // this line flips the pull up arrow to a drop down arrow
       $('#edit_synapse .permissionSelect').remove()
@@ -218,7 +218,7 @@ const SynapseCard = {
     }
   }, // add_perms_form
 
-  add_direction_form: function (synapse) {
+  add_direction_form: function(synapse) {
     // directionality checkboxes
     $('#editSynLowerBar').append('<div id="edit_synapse_left"></div>')
     $('#editSynLowerBar').append('<div id="edit_synapse_right"></div>')
@@ -227,14 +227,16 @@ const SynapseCard = {
 
     // determine which node is to the left and the right
     // if directly in a line, top is left
+    let left
+    let right
     if (edge.nodeFrom.pos.x < edge.nodeTo.pos.x ||
-      edge.nodeFrom.pos.x == edge.nodeTo.pos.x &&
+      edge.nodeFrom.pos.x === edge.nodeTo.pos.x &&
       edge.nodeFrom.pos.y < edge.nodeTo.pos.y) {
-      var left = edge.nodeTo.getData('topic')
-      var right = edge.nodeFrom.getData('topic')
+      left = edge.nodeTo.getData('topic')
+      right = edge.nodeFrom.getData('topic')
     } else {
-      var left = edge.nodeFrom.getData('topic')
-      var right = edge.nodeTo.getData('topic')
+      left = edge.nodeFrom.getData('topic')
+      right = edge.nodeTo.getData('topic')
     }
 
     /*
@@ -243,24 +245,24 @@ const SynapseCard = {
      * Else check the 'left' checkbox since the arrow is incoming.
      */
 
-    var directionCat = synapse.get('category'); // both, none, from-to
-    if (directionCat == 'from-to') {
-      var from_to = [synapse.get('topic1_id'), synapse.get('topic2_id')]
-      if (from_to[0] == left.id) {
+    var directionCat = synapse.get('category') // both, none, from-to
+    if (directionCat === 'from-to') {
+      var fromTo = [synapse.get('topic1_id'), synapse.get('topic2_id')]
+      if (fromTo[0] === left.id) {
         // check left checkbox
         $('#edit_synapse_left').addClass('checked')
       } else {
         // check right checkbox
         $('#edit_synapse_right').addClass('checked')
       }
-    } else if (directionCat == 'both') {
+    } else if (directionCat === 'both') {
       // check both checkboxes
       $('#edit_synapse_left').addClass('checked')
       $('#edit_synapse_right').addClass('checked')
     }
 
     if (synapse.authorizeToEdit(Active.Mapper)) {
-      $('#edit_synapse_left, #edit_synapse_right').click(function () {
+      $('#edit_synapse_left, #edit_synapse_right').click(function() {
         $(this).toggleClass('checked')
 
         var leftChecked = $('#edit_synapse_left').is('.checked')

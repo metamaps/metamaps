@@ -31,22 +31,22 @@ class Maps extends Component {
     const { maps, user, currentUser } = this.props
     const numCards = maps.length + (user || currentUser ? 1 : 0)
     const mapSpaces = Math.floor(document.body.clientWidth / MAP_WIDTH)
-    const mapsWidth = document.body.clientWidth <= MOBILE_VIEW_BREAKPOINT ?
-                        document.body.clientWidth - MOBILE_VIEW_PADDING :
-                        Math.min(MAX_COLUMNS, Math.min(numCards, mapSpaces)) * MAP_WIDTH
+    const mapsWidth = document.body.clientWidth <= MOBILE_VIEW_BREAKPOINT
+                        ? document.body.clientWidth - MOBILE_VIEW_PADDING
+                        : Math.min(MAX_COLUMNS, Math.min(numCards, mapSpaces)) * MAP_WIDTH
     this.setState({ mapsWidth })
   }
 
   scroll = () => {
     const { loadMore, moreToLoad, pending } = this.props
     const { maps } = this.refs
-    if (moreToLoad && !pending && maps.scrollTop + maps.offsetHeight > maps.scrollHeight - 300 ) {
+    if (moreToLoad && !pending && maps.scrollTop + maps.offsetHeight > maps.scrollHeight - 300) {
       loadMore()
     }
   }
 
   render = () => {
-    const { maps, currentUser, juntoState, pending, section, user, moreToLoad, loadMore, onStar, onRequest } = this.props
+    const { maps, currentUser, juntoState, pending, section, user, onStar, onRequest } = this.props
     const style = { width: this.state.mapsWidth + 'px' }
     const mobile = document && document.body.clientWidth <= MOBILE_VIEW_BREAKPOINT
 

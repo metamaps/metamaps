@@ -70,13 +70,9 @@ Metamaps.Topic = Topic
 Metamaps.TopicCard = TopicCard
 Metamaps.Util = Util
 Metamaps.Views = Views
-Metamaps.Views.ExploreMaps = ExploreMaps
-Metamaps.Views.ChatView = ChatView
-Metamaps.Views.VideoView = VideoView
-Metamaps.Views.Room = Room
 Metamaps.Visualize = Visualize
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   // initialize all the modules
   for (const prop in Metamaps) {
     // this runs the init function within each sub-object on the Metamaps one
@@ -94,14 +90,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Views.ExploreMaps.setCollection(DataModel.Maps[capitalize])
     if (Metamaps.currentPage === 'mapper') {
-      ExploreMaps.fetchUserThenRender()
+      Views.ExploreMaps.fetchUserThenRender()
     } else {
-      ExploreMaps.render()
+      Views.ExploreMaps.render()
     }
     GlobalUI.showDiv('#explore')
   } else if (Metamaps.currentSection === '' && Active.Mapper) {
-    ExploreMaps.setCollection(DataModel.Maps.Active)
-    ExploreMaps.render()
+    Views.ExploreMaps.setCollection(DataModel.Maps.Active)
+    Views.ExploreMaps.render()
     GlobalUI.showDiv('#explore')
   } else if (Active.Map || Active.Topic) {
     Loading.show()

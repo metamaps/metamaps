@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import Dropzone from 'react-dropzone'
 
 class ImportDialogBox extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {

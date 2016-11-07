@@ -6,16 +6,16 @@ import Visualize from './Visualize'
 import JIT from './JIT'
 
 const Organize = {
-  arrange: function (layout, centerNode) {
+  arrange: function(layout, centerNode) {
     // first option for layout to implement is 'grid', will do an evenly spaced grid with its center at the 0,0 origin
-    if (layout == 'grid') {
-      var numNodes = _.size(Visualize.mGraph.graph.nodes); // this will always be an integer, the # of nodes on your graph visualization
-      var numColumns = Math.floor(Math.sqrt(numNodes)) // the number of columns to make an even grid
-      var GRIDSPACE = 400
-      var row = 0
-      var column = 0
-      Visualize.mGraph.graph.eachNode(function (n) {
-        if (column == numColumns) {
+    if (layout === 'grid') {
+      const numNodes = _.size(Visualize.mGraph.graph.nodes) // this will always be an integer, the # of nodes on your graph visualization
+      const numColumns = Math.floor(Math.sqrt(numNodes)) // the number of columns to make an even grid
+      const GRIDSPACE = 400
+      let row = 0
+      let column = 0
+      Visualize.mGraph.graph.eachNode(function(n) {
+        if (column === numColumns) {
           column = 0
           row += 1
         }
@@ -26,25 +26,25 @@ const Organize = {
         column += 1
       })
       Visualize.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
-    } else if (layout == 'grid_full') {
+    } else if (layout === 'grid_full') {
       // this will always be an integer, the # of nodes on your graph visualization
-      var numNodes = _.size(Visualize.mGraph.graph.nodes)
-      // var numColumns = Math.floor(Math.sqrt(numNodes)) // the number of columns to make an even grid
-      // var GRIDSPACE = 400
-      var height = Visualize.mGraph.canvas.getSize(0).height
-      var width = Visualize.mGraph.canvas.getSize(0).width
-      var totalArea = height * width
-      var cellArea = totalArea / numNodes
-      var ratio = height / width
-      var cellWidth = sqrt(cellArea / ratio)
-      var cellHeight = cellArea / cellWidth
-      var row = floor(height / cellHeight)
-      var column = floor(width / cellWidth)
-      var totalCells = row * column
+      const numNodes = _.size(Visualize.mGraph.graph.nodes)
+      const numColumns = Math.floor(Math.sqrt(numNodes)) // the number of columns to make an even grid
+      const height = Visualize.mGraph.canvas.getSize(0).height
+      const width = Visualize.mGraph.canvas.getSize(0).width
+      const totalArea = height * width
+      const cellArea = totalArea / numNodes
+      const ratio = height / width
+      const cellWidth = Math.sqrt(cellArea / ratio)
+      const cellHeight = cellArea / cellWidth
+      const GRIDSPACE = 400
+      let row = Math.floor(height / cellHeight)
+      let column = Math.floor(width / cellWidth)
+      const totalCells = row * column
 
       if (totalCells) {
-        Visualize.mGraph.graph.eachNode(function (n) {
-          if (column == numColumns) {
+        Visualize.mGraph.graph.eachNode(function(n) {
+          if (column === numColumns) {
             column = 0
             row += 1
           }
@@ -56,7 +56,7 @@ const Organize = {
         })
       }
       Visualize.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
-    } else if (layout == 'radial') {
+    } else if (layout === 'radial') {
       var centerX = centerNode.getPos().x
       var centerY = centerNode.getPos().y
       centerNode.setPos(centerNode.getPos(), 'end')
@@ -65,16 +65,16 @@ const Organize = {
       var lineLength = 200
       var usedNodes = {}
       usedNodes[centerNode.id] = centerNode
-      var radial = function (node, level, degree) {
-        if (level == 1) {
+      var radial = function(node, level, degree) {
+        if (level === 1) {
           var numLinksTemp = _.size(node.adjacencies)
           var angleTemp = 2 * Math.PI / numLinksTemp
         } else {
           angleTemp = 2 * Math.PI / 20
         }
-        node.eachAdjacency(function (a) {
-          var isSecondLevelNode = (centerNode.adjacencies[a.nodeTo.id] != undefined && level > 1)
-          if (usedNodes[a.nodeTo.id] == undefined && !isSecondLevelNode) {
+        node.eachAdjacency(function(a) {
+          var isSecondLevelNode = (centerNode.adjacencies[a.nodeTo.id] !== undefined && level > 1)
+          if (usedNodes[a.nodeTo.id] === undefined && !isSecondLevelNode) {
             var newPos = new $jit.Complex()
             newPos.x = level * lineLength * Math.sin(degree) + centerX
             newPos.y = level * lineLength * Math.cos(degree) + centerY
@@ -88,15 +88,13 @@ const Organize = {
       }
       radial(centerNode, 1, 0)
       Visualize.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
-    } else if (layout == 'center_viewport') {
-      var lowX = 0,
-        lowY = 0,
-        highX = 0,
-        highY = 0
-      var oldOriginX = Visualize.mGraph.canvas.translateOffsetX
-      var oldOriginY = Visualize.mGraph.canvas.translateOffsetY
+    } else if (layout === 'center_viewport') {
+      let lowX = 0
+      let lowY = 0
+      let highX = 0
+      let highY = 0
 
-      Visualize.mGraph.graph.eachNode(function (n) {
+      Visualize.mGraph.graph.eachNode(function(n) {
         if (n.id === 1) {
           lowX = n.getPos().x
           lowY = n.getPos().y
@@ -109,9 +107,9 @@ const Organize = {
         if (n.getPos().y > highY) highY = n.getPos().y
       })
       console.log(lowX, lowY, highX, highY)
-      var newOriginX = (lowX + highX) / 2
-      var newOriginY = (lowY + highY) / 2
-    } else window.alert('please call function with a valid layout dammit!')
+    } else {
+      window.alert('please call function with a valid layout dammit!')
+    }
   }
 }
 
