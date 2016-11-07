@@ -11,8 +11,8 @@ RSpec.describe MapMailer, type: :mailer do
     it { expect(mail.subject).to match map.name }
     it { expect(mail.body.encoded).to match map.name }
     it { expect(mail.body.encoded).to match request.user.name }
-    it { expect(mail.body.encoded).to match 'Approve Request' }
-    it { expect(mail.body.encoded).to match 'Deny Request' }
+    it { expect(mail.body.encoded).to match 'Allow' }
+    it { expect(mail.body.encoded).to match 'Decline' }
   end
 
   describe 'invite_to_edit_email' do
