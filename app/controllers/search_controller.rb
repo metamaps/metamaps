@@ -45,7 +45,7 @@ class SearchController < ApplicationController
         end
       end
 
-      search = '%' + term.downcase + '%'
+      search = '%' + term.downcase.strip + '%'
       builder = policy_scope(Topic)
 
       if filterByMetacode
@@ -93,7 +93,7 @@ class SearchController < ApplicationController
         desc = true
       end
 
-      search = '%' + term.downcase + '%'
+      search = '%' + term.downcase.strip + '%'
       builder = policy_scope(Map)
 
       builder = if desc
@@ -117,7 +117,7 @@ class SearchController < ApplicationController
 
       # remove "mapper:" if appended at beginning
       term = term[7..-1] if term.downcase[0..6] == 'mapper:'
-      search = term.downcase + '%'
+      search = term.downcase.strip + '%'
 
       skip_policy_scope # TODO: builder = policy_scope(User)
       builder = User.where('LOWER("name") like ?', search)
@@ -136,7 +136,7 @@ class SearchController < ApplicationController
     topic2id = params[:topic2id]
 
     if term && !term.empty?
-      @synapses = policy_scope(Synapse).where('LOWER("desc") like ?', '%' + term.downcase + '%').order('"desc"')
+      @synapses = policy_scope(Synapse).where('LOWER("desc") like ?', '%' + term.downcase.strip + '%').order('"desc"')
 
       @synapses = @synapses.uniq(&:desc)
     elsif topic1id && !topic1id.empty?
