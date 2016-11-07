@@ -1,25 +1,15 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import parse from 'csv-parse'
 import _ from 'lodash'
 
 import Active from './Active'
 import AutoLayout from './AutoLayout'
+import DataModel from './DataModel'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
 import Synapse from './Synapse'
 import Topic from './Topic'
-
-/*
- * Metamaps.Import.js.erb
- *
- * Dependencies:
- *  - Metamaps.Backbone
- *  - Metamaps.Mappings
- *  - Metamaps.Metacodes
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
 
 const Import = {
   // note that user is not imported
@@ -228,7 +218,7 @@ const Import = {
     parsedTopics.forEach(topic => {
       let coords = { x: topic.x, y: topic.y }
       if (!coords.x || !coords.y) {
-        coords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+        coords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
       }
 
       if (!topic.name && topic.link ||
@@ -255,10 +245,10 @@ const Import = {
     parsedSynapses.forEach(function (synapse) {
       // only createSynapseWithParameters once both topics are persisted
       // if there isn't a cidMapping, check by topic name instead
-      var topic1 = Metamaps.Topics.get(self.cidMappings[synapse.topic1])
-      if (!topic1) topic1 = Metamaps.Topics.findWhere({ name: synapse.topic1 })
-      var topic2 = Metamaps.Topics.get(self.cidMappings[synapse.topic2])
-      if (!topic2) topic2 = Metamaps.Topics.findWhere({ name: synapse.topic2 })
+      var topic1 = DataModel.Topics.get(self.cidMappings[synapse.topic1])
+      if (!topic1) topic1 = DataModel.Topics.findWhere({ name: synapse.topic1 })
+      var topic2 = DataModel.Topics.get(self.cidMappings[synapse.topic2])
+      if (!topic2) topic2 = DataModel.Topics.findWhere({ name: synapse.topic2 })
 
       if (!topic1 || !topic2) {
         console.error("One of the two topics doesn't exist!")
@@ -291,15 +281,15 @@ const Import = {
     link, xloc, yloc, import_id, opts = {}) {
     var self = Import
     $(document).trigger(Map.events.editedByActiveMapper)
-    var metacode = Metamaps.Metacodes.where({name: metacode_name})[0] || null
+    var metacode = DataModel.Metacodes.where({name: metacode_name})[0] || null
     if (metacode === null) {
-      metacode = Metamaps.Metacodes.where({ name: 'Wildcard' })[0]
+      metacode = DataModel.Metacodes.where({ name: 'Wildcard' })[0]
       console.warn("Couldn't find metacode " + metacode_name + ' so used Wildcard instead.')
     }
 
     var topic_permission = permission || Active.Map.get('permission')
     var defer_to_map_id = permission === topic_permission ? Active.Map.get('id') : null
-    var topic = new Metamaps.Backbone.Topic({
+    var topic = new DataModel.Topic({
       name: name,
       metacode_id: metacode.id,
       permission: topic_permission,
@@ -308,19 +298,19 @@ const Import = {
       link: link || '',
       calculated_permission: Active.Map.get('permission')
     })
-    Metamaps.Topics.add(topic)
+    DataModel.Topics.add(topic)
 
     if (import_id !== null && import_id !== undefined) {
       self.cidMappings[import_id] = topic.cid
     }
 
-    var mapping = new Metamaps.Backbone.Mapping({
+    var mapping = new DataModel.Mapping({
       xloc: xloc,
       yloc: yloc,
       mappable_id: topic.cid,
       mappable_type: 'Topic'
     })
-    Metamaps.Mappings.add(mapping)
+    DataModel.Mappings.add(mapping)
 
     // this function also includes the creation of the topic in the database
     Topic.renderTopic(mapping, topic, true, true, {
@@ -340,20 +330,20 @@ const Import = {
       return
     } // if
 
-    var synapse = new Metamaps.Backbone.Synapse({
+    var synapse = new DataModel.Synapse({
       desc: desc || '',
       category: category || 'from-to',
       permission: permission,
       topic1_id: topic1.id,
       topic2_id: topic2.id
     })
-    Metamaps.Synapses.add(synapse)
+    DataModel.Synapses.add(synapse)
 
-    var mapping = new Metamaps.Backbone.Mapping({
+    var mapping = new DataModel.Mapping({
       mappable_type: 'Synapse',
       mappable_id: synapse.cid
     })
-    Metamaps.Mappings.add(mapping)
+    DataModel.Mappings.add(mapping)
 
     Synapse.renderSynapse(mapping, synapse, node1, node2, true)
   },
@@ -361,7 +351,7 @@ const Import = {
   handleURL: function (url, opts = {}) {
     let coords = opts.coords
     if (!coords || coords.x === undefined || coords.y === undefined) {
-      coords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+      coords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
     }
 
     const name = opts.name || 'Link'

@@ -1,12 +1,11 @@
-/* global Metamaps, $ */
+/* global $ */
+
+import outdent from 'outdent'
 
 import Active from '../Active'
+import DataModel from '../DataModel'
+import DataModelMap from '../DataModel/Map'
 import GlobalUI from './index'
-
-/*
- * Metamaps.Backbone
- * Metamaps.Maps
- */
 
 const CreateMap = {
   newMap: null,
@@ -17,7 +16,7 @@ const CreateMap = {
   init: function () {
     var self = CreateMap
 
-    self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' })
+    self.newMap = new DataModelMap({ permission: 'commons' })
 
     self.bindFormEvents()
 
@@ -43,15 +42,6 @@ const CreateMap = {
     $('#mapCreatedSuccess').fadeOut(300, function () {
       $(this).remove()
     })
-  },
-  generateSuccessMessage: function (id) {
-    var stringStart = "<div id='mapCreatedSuccess'><h6>SUCCESS!</h6>Your map has been created. Do you want to: <a id='mapGo' href='/maps/"
-    stringStart += id
-    stringStart += "' onclick='Metamaps.GlobalUI.CreateMap.closeSuccess();'>Go to your new map</a>"
-    stringStart += "<span>OR</span><a id='mapStay' href='#' onclick='Metamaps.GlobalUI.CreateMap.closeSuccess(); return false;'>Stay on this "
-    var page = Active.Map ? 'map' : 'page'
-    var stringEnd = '</a></div>'
-    return stringStart + page + stringEnd
   },
   switchPermission: function () {
     var self = CreateMap
@@ -109,10 +99,23 @@ const CreateMap = {
   success: function (model) {
     var self = CreateMap
     // push the new map onto the collection of 'my maps'
-    Metamaps.Maps.Mine.add(model)
+    DataModel.Maps.Mine.add(model)
 
     GlobalUI.clearNotify()
-    $('#wrapper').append(self.generateSuccessMessage(model.id))
+    $('#wrapper').append(outdent`
+      <div id="mapCreatedSuccess">
+        <h6>SUCCESS!</h6>
+        Your map has been created. Do you want to:
+        <a id="mapGo" href="/maps/${model.id}">Go to your new map</a>
+        <span>OR</span>
+        <a id="mapStay" href="#">Stay on this ${Active.Map ? 'map' : 'page'}</a>
+      </div>
+    `)
+    $('#mapGo').click(e => GlobalUI.CreateMap.closeSuccess())
+    $('#mapStay').click(e => {
+      GlobalUI.CreateMap.closeSuccess()
+      return false
+    })
   },
   reset: function (id) {
     var self = CreateMap
@@ -128,7 +131,7 @@ const CreateMap = {
     }
 
     self.bindFormEvents()
-    self.newMap = new Metamaps.Backbone.Map({ permission: 'commons' })
+    self.newMap = new DataModel.Map({ permission: 'commons' })
 
     return false
   }

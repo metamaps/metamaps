@@ -1,8 +1,7 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import clipboard from 'clipboard-js'
 
-import Active from '../Active'
 import Create from '../Create'
 
 import Search from './Search'
@@ -10,21 +9,16 @@ import CreateMap from './CreateMap'
 import Account from './Account'
 import ImportDialog from './ImportDialog'
 
-/*
- * Metamaps.Backbone
- * Metamaps.Maps
- */
-
 const GlobalUI = {
   notifyTimeout: null,
   lightbox: null,
-  init: function () {
+  init: function (serverData) {
     var self = GlobalUI
 
-    self.Search.init()
-    self.CreateMap.init()
-    self.Account.init()
-    self.ImportDialog.init(Metamaps.Erb, self.openLightbox, self.closeLightbox)
+    self.Search.init(serverData)
+    self.CreateMap.init(serverData)
+    self.Account.init(serverData)
+    self.ImportDialog.init(serverData, self.openLightbox, self.closeLightbox)
 
     if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
 
@@ -36,28 +30,6 @@ const GlobalUI = {
     })
 
     $('#lightbox_screen, #lightbox_close').click(self.closeLightbox)
-
-    // initialize global backbone models and collections
-    if (Active.Mapper) Active.Mapper = new Metamaps.Backbone.Mapper(Active.Mapper)
-
-    var myCollection = Metamaps.Maps.Mine ? Metamaps.Maps.Mine : []
-    var sharedCollection = Metamaps.Maps.Shared ? Metamaps.Maps.Shared : []
-    var starredCollection = Metamaps.Maps.Starred ? Metamaps.Maps.Starred : []
-    var mapperCollection = []
-    var mapperOptionsObj = { id: 'mapper', sortBy: 'updated_at' }
-    if (Metamaps.Maps.Mapper) {
-      mapperCollection = Metamaps.Maps.Mapper.models
-      mapperOptionsObj.mapperId = Metamaps.Maps.Mapper.id
-    }
-    var featuredCollection = Metamaps.Maps.Featured ? Metamaps.Maps.Featured : []
-    var activeCollection = Metamaps.Maps.Active ? Metamaps.Maps.Active : []
-    Metamaps.Maps.Mine = new Metamaps.Backbone.MapsCollection(myCollection, { id: 'mine', sortBy: 'updated_at' })
-    Metamaps.Maps.Shared = new Metamaps.Backbone.MapsCollection(sharedCollection, { id: 'shared', sortBy: 'updated_at' })
-    Metamaps.Maps.Starred = new Metamaps.Backbone.MapsCollection(starredCollection, { id: 'starred', sortBy: 'updated_at' })
-    // 'Mapper' refers to another mapper
-    Metamaps.Maps.Mapper = new Metamaps.Backbone.MapsCollection(mapperCollection, mapperOptionsObj)
-    Metamaps.Maps.Featured = new Metamaps.Backbone.MapsCollection(featuredCollection, { id: 'featured', sortBy: 'updated_at' })
-    Metamaps.Maps.Active = new Metamaps.Backbone.MapsCollection(activeCollection, { id: 'active', sortBy: 'updated_at' })
   },
   showDiv: function (selector) {
     $(selector).show()

@@ -1,10 +1,11 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import $jit from '../patched/JIT'
 
 import Active from './Active'
 import AutoLayout from './AutoLayout'
 import Create from './Create'
+import DataModel from './DataModel'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'
 import JIT from './JIT'
@@ -17,41 +18,30 @@ import TopicCard from './TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
 
-
-/*
- * Metamaps.Topic.js.erb
- *
- * Dependencies:
- *  - Metamaps.Backbone
- *  - Metamaps.Creators
- *  - Metamaps.Mappings
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
 const noOp = () => {}
+
 const Topic = {
   // this function is to retrieve a topic JSON object from the database
   // @param id = the id of the topic to retrieve
   get: function (id, callback = noOp) {
     // if the desired topic is not yet in the local topic repository, fetch it
-    if (Metamaps.Topics.get(id) == undefined) {
+    if (DataModel.Topics.get(id) == undefined) {
       $.ajax({
         url: '/topics/' + id + '.json',
         success: function (data) {
-          Metamaps.Topics.add(data)
-          callback(Metamaps.Topics.get(id))
+          DataModel.Topics.add(data)
+          callback(DataModel.Topics.get(id))
         }
       })
-    } else callback(Metamaps.Topics.get(id))
+    } else callback(DataModel.Topics.get(id))
   },
   launch: function (id) {
-    var bb = Metamaps.Backbone
     var start = function (data) {
-      Active.Topic = new bb.Topic(data.topic)
-      Metamaps.Creators = new bb.MapperCollection(data.creators)
-      Metamaps.Topics = new bb.TopicCollection([data.topic].concat(data.relatives))
-      Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
-      Metamaps.Backbone.attachCollectionEvents()
+      Active.Topic = new DataModel.Topic(data.topic)
+      DataModel.Creators = new DataModel.MapperCollection(data.creators)
+      DataModel.Topics = new DataModel.TopicCollection([data.topic].concat(data.relatives))
+      DataModel.Synapses = new DataModel.SynapseCollection(data.synapses)
+      DataModel.attachCollectionEvents()
 
       document.title = Active.Topic.get('name') + ' | Metamaps'
 
@@ -101,7 +91,7 @@ const Topic = {
         }
       })
       Router.navigate('/topics/' + nodeid)
-      Active.Topic = Metamaps.Topics.get(nodeid)
+      Active.Topic = DataModel.Topics.get(nodeid)
     }
   },
   fetchRelatives: function (nodes, metacode_id) {
@@ -109,10 +99,10 @@ const Topic = {
 
     var node = $.isArray(nodes) ? nodes[0] : nodes
 
-    var topics = Metamaps.Topics.map(function (t) { return t.id })
+    var topics = DataModel.Topics.map(function (t) { return t.id })
     var topics_string = topics.join()
 
-    var creators = Metamaps.Creators.map(function (t) { return t.id })
+    var creators = DataModel.Creators.map(function (t) { return t.id })
     var creators_string = creators.join()
 
     var topic = node.getData('topic')
@@ -124,13 +114,13 @@ const Topic = {
         window.setTimeout(function() { successCallback(data) }, 100)
         return
       }
-      if (data.creators.length > 0) Metamaps.Creators.add(data.creators)
-      if (data.topics.length > 0) Metamaps.Topics.add(data.topics)
-      if (data.synapses.length > 0) Metamaps.Synapses.add(data.synapses)
+      if (data.creators.length > 0) DataModel.Creators.add(data.creators)
+      if (data.topics.length > 0) DataModel.Topics.add(data.topics)
+      if (data.synapses.length > 0) DataModel.Synapses.add(data.synapses)
 
-      var topicColl = new Metamaps.Backbone.TopicCollection(data.topics)
+      var topicColl = new DataModel.TopicCollection(data.topics)
       topicColl.add(topic)
-      var synapseColl = new Metamaps.Backbone.SynapseCollection(data.synapses)
+      var synapseColl = new DataModel.SynapseCollection(data.synapses)
 
       var graph = JIT.convertModelsToJIT(topicColl, synapseColl)[0]
       Visualize.mGraph.op.sum(graph, {
@@ -142,7 +132,7 @@ const Topic = {
       var i, l, t, s
 
       Visualize.mGraph.graph.eachNode(function (n) {
-        t = Metamaps.Topics.get(n.id)
+        t = DataModel.Topics.get(n.id)
         t.set({ node: n }, { silent: true })
         t.updateNode()
 
@@ -152,7 +142,7 @@ const Topic = {
 
             l = edge.getData('synapseIDs').length
             for (i = 0; i < l; i++) {
-              s = Metamaps.Synapses.get(edge.getData('synapseIDs')[i])
+              s = DataModel.Synapses.get(edge.getData('synapseIDs')[i])
               s.set({ edge: edge }, { silent: true })
               s.updateEdge()
             }
@@ -309,25 +299,25 @@ const Topic = {
 
     $(document).trigger(Map.events.editedByActiveMapper)
 
-    var metacode = Metamaps.Metacodes.get(Create.newTopic.metacode)
+    var metacode = DataModel.Metacodes.get(Create.newTopic.metacode)
 
-    var topic = new Metamaps.Backbone.Topic({
+    var topic = new DataModel.Topic({
       name: Create.newTopic.name,
       metacode_id: metacode.id,
       defer_to_map_id: Active.Map.id
     })
-    Metamaps.Topics.add(topic)
+    DataModel.Topics.add(topic)
 
     if (Create.newTopic.pinned) {
-      var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+      var nextCoords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
     }
-    var mapping = new Metamaps.Backbone.Mapping({
+    var mapping = new DataModel.Mapping({
       xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
       yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
       mappable_id: topic.cid,
       mappable_type: 'Topic',
     })
-    Metamaps.Mappings.add(mapping)
+    DataModel.Mappings.add(mapping)
 
     // these can't happen until the value is retrieved, which happens in the line above
     if (!Create.newTopic.pinned) Create.newTopic.hide()
@@ -348,15 +338,15 @@ const Topic = {
 
     self.get(id, (topic) => {
       if (Create.newTopic.pinned) {
-        var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
+        var nextCoords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
       }
-      var mapping = new Metamaps.Backbone.Mapping({
+      var mapping = new DataModel.Mapping({
         xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
         yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
         mappable_type: 'Topic',
         mappable_id: topic.id,
       })
-      Metamaps.Mappings.add(mapping)
+      DataModel.Mappings.add(mapping)
 
       self.renderTopic(mapping, topic, true, true)
       // this blocked the enterKeyHandler from creating a new topic as well
@@ -364,26 +354,26 @@ const Topic = {
     })
   },
   getMapFromAutocomplete: function (data) {
-    var self = Metamaps.Topic
+    var self = Topic
 
-    $(document).trigger(Metamaps.Map.events.editedByActiveMapper)
+    $(document).trigger(Map.events.editedByActiveMapper)
 
-    var metacode = Metamaps.Metacodes.findWhere({ name: 'Metamap' })
-    var topic = new Metamaps.Backbone.Topic({
+    var metacode = DataModel.Metacodes.findWhere({ name: 'Metamap' })
+    var topic = new DataModel.Topic({
       name: data.name,
       metacode_id: metacode.id,
-      defer_to_map_id: Metamaps.Active.Map.id,
+      defer_to_map_id: Active.Map.id,
       link: window.location.origin + '/maps/' + data.id
     })
-    Metamaps.Topics.add(topic)
+    DataModel.Topics.add(topic)
 
-    var mapping = new Metamaps.Backbone.Mapping({
-      xloc: Metamaps.Create.newTopic.x,
-      yloc: Metamaps.Create.newTopic.y,
+    var mapping = new DataModel.Mapping({
+      xloc: Create.newTopic.x,
+      yloc: Create.newTopic.y,
       mappable_id: topic.cid,
       mappable_type: 'Topic',
     })
-    Metamaps.Mappings.add(mapping)
+    DataModel.Mappings.add(mapping)
 
     // these can't happen until the value is retrieved, which happens in the line above
     if (!Create.newTopic.pinned) Create.newTopic.hide()
@@ -399,14 +389,14 @@ const Topic = {
     $(document).trigger(Map.events.editedByActiveMapper)
 
     self.get(id, (topic) => {
-      var nextCoords = AutoLayout.getNextCoord({ mappings: Metamaps.Mappings })
-      var mapping = new Metamaps.Backbone.Mapping({
+      var nextCoords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
+      var mapping = new DataModel.Mapping({
         xloc: nextCoords.x,
         yloc: nextCoords.y,
         mappable_type: 'Topic',
         mappable_id: topic.id,
       })
-      Metamaps.Mappings.add(mapping)
+      DataModel.Mappings.add(mapping)
       self.renderTopic(mapping, topic, true, true)
       GlobalUI.notifyUser('Topic was added to your map!')
     })

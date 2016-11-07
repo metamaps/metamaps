@@ -1,20 +1,12 @@
-/* global Metamaps, $, Hogan, Bloodhound, Countable */
+/* global $, Hogan, Bloodhound, Countable */
 
 import outdent from 'outdent'
 
 import Active from '../Active'
+import DataModel from '../DataModel'
 import GlobalUI from '../GlobalUI'
 import Router from '../Router'
 import Util from '../Util'
-
-/*
- * Metamaps.Collaborators
- * Metamaps.Erb
- * Metamaps.Mappers
- * Metamaps.Maps
- * Metamaps.Synapses
- * Metamaps.Topics
- */
 
 const InfoBox = {
   isOpen: false,
@@ -42,7 +34,8 @@ const InfoBox = {
       data-bip-activator="#mapInfoDesc"
       data-bip-value="{{desc}}"
     >{{desc}}</span>`,
-  init: function () {
+  userImageUrl: '',
+  init: function (serverData) {
     var self = InfoBox
 
     $('.mapInfoIcon').click(self.toggleBox)
@@ -54,7 +47,9 @@ const InfoBox = {
     self.attachEventListeners() 
 
     self.generateBoxHTML = Hogan.compile($('#mapInfoBoxTemplate').html())
-    
+
+    self.userImageUrl = serverData['user.png']
+
     var querystring = window.location.search.replace(/^\?/, '')
     if (querystring == 'new') { 
       self.open()
@@ -106,7 +101,7 @@ const InfoBox = {
 
     var isCreator = map.authorizePermissionChange(Active.Mapper)
     var canEdit = map.authorizeToEdit(Active.Mapper)
-    var relevantPeople = map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
+    var relevantPeople = map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
     var shareable = map.get('permission') !== 'private'
 
     obj['name'] = canEdit ? Hogan.compile(self.nameHTML).render({id: map.id, name: map.get('name')}) : map.get('name')
@@ -116,7 +111,7 @@ const InfoBox = {
     obj['contributor_count'] = relevantPeople.length
     obj['contributors_class'] = relevantPeople.length > 1 ? 'multiple' : ''
     obj['contributors_class'] += relevantPeople.length === 2 ? ' mTwo' : ''
-    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : Metamaps.Erb['user.png']
+    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : self.userImageUrl
     obj['contributor_list'] = self.createContributorList()
 
     obj['user_name'] = isCreator ? 'You' : map.get('user_name')
@@ -218,7 +213,7 @@ const InfoBox = {
                     value: "No results",
                     label: "No results",
                     rtype: "noresult",
-                    profile: Metamaps.Erb['user.png'],
+                    profile: self.userImageUrl
                 });
             },
             suggestion: function(s) {
@@ -251,24 +246,24 @@ const InfoBox = {
   },
   removeCollaborator: function (collaboratorId) {
     var self = InfoBox
-    Metamaps.Collaborators.remove(Metamaps.Collaborators.get(collaboratorId))
-    var mapperIds = Metamaps.Collaborators.models.map(function (mapper) { return mapper.id })
+    DataModel.Collaborators.remove(DataModel.Collaborators.get(collaboratorId))
+    var mapperIds = DataModel.Collaborators.models.map(function (mapper) { return mapper.id })
     $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
     self.updateNumbers()
   },
   addCollaborator: function (newCollaboratorId) {
     var self = InfoBox
 
-    if (Metamaps.Collaborators.get(newCollaboratorId)) {
+    if (DataModel.Collaborators.get(newCollaboratorId)) {
       GlobalUI.notifyUser('That user already has access')
       return
     }
 
     function callback(mapper) {
-      Metamaps.Collaborators.add(mapper)
-      var mapperIds = Metamaps.Collaborators.models.map(function (mapper) { return mapper.id })
+      DataModel.Collaborators.add(mapper)
+      var mapperIds = DataModel.Collaborators.models.map(function (mapper) { return mapper.id })
       $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
-      var name = Metamaps.Collaborators.get(newCollaboratorId).get('name')
+      var name = DataModel.Collaborators.get(newCollaboratorId).get('name')
       GlobalUI.notifyUser(name + ' will be notified by email')
       self.updateNumbers()
     }
@@ -289,7 +284,7 @@ const InfoBox = {
   },
   createContributorList: function () {
     var self = InfoBox
-    var relevantPeople = Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
+    var relevantPeople = Active.Map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
     var activeMapperIsCreator = Active.Mapper && Active.Mapper.id === Active.Map.get('user_id')
     var string = ''
     string += '<ul>'
@@ -315,13 +310,13 @@ const InfoBox = {
 
     var self = InfoBox
     var mapper = Active.Mapper
-    var relevantPeople = Active.Map.get('permission') === 'commons' ? Metamaps.Mappers : Metamaps.Collaborators
+    var relevantPeople = Active.Map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
 
     var contributors_class = ''
     if (relevantPeople.length === 2) contributors_class = 'multiple mTwo'
     else if (relevantPeople.length > 2) contributors_class = 'multiple'
 
-    var contributors_image = Metamaps.Erb['user.png']
+    var contributors_image = self.userImageUrl
     if (relevantPeople.length > 0) {
       // get the first contributor and use their image
       contributors_image = relevantPeople.models[0].get('image')
@@ -333,8 +328,8 @@ const InfoBox = {
     $('.mapContributors .tip').unbind().click(function (event) {
       event.stopPropagation()
     })
-    $('.mapTopics').text(Metamaps.Topics.length)
-    $('.mapSynapses').text(Metamaps.Synapses.length)
+    $('.mapTopics').text(DataModel.Topics.length)
+    $('.mapSynapses').text(DataModel.Synapses.length)
 
     $('.mapEditedAt').html('<span>Last edited: </span>' + Util.nowDateFormatted())
   },
@@ -388,10 +383,10 @@ const InfoBox = {
 
     if (doIt && authorized) {
       InfoBox.close()
-      Metamaps.Maps.Active.remove(map)
-      Metamaps.Maps.Featured.remove(map)
-      Metamaps.Maps.Mine.remove(map)
-      Metamaps.Maps.Shared.remove(map)
+      DataModel.Maps.Active.remove(map)
+      DataModel.Maps.Featured.remove(map)
+      DataModel.Maps.Mine.remove(map)
+      DataModel.Maps.Shared.remove(map)
       map.destroy()
       Router.home()
       GlobalUI.notifyUser('Map eliminated!')

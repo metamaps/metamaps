@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import React from 'react'
 import ReactDOM from 'react-dom' // TODO ensure this isn't a double import
@@ -6,11 +6,8 @@ import ReactDOM from 'react-dom' // TODO ensure this isn't a double import
 import Active from '../Active'
 import GlobalUI from '../GlobalUI'
 import Realtime from '../Realtime'
+import Loading from '../Loading'
 import Maps from '../../components/Maps'
-
-/*
- *  - Metamaps.Loading
- */
 
 const ExploreMaps = {
   pending: false,
@@ -63,6 +60,7 @@ const ExploreMaps = {
     ).resize()
 
     if (cb) cb()
+    Loading.hide()
   },
   loadMore: function () {
     var self = ExploreMaps

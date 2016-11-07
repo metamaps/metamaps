@@ -1,23 +1,25 @@
-/* global Metamaps, $, CanvasLoader, Countable, Hogan, embedly */
+/* global $, CanvasLoader, Countable, Hogan, embedly */
 
 import Active from './Active'
+import DataModel from './DataModel'
 import GlobalUI from './GlobalUI'
 import Mapper from './Mapper'
 import Router from './Router'
 import Util from './Util'
 import Visualize from './Visualize'
 
-/*
- * Metamaps.TopicCard.js
- *
- * Dependencies:
- *  - Metamaps.Metacodes
- */
 const TopicCard = {
   openTopicCard: null, // stores the topic that's currently open
   authorizedToEdit: false, // stores boolean for edit permission for open topic card
-  init: function () {
+  RAILS_ENV: undefined,
+  init: function (serverData) {
     var self = TopicCard
+
+    if (serverData.RAILS_ENV) {
+      self.RAILS_ENV = serverData.RAILS_ENV
+    } else {
+      console.error('RAILS_ENV is not defined! See TopicCard.js init function.')
+    }
 
     // initialize best_in_place editing
     $('.authenticated div.permission.canEdit .best_in_place').best_in_place()
@@ -89,6 +91,23 @@ const TopicCard = {
     $('.attachments').removeClass('hidden')
     $('.CardOnGraph').removeClass('hasAttachment')
   },
+  showLinkLoader: function() {
+    var loader = new CanvasLoader('embedlyLinkLoader')
+    loader.setColor('#4fb5c0'); // default is '#000000'
+    loader.setDiameter(28) // default is 40
+    loader.setDensity(41) // default is 40
+    loader.setRange(0.9); // default is 1.3
+    loader.show() // Hidden by default
+  },
+  showLink: function(topic) {
+    var e = embedly('card', document.getElementById('embedlyLink'))
+    if (!e && TopicCard.RAILS_ENV != 'development') {
+      TopicCard.handleInvalidLink()
+    } else if (!e) {
+      $('#embedlyLink').attr('target', '_blank').html(topic.get('link')).show()
+      $('#embedlyLinkLoader').hide()
+    }
+  },
   bindShowCardListeners: function (topic) {
     var self = TopicCard
     var showCard = document.getElementById('showcard')
@@ -128,20 +147,9 @@ const TopicCard = {
           $('.attachments').addClass('hidden')
           $('.embeds').append(embedlyEl)
           $('.embeds').append('<div id="embedlyLinkLoader"></div>')
-          var loader = new CanvasLoader('embedlyLinkLoader')
-          loader.setColor('#4fb5c0'); // default is '#000000'
-          loader.setDiameter(28) // default is 40
-          loader.setDensity(41) // default is 40
-          loader.setRange(0.9); // default is 1.3
-          loader.show() // Hidden by default
-          var e = embedly('card', document.getElementById('embedlyLink'))
-          if (!e && Metamaps.Erb.RAILS_ENV != 'development') {
-            self.handleInvalidLink()
-          }
-          else if (!e) {
-            $('#embedlyLink').attr('target', '_blank').html(topic.get('link')).show()
-            $('#embedlyLinkLoader').hide()
-          }
+
+          self.showLinkLoader()
+          self.showLink(topic)
         }
       }, 100)
     }
@@ -150,20 +158,9 @@ const TopicCard = {
 
     // initialize the link card, if there is a link
     if (topic.get('link') && topic.get('link') !== '') {
-      var loader = new CanvasLoader('embedlyLinkLoader')
-      loader.setColor('#4fb5c0'); // default is '#000000'
-      loader.setDiameter(28) // default is 40
-      loader.setDensity(41) // default is 40
-      loader.setRange(0.9); // default is 1.3
-      loader.show() // Hidden by default
-      var e = embedly('card', document.getElementById('embedlyLink'))
+      self.showLinkLoader()
+      self.showLink(topic)
       self.showLinkRemover()
-      if (!e && Metamaps.Erb.RAILS_ENV != 'development') {
-        self.handleInvalidLink()
-      } else if (!e) {
-        $('#embedlyLink').attr('target', '_blank').html(topic.get('link')).show()
-        $('#embedlyLinkLoader').hide()
-      }
     }
 
     var selectingMetacode = false
@@ -182,7 +179,7 @@ const TopicCard = {
     var metacodeLiClick = function () {
       selectingMetacode = false
       var metacodeId = parseInt($(this).attr('data-id'))
-      var metacode = Metamaps.Metacodes.get(metacodeId)
+      var metacode = DataModel.Metacodes.get(metacodeId)
       $('.CardOnGraph').find('.metacodeTitle').html(metacode.get('name'))
         .append('<div class="expandMetacodeSelect"></div>')
         .attr('class', 'metacodeTitle mbg' + metacode.id)

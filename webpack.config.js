@@ -12,6 +12,13 @@ if (NODE_ENV === 'production') {
   plugins.push(new webpack.optimize.UglifyJsPlugin({
     compress: { warnings: false }
   }))
+} else {
+  // enable this to test for circular dependencies
+  // const CircularDependencyPlugin = require('circular-dependency-plugin')
+  // plugins.push(new CircularDependencyPlugin({
+  //   exclude: /^node_modules\//,
+  //   failOnError: true
+  // }))
 }
 
 const devtool = NODE_ENV === 'production' ? undefined : 'cheap-module-eval-source-map'
@@ -28,9 +35,7 @@ const config = module.exports = {
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        loaders: [
-          'babel-loader?cacheDirectory&retainLines=true'
-        ]
+        loader: 'babel-loader?cacheDirectory&retainLines=true'
       }
     ]
   },

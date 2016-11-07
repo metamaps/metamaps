@@ -1,13 +1,16 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import outdent from 'outdent'
 
 import Active from '../Active'
 import AutoLayout from '../AutoLayout'
 import Create from '../Create'
+import DataModel from '../DataModel'
+import DataModelMap from '../DataModel/Map'
 import Filter from '../Filter'
 import GlobalUI from '../GlobalUI'
 import JIT from '../JIT'
+import Loading from '../Loading'
 import Realtime from '../Realtime'
 import Router from '../Router'
 import Selected from '../Selected'
@@ -18,26 +21,11 @@ import Visualize from '../Visualize'
 import CheatSheet from './CheatSheet'
 import InfoBox from './InfoBox'
 
-/*
- * Metamaps.Map.js.erb
- *
- * Dependencies:
- *  - Metamaps.Backbone
- *  - Metamaps.Erb
- *  - Metamaps.Loading
- *  - Metamaps.Mappers
- *  - Metamaps.Mappings
- *  - Metamaps.Maps
- *  - Metamaps.Messages
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
-
 const Map = {
   events: {
     editedByActiveMapper: 'Metamaps:Map:events:editedByActiveMapper'
   },
-  init: function () {
+  init: function (serverData) {
     var self = Map
     
     $('#wrapper').mousedown(function (e){
@@ -56,8 +44,8 @@ const Map = {
     GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
 
     self.updateStar()
-    InfoBox.init()
-    CheatSheet.init()
+    InfoBox.init(serverData)
+    CheatSheet.init(serverData)
 
     $('.viewOnly .requestAccess').click(self.requestAccess)
 
@@ -82,17 +70,16 @@ const Map = {
     $('.viewOnly').removeClass('sendRequest sentRequest requestDenied').addClass(className)
   },
   launch: function (id) {
-    var bb = Metamaps.Backbone
     var start = function (data) {
-      Active.Map = new bb.Map(data.map)
-      Metamaps.Mappers = new bb.MapperCollection(data.mappers)
-      Metamaps.Collaborators = new bb.MapperCollection(data.collaborators)
-      Metamaps.Topics = new bb.TopicCollection(data.topics)
-      Metamaps.Synapses = new bb.SynapseCollection(data.synapses)
-      Metamaps.Mappings = new bb.MappingCollection(data.mappings)
-      Metamaps.Messages = data.messages
-      Metamaps.Stars = data.stars
-      Metamaps.Backbone.attachCollectionEvents()
+      Active.Map = new DataModelMap(data.map)
+      DataModel.Mappers = new DataModel.MapperCollection(data.mappers)
+      DataModel.Collaborators = new DataModel.MapperCollection(data.collaborators)
+      DataModel.Topics = new DataModel.TopicCollection(data.topics)
+      DataModel.Synapses = new DataModel.SynapseCollection(data.synapses)
+      DataModel.Mappings = new DataModel.MappingCollection(data.mappings)
+      DataModel.Messages = data.messages
+      DataModel.Stars = data.stars
+      DataModel.attachCollectionEvents()
 
       var map = Active.Map
       var mapper = Active.Mapper
@@ -137,7 +124,7 @@ const Map = {
       Filter.checkMappers()
 
       Realtime.startActiveMap()
-      Metamaps.Loading.hide()
+      Loading.hide()
       
       // for mobile
       $('#header_content').html(map.get('name'))
@@ -165,9 +152,9 @@ const Map = {
     }
   },
   updateStar: function () {
-    if (!Active.Mapper || !Metamaps.Stars) return
+    if (!Active.Mapper || !DataModel.Stars) return
     // update the star/unstar icon
-    if (Metamaps.Stars.find(function (s) { return s.user_id === Active.Mapper.id })) {
+    if (DataModel.Stars.find(function (s) { return s.user_id === Active.Mapper.id })) {
       $('.starMap').addClass('starred')
       $('.starMap .tooltipsAbove').html('Unstar')
     } else {
@@ -180,8 +167,8 @@ const Map = {
 
     if (!Active.Map) return
     $.post('/maps/' + Active.Map.id + '/star')
-    Metamaps.Stars.push({ user_id: Active.Mapper.id, map_id: Active.Map.id })
-    Metamaps.Maps.Starred.add(Active.Map)
+    DataModel.Stars.push({ user_id: Active.Mapper.id, map_id: Active.Map.id })
+    DataModel.Maps.Starred.add(Active.Map)
     GlobalUI.notifyUser('Map is now starred')
     self.updateStar()
   },
@@ -190,8 +177,8 @@ const Map = {
 
     if (!Active.Map) return
     $.post('/maps/' + Active.Map.id + '/unstar')
-    Metamaps.Stars = Metamaps.Stars.filter(function (s) { return s.user_id != Active.Mapper.id })
-    Metamaps.Maps.Starred.remove(Active.Map)
+    DataModel.Stars = DataModel.Stars.filter(function (s) { return s.user_id != Active.Mapper.id })
+    DataModel.Maps.Starred.remove(Active.Map)
     self.updateStar() 
   },
   fork: function () {
@@ -219,7 +206,7 @@ const Map = {
       }
     })
     // collect the unfiltered synapses
-    Metamaps.Synapses.each(function (synapse) {
+    DataModel.Synapses.each(function (synapse) {
       var desc = synapse.get('desc')
 
       var descNotFiltered = Filter.visible.synapses.indexOf(desc) > -1
@@ -240,8 +227,8 @@ const Map = {
   },
   leavePrivateMap: function () {
     var map = Active.Map
-    Metamaps.Maps.Active.remove(map)
-    Metamaps.Maps.Featured.remove(map)
+    DataModel.Maps.Active.remove(map)
+    DataModel.Maps.Featured.remove(map)
     Router.home()
     GlobalUI.notifyUser('Sorry! That map has been changed to Private.')
   },
@@ -260,7 +247,7 @@ const Map = {
   },
   editedByActiveMapper: function () {
     if (Active.Mapper) {
-      Metamaps.Mappers.add(Active.Mapper)
+      DataModel.Mappers.add(Active.Mapper)
     }
   },
   exportImage: function () {

@@ -49,6 +49,7 @@
   "devDependencies": {
     "babel-eslint": "^6.1.2",
     "chai": "^3.5.0",
+    "circular-dependency-plugin": "^2.0.0",
     "eslint": "^3.5.0",
     "eslint-config-standard": "^6.2.0",
     "eslint-plugin-promise": "^2.0.1",

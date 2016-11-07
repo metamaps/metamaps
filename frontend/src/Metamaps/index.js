@@ -1,20 +1,19 @@
-/* global Metamaps */
-
 import Account from './Account'
 import Active from './Active'
 import Admin from './Admin'
 import AutoLayout from './AutoLayout'
-import Backbone from './Backbone'
+import DataModel from './DataModel'
 import Control from './Control'
 import Create from './Create'
 import Debug from './Debug'
 import Filter from './Filter'
 import GlobalUI, {
-  Search, CreateMap, ImportDialog, Account as GlobalUI_Account
+  Search, CreateMap, ImportDialog, Account as GlobalUIAccount
 } from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
 import Listeners from './Listeners'
+import Loading from './Loading'
 import Map, { CheatSheet, InfoBox } from './Map'
 import Mapper from './Mapper'
 import Mobile from './Mobile'
@@ -33,12 +32,12 @@ import Util from './Util'
 import Views from './Views'
 import Visualize from './Visualize'
 
-Metamaps = window.Metamaps || {}
+const Metamaps = window.Metamaps || {}
 Metamaps.Account = Account
 Metamaps.Active = Active
 Metamaps.Admin = Admin
 Metamaps.AutoLayout = AutoLayout
-Metamaps.Backbone = Backbone
+Metamaps.DataModel = DataModel
 Metamaps.Control = Control
 Metamaps.Create = Create
 Metamaps.Debug = Debug
@@ -46,11 +45,12 @@ Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
 Metamaps.GlobalUI.Search = Search
 Metamaps.GlobalUI.CreateMap = CreateMap
-Metamaps.GlobalUI.Account = GlobalUI_Account
+Metamaps.GlobalUI.Account = GlobalUIAccount
 Metamaps.GlobalUI.ImportDialog = ImportDialog
 Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
+Metamaps.Loading = Loading
 Metamaps.Map = Map
 Metamaps.Map.CheatSheet = CheatSheet
 Metamaps.Map.InfoBox = InfoBox
@@ -70,6 +70,10 @@ Metamaps.Topic = Topic
 Metamaps.TopicCard = TopicCard
 Metamaps.Util = Util
 Metamaps.Views = Views
+Metamaps.Views.ExploreMaps = ExploreMaps
+Metamaps.Views.ChatView = ChatView
+Metamaps.Views.VideoView = VideoView
+Metamaps.Views.Room = Room
 Metamaps.Visualize = Visualize
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -81,26 +85,26 @@ document.addEventListener('DOMContentLoaded', function () {
       Metamaps[prop].hasOwnProperty('init') &&
       typeof (Metamaps[prop].init) === 'function'
     ) {
-      Metamaps[prop].init()
+      Metamaps[prop].init(Metamaps.ServerData)
     }
   }
   // load whichever page you are on
   if (Metamaps.currentSection === 'explore') {
     const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
 
-    Views.ExploreMaps.setCollection(Metamaps.Maps[capitalize])
+    Views.ExploreMaps.setCollection(DataModel.Maps[capitalize])
     if (Metamaps.currentPage === 'mapper') {
-      Views.ExploreMaps.fetchUserThenRender()
+      ExploreMaps.fetchUserThenRender()
     } else {
-      Views.ExploreMaps.render()
+      ExploreMaps.render()
     }
     GlobalUI.showDiv('#explore')
   } else if (Metamaps.currentSection === '' && Active.Mapper) {
-    Views.ExploreMaps.setCollection(Metamaps.Maps.Active)
-    Views.ExploreMaps.render()
+    ExploreMaps.setCollection(DataModel.Maps.Active)
+    ExploreMaps.render()
     GlobalUI.showDiv('#explore')
   } else if (Active.Map || Active.Topic) {
-    Metamaps.Loading.show()
+    Loading.show()
     JIT.prepareVizData()
     GlobalUI.showDiv('#infovis')
   }

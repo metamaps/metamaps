@@ -1,4 +1,4 @@
-/* global Metamaps, $, Image, CanvasLoader */
+/* global $, Image, CanvasLoader */
 
 import _ from 'lodash'
 import outdent from 'outdent'
@@ -8,6 +8,7 @@ import $jit from '../patched/JIT'
 import Active from './Active'
 import Control from './Control'
 import Create from './Create'
+import DataModel from './DataModel'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
@@ -22,14 +23,6 @@ import TopicCard from './TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
 import clipboard from 'clipboard-js'
-
-/*
- * Metamaps.Erb
- * Metamaps.Mappings
- * Metamaps.Metacodes
- * Metamaps.Synapses
- * Metamaps.Topics
- */
 
 let panningInt
 
@@ -58,7 +51,7 @@ const JIT = {
   /**
    * This method will bind the event handlers it is interested and initialize the class.
    */
-  init: function () {
+  init: function (serverData) {
     const self = JIT
 
     $('.zoomIn').click(self.zoomIn)
@@ -72,10 +65,10 @@ const JIT = {
     $('.takeScreenshot').click(Map.exportImage)
 
     self.topicDescImage = new Image()
-    self.topicDescImage.src = Metamaps.Erb['topic_description_signifier.png']
+    self.topicDescImage.src = serverData['topic_description_signifier.png']
 
     self.topicLinkImage = new Image()
-    self.topicLinkImage.src = Metamaps.Erb['topic_link_signifier.png']
+    self.topicLinkImage.src = serverData['topic_link_signifier.png']
   },
   /**
    * convert our topic JSON into something JIT can use
@@ -140,15 +133,15 @@ const JIT = {
     self.vizData = []
     Visualize.loadLater = false
 
-    const results = self.convertModelsToJIT(Metamaps.Topics, Metamaps.Synapses)
+    const results = self.convertModelsToJIT(DataModel.Topics, DataModel.Synapses)
 
     self.vizData = results[0]
 
     // clean up the synapses array in case of any faulty data
     _.each(results[1], function (synapse) {
       mapping = synapse.getMapping()
-      Metamaps.Synapses.remove(synapse)
-      if (Metamaps.Mappings) Metamaps.Mappings.remove(mapping)
+      DataModel.Synapses.remove(synapse)
+      if (DataModel.Mappings) DataModel.Mappings.remove(mapping)
     })
 
     // set up addTopic instructions in case they delete all the topics
@@ -320,17 +313,6 @@ const JIT = {
         panning: 'avoid nodes',
         zooming: 28 // zoom speed. higher is more sensible
       },
-      // background: {
-      //    type: 'Metamaps'
-      // },
-      // NodeStyles: {
-      //  enable: true,
-      //  type: 'Native',
-      //  stylesHover: {
-      //    dim: 30
-      //  },
-      //  duration: 300
-      // },
       // Change node and edge styles such as
       // color and width.
       // These properties are also set per node
@@ -656,7 +638,6 @@ const JIT = {
     },
     // this will just be used to patch the ForceDirected graphsettings with the few things which actually differ
     background: {
-      // type: 'Metamaps',
       levelDistance: 200,
       numberOfCircles: 4,
       CanvasStyles: {
@@ -1191,7 +1172,7 @@ const JIT = {
     eY = -1 * eY
 
     const edgesToToggle = []
-    Metamaps.Synapses.each(function (synapse) {
+    DataModel.Synapses.each(function (synapse) {
       const e = synapse.get('edge')
       if (edgesToToggle.indexOf(e) === -1) {
         edgesToToggle.push(e)
@@ -1579,15 +1560,15 @@ const JIT = {
     loader.setRange(0.9) // default is 1.3
     loader.show() // Hidden by default
 
-    const topics = Metamaps.Topics.map(function (t) { return t.id })
+    const topics = DataModel.Topics.map(function (t) { return t.id })
     const topicsString = topics.join()
 
     const successCallback = function (data) {
       $('#loadingSiblings').remove()
 
       for (var key in data) {
-        const string = Metamaps.Metacodes.get(key).get('name') + ' (' + data[key] + ')'
-        $('#fetchSiblingList').append('<li class="getSiblings" data-id="' + key + '">' + string + '</li>')
+        const string = `${DataModel.Metacodes.get(key).get('name')} (${data[key]})`
+        $('#fetchSiblingList').append(`<li class="getSiblings" data-id="${key}">${string}</li>`)
       }
 
       $('.rc-siblings .getSiblings').click(function () {

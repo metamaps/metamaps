@@ -1,11 +1,11 @@
 /* global $, CanvasLoader */
 
-/* 
- * Metamaps.Erb
- */
-
 const Account = {
+  init: function (serverData) {
+    Account.userIconUrl = serverData['user.png']
+  },
   listenersInitialized: false,
+  userIconUrl: null,
   initListeners: function () {
     var self = Account
 
@@ -25,24 +25,18 @@ const Account = {
     if (!self.listenersInitialized) self.initListeners()
   },
   closeChangePicture: function () {
-    var self = Account
-
     $('.userImageMenu').hide()
   },
   showLoading: function () {
-    var self = Account
-
     var loader = new CanvasLoader('accountPageLoading')
-    loader.setColor('#4FC059'); // default is '#000000'
+    loader.setColor('#4FC059') // default is '#000000'
     loader.setDiameter(28) // default is 40
     loader.setDensity(41) // default is 40
-    loader.setRange(0.9); // default is 1.3
+    loader.setRange(0.9) // default is 1.3
     loader.show() // Hidden by default
     $('#accountPageLoading').show()
   },
   showImagePreview: function () {
-    var self = Account
-
     var file = $('#user_image')[0].files[0]
 
     var reader = new window.FileReader()
@@ -90,7 +84,7 @@ const Account = {
     var self = Account
 
     $('.userImageDiv canvas').remove()
-    $('.userImageDiv img').attr('src', window.Metamaps.Erb['user.png']).show()
+    $('.userImageDiv img').attr('src', self.userIconUrl).show()
     $('.userImageMenu').hide()
 
     var input = $('#user_image')

@@ -1,12 +1,7 @@
-/* global Metamaps, $, Hogan, Bloodhound, CanvasLoader */
+/* global $, Hogan, Bloodhound, CanvasLoader */
 
 import Active from '../Active'
 import Router from '../Router'
-
-/*
- * Metamaps.Erb
- * Metamaps.Maps
- */
 
 const Search = {
   locked: false,
@@ -15,11 +10,13 @@ const Search = {
   limitMapsToMe: false,
   changing: false,
   optionsInitialized: false,
-  init: function () {
+  init: function (serverData) {
     var self = Search
 
-    // TODO does this overlap with Metamaps.Loading?
-    // devin sez: I'd like to remove Metamaps.Loading from the rails code
+    self.wildcardIconUrl = serverData['icons/wildcard.png']
+    self.userIconUrl = serverData['user.png']
+
+    // this is similar to Metamaps.Loading, but it's for the search element
     var loader = new CanvasLoader('searchLoading')
     loader.setColor('#4fb5c0') // default is '#000000'
     loader.setDiameter(24) // default is 40
@@ -56,7 +53,7 @@ const Search = {
           return Hogan.compile(topicheader + $('#topicSearchTemplate').html()).render({
             value: 'No results',
             label: 'No results',
-            typeImageURL: Metamaps.Erb['icons/wildcard.png'],
+            typeImageURL: self.wildcardIconUrl,
             rtype: 'noresult'
           })
         },
@@ -124,7 +121,7 @@ const Search = {
             value: 'No results',
             label: 'No results',
             rtype: 'noresult',
-            profile: Metamaps.Erb['user.png']
+            profile: self.userIconUrl
           })
         },
         header: mapperheader,

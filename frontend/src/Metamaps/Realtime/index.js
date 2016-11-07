@@ -1,23 +1,11 @@
-/* global Metamaps, $ */
-
-/*
- * Metamaps.Realtime.js
- *
- * Dependencies:
- *  - Metamaps.Backbone
- *  - Metamaps.Erb
- *  - Metamaps.Mappers
- *  - Metamaps.Mappings
- *  - Metamaps.Messages
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
+/* global $ */
 
 import _ from 'lodash'
 import SimpleWebRTC from 'simplewebrtc'
 import SocketIoConnection from 'simplewebrtc/socketioconnection'
 
 import Active from '../Active'
+import DataModel from '../DataModel'
 import GlobalUI from '../GlobalUI'
 import JIT from '../JIT'
 import Synapse from '../Synapse'
@@ -121,12 +109,14 @@ let Realtime = {
   broadcastingStatus: false,
   inConversation: false,
   localVideo: null,
-  init: function () {
+  'junto_spinner_darkgrey.gif': '',
+  init: function (serverData) {
     var self = Realtime
 
     self.addJuntoListeners()
 
-    self.socket = new SocketIoConnection({ url: Metamaps.Erb['REALTIME_SERVER']})
+    self.socket = new SocketIoConnection({ url: serverData['REALTIME_SERVER']})
+    self['junto_spinner_darkgrey.gif'] = serverData['junto_spinner_darkgrey.gif']
     
     self.socket.on('connect', function () {
       console.log('connected')
@@ -230,7 +220,7 @@ let Realtime = {
         self.setupSocket()
         self.setupLocalSendables()
       }
-      self.room.addMessages(new Metamaps.Backbone.MessageCollection(Metamaps.Messages), true)
+      self.room.addMessages(new DataModel.MessageCollection(DataModel.Messages), true)
     }
   },
   endActiveMap: function () {

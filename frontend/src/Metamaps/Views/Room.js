@@ -1,4 +1,4 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import Backbone from 'backbone'
 import attachMediaStream from 'attachmediastream'
@@ -7,17 +7,13 @@ import attachMediaStream from 'attachmediastream'
 // Backbone.$ = window.$
 
 import Active from '../Active'
+import DataModel from '../DataModel'
 import Realtime from '../Realtime'
 
 import ChatView from './ChatView'
 import VideoView from './VideoView'
 
-/*
- * Dependencies:
- *   Metamaps.Backbone
- */
-
-const Room = function(opts) {
+const Room = function(opts = {}) {
   var self = this
 
   this.isActiveRoom = false
@@ -35,6 +31,7 @@ const Room = function(opts) {
   this.chat = new ChatView(this.messages, this.currentMapper, this.room)
 
   this.videos = {}
+  this.soundUrls = opts.soundUrls
 
   this.init()
 }
@@ -170,14 +167,14 @@ Room.prototype.init = function () {
     var self = this
       //this.roomRef.child('messages').push(data)
       if (self.chat.alertSound) self.chat.sound.play('sendchat')
-      var m = new Metamaps.Backbone.Message({
+      var m = new DataModel.Message({
         message: data.message,
         resource_id: Active.Map.id,
         resource_type: "Map"
       })
       m.save(null, {
         success: function (model, response) {
-          self.addMessages(new Metamaps.Backbone.MessageCollection(model), false, true)
+          self.addMessages(new DataModel.MessageCollection(model), false, true)
           $(document).trigger(Room.events.newMessage, [model])
         },
         error: function (model, response) {

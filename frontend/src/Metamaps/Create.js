@@ -1,20 +1,12 @@
-/* global Metamaps, $, Hogan, Bloodhound */
+/* global $, Hogan, Bloodhound */
 
+import DataModel from './DataModel'
 import Mouse from './Mouse'
 import Selected from './Selected'
 import Synapse from './Synapse'
 import Topic from './Topic'
 import Visualize from './Visualize'
 import GlobalUI from './GlobalUI'
-
-/*
- * Metamaps.Create.js
- *
- * Dependencies:
- *  - Metamaps.Backbone
- *  - Metamaps.Metacodes
- *  - Metamaps.Topics
- */
 
 const Create = {
   isSwitchingSet: false, // indicates whether the metacode set switch lightbox is open
@@ -59,7 +51,7 @@ const Create = {
     }
 
     var codesToSwitchToIds
-    var metacodeModels = new Metamaps.Backbone.MetacodeCollection()
+    var metacodeModels = new DataModel.MetacodeCollection()
     Create.selectedMetacodeSetIndex = index
     Create.selectedMetacodeSet = 'metacodeset-' + set
 
@@ -80,7 +72,7 @@ const Create = {
 
     // sort by name
     for (var i = 0; i < codesToSwitchToIds.length; i++) {
-      metacodeModels.add(Metamaps.Metacodes.get(codesToSwitchToIds[i]))
+      metacodeModels.add(DataModel.Metacodes.get(codesToSwitchToIds[i]))
     }
     metacodeModels.sort()
 
@@ -243,7 +235,7 @@ const Create = {
         $('.pinCarousel').removeClass('isPinned')
         Create.newTopic.pinned = false
       }
-      if (Metamaps.Topics.length === 0) {
+      if (DataModel.Topics.length === 0) {
         GlobalUI.showDiv('#instructions')
       }
       Create.newTopic.beingCreated = false

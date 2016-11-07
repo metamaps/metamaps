@@ -1,7 +1,7 @@
 const Active = {
   Map: null,
-  Topic: null,
-  Mapper: null
-};
+  Mapper: null,
+  Topic: null
+}
 
 export default Active

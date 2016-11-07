@@ -7,6 +7,7 @@ everthing in this file happens as a result of websocket events
 import { JUNTO_UPDATED } from './events'
 
 import Active from '../Active'
+import DataModel from '../DataModel'
 import GlobalUI from '../GlobalUI'
 import Control from '../Control'
 import Map from '../Map'
@@ -22,7 +23,7 @@ export const juntoUpdated = self => state => {
 }
 
 export const synapseRemoved = self => data => {
-  var synapse = Metamaps.Synapses.get(data.mappableid)
+  var synapse = DataModel.Synapses.get(data.mappableid)
   if (synapse) {
     var edge = synapse.get('edge')
     var mapping = synapse.getMapping()
@@ -36,8 +37,8 @@ export const synapseRemoved = self => data => {
     if (edge.getData('displayIndex')) {
       delete edge.data.$displayIndex
     }
-    Metamaps.Synapses.remove(synapse)
-    Metamaps.Mappings.remove(mapping)
+    DataModel.Synapses.remove(synapse)
+    DataModel.Mappings.remove(mapping)
   }
 }
 
@@ -63,18 +64,18 @@ export const synapseCreated = self => data => {
     }
   }
 
-  mapper = Metamaps.Mappers.get(data.mapperid)
+  mapper = DataModel.Mappers.get(data.mapperid)
   if (mapper === undefined) {
     Mapper.get(data.mapperid, function(m) {
-      Metamaps.Mappers.add(m)
+      DataModel.Mappers.add(m)
       mapper = m
     })
   }
   $.ajax({
     url: '/synapses/' + data.mappableid + '.json',
     success: function (response) {
-      Metamaps.Synapses.add(response)
-      synapse = Metamaps.Synapses.get(response.id)
+      DataModel.Synapses.add(response)
+      synapse = DataModel.Synapses.get(response.id)
     },
     error: function () {
       cancel = true
@@ -83,8 +84,8 @@ export const synapseCreated = self => data => {
   $.ajax({
     url: '/mappings/' + data.mappingid + '.json',
     success: function (response) {
-      Metamaps.Mappings.add(response)
-      mapping = Metamaps.Mappings.get(response.id)
+      DataModel.Mappings.add(response)
+      mapping = DataModel.Mappings.get(response.id)
     },
     error: function () {
       cancel = true
@@ -94,13 +95,13 @@ export const synapseCreated = self => data => {
 }
 
 export const topicRemoved = self => data => {
-  var topic = Metamaps.Topics.get(data.mappableid)
+  var topic = DataModel.Topics.get(data.mappableid)
   if (topic) {
     var node = topic.get('node')
     var mapping = topic.getMapping()
     Control.hideNode(node.id)
-    Metamaps.Topics.remove(topic)
-    Metamaps.Mappings.remove(mapping)
+    DataModel.Topics.remove(topic)
+    DataModel.Mappings.remove(mapping)
   }
 }
 
@@ -120,18 +121,18 @@ export const topicCreated = self => data => {
     }
   }
 
-  mapper = Metamaps.Mappers.get(data.mapperid)
+  mapper = DataModel.Mappers.get(data.mapperid)
   if (mapper === undefined) {
     Mapper.get(data.mapperid, function(m) {
-      Metamaps.Mappers.add(m)
+      DataModel.Mappers.add(m)
       mapper = m
     })
   }
   $.ajax({
     url: '/topics/' + data.mappableid + '.json',
     success: function (response) {
-      Metamaps.Topics.add(response)
-      topic = Metamaps.Topics.get(response.id)
+      DataModel.Topics.add(response)
+      topic = DataModel.Topics.get(response.id)
     },
     error: function () {
       cancel = true
@@ -140,8 +141,8 @@ export const topicCreated = self => data => {
   $.ajax({
     url: '/mappings/' + data.mappingid + '.json',
     success: function (response) {
-      Metamaps.Mappings.add(response)
-      mapping = Metamaps.Mappings.get(response.id)
+      DataModel.Mappings.add(response)
+      mapping = DataModel.Mappings.get(response.id)
     },
     error: function () {
       cancel = true
@@ -152,7 +153,7 @@ export const topicCreated = self => data => {
 }
 
 export const messageCreated = self => data => {
-  self.room.addMessages(new Metamaps.Backbone.MessageCollection(data))
+  self.room.addMessages(new DataModel.MessageCollection(data))
 }
 
 export const mapUpdated = self => data => {
@@ -182,7 +183,7 @@ export const mapUpdated = self => data => {
 }
 
 export const topicUpdated = self => data => {
-  var topic = Metamaps.Topics.get(data.topicId)
+  var topic = DataModel.Topics.get(data.topicId)
   if (topic) {
     var node = topic.get('node')
     topic.fetch({
@@ -195,7 +196,7 @@ export const topicUpdated = self => data => {
 }
 
 export const synapseUpdated = self => data => {
-  var synapse = Metamaps.Synapses.get(data.synapseId)
+  var synapse = DataModel.Synapses.get(data.synapseId)
   if (synapse) {
     // edge reset necessary because fetch causes model reset
     var edge = synapse.get('edge')
@@ -214,7 +215,7 @@ export const topicDragged = self => positions => {
 
   if (Active.Map) {
     for (var key in positions) {
-      topic = Metamaps.Topics.get(key)
+      topic = DataModel.Topics.get(key)
       if (topic) node = topic.get('node')
       if (node) node.pos.setc(positions[key].x, positions[key].y)
     } // for
@@ -301,9 +302,10 @@ export const newMapper = self => data => {
 
     var notifyMessage = data.username + ' just joined the map'
     if (firstOtherPerson) {
-      notifyMessage += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.inviteACall(' + data.userid + ')">Suggest A Video Call</button>'
+      notifyMessage += ' <button type="button" class="toast-button button">Suggest A Video Call</button>'
     }
     GlobalUI.notifyUser(notifyMessage)
+    $('#toast button').click(e => self.inviteACall(data.userid))
     self.sendMapperInfo(data.userid)
   }
 }
@@ -332,11 +334,13 @@ export const invitedToCall = self => inviter => {
   self.soundId = self.room.chat.sound.play('sessioninvite')
 
   var username = self.mappersOnMap[inviter].name
-  var notifyText = '<img src="' + Metamaps.Erb['junto_spinner_darkgrey.gif'] + '" style="display: inline-block; margin-top: -12px; margin-bottom: -6px; vertical-align: top;" />'
+  var notifyText = '<img src="' + self['junto_spinner_darkgrey.gif'] + '" style="display: inline-block; margin-top: -12px; margin-bottom: -6px; vertical-align: top;" />'
   notifyText += username + ' is inviting you to a conversation. Join live?'
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.acceptCall(' + inviter + ')">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyCall(' + inviter + ')">No</button>'
+  notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.acceptCall(inviter))
+  $('#toast button.no').click(e => self.denyCall(inviter))
 }
 
 export const invitedToJoin = self => inviter => {
@@ -345,9 +349,11 @@ export const invitedToJoin = self => inviter => {
 
   var username = self.mappersOnMap[inviter].name
   var notifyText = username + ' is inviting you to the conversation. Join?'
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.Realtime.denyInvite(' + inviter + ')">No</button>'
+  notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.joinCall())
+  $('#toast button.no').click(e => self.denyInvite(inviter))
 }
 
 export const mapperJoinedCall = self => id => {
@@ -384,18 +390,24 @@ export const mapperLeftCall = self => id => {
 
 export const callInProgress = self => () => {
   var notifyText = "There's a conversation happening, want to join?"
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>'
+  notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.joinCall())
+  $('#toast button.no').click(e => GlobalUI.clearNotify())
+
   self.room.conversationInProgress()
 }
 
 export const callStarted = self => () => {
   if (self.inConversation) return
   var notifyText = "There's a conversation starting, want to join?"
-  notifyText += ' <button type="button" class="toast-button button" onclick="Metamaps.Realtime.joinCall()">Yes</button>'
-  notifyText += ' <button type="button" class="toast-button button btn-no" onclick="Metamaps.GlobalUI.clearNotify()">No</button>'
+  notifyText += ' <button type="button" class="toast-button button">Yes</button>'
+  notifyText += ' <button type="button" class="toast-button button btn-no">No</button>'
   GlobalUI.notifyUser(notifyText, true)
+  $('#toast button.yes').click(e => self.joinCall())
+  $('#toast button.no').click(e => GlobalUI.clearNotify())
+
   self.room.conversationInProgress()
 }
 

@@ -5,14 +5,14 @@
    # %>
 
 <script>
-  Metamaps.Maps.Mapper = {
-    models: <%= @maps.to_json.html_safe %>,
-    id: <%= params[:id] %>
-  };
-  Metamaps.currentPage = "mapper";
   <% content_for :title, @user.name + " | Metamaps" %>
   <% content_for :mobile_title, @user.name %>
 
   Metamaps.currentSection = "explore";
+  Metamaps.currentPage = "mapper";
+  Metamaps.ServerData.Mapper = {
+    models: <%= @maps.to_json.html_safe %>,
+    id: <%= params[:id] %>
+  };
   Metamaps.GlobalUI.Search.focus();
 </script>

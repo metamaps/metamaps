@@ -1,23 +1,15 @@
-/* global Metamaps, $ */
+/* global $ */
 
 import _ from 'lodash'
 
 import $jit from '../patched/JIT'
 
 import Active from './Active'
+import DataModel from './DataModel'
 import JIT from './JIT'
+import Loading from './Loading'
 import Router from './Router'
 import TopicCard from './TopicCard'
-
-/*
- * Metamaps.Visualize
- *
- * Dependencies:
- *  - Metamaps.Loading
- *  - Metamaps.Metacodes
- *  - Metamaps.Synapses
- *  - Metamaps.Topics
- */
 
 const Visualize = {
   mGraph: null, // a reference to the graph object.
@@ -25,8 +17,11 @@ const Visualize = {
   type: 'ForceDirected', // the type of graph we're building, could be "RGraph", "ForceDirected", or "ForceDirected3D"
   loadLater: false, // indicates whether there is JSON that should be loaded right in the offset, or whether to wait till the first topic is created
   touchDragNode: null,
-  init: function () {
+  init: function (serverData) {
     var self = Visualize
+
+    if (serverData.VisualizeType) self.type = serverData.VisualizeType
+
     // disable awkward dragging of the canvas element that would sometimes happen
     $('#infovis-canvas').on('dragstart', function (event) {
       event.preventDefault()
@@ -59,7 +54,7 @@ const Visualize = {
       var i, l, startPos, endPos, topic, synapse
 
       self.mGraph.graph.eachNode(function (n) {
-        topic = Metamaps.Topics.get(n.id)
+        topic = DataModel.Topics.get(n.id)
         topic.set({ node: n }, { silent: true })
         topic.updateNode()
 
@@ -69,7 +64,7 @@ const Visualize = {
 
             l = edge.getData('synapseIDs').length
             for (i = 0; i < l; i++) {
-              synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i])
+              synapse = DataModel.Synapses.get(edge.getData('synapseIDs')[i])
               synapse.set({ edge: edge }, { silent: true })
               synapse.updateEdge()
             }
@@ -84,7 +79,7 @@ const Visualize = {
       var i, l, startPos, endPos, topic, synapse
 
       self.mGraph.graph.eachNode(function (n) {
-        topic = Metamaps.Topics.get(n.id)
+        topic = DataModel.Topics.get(n.id)
         topic.set({ node: n }, { silent: true })
         topic.updateNode()
         mapping = topic.getMapping()
@@ -95,7 +90,7 @@ const Visualize = {
 
             l = edge.getData('synapseIDs').length
             for (i = 0; i < l; i++) {
-              synapse = Metamaps.Synapses.get(edge.getData('synapseIDs')[i])
+              synapse = DataModel.Synapses.get(edge.getData('synapseIDs')[i])
               synapse.set({ edge: edge }, { silent: true })
               synapse.updateEdge()
             }
@@ -161,7 +156,7 @@ const Visualize = {
     if (self.type == 'ForceDirected' && Active.Mapper) $.post('/maps/' + Active.Map.id + '/events/user_presence')
 
     function runAnimation () {
-      Metamaps.Loading.hide()
+      Loading.hide()
       // load JSON data, if it's not empty
       if (!self.loadLater) {
         // load JSON data.
@@ -189,12 +184,12 @@ const Visualize = {
     // hold for a maximum of 80 passes, or 4 seconds of waiting time
     var tries = 0
     function hold () {
-      var unique = _.uniq(Metamaps.Topics.models, function (metacode) { return metacode.get('metacode_id'); }),
+      var unique = _.uniq(DataModel.Topics.models, function (metacode) { return metacode.get('metacode_id'); }),
         requiredMetacodes = _.map(unique, function (metacode) { return metacode.get('metacode_id'); }),
         loadedCount = 0
 
       _.each(requiredMetacodes, function (metacode_id) {
-        var metacode = Metamaps.Metacodes.get(metacode_id),
+        var metacode = DataModel.Metacodes.get(metacode_id),
           img = metacode ? metacode.get('image') : false
 
         if (img && (img.complete || (typeof img.naturalWidth !== 'undefined' && img.naturalWidth !== 0))) {
