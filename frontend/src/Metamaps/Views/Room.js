@@ -26,10 +26,11 @@ const Room = function(opts = {}) {
 
   this.messages = new Backbone.Collection()
   this.currentMapper = new Backbone.Model({ name: opts.username, image: opts.image })
-  this.chat = new ChatView(this.messages, this.currentMapper, this.room)
+  this.chat = new ChatView(this.messages, this.currentMapper, this.room, {
+    soundUrls: opts.soundUrls
+  })
 
   this.videos = {}
-  this.soundUrls = opts.soundUrls
 
   this.init()
 }

@@ -93,10 +93,10 @@ server to see what problems show up:
 #### Realtime server:
 
     sudo npm install -g forever
-    (crontab -u metamaps -l 2>/dev/null; echo "@reboot $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
+    (crontab -u metamaps -l 2>/dev/null; echo "@reboot env NODE_REALTIME_PORT=5000 $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
 
     mkdir -p /home/metamaps/logs
-    forever --append \
+    env NODE_REALTIME_PORT=5000 forever --append \
       -c /home/metamaps/metamaps/node_modules/.bin/babel-node \
       -l /home/metamaps/logs/forever.realtime.log \
       start /home/metamaps/metamaps/realtime/realtime-server.js

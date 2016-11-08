@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # bad code that should be checked over before entering one of the
 # nice files from the right side of this repo
 class HacksController < ApplicationController
@@ -11,7 +12,7 @@ class HacksController < ApplicationController
     response, url = get_with_redirects(url)
     title = get_encoded_title(response)
     render json: { success: true, title: title, url: url }
-  rescue StandardError => e
+  rescue StandardError
     render json: { success: false }
   end
 
@@ -28,7 +29,13 @@ class HacksController < ApplicationController
   end
 
   def get_encoded_title(http_response)
-    title = http_response.body.sub(/.*<title>(.*)<\/title>.*/m, '\1')
+    # ensure there's actually an html title tag
+    title = http_response.body.sub(%r{.*(<title>.*</title>).*}m, '\1')
+    return '' unless title.starts_with?('<title>')
+    return '' unless title.ends_with?('</title>')
+    title = title.sub('<title>', '').sub(%r{</title>$}, '')
+
+    # encode and trim the title to 140 usable characters
     charset = http_response['content-type'].sub(/.*charset=(.*);?.*/, '\1')
     charset = nil if charset == 'text/html'
     title = title.force_encoding(charset) if charset

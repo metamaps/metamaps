@@ -15,4 +15,4 @@ signalling(io, stunservers, store)
 junto(io, store)
 map(io, store)
 
-io.listen(5001)
+io.listen(parseInt(process.env.NODE_REALTIME_PORT) || 5000)

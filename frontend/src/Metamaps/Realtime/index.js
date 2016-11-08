@@ -172,7 +172,11 @@ let Realtime = {
         room: 'global',
         $video: self.localVideo.$video,
         myVideoView: self.localVideo.view,
-        config: { DOUBLE_CLICK_TOLERANCE: 200 }
+        config: { DOUBLE_CLICK_TOLERANCE: 200 },
+        soundUrls: [
+          serverData['sounds/MM_sounds.mp3'],
+          serverData['sounds/MM_sounds.ogg']
+        ]
       })
       self.room.videoAdded(self.handleVideoAdded)
 
