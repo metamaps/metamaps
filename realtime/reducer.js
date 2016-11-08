@@ -1,4 +1,4 @@
-const { omit, omitBy, isNil, mapValues } = require('lodash')
+const { find, omit, isNil, mapValues, values } = require('lodash')
 const {
   JOIN_MAP,
   LEAVE_MAP,
@@ -9,7 +9,16 @@ const {
 const NOT_IN_CONVERSATION = 0
 const IN_CONVERSATION = 1
 
-const addMapperToMap = (map, userId) => { return Object.assign({}, map, { [userId]: NOT_IN_CONVERSATION })}
+const addMapperToMap = (map, userId) => Object.assign({}, map, { [userId]: NOT_IN_CONVERSATION })
+const userStillPresent = (userId, liveMaps) => { 
+  if (!userId) return false
+  let stillPresent = false
+  const userIdString = userId.toString()
+  values(liveMaps).forEach(presentUsers => {
+    if (find(Object.keys(presentUsers), id => id === userIdString)) stillPresent = true
+  })
+  return stillPresent
+}
 
 const reducer = (state = { connectedPeople: {}, liveMaps: {} }, action) => {
   const { type, payload } = action
@@ -37,10 +46,13 @@ const reducer = (state = { connectedPeople: {}, liveMaps: {} }, action) => {
     const newLiveMaps = mapWillEmpty
       ? omit(liveMaps, payload.mapid)
       : Object.assign({}, liveMaps, { [payload.mapid]: omit(map, payload.userid) })
+    delete newLiveMaps[undefined]
+    delete newLiveMaps[null]
+    const updateConnectedPeople = userStillPresent(payload.userid, newLiveMaps) ? connectedPeople : omit(connectedPeople, payload.userid)
 
     return {
-      connectedPeople: omit(connectedPeople, payload.userid),
-      liveMaps: omitBy(newLiveMaps, isNil)
+      connectedPeople: updateConnectedPeople,
+      liveMaps: newLiveMaps
     }
   case JOIN_CALL:
     // update the user (payload.id is user id) in the given map to be marked in the conversation
@@ -57,15 +69,18 @@ const reducer = (state = { connectedPeople: {}, liveMaps: {} }, action) => {
       : Object.assign({}, map, { [payload.userid]: NOT_IN_CONVERSATION })
 
     return Object.assign({}, state, {
-      liveMaps: Object.assign({}, liveMaps, { map: newMap })
+      liveMaps: Object.assign({}, liveMaps, { [payload.mapid]: newMap })
     })
   case 'DISCONNECT':
     const mapWithoutUser = omit(map, payload.userid)
     const newMapWithoutUser = callWillFinish ? mapValues(mapWithoutUser, () => NOT_IN_CONVERSATION) : mapWithoutUser
     const newLiveMapsWithoutUser = mapWillEmpty ? omit(liveMaps, payload.mapid) : Object.assign({}, liveMaps, { [payload.mapid]: newMapWithoutUser })
+    delete newLiveMapsWithoutUser[undefined]
+    delete newLiveMapsWithoutUser[null]
+    const newConnectedPeople = userStillPresent(payload.userid, newLiveMapsWithoutUser) ? connectedPeople : omit(connectedPeople, payload.userid)
     return {
-      connectedPeople: omit(connectedPeople, payload.userid),
-      liveMaps: omitBy(newLiveMapsWithoutUser, isNil)
+      connectedPeople: newConnectedPeople,
+      liveMaps: newLiveMapsWithoutUser
     }
   default:
     return state
