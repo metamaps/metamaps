@@ -37,8 +37,8 @@ const Topic = Backbone.Model.extend({
 
     newOptions.success = function(model, response, opt) {
       if (s) s(model, response, opt)
-      model.trigger('saved')
       model.set('calculated_permission', model.get('permission'))
+      model.trigger('saved')
 
       if (permBefore === 'private' && model.get('permission') !== 'private') {
         model.trigger('noLongerPrivate')

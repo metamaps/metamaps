@@ -32,7 +32,7 @@ class AccessController < ApplicationController
 
   # POST maps/:id/access
   def access
-    user_ids = params[:access] || []
+    user_ids = params[:access].to_a.map(&:to_i) || []
 
     @map.add_new_collaborators(user_ids).each do |user_id|
       # add_new_collaborators returns array of added users,
