@@ -1,3 +1,4 @@
+// eslint-disable spaced-comment
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //
@@ -16,3 +17,4 @@
 //= require_directory ./lib
 //= require ./webpacked/metamaps.bundle
 //= require ./Metamaps.ServerData
+//= require homepageVimeoFallback
