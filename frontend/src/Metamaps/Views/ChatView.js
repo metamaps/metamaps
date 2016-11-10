@@ -226,7 +226,7 @@ var Handlers = {
   }
 }
 
-const ChatView = function(messages, mapper, room) {
+const ChatView = function(messages, mapper, room, opts = {}) {
   this.room = room
   this.mapper = mapper
   this.messages = messages // backbone collection
@@ -243,7 +243,7 @@ const ChatView = function(messages, mapper, room) {
   Private.attachElements.call(this)
   Private.addEventListeners.call(this)
   Private.initialMessages.call(this)
-  Private.initializeSounds.call(this, room.soundUrls)
+  Private.initializeSounds.call(this, opts.soundUrls)
   this.$container.css({
     right: '-300px'
   })

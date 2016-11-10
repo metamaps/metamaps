@@ -25,7 +25,7 @@ const PasteInput = {
         self.handleFile(e.dataTransfer.files[0], coords)
       }
       // OMG import bookmarks 😍
-      if (e.dataTransfer.items.length > 0) {
+      if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
         e.dataTransfer.items[0].getAsString(function(text) {
           if (text.match(self.URL_REGEX)) {
             self.handle(text, coords)

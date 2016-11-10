@@ -375,6 +375,7 @@ const Import = {
           $.get('/hacks/load_url_title', {
             url
           }, function success(data, textStatus) {
+            if (data.trim() === '') return
             var selector = '#showcard #topic_' + topic.get('id') + ' .best_in_place'
             if ($(selector).find('form').length > 0) {
               $(selector).find('textarea, input').val(data.title)
