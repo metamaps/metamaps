@@ -15,9 +15,9 @@ module ApplicationHelper
     @m = current_user.settings.metacodes
     set = metacodeset
     @metacodes = if set && set == 'Most'
-                   Metacode.where(id: current_user.mostUsedMetacodes).to_a
+                   Metacode.where(id: current_user.most_used_metacodes).to_a
                  elsif set && set == 'Recent'
-                   Metacode.where(id: current_user.recentMetacodes).to_a
+                   Metacode.where(id: current_user.recent_metacodes).to_a
                  elsif set
                    set.metacodes.to_a
                  else
@@ -27,11 +27,11 @@ module ApplicationHelper
   end
 
   def user_most_used_metacodes
-    @metacodes = current_user.mostUsedMetacodes.map { |id| Metacode.find(id) }
+    @metacodes = current_user.most_used_metacodes.map { |id| Metacode.find(id) }
   end
 
   def user_recent_metacodes
-    @metacodes = current_user.recentMetacodes.map { |id| Metacode.find(id) }
+    @metacodes = current_user.recent_metacodes.map { |id| Metacode.find(id) }
   end
 
   def invite_link

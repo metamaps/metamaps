@@ -64,32 +64,20 @@ class User < ApplicationRecord
     json['rtype'] = 'mapper'
     json
   end
-  
+
   def all_accessible_maps
-    #TODO: is there a way to keep this an ActiveRecord relation?
     maps + shared_maps
   end
 
-  def recentMetacodes
-    array = []
-    self.topics.sort{|a,b| b.created_at <=> a.created_at }.each do |t|
-      if array.length < 5 and array.index(t.metacode_id) == nil
-        array.push(t.metacode_id)
-      end
-    end
-    array
+  def recent_metacodes
+    topics.order(:created_at).pluck(:metacode_id).uniq.first(5)
   end
 
-  def mostUsedMetacodes
-    self.topics.to_a.reduce({}) { |memo, topic| 
-      if memo[topic.metacode_id] == nil
-        memo[topic.metacode_id] = 1 
-      else 
-        memo[topic.metacode_id] = memo[topic.metacode_id] + 1
-      end
-      
+  def most_used_metacodes
+    topics.to_a.each_with_object(Hash.new(0)) do |topic, memo|
+      memo[topic.metacode_id] += 1
       memo
-    }.to_a.sort{ |a, b| b[1] <=> a[1] }.map{|i| i[0]}.slice(0, 5)
+    end.to_a.sort { |a, b| b[1] <=> a[1] }.map { |i| i[0] }.slice(0, 5)
   end
 
   # generate a random 8 letter/digit code that they can use to invite people
