@@ -75,7 +75,6 @@ ActiveRecord::Schema.define(version: 20161105160340) do
     t.datetime "updated_at",    null: false
     t.integer  "mappable_id"
     t.string   "mappable_type"
-    t.boolean  "in_trash"
     t.index ["map_id", "synapse_id"], name: "index_mappings_on_map_id_and_synapse_id", using: :btree
     t.index ["map_id", "topic_id"], name: "index_mappings_on_map_id_and_topic_id", using: :btree
     t.index ["map_id"], name: "index_mappings_on_map_id", using: :btree
@@ -190,7 +189,6 @@ ActiveRecord::Schema.define(version: 20161105160340) do
     t.text     "permission"
     t.text     "weight"
     t.integer  "defer_to_map_id"
-    t.boolean  "in_trash"
     t.index ["topic1_id", "topic1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
     t.index ["topic1_id"], name: "index_synapses_on_topic1_id", using: :btree
     t.index ["topic2_id", "topic2_id"], name: "index_synapses_on_node2_id_and_node2_id", using: :btree
@@ -225,7 +223,6 @@ ActiveRecord::Schema.define(version: 20161105160340) do
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
     t.integer  "defer_to_map_id"
-    t.boolean  "in_trash"
     t.index ["metacode_id"], name: "index_topics_on_metacode_id", using: :btree
     t.index ["user_id"], name: "index_topics_on_user_id", using: :btree
   end
