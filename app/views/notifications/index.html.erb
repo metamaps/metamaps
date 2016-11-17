@@ -1,0 +1,18 @@
+<% content_for :title, 'Notifications | Metamaps' %>
+<% content_for :mobile_title, 'Notifications' %>
+
+<div id="yield">
+  <div class="centerContent">
+    <h4>Notifications</h4>
+    <ul>
+      <% @notifications.each do |notification| %>
+        <li>
+          <strong>
+            <%= link_to notification.subject, notification_path(notification.id) %>
+          </strong>
+          <%= notification.body.truncate(140) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

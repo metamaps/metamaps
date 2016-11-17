@@ -110,4 +110,8 @@ class User < ApplicationRecord
   def settings=(val)
     self[:settings] = val
   end
+
+  def mailboxer_email(object)
+    nil # email
+  end
 end

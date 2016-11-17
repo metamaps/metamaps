@@ -1,0 +1,12 @@
+<% content_for :title, 'Notifications | Metamaps' %>
+<% content_for :mobile_title, 'Notifications' %>
+
+<div id="yield">
+  <div class="centerContent">
+    <h4><%= @notification.subject %></h4>
+    <hr />
+    <%= @notification.body %>
+    <hr />
+    <%= link_to 'Back', notifications_path %>
+  </div>
+</div>
