@@ -36,6 +36,7 @@ Metamaps::Application.routes.draw do
   resources :mappings, except: [:index, :new, :edit]
 
   resources :messages, only: [:show, :create, :update, :destroy]
+  resources :notifications, only: [:index, :show]
 
   resources :metacode_sets, except: [:show]
 
