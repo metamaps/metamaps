@@ -36,7 +36,12 @@ Metamaps::Application.routes.draw do
   resources :mappings, except: [:index, :new, :edit]
 
   resources :messages, only: [:show, :create, :update, :destroy]
-  resources :notifications, only: [:index, :show]
+  resources :notifications, only: [:index, :show] do
+    member do
+      put :mark_read
+      put :mark_unread
+    end
+  end
 
   resources :metacode_sets, except: [:show]
 
