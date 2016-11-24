@@ -111,7 +111,13 @@ let Realtime = {
 
     self.addJuntoListeners()
 
-    self.socket = new SocketIoConnection({ url: serverData['REALTIME_SERVER'] })
+    self.socket = new SocketIoConnection({
+      url: serverData['REALTIME_SERVER'],
+      socketio: {
+        // don't poll forever if in development
+        reconnectionAttempts: serverData.RAILS_ENV === 'development' ? 5 : Infinity
+      }
+    })
     self['junto_spinner_darkgrey.gif'] = serverData['junto_spinner_darkgrey.gif']
 
     self.socket.on('connect', function() {
