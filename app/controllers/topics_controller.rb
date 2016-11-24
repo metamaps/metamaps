@@ -12,7 +12,7 @@ class TopicsController < ApplicationController
     term = params[:term]
     if term && !term.empty?
       @topics = policy_scope(Topic).where('LOWER("name") like ?', term.downcase + '%').order('"name"')
-      @mapTopics = @topics.select { |t| t.metacode.name == 'Metamap' }
+      @mapTopics = @topics.select { |t| t&.metacode&.name == 'Metamap' }
       # prioritize topics which point to maps, over maps
       @exclude = @mapTopics.length > 0 ? @mapTopics.map(&:name) : ['']
       @maps = policy_scope(Map).where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', @exclude).order('"name"')
