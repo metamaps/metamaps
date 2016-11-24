@@ -9,7 +9,5 @@ Rails.application.configure do
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  config.assets.precompile += %w(webpacked/metamaps.bundle.js)
-  config.assets.precompile += %w(webpacked/homepage.js)
-  config.assets.precompile += %w(home.css)
+  config.assets.precompile += %w(webpacked/metamaps.bundle.js homepage.js home.css)
 end
