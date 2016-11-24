@@ -837,6 +837,9 @@ label {
 .accountApps .accountIcon {
     background-position: 0 -32px;
 }
+.accountNotifications .accountIcon {
+    background-position: 0 0; /* TODO get a real icon */
+}
 .accountInvite .accountIcon {
     background-position: 0 -64px;
 }
@@ -850,6 +853,10 @@ label {
 }
 .accountListItem:hover a {
     color: #424242;
+}
+.accountNotifications.unread a {
+    color: #424242;
+    font-weight: 900;
 }
 .accountListItem:hover .accountIcon {
     background-position-x: -32px;

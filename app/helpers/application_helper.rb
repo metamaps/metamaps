@@ -45,4 +45,11 @@ module ApplicationHelper
     end
     false
   end
+
+  def user_unread_notification_count
+    return 0 if current_user.nil?
+    current_user.mailboxer_notification_receipts.reduce(0) do |total, receipt|
+      receipt.is_read ? total : total + 1
+    end
+  end
 end
