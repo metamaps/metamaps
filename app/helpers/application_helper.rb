@@ -37,4 +37,12 @@ module ApplicationHelper
   def invite_link
     "#{request.base_url}/join" + (current_user ? "?code=#{current_user.code}" : '')
   end
+
+  def user_has_unread_notifications?
+    return false if current_user.nil?
+    current_user.mailboxer_notification_receipts.each do |receipt|
+      return true if receipt.is_read == false
+    end
+    false
+  end
 end

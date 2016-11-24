@@ -56,8 +56,7 @@ class NotificationsController < ApplicationController
   private
 
   def set_receipts
-    @receipts = current_user.mailbox.receipts
-      .includes(:notification).where(mailbox_type: nil)
+    @receipts = current_user.mailboxer_notification_receipts
   end
 
   def set_notification

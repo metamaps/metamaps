@@ -114,4 +114,12 @@ class User < ApplicationRecord
   def mailboxer_email(object)
     nil # email
   end
+
+  def mailboxer_notifications
+    mailbox.notifications
+  end
+
+  def mailboxer_notification_receipts
+    mailbox.receipts.includes(:notification).where(mailbox_type: nil)
+  end
 end
