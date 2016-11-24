@@ -39,11 +39,12 @@ module ApplicationHelper
   end
 
   def user_has_unread_notifications?
-    return false if current_user.nil?
+    return @user_has_unread_notifications unless @user_has_unread_notifications.nil?
+    return (@user_has_unread_notifications = false) if current_user.nil?
     current_user.mailboxer_notification_receipts.each do |receipt|
-      return true if receipt.is_read == false
+      return (@user_has_unread_notifications = true) if receipt.is_read == false
     end
-    false
+    @user_has_unread_notifications = false
   end
 
   def user_unread_notification_count

@@ -24,7 +24,11 @@
     </li>
     <% if current_user.present? %>
       <li class="accountListItem accountNotifications <%= user_has_unread_notifications? ? 'unread' : 'read' %>">
-        <div class="accountIcon"></div>
+        <div class="accountIcon">
+          <% if user_has_unread_notifications? %>
+            <div class="unread-notifications-dot"></div>
+          <% end %>
+        </div>
         <%= link_to "Notifications", notifications_path %>
       </li>
     <% end %>
