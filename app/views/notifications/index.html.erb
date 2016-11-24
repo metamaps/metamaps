@@ -2,7 +2,7 @@
 <% content_for :mobile_title, 'Notifications' %>
 
 <div id="yield">
-  <div class="centerContent">
+  <div class="centerContent notificationsPage">
     <h4>Notifications</h4>
     <ul class="notifications">
       <% @notifications.each do |notification| %>
@@ -26,3 +26,5 @@
     </ul>
   </div>
 </div>
+
+<%= render partial: 'notifications/header' %>

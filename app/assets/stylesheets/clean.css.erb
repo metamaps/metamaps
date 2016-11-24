@@ -781,6 +781,10 @@
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
 }
+.exploreMapsCenter .notificationsLink .exploreMapsIcon {
+    background-image: url(<%= asset_path 'user_sprite.png' %>);
+    background-position: 0 -128px;
+}
 .authedApps:hover .exploreMapsIcon, .authedApps.active .exploreMapsIcon {
     background-position-x: -32px;
 }
@@ -798,6 +802,9 @@
 }
 .sharedMaps:hover .exploreMapsIcon, .sharedMaps.active .exploreMapsIcon {
     background-position: -128px -32px;
+}
+.notificationsLink:hover .exploreMapsIcon, .notificationsLink.active .exploreMapsIcon {
+    background-position-x: -32px;
 }
 
 .mapsWrapper {
