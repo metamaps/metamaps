@@ -58,7 +58,8 @@ class NotificationsController < ApplicationController
     # TODO will a logged out user be unsubscribed after logging in?
     # need to use devise stored_url or whatever
     if current_user.nil?
-      return redirect_to sign_in_path, notice: 'Continue to unsubscribe from emails by logging in.'
+      flash[:notice] = 'Continue to unsubscribe from emails by logging in.'
+      return redirect_to "#{sign_in_path}?redirect_to=#{unsubscribe_notifications_path}"
     end
 
     if current_user.emails_allowed == false

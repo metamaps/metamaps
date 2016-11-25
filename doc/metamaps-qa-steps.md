@@ -32,6 +32,13 @@ Run these tests to be reasonably sure that your code changes haven't broken anyt
  - Add a number of synapses to one of your maps. Reload to see if they are still there.
  - Rearrange one of your maps and save the layout. Reload to see if the layout is preserved.
 
+### Unsubscribing from Notifications
+
+ - Log out
+ - Visit /notifications/unsubscribe. It should redirect you to the login page.
+ - Log in.
+ - It should redirect you to the user edit page, and you should be unsubscribed.
+
 ### Misc
 
  - Login as admin. Change metacode sets.

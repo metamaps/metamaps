@@ -1,4 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
+  after_action :store_location, only: [:new]
+
   protected
 
   def after_sign_in_path_for(resource)
@@ -9,6 +11,14 @@ class Users::SessionsController < Devise::SessionsController
       super
     else
       request.referer || root_path
+    end
+  end
+
+  private
+
+  def store_location
+    if params[:redirect_to]
+      store_location_for(User, params[:redirect_to])    
     end
   end
 end
