@@ -111,8 +111,14 @@ class User < ApplicationRecord
     self[:settings] = val
   end
 
-  def mailboxer_email(_object)
-    nil # email
+  # Mailboxer hooks and helper functions
+
+  def mailboxer_email(_message)
+    if emails_allowed
+      email
+    else
+      nil
+    end
   end
 
   def mailboxer_notifications
