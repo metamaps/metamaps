@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class NotificationsController < ApplicationController
   before_action :set_receipts, only: [:index, :show, :mark_read, :mark_unread]
   before_action :set_notification, only: [:show, :mark_read, :mark_unread]
@@ -66,5 +67,4 @@ class NotificationsController < ApplicationController
   def set_receipt
     @receipt = @receipts.find_by(notification_id: params[:id])
   end
-
 end

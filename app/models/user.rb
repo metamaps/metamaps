@@ -111,7 +111,7 @@ class User < ApplicationRecord
     self[:settings] = val
   end
 
-  def mailboxer_email(object)
+  def mailboxer_email(_object)
     nil # email
   end
 
