@@ -54,6 +54,28 @@ class NotificationsController < ApplicationController
     end
   end
 
+  def unsubscribe
+    # TODO will a logged out user be unsubscribed after logging in?
+    # need to use devise stored_url or whatever
+    if current_user.nil?
+      return redirect_to sign_in_path, notice: 'Continue to unsubscribe from emails by logging in.'
+    end
+
+    if current_user.emails_allowed == false
+      return redirect_to edit_user_path(current_user), notice: 'You were already unsubscribed from emails.'
+    end
+
+    current_user.emails_allowed = false
+    success = current_user.save
+
+    if success
+      redirect_to edit_user_path(current_user), notice: 'You will no longer receive emails from Metamaps.'
+    else
+      flash[:alert] = 'Sorry, something went wrong. You have not been unsubscribed from emails.'
+      redirect_to edit_user_path(current_user)
+    end
+  end
+
   private
 
   def set_receipts

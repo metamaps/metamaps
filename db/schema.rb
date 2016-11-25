@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161105160340) do
+ActiveRecord::Schema.define(version: 20161125175229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -296,8 +296,8 @@ ActiveRecord::Schema.define(version: 20161105160340) do
     t.string   "password_salt",          limit: 255
     t.string   "persistence_token",      limit: 255
     t.string   "perishable_token",       limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.string   "code",                   limit: 8
     t.string   "joinedwithcode",         limit: 8
     t.text     "settings"
@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(version: 20161105160340) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.integer  "generation"
+    t.boolean  "emails_allowed",                     default: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 

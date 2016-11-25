@@ -50,6 +50,9 @@ Metamaps::Application.routes.draw do
 
   resources :messages, only: [:show, :create, :update, :destroy]
   resources :notifications, only: [:index, :show] do
+    collection do
+      get :unsubscribe
+    end
     member do
       put :mark_read
       put :mark_unread
