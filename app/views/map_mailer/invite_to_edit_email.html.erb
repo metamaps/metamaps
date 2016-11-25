@@ -1,25 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body style="font-family: sans-serif; width: 100%; padding: 24px 16px 16px 16px; background-color: #f5f5f5; text-align: center;">
+<div style="padding: 16px; background: white; text-align: left;">
+  <% button_style = "background-color:#4fc059;border-radius:2px;color:white;display:inline-block;font-family:Roboto,Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;min-height:29px;line-height:29px;min-width:54px;outline:0px;padding:0 8px;text-align:center;text-decoration:none" %>
 
-  <div style="padding: 16px; background: white; text-align: left;">
-    <% button_style = "background-color:#4fc059;border-radius:2px;color:white;display:inline-block;font-family:Roboto,Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;min-height:29px;line-height:29px;min-width:54px;outline:0px;padding:0 8px;text-align:center;text-decoration:none" %>
+  <p><span style="font-weight: bold;"><%= @inviter.name %></span> has invited you to <span style="font-weight: bold">collaboratively edit</span> the following map:</p>
+  <p><%= link_to @map.name, map_url(@map), target: "_blank", style: "font-size: 18px; text-decoration: none; color: #4fc059;" %></p>
+  <% if @map.desc %>
+    <p style="font-size: 12px;"><%= @map.desc %></p>
+  <% end %>
 
-    <p><span style="font-weight: bold;"><%= @inviter.name %></span> has invited you to <span style="font-weight: bold">collaboratively edit</span> the following map:</p>
-    <p><%= link_to @map.name, map_url(@map), target: "_blank", style: "font-size: 18px; text-decoration: none; color: #4fc059;" %></p>
-    <% if @map.desc %>
-      <p style="font-size: 12px;"><%= @map.desc %></p>
-    <% end %>
+  <%= link_to 'Open in Metamaps', map_url(@map), target: "_blank", style: button_style %>    
 
-    <%= link_to 'Open in Metamaps', map_url(@map), target: "_blank", style: button_style %>    
+  <p style="font-size: 12px;">Make sense with Metamaps</p>
 
-    <p style="font-size: 12px;">Make sense with Metamaps</p>
-
-    <%= render partial: 'shared/mailer_unsubscribe_link' %>
-  </div>
-
-  </body>
-</html>
+  <%= render partial: 'shared/mailer_unsubscribe_link' %>
+</div>
