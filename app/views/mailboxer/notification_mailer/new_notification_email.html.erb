@@ -4,6 +4,7 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <%= raw @notification.body %>
+    <% binding.pry %>
+    <%= raw @notification.body.parts[1].encoded %>
   </body>
 </html>

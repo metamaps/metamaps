@@ -22,7 +22,7 @@ class AccessController < ApplicationController
     request = AccessRequest.create(user: current_user, map: @map)
     # what about push notification to map owner?
     mail = MapMailer.access_request_email(request, @map)
-    @map.user.notify(mail.subject, mail.body.parts[0])
+    @map.user.notify(mail.subject, mail.body)
 
     respond_to do |format|
       format.json do
@@ -40,7 +40,7 @@ class AccessController < ApplicationController
       # who we then send an email to
       user = User.find(user_id)
       mail = MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id))
-      user.notify(mail.subject, mail.body.parts[0])
+      user.notify(mail.subject, mail.body)
     end
     @map.remove_old_collaborators(user_ids)
 
