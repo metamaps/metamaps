@@ -2,12 +2,12 @@
 <% content_for :mobile_title, 'Notifications' %>
 
 <div id="yield">
-  <div class="centerContent">
-    <h4><%= @notification.subject %></h4>
-    <hr />
+  <div class="centerContent notificationPage">
+    <h2 class="title"><%= @notification.subject %></h4>
     <%= @notification.body %>
-    <hr />
-    <%= link_to 'Back', notifications_path %>
+    <div class="back">
+      <%= link_to 'Back', notifications_path %>
+    </div>
   </div>
 </div>
 

@@ -2,10 +2,53 @@
   ul.notifications {
     list-style: none;
   }
-}
 
-$menu_bar_height: 6em;
-.notificationsPage {
-  margin: 1em;
-  margin-top: 1em + $menu_bar_height;
+  $menu_bar_height: 6em;
+  .notificationPage,
+  .notificationsPage {
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 1em;
+    margin-top: 1em + $menu_bar_height;
+
+    & > .title {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.25em;
+      margin-bottom: 0.5em;
+    }
+
+    .back {
+      margin-top: 1em;
+    }
+  }
+
+
+  .notification {
+    .notification-subject {
+      width: 25%;
+    }
+    .notification-body {
+      width: 50%;
+    }
+    .notification-read-unread {
+      width: 10%;
+    }
+
+    .notification-body,
+    .notification-subject,
+    .notification-read-unread {
+      display: inline-block;
+      vertical-align: top;
+      font-weight: 300;
+    }
+
+    &.unread {
+      .notification-body,
+      .notification-subject,
+      .notification-read-unread {
+        font-weight: bold;
+      }
+    }
+  }
 }
