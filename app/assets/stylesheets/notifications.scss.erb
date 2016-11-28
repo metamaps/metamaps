@@ -24,10 +24,11 @@ $unread_notifications_dot_size: 8px;
   .notificationPage,
   .notificationsPage {
     width: auto;
-    max-width: 100%;
+    max-width: 960px;
     box-sizing: border-box;
-    margin: 1em;
+    margin: 1em auto;
     margin-top: 1em + $menu_bar_height;
+    font-family: 'din-regular', Sans-Serif;
 
     & > .title {
       border-bottom: 1px solid #eee;
@@ -57,14 +58,13 @@ $unread_notifications_dot_size: 8px;
     .notification-read-unread {
       display: inline-block;
       vertical-align: top;
-      font-weight: 300;
     }
 
     &.unread {
       .notification-body,
       .notification-subject,
       .notification-read-unread {
-        font-weight: bold;
+        font-family: 'din-medium', Sans-Serif;
       }
     }
   }

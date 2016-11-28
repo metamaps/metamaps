@@ -25,6 +25,9 @@
           </div>
         </li>
       <% end %>
+      <% if @notifications.count == 0 %>
+        You have ZERO unread notifications. Huzzah!
+      <% end %>
     </ul>
   </div>
   <%= render partial: 'shared/back_to_mapping' %>

@@ -72,7 +72,7 @@
   <% end %>
 
   <% if current_user.present? %>
-    <%= link_to notifications_path, target: '_blank', class: "notificationsIcon upperRightEl upperRightIcon #{user_has_unread_notifications? ? 'unread' : 'read'}" do %>
+    <%= link_to notifications_path, class: "notificationsIcon upperRightEl upperRightIcon #{user_has_unread_notifications? ? 'unread' : 'read'}" do %>
       <div class="tooltipsUnder">
         Notifications
       </div>
