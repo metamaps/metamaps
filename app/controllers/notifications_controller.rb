@@ -55,22 +55,13 @@ class NotificationsController < ApplicationController
   end
 
   def unsubscribe
-    # TODO will a logged out user be unsubscribed after logging in?
-    # need to use devise stored_url or whatever
-    if current_user.nil?
-      flash[:notice] = 'Continue to unsubscribe from emails by logging in.'
-      return redirect_to "#{sign_in_path}?redirect_to=#{unsubscribe_notifications_path}"
-    end
+    unsubscribe_redirect_if_logged_out!
+    check_if_already_unsubscribed!
+    return if performed? # if one of these checks already redirected, we're done
 
-    if current_user.emails_allowed == false
-      return redirect_to edit_user_path(current_user), notice: 'You were already unsubscribed from emails.'
-    end
-
-    current_user.emails_allowed = false
-    success = current_user.save
-
-    if success
-      redirect_to edit_user_path(current_user), notice: 'You will no longer receive emails from Metamaps.'
+    if current_user.update(emails_allowed: false)
+      redirect_to edit_user_path(current_user),
+                  notice: 'You will no longer receive emails from Metamaps.'
     else
       flash[:alert] = 'Sorry, something went wrong. You have not been unsubscribed from emails.'
       redirect_to edit_user_path(current_user)
@@ -78,6 +69,19 @@ class NotificationsController < ApplicationController
   end
 
   private
+
+  def unsubscribe_redirect_if_logged_out!
+    return if current_user.present?
+
+    flash[:notice] = 'Continue to unsubscribe from emails by logging in.'
+    redirect_to "#{sign_in_path}?redirect_to=#{unsubscribe_notifications_path}"
+  end
+
+  def check_if_already_unsubscribed!
+    return if current_user.emails_allowed
+
+    redirect_to edit_user_path(current_user), notice: 'You were already unsubscribed from emails.'
+  end
 
   def set_receipts
     @receipts = current_user.mailboxer_notification_receipts

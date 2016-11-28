@@ -4,6 +4,6 @@ class ApplicationMailer < ActionMailer::Base
   layout 'mailer'
 
   def deliver
-    fail NotImplementedError('Please use Mailboxer to send your emails.')
+    raise NotImplementedError('Please use Mailboxer to send your emails.')
   end
 end

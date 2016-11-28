@@ -12,11 +12,11 @@ module Metamaps
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     #
-    if ENV['ACTIVE_JOB_FRAMEWORK'] == 'sucker_punch'
-      config.active_job.queue_adapter = :sucker_punch
-    else
-      config.active_job.queue_adapter = :delayed_job
-    end
+    config.active_job.queue_adapter = if ENV['ACTIVE_JOB_FRAMEWORK'] == 'sucker_punch'
+                                        :sucker_punch
+                                      else
+                                        :delayed_job
+                                      end
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths << Rails.root.join('app', 'services')

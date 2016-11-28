@@ -1,5 +1,5 @@
 $('#notification-<%= @notification.id %> .notification-read-unread > a')
-  .text('(unread)')
+  .text('mark as read')
   .attr('href', '<%= mark_read_notification_path(@notification.id) %>')
 $('#notification-<%= @notification.id %>')
   .removeClass('read')

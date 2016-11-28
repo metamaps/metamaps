@@ -114,11 +114,8 @@ class User < ApplicationRecord
   # Mailboxer hooks and helper functions
 
   def mailboxer_email(_message)
-    if emails_allowed
-      email
-    else
-      nil
-    end
+    return email if emails_allowed
+    # else return nil, which sends no email
   end
 
   def mailboxer_notifications
