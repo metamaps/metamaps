@@ -71,12 +71,20 @@
   </a><!-- end addMap -->
   <% end %>
 
+  <% if current_user.present? %>
+    <%= link_to notifications_path, target: '_blank', class: "notificationsIcon upperRightEl upperRightIcon #{user_has_unread_notifications? ? 'unread' : 'read'}" do %>
+      <div class="tooltipsUnder">
+        Notifications
+      </div>
+      <% if user_has_unread_notifications? %>
+        <div class="unread-notifications-dot"></div>
+      <% end %>
+    <% end %>
+  <% end %>
+
   <!-- Account / Sign in -->
   <% if !(controller_name == "sessions" && action_name == "new") %>
   <div class="sidebarAccount upperRightEl">
-    <% if user_has_unread_notifications? %>
-      <div class="unread-notifications-dot"></div>
-    <% end %>
     <div class="sidebarAccountIcon"><div class="tooltipsUnder">Account</div>
       <% if current_user && current_user.image %>
         <%= image_tag current_user.image.url(:thirtytwo), :size => "32x32" %>

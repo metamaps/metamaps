@@ -210,7 +210,10 @@
 }
 .addMap {
     background-position: -96px 0;
-    margin-right:10px;
+}
+.notificationsIcon {
+    background-position: -128px 0;
+    margin-right: 10px; // make it look more natural next to the account menu icon
 }
 .importDialog:hover {
     background-position: 0 -32px;
@@ -758,7 +761,7 @@
 }
 
 .exploreMapsCenter .authedApps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri('user_sprite.png') %>);
+    background-image: url(<%= asset_path('user_sprite.png') %>);
     background-position: 0 -32px;
 }
 .exploreMapsCenter .myMaps .exploreMapsIcon {

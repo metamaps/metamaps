@@ -8,16 +8,6 @@
   <%= image_tag account.image.url(:sixtyfour), :size => "48x48", :class => "sidebarAccountImage" %>
   <h3 class="accountHeader"><%= account.name.split[0...1][0] %></h3>
   <ul>
-    <% if current_user.present? %>
-      <li class="accountListItem accountNotifications <%= user_has_unread_notifications? ? 'unread' : 'read' %>">
-        <div class="accountIcon">
-          <% if user_has_unread_notifications? %>
-            <div class="unread-notifications-dot"></div>
-          <% end %>
-        </div>
-        <%= link_to "Notifications", notifications_path %>
-      </li>
-    <% end %>
     <li class="accountListItem accountSettings">
       <div class="accountIcon"></div>
       <%= link_to "Account", edit_user_url(account) %>

@@ -826,7 +826,7 @@ label {
     position:absolute;
     pointer-events:none;
     background-repeat:no-repeat;
-    background-image: url(<%= asset_data_uri('user_sprite.png') %>);
+    background-image: url(<%= asset_path('user_sprite.png') %>);
 }
 .accountSettings .accountIcon {
     background-position: 0 0;
@@ -836,9 +836,6 @@ label {
 }
 .accountApps .accountIcon {
     background-position: 0 -32px;
-}
-.accountNotifications .accountIcon {
-    background-position: 0 -128px;
 }
 .accountInvite .accountIcon {
     background-position: 0 -64px;
@@ -854,28 +851,12 @@ label {
 .accountListItem:hover a {
     color: #424242;
 }
-.accountNotifications {
-    position: relative;
-}
-.accountNotifications.unread a {
-    font-weight: 900;
-}
 .accountListItem:hover .accountIcon {
     background-position-x: -32px;
 }
 li.accountInvite span {
     display: block;
     padding: 9px 0 9px 62px;
-}
-$unread_notifications_dot_size: 8px;
-.unread-notifications-dot {
-  width: $unread_notifications_dot_size;
-  height: $unread_notifications_dot_size;
-  background-color: #e22;
-  border-radius: $unread_notifications_dot_size / 2;
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 .accountImage {
     background-image: url(<%= asset_data_uri 'user.png' %>);
