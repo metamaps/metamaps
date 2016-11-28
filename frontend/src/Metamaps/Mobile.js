@@ -22,7 +22,7 @@ const Mobile = {
     self.toggleMenu()
   },
   toggleMenu: function() {
-    $('#mobile_menu').toggle()
+    $('#mobile_menu').toggleClass('visible')
   },
   titleClick: function() {
     if (Active.Map) {

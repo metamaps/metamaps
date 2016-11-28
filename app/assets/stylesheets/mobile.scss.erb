@@ -229,6 +229,16 @@
   list-style: none;
 }
 
+/*
+ * the mobile menu, even if it's been opened by a user, should
+ * not show up if they resize their browser back to full size
+ */
+@media only screen and (max-width : 504px) {
+  #mobile_menu.visible {
+    display: block;
+  }
+}
+
 li.mobileMenuUser {
   border-bottom: 1px solid #BBB;
 }
