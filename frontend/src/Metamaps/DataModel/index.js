@@ -77,8 +77,6 @@ const DataModel = {
     if (serverData.Topics) self.Topics = new TopicCollection(serverData.Topics)
 
     // initialize global backbone models and collections
-    if (Active.Mapper) Active.Mapper = new self.Mapper(Active.Mapper)
-
     var myCollection = serverData.Mine ? serverData.Mine : []
     var sharedCollection = serverData.Shared ? serverData.Shared : []
     var starredCollection = serverData.Starred ? serverData.Starred : []
