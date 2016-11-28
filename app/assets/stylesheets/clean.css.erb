@@ -215,6 +215,9 @@
     background-position: -128px 0;
     margin-right: 10px; // make it look more natural next to the account menu icon
 }
+.notificationsIcon:hover {
+    background-position: -128px -32px;
+}
 .importDialog:hover {
     background-position: 0 -32px;
 }
@@ -226,7 +229,6 @@
 }
 .addMap:hover {
     background-position: -96px -32px;
-    margin-right:10px;
 }
 
 
@@ -474,7 +476,7 @@
     background-position: -32px 0;
 }
 
-.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
+.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .notificationsIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
  .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .importDialog:hover .tooltipsUnder, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
     display: block;
 }
@@ -537,6 +539,9 @@
 
 .sidebarFilterIcon .tooltipsUnder {
     margin-left: -4px;
+}
+.notificationsIcon .tooltipsUnder {
+  left: -20px;
 }
 
 .sidebarForkIcon .tooltipsUnder {
@@ -615,7 +620,7 @@
     border-bottom: 5px solid transparent;
 }
 
-.importDialog div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
+.importDialog div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after, .notificationsIcon div:after {
     content: '';
     position: absolute;
     right: 40%;
@@ -628,6 +633,9 @@
 }
 .sidebarFilterIcon div:after {
     right: 37% !important;
+}
+.notificationsIcon div:after {
+  right: 46% !important;
 }
 
 .mapInfoIcon div:after, .openCheatsheet div:after, .starMap div:after, .openMetacodeSwitcher div:after, .pinCarousel div:after {
@@ -785,8 +793,8 @@
     background-position: -96px 0;
 }
 .exploreMapsCenter .notificationsLink .exploreMapsIcon {
-    background-image: url(<%= asset_path 'user_sprite.png' %>);
-    background-position: 0 -128px;
+    background-image: url(<%= asset_path 'topright_sprite.png' %>);
+    background-position: -128px 0;
 }
 .authedApps:hover .exploreMapsIcon, .authedApps.active .exploreMapsIcon {
     background-position-x: -32px;
@@ -807,7 +815,7 @@
     background-position: -128px -32px;
 }
 .notificationsLink:hover .exploreMapsIcon, .notificationsLink.active .exploreMapsIcon {
-    background-position-x: -32px;
+    background-position-y: -32px;
 }
 
 .mapsWrapper {
