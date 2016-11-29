@@ -7580,7 +7580,7 @@ Graph.Label.Native = new Class({
       
       //START METAMAPS CODE
       
-      var arrayOfLabelLines = Metamaps.Util.splitLine(node.name,30).split('\n');
+      var arrayOfLabelLines = Metamaps.Util.splitLine(node.name, 25).split('\n');
       //render background
             ctx.fillStyle = ctx.strokeStyle = Metamaps.Settings.colors.labels.background;
             ctx.lineWidth = 2;

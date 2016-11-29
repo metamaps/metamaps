@@ -228,7 +228,7 @@ const JIT = {
       ctx.fillStyle = '#FFF'
       ctx.textBaseline = 'alphabetic'
 
-      const arrayOfLabelLines = Util.splitLine(desc, 30).split('\n')
+      const arrayOfLabelLines = Util.splitLine(desc, 25).split('\n')
       let lineWidths = []
       for (let index = 0; index < arrayOfLabelLines.length; ++index) {
         lineWidths.push(ctx.measureText(arrayOfLabelLines[index]).width)
@@ -497,7 +497,7 @@ const JIT = {
         'contains': function(node, pos) {
           const npos = node.pos.getc(true)
           const dim = node.getData('dim')
-          const arrayOfLabelLines = Util.splitLine(node.name, 30).split('\n')
+          const arrayOfLabelLines = Util.splitLine(node.name, 25).split('\n')
           const ctx = Visualize.mGraph.canvas.getCtx()
 
           const height = 25 * arrayOfLabelLines.length
@@ -1930,7 +1930,7 @@ const JIT = {
           minY = y
         }
 
-        let arrayOfLabelLines = Util.splitLine(n.name, 30).split('\n')
+        let arrayOfLabelLines = Util.splitLine(n.name, 25).split('\n')
         let dim = n.getData('dim')
         let ctx = canvas.getCtx()
 
