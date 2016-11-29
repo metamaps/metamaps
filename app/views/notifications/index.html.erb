@@ -13,7 +13,7 @@
               <%= notification.subject %>
             </div>
             <div class="notification-body">
-              <%= notification.body.truncate(70) %>
+              <%= strip_tags(notification.body).truncate(70) %>
             </div>
           <% end %>
           <div class="notification-read-unread">
