@@ -4,7 +4,7 @@
 <div id="yield">
   <div class="centerContent notificationPage">
     <h2 class="title"><%= @notification.subject %></h4>
-    <%= @notification.body %>
+    <%= raw @notification.body %>
     <div class="back">
       <%= link_to 'Back', notifications_path %>
     </div>

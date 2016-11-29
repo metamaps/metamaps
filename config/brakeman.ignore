@@ -1,0 +1,24 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "88694dca0bcc2226859746f9ed40cc682d6e5eaec1e73f2be557770a854ede0b",
+      "message": "Unescaped model attribute",
+      "file": "app/views/notifications/show.html.erb",
+      "line": 7,
+      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "current_user.mailbox.notifications.find_by(:id => params[:id]).body",
+      "render_path": [{"type":"controller","class":"NotificationsController","method":"show","line":24,"file":"app/controllers/notifications_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "notifications/show"
+      },
+      "user_input": "current_user.mailbox.notifications",
+      "confidence": "Weak",
+      "note": ""
+    }
+  ],
+  "updated": "2016-11-29 13:01:34 -0500",
+  "brakeman_version": "3.4.0"
+}

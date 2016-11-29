@@ -620,7 +620,12 @@
     border-bottom: 5px solid transparent;
 }
 
-.importDialog div:after, .sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after, .notificationsIcon div:after {
+.addMap div:after,
+.importDialog div:after,
+.sidebarForkIcon div:after,
+.sidebarFilterIcon div:after,
+.notificationsIcon div:after,
+.sidebarAccountIcon .tooltipsUnder:after,
     content: '';
     position: absolute;
     right: 40%;
@@ -630,6 +635,9 @@
     border-bottom: 4px solid #000000;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
+}
+.notificationsIcon .unread-notifications-dot:after {
+    content: none;
 }
 .sidebarFilterIcon div:after {
     right: 37% !important;
