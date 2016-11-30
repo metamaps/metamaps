@@ -70,6 +70,7 @@ class SearchController < ApplicationController
       builder = builder.where(user: user) if user
       @topics = builder.order(:name)
     else
+      skip_policy_scope
       @topics = []
     end
 
