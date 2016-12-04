@@ -8,7 +8,8 @@ import Create from './Create'
 import Debug from './Debug'
 import Filter from './Filter'
 import GlobalUI, {
-  Search, CreateMap, ImportDialog, Account as GlobalUIAccount
+  Search, CreateMap, ImportDialog, Account as GlobalUIAccount,
+  NotificationIcon
 } from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
@@ -47,6 +48,7 @@ Metamaps.GlobalUI.Search = Search
 Metamaps.GlobalUI.CreateMap = CreateMap
 Metamaps.GlobalUI.Account = GlobalUIAccount
 Metamaps.GlobalUI.ImportDialog = ImportDialog
+Metamaps.GlobalUI.NotificationIcon = NotificationIcon
 Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
