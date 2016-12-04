@@ -8,6 +8,7 @@ import Search from './Search'
 import CreateMap from './CreateMap'
 import Account from './Account'
 import ImportDialog from './ImportDialog'
+import NotificationIcon from './NotificationIcon'
 
 const GlobalUI = {
   notifyTimeout: null,
@@ -19,6 +20,7 @@ const GlobalUI = {
     self.CreateMap.init(serverData)
     self.Account.init(serverData)
     self.ImportDialog.init(serverData, self.openLightbox, self.closeLightbox)
+    self.NotificationIcon.init(serverData)
 
     if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
 
@@ -127,5 +129,5 @@ const GlobalUI = {
   }
 }
 
-export { Search, CreateMap, Account, ImportDialog }
+export { Search, CreateMap, Account, ImportDialog, NotificationIcon }
 export default GlobalUI

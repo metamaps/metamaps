@@ -71,15 +71,20 @@
   </a><!-- end addMap -->
   <% end %>
 
+  <script type="text/javascript">
+    Metamaps.ServerData.unreadNotificationsCount = <%= user_unread_notification_count %>
+  </script>
   <% if current_user.present? %>
-    <%= link_to notifications_path, class: "notificationsIcon upperRightEl upperRightIcon #{user_has_unread_notifications? ? 'unread' : 'read'}" do %>
-      <div class="tooltipsUnder">
-        Notifications
-      </div>
-      <% if user_has_unread_notifications? %>
-        <div class="unread-notifications-dot"></div>
+    <span id="notification_icon">
+      <%= link_to notifications_path, class: "notificationsIcon upperRightEl upperRightIcon #{user_has_unread_notifications? ? 'unread' : 'read'}" do %>
+        <div class="tooltipsUnder">
+          Notifications
+        </div>
+        <% if user_has_unread_notifications? %>
+          <div class="unread-notifications-dot"></div>
+        <% end %>
       <% end %>
-    <% end %>
+    </span>
   <% end %>
 
   <!-- Account / Sign in -->
