@@ -36,11 +36,7 @@ class Synapse < ApplicationRecord
     end
   end
 
-  def calculated_permission
-    defer_to_map&.permission || permission
-  end
-
   def as_json(_options = {})
-    super(methods: [:user_name, :user_image, :calculated_permission, :collaborator_ids])
+    super(methods: [:user_name, :user_image, :collaborator_ids])
   end
 end

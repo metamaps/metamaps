@@ -32,12 +32,17 @@ class Map < ApplicationRecord
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, content_type: /\Aimage\/.*\Z/
 
+  after_save :update_deferring_topics_and_synapses, if: :permission_changed?
+
+  delegate :count, to: :topics, prefix: :topic # same as `def topic_count; topics.count; end`
+  delegate :count, to: :synapses, prefix: :synapse
+  delegate :count, to: :contributors, prefix: :contributor
+  delegate :count, to: :stars, prefix: :star
+
+  delegate :name, to: :user, prefix: true
+
   def mappings
     topicmappings.or(synapsemappings)
-  end
-
-  def mk_permission
-    Perm.short(permission)
   end
 
   def contributors
@@ -48,26 +53,8 @@ class Map < ApplicationRecord
     User.where(id: user_id).or(User.where(id: collaborators))
   end
 
-  def topic_count
-    topics.length
-  end
-
-  def synapse_count
-    synapses.length
-  end
-
-  delegate :name, to: :user, prefix: true
-
   def user_image
     user.image.url(:thirtytwo)
-  end
-
-  def contributor_count
-    contributors.length
-  end
-
-  def star_count
-    stars.length
   end
 
   def collaborator_ids
@@ -130,5 +117,10 @@ class Map < ApplicationRecord
       old_user_id
     end
     removed.compact
+  end
+
+  def update_deferring_topics_and_synapses
+    Topic.where(defer_to_map_id: id).update_all(permission: permission)
+    Synapse.where(defer_to_map_id: id).update_all(permission: permission)
   end
 end

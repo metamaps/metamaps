@@ -448,8 +448,8 @@ const TopicCard = {
         nodeValues.inmaps += '<li class="hideExtra extraText"><a href="' + url + '">' + inmapsAr[i] + '</a></li>'
       }
     }
-    nodeValues.permission = topic.get('calculated_permission')
-    nodeValues.mk_permission = topic.get('calculated_permission').substring(0, 2)
+    nodeValues.permission = topic.get('permission')
+    nodeValues.mk_permission = topic.get('permission').substring(0, 2)
     nodeValues.map_count = topic.get('map_count').toString()
     nodeValues.synapse_count = topic.get('synapse_count').toString()
     nodeValues.id = topic.isNew() ? topic.cid : topic.id

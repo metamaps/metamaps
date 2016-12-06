@@ -38,7 +38,6 @@ const Synapse = Backbone.Model.extend({
 
     newOptions.success = function(model, response, opt) {
       if (s) s(model, response, opt)
-      model.set('calculated_permission', model.get('permission'))
       model.trigger('saved')
 
       if (permBefore === 'private' && model.get('permission') !== 'private') {
@@ -85,7 +84,7 @@ const Synapse = Backbone.Model.extend({
       </li>`
   },
   authorizeToEdit: function(mapper) {
-    if (mapper && (this.get('calculated_permission') === 'commons' || this.get('collaborator_ids').includes(mapper.get('id')) || this.get('user_id') === mapper.get('id'))) return true
+    if (mapper && (this.get('permission') === 'commons' || this.get('collaborator_ids').includes(mapper.get('id')) || this.get('user_id') === mapper.get('id'))) return true
     else return false
   },
   authorizePermissionChange: function(mapper) {

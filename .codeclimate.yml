@@ -8,6 +8,7 @@ engines:
     enabled: true
     config:
       languages:
+        count_threshold: 3 # rule of three
         ruby:
           mass_threshold: 36 # default: 18
         javascript:

@@ -295,8 +295,7 @@ const Import = {
       permission: topicPermision,
       defer_to_map_id: deferToMapId,
       desc: desc || '',
-      link: link || '',
-      calculated_permission: Active.Map.get('permission')
+      link: link || ''
     })
     DataModel.Topics.add(topic)
 
