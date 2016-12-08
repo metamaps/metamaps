@@ -22,12 +22,10 @@ class AccessController < ApplicationController
     request = AccessRequest.create(user: current_user, map: @map)
     # what about push notification to map owner?
     mail = MapMailer.access_request_email(request, @map)
-    @map.user.notify(mail.subject, mail.body.parts[1].body.to_s)
+    @map.user.notify(mail.subject, 'access request', request, true, MAILBOXER_CODE_ACCESS_REQUEST)
 
     respond_to do |format|
-      format.json do
-        head :ok
-      end
+      format.json { head :ok }
     end
   end
 
@@ -40,14 +38,12 @@ class AccessController < ApplicationController
       # who we then send an email to
       user = User.find(user_id)
       mail = MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id))
-      user.notify(mail.subject, mail.body.parts[1].body.to_s)
+      user.notify(mail.subject, 'invite to edit', @map, true, MAILBOXER_CODE_INVITED_TO_EDIT)
     end
     @map.remove_old_collaborators(user_ids)
 
     respond_to do |format|
-      format.json do
-        head :ok
-      end
+      format.json { head :ok }
     end
   end
 
