@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-  </head>
-  <body>
-    <%= raw @notification.body %>
-  </body>
-</html>
+<% mail = ApplicationMailer.mail_for_notification(@notification) %>
+<% @notification.update(body: mail.html_part&.body&.decoded) %>
+<%= raw mail.html_part&.body&.decoded %>

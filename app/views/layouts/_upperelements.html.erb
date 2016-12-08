@@ -76,11 +76,11 @@
   </script>
   <% if current_user.present? %>
     <span id="notification_icon">
-      <%= link_to notifications_path, class: "notificationsIcon upperRightEl upperRightIcon #{user_has_unread_notifications? ? 'unread' : 'read'}" do %>
+      <%= link_to notifications_path, class: "notificationsIcon upperRightEl upperRightIcon #{user_unread_notification_count > 0 ? 'unread' : 'read'}" do %>
         <div class="tooltipsUnder">
-          Notifications
+          Notifications (<%= user_unread_notification_count %> unread)
         </div>
-        <% if user_has_unread_notifications? %>
+        <% if user_unread_notification_count > 0 %>
           <div class="unread-notifications-dot"></div>
         <% end %>
       <% end %>

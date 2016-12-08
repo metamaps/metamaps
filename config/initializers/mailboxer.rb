@@ -1,4 +1,15 @@
 # frozen_string_literal: true
+
+# notification codes to differentiate different types of notifications
+# e.g. a notification might have {
+#   notified_object_type: 'Map',
+#   notified_object_id: 1,
+#   notification_code: MAILBOXER_CODE_ACCESS_REQUEST
+# },
+# which would imply that this is an access request to Map.find(1)
+MAILBOXER_CODE_ACCESS_REQUEST = 'ACCESS_REQUEST'
+MAILBOXER_CODE_INVITED_TO_EDIT = 'INVITED_TO_EDIT'
+
 Mailboxer.setup do |config|
   # Configures if your application uses or not email sending for Notifications and Messages
   config.uses_emails = true
