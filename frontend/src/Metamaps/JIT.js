@@ -33,6 +33,7 @@ const JIT = {
   dragFlag: 0,
   dragTolerance: 0,
   virtualPointer: {},
+  autoCreateSynapseTimeoutId: null,
 
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
@@ -895,7 +896,28 @@ const JIT = {
           })
           temp.setData('dim', 35, 'current')
           Visualize.mGraph.plot()
+
+          // if they hold the mouse over the topic, auto create the synapse after 1000ms
+          if (JIT.autoCreateSynapseTimeoutId === null) {
+            JIT.autoCreateSynapseTimeoutId = window.setTimeout(() => {
+              Create.newSynapse.description = ''
+              Create.newSynapse.topic2id = temp.getData('topic').id
+              Synapse.createSynapseLocally()
+
+              JIT.tempNode = null
+              JIT.tempNode2 = null
+              JIT.tempInit = false
+              Mouse.synapseStartCoordinates = []
+              Mouse.synapseEndCoordinates = null
+              temp.setData('dim', 25, 'current')
+
+              JIT.autoCreateSynapseTimeoutId = null
+            }, 1000)
+          }
         } else if (!temp) {
+          window.clearTimeout(JIT.autoCreateSynapseTimeoutId)
+          JIT.autoCreateSynapseTimeoutId = null
+
           JIT.tempNode2 = null
           Visualize.mGraph.graph.eachNode(function(n) {
             n.setData('dim', 25, 'current')
@@ -926,6 +948,8 @@ const JIT = {
     if (JIT.tempNode2) JIT.tempNode2.setData('dim', 25, 'current')
     JIT.tempNode2 = null
     JIT.tempInit = false
+    window.clearTimeout(JIT.autoCreateSynapseTimeoutId)
+    JIT.autoCreateSynapseTimeoutId = null
     // reset the draw synapse positions to false
     Mouse.synapseStartCoordinates = []
     Mouse.synapseEndCoordinates = null
@@ -967,6 +991,8 @@ const JIT = {
       $('#new_synapse').css('left', pixelPos.x + 'px')
       $('#new_synapse').css('top', pixelPos.y + 'px')
       Create.newSynapse.open()
+      window.clearTimeout(JIT.autoCreateSynapseTimeoutId)
+      JIT.autoCreateSynapseTimeoutId = null
       JIT.tempNode = null
       JIT.tempNode2 = null
       JIT.tempInit = false
