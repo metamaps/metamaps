@@ -3,7 +3,7 @@
     <%= yield(:mobile_title) %>
   </div>
   <div id="menu_icon">
-    <% if user_has_unread_notifications? %>
+    <% if user_unread_notification_count > 0 %>
       <div class="unread-notifications-dot"></div>
     <% end %>
   </div>
@@ -55,7 +55,7 @@
       </li>
       <li class="notifications">
         <%= link_to "Notifications", notifications_path %>
-        <% if user_has_unread_notifications? %>
+        <% if user_unread_notification_count > 0 %>
           <div class="unread-notifications-dot"></div>
         <% end %>
       </li>
