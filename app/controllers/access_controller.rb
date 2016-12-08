@@ -36,9 +36,8 @@ class AccessController < ApplicationController
     @map.add_new_collaborators(user_ids).each do |user_id|
       # add_new_collaborators returns array of added users,
       # who we then send an email to
-      user = User.find(user_id)
       mail = MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id))
-      user.notify(mail.subject, 'invite to edit', @map, true, MAILBOXER_CODE_INVITED_TO_EDIT)
+      user.notify(mail.subject, 'invite to edit', UserMap.find_by(user_id: user_id, map: @map), true, MAILBOXER_CODE_INVITED_TO_EDIT)
     end
     @map.remove_old_collaborators(user_ids)
 

@@ -13,8 +13,8 @@ class ApplicationMailer < ActionMailer::Base
         request = notification.notified_object
         MapMailer.access_request_email(request, request.map)
       elsif notification.notification_code == MAILBOXER_CODE_INVITED_TO_EDIT
-        map = notification.notified_object
-        MapMailer.invite_to_edit_email(map, map.user, 'TODO invited user')
+        user_map = notification.notified_object
+        MapMailer.invite_to_edit_email(user_map.map, user_map.map.user, user_map.user)
       end
     end
   end

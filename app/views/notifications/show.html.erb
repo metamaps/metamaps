@@ -3,12 +3,16 @@
 
 <div id="yield">
   <div class="centerContent notificationPage">
-    <h2 class="title"><%= @notification.subject %></h4>
-    <%= raw @notification.body %>
-    <div class="back">
-      <%= link_to 'Back', notifications_path %>
+    <h2 class="notification-title"><%= @notification.subject %></h4>
+    <div class="notification-body">
+      <%= raw @notification.body %>
     </div>
   </div>
+
+  <div class="centerContent back">
+    <%= link_to 'Back', notifications_path %>
+  </div>
+
   <%= render partial: 'shared/back_to_mapping' %>
 </div>
 

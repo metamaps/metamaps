@@ -30,7 +30,7 @@ $unread_notifications_dot_size: 8px;
     margin-top: 1em + $menu_bar_height;
     font-family: 'din-regular', Sans-Serif;
 
-    & > .title {
+    & > .notification-title {
       border-bottom: 1px solid #eee;
       padding-bottom: 0.25em;
       margin-bottom: 0.5em;
@@ -42,7 +42,7 @@ $unread_notifications_dot_size: 8px;
   }
 
 
-  .notification {
+  .notificationsPage .notification {
     .notification-subject {
       width: 25%;
     }
@@ -66,6 +66,12 @@ $unread_notifications_dot_size: 8px;
       .notification-read-unread {
         font-family: 'din-medium', Sans-Serif;
       }
+    }
+  }
+
+  .notificationPage .notification-body {
+    p, div {
+      margin: 1em auto;
     }
   }
 }
