@@ -11,9 +11,9 @@ class AccessRequest < ApplicationRecord
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
     end
     
-    UserMap.create(user: user, map: map)
+    user_map = UserMap.create(user: user, map: map)
     mail = MapMailer.invite_to_edit_email(map, map.user, user)
-    user.notify(mail.subject, 'invite to edit', self, true, MAILBOXER_CODE_INVITED_TO_EDIT)
+    user.notify(mail.subject, 'invite to edit', user_map, true, MAILBOXER_CODE_INVITED_TO_EDIT)
   end
 
   def deny

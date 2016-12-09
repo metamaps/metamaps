@@ -1,4 +1,6 @@
 <!DOCTYPE html>
 <% mail = ApplicationMailer.mail_for_notification(@notification) %>
-<% @notification.update(body: mail.html_part&.body&.decoded) %>
-<%= raw mail.html_part&.body&.decoded %>
+<% if mail %>
+  <% @notification.update(body: mail.html_part&.body&.decoded) %>
+  <%= raw mail.html_part&.body&.decoded %>
+<% end %>
