@@ -49,7 +49,7 @@ class AccessController < ApplicationController
   # GET maps/:id/approve_access/:request_id
   def approve_access
     request = AccessRequest.find(params[:request_id])
-    request.approve
+    request.approve # also marks mailboxer notification as read
     respond_to do |format|
       format.html { redirect_to map_path(@map), notice: 'Request was approved' }
     end
@@ -58,7 +58,7 @@ class AccessController < ApplicationController
   # GET maps/:id/deny_access/:request_id
   def deny_access
     request = AccessRequest.find(params[:request_id])
-    request.deny
+    request.deny # also marks mailboxer notification as read
     respond_to do |format|
       format.html { redirect_to map_path(@map), notice: 'Request was turned down' }
     end
