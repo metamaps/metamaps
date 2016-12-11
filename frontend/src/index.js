@@ -1,5 +1,5 @@
 // create global references
-import _ from 'underscore'
+import _ from 'lodash'
 import Metamaps from './Metamaps'
 
 window._ = _

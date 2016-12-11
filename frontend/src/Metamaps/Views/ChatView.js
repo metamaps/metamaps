@@ -3,13 +3,12 @@
 import Backbone from 'backbone'
 import { Howl } from 'howler'
 import Autolinker from 'autolinker'
-import _ from 'lodash'
-import underscore from 'underscore'
+import { clone, template as lodashTemplate } from 'lodash'
 import outdent from 'outdent'
 // TODO is this line good or bad
 // Backbone.$ = window.$
 
-const linker = new Autolinker({ newWindow: true, truncate: 50, email: false, phone: false, twitter: false })
+const linker = new Autolinker({ newWindow: true, truncate: 50, email: false, phone: false })
 
 var Private = {
   messageHTML: outdent`
@@ -41,12 +40,13 @@ var Private = {
       <div class='clearfloat'></div>
     </div>`,
   templates: function() {
-    underscore.templateSettings = {
+    const templateSettings = {
       interpolate: /\{\{(.+?)\}\}/g
     }
-    this.messageTemplate = underscore.template(Private.messageHTML)
 
-    this.participantTemplate = underscore.template(Private.participantHTML)
+    this.messageTemplate = lodashTemplate(Private.messageHTML, templateSettings)
+
+    this.participantTemplate = lodashTemplate(Private.participantHTML, templateSettings)
   },
   createElements: function() {
     this.$unread = $('<div class="chat-unread"></div>')
@@ -147,7 +147,7 @@ var Private = {
       }
       return i
     }
-    var m = _.clone(message.attributes)
+    var m = clone(message.attributes)
 
     m.timestamp = new Date(m.created_at)
 
@@ -176,7 +176,7 @@ var Private = {
     $(document).trigger(ChatView.events.message + '-' + this.room, [message])
   },
   addParticipant: function(participant) {
-    var p = _.clone(participant.attributes)
+    var p = clone(participant.attributes)
     if (p.self) {
       p.selfClass = 'is-self'
       p.selfName = '(me)'
