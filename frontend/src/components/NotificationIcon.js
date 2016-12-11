@@ -9,14 +9,14 @@ class NotificationIcon extends Component {
   }
 
   render = () => {
-    var linkClasses = "notificationsIcon upperRightEl upperRightIcon "
-    
+    let linkClasses = 'notificationsIcon upperRightEl upperRightIcon '
+
     if (this.props.unreadNotificationsCount > 0) {
-      linkClasses += "unread"
+      linkClasses += 'unread'
     } else {
-      linkClasses += "read"
+      linkClasses += 'read'
     }
-    
+
     return (
       <a className={linkClasses} href="/notifications">
         <div className="tooltipsUnder">
@@ -26,8 +26,7 @@ class NotificationIcon extends Component {
           <div className="unread-notifications-dot"></div>
         )}
       </a>
-    
-      
+
     )
   }
 }
