@@ -315,10 +315,8 @@ const Create = {
         Create.newSynapse.description = $(this).val()
       })
 
-      $('#synapse_desc').focusout(function() {
-        if (Create.newSynapse.beingCreated) {
-          Synapse.createSynapseLocally()
-        }
+      $('#synapse_desc').focusout(function(e) {
+        Create.newSynapse.hide()
       })
 
       $('#synapse_desc').keydown(function(e) {
