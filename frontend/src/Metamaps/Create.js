@@ -140,7 +140,13 @@ const Create = {
   },
   newTopic: {
     init: function() {
-      $('#topic_name').keyup(function() {
+      $('#topic_name').keyup(function(e) {
+        const ESC = 27
+
+        if (e.keyCode === ESC) {
+          Create.newTopic.hide()
+        } // if
+
         Create.newTopic.name = $(this).val()
       })
 
@@ -301,18 +307,24 @@ const Create = {
 
       $('#synapse_desc').keyup(function(e) {
         const ESC = 27
-        const BACKSPACE = 8
-        const DELETE = 46
-        if (e.keyCode === BACKSPACE && $(this).val() === '' ||
-          e.keyCode === DELETE && $(this).val() === '' ||
-          e.keyCode === ESC) {
+
+        if (e.keyCode === ESC) {
           Create.newSynapse.hide()
         } // if
+
         Create.newSynapse.description = $(this).val()
       })
 
       $('#synapse_desc').focusout(function() {
         if (Create.newSynapse.beingCreated) {
+          Synapse.createSynapseLocally()
+        }
+      })
+
+      $('#synapse_desc').keydown(function(e) {
+        const TAB = 9
+        if (Create.newSynapse.beingCreated && e.keyCode === TAB) {
+          e.preventDefault()
           Synapse.createSynapseLocally()
         }
       })

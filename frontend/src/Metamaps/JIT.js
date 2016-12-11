@@ -420,6 +420,8 @@ const JIT = {
           $('.rightclickmenu').remove()
 
           if (Mouse.boxStartCoordinates) {
+            Create.newSynapse.hide()
+            Create.newTopic.hide()
             Visualize.mGraph.busy = false
             Mouse.boxEndCoordinates = eventInfo.getPos()
             JIT.selectWithBox(e)
@@ -434,7 +436,9 @@ const JIT = {
           } else if (node && !node.nodeFrom) {
             JIT.selectNodeOnRightClickHandler(node, e)
           } else {
-            // console.log('right clicked on open space')
+            // right click open space
+            Create.newSynapse.hide()
+            Create.newTopic.hide()
           }
         }
       },
