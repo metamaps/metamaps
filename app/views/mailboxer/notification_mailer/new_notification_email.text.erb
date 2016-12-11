@@ -1,2 +1,4 @@
 <% mail = ApplicationMailer.mail_for_notification(@notification) %>
-<%= mail.text_part&.body&.decoded %>
+<% if mail %>
+  <%= mail.text_part&.body&.decoded %>
+<% end %>
