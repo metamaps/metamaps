@@ -30,6 +30,11 @@
       <% end %>
     </ul>
   </div>
+
+  <div class="centerContent pagination">
+    <%= paginate @notifications %>
+  </div>
+
   <%= render partial: 'shared/back_to_mapping' %>
 </div>
 

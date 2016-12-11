@@ -5,7 +5,7 @@ class NotificationsController < ApplicationController
   before_action :set_receipt, only: [:show, :mark_read, :mark_unread]
 
   def index
-    @notifications = current_user.mailbox.notifications
+    @notifications = current_user.mailbox.notifications.page(params[:page]).per(25)
 
     respond_to do |format|
       format.html
