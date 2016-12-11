@@ -8,7 +8,7 @@ import NotificationIconComponent from '../../components/NotificationIcon'
 
 const NotificationIcon = {
   unreadNotificationsCount: null,
-  
+
   init: function(serverData) {
     const self = NotificationIcon
     self.unreadNotificationsCount = serverData.unreadNotificationsCount
@@ -18,7 +18,7 @@ const NotificationIcon = {
     if (newUnreadCount !== null) {
       NotificationIcon.unreadNotificationsCount = newUnreadCount
     }
-    
+
     if (Active.Mapper !== null) {
       ReactDOM.render(React.createElement(NotificationIconComponent, {
         unreadNotificationsCount: NotificationIcon.unreadNotificationsCount
