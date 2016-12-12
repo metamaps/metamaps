@@ -1,8 +1,8 @@
 .centerContent {
   position: relative;
-  margin: 92px auto 0 auto;
-  padding: 20px 0 60px 20px;
-  width: 760px;
+  margin: 0 auto;
+  width: auto;
+  max-width: 960px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
   background: #fff;
@@ -10,7 +10,7 @@
   -moz-border-radius: 3px;
   border-radius: 3px;
   border: 1px solid #dcdcdc;
-  margin-bottom: 10px;
+  box-sizing: border-box;
   padding: 15px;
 }
 
@@ -130,10 +130,8 @@
     border-radius: 2px;
 }
 
-.back-to-mapping {
-  margin: 1em auto;
-  width: auto;
-  max-width: 960px;
-  box-sizing: border-box;
+.centerContent.withPadding {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 

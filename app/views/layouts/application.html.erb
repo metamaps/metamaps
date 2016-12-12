@@ -30,7 +30,7 @@
 
         <div class="wrapper <%= classes %>" id="wrapper">
 
-            <%= render :partial => 'layouts/upperelements', :locals => { :appsPage => false }  %>
+            <%= render :partial => 'layouts/upperelements', :locals => { :noHardHomeLink => controller_name == "notifications" ? true : false }  %>
 
             <%= yield %>
 

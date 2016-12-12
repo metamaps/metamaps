@@ -4,7 +4,7 @@
 <div class="upperLeftUI">
   <!-- home button -->
   <div class="homeButton">
-    <a href="<%= root_url %>" <% if current_user && !appsPage %><%= 'data-router=true' %><% end %>>METAMAPS</a>
+    <a href="<%= root_url %>" <% if current_user && !noHardHomeLink %><%= 'data-router=true' %><% end %>>METAMAPS</a>
   </div> <!-- end homeButton -->
 
   <!-- search box -->
@@ -78,7 +78,7 @@
     <span id="notification_icon">
       <%= link_to notifications_path, class: "notificationsIcon upperRightEl upperRightIcon #{user_unread_notification_count > 0 ? 'unread' : 'read'}" do %>
         <div class="tooltipsUnder">
-          Notifications (<%= user_unread_notification_count %> unread)
+          Notifications
         </div>
         <% if user_unread_notification_count > 0 %>
           <div class="unread-notifications-dot"></div>

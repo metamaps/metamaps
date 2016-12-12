@@ -2,3 +2,7 @@
 <% if mail %>
   <%= mail.text_part&.body&.decoded %>
 <% end %>
+
+Make sense with Metamaps
+
+<%= render partial: 'shared/mailer_unsubscribe_link' %>
