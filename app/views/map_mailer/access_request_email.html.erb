@@ -5,10 +5,10 @@
 
   <p><%= @map.name %></p>
 
-  <p><%= link_to "Allow", approve_access_map_url(id: @map.id, request_id: @request.id), target: "_blank", style: "font-size: 18px; text-decoration: none; color: #4fc059;" %>
-  <p><%= link_to "Decline", deny_access_map_url(id: @map.id, request_id: @request.id), target: "_blank", style: "font-size: 18px; text-decoration: none; color: #DB5D5D;" %></p>
+  <p><%= link_to "Allow", approve_access_map_url(id: @map.id, request_id: @request.id), style: "font-size: 18px; text-decoration: none; color: #4fc059;" %>
+  <p><%= link_to "Decline", deny_access_map_url(id: @map.id, request_id: @request.id), style: "font-size: 18px; text-decoration: none; color: #DB5D5D;" %></p>
 
-  <%= link_to 'Open in Metamaps', map_url(@map), target: "_blank", style: button_style %> 
+  <%= link_to 'Open in Metamaps', map_url(@map), style: button_style %> 
 
   <p style="font-size: 12px;">Make sense with Metamaps</p>
 
