@@ -20,7 +20,7 @@ class NotificationIcon extends Component {
     return (
       <a className={linkClasses} href="/notifications">
         <div className="tooltipsUnder">
-          Notifications ({this.props.unreadNotificationsCount} unread)
+          Notifications
         </div>
         {this.props.unreadNotificationsCount === 0 ? null : (
           <div className="unread-notifications-dot"></div>
