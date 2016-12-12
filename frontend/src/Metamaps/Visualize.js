@@ -149,6 +149,29 @@ const Visualize = {
       self.mGraph.graph.empty()
     }
 
+    // monkey patch scale function
+    const oldScale = self.mGraph.canvas.scale
+    self.mGraph.canvas.scale = function(x, y, disablePlot) {
+      const returnValue = oldScale.apply(self.mGraph.canvas, arguments)
+      Util.updateQueryParams({ scale: self.mGraph.canvas.scaleOffsetX.toFixed(2) })
+      return returnValue
+    }
+
+    // monkey patch translate function
+    const oldTranslate = self.mGraph.canvas.translate
+    let translateTimeout = null
+    self.mGraph.canvas.translate = function(x, y, disablePlot) {
+      const returnValue = oldTranslate.apply(self.mGraph.canvas, arguments)
+      window.clearTimeout(translateTimeout)
+      translateTimeout = window.setTimeout(() => {
+        const newX = self.mGraph.canvas.translateOffsetX.toFixed(2)
+        const newY = self.mGraph.canvas.translateOffsetY.toFixed(2)
+        Util.updateQueryParams({ translate: `${newX},${newY}` })
+        translateTimeout = null
+        return returnValue
+      }, 50)
+    }
+
     const queryParams = Util.queryParams()
     if (typeof queryParams.scale === 'string') {
       const scale = parseFloat(queryParams.scale) || 0

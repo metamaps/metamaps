@@ -132,4 +132,7 @@ describe('Metamaps.Util.js', function() {
   describe('queryParams', function() {
     it.skip('TODO need window')
   })
+  describe('updateQueryParams', function() {
+    it.skip('TODO need window')
+  })
 })

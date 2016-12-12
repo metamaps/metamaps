@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, window, document, history */
 
 import { Parser, HtmlRenderer, Node } from 'commonmark'
 import { emojiIndex } from 'emoji-mart'
@@ -236,6 +236,11 @@ const Util = {
       obj[item[0]] = item[1]
       return obj
     }, {})
+  },
+  updateQueryParams: function(newValues) {
+    const qp = Object.assign({}, Util.queryParams(), newValues)
+    const newString = Object.keys(qp).filter(key => !!key).map(key => `${key}=${qp[key]}`).join('&')
+    history.replaceState({}, document.title, `${window.location.pathname}?${newString}`)
   }
 }
 
