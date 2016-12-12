@@ -31,9 +31,11 @@
     </ul>
   </div>
 
-  <div class="centerContent pagination">
-    <%= paginate @notifications %>
-  </div>
+  <% if @notifications.total_pages > 1 %>
+    <div class="centerContent pagination">
+      <%= paginate @notifications %>
+    </div>
+  <% end %>
 
   <%= render partial: 'shared/back_to_mapping' %>
 </div>
