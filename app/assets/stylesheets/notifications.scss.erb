@@ -22,10 +22,11 @@ $unread_notifications_dot_size: 8px;
 
   .notificationPage,
   .notificationsPage {
-    width: auto;
-    max-width: 960px;
-    box-sizing: border-box;
     font-family: 'din-regular', Sans-Serif;
+
+    & a:hover {
+      text-decoration: none;
+    }
 
     & > .notification-title {
       border-bottom: 1px solid #eee;
@@ -38,33 +39,61 @@ $unread_notifications_dot_size: 8px;
     }
   }
 
-
-  .notificationsPage .notification {
-    .notification-subject {
-      width: 25%;
-    }
-    .notification-body {
-      width: 50%;
-    }
-    .notification-read-unread {
-      width: 10%;
+  .notificationsPage {
+    header {
+      margin-bottom: 0;
     }
 
-    .notification-body,
-    .notification-subject,
-    .notification-read-unread {
-      display: inline-block;
-      vertical-align: top;
+    .notification:first-child {
+      border-top: none;
+    }
+    .notification:last-child {
+      border-bottom: 1px solid #DCDCDC;
     }
 
-    &.unread {
-      .notification-body,
-      .notification-subject,
+    .notification {
+      padding: 10px;
+      border:1px solid #DCDCDC;
+      border-bottom: none;
+
+      &:hover {
+        background: #F6F6F6;
+      }
+
+      & > a {
+        float: left;
+        width: 85%;  
+        box-sizing: border-box;
+        padding-right: 10px;
+      }
+
       .notification-read-unread {
-        font-family: 'din-medium', Sans-Serif;
+        float: left;
+        width: 15%;
+      }
+
+      .notification-body,
+      .notification-subject {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .notification-body {
+        margin-left: 15px;
+      }
+
+      &.unread {
+        .notification-body,
+        .notification-subject,
+        .notification-read-unread {
+          font-family: 'din-medium', Sans-Serif;
+        }
       }
     }
+
   }
+
+    
 
   .notificationPage .notification-body {
     p, div {

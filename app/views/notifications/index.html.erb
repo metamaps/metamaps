@@ -25,6 +25,7 @@
               <%= link_to 'mark as read', mark_read_notification_path(notification.id), remote: true, method: :put %>
             <% end %>
           </div>
+          <div class="clearfloat"></div>
         </li>
       <% end %>
       <% if @notifications.count == 0 %>
@@ -34,7 +35,7 @@
   </div>
 
   <% if @notifications.total_pages > 1 %>
-    <div class="centerContent pagination">
+    <div class="centerContent withPadding pagination">
       <%= paginate @notifications %>
     </div>
   <% end %>
