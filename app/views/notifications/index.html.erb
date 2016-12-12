@@ -3,7 +3,9 @@
 
 <div id="yield">
   <div class="centerContent notificationsPage">
-    <h2 class="title">My Notifications</h4>
+    <header class="page-header">
+      <h2 class="title">My Notifications</h4>
+    </header>
     <ul class="notifications">
       <% @notifications.each do |notification| %>
         <% receipt = @receipts.find_by(notification_id: notification.id) %>
