@@ -123,4 +123,8 @@ class Map < ApplicationRecord
     Topic.where(defer_to_map_id: id).update_all(permission: permission)
     Synapse.where(defer_to_map_id: id).update_all(permission: permission)
   end
+
+  def invited_text
+    self.name + ' - invited to edit'
+  end
 end

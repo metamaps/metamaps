@@ -8,7 +8,8 @@
 # },
 # which would imply that this is an access request to Map.find(1)
 MAILBOXER_CODE_ACCESS_REQUEST = 'ACCESS_REQUEST'
-MAILBOXER_CODE_INVITED_TO_EDIT = 'INVITED_TO_EDIT'
+MAILBOXER_CODE_ACCESS_APPROVED = 'ACCESS_APPROVED'
+MAILBOXER_CODE_INVITE_TO_EDIT = 'INVITE_TO_EDIT'
 
 Mailboxer.setup do |config|
   # Configures if your application uses or not email sending for Notifications and Messages

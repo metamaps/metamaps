@@ -264,7 +264,7 @@ const InfoBox = {
       var mapperIds = DataModel.Collaborators.models.map(function(mapper) { return mapper.id })
       $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
       var name = DataModel.Collaborators.get(newCollaboratorId).get('name')
-      GlobalUI.notifyUser(name + ' will be notified by email')
+      GlobalUI.notifyUser(name + ' will be notified')
       self.updateNumbers()
     }
 

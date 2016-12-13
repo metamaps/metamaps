@@ -11,8 +11,11 @@ class ApplicationMailer < ActionMailer::Base
     def mail_for_notification(notification)
       if notification.notification_code == MAILBOXER_CODE_ACCESS_REQUEST
         request = notification.notified_object
-        MapMailer.access_request_email(request, request.map)
-      elsif notification.notification_code == MAILBOXER_CODE_INVITED_TO_EDIT
+        MapMailer.access_request_email(request)
+      elsif notification.notification_code == MAILBOXER_CODE_ACCESS_APPROVED
+        request = notification.notified_object
+        MapMailer.access_approved_email(request)
+      elsif notification.notification_code == MAILBOXER_CODE_INVITE_TO_EDIT
         user_map = notification.notified_object
         MapMailer.invite_to_edit_email(user_map.map, user_map.map.user, user_map.user)
       end

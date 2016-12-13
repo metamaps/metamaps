@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<% mail = ApplicationMailer.mail_for_notification(@notification) %>
 <div style="padding: 16px; background: white; text-align: left;">
-  <% if mail %>
-    <% @notification.update(body: mail.html_part&.body&.decoded) %>
-    <%= raw mail.html_part&.body&.decoded %>
-  <% end %>
+  <%= raw @notification.body %>
   <p style="font-size: 12px;">Make sense with Metamaps</p>
   <%= render partial: 'shared/mailer_unsubscribe_link' %>
 </div>

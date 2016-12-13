@@ -12,8 +12,7 @@ class AccessRequest < ApplicationRecord
     end
 
     user_map = UserMap.create(user: user, map: map)
-    mail = MapMailer.invite_to_edit_email(map, map.user, user)
-    user.notify(mail.subject, 'invite to edit', user_map, true, MAILBOXER_CODE_INVITED_TO_EDIT)
+    NotificationService.access_approved(self)
   end
 
   def deny
@@ -24,5 +23,13 @@ class AccessRequest < ApplicationRecord
     Mailboxer::Notification.where(notified_object: self).find_each do |notification|
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
     end
+  end
+
+  def requested_text
+    self.map.name + ' - request to edit' 
+  end
+
+  def approved_text
+    self.map.name + ' - access approved' 
   end
 end
