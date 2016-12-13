@@ -29,7 +29,9 @@
         </li>
       <% end %>
       <% if @notifications.count == 0 %>
-        You have ZERO unread notifications. Huzzah!
+        <div class="emptyInbox">
+          You have ZERO unread notifications. Huzzah!
+        </div>
       <% end %>
     </ul>
   </div>
@@ -40,7 +42,7 @@
     </div>
   <% end %>
 
-  <%= render partial: 'shared/back_to_mapping' %>
+  <%= render partial: 'shared/go_to_maps' %>
 </div>
 
 <%= render partial: 'notifications/header' %>
