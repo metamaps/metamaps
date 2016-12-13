@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AccessRequest < ApplicationRecord
   belongs_to :user
   belongs_to :map
@@ -5,7 +6,7 @@ class AccessRequest < ApplicationRecord
   def approve
     self.approved = true
     self.answered = true
-    self.save
+    save
 
     Mailboxer::Notification.where(notified_object: self).find_each do |notification|
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
@@ -18,7 +19,7 @@ class AccessRequest < ApplicationRecord
   def deny
     self.approved = false
     self.answered = true
-    self.save
+    save
 
     Mailboxer::Notification.where(notified_object: self).find_each do |notification|
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
@@ -26,10 +27,10 @@ class AccessRequest < ApplicationRecord
   end
 
   def requested_text
-    self.map.name + ' - request to edit' 
+    map.name + ' - request to edit'
   end
 
   def approved_text
-    self.map.name + ' - access approved' 
+    map.name + ' - access approved'
   end
 end

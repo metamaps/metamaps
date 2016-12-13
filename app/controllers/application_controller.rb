@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   helper_method :admin?
 
   def handle_unauthorized
-    if authenticated? and params[:controller] == 'maps' and params[:action] == 'show'
+    if authenticated? && (params[:controller] == 'maps') && (params[:action] == 'show')
       redirect_to request_access_map_path(params[:id])
     elsif authenticated?
       redirect_to root_path, notice: "You don't have permission to see that page."
@@ -41,13 +41,13 @@ class ApplicationController < ActionController::Base
   def require_no_user
     return true unless authenticated?
     redirect_to edit_user_path(user), notice: 'You must be logged out.'
-    return false
+    false
   end
 
   def require_user
     return true if authenticated?
     redirect_to sign_in_path, notice: 'You must be logged in.'
-    return false
+    false
   end
 
   def require_admin

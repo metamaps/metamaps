@@ -6,7 +6,6 @@ class AccessController < ApplicationController
                                  :deny_access, :deny_access_post, :request_access]
   after_action :verify_authorized
 
-
   # GET maps/:id/request_access
   def request_access
     @map = nil

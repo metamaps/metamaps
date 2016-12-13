@@ -1,4 +1,5 @@
-#t frozen_string_literal: true
+# frozen_string_literal: true
+# t frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe 'maps API', type: :request do
@@ -35,7 +36,7 @@ RSpec.describe 'maps API', type: :request do
     expect(response).to match_json_schema(:map)
     expect(JSON.parse(response.body)['data']['id']).to eq map.id
   end
-  
+
   it 'POST /api/v2/maps' do
     post '/api/v2/maps', params: { map: map.attributes, access_token: token }
 

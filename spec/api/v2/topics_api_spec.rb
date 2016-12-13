@@ -18,7 +18,6 @@ RSpec.describe 'topics API', type: :request do
   it 'GET /api/v2/topics/:id' do
     get "/api/v2/topics/#{topic.id}"
 
-
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:topic)
     expect(JSON.parse(response.body)['data']['id']).to eq topic.id

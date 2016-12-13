@@ -14,9 +14,7 @@ Webhooks::Slack::Base = Struct.new(:webhook, :event) do
     'something'
   end
 
-  def channel
-    webhook.channel
-  end
+  delegate :channel, to: :webhook
 
   def attachments
     [{

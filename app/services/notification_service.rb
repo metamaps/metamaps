@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class NotificationService
-
   def self.renderer
     renderer ||= ApplicationController.renderer.new(
       http_host: ENV['MAILER_DEFAULT_URL'],

@@ -20,7 +20,7 @@ module TopicsHelper
         type: is_map ? metamapMetacode.name : t.metacode.name,
         typeImageURL: is_map ? metamapMetacode.icon : t.metacode.icon,
         mapCount: is_map ? 0 : t.maps.count,
-        synapseCount: is_map ? 0 : t.synapses.count,
+        synapseCount: is_map ? 0 : t.synapses.count
       }
     end
   end
