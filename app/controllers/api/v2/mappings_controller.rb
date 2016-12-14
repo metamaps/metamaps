@@ -7,11 +7,13 @@ module Api
       end
 
       def update
-        # mappings are the only things where the user is set to the latest updater
-        # done this way so that the model hooks can use the mapping user to determine who took this action
-        resource.user = current_user if current_user.present? # current_user should always be present
+        # hack: set the user temporarily so the model hook can reference it, then set it back
+        temp = resource.user
+        resource.user = current_user
         update_action
         respond_with_resource
+        resourse.user = temp
+        update_action
       end
 
       def destroy
