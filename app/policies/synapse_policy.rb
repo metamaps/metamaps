@@ -38,7 +38,7 @@ class SynapsePolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.user == user || admin_override
+    record.mappings.empty? && (record.user == user || admin_override)
   end
 
   # Helpers

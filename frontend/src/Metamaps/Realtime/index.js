@@ -29,11 +29,9 @@ import {
   TOPIC_CREATED,
   TOPIC_UPDATED,
   TOPIC_REMOVED,
-  TOPIC_DELETED,
   SYNAPSE_CREATED,
   SYNAPSE_UPDATED,
   SYNAPSE_REMOVED,
-  SYNAPSE_DELETED,
   PEER_COORDS_UPDATED,
   MAP_UPDATED
 } from './events'
@@ -58,11 +56,9 @@ import {
   topicCreated,
   topicUpdated,
   topicRemoved,
-  topicDeleted,
   synapseCreated,
   synapseUpdated,
   synapseRemoved,
-  synapseDeleted,
   mapUpdated
 } from './receivable'
 
@@ -84,11 +80,9 @@ import {
   createTopic,
   updateTopic,
   removeTopic,
-  deleteTopic,
   createSynapse,
   updateSynapse,
   removeSynapse,
-  deleteSynapse,
   updateMap
 } from './sendable'
 
@@ -304,11 +298,6 @@ let Realtime = {
     }
     $(document).on(JIT.events.newTopic + '.map', createTopic)
 
-    var deleteTopic = function(event, data) {
-      self.deleteTopic(data)
-    }
-    $(document).on(JIT.events.deleteTopic + '.map', deleteTopic)
-
     var removeTopic = function(event, data) {
       self.removeTopic(data)
     }
@@ -318,11 +307,6 @@ let Realtime = {
       self.createSynapse(data)
     }
     $(document).on(JIT.events.newSynapse + '.map', createSynapse)
-
-    var deleteSynapse = function(event, data) {
-      self.deleteSynapse(data)
-    }
-    $(document).on(JIT.events.deleteSynapse + '.map', deleteSynapse)
 
     var removeSynapse = function(event, data) {
       self.removeSynapse(data)
@@ -500,11 +484,9 @@ const sendables = [
   ['createTopic', createTopic],
   ['updateTopic', updateTopic],
   ['removeTopic', removeTopic],
-  ['deleteTopic', deleteTopic],
   ['createSynapse', createSynapse],
   ['updateSynapse', updateSynapse],
   ['removeSynapse', removeSynapse],
-  ['deleteSynapse', deleteSynapse],
   ['updateMap', updateMap]
 ]
 sendables.forEach(sendable => {
@@ -531,11 +513,9 @@ const subscribeToEvents = (Realtime, socket) => {
   socket.on(TOPIC_CREATED, topicCreated(Realtime))
   socket.on(TOPIC_UPDATED, topicUpdated(Realtime))
   socket.on(TOPIC_REMOVED, topicRemoved(Realtime))
-  socket.on(TOPIC_DELETED, topicDeleted(Realtime))
   socket.on(SYNAPSE_CREATED, synapseCreated(Realtime))
   socket.on(SYNAPSE_UPDATED, synapseUpdated(Realtime))
   socket.on(SYNAPSE_REMOVED, synapseRemoved(Realtime))
-  socket.on(SYNAPSE_DELETED, synapseDeleted(Realtime))
   socket.on(MAP_UPDATED, mapUpdated(Realtime))
 }
 

@@ -36,7 +36,7 @@ class TopicPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.user == user || admin_override
+    record.mappings.empty? && (record.user == user || admin_override)
   end
 
   def autocomplete_topic?

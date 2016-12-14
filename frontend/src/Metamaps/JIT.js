@@ -37,10 +37,8 @@ const JIT = {
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
     newTopic: 'Metamaps:JIT:events:newTopic',
-    deleteTopic: 'Metamaps:JIT:events:deleteTopic',
     removeTopic: 'Metamaps:JIT:events:removeTopic',
     newSynapse: 'Metamaps:JIT:events:newSynapse',
-    deleteSynapse: 'Metamaps:JIT:events:deleteSynapse',
     removeSynapse: 'Metamaps:JIT:events:removeSynapse',
     pan: 'Metamaps:JIT:events:pan',
     zoom: 'Metamaps:JIT:events:zoom',
@@ -1396,9 +1394,8 @@ const JIT = {
     const disabled = authorized ? '' : 'disabled'
 
     if (Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
+    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove<div class="rc-keyboard">Ctrl+D</div></li>'
+    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+D</div></li>'
 
     if (Active.Topic) {
       menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic<div class="rc-keyboard">Alt+E</div></li>'
@@ -1483,28 +1480,18 @@ const JIT = {
 
     // attach events to clicks on the list items
 
-    // delete the selected things from the database
-    if (authorized) {
-      $('.rc-delete').click(function() {
-        $('.rightclickmenu').remove()
-        Control.deleteSelected()
-      })
-    }
-
     // remove the selected things from the map
     if (Active.Topic || authorized) {
       $('.rc-remove').click(function() {
         $('.rightclickmenu').remove()
-        Control.removeSelectedEdges()
-        Control.removeSelectedNodes()
+        Control.removeSelected()
       })
     }
 
     // hide selected nodes and synapses until refresh
     $('.rc-hide').click(function() {
       $('.rightclickmenu').remove()
-      Control.hideSelectedEdges()
-      Control.hideSelectedNodes()
+      Control.hideSelected()
     })
 
     // when in radial, center on the topic you picked
@@ -1654,9 +1641,8 @@ const JIT = {
     const disabled = authorized ? '' : 'disabled'
 
     if (Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
+    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove<div class="rc-keyboard">Ctrl+D</div></li>'
+    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+D</div></li>'
 
     if (Active.Map && Active.Mapper) menustring += '<li class="rc-spacer"></li>'
 
@@ -1703,28 +1689,18 @@ const JIT = {
 
     // attach events to clicks on the list items
 
-    // delete the selected things from the database
-    if (authorized) {
-      $('.rc-delete').click(function() {
-        $('.rightclickmenu').remove()
-        Control.deleteSelected()
-      })
-    }
-
     // remove the selected things from the map
     if (authorized) {
       $('.rc-remove').click(function() {
         $('.rightclickmenu').remove()
-        Control.removeSelectedEdges()
-        Control.removeSelectedNodes()
+        Control.removeSelected()
       })
     }
 
     // hide selected nodes and synapses until refresh
     $('.rc-hide').click(function() {
       $('.rightclickmenu').remove()
-      Control.hideSelectedEdges()
-      Control.hideSelectedNodes()
+      Control.hideSelected()
     })
 
     // change the permission of all the selected nodes and synapses that you were the originator of

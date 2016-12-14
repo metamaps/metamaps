@@ -39,76 +39,13 @@ const Control = {
     Selected.Nodes.splice(
       Selected.Nodes.indexOf(node), 1)
   },
-  deleteSelected: function() {
-    if (!Active.Map) return
-
-    var n = Selected.Nodes.length
-    var e = Selected.Edges.length
-    var ntext = n === 1 ? '1 topic' : n + ' topics'
-    var etext = e === 1 ? '1 synapse' : e + ' synapses'
-
-    var authorized = Active.Map.authorizeToEdit(Active.Mapper)
-
-    if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
-      return
-    }
-
-    var r = window.confirm(outdent`
-      You have ${ntext} and ${etext} selected. Are you sure you want
-      to permanently delete them all? This will remove them from all
-      maps they appear on.`)
-    if (r) {
-      Control.deleteSelectedEdges()
-      Control.deleteSelectedNodes()
-    }
-
-    if (DataModel.Topics.length === 0) {
-      GlobalUI.showDiv('#instructions')
-    }
+  removeSelected: function() {
+    Control.removeSelectedEdges()
+    Control.removeSelectedNodes()
   },
-  deleteSelectedNodes: function() { // refers to deleting topics permanently
-    if (!Active.Map) return
-
-    var authorized = Active.Map.authorizeToEdit(Active.Mapper)
-
-    if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
-      return
-    }
-
-    var l = Selected.Nodes.length
-    for (var i = l - 1; i >= 0; i -= 1) {
-      var node = Selected.Nodes[i]
-      Control.deleteNode(node.id)
-    }
-  },
-  deleteNode: function(nodeid) { // refers to deleting topics permanently
-    if (!Active.Map) return
-
-    var authorized = Active.Map.authorizeToEdit(Active.Mapper)
-
-    if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
-      return
-    }
-
-    var node = Visualize.mGraph.graph.getNode(nodeid)
-    var topic = node.getData('topic')
-
-    var permToDelete = Active.Mapper.id === topic.get('user_id') || Active.Mapper.get('admin')
-    if (permToDelete) {
-      var mappableid = topic.id
-      var mapping = node.getData('mapping')
-      topic.destroy()
-      DataModel.Mappings.remove(mapping)
-      $(document).trigger(JIT.events.deleteTopic, [{
-        mappableid: mappableid
-      }])
-      Control.hideNode(nodeid)
-    } else {
-      GlobalUI.notifyUser('Only topics you created can be deleted')
-    }
+  hideSelected: function() {
+    Control.hideSelectedEdges()
+    Control.hideSelectedNodes()
   },
   removeSelectedNodes: function() { // refers to removing topics permanently from a map
     if (Active.Topic) {
@@ -237,59 +174,6 @@ const Control = {
     Selected.Edges.splice(
       Selected.Edges.indexOf(edge), 1)
   },
-  deleteSelectedEdges: function() { // refers to deleting topics permanently
-    if (!Active.Map) return
-
-    var authorized = Active.Map.authorizeToEdit(Active.Mapper)
-
-    if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
-      return
-    }
-
-    const l = Selected.Edges.length
-    for (let i = l - 1; i >= 0; i -= 1) {
-      const edge = Selected.Edges[i]
-      Control.deleteEdge(edge)
-    }
-  },
-  deleteEdge: function(edge) {
-    if (!Active.Map) return
-
-    var authorized = Active.Map.authorizeToEdit(Active.Mapper)
-
-    if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
-      return
-    }
-
-    var index = edge.getData('displayIndex') ? edge.getData('displayIndex') : 0
-
-    var synapse = edge.getData('synapses')[index]
-    var mapping = edge.getData('mappings')[index]
-
-    var permToDelete = Active.Mapper.id === synapse.get('user_id') || Active.Mapper.get('admin')
-    if (permToDelete) {
-      if (edge.getData('synapses').length - 1 === 0) {
-        Control.hideEdge(edge)
-      }
-      var mappableid = synapse.id
-      synapse.destroy()
-
-      // the server will destroy the mapping, we just need to remove it here
-      DataModel.Mappings.remove(mapping)
-      edge.getData('mappings').splice(index, 1)
-      edge.getData('synapses').splice(index, 1)
-      if (edge.getData('displayIndex')) {
-        delete edge.data.$displayIndex
-      }
-      $(document).trigger(JIT.events.deleteSynapse, [{
-        mappableid: mappableid
-      }])
-    } else {
-      GlobalUI.notifyUser('Only synapses you created can be deleted')
-    }
-  },
   removeSelectedEdges: function() {
     // Topic view is handled by removeSelectedNodes
     if (!Active.Map) return
@@ -299,7 +183,7 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit this map.')
       return
     }
 

@@ -1,9 +1,7 @@
 const {
   // server sendable, client receivable
   TOPIC_UPDATED,
-  TOPIC_DELETED,
   SYNAPSE_UPDATED,
-  SYNAPSE_DELETED,
   MAP_UPDATED,
   JUNTO_UPDATED,
 
@@ -13,15 +11,12 @@ const {
   JOIN_MAP,
   LEAVE_MAP,
   UPDATE_TOPIC,
-  DELETE_TOPIC,
   UPDATE_SYNAPSE,
-  DELETE_SYNAPSE,
   UPDATE_MAP
 } = require('../frontend/src/Metamaps/Realtime/events')
 
 module.exports = function(io, store) {
   store.subscribe(() => {
-    console.log(store.getState())
     io.sockets.emit(JUNTO_UPDATED, store.getState())
   })
 
@@ -38,16 +33,8 @@ module.exports = function(io, store) {
       socket.broadcast.emit(TOPIC_UPDATED, data)
     })
 
-    socket.on(DELETE_TOPIC, function(data) {
-      socket.broadcast.emit(TOPIC_DELETED, data)
-    })
-
     socket.on(UPDATE_SYNAPSE, function(data) {
       socket.broadcast.emit(SYNAPSE_UPDATED, data)
-    })
-
-    socket.on(DELETE_SYNAPSE, function(data) {
-      socket.broadcast.emit(SYNAPSE_DELETED, data)
     })
 
     socket.on(UPDATE_MAP, function(data) {

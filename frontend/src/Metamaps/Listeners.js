@@ -60,7 +60,7 @@ const Listeners = {
         case 68: // if d or D is pressed
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
-            Control.deleteSelected()
+            Control.removeSelected()
           }
           break
         case 69: // if e or E is pressed
@@ -84,15 +84,16 @@ const Listeners = {
         case 72: // if h or H is pressed
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
-            Control.hideSelectedNodes()
-            Control.hideSelectedEdges()
+            Control.hideSelected()
           }
           break
         case 77: // if m or M is pressed
+          // since we're removing 'deletion', we have Ctrl-D available for this now, but leave this in
+          // as a deprecated function, just in case its what people got used to
+          // or should we do a GlobalUI.notifyUser to ask them to switch?
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault()
-            Control.removeSelectedNodes()
-            Control.removeSelectedEdges()
+            Control.removeSelected()
           }
           break
         case 82: // if r or R is pressed
