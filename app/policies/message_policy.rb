@@ -17,7 +17,8 @@ class MessagePolicy < ApplicationPolicy
   delegate :show?, to: :resource_policy
 
   def create?
-    record.resource.present? && resource_policy.update?
+    # we have currently decided to let any map that is visible to someone be commented on by them
+    record.resource.present? && resource_policy.show?
   end
 
   def update?
