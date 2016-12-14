@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-class Events::NewMapping < Event
+class Events::TopicRemovedFromMap < Event
   # after_create :notify_users!
 
   def self.publish!(mapping, user)
-    create!(kind: mapping.mappable_type == 'Topic' ? 'topic_added_to_map' : 'synapse_added_to_map',
+    create!(kind: 'topic_removed_from_map',
             eventable: mapping,
             map: mapping.map,
             user: user)
