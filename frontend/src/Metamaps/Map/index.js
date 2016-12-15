@@ -12,11 +12,13 @@ import Filter from '../Filter'
 import GlobalUI from '../GlobalUI'
 import JIT from '../JIT'
 import Loading from '../Loading'
+import Mapper from '../Mapper'
 import Realtime from '../Realtime'
 import Router from '../Router'
 import Selected from '../Selected'
 import SynapseCard from '../SynapseCard'
 import TopicCard from '../TopicCard'
+import Topic from '../Topic'
 import Visualize from '../Visualize'
 
 import CheatSheet from './CheatSheet'
@@ -377,7 +379,52 @@ const Map = {
         }
       })
     })
-  }
+  },
+  replay: function () {
+
+    function addNode(topic, meta, user_id) {
+      var mapping, mapper, cancel
+      mapping = new DataModel.Mapping({ id: meta.mapping_id, xloc: meta.x, yloc: meta.y })
+      function waitThenRenderTopic() {
+        if (mapper) {
+          Topic.renderTopic(mapping, topic, false, false)
+        } else if (!cancel) {
+          setTimeout(waitThenRenderTopic, 10)
+        }
+      }
+      mapper = DataModel.Mappers.get(user_id)
+      if (mapper === undefined) {
+        Mapper.get(user_id, function(m) {
+          DataModel.Mappers.add(m)
+          mapper = m
+        })
+      }
+
+      waitThenRenderTopic()
+    }
+
+    function processEvent(event, index) {
+      function complete(delay) {
+        var next = DataModel.Events[index + 1]
+        if (next) {
+          setTimeout(function(){ processEvent(next, index + 1) }, delay)
+        }
+      }
+      switch (event.kind) {
+        case 'topic_added_to_map':
+          Topic.get(event.eventable_id, function(topic) {
+            addNode(topic, event.meta, event.user_id)
+            complete(1000)
+          })
+          break;
+        default:
+          complete(10)
+      }
+    } // processEvent
+    Visualize.mGraph.graph.empty()
+    Visualize.mGraph.plot() 
+    processEvent(DataModel.Events[0], 0)
+  } // replay 
 }
 
 export { CheatSheet, InfoBox }
