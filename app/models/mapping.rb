@@ -52,9 +52,9 @@ class Mapping < ApplicationRecord
     end
 
     if mappable_type == 'Topic'
-      Events::TopicRemovedFromMap.publish!(self, user)
+      Events::TopicRemovedFromMap.publish!(mappable, map, user)
     elsif mappable_type == 'Synapse'
-      Events::SynapseRemovedFromMap.publish!(self, user)
+      Events::SynapseRemovedFromMap.publish!(mappable, map, user)
     end
   end
 end

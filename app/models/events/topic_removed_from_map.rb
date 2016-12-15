@@ -2,10 +2,10 @@
 class Events::TopicRemovedFromMap < Event
   # after_create :notify_users!
 
-  def self.publish!(mapping, user)
+  def self.publish!(topic, map, user)
     create!(kind: 'topic_removed_from_map',
-            eventable: mapping,
-            map: mapping.map,
+            eventable: topic,
+            map: map,
             user: user)
   end
 end
