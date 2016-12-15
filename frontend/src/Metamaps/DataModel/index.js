@@ -35,6 +35,7 @@ const DataModel = {
 
   Collaborators: new MapperCollection(),
   Creators: new MapperCollection(),
+  Events: [],
   Mappers: new MapperCollection(),
   Mappings: new MappingCollection(),
   Maps: {
@@ -68,6 +69,7 @@ const DataModel = {
 
     if (serverData.Collaborators) self.Collaborators = new MapperCollection(serverData.Collaborators)
     if (serverData.Creators) self.Creators = new MapperCollection(serverData.Creators)
+    if (serverData.Events) self.Events = serverData.Events
     if (serverData.Mappers) self.Mappers = new MapperCollection(serverData.Mappers)
     if (serverData.Mappings) self.Mappings = new MappingCollection(serverData.Mappings)
     if (serverData.Messages) self.Messages = serverData.Messages

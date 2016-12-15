@@ -14,7 +14,7 @@ class Map < ApplicationRecord
   has_many :collaborators, through: :user_maps, source: :user
 
   has_many :webhooks, as: :hookable
-  has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
+  has_many :events, -> { includes :user }, dependent: :destroy
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot,
@@ -95,7 +95,8 @@ class Map < ApplicationRecord
       collaborators: editors,
       messages: messages.sort_by(&:created_at),
       stars: stars,
-      requests: access_requests
+      requests: access_requests,
+      events: events.chronologically 
     }
   end
 

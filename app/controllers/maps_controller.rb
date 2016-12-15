@@ -16,6 +16,7 @@ class MapsController < ApplicationController
         @allmessages = @map.messages.sort_by(&:created_at)
         @allstars = @map.stars
         @allrequests = @map.access_requests
+        @allevents = @map.events
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }

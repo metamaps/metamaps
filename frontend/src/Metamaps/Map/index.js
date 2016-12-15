@@ -80,6 +80,7 @@ const Map = {
       DataModel.Mappings = new DataModel.MappingCollection(data.mappings)
       DataModel.Messages = data.messages
       DataModel.Stars = data.stars
+      DataModel.Events = data.events
       DataModel.attachCollectionEvents()
 
       var map = Active.Map
