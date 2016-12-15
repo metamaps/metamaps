@@ -30,7 +30,7 @@
       <% end %>
       <% if @notifications.count == 0 %>
         <div class="emptyInbox">
-          You have ZERO unread notifications. Huzzah!
+          You have no notifications. More time for dancing.
         </div>
       <% end %>
     </ul>
@@ -41,8 +41,6 @@
       <%= paginate @notifications %>
     </div>
   <% end %>
-
-  <%= render partial: 'shared/go_to_maps' %>
 </div>
 
 <%= render partial: 'notifications/header' %>

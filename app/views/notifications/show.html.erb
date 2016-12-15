@@ -2,18 +2,15 @@
 <% content_for :mobile_title, 'Notifications' %>
 
 <div id="yield">
+  <div class="centerContent withPadding back">
+    <%= link_to 'Back to notifications', notifications_path %>
+  </div>
   <div class="centerContent notificationPage">
     <h2 class="notification-title"><%= @notification.subject %></h4>
     <div class="notification-body">
       <%= raw @notification.body %>
     </div>
   </div>
-
-  <div class="centerContent withPadding back">
-    <%= link_to 'Back to notifications', notifications_path %>
-  </div>
-
-  <%= render partial: 'shared/go_to_maps' %>
 </div>
 
 <%= render partial: 'notifications/header' %>
