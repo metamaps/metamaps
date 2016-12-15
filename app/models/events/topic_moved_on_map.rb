@@ -2,10 +2,10 @@
 class Events::TopicMovedOnMap < Event
   # after_create :notify_users!
 
-  def self.publish!(mapping, user, meta)
+  def self.publish!(topic, map, user, meta)
     create!(kind: 'topic_moved_on_map',
-            eventable: mapping,
-            map: mapping.map,
+            eventable: topic,
+            map: map,
             user: user,
             meta: meta)
   end

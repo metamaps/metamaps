@@ -2,10 +2,11 @@
 class Events::SynapseAddedToMap < Event
   # after_create :notify_users!
 
-  def self.publish!(mapping, user)
+  def self.publish!(synapse, map, user, meta)
     create!(kind: 'synapse_added_to_map',
-            eventable: mapping,
-            map: mapping.map,
-            user: user)
+            eventable: synapse,
+            map: map,
+            user: user,
+            meta: meta)
   end
 end

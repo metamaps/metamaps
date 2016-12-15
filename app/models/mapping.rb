@@ -30,17 +30,17 @@ class Mapping < ApplicationRecord
 
   def after_created
     if mappable_type == 'Topic'
-      meta = {'x': xloc, 'y': yloc}
-      Events::TopicAddedToMap.publish!(self, user, meta)
+      meta = {'x': xloc, 'y': yloc, 'mapping_id': id}
+      Events::TopicAddedToMap.publish!(mappable, map, user, meta)
     elsif mappable_type == 'Synapse'
-      Events::SynapseAddedToMap.publish!(self, user)
+      Events::SynapseAddedToMap.publish!(mappable, map, user, meta)
     end
   end
 
   def after_updated
     if mappable_type == 'Topic' and (xloc_changed? or yloc_changed?)
-      meta = {'x': xloc, 'y': yloc}
-      Events::TopicMovedOnMap.publish!(self, user, meta)
+      meta = {'x': xloc, 'y': yloc, 'mapping_id': id}
+      Events::TopicMovedOnMap.publish!(mappable, map, user, meta)
     end
   end
 
@@ -51,10 +51,11 @@ class Mapping < ApplicationRecord
       mappable.save
     end
 
+    meta = {'mapping_id': id}
     if mappable_type == 'Topic'
-      Events::TopicRemovedFromMap.publish!(mappable, map, user)
+      Events::TopicRemovedFromMap.publish!(mappable, map, user, meta)
     elsif mappable_type == 'Synapse'
-      Events::SynapseRemovedFromMap.publish!(mappable, map, user)
+      Events::SynapseRemovedFromMap.publish!(mappable, map, user, meta)
     end
   end
 end
