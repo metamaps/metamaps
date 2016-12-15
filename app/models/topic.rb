@@ -143,6 +143,7 @@ class Topic < ApplicationRecord
       new = self.attributes.select {|k,v| attrs.include?(k) } 
       old = changed_attributes.select {|k,v| attrs.include?(k) } 
       meta = new.merge(old) # we are prioritizing the old values, keeping them 
+      meta['changed'] = changed_attributes.keys.select {|k| attrs.include?(k) } 
       Events::TopicUpdated.publish!(self, user, meta)
     end
   end
