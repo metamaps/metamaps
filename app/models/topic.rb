@@ -16,6 +16,7 @@ class Topic < ApplicationRecord
   belongs_to :metacode
 
   before_create :create_metamap?
+  after_update :after_updated
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
@@ -134,5 +135,15 @@ class Topic < ApplicationRecord
                       arranged: true, user_id: user_id)
     self.link = Rails.application.routes.url_helpers
                      .map_url(host: ENV['MAILER_DEFAULT_URL'], id: @map.id)
+  end
+
+  def after_updated
+    attrs = ['name', 'desc', 'link', 'metacode_id', 'permission', 'defer_to_map_id']
+    if attrs.any? {|k| changed_attributes.key?(k)}
+      new = self.attributes.select {|k,v| attrs.include?(k) } 
+      old = changed_attributes.select {|k,v| attrs.include?(k) } 
+      meta = new.merge(old) # we are prioritizing the old values, keeping them 
+      Events::TopicUpdated.publish!(self, user, meta)
+    end
   end
 end

@@ -2,7 +2,8 @@
 class Event < ApplicationRecord
   KINDS = %w(user_present_on_map conversation_started_on_map 
                topic_added_to_map topic_moved_on_map topic_removed_from_map
-               synapse_added_to_map synapse_removed_from_map).freeze
+               synapse_added_to_map synapse_removed_from_map
+               topic_updated synapse_updated).freeze
 
   belongs_to :eventable, polymorphic: true
   belongs_to :map
