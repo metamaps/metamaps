@@ -4,18 +4,19 @@
 <div id="yield">
   <div class="centerContent notificationsPage">
     <header class="page-header">
-      <h2 class="title">My Notifications</h4>
+      <h2 class="title">Notifications</h4>
     </header>
     <ul class="notifications">
       <% @notifications.each do |notification| %>
         <% receipt = @receipts.find_by(notification_id: notification.id) %>
         <li class="notification <%= receipt.is_read? ? 'read' : 'unread' %>" id="notification-<%= notification.id %>">
           <%= link_to notification_path(notification.id) do %>
-            <div class="notification-subject">
-              <%= notification.subject %>
+            <div class="notification-actor">
+              <%= image_tag notification.sender.image(:thirtytwo) %>
             </div>
             <div class="notification-body">
-              <%= strip_tags(notification.body).truncate(70) %>
+              <div class="in-bold"><%= notification.sender.name %></div>
+              <%= raw NotificationService.text_for_notification(notification) %>
             </div>
           <% end %>
           <div class="notification-read-unread">
@@ -24,6 +25,9 @@
             <% else %>
               <%= link_to 'mark as read', mark_read_notification_path(notification.id), remote: true, method: :put %>
             <% end %>
+          </div>
+          <div class="notification-date">
+            <%= notification.created_at.strftime("%b %d") %>
           </div>
           <div class="clearfloat"></div>
         </li>
