@@ -9,20 +9,20 @@ Doorkeeper.configure do
       current_user
     else
       store_location_for(User, request.fullpath)
-      redirect_to(sign_in_url, notice: "Sign In to Connect")
+      redirect_to(sign_in_url, notice: 'Sign In to Connect')
     end
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications,
   # you need to declare the block below.
   admin_authenticator do
-    if current_user && current_user.admin
+    if current_user&.admin
       current_user
     elsif current_user && !current_user.admin
-      redirect_to(root_url, notice: "Unauthorized")
+      redirect_to(root_url, notice: 'Unauthorized')
     else
       store_location_for(User, request.fullpath)
-      redirect_to(sign_in_url, notice: "Try signing in to do that")
+      redirect_to(sign_in_url, notice: 'Try signing in to do that')
     end
   end
 

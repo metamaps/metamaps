@@ -20,12 +20,25 @@ Metamaps::Application.routes.draw do
       post 'events/:event', action: :events
       get :contains
 
-      get :request_access, to: 'access#request_access'
-      get 'approve_access/:request_id', to: 'access#approve_access', as: :approve_access
-      get 'deny_access/:request_id', to: 'access#deny_access', as: :deny_access
-      post :access_request, to: 'access#access_request', default: { format: :json }
-      post 'approve_access/:request_id', to: 'access#approve_access_post', default: { format: :json }
-      post 'deny_access/:request_id', to: 'access#deny_access_post', default: { format: :json }
+      get :request_access,
+          to: 'access#request_access'
+      get 'approve_access/:request_id',
+          to: 'access#approve_access',
+          as: :approve_access
+      get 'deny_access/:request_id',
+          to: 'access#deny_access',
+          as: :deny_access
+
+      post :access_request,
+           to: 'access#access_request',
+           default: { format: :json }
+      post 'approve_access/:request_id',
+           to: 'access#approve_access_post',
+           default: { format: :json }
+      post 'deny_access/:request_id',
+           to: 'access#deny_access_post',
+           default: { format: :json }
+
       post :access, to: 'access#access', default: { format: :json }
 
       post :star, to: 'stars#create', default: { format: :json }
@@ -36,6 +49,15 @@ Metamaps::Application.routes.draw do
   resources :mappings, except: [:index, :new, :edit]
 
   resources :messages, only: [:show, :create, :update, :destroy]
+  resources :notifications, only: [:index, :show] do
+    collection do
+      get :unsubscribe
+    end
+    member do
+      put :mark_read
+      put :mark_unread
+    end
+  end
 
   resources :metacode_sets, except: [:show]
 
@@ -109,3 +131,4 @@ Metamaps::Application.routes.draw do
     get 'load_url_title'
   end
 end
+# rubocop:enable Rubocop/Metrics/BlockLength

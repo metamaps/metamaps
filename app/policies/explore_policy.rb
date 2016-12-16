@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ExplorePolicy < ApplicationPolicy
   def active?
     true

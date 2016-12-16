@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Rack::Attack
   Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
@@ -11,10 +12,8 @@ class Rack::Attack
   # Throttle POST requests to /login by IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle('logins/ip', :limit => 5, :period => 20.seconds) do |req|
-    if req.path == '/login' && req.post?
-      req.ip
-    end
+  throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
+    req.ip if req.path == '/login' && req.post?
   end
 
   # Throttle POST requests to /login by email param
@@ -25,17 +24,17 @@ class Rack::Attack
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
-  throttle("logins/email", :limit => 5, :period => 20.seconds) do |req|
+  throttle('logins/email', limit: 5, period: 20.seconds) do |req|
     if req.path == '/login' && req.post?
       # return the email if present, nil otherwise
       req.params['email'].presence
     end
   end
 
-  throttle('load_url_title/req/5mins/ip', :limit => 300, :period => 5.minutes) do |req|
+  throttle('load_url_title/req/5mins/ip', limit: 300, period: 5.minutes) do |req|
     req.ip if req.path == 'hacks/load_url_title'
   end
-  throttle('load_url_title/req/1s/ip', :limit => 5, :period => 1.second) do |req|
+  throttle('load_url_title/req/1s/ip', limit: 5, period: 1.second) do |req|
     # If the return value is truthy, the cache key for the return value
     # is incremented and compared with the limit. In this case:
     #   "rack::attack:#{Time.now.to_i/1.second}:load_url_title/req/ip:#{req.ip}"
@@ -46,16 +45,16 @@ class Rack::Attack
   end
 
   self.throttled_response = lambda do |env|
-		now = Time.now
-		match_data = env['rack.attack.match_data']
+    now = Time.now
+    match_data = env['rack.attack.match_data']
     period = match_data[:period]
     limit = match_data[:limit]
 
-		headers = {
+    headers = {
       'X-RateLimit-Limit' => limit.to_s,
-			'X-RateLimit-Remaining' => '0',
-			'X-RateLimit-Reset' => (now + (period - now.to_i % period)).to_s
-		}
+      'X-RateLimit-Remaining' => '0',
+      'X-RateLimit-Reset' => (now + (period - now.to_i % period)).to_s
+    }
 
     [429, headers, ['']]
   end

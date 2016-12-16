@@ -14,14 +14,14 @@ class TopicsController < ApplicationController
       @topics = policy_scope(Topic).where('LOWER("name") like ?', term.downcase + '%').order('"name"')
       @mapTopics = @topics.select { |t| t&.metacode&.name == 'Metamap' }
       # prioritize topics which point to maps, over maps
-      @exclude = @mapTopics.length > 0 ? @mapTopics.map(&:name) : ['']
+      @exclude = @mapTopics.length.positive? ? @mapTopics.map(&:name) : ['']
       @maps = policy_scope(Map).where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', @exclude).order('"name"')
     else
       @topics = []
       @maps = []
     end
-    @all= @topics.to_a.concat(@maps.to_a).sort { |a, b| a.name <=> b.name }
-    
+    @all = @topics.to_a.concat(@maps.to_a).sort_by(&:name)
+
     render json: autocomplete_array_json(@all).to_json
   end
 

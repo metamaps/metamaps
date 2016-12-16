@@ -22,7 +22,7 @@
 
         <div class="wrapper <%= classes %>" id="wrapper">
 
-            <%= render :partial => 'layouts/upperelements', :locals => {:appsPage => true } %>
+            <%= render :partial => 'layouts/upperelements', :locals => {:noHardHomeLink => true } %>
 
             <%= yield %>
 
@@ -37,6 +37,9 @@
                           <% end %>
                             <a href="<%= oauth_authorized_applications_path %>" class="authedApps exploreMapsButton <%= params[:controller] == 'doorkeeper/authorized_applications' ? 'active' : nil %>">
                                 <div class="exploreMapsIcon"></div>Authorized Apps
+                            </a>
+                            <a href="/" class="myMaps exploreMapsButton">
+                                <div class="exploreMapsIcon"></div>Maps
                             </a>
                         </div>
                     </div>

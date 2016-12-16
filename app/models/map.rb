@@ -18,11 +18,11 @@ class Map < ApplicationRecord
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :screenshot,
-    styles: {
-      thumb: ['220x220#', :png]
-      #:full => ['940x630#', :png]
-    },
-    default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-square.png'
+                    styles: {
+                      thumb: ['220x220#', :png]
+                      #:full => ['940x630#', :png]
+                    },
+                    default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-square.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }
@@ -122,5 +122,9 @@ class Map < ApplicationRecord
   def update_deferring_topics_and_synapses
     Topic.where(defer_to_map_id: id).update_all(permission: permission)
     Synapse.where(defer_to_map_id: id).update_all(permission: permission)
+  end
+
+  def invited_text
+    name + ' - invited to edit'
   end
 end

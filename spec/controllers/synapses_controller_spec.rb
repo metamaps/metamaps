@@ -53,9 +53,9 @@ RSpec.describe SynapsesController, type: :controller do
         expect(response.status).to eq 422
       end
       it 'does not create a synapse' do
-        expect {
+        expect do
           post :create, format: :json, params: { synapse: invalid_attributes }
-        }.to change {
+        end.to change {
           Synapse.count
         }.by 0
       end

@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe MapMailer, type: :mailer do
   describe 'access_request_email' do
-    let(:request) { create(:access_request) }
     let(:map) { create(:map) }
-    let(:mail) { described_class.access_request_email(request, map) }
+    let(:request) { create(:access_request, map: map) }
+    let(:mail) { described_class.access_request_email(request) }
 
     it { expect(mail.from).to eq ['team@metamaps.cc'] }
     it { expect(mail.to).to eq [map.user.email] }

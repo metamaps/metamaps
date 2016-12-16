@@ -16,7 +16,7 @@ class MapPolicy < ApplicationPolicy
   end
 
   def show?
-    record.permission.in?(['commons', 'public']) ||
+    record.permission.in?(%w(commons public)) ||
       record.collaborators.include?(user) ||
       record.user == user
   end

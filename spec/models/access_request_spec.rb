@@ -1,8 +1,7 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe AccessRequest, type: :model do
-  include ActiveJob::TestHelper # enqueued_jobs
-
   let(:access_request) { create(:access_request) }
 
   describe 'approve' do
@@ -13,7 +12,7 @@ RSpec.describe AccessRequest, type: :model do
     it { expect(access_request.approved).to be true }
     it { expect(access_request.answered).to be true }
     it { expect(UserMap.count).to eq 1 }
-    it { expect(enqueued_jobs.count).to eq 1 }
+    it { expect(Mailboxer::Notification.count).to eq 1 }
   end
 
   describe 'deny' do
@@ -24,6 +23,6 @@ RSpec.describe AccessRequest, type: :model do
     it { expect(access_request.approved).to be false }
     it { expect(access_request.answered).to be true }
     it { expect(UserMap.count).to eq 0 }
-    it { expect(enqueued_jobs.count).to eq 0 }
+    it { expect(Mailboxer::Notification.count).to eq 0 }
   end
 end

@@ -21,13 +21,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-
   private
 
   def store_location
-    if params[:redirect_to]
-      store_location_for(User, params[:redirect_to])    
-    end
+    store_location_for(User, params[:redirect_to]) if params[:redirect_to]
   end
 
   def configure_sign_up_params
