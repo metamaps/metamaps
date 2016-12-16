@@ -37,7 +37,6 @@ const Topic = Backbone.Model.extend({
 
     newOptions.success = function(model, response, opt) {
       if (s) s(model, response, opt)
-      model.set('calculated_permission', model.get('permission'))
       model.trigger('saved')
 
       if (permBefore === 'private' && model.get('permission') !== 'private') {
@@ -82,7 +81,7 @@ const Topic = Backbone.Model.extend({
   authorizeToEdit: function(mapper) {
     if (mapper &&
       (this.get('user_id') === mapper.get('id') ||
-      this.get('calculated_permission') === 'commons' ||
+      this.get('permission') === 'commons' ||
       this.get('collaborator_ids').includes(mapper.get('id')))) {
       return true
     } else {

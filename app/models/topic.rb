@@ -16,6 +16,7 @@ class Topic < ApplicationRecord
   belongs_to :metacode
 
   before_create :create_metamap?
+  after_update :after_updated
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
@@ -75,12 +76,8 @@ class Topic < ApplicationRecord
     Pundit.policy_scope(user, maps).map(&:id)
   end
 
-  def calculated_permission
-    defer_to_map&.permission || permission
-  end
-
   def as_json(options = {})
-    super(methods: [:user_name, :user_image, :calculated_permission, :collaborator_ids])
+    super(methods: [:user_name, :user_image, :collaborator_ids])
       .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
              map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
   end
@@ -129,15 +126,25 @@ class Topic < ApplicationRecord
     "Get: #{name}"
   end
 
-  def mk_permission
-    Perm.short(permission)
+  protected
+
+  def create_metamap?
+    return unless (link == '') && (metacode.name == 'Metamap')
+
+    @map = Map.create(name: name, permission: permission, desc: '',
+                      arranged: true, user_id: user_id)
+    self.link = Rails.application.routes.url_helpers
+                     .map_url(host: ENV['MAILER_DEFAULT_URL'], id: @map.id)
   end
 
-  protected
-    def create_metamap?
-      if link == '' and metacode.name == 'Metamap'
-        @map = Map.create({ name: name, permission: permission, desc: '', arranged: true, user_id: user_id })
-        self.link = Rails.application.routes.url_helpers.map_url(:host => ENV['MAILER_DEFAULT_URL'], :id => @map.id)
-      end
+  def after_updated
+    attrs = ['name', 'desc', 'link', 'metacode_id', 'permission', 'defer_to_map_id']
+    if attrs.any? {|k| changed_attributes.key?(k)}
+      new = self.attributes.select {|k| attrs.include?(k) }
+      old = changed_attributes.select {|k| attrs.include?(k) }
+      meta = new.merge(old) # we are prioritizing the old values, keeping them 
+      meta['changed'] = changed_attributes.keys.select {|k| attrs.include?(k) }
+      Events::TopicUpdated.publish!(self, user, meta)
     end
+  end
 end

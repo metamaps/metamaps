@@ -13,13 +13,12 @@ class UsersController < ApplicationController
 
   # GET /users/:id/edit
   def edit
-    @user = current_user
-    respond_with(@user)
+    @user = User.find(current_user.id)
   end
 
   # PUT /users/:id
   def update
-    @user = current_user
+    @user = User.find(current_user.id)
 
     if user_params[:password] == '' && user_params[:password_confirmation] == ''
       # not trying to change the password
@@ -96,6 +95,8 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :image, :password, :password_confirmation)
+    params.require(:user).permit(
+      :name, :email, :image, :password, :password_confirmation, :emails_allowed
+    )
   end
 end

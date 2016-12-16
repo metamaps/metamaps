@@ -14,6 +14,7 @@ module Api
       def self.embeddable
         {
           user: {},
+          updated_by: {},
           map: {}
         }
       end

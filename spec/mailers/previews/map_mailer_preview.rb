@@ -7,6 +7,11 @@ class MapMailerPreview < ActionMailer::Preview
 
   def access_request_email
     request = AccessRequest.first
-    MapMailer.access_request_email(request, request.map)
+    MapMailer.access_request_email(request)
+  end
+
+  def access_approved_email
+    request = AccessRequest.first
+    MapMailer.access_approved_email(request)
   end
 end

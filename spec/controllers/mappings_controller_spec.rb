@@ -24,6 +24,7 @@ RSpec.describe MappingsController, type: :controller do
         post :create, params: {
           mapping: valid_attributes
         }
+        mapping.updated_by = controller.current_user
         expect(comparable(Mapping.last)).to eq comparable(mapping)
       end
     end

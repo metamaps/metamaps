@@ -174,7 +174,7 @@ const SynapseCard = {
 
   add_perms_form: function(synapse) {
     // permissions - if owner, also allow permission editing
-    $('#editSynLowerBar').append('<div class="mapPerm ' + synapse.get('calculated_permission').substring(0, 2) + '"></div>')
+    $('#editSynLowerBar').append('<div class="mapPerm ' + synapse.get('permission').substring(0, 2) + '"></div>')
 
     // ability to change permission
     var selectingPermission = false

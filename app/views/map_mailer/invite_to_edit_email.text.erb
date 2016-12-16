@@ -1,7 +1,5 @@
-<%= @inviter.name %> has invited you to collaboratively edit the following map:
+<% map = @map || map %>
+<% inviter = @inviter || inviter %>
+<%= inviter.name %> has invited you to collaboratively edit the following map:
 
-<%= @map.name %> [<%= map_url(@map) %>]
-
-Make sense with Metamaps
-
-
+<%= map.name %> [<%= map_url(map) %>]

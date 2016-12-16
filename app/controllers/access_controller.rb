@@ -6,7 +6,6 @@ class AccessController < ApplicationController
                                  :deny_access, :deny_access_post, :request_access]
   after_action :verify_authorized
 
-
   # GET maps/:id/request_access
   def request_access
     @map = nil
@@ -20,13 +19,10 @@ class AccessController < ApplicationController
   # POST maps/:id/access_request
   def access_request
     request = AccessRequest.create(user: current_user, map: @map)
-    # what about push notification to map owner?
-    MapMailer.access_request_email(request, @map).deliver_later
+    NotificationService.access_request(request)
 
     respond_to do |format|
-      format.json do
-        head :ok
-      end
+      format.json { head :ok }
     end
   end
 
@@ -36,22 +32,21 @@ class AccessController < ApplicationController
 
     @map.add_new_collaborators(user_ids).each do |user_id|
       # add_new_collaborators returns array of added users,
-      # who we then send an email to
-      MapMailer.invite_to_edit_email(@map, current_user, User.find(user_id)).deliver_later
+      # who we then send a notification to
+      user = User.find(user_id)
+      NotificationService.invite_to_edit(@map, current_user, user)
     end
     @map.remove_old_collaborators(user_ids)
 
     respond_to do |format|
-      format.json do
-        head :ok
-      end
+      format.json { head :ok }
     end
   end
 
   # GET maps/:id/approve_access/:request_id
   def approve_access
     request = AccessRequest.find(params[:request_id])
-    request.approve()
+    request.approve # also marks mailboxer notification as read
     respond_to do |format|
       format.html { redirect_to map_path(@map), notice: 'Request was approved' }
     end
@@ -60,7 +55,7 @@ class AccessController < ApplicationController
   # GET maps/:id/deny_access/:request_id
   def deny_access
     request = AccessRequest.find(params[:request_id])
-    request.deny()
+    request.deny # also marks mailboxer notification as read
     respond_to do |format|
       format.html { redirect_to map_path(@map), notice: 'Request was turned down' }
     end
@@ -69,7 +64,7 @@ class AccessController < ApplicationController
   # POST maps/:id/approve_access/:request_id
   def approve_access_post
     request = AccessRequest.find(params[:request_id])
-    request.approve()
+    request.approve
     respond_to do |format|
       format.json do
         head :ok
@@ -80,7 +75,7 @@ class AccessController < ApplicationController
   # POST maps/:id/deny_access/:request_id
   def deny_access_post
     request = AccessRequest.find(params[:request_id])
-    request.deny()
+    request.deny
     respond_to do |format|
       format.json do
         head :ok
@@ -94,5 +89,4 @@ class AccessController < ApplicationController
     @map = Map.find(params[:id])
     authorize @map
   end
-
 end

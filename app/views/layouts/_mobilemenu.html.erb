@@ -2,7 +2,11 @@
   <div id="header_content">
     <%= yield(:mobile_title) %>
   </div>
-  <div id="menu_icon"></div>
+  <div id="menu_icon">
+    <% if user_unread_notification_count > 0 %>
+      <div class="unread-notifications-dot"></div>
+    <% end %>
+  </div>
 </div>
 <div id="mobile_menu">
   <ul>
@@ -48,6 +52,12 @@
     <% if current_user %>
       <li>
         <%= link_to "Account", edit_user_url(current_user) %>
+      </li>
+      <li class="notifications">
+        <%= link_to "Notifications", notifications_path %>
+        <% if user_unread_notification_count > 0 %>
+          <div class="unread-notifications-dot"></div>
+        <% end %>
       </li>
       <li>
         <%= link_to "Sign Out", "/logout", id: "Logout" %>

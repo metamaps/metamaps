@@ -1,16 +1,16 @@
+
 # frozen_string_literal: true
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  config.log_level = :warn
-  config.eager_load = true
-
-  # 12 factor: log to stdout
-  logger = ActiveSupport::Logger.new(STDOUT)
+  # log to stdout
+  logger = Logger.new(STDOUT)
   logger.formatter = config.log_formatter
+  logger.level = :warn
   config.logger = ActiveSupport::TaggedLogging.new(logger)
 
   # Code is not reloaded between requests
+  config.eager_load = true
   config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on

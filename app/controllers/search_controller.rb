@@ -105,6 +105,7 @@ class SearchController < ApplicationController
       builder = builder.where(user: user) if user
       @maps = builder.order(:name)
     else
+      skip_policy_scope
       @maps = []
     end
 
@@ -120,10 +121,10 @@ class SearchController < ApplicationController
       term = term[7..-1] if term.downcase[0..6] == 'mapper:'
       search = term.downcase.strip + '%'
 
-      skip_policy_scope # TODO: builder = policy_scope(User)
-      builder = User.where('LOWER("name") like ?', search)
+      builder = policy_scope(User).where('LOWER("name") like ?', search)
       @mappers = builder.order(:name)
     else
+      skip_policy_scope
       @mappers = []
     end
     render json: autocomplete_user_array_json(@mappers).to_json
@@ -146,6 +147,7 @@ class SearchController < ApplicationController
       @synapses = @one + @two
       @synapses.sort! { |s1, s2| s1.desc <=> s2.desc }.to_a
     else
+      skip_policy_scope
       @synapses = []
     end
 

@@ -30,7 +30,7 @@
 
         <div class="wrapper <%= classes %>" id="wrapper">
 
-            <%= render :partial => 'layouts/upperelements', :locals => { :appsPage => false }  %>
+            <%= render :partial => 'layouts/upperelements', :locals => { :noHardHomeLink => controller_name == "notifications" ? true : false }  %>
 
             <%= yield %>
 
@@ -64,8 +64,12 @@
             <p id="toast" class="toast">
               <% if devise_error_messages? %>
                 <%= devise_error_messages! %>
-              <% elsif notice %>
+              <% end %>
+              <% if notice %>
                 <%= notice %>
+              <% end %>
+              <% if alert %>
+                <%= alert %>
               <% end %>
             </p>      
             <div id="loading"></div>

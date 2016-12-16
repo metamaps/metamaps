@@ -2,6 +2,8 @@
 require 'open-uri'
 
 class User < ApplicationRecord
+  acts_as_messageable # mailboxer notifications
+
   has_many :topics
   has_many :synapses
   has_many :maps
@@ -107,5 +109,20 @@ class User < ApplicationRecord
 
   def settings=(val)
     self[:settings] = val
+  end
+
+  # Mailboxer hooks and helper functions
+
+  def mailboxer_email(_message)
+    return email if emails_allowed
+    # else return nil, which sends no email
+  end
+
+  def mailboxer_notifications
+    mailbox.notifications
+  end
+
+  def mailboxer_notification_receipts
+    mailbox.receipts.includes(:notification).where(mailbox_type: nil)
   end
 end

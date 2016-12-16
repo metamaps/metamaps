@@ -2,6 +2,7 @@
 
 import Active from './Active'
 import Control from './Control'
+import DataModel from './DataModel'
 import JIT from './JIT'
 import Mobile from './Mobile'
 import Realtime from './Realtime'
@@ -31,13 +32,26 @@ const Listeners = {
           break
         case 65: // if a or A is pressed
           if ((e.ctrlKey || e.metaKey) && onCanvas) {
-            Control.deselectAllNodes()
-            Control.deselectAllEdges()
-
+            const nodesCount = Object.keys(Visualize.mGraph.graph.nodes).length
+            const selectedNodesCount = Selected.Nodes.length
             e.preventDefault()
-            Visualize.mGraph.graph.eachNode(function(n) {
-              Control.selectNode(n, e)
+
+            // Hit Ctrl+A once to select all nodes
+            Control.deselectAllNodes()
+            Visualize.mGraph.graph.eachNode(node => {
+              Control.selectNode(node, e)
             })
+
+            // Hitting Ctrl+A a second time will select all edges too
+            Control.deselectAllEdges()
+            if (nodesCount === selectedNodesCount) {
+              DataModel.Synapses.models.forEach(synapse => {
+                const topic1id = synapse.get('topic1_id')
+                const topic2id = synapse.get('topic2_id')
+                const edge = Visualize.mGraph.graph.edges[topic1id][topic2id]
+                Control.selectEdge(edge, e)
+              })
+            }
 
             Visualize.mGraph.plot()
           }
