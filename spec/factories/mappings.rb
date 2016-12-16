@@ -5,6 +5,7 @@ FactoryGirl.define do
     yloc 0
     map
     user
+    association :updated_by, factory: :user
     association :mappable, factory: :topic
 
     factory :mapping_random_location do
