@@ -19,10 +19,10 @@ class MappingsController < ApplicationController
     @mapping = Mapping.new(mapping_params)
     authorize @mapping
     @mapping.user = current_user
+    @mapping.updated_by = current_user
 
     if @mapping.save
       render json: @mapping, status: :created
-      Events::NewMapping.publish!(@mapping, current_user)
     else
       render json: @mapping.errors, status: :unprocessable_entity
     end
@@ -32,8 +32,10 @@ class MappingsController < ApplicationController
   def update
     @mapping = Mapping.find(params[:id])
     authorize @mapping
+    @mapping.updated_by = current_user
+    @mapping.assign_attributes(mapping_params)
 
-    if @mapping.update_attributes(mapping_params)
+    if @mapping.save
       head :no_content
     else
       render json: @mapping.errors, status: :unprocessable_entity
@@ -44,14 +46,7 @@ class MappingsController < ApplicationController
   def destroy
     @mapping = Mapping.find(params[:id])
     authorize @mapping
-
-    mappable = @mapping.mappable
-    if mappable.defer_to_map
-      mappable.permission = mappable.defer_to_map.permission
-      mappable.defer_to_map_id = nil
-      mappable.save
-    end
-
+    @mapping.updated_by = current_user
     @mapping.destroy
 
     head :no_content

@@ -8,6 +8,7 @@
       "mappable_type": "Topic",
       "updated_at": "2016-03-25T08:44:07.152Z",
       "user_id": 1,
+      "updated_by_id": 1,
       "xloc": -271,
       "yloc": 22
     },
@@ -19,6 +20,7 @@
       "mappable_type": "Topic",
       "updated_at": "2016-03-25T08:44:13.907Z",
       "user_id": 1,
+      "updated_by_id": 1,
       "xloc": -12,
       "yloc": 61
     },
@@ -30,6 +32,7 @@
       "mappable_type": "Topic",
       "updated_at": "2016-03-25T08:44:19.333Z",
       "user_id": 1,
+      "updated_by_id": 1,
       "xloc": -93,
       "yloc": -90
     },
@@ -40,7 +43,8 @@
       "mappable_id": 1,
       "mappable_type": "Synapse",
       "updated_at": "2016-03-25T08:44:21.337Z",
-      "user_id": 1
+      "user_id": 1,
+      "updated_by_id": 1
     }
   ],
   "page": {

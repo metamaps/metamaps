@@ -35,6 +35,12 @@
     },
     "user": {
       "$ref": "_user.json"
+    },
+    "updated_by_id": {
+      "$ref": "_id.json"
+    },
+    "updated_by": {
+      "$ref": "_user.json"
     }
   },
   "required": [
@@ -55,6 +61,12 @@
       "oneOf": [
         { "required": [ "user_id" ] },
         { "required": [ "user" ] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": [ "updated_by_id" ] },
+        { "required": [ "updated_by" ] }
       ]
     }
   ]

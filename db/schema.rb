@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125175229) do
+ActiveRecord::Schema.define(version: 20161216174257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20161125175229) do
     t.integer  "map_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.json     "meta"
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id", using: :btree
     t.index ["map_id"], name: "index_events_on_map_id", using: :btree
     t.index ["user_id"], name: "index_events_on_user_id", using: :btree
@@ -128,10 +129,12 @@ ActiveRecord::Schema.define(version: 20161125175229) do
     t.datetime "updated_at",    null: false
     t.integer  "mappable_id"
     t.string   "mappable_type"
+    t.integer  "updated_by_id"
     t.index ["map_id", "synapse_id"], name: "index_mappings_on_map_id_and_synapse_id", using: :btree
     t.index ["map_id", "topic_id"], name: "index_mappings_on_map_id_and_topic_id", using: :btree
     t.index ["map_id"], name: "index_mappings_on_map_id", using: :btree
     t.index ["mappable_id", "mappable_type"], name: "index_mappings_on_mappable_id_and_mappable_type", using: :btree
+    t.index ["updated_by_id"], name: "index_mappings_on_updated_by_id", using: :btree
     t.index ["user_id"], name: "index_mappings_on_user_id", using: :btree
   end
 
@@ -336,5 +339,6 @@ ActiveRecord::Schema.define(version: 20161125175229) do
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
+  add_foreign_key "mappings", "users", column: "updated_by_id"
   add_foreign_key "tokens", "users"
 end

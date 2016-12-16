@@ -22,6 +22,8 @@ class Synapse < ApplicationRecord
     where(topic1_id: topic_id).or(where(topic2_id: topic_id))
   }
 
+  after_update :after_updated
+
   delegate :name, to: :user, prefix: true
 
   def user_image
@@ -38,5 +40,16 @@ class Synapse < ApplicationRecord
 
   def as_json(_options = {})
     super(methods: [:user_name, :user_image, :collaborator_ids])
+  end
+
+  def after_updated
+    attrs = ['desc', 'category', 'permission', 'defer_to_map_id']
+    if attrs.any? {|k| changed_attributes.key?(k)}
+      new = self.attributes.select {|k| attrs.include?(k) }
+      old = changed_attributes.select {|k| attrs.include?(k) }
+      meta = new.merge(old) # we are prioritizing the old values, keeping them 
+      meta['changed'] = changed_attributes.keys.select {|k| attrs.include?(k) }
+      Events::SynapseUpdated.publish!(self, user, meta)
+    end
   end
 end

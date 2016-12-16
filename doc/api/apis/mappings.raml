@@ -1,6 +1,6 @@
 #type: collection
 get:
-  is: [ embeddable: { embedFields: "user,map" }, orderable, pageable ]
+  is: [ embeddable: { embedFields: "user,updated_by,map" }, orderable, pageable ]
   securedBy: [ null, token, oauth_2_0, cookie ]
   responses:
     200:
@@ -31,7 +31,7 @@ post:
 /{id}:
   #type: item
   get:
-    is: [ embeddable: { embedFields: "user,map" } ]
+    is: [ embeddable: { embedFields: "user,updated_by,map" } ]
     securedBy: [ null, token, oauth_2_0, cookie ]
     responses:
       200:
