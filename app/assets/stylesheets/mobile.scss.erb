@@ -8,6 +8,13 @@
   }
 }
 
+/* when this switches to two lines */
+@media only screen and (max-width : 728px) {
+  .controller-notifications .notificationsPage .notification .notification-read-unread a {
+    margin-top: -20px !important;
+  }
+}
+
 @media only screen and (max-width : 390px) {
   .map .mapCard .mobileMetadata {
     width: 190px;
@@ -31,6 +38,17 @@
 @media only screen and (max-width : 504px) {
   .upperLeftUI, .upperRightUI, .openCheatsheet, .mapInfoIcon, .feedback-icon, .chat-box, #exploreMapsHeader {
     display: none !important;
+  }
+
+  .notificationsPage .page-header {
+    display: none;
+  }
+
+  .controller-notifications .notificationsPage .notification .notification-read-unread {
+    display: block !important;
+  }
+  .controller-notifications .notificationsPage .notification .notification-date {
+    display: none;
   }
 
   #mobile_header {

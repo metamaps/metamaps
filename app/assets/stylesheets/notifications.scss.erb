@@ -48,20 +48,20 @@ $unread_notifications_dot_size: 8px;
       padding-top: 15px;
     }
 
-    .notification:first-child {
-      border-top: none;
-    }
-    .notification:last-child {
-      border-bottom: 1px solid #DCDCDC;
-    }
-
     .notification {
       padding: 10px;
-      border:1px solid #DCDCDC;
-      border-bottom: none;
+      position: relative;
 
       &:hover {
         background: #F6F6F6;
+
+        .notification-read-unread {
+          display:block;
+        }
+
+        .notification-date {
+          display: none;
+        }
       }
 
       & > a {
@@ -71,27 +71,58 @@ $unread_notifications_dot_size: 8px;
         padding-right: 10px;
       }
 
-      .notification-read-unread {
+      .notification-actor { 
         float: left;
-        width: 15%;
-      }
 
-      .notification-body,
-      .notification-subject {
-        display: inline-block;
-        vertical-align: top;
+        img {
+          width: 32px;
+          height: 32px;
+          border-radius: 16px;
+        }
       }
 
       .notification-body {
-        margin-left: 15px;
+        margin-left: 50px;
+
+        .in-bold {
+          font-family: 'din-medium', Sans-Serif;
+        }
+
+        .action {
+          background: #4fb5c0;
+          color: #FFF;
+          padding: 2px 6px;
+          border-radius: 3px;
+          display: inline-block;
+          margin: 5px 0;
+        }
+      } 
+
+      .notification-date {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        color: #607d8b;
+        font-size: 13px;
+        line-height: 13px;
+        margin-top: -6px;
+      }
+
+      .notification-read-unread {
+        display: none;
+        float: left;
+        width: 15%;
+
+        a {
+          position: absolute;
+          top: 50%;
+          margin-top: -10px;
+          text-align: center;
+        }
       }
 
       &.unread {
-        .notification-body,
-        .notification-subject,
-        .notification-read-unread {
-          font-family: 'din-medium', Sans-Serif;
-        }
+        background: #EEE;
       }
     }
 
