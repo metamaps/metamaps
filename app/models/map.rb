@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Map < ApplicationRecord
   belongs_to :user
+  belongs_to :source, class_name: :Map
 
   has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
   has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
