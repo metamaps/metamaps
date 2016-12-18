@@ -237,10 +237,10 @@ const Util = {
       return obj
     }, {})
   },
-  updateQueryParams: function(newValues) {
+  updateQueryParams: function(newValues, pathname = window.location.pathname) {
     const qp = Object.assign({}, Util.queryParams(), newValues)
     const newString = Object.keys(qp).filter(key => !!key).map(key => `${key}=${qp[key]}`).join('&')
-    history.replaceState({}, document.title, `${window.location.pathname}?${newString}`)
+    history.replaceState({}, document.title, `${pathname}?${newString}`)
   }
 }
 
