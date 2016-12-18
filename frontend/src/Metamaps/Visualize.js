@@ -173,13 +173,13 @@ const Visualize = {
     }
 
     const queryParams = Util.queryParams()
-    if (typeof queryParams.scale === 'string') {
-      const scale = parseFloat(queryParams.scale) || 0
-      self.mGraph.canvas.scale(scale, scale)
-    }
+    const scale = parseFloat(queryParams.scale) || 1.0
     if (typeof queryParams.translate === 'string') {
       const [x, y] = queryParams.translate.split(',').map(n => parseFloat(n) || 0)
-      self.mGraph.canvas.translate(x, y)
+      self.mGraph.canvas.translate(x / scale, y / scale)
+    }
+    if (typeof queryParams.scale === 'string') {
+      self.mGraph.canvas.scale(scale, scale)
     }
 
     function runAnimation() {
