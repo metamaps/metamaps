@@ -1,6 +1,6 @@
 /* global $ */
 
-import _ from 'lodash'
+import { find as _find, indexOf as _indexOf, uniq as _uniq, debounce } from 'lodash'
 
 import $jit from '../patched/JIT'
 
@@ -151,25 +151,25 @@ const Visualize = {
 
     // monkey patch scale function
     const oldScale = self.mGraph.canvas.scale
+    const updateScaleInUrl = debounce(() => {
+      Util.updateQueryParams({ scale: self.mGraph.canvas.scaleOffsetX.toFixed(2) })
+    }, 200)
     self.mGraph.canvas.scale = function(x, y, disablePlot) {
       const returnValue = oldScale.apply(self.mGraph.canvas, arguments)
-      Util.updateQueryParams({ scale: self.mGraph.canvas.scaleOffsetX.toFixed(2) })
+      updateScaleInUrl()
       return returnValue
     }
 
     // monkey patch translate function
     const oldTranslate = self.mGraph.canvas.translate
-    let translateTimeout = null
+    const updateTranslateInUrl = debounce(() => {
+      const newX = self.mGraph.canvas.translateOffsetX.toFixed(2)
+      const newY = self.mGraph.canvas.translateOffsetY.toFixed(2)
+      Util.updateQueryParams({ translate: `${newX},${newY}` })
+    }, 200)
     self.mGraph.canvas.translate = function(x, y, disablePlot) {
       const returnValue = oldTranslate.apply(self.mGraph.canvas, arguments)
-      window.clearTimeout(translateTimeout)
-      translateTimeout = window.setTimeout(() => {
-        const newX = self.mGraph.canvas.translateOffsetX.toFixed(2)
-        const newY = self.mGraph.canvas.translateOffsetY.toFixed(2)
-        Util.updateQueryParams({ translate: `${newX},${newY}` })
-        translateTimeout = null
-        return returnValue
-      }, 50)
+      updateTranslateInUrl()
     }
 
     const queryParams = Util.queryParams()
@@ -189,10 +189,10 @@ const Visualize = {
         // load JSON data.
         var rootIndex = 0
         if (Active.Topic) {
-          var node = _.find(JIT.vizData, function(node) {
+          var node = _find(JIT.vizData, function(node) {
             return node.id === Active.Topic.id
           })
-          rootIndex = _.indexOf(JIT.vizData, node)
+          rootIndex = _indexOf(JIT.vizData, node)
         }
         self.mGraph.loadJSON(JIT.vizData, rootIndex)
         // compute positions and plot.
@@ -211,11 +211,11 @@ const Visualize = {
     // hold for a maximum of 80 passes, or 4 seconds of waiting time
     var tries = 0
     function hold() {
-      const unique = _.uniq(DataModel.Topics.models, function(metacode) { return metacode.get('metacode_id') })
-      const requiredMetacodes = _.map(unique, function(metacode) { return metacode.get('metacode_id') })
+      const unique = _uniq(DataModel.Topics.models, function(metacode) { return metacode.get('metacode_id') })
+      const requiredMetacodes = unique.map(metacode => metacode.get('metacode_id'))
       let loadedCount = 0
 
-      _.each(requiredMetacodes, function(metacodeId) {
+      requiredMetacodes.forEach(metacodeId => {
         const metacode = DataModel.Metacodes.get(metacodeId)
         const img = metacode ? metacode.get('image') : false
 
