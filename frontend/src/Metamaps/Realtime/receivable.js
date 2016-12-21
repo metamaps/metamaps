@@ -9,6 +9,7 @@ import { indexOf } from 'lodash'
 import { JUNTO_UPDATED } from './events'
 
 import Active from '../Active'
+import { ChatView } from '../Views'
 import DataModel from '../DataModel'
 import GlobalUI from '../GlobalUI'
 import Control from '../Control'
@@ -152,7 +153,7 @@ export const topicCreated = self => data => {
 }
 
 export const messageCreated = self => data => {
-  self.room.addMessages(new DataModel.MessageCollection(data))
+  ChatView.addMessages(new DataModel.MessageCollection(data))
 }
 
 export const mapUpdated = self => data => {
@@ -230,10 +231,10 @@ export const lostMapper = self => data => {
   // data.userid
   // data.username
   delete self.mappersOnMap[data.userid]
-  self.room.chat.sound.play('leavemap')
+  ChatView.sound.play('leavemap')
   // $('#mapper' + data.userid).remove()
   $('#compass' + data.userid).remove()
-  self.room.chat.removeParticipant(data.username)
+  ChatView.removeParticipant(ChatView.participants.findWhere({id: data.userid}))
 
   GlobalUI.notifyUser(data.username + ' just left the map')
 
@@ -262,8 +263,8 @@ export const mapperListUpdated = self => data => {
   }
 
   if (data.userid !== Active.Mapper.id) {
-    self.room.chat.addParticipant(self.mappersOnMap[data.userid])
-    if (data.userinconversation) self.room.chat.mapperJoinedCall(data.userid)
+    ChatView.addParticipant(self.mappersOnMap[data.userid])
+    if (data.userinconversation) ChatView.mapperJoinedCall(data.userid)
 
     // create a div for the collaborators compass
     self.createCompass(data.username, data.userid, data.avatar, self.mappersOnMap[data.userid].color)
@@ -291,8 +292,8 @@ export const newMapper = self => data => {
 
   // create an item for them in the realtime box
   if (data.userid !== Active.Mapper.id) {
-    self.room.chat.sound.play('joinmap')
-    self.room.chat.addParticipant(self.mappersOnMap[data.userid])
+    ChatView.sound.play('joinmap')
+    ChatView.addParticipant(self.mappersOnMap[data.userid])
 
     // create a div for the collaborators compass
     self.createCompass(data.username, data.userid, data.avatar, self.mappersOnMap[data.userid].color)
@@ -311,24 +312,24 @@ export const callAccepted = self => userid => {
   // const username = self.mappersOnMap[userid].name
   GlobalUI.notifyUser('Conversation starting...')
   self.joinCall()
-  self.room.chat.invitationAnswered(userid)
+  ChatView.invitationAnswered(userid)
 }
 
 export const callDenied = self => userid => {
   var username = self.mappersOnMap[userid].name
   GlobalUI.notifyUser(username + " didn't accept your invitation")
-  self.room.chat.invitationAnswered(userid)
+  ChatView.invitationAnswered(userid)
 }
 
 export const inviteDenied = self => userid => {
   var username = self.mappersOnMap[userid].name
   GlobalUI.notifyUser(username + " didn't accept your invitation")
-  self.room.chat.invitationAnswered(userid)
+  ChatView.invitationAnswered(userid)
 }
 
 export const invitedToCall = self => inviter => {
-  self.room.chat.sound.stop(self.soundId)
-  self.soundId = self.room.chat.sound.play('sessioninvite')
+  ChatView.sound.stop(self.soundId)
+  self.soundId = ChatView.sound.play('sessioninvite')
 
   var username = self.mappersOnMap[inviter].name
   var notifyText = '<img src="' + self['junto_spinner_darkgrey.gif'] + '" style="display: inline-block; margin-top: -12px; margin-bottom: -6px; vertical-align: top;" />'
@@ -341,8 +342,8 @@ export const invitedToCall = self => inviter => {
 }
 
 export const invitedToJoin = self => inviter => {
-  self.room.chat.sound.stop(self.soundId)
-  self.soundId = self.room.chat.sound.play('sessioninvite')
+  ChatView.sound.stop(self.soundId)
+  self.soundId = ChatView.sound.play('sessioninvite')
 
   var username = self.mappersOnMap[inviter].name
   var notifyText = username + ' is inviting you to the conversation. Join?'
@@ -355,16 +356,14 @@ export const invitedToJoin = self => inviter => {
 
 export const mapperJoinedCall = self => id => {
   var mapper = self.mappersOnMap[id]
-
   if (mapper) {
     if (self.inConversation) {
       var username = mapper.name
       var notifyText = username + ' joined the call'
       GlobalUI.notifyUser(notifyText)
     }
-
     mapper.inConversation = true
-    self.room.chat.mapperJoinedCall(id)
+    ChatView.mapperJoinedCall(id)
   }
 }
 
@@ -377,7 +376,7 @@ export const mapperLeftCall = self => id => {
       GlobalUI.notifyUser(notifyText)
     }
     mapper.inConversation = false
-    self.room.chat.mapperLeftCall(id)
+    ChatView.mapperLeftCall(id)
     if ((self.inConversation && self.countOthersInConversation() === 0) ||
       (!self.inConversation && self.countOthersInConversation() === 1)) {
       self.callEnded()
@@ -392,8 +391,7 @@ export const callInProgress = self => () => {
   GlobalUI.notifyUser(notifyText, true)
   $('#toast button.yes').click(e => self.joinCall())
   $('#toast button.no').click(e => GlobalUI.clearNotify())
-
-  self.room.conversationInProgress()
+  ChatView.conversationInProgress() 
 }
 
 export const callStarted = self => () => {
@@ -404,7 +402,6 @@ export const callStarted = self => () => {
   GlobalUI.notifyUser(notifyText, true)
   $('#toast button.yes').click(e => self.joinCall())
   $('#toast button.no').click(e => GlobalUI.clearNotify())
-
-  self.room.conversationInProgress()
+  ChatView.conversationInProgress()
 }
 

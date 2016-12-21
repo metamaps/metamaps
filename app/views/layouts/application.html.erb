@@ -9,6 +9,8 @@
 
 <body class="<%= authenticated? ? "authenticated" : "unauthenticated" %> controller-<%= controller_name %> action-<%= action_name %>">
 
+    <div id="chat-box-wrapper"></div>
+
     <a class='feedback-icon' target='_blank' href='https://hylo.com/c/metamaps'></a>    
 
     <%= content_tag :div, class: "main" do %>

@@ -1,6 +1,7 @@
 /* global $ */
 
 import Active from '../Active'
+import { ChatView } from '../Views'
 import GlobalUI from '../GlobalUI'
 
 import {
@@ -72,6 +73,7 @@ export const joinCall = self => () => {
       $('#wrapper').append(self.localVideo.view.$container)
     }
     self.room.join()
+    ChatView.conversationInProgress(true)
   })
   self.inConversation = true
   self.socket.emit(JOIN_CALL, {
@@ -80,7 +82,7 @@ export const joinCall = self => () => {
   })
   self.webrtc.startLocalVideo()
   GlobalUI.clearNotify()
-  self.room.chat.mapperJoinedCall(Active.Mapper.id)
+  ChatView.mapperJoinedCall(Active.Mapper.id)
 }
 
 export const leaveCall = self => () => {
@@ -89,7 +91,8 @@ export const leaveCall = self => () => {
     id: Active.Mapper.id
   })
 
-  self.room.chat.mapperLeftCall(Active.Mapper.id)
+  ChatView.mapperLeftCall(Active.Mapper.id)
+  ChatView.leaveConversation() // the conversation will carry on without you
   self.room.leaveVideoOnly()
   self.inConversation = false
   self.localVideo.view.$container.hide()
@@ -102,7 +105,7 @@ export const leaveCall = self => () => {
 }
 
 export const acceptCall = self => userid => {
-  self.room.chat.sound.stop(self.soundId)
+  ChatView.sound.stop(self.soundId)
   self.socket.emit(ACCEPT_CALL, {
     mapid: Active.Map.id,
     invited: Active.Mapper.id,
@@ -114,7 +117,7 @@ export const acceptCall = self => userid => {
 }
 
 export const denyCall = self => userid => {
-  self.room.chat.sound.stop(self.soundId)
+  ChatView.sound.stop(self.soundId)
   self.socket.emit(DENY_CALL, {
     mapid: Active.Map.id,
     invited: Active.Mapper.id,
@@ -124,7 +127,7 @@ export const denyCall = self => userid => {
 }
 
 export const denyInvite = self => userid => {
-  self.room.chat.sound.stop(self.soundId)
+  ChatView.sound.stop(self.soundId)
   self.socket.emit(DENY_INVITE, {
     mapid: Active.Map.id,
     invited: Active.Mapper.id,
@@ -139,7 +142,7 @@ export const inviteACall = self => userid => {
     inviter: Active.Mapper.id,
     invited: userid
   })
-  self.room.chat.invitationPending(userid)
+  ChatView.invitationPending(userid)
   GlobalUI.clearNotify()
 }
 
@@ -149,7 +152,7 @@ export const inviteToJoin = self => userid => {
     inviter: Active.Mapper.id,
     invited: userid
   })
-  self.room.chat.invitationPending(userid)
+  ChatView.invitationPending(userid)
 }
 
 export const sendCoords = self => coords => {

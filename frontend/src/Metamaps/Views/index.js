@@ -7,8 +7,9 @@ import Room from './Room'
 import { JUNTO_UPDATED } from '../Realtime/events'
 
 const Views = {
-  init: () => {
+  init: (serverData) => {
     $(document).on(JUNTO_UPDATED, () => ExploreMaps.render())
+    ChatView.init([serverData['sounds/MM_sounds.mp3'],serverData['sounds/MM_sounds.ogg']])
   },
   ExploreMaps,
   ChatView,
