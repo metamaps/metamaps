@@ -300,7 +300,7 @@ const InfoBox = {
     string += '</ul>'
 
     if (activeMapperIsCreator) {
-      string += '<div class="collabSearchField"><span class="addCollab"></span><input class="collaboratorSearchField" placeholder="Add a collaborator!"></input></div>'
+      string += '<div class="collabSearchField"><span class="addCollab"></span><input class="collaboratorSearchField" placeholder="Add a collaborator"></input></div>'
     }
     return string
   },
