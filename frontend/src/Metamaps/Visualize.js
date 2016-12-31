@@ -153,7 +153,7 @@ const Visualize = {
     const oldScale = self.mGraph.canvas.scale
     const cachedPathname = window.location.pathname
     const updateScaleInUrl = debounce(() => {
-      Util.updateQueryParams({ scale: self.mGraph.canvas.scaleOffsetX.toFixed(2) }, pathname)
+      Util.updateQueryParams({ scale: self.mGraph.canvas.scaleOffsetX.toFixed(2) }, cachedPathname)
     }, 200)
     self.mGraph.canvas.scale = function(x, y, disablePlot) {
       const returnValue = oldScale.apply(self.mGraph.canvas, arguments)
@@ -166,7 +166,7 @@ const Visualize = {
     const updateTranslateInUrl = debounce(() => {
       const newX = self.mGraph.canvas.translateOffsetX.toFixed(2)
       const newY = self.mGraph.canvas.translateOffsetY.toFixed(2)
-      Util.updateQueryParams({ translate: `${newX},${newY}` }, pathname)
+      Util.updateQueryParams({ translate: `${newX},${newY}` }, cachedPathname)
     }, 200)
     self.mGraph.canvas.translate = function(x, y, disablePlot) {
       const returnValue = oldTranslate.apply(self.mGraph.canvas, arguments)
