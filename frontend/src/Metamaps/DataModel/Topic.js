@@ -19,34 +19,6 @@ const Topic = Backbone.Model.extend({
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)
   },
-  save: function(key, val, options) {
-    var attrs
-
-    // Handle both `"key", value` and `{key: value}` -style arguments.
-    if (key == null || typeof key === 'object') {
-      attrs = key
-      options = val
-    } else {
-      (attrs = {})[key] = val
-    }
-
-    var newOptions = options || {}
-    var s = newOptions.success
-
-    var permBefore = this.get('permission')
-
-    newOptions.success = function(model, response, opt) {
-      if (s) s(model, response, opt)
-      model.trigger('saved')
-
-      if (permBefore === 'private' && model.get('permission') !== 'private') {
-        model.trigger('noLongerPrivate')
-      } else if (permBefore !== 'private' && model.get('permission') === 'private') {
-        model.trigger('nowPrivate')
-      }
-    }
-    return Backbone.Model.prototype.save.call(this, attrs, newOptions)
-  },
   initialize: function() {
     if (this.isNew()) {
       this.set({
@@ -59,23 +31,6 @@ const Topic = Backbone.Model.extend({
 
     this.on('changeByOther', this.updateCardView)
     this.on('change', this.updateNodeView)
-    this.on('saved', this.savedEvent)
-    this.on('nowPrivate', function() {
-      var removeTopicData = {
-        mappableid: this.id
-      }
-
-      $(document).trigger(JIT.events.removeTopic, [removeTopicData])
-    })
-    this.on('noLongerPrivate', function() {
-      var newTopicData = {
-        mappingid: this.getMapping().id,
-        mappableid: this.id
-      }
-
-      $(document).trigger(JIT.events.newTopic, [newTopicData])
-    })
-
     this.on('change:metacode_id', Filter.checkMetacodes, this)
   },
   authorizeToEdit: function(mapper) {
@@ -87,6 +42,10 @@ const Topic = Backbone.Model.extend({
     } else {
       return false
     }
+  },
+  authorizeToShow: function(mapper) {
+    if (this.get('permission') !== 'private' || (mapper && this.get('collaborator_ids').includes(mapper.get('id')) || this.get('user_id') === mapper.get('id'))) return true
+    else return false
   },
   authorizePermissionChange: function(mapper) {
     if (mapper && this.get('user_id') === mapper.get('id')) return true
@@ -134,9 +93,6 @@ const Topic = Backbone.Model.extend({
     }
 
     return node
-  },
-  savedEvent: function() {
-    Realtime.updateTopic(this)
   },
   updateViews: function() {
     var onPageWithTopicCard = Active.Map || Active.Topic

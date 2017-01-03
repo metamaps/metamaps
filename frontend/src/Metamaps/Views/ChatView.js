@@ -120,10 +120,10 @@ const ChatView = {
     ChatView.render()
   },
   close: () => {
-    ChatView.mapChat.close()
+    ChatView.mapChat && ChatView.mapChat.close()
   },
   open: () => {
-    ChatView.mapChat.open()
+    ChatView.mapChat && ChatView.mapChat.open()
   },
   videoToggleClick: function() {
     ChatView.videosShowing = !ChatView.videosShowing
@@ -161,7 +161,6 @@ const ChatView = {
     m.save(null, {
       success: function(model, response) {
         self.addMessages(new DataModel.MessageCollection(model), false, true)
-        $(document).trigger(ChatView.events.newMessage, [model])
       },
       error: function(model, response) {
         console.log('error!', response)
@@ -177,9 +176,9 @@ const ChatView = {
     messages.models.forEach(m => ChatView.addMessage(m, isInitial, wasMe))
   },
   reset: () => {
-    ChatView.mapChat.reset()
-    ChatView.participants.reset()
-    ChatView.messages.reset()
+    ChatView.mapChat && ChatView.mapChat.reset()
+    ChatView.participants && ChatView.participants.reset()
+    ChatView.messages && ChatView.messages.reset()
     ChatView.render()
   }
 }
@@ -197,7 +196,6 @@ const ChatView = {
  * @static
  */
 ChatView.events = {
-  newMessage: 'ChatView:newMessage',
   openTray: 'ChatView:openTray',
   closeTray: 'ChatView:closeTray',
   inputFocus: 'ChatView:inputFocus',

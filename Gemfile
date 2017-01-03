@@ -44,6 +44,7 @@ group :test do
 end
 
 group :development, :test do
+  gem 'puma'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'pry-byebug'

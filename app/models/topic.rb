@@ -90,6 +90,15 @@ class Topic < ApplicationRecord
     end
   end
 
+  def filtered
+    {
+      id: id,
+      permission: permission,
+      user_id: user_id,
+      collaborator_ids: collaborator_ids
+    }
+  end
+
   # TODO: move to a decorator?
   def synapses_csv(output_format = 'array')
     output = []
@@ -145,6 +154,9 @@ class Topic < ApplicationRecord
       meta = new.merge(old) # we are prioritizing the old values, keeping them 
       meta['changed'] = changed_attributes.keys.select {|k| attrs.include?(k) }
       Events::TopicUpdated.publish!(self, user, meta)
+      maps.each {|map|
+        ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
+      }
     end
   end
 end

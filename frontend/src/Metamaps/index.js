@@ -2,9 +2,10 @@ import Account from './Account'
 import Active from './Active'
 import Admin from './Admin'
 import AutoLayout from './AutoLayout'
-import DataModel from './DataModel'
+import Cable from './Cable'
 import Control from './Control'
 import Create from './Create'
+import DataModel from './DataModel'
 import Debug from './Debug'
 import Filter from './Filter'
 import GlobalUI, {
@@ -38,9 +39,10 @@ Metamaps.Account = Account
 Metamaps.Active = Active
 Metamaps.Admin = Admin
 Metamaps.AutoLayout = AutoLayout
-Metamaps.DataModel = DataModel
+Metamaps.Cable = Cable
 Metamaps.Control = Control
 Metamaps.Create = Create
+Metamaps.DataModel = DataModel
 Metamaps.Debug = Debug
 Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI

@@ -2,24 +2,14 @@ const {
   MAPPER_LIST_UPDATED,
   NEW_MAPPER,
   LOST_MAPPER,
-  MESSAGE_CREATED,
   TOPIC_DRAGGED,
-  TOPIC_CREATED,
-  TOPIC_REMOVED,
-  SYNAPSE_CREATED,
-  SYNAPSE_REMOVED,
   PEER_COORDS_UPDATED,
 
   JOIN_MAP,
   LEAVE_MAP,
   SEND_COORDS,
   SEND_MAPPER_INFO,
-  CREATE_MESSAGE,
   DRAG_TOPIC,
-  CREATE_TOPIC,
-  REMOVE_TOPIC,
-  CREATE_SYNAPSE,
-  REMOVE_SYNAPSE
 } = require('../frontend/src/Metamaps/Realtime/events')
 
 const { mapRoom, userMapRoom } = require('./rooms')
@@ -74,40 +64,11 @@ module.exports = function(io, store) {
       socket.broadcast.in(mapRoom(data.mapid)).emit(PEER_COORDS_UPDATED, peer)
     })
 
-    socket.on(CREATE_MESSAGE, function(data) {
-      var mapId = data.mapid
-      delete data.mapid
-      socket.broadcast.in(mapRoom(mapId)).emit(MESSAGE_CREATED, data)
-    })
 
     socket.on(DRAG_TOPIC, function(data) {
       var mapId = data.mapid
       delete data.mapid
       socket.broadcast.in(mapRoom(mapId)).emit(TOPIC_DRAGGED, data)
-    })
-
-    socket.on(CREATE_TOPIC, function(data) {
-      var mapId = data.mapid
-      delete data.mapid
-      socket.broadcast.in(mapRoom(mapId)).emit(TOPIC_CREATED, data)
-    })
-
-    socket.on(REMOVE_TOPIC, function(data) {
-      var mapId = data.mapid
-      delete data.mapid
-      socket.broadcast.in(mapRoom(mapId)).emit(TOPIC_REMOVED, data)
-    })
-
-    socket.on(CREATE_SYNAPSE, function(data) {
-      var mapId = data.mapid
-      delete data.mapid
-      socket.broadcast.in(mapRoom(mapId)).emit(SYNAPSE_CREATED, data)
-    })
-
-    socket.on(REMOVE_SYNAPSE, function(data) {
-      var mapId = data.mapid
-      delete data.mapid
-      socket.broadcast.in(mapRoom(mapId)).emit(SYNAPSE_REMOVED, data)
     })
   })
 }

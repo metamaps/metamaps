@@ -15,32 +15,8 @@ const Map = Backbone.Model.extend({
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)
   },
-  save: function(key, val, options) {
-    var attrs
-
-    // Handle both `"key", value` and `{key: value}` -style arguments.
-    if (key == null || typeof key === 'object') {
-      attrs = key
-      options = val
-    } else {
-      (attrs = {})[key] = val
-    }
-
-    var newOptions = options || {}
-    var s = newOptions.success
-
-    newOptions.success = function(model, response, opt) {
-      if (s) s(model, response, opt)
-      model.trigger('saved')
-    }
-    return Backbone.Model.prototype.save.call(this, attrs, newOptions)
-  },
   initialize: function() {
     this.on('changeByOther', this.updateView)
-    this.on('saved', this.savedEvent)
-  },
-  savedEvent: function() {
-    Realtime.updateMap(this)
   },
   authorizeToEdit: function(mapper) {
     if (mapper && (

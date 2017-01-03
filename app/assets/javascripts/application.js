@@ -14,6 +14,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
+//= require action_cable
 //= require_directory ./lib
 //= require ./webpacked/metamaps.bundle
 //= require ./Metamaps.ServerData

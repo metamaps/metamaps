@@ -40,18 +40,12 @@ const Synapse = {
 
     Control.selectEdge(edgeOnViz)
 
-    var mappingSuccessCallback = function(mappingModel, response) {
-      var newSynapseData = {
-        mappingid: mappingModel.id,
-        mappableid: mappingModel.get('mappable_id')
-      }
-
-      $(document).trigger(JIT.events.newSynapse, [newSynapseData])
-    }
     var synapseSuccessCallback = function(synapseModel, response) {
       if (Active.Map) {
         mapping.save({ mappable_id: synapseModel.id }, {
-          success: mappingSuccessCallback
+          error: function(model, response) {
+            console.log('error saving mapping to database')
+          }
         })
       }
     }
@@ -66,7 +60,9 @@ const Synapse = {
         })
       } else if (!synapse.isNew() && Active.Map) {
         mapping.save(null, {
-          success: mappingSuccessCallback
+          error: function(model, response) {
+            console.log('error saving mapping to database')
+          }
         })
       }
     }

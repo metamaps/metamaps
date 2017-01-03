@@ -102,9 +102,6 @@ const Control = {
       var mapping = node.getData('mapping')
       topic.destroy()
       DataModel.Mappings.remove(mapping)
-      $(document).trigger(JIT.events.deleteTopic, [{
-        mappableid: mappableid
-      }])
       Control.hideNode(nodeid)
     } else {
       GlobalUI.notifyUser('Only topics you created can be deleted')
@@ -155,9 +152,6 @@ const Control = {
     var mapping = node.getData('mapping')
     mapping.destroy()
     DataModel.Topics.remove(topic)
-    $(document).trigger(JIT.events.removeTopic, [{
-      mappableid: mappableid
-    }])
     Control.hideNode(nodeid)
   },
   hideSelectedNodes: function() {
@@ -283,9 +277,6 @@ const Control = {
       if (edge.getData('displayIndex')) {
         delete edge.data.$displayIndex
       }
-      $(document).trigger(JIT.events.deleteSynapse, [{
-        mappableid: mappableid
-      }])
     } else {
       GlobalUI.notifyUser('Only synapses you created can be deleted')
     }
@@ -337,9 +328,6 @@ const Control = {
     if (edge.getData('displayIndex')) {
       delete edge.data.$displayIndex
     }
-    $(document).trigger(JIT.events.removeSynapse, [{
-      mappableid: mappableid
-    }])
   },
   hideSelectedEdges: function() {
     const l = Selected.Edges.length

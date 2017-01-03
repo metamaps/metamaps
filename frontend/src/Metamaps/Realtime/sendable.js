@@ -17,17 +17,7 @@ import {
   LEAVE_CALL,
   SEND_MAPPER_INFO,
   SEND_COORDS,
-  CREATE_MESSAGE,
-  DRAG_TOPIC,
-  CREATE_TOPIC,
-  UPDATE_TOPIC,
-  REMOVE_TOPIC,
-  DELETE_TOPIC,
-  CREATE_SYNAPSE,
-  UPDATE_SYNAPSE,
-  REMOVE_SYNAPSE,
-  DELETE_SYNAPSE,
-  UPDATE_MAP
+  DRAG_TOPIC
 } from './events'
 
 export const joinMap = self => () => {
@@ -158,7 +148,7 @@ export const inviteToJoin = self => userid => {
 export const sendCoords = self => coords => {
   var map = Active.Map
   var mapper = Active.Mapper
-  if (map.authorizeToEdit(mapper)) {
+  if (map && map.authorizeToEdit(mapper)) {
     var update = {
       usercoords: coords,
       userid: Active.Mapper.id,
@@ -175,72 +165,3 @@ export const dragTopic = self => positions => {
   }
 }
 
-export const updateTopic = self => topic => {
-  var data = {
-    topicId: topic.id
-  }
-  self.socket.emit(UPDATE_TOPIC, data)
-}
-
-export const updateSynapse = self => synapse => {
-  var data = {
-    synapseId: synapse.id
-  }
-  self.socket.emit(UPDATE_SYNAPSE, data)
-}
-
-export const updateMap = self => map => {
-  var data = {
-    mapId: map.id
-  }
-  self.socket.emit(UPDATE_MAP, data)
-}
-
-export const createMessage = self => data => {
-  var message = data.attributes
-  message.mapid = Active.Map.id
-  self.socket.emit(CREATE_MESSAGE, message)
-}
-
-export const createTopic = self => data => {
-  if (Active.Map) {
-    data.mapperid = Active.Mapper.id
-    data.mapid = Active.Map.id
-    self.socket.emit(CREATE_TOPIC, data)
-  }
-}
-
-export const deleteTopic = self => data => {
-  if (Active.Map) {
-    self.socket.emit(DELETE_TOPIC, data)
-  }
-}
-
-export const removeTopic = self => data => {
-  if (Active.Map) {
-    data.mapid = Active.Map.id
-    self.socket.emit(REMOVE_TOPIC, data)
-  }
-}
-
-export const createSynapse = self => data => {
-  if (Active.Map) {
-    data.mapperid = Active.Mapper.id
-    data.mapid = Active.Map.id
-    self.socket.emit(CREATE_SYNAPSE, data)
-  }
-}
-
-export const deleteSynapse = self => data => {
-  if (Active.Map) {
-    data.mapid = Active.Map.id
-    self.socket.emit(DELETE_SYNAPSE, data)
-  }
-}
-
-export const removeSynapse = self => data => {
-  if (Active.Map) {
-    data.mapid = Active.Map.id
-    self.socket.emit(REMOVE_SYNAPSE, data)
-  }
-}
