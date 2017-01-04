@@ -27,6 +27,7 @@ gem 'rack-cors'
 gem 'redis'
 gem 'slack-notifier'
 gem 'snorlax'
+gem 'puma'
 
 # asset stuff
 gem 'jquery-rails'
@@ -44,7 +45,6 @@ group :test do
 end
 
 group :development, :test do
-  gem 'puma'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'pry-byebug'
