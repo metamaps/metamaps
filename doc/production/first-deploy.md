@@ -40,8 +40,8 @@
       --branch instance/mycoolinstance
     rvm install $(cat metamaps/.ruby-version) #ensure ruby is installed
     cd metamaps
-    gem install bundle
-    bundle install
+    gem install bundler
+    RAILS_ENV=production bundle install
 
 #### Connect rails database
 
@@ -58,18 +58,26 @@ Run this in the metamaps directory, still as metamaps:
     export NODE_ENV=production
 
     # create, load schema, seed
-    rake db:setup
+    bundle exec rails db:setup
 
 #### Install node & ES6 modules
 
     sudo aptitude install nodejs npm
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     npm install
+
+#### Precompile assets
+
+This step depends on running npm install first; assets:precompile calls `npm install` and `bin/build-apidocs.sh`, both of which require node_modules to be installed. We suggest you run the commands separately this time to better catch any errors.
+
     npm run build
+    bin/build-apidocs.sh
+    bundle exec rails assets:precompile
+    bundle exec rails perms:fix
 
 #### Nginx and SSL
 
-Now set up nginx - config stored on Linode, including relevant environment variables.
+We recommand using Passenger + Nginx to serve your website. You can contact us for our nginx configuration.
 
 Get an SSL certificate and encrypt it for the realtime video.
 
@@ -85,12 +93,12 @@ server to see what problems show up:
 #### Realtime server:
 
     sudo npm install -g forever
-    (crontab -u metamaps -l 2>/dev/null; echo "@reboot $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
+    (crontab -u metamaps -l 2>/dev/null; echo "@reboot env NODE_REALTIME_PORT=5000 $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
 
-    cd /home/metamaps/metamaps/realtime
-    npm install
     mkdir -p /home/metamaps/logs
-    forever --append -l /home/metamaps/logs/forever.realtime.log \
+    env NODE_REALTIME_PORT=5000 forever --append \
+      -c /home/metamaps/metamaps/node_modules/.bin/babel-node \
+      -l /home/metamaps/logs/forever.realtime.log \
       start /home/metamaps/metamaps/realtime/realtime-server.js
 
 #### Upstart service for delayed_worker:
@@ -114,7 +122,7 @@ Put the following code into `/etc/init/metamaps_delayed_worker.conf`:
     respawn
     respawn limit 3 30
     
-    exec bundle exec rake jobs:work
+    exec bundle exec rails jobs:work
 
 Then start the service and check the last ten lines of the log file to make sure it's running OK:
 

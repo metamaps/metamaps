@@ -28,6 +28,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
+  padding-top: 92px;
 }
 
 /*.animations {
@@ -47,11 +49,14 @@
 .mapElement {
 	display: none;
 }
-.mapPage .mapElement, .topicPage .mapElement {
+.mapPage .mapElement,
+.topicPage .mapElement {
 	display: block;
 }
-.mapPage .mapElementHidden {
-    display:none;
+.mapPage .mapElementHidden,
+.topicPage .mapElement.mapInfoBox,
+.topicPage .mapElement.importDialog {
+  display:none;
 }
 .topicPage .starMap {
   display: none;
@@ -188,29 +193,44 @@
 .upperRightIcon {
     width: 32px;
     height: 32px;
-    background-image: url(<%= asset_data_uri('topright_sprite.png') %>);
+    background-image: url(<%= asset_path('topright_sprite.png') %>);
     background-repeat: no-repeat;
     cursor: pointer;
 }
+.mapPage .mapElement .importDialog {
+    display: none;
+    background-position: 0 0;
+}
+.mapPage.canEditMap .mapElement .importDialog {
+  display: block;
+}
 .sidebarFilterIcon {
-    background-position: -64px 0;
+    background-position: -32px 0;
 }
 .sidebarForkIcon {
-    background-position: -96px 0;
+    background-position: -64px 0;
 }
 .addMap {
+    background-position: -96px 0;
+}
+.notificationsIcon {
     background-position: -128px 0;
-    margin-right:10px;
+    margin-right: 10px; // make it look more natural next to the account menu icon
+}
+.notificationsIcon:hover {
+    background-position: -128px -32px;
+}
+.importDialog:hover {
+    background-position: 0 -32px;
 }
 .sidebarFilterIcon:hover {
-    background-position: -64px -32px;
+    background-position: -32px -32px;
 }
 .sidebarForkIcon:hover {
-    background-position: -96px -32px;
+    background-position: -64px -32px;
 }
 .addMap:hover {
-    background-position: -128px -32px;
-    margin-right:10px;
+    background-position: -96px -32px;
 }
 
 
@@ -325,7 +345,7 @@
 }
 
 .fullWidthWrapper.withPartners {
-    background: url(<%= asset_data_uri('homepage_bg_fade.png') %>) no-repeat center -300px;
+    background: url(<%= asset_path('homepage_bg_fade.png') %>) no-repeat center -300px;
 }
 .homeWrapper.homePartners {
     padding: 64px 0 280px;
@@ -364,7 +384,7 @@
     cursor: pointer;
 }
 .openCheatsheet {
-    background-image: url(<%= asset_data_uri('help_sprite.png') %>);
+    background-image: url(<%= asset_path('help_sprite.png') %>);
     background-repeat:no-repeat;
 }
 .openCheatsheet:hover {
@@ -373,7 +393,7 @@
 .mapInfoIcon {
 	position: relative;
 	top: 56px; /* puts it just offscreen */
-    background-image: url(<%= asset_data_uri('mapinfo_sprite.png') %>);
+    background-image: url(<%= asset_path('mapinfo_sprite.png') %>);
     background-repeat:no-repeat;
 }
 .mapInfoIcon:hover {
@@ -382,8 +402,9 @@
 .mapPage .mapInfoIcon {
 	top: 0;
 }
+
 .starMap {
-  background-image: url(<%= asset_data_uri('starmap_sprite.png') %>);
+  background-image: url(<%= asset_path('starmap_sprite.png') %>);
   background-position: 0 0;
   background-repeat: no-repeat;
   width: 32px;
@@ -437,7 +458,7 @@
 .takeScreenshot {
     margin-bottom: 5px;
     border-radius: 2px;
-    background-image: url(<%= asset_data_uri 'screenshot_sprite.png' %>);
+    background-image: url(<%= asset_path 'screenshot_sprite.png' %>);
     display: none;
 }
 .takeScreenshot:hover {
@@ -450,15 +471,15 @@
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
-    background-image: url(<%= asset_data_uri('extents_sprite.png') %>);
+    background-image: url(<%= asset_path('extents_sprite.png') %>);
 }
 
 .zoomExtents:hover {
     background-position: -32px 0;
 }
 
-.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
- .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
+.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .notificationsIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
+ .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .importDialog:hover .tooltipsUnder, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
     display: block;
 }
 
@@ -514,8 +535,15 @@
     font-style: normal;
 }
 
+.importDialog .tooltipsUnder {
+    left: -22px;
+}
+
 .sidebarFilterIcon .tooltipsUnder {
     margin-left: -4px;
+}
+.notificationsIcon .tooltipsUnder {
+  left: -20px;
 }
 
 .sidebarForkIcon .tooltipsUnder {
@@ -594,7 +622,12 @@
     border-bottom: 5px solid transparent;
 }
 
-.sidebarFilterIcon div:after, .sidebarForkIcon div:after, .addMap div:after, .sidebarAccountIcon .tooltipsUnder:after {
+.addMap div:after,
+.importDialog div:after,
+.sidebarForkIcon div:after,
+.sidebarFilterIcon div:after,
+.notificationsIcon div:after,
+.sidebarAccountIcon .tooltipsUnder:after {
     content: '';
     position: absolute;
     right: 40%;
@@ -605,8 +638,14 @@
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
 }
+.notificationsIcon .unread-notifications-dot:after {
+    content: none;
+}
 .sidebarFilterIcon div:after {
     right: 37% !important;
+}
+.notificationsIcon div:after {
+  right: 46% !important;
 }
 
 .mapInfoIcon div:after, .openCheatsheet div:after, .starMap div:after, .openMetacodeSwitcher div:after, .pinCarousel div:after {
@@ -623,7 +662,7 @@
 }
 
 .zoomIn {
-    background-image: url(<%= asset_data_uri('zoom_sprite.png') %>);
+    background-image: url(<%= asset_path('zoom_sprite.png') %>);
     background-position: 0 /…0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
@@ -632,7 +671,7 @@
     background-position: -32px 0;
 }
 .zoomOut {
-    background-image: url(<%= asset_data_uri('zoom_sprite.png') %>);
+    background-image: url(<%= asset_path('zoom_sprite.png') %>);
     background-position:0 -32px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
@@ -650,15 +689,14 @@
 }
 
 #exploreMaps {
-  padding: 0 5%;
   position: absolute;
-  width: 90%;
   height: 100%;
+  width: 100%;
   overflow-y: auto;
 }
 
 #exploreMaps > div {
-  margin-top: 110px;
+  margin: 110px auto 0 auto;
 }
 
 .button.loadMore {
@@ -739,25 +777,37 @@
     top:5px;
     left:5px;
 }
+
+.exploreMapsCenter .authedApps .exploreMapsIcon {
+    background-image: url(<%= asset_path('user_sprite.png') %>);
+    background-position: 0 -32px;
+}
 .exploreMapsCenter .myMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -32px 0;
 }
 .exploreMapsCenter .sharedMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -128px 0;
 }
 .exploreMapsCenter .activeMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: 0 0;
 }
 .exploreMapsCenter .featuredMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
 }
 .exploreMapsCenter .starredMaps .exploreMapsIcon {
-    background-image: url(<%= asset_data_uri 'exploremaps_sprite.png' %>);
+    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
+}
+.exploreMapsCenter .notificationsLink .exploreMapsIcon {
+    background-image: url(<%= asset_path 'topright_sprite.png' %>);
+    background-position: -128px 0;
+}
+.authedApps:hover .exploreMapsIcon, .authedApps.active .exploreMapsIcon {
+    background-position-x: -32px;
 }
 .myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
     background-position: -32px -32px;
@@ -773,6 +823,9 @@
 }
 .sharedMaps:hover .exploreMapsIcon, .sharedMaps.active .exploreMapsIcon {
     background-position: -128px -32px;
+}
+.notificationsLink:hover .exploreMapsIcon, .notificationsLink.active .exploreMapsIcon {
+    background-position-y: -32px;
 }
 
 .mapsWrapper {

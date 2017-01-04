@@ -2,16 +2,59 @@
   display: none;
 }
 
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen and (max-device-width : 480px) {
-  .upperLeftUI, .upperRightUI, .openCheatsheet, .mapInfoIcon, .uv-icon, .chat-box, #exploreMapsHeader {
+@media only screen and (max-width : 752px) and (min-width : 504px) {
+  .sidebarSearch .tt-hint, .sidebarSearch .sidebarSearchField {
+    width: 160px !important;
+  }
+}
+
+/* when this switches to two lines */
+@media only screen and (max-width : 728px) {
+  .controller-notifications .notificationsPage .notification .notification-read-unread a {
+    margin-top: -20px !important;
+  }
+}
+
+@media only screen and (max-width : 390px) {
+  .map .mapCard .mobileMetadata {
+    width: 190px;
+  }
+}
+@media only screen and (min-width : 390px) {
+  .map .mapCard .mobileMetadata {
+    width: 390px;
+  }
+}
+/* 800 is the max-width for centerContent */
+@media only screen and (max-width : 800px) {
+  .centerContent.withPadding {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+
+/* Smartphones (portrait and landscape) ----------- the minimum space that two map cards can fit side by side */
+@media only screen and (max-width : 504px) {
+  .upperLeftUI, .upperRightUI, .openCheatsheet, .mapInfoIcon, .feedback-icon, .chat-box, #exploreMapsHeader {
     display: none !important;
   }
-  
+
+  .notificationsPage .page-header {
+    display: none;
+  }
+
+  .controller-notifications .notificationsPage .notification .notification-read-unread {
+    display: block !important;
+  }
+  .controller-notifications .notificationsPage .notification .notification-date {
+    display: none;
+  }
+
   #mobile_header {
     display: block;
   }
-  
+
   .homeWrapper {
     width: 96%;
     padding: 0 2%;
@@ -38,25 +81,25 @@
   .learnMoreCTA {
     display: none !important;
   }
-  
+
   #yield {
-    height: 100%;
+    padding-top: 50px;
   }
-  
+
   .new_session, .new_user, .edit_user, .login, .forgotPassword {
     position: relative;
     top: auto;
     left: auto;
     width: 78%;
     padding: 16px 10%;
-    margin: 50px auto 0 auto;
+    margin: 0 auto;
   }
-  
+
   .centerGreyForm input[type="text"], .centerGreyForm input[type="email"], .centerGreyForm input[type="password"] {
     width: 100%;
   }
-  
-  .wrapper div.mapInfoBox {
+
+  .wrapper .mapInfoBox {
     position: fixed;
     top: 50px;
     right: 0px;
@@ -64,14 +107,19 @@
     width: 100%;
     max-width: 360px;
   }
-  
+
   #wrapper .requestInvite {
     width: 100%;
     padding: 0;
   }
-  
+
   #exploreMaps > div {
     margin-top: 70px;
+  }
+  
+  .mapper {
+    width: 100%;
+    margin: 0 0 30px 0;
   }
 
   .map.newMap {
@@ -94,35 +142,73 @@
     span {
       vertical-align: middle;
       padding: 16px;
-      display: inline-block; 
+      display: inline-block;
     }
   }
   .map.newMap:hover .newMapImage {
     background-position: 0 -40px;
   }
-}
-
-/* Smartphones (portrait) ----------- */
-@media only screen and (max-width : 400px) {
 
   .map {
     width: 100%;
     margin: 0 0 30px 0;
     height: auto;
-  }
-  
-  .mapCard {
-    height: auto;
-  }
-  
-  .mapCard .title {
-    text-align: left;
-  }
-  
-  .mapCard .mapScreenshot {
-    display: none;
-  }
 
+    .mapCard {
+      height: auto;
+      padding: 0;
+
+      &:hover {
+        .mainContent {
+          filter: none;
+        }
+      }
+      .mobileHasMapper, .mobileHasConversation {
+        .mapperList {
+          padding: 8px 16px;
+          list-style-type: none;
+
+          li {
+            &.live {
+              height: 32px;
+              padding-left: 32px;
+              font-size: 16px;
+            }
+
+            img {
+              width: 24px;
+              height: 24px;
+              border-radius: 12px;
+              display: inline-block;
+              vertical-align: middle;
+            }
+            span {
+              padding-left: 10px;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+      .mobileHasMapper {
+        background: url('<%= asset_path('junto.png') %>') no-repeat 12px 0;
+      }
+      .mobileHasConversation {
+        background: url('<%= asset_path('junto.gif') %>') no-repeat 12px 0;
+      }
+      .mobileMetadata {
+        margin: 0 auto;
+      }
+      .title {
+        text-align: left;
+        display: block;
+        height: auto;
+        padding: 16px;
+      }
+      .desc {
+        padding: 0 16px;
+      }
+    }
+  }
 }
 
 #mobile_header {
@@ -153,8 +239,17 @@
   line-height: 50px;
 }
 
+#mobile_header #menu_icon .unread-notifications-dot {
+  top: 5px;
+  left: 29px;
+  width: 12px;
+  height: 12px;
+  border: 3px solid #eee;
+  border-radius: 9px;
+}
+
 #mobile_menu {
- display: none;
+  display: none;
   background: #EEE;
   position: fixed;
   top: 50px;
@@ -162,11 +257,31 @@
   padding: 10px;
   width: 200px;
   box-shadow: 3px 3px 3px rgba(0,0,0,0.23), 3px 3px 3px rgba(0,0,0,0.16);
+
+  li {
+    padding: 10px;
+    list-style: none;
+
+    &.notifications {
+      position: relative;
+
+      .unread-notifications-dot {
+        top: 50%;
+        left: 0px;
+        margin-top: -4px;
+      }
+    }
+  }
 }
 
-#mobile_menu li {
-  padding: 10px;
-  list-style: none;
+/*
+ * the mobile menu, even if it's been opened by a user, should
+ * not show up if they resize their browser back to full size
+ */
+@media only screen and (max-width : 504px) {
+  #mobile_menu.visible {
+    display: block;
+  }
 }
 
 li.mobileMenuUser {

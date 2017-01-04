@@ -1,10 +1,14 @@
+# Node JS env
+export NODE_REALTIME_PORT='5000' # should match REALTIME_SERVER, below
+
+# Rails env
 export DB_USERNAME='postgres'
 export DB_PASSWORD='3112'
 export DB_HOST='localhost'
 export DB_PORT='5432'
 export DB_NAME='metamap002'
 
-export REALTIME_SERVER='http://localhost:5001'
+export REALTIME_SERVER='http://localhost:5000'
 export MAILER_DEFAULT_URL='localhost:3000'
 export DEVISE_MAILER_SENDER='team@metamaps.cc'
 
@@ -14,10 +18,10 @@ export SECRET_KEY_BASE='267c8a84f63963282f45bc3010eaddf027abfab58fc759d6e239c800
 # # you can safely leave these blank, unless you're deploying an instance, in
 # # which case you'll need to set them up
 #
+# export S3_REGION
 # export S3_BUCKET_NAME
 # export AWS_ACCESS_KEY_ID
 # export AWS_SECRET_ACCESS_KEY
-# export SSO_KEY
 #
 # export SMTP_DOMAIN
 # export SMTP_PASSWORD

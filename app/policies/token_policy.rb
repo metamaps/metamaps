@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TokenPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
@@ -9,11 +10,11 @@ class TokenPolicy < ApplicationPolicy
     end
   end
 
-  def create?
+  def index?
     user.present?
   end
 
-  def my_tokens?
+  def create?
     user.present?
   end
 

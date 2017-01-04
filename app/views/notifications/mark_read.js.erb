@@ -1,0 +1,7 @@
+$('#notification-<%= @notification.id %> .notification-read-unread > a')
+  .text('mark as unread')
+  .attr('href', '<%= mark_unread_notification_path(@notification.id) %>')
+$('#notification-<%= @notification.id %>')
+  .removeClass('unread')
+  .addClass('read')
+Metamaps.GlobalUI.NotificationIcon.render(Metamaps.GlobalUI.NotificationIcon.unreadNotificationsCount - 1)

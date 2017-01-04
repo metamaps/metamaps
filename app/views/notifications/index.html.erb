@@ -1,0 +1,50 @@
+<% content_for :title, 'Notifications | Metamaps' %>
+<% content_for :mobile_title, 'Notifications' %>
+
+<div id="yield">
+  <div class="centerContent notificationsPage">
+    <header class="page-header">
+      <h2 class="title">Notifications</h4>
+    </header>
+    <ul class="notifications">
+      <% @notifications.each do |notification| %>
+        <% receipt = @receipts.find_by(notification_id: notification.id) %>
+        <li class="notification <%= receipt.is_read? ? 'read' : 'unread' %>" id="notification-<%= notification.id %>">
+          <%= link_to notification_path(notification.id) do %>
+            <div class="notification-actor">
+              <%= image_tag notification.sender.image(:thirtytwo) %>
+            </div>
+            <div class="notification-body">
+              <div class="in-bold"><%= notification.sender.name %></div>
+              <%= raw NotificationService.text_for_notification(notification) %>
+            </div>
+          <% end %>
+          <div class="notification-read-unread">
+            <% if receipt.is_read? %>
+              <%= link_to 'mark as unread', mark_unread_notification_path(notification.id), remote: true, method: :put %>
+            <% else %>
+              <%= link_to 'mark as read', mark_read_notification_path(notification.id), remote: true, method: :put %>
+            <% end %>
+          </div>
+          <div class="notification-date">
+            <%= notification.created_at.strftime("%b %d") %>
+          </div>
+          <div class="clearfloat"></div>
+        </li>
+      <% end %>
+      <% if @notifications.count == 0 %>
+        <div class="emptyInbox">
+          You have no notifications. More time for dancing.
+        </div>
+      <% end %>
+    </ul>
+  </div>
+
+  <% if @notifications.total_pages > 1 %>
+    <div class="centerContent withPadding pagination">
+      <%= paginate @notifications %>
+    </div>
+  <% end %>
+</div>
+
+<%= render partial: 'notifications/header' %>

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MetacodeSetsController < ApplicationController
   before_action :require_admin
 

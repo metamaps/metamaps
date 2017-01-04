@@ -1,0 +1,15 @@
+<% #
+   # @file
+   # Shows a list of current user's starred maps
+   # GET /explore/starred(.:format)
+   # %>
+
+<script>
+  <% content_for :title, "Starred Maps | Metamaps" %>
+  <% content_for :mobile_title, "Starred Maps" %>
+
+  Metamaps.currentPage = "starred";
+  Metamaps.currentSection = "explore";
+  Metamaps.ServerData.Starred = <%= @maps.to_json.html_safe %>;
+  Metamaps.GlobalUI.Search.focus();
+</script>

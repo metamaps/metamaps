@@ -1,4 +1,11 @@
-class MapExportService < Struct.new(:user, :map)
+# frozen_string_literal: true
+class MapExportService
+  attr_reader :user, :map
+  def initialize(user, map)
+    @user = user
+    @map = map
+  end
+
   def json
     # marshal_dump turns OpenStruct into a Hash
     {
@@ -13,10 +20,6 @@ class MapExportService < Struct.new(:user, :map)
         csv << line
       end
     end
-  end
-
-  def xls
-    to_spreadsheet
   end
 
   private
@@ -55,8 +58,8 @@ class MapExportService < Struct.new(:user, :map)
     visible_synapses.map do |synapse|
       next nil if synapse.nil?
       OpenStruct.new(
-        topic1: synapse.node1_id,
-        topic2: synapse.node2_id,
+        topic1: synapse.topic1_id,
+        topic2: synapse.topic2_id,
         category: synapse.category,
         description: synapse.desc,
         user: synapse.user.name,

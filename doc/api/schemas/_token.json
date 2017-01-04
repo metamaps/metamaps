@@ -1,0 +1,24 @@
+{
+  "name": "Token",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "_id.json"
+    },
+    "token": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "created_at": {
+      "$ref": "_datetimestamp.json"
+    }
+  },
+  "required": [
+    "id",
+    "token",
+    "description",
+    "created_at"
+  ]
+}

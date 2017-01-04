@@ -1,0 +1,12 @@
+{
+  "name": "Topic Envelope",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "_topic.json"
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

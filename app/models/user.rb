@@ -1,6 +1,9 @@
+# frozen_string_literal: true
 require 'open-uri'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
+  acts_as_messageable # mailboxer notifications
+
   has_many :topics
   has_many :synapses
   has_many :maps
@@ -41,7 +44,7 @@ class User < ActiveRecord::Base
                             default_url: 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
 
   # Validate the attached image is image/jpg, image/png, etc
-  validates_attachment_content_type :image, content_type: %r(\Aimage/.*\Z)
+  validates_attachment_content_type :image, content_type: %r{\Aimage/.*\Z}
 
   # override default as_json
   def as_json(_options = {})
@@ -86,6 +89,21 @@ class User < ActiveRecord::Base
     }.to_a.sort{ |a, b| b[1] <=> a[1] }.map{|i| i[0]}.slice(0, 5)
   end
 
+  def all_accessible_maps
+    maps + shared_maps
+  end
+
+  def recent_metacodes
+    topics.order(:created_at).pluck(:metacode_id).uniq.first(5)
+  end
+
+  def most_used_metacodes
+    topics.to_a.each_with_object(Hash.new(0)) do |topic, memo|
+      memo[topic.metacode_id] += 1
+      memo
+    end.to_a.sort { |a, b| b[1] <=> a[1] }.map { |i| i[0] }.slice(0, 5)
+  end
+
   # generate a random 8 letter/digit code that they can use to invite people
   def generate_code
     self.code ||= rand(36**8).to_s(36)
@@ -101,8 +119,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def starred_map?(map) 
-    return !!self.stars.index{|s| s.map_id == map.id }
+  def starred_map?(map)
+    stars.where(map_id: map.id).exists?
   end
 
   def settings
@@ -113,5 +131,20 @@ class User < ActiveRecord::Base
 
   def settings=(val)
     self[:settings] = val
+  end
+
+  # Mailboxer hooks and helper functions
+
+  def mailboxer_email(_message)
+    return email if emails_allowed
+    # else return nil, which sends no email
+  end
+
+  def mailboxer_notifications
+    mailbox.notifications
+  end
+
+  def mailboxer_notification_receipts
+    mailbox.receipts.includes(:notification).where(mailbox_type: nil)
   end
 end

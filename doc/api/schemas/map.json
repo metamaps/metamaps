@@ -1,0 +1,12 @@
+{
+  "name": "Map Envelope",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "_map.json"
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

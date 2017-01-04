@@ -1,47 +1,24 @@
+# frozen_string_literal: true
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       visible = %w(public commons)
-      permission = 'maps.permission IN (?)'
-      if user
-        shared_maps = user.shared_maps.map(&:id)
-        scope.where(permission + ' OR maps.id IN (?) OR maps.user_id = ?', visible, shared_maps, user.id)
-      else
-        scope.where(permission, visible)
-      end
+      return scope.where(permission: visible) unless user
+
+      scope.where(permission: visible)
+           .or(scope.where(id: user.shared_maps.map(&:id)))
+           .or(scope.where(user_id: user.id))
     end
   end
 
-  def activemaps?
-    user.blank? # redirect to root url if authenticated for some reason
-  end
-
-  def featuredmaps?
-    true
-  end
-
-  def mymaps?
-    user.present?
-  end
-
-  def usermaps?
+  def index?
     true
   end
 
   def show?
-    record.permission == 'commons' || record.permission == 'public' || record.collaborators.include?(user) || record.user == user
-  end
-
-  def export?
-    show?
-  end
-
-  def events?
-    show?
-  end
-
-  def contains?
-    show?
+    record.permission.in?(%w(commons public)) ||
+      record.collaborators.include?(user) ||
+      record.user == user
   end
 
   def create?
@@ -49,12 +26,57 @@ class MapPolicy < ApplicationPolicy
   end
 
   def update?
-    user.present? && (record.permission == 'commons' || record.collaborators.include?(user) || record.user == user)
+    return false unless user.present?
+    record.permission == 'commons' ||
+      record.collaborators.include?(user) ||
+      record.user == user
+  end
+
+  def destroy?
+    record.user == user || admin_override
   end
 
   def access?
-    # note that this is to edit access
+    # this is for the map creator to bulk change who can access the map
     user.present? && record.user == user
+  end
+
+  def request_access?
+    # this is to access the page where you can request access to a map
+    user.present?
+  end
+
+  def access_request?
+    # this is to actually request access
+    user.present?
+  end
+
+  def approve_access?
+    record.user == user
+  end
+
+  def deny_access?
+    approve_access?
+  end
+
+  def approve_access_post?
+    approve_access?
+  end
+
+  def deny_access_post?
+    approve_access?
+  end
+
+  def contains?
+    show?
+  end
+
+  def events?
+    show?
+  end
+
+  def export?
+    show?
   end
 
   def star?
@@ -63,13 +85,5 @@ class MapPolicy < ApplicationPolicy
 
   def unstar?
     user.present?
-  end
-
-  def screenshot?
-    update?
-  end
-
-  def destroy?
-    record.user == user || admin_override
   end
 end

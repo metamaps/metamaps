@@ -1,34 +1,42 @@
+# frozen_string_literal: true
 module MapsHelper
-  ## this one is for building our custom JSON autocomplete format for typeahead
+  # JSON autocomplete format for typeahead
   def autocomplete_map_array_json(maps)
-    temp = []
-    maps.each do |m|
-      map = {}
-      map['id'] = m.id
-      map['label'] = m.name
-      map['value'] = m.name
-      map['description'] = m.desc.try(:truncate, 30)
-      map['permission'] = m.permission
-      map['topicCount'] = m.topics.count
-      map['synapseCount'] = m.synapses.count
-      map['contributorCount'] = m.contributors.count
-      map['rtype'] = 'map'
-
-      contributorTip = ''
-      firstContributorImage = 'https://s3.amazonaws.com/metamaps-assets/site/user.png'
-      if m.contributors.count > 0
-        firstContributorImage = m.contributors[0].image.url(:thirtytwo)
-        m.contributors.each_with_index do |c, _index|
-          userImage = c.image.url(:thirtytwo)
-          name = c.name
-          contributorTip += '<li> <img class="tipUserImage" width="25" height="25" src=' + userImage + ' />' + '<span>' + name + '</span> </li>'
-        end
-      end
-      map['contributorTip'] = contributorTip
-      map['mapContributorImage'] = firstContributorImage
-
-      temp.push map
+    maps.map do |m|
+      {
+        id: m.id,
+        label: m.name,
+        value: m.name,
+        description: m.desc.try(:truncate, 30),
+        permission: m.permission,
+        topicCount: m.topics.count,
+        synapseCount: m.synapses.count,
+        contributorCount: m.contributors.count,
+        rtype: 'map',
+        contributorTip: contributor_tip(m),
+        mapContributorImage: first_contributor_image(m)
+      }
     end
-    temp
+  end
+
+  def first_contributor_image(map)
+    if map.contributors.count.positive?
+      return map.contributors[0].image.url(:thirtytwo)
+    end
+    'https://s3.amazonaws.com/metamaps-assets/site/user.png'
+  end
+
+  def contributor_tip(map)
+    output = ''
+    if map.contributors.count.positive?
+      map.contributors.each_with_index do |contributor, _index|
+        user_image = contributor.image.url(:thirtytwo)
+        output += '<li>'
+        output += %(<img class="tipUserImage" width="25" height="25" src="#{user_image}" />)
+        output += "<span>#{contributor.name}</span>"
+        output += '</li>'
+      end
+    end
+    output
   end
 end

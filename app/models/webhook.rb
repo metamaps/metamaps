@@ -1,4 +1,5 @@
-class Webhook < ActiveRecord::Base
+# frozen_string_literal: true
+class Webhook < ApplicationRecord
   belongs_to :hookable, polymorphic: true
 
   validates :uri, presence: true

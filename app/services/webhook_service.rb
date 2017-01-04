@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class WebhookService
   def self.publish!(webhook:, event:)
     return false unless webhook.event_types.include? event.kind
@@ -10,7 +11,7 @@ class WebhookService
     end
 
     def webhook_object_for(webhook, event)
-      "Webhooks::#{webhook.kind.classify}::#{event.kind.classify}".constantize.new(event)
+      "Webhooks::#{webhook.kind.classify}::#{event.kind.classify}".constantize.new(webhook, event)
     end
   end
 end

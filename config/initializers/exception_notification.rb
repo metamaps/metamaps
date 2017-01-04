@@ -1,4 +1,50 @@
+# frozen_string_literal: true
 require 'exception_notification/rails'
+
+module ExceptionNotifier
+  class MetamapsNotifier < SlackNotifier
+    def call(exception, options = {})
+      # trick original notifier to "ping" self, storing the result
+      # in @message_opts and then modifying the result
+      @old_notifier = @notifier
+      @notifier = self
+      super
+      @notifier = @old_notifier
+
+      @message_opts[:attachments][0][:fields] = new_fields(exception, options[:env])
+      @message_opts[:attachments][0][:text] = new_text(exception, options[:env])
+
+      @notifier.ping '', @message_opts
+    end
+
+    def ping(message, message_opts)
+      @message = message
+      @message_opts = message_opts
+    end
+
+    private
+
+    def new_fields(exception, env)
+      new_fields = []
+
+      backtrace = exception.backtrace.reject { |line| line =~ %r{/(vendor/bundle|vendor_ruby)/} }
+      backtrace = backtrace[0..3] if backtrace.length > 4
+      backtrace = "```\n#{backtrace.join("\n")}\n```"
+      new_fields << { title: 'Backtrace', value: backtrace }
+
+      user = env.dig('exception_notifier.exception_data', :current_user)
+      new_fields << { title: 'Current User', value: "`#{user.name} <#{user.email}>`" }
+
+      new_fields
+    end
+
+    def new_text(exception, _env)
+      text = @message_opts[:attachments][0][:text].chomp
+      text += ': ' + exception.message + "\n"
+      text
+    end
+  end
+end
 
 ExceptionNotification.configure do |config|
   # Ignore additional exception types.
@@ -19,7 +65,7 @@ ExceptionNotification.configure do |config|
   # Notifiers ######
 
   if ENV['SLACK_EN_WEBHOOK_URL']
-    config.add_notifier :slack, webhook_url: ENV['SLACK_EN_WEBHOOK_URL']
+    config.add_notifier :metamaps, webhook_url: ENV['SLACK_EN_WEBHOOK_URL']
   end
 
   # Email notifier sends notifications by email.

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :mapping do
     xloc 0
     yloc 0
     map
     user
+    association :updated_by, factory: :user
     association :mappable, factory: :topic
 
     factory :mapping_random_location do

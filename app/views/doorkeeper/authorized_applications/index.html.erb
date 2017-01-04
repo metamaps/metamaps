@@ -5,6 +5,12 @@
 </header>
 
 <main role="main">
+  <div>
+    Coming soon!<br />
+    There are a number of apps being worked on for Metamaps currently, including the playful Metamapper Slack Bot. Check back here for updates.<br />
+    If you're a developer interested in building an app for Metamaps, check out <a href="https://metamaps.cc/api" target="_blank">the API docs</a>.
+  </div><br />
+  <% if @applications.count > 0 %>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -24,6 +30,7 @@
     <% end %>
     </tbody>
   </table>
+  <% end %>
 </main>
 </div>
 </div>

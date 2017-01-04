@@ -1,9 +1,9 @@
+# frozen_string_literal: true
 class EventSerializer < ActiveModel::Serializer
-  embed :ids, include: true
   attributes :id, :sequence_id, :kind, :map_id, :created_at
 
-  has_one :actor, serializer: NewUserSerializer, root: 'users'
-  has_one :map, serializer: NewMapSerializer
+  has_one :actor, serializer: Api::V2::UserSerializer, root: 'users'
+  has_one :map, serializer: Api::V2::MapSerializer
 
   def actor
     object.user || object.eventable.try(:user)

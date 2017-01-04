@@ -6,9 +6,16 @@ AllCops:
     - 'bin/**/*'
     - 'vendor/**/*'
     - 'app/assets/javascripts/node_modules/**/*'
+    - 'Vagrantfile'
 
 Rails:
   Enabled: true
 
 Metrics/LineLength:
   Max: 100
+
+Metrics/AbcSize:
+  Max: 16
+
+Style/Documentation:
+  Enabled: false

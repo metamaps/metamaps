@@ -1,5 +1,7 @@
-class Map < ActiveRecord::Base
+# frozen_string_literal: true
+class Map < ApplicationRecord
   belongs_to :user
+  belongs_to :source, class_name: :Map
 
   has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
   has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
@@ -8,6 +10,7 @@ class Map < ActiveRecord::Base
   has_many :messages, as: :resource, dependent: :destroy
   has_many :stars
 
+  has_many :access_requests, dependent: :destroy
   has_many :user_maps, dependent: :destroy
   has_many :collaborators, through: :user_maps, source: :user
 
@@ -15,11 +18,12 @@ class Map < ActiveRecord::Base
   has_many :events, -> { includes :user }, as: :eventable, dependent: :destroy
 
   # This method associates the attribute ":image" with a file attachment
-  has_attached_file :screenshot, styles: {
-    thumb: ['188x126#', :png]
-    #:full => ['940x630#', :png]
-  },
-  default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-white.png'
+  has_attached_file :screenshot,
+                    styles: {
+                      thumb: ['220x220#', :png]
+                      #:full => ['940x630#', :png]
+                    },
+                    default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-square.png'
 
   validates :name, presence: true
   validates :arranged, inclusion: { in: [true, false] }
@@ -29,45 +33,30 @@ class Map < ActiveRecord::Base
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, content_type: /\Aimage\/.*\Z/
 
-  def mappings
-    topicmappings + synapsemappings
-  end
+  after_update :after_updated
+  after_save :update_deferring_topics_and_synapses, if: :permission_changed?
 
-  def mk_permission
-    Perm.short(permission)
-  end
-
-  # return an array of the contributors to the map
-  def contributors
-    contributors = []
-
-    mappings.each do |m|
-      contributors.push(m.user) unless contributors.include?(m.user)
-    end
-
-    contributors
-  end
-
-  def editors
-    collaborators + [user]
-  end
-
-  def topic_count
-    topics.length
-  end
-
-  def synapse_count
-    synapses.length
-  end
+  delegate :count, to: :topics, prefix: :topic # same as `def topic_count; topics.count; end`
+  delegate :count, to: :synapses, prefix: :synapse
+  delegate :count, to: :contributors, prefix: :contributor
+  delegate :count, to: :stars, prefix: :star
 
   delegate :name, to: :user, prefix: true
 
-  def user_image
-    user.image.url
+  def mappings
+    topicmappings.or(synapsemappings)
   end
 
-  def contributor_count
-    contributors.length
+  def contributors
+    User.where(id: mappings.map(&:user_id).uniq)
+  end
+
+  def editors
+    User.where(id: user_id).or(User.where(id: collaborators))
+  end
+
+  def user_image
+    user.image.url(:thirtytwo)
   end
 
   def collaborator_ids
@@ -86,25 +75,65 @@ class Map < ActiveRecord::Base
     updated_at.strftime('%m/%d/%Y')
   end
 
+  def starred_by_user?(user)
+    user&.stars&.where(map: self)&.exists? || false # return false, not nil
+  end
+
   def as_json(_options = {})
-    json = super(methods: [:user_name, :user_image, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
+    json = super(methods: [:user_name, :user_image, :star_count, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
     json[:created_at_clean] = created_at_str
     json[:updated_at_clean] = updated_at_str
     json
   end
 
-  def decode_base64(imgBase64)
-    decoded_data = Base64.decode64(imgBase64)
+  # user param helps determine what records are visible
+  def contains(user)
+    {
+      map: self,
+      topics: Pundit.policy_scope(user, topics).to_a,
+      synapses: Pundit.policy_scope(user, synapses).to_a,
+      mappings: Pundit.policy_scope(user, mappings).to_a,
+      mappers: contributors,
+      collaborators: editors,
+      messages: messages.sort_by(&:created_at),
+      stars: stars,
+      requests: access_requests
+    }
+  end
 
-    data = StringIO.new(decoded_data)
-    data.class_eval do
-      attr_accessor :content_type, :original_filename
+  def add_new_collaborators(user_ids)
+    users = User.where(id: user_ids)
+    added = users.map do |new_user|
+      next nil if editors.include?(new_user)
+      UserMap.create(user_id: new_user.id, map_id: id)
+      new_user.id
     end
+    added.compact
+  end
 
-    data.content_type = 'image/png'
-    data.original_filename = File.basename('map-' + id.to_s + '-screenshot.png')
+  def remove_old_collaborators(user_ids)
+    removed = editors.map(&:id).map do |old_user_id|
+      next nil if user_ids.include?(old_user_id)
+      user_maps.where(user_id: old_user_id).find_each(&:destroy)
+      access_requests.where(user_id: old_user_id).find_each(&:destroy)
+      old_user_id
+    end
+    removed.compact
+  end
+  
+  def after_updated
+    attrs = ['name', 'desc', 'permission']
+    if attrs.any? {|k| changed_attributes.key?(k)}
+      ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
+    end
+  end
 
-    self.screenshot = data
-    save
+  def update_deferring_topics_and_synapses
+    Topic.where(defer_to_map_id: id).update_all(permission: permission)
+    Synapse.where(defer_to_map_id: id).update_all(permission: permission)
+  end
+
+  def invited_text
+    name + ' - invited to edit'
   end
 end

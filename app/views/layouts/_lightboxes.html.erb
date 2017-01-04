@@ -10,19 +10,20 @@
       <div class="lightboxContent" id="about">
         <h3>About Metamaps.cc</h3>
             <div id="aboutParms">
-            <div id="leftAboutParms">
+              <div id="leftAboutParms">
                 <p>STATUS: </p>
                 <p>VERSION:</p>
+                <p>BUILD:</p>
                 <p>LAST UPDATE:</p>
-            </div>
+              </div>
 
-            <div id="rightAboutParms">
+              <div id="rightAboutParms">
                 <p>PRIVATE BETA</p>
                 <p><%= METAMAPS_VERSION %></p>
+                <p><%= METAMAPS_BUILD %></p>
                 <p><%= METAMAPS_LAST_UPDATED %></p>
-            </div>
-            <div class="clearfloat">
-            </div>
+              </div>
+              <div class="clearfloat"></div>
             </div>
 
         <p>Metamaps.cc is a free and open source web platform that supports real-time sense-making and distributed collaboration between individuals, communities and organizations.</p>
@@ -33,31 +34,31 @@
 
         <ul class="lightbox_links">
           <li>
-            <a id="lightbox_metamapps" href="https://twitter.com/metamapps" target="_blank">
+            <a class="icon_twitter" href="https://twitter.com/metamapps" target="_blank">
               <div class="lightboxAboutIcon"></div>
               @metamapps
             </a>
           </li>
           <li>
-            <a id="lightbox_community" href="https://plus.google.com/u/0/communities/115060009262157699234" target="_blank">
+            <a class="icon_community" href="https://www.hylo.com/c/metamaps/join/mice-late-hit-two-shown" target="_blank">
               <div class="lightboxAboutIcon"></div>
               community
             </a>
           </li>
           <li>
-            <a id="lightbox_blog" href="http://blog.metamaps.cc" target="_blank">
-              <div class="lightboxAboutIcon"></div>
-              blog
-            </a>
-          </li>
-          <li>
-            <a id="lightbox_source" href="https://github.com/metamaps/metamaps" target="_blank">
+            <a class="icon_source_code" href="https://github.com/metamaps/metamaps" target="_blank">
               <div class="lightboxAboutIcon"></div>
               source code
             </a>
           </li>
           <li>
-            <a id="lightbox_term" href="https://metamaps.cc/maps/331" target="_blank">
+            <a class="icon_howtos" href="https://docs.metamaps.cc" target="_blank">
+              <div class="lightboxAboutIcon"></div>
+              howtos
+            </a>
+          </li>
+          <li>
+            <a class="icon_terms" href="https://metamaps.cc/maps/331" target="_blank">
               <div class="lightboxAboutIcon"></div>
               terms
             </a>
@@ -72,7 +73,7 @@
         <a id="chromeIcon" href="https://www.google.com/chrome/browser/" target="_blank">Chrome</a>
         <a id="fireFoxIcon" href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a>
         <a id="safariIcon" href="http://support.apple.com/downloads/#safari" target="_blank">Safari</a>
-        <p id="noIEbody">While it's downloading, explore our <a href="http://blog.metamaps.cc/">blog</a>,<br> watch the <a href="http://vimeo.com/88334167">tutorials</a>, or visit our <a href="http://metamapscc.uservoice.com/">knowledge base</a>!
+        <p id="noIEbody">While it's downloading, explore our <a href="http://blog.metamaps.cc/">blog</a>,<br> watch the <a href="http://vimeo.com/88334167">tutorials</a>, or visit our <a href="https://docs.metamaps.cc">knowledge base</a>!
 
       </div>
 
@@ -94,7 +95,7 @@
 <p>As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
 <p>Below is a personal invite link containing your unique access code, which can be used multiple times.</p>
             <div id="joinCodesBox">
-            <p class="joinCodes"><%= determine_invite_link %>
+            <p class="joinCodes"><%= invite_link() %>
             <button class="button" onclick="Metamaps.GlobalUI.shareInvite('<%= @invite_link %>');">COPY INVITE LINK!</button>
             </div>
 

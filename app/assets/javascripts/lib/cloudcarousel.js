@@ -156,11 +156,12 @@ jQuery.browser = browser;
 			event.data.rotate(-1);	
 			return false;
 		});
-		$(options.buttonRight).bind('mouseup',this,function(event){															
+		$(options.buttonRight).bind('mouseup',this,function(event){
 			event.data.rotate(1);	
 			return false;
 		});
 		
+		// START METAMAPS CODE
 		// Add code that makes tab and shift+tab scroll through metacodes
 		$('.new_topic').bind('keydown',this,function(event){
             if (event.keyCode == 9 && event.shiftKey) {
@@ -175,6 +176,7 @@ jQuery.browser = browser;
                 event.stopPropagation();
             }
 		});
+		// END METAMAPS CODE
 		
 		// You will need this plugin for the mousewheel to work: http://plugins.jquery.com/project/mousewheel
 		if (options.mouseWheel)
@@ -189,14 +191,14 @@ jQuery.browser = browser;
 					 }
 				 });*/
 			// END METAMAPS CODE
-			/* ORIGINAL CODE
-			$(container).bind('mousewheel',this,function(event, delta) {					 
-					 event.data.rotate(delta);
-					 return false;
-				 });
-			*/
+			// ORIGINAL CODE
+			// $(container).bind('mousewheel',this,function(event, delta) {
+			// 	event.data.rotate(delta);
+			// 	return false;
+			// });
+			//
 		}
-		$(container).bind('mouseover click',this,function(event){
+		$(container).unbind('mouseover click').bind('mouseover click',this,function(event){
 			
 			clearInterval(event.data.autoRotateTimer);		// Stop auto rotation if mouse over.
 			var	text = $(event.target).attr('alt');		
@@ -210,22 +212,27 @@ jQuery.browser = browser;
 				//$(options.titleBox).html( ($(event.target).attr('title') ));							
 				if ( options.bringToFront && event.type == 'click' )				
 				{
-                    $(options.titleBox).html( ($(event.target).attr('title') ));
-				    // METAMAPS CODE
-			        Metamaps.Create.newTopic.metacode = $(event.target).attr('data-id');
-			        // NOT METAMAPS CODE
+					$(options.titleBox).html( ($(event.target).attr('title') ));
+					// START METAMAPS CODE
+					Metamaps.Create.newTopic.metacode = $(event.target).attr('data-id');
+					// END METAMAPS CODE
 					var	idx = $(event.target).data('itemIndex');	
 					var	frontIndex = event.data.frontIndex;
 					//var	diff = idx - frontIndex;                    
-                    var        diff = (idx - frontIndex) % images.length;
-                    if (Math.abs(diff) > images.length / 2) {
-                        diff += (diff > 0 ? -images.length : images.length);
-                    }
-                    
+					var diff = (idx - frontIndex) % images.length;
+					if (Math.abs(diff) > images.length / 2) {
+						diff += (diff > 0 ? -images.length : images.length);
+					}
+
 					event.data.rotate(-diff);
 				}
 			}
 		});
+		// START METAMAPS CODE - initialize newTopic.metacode
+		var first = $(this.container).find('img').get(0)
+		Metamaps.Create.newTopic.metacode = $(first).data('id')
+		// END METAMAPS CODE
+
 		// If we have moved out of a carousel item (or the container itself),
 		// restore the text of the front item in 1 second.
 		$(container).bind('mouseout',this,function(event){
@@ -249,7 +256,7 @@ jQuery.browser = browser;
 		this.showFrontText = function()
 		{	
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
-            // METAMAPS CODE
+                        // METAMAPS CODE
 			Metamaps.Create.newTopic.setMetacode($(items[this.frontIndex].image).attr('data-id'))
 			// NOT METAMAPS CODE
 			//$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));

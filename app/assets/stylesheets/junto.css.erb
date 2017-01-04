@@ -90,13 +90,16 @@
   left: 30px;
   top: 72px;
 }
+#chat-box-wrapper {
+  height: 100%;
+  float: right;
+}
 .chat-box {
   position: relative;
   display: flex;
   flex-direction: column;
   z-index: 1;
   width: 300px;
-  float: right;
   height: 100%;
   background: #424242;
   box-shadow: -8px 0px 16px 2px rgba(0, 0, 0, 0.23);
@@ -114,7 +117,6 @@
   background: url(<%= asset_path 'junto_spinner_dark.gif' %>) no-repeat 2px 8px, url(<%= asset_path 'tray_tab.png' %>) no-repeat !important;
 }
 .chat-box .chat-button .chat-unread {
-  display: none;
   background: #DAB539;
   position: absolute;
   top: -3px;
@@ -176,7 +178,6 @@
   overflow-y: auto;
 }
 .chat-box .participants .conversation-live {
-  display: none;
   padding: 5px 10px 5px 10px;
   background: #c04f4f;
   margin: 5px 10px;
@@ -186,15 +187,6 @@
   float: right;
   cursor: pointer;
   color: #EBFF00;
-}
-.chat-box .participants .conversation-live .leave {
-  display: none;
-}
-.chat-box .participants.is-participating .conversation-live .leave {
-  display: block;
-}
-.chat-box .participants.is-participating .conversation-live .join {
-  display: none;
 }
 .chat-box .participants .participant {
   width: 89%;
@@ -225,32 +217,18 @@
   padding: 2px 8px 0;
   text-align: left;
 }
-.chat-box .participants .participant.is-self .chat-participant-invite-call,
-.chat-box .participants .participant.is-self .chat-participant-invite-join {
-  display: none !important;
-}
-.chat-box .participants.is-live .participant .chat-participant-invite-call {
-  display: none;
-}
-.chat-box .participants .participant .chat-participant-invite-join {
-  display: none;
-}
-.chat-box .participants.is-live.is-participating .participant:not(.active) .chat-participant-invite-join {
-  display: block;
-}
 .chat-box .participants .participant .chat-participant-invite-call,
 .chat-box .participants .participant .chat-participant-invite-join
  {
   float: right;
   background: #4FC059 url(<%= asset_path 'invitepeer16.png' %>) no-repeat center center;
 }
-.chat-box .participants .participant.pending .chat-participant-invite-call,
-.chat-box .participants .participant.pending .chat-participant-invite-join {
+.chat-box .participants .participant .chat-participant-invite-call.pending,
+.chat-box .participants .participant .chat-participant-invite-join.pending {
     background: #dab539 url(<%= asset_path 'ellipsis.gif' %>) no-repeat center center;
 }
 .chat-box .participants .participant .chat-participant-participating {
   float: right;
-  display: none;
   margin-top: 14px;
 }
 .chat-box .participants .participant .chat-participant-participating .green-dot {
@@ -258,9 +236,6 @@
   width: 12px;
   height: 12px;
   border-radius: 6px;
-}
-.chat-box .participants .participant.active .chat-participant-participating {
-  display: block;
 }
 .chat-box .chat-header {
   width: 276px;
@@ -339,6 +314,7 @@
   margin-top: 12px;
   padding: 2px 8px 0;
   text-align: left;
+  word-wrap: break-word;
 }
 .chat-box .chat-messages .chat-message .chat-message-time {
   float: right;

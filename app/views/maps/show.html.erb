@@ -9,13 +9,14 @@
 <script>
 	Metamaps.currentSection = "map";
 	Metamaps.currentPage = <%= @map.id.to_s %>;
-    Metamaps.Active.Map = <%= @map.to_json.html_safe %>;
-    Metamaps.Mappers = <%= @allmappers.to_json.html_safe %>;
-    Metamaps.Collaborators = <%= @allcollaborators.to_json.html_safe %>;
-    Metamaps.Topics = <%= @alltopics.to_json.html_safe %>;
-    Metamaps.Synapses = <%= @allsynapses.to_json.html_safe %>;
-    Metamaps.Mappings = <%= @allmappings.to_json.html_safe %>;
-    Metamaps.Messages = <%= @allmessages.to_json.html_safe %>;
-    Metamaps.Stars = <%= @allstars.to_json.html_safe %>;
-    Metamaps.Visualize.type = "ForceDirected";
+  Metamaps.ServerData = Metamaps.ServerData || {}
+  Metamaps.ServerData.ActiveMap = <%= @map.to_json.html_safe %>;
+  Metamaps.ServerData.Mappers = <%= @allmappers.to_json.html_safe %>;
+  Metamaps.ServerData.Collaborators = <%= @allcollaborators.to_json.html_safe %>;
+  Metamaps.ServerData.Topics = <%= @alltopics.to_json(user: current_user).html_safe %>;
+  Metamaps.ServerData.Synapses = <%= @allsynapses.to_json.html_safe %>;
+  Metamaps.ServerData.Mappings = <%= @allmappings.to_json.html_safe %>;
+  Metamaps.ServerData.Messages = <%= @allmessages.to_json.html_safe %>;
+  Metamaps.ServerData.Stars = <%= @allstars.to_json.html_safe %>;
+  Metamaps.ServerData.VisualizeType = "ForceDirected";
 </script>
