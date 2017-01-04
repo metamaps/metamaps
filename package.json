@@ -27,7 +27,7 @@
     "babel-preset-es2015": "6.18.0",
     "babel-preset-react": "6.16.0",
     "backbone": "1.0.0",
-    "clipboard-js": "git://github.com/devvmh/clipboard.js#patch-1",
+    "clipboard-js": "0.3.2",
     "commonmark": "0.27.0",
     "csv-parse": "1.1.7",
     "getScreenMedia": "git://github.com/devvmh/getScreenMedia#patch-1",
