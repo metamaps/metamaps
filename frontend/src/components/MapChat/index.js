@@ -3,6 +3,22 @@ import Unread from './Unread'
 import Participant from './Participant'
 import Message from './Message'
 
+function makeList(messages) {
+  let currentHeader
+  return messages ? messages.map(m => {
+    let heading = false
+    if (!currentHeader) {
+      heading = true
+      currentHeader = m
+    } else {
+      // not same user or time diff of greater than 3 minutes
+      heading = m.user_id !== currentHeader.user_id || Math.floor(Math.abs(new Date(currentHeader.created_at) - new Date(m.created_at)) / 60000) > 3
+      currentHeader = heading ? m : currentHeader
+    }
+    return <Message {...m} key={m.id} heading={heading}/>
+  }) : null
+}
+
 class MapChat extends Component {
   constructor(props) {
     super(props)
@@ -125,7 +141,7 @@ class MapChat extends Component {
           <Unread count={unreadMessages} />
         </div>
         <div className="chat-messages" ref={div => this.messagesDiv = div}>
-          {messages.map(message => <Message key={message.id} {...message} />)}
+          {makeList(messages)}
         </div>
         <textarea className="chat-input"
           ref={textarea => this.messageInput = textarea}

@@ -18,15 +18,18 @@ function formatDate(created_at) {
 }
 
 const Message = props => {
-  const { user_image, user_name, message, created_at } = props
+  const { user_image, user_name, message, created_at, heading } = props
   const messageHtml = {__html: linker.link(message)}
   return (
     <div className="chat-message">
       <div className="chat-message-user">
-        <img src={user_image} title={user_name} />
+        {heading && <img src={user_image} />}
       </div>
+      {heading && <div className="chat-message-meta">
+        <span className='chat-message-username'>{user_name}</span>&nbsp;
+        <span className='chat-message-time'>{formatDate(created_at)}</span>
+      </div>}
       <div className="chat-message-text" dangerouslySetInnerHTML={messageHtml}></div>
-      <div className="chat-message-time">{formatDate(created_at)}</div>
       <div className="clearfloat"></div>
     </div>
   )
