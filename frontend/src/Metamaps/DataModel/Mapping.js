@@ -21,16 +21,16 @@ const Mapping = Backbone.Model.extend({
       })
     }
   },
-  getMap: function() {
-    return Map.get(this.get('map_id'))
+  getMap: function(callback) {
+    Map.get(this.get('map_id'), callback)
   },
-  getTopic: function() {
-    if (this.get('mappable_type') !== 'Topic') return false
-    return Topic.get(this.get('mappable_id'))
-  },
-  getSynapse: function() {
-    if (this.get('mappable_type') !== 'Synapse') return false
-    return Synapse.get(this.get('mappable_id'))
+  getMappable: function(callback) {
+    if (this.get('mappable_type') === 'Topic') {
+      Topic.get(this.get('mappable_id'), callback)
+    }
+    else if (this.get('mappable_type') === 'Synapse') {
+      Synapse.get(this.get('mappable_id'), callback)
+    }
   }
 })
 

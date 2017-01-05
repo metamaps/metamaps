@@ -9,6 +9,7 @@ import Active from './Active'
 import Control from './Control'
 import Create from './Create'
 import DataModel from './DataModel'
+import Engine from './Engine'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'
 import Map from './Map'
@@ -1067,6 +1068,7 @@ const JIT = {
         n.pos.setp(theta, rho)
       } else {
         n.pos.setc(x, y)
+        Engine.setTopicPos(n.getData('body_id'), x, y)
       }
 
       if (Active.Map) {

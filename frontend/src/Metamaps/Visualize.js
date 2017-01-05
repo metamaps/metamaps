@@ -1,11 +1,13 @@
 /* global $ */
 
 import _ from 'lodash'
+import Matter from 'matter-js'
 
 import $jit from '../patched/JIT'
 
 import Active from './Active'
 import DataModel from './DataModel'
+import Engine from './Engine'
 import JIT from './JIT'
 import Loading from './Loading'
 import Router from './Router'
@@ -94,10 +96,14 @@ const Visualize = {
           }
         })
 
-        const startPos = new $jit.Complex(0, 0)
+        //const startPos = new $jit.Complex(0, 0)
         const endPos = new $jit.Complex(mapping.get('xloc'), mapping.get('yloc'))
-        n.setPos(startPos, 'start')
+        //n.setPos(startPos, 'start')
+        //n.setPos(endPos, 'end')
+        n.setPos(endPos, 'current')
         n.setPos(endPos, 'end')
+        n.setData('dim', 1, 'start')
+        n.setData('dim', 25, 'end')
       })
     } else if (self.type === 'ForceDirected3D') {
       self.mGraph.compute()
@@ -170,7 +176,13 @@ const Visualize = {
         if (self.type === 'RGraph') {
           self.mGraph.fx.animate(JIT.RGraph.animate)
         } else if (self.type === 'ForceDirected') {
-          self.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
+          //self.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
+          //self.mGraph.fx.animate({
+          //  modes: ['node-property:dim'],
+          //  duration: 3000
+          //})
+          self.mGraph.plot()
+          Engine.run(true)
         } else if (self.type === 'ForceDirected3D') {
           self.mGraph.animate(JIT.ForceDirected.animateFDLayout)
         }

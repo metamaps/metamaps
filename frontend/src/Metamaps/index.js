@@ -7,6 +7,7 @@ import Control from './Control'
 import Create from './Create'
 import DataModel from './DataModel'
 import Debug from './Debug'
+import Engine from './Engine'
 import Filter from './Filter'
 import GlobalUI, {
   Search, CreateMap, ImportDialog, Account as GlobalUIAccount,
@@ -44,6 +45,7 @@ Metamaps.Control = Control
 Metamaps.Create = Create
 Metamaps.DataModel = DataModel
 Metamaps.Debug = Debug
+Metamaps.Engine = Engine
 Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
 Metamaps.GlobalUI.Search = Search

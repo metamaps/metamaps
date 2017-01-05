@@ -5,6 +5,7 @@ import Backbone from 'backbone'
 try { Backbone.$ = window.$ } catch (err) {}
 
 import Active from '../Active'
+import Engine from '../Engine'
 import Filter from '../Filter'
 import JIT from '../JIT'
 import Realtime from '../Realtime'

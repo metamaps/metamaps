@@ -6,6 +6,7 @@ import Active from './Active'
 import AutoLayout from './AutoLayout'
 import Create from './Create'
 import DataModel from './DataModel'
+import Engine from './Engine'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'
 import JIT from './JIT'
@@ -223,6 +224,7 @@ const Topic = {
         })
       }
     } else {
+      Engine.run()
       Visualize.mGraph.loadJSON(newnode)
       nodeOnViz = Visualize.mGraph.graph.getNode(newnode.id)
       topic.set('node', nodeOnViz, {silent: true})
@@ -249,6 +251,7 @@ const Topic = {
     }
     var topicSuccessCallback = function(topicModel, response) {
       if (Active.Map) {
+        Engine.addTopic(mapping)
         mapping.save({ mappable_id: topicModel.id }, {
           success: function(model, response) {
             mappingSuccessCallback(model, response, topicModel)
@@ -302,7 +305,7 @@ const Topic = {
     DataModel.Topics.add(topic)
 
     if (Create.newTopic.pinned) {
-      var nextCoords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
+      var nextCoords = { x: 0, y: 0 } // AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
     }
     var mapping = new DataModel.Mapping({
       xloc: nextCoords ? nextCoords.x : Create.newTopic.x,

@@ -8,6 +8,7 @@ import AutoLayout from '../AutoLayout'
 import Create from '../Create'
 import DataModel from '../DataModel'
 import DataModelMap from '../DataModel/Map'
+import Engine from '../Engine'
 import Filter from '../Filter'
 import GlobalUI from '../GlobalUI'
 import JIT from '../JIT'
@@ -148,6 +149,7 @@ const Map = {
       Filter.close()
       InfoBox.close()
       Realtime.endActiveMap()
+      Engine.endActiveMap()
       $('.viewOnly').removeClass('isViewOnly')
     }
   },
