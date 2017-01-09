@@ -174,7 +174,10 @@ const Util = {
       text = text.replace(new RegExp(escapeRegExp(emoji.colons), 'g'), emoji.native)
     })
     if (opts.emoticons) {
-      Object.keys(emojiIndex.emoticons).forEach(emoticon => {
+      const emoticons = Object.assign({}, emojiIndex.emoticons, {
+        ':D': ':grin:'
+      })
+      Object.keys(emoticons).forEach(emoticon => {
         const key = emojiIndex.emoticons[emoticon]
         const emoji = emojiIndex.emojis[key]
         text = text.replace(new RegExp(escapeRegExp(emoticon), 'g'), emoji.native)
