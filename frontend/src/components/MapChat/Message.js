@@ -1,5 +1,6 @@
 import React from 'react'
 import Autolinker from 'autolinker'
+import Util from '../../Metamaps/Util'
 
 const linker = new Autolinker({ newWindow: true, truncate: 50, email: false, phone: false })
 
@@ -19,7 +20,8 @@ function formatDate(created_at) {
 
 const Message = props => {
   const { user_image, user_name, message, created_at, heading } = props
-  const messageHtml = {__html: linker.link(message)}
+  const messageHtml = {__html: linker.link(Util.addEmoji(message, { emoticons: false }))}
+
   return (
     <div className="chat-message">
       <div className="chat-message-user">
