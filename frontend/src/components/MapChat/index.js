@@ -102,6 +102,11 @@ class MapChat extends Component {
     }
   }
 
+  focusMessageInput = () => {
+    if (!this.messageInput) return
+    this.messageInput.focus()
+  }
+
   render = () => {
     const rightOffset = this.state.open ? '0' : '-300px'
     const { conversationLive, isParticipating, participants, messages, inviteACall, inviteToJoin } = this.props
@@ -145,16 +150,17 @@ class MapChat extends Component {
         <div className="chat-messages" ref={div => { this.messagesDiv = div }}>
           {makeList(messages)}
         </div>
-        <NewMessage textAreaProps={{
-          className: 'chat-input',
-          ref: textarea => { this.messageInput = textarea },
-          placeholder: 'Send a message...',
-          onKeyUp: this.handleTextareaKeyUp,
-          onFocus: this.props.inputFocus,
-          onBlur: this.props.inputBlur
-        }}
+        <NewMessage messageText={this.state.messageText}
+          focusMessageInput={this.focusMessageInput}
           handleChange={this.handleChange('messageText')}
-          messageText={this.state.messageText}
+          textAreaProps={{
+            className: 'chat-input',
+            ref: textarea => { this.messageInput = textarea },
+            placeholder: 'Send a message...',
+            onKeyUp: this.handleTextareaKeyUp,
+            onFocus: this.props.inputFocus,
+            onBlur: this.props.inputBlur
+          }}
         />
       </div>
     )
