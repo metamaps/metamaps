@@ -10,6 +10,6 @@
 
   Metamaps.Loading.setup()
 </script>
-<%= render :partial => 'layouts/googleanalytics' if Rails.env.production? %>
+<%= render :partial => 'layouts/googleanalytics' if ENV["GA_TRACKING_CODE"].present? %>
 </body>
 </html>
