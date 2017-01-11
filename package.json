@@ -5,7 +5,9 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "mocha --compilers js:babel-core/register frontend/test"
+    "test": "mocha --compilers js:babel-core/register frontend/test",
+    "eslint": "eslint frontend",
+    "eslint:fix": "eslint --fix frontend"
   },
   "repository": {
     "type": "git",

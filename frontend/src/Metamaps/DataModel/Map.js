@@ -7,7 +7,6 @@ try { Backbone.$ = window.$ } catch (err) {}
 import Active from '../Active'
 import InfoBox from '../Map/InfoBox'
 import Mapper from '../Mapper'
-import Realtime from '../Realtime'
 
 const Map = Backbone.Model.extend({
   urlRoot: '/maps',

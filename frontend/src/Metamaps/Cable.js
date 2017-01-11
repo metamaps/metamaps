@@ -1,5 +1,7 @@
 /* global $, ActionCable */
 
+import { indexOf } from 'lodash'
+
 import Active from './Active'
 import Control from './Control'
 import DataModel from './DataModel'
@@ -42,14 +44,14 @@ const Cable = {
     if (t1.authorizeToShow(m) && t2.authorizeToShow(m) && s.authorizeToShow(m) && !DataModel.Synapses.get(event.synapse.id)) {
       // refactor the heck outta this, its adding wicked wait time
       var topic1, topic2, node1, node2, synapse, mapping, cancel, mapper
- 
-      function waitThenRenderSynapse() {
+
+      const waitThenRenderSynapse = () => {
         if (synapse && mapping && mapper) {
           topic1 = synapse.getTopic1()
           node1 = topic1.get('node')
           topic2 = synapse.getTopic2()
           node2 = topic2.get('node')
-    
+
           Synapse.renderSynapse(mapping, synapse, node1, node2, false)
         } else if (!cancel) {
           setTimeout(waitThenRenderSynapse, 10)
@@ -108,7 +110,7 @@ const Cable = {
       if (edge.getData('mappings').length - 1 === 0) {
         Control.hideEdge(edge)
       }
-  
+
       var index = indexOf(edge.getData('synapses'), synapse)
       edge.getData('mappings').splice(index, 1)
       edge.getData('synapses').splice(index, 1)
@@ -129,15 +131,15 @@ const Cable = {
     if (t.authorizeToShow(m) && !DataModel.Topics.get(event.topic.id)) {
       // refactor the heck outta this, its adding wicked wait time
       var topic, mapping, mapper, cancel
-    
-      function waitThenRenderTopic() {
+
+      const waitThenRenderTopic = () => {
         if (topic && mapping && mapper) {
           Topic.renderTopic(mapping, topic, false, false)
         } else if (!cancel) {
           setTimeout(waitThenRenderTopic, 10)
         }
       }
-    
+
       mapper = DataModel.Mappers.get(event.topic.user_id)
       if (mapper === undefined) {
         Mapper.get(event.topic.user_id, function(m) {

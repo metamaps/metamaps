@@ -1,5 +1,3 @@
-/* global $ */
-
 import _ from 'lodash'
 import outdent from 'outdent'
 import Backbone from 'backbone'
@@ -7,8 +5,6 @@ try { Backbone.$ = window.$ } catch (err) {}
 
 import Active from '../Active'
 import Filter from '../Filter'
-import JIT from '../JIT'
-import Realtime from '../Realtime'
 import SynapseCard from '../SynapseCard'
 import Visualize from '../Visualize'
 

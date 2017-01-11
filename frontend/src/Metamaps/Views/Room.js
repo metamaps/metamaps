@@ -1,13 +1,7 @@
 /* global $ */
 
-import Backbone from 'backbone'
 import attachMediaStream from 'attachmediastream'
 
-// TODO is this line good or bad
-// Backbone.$ = window.$
-
-import Active from '../Active'
-import DataModel from '../DataModel'
 import Realtime from '../Realtime'
 import VideoView from './VideoView'
 

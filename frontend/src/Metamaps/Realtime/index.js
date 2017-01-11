@@ -8,8 +8,7 @@ import Cable from '../Cable'
 import DataModel from '../DataModel'
 import JIT from '../JIT'
 import Util from '../Util'
-import Views from '../Views'
-import { ChatView } from '../Views'
+import Views, { ChatView } from '../Views'
 import Visualize from '../Visualize'
 
 import {
@@ -152,7 +151,7 @@ let Realtime = {
         config: { DOUBLE_CLICK_TOLERANCE: 200 }
       })
       self.room.videoAdded(self.handleVideoAdded)
-      
+
       self.startActiveMap()
     } // if Active.Mapper
   },
