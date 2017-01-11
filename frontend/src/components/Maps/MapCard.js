@@ -112,7 +112,7 @@ class MapCard extends Component {
               { mobile && hasConversation && <div className='mobileHasConversation'><MapperList mappers={ mapperList } /></div> }
               { mobile && d && <div className="desc">{ d }</div> }
               { mobile && <div className='mobileMetadata'><Metadata map={ map } /></div> }
-              <div className='creatorAndPerm'>
+              <div className={`creatorAndPerm ${map.authorizeToEdit(currentUser) ? '' : 'cardHasViewOnly'}`}>
                 <img className='creatorImage' src={ map.get('user_image') } />
                 <span className='creatorName'>{ map.get('user_name') }</span>
                 { !map.authorizeToEdit(currentUser) && <div className='cardViewOnly'>View Only</div> }
