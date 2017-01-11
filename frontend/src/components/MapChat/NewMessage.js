@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react'
 import { Emoji, Picker } from 'emoji-mart'
-import Util from '../../Metamaps/Util'
 
 class NewMessage extends Component {
   constructor(props) {
@@ -13,10 +12,6 @@ class NewMessage extends Component {
 
   toggleEmojiPicker = () => {
     this.setState({ showEmojiPicker: !this.state.showEmojiPicker })
-  }
-
-  textAreaValue = () => {
-    return Util.addEmoji(this.props.messageText)
   }
 
   handleClick = (emoji, event) => {
@@ -44,7 +39,7 @@ class NewMessage extends Component {
         <div className="extra-message-options">
           <span className="emoji-picker-button" onClick={this.toggleEmojiPicker}><Emoji size={24} emoji="upside_down_face" /></span>
         </div>
-        <textarea value={this.textAreaValue()}
+        <textarea value={this.props.messageText}
           onChange={this.props.handleChange}
           {...this.props.textAreaProps}
         />
