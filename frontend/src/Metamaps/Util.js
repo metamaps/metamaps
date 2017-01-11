@@ -167,7 +167,7 @@ const Util = {
     })
     return text
   },
-  addEmoji: function(withoutEmoji, opts = { emoticons: false }) {
+  addEmoji: function(withoutEmoji, opts = { emoticons: true }) {
     let text = withoutEmoji
     Object.keys(emojiIndex.emojis).forEach(key => {
       const emoji = emojiIndex.emojis[key]
