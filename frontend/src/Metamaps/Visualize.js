@@ -159,6 +159,8 @@ const Visualize = {
 
     function runAnimation() {
       Loading.hide()
+      $('#new_topic').show()
+      $('#topic_name').focus()
       // load JSON data, if it's not empty
       if (!self.loadLater) {
         // load JSON data.
@@ -178,8 +180,6 @@ const Visualize = {
         } else if (self.type === 'ForceDirected') {
           self.mGraph.plot()
           Engine.run(true)
-          $('#new_topic').show()
-          $('#topic_name').focus()
         } else if (self.type === 'ForceDirected3D') {
           self.mGraph.animate(JIT.ForceDirected.animateFDLayout)
         }

@@ -28,7 +28,7 @@ const Cable = {
   },
   unsubscribeFromMap: () => {
     let self = Cable
-    self.sub.unsubscribe()
+    self.sub && self.sub.unsubscribe()
     delete self.sub
   },
   synapseAdded: event => {

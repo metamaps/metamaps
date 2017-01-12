@@ -36,7 +36,7 @@ const Engine = {
     Engine.runner = Matter.Runner.run(Engine.engine)
   },
   endActiveMap: () => {
-    Runner.stop(Engine.runner)
+    Engine.runner && Runner.stop(Engine.runner)
     Matter.Engine.clear(Engine.engine)
   },
   setNodePos: (id, x, y) => {
