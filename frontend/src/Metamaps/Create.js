@@ -23,9 +23,9 @@ const Create = {
   newSelectedMetacodes: [],
   recentMetacodes: [],
   mostUsedMetacodes: [],
-  init: function () {
+  init: function (serverData) {
     var self = Create
-    self.newTopic.init()
+    self.newTopic.init(serverData)
     self.newSynapse.init()
 
     // // SWITCHING METACODE SETS
@@ -142,9 +142,11 @@ console.log(codesToSwitchToIds)
     $('#topic_name').focus()
   },
   newTopic: {
-    init: function () {
+    init: function (serverData) {
       const DOWN_ARROW = 40
       const ESC = 27
+
+      if (!serverData.ActiveMapper) return
 
       $('#topic_name').keyup(function (e) {
 
@@ -218,7 +220,9 @@ console.log(codesToSwitchToIds)
         speed: 0.3,
         bringToFront: true
       })
-      $('#new_topic').attr('oncontextmenu', 'return false') // prevents the mouse up event from opening the default context menu on this element
+      $('#new_topic').hide()
+        .css({ left: '50%', top: '50%' })
+        .attr('oncontextmenu', 'return false') // prevents the mouse up event from opening the default context menu on this element
     },
     name: null,
     newId: 1,
