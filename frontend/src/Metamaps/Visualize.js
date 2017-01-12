@@ -176,13 +176,10 @@ const Visualize = {
         if (self.type === 'RGraph') {
           self.mGraph.fx.animate(JIT.RGraph.animate)
         } else if (self.type === 'ForceDirected') {
-          //self.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
-          //self.mGraph.fx.animate({
-          //  modes: ['node-property:dim'],
-          //  duration: 3000
-          //})
           self.mGraph.plot()
           Engine.run(true)
+          $('#new_topic').show()
+          $('#topic_name').focus()
         } else if (self.type === 'ForceDirected3D') {
           self.mGraph.animate(JIT.ForceDirected.animateFDLayout)
         }

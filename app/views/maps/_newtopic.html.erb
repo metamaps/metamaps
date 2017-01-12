@@ -1,13 +1,6 @@
-<% @metacodes = user_metacodes() %>
-
 <%= form_for Topic.new, url: topics_url, remote: true do |form| %>
   <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes">
     <div class="tooltipsAbove">Switch Metacodes</div>
-  </div>
-
-  <div class="pinCarousel">
-    <div class="tooltipsAbove helpPin">Pin Open</div>
-    <div class="tooltipsAbove helpUnpin">Unpin</div>
   </div>
 
   <div id="metacodeImg">
@@ -28,12 +21,10 @@
   <div class="clearfloat"></div>
 <script>
 <% @metacodes.each do |metacode| %>
-  <% if !set %>
-    Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
-    Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
-    Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
-    Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
-  <% end %>
+  Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
+  Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
+  Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
+  Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
 <% end %> 
 Metamaps.Create.newTopic.metacode = <%= user_metacode().id %>
 <% current_user.recentMetacodes.each do |id| %>

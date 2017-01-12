@@ -144,7 +144,7 @@ const Map = {
       $('.rightclickmenu').remove()
       TopicCard.hideCard()
       SynapseCard.hideCard()
-      Create.newTopic.hide(true) // true means force (and override pinned)
+      $('#new_topic').hide()
       Create.newSynapse.hide()
       Filter.close()
       InfoBox.close()

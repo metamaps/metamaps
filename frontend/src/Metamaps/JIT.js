@@ -404,6 +404,7 @@ const JIT = {
             JIT.selectEdgeOnClickHandler(node, e)
           } else if (node && !node.nodeFrom) {
             JIT.selectNodeOnClickHandler(node, e)
+            Engine.setFocusNode(node)
           } else {
             JIT.canvasClickHandler(eventInfo.getPos(), e)
           } // if
@@ -415,7 +416,6 @@ const JIT = {
 
           if (Mouse.boxStartCoordinates) {
             Create.newSynapse.hide()
-            Create.newTopic.hide()
             Visualize.mGraph.busy = false
             Mouse.boxEndCoordinates = eventInfo.getPos()
             JIT.selectWithBox(e)
@@ -432,7 +432,6 @@ const JIT = {
           } else {
             // right click open space
             Create.newSynapse.hide()
-            Create.newTopic.hide()
           }
         }
       },
@@ -721,11 +720,11 @@ const JIT = {
       $('canvas').css('cursor', 'default')
     }
   }, // onMouseMoveHandler
-  enterKeyHandler: function() {
+  enterKeyHandler: function(e) {
     const creatingMap = GlobalUI.lightbox
     if (creatingMap === 'newmap' || creatingMap === 'forkmap') {
       GlobalUI.CreateMap.submit()
-    } else if (Create.newTopic.beingCreated && !Create.newTopic.metacodeSelectorOpen) {
+    } else if (e.target.id === 'topic_name' && !Create.newTopic.metacodeSelectorOpen) {
       Topic.createTopicLocally()
     } else if (Create.newSynapse.beingCreated) {
       Synapse.createSynapseLocally()
@@ -850,7 +849,6 @@ const JIT = {
           JIT.tempNode = node
           JIT.tempInit = true
 
-          Create.newTopic.hide()
           Create.newSynapse.hide()
           Mouse.synapseEndCoordinates = {
             x: pos.x,
@@ -878,15 +876,7 @@ const JIT = {
           Visualize.mGraph.graph.eachNode(function(n) {
             n.setData('dim', 25, 'current')
           })
-          // pop up node creation :)
-          var myX = e.clientX - 110
-          var myY = e.clientY - 30
-          $('#new_topic').css('left', myX + 'px')
-          $('#new_topic').css('top', myY + 'px')
-          Create.newTopic.x = eventInfo.getPos().x
-          Create.newTopic.y = eventInfo.getPos().y
           Visualize.mGraph.plot()
-
           Mouse.synapseEndCoordinates = {
             x: pos.x,
             y: pos.y
@@ -929,12 +919,9 @@ const JIT = {
     self.dragTolerance = 0
 
     if (JIT.tempInit && JIT.tempNode2 === null) {
-      // this means you want to add a new topic, and then a synapse
-      Create.newTopic.addSynapse = true
-      Create.newTopic.open()
+      Mouse.synapseEndCoordinates = null
     } else if (JIT.tempInit && JIT.tempNode2 !== null) {
       // this means you want to create a synapse between two existing topics
-      Create.newTopic.addSynapse = false
       Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
       Create.newSynapse.topic2id = JIT.tempNode2.getData('topic').id
       Create.newSynapse.node1 = JIT.tempNode
@@ -946,7 +933,6 @@ const JIT = {
       pixelPos = Util.coordsToPixels(Visualize.mGraph, midpoint)
       $('#new_synapse').css('left', pixelPos.x + 'px')
       $('#new_synapse').css('top', pixelPos.y + 'px')
-      Create.newSynapse.alreadyAdded = false
       Create.newSynapse.open()
       JIT.tempNode = null
       JIT.tempNode2 = null
@@ -991,27 +977,12 @@ const JIT = {
     const authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     if (now - storedTime < Mouse.DOUBLE_CLICK_TOLERANCE && !Mouse.didPan) {
-      if (Active.Map && !authorized) {
-        GlobalUI.notifyUser('Cannot edit Public map.')
-        return
-      } else if (Active.Topic) {
-        GlobalUI.notifyUser('Cannot create in Topic view.')
-        return
-      }
       // DOUBLE CLICK
-      // pop up node creation :)
-      Create.newTopic.addSynapse = false
-      Create.newTopic.x = canvasLoc.x
-      Create.newTopic.y = canvasLoc.y
-      $('#new_topic').css('left', e.clientX + 'px')
-      $('#new_topic').css('top', e.clientY + 'px')
-      Create.newTopic.open()
     } else if (!Mouse.didPan) {
       // SINGLE CLICK, no pan
       Filter.close()
       TopicCard.hideCard()
       SynapseCard.hideCard()
-      Create.newTopic.hide()
       $('.rightclickmenu').remove()
       // reset the draw synapse positions to false
       Mouse.synapseStartCoordinates = []
@@ -1025,7 +996,6 @@ const JIT = {
       }
     } else {
       // SINGLE CLICK, resulting from pan
-      Create.newTopic.hide()
     }
   }, // canvasClickHandler
   updateTopicPositions: function(node, pos) {

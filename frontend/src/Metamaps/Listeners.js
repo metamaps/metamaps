@@ -24,7 +24,7 @@ const Listeners = {
         case 13: // if enter key is pressed
           // prevent topic creation if sending a message
           if (e.target.className !== 'chat-input') {
-            JIT.enterKeyHandler()
+            JIT.enterKeyHandler(e)
           }
           break
         case 27: // if esc key is pressed

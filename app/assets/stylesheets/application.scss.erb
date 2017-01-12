@@ -526,9 +526,9 @@ button.button.btn-no:hover {
 }
 
 .new_topic {
-    /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
-    top: -1000px;
-    left: -1000px;
+    top: 50%;
+    left: 50%;
+    margin-top: -17px;
     display: block;
     position: absolute;
     z-index: 1;
@@ -594,37 +594,17 @@ button.button.btn-no:hover {
     color: #BDBDBD;
 }
 .openMetacodeSwitcher {
-    display: none;
+    display: block;
     height: 16px;
     width: 16px;
     background-image: url(<%= asset_data_uri('metacodesettings_sprite.png') %>);
     position: absolute;
     z-index: 2;
-    top: 20px;
-    left: 16px;
+    top: -16px;
+    left: -16px;
 }
 .openMetacodeSwitcher:hover {
     background-position: -16px 0;
-}
-.pinCarousel {
-    cursor: pointer;
-    display: block;
-    height: 16px;
-    width: 16px;
-    background-image: url(<%= asset_data_uri('pincarousel_sprite.png') %>);
-    position: absolute;
-    z-index: 2;
-    top: -20px;
-    right: -16px;
-}
-.pinCarousel:hover {
-    background-position: 0 -16px;
-}
-.pinCarousel.isPinned {
-    background-position: -16px 0;
-}
-.pinCarousel.isPinned:hover {
-    background-position: -16px -16px;
 }
 #metacodeImg {
     height: 120px;

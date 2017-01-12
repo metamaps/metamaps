@@ -6,6 +6,8 @@ const Mouse = {
   edgeHoveringOver: false,
   boxStartCoordinates: false,
   boxEndCoordinates: false,
+  focusNodeCoords: null,
+  newNodeCoords: { x: 100, y: 0 },
   synapseStartCoordinates: [],
   synapseEndCoordinates: null,
   lastNodeClick: 0,

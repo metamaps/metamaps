@@ -65,10 +65,11 @@ const Create = {
     if (!custom) {
       codesToSwitchToIds = $('#metacodeSwitchTabs' + set).attr('data-metacodes').split(',')
       $('.customMetacodeList li').addClass('toggledOff')
-      Create.selectedMetacodes = []
-      Create.selectedMetacodeNames = []
-      Create.newSelectedMetacodes = []
-      Create.newSelectedMetacodeNames = []
+console.log(codesToSwitchToIds)
+      Create.selectedMetacodes = codesToSwitchToIds
+      Create.selectedMetacodeNames = DataModel.Metacodes.filter(m => codesToSwitchToIds.indexOf(m.id) > -1).map(m => m.get('name'))  
+      Create.newSelectedMetacodes = codesToSwitchToIds
+      Create.newSelectedMetacodeNames = DataModel.Metacodes.filter(m => codesToSwitchToIds.indexOf(m.id) > -1).map(m => m.get('name'))  
     } else if (custom) {
       // uses .slice to avoid setting the two arrays to the same actual array
       Create.selectedMetacodes = Create.newSelectedMetacodes.slice(0)
@@ -77,9 +78,11 @@ const Create = {
     }
 
     // sort by name
-    for (var i = 0; i < codesToSwitchToIds.length; i++) {
-      metacodeModels.add(DataModel.Metacodes.get(codesToSwitchToIds[i]))
-    }
+    codesToSwitchToIds.forEach(id => {
+      const metacode = DataModel.Metacodes.get(id)
+      metacodeModels.add(metacode)
+      $('.customMetacodeList #' + id).removeClass('toggledOff')
+    })
     metacodeModels.sort()
 
     $('#metacodeImg').removeData('cloudcarousel')
@@ -96,6 +99,8 @@ const Create = {
       speed: 0.3,
       bringToFront: true
     })
+
+    Create.newTopic.setMetacode(metacodeModels.models[0].id)
 
     GlobalUI.closeLightbox()
     $('#topic_name').focus()
@@ -123,13 +128,7 @@ const Create = {
     var self = Create
     self.isSwitchingSet = false
 
-    if (self.selectedMetacodeSet !== 'metacodeset-custom') {
-      $('.customMetacodeList li').addClass('toggledOff')
-      self.selectedMetacodes = []
-      self.selectedMetacodeNames = []
-      self.newSelectedMetacodes = []
-      self.newSelectedMetacodeNames = []
-    } else { // custom set is selected
+    if (self.selectedMetacodeSet === 'metacodeset-custom') {
       // reset it to the current actual selection
       $('.customMetacodeList li').addClass('toggledOff')
       for (var i = 0; i < self.selectedMetacodes.length; i++) {
@@ -167,17 +166,7 @@ const Create = {
       })
       
       Create.newTopic.initSelector()
-
-      $('.pinCarousel').click(function() {
-        if (Create.newTopic.pinned) {
-          $('.pinCarousel').removeClass('isPinned')
-          Create.newTopic.pinned = false
-        } else {
-          $('.pinCarousel').addClass('isPinned')
-          Create.newTopic.pinned = true
-        }
-      })
-
+      
       var topicBloodhound = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -229,7 +218,6 @@ const Create = {
         speed: 0.3,
         bringToFront: true
       })
-      $('.new_topic').hide()
       $('#new_topic').attr('oncontextmenu', 'return false') // prevents the mouse up event from opening the default context menu on this element
     },
     name: null,
@@ -253,7 +241,7 @@ const Create = {
             Create.newTopic.hideSelector()
             $('#topic_name').focus()
           },
-          metacodes: DataModel.Metacodes.models
+          metacodes: DataModel.Metacodes.filter(m => Create.selectedMetacodes.indexOf(m.id.toString()) > -1)
         }),
         document.getElementById('metacodeSelector')
       )
@@ -287,30 +275,16 @@ const Create = {
         }
       })
     },
-    open: function () {
-      $('#new_topic').fadeIn('fast', function () {
-        $('#topic_name').focus()
-      })
-      Create.newTopic.beingCreated = true
-      Create.newTopic.name = ''
-      GlobalUI.hideDiv('#instructions')
-    },
-    hide: function(force) {
-      if (force || !Create.newTopic.pinned) {
-        $('#new_topic').fadeOut('fast')
-      }
-      if (force) {
-        $('.pinCarousel').removeClass('isPinned')
-        Create.newTopic.pinned = false
-      }
-      if (DataModel.Topics.length === 0) {
-        GlobalUI.showDiv('#instructions')
-      }
-      Create.newTopic.beingCreated = false
-    },
     reset: function() {
       $('#topic_name').typeahead('val', '')
       Create.newTopic.hideSelector()
+    },
+    position: function() {
+      const pixels = Util.coordsToPixels(Visualize.mGraph, Mouse.newNodeCoords)
+      $('#new_topic').css({
+        left: pixels.x,
+        top: pixels.y
+      })
     }
   },
   newSynapse: {
@@ -403,6 +377,7 @@ const Create = {
         }
       })
     },
+    focusNode: null,
     beingCreated: false,
     description: null,
     topic1id: null,

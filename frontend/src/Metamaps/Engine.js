@@ -1,22 +1,34 @@
 import Matter, { Vector, Sleeping, World, Constraint, Composite, Runner, Common, Body, Bodies, Events } from 'matter-js'
+import { last, sortBy, values } from 'lodash'
 
 import $jit from '../patched/JIT'
 
 import Create from './Create'
 import DataModel from './DataModel'
+import Mouse from './Mouse'
 import JIT from './JIT'
 import Visualize from './Visualize'
 
 const Engine = {
+  focusBody: null,
+  newNodeConstraint: null,
+  newNodeBody:  Bodies.circle(Mouse.newNodeCoords.x, Mouse.newNodeCoords.y, 1),
   init: () => {
     Engine.engine = Matter.Engine.create() 
     Events.on(Engine.engine, 'afterUpdate', Engine.callUpdate)
-    Engine.engine.world.gravity.scale = 0
+    //Engine.engine.world.gravity.scale = 0
+    Engine.engine.world.gravity.y = 0
+    Engine.engine.world.gravity.x = -1
+    Body.setStatic(Engine.newNodeBody, true)
   },
   run: init => {
     if (init) {
+      World.addBody(Engine.engine.world, Engine.newNodeBody)
       Visualize.mGraph.graph.eachNode(Engine.addNode)
       DataModel.Synapses.each(s => Engine.addEdge(s.get('edge')))
+      if (Object.keys(Visualize.mGraph.graph.nodes).length) {
+        Engine.setFocusNode(Engine.findFocusNode(Visualize.mGraph.graph.nodes))
+      }
     }
     Engine.runner = Matter.Runner.run(Engine.engine)
   },
@@ -49,6 +61,28 @@ const Engine = {
   removeNode: node => { 
 
   },
+  findFocusNode: nodes => {
+    return last(sortBy(values(nodes), n => new Date(n.getData('topic').get('created_at'))))
+  },
+  setFocusNode: node => {
+    Create.newSynapse.focusNode = node
+    const body = Composite.get(Engine.engine.world, node.getData('body_id'), 'body')
+    Engine.focusBody = body 
+    let constraint
+    if (Engine.newNodeConstraint) {
+      Engine.newNodeConstraint.bodyA = body
+    }
+    else {
+      constraint = Constraint.create({
+        bodyA: body,
+        bodyB: Engine.newNodeBody,
+        length: JIT.ForceDirected.graphSettings.levelDistance,
+        stiffness: 0.2
+      })
+      World.addConstraint(Engine.engine.world, constraint)
+      Engine.newNodeConstraint = constraint
+    }
+  },
   addEdge: edge => {
     const bodyA = Composite.get(Engine.engine.world, edge.nodeFrom.getData('body_id'), 'body')   
     const bodyB = Composite.get(Engine.engine.world, edge.nodeTo.getData('body_id'), 'body')   
@@ -70,7 +104,9 @@ const Engine = {
       const newPos = new $jit.Complex(b.position.x, b.position.y)
       node && node.setPos(newPos, 'current')
     })
+    if (Engine.focusBody) Mouse.focusNodeCoords = Engine.focusBody.position
     Create.newSynapse.updateForm() 
+    Create.newTopic.position()
     Visualize.mGraph.plot()
   }
 }

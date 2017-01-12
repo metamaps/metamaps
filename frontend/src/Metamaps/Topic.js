@@ -171,63 +171,28 @@ const Topic = {
   // opts is additional options in a hash
   // TODO: move createNewInDB and permitCreateSynapseAfter into opts
   renderTopic: function(mapping, topic, createNewInDB, permitCreateSynapseAfter, opts = {}) {
-    var nodeOnViz, tempPos
+    var nodeOnViz
     var newnode = topic.createNode()
-    var midpoint = {}
-    var pixelPos
+    const connectToId = Create.newSynapse.focusNode.getData('topic').id
 
     if (!$.isEmptyObject(Visualize.mGraph.graph.nodes)) {
-      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) {
-        Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
-        Create.newSynapse.node1 = JIT.tempNode
-        // this will also add a new node if the node doesn't exist
-        Visualize.mGraph.graph.addAdjacence(JIT.tempNode, newnode)
-        Create.newSynapse.alreadyAdded = true
-        Mouse.synapseEndCoordinates = null
-      } 
-      else Visualize.mGraph.graph.addNode(newnode)
+      // this will also add the new node
+      Visualize.mGraph.graph.addAdjacence(Create.newSynapse.focusNode, newnode)
       nodeOnViz = Visualize.mGraph.graph.getNode(newnode.id)
-      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) Create.newSynapse.node2 = nodeOnViz
       Engine.addNode(nodeOnViz)
-      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) { 
-        Engine.addEdge(Visualize.mGraph.graph.getAdjacence(JIT.tempNode.id, nodeOnViz.id))
-      }
+      Engine.addEdge(Visualize.mGraph.graph.getAdjacence(Create.newSynapse.focusNode.id, nodeOnViz.id))
       topic.set('node', nodeOnViz, {silent: true})
       topic.updateNode() // links the topic and the mapping to the node
-
+      Engine.setFocusNode(nodeOnViz)
       nodeOnViz.setData('dim', 1, 'start')
       nodeOnViz.setData('dim', 25, 'end')
-      if (Visualize.type === 'RGraph') {
-        tempPos = new $jit.Complex(mapping.get('xloc'), mapping.get('yloc'))
-        tempPos = tempPos.toPolar()
-        nodeOnViz.setPos(tempPos, 'current')
-        nodeOnViz.setPos(tempPos, 'start')
-        nodeOnViz.setPos(tempPos, 'end')
-      } else if (Visualize.type === 'ForceDirected') {
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'current')
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'start')
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'end')
-      }
-      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) {
-        // show the form
-        //Create.newSynapse.open()
         Visualize.mGraph.fx.animate({
           modes: ['node-property:dim'],
-          duration: 500,
-          onComplete: function() {
-            JIT.tempNode = null
-            JIT.tempNode2 = null
-            JIT.tempInit = false
-          }
+          duration: 500
         })
-      } else {
-        Visualize.mGraph.fx.plotNode(nodeOnViz, Visualize.mGraph.canvas)
-        Visualize.mGraph.fx.animate({
-          modes: ['node-property:dim'],
-          duration: 500,
-          onComplete: function() {}
-        })
-      }
     } else {
       Engine.run()
       Visualize.mGraph.loadJSON(newnode)
@@ -235,7 +200,7 @@ const Topic = {
       Engine.addNode(nodeOnViz)
       topic.set('node', nodeOnViz, {silent: true})
       topic.updateNode() // links the topic and the mapping to the node
-
+      Engine.setFocusNode(nodeOnViz)
       nodeOnViz.setData('dim', 1, 'start')
       nodeOnViz.setData('dim', 25, 'end')
       nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'current')
@@ -244,8 +209,7 @@ const Topic = {
       Visualize.mGraph.fx.plotNode(nodeOnViz, Visualize.mGraph.canvas)
       Visualize.mGraph.fx.animate({
         modes: ['node-property:dim'],
-        duration: 500,
-        onComplete: function() {}
+        duration: 500
       })
     }
 
@@ -266,11 +230,7 @@ const Topic = {
           }
         })
       }
-
-      if (Create.newTopic.addSynapse) {
-        Create.newSynapse.topic2id = topicModel.id
-        Synapse.createSynapseLocally()
-      }
+      Synapse.createSynapseLocally(true, connectToId, topicModel.id)
     }
 
     if (!Settings.sandbox && createNewInDB) {
@@ -296,9 +256,6 @@ const Topic = {
       return
     }
 
-    // hide the 'double-click to add a topic' message
-    GlobalUI.hideDiv('#instructions')
-
     $(document).trigger(Map.events.editedByActiveMapper)
 
     var metacode = DataModel.Metacodes.get(Create.newTopic.metacode)
@@ -310,34 +267,23 @@ const Topic = {
     })
     DataModel.Topics.add(topic)
 
-    if (Create.newTopic.pinned) {
-      var nextCoords = { x: 0, y: 0 } // AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
-    }
     var mapping = new DataModel.Mapping({
-      xloc: nextCoords ? nextCoords.x : Create.newTopic.x,
-      yloc: nextCoords ? nextCoords.y : Create.newTopic.y,
+      xloc: Mouse.newNodeCoords.x, 
+      yloc: Mouse.newNodeCoords.y,
       mappable_id: topic.cid,
       mappable_type: 'Topic'
     })
     DataModel.Mappings.add(mapping)
 
     // these can't happen until the value is retrieved, which happens in the line above
-    if (!Create.newTopic.pinned) Create.newTopic.hide()
     Create.newTopic.reset()
 
     self.renderTopic(mapping, topic, true, true) // this function also includes the creation of the topic in the database
   },
   getTopicFromAutocomplete: function(id) {
     var self = Topic
-
-    // hide the 'double-click to add a topic' message
-    GlobalUI.hideDiv('#instructions')
-
     $(document).trigger(Map.events.editedByActiveMapper)
-
-    if (!Create.newTopic.pinned) Create.newTopic.hide()
     Create.newTopic.reset()
-
     self.get(id, (topic) => {
       if (Create.newTopic.pinned) {
         var nextCoords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
@@ -349,10 +295,7 @@ const Topic = {
         mappable_id: topic.id
       })
       DataModel.Mappings.add(mapping)
-
       self.renderTopic(mapping, topic, true, true)
-      // this blocked the enterKeyHandler from creating a new topic as well
-      if (Create.newTopic.pinned) Create.newTopic.beingCreated = true
     })
   },
   getMapFromAutocomplete: function(data) {

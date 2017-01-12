@@ -8,10 +8,6 @@ class Mapping < ApplicationRecord
   belongs_to :user
   belongs_to :updated_by, class_name: 'User'
 
-  validates :xloc, presence: true,
-                   unless: proc { |m| m.mappable_type == 'Synapse' }
-  validates :yloc, presence: true,
-                   unless: proc { |m| m.mappable_type == 'Synapse' }
   validates :map, presence: true
   validates :mappable, presence: true
 
@@ -31,7 +27,7 @@ class Mapping < ApplicationRecord
 
   def after_created
     if mappable_type == 'Topic'
-      meta = {'x': xloc, 'y': yloc, 'mapping_id': id}
+      meta = {'mapping_id': id}
       Events::TopicAddedToMap.publish!(mappable, map, user, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicAdded', topic: mappable.filtered, mapping_id: id
     elsif mappable_type == 'Synapse'

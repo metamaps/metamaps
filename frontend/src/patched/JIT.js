@@ -7243,6 +7243,13 @@ Graph.Plot = {
         ctx.restore();
     }
 
+    if (Metamaps.Mouse.focusNodeCoords) {
+        ctx.save();
+        Metamaps.JIT.renderMidArrow(Metamaps.Mouse.focusNodeCoords, Metamaps.Mouse.newNodeCoords, 13, false, canvas, 0.3, true);
+        Metamaps.JIT.renderMidArrow(Metamaps.Mouse.focusNodeCoords, Metamaps.Mouse.newNodeCoords, 13, false, canvas, 0.7, true);
+        ctx.restore();
+    }
+
     if (Metamaps.Mouse.boxStartCoordinates && Metamaps.Mouse.boxEndCoordinates) {
       ctx.save();
       ctx.beginPath()
