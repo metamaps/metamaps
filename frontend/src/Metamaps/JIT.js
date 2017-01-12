@@ -725,7 +725,7 @@ const JIT = {
     const creatingMap = GlobalUI.lightbox
     if (creatingMap === 'newmap' || creatingMap === 'forkmap') {
       GlobalUI.CreateMap.submit()
-    } else if (Create.newTopic.beingCreated) {
+    } else if (Create.newTopic.beingCreated && !Create.newTopic.metacodeSelectorOpen) {
       Topic.createTopicLocally()
     } else if (Create.newSynapse.beingCreated) {
       Synapse.createSynapseLocally()

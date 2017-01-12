@@ -253,9 +253,7 @@ const Create = {
             Create.newTopic.hideSelector()
             $('#topic_name').focus()
           },
-          metacodes: DataModel.Metacodes.models,
-          recent: Create.recentMetacodes,
-          mostUsed: Create.mostUsedMetacodes
+          metacodes: DataModel.Metacodes.models
         }),
         document.getElementById('metacodeSelector')
       )
