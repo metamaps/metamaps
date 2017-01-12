@@ -2,6 +2,7 @@ Metamaps
 =======
 
 [![Build Status](https://travis-ci.org/metamaps/metamaps.svg?branch=develop)](https://travis-ci.org/metamaps/metamaps)
+[![Code Climate](https://codeclimate.com/github/metamaps/metamaps/badges/gpa.svg)](https://codeclimate.com/github/metamaps/metamaps)
 
 ## What is Metamaps?
 
