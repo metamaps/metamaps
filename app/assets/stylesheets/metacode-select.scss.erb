@@ -1,0 +1,72 @@
+#metacodeSelector {
+  display: none;
+}
+
+.metacodeSelect {
+  border-top: 1px solid #DDD;
+  padding: 0;
+
+  .tabList {
+    float: left;
+    background: #FFF;
+    
+    div {
+      border-right: 1px solid #DDD;
+      border-bottom: 1px solid #DDD;
+    }
+    
+    div:last-child {
+      border-bottom: none;
+    }
+    
+    div.active {
+      border-right: none;
+      background: #EEE;
+      
+      .metacodeFilterInput {
+        background: #EEE;
+      }
+    }
+    
+    .metacodeFilterInput {
+      width: 100px;
+      outline: none;
+      border: 0;
+      padding: 8px;
+      font-size: 14px;
+      line-height: 14px;
+      color: #424242;
+      font-family: 'din-medium', helvetica, sans-serif;
+    }
+    
+    span {
+      padding: 8px;
+      display: block;
+    }
+  }
+  
+  .metacodeList {
+    float:left;
+    list-style: none;
+    background: #FFF;
+    min-height: 107px;
+    min-width: 100px;
+    
+    li {
+      padding: 8px;
+      cursor: pointer;
+      
+      &:hover, &.keySelect {
+        background: #EEE;
+      }
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      vertical-align: middle;
+      padding-right: 6px;
+    }
+  }
+}

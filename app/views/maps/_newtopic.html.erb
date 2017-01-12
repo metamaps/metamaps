@@ -11,24 +11,36 @@
   </div>
 
   <div id="metacodeImg">
+    <% @metacodes = [user_metacode()].concat(user_metacodes()).uniq %>
+    <% set = metacodeset() %>
     <% @metacodes.each do |metacode| %>
       <img class="cloudcarousel" width="40" height="40" src="<%= asset_path metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
     <% end %>
-  </div> 
-
+  </div>
+  <div class="selectedMetacode">
+    <img src="<%= asset_path user_metacode().icon %>" />
+    <span><%= user_metacode().name %></span>
+    <div class="downArrow"></div>
+  </div>
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>
-
-  <div id="metacodeImgTitle"></div>
   <div class="clearfloat"></div>
-
-  <script>
-    <% @metacodes.each do |metacode| %>
-      <% if !metacodeset() %>
-        Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
-        Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
-        Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
-        Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
-      <% end %>
-    <% end %> 
-  </script>
+  <div id="metacodeSelector"></div>
+  <div class="clearfloat"></div>
+<script>
+<% @metacodes.each do |metacode| %>
+  <% if !set %>
+    Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
+    Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
+    Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
+    Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
+  <% end %>
+<% end %> 
+Metamaps.Create.newTopic.metacode = <%= user_metacode().id %>
+<% current_user.recentMetacodes.each do |id| %>
+    Metamaps.Create.recentMetacodes.push(<%= id %>);
+<% end %>
+<% current_user.mostUsedMetacodes.each do |id| %>
+    Metamaps.Create.mostUsedMetacodes.push(<%= id %>);
+<% end %>
+</script>
 <% end %>

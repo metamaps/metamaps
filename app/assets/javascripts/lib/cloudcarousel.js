@@ -164,16 +164,17 @@ jQuery.browser = browser;
 		// START METAMAPS CODE
 		// Add code that makes tab and shift+tab scroll through metacodes
 		$('.new_topic').bind('keydown',this,function(event){
-			if (event.keyCode == 9) {
-				if (event.shiftKey) {
-					event.data.rotate(-1)
-				} else {
-					event.data.rotate(1)
-				}
-				event.preventDefault();
-				event.stopPropagation();
-				Metamaps.Create.newTopic.metacode = $(items[event.data.frontIndex].image).attr('data-id');
-			}
+            if (event.keyCode == 9 && event.shiftKey) {
+        $(container).show()
+				event.data.rotate(-1);
+                event.preventDefault();
+                event.stopPropagation();
+			} else if (event.keyCode == 9) {
+				$(container).show()
+				event.data.rotate(1);
+                event.preventDefault();
+                event.stopPropagation();
+            }
 		});
 		// END METAMAPS CODE
 		
@@ -181,14 +182,14 @@ jQuery.browser = browser;
 		if (options.mouseWheel)
 		{
 			// START METAMAPS CODE
-			$('body').bind('mousewheel',this,function(event, delta) {					 
-					if (Metamaps.Create.newTopic.beingCreated && 
-					    !Metamaps.Create.isSwitchingSet &&
-					    !Metamaps.Create.newTopic.pinned) {
-						event.data.rotate(delta);
-						return false;
-					}
-				});
+			/*$('body').bind('mousewheel',this,function(event, delta) {					 
+					 if (Metamaps.Create.newTopic.beingCreated && 
+					     !Metamaps.Create.isSwitchingSet &&
+					     !Metamaps.Create.newTopic.pinned) {
+					 	event.data.rotate(delta);
+					 	return false;
+					 }
+				 });*/
 			// END METAMAPS CODE
 			// ORIGINAL CODE
 			// $(container).bind('mousewheel',this,function(event, delta) {
@@ -255,8 +256,11 @@ jQuery.browser = browser;
 		this.showFrontText = function()
 		{	
 			if ( items[this.frontIndex] === undefined ) { return; }	// Images might not have loaded yet.
-			$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
-			$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				
+                        // METAMAPS CODE
+			Metamaps.Create.newTopic.setMetacode($(items[this.frontIndex].image).attr('data-id'))
+			// NOT METAMAPS CODE
+			//$(options.titleBox).html( $(items[this.frontIndex].image).attr('title'));
+			//$(options.altBox).html( $(items[this.frontIndex].image).attr('alt'));				
 		};
 						
 		this.go = function()
@@ -269,7 +273,10 @@ jQuery.browser = browser;
 		this.stop = function()
 		{
 			clearTimeout(this.controlTimer);
-			this.controlTimer = 0;				
+			this.controlTimer = 0;
+			// METAMAPS CODE
+			$(container).hide()
+			// END METAMAPS CODE
 		};
 		
 		
@@ -390,7 +397,7 @@ jQuery.browser = browser;
 			}
 			// If all images have valid widths and heights, we can stop checking.			
 			clearInterval(this.tt);
-			this.showFrontText();
+			// METAMAPS COMMENT this.showFrontText();
 			this.autoRotate();	
 			this.updateAll();
 			
