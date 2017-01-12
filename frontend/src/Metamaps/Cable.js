@@ -2,7 +2,9 @@
 
 import Active from './Active'
 import Control from './Control'
+import Create from './Create'
 import DataModel from './DataModel'
+import Engine from './Engine'
 import Map from './Map'
 import Mapper from './Mapper'
 import Synapse from './Synapse'
@@ -51,6 +53,9 @@ const Cable = {
           node2 = topic2.get('node')
     
           Synapse.renderSynapse(mapping, synapse, node1, node2, false)
+          if (Create.newSynapse.focusNode === node1) {
+            Engine.setFocusNode(node2)
+          }
         } else if (!cancel) {
           setTimeout(waitThenRenderSynapse, 10)
         }
@@ -132,7 +137,7 @@ const Cable = {
     
       function waitThenRenderTopic() {
         if (topic && mapping && mapper) {
-          Topic.renderTopic(mapping, topic, false, false)
+          Topic.renderTopic(mapping, topic, false)
         } else if (!cancel) {
           setTimeout(waitThenRenderTopic, 10)
         }
@@ -183,7 +188,7 @@ const Cable = {
   },
   topicMoved: event => {
     var topic, node, mapping
-    if (Active.Map) {
+    /*if (Active.Map) {
       topic = DataModel.Topics.get(event.id)
       mapping = DataModel.Mappings.get(event.mapping_id)
       mapping.set('xloc', event.x)
@@ -191,7 +196,7 @@ const Cable = {
       if (topic) node = topic.get('node')
       if (node) node.pos.setc(event.x, event.y)
       Visualize.mGraph.plot()
-    }
+    }*/
   },
   topicRemoved: event => {
     var topic = DataModel.Topics.get(event.id)

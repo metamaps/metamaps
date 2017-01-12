@@ -48,28 +48,17 @@ const Synapse = {
 
     var synapseSuccessCallback = function(synapseModel, response) {
       if (Active.Map) {
-        mapping.save({ mappable_id: synapseModel.id }, {
-          error: function(model, response) {
-            console.log('error saving mapping to database')
-          }
-        })
+        mapping.save({ mappable_id: synapseModel.id })
       }
     }
 
-    if (!Settings.sandbox && createNewInDB) {
+    if (createNewInDB) {
       if (synapse.isNew()) {
         synapse.save(null, {
-          success: synapseSuccessCallback,
-          error: function(model, response) {
-            console.log('error saving synapse to database')
-          }
+          success: synapseSuccessCallback
         })
       } else if (!synapse.isNew() && Active.Map) {
-        mapping.save(null, {
-          error: function(model, response) {
-            console.log('error saving mapping to database')
-          }
-        })
+        mapping.save(null)
       }
     }
   },
