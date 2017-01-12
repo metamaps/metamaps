@@ -117,10 +117,6 @@ const DataModel = {
       Filter.checkMetacodes()
       Filter.checkMappers()
     })
-    DataModel.Mappings.on('remove', function(mapping) {
-      console.log('removed', mapping)
-      if (mapping.get('mappable_type') === 'Topic') Engine.removeTopic(mapping)
-    })
   }
 }
 

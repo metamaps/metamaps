@@ -393,7 +393,6 @@ const JIT = {
               Visualize.mGraph.busy = false
               Mouse.boxEndCoordinates = eventInfo.getPos()
               JIT.selectWithBox(e)
-
               return
             }
           }
@@ -853,22 +852,6 @@ const JIT = {
 
           Create.newTopic.hide()
           Create.newSynapse.hide()
-          // set the draw synapse start positions
-          var l = Selected.Nodes.length
-          if (l > 0) {
-            for (let i = l - 1; i >= 0; i -= 1) {
-              const n = Selected.Nodes[i]
-              Mouse.synapseStartCoordinates.push({
-                x: n.pos.getc().x,
-                y: n.pos.getc().y
-              })
-            }
-          } else {
-            Mouse.synapseStartCoordinates = [{
-              x: JIT.tempNode.pos.getc().x,
-              y: JIT.tempNode.pos.getc().y
-            }]
-          }
           Mouse.synapseEndCoordinates = {
             x: pos.x,
             y: pos.y
@@ -954,6 +937,8 @@ const JIT = {
       Create.newTopic.addSynapse = false
       Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
       Create.newSynapse.topic2id = JIT.tempNode2.getData('topic').id
+      Create.newSynapse.node1 = JIT.tempNode
+      Create.newSynapse.node2 = JIT.tempNode2
       JIT.tempNode2.setData('dim', 25, 'current')
       Visualize.mGraph.plot()
       midpoint.x = JIT.tempNode.pos.getc().x + (JIT.tempNode2.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
@@ -961,6 +946,7 @@ const JIT = {
       pixelPos = Util.coordsToPixels(Visualize.mGraph, midpoint)
       $('#new_synapse').css('left', pixelPos.x + 'px')
       $('#new_synapse').css('top', pixelPos.y + 'px')
+      Create.newSynapse.alreadyAdded = false
       Create.newSynapse.open()
       JIT.tempNode = null
       JIT.tempNode2 = null
@@ -1068,7 +1054,7 @@ const JIT = {
         n.pos.setp(theta, rho)
       } else {
         n.pos.setc(x, y)
-        Engine.setTopicPos(n.getData('body_id'), x, y)
+        Engine.setNodePos(n.getData('body_id'), x, y)
       }
 
       if (Active.Map) {
@@ -1274,26 +1260,6 @@ const JIT = {
     Mouse.boxEndCoordinates = false
     Visualize.mGraph.plot()
   }, // selectWithBox
-  drawSelectBox: function(eventInfo, e) {
-    const ctx = Visualize.mGraph.canvas.getCtx()
-
-    const startX = Mouse.boxStartCoordinates.x
-    const startY = Mouse.boxStartCoordinates.y
-    const currX = eventInfo.getPos().x
-    const currY = eventInfo.getPos().y
-
-    Visualize.mGraph.canvas.clear()
-    Visualize.mGraph.plot()
-
-    ctx.beginPath()
-    ctx.moveTo(startX, startY)
-    ctx.lineTo(startX, currY)
-    ctx.lineTo(currX, currY)
-    ctx.lineTo(currX, startY)
-    ctx.lineTo(startX, startY)
-    ctx.strokeStyle = 'black'
-    ctx.stroke()
-  }, // drawSelectBox
   selectNodeOnClickHandler: function(node, e) {
     if (Visualize.mGraph.busy) return
 

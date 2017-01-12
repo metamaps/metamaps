@@ -88,8 +88,8 @@ const Synapse = Backbone.Model.extend({
       }
     }
 
-    if (Active.Map) {
-      mapping = providedMapping || this.getMapping()
+    if (Active.Map && providedMapping) {
+      mapping = providedMapping
       mappingID = mapping.isNew() ? mapping.cid : mapping.id
       edge.data.$mappings = []
       edge.data.$mappingIDs = [mappingID]
@@ -100,10 +100,12 @@ const Synapse = Backbone.Model.extend({
   updateEdge: function() {
     var mapping
     var edge = this.get('edge')
+    edge.data.$synapses = edge.data.$synapses || []
     edge.getData('synapses').push(this)
 
     if (Active.Map) {
       mapping = this.getMapping()
+      edge.data.$mappings = edge.data.$mappings || []
       edge.getData('mappings').push(mapping)
     }
 

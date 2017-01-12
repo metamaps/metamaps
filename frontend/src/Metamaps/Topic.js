@@ -11,9 +11,11 @@ import Filter from './Filter'
 import GlobalUI from './GlobalUI'
 import JIT from './JIT'
 import Map from './Map'
+import Mouse from './Mouse'
 import Router from './Router'
 import Selected from './Selected'
 import Settings from './Settings'
+import Synapse from './Synapse'
 import SynapseCard from './SynapseCard'
 import TopicCard from './TopicCard'
 import Util from './Util'
@@ -170,15 +172,26 @@ const Topic = {
   // TODO: move createNewInDB and permitCreateSynapseAfter into opts
   renderTopic: function(mapping, topic, createNewInDB, permitCreateSynapseAfter, opts = {}) {
     var nodeOnViz, tempPos
-
     var newnode = topic.createNode()
-
     var midpoint = {}
     var pixelPos
 
     if (!$.isEmptyObject(Visualize.mGraph.graph.nodes)) {
-      Visualize.mGraph.graph.addNode(newnode)
+      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) {
+        Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
+        Create.newSynapse.node1 = JIT.tempNode
+        // this will also add a new node if the node doesn't exist
+        Visualize.mGraph.graph.addAdjacence(JIT.tempNode, newnode)
+        Create.newSynapse.alreadyAdded = true
+        Mouse.synapseEndCoordinates = null
+      } 
+      else Visualize.mGraph.graph.addNode(newnode)
       nodeOnViz = Visualize.mGraph.graph.getNode(newnode.id)
+      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) Create.newSynapse.node2 = nodeOnViz
+      Engine.addNode(nodeOnViz)
+      if (Create.newTopic.addSynapse && permitCreateSynapseAfter) { 
+        Engine.addEdge(Visualize.mGraph.graph.getAdjacence(JIT.tempNode.id, nodeOnViz.id))
+      }
       topic.set('node', nodeOnViz, {silent: true})
       topic.updateNode() // links the topic and the mapping to the node
 
@@ -196,16 +209,8 @@ const Topic = {
         nodeOnViz.setPos(new $jit.Complex(mapping.get('xloc'), mapping.get('yloc')), 'end')
       }
       if (Create.newTopic.addSynapse && permitCreateSynapseAfter) {
-        Create.newSynapse.topic1id = JIT.tempNode.getData('topic').id
-
-        // position the form
-        midpoint.x = JIT.tempNode.pos.getc().x + (nodeOnViz.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
-        midpoint.y = JIT.tempNode.pos.getc().y + (nodeOnViz.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
-        pixelPos = Util.coordsToPixels(Visualize.mGraph, midpoint)
-        $('#new_synapse').css('left', pixelPos.x + 'px')
-        $('#new_synapse').css('top', pixelPos.y + 'px')
         // show the form
-        Create.newSynapse.open()
+        //Create.newSynapse.open()
         Visualize.mGraph.fx.animate({
           modes: ['node-property:dim'],
           duration: 500,
@@ -227,6 +232,7 @@ const Topic = {
       Engine.run()
       Visualize.mGraph.loadJSON(newnode)
       nodeOnViz = Visualize.mGraph.graph.getNode(newnode.id)
+      Engine.addNode(nodeOnViz)
       topic.set('node', nodeOnViz, {silent: true})
       topic.updateNode() // links the topic and the mapping to the node
 
@@ -251,7 +257,6 @@ const Topic = {
     }
     var topicSuccessCallback = function(topicModel, response) {
       if (Active.Map) {
-        Engine.addTopic(mapping)
         mapping.save({ mappable_id: topicModel.id }, {
           success: function(model, response) {
             mappingSuccessCallback(model, response, topicModel)
@@ -264,6 +269,7 @@ const Topic = {
 
       if (Create.newTopic.addSynapse) {
         Create.newSynapse.topic2id = topicModel.id
+        Synapse.createSynapseLocally()
       }
     }
 

@@ -5,6 +5,7 @@ import Mouse from './Mouse'
 import Selected from './Selected'
 import Synapse from './Synapse'
 import Topic from './Topic'
+import Util from './Util'
 import Visualize from './Visualize'
 import GlobalUI from './GlobalUI'
 
@@ -356,8 +357,35 @@ const Create = {
       Create.newTopic.addSynapse = false
       Create.newSynapse.topic1id = 0
       Create.newSynapse.topic2id = 0
+      Create.newSynapse.node1 = null
+      Create.newSynapse.node2 = null
       Mouse.synapseStartCoordinates = []
+      Mouse.synapseEndCoordinates = null
       if (Visualize.mGraph) Visualize.mGraph.plot()
+    },
+    updateForm: function() {
+      // set the draw synapse start positions
+      Mouse.synapseStartCoordinates = []
+      for (let i = Selected.Nodes.length - 1; i >= 0; i -= 1) {
+        const n = Selected.Nodes[i]
+        Mouse.synapseStartCoordinates.push({
+          x: n.pos.getc().x,
+          y: n.pos.getc().y
+        })
+      }
+      let pixelPos, midpoint = {}
+      if (Create.newSynapse.beingCreated) {
+        Mouse.synapseEndCoordinates = {
+          x: Create.newSynapse.node2.pos.getc().x,
+          y: Create.newSynapse.node2.pos.getc().y
+        }
+        // position the form
+        midpoint.x = Create.newSynapse.node1.pos.getc().x + (Create.newSynapse.node2.pos.getc().x - Create.newSynapse.node1.pos.getc().x) / 2
+        midpoint.y = Create.newSynapse.node1.pos.getc().y + (Create.newSynapse.node2.pos.getc().y - Create.newSynapse.node1.pos.getc().y) / 2
+        pixelPos = Util.coordsToPixels(Visualize.mGraph, midpoint)
+        $('#new_synapse').css('left', pixelPos.x + 'px')
+        $('#new_synapse').css('top', pixelPos.y + 'px')
+      }
     }
   }
 }

@@ -4,6 +4,7 @@ import Active from './Active'
 import Control from './Control'
 import Create from './Create'
 import DataModel from './DataModel'
+import Engine from './Engine'
 import JIT from './JIT'
 import Map from './Map'
 import Selected from './Selected'
@@ -28,13 +29,18 @@ const Synapse = {
     } else callback(DataModel.Synapses.get(id))
   },
 
-  renderSynapse: function(mapping, synapse, node1, node2, createNewInDB) {
+  renderSynapse: function(mapping, synapse, node1, node2, createNewInDB, alreadyAdded) {
     var edgeOnViz
+    var newedge
 
-    var newedge = synapse.createEdge(mapping)
-
-    Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data)
+    if (!alreadyAdded) {
+      newedge = synapse.createEdge(mapping)
+      Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data)
+    }
     edgeOnViz = Visualize.mGraph.graph.getAdjacence(node1.id, node2.id)
+    if (!alreadyAdded) {
+      Engine.addEdge(edgeOnViz)
+    }
     synapse.set('edge', edgeOnViz)
     synapse.updateEdge() // links the synapse and the mapping to the edge
 
@@ -109,7 +115,7 @@ const Synapse = {
       DataModel.Mappings.add(mapping)
 
       // this function also includes the creation of the synapse in the database
-      self.renderSynapse(mapping, synapse, node1, node2, true)
+      self.renderSynapse(mapping, synapse, node1, node2, true, Create.newSynapse.alreadyAdded)
     } // for each in synapsesToCreate
 
     Create.newSynapse.hide()

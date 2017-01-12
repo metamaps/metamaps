@@ -2560,7 +2560,10 @@ Extras.Classes.Navigation = new Class({
     }
     if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
       Metamaps.Visualize.mGraph.busy = true;
-      Metamaps.JIT.drawSelectBox(eventInfo,e);
+      Metamaps.Mouse.boxEndCoordinates = {
+        x: eventInfo.getPos().x,
+        y: eventInfo.getPos().y
+      }
       //console.log('mouse move');
       return;
     }
@@ -2606,9 +2609,7 @@ Extras.Classes.Navigation = new Class({
     this.pressed = false;
     
     // START METAMAPS CODE
-    if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
-    
-    
+    if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning(); 
     // END METAMAPS CODE
     
   },
@@ -2651,7 +2652,10 @@ Extras.Classes.Navigation = new Class({
       }
       if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
         Metamaps.Visualize.mGraph.busy = true;
-        Metamaps.JIT.drawSelectBox(eventInfo,e);
+        Metamaps.Mouse.boxEndCoordinates = {
+          x: eventInfo.getPos().x,
+          y: eventInfo.getPos().y
+        }
         return;
       }
       if (rightClick){
@@ -7225,7 +7229,7 @@ Graph.Plot = {
      var T = !!root.visited;
     
     //START METAMAPS CODE
-    if (Metamaps.Mouse.synapseStartCoordinates.length > 0) {
+    if (Metamaps.Mouse.synapseStartCoordinates.length > 0 && Metamaps.Mouse.synapseEndCoordinates) {
         ctx.save();
         var start;
         var end = Metamaps.Mouse.synapseEndCoordinates;
@@ -7237,6 +7241,19 @@ Graph.Plot = {
             Metamaps.JIT.renderMidArrow(start, end, 13, false, canvas, 0.7, true);
         }
         ctx.restore();
+    }
+
+    if (Metamaps.Mouse.boxStartCoordinates && Metamaps.Mouse.boxEndCoordinates) {
+      ctx.save();
+      ctx.beginPath()
+      ctx.moveTo(Metamaps.Mouse.boxStartCoordinates.x, Metamaps.Mouse.boxStartCoordinates.y)
+      ctx.lineTo(Metamaps.Mouse.boxStartCoordinates.x, Metamaps.Mouse.boxEndCoordinates.y)
+      ctx.lineTo(Metamaps.Mouse.boxEndCoordinates.x, Metamaps.Mouse.boxEndCoordinates.y)
+      ctx.lineTo(Metamaps.Mouse.boxEndCoordinates.x, Metamaps.Mouse.boxStartCoordinates.y)
+      ctx.lineTo(Metamaps.Mouse.boxStartCoordinates.x, Metamaps.Mouse.boxStartCoordinates.y)
+      ctx.strokeStyle = 'black'
+      ctx.stroke()
+      ctx.restore()
     }
     //END METAMAPS CODE  
 
