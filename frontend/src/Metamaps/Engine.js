@@ -3,6 +3,7 @@ import { last, sortBy, values } from 'lodash'
 
 import $jit from '../patched/JIT'
 
+import Active from './Active'
 import Create from './Create'
 import DataModel from './DataModel'
 import Mouse from './Mouse'
@@ -13,20 +14,22 @@ const Engine = {
   focusBody: null,
   newNodeConstraint: null,
   newNodeBody:  Bodies.circle(Mouse.newNodeCoords.x, Mouse.newNodeCoords.y, 1),
-  init: () => {
+  init: (serverData) => {
     Engine.engine = Matter.Engine.create() 
     Events.on(Engine.engine, 'afterUpdate', Engine.callUpdate)
-    //Engine.engine.world.gravity.scale = 0
-    Engine.engine.world.gravity.y = 0
-    Engine.engine.world.gravity.x = -1
-    Body.setStatic(Engine.newNodeBody, true)
+    if (!serverData.ActiveMapper) Engine.engine.world.gravity.scale = 0
+    else {
+      Engine.engine.world.gravity.y = 0
+      Engine.engine.world.gravity.x = -1
+      Body.setStatic(Engine.newNodeBody, true)
+    }
   },
   run: init => {
     if (init) {
-      World.addBody(Engine.engine.world, Engine.newNodeBody)
+      if (Active.Mapper) World.addBody(Engine.engine.world, Engine.newNodeBody)
       Visualize.mGraph.graph.eachNode(Engine.addNode)
       DataModel.Synapses.each(s => Engine.addEdge(s.get('edge')))
-      if (Object.keys(Visualize.mGraph.graph.nodes).length) {
+      if (Active.Mapper && Object.keys(Visualize.mGraph.graph.nodes).length) {
         Engine.setFocusNode(Engine.findFocusNode(Visualize.mGraph.graph.nodes))
       }
     }
@@ -65,6 +68,7 @@ const Engine = {
     return last(sortBy(values(nodes), n => new Date(n.getData('topic').get('created_at'))))
   },
   setFocusNode: node => {
+    if (!Active.Mapper) return
     Create.newSynapse.focusNode = node
     const body = Composite.get(Engine.engine.world, node.getData('body_id'), 'body')
     Engine.focusBody = body 
@@ -104,9 +108,11 @@ const Engine = {
       const newPos = new $jit.Complex(b.position.x, b.position.y)
       node && node.setPos(newPos, 'current')
     })
-    if (Engine.focusBody) Mouse.focusNodeCoords = Engine.focusBody.position
-    Create.newSynapse.updateForm() 
-    Create.newTopic.position()
+    if (Active.Mapper) {
+      if (Engine.focusBody) Mouse.focusNodeCoords = Engine.focusBody.position
+      Create.newSynapse.updateForm() 
+      Create.newTopic.position()
+    }
     Visualize.mGraph.plot()
   }
 }
