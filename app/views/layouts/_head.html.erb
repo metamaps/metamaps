@@ -17,13 +17,13 @@
   <meta name="viewport" content="width=device-width, user-scalable=no">
   
   <% if controller.class.name == 'MapsController' && @map %>
-    <meta property="og:title" content="<%= @map.title %>" />
+    <meta property="og:title" content="<%= @map.name %>" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="<%= @map.screenshot_url %>" />
     <meta property="og:description" content="<%= @map.desc %>" />
     <meta property="og:url" content="<%= original_url %>" />
 
-    <meta name="twitter:title" content="<%= @map.title %>" />
+    <meta name="twitter:title" content="<%= @map.name %>" />
     <meta name="twitter:image" content="<%= @map.screenshot_url %>" />
     <meta name="twitter:description" content="<%= @map.desc %>" />
     <meta name="twitter:url" content="<%= original_url %>" />
