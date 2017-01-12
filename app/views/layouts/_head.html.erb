@@ -21,12 +21,12 @@
     <meta property="og:type" content="website" />
     <meta property="og:image" content="<%= @map.screenshot_url %>" />
     <meta property="og:description" content="<%= @map.desc %>" />
-    <meta property="og:url" content="<%= original_url %>" />
+    <meta property="og:url" content="<%= request.original_url %>" />
 
     <meta name="twitter:title" content="<%= @map.name %>" />
     <meta name="twitter:image" content="<%= @map.screenshot_url %>" />
     <meta name="twitter:description" content="<%= @map.desc %>" />
-    <meta name="twitter:url" content="<%= original_url %>" />
+    <meta name="twitter:url" content="<%= request.original_url %>" />
   <% end %>
 
   <%= stylesheet_link_tag    "application", :media => "all" %>
