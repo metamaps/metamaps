@@ -1,6 +1,6 @@
 #type: collection
 get:
-  is: [ searchable: { searchFields: "name, desc" }, embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" }, orderable, pageable ]
+  is: [ searchable: { searchFields: "name, desc" }, embeddable: { embedFields: "user,source,topics,synapses,mappings,contributors,collaborators" }, orderable, pageable ]
   securedBy: [ null, token, oauth_2_0, cookie ]
   queryParameters:
     user_id:
@@ -23,6 +23,8 @@ post:
           description: description
         permission:
           description: commons, public, or private
+        source_id:
+          description: the id of the map this map is a fork of
         screenshot:
           description: url to a screenshot of the map
         contributor_ids:
@@ -37,7 +39,7 @@ post:
 /{id}:
   #type: item
   get:
-    is: [ embeddable: { embedFields: "user,topics,synapses,mappings,contributors,collaborators" } ]
+    is: [ embeddable: { embedFields: "user,source,topics,synapses,mappings,contributors,collaborators" } ]
     securedBy: [ null, token, oauth_2_0, cookie ]
     responses:
       200:
@@ -60,6 +62,9 @@ post:
           screenshot:
             description: url to a screenshot of the map
             required: false
+          source_id:
+            description: the id of the map this map is a fork of
+            required: false
     responses:
       200:
         body:
@@ -80,6 +85,9 @@ post:
             required: false
           screenshot:
             description: url to a screenshot of the map
+            required: false
+          source_id:
+            description: the id of the map this map is a fork of
             required: false
     responses:
       200:

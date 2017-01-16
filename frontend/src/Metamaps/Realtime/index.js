@@ -4,10 +4,11 @@ import SimpleWebRTC from 'simplewebrtc'
 import SocketIoConnection from 'simplewebrtc/socketioconnection'
 
 import Active from '../Active'
+import Cable from '../Cable'
 import DataModel from '../DataModel'
 import JIT from '../JIT'
 import Util from '../Util'
-import Views from '../Views'
+import Views, { ChatView } from '../Views'
 import Visualize from '../Visualize'
 
 import {
@@ -24,18 +25,8 @@ import {
   MAPPER_LEFT_CALL,
   NEW_MAPPER,
   LOST_MAPPER,
-  MESSAGE_CREATED,
-  TOPIC_DRAGGED,
-  TOPIC_CREATED,
-  TOPIC_UPDATED,
-  TOPIC_REMOVED,
-  TOPIC_DELETED,
-  SYNAPSE_CREATED,
-  SYNAPSE_UPDATED,
-  SYNAPSE_REMOVED,
-  SYNAPSE_DELETED,
   PEER_COORDS_UPDATED,
-  MAP_UPDATED
+  TOPIC_DRAGGED
 } from './events'
 
 import {
@@ -53,17 +44,7 @@ import {
   peerCoordsUpdated,
   newMapper,
   lostMapper,
-  messageCreated,
-  topicDragged,
-  topicCreated,
-  topicUpdated,
-  topicRemoved,
-  topicDeleted,
-  synapseCreated,
-  synapseUpdated,
-  synapseRemoved,
-  synapseDeleted,
-  mapUpdated
+  topicDragged
 } from './receivable'
 
 import {
@@ -79,17 +60,7 @@ import {
   leaveCall,
   sendCoords,
   sendMapperInfo,
-  createMessage,
-  dragTopic,
-  createTopic,
-  updateTopic,
-  removeTopic,
-  deleteTopic,
-  createSynapse,
-  updateSynapse,
-  removeSynapse,
-  deleteSynapse,
-  updateMap
+  dragTopic
 } from './sendable'
 
 let Realtime = {
@@ -122,11 +93,12 @@ let Realtime = {
 
     self.socket.on('connect', function() {
       console.log('connected')
+      if (Active.Map && Active.Mapper && Active.Map.authorizeToEdit(Active.Mapper)) {
+        self.checkForCall()
+        self.joinMap()
+      }
       subscribeToEvents(self, self.socket)
-
-      if (!self.disconnected) {
-        self.startActiveMap()
-      } else self.disconnected = false
+      self.disconnected = false
     })
     self.socket.on('disconnect', function() {
       self.disconnected = true
@@ -173,48 +145,39 @@ let Realtime = {
       self.room = new Views.Room({
         webrtc: self.webrtc,
         socket: self.socket,
-        username: Active.Mapper ? Active.Mapper.get('name') : '',
-        image: Active.Mapper ? Active.Mapper.get('image') : '',
         room: 'global',
         $video: self.localVideo.$video,
         myVideoView: self.localVideo.view,
-        config: { DOUBLE_CLICK_TOLERANCE: 200 },
-        soundUrls: [
-          serverData['sounds/MM_sounds.mp3'],
-          serverData['sounds/MM_sounds.ogg']
-        ]
+        config: { DOUBLE_CLICK_TOLERANCE: 200 }
       })
       self.room.videoAdded(self.handleVideoAdded)
 
-      if (!Active.Map) {
-        self.room.chat.$container.hide()
-      }
-      $('body').prepend(self.room.chat.$container)
+      self.startActiveMap()
     } // if Active.Mapper
   },
   addJuntoListeners: function() {
     var self = Realtime
 
-    $(document).on(Views.ChatView.events.openTray, function() {
+    $(document).on(ChatView.events.openTray, function() {
       $('.main').addClass('compressed')
       self.chatOpen = true
       self.positionPeerIcons()
     })
-    $(document).on(Views.ChatView.events.closeTray, function() {
+    $(document).on(ChatView.events.closeTray, function() {
       $('.main').removeClass('compressed')
       self.chatOpen = false
       self.positionPeerIcons()
     })
-    $(document).on(Views.ChatView.events.videosOn, function() {
+    $(document).on(ChatView.events.videosOn, function() {
       $('#wrapper').removeClass('hideVideos')
     })
-    $(document).on(Views.ChatView.events.videosOff, function() {
+    $(document).on(ChatView.events.videosOff, function() {
       $('#wrapper').addClass('hideVideos')
     })
-    $(document).on(Views.ChatView.events.cursorsOn, function() {
+    $(document).on(ChatView.events.cursorsOn, function() {
       $('#wrapper').removeClass('hideCursors')
     })
-    $(document).on(Views.ChatView.events.cursorsOff, function() {
+    $(document).on(ChatView.events.cursorsOff, function() {
       $('#wrapper').addClass('hideCursors')
     })
   },
@@ -223,10 +186,11 @@ let Realtime = {
     if (Active.Map && Active.Mapper) {
       if (Active.Map.authorizeToEdit(Active.Mapper)) {
         self.turnOn()
-        self.setupSocket()
-        self.setupLocalSendables()
+        self.checkForCall()
+        self.joinMap()
       }
-      self.room.addMessages(new DataModel.MessageCollection(DataModel.Messages), true)
+      self.setupChat() // chat can happen on public maps too
+      Cable.subscribeToMap(Active.Map.id) // people with edit rights can still see live updates
     }
   },
   endActiveMap: function() {
@@ -236,16 +200,15 @@ let Realtime = {
     if (self.inConversation) self.leaveCall()
     self.leaveMap()
     $('.collabCompass').remove()
-    if (self.room) {
-      self.room.leave()
-      self.room.chat.$container.hide()
-      self.room.chat.close()
-    }
+    if (self.room) self.room.leave()
+    ChatView.hide()
+    ChatView.close()
+    ChatView.reset()
+    Cable.unsubscribeFromMap()
   },
   turnOn: function(notify) {
     var self = Realtime
     $('.collabCompass').show()
-    self.room.chat.$container.show()
     self.room.room = 'map-' + Active.Map.id
     self.activeMapper = {
       id: Active.Mapper.id,
@@ -258,81 +221,31 @@ let Realtime = {
     self.localVideo.view.$container.find('.video-cutoff').css({
       border: '4px solid ' + self.activeMapper.color
     })
-    self.room.chat.addParticipant(self.activeMapper)
+    self.setupLocalEvents()
   },
-  setupSocket: function() {
-    var self = Realtime
-    self.checkForCall()
-    self.joinMap()
+  setupChat: function() {
+    const self = Realtime
+    ChatView.setNewMap()
+    ChatView.addParticipant(self.activeMapper)
+    ChatView.addMessages(new DataModel.MessageCollection(DataModel.Messages), true)
+    ChatView.show()
   },
-  setupLocalSendables: function() {
+  setupLocalEvents: function() {
     var self = Realtime
-
     // local event listeners that trigger events
-    var sendCoords = function(event) {
+    $(document).on(JIT.events.zoom + '.map', self.positionPeerIcons)
+    $(document).on(JIT.events.pan + '.map', self.positionPeerIcons)
+    $(document).on('mousemove.map', function(event) {
       var pixels = {
         x: event.pageX,
         y: event.pageY
       }
       var coords = Util.pixelsToCoords(Visualize.mGraph, pixels)
       self.sendCoords(coords)
-    }
-    $(document).on('mousemove.map', sendCoords)
-
-    var zoom = function(event, e) {
-      if (e) {
-        var pixels = {
-          x: e.pageX,
-          y: e.pageY
-        }
-        var coords = Util.pixelsToCoords(Visualize.mGraph, pixels)
-        self.sendCoords(coords)
-      }
-      self.positionPeerIcons()
-    }
-    $(document).on(JIT.events.zoom + '.map', zoom)
-
-    $(document).on(JIT.events.pan + '.map', self.positionPeerIcons)
-
-    var dragTopic = function(event, positions) {
+    })
+    $(document).on(JIT.events.topicDrag + '.map', function(event, positions) {
       self.dragTopic(positions)
-    }
-    $(document).on(JIT.events.topicDrag + '.map', dragTopic)
-
-    var createTopic = function(event, data) {
-      self.createTopic(data)
-    }
-    $(document).on(JIT.events.newTopic + '.map', createTopic)
-
-    var deleteTopic = function(event, data) {
-      self.deleteTopic(data)
-    }
-    $(document).on(JIT.events.deleteTopic + '.map', deleteTopic)
-
-    var removeTopic = function(event, data) {
-      self.removeTopic(data)
-    }
-    $(document).on(JIT.events.removeTopic + '.map', removeTopic)
-
-    var createSynapse = function(event, data) {
-      self.createSynapse(data)
-    }
-    $(document).on(JIT.events.newSynapse + '.map', createSynapse)
-
-    var deleteSynapse = function(event, data) {
-      self.deleteSynapse(data)
-    }
-    $(document).on(JIT.events.deleteSynapse + '.map', deleteSynapse)
-
-    var removeSynapse = function(event, data) {
-      self.removeSynapse(data)
-    }
-    $(document).on(JIT.events.removeSynapse + '.map', removeSynapse)
-
-    var createMessage = function(event, data) {
-      self.createMessage(data)
-    }
-    $(document).on(Views.Room.events.newMessage + '.map', createMessage)
+    })
   },
   countOthersInConversation: function() {
     var self = Realtime
@@ -403,7 +316,7 @@ let Realtime = {
   callEnded: function() {
     var self = Realtime
 
-    self.room.conversationEnding()
+    ChatView.conversationEnded()
     self.room.leaveVideoOnly()
     self.inConversation = false
     self.localVideo.view.$container.hide().css({
@@ -495,17 +408,7 @@ const sendables = [
   ['leaveCall', leaveCall],
   ['sendMapperInfo', sendMapperInfo],
   ['sendCoords', sendCoords],
-  ['createMessage', createMessage],
-  ['dragTopic', dragTopic],
-  ['createTopic', createTopic],
-  ['updateTopic', updateTopic],
-  ['removeTopic', removeTopic],
-  ['deleteTopic', deleteTopic],
-  ['createSynapse', createSynapse],
-  ['updateSynapse', updateSynapse],
-  ['removeSynapse', removeSynapse],
-  ['deleteSynapse', deleteSynapse],
-  ['updateMap', updateMap]
+  ['dragTopic', dragTopic]
 ]
 sendables.forEach(sendable => {
   Realtime[sendable[0]] = sendable[1](Realtime)
@@ -526,17 +429,7 @@ const subscribeToEvents = (Realtime, socket) => {
   socket.on(PEER_COORDS_UPDATED, peerCoordsUpdated(Realtime))
   socket.on(NEW_MAPPER, newMapper(Realtime))
   socket.on(LOST_MAPPER, lostMapper(Realtime))
-  socket.on(MESSAGE_CREATED, messageCreated(Realtime))
   socket.on(TOPIC_DRAGGED, topicDragged(Realtime))
-  socket.on(TOPIC_CREATED, topicCreated(Realtime))
-  socket.on(TOPIC_UPDATED, topicUpdated(Realtime))
-  socket.on(TOPIC_REMOVED, topicRemoved(Realtime))
-  socket.on(TOPIC_DELETED, topicDeleted(Realtime))
-  socket.on(SYNAPSE_CREATED, synapseCreated(Realtime))
-  socket.on(SYNAPSE_UPDATED, synapseUpdated(Realtime))
-  socket.on(SYNAPSE_REMOVED, synapseRemoved(Realtime))
-  socket.on(SYNAPSE_DELETED, synapseDeleted(Realtime))
-  socket.on(MAP_UPDATED, mapUpdated(Realtime))
 }
 
 export default Realtime

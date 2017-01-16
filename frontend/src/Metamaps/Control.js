@@ -1,5 +1,3 @@
-/* global $ */
-
 import _ from 'lodash'
 import outdent from 'outdent'
 
@@ -7,7 +5,6 @@ import Active from './Active'
 import DataModel from './DataModel'
 import Filter from './Filter'
 import GlobalUI from './GlobalUI'
-import JIT from './JIT'
 import Mouse from './Mouse'
 import Selected from './Selected'
 import Settings from './Settings'
@@ -98,13 +95,9 @@ const Control = {
 
     var permToDelete = Active.Mapper.id === topic.get('user_id') || Active.Mapper.get('admin')
     if (permToDelete) {
-      var mappableid = topic.id
       var mapping = node.getData('mapping')
       topic.destroy()
       DataModel.Mappings.remove(mapping)
-      $(document).trigger(JIT.events.deleteTopic, [{
-        mappableid: mappableid
-      }])
       Control.hideNode(nodeid)
     } else {
       GlobalUI.notifyUser('Only topics you created can be deleted')
@@ -151,13 +144,9 @@ const Control = {
     }
 
     var topic = node.getData('topic')
-    var mappableid = topic.id
     var mapping = node.getData('mapping')
     mapping.destroy()
     DataModel.Topics.remove(topic)
-    $(document).trigger(JIT.events.removeTopic, [{
-      mappableid: mappableid
-    }])
     Control.hideNode(nodeid)
   },
   hideSelectedNodes: function() {
@@ -273,7 +262,6 @@ const Control = {
       if (edge.getData('synapses').length - 1 === 0) {
         Control.hideEdge(edge)
       }
-      var mappableid = synapse.id
       synapse.destroy()
 
       // the server will destroy the mapping, we just need to remove it here
@@ -283,9 +271,6 @@ const Control = {
       if (edge.getData('displayIndex')) {
         delete edge.data.$displayIndex
       }
-      $(document).trigger(JIT.events.deleteSynapse, [{
-        mappableid: mappableid
-      }])
     } else {
       GlobalUI.notifyUser('Only synapses you created can be deleted')
     }
@@ -327,7 +312,6 @@ const Control = {
 
     var synapse = edge.getData('synapses')[index]
     var mapping = edge.getData('mappings')[index]
-    var mappableid = synapse.id
     mapping.destroy()
 
     DataModel.Synapses.remove(synapse)
@@ -337,9 +321,6 @@ const Control = {
     if (edge.getData('displayIndex')) {
       delete edge.data.$displayIndex
     }
-    $(document).trigger(JIT.events.removeSynapse, [{
-      mappableid: mappableid
-    }])
   },
   hideSelectedEdges: function() {
     const l = Selected.Edges.length

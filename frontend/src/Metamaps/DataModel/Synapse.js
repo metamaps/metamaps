@@ -1,5 +1,3 @@
-/* global $ */
-
 import _ from 'lodash'
 import outdent from 'outdent'
 import Backbone from 'backbone'
@@ -7,8 +5,6 @@ try { Backbone.$ = window.$ } catch (err) {}
 
 import Active from '../Active'
 import Filter from '../Filter'
-import JIT from '../JIT'
-import Realtime from '../Realtime'
 import SynapseCard from '../SynapseCard'
 import Visualize from '../Visualize'
 
@@ -20,34 +16,6 @@ const Synapse = Backbone.Model.extend({
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)
   },
-  save: function(key, val, options) {
-    var attrs
-
-    // Handle both `"key", value` and `{key: value}` -style arguments.
-    if (key == null || typeof key === 'object') {
-      attrs = key
-      options = val
-    } else {
-      (attrs = {})[key] = val
-    }
-
-    var newOptions = options || {}
-    var s = newOptions.success
-
-    var permBefore = this.get('permission')
-
-    newOptions.success = function(model, response, opt) {
-      if (s) s(model, response, opt)
-      model.trigger('saved')
-
-      if (permBefore === 'private' && model.get('permission') !== 'private') {
-        model.trigger('noLongerPrivate')
-      } else if (permBefore !== 'private' && model.get('permission') === 'private') {
-        model.trigger('nowPrivate')
-      }
-    }
-    return Backbone.Model.prototype.save.call(this, attrs, newOptions)
-  },
   initialize: function() {
     if (this.isNew()) {
       this.set({
@@ -56,24 +24,8 @@ const Synapse = Backbone.Model.extend({
         'category': 'from-to'
       })
     }
-
     this.on('changeByOther', this.updateCardView)
     this.on('change', this.updateEdgeView)
-    this.on('saved', this.savedEvent)
-    this.on('noLongerPrivate', function() {
-      var newSynapseData = {
-        mappingid: this.getMapping().id,
-        mappableid: this.id
-      }
-
-      $(document).trigger(JIT.events.newSynapse, [newSynapseData])
-    })
-    this.on('nowPrivate', function() {
-      $(document).trigger(JIT.events.removeSynapse, [{
-        mappableid: this.id
-      }])
-    })
-
     this.on('change:desc', Filter.checkSynapses, this)
   },
   prepareLiForFilter: function() {
@@ -85,6 +37,10 @@ const Synapse = Backbone.Model.extend({
   },
   authorizeToEdit: function(mapper) {
     if (mapper && (this.get('permission') === 'commons' || this.get('collaborator_ids').includes(mapper.get('id')) || this.get('user_id') === mapper.get('id'))) return true
+    else return false
+  },
+  authorizeToShow: function(mapper) {
+    if (this.get('permission') !== 'private' || (mapper && this.get('collaborator_ids').includes(mapper.get('id')) || this.get('user_id') === mapper.get('id'))) return true
     else return false
   },
   authorizePermissionChange: function(mapper) {
@@ -148,9 +104,6 @@ const Synapse = Backbone.Model.extend({
     }
 
     return edge
-  },
-  savedEvent: function() {
-    Realtime.updateSynapse(this)
   },
   updateViews: function() {
     this.updateCardView()

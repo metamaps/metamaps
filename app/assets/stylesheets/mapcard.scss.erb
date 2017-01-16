@@ -211,6 +211,16 @@
 
     span.creatorName {
       margin-left: 8px;
+      max-width: 162px;
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
+
+    .creatorAndPerm.cardHasViewOnly span.creatorName {
+      max-width: 95px;
     }
 
     .cardViewOnly {

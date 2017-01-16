@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161216174257) do
+ActiveRecord::Schema.define(version: 20161218183817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,6 +151,8 @@ ActiveRecord::Schema.define(version: 20161216174257) do
     t.string   "screenshot_content_type", limit: 255
     t.integer  "screenshot_file_size"
     t.datetime "screenshot_updated_at"
+    t.integer  "source_id"
+    t.index ["source_id"], name: "index_maps_on_source_id", using: :btree
     t.index ["user_id"], name: "index_maps_on_user_id", using: :btree
   end
 
@@ -340,5 +342,6 @@ ActiveRecord::Schema.define(version: 20161216174257) do
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "mappings", "users", column: "updated_by_id"
+  add_foreign_key "maps", "maps", column: "source_id"
   add_foreign_key "tokens", "users"
 end

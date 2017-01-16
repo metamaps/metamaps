@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 Metamaps::Application.routes.draw do
   use_doorkeeper
+  mount ActionCable.server => '/cable'
 
   root to: 'main#home', via: :get
   get 'request', to: 'main#requestinvite', as: :request

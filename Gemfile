@@ -27,6 +27,7 @@ gem 'rack-cors'
 gem 'redis'
 gem 'slack-notifier'
 gem 'snorlax'
+gem 'puma'
 
 # asset stuff
 gem 'jquery-rails'

@@ -9,6 +9,8 @@
 
 <body class="<%= authenticated? ? "authenticated" : "unauthenticated" %> controller-<%= controller_name %> action-<%= action_name %>">
 
+    <div id="chat-box-wrapper"></div>
+
     <a class='feedback-icon' target='_blank' href='https://hylo.com/c/metamaps'></a>    
 
     <%= content_tag :div, class: "main" do %>
@@ -48,7 +50,7 @@
             
             <div id="instructions">
               <div class="addTopic">
-                Double-click to<br>add a topic!
+                Double-click to<br>add a topic
               </div>
               <div class="tabKey">
                 Use Tab & Shift+Tab to select a metacode

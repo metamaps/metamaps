@@ -16,3 +16,4 @@ junto(io, store)
 map(io, store)
 
 io.listen(parseInt(process.env.NODE_REALTIME_PORT) || 5000)
+console.log('booting up', process.env.NODE_REALTIME_PORT || 5000)

@@ -242,12 +242,6 @@ const Topic = {
     }
 
     var mappingSuccessCallback = function(mappingModel, response, topicModel) {
-      var newTopicData = {
-        mappingid: mappingModel.id,
-        mappableid: mappingModel.get('mappable_id')
-      }
-
-      $(document).trigger(JIT.events.newTopic, [newTopicData])
       // call a success callback if provided
       if (opts.success) {
         opts.success(topicModel)

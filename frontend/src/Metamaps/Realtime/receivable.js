@@ -4,18 +4,12 @@
 everthing in this file happens as a result of websocket events
 */
 
-import { indexOf } from 'lodash'
-
 import { JUNTO_UPDATED } from './events'
 
 import Active from '../Active'
+import { ChatView } from '../Views'
 import DataModel from '../DataModel'
 import GlobalUI from '../GlobalUI'
-import Control from '../Control'
-import Map from '../Map'
-import Mapper from '../Mapper'
-import Topic from '../Topic'
-import Synapse from '../Synapse'
 import Util from '../Util'
 import Visualize from '../Visualize'
 
@@ -24,188 +18,8 @@ export const juntoUpdated = self => state => {
   $(document).trigger(JUNTO_UPDATED)
 }
 
-export const synapseRemoved = self => data => {
-  var synapse = DataModel.Synapses.get(data.mappableid)
-  if (synapse) {
-    var edge = synapse.get('edge')
-    var mapping = synapse.getMapping()
-    if (edge.getData('mappings').length - 1 === 0) {
-      Control.hideEdge(edge)
-    }
-
-    var index = indexOf(edge.getData('synapses'), synapse)
-    edge.getData('mappings').splice(index, 1)
-    edge.getData('synapses').splice(index, 1)
-    if (edge.getData('displayIndex')) {
-      delete edge.data.$displayIndex
-    }
-    DataModel.Synapses.remove(synapse)
-    DataModel.Mappings.remove(mapping)
-  }
-}
-
-export const synapseDeleted = self => data => {
-  synapseRemoved(self)(data)
-}
-
-export const synapseCreated = self => data => {
-  var topic1, topic2, node1, node2, synapse, mapping, cancel, mapper
-
-  function waitThenRenderSynapse() {
-    if (synapse && mapping && mapper) {
-      topic1 = synapse.getTopic1()
-      node1 = topic1.get('node')
-      topic2 = synapse.getTopic2()
-      node2 = topic2.get('node')
-
-      Synapse.renderSynapse(mapping, synapse, node1, node2, false)
-    } else if (!cancel) {
-      setTimeout(waitThenRenderSynapse, 10)
-    }
-  }
-
-  mapper = DataModel.Mappers.get(data.mapperid)
-  if (mapper === undefined) {
-    Mapper.get(data.mapperid, function(m) {
-      DataModel.Mappers.add(m)
-      mapper = m
-    })
-  }
-  $.ajax({
-    url: '/synapses/' + data.mappableid + '.json',
-    success: function(response) {
-      DataModel.Synapses.add(response)
-      synapse = DataModel.Synapses.get(response.id)
-    },
-    error: function() {
-      cancel = true
-    }
-  })
-  $.ajax({
-    url: '/mappings/' + data.mappingid + '.json',
-    success: function(response) {
-      DataModel.Mappings.add(response)
-      mapping = DataModel.Mappings.get(response.id)
-    },
-    error: function() {
-      cancel = true
-    }
-  })
-  waitThenRenderSynapse()
-}
-
-export const topicRemoved = self => data => {
-  var topic = DataModel.Topics.get(data.mappableid)
-  if (topic) {
-    var node = topic.get('node')
-    var mapping = topic.getMapping()
-    Control.hideNode(node.id)
-    DataModel.Topics.remove(topic)
-    DataModel.Mappings.remove(mapping)
-  }
-}
-
-export const topicDeleted = self => data => {
-  topicRemoved(self)(data)
-}
-
-export const topicCreated = self => data => {
-  var topic, mapping, mapper, cancel
-
-  function waitThenRenderTopic() {
-    if (topic && mapping && mapper) {
-      Topic.renderTopic(mapping, topic, false, false)
-    } else if (!cancel) {
-      setTimeout(waitThenRenderTopic, 10)
-    }
-  }
-
-  mapper = DataModel.Mappers.get(data.mapperid)
-  if (mapper === undefined) {
-    Mapper.get(data.mapperid, function(m) {
-      DataModel.Mappers.add(m)
-      mapper = m
-    })
-  }
-  $.ajax({
-    url: '/topics/' + data.mappableid + '.json',
-    success: function(response) {
-      DataModel.Topics.add(response)
-      topic = DataModel.Topics.get(response.id)
-    },
-    error: function() {
-      cancel = true
-    }
-  })
-  $.ajax({
-    url: '/mappings/' + data.mappingid + '.json',
-    success: function(response) {
-      DataModel.Mappings.add(response)
-      mapping = DataModel.Mappings.get(response.id)
-    },
-    error: function() {
-      cancel = true
-    }
-  })
-
-  waitThenRenderTopic()
-}
-
-export const messageCreated = self => data => {
-  self.room.addMessages(new DataModel.MessageCollection(data))
-}
-
-export const mapUpdated = self => data => {
-  var map = Active.Map
-  var isActiveMap = map && data.mapId === map.id
-  if (isActiveMap) {
-    var couldEditBefore = map.authorizeToEdit(Active.Mapper)
-    var idBefore = map.id
-    map.fetch({
-      success: function(model, response) {
-        var idNow = model.id
-        var canEditNow = model.authorizeToEdit(Active.Mapper)
-        if (idNow !== idBefore) {
-          Map.leavePrivateMap() // this means the map has been changed to private
-        } else if (couldEditBefore && !canEditNow) {
-          Map.cantEditNow()
-        } else if (!couldEditBefore && canEditNow) {
-          Map.canEditNow()
-        } else {
-          model.trigger('changeByOther')
-        }
-      }
-    })
-  }
-}
-
-export const topicUpdated = self => data => {
-  var topic = DataModel.Topics.get(data.topicId)
-  if (topic) {
-    var node = topic.get('node')
-    topic.fetch({
-      success: function(model) {
-        model.set({ node: node })
-        model.trigger('changeByOther')
-      }
-    })
-  }
-}
-
-export const synapseUpdated = self => data => {
-  var synapse = DataModel.Synapses.get(data.synapseId)
-  if (synapse) {
-    // edge reset necessary because fetch causes model reset
-    var edge = synapse.get('edge')
-    synapse.fetch({
-      success: function(model) {
-        model.set({ edge: edge })
-        model.trigger('changeByOther')
-      }
-    })
-  }
-}
-
+/* All the following events are received through the nodejs realtime server
+    and are done this way because they are transient data, not persisted to the server */
 export const topicDragged = self => positions => {
   var topic
   var node
@@ -230,10 +44,10 @@ export const lostMapper = self => data => {
   // data.userid
   // data.username
   delete self.mappersOnMap[data.userid]
-  self.room.chat.sound.play('leavemap')
+  ChatView.sound.play('leavemap')
   // $('#mapper' + data.userid).remove()
   $('#compass' + data.userid).remove()
-  self.room.chat.removeParticipant(data.username)
+  ChatView.removeParticipant(ChatView.participants.findWhere({id: data.userid}))
 
   GlobalUI.notifyUser(data.username + ' just left the map')
 
@@ -262,8 +76,8 @@ export const mapperListUpdated = self => data => {
   }
 
   if (data.userid !== Active.Mapper.id) {
-    self.room.chat.addParticipant(self.mappersOnMap[data.userid])
-    if (data.userinconversation) self.room.chat.mapperJoinedCall(data.userid)
+    ChatView.addParticipant(self.mappersOnMap[data.userid])
+    if (data.userinconversation) ChatView.mapperJoinedCall(data.userid)
 
     // create a div for the collaborators compass
     self.createCompass(data.username, data.userid, data.avatar, self.mappersOnMap[data.userid].color)
@@ -291,8 +105,8 @@ export const newMapper = self => data => {
 
   // create an item for them in the realtime box
   if (data.userid !== Active.Mapper.id) {
-    self.room.chat.sound.play('joinmap')
-    self.room.chat.addParticipant(self.mappersOnMap[data.userid])
+    ChatView.sound.play('joinmap')
+    ChatView.addParticipant(self.mappersOnMap[data.userid])
 
     // create a div for the collaborators compass
     self.createCompass(data.username, data.userid, data.avatar, self.mappersOnMap[data.userid].color)
@@ -311,24 +125,24 @@ export const callAccepted = self => userid => {
   // const username = self.mappersOnMap[userid].name
   GlobalUI.notifyUser('Conversation starting...')
   self.joinCall()
-  self.room.chat.invitationAnswered(userid)
+  ChatView.invitationAnswered(userid)
 }
 
 export const callDenied = self => userid => {
   var username = self.mappersOnMap[userid].name
   GlobalUI.notifyUser(username + " didn't accept your invitation")
-  self.room.chat.invitationAnswered(userid)
+  ChatView.invitationAnswered(userid)
 }
 
 export const inviteDenied = self => userid => {
   var username = self.mappersOnMap[userid].name
   GlobalUI.notifyUser(username + " didn't accept your invitation")
-  self.room.chat.invitationAnswered(userid)
+  ChatView.invitationAnswered(userid)
 }
 
 export const invitedToCall = self => inviter => {
-  self.room.chat.sound.stop(self.soundId)
-  self.soundId = self.room.chat.sound.play('sessioninvite')
+  ChatView.sound.stop(self.soundId)
+  self.soundId = ChatView.sound.play('sessioninvite')
 
   var username = self.mappersOnMap[inviter].name
   var notifyText = '<img src="' + self['junto_spinner_darkgrey.gif'] + '" style="display: inline-block; margin-top: -12px; margin-bottom: -6px; vertical-align: top;" />'
@@ -341,8 +155,8 @@ export const invitedToCall = self => inviter => {
 }
 
 export const invitedToJoin = self => inviter => {
-  self.room.chat.sound.stop(self.soundId)
-  self.soundId = self.room.chat.sound.play('sessioninvite')
+  ChatView.sound.stop(self.soundId)
+  self.soundId = ChatView.sound.play('sessioninvite')
 
   var username = self.mappersOnMap[inviter].name
   var notifyText = username + ' is inviting you to the conversation. Join?'
@@ -355,16 +169,14 @@ export const invitedToJoin = self => inviter => {
 
 export const mapperJoinedCall = self => id => {
   var mapper = self.mappersOnMap[id]
-
   if (mapper) {
     if (self.inConversation) {
       var username = mapper.name
       var notifyText = username + ' joined the call'
       GlobalUI.notifyUser(notifyText)
     }
-
     mapper.inConversation = true
-    self.room.chat.mapperJoinedCall(id)
+    ChatView.mapperJoinedCall(id)
   }
 }
 
@@ -377,7 +189,7 @@ export const mapperLeftCall = self => id => {
       GlobalUI.notifyUser(notifyText)
     }
     mapper.inConversation = false
-    self.room.chat.mapperLeftCall(id)
+    ChatView.mapperLeftCall(id)
     if ((self.inConversation && self.countOthersInConversation() === 0) ||
       (!self.inConversation && self.countOthersInConversation() === 1)) {
       self.callEnded()
@@ -392,8 +204,7 @@ export const callInProgress = self => () => {
   GlobalUI.notifyUser(notifyText, true)
   $('#toast button.yes').click(e => self.joinCall())
   $('#toast button.no').click(e => GlobalUI.clearNotify())
-
-  self.room.conversationInProgress()
+  ChatView.conversationInProgress()
 }
 
 export const callStarted = self => () => {
@@ -404,7 +215,6 @@ export const callStarted = self => () => {
   GlobalUI.notifyUser(notifyText, true)
   $('#toast button.yes').click(e => self.joinCall())
   $('#toast button.no').click(e => GlobalUI.clearNotify())
-
-  self.room.conversationInProgress()
+  ChatView.conversationInProgress()
 }
 

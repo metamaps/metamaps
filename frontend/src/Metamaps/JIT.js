@@ -36,12 +36,6 @@ const JIT = {
 
   events: {
     topicDrag: 'Metamaps:JIT:events:topicDrag',
-    newTopic: 'Metamaps:JIT:events:newTopic',
-    deleteTopic: 'Metamaps:JIT:events:deleteTopic',
-    removeTopic: 'Metamaps:JIT:events:removeTopic',
-    newSynapse: 'Metamaps:JIT:events:newSynapse',
-    deleteSynapse: 'Metamaps:JIT:events:deleteSynapse',
-    removeSynapse: 'Metamaps:JIT:events:removeSynapse',
     pan: 'Metamaps:JIT:events:pan',
     zoom: 'Metamaps:JIT:events:zoom',
     animationDone: 'Metamaps:JIT:events:animationDone'

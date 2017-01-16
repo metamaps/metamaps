@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe 'maps API', type: :request do
   let(:user) { create(:user, admin: true) }
   let(:token) { create(:token, user: user).token }
-  let(:map) { create(:map, user: user) }
+  let(:source) { create(:map, user: user) }
+  let(:map) { create(:map, user: user, source: source) }
 
   describe 'GET /api/v2/maps' do
     it 'returns all maps' do
@@ -42,7 +43,7 @@ RSpec.describe 'maps API', type: :request do
 
     expect(response).to have_http_status(:success)
     expect(response).to match_json_schema(:map)
-    expect(Map.count).to eq 2
+    expect(Map.count).to eq 3
   end
 
   it 'PATCH /api/v2/maps/:id' do
@@ -56,7 +57,7 @@ RSpec.describe 'maps API', type: :request do
     delete "/api/v2/maps/#{map.id}", params: { access_token: token }
 
     expect(response).to have_http_status(:no_content)
-    expect(Map.count).to eq 0
+    expect(Map.count).to eq 1
   end
 
   it 'POST /api/v2/maps/:id/stars' do

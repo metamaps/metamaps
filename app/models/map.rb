@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Map < ApplicationRecord
   belongs_to :user
+  belongs_to :source, class_name: :Map
 
   has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
   has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
@@ -32,6 +33,7 @@ class Map < ApplicationRecord
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, content_type: /\Aimage\/.*\Z/
 
+  after_update :after_updated
   after_save :update_deferring_topics_and_synapses, if: :permission_changed?
 
   delegate :count, to: :topics, prefix: :topic # same as `def topic_count; topics.count; end`
@@ -117,6 +119,13 @@ class Map < ApplicationRecord
       old_user_id
     end
     removed.compact
+  end
+  
+  def after_updated
+    attrs = ['name', 'desc', 'permission']
+    if attrs.any? {|k| changed_attributes.key?(k)}
+      ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
+    end
   end
 
   def update_deferring_topics_and_synapses

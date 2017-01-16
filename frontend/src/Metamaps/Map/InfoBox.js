@@ -300,7 +300,7 @@ const InfoBox = {
     string += '</ul>'
 
     if (activeMapperIsCreator) {
-      string += '<div class="collabSearchField"><span class="addCollab"></span><input class="collaboratorSearchField" placeholder="Add a collaborator!"></input></div>'
+      string += '<div class="collabSearchField"><span class="addCollab"></span><input class="collaboratorSearchField" placeholder="Add a collaborator"></input></div>'
     }
     return string
   },
@@ -391,7 +391,7 @@ const InfoBox = {
       DataModel.Maps.Shared.remove(map)
       map.destroy()
       Router.home()
-      GlobalUI.notifyUser('Map eliminated!')
+      GlobalUI.notifyUser('Map eliminated')
     } else if (!authorized) {
       window.alert("Hey now. We can't just go around willy nilly deleting other people's maps now can we? Run off and find something constructive to do, eh?")
     }

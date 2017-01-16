@@ -33,6 +33,12 @@
     "user": {
       "$ref": "_user.json"
     },
+    "source_id": {
+      "$ref": "_optid.json"
+    },
+    "source": {
+      "$ref": "_map.json"
+    },
     "topic_ids": {
       "type": "array",
       "items": {
@@ -109,6 +115,12 @@
       "oneOf": [
         { "required": [ "user_id" ] },
         { "required": [ "user" ] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": [ "source_id" ] },
+        { "required": [ "source" ] }
       ]
     },
     {
