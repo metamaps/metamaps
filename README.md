@@ -17,7 +17,7 @@ Metamaps is developed and maintained by a distributed, nomadic community compris
 - Contact: [team@metamaps.cc](mailto:team@metamaps.cc) or [@metamapps](https://twitter.com/metamapps) on Twitter
 - User Documentation: [docs.metamaps.cc](https://docs.metamaps.cc)
 - User Community: [hylo.com/c/metamaps](https://www.hylo.com/c/metamaps)
-- To weigh in on what you'd like to see developed, see our [Metamaps Feedback and Features](https://trello.com/b/uFOA6a2x/metamaps-feedback-feature-ideas-requests) board on trello
+- To see what we're developing, or to weigh in on what you'd like to see developed, see our [Metamaps Feedback and Features](https://trello.com/b/uFOA6a2x/metamaps-feedback-feature-ideas-requests) board on trello
 - To follow along with, or contribute,to our design process, see our [Metamaps Design](https://trello.com/b/8HlCikOX/metamaps-design) board on trello
 - To follow along with, or contribute to, our development process, see our [Github Issues and Pull Requests](https://github.com/metamaps/metamaps/issues)
 - Request an invite to the open beta [here](https://metamaps.cc/request)
