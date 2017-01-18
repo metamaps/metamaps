@@ -108,14 +108,14 @@ server to see what problems show up:
 #### Realtime server:
 
     sudo npm install -g forever
-    (crontab -u metamaps -l 2>/dev/null; echo "@reboot NODE_REALTIME_PORT=5000 /usr/bin/forever --minUptime 1000 --spinSleepTime 1000 --append -l /home/metamaps/logs/forever.realtime.log -c /home/metamaps/metamaps.cc/node_modules/.bin/babel-node --workingDir /home/metamaps/metamaps.cc start /home/metamaps/metamaps.cc/realtime/realtime-server.js") | crontab -u metamaps
+    (sudo crontab -u metamaps -l 2>/dev/null; echo "@reboot NODE_REALTIME_PORT=5000 /usr/bin/forever --minUptime 1000 --spinSleepTime 1000 --append -l /home/metamaps/logs/forever.realtime.log -c /home/metamaps/metamaps/node_modules/.bin/babel-node --workingDir /home/metamaps/metamaps start /home/metamaps/metamaps/realtime/realtime-server.js") | sudo crontab -u metamaps
 
     mkdir -p /home/metamaps/logs
     /usr/bin/forever --minUptime 1000 --spinSleepTime 1000 \
       --append -l /home/metamaps/logs/forever.realtime.log \
-      -c /home/metamaps/metamaps.cc/node_modules/.bin/babel-node \
-      --workingDir /home/metamaps/metamaps.cc \
-      start /home/metamaps/metamaps.cc/realtime/realtime-server.js
+      -c /home/metamaps/metamaps/node_modules/.bin/babel-node \
+      --workingDir /home/metamaps/metamaps \
+      start /home/metamaps/metamaps/realtime/realtime-server.js
 
 #### Upstart service for delayed_worker:
 
