@@ -40,8 +40,15 @@
     rvm user gemsets
     git clone https://github.com/metamaps/metamaps \
       --branch instance/mycoolinstance
-    rvm install $(cat metamaps/.ruby-version) #ensure ruby is installed
-    cd metamaps
+    cat metamaps/.ruby-version
+
+The last line tells you what version of ruby you need to install. For example, at the time of writing the version is 2.3.0. As your normal sudo-enabled user, run
+
+    sudo rvm install 2.3.0
+
+Now switch back to the metamaps user and continue
+
+    cd /home/metamaps/metamaps
     gem install bundler
     RAILS_ENV=production bundle install
 
