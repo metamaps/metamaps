@@ -14,7 +14,9 @@
 
 #### Setup Postgres
 
-    sudo apt-get install postgresql-9.4 #specify version!!
+    sudo apt-get install postgresql-9.4
+    # make sure you have development headers for postgres. The package name might be different on your distribution.
+    sudo apt-get install libpq-dev
     sudo -u postgres psql
     postgres=# CREATE USER metamaps WITH PASSWORD 'mycoolpassword' CREATEDB;
     postgres=# CREATE DATABASE metamaps_production OWNER metamaps;
