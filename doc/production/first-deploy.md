@@ -24,6 +24,15 @@
 
 On some deploys, we have had problems with unicode encoding when trying to run `db:setup`. Running the commands in this Github gist resolved the issue: https://gist.github.com/amolkhanorkar/8706915. Try this link if you have problems
 
+#### Install Node for javascript building
+
+    # this first line lets us use up-to-date versions of node.js
+    # instead of the old versions in the Ubuntu repositories
+    curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+    sudo aptitude install nodejs
+    sudo ln -s /usr/bin/nodejs /usr/bin/node
+
+
 #### Install system-wide rvm:
 
     sudo gpg --keyserver hkp://keys.gnupg.net \
@@ -71,19 +80,7 @@ Run this in the metamaps directory, still as metamaps:
     # create, load schema, seed
     bundle exec rails db:setup
 
-#### Install node & ES6 modules
-
-Run these commands on your sudo-enabled account
-
-    # this first line lets us use up-to-date versions of node.js
-    # instead of the old versions in the Ubuntu repositories
-    curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-    sudo aptitude install nodejs
-    sudo ln -s /usr/bin/nodejs /usr/bin/node
-
 #### Precompile assets
-
-Run these commands as the metamaps user.
 
 Note that `rails assets:precompile` will normally call `npm install` and `bin/build-apidocs.sh` as part of its process. Both of these latter commands require `npm install` to be run first. We suggest you run all five commands separately this time (like below) to better catch any errors. In the future, you won't need to run the second and third commands separately.
 
