@@ -29,9 +29,12 @@ On some deploys, we have had problems with unicode encoding when trying to run `
     # this first line lets us use up-to-date versions of node.js
     # instead of the old versions in the Ubuntu repositories
     curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-    sudo aptitude install nodejs
+    sudo apt-get install nodejs
     sudo ln -s /usr/bin/nodejs /usr/bin/node
 
+### Install redis server for action cable
+
+    sudo apt-get install redis-server
 
 #### Install system-wide rvm:
 
