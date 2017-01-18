@@ -22,6 +22,8 @@
     postgres=# CREATE DATABASE metamaps_production OWNER metamaps;
     postgres=# \q
 
+On some deploys, we have had problems with unicode encoding when trying to run `db:setup`. Running the commands in this Github gist resolved the issue: https://gist.github.com/amolkhanorkar/8706915. Try this link if you have problems
+
 #### Install system-wide rvm:
 
     sudo gpg --keyserver hkp://keys.gnupg.net \
