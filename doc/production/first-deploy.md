@@ -64,6 +64,9 @@ Run this in the metamaps directory, still as metamaps:
 
 #### Install node & ES6 modules
 
+    # this first line lets us use up-to-date versions of node.js
+    # instead of the old versions in the Ubuntu repositories
+    curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
     sudo aptitude install nodejs npm
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     npm install
