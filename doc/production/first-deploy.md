@@ -17,7 +17,7 @@
     sudo apt-get install postgresql-9.4 #specify version!!
     sudo -u postgres psql
     postgres=# CREATE USER metamaps WITH PASSWORD 'mycoolpassword' CREATEDB;
-    postgres=# CREATE DATABASE metamap002_production OWNER metamaps;
+    postgres=# CREATE DATABASE metamaps_production OWNER metamaps;
     postgres=# \q
 
 #### Install system-wide rvm:
@@ -68,7 +68,7 @@ Run this in the metamaps directory, still as metamaps:
 
 #### Precompile assets
 
-This step depends on running npm install first; assets:precompile calls `npm install` and `bin/build-apidocs.sh`, both of which require node_modules to be installed. We suggest you run the commands separately this time to better catch any errors.
+This step depends on running `npm install` (in the previous step) first. Note that `rails assets:precompile` will normally call `npm install` and `bin/build-apidocs.sh` as part of its process. Both of these latter commands require the node_modules to already be installed. We suggest you run the commands separately this time (like below) to better catch any errors.
 
     npm run build
     bin/build-apidocs.sh
@@ -93,13 +93,14 @@ server to see what problems show up:
 #### Realtime server:
 
     sudo npm install -g forever
-    (crontab -u metamaps -l 2>/dev/null; echo "@reboot env NODE_REALTIME_PORT=5000 $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
+    (crontab -u metamaps -l 2>/dev/null; echo "@reboot NODE_REALTIME_PORT=5000 /usr/bin/forever --minUptime 1000 --spinSleepTime 1000 --append -l /home/metamaps/logs/forever.realtime.log -c /home/metamaps/metamaps.cc/node_modules/.bin/babel-node --workingDir /home/metamaps/metamaps.cc start /home/metamaps/metamaps.cc/realtime/realtime-server.js") | crontab -u metamaps
 
     mkdir -p /home/metamaps/logs
-    env NODE_REALTIME_PORT=5000 forever --append \
-      -c /home/metamaps/metamaps/node_modules/.bin/babel-node \
-      -l /home/metamaps/logs/forever.realtime.log \
-      start /home/metamaps/metamaps/realtime/realtime-server.js
+    /usr/bin/forever --minUptime 1000 --spinSleepTime 1000 \
+      --append -l /home/metamaps/logs/forever.realtime.log \
+      -c /home/metamaps/metamaps.cc/node_modules/.bin/babel-node \
+      --workingDir /home/metamaps/metamaps.cc \
+      start /home/metamaps/metamaps.cc/realtime/realtime-server.js
 
 #### Upstart service for delayed_worker:
 
