@@ -73,17 +73,21 @@ Run this in the metamaps directory, still as metamaps:
 
 #### Install node & ES6 modules
 
+Run these commands on your sudo-enabled account
+
     # this first line lets us use up-to-date versions of node.js
     # instead of the old versions in the Ubuntu repositories
     curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-    sudo aptitude install nodejs npm
+    sudo aptitude install nodejs
     sudo ln -s /usr/bin/nodejs /usr/bin/node
-    npm install
 
 #### Precompile assets
 
-This step depends on running `npm install` (in the previous step) first. Note that `rails assets:precompile` will normally call `npm install` and `bin/build-apidocs.sh` as part of its process. Both of these latter commands require the node_modules to already be installed. We suggest you run the commands separately this time (like below) to better catch any errors.
+Run these commands as the metamaps user.
 
+Note that `rails assets:precompile` will normally call `npm install` and `bin/build-apidocs.sh` as part of its process. Both of these latter commands require `npm install` to be run first. We suggest you run all five commands separately this time (like below) to better catch any errors. In the future, you won't need to run the second and third commands separately.
+
+    npm install
     npm run build
     bin/build-apidocs.sh
     bundle exec rails assets:precompile
