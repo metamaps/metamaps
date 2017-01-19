@@ -1558,6 +1558,7 @@ h3.filterBox {
     box-sizing: border-box;
     margin: 0.75em;
     padding: 0.75em;
+    padding-top: 0.85em;
     height: 3em;
     background-color: #AAB0FB;
     border-radius: 0.3em;
@@ -2051,6 +2052,43 @@ and it won't be important on password protected instances */
 .yourMap .mapInfoDelete {
     display: block;
 }
+
+.mapInfoButtonsWrapper .mapInfoThumbnail {
+  display: block;
+  background-image: url(<%= asset_path('screenshot_sprite.png') %>);
+  width: 32px;
+  height: 32px;
+
+  & > span {
+    bottom: -9px;
+    right: 3px;
+    font-size: 10px;
+    color: #eee;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  .tooltip {
+    display: none;
+  }
+
+  &:hover {
+    background-position: -32px 0;
+
+    .tooltip {
+      display: block;
+      position: absolute;
+      bottom: 30px;
+      background: black;
+      color: white;
+      border-radius: 2px;
+      padding: 3px 5px 2px 5px;
+    }
+  }
+}
+
 .mapInfoButtonsWrapper span {
     position: absolute;
     width: 100%;

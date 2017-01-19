@@ -35,8 +35,10 @@ const InfoBox = {
       data-bip-value="{{desc}}"
     >{{desc}}</span>`,
   userImageUrl: '',
-  init: function(serverData) {
+  init: function(serverData, updateThumbnail) {
     var self = InfoBox
+
+    self.updateThumbnail = updateThumbnail
 
     $('.mapInfoIcon').click(self.toggleBox)
     $('.mapInfoBox').click(function(event) {
@@ -181,6 +183,7 @@ const InfoBox = {
     $('.mapInfoBox.yourMap').unbind('.yourMap').bind('click.yourMap', self.hidePermissionSelect)
 
     $('.yourMap .mapInfoDelete').unbind().click(self.deleteActiveMap)
+    $('.mapInfoThumbnail').unbind().click(self.updateThumbnail)
 
     $('.mapContributors span, #mapContribs').unbind().click(function(event) {
       $('.mapContributors .tip').toggle()

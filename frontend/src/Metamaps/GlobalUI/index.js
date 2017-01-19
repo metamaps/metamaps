@@ -12,9 +12,11 @@ import NotificationIcon from './NotificationIcon'
 
 const GlobalUI = {
   notifyTimeout: null,
+  notifyQueue: [],
+  notifying: false,
   lightbox: null,
   init: function(serverData) {
-    var self = GlobalUI
+    const self = GlobalUI
 
     self.Search.init(serverData)
     self.CreateMap.init(serverData)
@@ -45,7 +47,7 @@ const GlobalUI = {
     }, 200, 'easeInCubic', function() { $(this).hide() })
   },
   openLightbox: function(which) {
-    var self = GlobalUI
+    const self = GlobalUI
 
     $('.lightboxContent').hide()
     $('#' + which).show()
@@ -72,7 +74,7 @@ const GlobalUI = {
   },
 
   closeLightbox: function(event) {
-    var self = GlobalUI
+    const self = GlobalUI
 
     if (event) event.preventDefault()
 
@@ -96,23 +98,45 @@ const GlobalUI = {
     }
     self.lightbox = null
   },
-  notifyUser: function(message, leaveOpen) {
-    var self = GlobalUI
+  notifyUser: function(message, opts = {}) {
+    const self = GlobalUI
+
+    if (self.notifying) {
+      self.notifyQueue.push({ message, opts })
+      return
+    } else {
+      self._notifyUser(message, opts)
+    }
+  },
+  // note: use the wrapper function notifyUser instead of this one
+  _notifyUser: function(message, opts = {}) {
+    const self = GlobalUI
+
+    const { leaveOpen = false, timeOut = 8000 } = opts
 
     $('#toast').html(message)
     self.showDiv('#toast')
     clearTimeout(self.notifyTimeOut)
+
     if (!leaveOpen) {
       self.notifyTimeOut = setTimeout(function() {
-        self.hideDiv('#toast')
-      }, 8000)
+        GlobalUI.clearNotify()
+      }, timeOut)
     }
+
+    self.notifying = true
   },
   clearNotify: function() {
-    var self = GlobalUI
+    const self = GlobalUI
 
-    clearTimeout(self.notifyTimeOut)
-    self.hideDiv('#toast')
+    // if there are messages remaining, display them
+    if (self.notifyQueue.length > 0) {
+      const { message, opts } = self.notifyQueue.shift()
+      self._notifyUser(message, opts)
+    } else {
+      self.hideDiv('#toast')
+      self.notifying = false
+    }
   },
   shareInvite: function(inviteLink) {
     clipboard.copy({
