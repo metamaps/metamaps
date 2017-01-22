@@ -53,7 +53,7 @@
     "redux": "3.7.2",
     "riek": "1.1.0",
     "simplewebrtc": "2.2.2",
-    "socket.io": "1.3.7",
+    "socket.io": "1.7.2",
     "webpack": "3.5.6"
   },
   "devDependencies": {
