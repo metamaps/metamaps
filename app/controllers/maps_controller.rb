@@ -20,6 +20,7 @@ class MapsController < ApplicationController
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }
+      format.ttl { redirect_to action: :export, format: :ttl }
     end
   end
 
@@ -90,10 +91,12 @@ class MapsController < ApplicationController
 
   # GET maps/:id/export
   def export
-    exporter = MapExportService.new(current_user, @map)
+    exporter = MapExportService.new(current_user, @map, base_url: request.base_url)
+
     respond_to do |format|
       format.json { render json: exporter.json }
       format.csv { send_data exporter.csv }
+      format.ttl { render text: exporter.rdf }
     end
   end
 

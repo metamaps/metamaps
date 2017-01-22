@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 class MapExportService
-  attr_reader :user, :map
-  def initialize(user, map)
+  attr_reader :user, :map, :base_url
+
+  def initialize(user, map, opts = {})
     @user = user
     @map = map
+    @base_url = opts[:base_url] || 'https://metamaps.cc'
   end
 
   def json
@@ -20,6 +22,25 @@ class MapExportService
         csv << line
       end
     end
+  end
+
+  def rdf
+    output = ''
+    output += "PREFIX d: <#{base_url}/maps/#{map.id}>\n"
+    output += "PREFIX mm: <#{base_url}/owl/map.owl.ttl>\n"
+    output += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+    output += "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"
+    output += "\n"
+    map.contributors.each do |mapper|
+      output += mapper.as_rdf(base_url: base_url)
+    end
+    map.topics.each do |topic|
+      output += topic.as_rdf
+    end
+    map.synapses.each do |synapse|
+      output += synapse.as_rdf
+    end
+    output
   end
 
   private
