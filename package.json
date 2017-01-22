@@ -37,6 +37,7 @@
     "getscreenmedia": "2.0.0",
     "hark": "git://github.com/otalk/hark#342ef9b7eff2",
     "howler": "2.0.2",
+    "jquery": "1.12.4",
     "json-loader": "0.5.4",
     "lodash": "4.17.4",
     "node-uuid": "1.4.7",
