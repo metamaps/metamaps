@@ -22,6 +22,8 @@ Metamaps is developed and maintained by a distributed, nomadic community compris
 - To follow along with, or contribute to, our development process, see our [Github Issues and Pull Requests](https://github.com/metamaps/metamaps/issues)
 - Request an invite to the open beta [here](https://metamaps.cc/request)
 
+<!-- markdown hack to split two lists -->
+
 - To send us a personal message get in touch with us via email, Twitter, or Hylo
 - If you would like to report a bug, please check the [issues][contributing-issues] section in our [contributing instructions][contributing].
 - If you would like to get set up as a developer, that's great! Read on for help getting your development environment set up.
