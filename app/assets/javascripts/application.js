@@ -11,7 +11,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 /* eslint-disable spaced-comment */
-//= require jquery3
+//= require jquery
 //= require jquery-ui
 //= require jquery_ujs
 //= require action_cable
