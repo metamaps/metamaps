@@ -87,7 +87,7 @@ module Api
 
       def token_user
         token = params[:access_token]
-        access_token = Token.find_by_token(token)
+        access_token = Token.find_by(token: token)
         @token_user ||= access_token.user if access_token
       end
 
@@ -160,7 +160,7 @@ module Api
       def search_by_q(collection)
         table = resource_class.arel_table
         safe_query = "%#{params[:q].gsub(/[%_]/, '\\\\\0')}%"
-        search_column = -> (column) { table[column].matches(safe_query) }
+        search_column = ->(column) { table[column].matches(safe_query) }
 
         condition = searchable_columns.reduce(nil) do |prev, column|
           next search_column.call(column) if prev.nil?

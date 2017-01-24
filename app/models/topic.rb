@@ -160,16 +160,16 @@ class Topic < ApplicationRecord
   end
 
   def after_updated
-    attrs = ['name', 'desc', 'link', 'metacode_id', 'permission', 'defer_to_map_id']
-    if attrs.any? {|k| changed_attributes.key?(k)}
-      new = self.attributes.select {|k| attrs.include?(k) }
-      old = changed_attributes.select {|k| attrs.include?(k) }
-      meta = new.merge(old) # we are prioritizing the old values, keeping them 
-      meta['changed'] = changed_attributes.keys.select {|k| attrs.include?(k) }
+    attrs = %w(name desc link metacode_id permission defer_to_map_id)
+    if attrs.any? { |k| changed_attributes.key?(k) }
+      new = attributes.select { |k| attrs.include?(k) }
+      old = changed_attributes.select { |k| attrs.include?(k) }
+      meta = new.merge(old) # we are prioritizing the old values, keeping them
+      meta['changed'] = changed_attributes.keys.select { |k| attrs.include?(k) }
       Events::TopicUpdated.publish!(self, user, meta)
-      maps.each {|map|
+      maps.each do |map|
         ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
-      }
+      end
     end
   end
 end

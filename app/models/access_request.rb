@@ -12,7 +12,7 @@ class AccessRequest < ApplicationRecord
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
     end
 
-    user_map = UserMap.create(user: user, map: map)
+    UserMap.create(user: user, map: map)
     NotificationService.access_approved(self)
   end
 

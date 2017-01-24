@@ -31,7 +31,7 @@ class Mapping < ApplicationRecord
 
   def after_created
     if mappable_type == 'Topic'
-      meta = {'x': xloc, 'y': yloc, 'mapping_id': id}
+      meta = { 'x': xloc, 'y': yloc, 'mapping_id': id }
       Events::TopicAddedToMap.publish!(mappable, map, user, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicAdded', topic: mappable.filtered, mapping_id: id
     elsif mappable_type == 'Synapse'
@@ -42,13 +42,14 @@ class Mapping < ApplicationRecord
         synapse: mappable.filtered,
         topic1: mappable.topic1.filtered,
         topic2: mappable.topic2.filtered,
-        mapping_id: id)
+        mapping_id: id
+      )
     end
   end
 
   def after_updated
-    if mappable_type == 'Topic' and (xloc_changed? or yloc_changed?)
-      meta = {'x': xloc, 'y': yloc, 'mapping_id': id}
+    if (mappable_type == 'Topic') && (xloc_changed? || yloc_changed?)
+      meta = { 'x': xloc, 'y': yloc, 'mapping_id': id }
       Events::TopicMovedOnMap.publish!(mappable, map, updated_by, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicMoved', id: mappable.id, mapping_id: id, x: xloc, y: yloc
     end
@@ -61,7 +62,7 @@ class Mapping < ApplicationRecord
       mappable.save
     end
 
-    meta = {'mapping_id': id}
+    meta = { 'mapping_id': id }
     if mappable_type == 'Topic'
       Events::TopicRemovedFromMap.publish!(mappable, map, updated_by, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicRemoved', id: mappable.id, mapping_id: id

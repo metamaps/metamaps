@@ -5,7 +5,6 @@ class HacksController < ApplicationController
   include ActionView::Helpers::TextHelper # string truncate method
 
   # rate limited by rack-attack - currently 5r/s
-  # TODO: what else can we do to make get_with_redirects safer?
   def load_url_title
     authorize :Hack
     url = params[:url]

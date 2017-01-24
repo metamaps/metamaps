@@ -2,12 +2,11 @@
 module ApplicationHelper
   def metacodeset
     metacodes = current_user.settings.metacodes
+
     return false unless metacodes[0].include?('metacodeset')
-    if metacodes[0].sub('metacodeset-', '') == 'Most'
-      return 'Most'
-    elsif metacodes[0].sub('metacodeset-', '') == 'Recent'
-      return 'Recent'
-    end
+    return 'Most' if metacodes[0].sub('metacodeset-', '') == 'Most'
+    return 'Recent' if metacodes[0].sub('metacodeset-', '') == 'Recent'
+
     MetacodeSet.find(metacodes[0].sub('metacodeset-', '').to_i)
   end
 
