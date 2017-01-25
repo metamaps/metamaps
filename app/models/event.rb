@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Event < ApplicationRecord
-  KINDS = %w(user_present_on_map conversation_started_on_map
+  KINDS = %w(user_present_on_map user_not_present_on_map
+             conversation_started_on_map
              topic_added_to_map topic_moved_on_map topic_removed_from_map
              synapse_added_to_map synapse_removed_from_map
              topic_updated synapse_updated).freeze

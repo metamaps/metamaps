@@ -149,8 +149,6 @@ const Visualize = {
       self.mGraph.graph.empty()
     }
 
-    if (self.type === 'ForceDirected' && Active.Mapper) $.post('/maps/' + Active.Map.id + '/events/user_presence')
-
     function runAnimation() {
       Loading.hide()
       // load JSON data, if it's not empty
