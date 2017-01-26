@@ -206,9 +206,9 @@ const Visualize = {
       var t = Active.Topic
 
       if (m && window.location.pathname !== '/maps/' + m.id) {
-        Router.navigate('/maps/' + m.id)
+        Router.navigateAndTrack('/maps/' + m.id)
       } else if (t && window.location.pathname !== '/topics/' + t.id) {
-        Router.navigate('/topics/' + t.id)
+        Router.navigateAndTrack('/topics/' + t.id)
       }
     }, 800)
   },
