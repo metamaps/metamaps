@@ -14,6 +14,7 @@ Metamaps::Application.routes.draw do
     get 'starred'
     get 'mapper/:id', action: 'mapper'
   end
+  get :explore, to: redirect('/')
 
   resources :maps, except: [:index, :edit] do
     member do
