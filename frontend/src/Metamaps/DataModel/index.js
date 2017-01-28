@@ -80,11 +80,11 @@ const DataModel = {
     var myCollection = serverData.Mine ? serverData.Mine : []
     var sharedCollection = serverData.Shared ? serverData.Shared : []
     var starredCollection = serverData.Starred ? serverData.Starred : []
-    var mapperCollection = []
+    var mapperCollection = serverData.Mapper ? serverData.Mapper : []
     var mapperOptionsObj = { id: 'mapper', sortBy: 'updated_at' }
-    if (self.Maps.Mapper.mapperId) {
+    if (serverData.Mapper.mapperId) {
       mapperCollection = serverData.Mapper.models
-      mapperOptionsObj.mapperId = serverData.Mapper.id
+      mapperOptionsObj.mapperId = serverData.Mapper.mapperId
     }
     var featuredCollection = serverData.Featured ? serverData.Featured : []
     var activeCollection = serverData.Active ? serverData.Active : []
