@@ -150,10 +150,21 @@ module Api
 
       # override this method to explicitly set searchable columns
       def searchable_columns
+        return @searchable_columns unless @searchable_columns.nil?
+
         columns = resource_class.columns.select do |column|
           column.type == :text || column.type == :string
         end
-        columns.map(&:name)
+        @searchable_columns = columns.map(&:name)
+      end
+
+      # e.g. ?q=test&searchfields=name,desc
+      def searchfields
+        return searchable_columns if params[:searchfields].blank?
+
+        searchfields = params[:searchfields].split(',')
+        searchfields.select! { |f| searchable_columns.include?(f.to_sym) }
+        searchfields.empty? ? searchable_columns : searchfields
       end
 
       # thanks to http://stackoverflow.com/questions/4430578
@@ -162,7 +173,7 @@ module Api
         safe_query = "%#{params[:q].gsub(/[%_]/, '\\\\\0')}%"
         search_column = ->(column) { table[column].matches(safe_query) }
 
-        condition = searchable_columns.reduce(nil) do |prev, column|
+        condition = searchfields.reduce(nil) do |prev, column|
           next search_column.call(column) if prev.nil?
           search_column.call(column).or(prev)
         end
