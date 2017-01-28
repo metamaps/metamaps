@@ -198,6 +198,10 @@ Metacode.create(name: 'Status',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_status.png',
                 color: '#EFA7C0')
 
+Metacode.create(name: 'Story',
+                manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_story.png',
+                color: '#A7A2DC')
+
 Metacode.create(name: 'Tool',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_tool.png',
                 color: '#828282')
