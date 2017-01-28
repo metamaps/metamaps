@@ -16,6 +16,7 @@ class Topic < ApplicationRecord
 
   belongs_to :metacode
 
+  before_create :set_perm_by_defer
   before_create :create_metamap?
   after_update :after_updated
 
@@ -133,6 +134,10 @@ class Topic < ApplicationRecord
   end
 
   protected
+
+  def set_perm_by_defer
+    permission = defer_to_map.permission if defer_to_map
+  end
 
   def create_metamap?
     return unless (link == '') && (metacode.name == 'Metamap')

@@ -22,6 +22,7 @@ class Synapse < ApplicationRecord
     where(topic1_id: topic_id).or(where(topic2_id: topic_id))
   }
 
+  before_create :set_perm_by_defer
   after_update :after_updated
 
   delegate :name, to: :user, prefix: true
@@ -61,6 +62,12 @@ class Synapse < ApplicationRecord
     output[-2] = '.'
     output += %(\n)
     output
+  end
+  
+  protected
+  
+  def set_perm_by_defer
+    permission = defer_to_map.permission if defer_to_map
   end
 
   def after_updated
