@@ -23,7 +23,6 @@ const Control = {
     node.selected = true
     node.setData('dim', 30, 'current')
     Selected.Nodes.push(node)
-    Engine.setNodeSleeping(node.getData('body_id'), true)
   },
   deselectAllNodes: function() {
     var l = Selected.Nodes.length
@@ -40,7 +39,6 @@ const Control = {
     // remove the node
     Selected.Nodes.splice(
       Selected.Nodes.indexOf(node), 1)
-    Engine.setNodeSleeping(node.getData('body_id'), false)
   },
   deleteSelected: function() {
     if (!Active.Map) return

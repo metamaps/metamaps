@@ -1024,7 +1024,6 @@ const JIT = {
         n.pos.setp(theta, rho)
       } else {
         n.pos.setc(x, y)
-        Engine.setNodePos(n.getData('body_id'), x, y)
       }
 
       if (Active.Map) {

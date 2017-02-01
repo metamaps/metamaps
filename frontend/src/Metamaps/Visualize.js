@@ -97,7 +97,7 @@ const Visualize = {
         })
 
         //const startPos = new $jit.Complex(0, 0)
-        const endPos = new $jit.Complex(mapping.get('xloc'), mapping.get('yloc'))
+        const endPos = new $jit.Complex(0, 0)
         //n.setPos(startPos, 'start')
         //n.setPos(endPos, 'end')
         n.setPos(endPos, 'current')
