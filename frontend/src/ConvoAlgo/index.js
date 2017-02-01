@@ -26,40 +26,32 @@ export const generateLayoutObject = (topics, synapses, focalTopicId) => {
   let newRoot
   let currentTopic
   
-  const addParentsAndChildren = (topic) => {
+  const addParentsAndChildren = (topic, getParents, getChildren) => {
     if (!topic.id) return topic
     
     usedTopics[topic.id] = true
 
-    topic.parents = []
-    topic.children = []
+    if (getParents) {
+      topic.parents = []
+      synapses.filter(synapse => {
+        return synapse.topic2_id === topic.id
+               && !usedTopics[synapse.topic1_id]
+               && synapse.category === 'from-to'
+      })
+      .map(synapse => synapse.topic1_id)
+      .forEach(parentId => topic.parents.push(addParentsAndChildren({id: parentId}, true, false)))
+    }
     
-    let filteredParentIds = synapses.filter(synapse => { 
-      return synapse.topic2_id === topic.id
-             && !usedTopics[synapse.topic1_id]
-             && synapse.category === 'from-to'
-    }).map(synapse => synapse.topic1_id)
-    
-    let filteredChildrenIds = synapses.filter(synapse => { 
-      return synapse.topic1_id === topic.id
-             && !usedTopics[synapse.topic2_id]
-             && synapse.category === 'from-to'
-             
-    }).map(synapse => synapse.topic2_id)
-    
-    filteredParentIds.forEach(parentId => {
-      let parent = {
-        id: parentId
-      }
-      topic.parents.push(addParentsAndChildren(parent))
-    })
-    
-    filteredChildrenIds.forEach(childId => {
-      let child = {
-        id: childId
-      }
-      topic.children.push(addParentsAndChildren(child))
-    })
+    if (getChildren) {
+      topic.children = []
+      synapses.filter(synapse => {
+        return synapse.topic1_id === topic.id
+               && !usedTopics[synapse.topic2_id]
+               && synapse.category === 'from-to'
+      })
+      .map(synapse => synapse.topic2_id)
+      .forEach(childId => topic.children.push(addParentsAndChildren({id: childId}, false, true)))
+    }
     
     return topic
   }
@@ -73,17 +65,14 @@ export const generateLayoutObject = (topics, synapses, focalTopicId) => {
   newRoot = {
     id: currentTopic.id
   }
-  layout.push(addParentsAndChildren(newRoot))
-  
-  // 
-  // go through the the topics again, and build the island for the first topic that isn't 
-  // yet in the usedTopics object (in any island). recurse
+  layout.push(addParentsAndChildren(newRoot, true, true))
+  // do the rest
   topics.forEach(topic => {
     if (topic && topic.id && !usedTopics[topic.id]) {
       newRoot = {
         id: topic.id
       }
-      layout.push(addParentsAndChildren(newRoot))
+      layout.push(addParentsAndChildren(newRoot, true, true))
     }
   })
   return layout
