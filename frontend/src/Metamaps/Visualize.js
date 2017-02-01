@@ -1,7 +1,6 @@
 /* global $ */
 
 import _ from 'lodash'
-import Matter from 'matter-js'
 
 import $jit from '../patched/JIT'
 
