@@ -82,7 +82,7 @@ const DataModel = {
     var starredCollection = serverData.Starred ? serverData.Starred : []
     var mapperCollection = serverData.Mapper ? serverData.Mapper : []
     var mapperOptionsObj = { id: 'mapper', sortBy: 'updated_at' }
-    if (serverData.Mapper.mapperId) {
+    if (serverData.Mapper && serverData.Mapper.mapperId) {
       mapperCollection = serverData.Mapper.models
       mapperOptionsObj.mapperId = serverData.Mapper.mapperId
     }
