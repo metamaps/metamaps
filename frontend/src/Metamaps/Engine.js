@@ -18,8 +18,7 @@ const Engine = {
   run: init => {
     if (init) {
       if (Active.Mapper && Object.keys(Visualize.mGraph.graph.nodes).length) {
-        Engine.setFocusNode(Engine.findFocusNode(Visualize.mGraph.graph.nodes))
-        Engine.runLayout(true)
+        Engine.setFocusNode(Engine.findFocusNode(Visualize.mGraph.graph.nodes), true)
       }
     }
   },
@@ -56,16 +55,17 @@ const Engine = {
   findFocusNode: nodes => {
     return last(sortBy(values(nodes), n => new Date(n.getData('topic').get('created_at'))))
   },
-  setFocusNode: node => {
+  setFocusNode: (node, init) => {
     if (!Active.Mapper) return
     Create.newSynapse.focusNode = node
     Mouse.focusNodeCoords = node.pos
     Mouse.newNodeCoords = {
-      x: node.x + 200,
-      y: node.y
+      x: node.pos.x + 200,
+      y: node.pos.y
     }
     Create.newSynapse.updateForm()
     Create.newTopic.position()
+    Engine.runLayout(init)
   },
   addEdge: edge => {
     Engine.runLayout()

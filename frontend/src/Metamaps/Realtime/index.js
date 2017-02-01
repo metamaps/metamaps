@@ -5,6 +5,7 @@ import SocketIoConnection from 'simplewebrtc/socketioconnection'
 
 import Active from '../Active'
 import Cable from '../Cable'
+import Create from '../Create'
 import DataModel from '../DataModel'
 import JIT from '../JIT'
 import Util from '../Util'
@@ -234,8 +235,13 @@ let Realtime = {
   setupLocalEvents: function() {
     var self = Realtime
     // local event listeners that trigger events
-    $(document).on(JIT.events.zoom + '.map', self.positionPeerIcons)
-    $(document).on(JIT.events.pan + '.map', self.positionPeerIcons)
+    const panOrZoom = () => {
+      self.positionPeerIcons()
+      Create.newSynapse.updateForm()
+      Create.newTopic.position()
+    }
+    $(document).on(JIT.events.zoom + '.map', panOrZoom)
+    $(document).on(JIT.events.pan + '.map', panOrZoom)
     $(document).on('mousemove.map', function(event) {
       var pixels = {
         x: event.pageX,

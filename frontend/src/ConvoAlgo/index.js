@@ -108,11 +108,11 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
       // set the focalCoord to be what it already was
       coords[topic.id] = focalCoords
     } else if (!parent && !child) {
-      coords[topic.id] = {x: 0, y: 150}
+      coords[topic.id] = {x: 0, y: 250}
     } else if (parent) {
       coords[topic.id] = {
         x: coords[parent.id].x + 250,
-        y: coords[parent.id].y
+        y: coords[parent.id].y - (parent.id === focalTopicId ? 250 : 0)
       }
     } else if (child) {
       coords[topic.id] = {
