@@ -96,7 +96,6 @@ export const generateLayoutObject = (topics, synapses, focalTopicId) => {
     }
   })
 
-  console.log(JSON.stringify(layout))
   return layout
 }
 
@@ -105,6 +104,7 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
   const coords = {}
   const X_GRID_SPACE = 250
   const Y_GRID_SPACE = 200
+  const ISLAND_SPACING = 300
 
   const traverseIsland = (island, func, parent, child) => {
     func(island, parent, child)
@@ -165,9 +165,7 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
     coords[topic.id] = pos
   }
 
-  const translateIsland = (island, x, y) => {
-
-  }
+  
 
   // lay all of them out as if there were no other ones
   layoutObject.forEach((island, index) => {
@@ -181,8 +179,48 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
   })
 
   // calculate the bounds of each island
+  const islandBoundArray= []
+  const adjustBounds = islandBounds => (topic, parent, child) => {
+    const relation = parent || child
+    if (!relation) return
+    islandBounds.minX = Math.min(islandBounds.minX, coords[topic.id].x)
+    islandBounds.maxX = Math.max(islandBounds.maxX, coords[topic.id].x)
+    islandBounds.minY = Math.min(islandBounds.minY, coords[topic.id].y)
+    islandBounds.maxY = Math.max(islandBounds.maxY, coords[topic.id].y)
+  }
+  layoutObject.forEach(island => {
+    const islandBounds = {
+      minX: coords[island.id].x,
+      maxX: coords[island.id].x,
+      minY: coords[island.id].y,
+      maxY: coords[island.id].y
+    }
+    islandBoundArray.push(islandBounds)
+    traverseIsland(island, adjustBounds(islandBounds))
+  })
 
   // reposition the islands according to the bounds
+  const translateIsland = (island, x, y) => {
+    const adjustTopicPos = topic => {
+      coords[topic.id].x = coords[topic.id].x + x
+      coords[topic.id].y = coords[topic.id].y + y
+    }
+    traverseIsland(island, adjustTopicPos)
+  }
+  let currentYForIslands = 0 // the highest Y value that has thus been placed
+  layoutObject.forEach((island, index) => {
+    let translateY
+    const islandHeight = islandBoundArray[index].maxY - islandBoundArray[index].minY
+    if (index === 0) {
+      translateIsland(island, focalCoords.x, focalCoords.y) // position the selected island to where the user has it already
+      currentYForIslands = focalCoords.y + islandBoundArray[0].maxY
+    }
+    else {
+      translateIsland(island, focalCoords.x, currentYForIslands + ISLAND_SPACING + (Math.floor(islandHeight / 2)))
+      currentYForIslands = currentYForIslands + ISLAND_SPACING + islandHeight
+    }
+  })
+
   return coords
 }
 
