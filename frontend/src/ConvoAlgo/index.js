@@ -1,3 +1,5 @@
+import { findIndex, orderBy } from 'lodash'
+
 // an array of synapses
 // an array of topics
 
@@ -20,16 +22,36 @@ animate
 
 // synapses = [{ topic1_id: 4, topic2_id: 5, direction: 'from-to' }]
 
+const isEven = n => n % 2 === 0
+const isOdd = n => Math.abs(n % 2) === 1
+
+
 export const generateLayoutObject = (topics, synapses, focalTopicId) => {
   let layout = [] // will be the final output
   const usedTopics = {} // will store the topics that have been placed into islands
   let newRoot
   let currentTopic
-  
-  const addParentsAndChildren = (topic, getParents, getChildren) => {
+
+  const addParentsAndChildren = (topic, getParents, getChildren, degreeFromFocus) => {
     if (!topic.id) return topic
-    
+
     usedTopics[topic.id] = true
+    topic.degreeFromFocus = degreeFromFocus
+    const nextDegree = degreeFromFocus + 1
+
+    if (getChildren) {
+      topic.children = []
+      synapses.filter(synapse => {
+        return synapse.topic1_id === topic.id
+               && !usedTopics[synapse.topic2_id]
+               && synapse.category === 'from-to'
+      })
+      .map(synapse => synapse.topic2_id)
+      .forEach(childId => topic.children.push(addParentsAndChildren({id: childId}, false, true, nextDegree)))
+
+      topic.children = orderBy(topic.children, 'maxDescendants', 'desc')
+      topic.maxDescendants = topic.children.length ? topic.children[0].maxDescendants + 1 : 0
+    }
 
     if (getParents) {
       topic.parents = []
@@ -39,23 +61,19 @@ export const generateLayoutObject = (topics, synapses, focalTopicId) => {
                && synapse.category === 'from-to'
       })
       .map(synapse => synapse.topic1_id)
-      .forEach(parentId => topic.parents.push(addParentsAndChildren({id: parentId}, true, false)))
+      .forEach(parentId => topic.parents.push(addParentsAndChildren({id: parentId}, true, false, nextDegree)))
+
+      topic.parents = orderBy(topic.parents, 'maxAncestors', 'desc')
+      topic.maxAncestors = topic.parents.length ? topic.parents[0].maxAncestors + 1 : 0
     }
-    
-    if (getChildren) {
-      topic.children = []
-      synapses.filter(synapse => {
-        return synapse.topic1_id === topic.id
-               && !usedTopics[synapse.topic2_id]
-               && synapse.category === 'from-to'
-      })
-      .map(synapse => synapse.topic2_id)
-      .forEach(childId => topic.children.push(addParentsAndChildren({id: childId}, false, true)))
+
+    if (getParents && getChildren) {
+      topic.longestThread = topic.maxDescendants + topic.maxAncestors + 1
     }
-    
+
     return topic
   }
-  
+
   // start with the focal node, and build its island
   currentTopic = topics.find(t => t.id === focalTopicId)
   if (!currentTopic) {
@@ -65,23 +83,29 @@ export const generateLayoutObject = (topics, synapses, focalTopicId) => {
   newRoot = {
     id: currentTopic.id
   }
-  layout.push(addParentsAndChildren(newRoot, true, true))
-  // do the rest
+  layout.push(addParentsAndChildren(newRoot, true, true, 0))
+
+  // right now there's no reasoning going on about the selection of focal topics
+  // its just whichever ones happen to be found in the array first
   topics.forEach(topic => {
     if (topic && topic.id && !usedTopics[topic.id]) {
       newRoot = {
         id: topic.id
       }
-      layout.push(addParentsAndChildren(newRoot, true, true))
+      layout.push(addParentsAndChildren(newRoot, true, true, 0))
     }
   })
+
+  console.log(JSON.stringify(layout))
   return layout
 }
 
 
 export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoords) => {
   const coords = {}
-  
+  const X_GRID_SPACE = 250
+  const Y_GRID_SPACE = 200
+
   const traverseIsland = (island, func, parent, child) => {
     func(island, parent, child)
     if (island.parents) {
@@ -91,33 +115,73 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
       island.children.forEach(c => traverseIsland(c, func, island, null))
     }
   }
-  
-  const positionTopic = (topic, parent, child) => {
-    if (topic.id === focalTopicId) {
-      // set the focalCoord to be what it already was
-      coords[topic.id] = focalCoords
-    } else if (!parent && !child) {
-      coords[topic.id] = {x: 0, y: 250}
-    } else if (parent) {
-      coords[topic.id] = {
-        x: coords[parent.id].x + 250,
-        y: coords[parent.id].y - (parent.id === focalTopicId ? 250 : 0)
+
+  // const myFunction = n => n*5
+
+  // myFunction(2) === 10
+
+  const positionTopic = tempPosStore => (topic, parent, child) => {
+    let pos = {}
+
+    const getYValueForX = (x, attempt = 0) => {
+      tempPosStore[x] = tempPosStore[x] || {}
+      let yValue
+      let relationSign
+      let indexOfTopic
+      let relation = parent || child
+      let arrayOfTopics = parent ? parent.children : (child ? child.parents : [])
+
+      // first figure out what you'd like it to be
+      // then figure out if that spot's taken
+      // and if it is then call this function again with another attempt
+
+      // after the focal topic only, ODD indexes will move negatively on the Y axis
+      // and EVEN indexes will move positively on the Y axis
+
+      // for everything beyond the direct parents and children of the focal topic
+      // maintain the positivity or negativity on the Y axis of its parent or child
+
+      if (!relation) yValue = 0
+      else if (attempt === 0) yValue = coords[relation.id].y
+      else if (attempt > 0) {
+        // if the relations sign is 0, alternate between putting this topic into the upper and lower quadrants
+        if (coords[relation.id].y === 0) {
+          indexOfTopic = findIndex(arrayOfTopics, t => t.id === topic.id)
+          relationSign = isOdd(indexOfTopic) ? 1 : -1
+        } else {
+          // if the quadrant of the related topic is already decided, make sure to keep it
+          relationSign = coords[relation.id].y > 0 ? 1 : -1
+        }
+        yValue = coords[relation.id].y + (Y_GRID_SPACE * attempt * relationSign)
       }
-    } else if (child) {
-      coords[topic.id] = {
-        x: coords[child.id].x - 250,
-        y: coords[child.id].y
+
+      if (tempPosStore[x][yValue]) yValue = getYValueForX(x, attempt + 1)
+      tempPosStore[x][yValue] = true
+      return yValue
+    }
+
+    pos.x = topic.degreeFromFocus * X_GRID_SPACE * (parent ? 1 : -1),
+    pos.y = getYValueForX(pos.x)
+    coords[topic.id] = pos
+  }
+
+  const translateIsland = (island, x, y) => {
+
+  }
+
+  // lay all of them out as if there were no other ones
+  layoutObject.forEach((island, index) => {
+    const tempPosStore = {}
+    if (index === 0) {
+      tempPosStore[X_GRID_SPACE] = {
+        0: true
       }
     }
-  }
-  
-  // lay all of them out as if there were no other ones
-  layoutObject.forEach(island => {
-    traverseIsland(island, positionTopic)
+    traverseIsland(island, positionTopic(tempPosStore))
   })
-  
+
   // calculate the bounds of each island
-  
+
   // reposition the islands according to the bounds
   return coords
 }
