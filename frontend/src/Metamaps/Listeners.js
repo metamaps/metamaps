@@ -2,6 +2,7 @@
 
 import Active from './Active'
 import Control from './Control'
+import Create from './Create'
 import DataModel from './DataModel'
 import JIT from './JIT'
 import Mobile from './Mobile'
@@ -127,6 +128,8 @@ const Listeners = {
     $(window).resize(function() {
       if (Visualize && Visualize.mGraph) {
         Util.resizeCanvas(Visualize.mGraph.canvas)
+        Create.newSynapse.updateForm()
+        Create.newTopic.position()
       }
 
       if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
