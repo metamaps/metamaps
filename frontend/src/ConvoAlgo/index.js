@@ -1,10 +1,5 @@
 import { findIndex, orderBy } from 'lodash'
 
-// an array of synapses
-// an array of topics
-
-// a focal node
-
 /*
 step 1
 generate an object/array that represents the intended layout
@@ -13,18 +8,16 @@ generate an object/array that represents the intended layout
 step 2
 generate x,y coordinates for every topic in the layout object
 
-step 3 
-set end states for every topic
-
-Step 4
-animate
 */
 
-// synapses = [{ topic1_id: 4, topic2_id: 5, direction: 'from-to' }]
+// synapses = [{ topic1_id: 4, topic2_id: 5, direction: 'from-to', desc: 'has reply' }]
 
 const isEven = n => n % 2 === 0
 const isOdd = n => Math.abs(n % 2) === 1
 
+export const X_GRID_SPACE = 250
+export const Y_GRID_SPACE = 200
+export const ISLAND_SPACING = 300
 
 export const generateLayoutObject = (topics, synapses, focalTopicId) => {
   let layout = [] // will be the final output
@@ -102,9 +95,6 @@ export const generateLayoutObject = (topics, synapses, focalTopicId) => {
 
 export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoords) => {
   const coords = {}
-  const X_GRID_SPACE = 250
-  const Y_GRID_SPACE = 200
-  const ISLAND_SPACING = 300
 
   const traverseIsland = (island, func, parent, child) => {
     func(island, parent, child)
@@ -164,8 +154,6 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
     pos.y = getYValueForX(pos.x)
     coords[topic.id] = pos
   }
-
-  
 
   // lay all of them out as if there were no other ones
   layoutObject.forEach((island, index) => {
@@ -227,66 +215,3 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
 export const getLayoutForData = (topics, synapses, focalTopicId, focalCoords) => {
   return generateObjectCoordinates(generateLayoutObject(topics, synapses, focalTopicId), focalTopicId, focalCoords)
 }
-
-
-
-// if we've placed a node into an island, we need to NOT place it in any other islands
-// Every node should only appear in one island
-
-// the pseudo-focal node
-
-
-// the top level array represents islands
-// every island has some sort of 'focal' node
-/*
-var example = [
-  // the island that contains the focal node
-  {
-    id: 21,
-    parents: [
-      {
-        id: 25,
-        parents: []
-      },
-      {
-        id: 25,
-        parents: []
-      }
-    ],
-    children: [{
-      id: 26,
-      children: []
-    }]
-  },
-  // all other islands should not contain children on the top level node
-  {
-    id: 21,
-    // parents may contain children
-    parents: [
-      {
-        id: 100,
-        parents: [
-          {
-            id: 101,
-            parents: [],
-            children: [
-              {
-                id: 103,
-                children: []
-              }
-            ]
-          }  
-        ]
-      },
-      {
-        id: 102,
-        parents: []
-      }
-    ]
-  },
-  {
-    id: 21,
-    parents: []
-  },
-]
-*/

@@ -407,15 +407,6 @@ console.log(codesToSwitchToIds)
       if (Visualize.mGraph) Visualize.mGraph.plot()
     },
     updateForm: function() {
-      // set the draw synapse start positions
-      Mouse.synapseStartCoordinates = []
-      for (let i = Selected.Nodes.length - 1; i >= 0; i -= 1) {
-        const n = Selected.Nodes[i]
-        Mouse.synapseStartCoordinates.push({
-          x: n.pos.getc().x,
-          y: n.pos.getc().y
-        })
-      }
       let pixelPos, midpoint = {}
       if (Create.newSynapse.beingCreated) {
         Mouse.synapseEndCoordinates = {

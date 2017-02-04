@@ -46,16 +46,13 @@ const Cable = {
       var topic1, topic2, node1, node2, synapse, mapping, cancel, mapper
  
       function waitThenRenderSynapse() {
-        if (synapse && mapping && mapper) {
+        if (synapse && mapping && mapper && synapse.getTopic1() && synapse.getTopic2()) {
           topic1 = synapse.getTopic1()
           node1 = topic1.get('node')
           topic2 = synapse.getTopic2()
           node2 = topic2.get('node')
-    
-          Synapse.renderSynapse(mapping, synapse, node1, node2, false)
-          if (Create.newSynapse.focusNode === node1) {
-            Engine.setFocusNode(node2)
-          }
+          Synapse.renderSynapse(mapping, synapse, node1, node2, true)
+          Engine.runLayout()
         } else if (!cancel) {
           setTimeout(waitThenRenderSynapse, 10)
         }
@@ -122,6 +119,7 @@ const Cable = {
       }
       DataModel.Synapses.remove(synapse)
       DataModel.Mappings.remove(mapping)
+      Engine.runLayout()
     }
   },
   topicAdded: event => {
@@ -130,19 +128,19 @@ const Cable = {
     // containing only the information we need to determine whether the active mapper
     // can view this topic, then if we determine it can, we make a call for the full model
     const t = new DataModel.Topic(event.topic)
+    
+    // refactor the heck outta this, its adding wicked wait time
+    var topic, mapping, mapper, cancel
+    function waitThenRenderTopic() {
+      if (topic && mapping && mapper) {
+        Topic.renderTopic(mapping, topic, true)
+        Engine.runLayout()
+      } else if (!cancel) {
+        setTimeout(waitThenRenderTopic, 10)
+      }
+    }
 
     if (t.authorizeToShow(m) && !DataModel.Topics.get(event.topic.id)) {
-      // refactor the heck outta this, its adding wicked wait time
-      var topic, mapping, mapper, cancel
-    
-      function waitThenRenderTopic() {
-        if (topic && mapping && mapper) {
-          Topic.renderTopic(mapping, topic, false)
-        } else if (!cancel) {
-          setTimeout(waitThenRenderTopic, 10)
-        }
-      }
-    
       mapper = DataModel.Mappers.get(event.topic.user_id)
       if (mapper === undefined) {
         Mapper.get(event.topic.user_id, function(m) {
@@ -206,6 +204,7 @@ const Cable = {
       Control.hideNode(node.id)
       DataModel.Topics.remove(topic)
       DataModel.Mappings.remove(mapping)
+      Engine.runLayout()
     }
   },
   messageCreated: event => {

@@ -29,83 +29,52 @@ const Synapse = {
     } else callback(DataModel.Synapses.get(id))
   },
 
-  renderSynapse: function(mapping, synapse, node1, node2, createNewInDB, alreadyAdded) {
-    var edgeOnViz
-    var newedge
-
-    if (!alreadyAdded) {
-      newedge = synapse.createEdge(mapping)
-      Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data)
-    }
-    edgeOnViz = Visualize.mGraph.graph.getAdjacence(node1.id, node2.id)
-    if (!alreadyAdded) {
-      Engine.addEdge(edgeOnViz)
-    }
+  renderSynapse: function(mapping, synapse, node1, node2, fromRemote) {
+    const newedge = synapse.createEdge(mapping)
+    Visualize.mGraph.graph.addAdjacence(node1, node2, newedge.data)
+    const edgeOnViz = Visualize.mGraph.graph.getAdjacence(node1.id, node2.id)
     synapse.set('edge', edgeOnViz)
     synapse.updateEdge() // links the synapse and the mapping to the edge
-
-    //Control.selectEdge(edgeOnViz)
-
-    var synapseSuccessCallback = function(synapseModel, response) {
-      if (Active.Map) {
-        mapping.save({ mappable_id: synapseModel.id })
-      }
-    }
-
-    if (createNewInDB) {
-      if (synapse.isNew()) {
-        synapse.save(null, {
-          success: synapseSuccessCallback
-        })
-      } else if (!synapse.isNew() && Active.Map) {
-        mapping.save(null)
-      }
+    if (!fromRemote && synapse.isNew()) {
+      synapse.save(null, {
+        success: synapseModel => Active.Map && mapping.save({ mappable_id: synapseModel.id })
+      })
+    } else if (!fromRemote && !synapse.isNew() && Active.Map) {
+      mapping.save()
     }
   },
-  createSynapseLocally: function(alreadyAdded, topic1id, topic2id) {
+  createSynapseLocally: function(topic1id, topic2id, manual) {
     var self = Synapse
-    let topic1
-    let topic2
-    let node1
-    let node2
-    let synapse
-    let mapping
     $(document).trigger(Map.events.editedByActiveMapper)
     // for each node in this array we will create a synapse going to the position2 node.
-    var synapsesToCreate = []
-    if (alreadyAdded) {
-      topic2 = DataModel.Topics.get(topic2id)
-      node2 = topic2.get('node')
-      topic1 = DataModel.Topics.get(topic1id)
-      synapsesToCreate[0] = topic1.get('node')
-    }
-    else {
-      topic2 = DataModel.Topics.get(Create.newSynapse.topic2id)
-      node2 = topic2.get('node')
-      if (Selected.Nodes.length === 0) {
-        topic1 = DataModel.Topics.get(Create.newSynapse.topic1id)
-        synapsesToCreate[0] = topic1.get('node')
-      } else {
-        synapsesToCreate = Selected.Nodes
-      }
+    const synapsesToCreate = []
+    const topic2 = DataModel.Topics.get(topic2id)
+    const node2 = topic2.get('node')
+    if (Selected.Nodes.length === 0) {
+      synapsesToCreate.push(DataModel.Topics.get(topic1id).get('node'))
+    } else {
+      synapsesToCreate.concat(Selected.Nodes)
     }
     synapsesToCreate.forEach(node1 => {
-      topic1 = node1.getData('topic')
-      synapse = new DataModel.Synapse({
+      const topic1 = node1.getData('topic')
+      const synapse = new DataModel.Synapse({
         desc: Create.newSynapse.description || '',
-        topic1_id: topic1.isNew() ? topic1.cid : topic1.id,
-        topic2_id: topic2.isNew() ? topic2.cid : topic2.id
+        topic1_id: topic1.id,
+        topic2_id: topic2.id
       })
       DataModel.Synapses.add(synapse)
-      mapping = new DataModel.Mapping({
+      const mapping = new DataModel.Mapping({
         mappable_type: 'Synapse',
         mappable_id: synapse.cid
       })
       DataModel.Mappings.add(mapping)
       // this function also includes the creation of the synapse in the database
-      self.renderSynapse(mapping, synapse, node1, node2, true, alreadyAdded)
+      self.renderSynapse(mapping, synapse, node1, node2)
     }) // for each in synapsesToCreate
-    Create.newSynapse.hide()
+    if (manual) {
+      Engine.runLayout()
+      Create.newSynapse.hide()
+    }
   },
   getSynapseFromAutocomplete: function(id) {
     var self = Synapse
@@ -121,7 +90,8 @@ const Synapse = {
       const topic2 = DataModel.Topics.get(Create.newSynapse.topic2id)
       const node2 = topic2.get('node')
       Create.newSynapse.hide()
-      self.renderSynapse(mapping, synapse, node1, node2, true)
+      self.renderSynapse(mapping, synapse, node1, node2)
+      Engine.runLayout()
     })
   }
 }

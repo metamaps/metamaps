@@ -2564,6 +2564,7 @@ Extras.Classes.Navigation = new Class({
         x: eventInfo.getPos().x,
         y: eventInfo.getPos().y
       }
+      Metamaps.Visualize.mGraph.plot()
       //console.log('mouse move');
       return;
     }

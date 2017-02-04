@@ -12,7 +12,7 @@ const Mouse = {
   synapseEndCoordinates: null,
   lastNodeClick: 0,
   lastCanvasClick: 0,
-  DOUBLE_CLICK_TOLERANCE: 300
+  DOUBLE_CLICK_TOLERANCE: 501
 }
 
 export default Mouse
