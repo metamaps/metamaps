@@ -1,12 +1,14 @@
 # frozen_string_literal: true
-class Events::TopicMovedOnMap < Event
-  # after_create :notify_users!
+module Events
+  class TopicMovedOnMap < Event
+    # after_create :notify_users!
 
-  def self.publish!(topic, map, user, meta)
-    create!(kind: 'topic_moved_on_map',
-            eventable: topic,
-            map: map,
-            user: user,
-            meta: meta)
+    def self.publish!(topic, map, user, meta)
+      create!(kind: 'topic_moved_on_map',
+              eventable: topic,
+              map: map,
+              user: user,
+              meta: meta)
+    end
   end
 end

@@ -5,6 +5,7 @@ module Api
       include Pundit
       include PunditExtra
 
+      protect_from_forgery with: :exception
       snorlax_used_rest!
 
       before_action :load_resource, only: [:show, :update, :destroy]
@@ -86,7 +87,7 @@ module Api
 
       def token_user
         token = params[:access_token]
-        access_token = Token.find_by_token(token)
+        access_token = Token.find_by(token: token)
         @token_user ||= access_token.user if access_token
       end
 
@@ -149,19 +150,30 @@ module Api
 
       # override this method to explicitly set searchable columns
       def searchable_columns
+        return @searchable_columns unless @searchable_columns.nil?
+
         columns = resource_class.columns.select do |column|
           column.type == :text || column.type == :string
         end
-        columns.map(&:name)
+        @searchable_columns = columns.map(&:name)
+      end
+
+      # e.g. ?q=test&searchfields=name,desc
+      def searchfields
+        return searchable_columns if params[:searchfields].blank?
+
+        searchfields = params[:searchfields].split(',')
+        searchfields.select! { |f| searchable_columns.include?(f.to_sym) }
+        searchfields.empty? ? searchable_columns : searchfields
       end
 
       # thanks to http://stackoverflow.com/questions/4430578
       def search_by_q(collection)
         table = resource_class.arel_table
         safe_query = "%#{params[:q].gsub(/[%_]/, '\\\\\0')}%"
-        search_column = -> (column) { table[column].matches(safe_query) }
+        search_column = ->(column) { table[column].matches(safe_query) }
 
-        condition = searchable_columns.reduce(nil) do |prev, column|
+        condition = searchfields.reduce(nil) do |prev, column|
           next search_column.call(column) if prev.nil?
           search_column.call(column).or(prev)
         end

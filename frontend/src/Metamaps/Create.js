@@ -335,18 +335,18 @@ console.log(codesToSwitchToIds)
           },
           source: synapseBloodhound
         },
-          {
-            name: 'existing_synapses',
-            limit: 50,
-            display: function(s) { return s.label },
-            templates: {
-              suggestion: function(s) {
-                return Hogan.compile($('#synapseAutocompleteTemplate').html()).render(s)
-              },
-              header: '<h3>Existing synapses</h3>'
+        {
+          name: 'existing_synapses',
+          limit: 50,
+          display: function(s) { return s.label },
+          templates: {
+            suggestion: function(s) {
+              return Hogan.compile($('#synapseAutocompleteTemplate').html()).render(s)
             },
-            source: existingSynapseBloodhound
-          }]
+            header: '<h3>Existing synapses</h3>'
+          },
+          source: existingSynapseBloodhound
+        }]
       )
 
       $('#synapse_desc').keyup(function(e) {

@@ -29,4 +29,7 @@ Rails.application.configure do
   # Expands the lines which load the assets
   config.assets.debug = false
   config.assets.quiet = true
+
+  # S3 file storage
+  config.paperclip_defaults = {} # store on local machine for dev
 end

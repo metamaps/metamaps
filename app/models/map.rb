@@ -3,8 +3,10 @@ class Map < ApplicationRecord
   belongs_to :user
   belongs_to :source, class_name: :Map
 
-  has_many :topicmappings, -> { Mapping.topicmapping }, class_name: :Mapping, dependent: :destroy
-  has_many :synapsemappings, -> { Mapping.synapsemapping }, class_name: :Mapping, dependent: :destroy
+  has_many :topicmappings, -> { Mapping.topicmapping },
+           class_name: :Mapping, dependent: :destroy
+  has_many :synapsemappings, -> { Mapping.synapsemapping },
+           class_name: :Mapping, dependent: :destroy
   has_many :topics, through: :topicmappings, source: :mappable, source_type: 'Topic'
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: 'Synapse'
   has_many :messages, as: :resource, dependent: :destroy
@@ -21,7 +23,6 @@ class Map < ApplicationRecord
   has_attached_file :screenshot,
                     styles: {
                       thumb: ['220x220#', :png]
-                      #:full => ['940x630#', :png]
                     },
                     default_url: 'https://s3.amazonaws.com/metamaps-assets/site/missing-map-square.png'
 
@@ -31,7 +32,7 @@ class Map < ApplicationRecord
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
 
   # Validate the attached image is image/jpg, image/png, etc
-  validates_attachment_content_type :screenshot, content_type: /\Aimage\/.*\Z/
+  validates_attachment_content_type :screenshot, content_type: %r{\Aimage/.*\Z}
 
   after_update :after_updated
   after_save :update_deferring_topics_and_synapses, if: :permission_changed?
@@ -80,7 +81,12 @@ class Map < ApplicationRecord
   end
 
   def as_json(_options = {})
-    json = super(methods: [:user_name, :user_image, :star_count, :topic_count, :synapse_count, :contributor_count, :collaborator_ids, :screenshot_url], except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name, :screenshot_updated_at])
+    json = super(
+      methods: [:user_name, :user_image, :star_count, :topic_count, :synapse_count,
+                :contributor_count, :collaborator_ids, :screenshot_url],
+      except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name,
+               :screenshot_updated_at]
+    )
     json[:created_at_clean] = created_at_str
     json[:updated_at_clean] = updated_at_str
     json
@@ -120,17 +126,16 @@ class Map < ApplicationRecord
     end
     removed.compact
   end
-  
+
   def after_updated
-    attrs = ['name', 'desc', 'permission']
-    if attrs.any? {|k| changed_attributes.key?(k)}
-      ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
-    end
+    attrs = %w(name desc permission)
+    return unless attrs.any? { |k| changed_attributes.key?(k) }
+    ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
   end
 
   def update_deferring_topics_and_synapses
-    Topic.where(defer_to_map_id: id).update_all(permission: permission)
-    Synapse.where(defer_to_map_id: id).update_all(permission: permission)
+    Topic.where(defer_to_map_id: id).update(permission: permission)
+    Synapse.where(defer_to_map_id: id).update(permission: permission)
   end
 
   def invited_text

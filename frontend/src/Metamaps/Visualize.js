@@ -154,8 +154,6 @@ const Visualize = {
       self.mGraph.graph.empty()
     }
 
-    if (self.type === 'ForceDirected' && Active.Mapper) $.post('/maps/' + Active.Map.id + '/events/user_presence')
-
     function runAnimation() {
       Loading.hide()
       $('#new_topic').show()
@@ -216,9 +214,9 @@ const Visualize = {
       var t = Active.Topic
 
       if (m && window.location.pathname !== '/maps/' + m.id) {
-        Router.navigate('/maps/' + m.id)
+        Router.navigateAndTrack('/maps/' + m.id)
       } else if (t && window.location.pathname !== '/topics/' + t.id) {
-        Router.navigate('/topics/' + t.id)
+        Router.navigateAndTrack('/topics/' + t.id)
       }
     }, 800)
   },

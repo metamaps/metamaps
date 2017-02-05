@@ -49,7 +49,7 @@ const ChatView = {
     $('#' + ChatView.domId).hide()
   },
   render: () => {
-    if (!Active.Map) return    
+    if (!Active.Map) return
     const self = ChatView
     self.mapChat = ReactDOM.render(React.createElement(MapChat, {
       conversationLive: self.conversationLive,
@@ -111,7 +111,7 @@ const ChatView = {
   conversationInProgress: participating => {
     ChatView.conversationLive = true
     ChatView.isParticipating = participating
-    ChatView.render() 
+    ChatView.render()
   },
   conversationEnded: () => {
     ChatView.conversationLive = false
@@ -144,7 +144,7 @@ const ChatView = {
   },
   addMessage: (message, isInitial, wasMe) => {
     const self = ChatView
-    if (!isInitial) self.mapChat.newMessage() 
+    if (!isInitial) self.mapChat.newMessage()
     if (!wasMe && !isInitial && self.alertSound) self.sound.play('receivechat')
     self.messages.add(message)
     self.render()

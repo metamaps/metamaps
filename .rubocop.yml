@@ -19,3 +19,6 @@ Metrics/AbcSize:
 
 Style/Documentation:
   Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded

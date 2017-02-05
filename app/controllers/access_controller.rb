@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 class AccessController < ApplicationController
-  before_action :require_user, only: [:access, :access_request, :approve_access, :approve_access_post,
+  before_action :require_user, only: [:access, :access_request,
+                                      :approve_access, :approve_access_post,
                                       :deny_access, :deny_access_post, :request_access]
-  before_action :set_map, only: [:access, :access_request, :approve_access, :approve_access_post,
+  before_action :set_map, only: [:access, :access_request,
+                                 :approve_access, :approve_access_post,
                                  :deny_access, :deny_access_post, :request_access]
   after_action :verify_authorized
 

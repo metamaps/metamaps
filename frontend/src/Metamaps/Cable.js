@@ -1,5 +1,7 @@
 /* global $, ActionCable */
 
+import { indexOf } from 'lodash'
+
 import Active from './Active'
 import Control from './Control'
 import Create from './Create'
@@ -110,7 +112,7 @@ const Cable = {
       if (edge.getData('mappings').length - 1 === 0) {
         Control.hideEdge(edge)
       }
-  
+
       var index = indexOf(edge.getData('synapses'), synapse)
       edge.getData('mappings').splice(index, 1)
       edge.getData('synapses').splice(index, 1)
@@ -128,19 +130,20 @@ const Cable = {
     // containing only the information we need to determine whether the active mapper
     // can view this topic, then if we determine it can, we make a call for the full model
     const t = new DataModel.Topic(event.topic)
-    
-    // refactor the heck outta this, its adding wicked wait time
-    var topic, mapping, mapper, cancel
-    function waitThenRenderTopic() {
-      if (topic && mapping && mapper) {
-        Topic.renderTopic(mapping, topic, true)
-        Engine.runLayout()
-      } else if (!cancel) {
-        setTimeout(waitThenRenderTopic, 10)
-      }
-    }
 
     if (t.authorizeToShow(m) && !DataModel.Topics.get(event.topic.id)) {
+      // refactor the heck outta this, its adding wicked wait time
+      var topic, mapping, mapper, cancel
+
+      const waitThenRenderTopic = () => {
+        if (topic && mapping && mapper) {
+          Topic.renderTopic(mapping, topic, true)
+          Engine.runLayout()
+        } else if (!cancel) {
+          setTimeout(waitThenRenderTopic, 10)
+        }
+      }
+
       mapper = DataModel.Mappers.get(event.topic.user_id)
       if (mapper === undefined) {
         Mapper.get(event.topic.user_id, function(m) {

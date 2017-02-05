@@ -89,6 +89,17 @@ class User < ApplicationRecord
     }.to_a.sort{ |a, b| b[1] <=> a[1] }.map{|i| i[0]}.slice(0, 5)
   end
 
+  def as_rdf(opts = {})
+    base_url = opts[:base_url] || 'https://metamaps.cc'
+    output = ''
+    output += %(d:mapper_#{id} a foaf:OnlineAccount ;\n)
+    output += %(  foaf:accountName "#{name}" ;\n)
+    output += %(  foaf:accountServiceHomepage "#{base_url}/mapper/#{id}" ;\n)
+    output[-2] = '.' # change last ; to a .
+    output += %(\n)
+    output
+  end
+
   def all_accessible_maps
     maps + shared_maps
   end
@@ -115,7 +126,7 @@ class User < ApplicationRecord
     if code == joinedwithcode
       update(generation: 0)
     else
-      update(generation: User.find_by_code(joinedwithcode).generation + 1)
+      update(generation: User.find_by(code: joinedwithcode).generation + 1)
     end
   end
 

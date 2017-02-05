@@ -1,11 +1,11 @@
 /* global $ */
 
-$(document).ready(function () {
+$(document).ready(function() {
   if (window.location.pathname === '/') {
     $.ajax({
       type: 'GET',
       url: 'https://player.vimeo.com',
-      error: function (e) {
+      error: function(e) {
         $('.homeVideo').hide()
         $('.homeVideo').replaceWith($('<video/>', {
           poster: '/assets/metamaps-intro-poster.webp',

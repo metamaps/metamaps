@@ -38,7 +38,7 @@ Metacode.create(name: 'Process',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/blueprint/96px/bp_process.png',
                 color: '#BDB25E')
 
-Metacode.create(name: 'Future',
+Metacode.create(name: 'Future Dev',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/blueprint/96px/bp_futuredev.png',
                 color: '#25A17F')
 
@@ -70,7 +70,7 @@ Metacode.create(name: 'Need',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/blueprint/96px/bp_need.png',
                 color: '#D2A7D4')
 
-Metacode.create(name: 'Open',
+Metacode.create(name: 'Open Issue',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/blueprint/96px/bp_openissue.png',
                 color: '#9BBF71')
 
@@ -142,7 +142,7 @@ Metacode.create(name: 'Aim',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_aim.png',
                 color: '#B0B0B0')
 
-Metacode.create(name: 'Good',
+Metacode.create(name: 'Good Practice',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_goodpractice.png',
                 color: '#BD9E86')
 
@@ -197,6 +197,10 @@ Metacode.create(name: 'Research',
 Metacode.create(name: 'Status',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_status.png',
                 color: '#EFA7C0')
+
+Metacode.create(name: 'Story',
+                manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_story.png',
+                color: '#A7A2DC')
 
 Metacode.create(name: 'Tool',
                 manual_icon: 'https://s3.amazonaws.com/metamaps-assets/metacodes/generics/96px/gen_tool.png',

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Topic < ApplicationRecord
   include TopicsHelper
+  include Attachable
 
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
@@ -15,28 +16,12 @@ class Topic < ApplicationRecord
 
   belongs_to :metacode
 
+  before_create :set_perm_by_defer
   before_create :create_metamap?
   after_update :after_updated
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
-
-  # This method associates the attribute ":image" with a file attachment
-  has_attached_file :image
-
-  # , styles: {
-  # thumb: '100x100>',
-  # square: '200x200#',
-  # medium: '300x300>'
-  # }
-
-  # Validate the attached image is image/jpg, image/png, etc
-  validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
-
-  # This method associates the attribute ":image" with a file attachment
-  has_attached_file :audio
-  # Validate the attached audio is audio/wav, audio/mp3, etc
-  validates_attachment_content_type :audio, content_type: /\Aaudio\/.*\Z/
 
   def synapses
     synapses1.or(synapses2)
@@ -80,6 +65,19 @@ class Topic < ApplicationRecord
     super(methods: [:user_name, :user_image, :collaborator_ids])
       .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
              map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
+  end
+
+  def as_rdf
+    output = ''
+    output += %(d:topic_#{id} a mm:Topic ;\n)
+    output += %(  rdfs:label "#{name}" ;\n)
+    output += %(  rdfs:comment "#{desc}" ;\n) if desc.present?
+    output += %(  foaf:homepage <#{link}> ;\n) if link.present?
+    output += %(  mm:mapper d:mapper_#{user_id} ;\n)
+    output += %(  mm:metacode "#{metacode.name}" ;\n)
+    output[-2] = '.' # change last ; to a .
+    output += %(\n)
+    output
   end
 
   def collaborator_ids
@@ -137,6 +135,10 @@ class Topic < ApplicationRecord
 
   protected
 
+  def set_perm_by_defer
+    permission = defer_to_map.permission if defer_to_map
+  end
+
   def create_metamap?
     return unless (link == '') && (metacode.name == 'Metamap')
 
@@ -147,16 +149,16 @@ class Topic < ApplicationRecord
   end
 
   def after_updated
-    attrs = ['name', 'desc', 'link', 'metacode_id', 'permission', 'defer_to_map_id']
-    if attrs.any? {|k| changed_attributes.key?(k)}
-      new = self.attributes.select {|k| attrs.include?(k) }
-      old = changed_attributes.select {|k| attrs.include?(k) }
-      meta = new.merge(old) # we are prioritizing the old values, keeping them 
-      meta['changed'] = changed_attributes.keys.select {|k| attrs.include?(k) }
+    attrs = %w(name desc link metacode_id permission defer_to_map_id)
+    if attrs.any? { |k| changed_attributes.key?(k) }
+      new = attributes.select { |k| attrs.include?(k) }
+      old = changed_attributes.select { |k| attrs.include?(k) }
+      meta = new.merge(old) # we are prioritizing the old values, keeping them
+      meta['changed'] = changed_attributes.keys.select { |k| attrs.include?(k) }
       Events::TopicUpdated.publish!(self, user, meta)
-      maps.each {|map|
+      maps.each do |map|
         ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
-      }
+      end
     end
   end
 end

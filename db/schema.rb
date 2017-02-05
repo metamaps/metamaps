@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218183817) do
+ActiveRecord::Schema.define(version: 20170122201451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,18 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.datetime "updated_at",                 null: false
     t.index ["map_id"], name: "index_access_requests_on_map_id", using: :btree
     t.index ["user_id"], name: "index_access_requests_on_user_id", using: :btree
+  end
+
+  create_table "attachments", force: :cascade do |t|
+    t.string   "attachable_type"
+    t.integer  "attachable_id"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable_type_and_attachable_id", using: :btree
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -269,17 +281,9 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.text     "link"
     t.integer  "user_id"
     t.integer  "metacode_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.text     "permission"
-    t.string   "image_file_name",    limit: 255
-    t.string   "image_content_type", limit: 255
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
-    t.string   "audio_file_name",    limit: 255
-    t.string   "audio_content_type", limit: 255
-    t.integer  "audio_file_size"
-    t.datetime "audio_updated_at"
     t.integer  "defer_to_map_id"
     t.index ["metacode_id"], name: "index_topics_on_metacode_id", using: :btree
     t.index ["user_id"], name: "index_topics_on_user_id", using: :btree

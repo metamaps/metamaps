@@ -35,13 +35,29 @@ module Api
               Pundit.policy_scope(scope[:current_user], object.send(attr))&.map(&:id) || []
             end
             has_many(attr, opts.merge(if: -> { embeds.include?(key) })) do
-              Pundit.policy_scope(scope[:current_user], object.send(attr)) || []
+              list = Pundit.policy_scope(scope[:current_user], object.send(attr)) || []
+              child_serializer = "Api::V2::#{attr.to_s.singularize.camelize}Serializer".constantize
+              resource = ActiveModelSerializers::SerializableResource.new(
+                list,
+                each_serializer: child_serializer,
+                scope: scope.merge(embeds: [])
+              )
+              resource.as_json
             end
           else
             id_opts = opts.merge(key: "#{key}_id")
             attribute("#{attr}_id".to_sym,
                       id_opts.merge(unless: -> { embeds.include?(key) }))
-            attribute(key, opts.merge(if: -> { embeds.include?(key) }))
+            attribute(key, opts.merge(if: -> { embeds.include?(key) })) do |serializer|
+              object = serializer.object.send(key)
+              child_serializer = "Api::V2::#{object.class.name}Serializer".constantize
+              resource = ActiveModelSerializers::SerializableResource.new(
+                object,
+                serializer: child_serializer,
+                scope: scope.merge(embeds: [])
+              )
+              resource.as_json
+            end
           end
         end
       end

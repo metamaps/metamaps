@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react'
 import Unread from './Unread'
 import Participant from './Participant'
 import Message from './Message'
+import NewMessage from './NewMessage'
+import Util from '../../Metamaps/Util'
 
 function makeList(messages) {
   let currentHeader
@@ -29,7 +31,7 @@ class MapChat extends Component {
       messageText: '',
       alertSound: true, // whether to play sounds on arrival of new messages or not
       cursorsShowing: true,
-      videosShowing:  true
+      videosShowing: true
     }
   }
 
@@ -40,7 +42,7 @@ class MapChat extends Component {
       messageText: '',
       alertSound: true, // whether to play sounds on arrival of new messages or not
       cursorsShowing: true,
-      videosShowing:  true
+      videosShowing: true
     })
   }
 
@@ -94,10 +96,15 @@ class MapChat extends Component {
   handleTextareaKeyUp = e => {
     if (e.which === 13) {
       e.preventDefault()
-      const text = this.state.messageText
+      const text = Util.removeEmoji(this.state.messageText)
       this.props.handleInputMessage(text)
       this.setState({ messageText: '' })
     }
+  }
+
+  focusMessageInput = () => {
+    if (!this.messageInput) return
+    this.messageInput.focus()
   }
 
   render = () => {
@@ -116,12 +123,12 @@ class MapChat extends Component {
         <div className="participants">
           {conversationLive && <div className="conversation-live">
             LIVE
-	      {isParticipating && <span className="call-action leave" onClick={this.props.leaveCall}>
-                LEAVE
-              </span>}
-              {!isParticipating && <span className="call-action join"  onClick={this.props.joinCall}>
-                JOIN
-              </span>}
+            {isParticipating && <span className="call-action leave" onClick={this.props.leaveCall}>
+              LEAVE
+            </span>}
+            {!isParticipating && <span className="call-action join" onClick={this.props.joinCall}>
+              JOIN
+            </span>}
           </div>}
           {participants.map(participant => <Participant
             key={participant.id}
@@ -140,17 +147,20 @@ class MapChat extends Component {
           <div className="tooltips">Chat</div>
           <Unread count={unreadMessages} />
         </div>
-        <div className="chat-messages" ref={div => this.messagesDiv = div}>
+        <div className="chat-messages" ref={div => { this.messagesDiv = div }}>
           {makeList(messages)}
         </div>
-        <textarea className="chat-input"
-          ref={textarea => this.messageInput = textarea}
-          placeholder="Send a message..."
-          value={this.state.messageText}
-          onChange={this.handleChange('messageText')}
-          onKeyUp={this.handleTextareaKeyUp}
-          onFocus={this.props.inputFocus}
-          onBlur={this.props.inputBlur}
+        <NewMessage messageText={this.state.messageText}
+          focusMessageInput={this.focusMessageInput}
+          handleChange={this.handleChange('messageText')}
+          textAreaProps={{
+            className: 'chat-input',
+            ref: textarea => { this.messageInput = textarea },
+            placeholder: 'Send a message...',
+            onKeyUp: this.handleTextareaKeyUp,
+            onFocus: this.props.inputFocus,
+            onBlur: this.props.inputBlur
+          }}
         />
       </div>
     )
@@ -168,7 +178,7 @@ MapChat.propTypes = {
   inviteToJoin: PropTypes.func,
   videoToggleClick: PropTypes.func,
   cursorToggleClick: PropTypes.func,
-  soundToggleClick: PropTypes.func, 
+  soundToggleClick: PropTypes.func,
   participants: PropTypes.arrayOf(PropTypes.shape({
     color: PropTypes.string, // css color
     id: PropTypes.number,

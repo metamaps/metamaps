@@ -1,6 +1,14 @@
 /* global $ */
 
 import { Parser, HtmlRenderer } from 'commonmark'
+import { emojiIndex } from 'emoji-mart'
+import { escapeRegExp } from 'lodash'
+
+const emojiToShortcodes = {}
+Object.keys(emojiIndex.emojis).forEach(key => {
+  const emoji = emojiIndex.emojis[key]
+  emojiToShortcodes[emoji.native] = emoji.colons
+})
 
 const Util = {
   // helper function to determine how many lines are needed
@@ -150,6 +158,29 @@ const Util = {
     canvas.scale(oldAttr.scaleX, oldAttr.scaleY)
     const newAttr = Util.logCanvasAttributes(canvas)
     canvas.translate(newAttr.centreCoords.x - oldAttr.centreCoords.x, newAttr.centreCoords.y - oldAttr.centreCoords.y)
+  },
+  removeEmoji: function(withEmoji) {
+    let text = withEmoji
+    Object.keys(emojiIndex.emojis).forEach(key => {
+      const emoji = emojiIndex.emojis[key]
+      text = text.replace(new RegExp(escapeRegExp(emoji.native), 'g'), emoji.colons)
+    })
+    return text
+  },
+  addEmoji: function(withoutEmoji, opts = { emoticons: true }) {
+    let text = withoutEmoji
+    Object.keys(emojiIndex.emojis).forEach(key => {
+      const emoji = emojiIndex.emojis[key]
+      text = text.replace(new RegExp(escapeRegExp(emoji.colons), 'g'), emoji.native)
+    })
+    if (opts.emoticons) {
+      Object.keys(emojiIndex.emoticons).forEach(emoticon => {
+        const key = emojiIndex.emoticons[emoticon]
+        const emoji = emojiIndex.emojis[key]
+        text = text.replace(new RegExp(escapeRegExp(emoticon), 'g'), emoji.native)
+      })
+    }
+    return text
   }
 }
 
