@@ -18,6 +18,7 @@ Metamaps::Application.routes.draw do
 
   resources :maps, except: [:index, :edit] do
     member do
+      get :conversation
       get :export
       post 'events/:event', action: :events
       get :contains

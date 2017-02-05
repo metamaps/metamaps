@@ -14,7 +14,7 @@
     <% @metacodes.each do |metacode| %>
       <img class="cloudcarousel" width="40" height="40" src="<%= asset_path metacode.icon %>" alt="<%= metacode.name %>" title="<%= metacode.name %>" data-id="<%= metacode.id %>" />
     <% end %>
-  </div> 
+  </div>
 
   <%= form.text_field :name, :maxlength => 140, :placeholder => "title..." %>
 
@@ -23,12 +23,10 @@
 
   <script>
     <% @metacodes.each do |metacode| %>
-      <% if !metacodeset() %>
-        Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
-        Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
-        Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
-        Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
-      <% end %>
+      Metamaps.Create.selectedMetacodes.push("<%= metacode.id %>");
+      Metamaps.Create.newSelectedMetacodes.push("<%= metacode.id %>");
+      Metamaps.Create.selectedMetacodeNames.push("<%= metacode.name %>");
+      Metamaps.Create.newSelectedMetacodeNames.push("<%= metacode.name %>");
     <% end %> 
   </script>
 <% end %>

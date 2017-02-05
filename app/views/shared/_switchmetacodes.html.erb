@@ -93,12 +93,9 @@
     <div id="metacodeSwitchTabsCustom">
         <p class="setDesc">Choose Your Metacodes</p>
         <% @list = '' %>
+        <% metacodesInUse = user_metacodes() %> 
         <% Metacode.order("name").all.each_with_index do |m, index| %>
-          <% if selectedSet == "custom" %>
-            <% mClass = metacodes.index(m.id.to_s) == nil ? "toggledOff" : "" %>
-          <% else %>
-            <% mClass = "toggledOff" %>
-          <% end %>
+          <% mClass = metacodesInUse.index(m) == nil ? "toggledOff" : "" %>
           <% @list += '<li id="' + m.id.to_s + '" data-name="' + m.name + '" class="' + mClass + '"><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' %> 
         <% end %>
 
