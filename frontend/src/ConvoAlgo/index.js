@@ -206,11 +206,11 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
       minYForIslands = focalCoords.y + islandBoundArray[0].minY
     }
     else if (isOdd(index)) {
-      translateIsland(island, focalCoords.x, maxYForIslands + ISLAND_SPACING + (Math.floor(islandHeight / 2)))
+      translateIsland(island, focalCoords.x - islandBoundArray[index].maxX, maxYForIslands + ISLAND_SPACING + Math.abs(islandBoundArray[index].minY))
       maxYForIslands = maxYForIslands + ISLAND_SPACING + islandHeight
     }
     else {
-      translateIsland(island, focalCoords.x, minYForIslands - ISLAND_SPACING - (Math.floor(islandHeight / 2)))
+      translateIsland(island, focalCoords.x - islandBoundArray[index].maxX, minYForIslands - ISLAND_SPACING - islandBoundArray[index].maxY)
       minYForIslands = minYForIslands - ISLAND_SPACING - islandHeight
     }
   })
