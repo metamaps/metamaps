@@ -43,7 +43,7 @@ const Synapse = {
       mapping.save()
     }
   },
-  createSynapseLocally: function(topic1id, topic2id, manual) {
+  createSynapseLocally: function(topic1id, topic2id) {
     var self = Synapse
     $(document).trigger(Map.events.editedByActiveMapper)
     // for each node in this array we will create a synapse going to the position2 node.
@@ -71,10 +71,6 @@ const Synapse = {
       // this function also includes the creation of the synapse in the database
       self.renderSynapse(mapping, synapse, node1, node2)
     }) // for each in synapsesToCreate
-    if (manual) {
-      Engine.runLayout()
-      Create.newSynapse.hide()
-    }
   },
   getSynapseFromAutocomplete: function(id) {
     var self = Synapse

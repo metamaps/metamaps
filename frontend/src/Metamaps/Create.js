@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import DataModel from './DataModel'
+import Engine from './Engine'
 import MetacodeSelect from '../components/MetacodeSelect'
 import Mouse from './Mouse'
 import Selected from './Selected'
@@ -360,7 +361,9 @@ console.log(codesToSwitchToIds)
 
       $('#synapse_desc').focusout(function() {
         if (Create.newSynapse.beingCreated) {
-          Synapse.createSynapseLocally()
+          Synapse.createSynapseLocally(Create.newSynapse.topic1id, Create.newSynapse.topic2id)
+          Engine.runLayout()
+          Create.newSynapse.hide()
         }
       })
 
@@ -368,7 +371,9 @@ console.log(codesToSwitchToIds)
         const TAB = 9
         if (Create.newSynapse.beingCreated && e.keyCode === TAB) {
           e.preventDefault()
-          Synapse.createSynapseLocally()
+          Synapse.createSynapseLocally(Create.newSynapse.topic1id, Create.newSynapse.topic2id)
+          Engine.runLayout()
+          Create.newSynapse.hide()
         }
       })
 
@@ -377,7 +382,9 @@ console.log(codesToSwitchToIds)
           Synapse.getSynapseFromAutocomplete(datum.id)
         } else {
           Create.newSynapse.description = datum.value
-          Synapse.createSynapseLocally()
+          Synapse.createSynapseLocally(Create.newSynapse.topic1id, Create.newSynapse.topic2id)
+          Engine.runLayout()
+          Create.newSynapse.hide()
         }
       })
     },

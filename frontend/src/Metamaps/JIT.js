@@ -687,10 +687,6 @@ const JIT = {
   onMouseMoveHandler: function(_node, eventInfo, e) {
     const self = JIT
 
-    if (Mouse.synapseStartCoordinates.length) {
-      Visualize.mGraph.plot()
-    }
-
     if (Visualize.mGraph.busy) return
 
     const node = eventInfo.getNode()
@@ -731,7 +727,9 @@ const JIT = {
     } else if (e.target.id === 'topic_name' && !Create.newTopic.metacodeSelectorOpen) {
       Topic.createTopicLocally()
     } else if (Create.newSynapse.beingCreated) {
-      Synapse.createSynapseLocally()
+      Synapse.createSynapseLocally(Create.newSynapse.topic1id, Create.newSynapse.topic2id)
+      Engine.runLayout()
+      Create.newSynapse.hide()
     }
   }, // enterKeyHandler
   escKeyHandler: function() {
@@ -744,7 +742,6 @@ const JIT = {
     var authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
 
     if (node && !node.nodeFrom) {
-      self.handleSelectionBeforeDragging(node, e)
 
       const pos = eventInfo.getPos()
       if ((e.button === 0 || e.buttons === 0) && authorized) {
@@ -755,12 +752,19 @@ const JIT = {
           Create.newSynapse.hide()
           // set the draw synapse start positions
           Mouse.synapseStartCoordinates = []
-          for (let i = Selected.Nodes.length - 1; i >= 0; i -= 1) {
-            const n = Selected.Nodes[i]
-            Mouse.synapseStartCoordinates.push({
-              x: n.pos.getc().x,
-              y: n.pos.getc().y
+          if (Selected.Nodes.length) {
+            Selected.Nodes.forEach(n => {
+              Mouse.synapseStartCoordinates.push({
+                x: n.pos.getc().x,
+                y: n.pos.getc().y
+              })
             })
+          }
+          else {
+            Mouse.synapseStartCoordinates = [{
+              x: node.pos.getc().x,
+              y: node.pos.getc().y
+            }]
           }
           Mouse.synapseEndCoordinates = {
             x: pos.x,
@@ -792,6 +796,7 @@ const JIT = {
         }
       }
     }
+    Visualize.mGraph.plot()
   }, // onDragMoveTopicHandler
   onDragCancelHandler: function(node, eventInfo, e) {
     JIT.tempNode = null
@@ -818,7 +823,6 @@ const JIT = {
       Create.newSynapse.node1 = JIT.tempNode
       Create.newSynapse.node2 = JIT.tempNode2
       JIT.tempNode2.setData('dim', 25, 'current')
-      Visualize.mGraph.plot()
       midpoint.x = JIT.tempNode.pos.getc().x + (JIT.tempNode2.pos.getc().x - JIT.tempNode.pos.getc().x) / 2
       midpoint.y = JIT.tempNode.pos.getc().y + (JIT.tempNode2.pos.getc().y - JIT.tempNode.pos.getc().y) / 2
       pixelPos = Util.coordsToPixels(Visualize.mGraph, midpoint)
@@ -829,6 +833,7 @@ const JIT = {
       JIT.tempNode2 = null
       JIT.tempInit = false
     }
+    Visualize.mGraph.plot()
   }, // onDragEndTopicHandler
   canvasClickHandler: function(canvasLoc, e) {
     // grab the location and timestamp of the click
