@@ -8,10 +8,6 @@ class Mapping < ApplicationRecord
   belongs_to :user
   belongs_to :updated_by, class_name: 'User'
 
-  validates :xloc, presence: true,
-                   unless: proc { |m| m.mappable_type == 'Synapse' }
-  validates :yloc, presence: true,
-                   unless: proc { |m| m.mappable_type == 'Synapse' }
   validates :map, presence: true
   validates :mappable, presence: true
 

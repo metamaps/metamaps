@@ -105,6 +105,7 @@ Metamaps::Application.routes.draw do
     end
   end
   post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
+  post 'user/update_metacode_focus', to: 'users#update_metacode_focus'
 
   namespace :api, path: '/api', default: { format: :json } do
     namespace :v2, path: '/v2' do
