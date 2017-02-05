@@ -212,6 +212,8 @@ const Visualize = {
     Router.timeoutId = setTimeout(function() {
       var m = Active.Map
       var t = Active.Topic
+      
+      if (m && window.location.pathname === '/maps/' + m.id + '/conversation') return
 
       if (m && window.location.pathname !== '/maps/' + m.id) {
         Router.navigateAndTrack('/maps/' + m.id)
