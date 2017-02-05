@@ -41,10 +41,6 @@ module ApplicationHelper
   def user_metacode
     current_user.settings.metacode_focus ? Metacode.find(current_user.settings.metacode_focus.to_i) : nil
   end
-  
-  def user_metacode
-    current_user.settings.metacode_focus ? Metacode.find(current_user.settings.metacode_focus.to_i) || user_metacodes()[0]  : user_metacodes()[0]
-  end
 
   def user_most_used_metacodes
     @metacodes = current_user.most_used_metacodes.map { |id| Metacode.find(id) }

@@ -91,16 +91,6 @@ class UsersController < ApplicationController
       format.json { render json: @user }
     end
   end
-  
-  # PUT /user/update_metacode_focus
-  def update_metacode_focus
-    @user = current_user
-    @user.settings.metacode_focus = params[:value]
-    @user.save
-    respond_to do |format|
-      format.json { render json: { success: "success" }}
-    end
-  end
 
   # PUT /user/update_metacode_focus
   def update_metacode_focus
