@@ -195,17 +195,23 @@ export const generateObjectCoordinates = (layoutObject, focalTopicId, focalCoord
     }
     traverseIsland(island, adjustTopicPos)
   }
-  let currentYForIslands = 0 // the highest Y value that has thus been placed
+  let maxYForIslands = 0 // the highest Y value that has thus been placed
+  let minYForIslands = 0 // the lowest Y value that has thus been placed
   layoutObject.forEach((island, index) => {
     let translateY
     const islandHeight = islandBoundArray[index].maxY - islandBoundArray[index].minY
     if (index === 0) {
       translateIsland(island, focalCoords.x, focalCoords.y) // position the selected island to where the user has it already
-      currentYForIslands = focalCoords.y + islandBoundArray[0].maxY
+      maxYForIslands = focalCoords.y + islandBoundArray[0].maxY
+      minYForIslands = focalCoords.y + islandBoundArray[0].minY
+    }
+    else if (isOdd(index)) {
+      translateIsland(island, focalCoords.x, maxYForIslands + ISLAND_SPACING + (Math.floor(islandHeight / 2)))
+      maxYForIslands = maxYForIslands + ISLAND_SPACING + islandHeight
     }
     else {
-      translateIsland(island, focalCoords.x, currentYForIslands + ISLAND_SPACING + (Math.floor(islandHeight / 2)))
-      currentYForIslands = currentYForIslands + ISLAND_SPACING + islandHeight
+      translateIsland(island, focalCoords.x, minYForIslands - ISLAND_SPACING - (Math.floor(islandHeight / 2)))
+      minYForIslands = minYForIslands - ISLAND_SPACING - islandHeight
     }
   })
 
