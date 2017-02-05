@@ -47,7 +47,7 @@ const Cable = {
       // refactor the heck outta this, its adding wicked wait time
       var topic1, topic2, node1, node2, synapse, mapping, cancel, mapper
  
-      function waitThenRenderSynapse() {
+      const waitThenRenderSynapse = () => {
         if (synapse && mapping && mapper && synapse.getTopic1() && synapse.getTopic2()) {
           topic1 = synapse.getTopic1()
           node1 = topic1.get('node')
