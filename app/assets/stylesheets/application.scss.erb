@@ -526,50 +526,22 @@ button.button.btn-no:hover {
 }
 
 .new_topic {
-    top: -10000px;
-    left: -10000px;
-    margin-top: -17px;
+    /* start it off screen while it initializes the spinner, then it will be hidden with jquery */
+    top: -1000px;
+    left: -1000px;
     display: block;
     position: absolute;
+    margin: -40px 0 0 -35px;
     z-index: 1;
-    white-space: nowrap;
 }
-
-.selectedMetacode {
-  float: left;
-  background: #FFF;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-  padding: 5px 10px 5px 6px;
-  vertical-align: top;
-  border-right: 1px solid #DDD;
-  cursor: pointer;
-}
-.selectedMetacode:hover, .selectedMetacode.isBeingSelected {
-  background: #EDEDED;
-}
-.selectedMetacode img {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  vertical-align: middle;
-}
-.selectedMetacode span {
-  vertical-align: middle;
-}
-.selectedMetacode .downArrow {
-  display: inline-block;
-  vertical-align: middle;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 6px 0 6px;
-  border-color: #777 transparent transparent transparent;
-  margin-left: 2px;
-  margin-top: 4px;
+body:not(.action-conversation) .new_topic {
+  width: 340px;
 }
 
 #new_topic .twitter-typeahead {
+    position: absolute !important;
+    top: 45px;
+    left: 41px;
     z-index: 9999;
     width: 256px;
     height: 34px;
@@ -582,8 +554,7 @@ button.button.btn-no:hover {
     margin: 0;
     padding: 10px 6px;
     border: none;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
+    border-radius: 2px;
     outline: none;
     font-size: 14px;
     line-height: 14px;
@@ -600,22 +571,36 @@ button.button.btn-no:hover {
     background-image: url(<%= asset_data_uri('metacodesettings_sprite.png') %>);
     position: absolute;
     z-index: 2;
-    top: -16px;
-    left: -16px;
+    top: 20px;
+    left: 16px;
 }
 .openMetacodeSwitcher:hover {
     background-position: -16px 0;
 }
+.pinCarousel {
+    cursor: pointer;
+    display: block;
+    height: 16px;
+    width: 16px;
+    background-image: url(<%= asset_data_uri('pincarousel_sprite.png') %>);
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    right: 16px;
+}
+.pinCarousel:hover {
+    background-position: 0 -16px;
+}
+.pinCarousel.isPinned {
+    background-position: -16px 0;
+}
+.pinCarousel.isPinned:hover {
+    background-position: -16px -16px;
+}
 #metacodeImg {
     height: 120px;
-    width: 380px;
-    display: none;
-    position: absolute !important;
-    top: -30px;
-    z-index: -1;
 }
 #metacodeImgTitle {
-    display: none;
     float: left;
     width: 120px;
     text-align: center;

@@ -39,7 +39,11 @@
             <div class="showcard mapElement mapElementHidden" id="showcard"></div> <!-- the topic card -->
             <% if authenticated? %>
                 <% # for creating and pulling in topics and synapses %>
-                <%= render :partial => 'maps/newtopic' %>
+                <% if controller_name == 'maps' && action_name == "conversation" %>
+                  <%= render :partial => 'maps/newtopicsecret' %>
+                <% else %>
+                  <%= render :partial => 'maps/newtopic' %>
+                <% end %>
                 <%= render :partial => 'maps/newsynapse' %>
                 <% # for populating the change metacode list on the topic card %>
                 <%= render :partial => 'shared/metacodeoptions' %>
@@ -47,6 +51,21 @@
             <%= render :partial => 'layouts/lowermapelements' %>
 
             <div id="explore"></div>
+
+            <% if !(controller_name == 'maps' && action_name == "conversation") %>
+              <div id="instructions">
+                <div class="addTopic">
+                  Double-click to<br>add a topic
+                </div>
+                <div class="tabKey">
+                  Use Tab & Shift+Tab to select a metacode
+                </div>
+                <div class="enterKey">
+                  Press Enter to add the topic
+                </div>
+              </div>
+            <% end %>
+            
             <div id="infovis"></div>
             <%= render :partial => 'layouts/mobilemenu' %>
             

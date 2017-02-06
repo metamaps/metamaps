@@ -1,0 +1,22 @@
+<%#
+# @file
+# Code to display a map
+# /maps/:id
+#%>
+
+<% content_for :title, @map.name + " | Metamaps" %>
+<% content_for :mobile_title, @map.name %>
+<script>
+	Metamaps.currentSection = "map";
+	Metamaps.currentPage = <%= @map.id.to_s %>;
+  Metamaps.ServerData = Metamaps.ServerData || {}
+  Metamaps.ServerData.ActiveMap = <%= @map.to_json.html_safe %>;
+  Metamaps.ServerData.Mappers = <%= @allmappers.to_json.html_safe %>;
+  Metamaps.ServerData.Collaborators = <%= @allcollaborators.to_json.html_safe %>;
+  Metamaps.ServerData.Topics = <%= @alltopics.to_json(user: current_user).html_safe %>;
+  Metamaps.ServerData.Synapses = <%= @allsynapses.to_json.html_safe %>;
+  Metamaps.ServerData.Mappings = <%= @allmappings.to_json.html_safe %>;
+  Metamaps.ServerData.Messages = <%= @allmessages.to_json.html_safe %>;
+  Metamaps.ServerData.Stars = <%= @allstars.to_json.html_safe %>;
+  Metamaps.ServerData.VisualizeType = "ForceDirected";
+</script>
