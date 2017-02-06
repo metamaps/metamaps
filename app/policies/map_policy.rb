@@ -22,7 +22,7 @@ class MapPolicy < ApplicationPolicy
   end
   
   def conversation?
-    show? && %w(connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com).include?(user.email)
+    show? && %w(admin@admin.com user@user.com connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com).include?(user.email)
   end
 
   def create?

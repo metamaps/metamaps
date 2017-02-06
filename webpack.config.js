@@ -40,10 +40,10 @@ module.exports = {
     ]
   },
   entry: {
-    'metamaps.bundle': './frontend/src/index.js'
+    'metamaps.secret.bundle': './frontend/src/index.js'
   },
   output: {
-    path: './app/assets/javascripts/webpacked',
+    path: './app/assets/javascripts',
     filename: '[name].js',
     devtoolModuleFilenameTemplate: '[absolute-resource-path]'
   }
