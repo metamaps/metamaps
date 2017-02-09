@@ -7,7 +7,8 @@
       <h2 class="title">Notifications</h4>
     </header>
     <ul class="notifications">
-      <% @notifications.each do |notification| %>
+      <% notifications = @notifications.to_a.delete_if{|n| n.notified_object.nil? || n.notified_object.map.nil? }%> 
+      <% notifications.each do |notification| %>
         <% receipt = @receipts.find_by(notification_id: notification.id) %>
         <li class="notification <%= receipt.is_read? ? 'read' : 'unread' %>" id="notification-<%= notification.id %>">
           <%= link_to notification_path(notification.id) do %>
@@ -32,7 +33,7 @@
           <div class="clearfloat"></div>
         </li>
       <% end %>
-      <% if @notifications.count == 0 %>
+      <% if notifications.count == 0 %>
         <div class="emptyInbox">
           You have no notifications. More time for dancing.
         </div>
