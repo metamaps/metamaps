@@ -59,6 +59,7 @@ class MapsController < ApplicationController
   def create
     @map = Map.new(create_map_params)
     @map.user = current_user
+    @map.updated_by = current_user
     @map.arranged = false
     authorize @map
 
@@ -79,8 +80,11 @@ class MapsController < ApplicationController
 
   # PUT maps/:id
   def update
+    @map.updated_by = current_user
+    @map.assign_attributes(update_map_params)
+
     respond_to do |format|
-      if @map.update_attributes(update_map_params)
+      if @map.save
         format.json { head :no_content }
       else
         format.json { render json: @map.errors, status: :unprocessable_entity }
@@ -90,7 +94,8 @@ class MapsController < ApplicationController
 
   # DELETE maps/:id
   def destroy
-    @map.delete
+    @map.updated_by = current_user
+    @map.destroy
 
     respond_to do |format|
       format.json do

@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 class Map < ApplicationRecord
+  ATTRS_TO_WATCH = %w(name desc permission).freeze
+
   belongs_to :user
   belongs_to :source, class_name: :Map
+  belongs_to :updated_by, class_name: 'User'
 
   has_many :topicmappings, -> { Mapping.topicmapping },
            class_name: :Mapping, dependent: :destroy
@@ -10,7 +13,7 @@ class Map < ApplicationRecord
   has_many :topics, through: :topicmappings, source: :mappable, source_type: 'Topic'
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: 'Synapse'
   has_many :messages, as: :resource, dependent: :destroy
-  has_many :stars
+  has_many :stars, dependent: :destroy
 
   has_many :access_requests, dependent: :destroy
   has_many :user_maps, dependent: :destroy
@@ -126,13 +129,7 @@ class Map < ApplicationRecord
     end
     removed.compact
   end
-
-  def after_updated
-    attrs = %w(name desc permission)
-    return unless attrs.any? { |k| changed_attributes.key?(k) }
-    ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
-  end
-
+  
   def update_deferring_topics_and_synapses
     Topic.where(defer_to_map_id: id).update(permission: permission)
     Synapse.where(defer_to_map_id: id).update(permission: permission)
@@ -141,4 +138,12 @@ class Map < ApplicationRecord
   def invited_text
     name + ' - invited to edit'
   end
+
+  protected
+
+  def after_updated
+    return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+    ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
+  end
+  
 end

@@ -22,6 +22,8 @@ class SynapsesController < ApplicationController
     @synapse = Synapse.new(synapse_params)
     @synapse.desc = '' if @synapse.desc.nil?
     @synapse.desc.strip! # no trailing/leading whitespace
+    @synapse.user = current_user
+    @synapse.updated_by = current_user
 
     # we want invalid params to return :unprocessable_entity
     # so we have to authorize AFTER saving. But if authorize
@@ -47,9 +49,11 @@ class SynapsesController < ApplicationController
     @synapse = Synapse.find(params[:id])
     @synapse.desc = '' if @synapse.desc.nil?
     authorize @synapse
+    @synapse.updated_by = current_user
+    @synapse.assign_attributes(synapse_params)
 
     respond_to do |format|
-      if @synapse.update_attributes(synapse_params)
+      if @synapse.save
         format.json { head :no_content }
       else
         format.json { render json: @synapse.errors, status: :unprocessable_entity }
@@ -61,6 +65,7 @@ class SynapsesController < ApplicationController
   def destroy
     @synapse = Synapse.find(params[:id])
     authorize @synapse
+    @synapse.updated_by = current_user
     @synapse.destroy
 
     respond_to do |format|
@@ -72,7 +77,7 @@ class SynapsesController < ApplicationController
 
   def synapse_params
     params.require(:synapse).permit(
-      :id, :desc, :category, :weight, :permission, :topic1_id, :topic2_id, :user_id
+      :id, :desc, :category, :weight, :permission, :topic1_id, :topic2_id
     )
   end
 end

@@ -2,6 +2,9 @@
 class AccessRequest < ApplicationRecord
   belongs_to :user
   belongs_to :map
+  has_one    :user_map
+  
+  after_create :after_created_async
 
   def approve
     self.approved = true
@@ -12,8 +15,7 @@ class AccessRequest < ApplicationRecord
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
     end
 
-    UserMap.create(user: user, map: map)
-    NotificationService.access_approved(self)
+    UserMap.create(user: user, map: map, access_request: self)
   end
 
   def deny
@@ -33,4 +35,11 @@ class AccessRequest < ApplicationRecord
   def approved_text
     map.name + ' - access approved'
   end
+  
+  protected
+  
+  def after_created_async
+    NotificationService.access_request(self)
+  end
+  handle_asynchronously :after_created_async
 end

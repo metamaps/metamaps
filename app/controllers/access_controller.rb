@@ -20,9 +20,7 @@ class AccessController < ApplicationController
 
   # POST maps/:id/access_request
   def access_request
-    request = AccessRequest.create(user: current_user, map: @map)
-    NotificationService.access_request(request)
-
+    AccessRequest.create(user: current_user, map: @map)
     respond_to do |format|
       format.json { head :ok }
     end
@@ -32,12 +30,7 @@ class AccessController < ApplicationController
   def access
     user_ids = params[:access].to_a.map(&:to_i) || []
 
-    @map.add_new_collaborators(user_ids).each do |user_id|
-      # add_new_collaborators returns array of added users,
-      # who we then send a notification to
-      user = User.find(user_id)
-      NotificationService.invite_to_edit(@map, current_user, user)
-    end
+    @map.add_new_collaborators(user_ids)
     @map.remove_old_collaborators(user_ids)
 
     respond_to do |format|

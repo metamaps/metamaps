@@ -33,6 +33,7 @@ class MappingsController < ApplicationController
     @mapping = Mapping.find(params[:id])
     authorize @mapping
     @mapping.updated_by = current_user
+    @mapping.map.updated_by = current_user
     @mapping.assign_attributes(mapping_params)
 
     if @mapping.save
@@ -47,6 +48,7 @@ class MappingsController < ApplicationController
     @mapping = Mapping.find(params[:id])
     authorize @mapping
     @mapping.updated_by = current_user
+    @mapping.map.updated_by = current_user
     @mapping.destroy
 
     head :no_content

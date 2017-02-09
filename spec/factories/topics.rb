@@ -2,6 +2,7 @@
 FactoryGirl.define do
   factory :topic do
     user
+    association :updated_by, factory: :user
     metacode
     permission :commons
     sequence(:name) { |n| "Cool Topic ##{n}" }

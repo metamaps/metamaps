@@ -134,6 +134,8 @@ class TopicsController < ApplicationController
   def create
     @topic = Topic.new(topic_params)
     authorize @topic
+    @topic.user = current_user
+    @topic.updated_by = current_user
 
     respond_to do |format|
       if @topic.save
@@ -149,9 +151,11 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
     authorize @topic
+    @topic.updated_by = current_user
+    @topic.assign_attributes(topic_params)
 
     respond_to do |format|
-      if @topic.update_attributes(topic_params)
+      if @topic.save
         format.json { head :no_content }
       else
         format.json { render json: @topic.errors, status: :unprocessable_entity }
@@ -163,7 +167,7 @@ class TopicsController < ApplicationController
   def destroy
     @topic = Topic.find(params[:id])
     authorize @topic
-
+    @topic.updated_by = current_user
     @topic.destroy
     respond_to do |format|
       format.json { head :no_content }
@@ -173,6 +177,6 @@ class TopicsController < ApplicationController
   private
 
   def topic_params
-    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :user_id, :metacode_id, :defer_to_map_id)
+    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :metacode_id, :defer_to_map_id)
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Api
   module V2
-    class MapsController < RestfulController
+    class MapsController < WithUpdatesController
       def searchable_columns
         [:name, :desc]
       end

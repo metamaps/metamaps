@@ -7,6 +7,7 @@ FactoryGirl.define do
     association :topic1, factory: :topic
     association :topic2, factory: :topic
     user
+    association :updated_by, factory: :user
     weight 1 # TODO: drop this column
   end
 end

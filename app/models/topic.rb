@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 class Topic < ApplicationRecord
+  ATTRS_TO_WATCH = %w(name desc link metacode_id permission defer_to_map_id).freeze
   include TopicsHelper
   include Attachable
 
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
+  belongs_to :updated_by, class_name: 'User'
 
   has_many :synapses1, class_name: 'Synapse', foreign_key: 'topic1_id', dependent: :destroy
   has_many :synapses2, class_name: 'Synapse', foreign_key: 'topic2_id', dependent: :destroy
@@ -149,13 +151,12 @@ class Topic < ApplicationRecord
   end
 
   def after_updated
-    attrs = %w(name desc link metacode_id permission defer_to_map_id)
-    if attrs.any? { |k| changed_attributes.key?(k) }
-      new = attributes.select { |k| attrs.include?(k) }
-      old = changed_attributes.select { |k| attrs.include?(k) }
+    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+      new = attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
+      old = changed_attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
       meta = new.merge(old) # we are prioritizing the old values, keeping them
-      meta['changed'] = changed_attributes.keys.select { |k| attrs.include?(k) }
-      Events::TopicUpdated.publish!(self, user, meta)
+      meta['changed'] = changed_attributes.keys.select { |k| ATTRS_TO_WATCH.include?(k) }
+      Events::TopicUpdated.publish!(self, updated_by, meta)
       maps.each do |map|
         ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
       end

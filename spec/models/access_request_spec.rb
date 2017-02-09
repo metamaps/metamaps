@@ -11,8 +11,6 @@ RSpec.describe AccessRequest, type: :model do
 
     it { expect(access_request.approved).to be true }
     it { expect(access_request.answered).to be true }
-    it { expect(UserMap.count).to eq 1 }
-    it { expect(Mailboxer::Notification.count).to eq 1 }
   end
 
   describe 'deny' do
@@ -22,7 +20,5 @@ RSpec.describe AccessRequest, type: :model do
 
     it { expect(access_request.approved).to be false }
     it { expect(access_request.answered).to be true }
-    it { expect(UserMap.count).to eq 0 }
-    it { expect(Mailboxer::Notification.count).to eq 0 }
   end
 end
