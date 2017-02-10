@@ -46,7 +46,7 @@ class NotificationService
     template = get_template_for_event_type(event_type)
     mailboxer_code = get_mailboxer_code_for_event_type(event_type)
     body = renderer.render(template: template, locals: { map: user_map.map, inviter: user_map.map.user }, layout: false)
-    user_map.user.notify(map.invited_text, body, user_map, false, mailboxer_code, true, user_map.map.user)
+    user_map.user.notify(user_map.map.invited_text, body, user_map, false, mailboxer_code, true, user_map.map.user)
   end
 
   # note: this is a global function, probably called from the rails console with some html body

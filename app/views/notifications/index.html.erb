@@ -7,7 +7,8 @@
       <h2 class="title">Notifications</h4>
     </header>
     <ul class="notifications">
-      <% notifications = @notifications.to_a.delete_if{|n| n.notified_object.nil? || n.notified_object.map.nil? }%> 
+      <% blacklist = [MAILBOXER_CODE_ACCESS_REQUEST, MAILBOXER_CODE_ACCESS_APPROVED, MAILBOXER_CODE_INVITE_TO_EDIT] %>
+      <% notifications = @notifications.to_a.delete_if{|n| blacklist.include?(n.notification_code) && (n.notified_object.nil? || n.notified_object.map.nil?) }%> 
       <% notifications.each do |notification| %>
         <% receipt = @receipts.find_by(notification_id: notification.id) %>
         <li class="notification <%= receipt.is_read? ? 'read' : 'unread' %>" id="notification-<%= notification.id %>">
