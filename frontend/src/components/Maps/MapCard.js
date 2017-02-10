@@ -83,9 +83,10 @@ class MapCard extends Component {
     const { map, mobile, juntoState, currentUser, onRequest, onStar } = this.props
 
     const hasMap = juntoState.liveMaps[map.id] && values(juntoState.liveMaps[map.id]).length
-    const hasConversation = hasMap && find(values(hasMap), v => v === IN_CONVERSATION)
+    const realtimeMap = juntoState.liveMaps[map.id]
+    const hasConversation = hasMap && find(values(realtimeMap), v => v === IN_CONVERSATION)
     const hasMapper = hasMap && !hasConversation
-    const mapperList = hasMap && Object.keys(hasMap).map(id => juntoState.connectedPeople[id])
+    const mapperList = hasMap && Object.keys(realtimeMap).map(id => juntoState.connectedPeople[id])
 
     const n = map.get('name')
     const d = map.get('desc')
