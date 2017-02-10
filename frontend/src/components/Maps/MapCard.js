@@ -82,7 +82,7 @@ class MapCard extends Component {
   render = () => {
     const { map, mobile, juntoState, currentUser, onRequest, onStar } = this.props
 
-    const hasMap = juntoState.liveMaps[map.id] && values(juntoState.liveMaps[map.id]).length
+    const hasMap = (juntoState.liveMaps[map.id] && values(juntoState.liveMaps[map.id]).length) || null
     const realtimeMap = juntoState.liveMaps[map.id]
     const hasConversation = hasMap && find(values(realtimeMap), v => v === IN_CONVERSATION)
     const hasMapper = hasMap && !hasConversation
