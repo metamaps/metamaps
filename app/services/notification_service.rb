@@ -35,7 +35,7 @@ class NotificationService
     body = renderer.render(template: settings[:template], locals: { entity: entity, event: event }, layout: false)
     follows.each{|follow|
       # this handles email and in-app notifications, in the future, include push
-      follow.user.notify(settings[:subject], body, event, false, event_type, (follow.user.emails_allowed && follow.email), event.user)
+      follow.user.notify(settings[:subject], body, event, false, event_type, follow.user.emails_allowed, event.user)
       # push could be handled with Actioncable to send transient notifications to the UI
       # the receipt from the notify call could be used to link to the full notification
     }
