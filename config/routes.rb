@@ -37,9 +37,11 @@ Metamaps::Application.routes.draw do
            default: { format: :json }
       post 'approve_access/:request_id',
            to: 'access#approve_access_post',
+           as: :approve_access_post,
            default: { format: :json }
       post 'deny_access/:request_id',
            to: 'access#deny_access_post',
+           as: :deny_access_post,
            default: { format: :json }
 
       post :access, to: 'access#access', default: { format: :json }

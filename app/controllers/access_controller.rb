@@ -61,6 +61,7 @@ class AccessController < ApplicationController
     request = AccessRequest.find(params[:request_id])
     request.approve
     respond_to do |format|
+      format.js
       format.json do
         head :ok
       end
@@ -72,6 +73,7 @@ class AccessController < ApplicationController
     request = AccessRequest.find(params[:request_id])
     request.deny
     respond_to do |format|
+      format.js
       format.json do
         head :ok
       end

@@ -83,6 +83,7 @@ $unread_notifications_dot_size: 8px;
 
       .notification-body {
         margin-left: 50px;
+        line-height: 20px;
 
         .in-bold {
           font-family: 'din-medium', Sans-Serif;
@@ -130,9 +131,35 @@ $unread_notifications_dot_size: 8px;
 
     
 
-  .notificationPage .notification-body {
-    p, div {
-      margin: 1em auto;
+  .notificationPage {
+    .thirty-two-avatar {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border-radius: 16px;
+      vertical-align: middle;
+    }
+    
+    .button {
+      line-height: 32px;
+      
+      img {
+        margin-top: 8px;
+      }
+      
+      &.decline {
+        background: #DB5D5D;
+        &:hover {
+          background: #DC4B4B;
+        }
+      }
+    }
+  
+    .notification-body {
+      p, div {
+        margin: 1em auto;
+        line-height: 20px;
+      }
     }
   }
 }
