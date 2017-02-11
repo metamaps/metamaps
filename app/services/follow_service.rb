@@ -4,7 +4,7 @@ class FollowService
 
   def self.follow(entity, user, reason)
 
-    #return unless is_tester(user)
+    return unless is_tester(user)
 
     follow = Follow.where(followed: entity, user: user).first_or_create
     if FollowReason::REASONS.include?(reason) && !follow.follow_reason.read_attribute(reason)

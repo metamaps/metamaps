@@ -18,7 +18,7 @@ class NotificationIcon extends Component {
     }
 
     return (
-      <a className={linkClasses} href="/notifications">
+      <a className={linkClasses} href="/notifications" target="_blank">
         <div className="tooltipsUnder">
           Notifications
         </div>
