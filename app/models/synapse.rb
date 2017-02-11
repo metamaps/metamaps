@@ -26,7 +26,9 @@ class Synapse < ApplicationRecord
   }
 
   before_create :set_perm_by_defer
+  after_create :after_created_async
   after_update :after_updated
+  before_destroy :before_destroyed
 
   delegate :name, to: :user, prefix: true
 
@@ -72,6 +74,12 @@ class Synapse < ApplicationRecord
   def set_perm_by_defer
     permission = defer_to_map.permission if defer_to_map
   end
+  
+  def after_created_async
+    follow_ids = NotificationService.notify_followers(topic1, TOPIC_CONNECTED_1, self)
+    NotificationService.notify_followers(topic2, TOPIC_CONNECTED_2, self, nil, follow_ids)
+  end
+  handle_asynchronously :after_created_async
 
   def after_updated
     if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
@@ -84,5 +92,11 @@ class Synapse < ApplicationRecord
         ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'synapseUpdated', id: id
       end
     end
+  end
+  
+  def before_destroyed
+    # hard to know how to do this yet, because the synapse actually gets destroyed
+    #NotificationService.notify_followers(topic1, 'topic_disconnected', self)
+    #NotificationService.notify_followers(topic2, 'topic_disconnected', self)
   end
 end

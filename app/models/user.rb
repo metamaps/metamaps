@@ -12,6 +12,10 @@ class User < ApplicationRecord
   has_many :stars
   has_many :user_maps, dependent: :destroy
   has_many :shared_maps, through: :user_maps, source: :map
+  has_many :follows, as: :followed
+  has_many :followers, through: :follows, source: :user
+
+  has_many :following, class_name: 'Follow'
 
   after_create :generate_code
 

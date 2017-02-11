@@ -1,0 +1,8 @@
+<% topic1 = @entity || entity
+   synapse = @event || event
+   topic2 = (topic1.id == synapse.topic1_id ? synapse.topic2 : synapse.topic1) %>
+
+<%= synapse.user.name %> connected topic <%= topic1.name %> to topic <%= topic2.name %>
+<%= synapse.desc.length > 0 ? ' with the description' + event.desc : '' %>
+
+<%= topic_url(topic1) %>

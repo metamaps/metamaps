@@ -27,14 +27,6 @@ class AccessRequest < ApplicationRecord
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
     end
   end
-
-  def requested_text
-    map.name + ' - request to edit'
-  end
-
-  def approved_text
-    map.name + ' - access approved'
-  end
   
   protected
   

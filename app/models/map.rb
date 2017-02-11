@@ -14,6 +14,8 @@ class Map < ApplicationRecord
   has_many :synapses, through: :synapsemappings, source: :mappable, source_type: 'Synapse'
   has_many :messages, as: :resource, dependent: :destroy
   has_many :stars, dependent: :destroy
+  has_many :follows, as: :followed, dependent: :destroy
+  has_many :followers, :through => :follows, source: :user
 
   has_many :access_requests, dependent: :destroy
   has_many :user_maps, dependent: :destroy
@@ -37,6 +39,7 @@ class Map < ApplicationRecord
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, content_type: %r{\Aimage/.*\Z}
 
+  after_create :after_created_async
   after_update :after_updated
   after_save :update_deferring_topics_and_synapses, if: :permission_changed?
 
@@ -135,15 +138,25 @@ class Map < ApplicationRecord
     Synapse.where(defer_to_map_id: id).update(permission: permission)
   end
 
-  def invited_text
-    name + ' - invited to edit'
-  end
-
   protected
+  
+  def after_created_async
+    FollowService.follow(self, self.user, 'created')
+    # notify users following the map creator
+  end
+  handle_asynchronously :after_created_async
 
   def after_updated
     return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
     ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
   end
   
+  def after_updated_async
+    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+      FollowService.follow(self, updated_by, 'contributed')
+      # NotificationService.notify_followers(self, 'map_updated', changed_attributes)
+      # or better yet publish an event
+    end
+  end
+  handle_asynchronously :after_updated_async
 end

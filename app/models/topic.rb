@@ -15,12 +15,17 @@ class Topic < ApplicationRecord
 
   has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, through: :mappings
+  has_many :follows, as: :followed, dependent: :destroy
+  has_many :followers, :through => :follows, source: :user
 
   belongs_to :metacode
 
   before_create :set_perm_by_defer
   before_create :create_metamap?
+  after_create :after_created_async
   after_update :after_updated
+  after_update :after_updated_async
+  #before_destroy :before_destroyed
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
@@ -149,6 +154,12 @@ class Topic < ApplicationRecord
     self.link = Rails.application.routes.url_helpers
                      .map_url(host: ENV['MAILER_DEFAULT_URL'], id: @map.id)
   end
+  
+  def after_created_async
+    FollowService.follow(self, self.user, 'created')
+    # notify users following the topic creator
+  end
+  handle_asynchronously :after_created_async
 
   def after_updated
     if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
@@ -161,5 +172,17 @@ class Topic < ApplicationRecord
         ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
       end
     end
+  end
+  
+  def after_updated_async
+    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+      FollowService.follow(self, updated_by, 'contributed')
+    end
+  end
+  handle_asynchronously :after_updated_async
+
+  def before_destroyed
+    # hard to know how to do this yet, because the topic actually gets destroyed
+    #NotificationService.notify_followers(self, 'topic_deleted', ?)
   end
 end

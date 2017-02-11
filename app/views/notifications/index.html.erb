@@ -7,7 +7,7 @@
       <h2 class="title">Notifications</h4>
     </header>
     <ul class="notifications">
-      <% blacklist = [MAILBOXER_CODE_ACCESS_REQUEST, MAILBOXER_CODE_ACCESS_APPROVED, MAILBOXER_CODE_INVITE_TO_EDIT] %>
+      <% blacklist = [MAP_ACCESS_REQUEST, MAP_ACCESS_APPROVED, MAP_INVITE_TO_EDIT] %>
       <% notifications = @notifications.to_a.delete_if{|n| blacklist.include?(n.notification_code) && (n.notified_object.nil? || n.notified_object.map.nil?) }%> 
       <% notifications.each do |notification| %>
         <% receipt = @receipts.find_by(notification_id: notification.id) %>
@@ -18,7 +18,34 @@
             </div>
             <div class="notification-body">
               <div class="in-bold"><%= notification.sender.name %></div>
-              <%= raw NotificationService.text_for_notification(notification) %>
+              <%=
+                case notification.notification_code
+                  when MAP_ACCESS_APPROVED
+                    map = notification.notified_object.map
+                    output = 'granted your request to edit map <span class="in-bold">' + map.name + '</span>'
+                  when MAP_ACCESS_REQUEST
+                    map = notification.notified_object.map
+                    output = 'wants permission to map with you on <span class="in-bold">' + map.name + '</span>&nbsp;&nbsp;<div class="action">Offer a response</div>'
+                  when MAP_INVITE_TO_EDIT
+                    map = notification.notified_object.map
+                    output = 'gave you edit access to map  <span class="in-bold">' + map.name + '</span>'
+                  when TOPIC_ADDED_TO_MAP
+                    topic = notification.notified_object.eventable
+                    map = notification.notified_object.map
+                    output = 'added topic <span class="in-bold">' + topic.name + '</span> to map <span class="in-bold">' + map.name + '</span>'  
+                  when TOPIC_CONNECTED_1
+                    topic1 = notification.notified_object.topic1
+                    topic2 = notification.notified_object.topic2
+                    output = 'connected <span class="in-bold">' + topic1.name + '</span> to <span class="in-bold">' + topic2.name + '</span>'
+                  when TOPIC_CONNECTED_2
+                    topic1 = notification.notified_object.topic1
+                    topic2 = notification.notified_object.topic2
+                    output = 'connected <span class="in-bold">' + topic2.name + '</span> to <span class="in-bold">' + topic1.name + '</span>'
+                  when MESSAGE_FROM_DEVS
+                    output = notification.subject
+                end
+                raw output
+              %>
             </div>
           <% end %>
           <div class="notification-read-unread">
