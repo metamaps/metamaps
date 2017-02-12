@@ -1,7 +1,7 @@
 #type: collection
 get:
   is: [ searchable: { searchFields: "name" }, orderable, pageable ]
-  securedBy: [ null, token, oauth_2_0, cookie ]
+  securedBy: [ null, token, oauth_2_0 ]
   responses:
     200:
       body:
@@ -9,7 +9,7 @@ get:
           example: !include ../examples/users.json
 /{id}:
   #type: item
-  securedBy: [ null, token, oauth_2_0, cookie ]
+  securedBy: [ null, token, oauth_2_0 ]
   get:
     responses:
       200:

@@ -3,12 +3,14 @@ get:
   description: |
     A list of the current user's tokens.
   is: [ searchable: { searchFields: description }, pageable, orderable ]
+  securedBy: [ token, oauth_2_0, cookie ]
   responses:
     200:
       body:
         application/json:
           example: !include ../examples/tokens.json
 post:
+  securedBy: [ token, oauth_2_0, cookie ]
   body:
     application/json:
       properties:
@@ -22,6 +24,7 @@ post:
           example: !include ../examples/token.json
 /{id}:
   #type: item
+  securedBy: [ token, oauth_2_0, cookie ]
   delete:
     responses:
       204:
