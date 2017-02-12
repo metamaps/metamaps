@@ -14,11 +14,27 @@
 
 #### Setup Postgres
 
-    sudo apt-get install postgresql-9.4 #specify version!!
+    sudo apt-get install postgresql-9.4
+    # make sure you have development headers for postgres. The package name might be different on your distribution.
+    sudo apt-get install libpq-dev
     sudo -u postgres psql
     postgres=# CREATE USER metamaps WITH PASSWORD 'mycoolpassword' CREATEDB;
-    postgres=# CREATE DATABASE metamap002_production OWNER metamaps;
+    postgres=# CREATE DATABASE metamaps_production OWNER metamaps;
     postgres=# \q
+
+On some deploys, we have had problems with unicode encoding when trying to run `db:setup`. Running the commands in this Github gist resolved the issue: https://gist.github.com/amolkhanorkar/8706915. Try this link if you have problems
+
+#### Install Node for javascript building
+
+    # this first line lets us use up-to-date versions of node.js
+    # instead of the old versions in the Ubuntu repositories
+    curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+    sudo apt-get install nodejs
+    sudo ln -s /usr/bin/nodejs /usr/bin/node
+
+### Install redis server for action cable
+
+    sudo apt-get install redis-server
 
 #### Install system-wide rvm:
 
@@ -38,8 +54,15 @@
     rvm user gemsets
     git clone https://github.com/metamaps/metamaps \
       --branch instance/mycoolinstance
-    rvm install $(cat metamaps/.ruby-version) #ensure ruby is installed
-    cd metamaps
+    cat metamaps/.ruby-version
+
+The last line tells you what version of ruby you need to install. For example, at the time of writing the version is 2.3.0. As your normal sudo-enabled user, run
+
+    sudo rvm install 2.3.0
+
+Now switch back to the metamaps user and continue
+
+    cd /home/metamaps/metamaps
     gem install bundler
     RAILS_ENV=production bundle install
 
@@ -60,16 +83,11 @@ Run this in the metamaps directory, still as metamaps:
     # create, load schema, seed
     bundle exec rails db:setup
 
-#### Install node & ES6 modules
-
-    sudo aptitude install nodejs npm
-    sudo ln -s /usr/bin/nodejs /usr/bin/node
-    npm install
-
 #### Precompile assets
 
-This step depends on running npm install first; assets:precompile calls `npm install` and `bin/build-apidocs.sh`, both of which require node_modules to be installed. We suggest you run the commands separately this time to better catch any errors.
+Note that `rails assets:precompile` will normally call `npm install` and `bin/build-apidocs.sh` as part of its process. Both of these latter commands require `npm install` to be run first. We suggest you run all five commands separately this time (like below) to better catch any errors. In the future, you won't need to run the second and third commands separately.
 
+    npm install
     npm run build
     bin/build-apidocs.sh
     bundle exec rails assets:precompile
@@ -93,12 +111,13 @@ server to see what problems show up:
 #### Realtime server:
 
     sudo npm install -g forever
-    (crontab -u metamaps -l 2>/dev/null; echo "@reboot env NODE_REALTIME_PORT=5000 $(which forever) --append -l /home/metamaps/logs/forever.realtime.log start /home/metamaps/metamaps/realtime/realtime-server.js") | crontab -u metamaps -
+    (sudo crontab -u metamaps -l 2>/dev/null; echo "@reboot NODE_REALTIME_PORT=5000 /usr/bin/forever --minUptime 1000 --spinSleepTime 1000 --append -l /home/metamaps/logs/forever.realtime.log -c /home/metamaps/metamaps/node_modules/.bin/babel-node --workingDir /home/metamaps/metamaps start /home/metamaps/metamaps/realtime/realtime-server.js") | sudo crontab -u metamaps
 
     mkdir -p /home/metamaps/logs
-    env NODE_REALTIME_PORT=5000 forever --append \
+    /usr/bin/forever --minUptime 1000 --spinSleepTime 1000 \
+      --append -l /home/metamaps/logs/forever.realtime.log \
       -c /home/metamaps/metamaps/node_modules/.bin/babel-node \
-      -l /home/metamaps/logs/forever.realtime.log \
+      --workingDir /home/metamaps/metamaps \
       start /home/metamaps/metamaps/realtime/realtime-server.js
 
 #### Upstart service for delayed_worker:

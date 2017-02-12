@@ -11,16 +11,20 @@ class TopicsController < ApplicationController
   def autocomplete_topic
     term = params[:term]
     if term && !term.empty?
-      @topics = policy_scope(Topic).where('LOWER("name") like ?', term.downcase + '%').order('"name"')
-      @mapTopics = @topics.select { |t| t&.metacode&.name == 'Metamap' }
+      topics = policy_scope(Topic)
+               .where('LOWER("name") like ?', term.downcase + '%')
+               .order('"name"')
+      map_topics = topics.select { |t| t&.metacode&.name == 'Metamap' }
       # prioritize topics which point to maps, over maps
-      @exclude = @mapTopics.length.positive? ? @mapTopics.map(&:name) : ['']
-      @maps = policy_scope(Map).where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', @exclude).order('"name"')
+      exclude = map_topics.length.positive? ? map_topics.map(&:name) : ['']
+      maps = policy_scope(Map)
+             .where('LOWER("name") like ? AND name NOT IN (?)', term.downcase + '%', exclude)
+             .order('"name"')
     else
-      @topics = []
-      @maps = []
+      topics = []
+      maps = []
     end
-    @all = @topics.to_a.concat(@maps.to_a).sort_by(&:name)
+    @all = topics.to_a.concat(maps.to_a).sort_by(&:name)
 
     render json: autocomplete_array_json(@all).to_json
   end
@@ -70,13 +74,13 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
     authorize @topic
 
-    topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
+    topics_already_has = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
     alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
-    alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i } if params[:metacode].present?
-    alltopics.delete_if do |topic|
-      !topicsAlreadyHas.index(topic.id).nil?
+    if params[:metacode].present?
+      alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i }
     end
+    alltopics.delete_if { |topic| !topics_already_has.index(topic.id).nil? }
 
     @json = Hash.new(0)
     alltopics.each do |t|
@@ -93,12 +97,14 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
     authorize @topic
 
-    topicsAlreadyHas = params[:network] ? params[:network].split(',').map(&:to_i) : []
+    topics_already_has = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
     alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
-    alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i } if params[:metacode].present?
+    if params[:metacode].present?
+      alltopics.delete_if { |topic| topic.metacode_id != params[:metacode].to_i }
+    end
     alltopics.delete_if do |topic|
-      !topicsAlreadyHas.index(topic.id.to_s).nil?
+      !topics_already_has.index(topic.id.to_s).nil?
     end
 
     # find synapses between topics in alltopics array
@@ -108,9 +114,9 @@ class TopicsController < ApplicationController
       !synapse_ids.index(synapse.id).nil?
     end
 
-    creatorsAlreadyHas = params[:creators] ? params[:creators].split(',').map(&:to_i) : []
+    creators_already_has = params[:creators] ? params[:creators].split(',').map(&:to_i) : []
     allcreators = (alltopics.map(&:user) + allsynapses.map(&:user)).uniq.delete_if do |user|
-      !creatorsAlreadyHas.index(user.id).nil?
+      !creators_already_has.index(user.id).nil?
     end
 
     @json = {}
@@ -128,6 +134,8 @@ class TopicsController < ApplicationController
   def create
     @topic = Topic.new(topic_params)
     authorize @topic
+    @topic.user = current_user
+    @topic.updated_by = current_user
 
     respond_to do |format|
       if @topic.save
@@ -143,9 +151,11 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
     authorize @topic
+    @topic.updated_by = current_user
+    @topic.assign_attributes(topic_params)
 
     respond_to do |format|
-      if @topic.update_attributes(topic_params)
+      if @topic.save
         format.json { head :no_content }
       else
         format.json { render json: @topic.errors, status: :unprocessable_entity }
@@ -157,7 +167,7 @@ class TopicsController < ApplicationController
   def destroy
     @topic = Topic.find(params[:id])
     authorize @topic
-
+    @topic.updated_by = current_user
     @topic.destroy
     respond_to do |format|
       format.json { head :no_content }
@@ -167,6 +177,6 @@ class TopicsController < ApplicationController
   private
 
   def topic_params
-    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :user_id, :metacode_id, :defer_to_map_id)
+    params.require(:topic).permit(:id, :name, :desc, :link, :permission, :metacode_id, :defer_to_map_id)
   end
 end

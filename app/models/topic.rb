@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 class Topic < ApplicationRecord
+  ATTRS_TO_WATCH = %w(name desc link metacode_id permission defer_to_map_id).freeze
   include TopicsHelper
+  include Attachable
 
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
+  belongs_to :updated_by, class_name: 'User'
 
   has_many :synapses1, class_name: 'Synapse', foreign_key: 'topic1_id', dependent: :destroy
   has_many :synapses2, class_name: 'Synapse', foreign_key: 'topic2_id', dependent: :destroy
@@ -12,31 +15,20 @@ class Topic < ApplicationRecord
 
   has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, through: :mappings
+  has_many :follows, as: :followed, dependent: :destroy
+  has_many :followers, :through => :follows, source: :user
 
   belongs_to :metacode
 
+  before_create :set_perm_by_defer
   before_create :create_metamap?
+  after_create :after_created_async
   after_update :after_updated
+  after_update :after_updated_async
+  #before_destroy :before_destroyed
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
-
-  # This method associates the attribute ":image" with a file attachment
-  has_attached_file :image
-
-  # , styles: {
-  # thumb: '100x100>',
-  # square: '200x200#',
-  # medium: '300x300>'
-  # }
-
-  # Validate the attached image is image/jpg, image/png, etc
-  validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
-
-  # This method associates the attribute ":image" with a file attachment
-  has_attached_file :audio
-  # Validate the attached audio is audio/wav, audio/mp3, etc
-  validates_attachment_content_type :audio, content_type: /\Aaudio\/.*\Z/
 
   def synapses
     synapses1.or(synapses2)
@@ -80,6 +72,19 @@ class Topic < ApplicationRecord
     super(methods: [:user_name, :user_image, :collaborator_ids])
       .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
              map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
+  end
+
+  def as_rdf
+    output = ''
+    output += %(d:topic_#{id} a mm:Topic ;\n)
+    output += %(  rdfs:label "#{name}" ;\n)
+    output += %(  rdfs:comment "#{desc}" ;\n) if desc.present?
+    output += %(  foaf:homepage <#{link}> ;\n) if link.present?
+    output += %(  mm:mapper d:mapper_#{user_id} ;\n)
+    output += %(  mm:metacode "#{metacode.name}" ;\n)
+    output[-2] = '.' # change last ; to a .
+    output += %(\n)
+    output
   end
 
   def collaborator_ids
@@ -137,6 +142,10 @@ class Topic < ApplicationRecord
 
   protected
 
+  def set_perm_by_defer
+    permission = defer_to_map.permission if defer_to_map
+  end
+
   def create_metamap?
     return unless (link == '') && (metacode.name == 'Metamap')
 
@@ -145,18 +154,35 @@ class Topic < ApplicationRecord
     self.link = Rails.application.routes.url_helpers
                      .map_url(host: ENV['MAILER_DEFAULT_URL'], id: @map.id)
   end
+  
+  def after_created_async
+    FollowService.follow(self, self.user, 'created')
+    # notify users following the topic creator
+  end
+  handle_asynchronously :after_created_async
 
   def after_updated
-    attrs = ['name', 'desc', 'link', 'metacode_id', 'permission', 'defer_to_map_id']
-    if attrs.any? {|k| changed_attributes.key?(k)}
-      new = self.attributes.select {|k| attrs.include?(k) }
-      old = changed_attributes.select {|k| attrs.include?(k) }
-      meta = new.merge(old) # we are prioritizing the old values, keeping them 
-      meta['changed'] = changed_attributes.keys.select {|k| attrs.include?(k) }
-      Events::TopicUpdated.publish!(self, user, meta)
-      maps.each {|map|
+    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+      new = attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
+      old = changed_attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
+      meta = new.merge(old) # we are prioritizing the old values, keeping them
+      meta['changed'] = changed_attributes.keys.select { |k| ATTRS_TO_WATCH.include?(k) }
+      Events::TopicUpdated.publish!(self, updated_by, meta)
+      maps.each do |map|
         ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
-      }
+      end
     end
+  end
+  
+  def after_updated_async
+    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+      FollowService.follow(self, updated_by, 'contributed')
+    end
+  end
+  handle_asynchronously :after_updated_async
+
+  def before_destroyed
+    # hard to know how to do this yet, because the topic actually gets destroyed
+    #NotificationService.notify_followers(self, 'topic_deleted', ?)
   end
 end

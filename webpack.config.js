@@ -23,7 +23,7 @@ if (NODE_ENV === 'production') {
 
 const devtool = NODE_ENV === 'production' ? undefined : 'cheap-module-eval-source-map'
 
-const config = module.exports = {
+module.exports = {
   context: __dirname,
   plugins,
   devtool,

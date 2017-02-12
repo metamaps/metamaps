@@ -19,7 +19,7 @@ const Listeners = {
       if (!(Active.Map || Active.Topic)) return
 
       const onCanvas = e.target.tagName === 'BODY'
-
+      
       switch (e.which) {
         case 13: // if enter key is pressed
           // prevent topic creation if sending a message
@@ -29,6 +29,10 @@ const Listeners = {
           break
         case 27: // if esc key is pressed
           JIT.escKeyHandler()
+          break
+        case 46: // if DEL is pressed
+          e.preventDefault()
+          Control.deleteSelected()
           break
         case 65: // if a or A is pressed
           if ((e.ctrlKey || e.metaKey) && onCanvas) {
@@ -123,7 +127,6 @@ const Listeners = {
           break
       }
     })
-
     $(window).resize(function() {
       if (Visualize && Visualize.mGraph) {
         Util.resizeCanvas(Visualize.mGraph.canvas)

@@ -21,7 +21,18 @@ class NotificationsController < ApplicationController
   def show
     @receipt.update(is_read: true)
     respond_to do |format|
-      format.html
+      format.html do
+        case @notification.notification_code
+          when MAP_ACCESS_APPROVED, MAP_INVITE_TO_EDIT
+            redirect_to map_path(@notification.notified_object.map)
+          when TOPIC_ADDED_TO_MAP
+            redirect_to map_path(@notification.notified_object.map)
+          when TOPIC_CONNECTED_1
+            redirect_to topic_path(@notification.notified_object.topic1)
+          when TOPIC_CONNECTED_2
+            redirect_to topic_path(@notification.notified_object.topic2)
+        end
+      end
       format.json do
         render json: @notification.as_json.merge(
           is_read: @receipt.is_read

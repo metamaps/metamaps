@@ -28,6 +28,10 @@ class UserPolicy < ApplicationPolicy
     update?
   end
 
+  def update_metacode_focus?
+    update?
+  end
+
   # API action
   def current?
     user == record

@@ -29,8 +29,14 @@
     <meta name="twitter:url" content="<%= request.original_url %>" />
   <% end %>
 
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <% if controller_name == 'maps' && action_name == "conversation" %>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= stylesheet_link_tag    "application-secret", :media => "all" %>
+    <%= javascript_include_tag "application-secret" %>
+  <% else %>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+  <% end %>
 
   <!-- typekit for vinyl font -->
   <script type="text/javascript" src="https://use.typekit.net/tki2nyo.js"></script>

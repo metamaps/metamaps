@@ -2,11 +2,12 @@
 require 'rails_helper'
 
 RSpec.describe TopicsController, type: :controller do
-  let(:topic) { create(:topic) }
+  let(:user) { create(:user) }
+  let(:topic) { create(:topic, user: user, updated_by: user) }
   let(:valid_attributes) { topic.attributes.except('id') }
   let(:invalid_attributes) { { permission: :invalid_lol } }
   before :each do
-    sign_in create(:user)
+    sign_in(user)
   end
 
   describe 'POST #create' do

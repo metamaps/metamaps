@@ -1,0 +1,6 @@
+<% topic = @entity || entity %>
+<% event = @event || event %>
+<%= event.user.name %> added topic <%= topic.name %> to map <%= event.map.name %>
+
+topic_url(topic)
+map_url(event.map)

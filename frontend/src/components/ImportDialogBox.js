@@ -27,6 +27,9 @@ class ImportDialogBox extends Component {
         <div className="import-blue-button" onClick={this.handleExport('json')}>
           Export as JSON
         </div>
+        <div className="import-blue-button" onClick={this.props.downloadScreenshot}>
+          Download screenshot
+        </div>
         <h3>IMPORT</h3>
         <p>To upload a file, drop it here:</p>
         <Dropzone onDropAccepted={this.handleFile}
@@ -42,7 +45,8 @@ class ImportDialogBox extends Component {
 
 ImportDialogBox.propTypes = {
   onFileAdded: PropTypes.func,
-  exampleImageUrl: PropTypes.string
+  exampleImageUrl: PropTypes.string,
+  downloadScreenshot: PropTypes.func
 }
 
 export default ImportDialogBox

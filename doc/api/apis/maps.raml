@@ -1,7 +1,7 @@
 #type: collection
 get:
   is: [ searchable: { searchFields: "name, desc" }, embeddable: { embedFields: "user,source,topics,synapses,mappings,contributors,collaborators" }, orderable, pageable ]
-  securedBy: [ null, token, oauth_2_0, cookie ]
+  securedBy: [ null, token, oauth_2_0 ]
   queryParameters:
     user_id:
       description: |
@@ -40,7 +40,7 @@ post:
   #type: item
   get:
     is: [ embeddable: { embedFields: "user,source,topics,synapses,mappings,contributors,collaborators" } ]
-    securedBy: [ null, token, oauth_2_0, cookie ]
+    securedBy: [ null, token, oauth_2_0 ]
     responses:
       200:
         body:

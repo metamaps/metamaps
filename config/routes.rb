@@ -14,9 +14,11 @@ Metamaps::Application.routes.draw do
     get 'starred'
     get 'mapper/:id', action: 'mapper'
   end
+  get :explore, to: redirect('/')
 
   resources :maps, except: [:index, :edit] do
     member do
+      get :conversation
       get :export
       post 'events/:event', action: :events
       get :contains
@@ -35,9 +37,11 @@ Metamaps::Application.routes.draw do
            default: { format: :json }
       post 'approve_access/:request_id',
            to: 'access#approve_access_post',
+           as: :approve_access_post,
            default: { format: :json }
       post 'deny_access/:request_id',
            to: 'access#deny_access_post',
+           as: :deny_access_post,
            default: { format: :json }
 
       post :access, to: 'access#access', default: { format: :json }
@@ -85,6 +89,8 @@ Metamaps::Application.routes.draw do
     end
   end
 
+  resources :tokens, only: [:new]
+
   devise_for :users, skip: :sessions, controllers: {
     registrations: 'users/registrations',
     passwords: 'users/passwords',
@@ -104,6 +110,7 @@ Metamaps::Application.routes.draw do
     end
   end
   post 'user/updatemetacodes', to: 'users#updatemetacodes', as: :updatemetacodes
+  post 'user/update_metacode_focus', to: 'users#update_metacode_focus'
 
   namespace :api, path: '/api', default: { format: :json } do
     namespace :v2, path: '/v2' do

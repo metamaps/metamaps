@@ -8,17 +8,15 @@ class Mapping < ApplicationRecord
   belongs_to :user
   belongs_to :updated_by, class_name: 'User'
 
-  validates :xloc, presence: true,
-                   unless: proc { |m| m.mappable_type == 'Synapse' }
-  validates :yloc, presence: true,
-                   unless: proc { |m| m.mappable_type == 'Synapse' }
   validates :map, presence: true
   validates :mappable, presence: true
 
   delegate :name, to: :user, prefix: true
 
   after_create :after_created
+  after_create :after_created_async
   after_update :after_updated
+  after_update :after_updated_async
   before_destroy :before_destroyed
 
   def user_image
@@ -31,28 +29,41 @@ class Mapping < ApplicationRecord
 
   def after_created
     if mappable_type == 'Topic'
-      meta = {'x': xloc, 'y': yloc, 'mapping_id': id}
-      Events::TopicAddedToMap.publish!(mappable, map, user, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicAdded', topic: mappable.filtered, mapping_id: id
+      meta = { 'x': xloc, 'y': yloc, 'mapping_id': id }
+      Events::TopicAddedToMap.publish!(mappable, map, user, meta)
     elsif mappable_type == 'Synapse'
-      Events::SynapseAddedToMap.publish!(mappable, map, user, meta)
       ActionCable.server.broadcast(
         'map_' + map.id.to_s,
         type: 'synapseAdded',
         synapse: mappable.filtered,
         topic1: mappable.topic1.filtered,
         topic2: mappable.topic2.filtered,
-        mapping_id: id)
+        mapping_id: id
+      )
+      Events::SynapseAddedToMap.publish!(mappable, map, user, nil)
     end
   end
+  
+  def after_created_async
+    FollowService.follow(map, user, 'contributed')
+  end
+  handle_asynchronously :after_created_async
 
   def after_updated
-    if mappable_type == 'Topic' and (xloc_changed? or yloc_changed?)
-      meta = {'x': xloc, 'y': yloc, 'mapping_id': id}
+    if (mappable_type == 'Topic') && (xloc_changed? || yloc_changed?)
+      meta = { 'x': xloc, 'y': yloc, 'mapping_id': id }
       Events::TopicMovedOnMap.publish!(mappable, map, updated_by, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicMoved', id: mappable.id, mapping_id: id, x: xloc, y: yloc
     end
   end
+  
+  def after_updated_async
+    if (mappable_type == 'Topic') && (xloc_changed? || yloc_changed?)
+      FollowService.follow(map, updated_by, 'contributed')
+    end
+  end
+  handle_asynchronously :after_updated_async
 
   def before_destroyed
     if mappable.defer_to_map
@@ -61,7 +72,7 @@ class Mapping < ApplicationRecord
       mappable.save
     end
 
-    meta = {'mapping_id': id}
+    meta = { 'mapping_id': id }
     if mappable_type == 'Topic'
       Events::TopicRemovedFromMap.publish!(mappable, map, updated_by, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicRemoved', id: mappable.id, mapping_id: id
@@ -69,5 +80,6 @@ class Mapping < ApplicationRecord
       Events::SynapseRemovedFromMap.publish!(mappable, map, updated_by, meta)
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'synapseRemoved', id: mappable.id, mapping_id: id
     end
+    FollowService.follow(map, updated_by, 'contributed')
   end
 end

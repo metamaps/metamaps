@@ -7,5 +7,6 @@ FactoryGirl.define do
     source_id nil
     desc ''
     user
+    association :updated_by, factory: :user
   end
 end

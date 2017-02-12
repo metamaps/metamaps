@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
   before_action :require_user, only: [:create, :update, :destroy, :events]
-  before_action :set_map, only: [:show, :update, :destroy, :contains, :events, :export]
+  before_action :set_map, only: [:show, :conversation, :update, :destroy, :contains, :events, :export]
   after_action :verify_authorized
 
   # GET maps/:id
@@ -20,6 +20,24 @@ class MapsController < ApplicationController
       end
       format.json { render json: @map }
       format.csv { redirect_to action: :export, format: :csv }
+      format.ttl { redirect_to action: :export, format: :ttl }
+    end
+  end
+  
+  # GET maps/:id/conversation
+  def conversation
+    respond_to do |format|
+      format.html do
+        UserMap.where(map: @map, user: current_user).map(&:mark_invite_notifications_as_read)
+        @allmappers = @map.contributors
+        @allcollaborators = @map.editors
+        @alltopics = policy_scope(@map.topics)
+        @allsynapses = policy_scope(@map.synapses)
+        @allmappings = policy_scope(@map.mappings)
+        @allmessages = @map.messages.sort_by(&:created_at)
+        @allstars = @map.stars
+        @allrequests = @map.access_requests
+      end
     end
   end
 
@@ -41,6 +59,7 @@ class MapsController < ApplicationController
   def create
     @map = Map.new(create_map_params)
     @map.user = current_user
+    @map.updated_by = current_user
     @map.arranged = false
     authorize @map
 
@@ -61,8 +80,11 @@ class MapsController < ApplicationController
 
   # PUT maps/:id
   def update
+    @map.updated_by = current_user
+    @map.assign_attributes(update_map_params)
+
     respond_to do |format|
-      if @map.update_attributes(update_map_params)
+      if @map.save
         format.json { head :no_content }
       else
         format.json { render json: @map.errors, status: :unprocessable_entity }
@@ -72,7 +94,8 @@ class MapsController < ApplicationController
 
   # DELETE maps/:id
   def destroy
-    @map.delete
+    @map.updated_by = current_user
+    @map.destroy
 
     respond_to do |format|
       format.json do
@@ -90,10 +113,12 @@ class MapsController < ApplicationController
 
   # GET maps/:id/export
   def export
-    exporter = MapExportService.new(current_user, @map)
+    exporter = MapExportService.new(current_user, @map, base_url: request.base_url)
+
     respond_to do |format|
       format.json { render json: exporter.json }
       format.csv { send_data exporter.csv }
+      format.ttl { render text: exporter.rdf }
     end
   end
 
@@ -102,9 +127,6 @@ class MapsController < ApplicationController
     valid_event = false
     if params[:event] == 'conversation'
       Events::ConversationStartedOnMap.publish!(@map, current_user)
-      valid_event = true
-    elsif params[:event] == 'user_presence'
-      Events::UserPresentOnMap.publish!(@map, current_user)
       valid_event = true
     end
 

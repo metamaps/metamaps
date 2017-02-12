@@ -6,10 +6,48 @@
     <%= link_to 'Back to notifications', notifications_path %>
   </div>
   <div class="centerContent notificationPage">
-    <h2 class="notification-title"><%= @notification.subject %></h4>
-    <div class="notification-body">
-      <%= raw @notification.body %>
-    </div>
+    <h2 class="notification-title">
+      <% case @notification.notification_code
+           when MAP_ACCESS_REQUEST
+             request = @notification.notified_object 
+             map = request.map %>
+         <%= image_tag @notification.sender.image(:thirtytwo), class: 'thirty-two-avatar' %> <span style='font-weight:bold;' class='requesterName'><%= request.user.name %></span> wants to collaborate on map <span style='font-weight:bold;'><%= map.name %></span>
+       <% else %>
+         <%= @notification.subject %>
+       <% end %>
+    </h2>
+    <% case @notification.notification_code
+         when MAP_ACCESS_REQUEST %>
+       <div class="notification-body">
+         <p class="main-text">
+           <% if false && request.answered %>
+             <% if request.approved %>
+               You already responded to this access request, and allowed access.
+             <% elsif !request.approved %>
+               You already responded to this access request, and declined access. If you changed your mind, you can still grant 
+               them access by going to the map and adding them as a collaborator.
+             <% end %>
+           <% else %>
+             <%= image_tag asset_path('ellipsis.gif'), class: 'hidden' %>
+             <%= link_to 'Allow', approve_access_post_map_path(id: map.id, request_id: request.id), remote: true, method: :post, class: 'button allow' %>
+             <%= link_to 'Decline', deny_access_post_map_path(id: map.id, request_id: request.id), remote: true, method: :post, class: 'button decline' %>
+             <script>
+               $(document).ready(function() {
+                 $('.notification-body .button').click(function() {
+                   $(this).html('<img src="<%= asset_path('ellipsis.gif') %>" />')
+                 })
+               })
+             </script>
+           <% end %>
+         </p>
+         <%= link_to 'Go to map', map_url(map) %>
+         &nbsp;&nbsp;<%= link_to 'View mapper profile', explore_path(id: request.user.id) %>
+       </div>
+     <% else %>
+       <div class="notification-body">
+         <%= raw @notification.body %>
+       </div>
+     <% end %>
   </div>
 </div>
 

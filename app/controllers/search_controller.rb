@@ -14,7 +14,8 @@ class SearchController < ApplicationController
     term = params[:term]
     user = params[:user] ? params[:user] : false
 
-    if term && !term.empty? && term.downcase[0..3] != 'map:' && term.downcase[0..6] != 'mapper:' && !term.casecmp('topic:').zero?
+    if term.present? && term.downcase[0..3] != 'map:' &&
+       term.downcase[0..6] != 'mapper:' && !term.casecmp('topic:').zero?
 
       # remove "topic:" if appended at beginning
       term = term[6..-1] if term.downcase[0..5] == 'topic:'
@@ -34,28 +35,28 @@ class SearchController < ApplicationController
       end
 
       # check whether there's a filter by metacode as part of the query
-      filterByMetacode = false
+      filter_by_metacode = false
       Metacode.all.each do |m|
-        lOne = m.name.length + 1
-        lTwo = m.name.length
+        length_one = m.name.length + 1
+        length_two = m.name.length
 
-        if term.downcase[0..lTwo] == m.name.downcase + ':'
-          term = term[lOne..-1]
-          filterByMetacode = m
+        if term.downcase[0..length_two] == m.name.downcase + ':'
+          term = term[length_one..-1]
+          filter_by_metacode = m
         end
       end
 
       search = '%' + term.downcase.strip + '%'
       builder = policy_scope(Topic)
 
-      if filterByMetacode
+      if filter_by_metacode
         if term == ''
           builder = builder.none
         else
           builder = builder.where('LOWER("name") like ? OR
                                    LOWER("desc") like ? OR
                                    LOWER("link") like ?', search, search, search)
-          builder = builder.where(metacode_id: filterByMetacode.id)
+          builder = builder.where(metacode_id: filter_by_metacode.id)
         end
       elsif desc
         builder = builder.where('LOWER("desc") like ?', search)
@@ -82,7 +83,8 @@ class SearchController < ApplicationController
     term = params[:term]
     user = params[:user] ? params[:user] : nil
 
-    if term && !term.empty? && term.downcase[0..5] != 'topic:' && term.downcase[0..6] != 'mapper:' && !term.casecmp('map:').zero?
+    if term.present? && term.downcase[0..5] != 'topic:' &&
+       term.downcase[0..6] != 'mapper:' && !term.casecmp('map:').zero?
 
       # remove "map:" if appended at beginning
       term = term[4..-1] if term.downcase[0..3] == 'map:'
@@ -115,7 +117,8 @@ class SearchController < ApplicationController
   # get /search/mappers?term=SOMETERM
   def mappers
     term = params[:term]
-    if term && !term.empty? && term.downcase[0..3] != 'map:' && term.downcase[0..5] != 'topic:' && !term.casecmp('mapper:').zero?
+    if term.present? && term.downcase[0..3] != 'map:' &&
+       term.downcase[0..5] != 'topic:' && !term.casecmp('mapper:').zero?
 
       # remove "mapper:" if appended at beginning
       term = term[7..-1] if term.downcase[0..6] == 'mapper:'
@@ -138,13 +141,15 @@ class SearchController < ApplicationController
     topic2id = params[:topic2id]
 
     if term && !term.empty?
-      @synapses = policy_scope(Synapse).where('LOWER("desc") like ?', '%' + term.downcase.strip + '%').order('"desc"')
+      @synapses = policy_scope(Synapse)
+                  .where('LOWER("desc") like ?', '%' + term.downcase.strip + '%')
+                  .order('"desc"')
 
       @synapses = @synapses.uniq(&:desc)
     elsif topic1id && !topic1id.empty?
-      @one = policy_scope(Synapse).where(topic1_id: topic1id, topic2_id: topic2id)
-      @two = policy_scope(Synapse).where(topic2_id: topic1id, topic1_id: topic2id)
-      @synapses = @one + @two
+      one = policy_scope(Synapse).where(topic1_id: topic1id, topic2_id: topic2id)
+      two = policy_scope(Synapse).where(topic2_id: topic1id, topic1_id: topic2id)
+      @synapses = one + two
       @synapses.sort! { |s1, s2| s1.desc <=> s2.desc }.to_a
     else
       skip_policy_scope

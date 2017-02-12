@@ -45,7 +45,10 @@ const Map = {
     GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
 
     self.updateStar()
-    InfoBox.init(serverData)
+
+    InfoBox.init(serverData, function updateThumbnail() {
+      self.uploadMapScreenshot()
+    })
     CheatSheet.init(serverData)
 
     $('.viewOnly .requestAccess').click(self.requestAccess)
@@ -251,6 +254,48 @@ const Map = {
     }
   },
   exportImage: function() {
+    Map.uploadMapScreenshot()
+    Map.offerScreenshotDownload()
+    GlobalUI.notifyUser('Note: this button is going away. Check the map card or the import box for setting the map thumbnail or downloading a screenshot.')
+  },
+  offerScreenshotDownload: () => {
+    const canvas = Map.getMapCanvasForScreenshots()
+    const filename = Map.getMapScreenshotFilename(Active.Map)
+
+    var downloadMessage = outdent`
+      Captured map screenshot!
+      <a id="map-screenshot-download-link"
+         href="${canvas.canvas.toDataURL()}"
+         download="${filename}"
+      >
+        DOWNLOAD
+      </a>`
+    GlobalUI.notifyUser(downloadMessage)
+  },
+  uploadMapScreenshot: () => {
+    const canvas = Map.getMapCanvasForScreenshots()
+    const filename = Map.getMapScreenshotFilename(Active.Map)
+
+    canvas.canvas.toBlob(imageBlob => {
+      const formData = new window.FormData()
+      formData.append('map[screenshot]', imageBlob, filename)
+      $.ajax({
+        type: 'PATCH',
+        dataType: 'json',
+        url: `/maps/${Active.Map.id}`,
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          GlobalUI.notifyUser('Successfully updated map screenshot.')
+        },
+        error: function() {
+          GlobalUI.notifyUser('Failed to update map screenshot.')
+        }
+      })
+    })
+  },
+  getMapCanvasForScreenshots: () => {
     var canvas = {}
 
     canvas.canvas = document.createElement('canvas')
@@ -336,8 +381,9 @@ const Map = {
       node.visited = !T
     })
 
-    var map = Active.Map
-
+    return canvas
+  },
+  getMapScreenshotFilename: map => {
     var today = new Date()
     var dd = today.getDate()
     var mm = today.getMonth() + 1 // January is 0!
@@ -352,30 +398,7 @@ const Map = {
 
     var mapName = map.get('name').split(' ').join(['-'])
     const filename = `metamap-${map.id}-${mapName}-${today}.png`
-
-    var downloadMessage = outdent`
-      Captured map screenshot!
-      <a href="${canvas.canvas.toDataURL()}" download="${filename}">DOWNLOAD</a>`
-    GlobalUI.notifyUser(downloadMessage)
-
-    canvas.canvas.toBlob(imageBlob => {
-      const formData = new window.FormData()
-      formData.append('map[screenshot]', imageBlob, filename)
-      $.ajax({
-        type: 'PATCH',
-        dataType: 'json',
-        url: `/maps/${map.id}`,
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(data) {
-          console.log('successfully uploaded map screenshot')
-        },
-        error: function() {
-          console.log('failed to save map screenshot')
-        }
-      })
-    })
+    return filename
   }
 }
 

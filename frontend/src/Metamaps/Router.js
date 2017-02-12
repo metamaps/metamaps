@@ -39,7 +39,7 @@ const _Router = Backbone.Router.extend({
 
     var navigate = function() {
       self.timeoutId = setTimeout(function() {
-        self.navigate('')
+        self.navigateAndTrack('')
       }, 300)
     }
 
@@ -121,7 +121,7 @@ const _Router = Backbone.Router.extend({
         path += '/' + DataModel.Maps.Mapper.mapperId
       }
 
-      self.navigate(path)
+      self.navigateAndTrack(path)
     }
     var navigateTimeout = function() {
       self.timeoutId = setTimeout(navigate, 300)
@@ -201,6 +201,11 @@ const _Router = Backbone.Router.extend({
 })
 
 const Router = new _Router()
+
+Router.navigateAndTrack = (fragment, options) => {
+  Router.navigate(fragment, options)
+  window.ga && window.ga('send', 'pageview', location.pathname, {title: document.title})
+}
 
 Router.intercept = function(evt) {
   var segments

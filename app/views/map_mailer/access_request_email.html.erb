@@ -1,8 +1,0 @@
-<% map = @map || map %>
-<% request = @request || request %>
-<% button_style = "background-color:#4fc059;border-radius:2px;color:white;display:inline-block;font-family:Roboto,Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;min-height:29px;line-height:29px;min-width:54px;outline:0px;padding:0 8px;text-align:center;text-decoration:none" %>
-<p><span style="font-weight: bold;"><%= request.user.name %></span> is requesting access to <span style="font-weight: bold">collaboratively edit</span> the following map:</p>
-<p><%= map.name %></p>
-<p><%= link_to "Allow", approve_access_map_url(id: map.id, request_id: request.id), style: "font-size: 18px; text-decoration: none; color: #4fc059;" %>
-<p><%= link_to "Decline", deny_access_map_url(id: map.id, request_id: request.id), style: "font-size: 18px; text-decoration: none; color: #DB5D5D;" %></p>
-<%= link_to 'Go to Map', map_url(map), style: button_style %> 

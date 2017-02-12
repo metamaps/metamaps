@@ -29,3 +29,5 @@ coverage
 */.DS_Store
 .DS_Store?
 .vagrant
+gentle/
+startserver.sh

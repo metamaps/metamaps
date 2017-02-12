@@ -20,6 +20,10 @@ class MapPolicy < ApplicationPolicy
       record.collaborators.include?(user) ||
       record.user == user
   end
+  
+  def conversation?
+    show? && %w(connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com).include?(user.email)
+  end
 
   def create?
     user.present?

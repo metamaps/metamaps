@@ -6,7 +6,7 @@ export DB_USERNAME='postgres'
 export DB_PASSWORD='3112'
 export DB_HOST='localhost'
 export DB_PORT='5432'
-export DB_NAME='metamap002'
+export DB_NAME='metamaps'
 
 export REALTIME_SERVER='http://localhost:5000'
 export MAILER_DEFAULT_URL='localhost:3000'

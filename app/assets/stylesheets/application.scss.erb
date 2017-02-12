@@ -531,9 +531,11 @@ button.button.btn-no:hover {
     left: -1000px;
     display: block;
     position: absolute;
-    width: 340px;
     margin: -40px 0 0 -35px;
     z-index: 1;
+}
+body:not(.action-conversation) .new_topic {
+  width: 340px;
 }
 
 #new_topic .twitter-typeahead {
@@ -1558,6 +1560,7 @@ h3.filterBox {
     box-sizing: border-box;
     margin: 0.75em;
     padding: 0.75em;
+    padding-top: 0.85em;
     height: 3em;
     background-color: #AAB0FB;
     border-radius: 0.3em;
@@ -2012,6 +2015,7 @@ input.collaboratorSearchField {
     position: relative;
     cursor: pointer;
     display: none;
+    padding: 0 2px;
 }
 .mapInfoShareIcon {
     width: 24px;
@@ -2051,6 +2055,43 @@ and it won't be important on password protected instances */
 .yourMap .mapInfoDelete {
     display: block;
 }
+
+.mapInfoButtonsWrapper .mapInfoThumbnail {
+  display: block;
+  background-image: url(<%= asset_path('screenshot_sprite.png') %>);
+  width: 32px;
+  height: 32px;
+
+  & > span {
+    bottom: -8px;
+    right: 2px;
+    font-size: 12px;
+    color: #e0e0e0;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  .tooltip {
+    display: none;
+  }
+
+  &:hover {
+    background-position: -32px 0;
+
+    .tooltip {
+      display: block;
+      position: absolute;
+      bottom: 30px;
+      background: black;
+      color: white;
+      border-radius: 2px;
+      padding: 3px 5px 2px 5px;
+    }
+  }
+}
+
 .mapInfoButtonsWrapper span {
     position: absolute;
     width: 100%;

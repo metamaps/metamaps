@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218183817) do
+ActiveRecord::Schema.define(version: 20170209215911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,18 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.datetime "updated_at",                 null: false
     t.index ["map_id"], name: "index_access_requests_on_map_id", using: :btree
     t.index ["user_id"], name: "index_access_requests_on_user_id", using: :btree
+  end
+
+  create_table "attachments", force: :cascade do |t|
+    t.string   "attachable_type"
+    t.integer  "attachable_id"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable_type_and_attachable_id", using: :btree
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -53,6 +65,29 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id", using: :btree
     t.index ["map_id"], name: "index_events_on_map_id", using: :btree
     t.index ["user_id"], name: "index_events_on_user_id", using: :btree
+  end
+
+  create_table "follow_reasons", force: :cascade do |t|
+    t.integer  "follow_id"
+    t.boolean  "created"
+    t.boolean  "contributed"
+    t.boolean  "commented"
+    t.boolean  "followed"
+    t.boolean  "shared_on"
+    t.boolean  "starred"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["follow_id"], name: "index_follow_reasons_on_follow_id", using: :btree
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "followed_type"
+    t.integer  "followed_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["followed_type", "followed_id"], name: "index_follows_on_followed_type_and_followed_id", using: :btree
+    t.index ["user_id"], name: "index_follows_on_user_id", using: :btree
   end
 
   create_table "in_metacode_sets", force: :cascade do |t|
@@ -152,7 +187,9 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.integer  "screenshot_file_size"
     t.datetime "screenshot_updated_at"
     t.integer  "source_id"
+    t.integer  "updated_by_id"
     t.index ["source_id"], name: "index_maps_on_source_id", using: :btree
+    t.index ["updated_by_id"], name: "index_maps_on_updated_by_id", using: :btree
     t.index ["user_id"], name: "index_maps_on_user_id", using: :btree
   end
 
@@ -247,10 +284,12 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.text     "permission"
     t.text     "weight"
     t.integer  "defer_to_map_id"
-    t.index ["topic1_id", "topic1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
+    t.integer  "updated_by_id"
+    t.index ["topic1_id"], name: "index_synapses_on_node1_id_and_node1_id", using: :btree
     t.index ["topic1_id"], name: "index_synapses_on_topic1_id", using: :btree
-    t.index ["topic2_id", "topic2_id"], name: "index_synapses_on_node2_id_and_node2_id", using: :btree
+    t.index ["topic2_id"], name: "index_synapses_on_node2_id_and_node2_id", using: :btree
     t.index ["topic2_id"], name: "index_synapses_on_topic2_id", using: :btree
+    t.index ["updated_by_id"], name: "index_synapses_on_updated_by_id", using: :btree
     t.index ["user_id"], name: "index_synapses_on_user_id", using: :btree
   end
 
@@ -269,19 +308,13 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.text     "link"
     t.integer  "user_id"
     t.integer  "metacode_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.text     "permission"
-    t.string   "image_file_name",    limit: 255
-    t.string   "image_content_type", limit: 255
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
-    t.string   "audio_file_name",    limit: 255
-    t.string   "audio_content_type", limit: 255
-    t.integer  "audio_file_size"
-    t.datetime "audio_updated_at"
     t.integer  "defer_to_map_id"
+    t.integer  "updated_by_id"
     t.index ["metacode_id"], name: "index_topics_on_metacode_id", using: :btree
+    t.index ["updated_by_id"], name: "index_topics_on_updated_by_id", using: :btree
     t.index ["user_id"], name: "index_topics_on_user_id", using: :btree
   end
 
@@ -290,6 +323,8 @@ ActiveRecord::Schema.define(version: 20161218183817) do
     t.integer  "map_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "access_request_id"
+    t.index ["access_request_id"], name: "index_user_maps_on_access_request_id", using: :btree
     t.index ["map_id"], name: "index_user_maps_on_map_id", using: :btree
     t.index ["user_id"], name: "index_user_maps_on_user_id", using: :btree
   end
@@ -343,5 +378,8 @@ ActiveRecord::Schema.define(version: 20161218183817) do
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "mappings", "users", column: "updated_by_id"
   add_foreign_key "maps", "maps", column: "source_id"
+  add_foreign_key "maps", "users", column: "updated_by_id"
+  add_foreign_key "synapses", "users", column: "updated_by_id"
   add_foreign_key "tokens", "users"
+  add_foreign_key "topics", "users", column: "updated_by_id"
 end

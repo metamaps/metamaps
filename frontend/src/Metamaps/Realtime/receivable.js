@@ -149,7 +149,7 @@ export const invitedToCall = self => inviter => {
   notifyText += username + ' is inviting you to a conversation. Join live?'
   notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
   notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
-  GlobalUI.notifyUser(notifyText, true)
+  GlobalUI.notifyUser(notifyText, { leaveOpen: true })
   $('#toast button.yes').click(e => self.acceptCall(inviter))
   $('#toast button.no').click(e => self.denyCall(inviter))
 }
@@ -162,7 +162,7 @@ export const invitedToJoin = self => inviter => {
   var notifyText = username + ' is inviting you to the conversation. Join?'
   notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
   notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
-  GlobalUI.notifyUser(notifyText, true)
+  GlobalUI.notifyUser(notifyText, { leaveOpen: true })
   $('#toast button.yes').click(e => self.joinCall())
   $('#toast button.no').click(e => self.denyInvite(inviter))
 }
@@ -201,7 +201,7 @@ export const callInProgress = self => () => {
   var notifyText = "There's a conversation happening, want to join?"
   notifyText += ' <button type="button" class="toast-button button yes">Yes</button>'
   notifyText += ' <button type="button" class="toast-button button btn-no no">No</button>'
-  GlobalUI.notifyUser(notifyText, true)
+  GlobalUI.notifyUser(notifyText, { leaveOpen: true })
   $('#toast button.yes').click(e => self.joinCall())
   $('#toast button.no').click(e => GlobalUI.clearNotify())
   ChatView.conversationInProgress()
@@ -212,7 +212,7 @@ export const callStarted = self => () => {
   var notifyText = "There's a conversation starting, want to join?"
   notifyText += ' <button type="button" class="toast-button button">Yes</button>'
   notifyText += ' <button type="button" class="toast-button button btn-no">No</button>'
-  GlobalUI.notifyUser(notifyText, true)
+  GlobalUI.notifyUser(notifyText, { leaveOpen: true })
   $('#toast button.yes').click(e => self.joinCall())
   $('#toast button.no').click(e => GlobalUI.clearNotify())
   ChatView.conversationInProgress()

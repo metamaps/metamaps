@@ -1,22 +1,23 @@
 # frozen_string_literal: true
 class MapMailer < ApplicationMailer
+  include MapMailerHelper
   default from: 'team@metamaps.cc'
 
-  def access_request_email(request)
+  def access_approved(request)
     @request = request
     @map = request.map
-    mail(to: @map.user.email, subject: request.requested_text)
+    mail(to: request.user.email, subject: access_approved_subject(@map))
   end
 
-  def access_approved_email(request)
+  def access_request(request)
     @request = request
     @map = request.map
-    mail(to: request.user, subject: request.approved_text)
+    mail(to: @map.user.email, subject: access_request_subject(@map))
   end
 
-  def invite_to_edit_email(map, inviter, invitee)
-    @inviter = inviter
-    @map = map
-    mail(to: invitee.email, subject: map.invited_text)
+  def invite_to_edit(user_map)
+    @inviter = user_map.map.user
+    @map = user_map.map
+    mail(to: user_map.user.email, subject: invite_to_edit_subject(@map))
   end
 end

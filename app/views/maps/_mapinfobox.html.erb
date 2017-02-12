@@ -77,6 +77,11 @@
     <p class="mapCreatedAt"><span>Created by:</span> <%= @map.user == user ? "You" : @map.user.name %> on <%= @map.created_at.strftime("%m/%d/%Y") %></p>
     <p class="mapEditedAt"><span>Last edited:</span> <%= @map.updated_at.strftime("%m/%d/%Y") %></p>
     <div class="mapInfoButtonsWrapper">
+      <div class="mapInfoThumbnail">
+        <div class="thumbnail"></div>
+        <div class="tooltip">Update Thumbnail</div>
+        <span>Thumb</span>
+      </div>
       <div class="mapInfoDelete">
         <div class="deleteMap"></div>
         <span>Delete</span>

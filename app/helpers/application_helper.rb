@@ -2,12 +2,11 @@
 module ApplicationHelper
   def metacodeset
     metacodes = current_user.settings.metacodes
+
     return false unless metacodes[0].include?('metacodeset')
-    if metacodes[0].sub('metacodeset-', '') == 'Most'
-      return 'Most'
-    elsif metacodes[0].sub('metacodeset-', '') == 'Recent'
-      return 'Recent'
-    end
+    return 'Most' if metacodes[0].sub('metacodeset-', '') == 'Most'
+    return 'Recent' if metacodes[0].sub('metacodeset-', '') == 'Recent'
+
     MetacodeSet.find(metacodes[0].sub('metacodeset-', '').to_i)
   end
 
@@ -23,7 +22,24 @@ module ApplicationHelper
                  else
                    Metacode.where(id: @m).to_a
                  end
-    @metacodes.sort! { |m1, m2| m2.name.downcase <=> m1.name.downcase }.rotate!(-1)
+
+    focus_code = user_metacode()
+    if focus_code != nil && @metacodes.index{|m| m.id == focus_code.id} == nil
+      @metacodes.push(focus_code)
+    end
+
+    @metacodes
+      .sort! { |m1, m2| m2.name.downcase <=> m1.name.downcase }
+
+    if focus_code != nil
+      @metacodes.rotate!(@metacodes.index{|m| m.id == focus_code.id})
+    else
+      @metacodes.rotate!(-1)
+    end
+  end
+
+  def user_metacode
+    current_user.settings.metacode_focus ? Metacode.find(current_user.settings.metacode_focus.to_i) : nil
   end
 
   def user_most_used_metacodes
