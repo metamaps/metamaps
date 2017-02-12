@@ -2,6 +2,8 @@
 module Api
   module V2
     class TokensController < RestfulController
+      protect_from_forgery
+
       def searchable_columns
         [:description]
       end
@@ -17,6 +19,12 @@ module Api
         authorize resource
         create_action
         respond_with_resource
+      end
+
+      private
+
+      def current_user
+        token_user || doorkeeper_user || method(:current_user).super_method.super_method.call
       end
     end
   end

@@ -5,7 +5,6 @@ module Api
       include Pundit
       include PunditExtra
 
-      protect_from_forgery with: :exception
       snorlax_used_rest!
 
       before_action :load_resource, only: [:show, :update, :destroy]
@@ -46,7 +45,7 @@ module Api
       end
 
       def current_user
-        token_user || doorkeeper_user || super
+        token_user || doorkeeper_user
       end
 
       def load_resource

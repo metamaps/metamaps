@@ -89,6 +89,8 @@ Metamaps::Application.routes.draw do
     end
   end
 
+  resources :tokens, only: [:new]
+
   devise_for :users, skip: :sessions, controllers: {
     registrations: 'users/registrations',
     passwords: 'users/passwords',
