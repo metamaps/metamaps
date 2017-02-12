@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(version: 20170209215911) do
     t.integer  "user_id"
     t.string   "followed_type"
     t.integer  "followed_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.index ["followed_type", "followed_id"], name: "index_follows_on_followed_type_and_followed_id", using: :btree
     t.index ["user_id"], name: "index_follows_on_user_id", using: :btree
   end
