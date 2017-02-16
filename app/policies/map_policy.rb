@@ -98,4 +98,8 @@ class MapPolicy < ApplicationPolicy
   def unfollow?
     user.present?
   end
+
+  def unfollow_from_email?
+    user.present?
+  end
 end

@@ -63,6 +63,10 @@ class TopicPolicy < ApplicationPolicy
     user.present?
   end
 
+  def unfollow_from_email?
+    user.present?
+  end
+
   # Helpers
   def map_policy
     @map_policy ||= Pundit.policy(user, record.defer_to_map)
