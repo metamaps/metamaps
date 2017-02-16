@@ -181,6 +181,9 @@ const Util = {
       })
     }
     return text
+  },
+  isTester: function(currentUser) {
+    return ['connorturland@gmail.com', 'devin@callysto.com', 'chessscholar@gmail.com', 'solaureum@gmail.com', 'ishanshapiro@gmail.com'].indexOf(currentUser.get('email')) > -1
   }
 }
 

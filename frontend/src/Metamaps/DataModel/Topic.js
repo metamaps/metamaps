@@ -47,6 +47,9 @@ const Topic = Backbone.Model.extend({
     if (mapper && this.get('user_id') === mapper.get('id')) return true
     else return false
   },
+  isFollowedBy: function(mapper) {
+    return mapper.get('follows') && mapper.get('follows').topics.indexOf(this.get('id')) > -1
+  },
   getDate: function() {},
   getMetacode: function() {
     return DataModel.Metacodes.get(this.get('metacode_id'))

@@ -46,7 +46,7 @@ class Maps extends Component {
   }
 
   render = () => {
-    const { maps, currentUser, juntoState, pending, section, user, onStar, onRequest } = this.props
+    const { maps, currentUser, juntoState, pending, section, user, onStar, onRequest, onFollow } = this.props
     const style = { width: this.state.mapsWidth + 'px' }
     const mobile = document && document.body.clientWidth <= MOBILE_VIEW_BREAKPOINT
 
@@ -56,7 +56,7 @@ class Maps extends Component {
           <div style={ style }>
             { user ? <MapperCard user={ user } /> : null }
             { currentUser && !user && !(pending && maps.length === 0) ? <div className="map newMap"><a href="/maps/new"><div className="newMapImage"></div><span>Create new map...</span></a></div> : null }
-            { maps.models.map(map => <MapCard key={ map.id } map={ map } mobile={ mobile } juntoState={ juntoState } currentUser={ currentUser } onStar={ onStar } onRequest={ onRequest } />) }
+            { maps.models.map(map => <MapCard key={ map.id } map={ map } mobile={ mobile } juntoState={ juntoState } currentUser={ currentUser } onStar={ onStar } onRequest={ onRequest } onFollow={ onFollow } />) }
             <div className='clearfloat'></div>
           </div>
         </div>
@@ -79,7 +79,8 @@ Maps.propTypes = {
   loadMore: PropTypes.func,
   pending: PropTypes.bool.isRequired,
   onStar: PropTypes.func.isRequired,
-  onRequest: PropTypes.func.isRequired
+  onRequest: PropTypes.func.isRequired,
+  onFollow: PropTypes.func.isRequired
 }
 
 export default Maps

@@ -55,6 +55,14 @@ class TopicPolicy < ApplicationPolicy
     show?
   end
 
+  def follow?
+    show? && user.present?
+  end
+
+  def unfollow?
+    user.present?
+  end
+
   # Helpers
   def map_policy
     @map_policy ||= Pundit.policy(user, record.defer_to_map)

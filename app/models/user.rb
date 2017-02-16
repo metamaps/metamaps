@@ -52,10 +52,20 @@ class User < ApplicationRecord
 
   # override default as_json
   def as_json(_options = {})
-    { id: id,
+    json = { id: id,
       name: name,
       image: image.url(:sixtyfour),
       admin: admin }
+    if (_options[:follows])
+      json['follows'] = {
+        topics: following.where(followed_type: 'Topic').to_a.map(&:followed_id),
+        maps: following.where(followed_type: 'Map').to_a.map(&:followed_id)
+      }
+    end
+    if (_options[:email])
+      json['email'] = email
+    end
+    json
   end
 
   def as_json_for_autocomplete

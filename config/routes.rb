@@ -48,6 +48,8 @@ Metamaps::Application.routes.draw do
 
       post :star, to: 'stars#create', default: { format: :json }
       post :unstar, to: 'stars#destroy', default: { format: :json }
+      post :follow, default: { format: :json }
+      post :unfollow, default: { format: :json }
     end
   end
 
@@ -83,6 +85,8 @@ Metamaps::Application.routes.draw do
       get :network
       get :relative_numbers
       get :relatives
+      post :follow, default: { format: :json }
+      post :unfollow, default: { format: :json }
     end
     collection do
       get :autocomplete_topic

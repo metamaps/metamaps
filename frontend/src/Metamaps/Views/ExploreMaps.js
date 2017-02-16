@@ -53,6 +53,20 @@ const ExploreMaps = {
           url: `/maps/${map.id}/access_request`
         })
         GlobalUI.notifyUser('You will be notified by email if request accepted')
+      },
+      onFollow: function(map) {
+        const isFollowing = map.isFollowedBy(Active.Mapper)
+        $.post({
+          url: `/maps/${map.id}/${isFollowing ? 'un' : ''}follow`
+        })
+        if (isFollowing) {
+          GlobalUI.notifyUser('You are no longer following this map')
+          Active.Mapper.unfollowMap(map.id)
+        } else {
+          GlobalUI.notifyUser('You are now following this map')
+          Active.Mapper.followMap(map.id)
+        }
+        self.render()
       }
     }
     ReactDOM.render(

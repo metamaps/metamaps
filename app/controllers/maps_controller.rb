@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
-  before_action :require_user, only: [:create, :update, :destroy, :events]
-  before_action :set_map, only: [:show, :conversation, :update, :destroy, :contains, :events, :export]
+  before_action :require_user, only: [:create, :update, :destroy, :events, :follow, :unfollow]
+  before_action :set_map, only: [:show, :conversation, :update, :destroy, :contains, :events, :export, :follow, :unfollow]
   after_action :verify_authorized
 
   # GET maps/:id
@@ -133,6 +133,32 @@ class MapsController < ApplicationController
     respond_to do |format|
       format.json do
         head :bad_request unless valid_event
+        head :ok
+      end
+    end
+  end
+
+  # POST maps/:id/follow
+  def follow
+    follow = FollowService.follow(@map, current_user, 'followed')  
+
+    respond_to do |format|
+      format.json do
+        if follow
+          head :ok
+        else
+          head :bad_request
+        end
+      end
+    end
+  end
+
+  # POST maps/:id/unfollow
+  def unfollow
+    FollowService.unfollow(@map, current_user)  
+
+    respond_to do |format|
+      format.json do
         head :ok
       end
     end

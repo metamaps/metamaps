@@ -90,4 +90,12 @@ class MapPolicy < ApplicationPolicy
   def unstar?
     user.present?
   end
+
+  def follow?
+    show? && user.present?
+  end
+
+  def unfollow?
+    user.present?
+  end
 end
