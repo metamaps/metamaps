@@ -3,7 +3,9 @@ class TopicsController < ApplicationController
   include TopicsHelper
 
   before_action :require_user, only: [:create, :update, :destroy, :follow, :unfollow]
-  before_action :set_topic, only: [:show, :update, :relative_numbers, :relatives, :network, :destroy, :follow, :unfollow]
+  before_action :set_topic, only: [:show, :update, :relative_numbers,
+                                   :relatives, :network, :destroy,
+                                   :follow, :unfollow, :unfollow_from_email]
   after_action :verify_authorized, except: :autocomplete_topic
 
   respond_to :html, :js, :json
@@ -181,6 +183,17 @@ class TopicsController < ApplicationController
     respond_to do |format|
       format.json do
         head :ok
+      end
+    end
+  end
+
+  # GET topics/:id/unfollow_from_email
+  def unfollow_from_email
+    FollowService.unfollow(@topic, current_user)
+
+    respond_to do |format|
+      format.html do
+        redirect_to topic_path(@topic), notice: 'You are no longer following this topic'
       end
     end
   end

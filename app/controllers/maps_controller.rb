@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class MapsController < ApplicationController
   before_action :require_user, only: [:create, :update, :destroy, :events, :follow, :unfollow]
-  before_action :set_map, only: [:show, :conversation, :update, :destroy, :contains, :events, :export, :follow, :unfollow]
+  before_action :set_map, only: [:show, :conversation, :update, :destroy, :contains, :events, :export, :follow, :unfollow, :unfollow_from_email]
   after_action :verify_authorized
 
   # GET maps/:id
@@ -160,6 +160,17 @@ class MapsController < ApplicationController
     respond_to do |format|
       format.json do
         head :ok
+      end
+    end
+  end
+
+  # GET maps/:id/unfollow_from_email
+  def unfollow_from_email
+    FollowService.unfollow(@map, current_user)
+
+    respond_to do |format|
+      format.html do
+        redirect_to map_path(@map), notice: 'You are no longer following this map'
       end
     end
   end
