@@ -7,4 +7,4 @@
 
 <%= topic_url(topic1) %>
 
-<%= render :partial => 'topic_mailer/unfollow' %>
+<%= render :partial => 'topic_mailer/unfollow', locals: { topic: topic1 } %>
