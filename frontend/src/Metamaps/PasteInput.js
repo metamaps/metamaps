@@ -20,6 +20,10 @@ const PasteInput = {
     }, false)
     window.addEventListener('drop', function(e) {
       e = e || window.event
+
+      // prevent conflict with react-dropzone file uploader
+      if (event.target.id !== 'infovis-canvas') return
+
       e.preventDefault()
       var coords = Util.pixelsToCoords(Visualize.mGraph, { x: e.clientX, y: e.clientY })
       if (e.dataTransfer.files.length > 0) {

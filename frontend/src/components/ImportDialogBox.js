@@ -14,6 +14,7 @@ class ImportDialogBox extends Component {
   }
 
   handleFile = (files, e) => {
+    e.preventDefault() // prevent it from triggering the default drag-drop handler
     this.props.onFileAdded(files[0])
   }
 
