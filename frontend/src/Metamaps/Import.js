@@ -29,8 +29,8 @@ const Import = {
   handleCSV: function(text, parserOpts = {}) {
     const self = Import
 
-    const topicsRegex = /("?Topics"?)([\s\S]*)/mi
-    const synapsesRegex = /("?Synapses"?)([\s\S]*)/mi
+    const topicsRegex = /("?Topics"?,*)([\s\S]*)/mi
+    const synapsesRegex = /("?Synapses"?,*)([\s\S]*)/mi
     let topicsText = text.match(topicsRegex) || ''
     if (topicsText) topicsText = topicsText[2].replace(synapsesRegex, '')
     let synapsesText = text.match(synapsesRegex) || ''
