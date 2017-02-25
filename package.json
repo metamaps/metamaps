@@ -2,6 +2,9 @@
   "name": "metamaps",
   "version": "1.0.0",
   "description": "Metamaps webpacked javascript code",
+  "engines": {
+    "node": "6.2.2"
+  },
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
