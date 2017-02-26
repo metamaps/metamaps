@@ -29,7 +29,6 @@ import Settings from './Settings'
 import Synapse from './Synapse'
 import SynapseCard from './SynapseCard'
 import Topic from './Topic'
-import TopicCard from './TopicCard'
 import Util from './Util'
 import Views from './Views'
 import Visualize from './Visualize'
@@ -71,7 +70,6 @@ Metamaps.Settings = Settings
 Metamaps.Synapse = Synapse
 Metamaps.SynapseCard = SynapseCard
 Metamaps.Topic = Topic
-Metamaps.TopicCard = TopicCard
 Metamaps.Util = Util
 Metamaps.Views = Views
 Metamaps.Visualize = Visualize

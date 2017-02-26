@@ -1,6 +1,6 @@
 /* global $ */
 
-import { Parser, HtmlRenderer } from 'commonmark'
+import { Parser, HtmlRenderer, Node } from 'commonmark'
 import { emojiIndex } from 'emoji-mart'
 import { escapeRegExp } from 'lodash'
 
@@ -135,9 +135,26 @@ const Util = {
   },
   mdToHTML: text => {
     const safeText = text || ''
+    const parsed = new Parser().parse(safeText)
+
+    // remove images to avoid http content in https context
+    const walker = parsed.walker()
+    for (let event = walker.next(); event = walker.next(); event) {
+      const node = event.node
+      if (node.type === 'image') {
+        const imageAlt = node.firstChild.literal
+        const imageSrc = node.destination
+        const textNode = new Node('text', node.sourcepos)
+        textNode.literal = `![${imageAlt}](${imageSrc})`
+
+        node.insertBefore(textNode)
+        node.unlink() // remove the image, replacing it with markdown
+        walker.resumeAt(textNode, false)
+      }
+    }
+
     // use safe: true to filter xss
-    return new HtmlRenderer({ safe: true })
-      .render(new Parser().parse(safeText))
+    return new HtmlRenderer({ safe: true }).render(parsed)
   },
   logCanvasAttributes: function(canvas) {
     const fakeMgraph = { canvas }

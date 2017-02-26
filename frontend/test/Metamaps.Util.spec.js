@@ -113,9 +113,15 @@ describe('Metamaps.Util.js', function() {
       expect(Util.mdToHTML(md).trim()).to.equal(html)
     })
 
-    it('links and images', function() {
-      const md = '[Link](https://metamaps.cc) ![Image](https://example.org/image.png)'
-      const html = '<p><a href="https://metamaps.cc">Link</a> <img src="https://example.org/image.png" alt="Image" /></p>'
+    it('links', function() {
+      const md = '[Link](https://metamaps.cc)'
+      const html = '<p><a href="https://metamaps.cc">Link</a></p>'
+      expect(Util.mdToHTML(md).trim()).to.equal(html)
+    })
+
+    it('images are not rendered', function() {
+      const md = '![Image](https://example.org/image.png)'
+      const html = '<p>![Image](https://example.org/image.png)</p>'
       expect(Util.mdToHTML(md).trim()).to.equal(html)
     })
   })

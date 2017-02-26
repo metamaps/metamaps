@@ -7,7 +7,7 @@
   <script type="text/template" id="mapInfoBoxTemplate">
     <div class="requestTitle">Click here to name this map</div>
     <div class="mapInfoName" id="mapInfoName">{{{name}}}</div>
-  
+
     <div class="mapInfoStat">
       <div class="infoStatIcon mapContributors hoverForTip">
         <img id="mapContribs" class="{{contributors_class}}"
@@ -29,7 +29,7 @@
     <div class="mapInfoDesc" id="mapInfoDesc">
       {{{desc}}}
     </div>
-  
+
     <div class="mapInfoMeta">
       <p class="mapCreatedAt"><span>Created by:</span> {{user_name}} on {{created_at}}</p>
       <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
@@ -50,7 +50,7 @@
       </div>
     </div>
   </script>
-        
+
   <script type="text/template" id="topicSearchTemplate">
     <div class="result{{rtype}}">
       <div class="topicMetacode searchResIconWrapper">
@@ -100,7 +100,7 @@
         </div>
         <div class="mapContributorsIcon hoverForTip">
           <img id="mapContribs" width="25" height="25" src="{{mapContributorImage}}" />
-          <div class="tip"> 
+          <div class="tip">
             <ul>
               {{{contributorTip}}}
             </ul>
@@ -177,74 +177,6 @@
           <span class="tooltips topicOriginator">{{originator}}</span>
         </div>
         <div class="topicPermission {{permission}}"></div>
-      </div>
-      <div class="clearfloat"></div>
-    </div>
-  </script>
-
-  <script type="text/template" id="topicCardTemplate">
-    <div class="CardOnGraph {{hasAttachment}}" id="topic_{{id}}">
-      <span class="title"> 
-        <div class="titleWrapper" id="titleActivator">      
-          <span class="best_in_place best_in_place_name"                      
-            data-bip-url="/topics/{{id}}"                                     
-            data-bip-object="topic"                                           
-            data-bip-attribute="name"
-            data-bip-activator="#titleActivator"           
-            data-bip-value="{{name}}"
-            data-bip-type="textarea"
-          >
-            {{name}}
-          </span>
-        </div> 
-      </span>
-      <div class="links">
-        <div class="linkItem icon">
-          <div class="metacodeTitle {{metacode_class}}">
-            {{metacode}}
-            <div class="expandMetacodeSelect"></div>
-          </div>
-          <div class="metacodeImage" style="background-image:url({{imgsrc}});" title="click and drag to move card"></div>
-          <div class="metacodeSelect">{{{metacode_select}}}</div>
-        </div>
-        <div class="linkItem contributor">
-          <a href="/explore/mapper/{{userid}}" target="_blank"><img src="<%= asset_path('user.png') %>" class="contributorIcon" width="32" height="32" /></a>
-          <div class="contributorName">{{username}}</div>
-        </div>
-        <div class="linkItem mapCount">
-          <div class="mapCountIcon"></div>
-          {{map_count}}
-          <div class ="hoverTip">Click to see which maps topic appears on</div>
-          <div class="tip"><ul>{{{inmaps}}}</ul></div>
-        </div>
-        <a href="/topics/{{id}}" target="_blank" class="linkItem synapseCount">
-          <div class="synapseCountIcon"></div>
-          {{synapse_count}}
-          <div class="tip">Click to see this topics synapses</div>
-        </a>
-        <div class="linkItem mapPerm {{mk_permission}}" title="{{permission}}"></div>
-        <div class="clearfloat"></div>
-      </div>
-      <div class="scroll">
-        <div class="desc">
-          <span class="best_in_place best_in_place_desc"
-                data-bip-url="/topics/{{id}}"
-                data-bip-object="topic"
-                data-bip-nil="{{desc_nil}}"
-                data-bip-attribute="desc"
-                data-bip-type="textarea"
-                data-bip-value="{{desc_markdown}}"
-          >
-            {{{desc_html}}}
-          </span>
-          <div class="clearfloat"></div>
-        </div>
-      </div>
-      <div class="embeds">
-        {{{embeds}}}
-      </div>
-      <div class="attachments {{attachmentsHidden}}">
-        {{{attachments}}}
       </div>
       <div class="clearfloat"></div>
     </div>

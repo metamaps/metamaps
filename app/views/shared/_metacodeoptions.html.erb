@@ -3,61 +3,7 @@
   # this code generates the list of icons that will drop down in the metacode select list on the topic card
   #%>
   
-<div id="metacodeOptions">
-<ul>
-  <li>
-    <span>Recently Used</span>
-    <div class="expandMetacodeSet"></div>
-    <ul>
-    	<% user_recent_metacodes().each do |m| %>
-		  <li data-id="<%= m.id.to_s %>">
-		    <img width="24" height="24" src="<%= asset_path m.icon %>" alt="<%= m.name %>" />
-		    <div class="mSelectName"><%= m.name %></div>
-		    <div class="clearfloat"></div>
-		  </li>
-		<% end %>
-    </ul>
-  </li>
-  <li>
-    <span>Most Used</span>
-    <div class="expandMetacodeSet"></div>
-    <ul>
-    	<% user_most_used_metacodes().each do |m| %>
-		  <li data-id="<%= m.id.to_s %>">
-		    <img width="24" height="24" src="<%= asset_path m.icon %>" alt="<%= m.name %>" />
-		    <div class="mSelectName"><%= m.name %></div>
-		    <div class="clearfloat"></div>
-		  </li>
-		<% end %>
-    </ul>
-  </li>
-  <% MetacodeSet.order("name").all.each do |set| %>
-  <li>
-    <span><%= set.name %></span>
-    <div class="expandMetacodeSet"></div>
-    <ul>
-    	<% set.metacodes.sort { |a, b| a.name <=> b.name }.each do |m| %>
-		  <li data-id="<%= m.id.to_s %>">
-		    <img width="24" height="24" src="<%= asset_path m.icon %>" alt="<%= m.name %>" />
-		    <div class="mSelectName"><%= m.name %></div>
-		    <div class="clearfloat"></div>
-		  </li>
-		<% end %>
-    </ul>
-  </li>
-  <% end %>
-  <li>
-  	<span>All</span>
-    <div class="expandMetacodeSet"></div>
-  	<ul>
-  		<% Metacode.order("name").all.each do |m| %>
-		  <li data-id="<%= m.id.to_s %>">
-		    <img width="24" height="24" src="<%= asset_path m.icon %>" alt="<%= m.name %>" />
-		    <div class="mSelectName"><%= m.name %></div>
-		    <div class="clearfloat"></div>
-		  </li>
-		<% end %>
-  	</ul>
-  </li>
-</ul>
-</div>
+<script>
+  Metamaps.ServerData = Metamaps.ServerData || {}
+  Metamaps.ServerData.metacodeSets = <%= raw metacode_sets_json %>
+</script>

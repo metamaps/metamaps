@@ -4,7 +4,7 @@ try { Backbone.$ = window.$ } catch (err) {}
 
 import Active from '../Active'
 import Filter from '../Filter'
-import TopicCard from '../TopicCard'
+import TopicCard from '../Views/TopicCard'
 import Visualize from '../Visualize'
 
 import DataModel from './index'

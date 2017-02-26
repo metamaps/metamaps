@@ -9,7 +9,7 @@ import DataModel from './DataModel'
 import JIT from './JIT'
 import Loading from './Loading'
 import Router from './Router'
-import TopicCard from './TopicCard'
+import TopicCard from './Views/TopicCard'
 
 const Visualize = {
   mGraph: null, // a reference to the graph object.
