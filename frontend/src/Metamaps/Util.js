@@ -201,6 +201,34 @@ const Util = {
   },
   isTester: function(currentUser) {
     return ['connorturland@gmail.com', 'devin@callysto.com', 'chessscholar@gmail.com', 'solaureum@gmail.com', 'ishanshapiro@gmail.com'].indexOf(currentUser.get('email')) > -1
+  },
+  zoomOnPoint: function(graph, ans, zoomPoint) {
+    var s = graph.canvas.getSize(),
+          p = graph.canvas.getPos(),
+          ox = graph.canvas.translateOffsetX,
+          oy = graph.canvas.translateOffsetY,
+          sx = graph.canvas.scaleOffsetX,
+          sy = graph.canvas.scaleOffsetY;
+	    
+      var pointerCoordX = (zoomPoint.x - p.x - s.width / 2 - ox) * (1 / sx),
+          pointerCoordY = (zoomPoint.y - p.y - s.height / 2 - oy) * (1 / sy);
+
+      //This translates the canvas to be centred over the zoomPoint, then the canvas is zoomed as intended.
+      graph.canvas.translate(-pointerCoordX,-pointerCoordY);
+      graph.canvas.scale(ans, ans);
+      
+      //Get the canvas attributes again now that is has changed
+      s = graph.canvas.getSize(),
+      p = graph.canvas.getPos(),
+      ox = graph.canvas.translateOffsetX,
+      oy = graph.canvas.translateOffsetY,
+      sx = graph.canvas.scaleOffsetX,
+      sy = graph.canvas.scaleOffsetY;
+      var newX = (zoomPoint.x - p.x - s.width / 2 - ox) * (1 / sx),
+          newY = (zoomPoint.y - p.y - s.height / 2 - oy) * (1 / sy);
+          
+      //Translate the canvas to put the pointer back over top the same coordinate it was over before
+      graph.canvas.translate(newX-pointerCoordX,newY-pointerCoordY);
   }
 }
 

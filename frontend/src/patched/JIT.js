@@ -449,7 +449,7 @@ $.event = {
   isRightClick: function(e) {
     return (e.which == 3 || e.button == 2);
   },
-  getPos: function(e, win) {
+  getPos: function(e, win, touchIndex) {
     // get mouse position
     win = win || window;
     e = e || win.event;
@@ -457,7 +457,7 @@ $.event = {
     doc = doc.documentElement || doc.body;
     //TODO(nico): make touch event handling better
     if(e.touches && e.touches.length) {
-      e = e.touches[0];
+      e = e.touches[touchIndex || 0];
     }
     var page = {
       x: e.pageX || (e.clientX + doc.scrollLeft),
@@ -2469,33 +2469,7 @@ Extras.Classes.Navigation = new Class({
         
     // START METAMAPS CODE
 	  if (((ans > 1) && (5 >= this.canvas.scaleOffsetX)) || ((ans < 1) && (this.canvas.scaleOffsetX >= 0.2))) {
-	    var s = this.canvas.getSize(),
-          p = this.canvas.getPos(),
-          ox = this.canvas.translateOffsetX,
-          oy = this.canvas.translateOffsetY,
-          sx = this.canvas.scaleOffsetX,
-          sy = this.canvas.scaleOffsetY;
-	    
-	    //Basically this is just a duplication of the Util function pixelsToCoords, it finds the canvas coordinate of the mouse pointer
-      var pointerCoordX = (e.pageX - p.x - s.width / 2 - ox) * (1 / sx),
-          pointerCoordY = (e.pageY - p.y - s.height / 2 - oy) * (1 / sy);
-
-      //This translates the canvas to be centred over the mouse pointer, then the canvas is zoomed as intended.
-      this.canvas.translate(-pointerCoordX,-pointerCoordY);
-      this.canvas.scale(ans, ans);
-      
-      //Get the canvas attributes again now that is has changed
-      s = this.canvas.getSize(),
-      p = this.canvas.getPos(),
-      ox = this.canvas.translateOffsetX,
-      oy = this.canvas.translateOffsetY,
-      sx = this.canvas.scaleOffsetX,
-      sy = this.canvas.scaleOffsetY;
-      var newX = (e.pageX - p.x - s.width / 2 - ox) * (1 / sx),
-          newY = (e.pageY - p.y - s.height / 2 - oy) * (1 / sy);
-          
-      //Translate the canvas to put the pointer back over top the same coordinate it was over before
-      this.canvas.translate(newX-pointerCoordX,newY-pointerCoordY);
+	    Metamaps.Util.zoomOnPoint(this, ans, {x: e.pageX, y: e.pageY})
 	  }
 	  
     // END METAMAPS CODE
@@ -2620,109 +2594,129 @@ Extras.Classes.Navigation = new Class({
     Metamaps.Mouse.changeInY = 0;
     if((this.config.panning == 'avoid nodes' && eventInfo.getNode()) || eventInfo.getEdge()) return;
     this.pressed = true;
-    var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey); 
-    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
-      Metamaps.Mouse.boxStartCoordinates = eventInfo.getPos();
-    }
     Metamaps.Mouse.didPan = false;
-    this.pos = eventInfo.getPos();
+
     var canvas = this.canvas,
         ox = canvas.translateOffsetX,
         oy = canvas.translateOffsetY,
         sx = canvas.scaleOffsetX,
         sy = canvas.scaleOffsetY;
-    this.pos.x *= sx;
-    this.pos.x += ox;
-    this.pos.y *= sy;
-    this.pos.y += oy;
+
+    if (e.touches.length === 1) {
+      this.pos = eventInfo.getPos();
+    } else if (e.touches.length === 2) {
+      var s = canvas.getSize(),
+          pos1 = $.event.getPos(e, win, 0),
+          pos2 = $.event.getPos(e, win, 1),
+          touch1 = {
+            x: (pos1.x - s.width/2 - ox) * 1/sx,
+            y: (pos1.y - s.height/2 - oy) * 1/sy
+          },
+          touch2 = {
+            x: (pos2.x - s.width/2 - ox) * 1/sx,
+            y: (pos2.y - s.height/2 - oy) * 1/sy
+          };
+      this.pos = {
+        x: (touch1.x + touch2.x) / 2,
+        y: (touch1.y + touch2.y) / 2
+      }
+      this.unitRadius = Metamaps.Util.getDistance(touch1, touch2) / 2
+    }
+    if (e.touches.length === 1 || e.touches.length === 2) {
+      this.pos.x *= sx;
+      this.pos.x += ox;
+      this.pos.y *= sy;
+      this.pos.y += oy;
+    }
   },
   
   onTouchMove: function(e, win, eventInfo) {
+    e.preventDefault()
     if(!this.config.panning) return;
     if(!this.pressed) return;
-    if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
     
+    var canvas = this.canvas,
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY,
+        beforePos = this.pos,
+        currentPos,
+        touch1,
+        touch2;
+
     if (e.touches.length == 1) {
-      var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey);
-      if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
-        Metamaps.Visualize.mGraph.busy = true;
-        Metamaps.boxStartCoordinates = eventInfo.getPos();
-        return;
+      currentPos = eventInfo.getPos()
+    } else if (e.touches.length >= 2) {
+      var s = canvas.getSize(),
+          pos1 = $.event.getPos(e, win, 0),
+          pos2 = $.event.getPos(e, win, 1),
+          touch1 = {
+            x: (pos1.x - s.width/2 - ox) * 1/sx,
+            y: (pos1.y - s.height/2 - oy) * 1/sy
+          },
+          touch2 = {
+            x: (pos2.x - s.width/2 - ox) * 1/sx,
+            y: (pos2.y - s.height/2 - oy) * 1/sy
+          };
+      currentPos = {
+        x: (touch1.x + touch2.x) / 2,
+        y: (touch1.y + touch2.y) / 2
       }
-      if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
-        Metamaps.Visualize.mGraph.busy = true;
-        Metamaps.JIT.drawSelectBox(eventInfo,e);
-        return;
-      }
-      if (rightClick){
-        return;
-      }
-      if (e.target.id != 'infovis-canvas') { 
-        this.pressed = false;
-        return;
-      }
-      Metamaps.Mouse.didPan = true;
-      var thispos = this.pos, 
-          currentPos = eventInfo.getPos(),
-          canvas = this.canvas,
-          ox = canvas.translateOffsetX,
-          oy = canvas.translateOffsetY,
-          sx = canvas.scaleOffsetX,
-          sy = canvas.scaleOffsetY;
-      currentPos.x *= sx;
-      currentPos.y *= sy;
-      currentPos.x += ox;
-      currentPos.y += oy;
-      var x = currentPos.x - thispos.x,
-          y = currentPos.y - thispos.y;
-      Metamaps.Mouse.changeInX = x;
-      Metamaps.Mouse.changeInY = y;
-      this.pos = currentPos;
-      this.canvas.translate(x * 1/sx, y * 1/sy);
-      jQuery(document).trigger(Metamaps.JIT.events.pan);
-    } 
-    /*
-    else if (e.touches.length == 2) {
-      var touch1 = e.touches[0]
-      var touch2 = e.touches[1]
-      var canvas = this.canvas
-      
-      callCount++;
-
-      var dist = Metamaps.Util.getDistance({
-        x: touch1.clientX,
-        y: touch1.clientY
+    }
+    currentPos.x *= sx;
+    currentPos.y *= sy;
+    currentPos.x += ox;
+    currentPos.y += oy;
+    Metamaps.Mouse.didPan = true;
+    var x = currentPos.x - beforePos.x,
+        y = currentPos.y - beforePos.y;
+    Metamaps.Mouse.changeInX = x;
+    Metamaps.Mouse.changeInY = y;
+    this.pos = currentPos;
+    canvas.translate(x * 1/sx, y * 1/sy);
+    jQuery(document).trigger(Metamaps.JIT.events.pan);
+    
+    if (e.touches.length >= 2) {
+      var currentPixelRadius = Metamaps.Util.getDistance({
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY
       }, {
-        x: touch2.clientX,
-        y: touch2.clientY
-      })
-
-      if (!this.initDist) {
-        this.initDist = dist
-        this.initScale = canvas.scaleOffsetX
+        x: e.touches[1].clientX,
+        y: e.touches[1].clientY
+      }) / 2
+      var desiredScale = currentPixelRadius / this.unitRadius
+      var scaler = desiredScale / sx
+      var midpoint = {
+        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        y: (e.touches[0].clientY + e.touches[1].clientY) / 2
       }
-      var scale = (dist / this.initDist)
-      
-      document.getElementById("header_content").innerHTML = scale + ' ' + canvas.scaleOffsetX
-      if (30 >= this.initScale * scale && this.initScale * scale >= 0.2) {
-        canvas.scale(this.initScale * scale, this.initScale * scale)
+      if (30 >= desiredScale && desiredScale >= 0.2) {
+        //canvas.scale(scaler, scaler)
+        Metamaps.Util.zoomOnPoint(this, scaler, midpoint)
       }
-      if (canvas.scaleOffsetX < 0.5) {
-        canvas.viz.labels.hideLabels(true)
-      } else if (canvas.scaleOffsetX > 0.5) {
-        canvas.viz.labels.hideLabels(false)
-      }
-      
       jQuery(document).trigger(Metamaps.JIT.events.zoom);
     }
-    */
   },
   
   onTouchEnd: function(e, win, eventInfo, isRightClick) {
     if(!this.config.panning) return;
     this.pressed = false;
-    if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
-    this.initDist = false
+    if (e.touches.length === 1) {
+      var canvas = this.canvas,
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY
+        s = canvas.getSize();
+      this.pos = {
+        x: (e.touches[0].clientX - s.width/2 - ox) * 1/sx,
+        y: (e.touches[0].clientY - s.height/2 - oy) * 1/sy
+      };
+    } else if (e.touches.length === 0) {
+      this.pos = null
+      if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
+    }
   }
   // END METAMAPS CODE
 });
