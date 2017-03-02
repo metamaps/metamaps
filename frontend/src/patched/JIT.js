@@ -2692,28 +2692,31 @@ Extras.Classes.Navigation = new Class({
         y: (e.touches[0].clientY + e.touches[1].clientY) / 2
       }
       if (30 >= desiredScale && desiredScale >= 0.2) {
-        //canvas.scale(scaler, scaler)
         Metamaps.Util.zoomOnPoint(this, scaler, midpoint)
+        jQuery(document).trigger(Metamaps.JIT.events.zoom)
       }
-      jQuery(document).trigger(Metamaps.JIT.events.zoom);
     }
   },
   
   onTouchEnd: function(e, win, eventInfo, isRightClick) {
     if(!this.config.panning) return;
-    this.pressed = false;
     if (e.touches.length === 1) {
       var canvas = this.canvas,
         ox = canvas.translateOffsetX,
         oy = canvas.translateOffsetY,
         sx = canvas.scaleOffsetX,
-        sy = canvas.scaleOffsetY
+        sy = canvas.scaleOffsetY,
         s = canvas.getSize();
       this.pos = {
         x: (e.touches[0].clientX - s.width/2 - ox) * 1/sx,
         y: (e.touches[0].clientY - s.height/2 - oy) * 1/sy
       };
+      this.pos.x *= sx;
+      this.pos.x += ox;
+      this.pos.y *= sy;
+      this.pos.y += oy;
     } else if (e.touches.length === 0) {
+      this.pressed = false;
       this.pos = null
       if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
     }
