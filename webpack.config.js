@@ -5,8 +5,12 @@ const NODE_ENV = process.env.NODE_ENV || 'development'
 const plugins = [
   new webpack.DefinePlugin({
     "process.env.NODE_ENV": `"${NODE_ENV}"`
-  })
+  }),
+  new webpack.IgnorePlugin(/^mock-firmata$/), // work around bindings.js error
+  new webpack.ContextReplacementPlugin(/bindings$/, /^$/) // work around bindings.js error
 ]
+const externals = ["bindings"] // work around bindings.js error
+
 if (NODE_ENV === 'production') {
   plugins.push(new webpack.optimize.DedupePlugin())
   plugins.push(new webpack.optimize.UglifyJsPlugin({
@@ -26,12 +30,13 @@ const devtool = NODE_ENV === 'production' ? undefined : 'cheap-module-eval-sourc
 module.exports = {
   context: __dirname,
   plugins,
+  externals,
   devtool,
   module: {
-    preLoaders: [
-      { test: /\.json$/, loader: 'json' }
-    ],
     loaders: [
+      {
+        test: /\.json$/, loader: 'json-loader'
+      },
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,

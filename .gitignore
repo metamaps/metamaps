@@ -22,6 +22,7 @@ app/assets/javascripts/webpacked
 # Ignore all logfiles and tempfiles.
 log/*.log
 tmp
+.tmp
 
 coverage
 
