@@ -12,7 +12,6 @@ const plugins = [
 const externals = ["bindings"] // work around bindings.js error
 
 if (NODE_ENV === 'production') {
-  plugins.push(new webpack.optimize.DedupePlugin())
   plugins.push(new webpack.optimize.UglifyJsPlugin({
     compress: { warnings: false }
   }))
