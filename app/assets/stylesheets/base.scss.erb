@@ -6,6 +6,11 @@
   font-family: helvetica;
   color: #727272;
   line-height: 11px;
+  display: none;
+}
+
+.riek-editing + .nameCounter {
+  display: block;
 }
 
 .nameCounter.forMap {
@@ -14,14 +19,14 @@
 }
 
 .nameCounter.forTopic {
-  
+
 }
 
 #center-container {
   position:relative;
 	height:100%;
 	width:100%;
-  
+
   /* background-color:#031924; */
   color:#444;
 }
@@ -85,6 +90,11 @@
   display: table-cell;
   vertical-align: middle;
   padding: 0 16px;
+
+  &.riek-editing {
+    position: absolute;
+    top: 32px;
+  }
 }
 .canEdit #titleActivator:hover {
   background-image: url(<%= asset_data_uri('edit.png') %>);
@@ -93,12 +103,12 @@
   cursor: text;
 }
 
-.showcard .best_in_place_name textarea, .showcard .best_in_place_name input {
+.showcard .title .riek-editing {
   font-family: 'din-regular', sans-serif;
   color: #424242;
   font-size: 18px;
   line-height: 22px;
-  height: 15px;
+  height: 3em;
   padding: 5px 0;
   width: 100%;
   margin: 0;
@@ -122,7 +132,7 @@
   height: auto;
 }
 
-.CardOnGraph .best_in_place_desc textarea {
+.CardOnGraph .desc .riek-editing {
   font-size: 13px;
   line-height:15px;
   font-family: helvetica, sans-serif;
@@ -167,13 +177,14 @@
  * End Markdown styling
  */
 
-.CardOnGraph .best_in_place_desc {
+.CardOnGraph .riek_desc {
   display:block;
-  margin-top:2px;	
+  margin-top:2px;
   padding-right: 18px;
   margin-right: 8px;
+  min-height: 7em;
 }
-.canEdit .CardOnGraph .best_in_place_desc:hover {
+.canEdit .CardOnGraph .riek_desc:hover {
   background-image: url(<%= asset_data_uri('edit.png') %>);
   background-position: top right;
   background-repeat: no-repeat;
@@ -185,221 +196,224 @@
 }
 
 .CardOnGraph .links {
-  position:relative;
+  position: relative;
   border-bottom: 1px solid #BDBDBD;
   border-top: 1px solid #BDBDBD;
   background-color: #e0e0e0;
-}
 
-.linkItem {
-  float:left;
-  height:46px;
-  z-index: 1;
-  position: relative;
-  color: #424242;
-  font-size: 14px;
-  line-height:14px;
-  height:12px;
-  padding:17px 0;
-}
-.linkItem a {
-  color: #424242;
-}
+  .linkItem {
+    float: left;
+    z-index: 1;
+    position: relative;
+    color: #424242;
+    font-size: 14px;
+    line-height: 14px;
 
-.CardOnGraph .icon {
-  position:absolute;
-  width:100%;
-  z-index:1;
-  padding: 0;
-  height: 48px;
-}
-.linkItem.contributor {
-  margin-left:40px;
-  z-index:1;
-  padding:17px 16px 17px 30px;
-  position: relative;
-}
-.contributor .contributorIcon {
-  position: absolute;
-  top: 8px;
-  left: 0;
-  border-radius: 16px;
-}
+    a {
+      color: #424242;
+    }
+  }
 
-.contributor:hover .contributorName {
-  display: block;
-}
+  .icon {
+    position: absolute;
+    z-index: 1;
+    padding: 0;
+    height: 48px;
+    width: 100%;
 
-.contributorName {
-  display: none;
-  position: absolute;
-  background: black;
-  text-align: center;
-  color: white;
-  border-radius: 2px;
-  font-family: din-regular;
-  line-height: 15px;
-  font-size: 12px;
-  padding: 3px 5px 2px;
-  white-space: nowrap;
-  margin-top: 36px;
-  margin-left: -32px;
-}
+    .metacodeImage {
+      cursor: move;
+      position: relative;
+      left: -23px;
+      top: 1px;
+      width: 46px;
+      height: 46px;
+      background-size:46px 46px;
+      background-position:0 0;
+      background-repeat:no-repeat;
+    }
+  }
+  
+  .contributor {
+    bottom: 7px;
+    margin-left: 40px;
 
-.contributor div:before {
-  content: '';
-  position: absolute;
-  top: 128%;
-  left: 13px;
-  margin-top: -30px;
-  width: 0;
-  height: 0;
-  border-bottom: 4px solid #000000;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-}
+    .contributorIcon {
+      position: relative;
+      vertical-align: middle;
+      border-radius: 16px;
+      margin: 5px;
+      top: 8px;
+      left: 0;
+      border-radius: 16px;
+    }
 
-.linkItem.mapCount {
-  margin-left: 12px;
-  width: 24px;
-  padding:17px 0 17px 36px;
-}
-.linkItem.mapCount .mapCountIcon {
-  position: absolute;
-  top: 8px;
-  left: 0;
-  width: 32px;
-  height: 32px;
-  background-image: url(<%= asset_data_uri('map32_sprite.png') %>);
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  cursor: pointer;
-}
-.linkItem.mapCount:hover .mapCountIcon {
-  background-position: 0 -32px;
-}
+    span {
+      font-family: 'din-regular', sans-serif;
+      font-size: 14px;
+    }
 
-.linkItem.mapCount:hover .hoverTip {
-  display: block;
-}
-.CardOnGraph .mapCount .tip, .CardonGraph .mapCount .hoverTip {
-  top: 44px;
-  left: 0px;
-  font-size: 12px !important;
-}
+    .contributorName {
+      display: none;
+      position: absolute;
+      background: black;
+      text-align: center;
+      color: white;
+      border-radius: 2px;
+      font-family: din-regular;
+      line-height: 15px;
+      font-size: 12px;
+      padding: 3px 5px 2px;
+      white-space: nowrap;
+      margin-top: 8px;
 
-.hoverTip {
-  white-space: nowrap;
-  font-family: 'din-regular';
-  top: 44px;
-  left: 0px;
-  font-size: 12px !important;
-  display: none;
-  position: absolute;
-  background: black;
-  color: white;
-  border-radius: 4px;
-  line-height: 17px;
-  padding: 3px 5px 2px;
-  z-index: 100;
-}
+      &:before {
+        content: '';
+        position: absolute;
+        top: 26px;
+        left: 10px;
+        margin-top: -30px;
+        width: 0;
+        height: 0;
+        border-bottom: 4px solid #000000;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+      }
+    }
 
+    &:hover .contributorName {
+      display: block;
+    }
+  }
 
-.CardOnGraph .mapCount .tip:before, .CardOnGraph .mapCount .hoverTip:before {
-  content: '';
-  position: absolute;
-  top: 26px;
-  left: 10px;
-  margin-top: -30px;
-  width: 0;
-  height: 0;
-  border-bottom: 4px solid #000000;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-}
+  .mapCount {
+    padding:17px 0 17px 36px;
+    margin-left: 12px;
 
-.CardOnGraph .mapCount .tip li {
-  list-style-type: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 6px 10px;
-  display: block;
-  height: 14px;
-  font-family: 'din-regular', helvetica, sans-serif;
-  font-size: 14px;
-  line-height: 14px;
-  position: relative;
-}
+    .mapCountIcon {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      background-image: url(<%= asset_data_uri('map32_sprite.png') %>);
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      cursor: pointer;
+    }
 
-.CardOnGraph .mapCount li.hideExtra {
-  display: none;
+    &:hover .mapCountIcon {
+      background-position: 0 -32px;
+    }
+
+    .tip, .hoverTip {
+      top: 44px;
+      left: 0px;
+      font-size: 12px !important;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 26px;
+        left: 10px;
+        margin-top: -30px;
+        width: 0;
+        height: 0;
+        border-bottom: 4px solid #000000;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+      }
+    }
+
+    .hoverTip {
+      white-space: nowrap;
+      font-family: 'din-regular';
+      top: 44px;
+      left: 0px;
+      font-size: 12px !important;
+      position: absolute;
+      background: black;
+      color: white;
+      border-radius: 4px;
+      line-height: 17px;
+      padding: 3px 5px 2px;
+      z-index: 100;
+    }
+
+    .tip a {
+      color: white;
+    }
+
+    .tip a:hover {
+      color: #757575;
+    }
+
+    .tip li {
+      list-style-type: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 6px 10px;
+      display: block;
+      height: 14px;
+      font-family: 'din-regular', helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 14px;
+      position: relative;
+    }
+  }
+
+  .synapseCount {
+    margin-left: 26px;
+    width: 24px;
+    padding:17px 0 17px 32px;
+
+    .synapseCountIcon {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      background-image: url(<%= asset_data_uri('synapse32_sprite.png') %>);
+      background-repeat: no-repeat;
+      background-position: 0 0;
+    }
+    hover .synapseCountIcon {
+      background-position: 0 -32px;
+    }
+    .tip {
+      position: absolute;
+      background: black;
+      width: auto;
+      top: 44px;
+      color: white;
+      white-space: nowrap;
+      border-radius: 2px;
+      font-size: 12px !important;
+      font-family: 'din-regular';
+      line-height: 12px;
+      padding: 4px 4px 4px;
+      z-index: 100;
+    }
+
+    .tip:before {
+      content: '';
+      position: absolute;
+      margin-top: -8px;
+      margin-left: 6px;
+      width: 0;
+      height: 0;
+      border-bottom: 4px solid black;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+    }
+  }
 }
 
 .showMore {
   cursor: pointer;
   color: #4FC059;
 }
-
-.mapCount .tip a {
-  color: white;
-}
-
-.mapCount .tip a:hover {
-  color: #757575;
-}
-
-
-.linkItem.synapseCount {
-  margin-left: 2px;
-  width: 24px;
-  padding:17px 0 17px 32px;
-}
-.linkItem.synapseCount .synapseCountIcon {
-  position: absolute;
-  top: 8px;
-  left: 0;
-  width: 32px;
-  height: 32px;
-  background-image: url(<%= asset_data_uri('synapse32_sprite.png') %>);
-  background-repeat: no-repeat;
-  background-position: 0 0;
-}
-.linkItem.synapseCount:hover .synapseCountIcon {
-  background-position: 0 -32px;
-}
-
-.CardOnGraph .synapseCount .tip {
-  position: absolute;
-  background: black;
-  width: auto;
-  top: 44px;
-  color: white;
-  white-space: nowrap;
-  border-radius: 2px;
-  font-size: 12px !important;
-  font-family: 'din-regular';
-  line-height: 12px;
-  padding: 4px 4px 4px;
-  z-index: 100;
-}
-
-.CardOnGraph .synapseCount:hover .tip {
-  display: block;
-}
-
-.CardOnGraph .synapseCount .tip:before {
-  content: '';
-  position: absolute;
-  margin-top: -8px;
-  margin-left: 6px;
-  width: 0;
-  height: 0;
-  border-bottom: 4px solid black;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-}
-
 
 .mapPerm {
   width: 32px;
@@ -470,7 +484,7 @@ cursor: pointer;
   text-transform: uppercase;
   position: absolute;
   line-height: 24px;
-  height:24px;
+  height: 26px;
   font-size: 24px;
   display: none;
   width: 90%;
@@ -493,35 +507,25 @@ cursor: pointer;
   background-position: 0 -32px;
 }
 .permission.canEdit .minimize .expandMetacodeSelect {
-  
+
 }
 
-.CardOnGraph .metacodeImage {
-  cursor:move;
-  width:46px;
-  height:46px;
-  position:absolute;
-  left:-23px;
-  top:0;
-  background-size:46px 46px;
-  background-position:0 0;
-  background-repeat:no-repeat;
+.CardOnGraph .metacodeName {
+  display: inline-block;
 }
 
-#metacodeOptions {
-  display:none;
-}
 .CardOnGraph .metacodeSelect {
   display:none;
   width:auto;
   z-index: 2;
-  position: absolute;
   background: #EAEAEA;
-  left: 300px;
   white-space: nowrap;
+  position: absolute;
+  left: 300px;
+  top: -1px;
 }
 .CardOnGraph .metacodeSelect ul {
-  position: relative; 
+  position: relative;
   line-height: 14px;
   font-size: 14px;
   font-family: helvetica, sans-serif;
@@ -610,7 +614,6 @@ background-color: #E0E0E0;
   display:block;
 }
 .CardOnGraph .tip {
- display:none;
  position: absolute;
  background: black;
  top: 35px;
@@ -623,26 +626,24 @@ background-color: #E0E0E0;
  z-index:100;
 }
 
-#embedlyLink {
-  display: none;
-}
 #embedlyLinkLoader {
   margin: 0 auto;
   width: 28px;
 }
 
-.CardOnGraph .attachments {
-  border-top: 1px solid #BDBDBD;
+.CardOnGraph .link-adder {
   width:100%;
   height:47px;
+  position: relative;
+  border-top: 1px solid #BDBDBD;
 }
 
-.attachments a {
+.link-adder a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  margin-left: 40px; 
+  margin-left: 40px;
   padding-top:9px;
   font-size: 16px;
   line-height: 16px;
@@ -652,7 +653,7 @@ background-color: #E0E0E0;
   display: inline-block;
   width: 102px;
   height: 12px;
-  text-align: left; 
+  text-align: left;
   padding: 18px 0 18px 48px;
   font-size: 12px;
   color: #9e9e9e;
@@ -752,7 +753,6 @@ font-family: 'din-regular', helvetica, sans-serif;
   -moz-border-radius-bottomright: 8px;
   -webkit-border-bottom-right-radius: 8px;
   border-bottom-right-radius: 8px;
-  display: none;
   margin: 8px;
 }
 
@@ -839,10 +839,10 @@ font-family: 'din-regular', helvetica, sans-serif;
   line-height: 16px;
 }
 
-.canEdit #edit_synapse_desc:hover {
+.canEdit span.titleWrapper:hover {
   background-image: url(<%= asset_data_uri('edit.png') %>);
   background-repeat: no-repeat;
-  background-position: 164px center;
+  background-position: 95% 95%;
   cursor: text;
 }
 
@@ -950,11 +950,11 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 #edit_synapse_right {
   background-image: url(<%= asset_data_uri('synapsedirectionright_sprite.png') %>);
-  right: 16px; 
+  right: 16px;
 }
 #edit_synapse_left {
   background-image: url(<%= asset_data_uri('synapsedirectionleft_sprite.png') %>);
-  right: 56px; 
+  right: 56px;
 }
 #edit_synapse_left.checked, #edit_synapse_right.checked {
   background-position: 0 -48px;

@@ -16,7 +16,7 @@ import Realtime from '../Realtime'
 import Router from '../Router'
 import Selected from '../Selected'
 import SynapseCard from '../SynapseCard'
-import TopicCard from '../TopicCard'
+import TopicCard from '../Views/TopicCard'
 import Visualize from '../Visualize'
 
 import CheatSheet from './CheatSheet'

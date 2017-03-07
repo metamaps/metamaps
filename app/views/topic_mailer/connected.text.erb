@@ -6,3 +6,5 @@
 <%= synapse.desc.length > 0 ? ' with the description' + synapse.desc : '' %>
 
 <%= topic_url(topic1) %>
+
+<%= render :partial => 'topic_mailer/unfollow', locals: { topic: topic1 } %>

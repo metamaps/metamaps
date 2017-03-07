@@ -2,8 +2,13 @@
 
 import _ from 'lodash'
 import outdent from 'outdent'
+import clipboard from 'clipboard-js'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 import $jit from '../patched/JIT'
+
+import MetacodeSelect from '../components/MetacodeSelect'
 
 import Active from './Active'
 import Control from './Control'
@@ -18,10 +23,9 @@ import Settings from './Settings'
 import Synapse from './Synapse'
 import SynapseCard from './SynapseCard'
 import Topic from './Topic'
-import TopicCard from './TopicCard'
+import TopicCard from './Views/TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
-import clipboard from 'clipboard-js'
 
 let panningInt
 
@@ -1418,9 +1422,7 @@ const JIT = {
           <div class="expandLi"></div>
         </li>`
 
-      const metacodeOptions = $('#metacodeOptions').html()
-
-      menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode' + metacodeOptions + '<div class="expandLi"></div></li>'
+      menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode<div id="metacodeOptionsWrapper"></div><div class="expandLi"></div></li>'
     }
     if (Active.Topic) {
       if (!Active.Mapper) {
@@ -1475,6 +1477,25 @@ const JIT = {
     // add the menu to the page
     $('#wrapper').append(rightclickmenu)
 
+    ReactDOM.render(
+      React.createElement(MetacodeSelect, {
+        onMetacodeSelect: metacodeId => {
+          if (Selected.Nodes.length > 1) {
+            // batch update multiple topics
+            Control.updateSelectedMetacodes(metacodeId)
+          } else {
+            const topic = DataModel.Topics.get(node.id)
+            topic.save({
+              metacode_id: metacodeId
+            })
+          }
+          $(rightclickmenu).remove()
+        },
+        metacodeSets: TopicCard.metacodeSets
+      }),
+      document.getElementById('metacodeOptionsWrapper')
+    )
+
     // attach events to clicks on the list items
 
     // delete the selected things from the database
@@ -1519,13 +1540,6 @@ const JIT = {
       $('.rightclickmenu').remove()
       // $(this).text() will be 'commons' 'public' or 'private'
       Control.updateSelectedPermissions($(this).text())
-    })
-
-    // change the metacode of all the selected nodes that you have edit permission for
-    $('.rc-metacode li li').click(function() {
-      $('.rightclickmenu').remove()
-      //
-      Control.updateSelectedMetacodes($(this).attr('data-id'))
     })
 
     // fetch relatives

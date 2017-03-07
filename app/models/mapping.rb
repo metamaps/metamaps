@@ -41,10 +41,11 @@ class Mapping < ApplicationRecord
         topic2: mappable.topic2.filtered,
         mapping_id: id
       )
-      Events::SynapseAddedToMap.publish!(mappable, map, user, nil)
+      meta = { 'mapping_id': id }
+      Events::SynapseAddedToMap.publish!(mappable, map, user, meta)
     end
   end
-  
+
   def after_created_async
     FollowService.follow(map, user, 'contributed')
   end
@@ -57,7 +58,7 @@ class Mapping < ApplicationRecord
       ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicMoved', id: mappable.id, mapping_id: id, x: xloc, y: yloc
     end
   end
-  
+
   def after_updated_async
     if (mappable_type == 'Topic') && (xloc_changed? || yloc_changed?)
       FollowService.follow(map, updated_by, 'contributed')

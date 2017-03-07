@@ -6,12 +6,12 @@ class MapMailerPreview < ActionMailer::Preview
     MapMailer.invite_to_edit(user_map)
   end
 
-  def access_request_email
+  def access_request
     request = AccessRequest.first
     MapMailer.access_request(request)
   end
 
-  def access_approved_email
+  def access_approved
     request = AccessRequest.first
     MapMailer.access_approved(request)
   end

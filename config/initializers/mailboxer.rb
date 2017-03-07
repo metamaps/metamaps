@@ -15,8 +15,6 @@ MAP_ACCESS_REQUEST  = 'ACCESS_REQUEST'
 MAP_INVITE_TO_EDIT  = 'INVITE_TO_EDIT'
 
 # these ones are new
-# this one's a catch all for occurences on the map
-# MAP_ACTIVITY = 'MAP_ACTIVITY'
 # MAP_RECEIVED_TOPIC
 # MAP_LOST_TOPIC
 # MAP_TOPIC_MOVED

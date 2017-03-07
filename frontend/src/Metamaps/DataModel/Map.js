@@ -34,6 +34,9 @@ const Map = Backbone.Model.extend({
       return false
     }
   },
+  isFollowedBy: function(mapper) {
+    return mapper.get('follows') && mapper.get('follows').maps.indexOf(this.get('id')) > -1
+  },
   getUser: function() {
     return Mapper.get(this.get('user_id'))
   },

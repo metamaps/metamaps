@@ -3,7 +3,7 @@
 <%= render :partial => 'shared/metacodeBgColors' %>
 <script type="text/javascript" charset="utf-8">
   <% if current_user %>
-    Metamaps.ServerData.ActiveMapper = <%= current_user.to_json.html_safe %>
+    Metamaps.ServerData.ActiveMapper = <%= current_user.to_json({follows: true, email: true}).html_safe %>
   <% else %>
     Metamaps.ServerData.ActiveMapper = null
   <% end %>

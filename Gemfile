@@ -51,4 +51,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rubocop'
   gem 'tunemygc'
+  gem 'faker'
+  gem 'timecop'
 end

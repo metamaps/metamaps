@@ -2,7 +2,10 @@
 class TopicsController < ApplicationController
   include TopicsHelper
 
-  before_action :require_user, only: [:create, :update, :destroy]
+  before_action :require_user, only: [:create, :update, :destroy, :follow, :unfollow]
+  before_action :set_topic, only: [:show, :update, :relative_numbers,
+                                   :relatives, :network, :destroy,
+                                   :follow, :unfollow, :unfollow_from_email]
   after_action :verify_authorized, except: :autocomplete_topic
 
   respond_to :html, :js, :json
@@ -31,9 +34,6 @@ class TopicsController < ApplicationController
 
   # GET topics/:id
   def show
-    @topic = Topic.find(params[:id])
-    authorize @topic
-
     respond_to do |format|
       format.html do
         @alltopics = [@topic].concat(policy_scope(Topic.relatives(@topic.id, current_user)).to_a)
@@ -49,9 +49,6 @@ class TopicsController < ApplicationController
 
   # GET topics/:id/network
   def network
-    @topic = Topic.find(params[:id])
-    authorize @topic
-
     @alltopics = [@topic].concat(policy_scope(Topic.relatives(@topic.id, current_user)).to_a)
     @allsynapses = policy_scope(Synapse.for_topic(@topic.id))
 
@@ -71,9 +68,6 @@ class TopicsController < ApplicationController
 
   # GET topics/:id/relative_numbers
   def relative_numbers
-    @topic = Topic.find(params[:id])
-    authorize @topic
-
     topics_already_has = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
     alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
@@ -94,9 +88,6 @@ class TopicsController < ApplicationController
 
   # GET topics/:id/relatives
   def relatives
-    @topic = Topic.find(params[:id])
-    authorize @topic
-
     topics_already_has = params[:network] ? params[:network].split(',').map(&:to_i) : []
 
     alltopics = policy_scope(Topic.relatives(@topic.id, current_user)).to_a
@@ -149,8 +140,6 @@ class TopicsController < ApplicationController
   # PUT /topics/1
   # PUT /topics/1.json
   def update
-    @topic = Topic.find(params[:id])
-    authorize @topic
     @topic.updated_by = current_user
     @topic.assign_attributes(topic_params)
 
@@ -165,8 +154,6 @@ class TopicsController < ApplicationController
 
   # DELETE topics/:id
   def destroy
-    @topic = Topic.find(params[:id])
-    authorize @topic
     @topic.updated_by = current_user
     @topic.destroy
     respond_to do |format|
@@ -174,7 +161,49 @@ class TopicsController < ApplicationController
     end
   end
 
+  # POST topics/:id/follow
+  def follow
+    follow = FollowService.follow(@topic, current_user, 'followed')
+
+    respond_to do |format|
+      format.json do
+        if follow
+          head :ok
+        else
+          head :bad_request
+        end
+      end
+    end
+  end
+
+  # POST topics/:id/unfollow
+  def unfollow
+    FollowService.unfollow(@topic, current_user)
+
+    respond_to do |format|
+      format.json do
+        head :ok
+      end
+    end
+  end
+
+  # GET topics/:id/unfollow_from_email
+  def unfollow_from_email
+    FollowService.unfollow(@topic, current_user)
+
+    respond_to do |format|
+      format.html do
+        redirect_to topic_path(@topic), notice: 'You are no longer following this topic'
+      end
+    end
+  end
+
   private
+
+  def set_topic
+    @topic = Topic.find(params[:id])
+    authorize @topic
+  end
 
   def topic_params
     params.require(:topic).permit(:id, :name, :desc, :link, :permission, :metacode_id, :defer_to_map_id)

@@ -1250,7 +1250,7 @@ h3.filterBox {
     box-shadow: 0px 3px 3px rgba(0,0,0,0.12), 0 3px 3px rgba(0,0,0,0.24);
 }
 .rightclickmenu .rc-permission:hover > ul,
-.rightclickmenu .rc-metacode:hover > ul,
+.rightclickmenu .rc-metacode:hover #metacodeOptions > ul,
  .rightclickmenu .rc-siblings:hover > ul {
     display: block;
 }
@@ -1279,7 +1279,7 @@ h3.filterBox {
 .rightclickmenu li.toPrivate .rc-perm-icon {
     background-position: -24px 0;
 }
-.rightclickmenu .rc-metacode > ul > li,
+.rightclickmenu .rc-metacode #metacodeOptions > ul > li,
 .rightclickmenu .rc-siblings > ul > li {
     padding: 6px 24px 6px 8px;
     white-space: nowrap;
@@ -2311,6 +2311,9 @@ and it won't be important on password protected instances */
 }
 /* switch metacode set */
 
+#switchMetacodes > p {
+    margin: 16px 0 16px 0;
+}
 #metacodeSwitchTabs {
     width: 100%;
     font-size: 17px;
@@ -2318,28 +2321,43 @@ and it won't be important on password protected instances */
     border: none;
     background: none;
     padding: 0;
-}
-#metacodeSwitchTabs .setDesc {
-    margin-bottom: 5px;
-    font-family: 'din-medium', helvetica, sans-serif;
-    color: #424242;
-    font-size: 14px;
-    text-align: justify;
-    padding-right: 16px;
-}
-#switchMetacodes > p {
-    margin: 16px 0 16px 0;
-}
-#metacodeSwitchTabs > ul {
-    width: 130px;
-}
-#metacodeSwitchTabs > ul li {
-    font-size: 14px;
-    text-transform: uppercase;
-}
-#metacodeSwitchTabs li.ui-state-active a {
-    color: #00BCD4;
-    cursor: pointer;
+
+    .setDesc,
+    .selectAll,
+    .selectNone {
+        margin-bottom: 5px;
+        font-family: 'din-medium', helvetica, sans-serif;
+        color: #424242;
+        font-size: 14px;
+        text-align: justify;
+        padding-right: 16px;
+        display: inline-block;
+    }
+
+    .selectAll,
+    .selectNone {
+      float: right;
+      cursor: pointer;
+
+      &:hover,
+      &.selected {
+        color: #00bcd4;
+      }
+    }
+
+    & > ul {
+        width: 130px;
+
+        li {
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+    }
+
+    li.ui-state-active a {
+        color: #00BCD4;
+        cursor: pointer;
+    }
 }
 .metacodeSwitchTab {
     max-height: 300px;
@@ -3120,4 +3138,14 @@ script.data-gratipay-username {
 
 .inline {
   display: inline-block;
+}
+
+.topicFollow {
+    text-align: center;
+    height: 48px;
+    line-height: 48px;
+    border-top: 1px solid #BDBDBD;
+    background: #FFF;
+    cursor: pointer;
+    font-family: din-regular;
 }

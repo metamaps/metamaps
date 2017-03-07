@@ -109,6 +109,8 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
+    faker (1.7.3)
+      i18n (~> 0.5)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     httparty (0.14.0)
@@ -272,6 +274,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.5)
     tilt (2.0.5)
+    timecop (0.8.1)
     tunemygc (1.0.69)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -301,6 +304,7 @@ DEPENDENCIES
   dotenv-rails
   exception_notification
   factory_girl_rails
+  faker
   httparty
   jquery-rails
   jquery-ui-rails
@@ -327,6 +331,7 @@ DEPENDENCIES
   slack-notifier
   snorlax
   sucker_punch
+  timecop
   tunemygc
   uglifier
 
@@ -334,4 +339,4 @@ RUBY VERSION
    ruby 2.3.0p0
 
 BUNDLED WITH
-   1.13.7
+   1.14.6

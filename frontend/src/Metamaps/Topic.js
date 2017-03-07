@@ -14,7 +14,7 @@ import Router from './Router'
 import Selected from './Selected'
 import Settings from './Settings'
 import SynapseCard from './SynapseCard'
-import TopicCard from './TopicCard'
+import TopicCard from './Views/TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
 

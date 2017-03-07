@@ -26,7 +26,10 @@ const ImportDialog = {
     ReactDOM.render(React.createElement(ImportDialogBox, {
       onFileAdded: PasteInput.handleFile,
       exampleImageUrl: serverData['import-example.png'],
-      downloadScreenshot: ImportDialog.downloadScreenshot
+      downloadScreenshot: ImportDialog.downloadScreenshot,
+      onExport: format => {
+        window.open(`${window.location.pathname}/export.${format}`, '_blank')
+      }
     }), $('.importDialogWrapper').get(0))
   },
   show: function() {

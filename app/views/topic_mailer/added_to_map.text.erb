@@ -4,3 +4,5 @@
 
 topic_url(topic)
 map_url(event.map)
+
+<%= render :partial => 'topic_mailer/unfollow', locals: { topic: topic } %>

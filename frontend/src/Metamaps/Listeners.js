@@ -1,6 +1,7 @@
 /* global $ */
 
 import Active from './Active'
+import Create from './Create'
 import Control from './Control'
 import DataModel from './DataModel'
 import JIT from './JIT'
@@ -31,11 +32,18 @@ const Listeners = {
           JIT.escKeyHandler()
           break
         case 46: // if DEL is pressed
-          e.preventDefault()
-          Control.deleteSelected()
+          if(e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA" && (Selected.Nodes.length + Selected.Edges.length) > 0){
+            e.preventDefault()
+            Control.removeSelectedNodes()
+            Control.removeSelectedEdges()
+          }
           break
         case 65: // if a or A is pressed
-          if ((e.ctrlKey || e.metaKey) && onCanvas) {
+          if (Create.isSwitchingSet && e.ctrlKey || e.metaKey) {
+            Create.metacodeSelectorToggleSelectAll()
+            e.preventDefault()
+            break
+          } else if ((e.ctrlKey || e.metaKey) && onCanvas) {
             const nodesCount = Object.keys(Visualize.mGraph.graph.nodes).length
             const selectedNodesCount = Selected.Nodes.length
             e.preventDefault()

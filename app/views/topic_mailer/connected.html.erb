@@ -13,3 +13,5 @@
 </p>
 
 <%= link_to 'View the connection', topic_url(topic1), style: button_style %>
+
+<%= render :partial => 'topic_mailer/unfollow', locals: { topic: topic1 } %>

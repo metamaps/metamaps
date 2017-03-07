@@ -4,7 +4,7 @@ try { Backbone.$ = window.$ } catch (err) {}
 
 import Active from '../Active'
 import Filter from '../Filter'
-import TopicCard from '../TopicCard'
+import TopicCard from '../Views/TopicCard'
 import Visualize from '../Visualize'
 
 import DataModel from './index'
@@ -46,6 +46,9 @@ const Topic = Backbone.Model.extend({
   authorizePermissionChange: function(mapper) {
     if (mapper && this.get('user_id') === mapper.get('id')) return true
     else return false
+  },
+  isFollowedBy: function(mapper) {
+    return mapper.get('follows') && mapper.get('follows').topics.indexOf(this.get('id')) > -1
   },
   getDate: function() {},
   getMetacode: function() {

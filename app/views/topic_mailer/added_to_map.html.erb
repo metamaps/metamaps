@@ -9,3 +9,5 @@
 
 <%= link_to 'Go to Topic', topic_url(topic), style: button_style %>
 <%= link_to 'Go to Map', map_url(event.map), style: button_style %>
+
+<%= render :partial => 'topic_mailer/unfollow', locals: { topic: topic } %>

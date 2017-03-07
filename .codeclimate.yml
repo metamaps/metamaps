@@ -5,7 +5,7 @@ engines:
   bundler-audit:
     enabled: true
   duplication:
-    enabled: true
+    enabled: false
     config:
       languages:
         count_threshold: 3 # rule of three
