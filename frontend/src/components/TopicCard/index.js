@@ -4,11 +4,15 @@ import Title from './Title'
 import Links from './Links'
 import Desc from './Desc'
 import Attachments from './Attachments'
+import Follow from './Follow'
+import Util from '../../Metamaps/Util'
+
 
 class ReactTopicCard extends Component {
   render = () => {
-    const { topic, ActiveMapper } = this.props
+    const { topic, ActiveMapper, onFollow } = this.props
     const authorizedToEdit = topic.authorizeToEdit(ActiveMapper)
+    const isFollowing = topic.isFollowedBy(ActiveMapper)
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
 
     let classname = 'permission'
@@ -40,6 +44,7 @@ class ReactTopicCard extends Component {
             authorizedToEdit={authorizedToEdit}
             updateTopic={this.props.updateTopic}
           />
+          {Util.isTester(ActiveMapper) && <Follow isFollowing={isFollowing} onFollow={onFollow} />}
           <div className="clearfloat"></div>
         </div>
       </div>
@@ -51,6 +56,7 @@ ReactTopicCard.propTypes = {
   topic: PropTypes.object,
   ActiveMapper: PropTypes.object,
   updateTopic: PropTypes.func,
+  onFollow: PropTypes.func,
   metacodeSets: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     metacodes: PropTypes.arrayOf(PropTypes.shape({
