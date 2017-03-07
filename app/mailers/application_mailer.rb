@@ -3,10 +3,6 @@ class ApplicationMailer < ActionMailer::Base
   default from: 'team@metamaps.cc'
   layout 'mailer'
 
-  def deliver
-    raise NotImplementedError('Please use Mailboxer to send your emails.')
-  end
-
   class << self
     def mail_for_notification(notification)
       case notification.notification_code

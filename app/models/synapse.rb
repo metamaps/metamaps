@@ -68,13 +68,13 @@ class Synapse < ApplicationRecord
     output += %(\n)
     output
   end
-  
+
   protected
-  
+
   def set_perm_by_defer
     permission = defer_to_map.permission if defer_to_map
   end
-  
+
   def after_created_async
     follow_ids = NotificationService.notify_followers(topic1, TOPIC_CONNECTED_1, self)
     NotificationService.notify_followers(topic2, TOPIC_CONNECTED_2, self, nil, follow_ids)
@@ -93,7 +93,7 @@ class Synapse < ApplicationRecord
       end
     end
   end
-  
+
   def before_destroyed
     # hard to know how to do this yet, because the synapse actually gets destroyed
     #NotificationService.notify_followers(topic1, 'topic_disconnected', self)
