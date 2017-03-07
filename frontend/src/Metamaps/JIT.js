@@ -59,8 +59,6 @@ const JIT = {
     }
     $('.zoomExtents').click(zoomExtents)
 
-    $('.takeScreenshot').click(Map.exportImage)
-
     self.topicDescImage = new Image()
     self.topicDescImage.src = serverData['topic_description_signifier.png']
 
