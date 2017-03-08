@@ -5,7 +5,7 @@ class FollowService
 
       return unless user && is_tester(user)
 
-      return unless should_auto_follow(entity, user, reason)
+      return if (reason == 'created' || reason == 'contributed') && !should_auto_follow(entity, user, reason)
 
       follow = Follow.where(followed: entity, user: user).first_or_create
       if FollowReason::REASONS.include?(reason) && !follow.follow_reason.read_attribute(reason)
