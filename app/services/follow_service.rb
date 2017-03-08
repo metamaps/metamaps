@@ -5,6 +5,8 @@ class FollowService
 
       return unless is_tester(user)
 
+      return unless should_auto_follow(entity, user, reason)
+
       follow = Follow.where(followed: entity, user: user).first_or_create
       if FollowReason::REASONS.include?(reason) && !follow.follow_reason.read_attribute(reason)
         follow.follow_reason.update_attribute(reason, true)
@@ -27,6 +29,22 @@ class FollowService
     end
 
     protected
+
+    def should_auto_follow(entity, user, reason)
+      if entity.class == Topic
+        if reason == 'created'
+          return user.settings.follow_topic_on_created == '1'
+        elsif reason == 'contributed'
+          return user.settings.follow_topic_on_contributed == '1'
+        end
+      elsif entity.class == Map
+        if reason == 'created'
+          return user.settings.follow_map_on_created == '1'
+        elsif reason == 'contributed'
+          return user.settings.follow_map_contributed == '1'
+        end
+      end
+    end
 
     def is_tester(user)
       %w(connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com).include?(user.email)

@@ -23,11 +23,12 @@ class UsersController < ApplicationController
     if user_params[:password] == '' && user_params[:password_confirmation] == ''
       # not trying to change the password
       if @user.update_attributes(user_params.except(:password, :password_confirmation))
+        update_follow_settings(@user, params[:settings])
         @user.image = nil if params[:remove_image] == '1'
         @user.save
         sign_in(@user, bypass: true)
         respond_to do |format|
-          format.html { redirect_to root_url, notice: 'Account updated!' }
+          format.html { redirect_to root_url, notice: 'Settings updated' }
         end
       else
         sign_in(@user, bypass: true)
@@ -40,11 +41,12 @@ class UsersController < ApplicationController
       correct_pass = @user.valid_password?(params[:current_password])
 
       if correct_pass && @user.update_attributes(user_params)
+        update_follow_settings(@user, params[:settings])
         @user.image = nil if params[:remove_image] == '1'
         @user.save
         sign_in(@user, bypass: true)
         respond_to do |format|
-          format.html { redirect_to root_url, notice: 'Account updated!' }
+          format.html { redirect_to root_url, notice: 'Settings updated' }
         end
       else
         respond_to do |format|
@@ -104,9 +106,16 @@ class UsersController < ApplicationController
 
   private
 
+  def update_follow_settings(user, settings)
+    user.settings.follow_topic_on_created = settings[:follow_topic_on_created]
+    user.settings.follow_topic_on_contributed = settings[:follow_topic_on_contributed]
+    user.settings.follow_map_on_created = settings[:follow_map_on_created]
+    user.settings.follow_map_on_contributed = settings[:follow_map_on_contributed]
+  end
+
   def user_params
     params.require(:user).permit(
-      :name, :email, :image, :password, :password_confirmation, :emails_allowed
+      :name, :email, :image, :password, :password_confirmation, :emails_allowed, :settings
     )
   end
 end

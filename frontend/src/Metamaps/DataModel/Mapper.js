@@ -17,14 +17,16 @@ const Mapper = Backbone.Model.extend({
       </li>`
   },
   followMap: function(id) {
-    this.get('follows').maps.push(id)
+    const idIndex = this.get('follows').maps.indexOf(id)
+    if (idIndex < 0) this.get('follows').maps.push(id)
   },
   unfollowMap: function(id) {
     const idIndex = this.get('follows').maps.indexOf(id)
     if (idIndex > -1) this.get('follows').maps.splice(idIndex, 1)
   },
   followTopic: function(id) {
-    this.get('follows').topics.push(id)
+    const idIndex = this.get('follows').topics.indexOf(id)
+    if (idIndex < 0) this.get('follows').topics.push(id)
   },
   unfollowTopic: function(id) {
     const idIndex = this.get('follows').topics.indexOf(id)

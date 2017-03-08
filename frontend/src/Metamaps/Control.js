@@ -123,8 +123,12 @@ const Control = {
     const authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit this map.')
       return
+    }
+
+    if (Active.Mapper.get('follow_map_on_contributed')) {
+      Active.Mapper.followMap(Active.Map.id)
     }
 
     for (let i = l - 1; i >= 0; i -= 1) {
@@ -139,8 +143,12 @@ const Control = {
     var node = Visualize.mGraph.graph.getNode(nodeid)
 
     if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit this map.')
       return
+    }
+
+    if (Active.Mapper.get('follow_map_on_contributed')) {
+      Active.Mapper.followMap(Active.Map.id)
     }
 
     var topic = node.getData('topic')
@@ -284,8 +292,12 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit this map.')
       return
+    }
+
+    if (Active.Mapper.get('follow_map_on_contributed')) {
+      Active.Mapper.followMap(Active.Map.id)
     }
 
     for (let i = l - 1; i >= 0; i -= 1) {
@@ -300,8 +312,12 @@ const Control = {
     var authorized = Active.Map.authorizeToEdit(Active.Mapper)
 
     if (!authorized) {
-      GlobalUI.notifyUser('Cannot edit Public map.')
+      GlobalUI.notifyUser('Cannot edit this map.')
       return
+    }
+
+    if (Active.Mapper.get('follow_map_on_contributed')) {
+      Active.Mapper.followMap(Active.Map.id)
     }
 
     if (edge.getData('mappings').length - 1 === 0) {

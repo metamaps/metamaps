@@ -39,7 +39,7 @@ class Map < ApplicationRecord
   # Validate the attached image is image/jpg, image/png, etc
   validates_attachment_content_type :screenshot, content_type: %r{\Aimage/.*\Z}
 
-  after_create :after_created_async
+  after_create :after_created
   after_update :after_updated
   after_save :update_deferring_topics_and_synapses, if: :permission_changed?
 
@@ -140,11 +140,10 @@ class Map < ApplicationRecord
 
   protected
   
-  def after_created_async
+  def after_created
     FollowService.follow(self, self.user, 'created')
     # notify users following the map creator
   end
-  handle_asynchronously :after_created_async
 
   def after_updated
     return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }

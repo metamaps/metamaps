@@ -977,6 +977,9 @@ const JIT = {
       }
 
       if (checkWhetherToSave()) {
+        if (Active.Mapper.get('follow_map_on_contributed')) {
+          Active.Mapper.followMap(Active.Map.id)
+        }
         mapping = node.getData('mapping')
         mapping.save({
           xloc: node.getPos().x,
