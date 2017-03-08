@@ -132,6 +132,18 @@ class User < ApplicationRecord
     stars.where(map_id: map.id).exists?
   end
 
+  def has_map_open(map)
+    latestEvent = Event.where(map: map, user: self)
+                       .where(kind: ['user_present_on_map', 'user_not_present_on_map'])
+                       .order(:created_at)
+                       .last
+    latestEvent && latestEvent.kind == 'user_present_on_map'
+  end
+
+  def has_map_with_synapse_open(synapse)
+    synapse.maps.any?{|map| has_map_open(map)}
+  end
+
   def settings
     self[:settings] = UserPreference.new if self[:settings].nil?
     if not self[:settings].respond_to?(:follow_topic_on_created)
