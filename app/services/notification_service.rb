@@ -34,6 +34,11 @@ class NotificationService
     # we'll prbly want to put the body into the actual loop so we can pass the current user in as a local
     body = renderer.render(template: settings[:template], locals: { entity: entity, event: event }, layout: false)
     follows.each{|follow|
+      if entity.class == Map
+        next unless MapPolicy.new(follow.user, entity).show?
+      elsif entity.class == Topic
+        next unless TopicPolicy.new(follow.user, entity).show?
+      end
       # this handles email and in-app notifications, in the future, include push
       follow.user.notify(settings[:subject], body, event, false, event_type, follow.user.emails_allowed, event.user)
       # push could be handled with Actioncable to send transient notifications to the UI
