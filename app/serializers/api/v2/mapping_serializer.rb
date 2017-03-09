@@ -14,7 +14,7 @@ module Api
       def self.embeddable
         {
           user: {},
-          updated_by: {},
+          updated_by: { serializer: UserSerializer },
           map: {}
         }
       end

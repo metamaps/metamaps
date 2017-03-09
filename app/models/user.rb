@@ -62,6 +62,12 @@ class User < ApplicationRecord
         maps: following.where(followed_type: 'Map').to_a.map(&:followed_id)
       }
     end
+    if (_options[:follow_settings])
+      json['follow_topic_on_created'] = settings.follow_topic_on_created == "1"
+      json['follow_topic_on_contributed'] = settings.follow_topic_on_contributed == "1"
+      json['follow_map_on_created'] = settings.follow_map_on_created == "1"
+      json['follow_map_on_contributed'] = settings.follow_map_on_contributed == "1"
+    end
     if (_options[:email])
       json['email'] = email
     end
@@ -126,9 +132,23 @@ class User < ApplicationRecord
     stars.where(map_id: map.id).exists?
   end
 
+  def has_map_open(map)
+    latestEvent = Event.where(map: map, user: self)
+                       .where(kind: ['user_present_on_map', 'user_not_present_on_map'])
+                       .order(:created_at)
+                       .last
+    latestEvent && latestEvent.kind == 'user_present_on_map'
+  end
+
+  def has_map_with_synapse_open(synapse)
+    synapse.maps.any?{|map| has_map_open(map)}
+  end
+
   def settings
-    # make sure we always return a UserPreference instance
     self[:settings] = UserPreference.new if self[:settings].nil?
+    if not self[:settings].respond_to?(:follow_topic_on_created)
+      self[:settings].initialize_follow_settings
+    end
     self[:settings]
   end
 

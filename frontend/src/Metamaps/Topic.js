@@ -242,12 +242,18 @@ const Topic = {
     }
 
     var mappingSuccessCallback = function(mappingModel, response, topicModel) {
+      if (Active.Mapper.get('follow_map_on_contributed')) {
+        Active.Mapper.followMap(Active.Map.id)
+      }
       // call a success callback if provided
       if (opts.success) {
         opts.success(topicModel)
       }
     }
     var topicSuccessCallback = function(topicModel, response) {
+      if (Active.Mapper.get('follow_topic_on_created')) {
+        Active.Mapper.followTopic(topicModel.id)
+      }
       if (Active.Map) {
         mapping.save({ mappable_id: topicModel.id }, {
           success: function(model, response) {

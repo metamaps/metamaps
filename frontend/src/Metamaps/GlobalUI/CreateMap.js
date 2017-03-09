@@ -99,6 +99,9 @@ const CreateMap = {
   success: function(model) {
     // push the new map onto the collection of 'my maps'
     DataModel.Maps.Mine.add(model)
+    if (Active.Mapper.get('follow_map_on_created')) {
+      Active.Mapper.followMap(model.id)
+    }
 
     GlobalUI.clearNotify()
     $('#wrapper').append(outdent`

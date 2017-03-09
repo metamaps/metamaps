@@ -42,6 +42,11 @@ const Synapse = {
     var synapseSuccessCallback = function(synapseModel, response) {
       if (Active.Map) {
         mapping.save({ mappable_id: synapseModel.id }, {
+          success: function(model, response) {
+            if (Active.Mapper.get('follow_map_on_contributed')) {
+              Active.Mapper.followMap(Active.Map.id)
+            }
+          },
           error: function(model, response) {
             console.log('error saving mapping to database')
           }
@@ -59,6 +64,11 @@ const Synapse = {
         })
       } else if (!synapse.isNew() && Active.Map) {
         mapping.save(null, {
+          success: function(model, response) {
+            if (Active.Mapper.get('follow_map_on_contributed')) {
+              Active.Mapper.followMap(Active.Map.id)
+            }
+          },
           error: function(model, response) {
             console.log('error saving mapping to database')
           }

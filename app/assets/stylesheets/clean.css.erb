@@ -455,19 +455,6 @@
     z-index: 4;
 }
 
-.takeScreenshot {
-    margin-bottom: 5px;
-    border-radius: 2px;
-    background-image: url(<%= asset_path 'screenshot_sprite.png' %>);
-    display: none;
-}
-.takeScreenshot:hover {
-    background-position: -32px 0;
-}
-.canEditMap .takeScreenshot {
-    display: block;
-}
-
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
@@ -478,7 +465,7 @@
     background-position: -32px 0;
 }
 
-.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .takeScreenshot:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .notificationsIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
+.zoomExtents:hover .tooltips, .zoomIn:hover .tooltips, .zoomOut:hover .tooltips, .sidebarFilterIcon:hover .tooltipsUnder, .sidebarForkIcon:hover .tooltipsUnder, .notificationsIcon:hover .tooltipsUnder, .addMap:hover .tooltipsUnder, .authenticated .sidebarAccountIcon:hover .tooltipsUnder,
  .mapInfoIcon:hover .tooltipsAbove, .openCheatsheet:hover .tooltipsAbove, .chat-button:hover .tooltips, .importDialog:hover .tooltipsUnder, .starMap:hover .tooltipsAbove, .openMetacodeSwitcher:hover .tooltipsAbove, .pinCarousel:not(.isPinned):hover .tooltipsAbove.helpPin, .pinCarousel.isPinned:hover .tooltipsAbove.helpUnpin  {
     display: block;
 }
@@ -609,7 +596,7 @@
     margin-top: 40px;
 }
 
-.zoomExtents div::after, .zoomIn div::after, .zoomOut div::after, .takeScreenshot div:after, .chat-button div.tooltips::after {
+.zoomExtents div::after, .zoomIn div::after, .zoomOut div::after, .chat-button div.tooltips::after {
     content: '';
     position: absolute;
     top: 57%;

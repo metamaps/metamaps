@@ -59,8 +59,6 @@ const JIT = {
     }
     $('.zoomExtents').click(zoomExtents)
 
-    $('.takeScreenshot').click(Map.exportImage)
-
     self.topicDescImage = new Image()
     self.topicDescImage.src = serverData['topic_description_signifier.png']
 
@@ -979,6 +977,9 @@ const JIT = {
       }
 
       if (checkWhetherToSave()) {
+        if (Active.Mapper.get('follow_map_on_contributed')) {
+          Active.Mapper.followMap(Active.Map.id)
+        }
         mapping = node.getData('mapping')
         mapping.save({
           xloc: node.getPos().x,

@@ -27,7 +27,7 @@ const ImportDialog = {
       onFileAdded: PasteInput.handleFile,
       exampleImageUrl: serverData['import-example.png'],
       downloadScreenshot: ImportDialog.downloadScreenshot,
-      onExport: format => {
+      onExport: format => () => {
         window.open(`${window.location.pathname}/export.${format}`, '_blank')
       }
     }), $('.importDialogWrapper').get(0))

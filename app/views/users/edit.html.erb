@@ -8,7 +8,7 @@
 <% content_for :mobile_title, "Account Settings" %>
 <div id="yield">
 <%= form_for @user, url: user_url, :html =>{ :multipart => true, :class => "edit_user centerGreyForm"} do |form| %>
-  <h3>Edit Account</h3>
+  <h3>Edit Settings</h3>
   <div class="userImage">
     <div class="userImageDiv" onclick="Metamaps.Account.toggleChangePicture()">
       <%= image_tag @user.image.url(:ninetysix), :size => "84x84" %>
@@ -44,6 +44,26 @@
     <%= form.label :emails_allowed, class: 'firstFieldText' do %>
       <%= form.check_box :emails_allowed, class: 'inline' %>
       Send Metamaps notifications to my email.
+    <% end %>
+    <% if is_tester(@user) %>
+      <%= fields_for :settings, @user.settings do |settings| %>
+        <%= settings.label :follow_topic_on_created, class: 'firstFieldText' do %>
+          <%= settings.check_box :follow_topic_on_created, class: 'inline'  %>
+          Auto-follow topics you create.
+        <% end %>
+        <%= settings.label :follow_topic_on_contributed, class: 'firstFieldText' do %>
+          <%= settings.check_box :follow_topic_on_contributed, class: 'inline'  %>
+          Auto-follow topics you edit.
+        <% end %>
+        <%= settings.label :follow_map_on_created, class: 'firstFieldText' do %>
+          <%= settings.check_box :follow_map_on_created, class: 'inline'  %>
+          Auto-follow maps you create.
+        <% end %>
+        <%= settings.label :follow_map_on_contributed, class: 'firstFieldText' do %>
+          <%= settings.check_box :follow_map_on_contributed, class: 'inline'  %>
+          Auto-follow maps you edit.
+        <% end %>
+      <% end %>
     <% end %>
   </div>
   <div class="changePass" onclick="Metamaps.Account.showPass()">Change Password</div>

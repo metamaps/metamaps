@@ -34,7 +34,7 @@ class EmbedlyLink extends Component {
   }
 
   render = () => {
-    const { link, authorizedToEdit } = this.props
+    const { link, authorizedToEdit, topicId } = this.props
     const { linkEdit } = this.state
     const hasAttachment = !!link
 
@@ -55,7 +55,7 @@ class EmbedlyLink extends Component {
             {linkEdit && <div id="addLinkReset" onClick={this.resetLink}></div>}
           </div>
         </div>
-        {link && <Card link={link} />}
+        {link && <Card key={topicId} link={link} />}
         {authorizedToEdit && (
           <div id="linkremove"
             style={{ display: hasAttachment ? 'block' : 'none' }}
@@ -68,6 +68,7 @@ class EmbedlyLink extends Component {
 }
 
 EmbedlyLink.propTypes = {
+  topicId: PropTypes.number,
   link: PropTypes.string,
   authorizedToEdit: PropTypes.bool,
   updateTopic: PropTypes.func
