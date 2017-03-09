@@ -9,7 +9,11 @@ class Attachments extends Component {
 
     return (
       <div className="attachments">
-        <EmbedlyLink link={link} authorizedToEdit={authorizedToEdit} updateTopic={updateTopic} />
+        <EmbedlyLink topicId={topic.id}
+          link={link}
+          authorizedToEdit={authorizedToEdit}
+          updateTopic={updateTopic}
+        />
       </div>
     )
   }
