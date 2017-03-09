@@ -41,13 +41,9 @@ class FollowService
         if reason == 'created'
           return user.settings.follow_map_on_created == '1'
         elsif reason == 'contributed'
-          return user.settings.follow_map_contributed == '1'
+          return user.settings.follow_map_on_contributed == '1'
         end
       end
-    end
-
-    def is_tester(user)
-      %w(connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com).include?(user.email)
     end
   end
 end
