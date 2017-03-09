@@ -3,6 +3,7 @@ module Api
   module V2
     class UsersController < RestfulController
       def current
+        raise Pundit::NotAuthorizedError if current_user.nil?
         @user = current_user
         authorize @user
         show # delegate to the normal show function

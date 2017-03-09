@@ -18,7 +18,7 @@ module Api
       def self.embeddable
         {
           user: {},
-          source: {},
+          source: { serializer: MapSerializer },
           topics: {},
           synapses: {},
           mappings: {},
