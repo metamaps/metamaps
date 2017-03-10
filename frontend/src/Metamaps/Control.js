@@ -20,6 +20,21 @@ const Control = {
     node.setData('dim', 30, 'current')
     Selected.Nodes.push(node)
   },
+  selectNeighbors: function() {
+    if (Selected.Nodes.length > 0) {
+      //For each selected node, select all connected node and the synapses too
+      Selected.Nodes.forEach((item) => {
+        if (Visualize.mGraph.graph.getNode(item.id).adjacencies) {
+          for (const adjID in Visualize.mGraph.graph.getNode(item.id).adjacencies) {
+            Control.selectNode(Visualize.mGraph.graph.getNode(adjID))
+            Control.selectEdge(Visualize.mGraph.graph.getNode(item.id).adjacencies[adjID])
+          }
+        }
+      })
+
+      Visualize.mGraph.plot()
+    }
+  },
   deselectAllNodes: function() {
     var l = Selected.Nodes.length
     for (var i = l - 1; i >= 0; i -= 1) {
