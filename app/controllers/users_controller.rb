@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     if user_params[:password] == '' && user_params[:password_confirmation] == ''
       # not trying to change the password
       if @user.update_attributes(user_params.except(:password, :password_confirmation))
-        update_follow_settings(@user, params[:settings])
+        update_follow_settings(@user, params[:settings]) if is_tester(@user)
         @user.image = nil if params[:remove_image] == '1'
         @user.save
         sign_in(@user, bypass: true)
@@ -41,7 +41,7 @@ class UsersController < ApplicationController
       correct_pass = @user.valid_password?(params[:current_password])
 
       if correct_pass && @user.update_attributes(user_params)
-        update_follow_settings(@user, params[:settings])
+        update_follow_settings(@user, params[:settings]) if is_tester(@user)
         @user.image = nil if params[:remove_image] == '1'
         @user.save
         sign_in(@user, bypass: true)
