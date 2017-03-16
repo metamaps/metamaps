@@ -2,8 +2,8 @@ import React, { PropTypes, Component } from 'react'
 
 class Follow extends Component {
   render = () => {
-    const { isFollowing, onFollow } = this.props
-    return <div className='topicFollow' onClick={onFollow}>
+    const { isFollowing, onTopicFollow } = this.props
+    return <div className='topicFollow' onClick={onTopicFollow}>
       {isFollowing ? 'Unfollow' : 'Follow'}
     </div>
   }
@@ -11,7 +11,7 @@ class Follow extends Component {
 
 Follow.propTypes = {
   isFollowing: PropTypes.bool,
-  onFollow: PropTypes.func
+  onTopicFollow: PropTypes.func
 }
 
 export default Follow

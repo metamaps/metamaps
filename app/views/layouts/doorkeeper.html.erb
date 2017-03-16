@@ -6,55 +6,26 @@
 #%>
 
 <%= render :partial => 'layouts/head' %>
-
 <body class="<%= current_user ? 'authenticated' : 'unauthenticated' %>">
-
-    <a class='feedback-icon' target='_blank' href='https://hylo.com/c/metamaps'></a>
-
-    <%= content_tag :div, class: "main" do %>
-
-        <% if params[:controller] == 'doorkeeper/applications' || params[:controller] == 'doorkeeper/authorized_applications'
-             classes = 'appsPage'
-           else
-             classes = ''
-           end
-        %>
-
-        <div class="wrapper <%= classes %>" id="wrapper">
-
-            <%= render :partial => 'layouts/upperelements', :locals => {:noHardHomeLink => true } %>
-
-            <%= yield %>
-
-            <div id="exploreMapsHeader">
-                <div class="exploreMapsBar exploreElement">
-                    <div class="exploreMapsMenu">
-                        <div class="exploreMapsCenter">
-                          <% if current_user && current_user.admin %>
-                            <a href="<%= oauth_applications_path %>" class="activeMaps exploreMapsButton <%= params[:controller] == 'doorkeeper/applications' ? 'active' : nil %>">
-                                <div class="exploreMapsIcon"></div>Registered Apps
-                            </a>
-                          <% end %>
-                            <a href="<%= oauth_authorized_applications_path %>" class="authedApps exploreMapsButton <%= params[:controller] == 'doorkeeper/authorized_applications' ? 'active' : nil %>">
-                                <div class="exploreMapsIcon"></div>Authorized Apps
-                            </a>
-                            <a href="/" class="myMaps exploreMapsButton">
-                                <div class="exploreMapsIcon"></div>Maps
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p id="toast" class="toast">
-              <% if devise_error_messages? %>
-                <%= devise_error_messages! %>
-              <% elsif notice %>
-                <%= notice %>
-              <% end %>
-            </p>
-            <div id="loading"></div>
-        </div>
-
-    <% end %>
-
+  <div class="main" id="react-app"></div>
+  <%= yield %>
+  <div id="exploreMapsHeader">
+      <div class="exploreMapsBar exploreElement">
+          <div class="exploreMapsMenu">
+              <div class="exploreMapsCenter">
+                <% if current_user && current_user.admin %>
+                  <a href="<%= oauth_applications_path %>" class="activeMaps exploreMapsButton <%= params[:controller] == 'doorkeeper/applications' ? 'active' : nil %>">
+                      <div class="exploreMapsIcon"></div>Registered Apps
+                  </a>
+                <% end %>
+                  <a href="<%= oauth_authorized_applications_path %>" class="authedApps exploreMapsButton <%= params[:controller] == 'doorkeeper/authorized_applications' ? 'active' : nil %>">
+                      <div class="exploreMapsIcon"></div>Authorized Apps
+                  </a>
+                  <a href="/" class="myMaps exploreMapsButton">
+                      <div class="exploreMapsIcon"></div>Maps
+                  </a>
+              </div>
+          </div>
+      </div>
+  </div>
 <%= render :partial => 'layouts/foot' %>

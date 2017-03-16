@@ -15,6 +15,7 @@ const Loading = {
     Loading.loader.setDensity(41) // default is 40
     Loading.loader.setRange(0.9) // default is 1.3
     Loading.loader.show() // Hidden by default
+    $('#loading').hide()
   }
 }
 

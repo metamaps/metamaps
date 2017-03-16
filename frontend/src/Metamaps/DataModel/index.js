@@ -101,16 +101,19 @@ const DataModel = {
   },
   attachCollectionEvents: function() {
     DataModel.Topics.on('add remove', function(topic) {
+      console.log('updating infobox and filters due to topic add or remove')
       InfoBox.updateNumbers()
       Filter.checkMetacodes()
       Filter.checkMappers()
     })
     DataModel.Synapses.on('add remove', function(synapse) {
+      console.log('updating infobox and filters due to synapse add or remove')
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMappers()
     })
     DataModel.Mappings.on('add remove', function(mapping) {
+      console.log('updating infobox and filters due to mapping add or remove')
       InfoBox.updateNumbers()
       Filter.checkSynapses()
       Filter.checkMetacodes()

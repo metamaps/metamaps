@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 import { find, values } from 'lodash'
 import Util from '../../Metamaps/Util'
 
@@ -24,7 +25,7 @@ class Menu extends Component {
   }
 
   render = () => {
-    const { currentUser, map, onStar, onRequest, onFollow } = this.props
+    const { currentUser, map, onStar, onRequest, onMapFollow } = this.props
     const isFollowing = map.isFollowedBy(currentUser)
     const style = { display: this.state.open ? 'block' : 'none' }
 
@@ -37,7 +38,7 @@ class Menu extends Component {
       <ul className='menuItems' style={ style }>
         <li className='star' onClick={ () => { this.toggle() && onStar(map) }}>Star Map</li>
         { !map.authorizeToEdit(currentUser) && <li className='request' onClick={ () => { this.toggle() && onRequest(map) }}>Request Access</li> }
-        { Util.isTester(currentUser) && <li className='follow' onClick={ () => { this.toggle() && onFollow(map) }}>{isFollowing ? 'Unfollow' : 'Follow'}</li> }
+        { Util.isTester(currentUser) && <li className='follow' onClick={ () => { this.toggle() && onMapFollow(map) }}>{isFollowing ? 'Unfollow' : 'Follow'}</li> }
       </ul>
     </div>
   }
@@ -47,7 +48,7 @@ Menu.propTypes = {
   map: PropTypes.object.isRequired,
   onStar: PropTypes.func.isRequired,
   onRequest: PropTypes.func.isRequired,
-  onFollow: PropTypes.func.isRequired
+  onMapFollow: PropTypes.func.isRequired
 }
 
 const Metadata = (props) => {
@@ -78,13 +79,13 @@ const Metadata = (props) => {
 }
 
 const checkAndWrapInA = (shouldWrap, classString, mapId, element) => {
-  if (shouldWrap) return <a className={ classString } href={ `/maps/${mapId}` } data-router="true">{ element }</a>
+  if (shouldWrap) return <Link className={ classString } to={ `/maps/${mapId}` } >{ element }</Link>
   else return element
 }
 
 class MapCard extends Component {
   render = () => {
-    const { map, mobile, juntoState, currentUser, onRequest, onStar, onFollow } = this.props
+    const { map, mobile, juntoState, currentUser, onRequest, onStar, onMapFollow } = this.props
 
     const hasMap = (juntoState.liveMaps[map.id] && values(juntoState.liveMaps[map.id]).length) || null
     const realtimeMap = juntoState.liveMaps[map.id]
@@ -135,7 +136,7 @@ class MapCard extends Component {
             </div>) }
             { !mobile && hasMapper && <div className='mapHasMapper'><MapperList mappers={ mapperList } /></div> }
             { !mobile && hasConversation && <div className='mapHasConversation'><MapperList mappers={ mapperList } /></div> }
-            { !mobile && currentUser && <Menu currentUser={ currentUser } map={ map } onStar= { onStar } onRequest={ onRequest } onFollow={ onFollow } /> }
+            { !mobile && currentUser && <Menu currentUser={ currentUser } map={ map } onStar= { onStar } onRequest={ onRequest } onMapFollow={ onMapFollow } /> }
           </div>
         </div>) }
       </div>
@@ -150,7 +151,7 @@ MapCard.propTypes = {
   currentUser: PropTypes.object,
   onStar: PropTypes.func.isRequired,
   onRequest: PropTypes.func.isRequired,
-  onFollow: PropTypes.func.isRequired
+  onMapFollow: PropTypes.func.isRequired
 }
 
 export default MapCard

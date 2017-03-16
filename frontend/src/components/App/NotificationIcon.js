@@ -1,6 +1,11 @@
 import React, { PropTypes, Component } from 'react'
 
 class NotificationIcon extends Component {
+
+  static propTypes = {
+    unreadNotificationsCount: PropTypes.number
+  }
+
   constructor(props) {
     super(props)
 
@@ -29,10 +34,6 @@ class NotificationIcon extends Component {
 
     )
   }
-}
-
-NotificationIcon.propTypes = {
-  unreadNotificationsCount: PropTypes.number
 }
 
 export default NotificationIcon

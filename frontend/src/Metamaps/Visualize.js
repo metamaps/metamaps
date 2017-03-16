@@ -8,7 +8,6 @@ import Active from './Active'
 import DataModel from './DataModel'
 import JIT from './JIT'
 import Loading from './Loading'
-import Router from './Router'
 import TopicCard from './Views/TopicCard'
 
 const Visualize = {
@@ -198,19 +197,6 @@ const Visualize = {
       }
     }
     hold()
-
-    // update the url now that the map is ready
-    clearTimeout(Router.timeoutId)
-    Router.timeoutId = setTimeout(function() {
-      var m = Active.Map
-      var t = Active.Topic
-
-      if (m && window.location.pathname !== '/maps/' + m.id) {
-        Router.navigateAndTrack('/maps/' + m.id)
-      } else if (t && window.location.pathname !== '/topics/' + t.id) {
-        Router.navigateAndTrack('/topics/' + t.id)
-      }
-    }, 800)
   },
   clearVisualization: function() {
     Visualize.mGraph.graph.empty()

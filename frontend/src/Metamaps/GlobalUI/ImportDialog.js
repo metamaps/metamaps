@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import outdent from 'outdent'
 
-import ImportDialogBox from '../../components/ImportDialogBox'
+import ImportDialogBox from '../../components/MapView/ImportDialogBox'
 
 import PasteInput from '../PasteInput'
 import Map from '../Map'
@@ -19,7 +19,7 @@ const ImportDialog = {
     self.closeLightbox = closeLightbox
 
     $('#lightbox_content').append($(outdent`
-      <div class="lightboxContent" id="import-dialog-lightbox">
+      <div class="lightboxContent" id="import-dialog">
         <div class="importDialogWrapper" />
       </div>
     `))

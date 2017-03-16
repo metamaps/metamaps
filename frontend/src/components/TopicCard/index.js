@@ -7,12 +7,18 @@ import Attachments from './Attachments'
 import Follow from './Follow'
 import Util from '../../Metamaps/Util'
 
-
 class ReactTopicCard extends Component {
   render = () => {
-    const { topic, ActiveMapper, onFollow } = this.props
-    const authorizedToEdit = topic.authorizeToEdit(ActiveMapper)
-    const isFollowing = topic.isFollowedBy(ActiveMapper)
+    const { currentUser, onTopicFollow, updateTopic } = this.props
+    const topic = this.props.openTopic
+
+    if (!topic) return null
+
+    const wrappedUpdateTopic = obj => updateTopic(topic, obj)
+    const wrappedTopicFollow = () => onTopicFollow(topic)
+
+    const authorizedToEdit = topic.authorizeToEdit(currentUser)
+    const isFollowing = topic.isFollowedBy(currentUser)
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
 
     let classname = 'permission'
@@ -21,31 +27,33 @@ class ReactTopicCard extends Component {
     } else {
       classname += ' cannotEdit'
     }
-    if (topic.authorizePermissionChange(ActiveMapper)) classname += ' yourTopic'
+    if (topic.authorizePermissionChange(currentUser)) classname += ' yourTopic'
 
     return (
-      <div className={classname}>
-        <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topic.id}`}>
-          <Title name={topic.get('name')}
-            authorizedToEdit={authorizedToEdit}
-            onChange={this.props.updateTopic}
-          />
-          <Links topic={topic}
-            ActiveMapper={this.props.ActiveMapper}
-            updateTopic={this.props.updateTopic}
-            metacodeSets={this.props.metacodeSets}
-            redrawCanvas={this.props.redrawCanvas}
-          />
-          <Desc desc={topic.get('desc')}
-            authorizedToEdit={authorizedToEdit}
-            onChange={this.props.updateTopic}
-          />
-          <Attachments topic={topic}
-            authorizedToEdit={authorizedToEdit}
-            updateTopic={this.props.updateTopic}
-          />
-          {Util.isTester(ActiveMapper) && <Follow isFollowing={isFollowing} onFollow={onFollow} />}
-          <div className="clearfloat"></div>
+      <div className="showcard mapElement mapElementHidden" id="showcard">
+        <div className={classname}>
+          <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topic.id}`}>
+            <Title name={topic.get('name')}
+              authorizedToEdit={authorizedToEdit}
+              onChange={wrappedUpdateTopic}
+            />
+            <Links topic={topic}
+              ActiveMapper={this.props.currentUser}
+              updateTopic={wrappedUpdateTopic}
+              metacodeSets={this.props.metacodeSets}
+              redrawCanvas={this.props.redrawCanvas}
+            />
+            <Desc desc={topic.get('desc')}
+              authorizedToEdit={authorizedToEdit}
+              onChange={wrappedUpdateTopic}
+            />
+            <Attachments topic={topic}
+              authorizedToEdit={authorizedToEdit}
+              updateTopic={wrappedUpdateTopic}
+            />
+          {Util.isTester(currentUser) && <Follow isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />}
+            <div className="clearfloat"></div>
+          </div>
         </div>
       </div>
     )
@@ -53,10 +61,10 @@ class ReactTopicCard extends Component {
 }
 
 ReactTopicCard.propTypes = {
-  topic: PropTypes.object,
-  ActiveMapper: PropTypes.object,
+  openTopic: PropTypes.object,
+  currentUser: PropTypes.object,
   updateTopic: PropTypes.func,
-  onFollow: PropTypes.func,
+  onTopicFollow: PropTypes.func,
   metacodeSets: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     metacodes: PropTypes.arrayOf(PropTypes.shape({

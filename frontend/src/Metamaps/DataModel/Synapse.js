@@ -28,12 +28,11 @@ const Synapse = Backbone.Model.extend({
     this.on('change', this.updateEdgeView)
     this.on('change:desc', Filter.checkSynapses, this)
   },
-  prepareLiForFilter: function() {
-    return outdent`
-      <li data-id="${this.get('desc')}">
-        <img src="${DataModel.synapseIconUrl}" alt="synapse icon" />
-        <p>${this.get('desc')}</p>
-      </li>`
+  prepareDataForFilter: function() {
+    return {
+      desc: this.get('desc'),
+      icon: DataModel.synapseIconUrl
+    }
   },
   authorizeToEdit: function(mapper) {
     if (mapper && (this.get('permission') === 'commons' || this.get('collaborator_ids').includes(mapper.get('id')) || this.get('user_id') === mapper.get('id'))) return true

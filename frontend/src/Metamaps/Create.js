@@ -1,6 +1,7 @@
 /* global $, Hogan, Bloodhound */
 
 import DataModel from './DataModel'
+import Map from './Map'
 import Mouse from './Mouse'
 import Selected from './Selected'
 import Synapse from './Synapse'
@@ -270,7 +271,7 @@ const Create = {
       })
       Create.newTopic.beingCreated = true
       Create.newTopic.name = ''
-      GlobalUI.hideDiv('#instructions')
+      Map.setHasLearnedTopicCreation(true)
     },
     hide: function(force) {
       if (force || !Create.newTopic.pinned) {
@@ -281,7 +282,7 @@ const Create = {
         Create.newTopic.pinned = false
       }
       if (DataModel.Topics.length === 0) {
-        GlobalUI.showDiv('#instructions')
+        Map.setHasLearnedTopicCreation(false)
       }
       Create.newTopic.beingCreated = false
     },

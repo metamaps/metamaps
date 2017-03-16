@@ -4,11 +4,10 @@ import clipboard from 'clipboard-js'
 
 import Create from '../Create'
 
+import ReactApp from './ReactApp'
 import Search from './Search'
 import CreateMap from './CreateMap'
-import Account from './Account'
 import ImportDialog from './ImportDialog'
-import NotificationIcon from './NotificationIcon'
 
 const GlobalUI = {
   notifyTimeout: null,
@@ -18,13 +17,12 @@ const GlobalUI = {
   init: function(serverData) {
     const self = GlobalUI
 
-    self.Search.init(serverData)
+    self.ReactApp.init(serverData, self.openLightbox)
     self.CreateMap.init(serverData)
-    self.Account.init(serverData)
     self.ImportDialog.init(serverData, self.openLightbox, self.closeLightbox)
-    self.NotificationIcon.init(serverData)
+    self.Search.init(serverData)
 
-    if ($('#toast').html().trim()) self.notifyUser($('#toast').html())
+    if (serverData.toast) self.notifyUser(serverData.toast)
 
     // bind lightbox clicks
     $('.openLightbox').click(function(event) {
@@ -112,10 +110,9 @@ const GlobalUI = {
   _notifyUser: function(message, opts = {}) {
     const self = GlobalUI
 
-    const { leaveOpen = false, timeOut = 8000 } = opts
-
-    $('#toast').html(message)
-    self.showDiv('#toast')
+    const { leaveOpen = false, timeOut = 5000 } = opts
+    ReactApp.toast = message
+    ReactApp.render()
     clearTimeout(self.notifyTimeOut)
 
     if (!leaveOpen) {
@@ -134,7 +131,8 @@ const GlobalUI = {
       const { message, opts } = self.notifyQueue.shift()
       self._notifyUser(message, opts)
     } else {
-      self.hideDiv('#toast')
+      ReactApp.toast = null
+      ReactApp.render()
       self.notifying = false
     }
   },
@@ -153,5 +151,5 @@ const GlobalUI = {
   }
 }
 
-export { Search, CreateMap, Account, ImportDialog, NotificationIcon }
+export { ReactApp, Search, CreateMap, ImportDialog }
 export default GlobalUI

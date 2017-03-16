@@ -1,7 +1,8 @@
 /* global $, Hogan, Bloodhound, CanvasLoader */
 
+import { browserHistory } from 'react-router'
+
 import Active from '../Active'
-import Router from '../Router'
 
 const Search = {
   locked: false,
@@ -17,6 +18,7 @@ const Search = {
     self.userIconUrl = serverData['user.png']
 
     // this is similar to Metamaps.Loading, but it's for the search element
+    if (!document.getElementById('searchLoading')) return
     var loader = new CanvasLoader('searchLoading')
     loader.setColor('#4fb5c0') // default is '#000000'
     loader.setDiameter(24) // default is 40
@@ -189,11 +191,11 @@ const Search = {
 
     if (['topic', 'map', 'mapper'].indexOf(datum.rtype) !== -1) {
       if (datum.rtype === 'topic') {
-        Router.topics(datum.id)
+        browserHistory.push(`/topics/${datum.id}`)
       } else if (datum.rtype === 'map') {
-        Router.maps(datum.id)
+        browserHistory.push(`/maps/${datum.id}`)
       } else if (datum.rtype === 'mapper') {
-        Router.explore('mapper', datum.id)
+        browserHistory.push(`/explore/mapper/${datum.id}`)
       }
     }
   },

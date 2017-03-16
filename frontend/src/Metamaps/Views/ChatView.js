@@ -10,14 +10,14 @@ import ReactDOM from 'react-dom'
 import Active from '../Active'
 import DataModel from '../DataModel'
 import Realtime from '../Realtime'
-import MapChat from '../../components/MapChat'
+import ReactApp from '../GlobalUI/ReactApp'
 
 const ChatView = {
   isOpen: false,
+  unreadMessages: 0,
   messages: new Backbone.Collection(),
   conversationLive: false,
   isParticipating: false,
-  mapChat: null,
   domId: 'chat-box-wrapper',
   init: function(urls) {
     const self = ChatView
@@ -34,46 +34,32 @@ const ChatView = {
   },
   setNewMap: function() {
     const self = ChatView
+    self.unreadMessages = 0
+    self.isOpen = false
     self.conversationLive = false
     self.isParticipating = false
     self.alertSound = true // whether to play sounds on arrival of new messages or not
     self.cursorsShowing = true
     self.videosShowing = true
     self.participants = new Backbone.Collection()
+    self.messages = new Backbone.Collection()
     self.render()
-  },
-  show: () => {
-    $('#' + ChatView.domId).show()
-  },
-  hide: () => {
-    $('#' + ChatView.domId).hide()
   },
   render: () => {
     if (!Active.Map) return
     const self = ChatView
-    self.mapChat = ReactDOM.render(React.createElement(MapChat, {
-      conversationLive: self.conversationLive,
-      isParticipating: self.isParticipating,
-      onOpen: self.onOpen,
-      onClose: self.onClose,
-      leaveCall: Realtime.leaveCall,
-      joinCall: Realtime.joinCall,
-      inviteACall: Realtime.inviteACall,
-      inviteToJoin: Realtime.inviteToJoin,
-      participants: self.participants.models.map(p => p.attributes),
-      messages: self.messages.models.map(m => m.attributes),
-      videoToggleClick: self.videoToggleClick,
-      cursorToggleClick: self.cursorToggleClick,
-      soundToggleClick: self.soundToggleClick,
-      inputBlur: self.inputBlur,
-      inputFocus: self.inputFocus,
-      handleInputMessage: self.handleInputMessage
-    }), document.getElementById(ChatView.domId))
+    ReactApp.render()
   },
   onOpen: () => {
+    const self = ChatView
+    self.isOpen = true
+    self.unreadMessages = 0
+    self.render()
     $(document).trigger(ChatView.events.openTray)
   },
   onClose: () => {
+    const self = ChatView
+    self.isOpen = false
     $(document).trigger(ChatView.events.closeTray)
   },
   addParticipant: participant => {
@@ -119,12 +105,6 @@ const ChatView = {
     ChatView.participants.forEach(p => p.set({isParticipating: false, isPending: false}))
     ChatView.render()
   },
-  close: () => {
-    ChatView.mapChat && ChatView.mapChat.close()
-  },
-  open: () => {
-    ChatView.mapChat && ChatView.mapChat.open()
-  },
   videoToggleClick: function() {
     ChatView.videosShowing = !ChatView.videosShowing
     $(document).trigger(ChatView.videosShowing ? ChatView.events.videosOn : ChatView.events.videosOff)
@@ -144,11 +124,10 @@ const ChatView = {
   },
   addMessage: (message, isInitial, wasMe) => {
     const self = ChatView
-    if (!isInitial) self.mapChat.newMessage()
+    if (!isInitial && !self.isOpen) self.unreadMessages += 1
     if (!wasMe && !isInitial && self.alertSound) self.sound.play('receivechat')
     self.messages.add(message)
-    self.render()
-    if (!isInitial) self.mapChat.scroll()
+    if (!isInitial && self.isOpen) self.render()
   },
   sendChatMessage: message => {
     var self = ChatView
@@ -174,22 +153,8 @@ const ChatView = {
   // passed to this function
   addMessages: (messages, isInitial, wasMe) => {
     messages.models.forEach(m => ChatView.addMessage(m, isInitial, wasMe))
-  },
-  reset: () => {
-    ChatView.mapChat && ChatView.mapChat.reset()
-    ChatView.participants && ChatView.participants.reset()
-    ChatView.messages && ChatView.messages.reset()
-    ChatView.render()
   }
 }
-
-// ChatView.prototype.scrollMessages = function(duration) {
-//   duration = duration || 0
-
-//   this.$messages.animate({
-//     scrollTop: this.$messages[0].scrollHeight
-//   }, duration)
-// }
 
 /**
  * @class

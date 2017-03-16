@@ -9,12 +9,12 @@ const Mapper = Backbone.Model.extend({
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)
   },
-  prepareLiForFilter: function() {
-    return outdent`
-      <li data-id="${this.id}">
-        <img src="${this.get('image')}" data-id="${this.id}" alt="${this.get('name')}" />
-        <p>${this.get('name')}</p>
-      </li>`
+  prepareDataForFilter: function() {
+    return {
+      id: this.id,
+      image: this.get('image'),
+      name: this.get('name')
+    }
   },
   followMap: function(id) {
     const idIndex = this.get('follows').maps.indexOf(id)

@@ -2,6 +2,7 @@
 
 import outdent from 'outdent'
 import { find as _find } from 'lodash'
+import { browserHistory } from 'react-router'
 
 import Active from '../Active'
 import AutoLayout from '../AutoLayout'
@@ -9,11 +10,10 @@ import Create from '../Create'
 import DataModel from '../DataModel'
 import DataModelMap from '../DataModel/Map'
 import Filter from '../Filter'
-import GlobalUI from '../GlobalUI'
+import GlobalUI, { ReactApp } from '../GlobalUI'
 import JIT from '../JIT'
 import Loading from '../Loading'
 import Realtime from '../Realtime'
-import Router from '../Router'
 import Selected from '../Selected'
 import SynapseCard from '../SynapseCard'
 import TopicCard from '../Views/TopicCard'
@@ -26,143 +26,126 @@ const Map = {
   events: {
     editedByActiveMapper: 'Metamaps:Map:events:editedByActiveMapper'
   },
+  mapIsStarred: false,
+  requests: [],
+  userRequested: false,
+  requestAnswered: false,
+  requestApproved: false,
+  hasLearnedTopicCreation: true,
   init: function(serverData) {
     var self = Map
-
+    self.mapIsStarred = serverData.mapIsStarred
+    self.requests = serverData.requests
+    self.setAccessRequest()
     $('#wrapper').mousedown(function(e) {
       if (e.button === 1) return false
     })
-
-    $('.starMap').click(function() {
-      if ($(this).is('.starred')) self.unstar()
-      else self.star()
-    })
-
-    $('.sidebarFork').click(function() {
-      self.fork()
-    })
-
     GlobalUI.CreateMap.emptyForkMapForm = $('#fork_map').html()
-
-    self.updateStar()
-
     InfoBox.init(serverData, function updateThumbnail() {
       self.uploadMapScreenshot()
     })
     CheatSheet.init(serverData)
-
-    $('.viewOnly .requestAccess').click(self.requestAccess)
-
     $(document).on(Map.events.editedByActiveMapper, self.editedByActiveMapper)
   },
+  setHasLearnedTopicCreation: function(value) {
+    const self = Map
+    self.hasLearnedTopicCreation = value
+    ReactApp.render()
+  },
   requestAccess: function() {
-    $('.viewOnly').removeClass('sendRequest').addClass('sentRequest')
+    const self = Map
+    self.requests.push({
+      user_id: Active.Mapper.id,
+      answered: false,
+      approved: false
+    })
+    self.setAccessRequest()
     const mapId = Active.Map.id
     $.post({
       url: `/maps/${mapId}/access_request`
     })
     GlobalUI.notifyUser('Map creator will be notified of your request')
   },
-  setAccessRequest: function(requests, activeMapper) {
-    let className = 'isViewOnly '
-    if (activeMapper) {
-      const request = _find(requests, r => r.user_id === activeMapper.id)
-      if (!request) className += 'sendRequest'
-      else if (request && !request.answered) className += 'sentRequest'
-      else if (request && request.answered && !request.approved) className += 'requestDenied'
+  setAccessRequest: function() {
+    const self = Map
+    if (Active.Mapper) {
+      const request = _find(self.requests, r => r.user_id === Active.Mapper.id)
+      if (!request) {
+        self.userRequested = false
+        self.requestAnswered = false
+        self.requestApproved = false
+      }
+      else if (request && !request.answered) {
+        self.userRequested = true
+        self.requestAnswered = false
+        self.requestApproved = false
+      }
+      else if (request && request.answered && !request.approved) {
+        self.userRequested = true
+        self.requestAnswered = true
+        self.requestApproved = false
+      }
     }
-    $('.viewOnly').removeClass('sendRequest sentRequest requestDenied').addClass(className)
+    ReactApp.render()
   },
   launch: function(id) {
-    var start = function(data) {
-      Active.Map = new DataModelMap(data.map)
-      DataModel.Mappers = new DataModel.MapperCollection(data.mappers)
-      DataModel.Collaborators = new DataModel.MapperCollection(data.collaborators)
-      DataModel.Topics = new DataModel.TopicCollection(data.topics)
-      DataModel.Synapses = new DataModel.SynapseCollection(data.synapses)
-      DataModel.Mappings = new DataModel.MappingCollection(data.mappings)
-      DataModel.Messages = data.messages
-      DataModel.Stars = data.stars
-      DataModel.attachCollectionEvents()
-
-      var map = Active.Map
-      var mapper = Active.Mapper
-
-      document.title = map.get('name') + ' | Metamaps'
-
-      // add class to .wrapper for specifying whether you can edit the map
-      if (map.authorizeToEdit(mapper)) {
-        $('.wrapper').addClass('canEditMap')
-      } else {
-        Map.setAccessRequest(data.requests, mapper)
-      }
-
-      // add class to .wrapper for specifying if the map can
-      // be collaborated on
-      if (map.get('permission') === 'commons') {
-        $('.wrapper').addClass('commonsMap')
-      }
-
-      Map.updateStar()
-
-      // set filter mapper H3 text
-      $('#filter_by_mapper h3').html('MAPPERS')
-
-      // build and render the visualization
+    const self = Map
+    var dataIsReadySetupMap = function() {
+      Map.setAccessRequest()
       Visualize.type = 'ForceDirected'
       JIT.prepareVizData()
-
-      // update filters
-      Filter.reset()
-
-      // reset selected arrays
       Selected.reset()
-
-      // set the proper mapinfobox content
       InfoBox.load()
-
-      // these three update the actual filter box with the right list items
+      Filter.reset()
       Filter.checkMetacodes()
       Filter.checkSynapses()
       Filter.checkMappers()
-
       Realtime.startActiveMap()
       Loading.hide()
-
-      // for mobile
-      $('#header_content').html(map.get('name'))
+      document.title = Active.Map.get('name') + ' | Metamaps'
+      ReactApp.mobileTitle = Active.Map.get('name')
+      ReactApp.render()
     }
-
-    $.ajax({
-      url: '/maps/' + id + '/contains.json',
-      success: start
-    })
+    function isLoaded() {
+      if (InfoBox.generateBoxHTML) dataIsReadySetupMap()
+      else setTimeout(() => isLoaded(), 50)
+    }
+    if (Active.Map && Active.Map.id === id) {
+      isLoaded()
+    }
+    else {
+      Loading.show()
+      $.ajax({
+        url: '/maps/' + id + '/contains.json',
+        success: function(data) {
+          Active.Map = new DataModelMap(data.map)
+          DataModel.Mappers = new DataModel.MapperCollection(data.mappers)
+          DataModel.Collaborators = new DataModel.MapperCollection(data.collaborators)
+          DataModel.Topics = new DataModel.TopicCollection(data.topics)
+          DataModel.Synapses = new DataModel.SynapseCollection(data.synapses)
+          DataModel.Mappings = new DataModel.MappingCollection(data.mappings)
+          DataModel.Messages = data.messages
+          DataModel.Stars = data.stars
+          DataModel.attachCollectionEvents()
+          self.requests = data.requests
+          isLoaded()
+        }
+      })
+    }
   },
   end: function() {
     if (Active.Map) {
-      $('.wrapper').removeClass('canEditMap commonsMap')
+      $('.main').removeClass('compressed')
       AutoLayout.resetSpiral()
-
       $('.rightclickmenu').remove()
       TopicCard.hideCard()
       SynapseCard.hideCard()
       Create.newTopic.hide(true) // true means force (and override pinned)
       Create.newSynapse.hide()
-      Filter.close()
       InfoBox.close()
       Realtime.endActiveMap()
-      $('.viewOnly').removeClass('isViewOnly')
-    }
-  },
-  updateStar: function() {
-    if (!Active.Mapper || !DataModel.Stars) return
-    // update the star/unstar icon
-    if (DataModel.Stars.find(function(s) { return s.user_id === Active.Mapper.id })) {
-      $('.starMap').addClass('starred')
-      $('.starMap .tooltipsAbove').html('Unstar')
-    } else {
-      $('.starMap').removeClass('starred')
-      $('.starMap .tooltipsAbove').html('Star')
+      self.requests = []
+      self.hasLearnedTopicCreation = true
     }
   },
   star: function() {
@@ -173,7 +156,8 @@ const Map = {
     DataModel.Stars.push({ user_id: Active.Mapper.id, map_id: Active.Map.id })
     DataModel.Maps.Starred.add(Active.Map)
     GlobalUI.notifyUser('Map is now starred')
-    self.updateStar()
+    self.mapIsStarred = true
+    ReactApp.render()
   },
   unstar: function() {
     var self = Map
@@ -182,7 +166,8 @@ const Map = {
     $.post('/maps/' + Active.Map.id + '/unstar')
     DataModel.Stars = DataModel.Stars.filter(function(s) { return s.user_id !== Active.Mapper.id })
     DataModel.Maps.Starred.remove(Active.Map)
-    self.updateStar()
+    self.mapIsStarred = false
+    ReactApp.render()
   },
   fork: function() {
     GlobalUI.openLightbox('forkmap')
@@ -232,7 +217,7 @@ const Map = {
     var map = Active.Map
     DataModel.Maps.Active.remove(map)
     DataModel.Maps.Featured.remove(map)
-    Router.home()
+    browserHistory.push('/')
     GlobalUI.notifyUser('Sorry! That map has been changed to Private.')
   },
   cantEditNow: function() {
@@ -245,7 +230,7 @@ const Map = {
     confirmString += 'Do you want to reload and enable realtime collaboration?'
     var c = window.confirm(confirmString)
     if (c) {
-      Router.maps(Active.Map.id)
+      window.location.reload()
     }
   },
   editedByActiveMapper: function() {

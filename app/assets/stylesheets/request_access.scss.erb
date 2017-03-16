@@ -1,7 +1,6 @@
 .viewOnly {
   float: left;
   margin-left: 16px;
-  display: none;
   height: 32px;
   border: 1px solid #BDBDBD;
   border-radius: 2px;
@@ -23,7 +22,7 @@
   }
 
   .requestNotice {
-    display: none;
+    display: inline-block;
     padding: 0 8px;
   }
 
@@ -41,16 +40,6 @@
 
   .requestNotAccepted {
     background-color: #c04f4f;
-  }
-
-  &.sendRequest .requestAccess {
-    display: inline-block;
-  }
-  &.sentRequest .requestPending {
-    display: inline-block;
-  }
-  &.requestDenied .requestNotAccepted {
-    display: inline-block;
   }
 }
 

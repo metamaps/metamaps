@@ -151,8 +151,6 @@ let Realtime = {
         config: { DOUBLE_CLICK_TOLERANCE: 200 }
       })
       self.room.videoAdded(self.handleVideoAdded)
-
-      self.startActiveMap()
     } // if Active.Mapper
   },
   addJuntoListeners: function() {
@@ -201,9 +199,6 @@ let Realtime = {
     self.leaveMap()
     $('.collabCompass').remove()
     if (self.room) self.room.leave()
-    ChatView.hide()
-    ChatView.close()
-    ChatView.reset()
     Cable.unsubscribeFromMap()
   },
   turnOn: function(notify) {
@@ -228,7 +223,6 @@ let Realtime = {
     ChatView.setNewMap()
     ChatView.addParticipant(self.activeMapper)
     ChatView.addMessages(new DataModel.MessageCollection(DataModel.Messages), true)
-    ChatView.show()
   },
   setupLocalEvents: function() {
     var self = Realtime

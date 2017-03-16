@@ -50,15 +50,6 @@ const JIT = {
    */
   init: function(serverData) {
     const self = JIT
-
-    $('.zoomIn').click(self.zoomIn)
-    $('.zoomOut').click(self.zoomOut)
-
-    const zoomExtents = function(event) {
-      self.zoomExtents(event, Visualize.mGraph.canvas)
-    }
-    $('.zoomExtents').click(zoomExtents)
-
     self.topicDescImage = new Image()
     self.topicDescImage.src = serverData['topic_description_signifier.png']
 
@@ -123,36 +114,22 @@ const JIT = {
   prepareVizData: function() {
     const self = JIT
     let mapping
-
-    // reset/empty vizData
     self.vizData = []
     Visualize.loadLater = false
-
     const results = self.convertModelsToJIT(DataModel.Topics, DataModel.Synapses)
-
     self.vizData = results[0]
-
     // clean up the synapses array in case of any faulty data
     _.each(results[1], function(synapse) {
       mapping = synapse.getMapping()
       DataModel.Synapses.remove(synapse)
       if (DataModel.Mappings) DataModel.Mappings.remove(mapping)
     })
-
-    // set up addTopic instructions in case they delete all the topics
-    // i.e. if there are 0 topics at any time, it should have instructions again
-    $('#instructions div').hide()
-    if (Active.Map && Active.Map.authorizeToEdit(Active.Mapper)) {
-      $('#instructions div.addTopic').show()
-    }
-
     if (self.vizData.length === 0) {
-      GlobalUI.showDiv('#instructions')
+      Map.setHasLearnedTopicCreation(false)
       Visualize.loadLater = true
     } else {
-      GlobalUI.hideDiv('#instructions')
+      Map.setHasLearnedTopicCreation(true)
     }
-
     Visualize.render()
   }, // prepareVizData
   edgeRender: function(adj, canvas) {
@@ -1026,7 +1003,6 @@ const JIT = {
       Create.newTopic.open()
     } else if (!Mouse.didPan) {
       // SINGLE CLICK, no pan
-      Filter.close()
       TopicCard.hideCard()
       SynapseCard.hideCard()
       Create.newTopic.hide()

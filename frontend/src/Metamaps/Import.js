@@ -316,7 +316,7 @@ const Import = {
       success: opts.success
     })
 
-    GlobalUI.hideDiv('#instructions')
+    Map.setHasLearnedTopicCreation(true)
   },
 
   createSynapseWithParameters: function(desc, category, permission,

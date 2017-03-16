@@ -1,6 +1,7 @@
 /* global $ */
 
 import React, { PropTypes, Component } from 'react'
+import { Link } from 'react-router'
 
 import MetacodeSelect from '../MetacodeSelect'
 import Permission from './Permission'
@@ -52,21 +53,21 @@ class Links extends Component {
     }
 
     let output = []
-    
+
     firstFiveLinks.forEach(obj => {
-      output.push(<li key={obj.mapId}><a href={`/maps/${obj.mapId}`}>{obj.mapName}</a></li>)
+      output.push(<li key={obj.mapId}><Link to={`/maps/${obj.mapId}`}>{obj.mapName}</Link></li>)
     })
 
     if (extraLinks.length > 0) {
       if (this.state.showMoreMaps) {
         extraLinks.forEach(obj => {
-          output.push(<li key={obj.mapId} className="hideExtra extraText"><a href={`/maps/${obj.mapId}`}>{obj.mapName}</a></li>)
+          output.push(<li key={obj.mapId} className="hideExtra extraText"><Link to={`/maps/${obj.mapId}`}>{obj.mapName}</Link></li>)
         })
       }
       const text = this.state.showMoreMaps ? 'See less...' : `See ${extraLinks.length} more...`
       output.push(<li key="showMore"><span className="showMore" onClick={this.toggleShowMoreMaps}>{text}</span></li>)
     }
-      
+
     return output
   }
 

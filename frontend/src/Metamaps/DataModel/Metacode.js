@@ -9,12 +9,12 @@ const Metacode = Backbone.Model.extend({
     image.src = this.get('icon')
     this.set('image', image)
   },
-  prepareLiForFilter: function() {
-    return outdent`
-      <li data-id="${this.id}">
-        <img src="${this.get('icon')}" data-id="${this.id}" alt="${this.get('name')}" />
-        <p>${this.get('name').toLowerCase()}</p>
-      </li>`
+  prepareDataForFilter: function() {
+    return {
+      id: this.id,
+      name: this.get('name'),
+      icon: this.get('icon')
+    }
   }
 })
 

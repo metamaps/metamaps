@@ -193,10 +193,6 @@ button.button.btn-no:hover {
     display: block;
     width: 830px;
 }
-.requestInvite {
-    display: block;
-    margin: -720px auto 0;
-}
 .new_session,
 .new_user,
 .edit_user,
@@ -672,9 +668,21 @@ label {
     position: relative;
     /*overflow:hidden; */
 }
-.main.compressed {
-  width: calc(100% - 300px);
+.compressed {
+  .upperRightUI {
+    right: 324px;
+  }
+  .upperRightMapButtons {
+    right: 434px;
+  }
+  .mapControls {
+    right: 324px;
+  }
+  .infoAndHelp {
+    right: 370px;
+  }
 }
+
 #infovis-canvas {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -775,9 +783,9 @@ label {
 }
 .sidebarAccountIcon img {
     border-radius: 16px;
+    width: 32px;
 }
 .sidebarAccountBox {
-    display: none;
     height: auto;
 }
 .authenticated .sidebarAccountBox {
@@ -1039,7 +1047,6 @@ label[for="user_remember_me"] {
 }
 
 .sidebarFilterBox {
-    display:none;
     width: 319px;
     padding: 16px 0;
     overflow-y: auto;
@@ -3058,14 +3065,16 @@ and it won't be important on password protected instances */
 
 /* request */
 
-#wrapper .requestInvite {
+.requestInvite {
     width: 700px;
-    margin: 0 auto;
-    padding: 0 0 60px 0;
     background: #FFFFFF;
     color: white;
-    height: 100%;
-    overflow: hidden;
+    height: calc(100% - 52px);
+    z-index: 1;
+    position: relative;
+    left: 50%;
+    margin-left: -350px;
+    margin-top: 52px;
 }
 
 .home_bg {

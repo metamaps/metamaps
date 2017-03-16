@@ -9,8 +9,7 @@ import DataModel from './DataModel'
 import Debug from './Debug'
 import Filter from './Filter'
 import GlobalUI, {
-  Search, CreateMap, ImportDialog, Account as GlobalUIAccount,
-  NotificationIcon
+  ReactApp, Search, CreateMap, ImportDialog
 } from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
@@ -18,12 +17,10 @@ import Listeners from './Listeners'
 import Loading from './Loading'
 import Map, { CheatSheet, InfoBox } from './Map'
 import Mapper from './Mapper'
-import Mobile from './Mobile'
 import Mouse from './Mouse'
 import Organize from './Organize'
 import PasteInput from './PasteInput'
 import Realtime from './Realtime'
-import Router from './Router'
 import Selected from './Selected'
 import Settings from './Settings'
 import Synapse from './Synapse'
@@ -45,11 +42,10 @@ Metamaps.DataModel = DataModel
 Metamaps.Debug = Debug
 Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
+Metamaps.GlobalUI.ReactApp = ReactApp
 Metamaps.GlobalUI.Search = Search
 Metamaps.GlobalUI.CreateMap = CreateMap
-Metamaps.GlobalUI.Account = GlobalUIAccount
 Metamaps.GlobalUI.ImportDialog = ImportDialog
-Metamaps.GlobalUI.NotificationIcon = NotificationIcon
 Metamaps.Import = Import
 Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
@@ -59,12 +55,10 @@ Metamaps.Map.CheatSheet = CheatSheet
 Metamaps.Map.InfoBox = InfoBox
 Metamaps.Maps = {}
 Metamaps.Mapper = Mapper
-Metamaps.Mobile = Mobile
 Metamaps.Mouse = Mouse
 Metamaps.Organize = Organize
 Metamaps.PasteInput = PasteInput
 Metamaps.Realtime = Realtime
-Metamaps.Router = Router
 Metamaps.Selected = Selected
 Metamaps.Settings = Settings
 Metamaps.Synapse = Synapse
@@ -85,26 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
     ) {
       Metamaps[prop].init(Metamaps.ServerData)
     }
-  }
-  // load whichever page you are on
-  if (Metamaps.currentSection === 'explore') {
-    const capitalize = Metamaps.currentPage.charAt(0).toUpperCase() + Metamaps.currentPage.slice(1)
-
-    Views.ExploreMaps.setCollection(DataModel.Maps[capitalize])
-    if (Metamaps.currentPage === 'mapper') {
-      Views.ExploreMaps.fetchUserThenRender()
-    } else {
-      Views.ExploreMaps.render()
-    }
-    GlobalUI.showDiv('#explore')
-  } else if (Metamaps.currentSection === '' && Active.Mapper) {
-    Views.ExploreMaps.setCollection(DataModel.Maps.Active)
-    Views.ExploreMaps.render()
-    GlobalUI.showDiv('#explore')
-  } else if (Active.Map || Active.Topic) {
-    Loading.show()
-    JIT.prepareVizData()
-    GlobalUI.showDiv('#infovis')
   }
 })
 

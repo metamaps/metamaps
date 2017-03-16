@@ -61,7 +61,7 @@ const CreateMap = {
     if (GlobalUI.lightbox === 'forkmap') {
       self.newMap.set('topicsToMap', self.topicsToMap)
       self.newMap.set('synapsesToMap', self.synapsesToMap)
-      self.newMap.set('source_id', Active.Map.id)
+      if (Active.Map) self.newMap.set('source_id', Active.Map.id)
     }
 
     var formId = GlobalUI.lightbox === 'forkmap' ? '#fork_map' : '#new_map'

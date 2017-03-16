@@ -6,83 +6,18 @@
 #%>
 
 <%= render :partial => 'layouts/head' %>
-
 <body class="<%= authenticated? ? "authenticated" : "unauthenticated" %> controller-<%= controller_name %> action-<%= action_name %>">
-
-    <div id="chat-box-wrapper"></div>
-
-    <a class='feedback-icon' target='_blank' href='https://hylo.com/c/metamaps'></a>    
-
-    <%= content_tag :div, class: "main" do %>
-
-        <% classes = action_name == "home" ? "homePage" : ""
-           classes += action_name == "home" && authenticated? ? " explorePage" : ""
-           classes += controller_name == "maps" && action_name == "index" ? " explorePage" : ""
-           if controller_name == "maps" && action_name == "show"
-             classes += " mapPage"
-             if policy(@map).update?
-               classes += " canEditMap"
-             end
-             if @map.permission == "commons"
-               classes += " commonsMap"
-             end
-           end
-           classes += controller_name == "topics" && action_name == "show" ? " topicPage" : ""
-           %>
-
-        <div class="wrapper <%= classes %>" id="wrapper">
-
-            <%= render :partial => 'layouts/upperelements', :locals => { :noHardHomeLink => controller_name == "notifications" ? true : false }  %>
-
-            <%= yield %>
-
-            <div class="showcard mapElement mapElementHidden" id="showcard"></div> <!-- the topic card -->
-            <% if authenticated? %>
-                <% # for creating and pulling in topics and synapses %>
-                <% if controller_name == 'maps' && action_name == "conversation" %>
-                  <%= render :partial => 'maps/newtopicsecret' %>
-                <% else %>
-                  <%= render :partial => 'maps/newtopic' %>
-                <% end %>
-                <%= render :partial => 'maps/newsynapse' %>
-                <% # for populating the change metacode list on the topic card %>
-                <%= render :partial => 'shared/metacodeoptions' %>
-            <% end %>
-            <%= render :partial => 'layouts/lowermapelements' %>
-
-            <div id="explore"></div>
-
-            <% if !(controller_name == 'maps' && action_name == "conversation") %>
-              <div id="instructions">
-                <div class="addTopic">
-                  Double-click to<br>add a topic
-                </div>
-                <div class="tabKey">
-                  Use Tab & Shift+Tab to select a metacode
-                </div>
-                <div class="enterKey">
-                  Press Enter to add the topic
-                </div>
-              </div>
-            <% end %>
-            
-            <div id="infovis"></div>
-            <%= render :partial => 'layouts/mobilemenu' %>
-            
-            <p id="toast" class="toast">
-              <% if devise_error_messages? %>
-                <%= devise_error_messages! %>
-              <% end %>
-              <% if notice %>
-                <%= notice %>
-              <% end %>
-              <% if alert %>
-                <%= alert %>
-              <% end %>
-            </p>      
-            <div id="loading"></div>
-        </div>
-
+    <div class="main" id="react-app"></div>
+    <%= yield %>
+    <% if authenticated? %>
+        <% # for creating and pulling in topics and synapses %>
+        <% if controller_name == 'maps' && action_name == "conversation" %>
+          <%= render :partial => 'maps/newtopicsecret' %>
+        <% else %>
+          <%= render :partial => 'maps/newtopic' %>
+        <% end %>
+        <%= render :partial => 'maps/newsynapse' %>
+        <% # for populating the change metacode list on the topic card %>
+        <%= render :partial => 'shared/metacodeoptions' %>
     <% end %>
-
 <%= render :partial => 'layouts/foot' %>

@@ -146,7 +146,6 @@ const Listeners = {
       }
 
       if (Active.Map && Realtime.inConversation) Realtime.positionVideos()
-      Mobile.resizeTitle()
     })
   },
   centerAndReveal: function(nodes, opts) {
