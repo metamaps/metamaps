@@ -2,14 +2,9 @@
 
 import Backbone from 'backbone'
 import { Howl } from 'howler'
-import React from 'react'
-import ReactDOM from 'react-dom'
-// TODO is this line good or bad
-// Backbone.$ = window.$
 
 import Active from '../Active'
 import DataModel from '../DataModel'
-import Realtime from '../Realtime'
 import ReactApp from '../GlobalUI/ReactApp'
 
 const ChatView = {

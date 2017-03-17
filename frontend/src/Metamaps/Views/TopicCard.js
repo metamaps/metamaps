@@ -1,8 +1,5 @@
 /* global $ */
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-
 import Active from '../Active'
 import Visualize from '../Visualize'
 import GlobalUI, { ReactApp } from '../GlobalUI'
