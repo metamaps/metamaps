@@ -5,7 +5,6 @@ import Create from './Create'
 import Control from './Control'
 import DataModel from './DataModel'
 import JIT from './JIT'
-import Mobile from './Mobile'
 import Realtime from './Realtime'
 import Selected from './Selected'
 import Topic from './Topic'
@@ -32,7 +31,7 @@ const Listeners = {
           JIT.escKeyHandler()
           break
         case 38: // if UP key is pressed
-          if ((e.ctrlKey || e.metaKey) && e.shiftKey){
+          if ((e.ctrlKey || e.metaKey) && e.shiftKey) {
             Control.selectNeighbors()
           }
           break
