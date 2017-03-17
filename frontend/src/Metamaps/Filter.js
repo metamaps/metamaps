@@ -25,8 +25,6 @@ const Filter = {
     mappers: [],
     synapses: []
   },
-  isOpen: false,
-  changing: false,
   reset: function() {
     var self = Filter
     self.filters.metacodes = []

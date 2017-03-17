@@ -13,7 +13,6 @@ const ChatView = {
   messages: new Backbone.Collection(),
   conversationLive: false,
   isParticipating: false,
-  domId: 'chat-box-wrapper',
   init: function(urls) {
     const self = ChatView
     self.sound = new Howl({

@@ -11,7 +11,6 @@ import Settings from './Settings'
 import Visualize from './Visualize'
 
 const Control = {
-  init: function() {},
   selectNode: function(node, e) {
     var filtered = node.getData('alpha') === 0
 
