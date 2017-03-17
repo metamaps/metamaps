@@ -20,7 +20,8 @@ class App extends Component {
     userRequested: PropTypes.bool,
     requestAnswered: PropTypes.bool,
     requestApproved: PropTypes.bool,
-    onRequestAccess: PropTypes.func
+    onRequestAccess: PropTypes.func,
+    serverData: PropTypes.object
   }
 
   static childContextTypes = {
@@ -35,7 +36,7 @@ class App extends Component {
   render () {
     const { children, toast, unreadNotificationsCount, openInviteLightbox,
             mobile, mobileTitle, mobileTitleWidth, mobileTitleClick, location,
-            map, userRequested, requestAnswered, requestApproved,
+            map, userRequested, requestAnswered, requestApproved, serverData,
             onRequestAccess } = this.props
     const { pathname } = location || {}
     // this fixes a bug that happens otherwise when you logout
@@ -46,7 +47,8 @@ class App extends Component {
                                unreadNotificationsCount={unreadNotificationsCount}
                                mobileTitle={mobileTitle}
                                mobileTitleWidth={mobileTitleWidth}
-                               onTitleClick={mobileTitleClick} />}
+                               onTitleClick={mobileTitleClick}
+                               serverData={serverData} />}
       {!unauthedHome && <UpperLeftUI currentUser={currentUser}
                                      map={map}
                                      userRequested={userRequested}

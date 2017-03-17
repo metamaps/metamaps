@@ -26,6 +26,7 @@ const MOBILE_VIEW_PADDING = 40
 const MAX_COLUMNS = 4
 
 const ReactApp = {
+  serverData: {},
   mapId: null,
   topicId: null,
   unreadNotificationsCount: 0,
@@ -36,6 +37,7 @@ const ReactApp = {
   mobileTitleWidth: 0,
   init: function(serverData, openLightbox) {
     const self = ReactApp
+    self.serverData = serverData
     self.unreadNotificationsCount = serverData.unreadNotificationsCount
     self.mobileTitle = serverData.mobileTitle
     self.openLightbox = openLightbox
@@ -102,7 +104,8 @@ const ReactApp = {
       mobileTitle: self.mobileTitle,
       mobileTitleWidth: self.mobileTitleWidth,
       mobileTitleClick: (e) => Active.Map && InfoBox.toggleBox(e),
-      openInviteLightbox: () => self.openLightbox('invite')
+      openInviteLightbox: () => self.openLightbox('invite'),
+      serverData: self.serverData
     },
     self.getMapProps(),
     self.getTopicProps(),

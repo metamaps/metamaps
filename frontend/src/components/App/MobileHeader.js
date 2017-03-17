@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 
+import Sprite from '../common/Sprite'
+
 class MobileHeader extends Component {
   static propTypes = {
     unreadNotificationsCount: PropTypes.number,
@@ -20,7 +22,8 @@ class MobileHeader extends Component {
   }
 
   render() {
-    const { unreadNotificationsCount, currentUser, mobileTitle, mobileTitleWidth, onTitleClick } = this.props
+    const { unreadNotificationsCount, currentUser, mobileTitle,
+            mobileTitleWidth, onTitleClick, serverData } = this.props
     const { open } = this.state
     return <div>
       <div id="mobile_header">
@@ -39,17 +42,63 @@ class MobileHeader extends Component {
                 <span>{currentUser.get('name')}</span>
               </Link>
             </li>
-            <li><a href="/maps/new">New Map</a></li>
-            <li><Link to="/explore/mine">My Maps</Link></li>
-            <li><Link to="/explore/shared">Shared With Me</Link></li>
-            <li><Link to="/explore/starred">Starred By Me</Link></li>
-            <li><Link to="/explore/active">All Maps</Link></li>
-            <li><a href={`/users/${currentUser.id}/edit`}>Account</a></li>
+            <li>
+              <a href="/maps/new">
+                <Sprite src={serverData['map_control_sprite.png']}
+                      width={32} height={32} xIndex={4} yIndex={0} />
+                New Map
+              </a>
+            </li>
+            <li>
+              <Link to="/explore/mine">
+                <Sprite src={serverData['exploremaps_sprite.png']}
+                      width={32} height={32} xIndex={1} yIndex={0} />
+                My Maps
+              </Link>
+            </li>
+            <li>
+              <Link to="/explore/shared">
+                <Sprite src={serverData['exploremaps_sprite.png']}
+                        width={32} height={32} xIndex={4} yIndex={0} />
+                Shared With Me
+              </Link>
+            </li>
+            <li>
+              <Link to="/explore/starred">
+                <Sprite src={serverData['exploremaps_sprite.png']}
+                        width={32} height={32} xIndex={3} yIndex={0} />
+                Starred By Me
+              </Link>
+            </li>
+            <li>
+              <Link to="/explore/active">
+                <Sprite src={serverData['exploremaps_sprite.png']}
+                        width={32} height={32} xIndex={0} yIndex={0} />
+                All Maps
+              </Link>
+            </li>
+            <li>
+              <a href={`/users/${currentUser.id}/edit`}>
+                <Sprite src={serverData['user_sprite.png']}
+                        width={32} height={32} xIndex={0} yIndex={0} />
+                Account
+              </a>
+            </li>
             <li className="notifications">
-              <a href="/notifications">Notifications</a>
+              <a href="/notifications">
+                <Sprite src={serverData['map_control_sprite.png']}
+                        width={32} height={32} xIndex={0} yIndex={0} />
+                Notifications
+              </a>
               {unreadNotificationsCount > 0 && <div className="unread-notifications-dot"></div>}
             </li>
-            <li><a id="Logout" href="/logout">Sign Out</a></li>
+            <li>
+              <a id="Logout" href="/logout">
+                <Sprite src={serverData['user_sprite.png']}
+                        width={32} height={32} xIndex={0} yIndex={3} />
+                Sign Out
+              </a>
+            </li>
         </ul>}
         {!currentUser && <ul onClick={this.toggle}>
           <li><a href="/">Home</a></li>

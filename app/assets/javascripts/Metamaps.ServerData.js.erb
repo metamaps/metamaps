@@ -10,6 +10,9 @@ Metamaps.ServerData['topic_link_signifier.png'] = '<%= asset_path('topic_link_si
 Metamaps.ServerData['synapse16.png'] = '<%= asset_path('synapse16.png') %>'
 Metamaps.ServerData['sounds/MM_sounds.mp3'] = '<%= asset_path 'sounds/MM_sounds.mp3' %>'
 Metamaps.ServerData['sounds/MM_sounds.ogg'] = '<%= asset_path 'sounds/MM_sounds.ogg' %>'
+Metamaps.ServerData['exploremaps_sprite.png'] = '<%= asset_path 'exploremaps_sprite.png' %>'
+Metamaps.ServerData['map_control_sprite.png'] = '<%= asset_path 'map_control_sprite.png' %>'
+Metamaps.ServerData['user_sprite.png'] = '<%= asset_path 'user_sprite.png' %>'
 Metamaps.ServerData.Metacodes = <%= Metacode.all.to_json.gsub(%r[(icon.*?)(\"},)], '\1?purple=stupid\2').html_safe %>
 Metamaps.ServerData.REALTIME_SERVER = '<%= ENV['REALTIME_SERVER'] %>'
 Metamaps.ServerData.RAILS_ENV = '<%= ENV['RAILS_ENV'] %>'
