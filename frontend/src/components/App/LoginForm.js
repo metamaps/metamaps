@@ -19,7 +19,7 @@ class LoginForm extends Component {
   }
 
   emailInputDidMount(node) {
-    node.focus()
+    node && node.focus()
   }
 
   handleClickOutside = () => {
