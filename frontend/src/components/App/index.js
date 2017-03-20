@@ -60,7 +60,7 @@ class App extends Component {
                                 openInviteLightbox={openInviteLightbox}
                                 signInPage={pathname === '/login'} />}
       <Toast message={toast} />
-      {!mobile && currentUser && <a className='feedback-icon' target='_blank' href='https://hylo.com/c/metamaps'></a>}
+      {!mobile && currentUser && <a className='feedback-icon' target='_blank' href='https://hylo.com/c/metamaps/tag/feedback'></a>}
       {children}
     </div>
   }
