@@ -65,6 +65,7 @@ const SynapseCard = {
     self.add_user_info(synapse)
     self.add_perms_form(synapse)
     self.add_direction_form(synapse)
+    $('.authenticated #edit_synapse.permission.canEdit .best_in_place').best_in_place()
   },
   add_synapse_count: function(edge) {
     var count = edge.getData('synapses').length
