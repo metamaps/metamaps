@@ -88,7 +88,7 @@ class Links extends Component {
         <div className="linkItem icon metacodeItem"
           style={{ zIndex: this.state.showMetacodeTitle ? 4 : 1 }}
           onMouseLeave={() => this.setState({ showMetacodeTitle: false, showMetacodeSelect: false })}
-          onClick={this.handleMetacodeBarClick}
+          onClick={() => authorizedToEdit && this.handleMetacodeBarClick()}
         >
           <div className={`metacodeTitle mbg${metacode.get('id')}`}
             style={{ display: this.state.showMetacodeTitle ? 'block' : 'none' }}
