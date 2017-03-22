@@ -151,7 +151,7 @@ const ReactApp = {
       metacodeSets: TopicCard.metacodeSets,
       updateTopic: TopicCard.updateTopic,
       onTopicFollow: TopicCard.onTopicFollow,
-      redrawCanvas: TopicCard.redrawCanvas
+      redrawCanvas: () => Visualize.mGraph.plot()
     }
   },
   getTopicProps: function() {

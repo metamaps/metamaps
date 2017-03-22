@@ -7,9 +7,6 @@ import GlobalUI, { ReactApp } from '../GlobalUI'
 const TopicCard = {
   openTopic: null, // stores the topic that's currently open
   metacodeSets: [],
-  redrawCanvas: () => {
-    Visualize.mGraph.plot()
-  },
   init: function(serverData) {
     const self = TopicCard
     self.metacodeSets = serverData.metacodeSets
@@ -41,20 +38,11 @@ const TopicCard = {
     var topic = node.getData('topic')
     self.openTopic = topic
     self.render()
-    $('.showcard').fadeIn('fast', () => {
-      $('.showcard').draggable({
-        handle: '.metacodeImage',
-        stop: function() {
-          $(this).height('auto')
-        }
-      })
-      opts.complete && opts.complete()
-    })
   },
   hideCard: function() {
     var self = TopicCard
-    $('.showcard').fadeOut('fast')
     self.openTopic = null
+    self.render()
   }
 }
 

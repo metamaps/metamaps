@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react'
+import Draggable from 'react-draggable'
 
 import Title from './Title'
 import Links from './Links'
@@ -30,32 +31,34 @@ class ReactTopicCard extends Component {
     if (topic.authorizePermissionChange(currentUser)) classname += ' yourTopic'
 
     return (
-      <div className="showcard mapElement mapElementHidden" id="showcard">
-        <div className={classname}>
-          <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topic.id}`}>
-            <Title name={topic.get('name')}
-              authorizedToEdit={authorizedToEdit}
-              onChange={wrappedUpdateTopic}
-            />
-            <Links topic={topic}
-              ActiveMapper={this.props.currentUser}
-              updateTopic={wrappedUpdateTopic}
-              metacodeSets={this.props.metacodeSets}
-              redrawCanvas={this.props.redrawCanvas}
-            />
-            <Desc desc={topic.get('desc')}
-              authorizedToEdit={authorizedToEdit}
-              onChange={wrappedUpdateTopic}
-            />
-            <Attachments topic={topic}
-              authorizedToEdit={authorizedToEdit}
-              updateTopic={wrappedUpdateTopic}
-            />
-          {Util.isTester(currentUser) && <Follow isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />}
-            <div className="clearfloat"></div>
+      <Draggable handle=".metacodeImage" defaultPosition={{x: 100, y: 100}}>
+        <div className="showcard mapElement mapElementHidden" id="showcard">
+          <div className={classname}>
+            <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topic.id}`}>
+              <Title name={topic.get('name')}
+                authorizedToEdit={authorizedToEdit}
+                onChange={wrappedUpdateTopic}
+              />
+              <Links topic={topic}
+                ActiveMapper={this.props.currentUser}
+                updateTopic={wrappedUpdateTopic}
+                metacodeSets={this.props.metacodeSets}
+                redrawCanvas={this.props.redrawCanvas}
+              />
+              <Desc desc={topic.get('desc')}
+                authorizedToEdit={authorizedToEdit}
+                onChange={wrappedUpdateTopic}
+              />
+              <Attachments topic={topic}
+                authorizedToEdit={authorizedToEdit}
+                updateTopic={wrappedUpdateTopic}
+              />
+            {Util.isTester(currentUser) && <Follow isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />}
+              <div className="clearfloat"></div>
+            </div>
           </div>
         </div>
-      </div>
+      </Draggable>
     )
   }
 }

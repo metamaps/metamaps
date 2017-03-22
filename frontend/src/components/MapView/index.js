@@ -77,7 +77,7 @@ export default class MapView extends Component {
             toggleMetacode, toggleMapper, toggleSynapse, filterAllMetacodes,
             filterAllMappers, filterAllSynapses, filterData,
             openImportLightbox, forkMap, openHelpLightbox,
-            mapIsStarred, onMapStar, onMapUnstar,
+            mapIsStarred, onMapStar, onMapUnstar, openTopic,
             onZoomExtents, onZoomIn, onZoomOut, hasLearnedTopicCreation } = this.props
     const { chatOpen } = this.state
     const onChatOpen = () => {
@@ -107,7 +107,7 @@ export default class MapView extends Component {
                     filterAllMappers={filterAllMappers}
                     filterAllSynapses={filterAllSynapses} />
       <DataVis />
-      <TopicCard {...this.props} />
+      {openTopic && <TopicCard {...this.props} />}
       {currentUser && <Instructions mobile={mobile} hasLearnedTopicCreation={hasLearnedTopicCreation} />}
       {currentUser && <MapChat {...this.props} onOpen={onChatOpen} onClose={onChatClose} chatOpen={chatOpen} ref={x => this.mapChat = x} />}
       <VisualizationControls map={map}
