@@ -101,12 +101,13 @@ class MapChat extends Component {
     const { unreadMessages, chatOpen, conversationLive,
             isParticipating, participants, messages, inviteACall, inviteToJoin } = this.props
     const { videosShowing, cursorsShowing, alertSound } = this.state
-    const rightOffset = chatOpen ? '0' : '-300px'
     return (
-      <div id="chat-box-wrapper">
-        <div className="chat-box"
-          style={{ right: rightOffset }}
-        >
+      <div className="chat-box">
+        <div className={`chat-button ${conversationLive ? 'active' : ''}`} onClick={this.toggleDrawer}>
+          <div className="tooltips">Chat</div>
+          <Unread count={unreadMessages} />
+        </div>
+        {chatOpen && <div className="chat-panel">
           <div className="junto-header">
             PARTICIPANTS
             <div onClick={this.toggleVideosShowing} className={`video-toggle ${videosShowing ? '' : 'active'}`} />
@@ -135,14 +136,10 @@ class MapChat extends Component {
             CHAT
             <div onClick={this.toggleAlertSound} className={`sound-toggle ${alertSound ? '' : 'active'}`}></div>
           </div>
-          <div className={`chat-button ${conversationLive ? 'active' : ''}`} onClick={this.toggleDrawer}>
-            <div className="tooltips">Chat</div>
-            <Unread count={unreadMessages} />
-          </div>
           <div className="chat-messages" ref={div => { this.messagesDiv = div }}>
             {makeList(messages)}
           </div>
-          {chatOpen && <NewMessage messageText={this.state.messageText}
+          <NewMessage messageText={this.state.messageText}
             focusMessageInput={this.focusMessageInput}
             handleChange={this.handleChange('messageText')}
             textAreaProps={{
@@ -153,8 +150,8 @@ class MapChat extends Component {
               onFocus: this.props.inputFocus,
               onBlur: this.props.inputBlur
             }}
-          />}
-        </div>
+          />
+        </div>}
       </div>
     )
   }
