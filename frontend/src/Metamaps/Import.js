@@ -375,7 +375,7 @@ const Import = {
             url
           }, function success(data, textStatus) {
             if (typeof data === 'string' && data.trim() === '') return
-            var selector = '#showcard #topic_' + topic.get('id') + ' .best_in_place'
+            var selector = '.showcard #topic_' + topic.get('id') + ' .best_in_place'
             if ($(selector).find('form').length > 0) {
               $(selector).find('textarea, input').val(data.title)
             } else {

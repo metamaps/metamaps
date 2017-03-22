@@ -86,6 +86,20 @@ const Topic = {
       Active.Topic = DataModel.Topics.get(nodeid)
     }
   },
+  onTopicFollow: topic => {
+    const isFollowing = topic.isFollowedBy(Active.Mapper)
+    $.post({
+      url: `/topics/${topic.id}/${isFollowing ? 'un' : ''}follow`
+    })
+    if (isFollowing) {
+      GlobalUI.notifyUser('You are no longer following this topic')
+      Active.Mapper.unfollowTopic(topic.id)
+    } else {
+      GlobalUI.notifyUser('You are now following this topic')
+      Active.Mapper.followTopic(topic.id)
+    }
+    ReactApp.render()
+  },
   fetchRelatives: function(nodes, metacodeId) {
     var self = this
 

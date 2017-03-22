@@ -93,25 +93,11 @@ const Topic = Backbone.Model.extend({
 
     return node
   },
-  updateViews: function() {
-    var onPageWithTopicCard = Active.Map || Active.Topic
-    var node = this.get('node')
-    // update topic card, if this topic is the one open there
-    if (onPageWithTopicCard && this === TopicCard.openTopicCard) {
-      TopicCard.showCard(node)
-    }
-
-    // update the node on the map
-    if (onPageWithTopicCard && node) {
-      node.name = this.get('name')
-      Visualize.mGraph.plot()
-    }
-  },
   updateCardView: function() {
     var onPageWithTopicCard = Active.Map || Active.Topic
     var node = this.get('node')
     // update topic card, if this topic is the one open there
-    if (onPageWithTopicCard && this === TopicCard.openTopicCard) {
+    if (onPageWithTopicCard && this === TopicCard.openTopic) {
       TopicCard.showCard(node)
     }
   },

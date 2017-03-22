@@ -15,7 +15,7 @@ import Control from './Control'
 import Create from './Create'
 import DataModel from './DataModel'
 import Filter from './Filter'
-import GlobalUI from './GlobalUI'
+import GlobalUI, { ReactApp } from './GlobalUI'
 import Map from './Map'
 import Mouse from './Mouse'
 import Selected from './Selected'
@@ -1468,7 +1468,7 @@ const JIT = {
           }
           $(rightclickmenu).remove()
         },
-        metacodeSets: TopicCard.metacodeSets
+        metacodeSets: ReactApp.metacodeSets
       }),
       document.getElementById('metacodeOptionsWrapper')
     )

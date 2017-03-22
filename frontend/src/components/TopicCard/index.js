@@ -32,7 +32,7 @@ class ReactTopicCard extends Component {
 
     return (
       <Draggable handle=".metacodeImage" defaultPosition={{x: 100, y: 100}}>
-        <div className="showcard mapElement mapElementHidden" id="showcard">
+        <div className="showcard mapElement mapElementHidden">
           <div className={classname}>
             <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topic.id}`}>
               <Title name={topic.get('name')}

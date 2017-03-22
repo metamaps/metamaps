@@ -25,7 +25,8 @@ class Links extends Component {
     this.props.updateTopic({
       metacode_id: metacodeId
     })
-    this.props.redrawCanvas()
+    // this needs to trigger a redraw of the canvas,
+    // which it currently does using backbone. If backbone comes out, make sure it still does
   }
 
   toggleShowMoreMaps = e => {
@@ -155,8 +156,7 @@ Links.propTypes = {
       icon_path: PropTypes.string, // url
       name: PropTypes.string
     }))
-  })),
-  redrawCanvas: PropTypes.func
+  }))
 }
 
 export default Links
