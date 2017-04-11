@@ -6,7 +6,6 @@ import _ from 'lodash'
 import Active from './Active'
 import AutoLayout from './AutoLayout'
 import DataModel from './DataModel'
-import GlobalUI from './GlobalUI'
 import Map from './Map'
 import Synapse from './Synapse'
 import Topic from './Topic'
@@ -386,6 +385,31 @@ const Import = {
           })
         }
       }
+    )
+  },
+
+  handleText: function(text, opts = {}) {
+    let coords = opts.coords
+    if (!coords || coords.x === undefined || coords.y === undefined) {
+      coords = AutoLayout.getNextCoord({ mappings: DataModel.Mappings })
+    }
+
+    const name = text
+    const url = ''
+    const metacode = opts.metacode || 'Wildcard'
+    const importId = opts.importId || null // don't store a cidMapping
+    const permission = opts.permission || null // use default
+    const desc = opts.desc || ''
+
+    Import.createTopicWithParameters(
+      name,
+      metacode,
+      permission,
+      desc,
+      url,
+      coords.x,
+      coords.y,
+      importId
     )
   },
 

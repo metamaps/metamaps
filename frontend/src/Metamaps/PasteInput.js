@@ -3,12 +3,9 @@
 import Import from './Import'
 import Util from './Util'
 import Visualize from './Visualize'
+import URL_REGEX from '../patched/regex-weburl'
 
 const PasteInput = {
-  // thanks to https://github.com/kevva/url-regex
-  // eslint-disable-next-line no-useless-escape
-  URL_REGEX: new RegExp('^(?:(?:(?:[a-z]+:)?//)|www\.)(?:\S+(?::\S*)?@)?(?:localhost|(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])(?:\.(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])){3}|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#][^\s"]*)?$'),
-
   init: function() {
     var self = PasteInput
 
@@ -22,19 +19,17 @@ const PasteInput = {
       e = e || window.event
 
       // prevent conflict with react-dropzone file uploader
-      if (event.target.id !== 'infovis-canvas') return
+      if (e.target.id !== 'infovis-canvas') return
 
       e.preventDefault()
       var coords = Util.pixelsToCoords(Visualize.mGraph, { x: e.clientX, y: e.clientY })
       if (e.dataTransfer.files.length > 0) {
         self.handleFile(e.dataTransfer.files[0], coords)
       }
-      // OMG import bookmarks 😍
+      // OMG import bookmarks 😍 (Or just text :P)
       if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
         e.dataTransfer.items[0].getAsString(function(text) {
-          if (text.match(self.URL_REGEX)) {
-            self.handle(text, coords)
-          }
+          self.handle(text, coords)
         })
       }
     }, false)
@@ -66,15 +61,26 @@ const PasteInput = {
   handle: function(text, coords = {}) {
     var self = PasteInput
 
-    if (text.match(self.URL_REGEX)) {
+    if (text.match(URL_REGEX)) {
       Import.handleURL(text, coords)
     } else if (text[0] === '{') {
       Import.handleJSON(text)
-    } else if (text.match(/\t/)) {
+    } else if (text.match(/^[Tt]opics\t/) || text.match(/^[Ss]ynapses\t/)) {
       Import.handleTSV(text)
     } else {
-      // just try to see if CSV works
-      Import.handleCSV(text)
+      // Handle as plain text
+      let textItems = text.split('\n')
+      if (textItems.length === 1) {
+        if (textItems[0].trim() !== '') {
+          Import.handleText(textItems[0].trim(), coords)
+        }
+      } else if (window.confirm('Are you sure you want to create ' + textItems.length + ' new topics?')) {
+        textItems.forEach(item => {
+          if (item.trim() !== '') {
+            self.handle(item.trim(), coords)
+          }
+        })
+      }
     }
   }
 }
