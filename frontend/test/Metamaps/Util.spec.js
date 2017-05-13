@@ -1,10 +1,8 @@
 /* global describe, it */
 
-import chai from 'chai'
+import { expect } from 'chai'
 
-import Util from '../src/Metamaps/Util'
-
-const { expect } = chai
+import Util from '../../src/Metamaps/Util'
 
 describe('Metamaps.Util.js', function() {
   describe('splitLine', function() {

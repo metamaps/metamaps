@@ -5,12 +5,12 @@ const win = doc.defaultView
 global.document = doc
 global.window = win
 
-// take all properties of the window object and also attach it to the 
+// take all properties of the window object and also attach it to the
 // mocha global object
 propagateToGlobal(win)
 
 // from mocha-jsdom https://github.com/rstacruz/mocha-jsdom/blob/master/index.js#L80
-function propagateToGlobal (window) {
+function propagateToGlobal(window) {
   for (let key in window) {
     if (!window.hasOwnProperty(key)) continue
     if (key in global) continue

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "mocha-webpack --webpack-config webpack.test.config.js --require frontend/test/support/dom.js frontend/test",
+    "test": "mocha-webpack --webpack-config webpack.test.config.js --require frontend/test_support/dom.js --recursive frontend/test",
     "eslint": "eslint frontend",
     "eslint:fix": "eslint --fix frontend"
   },
@@ -58,6 +58,7 @@
     "babel-eslint": "^7.1.1",
     "chai": "^3.5.0",
     "circular-dependency-plugin": "^2.0.0",
+    "enzyme": "^2.8.2",
     "eslint": "^3.11.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
@@ -66,7 +67,8 @@
     "jsdom": "^9.11.0",
     "mocha": "^3.2.0",
     "mocha-webpack": "^0.7.0",
-    "react-addons-test-utils": "^15.4.2"
+    "react-addons-test-utils": "^15.5.1",
+    "sinon": "^2.2.0"
   },
   "optionalDependencies": {
     "raml2html": "4.0.5"
