@@ -42,6 +42,7 @@ class Map < ApplicationRecord
   after_create :after_created
   after_update :after_updated
   after_save :update_deferring_topics_and_synapses, if: :permission_changed?
+  before_destroy :before_destroyed
 
   delegate :count, to: :topics, prefix: :topic # same as `def topic_count; topics.count; end`
   delegate :count, to: :synapses, prefix: :synapse
@@ -158,4 +159,10 @@ class Map < ApplicationRecord
     end
   end
   handle_asynchronously :after_updated_async
+
+  def before_destroyed
+    Map.where(source_id: id).find_each do |forked_map|
+      forked_map.update(source_id: nil)
+    end
+  end
 end
