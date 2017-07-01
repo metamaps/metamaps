@@ -18,10 +18,26 @@
     font-weight: normal;
     font-style: normal;
 }
-
-.backface-visible {
-	-webkit-backface-visibility: visible !important;
-    backface-visibility: visible !important;
+@font-face {
+    font-family: 'noto-sans-regular';
+    src: url(<%= asset_path 'Fonts/notosansui-regular-webfont.woff2' %>) format('woff2'),
+         url(<%= asset_path 'Fonts/notosansui-regular-webfont.woff' %>) format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'noto-sans-bold';
+    src: url(<%= asset_path 'Fonts/notosansui-bold-webfont.woff2' %>) format('woff2'),
+         url(<%= asset_path 'Fonts/notosansui-bold-webfont.woff' %>) format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'noto-sans-bold-italic';
+    src: url(<%= asset_path 'Fonts/notosansui-bolditalic-webfont.woff2' %>) format('woff2'),
+         url(<%= asset_path 'Fonts/notosansui-bolditalic-webfont.woff' %>) format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 #yield {
@@ -227,119 +243,77 @@
 
 /* end map wrapper */
 
-/* yield */
-
-.famousYield {
-    overflow-y:auto;
-}
-
 /* homepage */
+
+body.action-home {
+  background: white;
+  font-family: 'noto-sans', sans-serif;
+  font-weight: 200;
+}
 
 .homeWrapper.homeText {
     margin-top: 5%;
 }
 
-.fullWidthWrapper {
-    width: 100%;
-}
-.fullWidthWrapper.withVideo {
-    height: 315px;
-    background: #757575;
-}
-
 .homeWrapper {
+    color: #6D6D6D;
+    text-align: center;
+}
+@media only screen and (max-width : 800px) {
+  .homeWrapper {
+    width: 90%;
+    margin: 0 5%;
+  }
+}
+@media only screen and (min-width : 801px) {
+  .homeWrapper {
     width: 800px;
     margin: 0 auto;
-    color: #424242;
+  }
 }
 
 .homeTitle {
     font-size: 64px;
-    line-height: 48px;
-    text-align: center;
+    line-height: 70px;
     margin-bottom: 20px;
+    font-family: 'noto-sans-bold', sans-serif;
 }
 
 .homeIntro {
     font-size: 22px;
     line-height: 26px;
-    text-align: justify;
     margin: 32px 0 20px;
-    font-family: 'din-regular', helvetica, sans-serif;
+}
+
+.homeIntro div {
+  margin: 20px 0;
 }
 
 .homeWrapper .green {
     color: #4fc059;
 }
-
-.homeWrapper .din-medium {
-    font-family: 'din-medium', helvetica, sans-serif;
+.homeWrapper .purple {
+    color: #a354cd;
+}
+.homeWrapper .yellow {
+    color: #dab539;
 }
 
-.homeVideo {
-    margin-bottom: 20px;
-    float: left;
-}
-
-.homeWrapper .callToAction {
-    float: left;
-    width: 216px;
-    padding: 8px 0 8px 24px;
-    color: #F5F5F5;
-}
-.callToAction h3 {
-    font-size: 24px;
-}
-.callToAction p {
-    margin: 8px 0 16px;
-    font-size: 13px;
-    line-height: 16px;
-    font-family: 'din-regular', helvetica, sans-serif;
-    text-align: left;
-}
-.callToAction a, .callToAction button {
+.requestInviteCTA {
     display: block;
     width: 220px;
-    height: 12px;
+    font-size: 20px;
     padding: 16px 0;
     text-align: center;
-    border-radius: 2px;
-    font-size: 12px;
-    box-shadow: 0px 1px 1.5px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    border-radius: 3px;
+    border: 2px solid #a354cd;
     margin: 0 auto;
-    color: #FFFFFF;
-    box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    -webkit-box-sizing: content-box;
-}
-.callToAction .requestInviteCTA {
-    background-color: #4fc059;
+    color: #a354cd;
     margin-bottom: 12px;
+    font-family: 'noto-sans-bold', sans-serif;
 }
-.callToAction .requestInviteCTA:hover {
-    background-color: #49ad4e;
-}
-.callToAction .exploreFeaturedCTA {
-    background-color: #a354cd;
-    margin-bottom: 12px;
-}
-.callToAction .exploreFeaturedCTA:hover {
-    background-color: #9150bc;
-}
-.callToAction .learnMoreCTA {
-    background-color: #4fb5c0;
-    margin-bottom: 12px;
-}
-.callToAction .learnMoreCTA:hover {
-    background-color: #419599;
-}
-
-.fullWidthWrapper.withPartners {
-    background: url(<%= asset_path('homepage_bg_fade.png') %>) no-repeat center -300px;
-}
-.homeWrapper.homePartners {
-    padding: 64px 0 280px;
-    height: 96px;
+.requestInviteCTA:hover {
+    
 }
 
 /* end home page */
