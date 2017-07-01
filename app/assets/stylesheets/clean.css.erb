@@ -251,13 +251,36 @@ body.action-home {
   font-weight: 200;
 }
 
+.homeLogo {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  font-family: 'noto-sans-bold-italic', sans-serif;
+  font-size: 22px;
+  color: #6D6D6D;
+}
+
+#particles-bg {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .homeWrapper.homeText {
     margin-top: 5%;
 }
 
 .homeWrapper {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    border-radius: 3px;
     color: #6D6D6D;
     text-align: center;
+    padding: 30px;
+    background: white;
+    opacity: 0.8;
 }
 @media only screen and (max-width : 800px) {
   .homeWrapper {
@@ -307,9 +330,8 @@ body.action-home {
     text-align: center;
     border-radius: 3px;
     border: 2px solid #a354cd;
-    margin: 0 auto;
+    margin: 12px auto;
     color: #a354cd;
-    margin-bottom: 12px;
     font-family: 'noto-sans-bold', sans-serif;
 }
 .requestInviteCTA:hover {

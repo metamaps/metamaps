@@ -8,6 +8,8 @@
 <% content_for :title, "Home | Metamaps" %> 
 <% content_for :mobile_title, "Home" %> 
 <div id="yield">
+  <div class="homeLogo">METAMAPS</div>
+  <div id="particles-bg"></div>
   <div class="homeWrapper homeText">
     <div class="homeTitle">Make sense, together.</div>
     <div class="homeIntro">
@@ -22,6 +24,7 @@
   </div>
 </div><!-- end yield -->
 
+<%= javascript_include_tag "particles-bg" %>
 <script>
   Metamaps.currentSection = ''
   Metamaps.currentPage = ''
