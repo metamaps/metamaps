@@ -37,8 +37,8 @@ class Mapping < ApplicationRecord
         'map_' + map.id.to_s,
         type: 'synapseAdded',
         synapse: mappable.filtered,
-        topic1: mappable.topic1.filtered,
-        topic2: mappable.topic2.filtered,
+        topic1: mappable.topic1&.filtered,
+        topic2: mappable.topic2&.filtered,
         mapping_id: id
       )
       meta = { 'mapping_id': id }
