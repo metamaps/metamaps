@@ -32,6 +32,11 @@ Metamaps is developed and maintained by a distributed, nomadic community compris
 
 If you are on Mac or Ubuntu you can use the following instructions to quickly get a local copy of metamaps up and running using a Vagrant virtualbox. Don't be intimidated, it's easy!
 ```
+There are two options for cloning the repository - the simplest way is the first one since you don't need to set up SSH keys:
+git clone https://github.com/metamaps/metamaps
+
+OR
+
 git clone git@github.com:metamaps/metamaps.git
 ```
 Now ensure you have VirtualBox and Vagrant installed on your computer
