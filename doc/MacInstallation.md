@@ -39,7 +39,7 @@ Copy the .example-env file and rename it to .env. Then modify the DB_USERNAME an
 
     rake db:create
     rake db:schema:load
-    rake db:fixtures:load
+    rake db:seed
     rails server
 
 Now open a browser to http://localhost:3000!
