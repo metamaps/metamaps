@@ -86,10 +86,15 @@ Open a new terminal, navigate to the metamaps directory, and execute the
 server: 
     
     rails s
+    
+NOTE: if you want to actively develop on the javascript in /frontend use
+
+    npm run build:watch
 
 and dont forget to run the other server for realtime...
 
-    node realtime/realtime-server.js 
+    node realtime/realtime-server.js
+to start a webpack build process that updates the build everytime you make code changes
 
 Now you're all set enjoy your personal server of metamaps :) Navigate your browser to localhost:3000 once you have the server running. Sign in with the default account
 
