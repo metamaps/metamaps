@@ -1,3 +1,5 @@
+DISCLAIMER: This tutorial is liable to be out of date, and we don't necessarily support windows development. If you are set on installing Metamaps on windows, it may be worthwhile to look at the Mac and Ubuntu docs for up to date information on what metamaps requires to run. 
+
 Before you begin, you'll need to install stuff:
 
 Ruby, Git, and Rails: http://railsinstaller.org/en
