@@ -39,10 +39,23 @@ Copy the .example-env file and rename it to .env. Then modify the DB_USERNAME an
     rake db:schema:load
     rake db:seed
     rails server
-
-Now open a browser to http://localhost:3000!
-
+    
 To start the realtime server:
 
-    cd realtime
-    node realtime-server.js
+    node realtime/realtime-server.js
+    
+NOTE: if you want to actively develop on the javascript in `/frontend` use
+
+    npm run build:watch
+to start a webpack build process that updates the build everytime you make code changes
+
+Now open a browser to http://localhost:3000!
+    
+Sign in with the default account
+
+    email: user@user.com
+    password: toolsplusconsciousness
+
+OR create a new account at /join, and use access code 'qwertyui'
+
+Start mapping and programming!
