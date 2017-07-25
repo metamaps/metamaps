@@ -89,9 +89,7 @@ server:
 
 and dont forget to run the other server for realtime...
 
-    cd realtime
-    npm install
-    node realtime-server.js
+    node realtime/realtime-server.js 
 
 Now you're all set enjoy your personal server of metamaps :) Navigate your browser to localhost:3000 once you have the server running. Sign in with the default account
 
