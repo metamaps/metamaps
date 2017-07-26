@@ -36,10 +36,10 @@ There are instructions for setup on various platforms, with particular support f
 - [Mac Install Walkthrough][mac-installation]
 - [Ubuntu Install Walkthrough][ubuntu-installation]
 
-If you don't want to take all those steps manually, and you'd prefer a simpler setup by using Vagrant, you can do that too:
+If you prefer to isolate your install in a virtual machine, you may find it simpler to setup using Vagrant:
 - [Vagrant installation][vagrant-installation]
 
-We don't promise support for windows, but at one point we had it running and we've kept those docs available for reference
+We don't promise support for Windows, but at one point we had it running and we've kept those docs available for reference
 - [Outdated Windows Walkthrough][windows-installation]
 
 ## Licensing information
