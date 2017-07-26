@@ -33,14 +33,14 @@ Metamaps is developed and maintained by a distributed, nomadic community compris
 First off is getting the code downloaded to your computer. You can download a zip file from github, but if you've got `git` you can just run `git clone https://github.com/metamaps/metamaps` in your terminal.
 
 There are instructions for setup on various platforms, with particular support for Mac and Ubuntu, which can be found here:
-[Mac Install Walkthrough][mac-installation]
-[Ubuntu Install Walkthrough][ubuntu-installation]
+- [Mac Install Walkthrough][mac-installation]
+- [Ubuntu Install Walkthrough][ubuntu-installation]
 
 If you don't want to take all those steps manually, and you'd prefer a simpler setup by using Vagrant, you can do that too:
-[Vagrant installation][vagrant-installation]
+- [Vagrant installation][vagrant-installation]
 
 We don't promise support for windows, but at one point we had it running and we've kept those docs available for reference
-[Windows][windows-installation]
+- [Outdated Windows Walkthrough][windows-installation]
 
 ## Licensing information
 
