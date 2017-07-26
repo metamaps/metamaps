@@ -35,9 +35,13 @@ Change directory to the metamaps git repository, and run:
 
 Copy the .example-env file and rename it to .env. Then modify the DB_USERNAME and DB_PASSWORD values to match the postgres username and password you set
 
+Now use rake to create and set up the database
+
     rake db:create
-    rake db:schema:load
-    rake db:seed
+    rake db:setup
+
+To start the rails server:
+
     rails server
     
 To start the realtime server:
