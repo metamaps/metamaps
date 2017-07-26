@@ -28,44 +28,19 @@ Metamaps is developed and maintained by a distributed, nomadic community compris
 - If you would like to report a bug, please check the [issues][contributing-issues] section in our [contributing instructions][contributing].
 - If you would like to get set up as a developer, that's great! Read on for help getting your development environment set up.
 
-## Installation
+## Installation for local use or development of Metamaps
 
-If you are on Mac or Ubuntu you can use the following instructions to quickly get a local copy of metamaps up and running using a Vagrant virtualbox. Don't be intimidated, it's easy!
-```
-There are two options for cloning the repository - the simplest way is the first one since you don't need to set up SSH keys:
-git clone https://github.com/metamaps/metamaps
+First off is getting the code downloaded to your computer. You can download a zip file from github, but if you've got `git` you can just run `git clone https://github.com/metamaps/metamaps` in your terminal.
 
-OR
+There are instructions for setup on various platforms, with particular support for Mac and Ubuntu, which can be found here:
+- [Mac Install Walkthrough][mac-installation]
+- [Ubuntu Install Walkthrough][ubuntu-installation]
 
-git clone git@github.com:metamaps/metamaps.git
-```
-Now ensure you have VirtualBox and Vagrant installed on your computer
-```
-cd metamaps
-./bin/configure.sh
-```
-This will do all the setup steps to make Metamaps work with a bit of behind the scenes ninja magick.
+If you prefer to isolate your install in a virtual machine, you may find it simpler to setup using Vagrant:
+- [Vagrant installation][vagrant-installation]
 
-To start servers which will run metamaps you can then run:
-```
-./bin/start
-```
-To stop them:
-```
-./bin/stop
-```
-With your webservers running, open a web browser and go to `http://localhost:3000`
-
-You can sign in with the default account
-email: `user@user.com`
-password: `toolsplusconsciousness`
-OR create a new account at `/join`, and use access code `qwertyui`
-
-Start mapping and programming!
-
-We haven't set up instructions for using Vagrant on Windows, but there are instructions for a manual setup here:
-
-- [For Windows][windows-installation]
+We don't promise support for Windows, but at one point we had it running and we've kept those docs available for reference
+- [Outdated Windows Walkthrough][windows-installation]
 
 ## Licensing information
 
@@ -81,4 +56,7 @@ Copyright (c) 2017 Connor Turland
 [license]: https://github.com/metamaps/metamaps/blob/develop/LICENSE
 [contributing]: https://github.com/metamaps/metamaps/blob/develop/doc/CONTRIBUTING.md
 [contributing-issues]: https://github.com/metamaps/metamaps/blob/develop/doc/CONTRIBUTING.md#reporting-bugs-and-other-issues
+[mac-installation]: https://github.com/metamaps/metamaps/blob/develop/doc/MacInstallation.md
+[ubuntu-installation]: https://github.com/metamaps/metamaps/blob/develop/doc/UbuntuInstallation.md
+[vagrant-installation]: https://github.com/metamaps/metamaps/blob/develop/doc/VagrantInstallation.md
 [windows-installation]: https://github.com/metamaps/metamaps/blob/develop/doc/WindowsInstallation.md

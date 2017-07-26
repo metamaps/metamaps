@@ -1,21 +1,19 @@
 # OSX Install
 
-If you are doing an upgrade and or recent pull for changes you will need to change your default ruby package from 2.1.1 to ruby 2.1.2
-
-Some of these steps are pulled from http://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/
-
-Install homebrew
+Install rvm (ruby version manager)
 
     \curl -sSL https://get.rvm.io | bash -s stable --rails
+ 
+Use rvm to install Ruby version 2.3.0
+
     rvm install 2.3.0 --with-gcc=clang
     rvm use 2.3.0
-    gem install lunchy 
 
-Now install homebrew. 
+Now install homebrew. (a package manager for mac)
 
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-Then install nodejs and ES6 code
+Then install nodejs (make sure its version 6.11.1 or greater)
 
     brew install nodejs
     npm install
@@ -29,7 +27,7 @@ And postgresql:
 
 Set a password, then start the service:
 
-    lunchy start postgres
+    brew services start postgresql
 
 Change directory to the metamaps git repository, and run:
 
@@ -37,9 +35,32 @@ Change directory to the metamaps git repository, and run:
 
 Copy the .example-env file and rename it to .env. Then modify the DB_USERNAME and DB_PASSWORD values to match the postgres username and password you set
 
+Now use rake to create and set up the database
+
     rake db:create
     rake db:schema:load
     rake db:seed
+
+To start the rails server:
+
     rails server
+    
+To start the realtime server:
+
+    node realtime/realtime-server.js
+    
+NOTE: if you want to actively develop on the javascript in `/frontend` use
+
+    npm run build:watch
+to start a webpack build process that updates the build everytime you make code changes
 
 Now open a browser to http://localhost:3000!
+    
+Sign in with the default account
+
+    email: user@user.com
+    password: toolsplusconsciousness
+
+OR create a new account at /join, and use access code 'qwertyui'
+
+Start mapping and programming!
