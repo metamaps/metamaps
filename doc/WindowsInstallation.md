@@ -1,4 +1,4 @@
-DISCLAIMER: This tutorial is liable to be out of date, and we don't necessarily support windows development. If you are set on installing Metamaps on windows, it may be worthwhile to look at the Mac and Ubuntu docs for up to date information on what metamaps requires to run. 
+DISCLAIMER: This tutorial is liable to be out of date, and we don't necessarily support Windows development. If you are set on installing Metamaps on Windows, it may be worthwhile to look at the Mac and Ubuntu docs for up to date information on what Metamaps requires to run. 
 
 Before you begin, you'll need to install stuff:
 
@@ -41,7 +41,7 @@ fail unless `.env` is correctly configured and Postgres is running.
 
     rake db:create
     rake db:schema:load
-    rake db:fixtures:load
+    rake db:seed
 
 And you're set up! At this point, you should be able to run the server at any
 time with only one command; you don't need to repeat any of the previous steps
