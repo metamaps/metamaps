@@ -80,6 +80,7 @@ Use these commands to set the password to 3112 and then quit:
 now we can use rake to create, load the schema into, and load db/seeds.rb
 into the postgres database:
 
+    rake db:create
     rake db:setup
 
 Open a new terminal, navigate to the metamaps directory, and execute the
