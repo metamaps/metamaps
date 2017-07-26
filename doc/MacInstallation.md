@@ -38,7 +38,8 @@ Copy the .example-env file and rename it to .env. Then modify the DB_USERNAME an
 Now use rake to create and set up the database
 
     rake db:create
-    rake db:setup
+    rake db:schema:load
+    rake db:seed
 
 To start the rails server:
 
