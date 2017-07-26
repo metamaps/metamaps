@@ -81,7 +81,8 @@ now we can use rake to create, load the schema into, and load db/seeds.rb
 into the postgres database:
 
     rake db:create
-    rake db:setup
+    rake db:schema:load
+    rake db:seed
 
 Open a new terminal, navigate to the metamaps directory, and execute the
 server: 
