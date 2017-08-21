@@ -70,6 +70,11 @@ const Import = {
     Import.handle(results)
   },
 
+  handleXML: function(text) {
+    const results = XMLParser.parseSchema(text)
+    Import.handle(results)
+  },
+
   handle: function(results) {
     var self = Import
     var topics = results.topics.map(topic => self.normalizeKeys(topic))
