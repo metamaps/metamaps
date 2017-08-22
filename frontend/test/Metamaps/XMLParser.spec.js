@@ -17,9 +17,14 @@ describe('Metamaps.XMLParser.js', function() {
           </element>
         </viewNode>
       </View:ColumnView>`
+
       { topics, synapses } = XMLParser.parseSchema(xml)
-      expect(topics[0].name).to.equal("MANDT")
-      expect(topics[0].metacode).to.equal("Wildcard")
+
+      expect(topics[0].name).to.equal("NTREE_DATA")
+      expect(topics[0].metacode).to.equal("Activity")
+
+      expect(topics[1].name).to.equal("MANDT")
+      expect(topics[1].metacode).to.equal("Wildcard")
 
       expect(synapses.length).to.equal(0)
     })
@@ -36,8 +41,11 @@ describe('Metamaps.XMLParser.js', function() {
         </viewNode>
       </View:ColumnView>`
       { topics, synapses } = XMLParser.parseSchema(xml)
+
       expect(topics[0].x).to.equal(176)
       expect(topics[0].y).to.equal(569)
+      expect(topics[1].x).to.equal(176 + 20)
+      expect(topics[1].y).to.equal(569)
     })
   })
 })
