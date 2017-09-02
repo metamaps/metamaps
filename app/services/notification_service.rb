@@ -38,6 +38,7 @@ class NotificationService
         when TOPIC_ADDED_TO_MAP
           next unless TopicPolicy.new(follow.user, entity).show? && MapPolicy.new(follow.user, event.map).show?
           next if follow.user.has_map_open(event.map)
+          next if event.map.source_id # if map is a fork, send notification for that instead
         when TOPIC_CONNECTED_1, TOPIC_CONNECTED_2
           next unless SynapsePolicy.new(follow.user, event).show?
           next if follow.user.has_map_with_synapse_open(event)
