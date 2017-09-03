@@ -23,15 +23,15 @@ class UsersController < ApplicationController
     if user_params[:password] == '' && user_params[:password_confirmation] == ''
       # not trying to change the password
       if @user.update_attributes(user_params.except(:password, :password_confirmation))
-        update_follow_settings(@user, params[:settings]) if is_tester(@user)
+        update_follow_settings(@user, params[:settings])
         @user.image = nil if params[:remove_image] == '1'
         @user.save
-        sign_in(@user, bypass: true)
+        bypass_sign_in(@user)
         respond_to do |format|
           format.html { redirect_to root_url, notice: 'Settings updated' }
         end
       else
-        sign_in(@user, bypass: true)
+        bypass_sign_in(@user)
         respond_to do |format|
           format.html { redirect_to edit_user_path(@user), notice: @user.errors.to_a[0] }
         end

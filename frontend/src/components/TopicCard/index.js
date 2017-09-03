@@ -6,7 +6,6 @@ import Links from './Links'
 import Desc from './Desc'
 import Attachments from './Attachments'
 import Follow from './Follow'
-import Util from '../../Metamaps/Util'
 
 class ReactTopicCard extends Component {
   render = () => {
@@ -53,7 +52,7 @@ class ReactTopicCard extends Component {
                 authorizedToEdit={authorizedToEdit}
                 updateTopic={wrappedUpdateTopic}
               />
-            {Util.isTester(currentUser) && <Follow isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />}
+            <Follow isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />
               <div className="clearfloat"></div>
             </div>
           </div>
