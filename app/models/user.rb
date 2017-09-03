@@ -58,8 +58,8 @@ class User < ApplicationRecord
       admin: admin }
     if (_options[:follows])
       json['follows'] = {
-        topics: following.where(followed_type: 'Topic').to_a.map(&:followed_id),
-        maps: following.where(followed_type: 'Map').to_a.map(&:followed_id)
+        topics: following.where(muted: false, followed_type: 'Topic').to_a.map(&:followed_id),
+        maps: following.where(muted: false, followed_type: 'Map').to_a.map(&:followed_id)
       }
     end
     if (_options[:follow_settings])

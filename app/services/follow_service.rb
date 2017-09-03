@@ -8,13 +8,15 @@ class FollowService
       return if (reason == 'created' || reason == 'contributed') && !should_auto_follow(entity, user, reason)
 
       follow = Follow.where(followed: entity, user: user).first_or_create
+      follow.update_attribute('muted', false)
       if FollowReason::REASONS.include?(reason) && !follow.follow_reason.read_attribute(reason)
         follow.follow_reason.update_attribute(reason, true)
       end
     end
 
     def unfollow(entity, user)
-      Follow.where(followed: entity, user: user).destroy_all
+      follow = Follow.where(followed: entity, user: user).first
+      follow.update_attribute('muted', true)
     end
 
     def remove_reason(entity, user, reason)
@@ -31,6 +33,8 @@ class FollowService
     protected
 
     def should_auto_follow(entity, user, reason)
+      follow = Follow.where(followed: entity, user: user).first
+      return false if follow && follow.muted
       if entity.class == Topic
         if reason == 'created'
           return user.settings.follow_topic_on_created == '1'

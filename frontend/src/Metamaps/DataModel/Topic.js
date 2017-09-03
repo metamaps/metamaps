@@ -105,6 +105,10 @@ const Topic = Backbone.Model.extend({
     var onPageWithTopicCard = Active.Map || Active.Topic
     var node = this.get('node')
 
+    if (Active.Mapper.get('follow_topic_on_contributed')) {
+      Active.Mapper.followTopic(this.id)
+    }
+
     // update the node on the map
     if (onPageWithTopicCard && node) {
       node.name = this.get('name')
