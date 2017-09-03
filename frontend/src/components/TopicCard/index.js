@@ -6,7 +6,6 @@ import Links from './Links'
 import Desc from './Desc'
 import Attachments from './Attachments'
 import Follow from './Follow'
-import Util from '../../Metamaps/Util'
 
 class ReactTopicCard extends Component {
   render = () => {

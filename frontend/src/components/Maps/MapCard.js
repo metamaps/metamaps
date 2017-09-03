@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { find, values } from 'lodash'
-import Util from '../../Metamaps/Util'
 
 const IN_CONVERSATION = 1 // shared with /realtime/reducer.js
 
