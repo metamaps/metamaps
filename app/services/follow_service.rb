@@ -3,7 +3,7 @@ class FollowService
   class << self 
     def follow(entity, user, reason)
 
-      return unless user && is_tester(user)
+      return unless user
 
       return if (reason == 'created' || reason == 'contributed') && !should_auto_follow(entity, user, reason)
 

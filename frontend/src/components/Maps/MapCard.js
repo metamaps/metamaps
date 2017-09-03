@@ -38,7 +38,7 @@ class Menu extends Component {
       <ul className='menuItems' style={ style }>
         <li className='star' onClick={ () => { this.toggle() && onStar(map) }}>Star Map</li>
         { !map.authorizeToEdit(currentUser) && <li className='request' onClick={ () => { this.toggle() && onRequest(map) }}>Request Access</li> }
-        { Util.isTester(currentUser) && <li className='follow' onClick={ () => { this.toggle() && onMapFollow(map) }}>{isFollowing ? 'Unfollow' : 'Follow'}</li> }
+        <li className='follow' onClick={ () => { this.toggle() && onMapFollow(map) }}>{isFollowing ? 'Unfollow' : 'Follow'}</li>
       </ul>
     </div>
   }
