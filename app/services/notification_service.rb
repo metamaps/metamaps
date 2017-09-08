@@ -53,8 +53,7 @@ class NotificationService
   end
 
   def self.notify_followers(entity, event_type, event, reason_filter = nil, exclude_follows = nil)
-    follows = entity.follows.where.not(user_id: event.user.id)
-    follows = follows.where(muted: false)
+    follows = entity.follows.active.where.not(user_id: event.user.id)
 
     if !exclude_follows.nil?
       follows = follows.where.not(id: exclude_follows)

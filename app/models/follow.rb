@@ -10,7 +10,11 @@ class Follow < ApplicationRecord
   validates :user, uniqueness: { scope: :followed, message: 'This entity is already followed by this user' }
   
   after_create :add_subsetting
-  
+
+  scope :active, -> {
+    where(muted: false)
+  } 
+
   private
 
   def add_subsetting
