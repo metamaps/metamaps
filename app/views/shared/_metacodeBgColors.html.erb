@@ -2,7 +2,7 @@
 <% Metacode.all.each do |m| %>
 	<% if m.color %>
 		<%= ".mbg" + m.id.to_s + "{" %>
-		<%= "background-color:" + m.color + " !important;" %>
+		<%= "color:" + m.color + " !important;" %>
 		<%= "}" %>
 	<% end %>
 <% end %>

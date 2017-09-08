@@ -15,6 +15,7 @@ app/assets/javascripts/webpacked
 
 #secrets and config
 .env
+*.swp
 
 # Ignore bundler config
 .bundle

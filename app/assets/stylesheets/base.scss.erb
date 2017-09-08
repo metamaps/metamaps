@@ -42,7 +42,7 @@
 	  z-index:2;
     color: #424242;
     border-radius:2px;
-    box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
+    box-shadow: 2px 3px 3px rgba(125, 125, 125, 0.23), -2px -1px 3px rgba(125, 125, 125, 0.16);
 }
 
 .text {
@@ -195,9 +195,6 @@
 
 .CardOnGraph .links {
   position: relative;
-  border-bottom: 1px solid #BDBDBD;
-  border-top: 1px solid #BDBDBD;
-  background-color: #e0e0e0;
 
   .linkItem {
     float: left;
@@ -213,15 +210,12 @@
   }
 
   .icon {
-    position: absolute;
-    z-index: 1;
     padding: 0;
     height: 48px;
-    width: 100%;
 
     .metacodeImage {
       cursor: move;
-      position: relative;
+      position: absolute;
       left: -23px;
       top: 1px;
       width: 46px;
@@ -477,17 +471,11 @@ cursor: pointer;
 }
 
 .CardOnGraph .metacodeTitle {
-  font-style: italic;
-  font-family: 'vinyl';
-  text-transform: uppercase;
-  position: absolute;
+  font-family: 'din-regular';
   line-height: 24px;
   height: 26px;
   font-size: 24px;
-  display: none;
-  width: 90%;
-  padding: 13px 0 9px 10%;
-  background-color: #E0E0E0;
+  padding: 13px 24px 9px 25px;
   color: #424242;
 }
 .permission.canEdit .metacodeTitle {
@@ -496,8 +484,8 @@ cursor: pointer;
 
 .permission.canEdit .expandMetacodeSelect {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 18px;
+  right: 4px;
   width: 16px;
   height: 16px;
   background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
@@ -633,7 +621,6 @@ background-color: #E0E0E0;
   width:100%;
   height:47px;
   position: relative;
-  border-top: 1px solid #BDBDBD;
 }
 
 .link-adder a {
