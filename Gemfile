@@ -5,7 +5,7 @@ ruby '2.3.0'
 gem 'rails', '~> 5.0.0'
 
 gem 'active_model_serializers'
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 2.7.0'
 gem 'best_in_place'
 gem 'delayed_job'
 gem 'delayed_job_active_record'

@@ -67,6 +67,9 @@ const PasteInput = {
       Import.handleJSON(text)
     } else if (text.match(/^[Tt]opics\t/) || text.match(/^[Ss]ynapses\t/)) {
       Import.handleTSV(text)
+    } else if ((text.match(/^[Tt]opics/) && text.match(/[\n,][Nn]ame[,\n]/)) ||
+               (text.match(/^[Ss]ynapses/) && text.match(/[\n,][Tt]opic1[,\n]/))) {
+      Import.handleCSV(text)
     } else {
       // Handle as plain text
       let textItems = text.split('\n')
