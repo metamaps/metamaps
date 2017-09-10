@@ -31,7 +31,7 @@ class Info extends Component {
 
     let firstFiveLinks = []
     let extraLinks = []
-    for (let i = 0; i < inmapsArray.length; i ++) {
+    for (let i = 0; i < inmapsArray.length; i++) {
       if (i < 5) {
         firstFiveLinks.push({ mapName: inmapsArray[i], mapId: inmapsLinks[i] })
       } else {
@@ -98,7 +98,7 @@ class Info extends Component {
 }
 
 Info.propTypes = {
-  topic: PropTypes.object, // backbone object
+  topic: PropTypes.object // backbone object
 }
 
 export default Info

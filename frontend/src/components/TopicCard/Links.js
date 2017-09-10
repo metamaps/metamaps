@@ -1,7 +1,6 @@
 /* global $ */
 
 import React, { PropTypes, Component } from 'react'
-import { Link } from 'react-router'
 
 import MetacodeSelect from '../MetacodeSelect'
 import Permission from './Permission'
@@ -55,7 +54,7 @@ class Links extends Component {
           >
             <MetacodeSelect onMetacodeSelect={this.handleMetacodeSelect} metacodeSets={this.props.metacodeSets} />
           </div>
-        </div>  
+        </div>
         <Follow ActiveMapper={ActiveMapper} isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />
         <Permission
           permission={topic.get('permission')}

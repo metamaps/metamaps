@@ -8,7 +8,6 @@ import Attachments from './Attachments'
 import Info from './Info'
 
 class ReactTopicCard extends Component {
-
   render = () => {
     const { currentUser, onTopicFollow, updateTopic } = this.props
     const topic = this.props.openTopic
@@ -16,10 +15,8 @@ class ReactTopicCard extends Component {
     if (!topic) return null
 
     const wrappedUpdateTopic = obj => updateTopic(topic, obj)
-    const wrappedTopicFollow = () => onTopicFollow(topic)
 
     const authorizedToEdit = topic.authorizeToEdit(currentUser)
-    const isFollowing = topic.isFollowedBy(currentUser)
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
 
     let classname = 'permission'
@@ -54,7 +51,7 @@ class ReactTopicCard extends Component {
                 authorizedToEdit={authorizedToEdit}
                 updateTopic={wrappedUpdateTopic}
               />
-              <Info topic={topic} /> 
+              <Info topic={topic} />
               <div className="clearfloat"></div>
             </div>
           </div>
@@ -64,7 +61,6 @@ class ReactTopicCard extends Component {
   }
 }
 
-// 
 ReactTopicCard.propTypes = {
   openTopic: PropTypes.object,
   currentUser: PropTypes.object,
