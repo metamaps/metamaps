@@ -26,9 +26,7 @@ class Links extends Component {
   }
 
   handleMetacodeBarClick = () => {
-    if (this.state.showMetacodeTitle) {
-      this.setState({ showMetacodeSelect: !this.state.showMetacodeSelect })
-    }
+    this.setState({ showMetacodeSelect: !this.state.showMetacodeSelect })
   }
 
   render = () => {
@@ -41,17 +39,16 @@ class Links extends Component {
 
     return (
       <div className="links">
-        <div className="linkItem icon metacodeItem"
-          onClick={() => authorizedToEdit && this.handleMetacodeBarClick()}
-        >
-          <div className={`metacodeTitle mbg${metacode.get('id')}`}>
+        <div className="linkItem icon metacodeItem">
+          <div className={`metacodeTitle mbg${metacode.get('id')}`}
+            onClick={() => authorizedToEdit && this.handleMetacodeBarClick()}
+          >
             {metacode.get('name')}
             <div className="expandMetacodeSelect"/>
           </div>
           <div className="metacodeImage"
             style={{backgroundImage: `url(${metacode.get('icon')})`}}
             title="click and drag to move card"
-            onMouseEnter={() => this.setState({ showMetacodeTitle: true })}
           />
           <div className="metacodeSelect"
             style={{ display: this.state.showMetacodeSelect ? 'block' : 'none' }}
@@ -59,12 +56,12 @@ class Links extends Component {
             <MetacodeSelect onMetacodeSelect={this.handleMetacodeSelect} metacodeSets={this.props.metacodeSets} />
           </div>
         </div>  
+        <Follow ActiveMapper={ActiveMapper} isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />
         <Permission
           permission={topic.get('permission')}
           authorizedToEdit={authorizedPermissionChange}
           updateTopic={this.props.updateTopic}
         />
-        <Follow isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />
         <div className="clearfloat"></div>
       </div>
     )

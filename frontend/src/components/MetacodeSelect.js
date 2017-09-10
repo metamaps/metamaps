@@ -12,6 +12,7 @@ import React, { PropTypes, Component } from 'react'
 
 class MetacodeSelect extends Component {
   render = () => {
+    if (!this.props.metacodeSets) return null
     return (
       <div id="metacodeOptions">
         <ul>
