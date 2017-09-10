@@ -8,7 +8,8 @@
  * passes that metacode's id to the callback.
  */
 
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class MetacodeSelect extends Component {
   render = () => {

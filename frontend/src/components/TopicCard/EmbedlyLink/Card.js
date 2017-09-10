@@ -1,5 +1,6 @@
 /* global $, embedly */
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class EmbedlyCard extends Component {
   constructor(props) {
