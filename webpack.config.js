@@ -47,7 +47,7 @@ module.exports = {
     'metamaps.bundle': './frontend/src/index.js'
   },
   output: {
-    path: './app/assets/javascripts/webpacked',
+    path: __dirname + '/app/assets/javascripts/webpacked',
     filename: '[name].js',
     devtoolModuleFilenameTemplate: '[absolute-resource-path]'
   }
