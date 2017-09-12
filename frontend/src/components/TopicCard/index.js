@@ -29,8 +29,8 @@ class ReactTopicCard extends Component {
     if (topic.authorizePermissionChange(currentUser)) classname += ' yourTopic'
 
     return (
-      <Draggable handle=".metacodeImage" defaultPosition={{x: 100, y: 100}}>
-        <div className="showcard mapElement mapElementHidden">
+      <Draggable handle='.metacodeImage' defaultPosition={{x: 100, y: 100}}>
+        <div className='showcard mapElement mapElementHidden'>
           <div className={classname}>
             <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topic.id}`}>
               <Links topic={topic}
@@ -53,7 +53,7 @@ class ReactTopicCard extends Component {
                 updateTopic={wrappedUpdateTopic}
               />
               <Info topic={topic} />
-              <div className="clearfloat"></div>
+              <div className='clearfloat' />
             </div>
           </div>
         </div>

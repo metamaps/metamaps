@@ -40,7 +40,7 @@ class Links extends Component {
     return (
       <div className="links">
         <div className="linkItem icon metacodeItem">
-          <div className={`metacodeTitle mbg${metacode.get('id')}`}
+          <div className={`metacodeTitle metacodeColor${metacode.get('id')}`}
             onClick={() => authorizedToEdit && this.handleMetacodeBarClick()}
           >
             {metacode.get('name')}

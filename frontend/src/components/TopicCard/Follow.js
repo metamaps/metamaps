@@ -4,8 +4,18 @@ import PropTypes from 'prop-types'
 class Follow extends Component {
   render = () => {
     const { ActiveMapper, isFollowing, onTopicFollow } = this.props
-    return <div className='topicFollow' onClick={() => ActiveMapper && onTopicFollow()}>
-      {ActiveMapper ? isFollowing ? 'Unfollow' : 'Follow' : ''}
+    function onClick () {
+      if (ActiveMapper) {
+        onTopicFollow()
+      }
+    }
+    let innerValue
+    // only display either option if there is a user signed in
+    if (ActiveMapper) {
+      innerValue = isFollowing ? 'Unfollow' : 'Follow'
+    }
+    return <div className='topicFollow' onClick={onClick}>
+      {innerValue}
     </div>
   }
 }
