@@ -1,9 +1,12 @@
+$mid-gray: #8A8A8A;
+$mid-gray-opacity: rgba(66, 66, 66, 0.6);
+
 .nameCounter {
   position: absolute;
   bottom: 1px;
   right: 2px;
   font-size: 11px;
-  font-family: helvetica;
+  font-family: helvetica, sans-serif;
   color: #727272;
   line-height: 11px;
   display: none;
@@ -118,7 +121,7 @@
    overflow-y: auto;
 
   p.emptyDesc {
-    color: rgba(66, 66, 66, 0.6);
+    color: $mid-gray-opacity;
   }
 
   a.mdSupport {
@@ -235,15 +238,15 @@
     float: left;
     z-index: 1;
     position: relative;
-    color: rgba(66, 66, 66, 0.6);
+    color: $mid-gray-opacity;
     font-size: 14px;
     line-height: 14px;
 
     a {
-      color: rgba(66, 66, 66, 0.6);
+      color: $mid-gray-opacity;
     }
   }
- 
+
   .contributor {
     bottom: 7px;
     margin-left: 16px;
@@ -311,7 +314,7 @@
         margin-top: -30px;
         width: 0;
         height: 0;
-        border-bottom: 4px solid #8A8A8A;
+        border-bottom: 4px solid $mid-gray;
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
       }
@@ -323,7 +326,7 @@
       top: 44px;
       font-size: 12px !important;
       position: absolute;
-      background: #8A8A8A;
+      background: $mid-gray;
       color: white;
       border-radius: 4px;
       line-height: 17px;
@@ -376,7 +379,7 @@
     }
     .tip {
       position: absolute;
-      background: #8A8A8A;
+      background: $mid-gray;
       width: auto;
       top: 44px;
       right: 0px;
@@ -397,7 +400,7 @@
       right: 12px;
       width: 0;
       height: 0;
-      border-bottom: 4px solid #8A8A8A;
+      border-bottom: 4px solid $mid-gray;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
     }
@@ -611,7 +614,7 @@ background-color: #E0E0E0;
 }
 .CardOnGraph .tip {
  position: absolute;
- background: #8A8A8A;
+ background: $mid-gray;
  top: 35px;
  right: 0;
  color: white;
