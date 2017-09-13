@@ -26,7 +26,7 @@ class MdTextArea extends RIETextArea {
 class Desc extends Component {
   render = () => {
     const descHTML = (!this.props.desc && this.props.authorizedToEdit)
-      ? '<p class="emptyDesc">Edit the description...</p>'
+      ? '<p class="emptyDesc">Edit the description... (supports markdown)</p>'
       : Util.mdToHTML(this.props.desc)
 
     if (this.props.authorizedToEdit) {
@@ -51,6 +51,7 @@ class Desc extends Component {
               dangerouslySetInnerHTML: { __html: descHTML }
             }}
           />
+          <a className="mdSupport" href="http://commonmark.org/help/" target="_blank">learn markdown</a>
           <div className="clearfloat"></div>
         </div>
       </div>
