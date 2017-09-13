@@ -1914,14 +1914,10 @@ input.collaboratorSearchField {
     background-position: -32px 0;
 }
 .yourMap .mapPermission:hover {
-    background-image: url(<%= asset_data_uri('arrowperms_sprite.png') %>);
     cursor: pointer;
-    background-position: -32px 0;
 }
 .yourMap .mapPermission.minimize {
-    background-image: url(<%= asset_data_uri('arrowperms_sprite.png') %>) !important;
     cursor: pointer;
-    background-position: 0 0;
 }
 .mapInfoBox .mapPermission .permissionSelect {
     list-style: none;
@@ -3150,11 +3146,15 @@ script.data-gratipay-username {
 }
 
 .topicFollow {
-    text-align: center;
-    height: 48px;
-    line-height: 48px;
-    border-top: 1px solid #BDBDBD;
-    background: #FFF;
+    height: 24px;
+    line-height: 24px;
     cursor: pointer;
-    font-family: din-regular;
+    font-family: helvetica, sans-serif;
+    float: left;
+    width: 72px;
+    text-align: right;
+    padding: 12px 0;
+    color: #4fb5c0;
+    font-size: 13px;
+    font-weight: bold;
 }

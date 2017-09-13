@@ -1,9 +1,12 @@
+$mid-gray: #8A8A8A;
+$mid-gray-opacity: rgba(66, 66, 66, 0.6);
+
 .nameCounter {
   position: absolute;
   bottom: 1px;
   right: 2px;
   font-size: 11px;
-  font-family: helvetica;
+  font-family: helvetica, sans-serif;
   color: #727272;
   line-height: 11px;
   display: none;
@@ -42,7 +45,7 @@
 	  z-index:2;
     color: #424242;
     border-radius:2px;
-    box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
+    box-shadow: 2px 3px 3px rgba(125, 125, 125, 0.23), -2px -1px 3px rgba(125, 125, 125, 0.16);
 }
 
 .text {
@@ -64,7 +67,6 @@
   display:block;
   position:relative;
   width:100%;
-  min-height:360px;
   z-index: 25;
 }
 .CardOnGraph.hasAttachment {
@@ -73,11 +75,10 @@
 
 .CardOnGraph .title {
   word-break: break-word;
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 20px;
+  line-height: 24px;
   display: table;
-  padding: 8px 0 16px;
-  height: 80px;
+  padding: 20px 0;
   text-align: center;
   font-family: 'din-regular', sans-serif;
   width: 300px;
@@ -88,11 +89,6 @@
   display: table-cell;
   vertical-align: middle;
   padding: 0 16px;
-
-  &.riek-editing {
-    position: absolute;
-    top: 32px;
-  }
 }
 .canEdit #titleActivator:hover {
   background-image: url(<%= asset_data_uri('edit.png') %>);
@@ -104,9 +100,8 @@
 .showcard .title .riek-editing {
   font-family: 'din-regular', sans-serif;
   color: #424242;
-  font-size: 18px;
-  line-height: 22px;
-  height: 3em;
+  font-size: 20px;
+  line-height: 24px;
   padding: 5px 0;
   width: 100%;
   margin: 0;
@@ -120,11 +115,19 @@
 .CardOnGraph .scroll {
    display:block;
    padding: 8px 0 8px 16px;
-   height: 152px;
    font-size: 13px;
    line-height:15px;
    font-family: helvetica, sans-serif;
    overflow-y: auto;
+
+  p.emptyDesc {
+    color: $mid-gray-opacity;
+  }
+
+  a.mdSupport {
+    color: #4fb5c0;
+    font-size: 11px;
+  }
 }
 .CardOnGraph.hasAttachment .scroll {
   height: auto;
@@ -180,7 +183,6 @@
   margin-top:2px;
   padding-right: 18px;
   margin-right: 8px;
-  min-height: 7em;
 }
 .canEdit .CardOnGraph .riek_desc:hover {
   background-image: url(<%= asset_data_uri('edit.png') %>);
@@ -195,9 +197,7 @@
 
 .CardOnGraph .links {
   position: relative;
-  border-bottom: 1px solid #BDBDBD;
-  border-top: 1px solid #BDBDBD;
-  background-color: #e0e0e0;
+  z-index: 2;
 
   .linkItem {
     float: left;
@@ -213,37 +213,52 @@
   }
 
   .icon {
-    position: absolute;
-    z-index: 1;
     padding: 0;
     height: 48px;
-    width: 100%;
+    margin-right: 10px;
 
     .metacodeImage {
       cursor: move;
-      position: relative;
-      left: -23px;
-      top: 1px;
-      width: 46px;
-      height: 46px;
-      background-size:46px 46px;
+      position: absolute;
+      left: -18px;
+      top: 6px;
+      width: 36px;
+      height: 36px;
+      background-size:36px 36px;
       background-position:0 0;
       background-repeat:no-repeat;
+    }
+  }
+}
+
+.CardOnGraph .info {
+  position: relative;
+
+  .linkItem {
+    float: left;
+    z-index: 1;
+    position: relative;
+    color: $mid-gray-opacity;
+    font-size: 14px;
+    line-height: 14px;
+
+    a {
+      color: $mid-gray-opacity;
     }
   }
 
   .contributor {
     bottom: 7px;
-    margin-left: 40px;
+    margin-left: 16px;
 
     .contributorIcon {
       position: relative;
+      display: inline-block;
       vertical-align: middle;
       border-radius: 16px;
-      margin: 5px;
-      top: 8px;
+      margin: 5px 5px 5px 0;
+      top: 11px;
       left: 0;
-      border-radius: 16px;
     }
 
     span {
@@ -252,52 +267,34 @@
     }
 
     .contributorName {
-      display: none;
-      position: absolute;
-      background: black;
-      text-align: center;
-      color: white;
-      border-radius: 2px;
       font-family: din-regular;
-      line-height: 15px;
-      font-size: 12px;
-      padding: 3px 5px 2px;
+      margin-top: 20px;
+      display: inline-block;
+      vertical-align: middle;
+      width: 97px;
+      padding: 0 8px 0 4px;
       white-space: nowrap;
-      margin-top: 8px;
-
-      &:before {
-        content: '';
-        position: absolute;
-        top: 26px;
-        left: 10px;
-        margin-top: -30px;
-        width: 0;
-        height: 0;
-        border-bottom: 4px solid #000000;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-      }
-    }
-
-    &:hover .contributorName {
-      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
   .mapCount {
-    padding:17px 0 17px 36px;
-    margin-left: 12px;
+    padding:17px 38px 17px 0;
+    width: 22px;
+    text-align: right;
 
     .mapCountIcon {
       position: absolute;
       top: 8px;
-      left: 0;
+      right: 0;
       width: 32px;
       height: 32px;
       background-image: url(<%= asset_data_uri('map32_sprite.png') %>);
       background-repeat: no-repeat;
       background-position: 0 0;
       cursor: pointer;
+      opacity: 0.6;
     }
 
     &:hover .mapCountIcon {
@@ -306,18 +303,18 @@
 
     .tip, .hoverTip {
       top: 44px;
-      left: 0px;
+      right: 0px;
       font-size: 12px !important;
 
       &:before {
         content: '';
         position: absolute;
         top: 26px;
-        left: 10px;
+        right: 10px;
         margin-top: -30px;
         width: 0;
         height: 0;
-        border-bottom: 4px solid #000000;
+        border-bottom: 4px solid $mid-gray;
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
       }
@@ -327,10 +324,9 @@
       white-space: nowrap;
       font-family: 'din-regular';
       top: 44px;
-      left: 0px;
       font-size: 12px !important;
       position: absolute;
-      background: black;
+      background: $mid-gray;
       color: white;
       border-radius: 4px;
       line-height: 17px;
@@ -362,28 +358,31 @@
   }
 
   .synapseCount {
-    margin-left: 26px;
-    width: 24px;
-    padding:17px 0 17px 32px;
+    width: 22px;
+    padding:17px 38px 17px 0;
+    text-align: right;
+    margin-right: 4px;
 
     .synapseCountIcon {
       position: absolute;
       top: 8px;
-      left: 0;
+      right: 0;
       width: 32px;
       height: 32px;
       background-image: url(<%= asset_data_uri('synapse32_sprite.png') %>);
       background-repeat: no-repeat;
       background-position: 0 0;
+      opacity: 0.6;
     }
     hover .synapseCountIcon {
       background-position: 0 -32px;
     }
     .tip {
       position: absolute;
-      background: black;
+      background: $mid-gray;
       width: auto;
       top: 44px;
+      right: 0px;
       color: white;
       white-space: nowrap;
       border-radius: 2px;
@@ -398,10 +397,10 @@
       content: '';
       position: absolute;
       margin-top: -8px;
-      margin-left: 6px;
+      right: 12px;
       width: 0;
       height: 0;
-      border-bottom: 4px solid black;
+      border-bottom: 4px solid $mid-gray;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
     }
@@ -411,6 +410,10 @@
 .showMore {
   cursor: pointer;
   color: #4FC059;
+}
+
+.linkItem.mapPerm {
+  margin-right: 8px;
 }
 
 .mapPerm {
@@ -434,14 +437,10 @@
 }
 
 .yourTopic .mapPerm:hover, .yourEdge .mapPerm:hover {
-  background-image: url(<%= asset_data_uri('arrowperms_sprite.png') %>);
-  background-position: -32px 0;
   cursor:pointer;
 }
 .yourTopic .mapPerm.minimize, .yourEdge .mapPerm.minimize {
- background-image: url(<%= asset_data_uri('arrowperms_sprite.png') %>) !important;
-background-position: 0 0;
-cursor: pointer;
+  cursor: pointer;
 }
 .mapPerm .permissionSelect {
   list-style: none;
@@ -477,32 +476,34 @@ cursor: pointer;
 }
 
 .CardOnGraph .metacodeTitle {
-  font-style: italic;
-  font-family: 'vinyl';
-  text-transform: uppercase;
-  position: absolute;
+  font-family: 'din-regular';
   line-height: 24px;
   height: 26px;
-  font-size: 24px;
-  display: none;
-  width: 90%;
-  padding: 13px 0 9px 10%;
-  background-color: #E0E0E0;
+  font-size: 18px;
+  padding: 13px 24px 9px 24px;
   color: #424242;
+  width: 120px;
+  max-width: 120px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .permission.canEdit .metacodeTitle {
   cursor:pointer;
 }
 
 .permission.canEdit .expandMetacodeSelect {
-  position: absolute;
-  top: 16px;
-  right: 16px;
+  position: relative;
+  top: 2px;
+  left: 4px;
   width: 16px;
   height: 16px;
   background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
   background-repeat: no-repeat;
   background-position: 0 -32px;
+  display: inline-block;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 .permission.canEdit .minimize .expandMetacodeSelect {
 
@@ -519,8 +520,8 @@ cursor: pointer;
   background: #EAEAEA;
   white-space: nowrap;
   position: absolute;
-  left: 300px;
-  top: -1px;
+  top: 48px;
+  box-shadow: 2px 2px 2px rgba(125, 125, 125, 0.23), -2px -1px 3px rgba(125, 125, 125, 0.16);
 }
 .CardOnGraph .metacodeSelect ul {
   position: relative;
@@ -613,9 +614,9 @@ background-color: #E0E0E0;
 }
 .CardOnGraph .tip {
  position: absolute;
- background: black;
+ background: $mid-gray;
  top: 35px;
- left: 0;
+ right: 0;
  color: white;
  border-radius: 4px;
  font-size:15px !important;
@@ -633,7 +634,6 @@ background-color: #E0E0E0;
   width:100%;
   height:47px;
   position: relative;
-  border-top: 1px solid #BDBDBD;
 }
 
 .link-adder a {
@@ -695,9 +695,9 @@ background-color: #E0E0E0;
 }
 
 #addLinkInput input{
-padding: 9px 7px 9px 31px;
+padding: 9px 27px 9px 31px;
 height: 12px;
-width: 198px;
+width: 210px;
 margin: 0 0 0 0;
 border: none;
 outline: none;

@@ -13,6 +13,7 @@ import PropTypes from 'prop-types'
 
 class MetacodeSelect extends Component {
   render = () => {
+    if (!this.props.metacodeSets) return null
     return (
       <div id="metacodeOptions">
         <ul>

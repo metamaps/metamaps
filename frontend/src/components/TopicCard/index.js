@@ -6,7 +6,7 @@ import Title from './Title'
 import Links from './Links'
 import Desc from './Desc'
 import Attachments from './Attachments'
-import Follow from './Follow'
+import Info from './Info'
 
 class ReactTopicCard extends Component {
   render = () => {
@@ -16,10 +16,8 @@ class ReactTopicCard extends Component {
     if (!topic) return null
 
     const wrappedUpdateTopic = obj => updateTopic(topic, obj)
-    const wrappedTopicFollow = () => onTopicFollow(topic)
 
     const authorizedToEdit = topic.authorizeToEdit(currentUser)
-    const isFollowing = topic.isFollowedBy(currentUser)
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
 
     let classname = 'permission'
@@ -31,19 +29,20 @@ class ReactTopicCard extends Component {
     if (topic.authorizePermissionChange(currentUser)) classname += ' yourTopic'
 
     return (
-      <Draggable handle=".metacodeImage" defaultPosition={{x: 100, y: 100}}>
-        <div className="showcard mapElement mapElementHidden">
+      <Draggable handle='.metacodeImage' defaultPosition={{x: 100, y: 100}}>
+        <div className='showcard mapElement mapElementHidden'>
           <div className={classname}>
             <div className={`CardOnGraph ${hasAttachment ? 'hasAttachment' : ''}`} id={`topic_${topic.id}`}>
-              <Title name={topic.get('name')}
-                authorizedToEdit={authorizedToEdit}
-                onChange={wrappedUpdateTopic}
-              />
               <Links topic={topic}
+                onTopicFollow={onTopicFollow}
                 ActiveMapper={this.props.currentUser}
                 updateTopic={wrappedUpdateTopic}
                 metacodeSets={this.props.metacodeSets}
                 redrawCanvas={this.props.redrawCanvas}
+              />
+              <Title name={topic.get('name')}
+                authorizedToEdit={authorizedToEdit}
+                onChange={wrappedUpdateTopic}
               />
               <Desc desc={topic.get('desc')}
                 authorizedToEdit={authorizedToEdit}
@@ -53,8 +52,8 @@ class ReactTopicCard extends Component {
                 authorizedToEdit={authorizedToEdit}
                 updateTopic={wrappedUpdateTopic}
               />
-            <Follow isFollowing={isFollowing} onTopicFollow={wrappedTopicFollow} />
-              <div className="clearfloat"></div>
+              <Info topic={topic} />
+              <div className='clearfloat' />
             </div>
           </div>
         </div>
