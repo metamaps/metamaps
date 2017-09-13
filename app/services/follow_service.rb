@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class FollowService
-  class << self 
+  class << self
     def follow(entity, user, reason)
 
       return unless user
@@ -8,7 +8,9 @@ class FollowService
       return if (reason == 'created' || reason == 'contributed') && !should_auto_follow(entity, user, reason)
 
       follow = Follow.where(followed: entity, user: user).first_or_create
-      follow.update(muted: false)
+      unless follow.update(muted: false)
+        raise follow.errors.full_messages.join("\n")
+      end
       if FollowReason::REASONS.include?(reason) && !follow.follow_reason.read_attribute(reason)
         follow.follow_reason.update_attribute(reason, true)
       end
@@ -16,7 +18,11 @@ class FollowService
 
     def unfollow(entity, user)
       follow = Follow.where(followed: entity, user: user).first
-      follow.update(muted: true)
+      if follow
+        unless follow.update(muted: true)
+          raise follow.errors.full_messages.join("\n")
+        end
+      end
     end
 
     def remove_reason(entity, user, reason)
