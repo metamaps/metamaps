@@ -5,7 +5,7 @@ namespace :metamaps do
   end
 
   def summarize_map_activity
-    Follow.where(followed_type: 'Map').find_each do |follow|
+    Follow.active.where(followed_type: 'Map').find_each do |follow|
       map = follow.followed
       user = follow.user
       # add logging and rescue-ing
