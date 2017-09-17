@@ -38,6 +38,7 @@ class Desc extends Component {
             change={this.props.onChange}
             className="riek_desc"
             classEditing="riek-editing"
+            rows="6"
             editProps={{
               onKeyPress: e => {
                 const ENTER = 13
