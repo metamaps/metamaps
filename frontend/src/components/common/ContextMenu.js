@@ -76,96 +76,156 @@ class ContextMenu extends Component {
     }
   }
 
-  render () {
-    const { contextNode, contextPos, contextOnMetacodeSelect, metacodeSets,
-            contextDelete, contextHide, contextRemove, contextCenterOn,
-            contextPopoutTopic, contextSiblingsData, contextFetchSiblings,
-            currentUser, contextPopulateSiblings, contextFetchingSiblingsData,
-            topicId, map, mapId, contextUpdatePermissions } = this.props
+  hide = () => {
+    const { contextHide } = this.props
+    return <li className="rc-hide" onClick={contextHide}>
+      <div className="rc-icon" />Hide until refresh
+        <div className="rc-keyboard">Ctrl+H</div>
+    </li>
+  }
 
+  remove = () => {
+    const { contextRemove, map, currentUser } = this.props
     const canEditMap = map && map.authorizeToEdit(currentUser)
-    const positionData = this.getPositionData()
-    const style = Object.assign({}, {position: 'absolute'}, positionData.pos)
+    if (!canEditMap) {
+      return null
+    }
+    return <li className="rc-remove" onClick={contextRemove}>
+      <div className="rc-icon" />Remove from map
+        <div className="rc-keyboard">Ctrl+M</div>
+    </li>
+  }
+
+  delete = () => {
+    const { contextDelete, map, currentUser } = this.props
+    const canEditMap = map && map.authorizeToEdit(currentUser)
+    if (!canEditMap) {
+      return null
+    }
+    return <li className="rc-delete" onClick={contextDelete}>
+      <div className="rc-icon" />Delete
+      <div className="rc-keyboard">Ctrl+D</div>
+    </li>
+  }
+
+  center = () => {
+    const { contextCenterOn, contextNode, topicId } = this.props
+    if (!(contextNode && topicId)) {
+      return null
+    }
+    return <li className="rc-center"
+      onClick={() => contextCenterOn(contextNode.id)}>
+      <div className="rc-icon" />Center this topic
+      <div className="rc-keyboard">Alt+E</div>
+    </li>
+  }
+
+  popout = () => {
+    const { contextPopoutTopic, contextNode } = this.props
+    if (!contextNode) {
+      return null
+    }
+    return <li className="rc-popout"
+      onClick={() => contextPopoutTopic(contextNode.id)}>
+      <div className="rc-icon" />Open in new tab
+    </li>
+  }
+
+  permission = () => {
+    const { currentUser, contextUpdatePermissions } = this.props
+    if (!currentUser) {
+      return null
+    }
+    return <li className="rc-permission">
+      <div className="rc-icon" />Change permissions
+      <ul>
+        <li className="changeP toCommons"
+          onClick={() => contextUpdatePermissions('commons')}>
+          <div className="rc-perm-icon" />commons
+        </li>
+        <li className="changeP toPublic"
+          onClick={() => contextUpdatePermissions('public')}>
+          <div className="rc-perm-icon" />public
+        </li>
+        <li className="changeP toPrivate"
+          onClick={() => contextUpdatePermissions('private')}>
+          <div className="rc-perm-icon" />private
+        </li>
+      </ul>
+      <div className="expandLi" />
+    </li>
+  }
+
+  metacode = () => {
+    const { metacodeSets, contextOnMetacodeSelect,
+            currentUser, contextNode } = this.props
+    if (!currentUser) {
+      return null
+    }
+    return <li className="rc-metacode">
+      <div className="rc-icon" />Change metacode
+      <div id="metacodeOptionsWrapper">
+        <MetacodeSelect
+          onMetacodeSelect={id => {
+            contextOnMetacodeSelect(contextNode && contextNode.id, id)
+          }}
+          metacodeSets={metacodeSets} />
+      </div>
+      <div className="expandLi" />
+    </li>
+  }
+
+  siblings = () => {
+    const { contextPopulateSiblings, contextFetchSiblings,
+            contextSiblingsData, contextFetchingSiblingsData,
+            topicId, contextNode } = this.props
     const populateSiblings = () => {
       if (!this.state.populateSiblingsSent) {
         contextPopulateSiblings(contextNode.id)
         this.setState({populateSiblingsSent: true})
       }
     }
+    if (!(contextNode && topicId)) {
+      return null
+    }
+    return <li className="rc-siblings"
+        onMouseOver={populateSiblings}>
+      <div className="rc-icon" />Reveal siblings
+      <ul id="fetchSiblingList">
+        <li className="fetchAll"
+          onClick={() => contextFetchSiblings(contextNode)}>All
+          <div className="rc-keyboard">Alt+R</div>
+        </li>
+        {contextSiblingsData && Object.keys(contextSiblingsData).map(key => {
+          return <li key={key}
+            onClick={() => contextFetchSiblings(contextNode, key)}>
+            {contextSiblingsData[key]}
+          </li>
+        })}
+        {contextFetchingSiblingsData && <li id="loadingSiblings">loading...</li>}
+      </ul>
+      <div className="expandLi" />
+    </li>
+  }
+
+  render () {
+    const { contextNode, currentUser, topicId } = this.props
+    const positionData = this.getPositionData()
+    const style = Object.assign({}, {position: 'absolute'}, positionData.pos)
+    const showSpacer = currentUser || (contextNode && topicId)
 
     return <div style={style}
       className={"rightclickmenu " + positionData.extraClasses.join(' ')}>
       <ul>
-        <li className="rc-hide" onClick={contextHide}>
-          <div className="rc-icon" />Hide until refresh
-            <div className="rc-keyboard">Ctrl+H</div>
-        </li>
-        {canEditMap && <li className="rc-remove" onClick={contextRemove}>
-          <div className="rc-icon" />Remove from map
-            <div className="rc-keyboard">Ctrl+M</div>
-        </li>}
-        {canEditMap && <li className="rc-delete" onClick={contextDelete}>
-          <div className="rc-icon" />Delete
-            <div className="rc-keyboard">Ctrl+D</div>
-        </li>}
-        {contextNode && topicId && <li className="rc-center"
-          onClick={() => contextCenterOn(contextNode.id)}>
-          <div className="rc-icon" />Center this topic
-          <div className="rc-keyboard">Alt+E</div>
-        </li>}
-        {contextNode && <li className="rc-popout"
-          onClick={() => contextPopoutTopic(contextNode.id)}>
-          <div className="rc-icon" />Open in new tab
-        </li>}
-        {(currentUser || (contextNode && topicId)) && <li className="rc-spacer">
-        </li>}
-        {currentUser && <li className="rc-permission">
-          <div className="rc-icon" />Change permissions
-          <ul>
-            <li className="changeP toCommons"
-              onClick={() => contextUpdatePermissions('commons')}>
-              <div className="rc-perm-icon" />commons
-            </li>
-            <li className="changeP toPublic"
-              onClick={() => contextUpdatePermissions('public')}>
-              <div className="rc-perm-icon" />public
-            </li>
-            <li className="changeP toPrivate"
-              onClick={() => contextUpdatePermissions('private')}>
-              <div className="rc-perm-icon" />private
-            </li>
-          </ul>
-          <div className="expandLi" />
-        </li>}
-        {currentUser && <li className="rc-metacode">
-          <div className="rc-icon" />Change metacode
-          <div id="metacodeOptionsWrapper">
-            <MetacodeSelect
-              onMetacodeSelect={id => {
-                contextOnMetacodeSelect(contextNode && contextNode.id, id)
-              }}
-              metacodeSets={metacodeSets} />
-          </div>
-          <div className="expandLi" />
-        </li>}
-        {contextNode && topicId && <li className="rc-siblings"
-            onMouseOver={populateSiblings}>
-          <div className="rc-icon" />Reveal siblings
-          <ul id="fetchSiblingList">
-            <li className="fetchAll"
-              onClick={() => contextFetchSiblings(contextNode)}>All
-              <div className="rc-keyboard">Alt+R</div>
-            </li>
-            {contextSiblingsData && Object.keys(contextSiblingsData).map(key => {
-              return <li key={key}
-                onClick={() => contextFetchSiblings(contextNode, key)}>
-                {contextSiblingsData[key]}
-              </li>
-            })}
-            {contextFetchingSiblingsData && <li id="loadingSiblings">loading...</li>}
-          </ul>
-          <div className="expandLi" />
-        </li>}
+        {this.hide()}
+        {this.remove()}
+        {this.delete()}
+        {this.center()}
+        {this.popout()}
+        {showSpacer && <li className="rc-spacer" />}
+        {this.permission()}
+        {this.metacode()}
+        {this.siblings()}
       </ul>
     </div>
   }
