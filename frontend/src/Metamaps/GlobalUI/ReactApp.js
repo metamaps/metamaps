@@ -167,7 +167,6 @@ const ReactApp = {
       contextFetchingSiblingsData: ContextMenu.fetchingSiblingsData,
       contextSiblingsData: ContextMenu.siblingsData,
       // functions
-      contextReset: ContextMenu.reset,
       contextDelete: ContextMenu.delete,
       contextRemove: ContextMenu.remove,
       contextHide: ContextMenu.hide,

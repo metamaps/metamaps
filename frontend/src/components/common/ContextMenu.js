@@ -6,13 +6,15 @@ import MetacodeSelect from '../MetacodeSelect'
 class ContextMenu extends Component {
   static propTypes = {
     topicId: PropTypes.string,
+    mapId: PropTypes.string,
+    currentUser: PropTypes.object,
+    map: PropTypes.object,
     contextNode: PropTypes.object,
     contextEdge: PropTypes.object,
     contextPos: PropTypes.object,
     contextFetchingSiblingsData: PropTypes.bool,
     contextSiblingsData: PropTypes.object,
     metacodeSets: PropTypes.array,
-    contextReset: PropTypes.func,
     contextDelete: PropTypes.func,
     contextRemove: PropTypes.func,
     contextHide: PropTypes.func,
@@ -33,9 +35,12 @@ class ContextMenu extends Component {
 
   render () {
     const { contextNode, contextPos, contextOnMetacodeSelect, metacodeSets,
-            contextSiblingsData, contextFetchSiblings,
-            contextPopulateSiblings, contextFetchingSiblingsData,
-            topicId } = this.props
+            contextDelete, contextHide, contextRemove, contextCenterOn,
+            contextPopoutTopic, contextSiblingsData, contextFetchSiblings,
+            currentUser, contextPopulateSiblings, contextFetchingSiblingsData,
+            topicId, map, mapId, contextUpdatePermissions } = this.props
+
+    const canEditMap = map && map.authorizeToEdit(currentUser)
     const style = {
       position: 'absolute',
       top: contextPos.y + 'px',
@@ -49,48 +54,60 @@ class ContextMenu extends Component {
       }
     }
 
-    // TODO: add checks for logged in and other context
     return <div className="rightclickmenu" style={style}>
       <ul>
-        <li className="rc-hide">
+        <li className="rc-hide" onClick={contextHide}>
           <div className="rc-icon" />Hide until refresh
             <div className="rc-keyboard">Ctrl+H</div>
         </li>
-        <li className="rc-remove ">
+        {canEditMap && <li className="rc-remove" onClick={contextRemove}>
           <div className="rc-icon" />Remove from map
             <div className="rc-keyboard">Ctrl+M</div>
-        </li>
-        <li className="rc-delete ">
+        </li>}
+        {canEditMap && <li className="rc-delete" onClick={contextDelete}>
           <div className="rc-icon" />Delete
             <div className="rc-keyboard">Ctrl+D</div>
-        </li>
-        <li className="rc-popout">
+        </li>}
+        {contextNode && topicId && <li className="rc-center"
+          onClick={() => contextCenterOn(contextNode.id)}>
+          <div className="rc-icon" />Center this topic
+          <div className="rc-keyboard">Alt+E</div>
+        </li>}
+        {contextNode && <li className="rc-popout"
+          onClick={() => contextPopoutTopic(contextNode.id)}>
           <div className="rc-icon" />Open in new tab
-        </li>
-        <li className="rc-spacer"></li>
-        <li className="rc-permission">
+        </li>}
+        {(currentUser || (contextNode && topicId)) && <li className="rc-spacer">
+        </li>}
+        {currentUser && <li className="rc-permission">
           <div className="rc-icon" />Change permissions
           <ul>
-            <li className="changeP toCommons">
+            <li className="changeP toCommons"
+              onClick={() => contextUpdatePermissions('commons')}>
               <div className="rc-perm-icon" />commons
             </li>
-            <li className="changeP toPublic">
+            <li className="changeP toPublic"
+              onClick={() => contextUpdatePermissions('public')}>
               <div className="rc-perm-icon" />public
             </li>
-            <li className="changeP toPrivate">
+            <li className="changeP toPrivate"
+              onClick={() => contextUpdatePermissions('private')}>
               <div className="rc-perm-icon" />private
             </li>
           </ul>
           <div className="expandLi" />
-        </li>
-        <li className="rc-metacode">
+        </li>}
+        {currentUser && <li className="rc-metacode">
           <div className="rc-icon" />Change metacode
           <div id="metacodeOptionsWrapper">
-            <MetacodeSelect onMetacodeSelect={contextOnMetacodeSelect}
+            <MetacodeSelect
+              onMetacodeSelect={id => {
+                contextOnMetacodeSelect(contextNode && contextNode.id, id)
+              }}
               metacodeSets={metacodeSets} />
           </div>
           <div className="expandLi" />
-        </li>
+        </li>}
         {contextNode && topicId && <li className="rc-siblings"
             onMouseOver={populateSiblings}>
           <div className="rc-icon" />Reveal siblings
@@ -105,7 +122,7 @@ class ContextMenu extends Component {
                 {contextSiblingsData[key]}
               </li>
             })}
-            {contextFetchingSiblingsData && <li id="loadingSiblings">loading</li>}
+            {contextFetchingSiblingsData && <li id="loadingSiblings">loading...</li>}
           </ul>
           <div className="expandLi" />
         </li>}
