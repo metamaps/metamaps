@@ -350,7 +350,7 @@ const JIT = {
         // Add also a click handler to nodes
         onClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
-          ContextMenu.reset()
+          ContextMenu.reset(ReactApp.render)
 
           if (Mouse.boxStartCoordinates) {
             if (e.ctrlKey) {
@@ -391,7 +391,7 @@ const JIT = {
         // Add also a click handler to nodes
         onRightClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
-          ContextMenu.reset()
+          ContextMenu.reset(ReactApp.render)
 
           if (Mouse.boxStartCoordinates) {
             Create.newSynapse.hide()
@@ -1007,7 +1007,7 @@ const JIT = {
       TopicCard.hideCard()
       SynapseCard.hideCard()
       Create.newTopic.hide()
-      ContextMenu.reset()
+      ContextMenu.reset(ReactApp.render)
       // reset the draw synapse positions to false
       Mouse.synapseStartCoordinates = []
       Mouse.synapseEndCoordinates = null
@@ -1355,7 +1355,7 @@ const JIT = {
 
     // select the node
     Control.selectNode(node, e)
-    ContextMenu.selectNode(node, {x: e.clientX, y: e.clientY})
+    ContextMenu.selectNode(ReactApp.render, node, {x: e.clientX, y: e.clientY})
 
   }, // selectNodeOnRightClickHandler,
   selectEdgeOnClickHandler: function(adj, e) {
@@ -1406,7 +1406,7 @@ const JIT = {
     e.stopPropagation()
     if (Visualize.mGraph.busy) return
     Control.selectEdge(adj)
-    ContextMenu.selectEdge(adj, {x: e.clientX, y: e.clientY})
+    ContextMenu.selectEdge(ReactApp.render, adj, {x: e.clientX, y: e.clientY})
   }, // selectEdgeOnRightClickHandler
   SmoothPanning: function() {
     const sx = Visualize.mGraph.canvas.scaleOffsetX

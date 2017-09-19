@@ -138,7 +138,7 @@ const Map = {
     if (Active.Map) {
       $('.main').removeClass('compressed')
       AutoLayout.resetSpiral()
-      ContextMenu.reset()
+      ContextMenu.reset(ReactApp.render)
       TopicCard.hideCard()
       SynapseCard.hideCard()
       Create.newTopic.hide(true) // true means force (and override pinned)

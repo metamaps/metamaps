@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, browserHistory } from 'react-router'
 import { merge } from 'lodash'
+import apply from 'async/apply'
 
 import { notifyUser } from './index.js'
 import ImportDialog from './ImportDialog'
@@ -157,7 +158,7 @@ const ReactApp = {
     }
   },
   getContextMenuProps: function() {
-    const self = ReactApp
+    const { render } = ReactApp
     return {
       // values
       contextMenu: !!(ContextMenu.clickedNode || ContextMenu.clickedEdge),
@@ -167,15 +168,15 @@ const ReactApp = {
       contextFetchingSiblingsData: ContextMenu.fetchingSiblingsData,
       contextSiblingsData: ContextMenu.siblingsData,
       // functions
-      contextDelete: ContextMenu.delete,
-      contextRemove: ContextMenu.remove,
-      contextHide: ContextMenu.hide,
-      contextCenterOn: ContextMenu.centerOn,
-      contextPopoutTopic: ContextMenu.popoutTopic,
-      contextUpdatePermissions: ContextMenu.updatePermissions,
-      contextOnMetacodeSelect: ContextMenu.onMetacodeSelect,
-      contextFetchSiblings: ContextMenu.fetchSiblings,
-      contextPopulateSiblings: ContextMenu.populateSiblings
+      contextDelete: apply(ContextMenu.delete, render),
+      contextRemove: apply(ContextMenu.remove, render),
+      contextHide: apply(ContextMenu.hide, render),
+      contextCenterOn: apply(ContextMenu.centerOn, render),
+      contextPopoutTopic: apply(ContextMenu.popoutTopic, render),
+      contextUpdatePermissions: apply(ContextMenu.updatePermissions, render),
+      contextOnMetacodeSelect: apply(ContextMenu.onMetacodeSelect, render),
+      contextFetchSiblings: apply(ContextMenu.fetchSiblings, render),
+      contextPopulateSiblings: apply(ContextMenu.populateSiblings, render)
     }
   },
   getTopicProps: function() {

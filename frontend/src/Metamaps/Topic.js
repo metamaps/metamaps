@@ -69,7 +69,7 @@ const Topic = {
   },
   end: function() {
     if (Active.Topic) {
-      ContextMenu.reset()
+      ContextMenu.reset(ReactApp.render)
       TopicCard.hideCard()
       SynapseCard.hideCard()
     }
