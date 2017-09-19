@@ -52,7 +52,7 @@ const ContextMenu = {
   },
   popoutTopic: (render, id) => {
     ContextMenu.reset(render)
-    const win = window.open('/topics/' + id, '_blank')
+    const win = window.open(`/topics/${id}`, '_blank')
     win.focus()
   },
   updatePermissions: (render, permission) => {

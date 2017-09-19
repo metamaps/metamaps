@@ -104,7 +104,7 @@ const Topic = {
   fetchSiblings: function(nodes, metacodeId) {
     var self = this
 
-    var node = $.isArray(nodes) ? nodes[0] : nodes
+    var node = Array.isArray(nodes) ? nodes[0] : nodes
 
     var topics = DataModel.Topics.map(function(t) { return t.id })
     var topicsString = topics.join()
@@ -156,7 +156,7 @@ const Topic = {
           }
         })
       })
-      if ($.isArray(nodes) && nodes.length > 1) {
+      if (Array.isArray(nodes) && nodes.length > 1) {
         self.fetchSiblings(nodes.slice(1), metacodeId)
       }
     }
