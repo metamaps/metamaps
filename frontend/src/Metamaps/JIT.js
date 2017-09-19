@@ -350,7 +350,7 @@ const JIT = {
         // Add also a click handler to nodes
         onClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
-          $('.rightclickmenu').remove()
+          ContextMenu.reset()
 
           if (Mouse.boxStartCoordinates) {
             if (e.ctrlKey) {
@@ -391,7 +391,7 @@ const JIT = {
         // Add also a click handler to nodes
         onRightClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
-          $('.rightclickmenu').remove()
+          ContextMenu.reset()
 
           if (Mouse.boxStartCoordinates) {
             Create.newSynapse.hide()
@@ -1007,7 +1007,7 @@ const JIT = {
       TopicCard.hideCard()
       SynapseCard.hideCard()
       Create.newTopic.hide()
-      $('.rightclickmenu').remove()
+      ContextMenu.reset()
       // reset the draw synapse positions to false
       Mouse.synapseStartCoordinates = []
       Mouse.synapseEndCoordinates = null
@@ -1412,7 +1412,7 @@ const JIT = {
     Control.selectEdge(adj)
 
     // delete old right click menu
-    $('.rightclickmenu').remove()
+    ContextMenu.reset()
     // create new menu for clicked on node
     const rightclickmenu = document.createElement('div')
     rightclickmenu.className = 'rightclickmenu'

@@ -15,6 +15,7 @@ import Selected from './Selected'
 import Settings from './Settings'
 import SynapseCard from './SynapseCard'
 import TopicCard from './Views/TopicCard'
+import ContextMenu from './Views/ContextMenu'
 import Util from './Util'
 import Visualize from './Visualize'
 
@@ -68,7 +69,7 @@ const Topic = {
   },
   end: function() {
     if (Active.Topic) {
-      $('.rightclickmenu').remove()
+      ContextMenu.reset()
       TopicCard.hideCard()
       SynapseCard.hideCard()
     }
