@@ -1,14 +1,9 @@
-/* global $, Image, CanvasLoader */
+/* global $, Image */
 
 import _ from 'lodash'
-import outdent from 'outdent'
 import clipboard from 'clipboard-js'
-import React from 'react'
-import ReactDOM from 'react-dom'
 
 import $jit from '../patched/JIT'
-
-import MetacodeSelect from '../components/MetacodeSelect'
 
 import Active from './Active'
 import ContextMenu from './Views/ContextMenu'
@@ -1347,16 +1342,11 @@ const JIT = {
   selectNodeOnRightClickHandler: function(node, e) {
     // the 'node' variable is a JIT node, the one that was clicked on
     // the 'e' variable is the click event
-
     e.preventDefault()
     e.stopPropagation()
-
     if (Visualize.mGraph.busy) return
-
-    // select the node
     Control.selectNode(node, e)
     ContextMenu.selectNode(ReactApp.render, node, {x: e.clientX, y: e.clientY})
-
   }, // selectNodeOnRightClickHandler,
   selectEdgeOnClickHandler: function(adj, e) {
     if (Visualize.mGraph.busy) return

@@ -1,3 +1,4 @@
+/* global $ */
 import Control from '../Control'
 import DataModel from '../DataModel'
 import Selected from '../Selected'

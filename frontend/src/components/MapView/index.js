@@ -1,4 +1,4 @@
-  import React, { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import ContextMenu from '../common/ContextMenu'
@@ -9,7 +9,6 @@ import Instructions from './Instructions'
 import VisualizationControls from '../common/VisualizationControls'
 import MapChat from './MapChat'
 import TopicCard from '../TopicCard'
-
 
 export default class MapView extends Component {
 

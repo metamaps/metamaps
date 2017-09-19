@@ -78,9 +78,9 @@ class ContextMenu extends Component {
 
   hide = () => {
     const { contextHide } = this.props
-    return <li className="rc-hide" onClick={contextHide}>
-      <div className="rc-icon" />Hide until refresh
-        <div className="rc-keyboard">Ctrl+H</div>
+    return <li className='rc-hide' onClick={contextHide}>
+      <div className='rc-icon' />Hide until refresh
+        <div className='rc-keyboard'>Ctrl+H</div>
     </li>
   }
 
@@ -90,9 +90,9 @@ class ContextMenu extends Component {
     if (!canEditMap) {
       return null
     }
-    return <li className="rc-remove" onClick={contextRemove}>
-      <div className="rc-icon" />Remove from map
-        <div className="rc-keyboard">Ctrl+M</div>
+    return <li className='rc-remove' onClick={contextRemove}>
+      <div className='rc-icon' />Remove from map
+        <div className='rc-keyboard'>Ctrl+M</div>
     </li>
   }
 
@@ -102,9 +102,9 @@ class ContextMenu extends Component {
     if (!canEditMap) {
       return null
     }
-    return <li className="rc-delete" onClick={contextDelete}>
-      <div className="rc-icon" />Delete
-      <div className="rc-keyboard">Ctrl+D</div>
+    return <li className='rc-delete' onClick={contextDelete}>
+      <div className='rc-icon' />Delete
+      <div className='rc-keyboard'>Ctrl+D</div>
     </li>
   }
 
@@ -113,10 +113,10 @@ class ContextMenu extends Component {
     if (!(contextNode && topicId)) {
       return null
     }
-    return <li className="rc-center"
+    return <li className='rc-center'
       onClick={() => contextCenterOn(contextNode.id)}>
-      <div className="rc-icon" />Center this topic
-      <div className="rc-keyboard">Alt+E</div>
+      <div className='rc-icon' />Center this topic
+      <div className='rc-keyboard'>Alt+E</div>
     </li>
   }
 
@@ -125,9 +125,9 @@ class ContextMenu extends Component {
     if (!contextNode) {
       return null
     }
-    return <li className="rc-popout"
+    return <li className='rc-popout'
       onClick={() => contextPopoutTopic(contextNode.id)}>
-      <div className="rc-icon" />Open in new tab
+      <div className='rc-icon' />Open in new tab
     </li>
   }
 
@@ -136,23 +136,23 @@ class ContextMenu extends Component {
     if (!currentUser) {
       return null
     }
-    return <li className="rc-permission">
-      <div className="rc-icon" />Change permissions
+    return <li className='rc-permission'>
+      <div className='rc-icon' />Change permissions
       <ul>
-        <li className="changeP toCommons"
+        <li className='changeP toCommons'
           onClick={() => contextUpdatePermissions('commons')}>
-          <div className="rc-perm-icon" />commons
+          <div className='rc-perm-icon' />commons
         </li>
-        <li className="changeP toPublic"
+        <li className='changeP toPublic'
           onClick={() => contextUpdatePermissions('public')}>
-          <div className="rc-perm-icon" />public
+          <div className='rc-perm-icon' />public
         </li>
-        <li className="changeP toPrivate"
+        <li className='changeP toPrivate'
           onClick={() => contextUpdatePermissions('private')}>
-          <div className="rc-perm-icon" />private
+          <div className='rc-perm-icon' />private
         </li>
       </ul>
-      <div className="expandLi" />
+      <div className='expandLi' />
     </li>
   }
 
@@ -162,16 +162,16 @@ class ContextMenu extends Component {
     if (!currentUser) {
       return null
     }
-    return <li className="rc-metacode">
-      <div className="rc-icon" />Change metacode
-      <div id="metacodeOptionsWrapper">
+    return <li className='rc-metacode'>
+      <div className='rc-icon' />Change metacode
+      <div id='metacodeOptionsWrapper'>
         <MetacodeSelect
           onMetacodeSelect={id => {
             contextOnMetacodeSelect(contextNode && contextNode.id, id)
           }}
           metacodeSets={metacodeSets} />
       </div>
-      <div className="expandLi" />
+      <div className='expandLi' />
     </li>
   }
 
@@ -188,13 +188,13 @@ class ContextMenu extends Component {
     if (!(contextNode && topicId)) {
       return null
     }
-    return <li className="rc-siblings"
+    return <li className='rc-siblings'
         onMouseOver={populateSiblings}>
-      <div className="rc-icon" />Reveal siblings
-      <ul id="fetchSiblingList">
-        <li className="fetchAll"
+      <div className='rc-icon' />Reveal siblings
+      <ul id='fetchSiblingList'>
+        <li className='fetchAll'
           onClick={() => contextFetchSiblings(contextNode)}>All
-          <div className="rc-keyboard">Alt+R</div>
+          <div className='rc-keyboard'>Alt+R</div>
         </li>
         {contextSiblingsData && Object.keys(contextSiblingsData).map(key => {
           return <li key={key}
@@ -202,27 +202,27 @@ class ContextMenu extends Component {
             {contextSiblingsData[key]}
           </li>
         })}
-        {contextFetchingSiblingsData && <li id="loadingSiblings">loading...</li>}
+        {contextFetchingSiblingsData && <li id='loadingSiblings'>loading...</li>}
       </ul>
-      <div className="expandLi" />
+      <div className='expandLi' />
     </li>
   }
 
-  render () {
+  render() {
     const { contextNode, currentUser, topicId } = this.props
     const positionData = this.getPositionData()
     const style = Object.assign({}, {position: 'absolute'}, positionData.pos)
     const showSpacer = currentUser || (contextNode && topicId)
 
     return <div style={style}
-      className={"rightclickmenu " + positionData.extraClasses.join(' ')}>
+      className={'rightclickmenu ' + positionData.extraClasses.join(' ')}>
       <ul>
         {this.hide()}
         {this.remove()}
         {this.delete()}
         {this.center()}
         {this.popout()}
-        {showSpacer && <li className="rc-spacer" />}
+        {showSpacer && <li className='rc-spacer' />}
         {this.permission()}
         {this.metacode()}
         {this.siblings()}
