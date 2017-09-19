@@ -1399,113 +1399,14 @@ const JIT = {
     }
   }, // selectEdgeOnClickHandler
   selectEdgeOnRightClickHandler: function(adj, e) {
-    // the 'node' variable is a JIT node, the one that was clicked on
+    // the 'adj' variable is a JIT adjacency, the one that was clicked on
     // the 'e' variable is the click event
-
     if (adj.getData('alpha') === 0) return // don't do anything if the edge is filtered
-
     e.preventDefault()
     e.stopPropagation()
-
     if (Visualize.mGraph.busy) return
-
     Control.selectEdge(adj)
-
-    // delete old right click menu
-    ContextMenu.reset()
-    // create new menu for clicked on node
-    const rightclickmenu = document.createElement('div')
-    rightclickmenu.className = 'rightclickmenu'
-    // prevent the custom context menu from immediately opening the default context menu as well
-    rightclickmenu.setAttribute('oncontextmenu', 'return false')
-
-    // add the proper options to the menu
-    let menustring = '<ul>'
-
-    const authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
-
-    const disabled = authorized ? '' : 'disabled'
-
-    if (Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
-
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-spacer"></li>'
-
-    if (Active.Mapper) {
-      const permOptions = outdent`
-        <ul>
-          <li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li>
-          <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li>           <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li>         </ul>`
-
-      menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + permOptions + '<div class="expandLi"></div></li>'
-    }
-
-    menustring += '</ul>'
-    rightclickmenu.innerHTML = menustring
-
-    // position the menu where the click happened
-    const position = {}
-    const RIGHTCLICK_WIDTH = 300
-    const RIGHTCLICK_HEIGHT = 144 // this does vary somewhat, but we can use static
-    const SUBMENUS_WIDTH = 256
-    const MAX_SUBMENU_HEIGHT = 270
-    const windowWidth = $(window).width()
-    const windowHeight = $(window).height()
-
-    if (windowWidth - e.clientX < SUBMENUS_WIDTH) {
-      position.right = windowWidth - e.clientX
-      $(rightclickmenu).addClass('moveMenusToLeft')
-    } else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH) {
-      position.right = windowWidth - e.clientX
-    } else position.left = e.clientX
-
-    if (windowHeight - e.clientY < MAX_SUBMENU_HEIGHT) {
-      position.bottom = windowHeight - e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else if (windowHeight - e.clientY < RIGHTCLICK_HEIGHT + MAX_SUBMENU_HEIGHT) {
-      position.top = e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else position.top = e.clientY
-
-    $(rightclickmenu).css(position)
-
-    // add the menu to the page
-    $('#wrapper').append(rightclickmenu)
-
-    // attach events to clicks on the list items
-
-    // delete the selected things from the database
-    if (authorized) {
-      $('.rc-delete').click(function() {
-        $('.rightclickmenu').remove()
-        Control.deleteSelected()
-      })
-    }
-
-    // remove the selected things from the map
-    if (authorized) {
-      $('.rc-remove').click(function() {
-        $('.rightclickmenu').remove()
-        Control.removeSelectedEdges()
-        Control.removeSelectedNodes()
-      })
-    }
-
-    // hide selected nodes and synapses until refresh
-    $('.rc-hide').click(function() {
-      $('.rightclickmenu').remove()
-      Control.hideSelectedEdges()
-      Control.hideSelectedNodes()
-    })
-
-    // change the permission of all the selected nodes and synapses that you were the originator of
-    $('.rc-permission li').click(function() {
-      $('.rightclickmenu').remove()
-      // $(this).text() will be 'commons' 'public' or 'private'
-      Control.updateSelectedPermissions($(this).text())
-    })
+    ContextMenu.selectEdge(adj, {x: e.clientX, y: e.clientY})
   }, // selectEdgeOnRightClickHandler
   SmoothPanning: function() {
     const sx = Visualize.mGraph.canvas.scaleOffsetX
