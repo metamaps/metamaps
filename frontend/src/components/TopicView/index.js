@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import ContextMenu from '../common/ContextMenu'
 import DataVis from '../common/DataVis'
 import UpperOptions from '../common/UpperOptions'
 import InfoAndHelp from '../common/InfoAndHelp'
@@ -10,6 +11,7 @@ import TopicCard from '../TopicCard'
 export default class TopicView extends Component {
 
   static propTypes = {
+    contextMenu: PropTypes.bool,
     mobile: PropTypes.bool,
     topicId: PropTypes.string,
     topic: PropTypes.object,
@@ -55,7 +57,7 @@ export default class TopicView extends Component {
     const { mobile, topic, currentUser, allForFiltering, visibleForFiltering,
             toggleMetacode, toggleMapper, toggleSynapse, filterAllMetacodes,
             filterAllMappers, filterAllSynapses, filterData, forkMap,
-            openHelpLightbox, onZoomIn, onZoomOut } = this.props
+            openHelpLightbox, onZoomIn, onZoomOut, contextMenu } = this.props
     // TODO: stop using {...this.props} and make explicit
     return <div className="topicWrapper">
       <UpperOptions ref={x => this.upperOptions = x}
@@ -73,6 +75,7 @@ export default class TopicView extends Component {
                     filterAllSynapses={filterAllSynapses} />
       <DataVis />
       <TopicCard {...this.props} />
+      {contextMenu && <ContextMenu {...this.props} />}
       <VisualizationControls onClickZoomIn={onZoomIn}
                              onClickZoomOut={onZoomOut} />
       <InfoAndHelp topic={topic}

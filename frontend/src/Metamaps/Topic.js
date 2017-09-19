@@ -74,7 +74,7 @@ const Topic = {
     }
   },
   centerOn: function(nodeid, callback) {
-    // don't clash with fetchRelatives
+    // don't clash with fetchSiblings
     if (!Visualize.mGraph.busy) {
       Visualize.mGraph.onClick(nodeid, {
         hideLabels: false,
@@ -100,7 +100,7 @@ const Topic = {
     }
     ReactApp.render()
   },
-  fetchRelatives: function(nodes, metacodeId) {
+  fetchSiblings: function(nodes, metacodeId) {
     var self = this
 
     var node = $.isArray(nodes) ? nodes[0] : nodes
@@ -156,7 +156,7 @@ const Topic = {
         })
       })
       if ($.isArray(nodes) && nodes.length > 1) {
-        self.fetchRelatives(nodes.slice(1), metacodeId)
+        self.fetchSiblings(nodes.slice(1), metacodeId)
       }
     }
 

@@ -1,6 +1,6 @@
 import Control from '../Control'
 import DataModel from '../DataModel'
-import ReactApp from '../GlobalUI/ReactApp'
+import { ReactApp } from '../GlobalUI'
 import Selected from '../Selected'
 import Topic from '../Topic'
 
@@ -8,11 +8,13 @@ const ContextMenu = {
   clickedNode: null,
   clickedEdge: null,
   pos: {x: 0, y: 0},
+  fetchingSiblingsData: false,
   siblingsData: null,
   selectNode: (node, pos) => {
     ContextMenu.pos = pos
     ContextMenu.clickedNode = node
     ContextMenu.clickedEdge = null
+    ContextMenu.fetchingSiblingsData = false
     ContextMenu.siblingsData = null
     ReactApp.render()
   },
@@ -20,16 +22,21 @@ const ContextMenu = {
     ContextMenu.pos = pos
     ContextMenu.clickedNode = null
     ContextMenu.clickedEdge = edge
+    ContextMenu.fetchingSiblingsData = false
     ContextMenu.siblingsData = null
     ReactApp.render()
   },
   reset: () => {
+    ContextMenu.fetchingSiblingsData = false
     ContextMenu.siblingsData = null
     ContextMenu.clickedNode = null
     ContextMenu.clickedEdge = null
     ReactApp.render()
   },
-  delete: Control.deleteSelected,
+  delete: () => {
+    Control.deleteSelected()
+    ContextMenu.reset()
+  },
   remove: () => {
     Control.removeSelectedEdges()
     Control.removeSelectedNodes()
@@ -66,39 +73,27 @@ const ContextMenu = {
     }
     ContextMenu.reset()
   },
-  fetchRelatives: (node, metacodeId) => {
-    Topic.fetchRelatives(node, metacodeId)
+  fetchSiblings: (node, metacodeId) => {
+    Topic.fetchSiblings(node, metacodeId)
     ContextMenu.reset()
   },
   populateSiblings: function(id) {
     // depending on how many topics are selected, do different things
-
-    // add a loading icon for now
-    /*const loader = new CanvasLoader('loadingSiblings')
-    loader.setColor('#4FC059') // default is '#000000'
-    loader.setDiameter(15) // default is 40
-    loader.setDensity(41) // default is 40
-    loader.setRange(0.9) // default is 1.3
-    loader.show() // Hidden by default*/
+    ContextMenu.fetchingSiblingsData = true
+    ReactApp.render()
 
     const topics = DataModel.Topics.map(function(t) { return t.id })
     const topicsString = topics.join()
 
     const successCallback = function(data) {
+      ContextMenu.fetchingSiblingsData = false
+
+      // adjust the data for consumption by react
+      for (var key in data) {
+        data[key] = `${DataModel.Metacodes.get(key).get('name')} (${data[key]})`
+      }
       ContextMenu.siblingsData = data
       ReactApp.render()
-      /*$('#loadingSiblings').remove()
-
-      for (var key in data) {
-        const string = `${DataModel.Metacodes.get(key).get('name')} (${data[key]})`
-        $('#fetchSiblingList').append(`<li class="getSiblings" data-id="${key}">${string}</li>`)
-      }
-
-      $('.rc-siblings .getSiblings').click(function() {
-        $('.rightclickmenu').remove()
-        // data-id is a metacode id
-        Topic.fetchRelatives(node, $(this).attr('data-id'))
-      })*/
     }
 
     $.ajax({

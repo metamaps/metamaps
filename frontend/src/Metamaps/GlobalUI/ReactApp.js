@@ -113,6 +113,7 @@ const ReactApp = {
     self.getFilterProps(),
     self.getCommonProps(),
     self.getMapsProps(),
+    self.getContextMenuProps(),
     self.getTopicCardProps(),
     self.getChatProps())
   },
@@ -153,6 +154,29 @@ const ReactApp = {
       metacodeSets: self.metacodeSets,
       updateTopic: (topic, obj) => topic.save(obj),
       onTopicFollow: Topic.onTopicFollow
+    }
+  },
+  getContextMenuProps: function() {
+    const self = ReactApp
+    return {
+      // values
+      contextMenu: !!(ContextMenu.clickedNode || ContextMenu.clickedEdge),
+      contextNode: ContextMenu.clickedNode,
+      contextEdge: ContextMenu.clickedEdge,
+      contextPos: ContextMenu.pos,
+      contextFetchingSiblingsData: ContextMenu.fetchingSiblingsData,
+      contextSiblingsData: ContextMenu.siblingsData,
+      // functions
+      contextReset: ContextMenu.reset,
+      contextDelete: ContextMenu.delete,
+      contextRemove: ContextMenu.remove,
+      contextHide: ContextMenu.hide,
+      contextCenterOn: ContextMenu.centerOn,
+      contextPopoutTopic: ContextMenu.popoutTopic,
+      contextUpdatePermissions: ContextMenu.updatePermissions,
+      contextOnMetacodeSelect: ContextMenu.onMetacodeSelect,
+      contextFetchSiblings: ContextMenu.fetchSiblings,
+      contextPopulateSiblings: ContextMenu.populateSiblings
     }
   },
   getTopicProps: function() {
