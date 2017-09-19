@@ -16,6 +16,7 @@ import Loading from '../Loading'
 import Realtime from '../Realtime'
 import Selected from '../Selected'
 import SynapseCard from '../SynapseCard'
+import ContextMenu from '../Views/ContextMenu'
 import TopicCard from '../Views/TopicCard'
 import Visualize from '../Visualize'
 
@@ -137,7 +138,7 @@ const Map = {
     if (Active.Map) {
       $('.main').removeClass('compressed')
       AutoLayout.resetSpiral()
-      $('.rightclickmenu').remove()
+      ContextMenu.reset(ReactApp.render)
       TopicCard.hideCard()
       SynapseCard.hideCard()
       Create.newTopic.hide(true) // true means force (and override pinned)

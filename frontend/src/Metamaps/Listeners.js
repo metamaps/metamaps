@@ -152,12 +152,12 @@ const Listeners = {
     var node = nodes[nodes.length - 1]
     if (opts.center && opts.reveal) {
       Topic.centerOn(node.id, function() {
-        Topic.fetchRelatives(nodes)
+        Topic.fetchSiblings(nodes)
       })
     } else if (opts.center) {
       Topic.centerOn(node.id)
     } else if (opts.reveal) {
-      Topic.fetchRelatives(nodes)
+      Topic.fetchSiblings(nodes)
     }
   }
 }

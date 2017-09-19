@@ -1,5 +1,6 @@
 /* global $ */
 
+import ContextMenu from './ContextMenu'
 import ExploreMaps from './ExploreMaps'
 import ChatView from './ChatView'
 import VideoView from './VideoView'
@@ -12,6 +13,7 @@ const Views = {
     $(document).on(JUNTO_UPDATED, () => ExploreMaps.render())
     ChatView.init([serverData['sounds/MM_sounds.mp3'], serverData['sounds/MM_sounds.ogg']])
   },
+  ContextMenu,
   ExploreMaps,
   ChatView,
   VideoView,
@@ -19,5 +21,5 @@ const Views = {
   TopicCard
 }
 
-export { ExploreMaps, ChatView, VideoView, Room, TopicCard }
+export { ContextMenu, ExploreMaps, ChatView, VideoView, Room, TopicCard }
 export default Views

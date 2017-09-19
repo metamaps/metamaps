@@ -4,12 +4,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, browserHistory } from 'react-router'
 import { merge } from 'lodash'
+import apply from 'async/apply'
 
 import { notifyUser } from './index.js'
 import ImportDialog from './ImportDialog'
 import Active from '../Active'
 import DataModel from '../DataModel'
-import { ExploreMaps, ChatView, TopicCard } from '../Views'
+import { ExploreMaps, ChatView, TopicCard, ContextMenu } from '../Views'
 import Filter from '../Filter'
 import JIT from '../JIT'
 import Realtime from '../Realtime'
@@ -113,6 +114,7 @@ const ReactApp = {
     self.getFilterProps(),
     self.getCommonProps(),
     self.getMapsProps(),
+    self.getContextMenuProps(),
     self.getTopicCardProps(),
     self.getChatProps())
   },
@@ -153,6 +155,28 @@ const ReactApp = {
       metacodeSets: self.metacodeSets,
       updateTopic: (topic, obj) => topic.save(obj),
       onTopicFollow: Topic.onTopicFollow
+    }
+  },
+  getContextMenuProps: function() {
+    const { render } = ReactApp
+    return {
+      // values
+      contextMenu: !!(ContextMenu.clickedNode || ContextMenu.clickedEdge),
+      contextNode: ContextMenu.clickedNode,
+      contextEdge: ContextMenu.clickedEdge,
+      contextPos: ContextMenu.pos,
+      contextFetchingSiblingsData: ContextMenu.fetchingSiblingsData,
+      contextSiblingsData: ContextMenu.siblingsData,
+      // functions
+      contextDelete: apply(ContextMenu.delete, render),
+      contextRemove: apply(ContextMenu.remove, render),
+      contextHide: apply(ContextMenu.hide, render),
+      contextCenterOn: apply(ContextMenu.centerOn, render),
+      contextPopoutTopic: apply(ContextMenu.popoutTopic, render),
+      contextUpdatePermissions: apply(ContextMenu.updatePermissions, render),
+      contextOnMetacodeSelect: apply(ContextMenu.onMetacodeSelect, render),
+      contextFetchSiblings: apply(ContextMenu.fetchSiblings, render),
+      contextPopulateSiblings: apply(ContextMenu.populateSiblings, render)
     }
   },
   getTopicProps: function() {

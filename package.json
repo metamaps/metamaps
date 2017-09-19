@@ -21,6 +21,7 @@
   "homepage": "https://github.com/metamaps/metamaps#readme",
   "dependencies": {
     "ajaxq": "0.0.7",
+    "async": "2.5.0",
     "attachmediastream": "2.0.0",
     "autolinker": "1.4.3",
     "babel-cli": "6.26.0",
