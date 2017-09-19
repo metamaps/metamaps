@@ -33,6 +33,49 @@ class ContextMenu extends Component {
     }
   }
 
+  getPositionData = () => {
+    const { contextPos } = this.props
+    let extraClasses = []
+    const position = {}
+    const RIGHTCLICK_WIDTH = 300
+    const RIGHTCLICK_HEIGHT = 144 // this does vary somewhat, but we can use static
+    const SUBMENUS_WIDTH = 256
+    const MAX_SUBMENU_HEIGHT = 270
+    const windowWidth = document.documentElement.clientWidth
+    const windowHeight = document.documentElement.clientHeight
+
+    if (windowWidth - contextPos.x < SUBMENUS_WIDTH) {
+      position.right = windowWidth - contextPos.x
+      extraClasses.push('moveMenusToLeft')
+    } else if (windowWidth - contextPos.x < RIGHTCLICK_WIDTH) {
+      position.right = windowWidth - contextPos.x
+    } else if (windowWidth - contextPos.x < RIGHTCLICK_WIDTH + SUBMENUS_WIDTH) {
+      position.left = contextPos.x
+      extraClasses.push('moveMenusToLeft')
+    } else {
+      position.left = contextPos.x
+    }
+
+    if (windowHeight - contextPos.y < MAX_SUBMENU_HEIGHT) {
+      position.bottom = windowHeight - contextPos.y
+      extraClasses.push('moveMenusUp')
+    } else if (windowHeight - contextPos.y < RIGHTCLICK_HEIGHT + MAX_SUBMENU_HEIGHT) {
+      position.top = contextPos.y
+      extraClasses.push('moveMenusUp')
+    } else {
+      position.top = contextPos.y
+    }
+    return {
+      pos: {
+        top: position.top && position.top + 'px',
+        bottom: position.bottom && position.bottom + 'px',
+        left: position.left && position.left + 'px',
+        right: position.right && position.right + 'px'
+      },
+      extraClasses
+    }
+  }
+
   render () {
     const { contextNode, contextPos, contextOnMetacodeSelect, metacodeSets,
             contextDelete, contextHide, contextRemove, contextCenterOn,
@@ -41,12 +84,8 @@ class ContextMenu extends Component {
             topicId, map, mapId, contextUpdatePermissions } = this.props
 
     const canEditMap = map && map.authorizeToEdit(currentUser)
-    const style = {
-      position: 'absolute',
-      top: contextPos.y + 'px',
-      left: contextPos.x + 'px'
-    }
-
+    const positionData = this.getPositionData()
+    const style = Object.assign({}, {position: 'absolute'}, positionData.pos)
     const populateSiblings = () => {
       if (!this.state.populateSiblingsSent) {
         contextPopulateSiblings(contextNode.id)
@@ -54,7 +93,8 @@ class ContextMenu extends Component {
       }
     }
 
-    return <div className="rightclickmenu" style={style}>
+    return <div style={style}
+      className={"rightclickmenu " + positionData.extraClasses.join(' ')}>
       <ul>
         <li className="rc-hide" onClick={contextHide}>
           <div className="rc-icon" />Hide until refresh
@@ -128,37 +168,6 @@ class ContextMenu extends Component {
         </li>}
       </ul>
     </div>
-
-    // position the menu where the click happened
-    /*const position = {}
-    const RIGHTCLICK_WIDTH = 300
-    const RIGHTCLICK_HEIGHT = 144 // this does vary somewhat, but we can use static
-    const SUBMENUS_WIDTH = 256
-    const MAX_SUBMENU_HEIGHT = 270
-    const windowWidth = $(window).width()
-    const windowHeight = $(window).height()
-
-    if (windowWidth - e.clientX < SUBMENUS_WIDTH) {
-      position.right = windowWidth - e.clientX
-      $(rightclickmenu).addClass('moveMenusToLeft')
-    } else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH) {
-      position.right = windowWidth - e.clientX
-    } else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH + SUBMENUS_WIDTH) {
-      position.left = e.clientX
-      $(rightclickmenu).addClass('moveMenusToLeft')
-    } else {
-      position.left = e.clientX
-    }
-
-    if (windowHeight - e.clientY < MAX_SUBMENU_HEIGHT) {
-      position.bottom = windowHeight - e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else if (windowHeight - e.clientY < RIGHTCLICK_HEIGHT + MAX_SUBMENU_HEIGHT) {
-      position.top = e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else {
-      position.top = e.clientY
-    }*/
   }
 }
 
