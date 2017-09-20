@@ -8,6 +8,7 @@ import apply from 'async/apply'
 
 import { notifyUser } from './index.js'
 import ImportDialog from './ImportDialog'
+import Notifications from './Notifications'
 import Active from '../Active'
 import DataModel from '../DataModel'
 import { ExploreMaps, ChatView, TopicCard, ContextMenu } from '../Views'
@@ -107,7 +108,9 @@ const ReactApp = {
       mobileTitleWidth: self.mobileTitleWidth,
       mobileTitleClick: (e) => Active.Map && InfoBox.toggleBox(e),
       openInviteLightbox: () => self.openLightbox('invite'),
-      serverData: self.serverData
+      serverData: self.serverData,
+      notifications: Notifications.notifications,
+      fetchNotifications: apply(Notifications.fetch, ReactApp.render)
     },
     self.getMapProps(),
     self.getTopicProps(),

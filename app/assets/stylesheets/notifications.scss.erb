@@ -13,6 +13,45 @@ $unread_notifications_dot_size: 8px;
   .notificationsIcon {
     position: relative;
   }
+
+  .notificationsBox {
+    position: absolute;
+    background: #FFFFFF;
+    border-radius: 2px;
+    width: 350px;
+    right: 0;
+    top: 50px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+
+    .notificationsBoxTriangle {
+      min-width: 0 !important;
+      display: block;
+      position: absolute;
+      right: 48px;
+      width: 20px !important;
+      height: 20px !important;
+      margin-left: -10px;
+      top: -10px;
+      border-top: 1px solid rgba(49, 72, 67, 0.11) !important;
+      border-left: 1px solid rgba(49, 72, 67, 0.11) !important;
+      border-bottom: 0 !important;
+      border-right: 0 !important;
+      background-color: #fff;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+    }
+
+    .notificationsBoxSeeAll {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 6px 0;
+      font-family: din-regular, helvetica, sans-serif;
+      color: #4fb5c0;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
 }
 
 .controller-notifications {
@@ -66,12 +105,12 @@ $unread_notifications_dot_size: 8px;
 
       & > a {
         float: left;
-        width: 85%;  
+        width: 85%;
         box-sizing: border-box;
         padding-right: 10px;
       }
 
-      .notification-actor { 
+      .notification-actor {
         float: left;
 
         img {
@@ -97,7 +136,7 @@ $unread_notifications_dot_size: 8px;
           display: inline-block;
           margin: 5px 0;
         }
-      } 
+      }
 
       .notification-date {
         position: absolute;
@@ -129,7 +168,7 @@ $unread_notifications_dot_size: 8px;
 
   }
 
-    
+
 
   .notificationPage {
     .thirty-two-avatar {
@@ -139,14 +178,14 @@ $unread_notifications_dot_size: 8px;
       border-radius: 16px;
       vertical-align: middle;
     }
-    
+
     .button {
       line-height: 32px;
-      
+
       img {
         margin-top: 8px;
       }
-      
+
       &.decline {
         background: #DB5D5D;
         &:hover {
@@ -154,7 +193,7 @@ $unread_notifications_dot_size: 8px;
         }
       }
     }
-  
+
     .notification-body {
       p, div {
         margin: 1em auto;

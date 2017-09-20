@@ -10,10 +10,15 @@ class NotificationsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: @notifications.map do |notification|
+        notifications = @notifications.map do |notification|
           receipt = @receipts.find_by(notification_id: notification.id)
-          notification.as_json.merge(is_read: receipt.is_read)
+          notification.as_json.merge(
+            is_read: receipt.is_read,
+            notified_object:  notification.notified_object,
+            sender: notification.sender
+          )
         end
+        render json: notifications
       end
     end
   end
