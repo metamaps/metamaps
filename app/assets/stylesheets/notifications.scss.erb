@@ -55,10 +55,6 @@ $unread_notifications_dot_size: 8px;
 }
 
 .controller-notifications {
-  ul.notifications {
-    list-style: none;
-  }
-
   .notificationPage,
   .notificationsPage {
     font-family: 'din-regular', Sans-Serif;
@@ -86,86 +82,6 @@ $unread_notifications_dot_size: 8px;
     .emptyInbox {
       padding-top: 15px;
     }
-
-    .notification {
-      padding: 10px;
-      position: relative;
-
-      &:hover {
-        background: #F6F6F6;
-
-        .notification-read-unread {
-          display:block;
-        }
-
-        .notification-date {
-          display: none;
-        }
-      }
-
-      & > a {
-        float: left;
-        width: 85%;
-        box-sizing: border-box;
-        padding-right: 10px;
-      }
-
-      .notification-actor {
-        float: left;
-
-        img {
-          width: 32px;
-          height: 32px;
-          border-radius: 16px;
-        }
-      }
-
-      .notification-body {
-        margin-left: 50px;
-        line-height: 20px;
-
-        .in-bold {
-          font-family: 'din-medium', Sans-Serif;
-        }
-
-        .action {
-          background: #4fb5c0;
-          color: #FFF;
-          padding: 2px 6px;
-          border-radius: 3px;
-          display: inline-block;
-          margin: 5px 0;
-        }
-      }
-
-      .notification-date {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        color: #607d8b;
-        font-size: 13px;
-        line-height: 13px;
-        margin-top: -6px;
-      }
-
-      .notification-read-unread {
-        display: none;
-        float: left;
-        width: 15%;
-
-        a {
-          position: absolute;
-          top: 50%;
-          margin-top: -10px;
-          text-align: center;
-        }
-      }
-
-      &.unread {
-        background: #EEE;
-      }
-    }
-
   }
 
 
@@ -200,5 +116,89 @@ $unread_notifications_dot_size: 8px;
         line-height: 20px;
       }
     }
+  }
+}
+
+ul.notifications {
+  list-style: none;
+}
+
+.notification {
+  padding: 10px;
+  position: relative;
+
+  &:hover {
+    background: #F6F6F6;
+
+    .notification-read-unread {
+      display:block;
+    }
+
+    .notification-date {
+      display: none;
+    }
+  }
+
+  & > a {
+    float: left;
+    width: 85%;
+    box-sizing: border-box;
+    padding-right: 10px;
+  }
+
+  .notification-actor {
+    float: left;
+
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 16px;
+    }
+  }
+
+  .notification-body {
+    font-family: 'din-regular', Sans-Serif;
+    margin-left: 50px;
+    line-height: 20px;
+
+    .in-bold {
+      font-family: 'din-medium', Sans-Serif;
+    }
+
+    .action {
+      background: #4fb5c0;
+      color: #FFF;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      margin: 5px 0;
+    }
+  }
+
+  .notification-date {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    color: #607d8b;
+    font-size: 13px;
+    line-height: 13px;
+    margin-top: -6px;
+  }
+
+  .notification-read-unread {
+    display: none;
+    float: left;
+    width: 15%;
+
+    div {
+      position: absolute;
+      top: 50%;
+      margin-top: -10px;
+      text-align: center;
+    }
+  }
+
+  &.unread {
+    background: #EEE;
   }
 }

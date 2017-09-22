@@ -13,6 +13,8 @@ class App extends Component {
     unreadNotificationsCount: PropTypes.number,
     notifications: PropTypes.array,
     fetchNotifications: PropTypes.func,
+    markAsRead: PropTypes.func,
+    markAsUnread: PropTypes.func,
     location: PropTypes.object,
     mobile: PropTypes.bool,
     mobileTitle: PropTypes.string,
@@ -40,7 +42,8 @@ class App extends Component {
     const { children, toast, unreadNotificationsCount, openInviteLightbox,
             mobile, mobileTitle, mobileTitleWidth, mobileTitleClick, location,
             map, userRequested, requestAnswered, requestApproved, serverData,
-            onRequestAccess, notifications, fetchNotifications } = this.props
+            onRequestAccess, notifications, fetchNotifications,
+            markAsRead, markAsUnread } = this.props
     const { pathname } = location || {}
     // this fixes a bug that happens otherwise when you logout
     const currentUser = this.props.currentUser && this.props.currentUser.id ? this.props.currentUser : null
@@ -62,6 +65,8 @@ class App extends Component {
                                 unreadNotificationsCount={unreadNotificationsCount}
                                 notifications={notifications}
                                 fetchNotifications={fetchNotifications}
+                                markAsRead={markAsRead}
+                                markAsUnread={markAsUnread}
                                 openInviteLightbox={openInviteLightbox}
                                 signInPage={pathname === '/login'} />}
       <Toast message={toast} />

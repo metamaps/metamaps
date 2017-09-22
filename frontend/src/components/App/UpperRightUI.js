@@ -13,6 +13,8 @@ class UpperRightUI extends Component {
     unreadNotificationsCount: PropTypes.number,
     fetchNotifications: PropTypes.func,
     notifications: PropTypes.array,
+    markAsRead: PropTypes.func.isRequired,
+    markAsUnread: PropTypes.func.isRequired,
     openInviteLightbox: PropTypes.func
   }
 
@@ -47,7 +49,8 @@ class UpperRightUI extends Component {
 
   render () {
     const { currentUser, signInPage, unreadNotificationsCount,
-            notifications, fetchNotifications, openInviteLightbox } = this.props
+            notifications, fetchNotifications, openInviteLightbox,
+            markAsRead, markAsUnread } = this.props
     const { accountBoxOpen, notificationsBoxOpen } = this.state
     return <div className="upperRightUI">
       {currentUser && <a href="/maps/new" target="_blank" className="addMap upperRightEl upperRightIcon">
@@ -62,6 +65,8 @@ class UpperRightUI extends Component {
         {notificationsBoxOpen && <NotificationBox
           notifications={notifications}
           fetchNotifications={fetchNotifications}
+          markAsRead={markAsRead}
+          markAsUnread={markAsUnread}
           toggleNotificationsBox={this.toggleNotificationsBox}/>}
       </span>}
       {!signInPage && <div className="sidebarAccount upperRightEl">

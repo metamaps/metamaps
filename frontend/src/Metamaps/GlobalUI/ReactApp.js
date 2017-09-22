@@ -31,7 +31,6 @@ const ReactApp = {
   serverData: {},
   mapId: null,
   topicId: null,
-  unreadNotificationsCount: 0,
   mapsWidth: 0,
   toast: '',
   mobile: false,
@@ -41,7 +40,6 @@ const ReactApp = {
   init: function(serverData, openLightbox) {
     const self = ReactApp
     self.serverData = serverData
-    self.unreadNotificationsCount = serverData.unreadNotificationsCount
     self.mobileTitle = serverData.mobileTitle
     self.openLightbox = openLightbox
     self.metacodeSets = serverData.metacodeSets
@@ -100,7 +98,7 @@ const ReactApp = {
   getProps: function() {
     const self = ReactApp
     return merge({
-      unreadNotificationsCount: self.unreadNotificationsCount,
+      unreadNotificationsCount: Notifications.unreadNotificationsCount,
       currentUser: Active.Mapper,
       toast: self.toast,
       mobile: self.mobile,
@@ -110,7 +108,9 @@ const ReactApp = {
       openInviteLightbox: () => self.openLightbox('invite'),
       serverData: self.serverData,
       notifications: Notifications.notifications,
-      fetchNotifications: apply(Notifications.fetch, ReactApp.render)
+      fetchNotifications: apply(Notifications.fetch, ReactApp.render),
+      markAsRead: apply(Notifications.markAsRead, ReactApp.render),
+      markAsUnread: apply(Notifications.markAsUnread, ReactApp.render)
     },
     self.getMapProps(),
     self.getTopicProps(),

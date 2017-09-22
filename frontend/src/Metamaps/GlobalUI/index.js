@@ -4,6 +4,7 @@ import clipboard from 'clipboard-js'
 
 import Create from '../Create'
 
+import Notifications from './Notifications'
 import ReactApp from './ReactApp'
 import Search from './Search'
 import CreateMap from './CreateMap'
@@ -151,5 +152,5 @@ const GlobalUI = {
   }
 }
 
-export { ReactApp, Search, CreateMap, ImportDialog }
+export { Notifications, ReactApp, Search, CreateMap, ImportDialog }
 export default GlobalUI

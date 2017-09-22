@@ -12,11 +12,7 @@ class NotificationsController < ApplicationController
       format.json do
         notifications = @notifications.map do |notification|
           receipt = @receipts.find_by(notification_id: notification.id)
-          notification.as_json.merge(
-            is_read: receipt.is_read,
-            notified_object:  notification.notified_object,
-            sender: notification.sender
-          )
+          NotificationDecorator.decorate(notification, receipt)
         end
         render json: notifications
       end
@@ -39,9 +35,7 @@ class NotificationsController < ApplicationController
         end
       end
       format.json do
-        render json: @notification.as_json.merge(
-          is_read: @receipt.is_read
-        )
+        render json: NotificationDecorator.decorate(@notification, @receipt)
       end
     end
   end
@@ -49,11 +43,8 @@ class NotificationsController < ApplicationController
   def mark_read
     @receipt.update(is_read: true)
     respond_to do |format|
-      format.js
       format.json do
-        render json: @notification.as_json.merge(
-          is_read: @receipt.is_read
-        )
+        render json: NotificationDecorator.decorate(@notification, @receipt)
       end
     end
   end
@@ -61,11 +52,8 @@ class NotificationsController < ApplicationController
   def mark_unread
     @receipt.update(is_read: false)
     respond_to do |format|
-      format.js
       format.json do
-        render json: @notification.as_json.merge(
-          is_read: @receipt.is_read
-        )
+        render json: NotificationDecorator.decorate(@notification, @receipt)
       end
     end
   end

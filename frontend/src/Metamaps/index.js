@@ -9,7 +9,7 @@ import DataModel from './DataModel'
 import Debug from './Debug'
 import Filter from './Filter'
 import GlobalUI, {
-  ReactApp, Search, CreateMap, ImportDialog
+  Notifications, ReactApp, Search, CreateMap, ImportDialog
 } from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
@@ -42,6 +42,7 @@ Metamaps.DataModel = DataModel
 Metamaps.Debug = Debug
 Metamaps.Filter = Filter
 Metamaps.GlobalUI = GlobalUI
+Metamaps.GlobalUI.Notifications = Notifications
 Metamaps.GlobalUI.ReactApp = ReactApp
 Metamaps.GlobalUI.Search = Search
 Metamaps.GlobalUI.CreateMap = CreateMap
