@@ -8,11 +8,14 @@ engines:
     enabled: true
     config:
       languages:
-        count_threshold: 3 # rule of three
+        # rule of three
+        count_threshold: 3
         ruby:
-          mass_threshold: 66 # default: 18
+          # default: 18
+          mass_threshold: 66
         javascript:
-          mass_threshold: 80 # default: 40
+          # default: 40
+          mass_threshold: 80
   eslint:
     enabled: true
     channel: "eslint-3"
