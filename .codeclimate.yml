@@ -12,7 +12,7 @@ engines:
         count_threshold: 3
         ruby:
           # default: 18
-          mass_threshold: 66
+          mass_threshold: 36
         javascript:
           # default: 40
           mass_threshold: 80
