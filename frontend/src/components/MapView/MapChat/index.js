@@ -110,7 +110,7 @@ class MapChat extends Component {
         </div>
         {chatOpen && <div className="chat-panel">
           <div className="junto-header">
-            PARTICIPANTS
+            Participants
             <div onClick={this.toggleVideosShowing} className={`video-toggle ${videosShowing ? '' : 'active'}`} />
             <div onClick={this.toggleCursorsShowing} className={`cursor-toggle ${cursorsShowing ? '' : 'active'}`} />
           </div>
@@ -134,7 +134,7 @@ class MapChat extends Component {
             )}
           </div>
           <div className="chat-header">
-            CHAT
+            Chat
             <div onClick={this.toggleAlertSound} className={`sound-toggle ${alertSound ? '' : 'active'}`}></div>
           </div>
           <div className="chat-messages" ref={div => { this.messagesDiv = div }}>
