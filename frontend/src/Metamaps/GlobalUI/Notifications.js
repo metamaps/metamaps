@@ -15,14 +15,22 @@ const Notifications = {
       }
     })
   },
+  incrementUnread: (render) => {
+    Notifications.unreadNotificationsCount++
+    render()
+  },
+  decrementUnread: (render) => {
+    Notifications.unreadNotificationsCount--
+    render()
+  },
   markAsRead: (render, id) => {
     const n = Notifications.notifications.find(n => n.id === id)
     $.ajax({
-      url: `/notifications/${id}/mark_read`,
+      url: `/notifications/${id}/mark_read.json`,
       method: 'PUT',
       success: function(r) {
         if (n) {
-          Notifications.unreadNotificationsCount--
+
           n.is_read = true
           render()
         }
@@ -35,7 +43,7 @@ const Notifications = {
   markAsUnread: (render, id) => {
     const n = Notifications.notifications.find(n => n.id === id)
     $.ajax({
-      url: `/notifications/${id}/mark_unread`,
+      url: `/notifications/${id}/mark_unread.json`,
       method: 'PUT',
       success: function() {
         if (n) {

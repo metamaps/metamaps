@@ -18,6 +18,7 @@ const GlobalUI = {
   init: function(serverData) {
     const self = GlobalUI
 
+    self.Notifications.init(serverData)
     self.ReactApp.init(serverData, self.openLightbox)
     self.CreateMap.init(serverData)
     self.ImportDialog.init(serverData, self.openLightbox, self.closeLightbox)

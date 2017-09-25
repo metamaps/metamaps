@@ -38,7 +38,7 @@ class NotificationDecorator
             id: topic1&.id,
             name: topic1&.name
           }
-          resul[:data][:topic2] = {
+          result[:data][:topic2] = {
             id: topic2&.id,
             name: topic2&.name
           }

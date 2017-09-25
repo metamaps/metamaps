@@ -31,7 +31,7 @@ class NotificationBox extends Component {
       <div className='notificationsBoxTriangle' />
       <ul className='notifications'>
         {!notifications && <li>loading...</li>}
-        {notifications && notifications.map(n => {
+        {notifications && notifications.slice(0, 10).map(n => {
           return <Notification notification={n}
             markAsRead={markAsRead}
             markAsUnread={markAsUnread}

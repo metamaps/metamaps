@@ -1,4 +1,6 @@
+$notifications-border-color: #DDDDDD;
 $unread_notifications_dot_size: 8px;
+
 .unread-notifications-dot {
   width: $unread_notifications_dot_size;
   height: $unread_notifications_dot_size;
@@ -22,6 +24,7 @@ $unread_notifications_dot_size: 8px;
     right: 0;
     top: 50px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    border: 1px solid $notifications-border-color;
 
     .notificationsBoxTriangle {
       min-width: 0 !important;
@@ -31,15 +34,20 @@ $unread_notifications_dot_size: 8px;
       width: 20px !important;
       height: 20px !important;
       margin-left: -10px;
-      top: -10px;
-      border-top: 1px solid rgba(49, 72, 67, 0.11) !important;
-      border-left: 1px solid rgba(49, 72, 67, 0.11) !important;
+      top: -11px;
+      border-left: 1px solid $notifications-border-color;
+      border-top: 1px solid $notifications-border-color;
       border-bottom: 0 !important;
       border-right: 0 !important;
       background-color: #fff;
       transform: rotate(45deg);
       -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
+    }
+
+    ul.notifications {
+      max-height: 500px;
+      overflow-y: auto;
     }
 
     .notificationsBoxSeeAll {
@@ -50,6 +58,14 @@ $unread_notifications_dot_size: 8px;
       font-family: din-regular, helvetica, sans-serif;
       color: #4fb5c0;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .notification {
+      font-size: 13px;
+
+      .notification-body {
+        border-bottom: 1px solid $notifications-border-color;
+      }
     }
   }
 }
@@ -121,11 +137,18 @@ $unread_notifications_dot_size: 8px;
 
 ul.notifications {
   list-style: none;
+
+  li:last-child {
+    .notification-body {
+      border-bottom: none !important;
+    }
+  }
 }
 
 .notification {
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   position: relative;
+  font-family: 'din-regular', Sans-Serif;
 
   &:hover {
     background: #F6F6F6;
@@ -157,9 +180,9 @@ ul.notifications {
   }
 
   .notification-body {
-    font-family: 'din-regular', Sans-Serif;
     margin-left: 50px;
     line-height: 20px;
+    padding-bottom: 10px;
 
     .in-bold {
       font-family: 'din-medium', Sans-Serif;
@@ -180,8 +203,6 @@ ul.notifications {
     top: 50%;
     right: 10px;
     color: #607d8b;
-    font-size: 13px;
-    line-height: 13px;
     margin-top: -6px;
   }
 
@@ -190,11 +211,12 @@ ul.notifications {
     float: left;
     width: 15%;
 
-    div {
+    a, div {
       position: absolute;
       top: 50%;
       margin-top: -10px;
       text-align: center;
+      cursor: pointer;
     }
   }
 

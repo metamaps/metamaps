@@ -43,6 +43,7 @@ class NotificationsController < ApplicationController
   def mark_read
     @receipt.update(is_read: true)
     respond_to do |format|
+      format.js
       format.json do
         render json: NotificationDecorator.decorate(@notification, @receipt)
       end
@@ -52,6 +53,7 @@ class NotificationsController < ApplicationController
   def mark_unread
     @receipt.update(is_read: false)
     respond_to do |format|
+      format.js
       format.json do
         render json: NotificationDecorator.decorate(@notification, @receipt)
       end
