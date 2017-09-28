@@ -1,4 +1,5 @@
 $notifications-border-color: #DDDDDD;
+$notifications-hover-color: #F6F6F6;
 $unread_notifications_dot_size: 8px;
 
 .unread-notifications-dot {
@@ -48,6 +49,20 @@ $unread_notifications_dot_size: 8px;
     ul.notifications {
       max-height: 500px;
       overflow-y: auto;
+
+      .notification {
+        font-size: 13px;
+
+        .notification-body {
+          border-bottom: 1px solid $notifications-border-color;
+        }
+      }
+
+      .notificationsEmpty {
+        font-family: din-regular, helvetica, sans-serif;
+        margin: 50px 10px;
+        text-align: center;
+      }
     }
 
     .notificationsBoxSeeAll {
@@ -56,15 +71,11 @@ $unread_notifications_dot_size: 8px;
       text-align: center;
       padding: 6px 0;
       font-family: din-regular, helvetica, sans-serif;
-      color: #4fb5c0;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
 
-    .notification {
-      font-size: 13px;
-
-      .notification-body {
-        border-bottom: 1px solid $notifications-border-color;
+      &:hover {
+        color: #333;
+        background: $notifications-hover-color;
       }
     }
   }
@@ -150,8 +161,12 @@ ul.notifications {
   position: relative;
   font-family: 'din-regular', Sans-Serif;
 
+  &.unread {
+    background: #EEE;
+  }
+
   &:hover {
-    background: #F6F6F6;
+    background: $notifications-hover-color;
 
     .notification-read-unread {
       display:block;
@@ -218,9 +233,5 @@ ul.notifications {
       text-align: center;
       cursor: pointer;
     }
-  }
-
-  &.unread {
-    background: #EEE;
   }
 }

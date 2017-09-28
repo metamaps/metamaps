@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import onClickOutsideAddon from 'react-onclickoutside'
 import Notification from '../Notification'
+import Loading from '../Loading'
 
 class NotificationBox extends Component {
 
@@ -27,10 +28,15 @@ class NotificationBox extends Component {
 
   render = () => {
     const { notifications, markAsRead, markAsUnread } = this.props
+    const empty = notifications && notifications.length === 0
     return <div className='notificationsBox'>
       <div className='notificationsBoxTriangle' />
       <ul className='notifications'>
-        {!notifications && <li>loading...</li>}
+        {!notifications && <li><Loading margin='30px auto' /></li>}
+        {empty && <li className='notificationsEmpty'>
+          You have no notifications. <br />
+          More time for dancing.
+        </li>}
         {notifications && notifications.slice(0, 10).map(n => {
           return <Notification notification={n}
             markAsRead={markAsRead}
@@ -38,7 +44,10 @@ class NotificationBox extends Component {
             key={`notification-${n.id}`} />
         })}
       </ul>
-      <a href='/notifications' className='notificationsBoxSeeAll'>See all</a>
+      {notifications && !empty && <a href='/notifications'
+        className='notificationsBoxSeeAll'>
+        See all
+      </a>}
     </div>
   }
 }
