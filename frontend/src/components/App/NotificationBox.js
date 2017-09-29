@@ -33,16 +33,17 @@ class NotificationBox extends Component {
       <div className='notificationsBoxTriangle' />
       <ul className='notifications'>
         {!notifications && <li><Loading margin='30px auto' /></li>}
-        {empty && <li className='notificationsEmpty'>
-          You have no notifications. <br />
-          More time for dancing.
-        </li>}
-        {notifications && notifications.slice(0, 10).map(n => {
-          return <Notification notification={n}
-            markAsRead={markAsRead}
-            markAsUnread={markAsUnread}
-            key={`notification-${n.id}`} />
-        })}
+        {empty ? (
+          <li className='notificationsEmpty'>
+            You have no notifications. <br />
+            More time for dancing.
+          </li>
+        ) : (
+          notifications.slice(0, 10).map(n => <Notification notification={n}
+              markAsRead={markAsRead}
+              markAsUnread={markAsUnread}
+              key={`notification-${n.id}`} />)
+        )}
       </ul>
       {notifications && !empty && <a href='/notifications'
         className='notificationsBoxSeeAll'>
