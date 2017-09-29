@@ -26,29 +26,48 @@ class NotificationBox extends Component {
     this.props.toggleNotificationsBox()
   }
 
-  render = () => {
+  hasSomeNotifications = () => {
+    const { notifications } = this.props
+    return notifications && notifications.length > 0
+  }
+
+  showLoading = () => {
+    return <li><Loading margin='30px auto' /></li>
+  }
+
+  showEmpty = () => {
+    return <li className='notificationsEmpty'>
+      You have no notifications. <br />
+      More time for dancing.
+    </li>
+  }
+
+  showNotifications = () => {
     const { notifications, markAsRead, markAsUnread } = this.props
-    const empty = notifications && notifications.length === 0
+    if (!this.hasSomeNotifications()) {
+      return this.showEmpty()
+    }
+    return notifications.slice(0, 10).map(
+      n => <Notification notification={n}
+        markAsRead={markAsRead}
+        markAsUnread={markAsUnread}
+        key={`notification-${n.id}`} />
+    ).concat([
+      <li key='notification-see-all'>
+        <a href='/notifications' className='notificationsBoxSeeAll'>
+          See all
+        </a>
+      </li>
+    ])
+  }
+
+  render = () => {
+    const { notifications } = this.props
     return <div className='notificationsBox'>
       <div className='notificationsBoxTriangle' />
       <ul className='notifications'>
-        {!notifications && <li><Loading margin='30px auto' /></li>}
-        {empty ? (
-          <li className='notificationsEmpty'>
-            You have no notifications. <br />
-            More time for dancing.
-          </li>
-        ) : (
-          notifications.slice(0, 10).map(n => <Notification notification={n}
-              markAsRead={markAsRead}
-              markAsUnread={markAsUnread}
-              key={`notification-${n.id}`} />)
-        )}
+        {notifications ? this.showNotifications() : this.showLoading()}
       </ul>
-      {notifications && !empty && <a href='/notifications'
-        className='notificationsBoxSeeAll'>
-        See all
-      </a>}
     </div>
   }
 }

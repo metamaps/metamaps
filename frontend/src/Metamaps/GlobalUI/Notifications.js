@@ -30,7 +30,7 @@ const Notifications = {
       method: 'PUT',
       success: function(r) {
         if (n) {
-
+          Notifications.unreadNotificationsCount--
           n.is_read = true
           render()
         }
