@@ -6,7 +6,6 @@ class NotificationsController < ApplicationController
 
   def index
     @notifications = current_user.mailbox.notifications.page(params[:page]).per(25)
-
     respond_to do |format|
       format.html
       format.json do
@@ -14,7 +13,11 @@ class NotificationsController < ApplicationController
           receipt = @receipts.find_by(notification_id: notification.id)
           NotificationDecorator.decorate(notification, receipt)
         end
-        render json: notifications
+        if notifications.length > 0
+          render json: notifications
+        else
+          render json: [].to_json
+        end
       end
     end
   end
