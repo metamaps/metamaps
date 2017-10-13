@@ -13,7 +13,7 @@ class NotificationsController < ApplicationController
           receipt = @receipts.find_by(notification_id: notification.id)
           NotificationDecorator.decorate(notification, receipt)
         end
-        if notifications.length > 0
+        if !notifications.empty?
           render json: notifications
         else
           render json: [].to_json
