@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import outdent from 'outdent'
 
 class Notification extends Component {
-
   static propTypes = {
     markAsRead: PropTypes.func,
     markAsUnread: PropTypes.func,
@@ -32,7 +31,7 @@ class Notification extends Component {
     let map, topic, topic1, topic2
     let result = `<div class='in-bold'>${notification.actor.name}</div>`
 
-    switch(notification.type) {
+    switch (notification.type) {
       case 'ACCESS_APPROVED':
         map = notification.data.map
         result += outdent`granted your request to edit map
@@ -77,8 +76,8 @@ class Notification extends Component {
 
   getDate = () => {
     const { notification: {created_at} } = this.props
-    const months = ['Jan','Feb','Mar','Apr','May','Jun',
-    'Jul','Aug','Sep','Oct','Nov','Dec']
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const created = new Date(created_at)
     return `${months[created.getMonth()]} ${created.getDate()}`
   }

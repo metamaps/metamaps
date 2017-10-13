@@ -1,3 +1,4 @@
+/* global $ */
 import GlobalUI from './index'
 
 const Notifications = {

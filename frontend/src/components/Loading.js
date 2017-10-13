@@ -3,31 +3,31 @@ import PropTypes from 'prop-types'
 
 // based on https://www.npmjs.com/package/react-loading-animation
 
-const loading_style = {
-    position: 'relative',
-    margin: '0 auto',
-    width: '30px',
-    height: '30px',
+const loadingStyle = {
+  position: 'relative',
+  margin: '0 auto',
+  width: '30px',
+  height: '30px'
 }
 
-const svg_style = {
-    animation: 'rotate 2s linear infinite',
-    height: '100%',
-    transformOrigin: 'center center',
-    width: '100%',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto'
+const svgStyle = {
+  animation: 'rotate 2s linear infinite',
+  height: '100%',
+  transformOrigin: 'center center',
+  width: '100%',
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  margin: 'auto'
 }
 
-const circle_style = {
-    strokeDasharray: '1,200',
-    strokeDashoffset: '0',
-    animation: 'dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite',
-    strokeLinecap: 'round'
+const circleStyle = {
+  strokeDasharray: '1,200',
+  strokeDashoffset: '0',
+  animation: 'dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite',
+  strokeLinecap: 'round'
 }
 
 const animation = `@keyframes rotate {
@@ -59,34 +59,34 @@ const animation = `@keyframes rotate {
 }`
 
 class Loading extends React.Component {
-    static propTypes = {
-        style: PropTypes.object,
-        width: PropTypes.string,
-        height: PropTypes.string,
-        margin: PropTypes.string
-    }
+  static propTypes = {
+    style: PropTypes.object,
+    width: PropTypes.string,
+    height: PropTypes.string,
+    margin: PropTypes.string
+  }
 
-    static defaultProps = {
-        style: {},
-        width: '30px',
-        height: '30px',
-        margin: '0 auto'
-    }
+  static defaultProps = {
+    style: {},
+    width: '30px',
+    height: '30px',
+    margin: '0 auto'
+  }
 
-    render () {
-      let { width, height, margin, style } = this.props
+  render() {
+    let { width, height, margin, style } = this.props
 
-      loading_style.width = width
-      loading_style.height = height
-      loading_style.margin = margin
+    loadingStyle.width = width
+    loadingStyle.height = height
+    loadingStyle.margin = margin
 
-      return <div style={Object.assign({}, loading_style, style)}>
+    return <div style={Object.assign({}, loadingStyle, style)}>
         <style>{animation}</style>
-        <svg style={svg_style} viewBox="25 25 50 50">
-            <circle style={circle_style} cx="50" cy="50" r="20" fill="none" strokeWidth="4" strokeMiterlimit="10"/>
+        <svg style={svgStyle} viewBox="25 25 50 50">
+            <circle style={circleStyle} cx="50" cy="50" r="20" fill="none" strokeWidth="4" strokeMiterlimit="10"/>
         </svg>
       </div>
-    }
+  }
 }
 
 export default Loading

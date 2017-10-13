@@ -6,7 +6,6 @@ import Notification from '../Notification'
 import Loading from '../Loading'
 
 class NotificationBox extends Component {
-
   static propTypes = {
     notifications: PropTypes.array,
     fetchNotifications: PropTypes.func.isRequired,
