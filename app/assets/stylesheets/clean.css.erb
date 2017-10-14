@@ -694,17 +694,16 @@
 }
 
 .navBarButton {
-    color: #757575;
+  color: #757575;
 	cursor: default;
 	font-weight: normal;
 	font-family: 'din-medium';
 	font-size: 14px;
-	height: 14px;
-	padding: 14px 8px 12px 40px;
-    border-bottom: 2px solid rgba(0,0,0,0);
+	padding: 0 8px;
+  border-bottom: 2px solid rgba(0,0,0,0);
 	display: inline-block;
-    cursor: pointer;
-    position:relative;
+  cursor: pointer;
+  position:relative;
 }
 .navBarButton:hover, .navBarButton.active {
   text-decoration: none;
@@ -733,9 +732,16 @@
     background-repeat: no-repeat;
     width:32px;
     height:32px;
-    position:absolute;
-    top:5px;
-    left:5px;
+    margin-top:5px;
+    margin-left:5px;
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.navBarLinkText {
+  padding: 11px 0 12px 0;
+  display: inline-block;
 }
 
 .navBarCenter .authedApps .navBarIcon {
