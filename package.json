@@ -73,6 +73,6 @@
     "sinon": "2.2.0"
   },
   "optionalDependencies": {
-    "raml2html": "6.4.1"
+    "raml2html": "4.0.5"
   }
 }
