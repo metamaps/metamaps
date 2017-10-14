@@ -25,9 +25,9 @@ module Metamaps
     config.encoding = 'utf-8'
 
     config.to_prepare do
-      Doorkeeper::ApplicationsController.layout "application"
-      Doorkeeper::AuthorizationsController.layout "application"
-      Doorkeeper::AuthorizedApplicationsController.layout "application"
+      Doorkeeper::ApplicationsController.layout 'application'
+      Doorkeeper::AuthorizationsController.layout 'application'
+      Doorkeeper::AuthorizedApplicationsController.layout 'application'
       Doorkeeper::ApplicationController.helper ApplicationHelper
     end
 

@@ -54,8 +54,8 @@ export default function makeRoutes (currentUser) {
     <Route path="oauth">
       <Route path="token/info" component={Apps} />
       <Route path="authorize">
-        <IndexRoute component={Apps} />
-        <Route path=":code" component={Apps} />
+        <IndexRoute component={nullComponent} />
+        <Route path=":code" component={nullComponent} />
       </Route>
       <Route path="authorized_applications">
         <IndexRoute component={Apps} />

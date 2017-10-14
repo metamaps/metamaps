@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import NavBar from '../App/Navbar'
 import NavBarLink from '../App/NavBarLink'
 
@@ -8,11 +9,13 @@ class Apps extends Component {
 
     return (
       <NavBar>
-        {currentUser.get('admin') && <NavBarLink show href="/oauth/applications"
-          className="activeMaps" text="Registered Apps" />}
-        <NavBarLink show href="/oauth/authorized_applications"
+        {currentUser && currentUser.get('admin') && <NavBarLink show hardReload
+          matchChildRoutes href="/oauth/applications" linkClass="activeMaps"
+          text="Registered Apps" />}
+        <NavBarLink show hardReload matchChildRoutes
+          href="/oauth/authorized_applications"
           linkClass="authedApps" text="Authorized Apps" />
-        <NavBarLink show href="/" linkClass="myMaps exploreMapsButton" text="Maps" />
+        <NavBarLink show href="/" linkClass="myMaps" text="Maps" />
       </NavBar>
     )
   }
