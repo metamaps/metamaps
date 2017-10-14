@@ -18,7 +18,7 @@ import Realtime from '../Realtime'
 import Map, { InfoBox } from '../Map'
 import Topic from '../Topic'
 import Visualize from '../Visualize'
-import makeRoutes from '../../components/makeRoutes'
+import makeRoutes from '../../routes/makeRoutes'
 let routes
 
 // 220 wide + 16 padding on both sides

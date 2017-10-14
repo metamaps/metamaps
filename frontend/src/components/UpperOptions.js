@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import FilterBox from '../common/FilterBox'
+import FilterBox from './FilterBox'
 
 export default class UpperOptions extends Component {
   static propTypes = {
