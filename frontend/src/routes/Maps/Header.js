@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import NavBar from '../../components/Navbar'
+import NavBar from '../../components/NavBar'
 import NavBarLink from '../../components/NavBarLink'
 
 class Header extends Component {

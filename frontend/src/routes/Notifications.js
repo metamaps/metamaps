@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import NavBar from '../components/Navbar'
+import NavBar from '../components/NavBar'
 import NavBarLink from '../components/NavBarLink'
 
 class Notifications extends Component {
