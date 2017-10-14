@@ -6,7 +6,6 @@ import MapperCard from './MapperCard'
 import MapCard from './MapCard'
 
 class Maps extends Component {
-
   static propTypes = {
     section: PropTypes.string,
     maps: PropTypes.object,

@@ -38,17 +38,38 @@ class App extends Component {
     return {location}
   }
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      yieldHTML: null
+    }
+  }
+
+  componentDidMount () {
+    this.setYield()
+  }
+
+  setYield () {
+    const yieldHTML = document.getElementById('yield')
+    if (yieldHTML) {
+      this.setState({yieldHTML: yieldHTML.innerHTML})
+      document.body.removeChild(yieldHTML)
+    }
+  }
+
   render () {
     const { children, toast, unreadNotificationsCount, openInviteLightbox,
             mobile, mobileTitle, mobileTitleWidth, mobileTitleClick, location,
             map, userRequested, requestAnswered, requestApproved, serverData,
             onRequestAccess, notifications, fetchNotifications,
             markAsRead, markAsUnread } = this.props
+    const { yieldHTML } = this.state
     const { pathname } = location || {}
     // this fixes a bug that happens otherwise when you logout
     const currentUser = this.props.currentUser && this.props.currentUser.id ? this.props.currentUser : null
     const unauthedHome = pathname === '/' && !currentUser
     return <div className="wrapper" id="wrapper">
+      {yieldHTML && <div id="yield" dangerouslySetInnerHTML={{__html: yieldHTML}}></div>}
       {mobile && <MobileHeader currentUser={currentUser}
                                unreadNotificationsCount={unreadNotificationsCount}
                                mobileTitle={mobileTitle}

@@ -1,8 +1,10 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 import App from './App'
+import Apps from './Apps'
 import Maps from './Maps'
 import MapView from './MapView'
+import Notifications from './Notifications'
 import TopicView from './TopicView'
 
 function nullComponent(props) {
@@ -31,8 +33,8 @@ export default function makeRoutes (currentUser) {
     <Route path="join" component={nullComponent} />
     <Route path="request" component={nullComponent} />
     <Route path="notifications">
-      <IndexRoute component={nullComponent} />
-      <Route path=":id" component={nullComponent} />
+      <IndexRoute component={Notifications} />
+      <Route path=":id" component={Notifications} />
     </Route>
     <Route path="users">
       <Route path=":id/edit" component={nullComponent} />
@@ -50,20 +52,20 @@ export default function makeRoutes (currentUser) {
       <Route path=":id/edit" component={nullComponent} />
     </Route>
     <Route path="oauth">
-      <Route path="token/info" component={nullComponent} />
+      <Route path="token/info" component={Apps} />
       <Route path="authorize">
         <IndexRoute component={nullComponent} />
         <Route path=":code" component={nullComponent} />
       </Route>
       <Route path="authorized_applications">
-        <IndexRoute component={nullComponent} />
-        <Route path=":id" component={nullComponent} />
+        <IndexRoute component={Apps} />
+        <Route path=":id" component={Apps} />
       </Route>
       <Route path="applications">
-        <IndexRoute component={nullComponent} />
-        <Route path="new" component={nullComponent} />
-        <Route path=":id" component={nullComponent} />
-        <Route path=":id/edit" component={nullComponent} />
+        <IndexRoute component={Apps} />
+        <Route path="new" component={Apps} />
+        <Route path=":id" component={Apps} />
+        <Route path=":id/edit" component={Apps} />
       </Route>
     </Route>
   </Route>

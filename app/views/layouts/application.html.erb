@@ -6,10 +6,10 @@
 #%>
 
 <%= render :partial => 'layouts/head' %>
-<body class="<%= authenticated? ? "authenticated" : "unauthenticated" %> controller-<%= controller_name %> action-<%= action_name %>">
+<body class="<%= current_user ? "authenticated" : "unauthenticated" %> controller-<%= controller_name %> action-<%= action_name %>">
     <div class="main" id="react-app"></div>
     <%= yield %>
-    <% if authenticated? %>
+    <% if current_user %>
         <% # for creating and pulling in topics and synapses %>
         <% if controller_name == 'maps' && action_name == "conversation" %>
           <%= render :partial => 'maps/newtopicsecret' %>
