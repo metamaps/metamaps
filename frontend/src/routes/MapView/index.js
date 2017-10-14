@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import ContextMenu from '../common/ContextMenu'
-import DataVis from '../common/DataVis'
-import UpperOptions from '../common/UpperOptions'
-import InfoAndHelp from '../common/InfoAndHelp'
+import ContextMenu from '../../components/ContextMenu'
+import DataVis from '../../components/DataVis'
+import UpperOptions from '../../components/UpperOptions'
+import InfoAndHelp from '../../components/InfoAndHelp'
 import Instructions from './Instructions'
-import VisualizationControls from '../common/VisualizationControls'
+import VisualizationControls from '../../components/VisualizationControls'
 import MapChat from './MapChat'
-import TopicCard from '../TopicCard'
+import TopicCard from '../../components/TopicCard'
 
 export default class MapView extends Component {
 

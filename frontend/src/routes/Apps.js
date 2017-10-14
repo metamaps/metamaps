@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import NavBar from '../App/Navbar'
-import NavBarLink from '../App/NavBarLink'
+import NavBar from '../components/Navbar'
+import NavBarLink from '../components/NavBarLink'
 
 class Apps extends Component {
   render = () => {

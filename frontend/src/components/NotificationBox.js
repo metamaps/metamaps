@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import onClickOutsideAddon from 'react-onclickoutside'
-import Notification from '../Notification'
-import Loading from '../Loading'
+import Notification from './Notification'
+import Loading from './Loading'
 
 class NotificationBox extends Component {
   static propTypes = {

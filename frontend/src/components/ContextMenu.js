@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import MetacodeSelect from '../MetacodeSelect'
+import MetacodeSelect from './MetacodeSelect'
 
 class ContextMenu extends Component {
   static propTypes = {

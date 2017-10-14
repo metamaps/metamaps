@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import MobileHeader from './MobileHeader'
-import UpperLeftUI from './UpperLeftUI'
-import UpperRightUI from './UpperRightUI'
-import Toast from './Toast'
+import MobileHeader from '../components/MobileHeader'
+import UpperLeftUI from '../components/UpperLeftUI'
+import UpperRightUI from '../components/UpperRightUI'
+import Toast from '../components/Toast'
 
 class App extends Component {
   static propTypes = {
