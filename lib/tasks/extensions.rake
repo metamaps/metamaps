@@ -11,5 +11,9 @@ namespace :assets do
   end
 end
 
+# run before
 Rake::Task[:'assets:precompile'].enhance([:'assets:js_compile'])
-Rake::Task[:'assets:precompile'].enhance([:'assets:production_ready'])
+# run after
+Rake::Task[:'assets:precompile'].enhance do
+  Rake::Task[:'assets:production_ready'].invoke
+end
