@@ -1,31 +1,30 @@
 <div id="yield">
-  <div class='blackBox'>
-  <%= render :partial => 'admin/adminpanel' %>
-  <br />
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Icon</th>
-      <th>Color</th>
-      <th></th>
-      <th></th>
-    </tr>
+  <div class='centerContent'>
+    <br />
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Icon</th>
+        <th>Color</th>
+        <th></th>
+        <th></th>
+      </tr>
 
-  <% @metacodes.each do |metacode| %>
-    <tr>
-      <td><%= metacode.name %></td>
-      <td class="iconURL"><%= metacode.icon %></td>
-      <% if metacode.color %>
-        <td class="iconColor" style="background-color: <%= metacode.color %>">
-          <%= metacode.color %>
-        </td>
-      <% else %>
-        <td></td>
-      <% end %>
-      <td><%= image_tag metacode.icon, width: 40 %></td>
-      <td><%= link_to 'Edit', edit_metacode_path(metacode) %></td>
-    </tr>
-  <% end %>
-  </table>
+    <% @metacodes.each do |metacode| %>
+      <tr>
+        <td><%= metacode.name %></td>
+        <td class="iconURL"><%= metacode.icon %></td>
+        <% if metacode.color %>
+          <td class="iconColor" style="background-color: <%= metacode.color %>">
+            <%= metacode.color %>
+          </td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <td><%= image_tag metacode.icon, width: 40 %></td>
+        <td><%= link_to 'Edit', edit_metacode_path(metacode) %></td>
+      </tr>
+    <% end %>
+    </table>
   </div>
 </div>
