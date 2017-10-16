@@ -3,12 +3,14 @@
 
 <div id="yield">
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :post, :class => "new_user centerGreyForm" }) do |f| %>
-  
+
   <h3>Sign Up</h3>
+
+  <div class="fieldText">Only email addresses at the uts.edu.au domain name will be able to register.</div>
 
   <div><%= f.label :name, "Name:", :class => "firstFieldText" %>
   <%= f.text_field :name, :autofocus => true %></div>
-  
+
   <div><%= f.label :email, "Email:", :class => "fieldText" %>
   <%= f.email_field :email %></div>
 
@@ -17,13 +19,7 @@
 
   <div><%= f.label :password_confirmation, "Password Confirmation:", :class => "fieldText" %>
   <%= f.password_field :password_confirmation %></div>
-  
-  <div><%= f.label "Access Code:", :class => "fieldText" %>
-  <%= f.text_field :joinedwithcode, :value => params[:code] %></div>
 
-  <div><%= f.submit "Sign up!" %></div>
-  
-  <div class = "smallText"><br />Don't have an access code?<br /><a href="/request">Request an Invite</a></div>
+  <div><%= f.submit "Sign up" %></div>
 <% end %>
 </div>
-

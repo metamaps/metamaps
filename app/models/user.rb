@@ -17,8 +17,6 @@ class User < ApplicationRecord
 
   has_many :following, class_name: 'Follow'
 
-  after_create :generate_code
-
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
 
   serialize :settings, UserPreference
@@ -35,8 +33,6 @@ class User < ApplicationRecord
   validates :email, presence: true # done by devise
   validates :name, uniqueness: true # done by devise
   validates :email, uniqueness: true # done by devise
-
-  validates :joinedwithcode, presence: true, inclusion: { in: $codes, message: '%{value} is not valid' }, on: :create
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :image, styles: {

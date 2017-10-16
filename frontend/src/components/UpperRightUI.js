@@ -18,6 +18,10 @@ class UpperRightUI extends Component {
     openInviteLightbox: PropTypes.func
   }
 
+  static contextTypes = {
+    location: PropTypes.object
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -52,6 +56,8 @@ class UpperRightUI extends Component {
             notifications, fetchNotifications, openInviteLightbox,
             markAsRead, markAsUnread } = this.props
     const { accountBoxOpen, notificationsBoxOpen } = this.state
+    const { pathname } = this.context.location
+    const unauthedHome = pathname === '/' && !currentUser
     return <div className="upperRightUI">
       {currentUser && <a href="/maps/new" target="_blank" className="addMap upperRightEl upperRightIcon">
         <div className="tooltipsUnder">
@@ -69,7 +75,7 @@ class UpperRightUI extends Component {
           markAsUnread={markAsUnread}
           toggleNotificationsBox={this.toggleNotificationsBox}/>}
       </span>}
-      {!signInPage && <div className="sidebarAccount upperRightEl">
+      {!signInPage && !unauthedHome && <div className="sidebarAccount upperRightEl">
         <div className="sidebarAccountIcon ignore-react-onclickoutside" onClick={this.toggleAccountBox}>
           <div className="tooltipsUnder">Account</div>
           {currentUser && <img src={currentUser.get('image')} />}

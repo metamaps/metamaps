@@ -4,7 +4,6 @@ Metamaps::Application.routes.draw do
   mount ActionCable.server => '/cable'
 
   root to: 'main#home', via: :get
-  get 'request', to: 'main#requestinvite', as: :request
 
   namespace :explore do
     get 'active'

@@ -12,19 +12,25 @@ class UpperLeftUI extends Component {
     onRequestClick: PropTypes.func
   }
 
+  static contextTypes = {
+    location: PropTypes.object
+  }
+  
   render () {
     const { map, currentUser, userRequested, requestAnswered, requestApproved, onRequestClick } = this.props
+    const { pathname } = this.context.location
+    const unauthedHome = pathname === '/' && !currentUser
     return <div className="upperLeftUI">
       <div className="homeButton">
         {currentUser && <Link to="/">METAMAPS</Link>}
         {!currentUser && <a href="/">METAMAPS</a>}
       </div>
-      <div className="sidebarSearch">
+      {!unauthedHome && <div className="sidebarSearch">
         <input type="text" className="sidebarSearchField" placeholder="Search for topics, maps, and mappers..." />
         <div id="searchLoading"></div>
         <div className="sidebarSearchIcon"></div>
         <div className="clearfloat"></div>
-      </div>
+      </div>}
       {map && !map.authorizeToEdit(currentUser) && <div className="viewOnly">
         <div className="eyeball">View Only</div>
         {currentUser && !userRequested && <div className="requestAccess requestNotice" onClick={onRequestClick}>Request Access</div>}
