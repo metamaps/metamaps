@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
+import Admin from './Admin'
 import App from './App'
 import Apps from './Apps'
 import Maps from './Maps'
@@ -42,14 +43,14 @@ export default function makeRoutes (currentUser) {
       <Route path="password/edit" component={nullComponent} />
     </Route>
     <Route path="metacodes">
-      <IndexRoute component={nullComponent} />
-      <Route path="new" component={nullComponent} />
-      <Route path=":id/edit" component={nullComponent} />
+      <IndexRoute component={Admin} />
+      <Route path="new" component={Admin} />
+      <Route path=":id/edit" component={Admin} />
     </Route>
     <Route path="metacode_sets">
-      <IndexRoute component={nullComponent} />
-      <Route path="new" component={nullComponent} />
-      <Route path=":id/edit" component={nullComponent} />
+      <IndexRoute component={Admin} />
+      <Route path="new" component={Admin} />
+      <Route path=":id/edit" component={Admin} />
     </Route>
     <Route path="oauth">
       <Route path="token/info" component={Apps} />

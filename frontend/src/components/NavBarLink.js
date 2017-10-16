@@ -48,15 +48,15 @@ class NavBarLink extends Component {
     if (hardReload) {
       return (
         <a { ...otherProps } href={href} className={classes.join(' ')}>
-          <div className="navBarIcon"></div>
-          {text}
+          {linkClass && <div className="navBarIcon"></div>}
+          <div className="navBarLinkText">{text}</div>
         </a>
       )
     }
     return (
       <Link { ...otherProps } to={href} className={classes.join(' ')}>
-        <div className="navBarIcon"></div>
-        {text}
+        {linkClass && <div className="navBarIcon"></div>}
+        <div className="navBarLinkText">{text}</div>
       </Link>
     )
   }
