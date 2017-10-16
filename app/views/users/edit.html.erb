@@ -3,8 +3,8 @@
   # /users/:id/edit
   # User edit form
   #%>
-  
-<% content_for :title, @user.name + "'s Settings | Metamaps" %> 
+
+<% content_for :title, @user.name + "'s Settings | Metamaps" %>
 <% content_for :mobile_title, "Account Settings" %>
 <div id="yield">
 <%= form_for @user, url: user_url, :html =>{ :multipart => true, :class => "edit_user centerGreyForm"} do |form| %>
@@ -36,9 +36,8 @@
     <%= form.label :name, "Name:", class: 'firstFieldText' %>
     <%= form.text_field :name %>
   </div>
-  <div>
-    <%= form.label :email, "Email:", class: 'firstFieldText' %>
-    <%= form.email_field :email %>
+  <div class="firstFieldText">
+    Email: <%= @user.email %>
   </div>
   <div>
     <%= form.label :emails_allowed, class: 'firstFieldText' do %>

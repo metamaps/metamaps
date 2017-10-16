@@ -7,6 +7,10 @@ module Users
 
     protected
 
+    def after_inactive_sign_up_path_for(resource)
+      sign_in_path
+    end
+
     def after_update_path_for(resource)
       signed_in_root_path(resource)
     end

@@ -87,20 +87,6 @@
       </div>
 
       <% if current_user %>
-        <div class="lightboxContent" id="invite">
-          <h3>SHARE INVITE</h3>
-
-<div class="leaveSpace"></div>
-<p>The Metamaps platform is currently in an invite-only beta with the express purpose of creating a high value knowledge ecosystem, a diverse community of contributors and a culture of collaboration and curiosity.</p>
-<p>As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
-<p>Below is a personal invite link containing your unique access code, which can be used multiple times.</p>
-            <div id="joinCodesBox">
-            <p class="joinCodes"><%= invite_link() %>
-            <button class="button" onclick="Metamaps.GlobalUI.shareInvite('<%= @invite_link %>');">COPY INVITE LINK!</button>
-            </div>
-
-        </div>
-
         <div class="lightboxContent" id="forkmap">
           <%= render :partial => 'shared/forkmap' %>
         </div>

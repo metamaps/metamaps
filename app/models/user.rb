@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   has_many :following, class_name: 'Follow'
 
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :registerable
+  devise :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :registerable
 
   serialize :settings, UserPreference
 
@@ -33,6 +33,7 @@ class User < ApplicationRecord
   validates :email, presence: true # done by devise
   validates :name, uniqueness: true # done by devise
   validates :email, uniqueness: true # done by devise
+  validates_format_of :email, with: /\@uts\.edu\.au/, message: ' must end with @uts.edu.au'
 
   # This method associates the attribute ":image" with a file attachment
   has_attached_file :image, styles: {

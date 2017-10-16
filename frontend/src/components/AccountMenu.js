@@ -28,14 +28,6 @@ class AccountMenu extends Component {
           <div className="accountIcon"></div>
           <a href="/metacodes">Admin</a>
         </li>
-        <li className="accountListItem accountApps">
-          <div className="accountIcon"></div>
-          <a href="/oauth/authorized_applications">Apps</a>
-        </li>
-        <li className="accountListItem accountInvite" onClick={onInviteClick}>
-          <div className="accountIcon"></div>
-          <span>Share Invite</span>
-        </li>
         <li className="accountListItem accountLogout">
           <div className="accountIcon"></div>
           <a id="Logout" href="/logout">Sign Out</a>
