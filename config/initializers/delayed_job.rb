@@ -1,9 +1,14 @@
-Delayed::Worker.class_eval do
+# frozen_string_literal: true
 
-    def handle_failed_job_with_notification(job, error)
-      handle_failed_job_without_notification(job, error)
-      ExceptionNotifier.notify_exception(error)
-    end
-    alias_method_chain :handle_failed_job, :notification
-
+module ExceptionNotifierInDelayedJob
+  def handle_failed_job(job, error)
+    super
+    ExceptionNotfier.notify_exception(error)
+  end
 end
+
+Delayed::Worker.class_eval do
+  prepend ExceptionNotifierInDelayedJob
+end
+
+Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
