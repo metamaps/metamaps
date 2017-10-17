@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 Metamaps::Application.routes.draw do
   use_doorkeeper
   mount ActionCable.server => '/cable'
@@ -16,7 +18,7 @@ Metamaps::Application.routes.draw do
   end
   get :explore, to: redirect('/')
 
-  resources :maps, except: [:index, :edit] do
+  resources :maps, except: %i[index edit] do
     member do
       get :conversation
       get :export
@@ -54,10 +56,10 @@ Metamaps::Application.routes.draw do
     end
   end
 
-  resources :mappings, except: [:index, :new, :edit]
+  resources :mappings, except: %i[index new edit]
 
-  resources :messages, only: [:show, :create, :update, :destroy]
-  resources :notifications, only: [:index, :show] do
+  resources :messages, only: %i[show create update destroy]
+  resources :notifications, only: %i[index show] do
     collection do
       get :unsubscribe
     end
@@ -79,9 +81,9 @@ Metamaps::Application.routes.draw do
     get :synapses
   end
 
-  resources :synapses, except: [:index, :new, :edit]
+  resources :synapses, except: %i[index new edit]
 
-  resources :topics, except: [:index, :new, :edit] do
+  resources :topics, except: %i[index new edit] do
     member do
       get :network
       get :relative_numbers
@@ -110,7 +112,7 @@ Metamaps::Application.routes.draw do
     get 'join' => 'users/registrations#new', :as => :sign_up
   end
 
-  resources :users, except: [:index, :destroy] do
+  resources :users, except: %i[index destroy] do
     member do
       get :details
     end
@@ -120,16 +122,16 @@ Metamaps::Application.routes.draw do
 
   namespace :api, path: '/api', default: { format: :json } do
     namespace :v2, path: '/v2' do
-      resources :metacodes, only: [:index, :show]
-      resources :mappings, only: [:index, :create, :show, :update, :destroy]
-      resources :maps, only: [:index, :create, :show, :update, :destroy] do
+      resources :metacodes, only: %i[index show]
+      resources :mappings, only: %i[index create show update destroy]
+      resources :maps, only: %i[index create show update destroy] do
         post :stars, to: 'stars#create', on: :member
         delete :stars, to: 'stars#destroy', on: :member
       end
-      resources :synapses, only: [:index, :create, :show, :update, :destroy]
-      resources :tokens, only: [:index, :create, :destroy]
-      resources :topics, only: [:index, :create, :show, :update, :destroy]
-      resources :users, only: [:index, :show] do
+      resources :synapses, only: %i[index create show update destroy]
+      resources :tokens, only: %i[index create destroy]
+      resources :topics, only: %i[index create show update destroy]
+      resources :users, only: %i[index show] do
         get :current, on: :collection
       end
       match '*path', to: 'restful#catch_404', via: :all
@@ -145,4 +147,4 @@ Metamaps::Application.routes.draw do
     get 'load_url_title'
   end
 end
-# rubocop:enable Rubocop/Metrics/BlockLength
+# rubocop:enable Metrics/BlockLength
