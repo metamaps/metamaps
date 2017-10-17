@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 ruby '2.3.0'
 
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.1.0'
 
 gem 'active_model_serializers'
 gem 'aws-sdk', '~> 2.7.0'
