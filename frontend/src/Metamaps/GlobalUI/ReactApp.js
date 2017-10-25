@@ -98,6 +98,7 @@ const ReactApp = {
   getProps: function() {
     const self = ReactApp
     return merge({
+      DataModel: DataModel,
       unreadNotificationsCount: Notifications.unreadNotificationsCount,
       currentUser: Active.Mapper,
       toast: self.toast,

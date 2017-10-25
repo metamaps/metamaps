@@ -38,7 +38,6 @@ const JIT = {
     zoom: 'Metamaps:JIT:events:zoom',
     animationDone: 'Metamaps:JIT:events:animationDone'
   },
-  vizData: [], // contains the visualization-compatible graph
   /**
    * This method will bind the event handlers it is interested and initialize the class.
    */
@@ -55,8 +54,6 @@ const JIT = {
    */
   convertModelsToJIT: function(topics, synapses) {
     const jitReady = []
-
-    const synapsesToRemove = []
     let mapping
     let node
     const nodes = {}
@@ -70,11 +67,7 @@ const JIT = {
     })
     synapses.each(function(s) {
       edge = s.createEdge()
-
-      if (topics.get(s.get('topic1_id')) === undefined || topics.get(s.get('topic2_id')) === undefined) {
-        // this means it's an invalid synapse
-        synapsesToRemove.push(s)
-      } else if (nodes[edge.nodeFrom] && nodes[edge.nodeTo]) {
+      if (nodes[edge.nodeFrom] && nodes[edge.nodeTo]) {
         existingEdge = _.find(edges, {
           nodeFrom: edge.nodeFrom,
           nodeTo: edge.nodeTo
@@ -103,29 +96,8 @@ const JIT = {
       jitReady.push(node)
     })
 
-    return [jitReady, synapsesToRemove]
+    return jitReady
   },
-  prepareVizData: function() {
-    const self = JIT
-    let mapping
-    self.vizData = []
-    Visualize.loadLater = false
-    const results = self.convertModelsToJIT(DataModel.Topics, DataModel.Synapses)
-    self.vizData = results[0]
-    // clean up the synapses array in case of any faulty data
-    _.each(results[1], function(synapse) {
-      mapping = synapse.getMapping()
-      DataModel.Synapses.remove(synapse)
-      if (DataModel.Mappings) DataModel.Mappings.remove(mapping)
-    })
-    if (self.vizData.length === 0) {
-      Map.setHasLearnedTopicCreation(false)
-      Visualize.loadLater = true
-    } else {
-      Map.setHasLearnedTopicCreation(true)
-    }
-    Visualize.render()
-  }, // prepareVizData
   edgeRender: function(adj, canvas) {
     // get nodes cartesian coordinates
     const pos = adj.nodeFrom.pos.getc(true)

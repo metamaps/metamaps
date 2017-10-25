@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import ContextMenu from '../components/ContextMenu'
-import DataVis from '../components/DataVis'
+import TopicVis from '../components/TopicVis'
 import UpperOptions from '../components/UpperOptions'
 import InfoAndHelp from '../components/InfoAndHelp'
 import VisualizationControls from '../components/VisualizationControls'
@@ -73,7 +73,7 @@ export default class TopicView extends Component {
                     filterAllMetacodes={filterAllMetacodes}
                     filterAllMappers={filterAllMappers}
                     filterAllSynapses={filterAllSynapses} />
-      <DataVis />
+      <TopicVis />
       <TopicCard {...this.props} />
       {contextMenu && <ContextMenu {...this.props} />}
       <VisualizationControls onClickZoomIn={onZoomIn}

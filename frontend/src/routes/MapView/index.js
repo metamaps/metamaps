@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import ContextMenu from '../../components/ContextMenu'
-import DataVis from '../../components/DataVis'
+import MapVis from '../../components/MapVis'
 import UpperOptions from '../../components/UpperOptions'
 import InfoAndHelp from '../../components/InfoAndHelp'
 import Instructions from './Instructions'
@@ -82,7 +82,7 @@ export default class MapView extends Component {
             openImportLightbox, forkMap, openHelpLightbox,
             mapIsStarred, onMapStar, onMapUnstar, openTopic,
             onZoomExtents, onZoomIn, onZoomOut, hasLearnedTopicCreation,
-            contextMenu } = this.props
+            contextMenu, DataModel } = this.props
     const { chatOpen } = this.state
     const onChatOpen = () => {
       this.setState({chatOpen: true})
@@ -110,7 +110,7 @@ export default class MapView extends Component {
                     filterAllMetacodes={filterAllMetacodes}
                     filterAllMappers={filterAllMappers}
                     filterAllSynapses={filterAllSynapses} />
-      <DataVis />
+      <MapVis map={map} DataModel={DataModel} />
       {openTopic && <TopicCard {...this.props} />}
       {contextMenu && <ContextMenu {...this.props} />}
       {currentUser && <Instructions mobile={mobile} hasLearnedTopicCreation={hasLearnedTopicCreation} />}
