@@ -4,19 +4,21 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, browserHistory } from 'react-router'
 import { merge } from 'lodash'
+import apply from 'async/apply'
 
 import { notifyUser } from './index.js'
 import ImportDialog from './ImportDialog'
+import Notifications from './Notifications'
 import Active from '../Active'
 import DataModel from '../DataModel'
-import { ExploreMaps, ChatView, TopicCard } from '../Views'
+import { ExploreMaps, ChatView, TopicCard, ContextMenu } from '../Views'
 import Filter from '../Filter'
 import JIT from '../JIT'
 import Realtime from '../Realtime'
 import Map, { InfoBox } from '../Map'
 import Topic from '../Topic'
 import Visualize from '../Visualize'
-import makeRoutes from '../../components/makeRoutes'
+import makeRoutes from '../../routes/makeRoutes'
 let routes
 
 // 220 wide + 16 padding on both sides
@@ -29,7 +31,6 @@ const ReactApp = {
   serverData: {},
   mapId: null,
   topicId: null,
-  unreadNotificationsCount: 0,
   mapsWidth: 0,
   toast: '',
   mobile: false,
@@ -39,7 +40,6 @@ const ReactApp = {
   init: function(serverData, openLightbox) {
     const self = ReactApp
     self.serverData = serverData
-    self.unreadNotificationsCount = serverData.unreadNotificationsCount
     self.mobileTitle = serverData.mobileTitle
     self.openLightbox = openLightbox
     self.metacodeSets = serverData.metacodeSets
@@ -98,7 +98,7 @@ const ReactApp = {
   getProps: function() {
     const self = ReactApp
     return merge({
-      unreadNotificationsCount: self.unreadNotificationsCount,
+      unreadNotificationsCount: Notifications.unreadNotificationsCount,
       currentUser: Active.Mapper,
       toast: self.toast,
       mobile: self.mobile,
@@ -106,13 +106,18 @@ const ReactApp = {
       mobileTitleWidth: self.mobileTitleWidth,
       mobileTitleClick: (e) => Active.Map && InfoBox.toggleBox(e),
       openInviteLightbox: () => self.openLightbox('invite'),
-      serverData: self.serverData
+      serverData: self.serverData,
+      notifications: Notifications.notifications,
+      fetchNotifications: apply(Notifications.fetch, ReactApp.render),
+      markAsRead: apply(Notifications.markAsRead, ReactApp.render),
+      markAsUnread: apply(Notifications.markAsUnread, ReactApp.render)
     },
     self.getMapProps(),
     self.getTopicProps(),
     self.getFilterProps(),
     self.getCommonProps(),
     self.getMapsProps(),
+    self.getContextMenuProps(),
     self.getTopicCardProps(),
     self.getChatProps())
   },
@@ -153,6 +158,28 @@ const ReactApp = {
       metacodeSets: self.metacodeSets,
       updateTopic: (topic, obj) => topic.save(obj),
       onTopicFollow: Topic.onTopicFollow
+    }
+  },
+  getContextMenuProps: function() {
+    const { render } = ReactApp
+    return {
+      // values
+      contextMenu: !!(ContextMenu.clickedNode || ContextMenu.clickedEdge),
+      contextNode: ContextMenu.clickedNode,
+      contextEdge: ContextMenu.clickedEdge,
+      contextPos: ContextMenu.pos,
+      contextFetchingSiblingsData: ContextMenu.fetchingSiblingsData,
+      contextSiblingsData: ContextMenu.siblingsData,
+      // functions
+      contextDelete: apply(ContextMenu.delete, render),
+      contextRemove: apply(ContextMenu.remove, render),
+      contextHide: apply(ContextMenu.hide, render),
+      contextCenterOn: apply(ContextMenu.centerOn, render),
+      contextPopoutTopic: apply(ContextMenu.popoutTopic, render),
+      contextUpdatePermissions: apply(ContextMenu.updatePermissions, render),
+      contextOnMetacodeSelect: apply(ContextMenu.onMetacodeSelect, render),
+      contextFetchSiblings: apply(ContextMenu.fetchSiblings, render),
+      contextPopulateSiblings: apply(ContextMenu.populateSiblings, render)
     }
   },
   getTopicProps: function() {

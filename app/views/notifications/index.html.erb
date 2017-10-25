@@ -8,7 +8,7 @@
     </header>
     <ul class="notifications">
       <% blacklist = [MAP_ACCESS_REQUEST, MAP_ACCESS_APPROVED, MAP_INVITE_TO_EDIT] %>
-      <% notifications = @notifications.to_a.delete_if{|n| blacklist.include?(n.notification_code) && (n.notified_object.nil? || n.notified_object.map.nil?) }%> 
+      <% notifications = @notifications.to_a.delete_if{|n| blacklist.include?(n.notification_code) && (n.notified_object.nil? || n.notified_object.map.nil?) }%>
       <% notifications.each do |notification| %>
         <% receipt = @receipts.find_by(notification_id: notification.id) %>
         <li class="notification <%= receipt.is_read? ? 'read' : 'unread' %>" id="notification-<%= notification.id %>">
@@ -76,5 +76,3 @@
     </div>
   <% end %>
 </div>
-
-<%= render partial: 'notifications/header' %>

@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import outdent from 'outdent'
 
-import ImportDialogBox from '../../components/MapView/ImportDialogBox'
+import ImportDialogBox from '../../routes/MapView/ImportDialogBox'
 
 import PasteInput from '../PasteInput'
 import Map from '../Map'

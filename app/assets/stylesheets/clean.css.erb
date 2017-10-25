@@ -668,19 +668,19 @@
   box-shadow: 0px 3px 3px rgba(0,0,0,0.23), 0 3px 3px rgba(0,0,0,0.16);
 }
 
-#exploreMapsHeader {
+#navBar {
   position: absolute;
   width: 100%;
 }
 
-.exploreMapsBar {
+.navBarContainer {
   z-index:2;
   background-color:#FAFAFA;
   height: 42px;
   padding-top: 52px;
 }
 
-.exploreMapsMenu {
+.navBarMenu {
   display: block;
   width: 100%;
   height:42px;
@@ -689,30 +689,29 @@
   text-align: center;
 }
 
-.exploreMapsCenter {
+.navBarCenter {
    display: block;
 }
 
-.exploreMapsButton {
-    color: #757575;
+.navBarButton {
+  color: #757575;
 	cursor: default;
 	font-weight: normal;
 	font-family: 'din-medium';
 	font-size: 14px;
-	height: 14px;
-	padding: 14px 8px 12px 40px;
-    border-bottom: 2px solid rgba(0,0,0,0);
+	padding: 0 8px;
+  border-bottom: 2px solid rgba(0,0,0,0);
 	display: inline-block;
-    cursor: pointer;
-    position:relative;
+  cursor: pointer;
+  position:relative;
 }
-.exploreMapsButton:hover, .exploreMapsButton.active {
+.navBarButton:hover, .navBarButton.active {
   text-decoration: none;
   color: #424242;
   border-bottom: 2px solid #00BCD4;
 }
 
-.exploreMapsButton.mapperButton {
+.navBarButton.mapperButton {
     height: 40px;
     padding: 0;
 }
@@ -729,62 +728,69 @@
 }
 
 
-.exploreMapsButton .exploreMapsIcon {
+.navBarButton .navBarIcon {
     background-repeat: no-repeat;
     width:32px;
     height:32px;
-    position:absolute;
-    top:5px;
-    left:5px;
+    margin-top:5px;
+    margin-left:5px;
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: top;
 }
 
-.exploreMapsCenter .authedApps .exploreMapsIcon {
+.navBarLinkText {
+  padding: 11px 0 12px 0;
+  display: inline-block;
+}
+
+.navBarCenter .authedApps .navBarIcon {
     background-image: url(<%= asset_path('user_sprite.png') %>);
     background-position: 0 -32px;
 }
-.exploreMapsCenter .myMaps .exploreMapsIcon {
+.navBarCenter .myMaps .navBarIcon {
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -32px 0;
 }
-.exploreMapsCenter .sharedMaps .exploreMapsIcon {
+.navBarCenter .sharedMaps .navBarIcon {
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -128px 0;
 }
-.exploreMapsCenter .activeMaps .exploreMapsIcon {
+.navBarCenter .activeMaps .navBarIcon {
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: 0 0;
 }
-.exploreMapsCenter .featuredMaps .exploreMapsIcon {
+.navBarCenter .featuredMaps .navBarIcon {
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
 }
-.exploreMapsCenter .starredMaps .exploreMapsIcon {
+.navBarCenter .starredMaps .navBarIcon {
     background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
     background-position: -96px 0;
 }
-.exploreMapsCenter .notificationsLink .exploreMapsIcon {
+.navBarCenter .notificationsLink .navBarIcon {
     background-image: url(<%= asset_path 'topright_sprite.png' %>);
     background-position: -128px 0;
 }
-.authedApps:hover .exploreMapsIcon, .authedApps.active .exploreMapsIcon {
+.authedApps:hover .navBarIcon, .authedApps.active .navBarIcon {
     background-position-x: -32px;
 }
-.myMaps:hover .exploreMapsIcon, .myMaps.active .exploreMapsIcon {
+.myMaps:hover .navBarIcon, .myMaps.active .navBarIcon {
     background-position: -32px -32px;
 }
-.activeMaps:hover .exploreMapsIcon, .activeMaps.active .exploreMapsIcon {
+.activeMaps:hover .navBarIcon, .activeMaps.active .navBarIcon {
     background-position: 0 -32px;
 }
-.featuredMaps:hover .exploreMapsIcon, .featuredMaps.active .exploreMapsIcon {
+.featuredMaps:hover .navBarIcon, .featuredMaps.active .navBarIcon {
     background-position: -96px -32px;
 }
-.starredMaps:hover .exploreMapsIcon, .starredMaps.active .exploreMapsIcon {
+.starredMaps:hover .navBarIcon, .starredMaps.active .navBarIcon {
     background-position: -96px -32px;
 }
-.sharedMaps:hover .exploreMapsIcon, .sharedMaps.active .exploreMapsIcon {
+.sharedMaps:hover .navBarIcon, .sharedMaps.active .navBarIcon {
     background-position: -128px -32px;
 }
-.notificationsLink:hover .exploreMapsIcon, .notificationsLink.active .exploreMapsIcon {
+.notificationsLink:hover .navBarIcon, .notificationsLink.active .navBarIcon {
     background-position-y: -32px;
 }
 

@@ -15,6 +15,7 @@ import Selected from './Selected'
 import Settings from './Settings'
 import SynapseCard from './SynapseCard'
 import TopicCard from './Views/TopicCard'
+import ContextMenu from './Views/ContextMenu'
 import Util from './Util'
 import Visualize from './Visualize'
 
@@ -68,13 +69,13 @@ const Topic = {
   },
   end: function() {
     if (Active.Topic) {
-      $('.rightclickmenu').remove()
+      ContextMenu.reset(ReactApp.render)
       TopicCard.hideCard()
       SynapseCard.hideCard()
     }
   },
   centerOn: function(nodeid, callback) {
-    // don't clash with fetchRelatives
+    // don't clash with fetchSiblings
     if (!Visualize.mGraph.busy) {
       Visualize.mGraph.onClick(nodeid, {
         hideLabels: false,
@@ -100,10 +101,10 @@ const Topic = {
     }
     ReactApp.render()
   },
-  fetchRelatives: function(nodes, metacodeId) {
+  fetchSiblings: function(nodes, metacodeId) {
     var self = this
 
-    var node = $.isArray(nodes) ? nodes[0] : nodes
+    var node = Array.isArray(nodes) ? nodes[0] : nodes
 
     var topics = DataModel.Topics.map(function(t) { return t.id })
     var topicsString = topics.join()
@@ -155,8 +156,8 @@ const Topic = {
           }
         })
       })
-      if ($.isArray(nodes) && nodes.length > 1) {
-        self.fetchRelatives(nodes.slice(1), metacodeId)
+      if (Array.isArray(nodes) && nodes.length > 1) {
+        self.fetchSiblings(nodes.slice(1), metacodeId)
       }
     }
 

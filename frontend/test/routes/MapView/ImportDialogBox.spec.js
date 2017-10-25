@@ -1,6 +1,6 @@
 /* global describe, it */
 import React from 'react'
-import ImportDialogBox from '../../../src/components/MapView/ImportDialogBox.js'
+import ImportDialogBox from '../../../src/routes/MapView/ImportDialogBox.js'
 import Dropzone from 'react-dropzone'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'

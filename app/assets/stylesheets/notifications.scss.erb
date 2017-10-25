@@ -1,4 +1,7 @@
+$notifications-border-color: #DDDDDD;
+$notifications-hover-color: #F6F6F6;
 $unread_notifications_dot_size: 8px;
+
 .unread-notifications-dot {
   width: $unread_notifications_dot_size;
   height: $unread_notifications_dot_size;
@@ -13,13 +16,72 @@ $unread_notifications_dot_size: 8px;
   .notificationsIcon {
     position: relative;
   }
+
+  .notificationsBox {
+    position: absolute;
+    background: #FFFFFF;
+    border-radius: 2px;
+    width: 350px;
+    right: 0;
+    top: 50px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    border: 1px solid $notifications-border-color;
+
+    .notificationsBoxTriangle {
+      min-width: 0 !important;
+      display: block;
+      position: absolute;
+      right: 48px;
+      width: 20px !important;
+      height: 20px !important;
+      margin-left: -10px;
+      top: -11px;
+      border-left: 1px solid $notifications-border-color;
+      border-top: 1px solid $notifications-border-color;
+      border-bottom: 0 !important;
+      border-right: 0 !important;
+      background-color: #fff;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+    }
+
+    ul.notifications {
+      max-height: 500px;
+      overflow-y: auto;
+
+      .notification {
+        font-size: 13px;
+
+        .notification-body {
+          border-bottom: 1px solid $notifications-border-color;
+        }
+      }
+
+      .notificationsEmpty {
+        font-family: din-regular, helvetica, sans-serif;
+        margin: 50px 10px;
+        text-align: center;
+      }
+    }
+
+    .notificationsBoxSeeAll {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 6px 0;
+      font-family: din-regular, helvetica, sans-serif;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        color: #333;
+        background: $notifications-hover-color;
+      }
+    }
+  }
 }
 
 .controller-notifications {
-  ul.notifications {
-    list-style: none;
-  }
-
   .notificationPage,
   .notificationsPage {
     font-family: 'din-regular', Sans-Serif;
@@ -47,89 +109,9 @@ $unread_notifications_dot_size: 8px;
     .emptyInbox {
       padding-top: 15px;
     }
-
-    .notification {
-      padding: 10px;
-      position: relative;
-
-      &:hover {
-        background: #F6F6F6;
-
-        .notification-read-unread {
-          display:block;
-        }
-
-        .notification-date {
-          display: none;
-        }
-      }
-
-      & > a {
-        float: left;
-        width: 85%;  
-        box-sizing: border-box;
-        padding-right: 10px;
-      }
-
-      .notification-actor { 
-        float: left;
-
-        img {
-          width: 32px;
-          height: 32px;
-          border-radius: 16px;
-        }
-      }
-
-      .notification-body {
-        margin-left: 50px;
-        line-height: 20px;
-
-        .in-bold {
-          font-family: 'din-medium', Sans-Serif;
-        }
-
-        .action {
-          background: #4fb5c0;
-          color: #FFF;
-          padding: 2px 6px;
-          border-radius: 3px;
-          display: inline-block;
-          margin: 5px 0;
-        }
-      } 
-
-      .notification-date {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        color: #607d8b;
-        font-size: 13px;
-        line-height: 13px;
-        margin-top: -6px;
-      }
-
-      .notification-read-unread {
-        display: none;
-        float: left;
-        width: 15%;
-
-        a {
-          position: absolute;
-          top: 50%;
-          margin-top: -10px;
-          text-align: center;
-        }
-      }
-
-      &.unread {
-        background: #EEE;
-      }
-    }
-
   }
 
-    
+
 
   .notificationPage {
     .thirty-two-avatar {
@@ -139,14 +121,14 @@ $unread_notifications_dot_size: 8px;
       border-radius: 16px;
       vertical-align: middle;
     }
-    
+
     .button {
       line-height: 32px;
-      
+
       img {
         margin-top: 8px;
       }
-      
+
       &.decline {
         background: #DB5D5D;
         &:hover {
@@ -154,12 +136,102 @@ $unread_notifications_dot_size: 8px;
         }
       }
     }
-  
+
     .notification-body {
       p, div {
         margin: 1em auto;
         line-height: 20px;
       }
+    }
+  }
+}
+
+ul.notifications {
+  list-style: none;
+
+  li:nth-last-child(2) {
+    .notification-body {
+      border-bottom: none !important;
+    }
+  }
+}
+
+.notification {
+  padding: 10px 10px 0 10px;
+  position: relative;
+  font-family: 'din-regular', Sans-Serif;
+
+  &.unread {
+    background: #EEE;
+  }
+
+  &:hover {
+    background: $notifications-hover-color;
+
+    .notification-read-unread {
+      display:block;
+    }
+
+    .notification-date {
+      display: none;
+    }
+  }
+
+  & > a {
+    float: left;
+    width: 85%;
+    box-sizing: border-box;
+    padding-right: 10px;
+  }
+
+  .notification-actor {
+    float: left;
+
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 16px;
+    }
+  }
+
+  .notification-body {
+    margin-left: 50px;
+    line-height: 20px;
+    padding-bottom: 10px;
+
+    .in-bold {
+      font-family: 'din-medium', Sans-Serif;
+    }
+
+    .action {
+      background: #4fb5c0;
+      color: #FFF;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      margin: 5px 0;
+    }
+  }
+
+  .notification-date {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    color: #607d8b;
+    margin-top: -6px;
+  }
+
+  .notification-read-unread {
+    display: none;
+    float: left;
+    width: 15%;
+
+    a, div {
+      position: absolute;
+      top: 50%;
+      margin-top: -10px;
+      text-align: center;
+      cursor: pointer;
     }
   }
 }

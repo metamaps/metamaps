@@ -9,7 +9,7 @@
     <h2 class="notification-title">
       <% case @notification.notification_code
            when MAP_ACCESS_REQUEST
-             request = @notification.notified_object 
+             request = @notification.notified_object
              map = request.map %>
          <%= image_tag @notification.sender.image(:thirtytwo), class: 'thirty-two-avatar' %> <span style='font-weight:bold;' class='requesterName'><%= request.user.name %></span> wants to collaborate on map <span style='font-weight:bold;'><%= map.name %></span>
        <% else %>
@@ -24,7 +24,7 @@
              <% if request.approved %>
                You already responded to this access request, and allowed access.
              <% elsif !request.approved %>
-               You already responded to this access request, and declined access. If you changed your mind, you can still grant 
+               You already responded to this access request, and declined access. If you changed your mind, you can still grant
                them access by going to the map and adding them as a collaborator.
              <% end %>
            <% else %>
@@ -50,5 +50,3 @@
      <% end %>
   </div>
 </div>
-
-<%= render partial: 'notifications/header' %>

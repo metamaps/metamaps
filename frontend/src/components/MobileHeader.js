@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 
-import Sprite from '../common/Sprite'
+import Sprite from './Sprite'
 
 class MobileHeader extends Component {
   static propTypes = {

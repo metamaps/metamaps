@@ -6,13 +6,17 @@ class NotificationsController < ApplicationController
 
   def index
     @notifications = current_user.mailbox.notifications.page(params[:page]).per(25)
-
     respond_to do |format|
       format.html
       format.json do
-        render json: @notifications.map do |notification|
+        notifications = @notifications.map do |notification|
           receipt = @receipts.find_by(notification_id: notification.id)
-          notification.as_json.merge(is_read: receipt.is_read)
+          NotificationDecorator.decorate(notification, receipt)
+        end
+        if !notifications.empty?
+          render json: notifications
+        else
+          render json: [].to_json
         end
       end
     end
@@ -34,9 +38,7 @@ class NotificationsController < ApplicationController
         end
       end
       format.json do
-        render json: @notification.as_json.merge(
-          is_read: @receipt.is_read
-        )
+        render json: NotificationDecorator.decorate(@notification, @receipt)
       end
     end
   end
@@ -46,9 +48,7 @@ class NotificationsController < ApplicationController
     respond_to do |format|
       format.js
       format.json do
-        render json: @notification.as_json.merge(
-          is_read: @receipt.is_read
-        )
+        render json: NotificationDecorator.decorate(@notification, @receipt)
       end
     end
   end
@@ -58,9 +58,7 @@ class NotificationsController < ApplicationController
     respond_to do |format|
       format.js
       format.json do
-        render json: @notification.as_json.merge(
-          is_read: @receipt.is_read
-        )
+        render json: NotificationDecorator.decorate(@notification, @receipt)
       end
     end
   end

@@ -127,6 +127,10 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
   a.mdSupport {
     color: #4fb5c0;
     font-size: 11px;
+    display: none;
+  }
+  .riek-editing + .mdSupport {
+    display: block;
   }
 }
 .CardOnGraph.hasAttachment .scroll {
@@ -139,14 +143,12 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
   font-family: helvetica, sans-serif;
   color: #424242;
   padding: 0;
-  width: 100%;
+  width: 258px;
   margin: 0;
   border: 0;
   outline: none;
-  font-size: 12px;
-  line-height: 15px;
   background: none;
-  resize: none;
+  overflow-y: scroll;
 }
 
 /*
@@ -180,11 +182,9 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
 
 .CardOnGraph .riek_desc {
   display:block;
-  margin-top:2px;
-  padding-right: 18px;
-  margin-right: 8px;
+  padding-right: 26px;
 }
-.canEdit .CardOnGraph .riek_desc:hover {
+.canEdit .CardOnGraph .riek_desc:not(.riek-editing):hover {
   background-image: url(<%= asset_data_uri('edit.png') %>);
   background-position: top right;
   background-repeat: no-repeat;

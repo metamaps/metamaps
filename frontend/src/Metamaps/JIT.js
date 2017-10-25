@@ -1,16 +1,12 @@
-/* global $, Image, CanvasLoader */
+/* global $, Image */
 
 import _ from 'lodash'
-import outdent from 'outdent'
 import clipboard from 'clipboard-js'
-import React from 'react'
-import ReactDOM from 'react-dom'
 
 import $jit from '../patched/JIT'
 
-import MetacodeSelect from '../components/MetacodeSelect'
-
 import Active from './Active'
+import ContextMenu from './Views/ContextMenu'
 import Control from './Control'
 import Create from './Create'
 import DataModel from './DataModel'
@@ -349,7 +345,7 @@ const JIT = {
         // Add also a click handler to nodes
         onClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
-          $('.rightclickmenu').remove()
+          ContextMenu.reset(ReactApp.render)
 
           if (Mouse.boxStartCoordinates) {
             if (e.ctrlKey) {
@@ -390,7 +386,7 @@ const JIT = {
         // Add also a click handler to nodes
         onRightClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
-          $('.rightclickmenu').remove()
+          ContextMenu.reset(ReactApp.render)
 
           if (Mouse.boxStartCoordinates) {
             Create.newSynapse.hide()
@@ -1006,7 +1002,7 @@ const JIT = {
       TopicCard.hideCard()
       SynapseCard.hideCard()
       Create.newTopic.hide()
-      $('.rightclickmenu').remove()
+      ContextMenu.reset(ReactApp.render)
       // reset the draw synapse positions to false
       Mouse.synapseStartCoordinates = []
       Mouse.synapseEndCoordinates = null
@@ -1346,230 +1342,12 @@ const JIT = {
   selectNodeOnRightClickHandler: function(node, e) {
     // the 'node' variable is a JIT node, the one that was clicked on
     // the 'e' variable is the click event
-
     e.preventDefault()
     e.stopPropagation()
-
     if (Visualize.mGraph.busy) return
-
-    // select the node
     Control.selectNode(node, e)
-
-    // delete old right click menu
-    $('.rightclickmenu').remove()
-    // create new menu for clicked on node
-    const rightclickmenu = document.createElement('div')
-    rightclickmenu.className = 'rightclickmenu'
-    // prevent the custom context menu from immediately opening the default context menu as well
-    rightclickmenu.setAttribute('oncontextmenu', 'return false')
-
-    // add the proper options to the menu
-    let menustring = '<ul>'
-
-    const authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
-
-    const disabled = authorized ? '' : 'disabled'
-
-    if (Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
-
-    if (Active.Topic) {
-      menustring += '<li class="rc-center"><div class="rc-icon"></div>Center this topic<div class="rc-keyboard">Alt+E</div></li>'
-    }
-
-    menustring += '<li class="rc-popout"><div class="rc-icon"></div>Open in new tab</li>'
-
-    if (Active.Mapper) {
-      const options = outdent`
-        <ul>
-          <li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li>
-          <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li>
-          <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li>
-        </ul>`
-
-      menustring += '<li class="rc-spacer"></li>'
-
-      menustring += outdent`
-        <li class="rc-permission">
-          <div class="rc-icon"></div>
-          Change permissions
-          ${options}
-          <div class="expandLi"></div>
-        </li>`
-
-      menustring += '<li class="rc-metacode"><div class="rc-icon"></div>Change metacode<div id="metacodeOptionsWrapper"></div><div class="expandLi"></div></li>'
-    }
-    if (Active.Topic) {
-      if (!Active.Mapper) {
-        menustring += '<li class="rc-spacer"></li>'
-      }
-
-      // set up the get sibling menu as a "lazy load"
-      // only fill in the submenu when they hover over the get siblings list item
-      const siblingMenu = outdent`
-        <ul id="fetchSiblingList">
-          <li class="fetchAll">All<div class="rc-keyboard">Alt+R</div></li>
-          <li id="loadingSiblings"></li>
-        </ul>`
-      menustring += '<li class="rc-siblings"><div class="rc-icon"></div>Reveal siblings' + siblingMenu + '<div class="expandLi"></div></li>'
-    }
-
-    menustring += '</ul>'
-    rightclickmenu.innerHTML = menustring
-
-    // position the menu where the click happened
-    const position = {}
-    const RIGHTCLICK_WIDTH = 300
-    const RIGHTCLICK_HEIGHT = 144 // this does vary somewhat, but we can use static
-    const SUBMENUS_WIDTH = 256
-    const MAX_SUBMENU_HEIGHT = 270
-    const windowWidth = $(window).width()
-    const windowHeight = $(window).height()
-
-    if (windowWidth - e.clientX < SUBMENUS_WIDTH) {
-      position.right = windowWidth - e.clientX
-      $(rightclickmenu).addClass('moveMenusToLeft')
-    } else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH) {
-      position.right = windowWidth - e.clientX
-    } else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH + SUBMENUS_WIDTH) {
-      position.left = e.clientX
-      $(rightclickmenu).addClass('moveMenusToLeft')
-    } else {
-      position.left = e.clientX
-    }
-
-    if (windowHeight - e.clientY < MAX_SUBMENU_HEIGHT) {
-      position.bottom = windowHeight - e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else if (windowHeight - e.clientY < RIGHTCLICK_HEIGHT + MAX_SUBMENU_HEIGHT) {
-      position.top = e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else {
-      position.top = e.clientY
-    }
-
-    $(rightclickmenu).css(position)
-    // add the menu to the page
-    $('#wrapper').append(rightclickmenu)
-
-    ReactDOM.render(
-      React.createElement(MetacodeSelect, {
-        onMetacodeSelect: metacodeId => {
-          if (Selected.Nodes.length > 1) {
-            // batch update multiple topics
-            Control.updateSelectedMetacodes(metacodeId)
-          } else {
-            const topic = DataModel.Topics.get(node.id)
-            topic.save({
-              metacode_id: metacodeId
-            })
-          }
-          $(rightclickmenu).remove()
-        },
-        metacodeSets: ReactApp.metacodeSets
-      }),
-      document.getElementById('metacodeOptionsWrapper')
-    )
-
-    // attach events to clicks on the list items
-
-    // delete the selected things from the database
-    if (authorized) {
-      $('.rc-delete').click(function() {
-        $('.rightclickmenu').remove()
-        Control.deleteSelected()
-      })
-    }
-
-    // remove the selected things from the map
-    if (Active.Topic || authorized) {
-      $('.rc-remove').click(function() {
-        $('.rightclickmenu').remove()
-        Control.removeSelectedEdges()
-        Control.removeSelectedNodes()
-      })
-    }
-
-    // hide selected nodes and synapses until refresh
-    $('.rc-hide').click(function() {
-      $('.rightclickmenu').remove()
-      Control.hideSelectedEdges()
-      Control.hideSelectedNodes()
-    })
-
-    // when in radial, center on the topic you picked
-    $('.rc-center').click(function() {
-      $('.rightclickmenu').remove()
-      Topic.centerOn(node.id)
-    })
-
-    // open the entity in a new tab
-    $('.rc-popout').click(function() {
-      $('.rightclickmenu').remove()
-      const win = window.open('/topics/' + node.id, '_blank')
-      win.focus()
-    })
-
-    // change the permission of all the selected nodes and synapses that you were the originator of
-    $('.rc-permission li').click(function() {
-      $('.rightclickmenu').remove()
-      // $(this).text() will be 'commons' 'public' or 'private'
-      Control.updateSelectedPermissions($(this).text())
-    })
-
-    // fetch relatives
-    let fetchSent = false
-    $('.rc-siblings').hover(function() {
-      if (!fetchSent) {
-        JIT.populateRightClickSiblings(node)
-        fetchSent = true
-      }
-    })
-    $('.rc-siblings .fetchAll').click(function() {
-      $('.rightclickmenu').remove()
-      // data-id is a metacode id
-      Topic.fetchRelatives(node)
-    })
+    ContextMenu.selectNode(ReactApp.render, node, {x: e.clientX, y: e.clientY})
   }, // selectNodeOnRightClickHandler,
-  populateRightClickSiblings: function(node) {
-    // depending on how many topics are selected, do different things
-    const topic = node.getData('topic')
-
-    // add a loading icon for now
-    const loader = new CanvasLoader('loadingSiblings')
-    loader.setColor('#4FC059') // default is '#000000'
-    loader.setDiameter(15) // default is 40
-    loader.setDensity(41) // default is 40
-    loader.setRange(0.9) // default is 1.3
-    loader.show() // Hidden by default
-
-    const topics = DataModel.Topics.map(function(t) { return t.id })
-    const topicsString = topics.join()
-
-    const successCallback = function(data) {
-      $('#loadingSiblings').remove()
-
-      for (var key in data) {
-        const string = `${DataModel.Metacodes.get(key).get('name')} (${data[key]})`
-        $('#fetchSiblingList').append(`<li class="getSiblings" data-id="${key}">${string}</li>`)
-      }
-
-      $('.rc-siblings .getSiblings').click(function() {
-        $('.rightclickmenu').remove()
-        // data-id is a metacode id
-        Topic.fetchRelatives(node, $(this).attr('data-id'))
-      })
-    }
-
-    $.ajax({
-      type: 'GET',
-      url: '/topics/' + topic.id + '/relative_numbers.json?network=' + topicsString,
-      success: successCallback,
-      error: function() {}
-    })
-  },
   selectEdgeOnClickHandler: function(adj, e) {
     if (Visualize.mGraph.busy) return
 
@@ -1611,113 +1389,14 @@ const JIT = {
     }
   }, // selectEdgeOnClickHandler
   selectEdgeOnRightClickHandler: function(adj, e) {
-    // the 'node' variable is a JIT node, the one that was clicked on
+    // the 'adj' variable is a JIT adjacency, the one that was clicked on
     // the 'e' variable is the click event
-
     if (adj.getData('alpha') === 0) return // don't do anything if the edge is filtered
-
     e.preventDefault()
     e.stopPropagation()
-
     if (Visualize.mGraph.busy) return
-
     Control.selectEdge(adj)
-
-    // delete old right click menu
-    $('.rightclickmenu').remove()
-    // create new menu for clicked on node
-    const rightclickmenu = document.createElement('div')
-    rightclickmenu.className = 'rightclickmenu'
-    // prevent the custom context menu from immediately opening the default context menu as well
-    rightclickmenu.setAttribute('oncontextmenu', 'return false')
-
-    // add the proper options to the menu
-    let menustring = '<ul>'
-
-    const authorized = Active.Map && Active.Map.authorizeToEdit(Active.Mapper)
-
-    const disabled = authorized ? '' : 'disabled'
-
-    if (Active.Map) menustring += '<li class="rc-hide"><div class="rc-icon"></div>Hide until refresh<div class="rc-keyboard">Ctrl+H</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-remove ' + disabled + '"><div class="rc-icon"></div>Remove from map<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Topic) menustring += '<li class="rc-remove"><div class="rc-icon"></div>Remove from view<div class="rc-keyboard">Ctrl+M</div></li>'
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-delete ' + disabled + '"><div class="rc-icon"></div>Delete<div class="rc-keyboard">Ctrl+D</div></li>'
-
-    if (Active.Map && Active.Mapper) menustring += '<li class="rc-spacer"></li>'
-
-    if (Active.Mapper) {
-      const permOptions = outdent`
-        <ul>
-          <li class="changeP toCommons"><div class="rc-perm-icon"></div>commons</li>
-          <li class="changeP toPublic"><div class="rc-perm-icon"></div>public</li>           <li class="changeP toPrivate"><div class="rc-perm-icon"></div>private</li>         </ul>`
-
-      menustring += '<li class="rc-permission"><div class="rc-icon"></div>Change permissions' + permOptions + '<div class="expandLi"></div></li>'
-    }
-
-    menustring += '</ul>'
-    rightclickmenu.innerHTML = menustring
-
-    // position the menu where the click happened
-    const position = {}
-    const RIGHTCLICK_WIDTH = 300
-    const RIGHTCLICK_HEIGHT = 144 // this does vary somewhat, but we can use static
-    const SUBMENUS_WIDTH = 256
-    const MAX_SUBMENU_HEIGHT = 270
-    const windowWidth = $(window).width()
-    const windowHeight = $(window).height()
-
-    if (windowWidth - e.clientX < SUBMENUS_WIDTH) {
-      position.right = windowWidth - e.clientX
-      $(rightclickmenu).addClass('moveMenusToLeft')
-    } else if (windowWidth - e.clientX < RIGHTCLICK_WIDTH) {
-      position.right = windowWidth - e.clientX
-    } else position.left = e.clientX
-
-    if (windowHeight - e.clientY < MAX_SUBMENU_HEIGHT) {
-      position.bottom = windowHeight - e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else if (windowHeight - e.clientY < RIGHTCLICK_HEIGHT + MAX_SUBMENU_HEIGHT) {
-      position.top = e.clientY
-      $(rightclickmenu).addClass('moveMenusUp')
-    } else position.top = e.clientY
-
-    $(rightclickmenu).css(position)
-
-    // add the menu to the page
-    $('#wrapper').append(rightclickmenu)
-
-    // attach events to clicks on the list items
-
-    // delete the selected things from the database
-    if (authorized) {
-      $('.rc-delete').click(function() {
-        $('.rightclickmenu').remove()
-        Control.deleteSelected()
-      })
-    }
-
-    // remove the selected things from the map
-    if (authorized) {
-      $('.rc-remove').click(function() {
-        $('.rightclickmenu').remove()
-        Control.removeSelectedEdges()
-        Control.removeSelectedNodes()
-      })
-    }
-
-    // hide selected nodes and synapses until refresh
-    $('.rc-hide').click(function() {
-      $('.rightclickmenu').remove()
-      Control.hideSelectedEdges()
-      Control.hideSelectedNodes()
-    })
-
-    // change the permission of all the selected nodes and synapses that you were the originator of
-    $('.rc-permission li').click(function() {
-      $('.rightclickmenu').remove()
-      // $(this).text() will be 'commons' 'public' or 'private'
-      Control.updateSelectedPermissions($(this).text())
-    })
+    ContextMenu.selectEdge(ReactApp.render, adj, {x: e.clientX, y: e.clientY})
   }, // selectEdgeOnRightClickHandler
   SmoothPanning: function() {
     const sx = Visualize.mGraph.canvas.scaleOffsetX

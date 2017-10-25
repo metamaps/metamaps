@@ -15,22 +15,22 @@
     <%= link_to @map.name, map_url(@map) %>
   </p>
   <div>
-    <% if @summary_data[:stats][:messages_sent] > 0 %>
+    <% if @summary_data[:stats][:messages_sent] %>
       <p style="margin:6px 0;color:#a354cd;"><%= pluralize(@summary_data[:stats][:messages_sent], 'message') %></p>
     <% end %>
-    <% if @summary_data[:stats][:topics_added] > 0 %>
+    <% if @summary_data[:stats][:topics_added] %>
       <p style="margin:6px 0;color:#4FC059;"><%= pluralize(@summary_data[:stats][:topics_added], 'topic') %> added</p>
     <% end %>
-    <% if @summary_data[:stats][:synapses_added] > 0 %>
+    <% if @summary_data[:stats][:synapses_added] %>
       <p style="margin:6px 0;color:#4FC059;"><%= pluralize(@summary_data[:stats][:synapses_added], 'synapse') %> added</p>
     <% end %>
-    <% if @summary_data[:stats][:topics_moved] > 0 %>
+    <% if @summary_data[:stats][:topics_moved] %>
       <p style="margin:6px 0;color:#00BCD4;"><%= pluralize(@summary_data[:stats][:topics_moved], 'topic') %> moved</p>
     <% end %>
-    <% if @summary_data[:stats][:topics_removed] > 0 %>
+    <% if @summary_data[:stats][:topics_removed] %>
       <p style="margin:6px 0;color:#c04f4f;"><%= pluralize(@summary_data[:stats][:topics_removed], 'topic') %> removed</p>
     <% end %>
-    <% if @summary_data[:stats][:synapses_removed] > 0 %>
+    <% if @summary_data[:stats][:synapses_removed] %>
       <p style="margin:6px 0;color:#c04f4f;"><%= pluralize(@summary_data[:stats][:synapses_removed], 'synapse') %> removed</p>
     <% end %>
   </div>
@@ -61,7 +61,7 @@
     </div>
   <% end %>
 
-  
+
   <% if @summary_data[:topics_removed] || @summary_data[:synapses_removed] %>
     <div style="background:rgba(192, 79, 79, 0.2); padding:8px;">
       <% if @summary_data[:topics_removed] %>

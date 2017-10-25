@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import DataVis from '../common/DataVis'
-import UpperOptions from '../common/UpperOptions'
-import InfoAndHelp from '../common/InfoAndHelp'
+import ContextMenu from '../../components/ContextMenu'
+import DataVis from '../../components/DataVis'
+import UpperOptions from '../../components/UpperOptions'
+import InfoAndHelp from '../../components/InfoAndHelp'
 import Instructions from './Instructions'
-import VisualizationControls from '../common/VisualizationControls'
+import VisualizationControls from '../../components/VisualizationControls'
 import MapChat from './MapChat'
-import TopicCard from '../TopicCard'
+import TopicCard from '../../components/TopicCard'
 
 export default class MapView extends Component {
 
   static propTypes = {
+    contextMenu: PropTypes.bool,
     mobile: PropTypes.bool,
     mapId: PropTypes.string,
     map: PropTypes.object,
@@ -79,7 +81,8 @@ export default class MapView extends Component {
             filterAllMappers, filterAllSynapses, filterData,
             openImportLightbox, forkMap, openHelpLightbox,
             mapIsStarred, onMapStar, onMapUnstar, openTopic,
-            onZoomExtents, onZoomIn, onZoomOut, hasLearnedTopicCreation } = this.props
+            onZoomExtents, onZoomIn, onZoomOut, hasLearnedTopicCreation,
+            contextMenu } = this.props
     const { chatOpen } = this.state
     const onChatOpen = () => {
       this.setState({chatOpen: true})
@@ -109,6 +112,7 @@ export default class MapView extends Component {
                     filterAllSynapses={filterAllSynapses} />
       <DataVis />
       {openTopic && <TopicCard {...this.props} />}
+      {contextMenu && <ContextMenu {...this.props} />}
       {currentUser && <Instructions mobile={mobile} hasLearnedTopicCreation={hasLearnedTopicCreation} />}
       {currentUser && <MapChat {...this.props} onOpen={onChatOpen} onClose={onChatClose} chatOpen={chatOpen} ref={x => this.mapChat = x} />}
       <VisualizationControls map={map}

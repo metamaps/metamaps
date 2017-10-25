@@ -163,9 +163,9 @@ If your system uses systemd for init scripts, ptu the following code into `/etc/
     User=metamaps
     Group=metamaps
     Environment=HOME=/home/metamaps
-    Environment=PATH="/usr/local/rvm/gems/ruby-2.3.0@metamaps/bin:/usr/local/rvm/gems/ruby-2.3.0@global/bin:/usr/local/rvm/rubies/ruby-2.3.0/bin:/usr/local/rvm/bin:/usr/local/bin:/usr/bin:/bin"
-    Environment=GEM_PATH="/usr/local/rvm/gems/ruby-2.3.0@metamaps:/usr/local/rvm/gems/ruby-2.3.0@global"
-    Environment=RAILS_ENV="production"
+    Environment=PATH=/usr/local/rvm/gems/ruby-2.3.0@metamaps/bin:/usr/local/rvm/gems/ruby-2.3.0@global/bin:/usr/local/rvm/rubies/ruby-2.3.0/bin:/usr/local/rvm/bin:/usr/local/bin:/usr/bin:/bin
+    Environment=GEM_PATH=/usr/local/rvm/gems/ruby-2.3.0@metamaps:/usr/local/rvm/gems/ruby-2.3.0@global
+    Environment=RAILS_ENV=production
 
     [Install]
     WantedBy=multi-user.target
@@ -174,3 +174,13 @@ Then start the service and check the last ten lines of the log file to make sure
 
     sudo systemctl start metamaps_delayed_job
     # ??? how the heck do you check systemd logs??
+    
+##### initial service startup
+    sudo systemctl enable metamaps_delayed_job
+    sudo systemctl start metamaps_delayed_job
+    sudo systemctl status metamaps_delayed_job
+
+##### after changing
+    sudo systemctl daemon-reload
+    sudo systemctl restart metamaps_delayed_job
+    sudo systemctl status metamaps_delayed_job

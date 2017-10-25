@@ -23,7 +23,7 @@ class UserPreference
   def initialize_follow_settings
     @follow_topic_on_created = false
     @follow_topic_on_contributed = false
-    @follow_map_on_created = false
+    @follow_map_on_created = true
     @follow_map_on_contributed = false
   end
 end

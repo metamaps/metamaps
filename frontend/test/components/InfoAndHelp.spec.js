@@ -4,8 +4,8 @@ import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import sinon from 'sinon'
 
-import InfoAndHelp from '../../../src/components/common/InfoAndHelp.js'
-import MapInfoBox from '../../../src/components/MapView/MapInfoBox.js'
+import InfoAndHelp from '../../src/components/InfoAndHelp.js'
+import MapInfoBox from '../../src/routes/MapView/MapInfoBox.js'
 
 function assertTooltip({ wrapper, description, cssClass, tooltipText, callback }) {
   it(description, function() {

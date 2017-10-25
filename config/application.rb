@@ -19,15 +19,15 @@ module Metamaps
                                       end
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths << Rails.root.join('app', 'services')
+    config.autoload_paths << Rails.root.join('app', 'decorators', 'services')
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'
 
     config.to_prepare do
-      Doorkeeper::ApplicationsController.layout 'doorkeeper'
-      Doorkeeper::AuthorizationsController.layout 'doorkeeper'
-      Doorkeeper::AuthorizedApplicationsController.layout 'doorkeeper'
+      Doorkeeper::ApplicationsController.layout 'application'
+      Doorkeeper::AuthorizationsController.layout 'application'
+      Doorkeeper::AuthorizedApplicationsController.layout 'application'
       Doorkeeper::ApplicationController.helper ApplicationHelper
     end
 

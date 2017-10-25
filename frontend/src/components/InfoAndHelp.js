@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import MapInfoBox from '../MapView/MapInfoBox'
+import MapInfoBox from '../routes/MapView/MapInfoBox'
 
 class InfoAndHelp extends Component {
   static propTypes = {
