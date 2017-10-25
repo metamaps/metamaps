@@ -12,10 +12,8 @@ import TopicCard from './Views/TopicCard'
 
 const Visualize = {
   mGraph: null, // a reference to the graph object.
-  cameraPosition: null, // stores the camera position when using a 3D visualization
-  type: 'ForceDirected', // the type of graph we're building, could be "RGraph", "ForceDirected", or "ForceDirected3D"
+  type: 'ForceDirected', // the type of graph we're building, could be "RGraph", "ForceDirected"
   loadLater: false, // indicates whether there is JSON that should be loaded right in the offset, or whether to wait till the first topic is created
-  touchDragNode: null,
   init: function(serverData) {
     var self = Visualize
 
@@ -33,15 +31,9 @@ const Visualize = {
     })
 
     // prevent touch events on the canvas from default behaviour
-    $('#infovis-canvas').bind('touchmove', function(event) {
-      // JIT.touchPanZoomHandler(event)
-    })
-
-    // prevent touch events on the canvas from default behaviour
     $('#infovis-canvas').bind('touchend touchcancel', function(event) {
-      if (!self.mGraph.events.touchMoved && !Visualize.touchDragNode) TopicCard.hideCurrentCard()
+      if (!self.mGraph.events.touchMoved) TopicCard.hideCurrentCard()
       self.mGraph.events.touched = self.mGraph.events.touchMoved = false
-      Visualize.touchDragNode = false
     })
   },
   computePositions: function() {
@@ -98,8 +90,6 @@ const Visualize = {
         n.setPos(startPos, 'start')
         n.setPos(endPos, 'end')
       })
-    } else if (self.type === 'ForceDirected3D') {
-      self.mGraph.compute()
     }
   },
   /**
@@ -137,13 +127,6 @@ const Visualize = {
       FDSettings.height = $('body').height()
 
       self.mGraph = new $jit.ForceDirected(FDSettings)
-    } else if (self.type === 'ForceDirected3D' && !self.mGraph) {
-      // clear the previous canvas from #infovis
-      $('#infovis').empty()
-
-      // init ForceDirected3D
-      self.mGraph = new $jit.ForceDirected3D(JIT.ForceDirected3D.graphSettings)
-      self.cameraPosition = self.mGraph.canvas.canvases[0].camera.position
     } else {
       self.mGraph.graph.empty()
     }
@@ -168,8 +151,6 @@ const Visualize = {
           self.mGraph.fx.animate(JIT.RGraph.animate)
         } else if (self.type === 'ForceDirected') {
           self.mGraph.animate(JIT.ForceDirected.animateSavedLayout)
-        } else if (self.type === 'ForceDirected3D') {
-          self.mGraph.animate(JIT.ForceDirected.animateFDLayout)
         }
       }
     }

@@ -23,8 +23,6 @@ import TopicCard from './Views/TopicCard'
 import Util from './Util'
 import Visualize from './Visualize'
 
-let panningInt
-
 const JIT = {
   tempInit: false,
   tempNode: null,
@@ -272,14 +270,27 @@ const JIT = {
     graphSettings: {
       // id of the visualization container
       injectInto: 'infovis',
-      // Enable zooming and panning
-      // by scrolling and DnD
+      // Number of iterations for the FD algorithm
+      iterations: 200,
+      // Edge length
+      levelDistance: 200,
       Navigation: {
         enable: true,
-        // Enable panning events only if we're dragging the empty
-        // canvas (and not a node).
         panning: 'avoid nodes',
-        zooming: 28 // zoom speed. higher is more sensible
+        zooming: 28, // zoom speed. higher is more sensible
+        onZoom: function (event) {
+          $(document).trigger(Metamaps.JIT.events.zoom, [event]);
+        },
+        onPan: function () {
+          $(document).trigger(Metamaps.JIT.events.pan);
+        }
+      },
+      Selection: {
+        enable: true,
+        type: 'Native',
+        onDrawSelectBox: function (e, corner, oppositeCorner) {
+          JIT.selectWithBox(e, corner, oppositeCorner);
+        }
       },
       // Change node and edge styles such as
       // color and width.
@@ -299,81 +310,36 @@ const JIT = {
         lineWidth: 2,
         alpha: 1
       },
-      // Native canvas text styling
       Label: {
-        type: 'Native', // Native or HTML
+        type: 'Native',
         size: 20,
         family: 'arial',
         textBaseline: 'alphabetic',
         color: Settings.colors.labels.text
       },
-      // Add Tips
-      Tips: {
-        enable: false,
-        onShow: function(tip, node) {}
-      },
-      // Add node events
+      // this is events for clicking on edges and nodes in particular
       Events: {
         enable: true,
         enableForEdges: true,
         onMouseMove: function(node, eventInfo, e) {
           JIT.onMouseMoveHandler(node, eventInfo, e)
-        // console.log('called mouse move handler')
         },
-        // Update node positions when dragged
         onDragMove: function(node, eventInfo, e) {
           JIT.onDragMoveTopicHandler(node, eventInfo, e)
-        // console.log('called drag move handler')
         },
         onDragEnd: function(node, eventInfo, e) {
           JIT.onDragEndTopicHandler(node, eventInfo, e, false)
-        // console.log('called drag end handler')
         },
         onDragCancel: function(node, eventInfo, e) {
           JIT.onDragCancelHandler(node, eventInfo, e, false)
         },
-        // Implement the same handler for touchscreens
-        onTouchStart: function(node, eventInfo, e) {},
-        // Implement the same handler for touchscreens
         onTouchMove: function(node, eventInfo, e) {
           JIT.onDragMoveTopicHandler(node, eventInfo, e)
         },
-        // Implement the same handler for touchscreens
-        onTouchEnd: function(node, eventInfo, e) {},
-        // Implement the same handler for touchscreens
-        onTouchCancel: function(node, eventInfo, e) {},
-        // Add also a click handler to nodes
         onClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
           ContextMenu.reset(ReactApp.render)
-
-          if (Mouse.boxStartCoordinates) {
-            if (e.ctrlKey) {
-              Visualize.mGraph.busy = false
-              Mouse.boxEndCoordinates = eventInfo.getPos()
-
-              const bS = Mouse.boxStartCoordinates
-              const bE = Mouse.boxEndCoordinates
-              if (Math.abs(bS.x - bE.x) > 20 && Math.abs(bS.y - bE.y) > 20) {
-                JIT.zoomToBox(e)
-                return
-              } else {
-                Mouse.boxStartCoordinates = null
-                Mouse.boxEndCoordinates = null
-              }
-            }
-
-            if (e.shiftKey) {
-              Visualize.mGraph.busy = false
-              Mouse.boxEndCoordinates = eventInfo.getPos()
-              JIT.selectWithBox(e)
-
-              return
-            }
-          }
-
           if (e.target.id !== 'infovis-canvas') return false
-
           // clicking on a edge, node, or clicking on blank part of canvas?
           if (node.nodeFrom) {
             JIT.selectEdgeOnClickHandler(node, e)
@@ -387,34 +353,15 @@ const JIT = {
         onRightClick: function(node, eventInfo, e) {
           // remove the rightclickmenu
           ContextMenu.reset(ReactApp.render)
-
-          if (Mouse.boxStartCoordinates) {
-            Create.newSynapse.hide()
-            Create.newTopic.hide()
-            Visualize.mGraph.busy = false
-            Mouse.boxEndCoordinates = eventInfo.getPos()
-            JIT.selectWithBox(e)
-            return
-          }
-
           if (e.target.id !== 'infovis-canvas') return false
-
           // clicking on a edge, node, or clicking on blank part of canvas?
           if (node.nodeFrom) {
             JIT.selectEdgeOnRightClickHandler(node, e)
           } else if (node && !node.nodeFrom) {
             JIT.selectNodeOnRightClickHandler(node, e)
-          } else {
-            // right click open space
-            Create.newSynapse.hide()
-            Create.newTopic.hide()
           }
         }
-      },
-      // Number of iterations for the FD algorithm
-      iterations: 200,
-      // Edge length
-      levelDistance: 200
+      }
     },
     nodeSettings: {
       'customNode': {
@@ -509,97 +456,7 @@ const JIT = {
         }
       }
     }
-  }, // ForceDirected
-  ForceDirected3D: {
-    animate: {
-      modes: ['linear'],
-      // TODO fix tests so we don't need _.get
-      transition: _.get($jit, 'Trans.Elastic.easeOut'),
-      duration: 2500,
-      onComplete: function() {
-        Visualize.mGraph.busy = false
-      }
-    },
-    graphSettings: {
-      // id of the visualization container
-      injectInto: 'infovis',
-      type: '3D',
-      Scene: {
-        Lighting: {
-          enable: false,
-          ambient: [0.5, 0.5, 0.5],
-          directional: {
-            direction: {
-              x: 1,
-              y: 0,
-              z: -1
-            },
-            color: [0.9, 0.9, 0.9]
-          }
-        }
-      },
-      // Enable zooming and panning
-      // by scrolling and DnD
-      Navigation: {
-        enable: false,
-        // Enable panning events only if we're dragging the empty
-        // canvas (and not a node).
-        panning: 'avoid nodes',
-        zooming: 10 // zoom speed. higher is more sensible
-      },
-      // Change node and edge styles such as
-      // color and width.
-      // These properties are also set per node
-      // with dollar prefixed data-properties in the
-      // JSON structure.
-      Node: {
-        overridable: true,
-        type: 'sphere',
-        dim: 15,
-        color: '#ffffff'
-      },
-      Edge: {
-        overridable: false,
-        type: 'tube',
-        color: '#111',
-        lineWidth: 3
-      },
-      // Native canvas text styling
-      Label: {
-        type: 'HTML', // Native or HTML
-        size: 10,
-        style: 'bold'
-      },
-      // Add node events
-      Events: {
-        enable: true,
-        type: 'Native',
-        i: 0,
-        onMouseMove: function(node, eventInfo, e) {
-          // if(this.i++ % 3) return
-          const pos = eventInfo.getPos()
-          Visualize.cameraPosition.x += (pos.x - Visualize.cameraPosition.x) * 0.5
-          Visualize.cameraPosition.y += (-pos.y - Visualize.cameraPosition.y) * 0.5
-          Visualize.mGraph.plot()
-        },
-        onMouseWheel: function(delta) {
-          Visualize.cameraPosition.z += -delta * 20
-          Visualize.mGraph.plot()
-        },
-        onClick: function() {}
-      },
-      // Number of iterations for the FD algorithm
-      iterations: 200,
-      // Edge length
-      levelDistance: 100
-    },
-    nodeSettings: {
-
-    },
-    edgeSettings: {
-
-    }
-  }, // ForceDirected3D
+  },
   RGraph: {
     animate: {
       modes: ['polar'],
@@ -1103,12 +960,12 @@ const JIT = {
       return {}
     }
   },
-  selectWithBox: function(e) {
+  selectWithBox: function(e, corner, oppositeCorner) {
     const self = this
-    let sX = Mouse.boxStartCoordinates.x
-    let sY = Mouse.boxStartCoordinates.y
-    let eX = Mouse.boxEndCoordinates.x
-    let eY = Mouse.boxEndCoordinates.y
+    let sX = corner.x
+    let sY = corner.y
+    let eX = oppositeCorner.x
+    let eY = oppositeCorner.y
 
     if (!e.shiftKey) {
       Control.deselectAllNodes()
@@ -1245,30 +1102,7 @@ const JIT = {
         }
       }
     })
-    Mouse.boxStartCoordinates = false
-    Mouse.boxEndCoordinates = false
-    Visualize.mGraph.plot()
   }, // selectWithBox
-  drawSelectBox: function(eventInfo, e) {
-    const ctx = Visualize.mGraph.canvas.getCtx()
-
-    const startX = Mouse.boxStartCoordinates.x
-    const startY = Mouse.boxStartCoordinates.y
-    const currX = eventInfo.getPos().x
-    const currY = eventInfo.getPos().y
-
-    Visualize.mGraph.canvas.clear()
-    Visualize.mGraph.plot()
-
-    ctx.beginPath()
-    ctx.moveTo(startX, startY)
-    ctx.lineTo(startX, currY)
-    ctx.lineTo(currX, currY)
-    ctx.lineTo(currX, startY)
-    ctx.lineTo(startX, startY)
-    ctx.strokeStyle = 'black'
-    ctx.stroke()
-  }, // drawSelectBox
   selectNodeOnClickHandler: function(node, e) {
     if (Visualize.mGraph.busy) return
 
@@ -1398,26 +1232,6 @@ const JIT = {
     Control.selectEdge(adj)
     ContextMenu.selectEdge(ReactApp.render, adj, {x: e.clientX, y: e.clientY})
   }, // selectEdgeOnRightClickHandler
-  SmoothPanning: function() {
-    const sx = Visualize.mGraph.canvas.scaleOffsetX
-    const sy = Visualize.mGraph.canvas.scaleOffsetY
-    const yVelocity = Mouse.changeInY // initial y velocity
-    const xVelocity = Mouse.changeInX // initial x velocity
-    let easing = 1 // frictional value
-
-    window.clearInterval(panningInt)
-    panningInt = setInterval(function() {
-      myTimer()
-    }, 1)
-
-    function myTimer() {
-      Visualize.mGraph.canvas.translate(xVelocity * easing * 1 / sx, yVelocity * easing * 1 / sy)
-      $(document).trigger(JIT.events.pan)
-      easing = easing * 0.75
-
-      if (easing < 0.1) window.clearInterval(panningInt)
-    }
-  }, // SmoothPanning
   renderMidArrow: function(from, to, dim, swap, canvas, placement, newSynapse) {
     const ctx = canvas.getCtx()
     // invert edge direction
@@ -1522,52 +1336,10 @@ const JIT = {
   },
   centerMap: function(canvas) {
     const offsetScale = canvas.scaleOffsetX
-
-    canvas.scale(1 / offsetScale, 1 / offsetScale)
-
     const offsetX = canvas.translateOffsetX
     const offsetY = canvas.translateOffsetY
-
+    canvas.scale(1 / offsetScale, 1 / offsetScale)
     canvas.translate(-1 * offsetX, -1 * offsetY)
-  },
-  zoomToBox: function(event) {
-    const sX = Mouse.boxStartCoordinates.x
-    const sY = Mouse.boxStartCoordinates.y
-    const eX = Mouse.boxEndCoordinates.x
-    const eY = Mouse.boxEndCoordinates.y
-
-    let canvas = Visualize.mGraph.canvas
-    JIT.centerMap(canvas)
-
-    let height = $(document).height()
-    let width = $(document).width()
-
-    let spanX = Math.abs(sX - eX)
-    let spanY = Math.abs(sY - eY)
-    let ratioX = width / spanX
-    let ratioY = height / spanY
-
-    let newRatio = Math.min(ratioX, ratioY)
-
-    if (canvas.scaleOffsetX * newRatio <= 5 && canvas.scaleOffsetX * newRatio >= 0.2) {
-      canvas.scale(newRatio, newRatio)
-    } else if (canvas.scaleOffsetX * newRatio > 5) {
-      newRatio = 5 / canvas.scaleOffsetX
-      canvas.scale(newRatio, newRatio)
-    } else {
-      newRatio = 0.2 / canvas.scaleOffsetX
-      canvas.scale(newRatio, newRatio)
-    }
-
-    const cogX = (sX + eX) / 2
-    const cogY = (sY + eY) / 2
-
-    canvas.translate(-1 * cogX, -1 * cogY)
-    $(document).trigger(JIT.events.zoom, [event])
-
-    Mouse.boxStartCoordinates = false
-    Mouse.boxEndCoordinates = false
-    Visualize.mGraph.plot()
   },
   zoomExtents: function(event, canvas, denySelected) {
     JIT.centerMap(canvas)

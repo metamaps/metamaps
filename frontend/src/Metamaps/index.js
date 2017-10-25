@@ -13,6 +13,7 @@ import GlobalUI, {
 } from './GlobalUI'
 import Import from './Import'
 import JIT from './JIT'
+import JitExtended from './JitExtended'
 import Listeners from './Listeners'
 import Loading from './Loading'
 import Map, { CheatSheet, InfoBox } from './Map'
@@ -49,6 +50,7 @@ Metamaps.GlobalUI.CreateMap = CreateMap
 Metamaps.GlobalUI.ImportDialog = ImportDialog
 Metamaps.Import = Import
 Metamaps.JIT = JIT
+Metamaps.JitExtended = JitExtended
 Metamaps.Listeners = Listeners
 Metamaps.Loading = Loading
 Metamaps.Map = Map

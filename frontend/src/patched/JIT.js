@@ -28,9 +28,9 @@ THE SOFTWARE.
 
 /*
  Object: $jit
- 
- Defines the namespace for all library Classes and Objects. 
- This variable is the *only* global variable defined in the Toolkit. 
+
+ Defines the namespace for all library Classes and Objects.
+ This variable is the *only* global variable defined in the Toolkit.
  There are also other interesting properties attached to this variable described below.
  */
 // START METAMAPS CODE
@@ -49,9 +49,9 @@ const $jit = function(w) {
 $jit.version = '2.0.1';
 /*
   Object: $jit.id
-  
+
   Works just like *document.getElementById*
-  
+
   Example:
   (start code js)
   var element = $jit.id('elementId');
@@ -61,17 +61,17 @@ $jit.version = '2.0.1';
 
 /*
  Object: $jit.util
- 
+
  Contains utility functions.
- 
- Some of the utility functions and the Class system were based in the MooTools Framework 
- <http://mootools.net>. Copyright (c) 2006-2010 Valerio Proietti, <http://mad4milk.net/>. 
+
+ Some of the utility functions and the Class system were based in the MooTools Framework
+ <http://mootools.net>. Copyright (c) 2006-2010 Valerio Proietti, <http://mad4milk.net/>.
  MIT license <http://mootools.net/license.txt>.
- 
+
  These methods are generally also implemented in DOM manipulation frameworks like JQuery, MooTools and Prototype.
- I'd suggest you to use the functions from those libraries instead of using these, since their functions 
+ I'd suggest you to use the functions from those libraries instead of using these, since their functions
  are widely used and tested in many different platforms/browsers. Use these functions only if you have to.
- 
+
  */
 var $ = function(d) {
   return document.getElementById(d);
@@ -80,16 +80,22 @@ var $ = function(d) {
 $.empty = function() {
 };
 
+// START METAMAPS CODE
+$.getDistance = function(p1, p2) {
+  return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2))
+}
+// END METAMAPS CODE
+
 /*
   Method: extend
-  
+
   Augment an object by appending another object's properties.
-  
+
   Parameters:
-  
+
   original - (object) The object to be extended.
   extended - (object) An object which properties are going to be appended to the original object.
-  
+
   Example:
   (start code js)
   $jit.util.extend({ 'a': 1, 'b': 2 }, { 'b': 3, 'c': 4 }); //{ 'a':1, 'b': 3, 'c': 4 }
@@ -113,13 +119,13 @@ $.time = Date.now || function() {
 
 /*
   Method: splat
-  
+
   Returns an array wrapping *obj* if *obj* is not an array. Returns *obj* otherwise.
-  
+
   Parameters:
-  
+
   obj - (mixed) The object to be wrapped in an array.
-  
+
   Example:
   (start code js)
   $jit.util.splat(3);   //[3]
@@ -141,14 +147,14 @@ $.type.s = Object.prototype.toString;
 
 /*
   Method: each
-  
+
   Iterates through an iterable applying *f*.
-  
+
   Parameters:
-  
+
   iterable - (array) The original array.
   fn - (function) The function to apply to the array elements.
-  
+
   Example:
   (start code js)
   $jit.util.each([3, 4, 5], function(n) { alert('number ' + n); });
@@ -175,14 +181,14 @@ $.indexOf = function(array, item) {
 
 /*
   Method: map
-  
+
   Maps or collects an array by applying *f*.
-  
+
   Parameters:
-  
+
   array - (array) The original array.
   f - (function) The function to apply to the array elements.
-  
+
   Example:
   (start code js)
   $jit.util.map([3, 4, 5], function(n) { return n*n; }); //[9, 16, 25]
@@ -198,15 +204,15 @@ $.map = function(array, f) {
 
 /*
   Method: reduce
-  
+
   Iteratively applies the binary function *f* storing the result in an accumulator.
-  
+
   Parameters:
-  
+
   array - (array) The original array.
   f - (function) The function to apply to the array elements.
   opt - (optional|mixed) The starting value for the acumulator.
-  
+
   Example:
   (start code js)
   $jit.util.reduce([3, 4, 5], function(x, y) { return x + y; }, 0); //12
@@ -224,13 +230,13 @@ $.reduce = function(array, f, opt) {
 
 /*
   Method: merge
-  
+
   Merges n-objects and their sub-objects creating a new, fresh object.
-  
+
   Parameters:
-  
+
   An arbitrary number of objects.
-  
+
   Example:
   (start code js)
   $jit.util.merge({ 'a': 1, 'b': 2 }, { 'b': 3, 'c': 4 }); //{ 'a':1, 'b': 3, 'c': 4 }
@@ -283,13 +289,13 @@ $.zip = function() {
 
 /*
   Method: rgbToHex
-  
+
   Converts an RGB array into a Hex string.
-  
+
   Parameters:
-  
+
   srcArray - (array) An array with R, G and B values
-  
+
   Example:
   (start code js)
   $jit.util.rgbToHex([255, 255, 255]); //'#ffffff'
@@ -310,13 +316,13 @@ $.rgbToHex = function(srcArray, array) {
 
 /*
   Method: hexToRgb
-  
+
   Converts an Hex color string into an RGB array.
-  
+
   Parameters:
-  
+
   hex - (string) A color hex string.
-  
+
   Example:
   (start code js)
   $jit.util.hexToRgb('#fff'); //[255, 255, 255]
@@ -358,15 +364,15 @@ $.clean = function(elem) {
 
 /*
   Method: addEvent
-  
+
   Cross-browser add event listener.
-  
+
   Parameters:
-  
+
   obj - (obj) The Element to attach the listener to.
   type - (string) The listener type. For example 'click', or 'mousemove'.
   fn - (function) The callback function to be used when the event is fired.
-  
+
   Example:
   (start code js)
   $jit.util.addEvent(elem, 'click', function(){ alert('hello'); });
@@ -571,19 +577,19 @@ $jit.Class = Class;
 
 /*
   Object: $jit.json
-  
+
   Provides JSON utility functions.
-  
+
   Most of these functions are JSON-tree traversal and manipulation functions.
 */
 $jit.json = {
   /*
      Method: prune
-  
+
      Clears all tree nodes having depth greater than maxLevel.
-  
+
      Parameters:
-  
+
         tree - (object) A JSON tree object. For more information please see <Loader.loadJSON>.
         maxLevel - (number) An integer specifying the maximum level allowed for this tree. All nodes having depth greater than max level will be deleted.
 
@@ -598,18 +604,18 @@ $jit.json = {
   },
   /*
      Method: getParent
-  
+
      Returns the parent node of the node having _id_ as id.
-  
+
      Parameters:
-  
+
         tree - (object) A JSON tree object. See also <Loader.loadJSON>.
         id - (string) The _id_ of the child node whose parent will be returned.
 
     Returns:
 
         A tree JSON node if any, or false otherwise.
-  
+
   */
   getParent: function(tree, id) {
     if (tree.id == id)
@@ -630,16 +636,16 @@ $jit.json = {
   },
   /*
      Method: getSubtree
-  
+
      Returns the subtree that matches the given id.
-  
+
      Parameters:
-  
+
         tree - (object) A JSON tree object. See also <Loader.loadJSON>.
         id - (string) A node *unique* identifier.
-  
+
      Returns:
-  
+
         A subtree having a root node matching the given id. Returns null if no subtree matching the id is found.
 
   */
@@ -655,16 +661,16 @@ $jit.json = {
   },
   /*
      Method: eachLevel
-  
+
       Iterates on tree nodes with relative depth less or equal than a specified level.
-  
+
      Parameters:
-  
+
         tree - (object) A JSON tree or subtree. See also <Loader.loadJSON>.
         initLevel - (number) An integer specifying the initial relative level. Usually zero.
         toLevel - (number) An integer specifying a top level. This method will iterate only through nodes with depth less than or equal this number.
         action - (function) A function that receives a node and an integer specifying the actual level of the node.
-          
+
     Example:
    (start code js)
      $jit.json.eachLevel(tree, 0, 3, function(node, depth) {
@@ -683,11 +689,11 @@ $jit.json = {
   },
   /*
      Method: each
-  
+
       A JSON tree iterator.
-  
+
      Parameters:
-  
+
         tree - (object) A JSON tree or subtree. See also <Loader.loadJSON>.
         action - (function) A function that receives a node.
 
@@ -697,7 +703,7 @@ $jit.json = {
         alert(node.name);
       });
     (end code)
-          
+
   */
   each: function(tree, action) {
     this.eachLevel(tree, 0, Number.MAX_VALUE, action);
@@ -706,12 +712,12 @@ $jit.json = {
 
 
 /*
-     An object containing multiple type of transformations. 
+     An object containing multiple type of transformations.
 */
 
 $jit.Trans = {
   $extend: true,
-  
+
   linear: function(p){
     return p;
   }
@@ -802,9 +808,9 @@ var Trans = $jit.Trans;
    Used by:
 
    <Graph.Plot>
-   
+
    Based on:
-   
+
    The Animation class is based in the MooTools Framework <http://mootools.net>. Copyright (c) 2006-2009 Valerio Proietti, <http://mad4milk.net/>. MIT license <http://mootools.net/license.txt>.
 
 */
@@ -896,7 +902,7 @@ var Options = function() {
     if(opt.$extend) {
       $.extend(ans, opt);
     } else {
-      ans[args[i]] = opt;  
+      ans[args[i]] = opt;
     }
   }
   return ans;
@@ -909,27 +915,27 @@ var Options = function() {
 
 /*
   Object: Options.Canvas
-  
-  These are Canvas general options, like where to append it in the DOM, its dimensions, background, 
+
+  These are Canvas general options, like where to append it in the DOM, its dimensions, background,
   and other more advanced options.
-  
+
   Syntax:
-  
+
   (start code js)
 
   Options.Canvas = {
     injectInto: 'id',
-    type: '2D', //'3D'
+    type: '2D',
     width: false,
     height: false,
     useCanvas: false,
     withLabels: true,
     background: false
-  };  
+  };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     injectInto: 'someContainerId',
@@ -937,9 +943,9 @@ var Options = function() {
     height: 700
   });
   (end code)
-  
+
   Parameters:
-  
+
   injectInto - *required* (string|element) The id of the DOM container for the visualization. It can also be an Element provided that it has an id.
   type - (string) Context type. Default's 2D but can be 3D for webGL enabled browsers.
   width - (number) Default's to the *container's offsetWidth*. The width of the canvas.
@@ -951,25 +957,14 @@ var Options = function() {
 
 Options.Canvas = {
     $extend: true,
-    
+
     injectInto: 'id',
     type: '2D',
     width: false,
     height: false,
     useCanvas: false,
     withLabels: true,
-    background: false,
-    
-    Scene: {
-      Lighting: {
-        enable: false,
-        ambient: [1, 1, 1],
-        directional: {
-          direction: { x: -100, y: -100, z: -100 },
-          color: [0.5, 0.3, 0.1]
-        }
-      }
-    }
+    background: false
 };
 
 /*
@@ -983,7 +978,7 @@ Options.Canvas = {
   Provides Node rendering options for Tree and Graph based visualizations.
 
   Syntax:
-    
+
   (start code js)
   Options.Node = {
     overridable: false,
@@ -1003,9 +998,9 @@ Options.Canvas = {
     CanvasStyles: {}
   };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     Node: {
@@ -1016,7 +1011,7 @@ Options.Canvas = {
     }
   });
   (end code)
-  
+
   Parameters:
 
   overridable - (boolean) Default's *false*. Determine whether or not general node properties can be overridden by a particular <Graph.Node>.
@@ -1038,7 +1033,7 @@ Options.Canvas = {
 */
 Options.Node = {
   $extend: false,
-  
+
   overridable: false,
   type: 'circle',
   color: '#ccb',
@@ -1071,7 +1066,7 @@ Options.Node = {
   Provides Edge rendering options for Tree and Graph based visualizations.
 
   Syntax:
-    
+
   (start code js)
   Options.Edge = {
     overridable: false,
@@ -1083,9 +1078,9 @@ Options.Node = {
     CanvasStyles: {}
   };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     Edge: {
@@ -1099,9 +1094,9 @@ Options.Node = {
     }
   });
   (end code)
-  
+
   Parameters:
-    
+
    overridable - (boolean) Default's *false*. Determine whether or not general edges properties can be overridden by a particular <Graph.Adjacence>.
    type - (string) Default's 'line'. Edge styles include 'line', 'hyperline', 'arrow'. The default Edge type might vary in each visualization. You can also implement custom Edge types.
    color - (string) Default's '#ccb'. Edge color.
@@ -1112,12 +1107,12 @@ Options.Node = {
    CanvasStyles - (object) Default's an empty object (i.e. {}). Attach any other canvas specific property that you'd set to the canvas context before plotting an Edge.
 
   See also:
-   
+
    If you want to know more about how to customize Node/Edge data per element, in the JSON or programmatically, take a look at this article.
 */
 Options.Edge = {
   $extend: false,
-  
+
   overridable: false,
   type: 'line',
   color: '#ccb',
@@ -1141,10 +1136,10 @@ Options.Edge = {
 /*
   Object: Options.Fx
 
-  Provides animation options like duration of the animations, frames per second and animation transitions.  
+  Provides animation options like duration of the animations, frames per second and animation transitions.
 
   Syntax:
-  
+
   (start code js)
     Options.Fx = {
       fps:40,
@@ -1153,9 +1148,9 @@ Options.Edge = {
       clearCanvas: true
     };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     duration: 1000,
@@ -1163,16 +1158,16 @@ Options.Edge = {
     transition: $jit.Trans.linear
   });
   (end code)
-  
+
   Parameters:
-  
+
   clearCanvas - (boolean) Default's *true*. Whether to clear the frame/canvas when the viz is plotted or animated.
   duration - (number) Default's *2500*. Duration of the animation in milliseconds.
   fps - (number) Default's *40*. Frames per second.
   transition - (object) Default's *$jit.Trans.Quart.easeInOut*. The transition used for the animations. See below for a more detailed explanation.
-  
+
   Object: $jit.Trans
-  
+
   This object is used for specifying different animation transitions in all visualizations.
 
   There are many different type of animation transitions.
@@ -1182,7 +1177,7 @@ Options.Edge = {
   Displays a linear transition
 
   >Trans.linear
-  
+
   (see Linear.png)
 
   Quad:
@@ -1192,7 +1187,7 @@ Options.Edge = {
   >Trans.Quad.easeIn
   >Trans.Quad.easeOut
   >Trans.Quad.easeInOut
-  
+
  (see Quad.png)
 
  Cubic:
@@ -1282,16 +1277,16 @@ Options.Edge = {
  >Trans.Elastic.easeInOut
 
  (see Elastic.png)
- 
+
  Based on:
-     
+
  Easing and Transition animation methods are based in the MooTools Framework <http://mootools.net>. Copyright (c) 2006-2010 Valerio Proietti, <http://mad4milk.net/>. MIT license <http://mootools.net/license.txt>.
 
 
 */
 Options.Fx = {
   $extend: true,
-  
+
   fps:40,
   duration: 2500,
   transition: $jit.Trans.Quart.easeInOut,
@@ -1305,10 +1300,10 @@ Options.Fx = {
 /*
   Object: Options.Label
 
-  Provides styling for Labels such as font size, family, etc. Also sets Node labels as HTML, SVG or Native canvas elements.  
+  Provides styling for Labels such as font size, family, etc. Also sets Node labels as HTML, SVG or Native canvas elements.
 
   Syntax:
-  
+
   (start code js)
     Options.Label = {
       overridable: false,
@@ -1321,9 +1316,9 @@ Options.Fx = {
       color: '#fff'
     };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     Label: {
@@ -1333,9 +1328,9 @@ Options.Fx = {
     }
   });
   (end code)
-  
+
   Parameters:
-    
+
   overridable - (boolean) Default's *false*. Determine whether or not general label properties can be overridden by a particular <Graph.Node>.
   type - (string) Default's *HTML*. The type for the labels. Can be 'HTML', 'SVG' or 'Native' canvas labels.
   style - (string) Default's *empty string*. Can be 'italic' or 'bold'. This parameter is only taken into account when using 'Native' canvas labels. For DOM based labels the className *node* is added to the DOM element for styling via CSS. You can also use <Options.Controller> methods to style individual labels.
@@ -1345,7 +1340,7 @@ Options.Fx = {
 */
 Options.Label = {
   $extend: false,
-  
+
   overridable: false,
   type: 'HTML', //'SVG', 'Native'
   style: ' ',
@@ -1364,11 +1359,11 @@ Options.Label = {
 
 /*
   Object: Options.Tips
-  
+
   Tips options
-  
+
   Syntax:
-    
+
   (start code js)
   Options.Tips = {
     enable: false,
@@ -1379,9 +1374,9 @@ Options.Label = {
     onHide: $.empty
   };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     Tips: {
@@ -1398,7 +1393,7 @@ Options.Label = {
 
   Parameters:
 
-  enable - (boolean) Default's *false*. If *true*, a tooltip will be shown when a node is hovered. The tooltip is a div DOM element having "tip" as CSS class. 
+  enable - (boolean) Default's *false*. If *true*, a tooltip will be shown when a node is hovered. The tooltip is a div DOM element having "tip" as CSS class.
   type - (string) Default's *auto*. Defines where to attach the MouseEnter/Leave tooltip events. Possible values are 'Native' to attach them to the canvas or 'HTML' to attach them to DOM label elements (if defined). 'auto' sets this property to the value of <Options.Label>'s *type* property.
   offsetX - (number) Default's *20*. An offset added to the current tooltip x-position (which is the same as the current mouse position). Default's 20.
   offsetY - (number) Default's *20*. An offset added to the current tooltip y-position (which is the same as the current mouse position). Default's 20.
@@ -1408,7 +1403,7 @@ Options.Label = {
 */
 Options.Tips = {
   $extend: false,
-  
+
   enable: false,
   type: 'auto',
   offsetX: 20,
@@ -1426,11 +1421,11 @@ Options.Tips = {
 
 /*
   Object: Options.NodeStyles
-  
+
   Apply different styles when a node is hovered or selected.
-  
+
   Syntax:
-    
+
   (start code js)
   Options.NodeStyles = {
     enable: false,
@@ -1439,9 +1434,9 @@ Options.Tips = {
     stylesClick: false
   };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     NodeStyles: {
@@ -1457,7 +1452,7 @@ Options.Tips = {
   (end code)
 
   Parameters:
-  
+
   enable - (boolean) Default's *false*. Whether to enable this option.
   type - (string) Default's *auto*. Use this to attach the hover/click events in the nodes or the nodes labels (if they have been defined as DOM elements: 'HTML' or 'SVG', see <Options.Label> for more details). The default 'auto' value will set NodeStyles to the same type defined for <Options.Label>.
   stylesHover - (boolean|object) Default's *false*. An object with node styles just like the ones defined for <Options.Node> or *false* otherwise.
@@ -1466,7 +1461,7 @@ Options.Tips = {
 
 Options.NodeStyles = {
   $extend: false,
-  
+
   enable: false,
   type: 'auto',
   stylesHover: false,
@@ -1481,11 +1476,11 @@ Options.NodeStyles = {
 
 /*
   Object: Options.Events
-  
+
   Configuration for adding mouse/touch event handlers to Nodes.
-  
+
   Syntax:
-  
+
   (start code js)
   Options.Events = {
     enable: false,
@@ -1507,9 +1502,9 @@ Options.NodeStyles = {
     onMouseWheel: $.empty
   };
   (end code)
-  
+
   Example:
-  
+
   (start code js)
   var viz = new $jit.Viz({
     Events: {
@@ -1526,31 +1521,31 @@ Options.NodeStyles = {
     }
   });
   (end code)
-  
+
   Parameters:
-  
+
   enable - (boolean) Default's *false*. Whether to enable the Event system.
   enableForEdges - (boolean) Default's *false*. Whether to track events also in arcs. If *true* the same callbacks -described below- are used for nodes *and* edges. A simple duck type check for edges is to check for *node.nodeFrom*.
   type - (string) Default's 'auto'. Whether to attach the events onto the HTML labels (via event delegation) or to use the custom 'Native' canvas Event System of the library. 'auto' is set when you let the <Options.Label> *type* parameter decide this.
-  onClick(node, eventInfo, e) - Triggered when a user performs a click in the canvas. *node* is the <Graph.Node> clicked or false if no node has been clicked. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
-  onRightClick(node, eventInfo, e) - Triggered when a user performs a right click in the canvas. *node* is the <Graph.Node> right clicked or false if no node has been clicked. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
+  onClick(node, eventInfo, e) - Triggered when a user performs a click in the canvas. *node* is the <Graph.Node> clicked or false if no node has been clicked. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
+  onRightClick(node, eventInfo, e) - Triggered when a user performs a right click in the canvas. *node* is the <Graph.Node> right clicked or false if no node has been clicked. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
   onMouseMove(node, eventInfo, e) - Triggered when the user moves the mouse. *node* is the <Graph.Node> under the cursor as it's moving over the canvas or false if no node has been clicked. *e* is the grabbed event (should return the native event in a cross-browser manner).  *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
-  onMouseEnter(node, eventInfo, e) - Triggered when a user moves the mouse over a node. *node* is the <Graph.Node> that the mouse just entered. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
-  onMouseLeave(node, eventInfo, e) - Triggered when the user mouse-outs a node. *node* is the <Graph.Node> 'mouse-outed'. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
-  onDragStart(node, eventInfo, e) - Triggered when the user mouse-downs over a node. *node* is the <Graph.Node> being pressed. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
-  onDragMove(node, eventInfo, e) - Triggered when a user, after pressing the mouse button over a node, moves the mouse around. *node* is the <Graph.Node> being dragged. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
-  onDragEnd(node, eventInfo, e) - Triggered when a user finished dragging a node. *node* is the <Graph.Node> being dragged. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
-  onDragCancel(node, eventInfo, e) - Triggered when the user releases the mouse button over a <Graph.Node> that wasn't dragged (i.e. the user didn't perform any mouse movement after pressing the mouse button). *node* is the <Graph.Node> being dragged. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas. 
-  onTouchStart(node, eventInfo, e) - Behaves just like onDragStart. 
-  onTouchMove(node, eventInfo, e) - Behaves just like onDragMove. 
-  onTouchEnd(node, eventInfo, e) - Behaves just like onDragEnd. 
+  onMouseEnter(node, eventInfo, e) - Triggered when a user moves the mouse over a node. *node* is the <Graph.Node> that the mouse just entered. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
+  onMouseLeave(node, eventInfo, e) - Triggered when the user mouse-outs a node. *node* is the <Graph.Node> 'mouse-outed'. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
+  onDragStart(node, eventInfo, e) - Triggered when the user mouse-downs over a node. *node* is the <Graph.Node> being pressed. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
+  onDragMove(node, eventInfo, e) - Triggered when a user, after pressing the mouse button over a node, moves the mouse around. *node* is the <Graph.Node> being dragged. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
+  onDragEnd(node, eventInfo, e) - Triggered when a user finished dragging a node. *node* is the <Graph.Node> being dragged. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
+  onDragCancel(node, eventInfo, e) - Triggered when the user releases the mouse button over a <Graph.Node> that wasn't dragged (i.e. the user didn't perform any mouse movement after pressing the mouse button). *node* is the <Graph.Node> being dragged. *e* is the grabbed event (should return the native event in a cross-browser manner). *eventInfo* is an object containing useful methods like *getPos* to get the mouse position relative to the canvas.
+  onTouchStart(node, eventInfo, e) - Behaves just like onDragStart.
+  onTouchMove(node, eventInfo, e) - Behaves just like onDragMove.
+  onTouchEnd(node, eventInfo, e) - Behaves just like onDragEnd.
   onTouchCancel(node, eventInfo, e) - Behaves just like onDragCancel.
   onMouseWheel(delta, e) - Triggered when the user uses the mouse scroll over the canvas. *delta* is 1 or -1 depending on the sense of the mouse scroll.
 */
 
 Options.Events = {
   $extend: false,
-  
+
   enable: false,
   enableForEdges: false,
   type: 'auto',
@@ -1576,12 +1571,12 @@ Options.Events = {
 
 /*
   Object: Options.Navigation
-  
-  Panning and zooming options for Graph/Tree based visualizations. These options are implemented 
+
+  Panning and zooming options for Graph/Tree based visualizations. These options are implemented
   by all visualizations except charts (<AreaChart>, <BarChart> and <PieChart>).
-  
+
   Syntax:
-  
+
   (start code js)
 
   Options.Navigation = {
@@ -1590,11 +1585,11 @@ Options.Events = {
     panning: false, //true, 'avoid nodes'
     zooming: false
   };
-  
+
   (end code)
-  
+
   Example:
-    
+
   (start code js)
   var viz = new $jit.Viz({
     Navigation: {
@@ -1604,24 +1599,85 @@ Options.Events = {
     }
   });
   (end code)
-  
+
   Parameters:
-  
+
   enable - (boolean) Default's *false*. Whether to enable Navigation capabilities.
   type - (string) Default's 'auto'. Whether to attach the navigation events onto the HTML labels (via event delegation) or to use the custom 'Native' canvas Event System of the library. When 'auto' set when you let the <Options.Label> *type* parameter decide this.
   panning - (boolean|string) Default's *false*. Set this property to *true* if you want to add Drag and Drop panning support to the visualization. You can also set this parameter to 'avoid nodes' to enable DnD panning but disable it if the DnD is taking place over a node. This is useful when some other events like Drag & Drop for nodes are added to <Graph.Nodes>.
   zooming - (boolean|number) Default's *false*. Set this property to a numeric value to turn mouse-scroll zooming on. The number will be proportional to the mouse-scroll sensitivity.
-  
+  // START METAMAPS CODE
+  onZoom(e) - triggered when zoom occurs
+  onPan() - triggered when panning occurs
+  // END METAMAPS CODE
 */
 
 Options.Navigation = {
   $extend: false,
-  
+
   enable: false,
   type: 'auto',
   panning: false, //true | 'avoid nodes'
-  zooming: false
+  zooming: false,
+  // START METAMAPS CODE
+  onZoom: $.empty,
+  onPan: $.empty
+  // END METAMAPS CODE
 };
+
+// START METAMAPS CODE
+/*
+ * File: Options.Selection.js
+ *
+*/
+
+/*
+  Object: Options.Selection
+
+  The ability to select nodes and edges
+
+  Syntax:
+
+  (start code js)
+
+  Options.Selection = {
+    enable: false,
+    type: 'Native',
+    onDrawSelectBox: function (e, corner, oppositeCorner) {
+
+    }
+  };
+
+  (end code)
+
+  Example:
+
+  (start code js)
+  var viz = new $jit.Viz({
+    Selection: {
+      enable: true,
+      type: 'Native',
+      onDrawSelectBox: function (e, corner, oppositeCorner) {
+
+      }
+    }
+  });
+  (end code)
+
+  Parameters:
+
+  enable - (boolean) Default's *false*. Whether to enable Selection capabilities.
+  type - (string) Default's *'Native'*. Just because (it doesn't work without)
+  onDrawSelectBox(e, corner, oppositeCorner) - *e* is the event, *corner* and *oppositeCorner* are objects with x and y number properties.
+*/
+Options.Selection = {
+  $extend: false,
+
+  enable: false,
+  type: 'Native',
+  onDrawSelectBox: $.empty
+};
+// END METAMAPS CODE
 
 /*
  * File: Options.Controller.js
@@ -1630,16 +1686,16 @@ Options.Navigation = {
 
 /*
   Object: Options.Controller
-  
-  Provides controller methods. Controller methods are callback functions that get called at different stages 
+
+  Provides controller methods. Controller methods are callback functions that get called at different stages
   of the animation, computing or plotting of the visualization.
-  
+
   Implemented by:
-    
+
   All visualizations except charts (<AreaChart>, <BarChart> and <PieChart>).
-  
+
   Syntax:
-  
+
   (start code js)
 
   Options.Controller = {
@@ -1654,11 +1710,11 @@ Options.Navigation = {
     onAfterPlotNode: $.empty,
     request:         false
   };
-  
+
   (end code)
-  
+
   Example:
-    
+
   (start code js)
   var viz = new $jit.Viz({
     onBeforePlotNode: function(node) {
@@ -1680,7 +1736,7 @@ Options.Navigation = {
     }
   });
   (end code)
-  
+
   Parameters:
 
    onBeforeCompute(node) - This method is called right before performing all computations and animations. The selected <Graph.Node> is passed as parameter.
@@ -1693,13 +1749,13 @@ Options.Navigation = {
    onAfterPlotLine(adj) - This method is triggered right after plotting a <Graph.Adjacence>.
 
     *Used in <ST>, <TM.Base> and <Icicle> visualizations*
-    
-    request(nodeId, level, onComplete) - This method is used for buffering information into the visualization. When clicking on an empty node, the visualization will make a request for this node's subtrees, specifying a given level for this subtree (defined by _levelsToShow_). Once the request is completed, the onComplete callback should be called with the given result. This is useful to provide on-demand information into the visualizations withought having to load the entire information from start. The parameters used by this method are _nodeId_, which is the id of the root of the subtree to request, _level_ which is the depth of the subtree to be requested (0 would mean just the root node). _onComplete_ is an object having the callback method _onComplete.onComplete(json)_ that should be called once the json has been retrieved.  
- 
+
+    request(nodeId, level, onComplete) - This method is used for buffering information into the visualization. When clicking on an empty node, the visualization will make a request for this node's subtrees, specifying a given level for this subtree (defined by _levelsToShow_). Once the request is completed, the onComplete callback should be called with the given result. This is useful to provide on-demand information into the visualizations withought having to load the entire information from start. The parameters used by this method are _nodeId_, which is the id of the root of the subtree to request, _level_ which is the depth of the subtree to be requested (0 would mean just the root node). _onComplete_ is an object having the callback method _onComplete.onComplete(json)_ that should be called once the json has been retrieved.
+
  */
 Options.Controller = {
   $extend: true,
-  
+
   onBeforeCompute: $.empty,
   onAfterCompute:  $.empty,
   onCreateLabel:   $.empty,
@@ -1715,23 +1771,23 @@ Options.Controller = {
 
 /*
  * File: Extras.js
- * 
+ *
  * Provides Extras such as Tips and Style Effects.
- * 
+ *
  * Description:
- * 
+ *
  * Provides the <Tips> and <NodeStyles> classes and functions.
  *
  */
 
 /*
  * Manager for mouse events (clicking and mouse moving).
- * 
+ *
  * This class is used for registering objects implementing onClick
  * and onMousemove methods. These methods are called when clicking or
  * moving the mouse around  the Canvas.
  * For now, <Tips> and <NodeStyles> are classes implementing these methods.
- * 
+ *
  */
 var ExtrasInitializer = {
   initialize: function(className, viz) {
@@ -1755,7 +1811,7 @@ var ExtrasInitializer = {
         target = e.target || e.srcElement,
         related = e.relatedTarget;
     if(group) {
-      return related && related == this.viz.canvas.getCtx().canvas 
+      return related && related == this.viz.canvas.getCtx().canvas
           && !!target && this.isDescendantOf(target, labelContainer);
     } else {
       return this.isDescendantOf(target, labelContainer);
@@ -1793,21 +1849,21 @@ var MouseEventsManager = new Class({
     this.registeredObjects = [];
     this.attachEvents();
   },
-  
+
   attachEvents: function() {
-    var htmlCanvas = this.canvas.getElement(), 
+    var htmlCanvas = this.canvas.getElement(),
         that = this;
     htmlCanvas.oncontextmenu = $.lambda(false);
     $.addEvents(htmlCanvas, {
       'mouseup': function(e, win) {
         var event = $.event.get(e, win);
-        that.handleEvent('MouseUp', e, win, 
-            that.makeEventObject(e, win), 
+        that.handleEvent('MouseUp', e, win,
+            that.makeEventObject(e, win),
             $.event.isRightClick(event));
       },
       'mousedown': function(e, win) {
         var event = $.event.get(e, win);
-        that.handleEvent('MouseDown', e, win, that.makeEventObject(e, win), 
+        that.handleEvent('MouseDown', e, win, that.makeEventObject(e, win),
             $.event.isRightClick(event));
       },
       'mousemove': function(e, win) {
@@ -1842,11 +1898,11 @@ var MouseEventsManager = new Class({
       htmlCanvas.addEventListener('DOMMouseScroll', handleMouseWheel, false);
     }
   },
-  
+
   register: function(obj) {
     this.registeredObjects.push(obj);
   },
-  
+
   handleEvent: function() {
     var args = Array.prototype.slice.call(arguments),
         type = args.shift();
@@ -1854,7 +1910,7 @@ var MouseEventsManager = new Class({
       regs[i]['on' + type].apply(regs[i], args);
     }
   },
-  
+
   makeEventObject: function(e, win) {
     var that = this,
         graph = this.viz.graph,
@@ -1891,7 +1947,7 @@ var MouseEventsManager = new Class({
         for(var id in graph.nodes) {
           var n = graph.nodes[id],
               geom = n && ntypes[n.getData('type')],
-              
+
               // START METAMAPS CODE
               contains = n.getData('alpha') !== 0 && geom && geom.contains && geom.contains.call(fx, n, this.getPos());
               // END METAMAPS CODE
@@ -1937,15 +1993,18 @@ var MouseEventsManager = new Class({
   }
 });
 
-/* 
- * Provides the initialization function for <NodeStyles> and <Tips> implemented 
+/*
+ * Provides the initialization function for <NodeStyles> and <Tips> implemented
  * by all main visualizations.
  *
  */
 var Extras = {
   initializeExtras: function() {
     var mem = new MouseEventsManager(this), that = this;
-    $.each(['NodeStyles', 'Tips', 'Navigation', 'Events'], function(k) {
+    // START METAMAPS CODE
+    $.each(['Selection', 'NodeStyles', 'Tips', 'Navigation', 'Events'], function(k) {
+    // END METAMAPS CODE
+    // ORIGINAL $.each(['NodeStyles', 'Tips', 'Navigation', 'Events'], function(k) {
       var obj = new Extras.Classes[k](k, that);
       if(obj.isEnabled()) {
         mem.register(obj);
@@ -1954,36 +2013,36 @@ var Extras = {
         that[k.toLowerCase()] = obj;
       }
     });
-  }   
+  }
 };
 
 Extras.Classes = {};
 /*
   Class: Events
-   
+
   This class defines an Event API to be accessed by the user.
   The methods implemented are the ones defined in the <Options.Events> object.
 */
 
 Extras.Classes.Events = new Class({
   Implements: [ExtrasInitializer, EventsInterface],
-  
+
   initializePost: function() {
     this.fx = this.viz.fx;
     this.ntypes = this.viz.fx.nodeTypes;
     this.etypes = this.viz.fx.edgeTypes;
-    
+
     this.hovered = false;
     this.pressed = false;
     this.touched = false;
 
     this.touchMoved = false;
     this.moved = false;
-    
+
   },
-  
+
   setAsProperty: $.lambda(true),
-  
+
   onMouseUp: function(e, win, event, isRightClick) {
     var evt = $.event.get(e, win);
     if(!this.moved) {
@@ -2025,7 +2084,7 @@ Extras.Classes.Events = new Class({
      this.hovered = false;
    }
   },
-  
+
   onMouseOver: function(e, win, event) {
     //mouseover a label
     var evt = $.event.get(e, win), label;
@@ -2035,7 +2094,7 @@ Extras.Classes.Events = new Class({
                                event, evt);
     }
   },
-  
+
   onMouseMove: function(e, win, event) {
    var label, evt = $.event.get(e, win);
    if(this.pressed) {
@@ -2050,7 +2109,7 @@ Extras.Classes.Events = new Class({
      if(this.hovered) {
        var hn = this.hovered;
        var geom = hn.nodeFrom? this.etypes[hn.getData('type')] : this.ntypes[hn.getData('type')];
-       var contains = geom && geom.contains 
+       var contains = geom && geom.contains
          && geom.contains.call(this.fx, hn, event.getPos());
        if(contains) {
          this.config.onMouseMove(hn, event, evt);
@@ -2067,17 +2126,17 @@ Extras.Classes.Events = new Class({
      }
    }
   },
-  
+
   onMouseWheel: function(e, win, delta) {
     this.config.onMouseWheel(delta, $.event.get(e, win));
   },
-  
+
   onMouseDown: function(e, win, event) {
-    
+
     // START METAMAPS CODE
     var evt = $.event.get(e, win);
     this.pressed = event.getNode() || (this.config.enableForEdges && event.getEdge());
-    // END METAMAPS CODE    
+    // END METAMAPS CODE
     // ORIGINAL CODE
     /*var evt = $.event.get(e, win), label;
     if(this.dom) {
@@ -2089,7 +2148,7 @@ Extras.Classes.Events = new Class({
     } */
     this.pressed && this.config.onDragStart(this.pressed, event, evt);
   },
-  
+
   onTouchStart: function(e, win, event) {
     var evt = $.event.get(e, win), label;
     if(this.dom && (label = this.isLabel(e, win))) {
@@ -2099,7 +2158,7 @@ Extras.Classes.Events = new Class({
     }
     this.touched && this.config.onTouchStart(this.touched, event, evt);
   },
-  
+
   onTouchMove: function(e, win, event) {
     var evt = $.event.get(e, win);
     if(this.touched) {
@@ -2107,7 +2166,7 @@ Extras.Classes.Events = new Class({
       this.config.onTouchMove(this.touched, event, evt);
     }
   },
-  
+
   onTouchEnd: function(e, win, event) {
     var evt = $.event.get(e, win);
     if(this.touched) {
@@ -2123,21 +2182,21 @@ Extras.Classes.Events = new Class({
 
 /*
    Class: Tips
-    
+
    A class containing tip related functions. This class is used internally.
-   
+
    Used by:
-   
+
    <ST>, <Sunburst>, <Hypertree>, <RGraph>, <TM>, <ForceDirected>, <Icicle>
-   
+
    See also:
-   
+
    <Options.Tips>
 */
 
 Extras.Classes.Tips = new Class({
   Implements: [ExtrasInitializer, EventsInterface],
-  
+
   initializePost: function() {
     //add DOM tooltip
     if(document.body) {
@@ -2154,9 +2213,9 @@ Extras.Classes.Tips = new Class({
       this.node = false;
     }
   },
-  
+
   setAsProperty: $.lambda(true),
-  
+
   onMouseOut: function(e, win) {
     //mouseout a label
     var evt = $.event.get(e, win);
@@ -2173,7 +2232,7 @@ Extras.Classes.Tips = new Class({
     }
     this.hide(false);
   },
-  
+
   onMouseOver: function(e, win) {
     //mouseover a label
     var label;
@@ -2182,7 +2241,7 @@ Extras.Classes.Tips = new Class({
       this.config.onShow(this.tip, this.node, label);
     }
   },
-  
+
   onMouseMove: function(e, win, opt) {
     if(this.dom && this.isLabel(e, win)) {
       this.setTooltipPosition($.event.getPos(e, win));
@@ -2200,10 +2259,10 @@ Extras.Classes.Tips = new Class({
       this.setTooltipPosition($.event.getPos(e, win));
     }
   },
-  
+
   setTooltipPosition: function(pos) {
-    var tip = this.tip, 
-        style = tip.style, 
+    var tip = this.tip,
+        style = tip.style,
         cont = this.config;
     style.display = '';
     //get window dimensions
@@ -2214,16 +2273,16 @@ Extras.Classes.Tips = new Class({
     //get tooltip dimensions
     var obj = {
       'width': tip.offsetWidth,
-      'height': tip.offsetHeight  
+      'height': tip.offsetHeight
     };
     //set tooltip position
     var x = cont.offsetX, y = cont.offsetY;
-    style.top = ((pos.y + y + obj.height > win.height)?  
+    style.top = ((pos.y + y + obj.height > win.height)?
         (pos.y - obj.height - y) : pos.y + y) + 'px';
-    style.left = ((pos.x + obj.width + x > win.width)? 
+    style.left = ((pos.x + obj.width + x > win.width)?
         (pos.x - obj.width - x) : pos.x + x) + 'px';
   },
-  
+
   hide: function(triggerCallback) {
     this.tip.style.display = 'none';
     triggerCallback && this.config.onHide();
@@ -2232,20 +2291,20 @@ Extras.Classes.Tips = new Class({
 
 /*
   Class: NodeStyles
-   
+
   Change node styles when clicking or hovering a node. This class is used internally.
-  
+
   Used by:
-  
+
   <ST>, <Sunburst>, <Hypertree>, <RGraph>, <TM>, <ForceDirected>, <Icicle>
-  
+
   See also:
-  
+
   <Options.NodeStyles>
 */
 Extras.Classes.NodeStyles = new Class({
   Implements: [ExtrasInitializer, EventsInterface],
-  
+
   initializePost: function() {
     this.fx = this.viz.fx;
     this.types = this.viz.fx.nodeTypes;
@@ -2254,11 +2313,11 @@ Extras.Classes.NodeStyles = new Class({
     this.nodeStylesOnClick = this.nStyles.stylesClick;
     this.hoveredNode = false;
     this.fx.nodeFxAnimation = new Animation();
-    
+
     this.down = false;
     this.move = false;
   },
-  
+
   onMouseOut: function(e, win) {
     this.down = this.move = false;
     if(!this.hoveredNode) return;
@@ -2276,7 +2335,7 @@ Extras.Classes.NodeStyles = new Class({
     this.toggleStylesOnHover(this.hoveredNode, false);
     this.hoveredNode = false;
   },
-  
+
   onMouseOver: function(e, win) {
     //mouseover a label
     var label;
@@ -2287,7 +2346,7 @@ Extras.Classes.NodeStyles = new Class({
       this.toggleStylesOnHover(this.hoveredNode, true);
     }
   },
-  
+
   onMouseDown: function(e, win, event, isRightClick) {
     if(isRightClick) return;
     var label;
@@ -2298,7 +2357,7 @@ Extras.Classes.NodeStyles = new Class({
     }
     this.move = false;
   },
-  
+
   onMouseUp: function(e, win, event, isRightClick) {
     if(isRightClick) return;
     if(!this.move) {
@@ -2306,16 +2365,16 @@ Extras.Classes.NodeStyles = new Class({
     }
     this.down = this.move = false;
   },
-  
+
   getRestoredStyles: function(node, type) {
-    var restoredStyles = {}, 
+    var restoredStyles = {},
         nStyles = this['nodeStylesOn' + type];
     for(var prop in nStyles) {
       restoredStyles[prop] = node.styles['$' + prop];
     }
     return restoredStyles;
   },
-  
+
   toggleStylesOnHover: function(node, set) {
     if(this.nodeStylesOnHover) {
       this.toggleStylesOn('Hover', node, set);
@@ -2327,7 +2386,7 @@ Extras.Classes.NodeStyles = new Class({
       this.toggleStylesOn('Click', node, set);
     }
   },
-  
+
   toggleStylesOn: function(type, node, set) {
     var viz = this.viz;
     var nStyles = this.nStyles;
@@ -2339,7 +2398,7 @@ Extras.Classes.NodeStyles = new Class({
       for(var s in this['nodeStylesOn' + type]) {
         var $s = '$' + s;
         if(!($s in node.styles)) {
-            node.styles[$s] = node.getData(s); 
+            node.styles[$s] = node.getData(s);
         }
       }
       viz.fx.nodeFx($.extend({
@@ -2390,7 +2449,7 @@ Extras.Classes.NodeStyles = new Class({
       this.hoveredNode = false;
     }
   },
-  
+
   onMouseMove: function(e, win, event) {
     //if mouse button is down and moving set move=true
     if(this.down) this.move = true;
@@ -2398,11 +2457,11 @@ Extras.Classes.NodeStyles = new Class({
     if(this.dom && this.isLabel(e, win)) return;
     var nStyles = this.nodeStylesOnHover;
     if(!nStyles) return;
-    
+
     if(!this.dom) {
       if(this.hoveredNode) {
         var geom = this.types[this.hoveredNode.getData('type')];
-        var contains = geom && geom.contains && geom.contains.call(this.fx, 
+        var contains = geom && geom.contains && geom.contains.call(this.fx,
             this.hoveredNode, event.getPos());
         if(contains) return;
       }
@@ -2440,73 +2499,62 @@ Extras.Classes.NodeStyles = new Class({
   }
 });
 
+// START METAMAPS CODE
+// we want to make sure we can set and clear our setInterval
+var panningInterval
+// END METAMAPS CODE
 Extras.Classes.Navigation = new Class({
   Implements: [ExtrasInitializer, EventsInterface],
-  
+
   initializePost: function() {
     this.pos = false;
     this.pressed = false;
     // START METAMAPS CODE
-    this.initDist = false;
+    this.boxStartCoordinates = null;
+    this.boxEndCoordinates = null;
+    this.didPan = false;
+    this.changeInX = 0;
+    this.changeInY = 0;
     // END METAMAPS CODE
   },
-  
-  onMouseWheel: function(e, win, scroll) {      
+
+  // START METAMAPS CODE
+  setAsProperty: $.lambda(true),
+  // END METAMAPS CODE
+
+  onMouseWheel: function(e, win, scroll) {
     if(!this.config.zooming) return;
-    
-    // START METAMAPS CODE
-    e.preventDefault();
-	  if (e.target.id != 'infovis-canvas') return;
-    if (Metamaps.Create.newTopic.beingCreated && !Metamaps.Create.newTopic.pinned) return;
-	  // END METAMAPS CODE
-  
-    //$.event.stop($.event.get(e, win));
-    // END METAMAPS CODE
-    // ORIGINAL CODE $.event.stop($.event.get(e, win));
+
+    $.event.stop($.event.get(e, win));
 
     var val = this.config.zooming / 1000,
         ans = 1 + scroll * val;
-        
-    // START METAMAPS CODE
-	  if (((ans > 1) && (5 >= this.canvas.scaleOffsetX)) || ((ans < 1) && (this.canvas.scaleOffsetX >= 0.2))) {
-	    Metamaps.Util.zoomOnPoint(this, ans, {x: e.pageX, y: e.pageY})
-	  }
-	  
-    // END METAMAPS CODE
-    // ORIGINAL CODE this.canvas.scale(ans, ans);
 
     // START METAMAPS CODE
-      jQuery(document).trigger(Metamaps.JIT.events.zoom, [e]);
+    // prevent zooming too far in or too far out
+    // also, we 'zoom on point' improving the native zooming
+	  if (((ans > 1) && (5 >= this.canvas.scaleOffsetX)) || ((ans < 1) && (this.canvas.scaleOffsetX >= 0.2))) {
+      this.canvas.zoomOnPoint(ans, {x: e.pageX, y: e.pageY});
+      this.config.onZoom(e);
+	  }
     // END METAMAPS CODE
+    // ORIGINAL CODE this.canvas.scale(ans, ans);
   },
-  
-  onMouseDown: function(e, win, eventInfo) {
-    ///console.log('mouse down!!!!');
+
+  onMouseDown: function(e, win, eventInfo, isRightClick) {
     if(!this.config.panning) return;
-    
+
     //START METAMAPS CODE
-    Metamaps.Mouse.changeInX = 0;
-    Metamaps.Mouse.changeInY = 0;
+    // clear a possible smoothPanning happening
+    window.clearInterval(panningInterval);
+    // don't conflict with rightClick+drag, or shiftKey+leftClick+drag for selection behaviour
+    if (isRightClick || e.button == 0 && e.shiftKey) return
+    // also avoid edges
     if((this.config.panning == 'avoid nodes' && eventInfo.getNode()) || eventInfo.getEdge()) return;
     // END METAMAPS CODE
     // ORIGINAl CODE if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
-    
+
     this.pressed = true;
-    
-    //START METAMAPS CODE
-    var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey); 
-    // TODO make sure this works across browsers  
-    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
-      Metamaps.Mouse.boxStartCoordinates = eventInfo.getPos();
-      //console.log('mouse down');
-    }
-
-    Metamaps.Mouse.didPan = false;
-    
-
-    
-    // END METAMAPS CODE
-    
     this.pos = eventInfo.getPos();
     var canvas = this.canvas,
         ox = canvas.translateOffsetX,
@@ -2517,38 +2565,33 @@ Extras.Classes.Navigation = new Class({
     this.pos.x += ox;
     this.pos.y *= sy;
     this.pos.y += oy;
+
+    //START METAMAPS CODE
+    // ctrlKey + leftClick and drag = zoom in to that box
+    if (e.button == 0 && e.ctrlKey) {
+      this.boxStartCoordinates = eventInfo.getPos();
+    }
+    this.changeInX = 0;
+    this.changeInY = 0;
+    this.didPan = false;
+    // END METAMAPS CODE
   },
-  
+
   onMouseMove: function(e, win, eventInfo) {
     if(!this.config.panning) return;
     if(!this.pressed) return;
-    if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
-    
+    // if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
+
     // START METAMAPS CODE
-    var rightClick = e.button == 2 || (navigator.platform.indexOf("Mac") != -1 && e.ctrlKey);
-    if (!Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
-      Metamaps.Visualize.mGraph.busy = true;
-      Metamaps.boxStartCoordinates = eventInfo.getPos();
-      //console.log('mouse move');
+    if (this.boxStartCoordinates) {
+      this.boxEndCoordinates = eventInfo.getPos();
+      this.canvas.drawSelectBox(this.boxStartCoordinates, this.boxEndCoordinates);
       return;
     }
-    if (Metamaps.Mouse.boxStartCoordinates && ((e.button == 0 && e.shiftKey) || (e.button == 0 && e.ctrlKey)  || rightClick)) {
-      Metamaps.Visualize.mGraph.busy = true;
-      Metamaps.JIT.drawSelectBox(eventInfo,e);
-      //console.log('mouse move');
-      return;
-    }
-    if (rightClick){
-      return;
-    }
-    if (e.target.id != 'infovis-canvas') { 
-      this.pressed = false;
-      return;
-    }
-    Metamaps.Mouse.didPan = true;
+    // the rest of the code below is for panning
     // END METAMAPS CODE
-    
-    var thispos = this.pos, 
+
+    var thispos = this.pos,
         currentPos = eventInfo.getPos(),
         canvas = this.canvas,
         ox = canvas.translateOffsetX,
@@ -2561,40 +2604,46 @@ Extras.Classes.Navigation = new Class({
     currentPos.y += oy;
     var x = currentPos.x - thispos.x,
         y = currentPos.y - thispos.y;
-    
+
     // START METAMAPS CODE
-    Metamaps.Mouse.changeInX = x;
-    Metamaps.Mouse.changeInY = y;
+    this.changeInX = x;
+    this.changeInY = y;
+    this.didPan = true;
     // END METAMAPS CODE
-    
+
     this.pos = currentPos;
     this.canvas.translate(x * 1/sx, y * 1/sy);
 
     // START METAMAPS CODE
-      jQuery(document).trigger(Metamaps.JIT.events.pan);
+    this.config.onPan();
     // END METAMAPS CODE
   },
-  
+
   onMouseUp: function(e, win, eventInfo, isRightClick) {
     if(!this.config.panning) return;
     this.pressed = false;
-    
+
     // START METAMAPS CODE
-    if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
-    
-    
+    if (this.boxStartCoordinates && this.boxEndCoordinates) {
+      this.zoomToBox();
+      this.config.onZoom(e);
+    }
+    else if (this.didPan) {
+      this.smoothPanning();
+    }
+    this.boxStartCoordinates = null;
+    this.boxEndCoordinates = null;
     // END METAMAPS CODE
-    
   },
-  
+
   // START METAMAPS CODE
   onTouchStart: function(e, win, eventInfo) {
     if(!this.config.panning) return;
-    Metamaps.Mouse.changeInX = 0;
-    Metamaps.Mouse.changeInY = 0;
+    this.changeInX = 0;
+    this.changeInY = 0;
     if((this.config.panning == 'avoid nodes' && eventInfo.getNode()) || eventInfo.getEdge()) return;
     this.pressed = true;
-    Metamaps.Mouse.didPan = false;
+    this.didPan = false;
 
     var canvas = this.canvas,
         ox = canvas.translateOffsetX,
@@ -2620,7 +2669,7 @@ Extras.Classes.Navigation = new Class({
         x: (touch1.x + touch2.x) / 2,
         y: (touch1.y + touch2.y) / 2
       }
-      this.unitRadius = Metamaps.Util.getDistance(touch1, touch2) / 2
+      this.unitRadius = $.getDistance(touch1, touch2) / 2
     }
     if (e.touches.length === 1 || e.touches.length === 2) {
       this.pos.x *= sx;
@@ -2629,12 +2678,12 @@ Extras.Classes.Navigation = new Class({
       this.pos.y += oy;
     }
   },
-  
+
   onTouchMove: function(e, win, eventInfo) {
     e.preventDefault()
     if(!this.config.panning) return;
     if(!this.pressed) return;
-    
+
     var canvas = this.canvas,
         ox = canvas.translateOffsetX,
         oy = canvas.translateOffsetY,
@@ -2668,36 +2717,36 @@ Extras.Classes.Navigation = new Class({
     currentPos.y *= sy;
     currentPos.x += ox;
     currentPos.y += oy;
-    Metamaps.Mouse.didPan = true;
+    this.didPan = true;
     var x = currentPos.x - beforePos.x,
         y = currentPos.y - beforePos.y;
-    Metamaps.Mouse.changeInX = x;
-    Metamaps.Mouse.changeInY = y;
+    this.changeInX = x;
+    this.changeInY = y;
     this.pos = currentPos;
     canvas.translate(x * 1/sx, y * 1/sy);
-    jQuery(document).trigger(Metamaps.JIT.events.pan);
-    
+    this.config.onPan();
+
     if (e.touches.length >= 2) {
-      var currentPixelRadius = Metamaps.Util.getDistance({
+      var currentPixelRadius = $.getDistance({
         x: e.touches[0].clientX,
         y: e.touches[0].clientY
       }, {
         x: e.touches[1].clientX,
         y: e.touches[1].clientY
-      }) / 2
-      var desiredScale = currentPixelRadius / this.unitRadius
-      var scaler = desiredScale / sx
+      }) / 2;
+      var desiredScale = currentPixelRadius / this.unitRadius;
+      var scaler = desiredScale / sx;
       var midpoint = {
         x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
         y: (e.touches[0].clientY + e.touches[1].clientY) / 2
-      }
+      };
       if (30 >= desiredScale && desiredScale >= 0.2) {
-        Metamaps.Util.zoomOnPoint(this, scaler, midpoint)
-        jQuery(document).trigger(Metamaps.JIT.events.zoom)
+        canvas.zoomOnPoint(scaler, midpoint);
+        this.config.onZoom(e);
       }
     }
   },
-  
+
   onTouchEnd: function(e, win, eventInfo, isRightClick) {
     if(!this.config.panning) return;
     if (e.touches.length === 1) {
@@ -2717,13 +2766,113 @@ Extras.Classes.Navigation = new Class({
       this.pos.y += oy;
     } else if (e.touches.length === 0) {
       this.pressed = false;
-      this.pos = null
-      if (Metamaps.Mouse.didPan) Metamaps.JIT.SmoothPanning();
+      this.pos = null;
+      if (this.didPan) this.smoothPanning();
+    }
+  },
+  center: function() {
+    const offsetScale = this.canvas.scaleOffsetX,
+      offsetX = this.canvas.translateOffsetX,
+      offsetY = this.canvas.translateOffsetY;
+    this.canvas.scale(1 / offsetScale, 1 / offsetScale);
+    this.canvas.translate(-1 * offsetX, -1 * offsetY);
+  },
+  zoomToBox: function() {
+    const bS = this.boxStartCoordinates;
+    const bE = this.boxEndCoordinates;
+    // don't zoom in if the box is too small
+    if (!(Math.abs(bS.x - bE.x) > 20 && Math.abs(bS.y - bE.y) > 20)) return
+    const sX = bS.x,
+      sY = bS.y,
+      eX = bE.x,
+      eY = bE.y;
+
+    let canvas = this.canvas;
+    this.center();
+    const size = canvas.getSize();
+    let height = size.height;
+    let width = size.width;
+
+    let spanX = Math.abs(sX - eX)
+    let spanY = Math.abs(sY - eY)
+    let ratioX = width / spanX
+    let ratioY = height / spanY
+
+    let newRatio = Math.min(ratioX, ratioY)
+
+    if (canvas.scaleOffsetX * newRatio <= 5 && canvas.scaleOffsetX * newRatio >= 0.2) {
+      canvas.scale(newRatio, newRatio)
+    } else if (canvas.scaleOffsetX * newRatio > 5) {
+      newRatio = 5 / canvas.scaleOffsetX
+      canvas.scale(newRatio, newRatio)
+    } else {
+      newRatio = 0.2 / canvas.scaleOffsetX
+      canvas.scale(newRatio, newRatio)
+    }
+    const cogX = (sX + eX) / 2
+    const cogY = (sY + eY) / 2
+    canvas.translate(-1 * cogX, -1 * cogY)
+  },
+  smoothPanning: function() {
+    var canvas = this.canvas,
+      sx = canvas.scaleOffsetX,
+      sy = canvas.scaleOffsetY,
+      yVelocity = this.changeInY, // initial y velocity
+      xVelocity = this.changeInX, // initial x velocity
+      easing = 1,
+      that = this; // frictional value
+
+    window.clearInterval(panningInterval);
+    panningInterval = window.setInterval(function() {
+      myTimer();
+    }, 1);
+
+    function myTimer() {
+      canvas.translate(xVelocity * easing * 1 / sx, yVelocity * easing * 1 / sy);
+      that.config.onPan();
+      easing = easing * 0.75;
+      if (easing < 0.1) window.clearInterval(panningInterval);
     }
   }
   // END METAMAPS CODE
 });
 
+// START METAMAPS CODE
+Extras.Classes.Selection = new Class({
+  Implements: [ExtrasInitializer, EventsInterface],
+
+  initializePost: function() {
+    this.boxStartCoordinates = null;
+    this.boxEndCoordinates = null;
+  },
+
+  setAsProperty: $.lambda(true),
+
+  onMouseDown: function(e, win, eventInfo, isRightClick) {
+    if(eventInfo.getNode() || eventInfo.getEdge()) return;
+    // shiftKey + leftClick OR rightClick
+    if ((e.button == 0 && e.shiftKey) || isRightClick) {
+      this.boxStartCoordinates = eventInfo.getPos();
+    }
+  },
+
+  onMouseMove: function(e, win, eventInfo) {
+    if (this.boxStartCoordinates) {
+      this.boxEndCoordinates = eventInfo.getPos();
+      this.canvas.drawSelectBox(this.boxStartCoordinates, this.boxEndCoordinates);
+    }
+  },
+
+  onMouseUp: function(e, win, eventInfo) {
+    if (this.boxStartCoordinates && this.boxEndCoordinates) {
+      this.config.onDrawSelectBox(e, this.boxStartCoordinates, this.boxEndCoordinates)
+    }
+    this.boxStartCoordinates = null;
+    this.boxEndCoordinates = null;
+    this.viz.plot();
+  }
+});
+// END METAMAPS CODE
 
 /*
  * File: Canvas.js
@@ -2732,28 +2881,28 @@ Extras.Classes.Navigation = new Class({
 
 /*
  Class: Canvas
- 
- 	A canvas widget used by all visualizations. The canvas object can be accessed by doing *viz.canvas*. If you want to 
+
+ 	A canvas widget used by all visualizations. The canvas object can be accessed by doing *viz.canvas*. If you want to
  	know more about <Canvas> options take a look at <Options.Canvas>.
- 
- A canvas widget is a set of DOM elements that wrap the native canvas DOM Element providing a consistent API and behavior 
+
+ A canvas widget is a set of DOM elements that wrap the native canvas DOM Element providing a consistent API and behavior
  across all browsers. It can also include Elements to add DOM (SVG or HTML) label support to all visualizations.
- 
+
  Example:
- 
+
  Suppose we have this HTML
- 
+
  (start code xml)
  	<div id="infovis"></div>
  (end code)
- 
+
  Now we create a new Visualization
- 
+
  (start code js)
  	var viz = new $jit.Viz({
  		//Where to inject the canvas. Any div container will do.
  		'injectInto':'infovis',
-		 //width and height for canvas. 
+		 //width and height for canvas.
 		 //Default's to the container offsetWidth and Height.
 		 'width': 900,
 		 'height':500
@@ -2761,7 +2910,7 @@ Extras.Classes.Navigation = new Class({
  (end code)
 
  The generated HTML will look like this
- 
+
  (start code xml)
  <div id="infovis">
  	<div id="infovis-canvaswidget" style="position:relative;">
@@ -2773,7 +2922,7 @@ Extras.Classes.Navigation = new Class({
  	</div>
  </div>
  (end code)
- 
+
  As you can see, the generated HTML consists of a canvas DOM Element of id *infovis-canvas* and a div label container
  of id *infovis-label*, wrapped in a main div container of id *infovis-canvaswidget*.
  */
@@ -2808,14 +2957,14 @@ var Canvas;
     translateOffsetY: 0,
     scaleOffsetX: 1,
     scaleOffsetY: 1,
-    
+
     initialize: function(viz, opt) {
       this.viz = viz;
       this.opt = this.config = opt;
-      var id = $.type(opt.injectInto) == 'string'? 
+      var id = $.type(opt.injectInto) == 'string'?
           opt.injectInto:opt.injectInto.id,
           type = opt.type,
-          idLabel = id + "-label", 
+          idLabel = id + "-label",
           wrapper = $(id),
           width = opt.width, // || wrapper.offsetWidth,
           height = opt.height; // || wrapper.offsetHeight;
@@ -2836,7 +2985,7 @@ var Canvas;
         }
       });
       //create label container
-      this.labelContainer = this.createLabelContainer(opt.Label.type, 
+      this.labelContainer = this.createLabelContainer(opt.Label.type,
           idLabel, canvasOptions);
       //create primary canvas
       this.canvases.push(new Canvas.Base[type]({
@@ -2876,11 +3025,11 @@ var Canvas;
     },
     /*
       Method: getCtx
-      
+
       Returns the main canvas context object
-      
+
       Example:
-      
+
       (start code js)
        var ctx = canvas.getCtx();
        //Now I can use the native canvas context
@@ -2893,11 +3042,11 @@ var Canvas;
     },
     /*
       Method: getConfig
-      
+
       Returns the current Configuration for this Canvas Widget.
-      
+
       Example:
-      
+
       (start code js)
        var config = canvas.getConfig();
       (end code)
@@ -2909,9 +3058,9 @@ var Canvas;
       Method: getElement
 
       Returns the main Canvas DOM wrapper
-      
+
       Example:
-      
+
       (start code js)
        var wrapper = canvas.getElement();
        //Returns <div id="infovis-canvaswidget" ... >...</div> as element
@@ -2922,13 +3071,13 @@ var Canvas;
     },
     /*
       Method: getSize
-      
+
       Returns canvas dimensions.
-      
+
       Returns:
-      
+
       An object with *width* and *height* properties.
-      
+
       Example:
       (start code js)
       canvas.getSize(); //returns { width: 900, height: 500 }
@@ -2939,20 +3088,20 @@ var Canvas;
     },
     /*
       Method: resize
-      
+
       Resizes the canvas.
-      
+
       Parameters:
-      
+
       width - New canvas width.
       height - New canvas height.
-      
+
       Example:
-      
+
       (start code js)
        canvas.resize(width, height);
       (end code)
-    
+
     */
     resize: function(width, height) {
       this.getPos(true);
@@ -2970,21 +3119,21 @@ var Canvas;
     },
     /*
       Method: translate
-      
+
       Applies a translation to the canvas.
-      
+
       Parameters:
-      
+
       x - (number) x offset.
       y - (number) y offset.
       disablePlot - (boolean) Default's *false*. Set this to *true* if you don't want to refresh the visualization.
-      
+
       Example:
-      
+
       (start code js)
        canvas.translate(30, 30);
       (end code)
-    
+
     */
     translate: function(x, y, disablePlot) {
       this.translateOffsetX += x*this.scaleOffsetX;
@@ -2995,21 +3144,21 @@ var Canvas;
     },
     /*
       Method: scale
-      
+
       Scales the canvas.
-      
+
       Parameters:
-      
+
       x - (number) scale value.
       y - (number) scale value.
       disablePlot - (boolean) Default's *false*. Set this to *true* if you don't want to refresh the visualization.
-      
+
       Example:
-      
+
       (start code js)
        canvas.scale(0.5, 0.5);
       (end code)
-    
+
     */
     scale: function(x, y, disablePlot) {
       var px = this.scaleOffsetX * x,
@@ -3025,17 +3174,17 @@ var Canvas;
     },
     /*
       Method: getPos
-      
+
       Returns the canvas position as an *x, y* object.
-      
+
       Parameters:
-      
+
       force - (boolean) Default's *false*. Set this to *true* if you want to recalculate the position without using any cache information.
-      
+
       Returns:
-      
+
       An object with *x* and *y* properties.
-      
+
       Example:
       (start code js)
       canvas.getPos(true); //returns { x: 900, y: 500 }
@@ -3049,13 +3198,13 @@ var Canvas;
     },
     /*
        Method: clear
-       
+
        Clears the canvas.
     */
     clear: function(i){
       this.canvases[i||0].clear();
     },
-    
+
     path: function(type, action){
       var ctx = this.canvases[0].getCtx();
       ctx.beginPath();
@@ -3063,7 +3212,7 @@ var Canvas;
       ctx[type]();
       ctx.closePath();
     },
-    
+
     createLabelContainer: function(type, idLabel, dim) {
       var NS = 'http://www.w3.org/2000/svg';
       if(type == 'HTML' || type == 'Native') {
@@ -3095,6 +3244,56 @@ var Canvas;
         return svgContainer;
       }
     }
+    // START METAMAPS CODE
+    ,
+    zoomOnPoint: function(ans, zoomPoint) {
+      var s = this.getSize(),
+        p = this.getPos(),
+        ox = this.translateOffsetX,
+        oy = this.translateOffsetY,
+        sx = this.scaleOffsetX,
+        sy = this.scaleOffsetY;
+
+      var pointerCoordX = (zoomPoint.x - p.x - s.width / 2 - ox) * (1 / sx),
+        pointerCoordY = (zoomPoint.y - p.y - s.height / 2 - oy) * (1 / sy);
+
+        // This translates the canvas to be centred over the zoomPoint, then the canvas is zoomed as intended.
+      this.translate(-pointerCoordX, -pointerCoordY);
+      this.scale(ans, ans);
+
+        // Get the canvas attributes again now that is has changed
+      s = this.getSize();
+      p = this.getPos();
+      ox = this.translateOffsetX;
+      oy = this.translateOffsetY;
+      sx = this.scaleOffsetX;
+      sy = this.scaleOffsetY;
+      var newX = (zoomPoint.x - p.x - s.width / 2 - ox) * (1 / sx),
+        newY = (zoomPoint.y - p.y - s.height / 2 - oy) * (1 / sy);
+
+        // Translate the canvas to put the pointer back over top the same coordinate it was over before
+      this.translate(newX - pointerCoordX, newY - pointerCoordY);
+    },
+    drawSelectBox: function(corner, oppositeCorner) {
+      var ctx = this.getCtx(),
+        startX = corner.x,
+        startY = corner.y,
+        endX = oppositeCorner.x,
+        endY = oppositeCorner.y;
+
+      this.clear();
+      this.viz.plot();
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(startX, endY);
+      ctx.lineTo(endX, endY);
+      ctx.lineTo(endX, startY);
+      ctx.lineTo(startX, startY);
+      ctx.strokeStyle = 'black';
+      ctx.stroke();
+    }
+    // END METAMAPS CODE
   });
   //base canvas wrapper
   Canvas.Base = {};
@@ -3129,7 +3328,7 @@ var Canvas;
       });
     },
     getCtx: function() {
-      if(!this.ctx) 
+      if(!this.ctx)
         return this.ctx = this.canvas.getContext('2d');
       return this.ctx;
     },
@@ -3173,7 +3372,7 @@ var Canvas;
       }
       this.translateOffsetX =
         this.translateOffsetY = 0;
-      this.scaleOffsetX = 
+      this.scaleOffsetX =
         this.scaleOffsetY = 1;
 
       this.clear();
@@ -3199,8 +3398,8 @@ var Canvas;
           oy = this.translateOffsetY,
           sx = this.scaleOffsetX,
           sy = this.scaleOffsetY;
-      this.getCtx().clearRect((-size.width / 2 - ox) * 1/sx, 
-                              (-size.height / 2 - oy) * 1/sy, 
+      this.getCtx().clearRect((-size.width / 2 - ox) * 1/sx,
+                              (-size.height / 2 - oy) * 1/sy,
                               size.width * 1/sx, size.height * 1/sy);
     },
     plot: function() {
@@ -3243,7 +3442,7 @@ var Canvas;
       //TODO(nico): print labels too!
     }
   });
-  
+
   // START METAMAPS CODE
   Canvas.Background.Metamaps = new Class({
     initialize: function(viz, options) {
@@ -3273,7 +3472,7 @@ var Canvas;
 
 /*
  * File: Polar.js
- * 
+ *
  * Defines the <Polar> class.
  *
  * Description:
@@ -3292,13 +3491,13 @@ var Canvas;
    A multi purpose polar representation.
 
    Description:
- 
+
    The <Polar> class, just like the <Complex> class, is used by the <Hypertree>, <ST> and <RGraph> as a 2D point representation.
- 
+
    See also:
- 
+
    <http://en.wikipedia.org/wiki/Polar_coordinates>
- 
+
    Parameters:
 
       theta - An angle.
@@ -3315,15 +3514,15 @@ $jit.Polar = Polar;
 Polar.prototype = {
     /*
        Method: getc
-    
+
        Returns a complex number.
-    
+
        Parameters:
 
        simple - _optional_ If *true*, this method will return only an object holding x and y properties and not a <Complex> instance. Default's *false*.
 
       Returns:
-    
+
           A complex number.
     */
     getc: function(simple) {
@@ -3332,11 +3531,11 @@ Polar.prototype = {
 
     /*
        Method: getp
-    
+
        Returns a <Polar> representation.
-    
+
        Returns:
-    
+
           A variable in polar coordinates.
     */
     getp: function() {
@@ -3346,13 +3545,13 @@ Polar.prototype = {
 
     /*
        Method: set
-    
+
        Sets a number.
 
        Parameters:
 
        v - A <Complex> or <Polar> instance.
-    
+
     */
     set: function(v) {
         v = v.getp();
@@ -3361,14 +3560,14 @@ Polar.prototype = {
 
     /*
        Method: setc
-    
+
        Sets a <Complex> number.
 
        Parameters:
 
        x - A <Complex> number real part.
        y - A <Complex> number imaginary part.
-    
+
     */
     setc: function(x, y) {
         this.rho = Math.sqrt(x * x + y * y);
@@ -3378,27 +3577,27 @@ Polar.prototype = {
 
     /*
        Method: setp
-    
+
        Sets a polar number.
 
        Parameters:
 
        theta - A <Polar> number angle property.
        rho - A <Polar> number rho property.
-    
+
     */
     setp: function(theta, rho) {
-        this.theta = theta; 
+        this.theta = theta;
         this.rho = rho;
     },
 
     /*
        Method: clone
-    
+
        Returns a copy of the current object.
-    
+
        Returns:
-    
+
           A copy of the real object.
     */
     clone: function() {
@@ -3407,15 +3606,15 @@ Polar.prototype = {
 
     /*
        Method: toComplex
-    
+
         Translates from polar to cartesian coordinates and returns a new <Complex> instance.
-    
+
         Parameters:
 
         simple - _optional_ If *true* this method will only return an object with x and y properties (and not the whole <Complex> instance). Default's *false*.
- 
+
         Returns:
-    
+
           A new <Complex> instance.
     */
     toComplex: function(simple) {
@@ -3427,41 +3626,41 @@ Polar.prototype = {
 
     /*
        Method: add
-    
+
         Adds two <Polar> instances.
-    
+
        Parameters:
 
        polar - A <Polar> number.
 
        Returns:
-    
+
           A new Polar instance.
     */
     add: function(polar) {
         return new Polar(this.theta + polar.theta, this.rho + polar.rho);
     },
-    
+
     /*
        Method: scale
-    
+
         Scales a polar norm.
-    
+
         Parameters:
 
         number - A scale factor.
-        
+
         Returns:
-    
+
           A new Polar instance.
     */
     scale: function(number) {
         return new Polar(this.theta, this.rho * number);
     },
-    
+
     /*
        Method: equals
-    
+
        Comparison method.
 
        Returns *true* if the theta and rho properties are equal.
@@ -3477,18 +3676,18 @@ Polar.prototype = {
     equals: function(c) {
         return this.theta == c.theta && this.rho == c.rho;
     },
-    
+
     /*
        Method: $add
-    
+
         Adds two <Polar> instances affecting the current object.
-    
+
        Paramters:
 
        polar - A <Polar> instance.
 
        Returns:
-    
+
           The changed object.
     */
     $add: function(polar) {
@@ -3498,15 +3697,15 @@ Polar.prototype = {
 
     /*
        Method: $madd
-    
+
         Adds two <Polar> instances affecting the current object. The resulting theta angle is modulo 2pi.
-    
+
        Parameters:
 
        polar - A <Polar> instance.
 
        Returns:
-    
+
           The changed object.
     */
     $madd: function(polar) {
@@ -3514,30 +3713,30 @@ Polar.prototype = {
         return this;
     },
 
-    
+
     /*
        Method: $scale
-    
+
         Scales a polar instance affecting the object.
-    
+
       Parameters:
 
       number - A scaling factor.
 
       Returns:
-    
+
           The changed object.
     */
     $scale: function(number) {
         this.rho *= number;
         return this;
     },
-    
+
     /*
       Method: isZero
-   
+
       Returns *true* if the number is zero.
-   
+
    */
     isZero: function () {
       var almostZero = 0.0001, abs = Math.abs;
@@ -3546,16 +3745,16 @@ Polar.prototype = {
 
     /*
        Method: interpolate
-    
+
         Calculates a polar interpolation between two points at a given delta moment.
 
         Parameters:
-      
+
         elem - A <Polar> instance.
         delta - A delta factor ranging [0, 1].
-    
+
        Returns:
-    
+
           A new <Polar> instance representing an interpolation between _this_ and _elem_
     */
     interpolate: function(elem, delta) {
@@ -3578,7 +3777,7 @@ Polar.prototype = {
           } else {
             sum = ch((et - pi2 + (tt - (et - pi2)) * delta));
           }
-        } else {  
+        } else {
           sum = ch((et + (tt - et) * delta)) ;
         }
         var r = (this.rho - elem.rho) * delta + elem.rho;
@@ -3598,7 +3797,7 @@ Polar.KER = $P(0, 0);
 
 /*
  * File: Complex.js
- * 
+ *
  * Defines the <Complex> class.
  *
  * Description:
@@ -3613,22 +3812,22 @@ Polar.KER = $P(0, 0);
 
 /*
    Class: Complex
-    
+
    A multi-purpose Complex Class with common methods.
- 
+
    Description:
- 
+
    The <Complex> class, just like the <Polar> class, is used by the <Hypertree>, <ST> and <RGraph> as a 2D point representation.
- 
+
    See also:
- 
+
    <http://en.wikipedia.org/wiki/Complex_number>
 
    Parameters:
 
    x - _optional_ A Complex number real part.
    y - _optional_ A Complex number imaginary part.
- 
+
 */
 
 var Complex = function(x, y) {
@@ -3641,11 +3840,11 @@ $jit.Complex = Complex;
 Complex.prototype = {
     /*
        Method: getc
-    
+
        Returns a complex number.
-    
+
        Returns:
-    
+
           A complex number.
     */
     getc: function() {
@@ -3654,15 +3853,15 @@ Complex.prototype = {
 
     /*
        Method: getp
-    
+
        Returns a <Polar> representation of this number.
-    
+
        Parameters:
 
        simple - _optional_ If *true*, this method will return only an object holding theta and rho properties and not a <Polar> instance. Default's *false*.
 
        Returns:
-    
+
           A variable in <Polar> coordinates.
     */
     getp: function(simple) {
@@ -3672,46 +3871,46 @@ Complex.prototype = {
 
     /*
        Method: set
-    
+
        Sets a number.
 
        Parameters:
 
        c - A <Complex> or <Polar> instance.
-    
+
     */
     set: function(c) {
       c = c.getc(true);
-      this.x = c.x; 
+      this.x = c.x;
       this.y = c.y;
     },
 
     /*
        Method: setc
-    
+
        Sets a complex number.
 
        Parameters:
 
        x - A <Complex> number Real part.
        y - A <Complex> number Imaginary part.
-    
+
     */
     setc: function(x, y) {
-        this.x = x; 
+        this.x = x;
         this.y = y;
     },
 
     /*
        Method: setp
-    
+
        Sets a polar number.
 
        Parameters:
 
        theta - A <Polar> number theta property.
        rho - A <Polar> number rho property.
-    
+
     */
     setp: function(theta, rho) {
         this.x = Math.cos(theta) * rho;
@@ -3720,11 +3919,11 @@ Complex.prototype = {
 
     /*
        Method: clone
-    
+
        Returns a copy of the current object.
-    
+
        Returns:
-    
+
           A copy of the real object.
     */
     clone: function() {
@@ -3733,18 +3932,18 @@ Complex.prototype = {
 
     /*
        Method: toPolar
-    
+
        Transforms cartesian to polar coordinates.
-    
+
        Parameters:
 
        simple - _optional_ If *true* this method will only return an object with theta and rho properties (and not the whole <Polar> instance). Default's *false*.
-       
+
        Returns:
-    
+
           A new <Polar> instance.
     */
-    
+
     toPolar: function(simple) {
         var rho = this.norm();
         var atan = Math.atan2(this.y, this.x);
@@ -3754,24 +3953,24 @@ Complex.prototype = {
     },
     /*
        Method: norm
-    
+
        Calculates a <Complex> number norm.
-    
+
        Returns:
-    
+
           A real number representing the complex norm.
     */
     norm: function () {
         return Math.sqrt(this.squaredNorm());
     },
-    
+
     /*
        Method: squaredNorm
-    
+
        Calculates a <Complex> number squared norm.
-    
+
        Returns:
-    
+
           A real number representing the complex squared norm.
     */
     squaredNorm: function () {
@@ -3780,17 +3979,17 @@ Complex.prototype = {
 
     /*
        Method: add
-    
+
        Returns the result of adding two complex numbers.
-       
+
        Does not alter the original object.
 
        Parameters:
-    
+
           pos - A <Complex> instance.
-    
+
        Returns:
-    
+
          The result of adding two complex numbers.
     */
     add: function(pos) {
@@ -3799,17 +3998,17 @@ Complex.prototype = {
 
     /*
        Method: prod
-    
+
        Returns the result of multiplying two <Complex> numbers.
-       
+
        Does not alter the original object.
 
        Parameters:
-    
+
           pos - A <Complex> instance.
-    
+
        Returns:
-    
+
          The result of multiplying two complex numbers.
     */
     prod: function(pos) {
@@ -3818,13 +4017,13 @@ Complex.prototype = {
 
     /*
        Method: conjugate
-    
+
        Returns the conjugate of this <Complex> number.
 
        Does not alter the original object.
 
        Returns:
-    
+
          The conjugate of this <Complex> number.
     */
     conjugate: function() {
@@ -3834,17 +4033,17 @@ Complex.prototype = {
 
     /*
        Method: scale
-    
+
        Returns the result of scaling a <Complex> instance.
-       
+
        Does not alter the original object.
 
        Parameters:
-    
+
           factor - A scale factor.
-    
+
        Returns:
-    
+
          The result of scaling this complex to a factor.
     */
     scale: function(factor) {
@@ -3853,7 +4052,7 @@ Complex.prototype = {
 
     /*
        Method: equals
-    
+
        Comparison method.
 
        Returns *true* if both real and imaginary parts are equal.
@@ -3872,37 +4071,37 @@ Complex.prototype = {
 
     /*
        Method: $add
-    
+
        Returns the result of adding two <Complex> numbers.
-       
+
        Alters the original object.
 
        Parameters:
-    
+
           pos - A <Complex> instance.
-    
+
        Returns:
-    
+
          The result of adding two complex numbers.
     */
     $add: function(pos) {
         this.x += pos.x; this.y += pos.y;
-        return this;    
+        return this;
     },
-    
+
     /*
        Method: $prod
-    
+
        Returns the result of multiplying two <Complex> numbers.
-       
+
        Alters the original object.
 
        Parameters:
-    
+
           pos - A <Complex> instance.
-    
+
        Returns:
-    
+
          The result of multiplying two complex numbers.
     */
     $prod:function(pos) {
@@ -3911,56 +4110,56 @@ Complex.prototype = {
         this.y = y*pos.x + x*pos.y;
         return this;
     },
-    
+
     /*
        Method: $conjugate
-    
+
        Returns the conjugate for this <Complex>.
-       
+
        Alters the original object.
 
        Returns:
-    
+
          The conjugate for this complex.
     */
     $conjugate: function() {
         this.y = -this.y;
         return this;
     },
-    
+
     /*
        Method: $scale
-    
+
        Returns the result of scaling a <Complex> instance.
-       
+
        Alters the original object.
 
        Parameters:
-    
+
           factor - A scale factor.
-    
+
        Returns:
-    
+
          The result of scaling this complex to a factor.
     */
     $scale: function(factor) {
         this.x *= factor; this.y *= factor;
         return this;
     },
-    
+
     /*
        Method: $div
-    
+
        Returns the division of two <Complex> numbers.
-       
+
        Alters the original object.
 
        Parameters:
-    
+
           pos - A <Complex> number.
-    
+
        Returns:
-    
+
          The result of scaling this complex to a factor.
     */
     $div: function(pos) {
@@ -3972,9 +4171,9 @@ Complex.prototype = {
 
     /*
       Method: isZero
-   
+
       Returns *true* if the number is zero.
-   
+
    */
     isZero: function () {
       var almostZero = 0.0001, abs = Math.abs;
@@ -3999,7 +4198,7 @@ Complex.KER = $C(0, 0);
  A Graph Class that provides useful manipulation functions. You can find more manipulation methods in the <Graph.Util> object.
 
  An instance of this class can be accessed by using the *graph* parameter of any tree or graph visualization.
- 
+
  Example:
 
  (start code js)
@@ -4010,11 +4209,11 @@ Complex.KER = $C(0, 0);
    //access model
    viz.graph; //<Graph> instance
  (end code)
- 
+
  Implements:
- 
+
  The following <Graph.Util> methods are implemented in <Graph>
- 
+
   - <Graph.Util.getNode>
   - <Graph.Util.eachNode>
   - <Graph.Util.computeLevels>
@@ -4022,8 +4221,8 @@ Complex.KER = $C(0, 0);
   - <Graph.Util.clean>
   - <Graph.Util.getClosestNodeToPos>
   - <Graph.Util.getClosestNodeToOrigin>
- 
-*/  
+
+*/
 
 $jit.Graph = new Class({
 
@@ -4038,7 +4237,7 @@ $jit.Graph = new Class({
     this.opt = $.merge(innerOptions, opt || {});
     this.nodes = {};
     this.edges = {};
-    
+
     //add nodeList methods
     var that = this;
     this.nodeList = {};
@@ -4057,7 +4256,7 @@ $jit.Graph = new Class({
 
 /*
      Method: getNode
-    
+
      Returns a <Graph.Node> by *id*.
 
      Parameters:
@@ -4069,7 +4268,7 @@ $jit.Graph = new Class({
      (start code js)
        var node = graph.getNode('nodeId');
      (end code)
-*/  
+*/
  getNode: function(id) {
     if(this.hasNode(id)) return this.nodes[id];
     return false;
@@ -4077,38 +4276,38 @@ $jit.Graph = new Class({
 
  /*
      Method: get
-    
+
      An alias for <Graph.Util.getNode>. Returns a node by *id*.
-    
+
      Parameters:
-    
+
      id - (string) A <Graph.Node> id.
-    
+
      Example:
-    
+
      (start code js)
        var node = graph.get('nodeId');
      (end code)
-*/  
+*/
   get: function(id) {
     return this.getNode(id);
   },
 
  /*
    Method: getByName
-  
+
    Returns a <Graph.Node> by *name*.
-  
+
    Parameters:
-  
+
    name - (string) A <Graph.Node> name.
-  
+
    Example:
-  
+
    (start code js)
      var node = graph.getByName('someName');
    (end code)
-  */  
+  */
   getByName: function(name) {
     for(var id in this.nodes) {
       var n = this.nodes[id];
@@ -4119,14 +4318,14 @@ $jit.Graph = new Class({
 
 /*
    Method: getAdjacence
-  
+
    Returns a <Graph.Adjacence> object connecting nodes with ids *id* and *id2*.
 
    Parameters:
 
    id - (string) A <Graph.Node> id.
    id2 - (string) A <Graph.Node> id.
-*/  
+*/
   getAdjacence: function (id, id2) {
     if(id in this.edges) {
       return this.edges[id][id2];
@@ -4136,11 +4335,11 @@ $jit.Graph = new Class({
 
     /*
      Method: addNode
-    
+
      Adds a node.
-     
+
      Parameters:
-    
+
       obj - An object with the properties described below
 
       id - (string) A node id
@@ -4150,31 +4349,31 @@ $jit.Graph = new Class({
     See also:
     <Graph.Node>
 
-  */  
-  addNode: function(obj) { 
-   if(!this.nodes[obj.id]) {  
+  */
+  addNode: function(obj) {
+   if(!this.nodes[obj.id]) {
      var edges = this.edges[obj.id] = {};
      this.nodes[obj.id] = new Graph.Node($.extend({
         'id': obj.id,
         'name': obj.name,
         'data': $.merge(obj.data || {}, {}),
-        'adjacencies': edges 
-      }, this.opt.Node), 
-      this.opt.klass, 
-      this.Node, 
+        'adjacencies': edges
+      }, this.opt.Node),
+      this.opt.klass,
+      this.Node,
       this.Edge,
       this.Label);
     }
     return this.nodes[obj.id];
   },
-  
+
     /*
      Method: addAdjacence
-    
+
      Connects nodes specified by *obj* and *obj2*. If not found, nodes are created.
-     
+
      Parameters:
-    
+
       obj - (object) A <Graph.Node> object.
       obj2 - (object) Another <Graph.Node> object.
       data - (object) A data object. Used to store some extra information in the <Graph.Adjacence> object created.
@@ -4182,7 +4381,7 @@ $jit.Graph = new Class({
     See also:
 
     <Graph.Node>, <Graph.Adjacence>
-    */  
+    */
   addAdjacence: function (obj, obj2, data) {
     if(!this.hasNode(obj.id)) { this.addNode(obj); }
     if(!this.hasNode(obj2.id)) { this.addNode(obj2); }
@@ -4198,14 +4397,14 @@ $jit.Graph = new Class({
 
     /*
      Method: removeNode
-    
+
      Removes a <Graph.Node> matching the specified *id*.
 
      Parameters:
 
      id - (string) A node's id.
 
-    */  
+    */
   removeNode: function(id) {
     if(this.hasNode(id)) {
       delete this.nodes[id];
@@ -4216,17 +4415,17 @@ $jit.Graph = new Class({
       delete this.edges[id];
     }
   },
-  
+
 /*
      Method: removeAdjacence
-    
+
      Removes a <Graph.Adjacence> matching *id1* and *id2*.
 
      Parameters:
 
      id1 - (string) A <Graph.Node> id.
      id2 - (string) A <Graph.Node> id.
-*/  
+*/
   removeAdjacence: function(id1, id2) {
     delete this.edges[id1][id2];
     delete this.edges[id2][id1];
@@ -4234,17 +4433,17 @@ $jit.Graph = new Class({
 
    /*
      Method: hasNode
-    
+
      Returns a boolean indicating if the node belongs to the <Graph> or not.
-     
+
      Parameters:
-    
+
         id - (string) Node id.
-   */  
+   */
   hasNode: function(id) {
     return id in this.nodes;
   },
-  
+
   /*
     Method: empty
 
@@ -4259,9 +4458,9 @@ var Graph = $jit.Graph;
 
 /*
  Object: Accessors
- 
+
  Defines a set of methods for data, canvas and label styles manipulation implemented by <Graph.Node> and <Graph.Adjacence> instances.
- 
+
  */
 var Accessors;
 
@@ -4332,7 +4531,7 @@ var Accessors;
 
       prop  - (string) The name of the property. The dollar sign is not needed. For
               example *getData(width)* will return *data.$width*.
-      type  - (string) The type of the data property queried. Default's "current". You can access *start* and *end* 
+      type  - (string) The type of the data property queried. Default's "current". You can access *start* and *end*
               data properties also. These properties are used when making animations.
       force - (boolean) Whether to obtain the true value of the property (equivalent to
               *data.$prop*) or to check for *node.overridable = true* first.
@@ -4367,13 +4566,13 @@ var Accessors;
               can also be "start" or "end".
 
     Example:
-    
+
     (start code js)
      node.setData('width', 30);
     (end code)
-    
+
     If we were to make an animation of a node/edge width then we could do
-    
+
     (start code js)
       var node = viz.getNode('nodeId');
       //set start and end values
@@ -4394,9 +4593,9 @@ var Accessors;
     Method: setDataset
 
     Convenience method to set multiple data values at once.
-    
+
     Parameters:
-    
+
     types - (array|string) A set of 'current', 'end' or 'start' values.
     obj - (object) A hash containing the names and values of the properties to be altered.
 
@@ -4412,11 +4611,11 @@ var Accessors;
         'color': '#ccc'
       });
     (end code)
-    
-    See also: 
-    
+
+    See also:
+
     <Accessors.setData>
-    
+
     */
     setDataset: function(types, obj) {
       types = $.splat(types);
@@ -4426,7 +4625,7 @@ var Accessors;
         }
       }
     },
-    
+
     /*
     Method: removeData
 
@@ -4456,16 +4655,16 @@ var Accessors;
 
       prop  - (string) The name of the property. The dollar sign is not needed. For
               example *getCanvasStyle(shadowBlur)* will return *data[$canvas-shadowBlur]*.
-      type  - (string) The type of the data property queried. Default's *current*. You can access *start* and *end* 
+      type  - (string) The type of the data property queried. Default's *current*. You can access *start* and *end*
               data properties also.
-              
+
     Example:
     (start code js)
       node.getCanvasStyle('shadowBlur');
     (end code)
-    
+
     See also:
-    
+
     <Accessors.getData>
     */
     getCanvasStyle: function(prop, type, force) {
@@ -4478,21 +4677,21 @@ var Accessors;
 
     Sets the canvas style data property with some specific value.
     This method is only useful for reserved (dollar prefixed) properties.
-    
+
     Parameters:
-    
+
     prop - (string) Name of the property. Can be any canvas property like 'shadowBlur', 'shadowColor', 'strokeStyle', etc.
     value - (mixed) The value to set to the property.
     type - (string) Default's *current*. Whether to set *start*, *current* or *end* type properties.
-    
+
     Example:
-    
+
     (start code js)
      node.setCanvasStyle('shadowBlur', 30);
     (end code)
-    
+
     If we were to make an animation of a node/edge shadowBlur canvas style then we could do
-    
+
     (start code js)
       var node = viz.getNode('nodeId');
       //set start and end values
@@ -4504,9 +4703,9 @@ var Accessors;
         duration: 1000
       });
     (end code)
-    
+
     See also:
-    
+
     <Accessors.setData>.
     */
     setCanvasStyle: function(prop, value, type) {
@@ -4519,12 +4718,12 @@ var Accessors;
     Convenience method to set multiple styles at once.
 
     Parameters:
-    
+
     types - (array|string) A set of 'current', 'end' or 'start' values.
     obj - (object) A hash containing the names and values of the properties to be altered.
 
     See also:
-    
+
     <Accessors.setDataset>.
     */
     setCanvasStyles: function(types, obj) {
@@ -4542,11 +4741,11 @@ var Accessors;
     Remove canvas style properties from data.
 
     Parameters:
-    
+
     A variable number of canvas style strings.
 
     See also:
-    
+
     <Accessors.removeData>.
     */
     removeCanvasStyle: function() {
@@ -4564,11 +4763,11 @@ var Accessors;
 
       prop  - (string) The name of the property. The dollar sign prefix is not needed. For
               example *getLabelData(size)* will return *data[$label-size]*.
-      type  - (string) The type of the data property queried. Default's *current*. You can access *start* and *end* 
+      type  - (string) The type of the data property queried. Default's *current*. You can access *start* and *end*
               data properties also.
-              
+
     See also:
-    
+
     <Accessors.getData>.
     */
     getLabelData: function(prop, type, force) {
@@ -4583,19 +4782,19 @@ var Accessors;
     This method is only useful for reserved (dollar prefixed) properties.
 
     Parameters:
-    
+
     prop - (string) Name of the property. Can be any canvas property like 'shadowBlur', 'shadowColor', 'strokeStyle', etc.
     value - (mixed) The value to set to the property.
     type - (string) Default's *current*. Whether to set *start*, *current* or *end* type properties.
-    
+
     Example:
-    
+
     (start code js)
      node.setLabelData('size', 30);
     (end code)
-    
+
     If we were to make an animation of a node label size then we could do
-    
+
     (start code js)
       var node = viz.getNode('nodeId');
       //set start and end values
@@ -4607,9 +4806,9 @@ var Accessors;
         duration: 1000
       });
     (end code)
-    
+
     See also:
-    
+
     <Accessors.setData>.
     */
     setLabelData: function(prop, value, type) {
@@ -4622,12 +4821,12 @@ var Accessors;
     Convenience function to set multiple label data at once.
 
     Parameters:
-    
+
     types - (array|string) A set of 'current', 'end' or 'start' values.
     obj - (object) A hash containing the names and values of the properties to be altered.
 
     See also:
-    
+
     <Accessors.setDataset>.
     */
     setLabelDataset: function(types, obj) {
@@ -4643,13 +4842,13 @@ var Accessors;
     Method: removeLabelData
 
     Remove label properties from data.
-    
+
     Parameters:
-    
+
     A variable number of label property strings.
 
     See also:
-    
+
     <Accessors.removeData>.
     */
     removeLabelData: function() {
@@ -4662,13 +4861,13 @@ var Accessors;
      Class: Graph.Node
 
      A <Graph> node.
-     
+
      Implements:
-     
+
      <Accessors> methods.
-     
+
      The following <Graph.Util> methods are implemented by <Graph.Node>
-     
+
     - <Graph.Util.eachAdjacency>
     - <Graph.Util.eachLevel>
     - <Graph.Util.eachSubgraph>
@@ -4676,10 +4875,10 @@ var Accessors;
     - <Graph.Util.anySubnode>
     - <Graph.Util.getSubnodes>
     - <Graph.Util.getParents>
-    - <Graph.Util.isDescendantOf>     
+    - <Graph.Util.isDescendantOf>
 */
 Graph.Node = new Class({
-    
+
   initialize: function(opt, klass, Node, Edge, Label) {
     var innerOptions = {
       'id': '',
@@ -4702,7 +4901,7 @@ Graph.Node = new Class({
       'startPos': new klass,
       'endPos': new klass
     };
-    
+
     $.extend(this, $.extend(innerOptions, opt));
     this.Config = this.Node = Node;
     this.Edge = Edge;
@@ -4711,13 +4910,13 @@ Graph.Node = new Class({
 
     /*
        Method: adjacentTo
-    
+
        Indicates if the node is adjacent to the node specified by id
 
        Parameters:
-    
+
           id - (string) A node id.
-    
+
        Example:
        (start code js)
         node.adjacentTo('nodeId') == true;
@@ -4729,30 +4928,30 @@ Graph.Node = new Class({
 
     /*
        Method: getAdjacency
-    
+
        Returns a <Graph.Adjacence> object connecting the current <Graph.Node> and the node having *id* as id.
 
        Parameters:
-    
+
           id - (string) A node id.
-    */  
+    */
     getAdjacency: function(id) {
         return this.adjacencies[id];
     },
 
     /*
       Method: getPos
-   
+
       Returns the position of the node.
-  
+
       Parameters:
-   
+
          type - (string) Default's *current*. Possible values are "start", "end" or "current".
-   
+
       Returns:
-   
+
         A <Complex> or <Polar> instance.
-  
+
       Example:
       (start code js)
        var pos = node.getPos('end');
@@ -4770,14 +4969,14 @@ Graph.Node = new Class({
    },
    /*
      Method: setPos
-  
+
      Sets the node's position.
-  
+
      Parameters:
-  
+
         value - (object) A <Complex> or <Polar> instance.
         type - (string) Default's *current*. Possible values are "start", "end" or "current".
-  
+
      Example:
      (start code js)
       node.setPos(new $jit.Complex(0, 0), 'end');
@@ -4803,9 +5002,9 @@ Graph.Node.implement(Accessors);
      Class: Graph.Adjacence
 
      A <Graph> adjacence (or edge) connecting two <Graph.Nodes>.
-     
+
      Implements:
-     
+
      <Accessors> methods.
 
      See also:
@@ -4813,13 +5012,13 @@ Graph.Node.implement(Accessors);
      <Graph>, <Graph.Node>
 
      Properties:
-     
+
       nodeFrom - A <Graph.Node> connected by this edge.
       nodeTo - Another  <Graph.Node> connected by this edge.
       data - Node data property containing a hash (i.e {}) with custom options.
 */
 Graph.Adjacence = new Class({
-  
+
   initialize: function(nodeFrom, nodeTo, data, Edge, Label) {
     this.nodeFrom = nodeFrom;
     this.nodeTo = nodeTo;
@@ -4837,24 +5036,24 @@ Graph.Adjacence.implement(Accessors);
    Object: Graph.Util
 
    <Graph> traversal and processing utility object.
-   
+
    Note:
-   
+
    For your convenience some of these methods have also been appended to <Graph> and <Graph.Node> classes.
 */
 Graph.Util = {
     /*
        filter
-    
+
        For internal use only. Provides a filtering function based on flags.
     */
     filter: function(param) {
         if(!param || !($.type(param) == 'string')) return function() { return true; };
         var props = param.split(" ");
         return function(elem) {
-            for(var i=0; i<props.length; i++) { 
-              if(elem[props[i]]) { 
-                return false; 
+            for(var i=0; i<props.length; i++) {
+              if(elem[props[i]]) {
+                return false;
               }
             }
             return true;
@@ -4862,11 +5061,11 @@ Graph.Util = {
     },
     /*
        Method: getNode
-    
+
        Returns a <Graph.Node> by *id*.
-       
+
        Also implemented by:
-       
+
        <Graph>
 
        Parameters:
@@ -4885,14 +5084,14 @@ Graph.Util = {
     getNode: function(graph, id) {
         return graph.nodes[id];
     },
-    
+
     /*
        Method: eachNode
-    
+
        Iterates over <Graph> nodes performing an *action*.
-       
+
        Also implemented by:
-       
+
        <Graph>.
 
        Parameters:
@@ -4915,23 +5114,23 @@ Graph.Util = {
         var filter = this.filter(flags);
         for(var i in graph.nodes) {
           if(filter(graph.nodes[i])) action(graph.nodes[i]);
-        } 
+        }
     },
-    
+
     /*
       Method: each
-   
+
       Iterates over <Graph> nodes performing an *action*. It's an alias for <Graph.Util.eachNode>.
-      
+
       Also implemented by:
-      
+
       <Graph>.
-  
+
       Parameters:
-  
+
       graph - (object) A <Graph> instance.
       action - (function) A callback function having a <Graph.Node> as first formal parameter.
-  
+
       Example:
       (start code js)
         $jit.Graph.Util.each(graph, function(node) {
@@ -4944,16 +5143,16 @@ Graph.Util = {
       (end code)
    */
    each: function(graph, action, flags) {
-      this.eachNode(graph, action, flags); 
+      this.eachNode(graph, action, flags);
    },
 
  /*
        Method: eachAdjacency
-    
+
        Iterates over <Graph.Node> adjacencies applying the *action* function.
-       
+
        Also implemented by:
-       
+
        <Graph.Node>.
 
        Parameters:
@@ -4989,16 +5188,16 @@ Graph.Util = {
 
      /*
        Method: computeLevels
-    
+
        Performs a BFS traversal setting the correct depth for each node.
-        
+
        Also implemented by:
-       
+
        <Graph>.
-       
+
        Note:
-       
-       The depth of each node can then be accessed by 
+
+       The depth of each node can then be accessed by
        >node._depth
 
        Parameters:
@@ -5033,11 +5232,11 @@ Graph.Util = {
 
     /*
        Method: eachBFS
-    
+
        Performs a BFS traversal applying *action* to each <Graph.Node>.
-       
+
        Also implemented by:
-       
+
        <Graph>.
 
        Parameters:
@@ -5074,18 +5273,18 @@ Graph.Util = {
             }, flags);
         }
     },
-    
+
     /*
        Method: eachLevel
-    
+
        Iterates over a node's subgraph applying *action* to the nodes of relative depth between *levelBegin* and *levelEnd*.
-       
+
        Also implemented by:
-       
+
        <Graph.Node>.
 
        Parameters:
-       
+
        node - (object) A <Graph.Node>.
        levelBegin - (number) A relative level value.
        levelEnd - (number) A relative level value.
@@ -5104,16 +5303,16 @@ Graph.Util = {
                     if(n._depth > d) loopLevel(n, levelBegin, levelEnd);
                 });
             }
-        })(node, levelBegin + d, levelEnd + d);      
+        })(node, levelBegin + d, levelEnd + d);
     },
 
     /*
        Method: eachSubgraph
-    
+
        Iterates over a node's children recursively.
-       
+
        Also implemented by:
-       
+
        <Graph.Node>.
 
        Parameters:
@@ -5137,13 +5336,13 @@ Graph.Util = {
 
     /*
        Method: eachSubnode
-    
+
        Iterates over a node's children (without deeper recursion).
-       
+
        Also implemented by:
-       
+
        <Graph.Node>.
-       
+
        Parameters:
        node - (object) A <Graph.Node>.
        action - (function) A callback function having a <Graph.Node> as first formal parameter.
@@ -5165,11 +5364,11 @@ Graph.Util = {
 
     /*
        Method: anySubnode
-    
+
        Returns *true* if any subnode matches the given condition.
-       
+
        Also implemented by:
-       
+
        <Graph.Node>.
 
        Parameters:
@@ -5192,15 +5391,15 @@ Graph.Util = {
       }, flags);
       return flag;
     },
-  
+
     /*
        Method: getSubnodes
-    
-       Collects all subnodes for a specified node. 
-       The *level* parameter filters nodes having relative depth of *level* from the root node. 
-       
+
+       Collects all subnodes for a specified node.
+       The *level* parameter filters nodes having relative depth of *level* from the root node.
+
        Also implemented by:
-       
+
        <Graph.Node>.
 
        Parameters:
@@ -5227,15 +5426,15 @@ Graph.Util = {
         }, flags);
         return ans;
     },
-  
-  
+
+
     /*
        Method: getParents
-    
+
        Returns an Array of <Graph.Nodes> which are parents of the given node.
-       
+
        Also implemented by:
-       
+
        <Graph.Node>.
 
        Parameters:
@@ -5249,7 +5448,7 @@ Graph.Util = {
          var pars = $jit.Graph.Util.getParents(node);
          //or...
          var pars = node.getParents();
-         
+
          if(pars.length > 0) {
            //do stuff with parents
          }
@@ -5263,17 +5462,17 @@ Graph.Util = {
         });
         return ans;
     },
-    
+
     /*
     Method: isDescendantOf
- 
-    Returns a boolean indicating if some node is descendant of the node with the given id. 
+
+    Returns a boolean indicating if some node is descendant of the node with the given id.
 
     Also implemented by:
-    
+
     <Graph.Node>.
-    
-    
+
+
     Parameters:
     node - (object) A <Graph.Node>.
     id - (string) A <Graph.Node> id.
@@ -5296,52 +5495,52 @@ Graph.Util = {
 
  /*
      Method: clean
-  
+
      Cleans flags from nodes.
 
      Also implemented by:
-     
+
      <Graph>.
-     
+
      Parameters:
      graph - A <Graph> instance.
   */
   clean: function(graph) { this.eachNode(graph, function(elem) { elem._flag = false; }); },
-  
-  /* 
-    Method: getClosestNodeToOrigin 
-  
+
+  /*
+    Method: getClosestNodeToOrigin
+
     Returns the closest node to the center of canvas.
-  
+
     Also implemented by:
-    
+
     <Graph>.
-    
+
     Parameters:
-   
+
      graph - (object) A <Graph> instance.
      prop - (optional|string) Default's 'current'. A <Graph.Node> position property. Possible properties are 'start', 'current' or 'end'.
-  
+
   */
   getClosestNodeToOrigin: function(graph, prop, flags) {
    return this.getClosestNodeToPos(graph, Polar.KER, prop, flags);
   },
-  
-  /* 
+
+  /*
     Method: getClosestNodeToPos
-  
+
     Returns the closest node to the given position.
-  
+
     Also implemented by:
-    
+
     <Graph>.
-    
+
     Parameters:
-   
+
      graph - (object) A <Graph> instance.
      pos - (object) A <Complex> or <Polar> instance.
      prop - (optional|string) Default's *current*. A <Graph.Node> position property. Possible properties are 'start', 'current' or 'end'.
-  
+
   */
   getClosestNodeToPos: function(graph, pos, prop, flags) {
    var node = null;
@@ -5356,7 +5555,7 @@ Graph.Util = {
          node.getPos(prop).getc(true), pos)) ? elem : node;
    }, flags);
    return node;
-  } 
+  }
 };
 
 //Append graph methods to <Graph>
@@ -5381,7 +5580,7 @@ $.each(['eachAdjacency', 'eachLevel', 'eachSubgraph', 'eachSubnode', 'anySubnode
 /*
    Object: Graph.Op
 
-   Perform <Graph> operations like adding/removing <Graph.Nodes> or <Graph.Adjacences>, 
+   Perform <Graph> operations like adding/removing <Graph.Nodes> or <Graph.Adjacences>,
    morphing a <Graph> into another <Graph>, contracting or expanding subtrees, etc.
 
 */
@@ -5393,19 +5592,19 @@ Graph.Op = {
       hideLabels: true,
       fps:30
     },
-    
+
     initialize: function(viz) {
       this.viz = viz;
     },
 
     /*
        Method: removeNode
-    
-       Removes one or more <Graph.Nodes> from the visualization. 
+
+       Removes one or more <Graph.Nodes> from the visualization.
        It can also perform several animations like fading sequentially, fading concurrently, iterating or replotting.
 
        Parameters:
-    
+
         node - (string|array) The node's id. Can also be an array having many ids.
         opt - (object) Animation options. It's an object with optional properties described below
         type - (string) Default's *nothing*. Type of the animation. Can be "nothing", "replot", "fade:seq",  "fade:con" or "iter".
@@ -5413,7 +5612,7 @@ Graph.Op = {
         fps - Described in <Options.Fx>.
         transition - Described in <Options.Fx>.
         hideLabels - (boolean) Default's *true*. Hide labels during the animation.
-   
+
       Example:
       (start code js)
         var viz = new $jit.Viz(options);
@@ -5430,7 +5629,7 @@ Graph.Op = {
         });
       (end code)
     */
-  
+
     removeNode: function(node, opt) {
         var viz = this.viz;
         var options = $.merge(this.options, viz.controller, opt);
@@ -5440,13 +5639,13 @@ Graph.Op = {
             case 'nothing':
                 for(i=0; i<n.length; i++) viz.graph.removeNode(n[i]);
                 break;
-            
+
             case 'replot':
                 this.removeNode(n, { type: 'nothing' });
                 viz.labels.clearLabels();
                 viz.refresh(true);
                 break;
-            
+
             case 'fade:seq': case 'fade':
                 that = this;
                 //set alpha to 0 for nodes to remove.
@@ -5466,7 +5665,7 @@ Graph.Op = {
                     }
                 }));
                 break;
-            
+
             case 'fade:con':
                 that = this;
                 //set alpha to 0 for nodes to remove. Tag them for being ignored on computing positions.
@@ -5484,7 +5683,7 @@ Graph.Op = {
                     }
                 }));
                 break;
-            
+
             case 'iter':
                 that = this;
                 viz.fx.sequence({
@@ -5494,19 +5693,19 @@ Graph.Op = {
                     duration: Math.ceil(options.duration / n.length)
                 });
                 break;
-                
+
             default: this.doError();
         }
     },
-    
+
     /*
        Method: removeEdge
-    
-       Removes one or more <Graph.Adjacences> from the visualization. 
+
+       Removes one or more <Graph.Adjacences> from the visualization.
        It can also perform several animations like fading sequentially, fading concurrently, iterating or replotting.
 
        Parameters:
-    
+
        vertex - (array) An array having two strings which are the ids of the nodes connected by this edge (i.e ['id1', 'id2']). Can also be a two dimensional array holding many edges (i.e [['id1', 'id2'], ['id3', 'id4'], ...]).
        opt - (object) Animation options. It's an object with optional properties described below
        type - (string) Default's *nothing*. Type of the animation. Can be "nothing", "replot", "fade:seq",  "fade:con" or "iter".
@@ -5514,7 +5713,7 @@ Graph.Op = {
        fps - Described in <Options.Fx>.
        transition - Described in <Options.Fx>.
        hideLabels - (boolean) Default's *true*. Hide labels during the animation.
-   
+
       Example:
       (start code js)
         var viz = new $jit.Viz(options);
@@ -5530,7 +5729,7 @@ Graph.Op = {
           duration: 1500
         });
       (end code)
-    
+
     */
     removeEdge: function(vertex, opt) {
         var viz = this.viz;
@@ -5541,12 +5740,12 @@ Graph.Op = {
             case 'nothing':
                 for(i=0; i<v.length; i++)   viz.graph.removeAdjacence(v[i][0], v[i][1]);
                 break;
-            
+
             case 'replot':
                 this.removeEdge(v, { type: 'nothing' });
                 viz.refresh(true);
                 break;
-            
+
             case 'fade:seq': case 'fade':
                 that = this;
                 //set alpha to 0 for edges to remove.
@@ -5567,7 +5766,7 @@ Graph.Op = {
                     }
                 }));
                 break;
-            
+
             case 'fade:con':
                 that = this;
                 //set alpha to 0 for nodes to remove. Tag them for being ignored when computing positions.
@@ -5587,7 +5786,7 @@ Graph.Op = {
                     }
                 }));
                 break;
-            
+
             case 'iter':
                 that = this;
                 viz.fx.sequence({
@@ -5597,20 +5796,20 @@ Graph.Op = {
                     duration: Math.ceil(options.duration / v.length)
                 });
                 break;
-                
+
             default: this.doError();
         }
     },
-    
+
     /*
        Method: sum
-    
-       Adds a new graph to the visualization. 
-       The JSON graph (or tree) must at least have a common node with the current graph plotted by the visualization. 
+
+       Adds a new graph to the visualization.
+       The JSON graph (or tree) must at least have a common node with the current graph plotted by the visualization.
        The resulting graph can be defined as follows <http://mathworld.wolfram.com/GraphSum.html>
 
        Parameters:
-    
+
        json - (object) A json tree or graph structure. See also <Loader.loadJSON>.
        opt - (object) Animation options. It's an object with optional properties described below
        type - (string) Default's *nothing*. Type of the animation. Can be "nothing", "replot", "fade:seq",  "fade:con".
@@ -5618,7 +5817,7 @@ Graph.Op = {
        fps - Described in <Options.Fx>.
        transition - Described in <Options.Fx>.
        hideLabels - (boolean) Default's *true*. Hide labels during the animation.
-   
+
       Example:
       (start code js)
         //...json contains a tree or graph structure...
@@ -5636,7 +5835,7 @@ Graph.Op = {
           duration: 1500
         });
       (end code)
-    
+
     */
     sum: function(json, opt) {
         var viz = this.viz;
@@ -5652,13 +5851,13 @@ Graph.Op = {
                     });
                 });
                 break;
-            
+
             case 'replot':
                 viz.refresh(true);
                 this.sum(json, { type: 'nothing' });
                 viz.refresh(true);
                 break;
-            
+
             case 'fade:seq': case 'fade': case 'fade:con':
                 // START METAMAPS CODE
                 var that = this;
@@ -5686,7 +5885,7 @@ Graph.Op = {
                 } else {
                     viz.graph.eachNode(function(elem) {
                         if (elem.id != root && elem.pos.isZero()) {
-                          elem.pos.set(elem.endPos); 
+                          elem.pos.set(elem.endPos);
                           elem.startPos.set(elem.endPos);
                         }
                     });
@@ -5699,15 +5898,15 @@ Graph.Op = {
             default: this.doError();
         }
     },
-    
+
     /*
        Method: morph
-    
-       This method will transform the current visualized graph into the new JSON representation passed in the method. 
+
+       This method will transform the current visualized graph into the new JSON representation passed in the method.
        The JSON object must at least have the root node in common with the current visualized graph.
 
        Parameters:
-    
+
        json - (object) A json tree or graph structure. See also <Loader.loadJSON>.
        opt - (object) Animation options. It's an object with optional properties described below
        type - (string) Default's *nothing*. Type of the animation. Can be "nothing", "replot", "fade:con".
@@ -5716,12 +5915,12 @@ Graph.Op = {
        transition - Described in <Options.Fx>.
        hideLabels - (boolean) Default's *true*. Hide labels during the animation.
        id - (string) The shared <Graph.Node> id between both graphs.
-       
-       extraModes - (optional|object) When morphing with an animation, dollar prefixed data parameters are added to 
-                    *endData* and not *data* itself. This way you can animate dollar prefixed parameters during your morphing operation. 
-                    For animating these extra-parameters you have to specify an object that has animation groups as keys and animation 
+
+       extraModes - (optional|object) When morphing with an animation, dollar prefixed data parameters are added to
+                    *endData* and not *data* itself. This way you can animate dollar prefixed parameters during your morphing operation.
+                    For animating these extra-parameters you have to specify an object that has animation groups as keys and animation
                     properties as values, just like specified in <Graph.Plot.animate>.
-   
+
       Example:
       (start code js)
         //...json contains a tree or graph structure...
@@ -5747,21 +5946,21 @@ Graph.Op = {
           'node-property': ['width', 'height']
         });
       (end code)
-    
+
     */
     morph: function(json, opt, extraModes) {
         extraModes = extraModes || {};
         var viz = this.viz;
         var options = $.merge(this.options, viz.controller, opt), root = viz.root;
         var graph;
-        //TODO(nico) this hack makes morphing work with the Hypertree. 
+        //TODO(nico) this hack makes morphing work with the Hypertree.
         //Need to check if it has been solved and this can be removed.
         viz.root = opt.id || viz.root;
         switch(options.type) {
             case 'nothing':
                 graph = viz.construct(json);
                 graph.eachNode(function(elem) {
-                  var nodeExists = viz.graph.hasNode(elem.id);  
+                  var nodeExists = viz.graph.hasNode(elem.id);
                   elem.eachAdjacency(function(adj) {
                     var adjExists = !!viz.graph.getAdjacence(adj.nodeFrom.id, adj.nodeTo.id);
                     viz.graph.addAdjacence(adj.nodeFrom, adj.nodeTo, adj.data);
@@ -5789,16 +5988,16 @@ Graph.Op = {
                     });
                     if(!graph.hasNode(elem.id)) viz.graph.removeNode(elem.id);
                 });
-                
+
                 break;
-            
+
             case 'replot':
                 viz.labels.clearLabels(true);
                 this.morph(json, { type: 'nothing' });
                 viz.refresh(true);
                 viz.refresh(true);
                 break;
-                
+
             case 'fade:seq': case 'fade': case 'fade:con':
                 // START METAMAPS CODE
                 var that = this;
@@ -5808,11 +6007,11 @@ Graph.Op = {
                 graph = viz.construct(json);
                 //preprocessing for nodes to delete.
                 //get node property modes to interpolate
-                var nodeModes = ('node-property' in extraModes) 
-                  && $.map($.splat(extraModes['node-property']), 
+                var nodeModes = ('node-property' in extraModes)
+                  && $.map($.splat(extraModes['node-property']),
                       function(n) { return '$' + n; });
                 viz.graph.eachNode(function(elem) {
-                  var graphNode = graph.getNode(elem.id);   
+                  var graphNode = graph.getNode(elem.id);
                   if(!graphNode) {
                       elem.setData('alpha', 1);
                       elem.setData('alpha', 1, 'start');
@@ -5829,7 +6028,7 @@ Graph.Op = {
                         }
                       }
                     }
-                }); 
+                });
                 viz.graph.eachNode(function(elem) {
                     if(elem.ignore) return;
                     elem.eachAdjacency(function(adj) {
@@ -5844,18 +6043,18 @@ Graph.Op = {
                             adj.setData('alpha', 0, 'end');
                         }
                     });
-                }); 
+                });
                 //preprocessing for adding nodes.
                 var fadeEdges = this.preprocessSum(graph);
 
-                var modes = !fadeEdges? ['node-property:alpha'] : 
-                                        ['node-property:alpha', 
+                var modes = !fadeEdges? ['node-property:alpha'] :
+                                        ['node-property:alpha',
                                          'edge-property:alpha'];
                 //Append extra node-property animations (if any)
-                modes[0] = modes[0] + (('node-property' in extraModes)? 
+                modes[0] = modes[0] + (('node-property' in extraModes)?
                     (':' + $.splat(extraModes['node-property']).join(':')) : '');
                 //Append extra edge-property animations (if any)
-                modes[1] = (modes[1] || 'edge-property:alpha') + (('edge-property' in extraModes)? 
+                modes[1] = (modes[1] || 'edge-property:alpha') + (('edge-property' in extraModes)?
                     (':' + $.splat(extraModes['edge-property']).join(':')) : '');
                 //Add label-property animations (if any)
                 if('label-property' in extraModes) {
@@ -5892,18 +6091,18 @@ Graph.Op = {
         }
     },
 
-    
+
   /*
     Method: contract
- 
+
     Collapses the subtree of the given node. The node will have a _collapsed=true_ property.
-    
+
     Parameters:
- 
+
     node - (object) A <Graph.Node>.
     opt - (object) An object containing options described below
     type - (string) Whether to 'replot' or 'animate' the contraction.
-   
+
     There are also a number of Animation options. For more information see <Options.Fx>.
 
     Example:
@@ -5916,7 +6115,7 @@ Graph.Op = {
        transition: $jit.Trans.Quart.easeOut
      });
    (end code)
- 
+
    */
     contract: function(node, opt) {
       var viz = this.viz;
@@ -5950,18 +6149,18 @@ Graph.Op = {
         viz.refresh();
       }
     },
-    
+
     /*
     Method: expand
- 
+
     Expands the previously contracted subtree. The given node must have the _collapsed=true_ property.
-    
+
     Parameters:
- 
+
     node - (object) A <Graph.Node>.
     opt - (object) An object containing options described below
     type - (string) Whether to 'replot' or 'animate'.
-     
+
     There are also a number of Animation options. For more information see <Options.Fx>.
 
     Example:
@@ -5974,7 +6173,7 @@ Graph.Op = {
         transition: $jit.Trans.Quart.easeOut
       });
     (end code)
- 
+
    */
     expand: function(node, opt) {
       if(!('collapsed' in node)) return;
@@ -6013,7 +6212,7 @@ Graph.Op = {
                 n.setData('alpha', 0, 'start');
                 n.setData('alpha', 1, 'end');
             }
-        }); 
+        });
         var fadeEdges = false;
         graph.eachNode(function(elem) {
             elem.eachAdjacency(function(adj) {
@@ -6021,16 +6220,16 @@ Graph.Op = {
                 var nodeTo = viz.graph.getNode(adj.nodeTo.id);
                 if(!nodeFrom.adjacentTo(nodeTo)) {
                     var adj = viz.graph.addAdjacence(nodeFrom, nodeTo, adj.data);
-                    if(nodeFrom.startAlpha == nodeFrom.endAlpha 
+                    if(nodeFrom.startAlpha == nodeFrom.endAlpha
                     && nodeTo.startAlpha == nodeTo.endAlpha) {
                         fadeEdges = true;
                         adj.setData('alpha', 0);
                         adj.setData('alpha', 0, 'start');
                         adj.setData('alpha', 1, 'end');
-                    } 
+                    }
                 }
             });
-        }); 
+        });
         return fadeEdges;
     }
 };
@@ -6039,14 +6238,14 @@ Graph.Op = {
 
 /*
    File: Helpers.js
- 
+
    Helpers are objects that contain rendering primitives (like rectangles, ellipses, etc), for plotting nodes and edges.
    Helpers also contain implementations of the *contains* method, a method returning a boolean indicating whether the mouse
    position is over the rendered shape.
-   
-   Helpers are very useful when implementing new NodeTypes, since you can access them through *this.nodeHelper* and 
+
+   Helpers are very useful when implementing new NodeTypes, since you can access them through *this.nodeHelper* and
    *this.edgeHelper* <Graph.Plot> properties, providing you with simple primitives and mouse-position check functions.
-   
+
    Example:
    (start code js)
    //implement a new node type
@@ -6078,7 +6277,7 @@ Graph.Op = {
 
 /*
    Object: NodeHelper
-   
+
    Contains rendering and other type of primitives for simple shapes.
  */
 var NodeHelper = {
@@ -6092,16 +6291,16 @@ var NodeHelper = {
   'circle': {
     /*
      Method: render
-     
+
      Renders a circle into the canvas.
-     
+
      Parameters:
-     
+
      type - (string) Possible options are 'fill' or 'stroke'.
      pos - (object) An *x*, *y* object with the position of the center of the circle.
      radius - (number) The radius of the circle to be rendered.
      canvas - (object) A <Canvas> instance.
-     
+
      Example:
      (start code js)
      NodeHelper.circle.render('fill', { x: 10, y: 30 }, 30, viz.canvas);
@@ -6116,23 +6315,23 @@ var NodeHelper = {
     },
     /*
     Method: contains
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     radius - (number) The radius of the rendered circle.
-    
+
     Example:
     (start code js)
     NodeHelper.circle.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, 30); //true
     (end code)
     */
     'contains': function(npos, pos, radius){
-      var diffx = npos.x - pos.x, 
-          diffy = npos.y - pos.y, 
+      var diffx = npos.x - pos.x,
+          diffy = npos.y - pos.y,
           diff = diffx * diffx + diffy * diffy;
       return diff <= radius * radius;
     }
@@ -6143,17 +6342,17 @@ var NodeHelper = {
   'ellipse': {
     /*
     Method: render
-    
+
     Renders an ellipse into the canvas.
-    
+
     Parameters:
-    
+
     type - (string) Possible options are 'fill' or 'stroke'.
     pos - (object) An *x*, *y* object with the position of the center of the ellipse.
     width - (number) The width of the ellipse.
     height - (number) The height of the ellipse.
     canvas - (object) A <Canvas> instance.
-    
+
     Example:
     (start code js)
     NodeHelper.ellipse.render('fill', { x: 10, y: 30 }, 30, 40, viz.canvas);
@@ -6187,16 +6386,16 @@ var NodeHelper = {
     },
     /*
     Method: contains
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     width - (number) The width of the rendered ellipse.
     height - (number) The height of the rendered ellipse.
-    
+
     Example:
     (start code js)
     NodeHelper.ellipse.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, 30, 40);
@@ -6230,16 +6429,16 @@ var NodeHelper = {
   'square': {
     /*
     Method: render
-    
+
     Renders a square into the canvas.
-    
+
     Parameters:
-    
+
     type - (string) Possible options are 'fill' or 'stroke'.
     pos - (object) An *x*, *y* object with the position of the center of the square.
     dim - (number) The radius (or half-diameter) of the square.
     canvas - (object) A <Canvas> instance.
-    
+
     Example:
     (start code js)
     NodeHelper.square.render('stroke', { x: 10, y: 30 }, 40, viz.canvas);
@@ -6250,15 +6449,15 @@ var NodeHelper = {
     },
     /*
     Method: contains
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     dim - (number) The radius (or half-diameter) of the square.
-    
+
     Example:
     (start code js)
     NodeHelper.square.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, 30);
@@ -6274,38 +6473,38 @@ var NodeHelper = {
   'rectangle': {
     /*
     Method: render
-    
+
     Renders a rectangle into the canvas.
-    
+
     Parameters:
-    
+
     type - (string) Possible options are 'fill' or 'stroke'.
     pos - (object) An *x*, *y* object with the position of the center of the rectangle.
     width - (number) The width of the rectangle.
     height - (number) The height of the rectangle.
     canvas - (object) A <Canvas> instance.
-    
+
     Example:
     (start code js)
     NodeHelper.rectangle.render('fill', { x: 10, y: 30 }, 30, 40, viz.canvas);
     (end code)
     */
     'render': function(type, pos, width, height, canvas){
-      canvas.getCtx()[type + "Rect"](pos.x - width / 2, pos.y - height / 2, 
+      canvas.getCtx()[type + "Rect"](pos.x - width / 2, pos.y - height / 2,
                                       width, height);
     },
     /*
     Method: contains
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     width - (number) The width of the rendered rectangle.
     height - (number) The height of the rendered rectangle.
-    
+
     Example:
     (start code js)
     NodeHelper.rectangle.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, 30, 40);
@@ -6322,28 +6521,28 @@ var NodeHelper = {
   'triangle': {
     /*
     Method: render
-    
+
     Renders a triangle into the canvas.
-    
+
     Parameters:
-    
+
     type - (string) Possible options are 'fill' or 'stroke'.
     pos - (object) An *x*, *y* object with the position of the center of the triangle.
     dim - (number) Half the base and half the height of the triangle.
     canvas - (object) A <Canvas> instance.
-    
+
     Example:
     (start code js)
     NodeHelper.triangle.render('stroke', { x: 10, y: 30 }, 40, viz.canvas);
     (end code)
     */
     'render': function(type, pos, dim, canvas){
-      var ctx = canvas.getCtx(), 
-          c1x = pos.x, 
-          c1y = pos.y - dim, 
-          c2x = c1x - dim, 
-          c2y = pos.y + dim, 
-          c3x = c1x + dim, 
+      var ctx = canvas.getCtx(),
+          c1x = pos.x,
+          c1y = pos.y - dim,
+          c2x = c1x - dim,
+          c2y = pos.y + dim,
+          c3x = c1x + dim,
           c3y = c2y;
       ctx.beginPath();
       ctx.moveTo(c1x, c1y);
@@ -6354,15 +6553,15 @@ var NodeHelper = {
     },
     /*
     Method: contains
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     dim - (number) Half the base and half the height of the triangle.
-    
+
     Example:
     (start code js)
     NodeHelper.triangle.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, 30);
@@ -6378,23 +6577,23 @@ var NodeHelper = {
   'star': {
     /*
     Method: render
-    
+
     Renders a star (concave decagon) into the canvas.
-    
+
     Parameters:
-    
+
     type - (string) Possible options are 'fill' or 'stroke'.
     pos - (object) An *x*, *y* object with the position of the center of the star.
     dim - (number) The length of a side of a concave decagon.
     canvas - (object) A <Canvas> instance.
-    
+
     Example:
     (start code js)
     NodeHelper.star.render('stroke', { x: 10, y: 30 }, 40, viz.canvas);
     (end code)
     */
     'render': function(type, pos, dim, canvas){
-      var ctx = canvas.getCtx(), 
+      var ctx = canvas.getCtx(),
           pi5 = Math.PI / 5;
       ctx.save();
       ctx.translate(pos.x, pos.y);
@@ -6414,15 +6613,15 @@ var NodeHelper = {
     },
     /*
     Method: contains
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     dim - (number) The length of a side of a concave decagon.
-    
+
     Example:
     (start code js)
     NodeHelper.star.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, 30);
@@ -6436,7 +6635,7 @@ var NodeHelper = {
 
 /*
   Object: EdgeHelper
-  
+
   Contains rendering primitives for simple edge shapes.
 */
 var EdgeHelper = {
@@ -6446,15 +6645,15 @@ var EdgeHelper = {
   'line': {
       /*
       Method: render
-      
+
       Renders a line into the canvas.
-      
+
       Parameters:
-      
+
       from - (object) An *x*, *y* object with the starting position of the line.
       to - (object) An *x*, *y* object with the ending position of the line.
       canvas - (object) A <Canvas> instance.
-      
+
       Example:
       (start code js)
       EdgeHelper.line.render({ x: 10, y: 30 }, { x: 10, y: 50 }, viz.canvas);
@@ -6469,37 +6668,37 @@ var EdgeHelper = {
       },
       /*
       Method: contains
-      
+
       Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-      
+
       Parameters:
-      
+
       posFrom - (object) An *x*, *y* object with a <Graph.Node> position.
       posTo - (object) An *x*, *y* object with a <Graph.Node> position.
       pos - (object) An *x*, *y* object with the position to check.
       epsilon - (number) The dimension of the shape.
-      
+
       Example:
       (start code js)
       EdgeHelper.line.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, { x: 15, y: 35 }, 30);
       (end code)
       */
       'contains': function(posFrom, posTo, pos, epsilon) {
-        var min = Math.min, 
+        var min = Math.min,
             max = Math.max,
             minPosX = min(posFrom.x, posTo.x),
             maxPosX = max(posFrom.x, posTo.x),
             minPosY = min(posFrom.y, posTo.y),
             maxPosY = max(posFrom.y, posTo.y);
-          
-        if(pos.x >= minPosX && pos.x <= maxPosX 
+
+        if(pos.x >= minPosX && pos.x <= maxPosX
             && pos.y >= minPosY && pos.y <= maxPosY) {
           if(Math.abs(posTo.x - posFrom.x) <= epsilon) {
-            
+
             return true;
           }
           var dist = (posTo.y - posFrom.y) / (posTo.x - posFrom.x) * (pos.x - posFrom.x) + posFrom.y;
-            
+
           return Math.abs(dist - pos.y) <= epsilon;
         }
         return false;
@@ -6511,17 +6710,17 @@ var EdgeHelper = {
   'arrow': {
       /*
       Method: render
-      
+
       Renders an arrow into the canvas.
-      
+
       Parameters:
-      
+
       from - (object) An *x*, *y* object with the starting position of the arrow.
       to - (object) An *x*, *y* object with the ending position of the arrow.
       dim - (number) The dimension of the arrow.
       swap - (boolean) Whether to set the arrow pointing to the starting position or the ending position.
       canvas - (object) A <Canvas> instance.
-      
+
       Example:
       (start code js)
       EdgeHelper.arrow.render({ x: 10, y: 30 }, { x: 10, y: 50 }, 13, false, viz.canvas);
@@ -6539,9 +6738,9 @@ var EdgeHelper = {
         vect.$scale(dim / vect.norm());
         var intermediatePoint = new Complex(to.x - vect.x, to.y - vect.y),
             normal = new Complex(-vect.y / 2, vect.x / 2),
-            v1 = intermediatePoint.add(normal), 
+            v1 = intermediatePoint.add(normal),
             v2 = intermediatePoint.$add(normal.$scale(-1));
-        
+
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
         ctx.lineTo(to.x, to.y);
@@ -6555,16 +6754,16 @@ var EdgeHelper = {
     },
     /*
     Method: contains
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     posFrom - (object) An *x*, *y* object with a <Graph.Node> position.
     posTo - (object) An *x*, *y* object with a <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     epsilon - (number) The dimension of the shape.
-    
+
     Example:
     (start code js)
     EdgeHelper.arrow.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, { x: 15, y: 35 }, 30);
@@ -6580,23 +6779,23 @@ var EdgeHelper = {
   'hyperline': {
     /*
     Method: render
-    
+
     Renders a hyperline into the canvas. A hyperline are the lines drawn for the <Hypertree> visualization.
-    
+
     Parameters:
-    
+
     from - (object) An *x*, *y* object with the starting position of the hyperline. *x* and *y* must belong to [0, 1).
     to - (object) An *x*, *y* object with the ending position of the hyperline. *x* and *y* must belong to [0, 1).
     r - (number) The scaling factor.
     canvas - (object) A <Canvas> instance.
-    
+
     Example:
     (start code js)
     EdgeHelper.hyperline.render({ x: 10, y: 30 }, { x: 10, y: 50 }, 100, viz.canvas);
     (end code)
     */
     'render': function(from, to, r, canvas){
-      var ctx = canvas.getCtx();  
+      var ctx = canvas.getCtx();
       var centerOfCircle = computeArcThroughTwoPoints(from, to);
       if (centerOfCircle.a > 1000 || centerOfCircle.b > 1000
           || centerOfCircle.ratio < 0) {
@@ -6615,19 +6814,19 @@ var EdgeHelper = {
             * r, angleBegin, angleEnd, sense);
         ctx.stroke();
       }
-      /*      
+      /*
         Calculates the arc parameters through two points.
-        
-        More information in <http://en.wikipedia.org/wiki/Poincar%C3%A9_disc_model#Analytic_geometry_constructions_in_the_hyperbolic_plane> 
-      
+
+        More information in <http://en.wikipedia.org/wiki/Poincar%C3%A9_disc_model#Analytic_geometry_constructions_in_the_hyperbolic_plane>
+
         Parameters:
-      
+
         p1 - A <Complex> instance.
         p2 - A <Complex> instance.
         scale - The Disk's diameter.
-      
+
         Returns:
-      
+
         An object containing some arc properties.
       */
       function computeArcThroughTwoPoints(p1, p2){
@@ -6640,7 +6839,7 @@ var EdgeHelper = {
             y: 0,
             ratio: -1
           };
-    
+
         var a = (p1.y * sq2 - p2.y * sq1 + p1.y - p2.y) / aDen;
         var b = (p2.x * sq1 - p1.x * sq2 + p2.x - p1.x) / bDen;
         var x = -a / 2;
@@ -6661,20 +6860,20 @@ var EdgeHelper = {
           a: a,
           b: b
         };
-    
+
         return out;
       }
-      /*      
-        Sets angle direction to clockwise (true) or counterclockwise (false). 
-         
-        Parameters: 
-      
-           angleBegin - Starting angle for drawing the arc. 
-           angleEnd - The HyperLine will be drawn from angleBegin to angleEnd. 
-      
-        Returns: 
-      
-           A Boolean instance describing the sense for drawing the HyperLine. 
+      /*
+        Sets angle direction to clockwise (true) or counterclockwise (false).
+
+        Parameters:
+
+           angleBegin - Starting angle for drawing the arc.
+           angleEnd - The HyperLine will be drawn from angleBegin to angleEnd.
+
+        Returns:
+
+           A Boolean instance describing the sense for drawing the HyperLine.
       */
       function sense(angleBegin, angleEnd){
         return (angleBegin < angleEnd)? ((angleBegin + Math.PI > angleEnd)? false
@@ -6683,18 +6882,18 @@ var EdgeHelper = {
     },
     /*
     Method: contains
-    
+
     Not Implemented
-    
+
     Returns *true* if *pos* is contained in the area of the shape. Returns *false* otherwise.
-    
+
     Parameters:
-    
+
     posFrom - (object) An *x*, *y* object with a <Graph.Node> position.
     posTo - (object) An *x*, *y* object with a <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
     epsilon - (number) The dimension of the shape.
-    
+
     Example:
     (start code js)
     EdgeHelper.hyperline.contains({ x: 10, y: 30 }, { x: 15, y: 35 }, { x: 15, y: 35 }, 30);
@@ -6713,9 +6912,9 @@ var EdgeHelper = {
    Object: Graph.Plot
 
    <Graph> rendering and animation methods.
-   
+
    Properties:
-   
+
    nodeHelper - <NodeHelper> object.
    edgeHelper - <EdgeHelper> object.
 */
@@ -6735,7 +6934,7 @@ Graph.Plot = {
     //Add helpers
     nodeHelper: NodeHelper,
     edgeHelper: EdgeHelper,
-    
+
     Interpolator: {
         //node/edge property parsers
         'map': {
@@ -6752,7 +6951,7 @@ Graph.Plot = {
           'dimArray':'array-number'
           //'colorArray':'array-color'
         },
-        
+
         //canvas specific parsers
         'canvas': {
           'globalAlpha': 'number',
@@ -6765,34 +6964,34 @@ Graph.Plot = {
           'shadowOffsetY': 'number',
           'miterLimit': 'number'
         },
-  
+
         //label parsers
         'label': {
           'size': 'number',
           'color': 'color'
         },
-  
+
         //Number interpolator
         'compute': function(from, to, delta) {
           return from + (to - from) * delta;
         },
-        
+
         //Position interpolators
         'moebius': function(elem, props, delta, vector) {
-          var v = vector.scale(-delta);  
+          var v = vector.scale(-delta);
           if(v.norm() < 1) {
               var x = v.x, y = v.y;
               var ans = elem.startPos
                 .getc().moebiusTransformation(v);
               elem.pos.setc(ans.x, ans.y);
               v.x = x; v.y = y;
-            }           
+            }
         },
 
         'linear': function(elem, props, delta) {
             var from = elem.startPos.getc(true);
             var to = elem.endPos.getc(true);
-            elem.pos.setc(this.compute(from.x, to.x, delta), 
+            elem.pos.setc(this.compute(from.x, to.x, delta),
                           this.compute(from.y, to.y, delta));
         },
 
@@ -6802,7 +7001,7 @@ Graph.Plot = {
           var ans = to.interpolate(from, delta);
           elem.pos.setp(ans.theta, ans.rho);
         },
-        
+
         //Graph's Node/Edge interpolators
         'number': function(elem, prop, delta, getter, setter) {
           var from = elem[getter](prop, 'start');
@@ -6817,10 +7016,10 @@ Graph.Plot = {
           var val = $.rgbToHex([parseInt(comp(from[0], to[0], delta)),
                                 parseInt(comp(from[1], to[1], delta)),
                                 parseInt(comp(from[2], to[2], delta))]);
-          
+
           elem[setter](prop, val);
         },
-        
+
         'array-number': function(elem, prop, delta, getter, setter) {
           var from = elem[getter](prop, 'start'),
               to = elem[getter](prop, 'end'),
@@ -6838,7 +7037,7 @@ Graph.Plot = {
           }
           elem[setter](prop, cur);
         },
-        
+
         'node': function(elem, props, delta, map, getter, setter) {
           map = this[map];
           if(props) {
@@ -6853,37 +7052,37 @@ Graph.Plot = {
             }
           }
         },
-        
+
         'edge': function(elem, props, delta, mapKey, getter, setter) {
             var adjs = elem.adjacencies;
             for(var id in adjs) this['node'](adjs[id], props, delta, mapKey, getter, setter);
         },
-        
+
         'node-property': function(elem, props, delta) {
           this['node'](elem, props, delta, 'map', 'getData', 'setData');
         },
-        
+
         'edge-property': function(elem, props, delta) {
-          this['edge'](elem, props, delta, 'map', 'getData', 'setData');  
+          this['edge'](elem, props, delta, 'map', 'getData', 'setData');
         },
 
         'label-property': function(elem, props, delta) {
           this['node'](elem, props, delta, 'label', 'getLabelData', 'setLabelData');
         },
-        
+
         'node-style': function(elem, props, delta) {
           this['node'](elem, props, delta, 'canvas', 'getCanvasStyle', 'setCanvasStyle');
         },
-        
+
         'edge-style': function(elem, props, delta) {
-          this['edge'](elem, props, delta, 'canvas', 'getCanvasStyle', 'setCanvasStyle');  
+          this['edge'](elem, props, delta, 'canvas', 'getCanvasStyle', 'setCanvasStyle');
         }
     },
-    
-  
+
+
     /*
        sequence
-    
+
        Iteratively performs an action while refreshing the state of the visualization.
 
        Parameters:
@@ -6931,15 +7130,15 @@ Graph.Plot = {
           that.viz.refresh(true);
         }, options.duration);
     },
-    
+
     /*
       prepare
- 
-      Prepare graph position and other attribute values before performing an Animation. 
+
+      Prepare graph position and other attribute values before performing an Animation.
       This method is used internally by the Toolkit.
-      
+
       See also:
-       
+
        <Animation>, <Graph.Plot.animate>
 
     */
@@ -6980,8 +7179,8 @@ Graph.Plot = {
           }
         }
       }
-      
-      graph.eachNode(function(node) { 
+
+      graph.eachNode(function(node) {
         node.startPos.set(node.pos);
         $.each(['node-property', 'node-style'], function(p) {
           if(p in m) {
@@ -7004,10 +7203,10 @@ Graph.Plot = {
       });
       return m;
     },
-    
+
     /*
        Method: animate
-    
+
        Animates a <Graph> by interpolating some <Graph.Node>, <Graph.Adjacence> or <Graph.Label> properties.
 
        Parameters:
@@ -7019,11 +7218,11 @@ Graph.Plot = {
        modes - (required|object) An object with animation modes (described below).
 
        Animation modes:
-       
-       Animation modes are strings representing different node/edge and graph properties that you'd like to animate. 
-       They are represented by an object that has as keys main categories of properties to animate and as values a list 
+
+       Animation modes are strings representing different node/edge and graph properties that you'd like to animate.
+       They are represented by an object that has as keys main categories of properties to animate and as values a list
        of these specific properties. The properties are described below
-       
+
        position - Describes the way nodes' positions must be interpolated. Possible values are 'linear', 'polar' or 'moebius'.
        node-property - Describes which Node properties will be interpolated. These properties can be any of the ones defined in <Options.Node>.
        edge-property - Describes which Edge properties will be interpolated. These properties can be any the ones defined in <Options.Edge>.
@@ -7063,13 +7262,13 @@ Graph.Plot = {
           animation =  opt.type === 'nodefx'? this.nodeFxAnimation : this.animation;
       //prepare graph values
       var m = this.prepare(opt.modes);
-      
+
       //animate
       if(opt.hideLabels) this.labels.hideLabels(true);
       animation.setOptions($.extend(opt, {
         $animating: false,
         compute: function(delta) {
-          graph.eachNode(function(node) { 
+          graph.eachNode(function(node) {
             for(var p in m) {
               interp[p](node, m[p], delta, versor);
             }
@@ -7083,20 +7282,20 @@ Graph.Plot = {
           opt.onComplete();
           //TODO(nico): This shouldn't be here!
           //opt.onAfterCompute();
-        }       
+        }
       })).start();
     },
-    
+
     /*
       nodeFx
-   
+
       Apply animation to node properties like color, width, height, dim, etc.
-  
+
       Parameters:
-  
+
       options - Animation options. This object properties is described below
       elements - The Elements to be transformed. This is an object that has a properties
-      
+
       (start code js)
       'elements': {
         //can also be an array of ids
@@ -7108,17 +7307,17 @@ Graph.Plot = {
           'height': 10, //some height
           'dim': 20, //some dim
           'lineWidth': 10 //some line width
-        } 
+        }
       }
       (end code)
-      
-      - _reposition_ Whether to recalculate positions and add a motion animation. 
+
+      - _reposition_ Whether to recalculate positions and add a motion animation.
       This might be used when changing _width_ or _height_ properties in a <Layouts.Tree> like layout. Default's *false*.
-      
+
       - _onComplete_ A method that is called when the animation completes.
-      
+
       ...and all other <Graph.Plot.animate> options like _duration_, _fps_, _transition_, etc.
-  
+
       Example:
       (start code js)
        var rg = new RGraph(canvas, config); //can be also Hypertree or ST
@@ -7131,7 +7330,7 @@ Graph.Plot = {
            'transition': Trans.Quart.easeOut
          }
        });
-      (end code)    
+      (end code)
    */
    nodeFx: function(opt) {
      var viz = this.viz,
@@ -7186,10 +7385,10 @@ Graph.Plot = {
      }));
    },
 
-    
+
     /*
        Method: plot
-    
+
        Plots a <Graph>.
 
        Parameters:
@@ -7200,33 +7399,33 @@ Graph.Plot = {
 
        (start code js)
        var viz = new $jit.Viz(options);
-       viz.fx.plot(); 
+       viz.fx.plot();
        (end code)
 
     */
    plot: function(opt, animating) {
-     var viz = this.viz, 
-         aGraph = viz.graph, 
-         canvas = viz.canvas, 
-         id = viz.root, 
-         that = this, 
-         ctx = canvas.getCtx(), 
+     var viz = this.viz,
+         aGraph = viz.graph,
+         canvas = viz.canvas,
+         id = viz.root,
+         that = this,
+         ctx = canvas.getCtx(),
          min = Math.min,
          opt = opt || this.viz.controller;
-     
+
      opt.clearCanvas && canvas.clear();
-       
+
      var root = aGraph.getNode(id);
      if(!root) return;
-     
+
      var T = !!root.visited;
-    
+
     //START METAMAPS CODE
     if (Metamaps.Mouse.synapseStartCoordinates.length > 0) {
         ctx.save();
         var start;
         var end = Metamaps.Mouse.synapseEndCoordinates;
-        
+
         var l = Metamaps.Mouse.synapseStartCoordinates.length;
         for (var i = l - 1; i >= 0; i -= 1) {
             start = Metamaps.Mouse.synapseStartCoordinates[i];
@@ -7235,7 +7434,7 @@ Graph.Plot = {
         }
         ctx.restore();
     }
-    //END METAMAPS CODE  
+    //END METAMAPS CODE
 
      aGraph.eachNode(function(node) {
        var nodeAlpha = node.getData('alpha');
@@ -7267,8 +7466,8 @@ Graph.Plot = {
       Plots a Subtree.
    */
    plotTree: function(node, opt, animating) {
-       var that = this, 
-       viz = this.viz, 
+       var that = this,
+       viz = this.viz,
        canvas = viz.canvas,
        config = this.config,
        ctx = canvas.getCtx();
@@ -7286,9 +7485,9 @@ Graph.Plot = {
            !animating && opt.onBeforePlotNode(node);
            this.plotNode(node, canvas, animating);
            !animating && opt.onAfterPlotNode(node);
-           if(!opt.hideLabels && opt.withLabels && nodeAlpha >= 0.95) 
+           if(!opt.hideLabels && opt.withLabels && nodeAlpha >= 0.95)
                this.labels.plotLabel(canvas, node, opt);
-           else 
+           else
                this.labels.hideLabel(node, false);
        } else {
            this.labels.hideLabel(node, true);
@@ -7297,17 +7496,17 @@ Graph.Plot = {
 
   /*
        Method: plotNode
-    
+
        Plots a <Graph.Node>.
 
        Parameters:
-       
+
        node - (object) A <Graph.Node>.
        canvas - (object) A <Canvas> element.
 
     */
     plotNode: function(node, canvas, animating) {
-        var f = node.getData('type'), 
+        var f = node.getData('type'),
             ctxObj = this.node.CanvasStyles;
         if(f != 'none') {
           var width = node.getData('lineWidth'),
@@ -7318,7 +7517,7 @@ Graph.Plot = {
           ctx.lineWidth = width;
           ctx.fillStyle = ctx.strokeStyle = color;
           ctx.globalAlpha = alpha;
-          
+
           for(var s in ctxObj) {
             ctx[s] = node.getCanvasStyle(s);
           }
@@ -7327,10 +7526,10 @@ Graph.Plot = {
           ctx.restore();
         }
     },
-    
+
     /*
        Method: plotLine
-    
+
        Plots a <Graph.Adjacence>.
 
        Parameters:
@@ -7348,14 +7547,14 @@ Graph.Plot = {
             ctx = canvas.getCtx(),
             nodeFrom = adj.nodeFrom,
             nodeTo = adj.nodeTo;
-        
+
         ctx.save();
         ctx.lineWidth = width;
         ctx.fillStyle = ctx.strokeStyle = color;
-        ctx.globalAlpha = Math.min(nodeFrom.getData('alpha'), 
-            nodeTo.getData('alpha'), 
+        ctx.globalAlpha = Math.min(nodeFrom.getData('alpha'),
+            nodeTo.getData('alpha'),
             adj.getData('alpha'));
-        
+
         for(var s in ctxObj) {
           ctx[s] = adj.getCanvasStyle(s);
         }
@@ -7363,152 +7562,9 @@ Graph.Plot = {
         this.edgeTypes[f].render.call(this, adj, canvas, animating);
         ctx.restore();
       }
-    }    
-  
+    }
+
 };
-
-/*
-  Object: Graph.Plot3D
-  
-  <Graph> 3D rendering and animation methods.
-  
-  Properties:
-  
-  nodeHelper - <NodeHelper> object.
-  edgeHelper - <EdgeHelper> object.
-
-*/
-Graph.Plot3D = $.merge(Graph.Plot, {
-  Interpolator: {
-    'linear': function(elem, props, delta) {
-      var from = elem.startPos.getc(true);
-      var to = elem.endPos.getc(true);
-      elem.pos.setc(this.compute(from.x, to.x, delta), 
-                    this.compute(from.y, to.y, delta),
-                    this.compute(from.z, to.z, delta));
-    }
-  },
-  
-  plotNode: function(node, canvas) {
-    if(node.getData('type') == 'none') return;
-    this.plotElement(node, canvas, {
-      getAlpha: function() {
-        return node.getData('alpha');
-      }
-    });
-  },
-  
-  plotLine: function(adj, canvas) {
-    if(adj.getData('type') == 'none') return;
-    this.plotElement(adj, canvas, {
-      getAlpha: function() {
-        return Math.min(adj.nodeFrom.getData('alpha'),
-                        adj.nodeTo.getData('alpha'),
-                        adj.getData('alpha'));
-      }
-    });
-  },
-  
-  plotElement: function(elem, canvas, opt) {
-    var gl = canvas.getCtx(),
-        viewMatrix = new Matrix4,
-        lighting = canvas.config.Scene.Lighting,
-        wcanvas = canvas.canvases[0],
-        program = wcanvas.program,
-        camera = wcanvas.camera;
-    
-    if(!elem.geometry) {
-      elem.geometry = new O3D[elem.getData('type')];
-    }
-    elem.geometry.update(elem);
-    if(!elem.webGLVertexBuffer) {
-      var vertices = [],
-          faces = [],
-          normals = [],
-          vertexIndex = 0,
-          geom = elem.geometry;
-      
-      for(var i=0, vs=geom.vertices, fs=geom.faces, fsl=fs.length; i<fsl; i++) {
-        var face = fs[i],
-            v1 = vs[face.a],
-            v2 = vs[face.b],
-            v3 = vs[face.c],
-            v4 = face.d? vs[face.d] : false,
-            n = face.normal;
-        
-        vertices.push(v1.x, v1.y, v1.z);
-        vertices.push(v2.x, v2.y, v2.z);
-        vertices.push(v3.x, v3.y, v3.z);
-        if(v4) vertices.push(v4.x, v4.y, v4.z);
-            
-        normals.push(n.x, n.y, n.z);
-        normals.push(n.x, n.y, n.z);
-        normals.push(n.x, n.y, n.z);
-        if(v4) normals.push(n.x, n.y, n.z);
-            
-        faces.push(vertexIndex, vertexIndex +1, vertexIndex +2);
-        if(v4) {
-          faces.push(vertexIndex, vertexIndex +2, vertexIndex +3);
-          vertexIndex += 4;
-        } else {
-          vertexIndex += 3;
-        }
-      }
-      //create and store vertex data
-      elem.webGLVertexBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLVertexBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-      //create and store faces index data
-      elem.webGLFaceBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elem.webGLFaceBuffer);
-      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(faces), gl.STATIC_DRAW);
-      elem.webGLFaceCount = faces.length;
-      //calculate vertex normals and store them
-      elem.webGLNormalBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLNormalBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-    }
-    viewMatrix.multiply(camera.matrix, elem.geometry.matrix);
-    //send matrix data
-    gl.uniformMatrix4fv(program.viewMatrix, false, viewMatrix.flatten());
-    gl.uniformMatrix4fv(program.projectionMatrix, false, camera.projectionMatrix.flatten());
-    //send normal matrix for lighting
-    var normalMatrix = Matrix4.makeInvert(viewMatrix);
-    normalMatrix.$transpose();
-    gl.uniformMatrix4fv(program.normalMatrix, false, normalMatrix.flatten());
-    //send color data
-    var color = $.hexToRgb(elem.getData('color'));
-    color.push(opt.getAlpha());
-    gl.uniform4f(program.color, color[0] / 255, color[1] / 255, color[2] / 255, color[3]);
-    //send lighting data
-    gl.uniform1i(program.enableLighting, lighting.enable);
-    if(lighting.enable) {
-      //set ambient light color
-      if(lighting.ambient) {
-        var acolor = lighting.ambient;
-        gl.uniform3f(program.ambientColor, acolor[0], acolor[1], acolor[2]);
-      }
-      //set directional light
-      if(lighting.directional) {
-        var dir = lighting.directional,
-            color = dir.color,
-            pos = dir.direction,
-            vd = new Vector3(pos.x, pos.y, pos.z).normalize().$scale(-1);
-        gl.uniform3f(program.lightingDirection, vd.x, vd.y, vd.z);
-        gl.uniform3f(program.directionalColor, color[0], color[1], color[2]);
-      }
-    }
-    //send vertices data
-    gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLVertexBuffer);
-    gl.vertexAttribPointer(program.position, 3, gl.FLOAT, false, 0, 0);
-    //send normals data
-    gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLNormalBuffer);
-    gl.vertexAttribPointer(program.normal, 3, gl.FLOAT, false, 0, 0);
-    //draw!
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elem.webGLFaceBuffer );
-    gl.drawElements(gl.TRIANGLES, elem.webGLFaceCount, gl.UNSIGNED_SHORT, 0);
-  }
-});
 
 
 /*
@@ -7528,9 +7584,9 @@ Graph.Plot3D = $.merge(Graph.Plot, {
    different label types.
 
    For example, the Graph.Label interface is implemented as <Graph.Label.HTML> to provide
-   HTML label elements. Also we provide the <Graph.Label.SVG> interface for SVG type labels. 
+   HTML label elements. Also we provide the <Graph.Label.SVG> interface for SVG type labels.
    The <Graph.Label.Native> interface implements these methods with the native Canvas text rendering functions.
-   
+
    All subclasses (<Graph.Label.HTML>, <Graph.Label.SVG> and <Graph.Label.Native>) implement the method plotLabel.
 */
 
@@ -7556,9 +7612,9 @@ Graph.Label.Native = new Class({
        canvas - (object) A <Canvas> instance.
        node - (object) A <Graph.Node>.
        controller - (object) A configuration object.
-       
+
        Example:
-       
+
        (start code js)
        var viz = new $jit.Viz(options);
        var node = viz.graph.getNode('nodeId');
@@ -7566,7 +7622,7 @@ Graph.Label.Native = new Class({
        (end code)
     */
     plotLabel: function(canvas, node, controller) {
-      
+
       var ctx = canvas.getCtx();
       var pos = node.pos.getc(true);
 
@@ -7574,15 +7630,15 @@ Graph.Label.Native = new Class({
       ctx.textAlign = node.getLabelData('textAlign');
       // ORIGINAL CODE ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
       ctx.textBaseline = node.getLabelData('textBaseline');
-      
+
       //START METAMAPS CODE
-      
+
       var arrayOfLabelLines = Metamaps.Util.splitLine(node.name, 25).split('\n');
       //render background
             ctx.fillStyle = ctx.strokeStyle = Metamaps.Settings.colors.labels.background;
             ctx.lineWidth = 2;
             var height = 25 * arrayOfLabelLines.length; //font size + margin
-            
+
             var index, lineWidths = [];
             for (index = 0; index < arrayOfLabelLines.length; ++index) {
               lineWidths.push( ctx.measureText( arrayOfLabelLines[index] ).width )
@@ -7591,7 +7647,7 @@ Graph.Label.Native = new Class({
             var x = pos.x - width/2;
             var y = pos.y + node.getData("height") + 5;
             var radius = 5;
-            
+
               ctx.beginPath();
               ctx.moveTo(x + radius, y);
               ctx.lineTo(x + width - radius, y);
@@ -7605,7 +7661,7 @@ Graph.Label.Native = new Class({
               ctx.closePath();
               ctx.fill();
               //ctx.stroke();
-       
+
        ctx.fillStyle = ctx.strokeStyle = node.getLabelData('color');
 
       this.renderLabel(arrayOfLabelLines, canvas, node, controller);
@@ -7857,9 +7913,9 @@ Graph.Label.HTML = new Class({
        canvas - (object) A <Canvas> instance.
        node - (object) A <Graph.Node>.
        controller - (object) A configuration object.
-       
+
       Example:
-       
+
        (start code js)
        var viz = new $jit.Viz(options);
        var node = viz.graph.getNode('nodeId');
@@ -7908,9 +7964,9 @@ Graph.Label.SVG = new Class({
        canvas - (object) A <Canvas> instance.
        node - (object) A <Graph.Node>.
        controller - (object) A configuration object.
-       
+
        Example:
-       
+
        (start code js)
        var viz = new $jit.Viz(options);
        var node = viz.graph.getNode('nodeId');
@@ -7941,7 +7997,7 @@ Graph.Label.SVG = new Class({
 
 /*
  * File: Loader.js
- * 
+ *
  */
 
 /*
@@ -7953,7 +8009,7 @@ var Loader = {
      construct: function(json) {
         var isGraph = ($.type(json) == 'array');
         var ans = new Graph(this.graphOptions, this.config.Node, this.config.Edge, this.config.Label);
-        if(!isGraph) 
+        if(!isGraph)
             //make tree
             (function (ans, json) {
                 ans.addNode(json);
@@ -8003,116 +8059,116 @@ var Loader = {
 
     /*
      Method: loadJSON
-    
+
      Loads a JSON structure to the visualization. The JSON structure can be a JSON *tree* or *graph* structure.
-     
+
       A JSON tree or graph structure consists of nodes, each having as properties
-       
+
        id - (string) A unique identifier for the node
        name - (string) A node's name
-       data - (object) The data optional property contains a hash (i.e {}) 
+       data - (object) The data optional property contains a hash (i.e {})
        where you can store all the information you want about this node.
-        
+
       For JSON *Tree* structures, there's an extra optional property *children* of type Array which contains the node's children.
-      
+
       Example:
 
       (start code js)
-        var json = {  
-          "id": "aUniqueIdentifier",  
-          "name": "usually a nodes name",  
+        var json = {
+          "id": "aUniqueIdentifier",
+          "name": "usually a nodes name",
           "data": {
             "some key": "some value",
             "some other key": "some other value"
-           },  
-          "children": [ *other nodes or empty* ]  
-        };  
+           },
+          "children": [ *other nodes or empty* ]
+        };
       (end code)
-        
-        JSON *Graph* structures consist of an array of nodes, each specifying the nodes to which the current node is connected. 
+
+        JSON *Graph* structures consist of an array of nodes, each specifying the nodes to which the current node is connected.
         For JSON *Graph* structures, the *children* property is replaced by the *adjacencies* property.
-        
+
         There are two types of *Graph* structures, *simple* and *extended* graph structures.
-        
-        For *simple* Graph structures, the adjacencies property contains an array of strings, each specifying the 
+
+        For *simple* Graph structures, the adjacencies property contains an array of strings, each specifying the
         id of the node connected to the main node.
-        
+
         Example:
-        
+
         (start code js)
-        var json = [  
-          {  
-            "id": "aUniqueIdentifier",  
-            "name": "usually a nodes name",  
+        var json = [
+          {
+            "id": "aUniqueIdentifier",
+            "name": "usually a nodes name",
             "data": {
               "some key": "some value",
               "some other key": "some other value"
-             },  
-            "adjacencies": ["anotherUniqueIdentifier", "yetAnotherUniqueIdentifier", 'etc']  
+             },
+            "adjacencies": ["anotherUniqueIdentifier", "yetAnotherUniqueIdentifier", 'etc']
           },
 
-          'other nodes go here...' 
-        ];          
+          'other nodes go here...'
+        ];
         (end code)
-        
+
         For *extended Graph structures*, the adjacencies property contains an array of Adjacency objects that have as properties
-        
+
         nodeTo - (string) The other node connected by this adjacency.
         data - (object) A data property, where we can store custom key/value information.
-        
+
         Example:
-        
+
         (start code js)
-        var json = [  
-          {  
-            "id": "aUniqueIdentifier",  
-            "name": "usually a nodes name",  
+        var json = [
+          {
+            "id": "aUniqueIdentifier",
+            "name": "usually a nodes name",
             "data": {
               "some key": "some value",
               "some other key": "some other value"
-             },  
-            "adjacencies": [  
-            {  
-              nodeTo:"aNodeId",  
-              data: {} //put whatever you want here  
+             },
+            "adjacencies": [
+            {
+              nodeTo:"aNodeId",
+              data: {} //put whatever you want here
             },
-            'other adjacencies go here...'  
+            'other adjacencies go here...'
           },
 
-          'other nodes go here...' 
-        ];          
+          'other nodes go here...'
+        ];
         (end code)
-       
+
        About the data property:
-       
-       As described before, you can store custom data in the *data* property of JSON *nodes* and *adjacencies*. 
-       You can use almost any string as key for the data object. Some keys though are reserved by the toolkit, and 
+
+       As described before, you can store custom data in the *data* property of JSON *nodes* and *adjacencies*.
+       You can use almost any string as key for the data object. Some keys though are reserved by the toolkit, and
        have special meanings. This is the case for keys starting with a dollar sign, for example, *$width*.
-       
-       For JSON *node* objects, adding dollar prefixed properties that match the names of the options defined in 
-       <Options.Node> will override the general value for that option with that particular value. For this to work 
+
+       For JSON *node* objects, adding dollar prefixed properties that match the names of the options defined in
+       <Options.Node> will override the general value for that option with that particular value. For this to work
        however, you do have to set *overridable = true* in <Options.Node>.
-       
-       The same thing is true for JSON adjacencies. Dollar prefixed data properties will alter values set in <Options.Edge> 
+
+       The same thing is true for JSON adjacencies. Dollar prefixed data properties will alter values set in <Options.Edge>
        if <Options.Edge> has *overridable = true*.
-       
-       When loading JSON data into TreeMaps, the *data* property must contain a value for the *$area* key, 
-       since this is the value which will be taken into account when creating the layout. 
+
+       When loading JSON data into TreeMaps, the *data* property must contain a value for the *$area* key,
+       since this is the value which will be taken into account when creating the layout.
        The same thing goes for the *$color* parameter.
-       
-       In JSON Nodes you can use also *$label-* prefixed properties to refer to <Options.Label> properties. For example, 
-       *$label-size* will refer to <Options.Label> size property. Also, in JSON nodes and adjacencies you can set 
-       canvas specific properties individually by using the *$canvas-* prefix. For example, *$canvas-shadowBlur* will refer 
+
+       In JSON Nodes you can use also *$label-* prefixed properties to refer to <Options.Label> properties. For example,
+       *$label-size* will refer to <Options.Label> size property. Also, in JSON nodes and adjacencies you can set
+       canvas specific properties individually by using the *$canvas-* prefix. For example, *$canvas-shadowBlur* will refer
        to the *shadowBlur* property.
-       
-       These properties can also be accessed after loading the JSON data from <Graph.Nodes> and <Graph.Adjacences> 
+
+       These properties can also be accessed after loading the JSON data from <Graph.Nodes> and <Graph.Adjacences>
        by using <Accessors>. For more information take a look at the <Graph> and <Accessors> documentation.
-       
-       Finally, these properties can also be used to create advanced animations like with <Options.NodeStyles>. For more 
+
+       Finally, these properties can also be used to create advanced animations like with <Options.NodeStyles>. For more
        information about creating animations please take a look at the <Graph.Plot> and <Graph.Plot.animate> documentation.
-       
+
        loadJSON Parameters:
-    
+
         json - A JSON Tree or Graph structure.
         i - For Graph structures only. Sets the indexed node as root for the visualization.
 
@@ -8130,22 +8186,22 @@ var Loader = {
         this.root = json[i? i : 0].id;
       }
     },
-    
+
     /*
       Method: toJSON
-   
-      Returns a JSON tree/graph structure from the visualization's <Graph>. 
+
+      Returns a JSON tree/graph structure from the visualization's <Graph>.
       See <Loader.loadJSON> for the graph formats available.
-      
+
       See also:
-      
+
       <Loader.loadJSON>
-      
+
       Parameters:
-      
-      type - (string) Default's "tree". The type of the JSON structure to be returned. 
+
+      type - (string) Default's "tree". The type of the JSON structure to be returned.
       Possible options are "tree" or "graph".
-    */    
+    */
     toJSON: function(type) {
       type = type || "tree";
       if(type == 'tree') {
@@ -8195,18 +8251,18 @@ var Loader = {
 
 /*
  * File: Layouts.js
- * 
+ *
  * Implements base Tree and Graph layouts.
  *
  * Description:
  *
  * Implements base Tree and Graph layouts like Radial, Tree, etc.
- * 
+ *
  */
 
 /*
  * Object: Layouts
- * 
+ *
  * Parent object for common layouts.
  *
  */
@@ -8216,7 +8272,7 @@ var Layouts = $jit.Layouts = {};
 //Some util shared layout functions are defined here.
 var NodeDim = {
   label: null,
-  
+
   compute: function(graph, prop, opt) {
     this.initializeLabel(opt);
     var label = this.label, style = label.style;
@@ -8229,16 +8285,16 @@ var NodeDim = {
         delete n.data.$width;
         delete n.data.$height;
         delete n.data.$dim;
-        
+
         var width  = n.getData('width'),
             height = n.getData('height');
         //reset label dimensions
         style.width  = autoWidth? 'auto' : width + 'px';
         style.height = autoHeight? 'auto' : height + 'px';
-        
+
         //TODO(nico) should let the user choose what to insert here.
         label.innerHTML = n.name;
-        
+
         var offsetWidth  = label.offsetWidth,
             offsetHeight = label.offsetHeight;
         var type = n.getData('type');
@@ -8249,12 +8305,12 @@ var NodeDim = {
           var dim = offsetWidth > offsetHeight? offsetWidth : offsetHeight;
           n.setData('width', dim);
           n.setData('height', dim);
-          n.setData('dim', dim); 
+          n.setData('dim', dim);
         }
       }
     });
   },
-  
+
   initializeLabel: function(opt) {
     if(!this.label) {
       this.label = document.createElement('div');
@@ -8262,7 +8318,7 @@ var NodeDim = {
     }
     this.setLabelStyles(opt);
   },
-  
+
   setLabelStyles: function(opt) {
     $.extend(this.label.style, {
       'visibility': 'hidden',
@@ -8277,39 +8333,39 @@ var NodeDim = {
 
 /*
  * Class: Layouts.Radial
- * 
+ *
  * Implements a Radial Layout.
- * 
+ *
  * Implemented By:
- * 
+ *
  * <RGraph>, <Hypertree>
- * 
+ *
  */
 Layouts.Radial = new Class({
 
   /*
    * Method: compute
-   * 
+   *
    * Computes nodes' positions.
-   * 
+   *
    * Parameters:
-   * 
+   *
    * property - _optional_ A <Graph.Node> position property to store the new
    * positions. Possible values are 'pos', 'end' or 'start'.
-   * 
+   *
    */
   compute : function(property) {
     var prop = $.splat(property || [ 'current', 'start', 'end' ]);
     NodeDim.compute(this.graph, prop, this.config);
     this.graph.computeLevels(this.root, 0, "ignore");
-    var lengthFunc = this.createLevelDistanceFunc(); 
+    var lengthFunc = this.createLevelDistanceFunc();
     this.computeAngularWidths(prop);
     this.computePositions(prop, lengthFunc);
   },
 
   /*
    * computePositions
-   * 
+   *
    * Performs the main algorithm for computing node positions.
    */
   computePositions : function(property, getLength) {
@@ -8379,7 +8435,7 @@ Layouts.Radial = new Class({
 
   /*
    * Method: setAngularWidthForNodes
-   * 
+   *
    * Sets nodes angular widths.
    */
   setAngularWidthForNodes : function(prop) {
@@ -8391,7 +8447,7 @@ Layouts.Radial = new Class({
 
   /*
    * Method: setSubtreesAngularWidth
-   * 
+   *
    * Sets subtrees angular widths.
    */
   setSubtreesAngularWidth : function() {
@@ -8403,7 +8459,7 @@ Layouts.Radial = new Class({
 
   /*
    * Method: setSubtreeAngularWidth
-   * 
+   *
    * Sets the angular width for a subtree.
    */
   setSubtreeAngularWidth : function(elem) {
@@ -8417,7 +8473,7 @@ Layouts.Radial = new Class({
 
   /*
    * Method: computeAngularWidths
-   * 
+   *
    * Computes nodes and subtrees angular widths.
    */
   computeAngularWidths : function(prop) {
@@ -8435,25 +8491,25 @@ Layouts.Radial = new Class({
 
 /*
    Class: RGraph
-   
+
    A radial graph visualization with advanced animations.
-   
+
    Inspired by:
- 
+
    Animated Exploration of Dynamic Graphs with Radial Layout (Ka-Ping Yee, Danyel Fisher, Rachna Dhamija, Marti Hearst) <http://bailando.sims.berkeley.edu/papers/infovis01.htm>
-   
+
    Note:
-   
+
    This visualization was built and engineered from scratch, taking only the paper as inspiration, and only shares some features with the visualization described in the paper.
-   
+
   Implements:
-  
+
   All <Loader> methods
-  
+
    Constructor Options:
-   
+
    Inherits options from
-   
+
    - <Options.Canvas>
    - <Options.Controller>
    - <Options.Node>
@@ -8463,26 +8519,24 @@ Layouts.Radial = new Class({
    - <Options.Tips>
    - <Options.NodeStyles>
    - <Options.Navigation>
-   
+
    Additionally, there are other parameters and some default values changed
-   
+
    interpolation - (string) Default's *linear*. Describes the way nodes are interpolated. Possible values are 'linear' and 'polar'.
-   levelDistance - (number) Default's *100*. The distance between levels of the tree. 
-     
+   levelDistance - (number) Default's *100*. The distance between levels of the tree.
+
    Instance Properties:
 
    canvas - Access a <Canvas> instance.
    graph - Access a <Graph> instance.
    op - Access a <RGraph.Op> instance.
    fx - Access a <RGraph.Plot> instance.
-   labels - Access a <RGraph.Label> interface implementation.   
+   labels - Access a <RGraph.Label> interface implementation.
 */
 
 $jit.RGraph = new Class( {
 
-  Implements: [
-      Loader, Extras, Layouts.Radial
-  ],
+  Implements: [ Loader, Extras, Layouts.Radial ],
 
   initialize: function(controller){
     var $RGraph = $jit.RGraph;
@@ -8492,8 +8546,12 @@ $jit.RGraph = new Class( {
       levelDistance: 100
     };
 
-    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
+    // START METAMAPS CODE
+    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge", "Selection",
         "Fx", "Controller", "Tips", "NodeStyles", "Events", "Navigation", "Label"), config, controller);
+    // END METAMAPS CODE
+    // ORIGINAL this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
+    //    "Fx", "Controller", "Tips", "NodeStyles", "Events", "Navigation", "Label"), config, controller);
 
     var canvasConfig = this.config;
     if(canvasConfig.useCanvas) {
@@ -8530,14 +8588,14 @@ $jit.RGraph = new Class( {
     this.initializeExtras();
   },
 
-  /* 
-  
-    createLevelDistanceFunc 
-  
-    Returns the levelDistance function used for calculating a node distance 
-    to its origin. This function returns a function that is computed 
-    per level and not per node, such that all nodes with the same depth will have the 
-    same distance to the origin. The resulting function gets the 
+  /*
+
+    createLevelDistanceFunc
+
+    Returns the levelDistance function used for calculating a node distance
+    to its origin. This function returns a function that is computed
+    per level and not per node, such that all nodes with the same depth will have the
+    same distance to the origin. The resulting function gets the
     parent node as parameter and returns a float.
 
    */
@@ -8548,14 +8606,14 @@ $jit.RGraph = new Class( {
     };
   },
 
-  /* 
-     Method: refresh 
-     
+  /*
+     Method: refresh
+
      Computes positions and plots the tree.
 
    */
   refresh: function(){
-    
+
     // START METAMAPS CODE
     // this.compute();
     // END METAMAPS CODE
@@ -8569,7 +8627,7 @@ $jit.RGraph = new Class( {
 
   /*
    Method: plot
-  
+
    Plots the RGraph. This is a shortcut to *fx.plot*.
   */
   plot: function(){
@@ -8577,7 +8635,7 @@ $jit.RGraph = new Class( {
   },
   /*
    getNodeAndParentAngle
-  
+
    Returns the _parent_ of the given node, also calculating its angle span.
   */
   getNodeAndParentAngle: function(id){
@@ -8599,7 +8657,7 @@ $jit.RGraph = new Class( {
   },
   /*
    tagChildren
-  
+
    Enumerates the children in order to maintain child ordering (second constraint of the paper).
   */
   tagChildren: function(par, id){
@@ -8616,9 +8674,9 @@ $jit.RGraph = new Class( {
       }
     }
   },
-  /* 
-  Method: onClick 
-  
+  /*
+  Method: onClick
+
   Animates the <RGraph> to center the node specified by *id*.
 
    Parameters:
@@ -8636,7 +8694,7 @@ $jit.RGraph = new Class( {
       hideLabels: false
      });
     (end code)
-    
+
   */
   onClick: function(id, opt){
     if (this.root != id && !this.busy) {
@@ -8683,15 +8741,15 @@ $jit.RGraph.$extend = true;
 
   /*
      Class: RGraph.Op
-     
+
      Custom extension of <Graph.Op>.
 
      Extends:
 
      All <Graph.Op> methods
-     
+
      See also:
-     
+
      <Graph.Op>
 
   */
@@ -8703,17 +8761,17 @@ $jit.RGraph.$extend = true;
 
   /*
      Class: RGraph.Plot
-    
+
     Custom extension of <Graph.Plot>.
-  
+
     Extends:
-  
+
     All <Graph.Plot> methods
-    
+
     See also:
-    
+
     <Graph.Plot>
-  
+
   */
   RGraph.Plot = new Class( {
 
@@ -8724,17 +8782,17 @@ $jit.RGraph.$extend = true;
   /*
     Object: RGraph.Label
 
-    Custom extension of <Graph.Label>. 
+    Custom extension of <Graph.Label>.
     Contains custom <Graph.Label.SVG>, <Graph.Label.HTML> and <Graph.Label.Native> extensions.
-  
+
     Extends:
-  
+
     All <Graph.Label> methods and subclasses.
-  
+
     See also:
-  
+
     <Graph.Label>, <Graph.Label.Native>, <Graph.Label.HTML>, <Graph.Label.SVG>.
-  
+
    */
   RGraph.Label = {};
 
@@ -8758,17 +8816,17 @@ $jit.RGraph.$extend = true;
 
   /*
      RGraph.Label.SVG
-    
+
     Custom extension of <Graph.Label.SVG>.
-  
+
     Extends:
-  
+
     All <Graph.Label.SVG> methods
-  
+
     See also:
-  
+
     <Graph.Label.SVG>
-  
+
   */
   RGraph.Label.SVG = new Class( {
     Implements: Graph.Label.SVG,
@@ -8777,7 +8835,7 @@ $jit.RGraph.$extend = true;
       this.viz = viz;
     },
 
-    /* 
+    /*
        placeLabel
 
        Overrides abstract method placeLabel in <Graph.Plot>.
@@ -8787,10 +8845,10 @@ $jit.RGraph.$extend = true;
        tag - A DOM label element.
        node - A <Graph.Node>.
        controller - A configuration/controller object passed to the visualization.
-      
+
      */
     placeLabel: function(tag, node, controller){
-      var pos = node.pos.getc(true), 
+      var pos = node.pos.getc(true),
           canvas = this.viz.canvas,
           ox = canvas.translateOffsetX,
           oy = canvas.translateOffsetY,
@@ -8828,7 +8886,7 @@ $jit.RGraph.$extend = true;
     initialize: function(viz){
       this.viz = viz;
     },
-    /* 
+    /*
        placeLabel
 
        Overrides abstract method placeLabel in <Graph.Plot>.
@@ -8838,10 +8896,10 @@ $jit.RGraph.$extend = true;
        tag - A DOM label element.
        node - A <Graph.Node>.
        controller - A configuration/controller object passed to the visualization.
-      
+
      */
     placeLabel: function(tag, node, controller){
-      var pos = node.pos.getc(true), 
+      var pos = node.pos.getc(true),
           canvas = this.viz.canvas,
           ox = canvas.translateOffsetX,
           oy = canvas.translateOffsetY,
@@ -8865,7 +8923,7 @@ $jit.RGraph.$extend = true;
   /*
     Class: RGraph.Plot.NodeTypes
 
-    This class contains a list of <Graph.Node> built-in types. 
+    This class contains a list of <Graph.Node> built-in types.
     Node types implemented are 'none', 'circle', 'triangle', 'rectangle', 'star', 'ellipse' and 'square'.
 
     You can add your custom node types, customizing your visualization to the extreme.
@@ -8894,64 +8952,64 @@ $jit.RGraph.$extend = true;
     },
     'circle': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
+        var pos = node.pos.getc(true),
             dim = node.getData('dim');
         this.nodeHelper.circle.render('fill', pos, dim, canvas);
       },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
+        var npos = node.pos.getc(true),
             dim = node.getData('dim');
         return this.nodeHelper.circle.contains(npos, pos, dim);
       }
     },
     'ellipse': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var pos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         this.nodeHelper.ellipse.render('fill', pos, width, height, canvas);
         },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var npos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         return this.nodeHelper.ellipse.contains(npos, pos, width, height);
       }
     },
     'square': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
+        var pos = node.pos.getc(true),
             dim = node.getData('dim');
         this.nodeHelper.square.render('fill', pos, dim, canvas);
       },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
+        var npos = node.pos.getc(true),
             dim = node.getData('dim');
         return this.nodeHelper.square.contains(npos, pos, dim);
       }
     },
     'rectangle': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var pos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         this.nodeHelper.rectangle.render('fill', pos, width, height, canvas);
       },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var npos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         return this.nodeHelper.rectangle.contains(npos, pos, width, height);
       }
     },
     'triangle': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
+        var pos = node.pos.getc(true),
             dim = node.getData('dim');
         this.nodeHelper.triangle.render('fill', pos, dim, canvas);
       },
       'contains': function(node, pos) {
-        var npos = node.pos.getc(true), 
+        var npos = node.pos.getc(true),
             dim = node.getData('dim');
         return this.nodeHelper.triangle.contains(npos, pos, dim);
       }
@@ -8973,13 +9031,13 @@ $jit.RGraph.$extend = true;
   /*
     Class: RGraph.Plot.EdgeTypes
 
-    This class contains a list of <Graph.Adjacence> built-in types. 
+    This class contains a list of <Graph.Adjacence> built-in types.
     Edge types implemented are 'none', 'line' and 'arrow'.
-  
+
     You can add your custom edge types, customizing your visualization to the extreme.
-  
+
     Example:
-  
+
     (start code js)
       RGraph.Plot.EdgeTypes.implement({
         'mySpecialType': {
@@ -8993,7 +9051,7 @@ $jit.RGraph.$extend = true;
         }
       });
     (end code)
-  
+
   */
   RGraph.Plot.EdgeTypes = new Class({
     'none': $.empty,
@@ -9036,17 +9094,17 @@ $jit.RGraph.$extend = true;
 
 /*
  * Class: Layouts.ForceDirected
- * 
+ *
  * Implements a Force Directed Layout.
- * 
+ *
  * Implemented By:
- * 
+ *
  * <ForceDirected>
- * 
+ *
  * Credits:
- * 
+ *
  * Marcus Cobden <http://marcuscobden.co.uk>
- * 
+ *
  */
 Layouts.ForceDirected = new Class({
 
@@ -9055,12 +9113,12 @@ Layouts.ForceDirected = new Class({
     var w = s.width, h = s.height;
     //count nodes
     var count = 0;
-    this.graph.eachNode(function(n) { 
+    this.graph.eachNode(function(n) {
       count++;
     });
     var k2 = w * h / count, k = Math.sqrt(k2);
     var l = this.config.levelDistance;
-    
+
     return {
       width: w,
       height: h,
@@ -9069,7 +9127,7 @@ Layouts.ForceDirected = new Class({
       edgef: function(x) { return /* x * x / k; */ k * (x - l); }
     };
   },
-  
+
   compute: function(property, incremental) {
     var prop = $.splat(property || ['current', 'start', 'end']);
     var opt = this.getOptions();
@@ -9091,7 +9149,7 @@ Layouts.ForceDirected = new Class({
     });
     this.computePositions(prop, opt, incremental);
   },
-  
+
   computePositions: function(property, opt, incremental) {
     var times = this.config.iterations, i = 0, that = this;
     if(incremental) {
@@ -9115,7 +9173,7 @@ Layouts.ForceDirected = new Class({
       }
     }
   },
-  
+
   computePositionStep: function(property, opt) {
     var graph = this.graph;
     var min = Math.min, max = Math.max;
@@ -9164,7 +9222,7 @@ Layouts.ForceDirected = new Class({
         var disp = u.disp[p];
         var norm = disp.norm() || 1;
         var p = u.getPos(p);
-        p.$add($C(disp.x * min(Math.abs(disp.x), t) / norm, 
+        p.$add($C(disp.x * min(Math.abs(disp.x), t) / norm,
             disp.y * min(Math.abs(disp.y), t) / norm));
         p.x = min(w2, max(-w2, p.x));
         p.y = min(h2, max(-h2, p.y));
@@ -9179,21 +9237,21 @@ Layouts.ForceDirected = new Class({
 
 /*
    Class: ForceDirected
-      
+
    A visualization that lays graphs using a Force-Directed layout algorithm.
-   
+
    Inspired by:
-  
+
    Force-Directed Drawing Algorithms (Stephen G. Kobourov) <http://www.cs.brown.edu/~rt/gdhandbook/chapters/force-directed.pdf>
-   
+
   Implements:
-  
+
   All <Loader> methods
-  
+
    Constructor Options:
-   
+
    Inherits options from
-   
+
    - <Options.Canvas>
    - <Options.Controller>
    - <Options.Node>
@@ -9203,12 +9261,12 @@ Layouts.ForceDirected = new Class({
    - <Options.Tips>
    - <Options.NodeStyles>
    - <Options.Navigation>
-   
+
    Additionally, there are two parameters
-   
+
    levelDistance - (number) Default's *50*. The natural length desired for the edges.
-   iterations - (number) Default's *50*. The number of iterations for the spring layout simulation. Depending on the browser's speed you could set this to a more 'interesting' number, like *200*. 
-     
+   iterations - (number) Default's *50*. The number of iterations for the spring layout simulation. Depending on the browser's speed you could set this to a more 'interesting' number, like *200*.
+
    Instance Properties:
 
    canvas - Access a <Canvas> instance.
@@ -9231,8 +9289,12 @@ $jit.ForceDirected = new Class( {
       levelDistance: 50
     };
 
-    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
-        "Fx", "Tips", "NodeStyles", "Events", "Navigation", "Controller", "Label"), config, controller);
+    // START METAMAPS CODE
+    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge", "Selection",
+        "Fx", "Controller", "Tips", "NodeStyles", "Events", "Navigation", "Label"), config, controller);
+    // END METAMAPS CODE
+    // ORIGINAL this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
+    //    "Fx", "Controller", "Tips", "NodeStyles", "Events", "Navigation", "Label"), config, controller);
 
     var canvasConfig = this.config;
     if(canvasConfig.useCanvas) {
@@ -9267,9 +9329,9 @@ $jit.ForceDirected = new Class( {
     this.initializeExtras();
   },
 
-  /* 
-    Method: refresh 
-    
+  /*
+    Method: refresh
+
     Computes positions and plots the tree.
   */
   refresh: function() {
@@ -9286,35 +9348,35 @@ $jit.ForceDirected = new Class( {
 
 /*
   Method: computeIncremental
-  
+
   Performs the Force Directed algorithm incrementally.
-  
+
   Description:
-  
-  ForceDirected algorithms can perform many computations and lead to JavaScript taking too much time to complete. 
-  This method splits the algorithm into smaller parts allowing the user to track the evolution of the algorithm and 
+
+  ForceDirected algorithms can perform many computations and lead to JavaScript taking too much time to complete.
+  This method splits the algorithm into smaller parts allowing the user to track the evolution of the algorithm and
   avoiding browser messages such as "This script is taking too long to complete".
-  
+
   Parameters:
-  
+
   opt - (object) The object properties are described below
-  
-  iter - (number) Default's *20*. Split the algorithm into pieces of _iter_ iterations. For example, if the _iterations_ configuration property 
+
+  iter - (number) Default's *20*. Split the algorithm into pieces of _iter_ iterations. For example, if the _iterations_ configuration property
   of your <ForceDirected> class is 100, then you could set _iter_ to 20 to split the main algorithm into 5 smaller pieces.
-  
-  property - (string) Default's *end*. Whether to update starting, current or ending node positions. Possible values are 'end', 'start', 'current'. 
-  You can also set an array of these properties. If you'd like to keep the current node positions but to perform these 
+
+  property - (string) Default's *end*. Whether to update starting, current or ending node positions. Possible values are 'end', 'start', 'current'.
+  You can also set an array of these properties. If you'd like to keep the current node positions but to perform these
   computations for final animation positions then you can just choose 'end'.
-  
-  onStep - (function) A callback function called when each "small part" of the algorithm completed. This function gets as first formal 
+
+  onStep - (function) A callback function called when each "small part" of the algorithm completed. This function gets as first formal
   parameter a percentage value.
-  
+
   onComplete - A callback function called when the algorithm completed.
-  
+
   Example:
-  
+
   In this example I calculate the end positions and then animate the graph to those positions
-  
+
   (start code js)
   var fd = new $jit.ForceDirected(...);
   fd.computeIncremental({
@@ -9329,9 +9391,9 @@ $jit.ForceDirected = new Class( {
     }
   });
   (end code)
-  
+
   In this example I calculate all positions and (re)plot the graph
-  
+
   (start code js)
   var fd = new ForceDirected(...);
   fd.computeIncremental({
@@ -9346,7 +9408,7 @@ $jit.ForceDirected = new Class( {
     }
   });
   (end code)
-  
+
   */
   computeIncremental: function(opt) {
     opt = $.merge( {
@@ -9362,7 +9424,7 @@ $jit.ForceDirected = new Class( {
 
   /*
     Method: plot
-   
+
     Plots the ForceDirected graph. This is a shortcut to *fx.plot*.
    */
   plot: function() {
@@ -9371,7 +9433,7 @@ $jit.ForceDirected = new Class( {
 
   /*
      Method: animate
-    
+
      Animates the graph from the current positions to the 'end' node positions.
   */
   animate: function(opt) {
@@ -9387,15 +9449,15 @@ $jit.ForceDirected.$extend = true;
 
   /*
      Class: ForceDirected.Op
-     
+
      Custom extension of <Graph.Op>.
 
      Extends:
 
      All <Graph.Op> methods
-     
+
      See also:
-     
+
      <Graph.Op>
 
   */
@@ -9407,17 +9469,17 @@ $jit.ForceDirected.$extend = true;
 
   /*
     Class: ForceDirected.Plot
-    
+
     Custom extension of <Graph.Plot>.
-  
+
     Extends:
-  
+
     All <Graph.Plot> methods
-    
+
     See also:
-    
+
     <Graph.Plot>
-  
+
   */
   ForceDirected.Plot = new Class( {
 
@@ -9427,24 +9489,24 @@ $jit.ForceDirected.$extend = true;
 
   /*
     Class: ForceDirected.Label
-    
-    Custom extension of <Graph.Label>. 
+
+    Custom extension of <Graph.Label>.
     Contains custom <Graph.Label.SVG>, <Graph.Label.HTML> and <Graph.Label.Native> extensions.
-  
+
     Extends:
-  
+
     All <Graph.Label> methods and subclasses.
-  
+
     See also:
-  
+
     <Graph.Label>, <Graph.Label.Native>, <Graph.Label.HTML>, <Graph.Label.SVG>.
-  
+
   */
   ForceDirected.Label = {};
 
   /*
      ForceDirected.Label.Native
-     
+
      Custom extension of <Graph.Label.Native>.
 
      Extends:
@@ -9462,17 +9524,17 @@ $jit.ForceDirected.$extend = true;
 
   /*
     ForceDirected.Label.SVG
-    
+
     Custom extension of <Graph.Label.SVG>.
-  
+
     Extends:
-  
+
     All <Graph.Label.SVG> methods
-  
+
     See also:
-  
+
     <Graph.Label.SVG>
-  
+
   */
   ForceDirected.Label.SVG = new Class( {
     Implements: Graph.Label.SVG,
@@ -9481,7 +9543,7 @@ $jit.ForceDirected.$extend = true;
       this.viz = viz;
     },
 
-    /* 
+    /*
        placeLabel
 
        Overrides abstract method placeLabel in <Graph.Label>.
@@ -9491,10 +9553,10 @@ $jit.ForceDirected.$extend = true;
        tag - A DOM label element.
        node - A <Graph.Node>.
        controller - A configuration/controller object passed to the visualization.
-      
+
      */
     placeLabel: function(tag, node, controller) {
-      var pos = node.pos.getc(true), 
+      var pos = node.pos.getc(true),
           canvas = this.viz.canvas,
           ox = canvas.translateOffsetX,
           oy = canvas.translateOffsetY,
@@ -9514,7 +9576,7 @@ $jit.ForceDirected.$extend = true;
 
   /*
      ForceDirected.Label.HTML
-     
+
      Custom extension of <Graph.Label.HTML>.
 
      Extends:
@@ -9532,7 +9594,7 @@ $jit.ForceDirected.$extend = true;
     initialize: function(viz) {
       this.viz = viz;
     },
-    /* 
+    /*
        placeLabel
 
        Overrides abstract method placeLabel in <Graph.Plot>.
@@ -9542,10 +9604,10 @@ $jit.ForceDirected.$extend = true;
        tag - A DOM label element.
        node - A <Graph.Node>.
        controller - A configuration/controller object passed to the visualization.
-      
+
      */
     placeLabel: function(tag, node, controller) {
-      var pos = node.pos.getc(true), 
+      var pos = node.pos.getc(true),
           canvas = this.viz.canvas,
           ox = canvas.translateOffsetX,
           oy = canvas.translateOffsetY,
@@ -9568,7 +9630,7 @@ $jit.ForceDirected.$extend = true;
   /*
     Class: ForceDirected.Plot.NodeTypes
 
-    This class contains a list of <Graph.Node> built-in types. 
+    This class contains a list of <Graph.Node> built-in types.
     Node types implemented are 'none', 'circle', 'triangle', 'rectangle', 'star', 'ellipse' and 'square'.
 
     You can add your custom node types, customizing your visualization to the extreme.
@@ -9597,64 +9659,64 @@ $jit.ForceDirected.$extend = true;
     },
     'circle': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
+        var pos = node.pos.getc(true),
             dim = node.getData('dim');
         this.nodeHelper.circle.render('fill', pos, dim, canvas);
       },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
+        var npos = node.pos.getc(true),
             dim = node.getData('dim');
         return this.nodeHelper.circle.contains(npos, pos, dim);
       }
     },
     'ellipse': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var pos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         this.nodeHelper.ellipse.render('fill', pos, width, height, canvas);
         },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var npos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         return this.nodeHelper.ellipse.contains(npos, pos, width, height);
       }
     },
     'square': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
+        var pos = node.pos.getc(true),
             dim = node.getData('dim');
         this.nodeHelper.square.render('fill', pos, dim, canvas);
       },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
+        var npos = node.pos.getc(true),
             dim = node.getData('dim');
         return this.nodeHelper.square.contains(npos, pos, dim);
       }
     },
     'rectangle': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var pos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         this.nodeHelper.rectangle.render('fill', pos, width, height, canvas);
       },
       'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            width = node.getData('width'), 
+        var npos = node.pos.getc(true),
+            width = node.getData('width'),
             height = node.getData('height');
         return this.nodeHelper.rectangle.contains(npos, pos, width, height);
       }
     },
     'triangle': {
       'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
+        var pos = node.pos.getc(true),
             dim = node.getData('dim');
         this.nodeHelper.triangle.render('fill', pos, dim, canvas);
       },
       'contains': function(node, pos) {
-        var npos = node.pos.getc(true), 
+        var npos = node.pos.getc(true),
             dim = node.getData('dim');
         return this.nodeHelper.triangle.contains(npos, pos, dim);
       }
@@ -9675,14 +9737,14 @@ $jit.ForceDirected.$extend = true;
 
   /*
     Class: ForceDirected.Plot.EdgeTypes
-  
-    This class contains a list of <Graph.Adjacence> built-in types. 
+
+    This class contains a list of <Graph.Adjacence> built-in types.
     Edge types implemented are 'none', 'line' and 'arrow'.
-  
+
     You can add your custom edge types, customizing your visualization to the extreme.
-  
+
     Example:
-  
+
     (start code js)
       ForceDirected.Plot.EdgeTypes.implement({
         'mySpecialType': {
@@ -9696,7 +9758,7 @@ $jit.ForceDirected.$extend = true;
         }
       });
     (end code)
-  
+
   */
   ForceDirected.Plot.EdgeTypes = new Class({
     'none': $.empty,
@@ -9730,1621 +9792,6 @@ $jit.ForceDirected.$extend = true;
   });
 
 })($jit.ForceDirected);
-
-
-/*
- * Vector3 class based on three.js http://github.com/mrdoob/three.js, Copyright (c) Mr.doob http://mrdoob.com/, MIT License http://github.com/mrdoob/three.js/blob/master/LICENSE 
- */
-
-var Vector3 = function(x, y, z) {
-	this.x = x || 0;
-	this.y = y || 0;
-	this.z = z || 0;
-};
-
-$jit.Vector3 = Vector3;
-
-Vector3.prototype = {
-  set: function(v) {
-    this.x = v.x;
-    this.y = v.y;
-    this.z = v.z;
-  },
-
-  setc: function(x, y, z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	},
-	
-	getc: function() {
-	  return this;
-	},
-	
-	//TODO(nico): getp
-
-	add: function(v1, v2) {
-		this.x = v1.x + v2.x;
-		this.y = v1.y + v2.y;
-		this.z = v1.z + v2.z;
-		return this;
-	},
-
-	$add: function(v) {
-		this.x += v.x;
-		this.y += v.y;
-		this.z += v.z;
-		return this;
-	},
-
-	addScalar: function(s) {
-		this.x += s;
-		this.y += s;
-		this.z += s;
-		return this;
-	},
-
-	sub: function(v1, v2) {
-		this.x = v1.x - v2.x;
-		this.y = v1.y - v2.y;
-		this.z = v1.z - v2.z;
-		return this;
-	},
-
-	$sub: function(v) {
-		this.x -= v.x;
-		this.y -= v.y;
-		this.z -= v.z;
-		return this;
-	},
-
-	cross: function(v1, v2) {
-		this.x = v1.y * v2.z - v1.z * v2.y;
-		this.y = v1.z * v2.x - v1.x * v2.z;
-		this.z = v1.x * v2.y - v1.y * v2.x;
-		return this;
-	},
-
-	$cross: function(v) {
-		var tx = this.x, ty = this.y, tz = this.z;
-
-		this.x = ty * v.z - tz * v.y;
-		this.y = tz * v.x - tx * v.z;
-		this.z = tx * v.y - ty * v.x;
-		return this;
-	},
-
-	$multiply: function(v) {
-		this.x *= v.x;
-		this.y *= v.y;
-		this.z *= v.z;
-		return this;
-	},
-
-	$scale: function(s) {
-		this.x *= s;
-		this.y *= s;
-		this.z *= s;
-		return this;
-	},
-
-	dot: function(v) {
-		return this.x * v.x + this.y * v.y + this.z * v.z;
-	},
-
-	distanceTo: function(v) {
-		return Math.sqrt(this.distanceToSquared(v));
-	},
-
-	distanceToSquared: function(v) {
-		var dx = this.x - v.x, dy = this.y - v.y, dz = this.z - v.z;
-		return dx * dx + dy * dy + dz * dz;
-	},
-
-	norm: function() {
-		return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z );
-	},
-
-	normSquared: function() {
-		return this.x * this.x + this.y * this.y + this.z * this.z;
-	},
-
-	negate: function() {
-		this.x = - this.x;
-		this.y = - this.y;
-		this.z = - this.z;
-		return this;
-	},
-
-	normalize: function() {
-	  var len = this.norm();
-		if ( len > 0 ) {
-			this.$scale(1 / len);
-		} 
-		return this;
-	},
-
-	isZero: function() {
-		var almostZero = 0.0001,
-		    abs = Math.abs;
-		
-		return abs(this.x) < almostZero && abs(this.y) < almostZero && abs(this.z) < almostZero;
-	},
-
-	clone: function() {
-		return new Vector3(this.x, this.y, this.z);
-	}
-};
-
-var $V3 = function(a, b, c) { return new Vector3(a, b, c); };
-
-/*
- * Matrix4 class based on three.js http://github.com/mrdoob/three.js, Copyright (c) Mr.doob http://mrdoob.com/, MIT License http://github.com/mrdoob/three.js/blob/master/LICENSE 
- */
-
-var Matrix4 = function() {
-	this._x = new Vector3();
-	this._y = new Vector3();
-	this._z = new Vector3();
-};
-
-$jit.Matrix4 = Matrix4;
-
-Matrix4.prototype = {
-
-	n11: 1, n12: 0, n13: 0, n14: 0,
-	n21: 0, n22: 1, n23: 0, n24: 0,
-	n31: 0, n32: 0, n33: 1, n34: 0,
-	n41: 0, n42: 0, n43: 0, n44: 1,
-
-	identity: function() {
-		this.n11 = 1; this.n12 = 0; this.n13 = 0; this.n14 = 0;
-		this.n21 = 0; this.n22 = 1; this.n23 = 0; this.n24 = 0;
-		this.n31 = 0; this.n32 = 0; this.n33 = 1; this.n34 = 0;
-		this.n41 = 0; this.n42 = 0; this.n43 = 0; this.n44 = 1;
-	},
-
-	lookAt: function(eye, center, up) {
-		var x = this._x, y = this._y, z = this._z;
-
-		z.sub(eye, center);
-		z.normalize();
-
-		x.cross(up, z);
-		x.normalize();
-
-		y.cross(z, x);
-		y.normalize();
-
-		this.n11 = x.x; this.n12 = x.y; this.n13 = x.z; this.n14 = - x.dot( eye );
-		this.n21 = y.x; this.n22 = y.y; this.n23 = y.z; this.n24 = - y.dot( eye );
-		this.n31 = z.x; this.n32 = z.y; this.n33 = z.z; this.n34 = - z.dot( eye );
-	},
-
-	transform: function(v) {
-		var vx = v.x, vy = v.y, vz = v.z, vw = v.w ? v.w : 1.0;
-
-		v.x = this.n11 * vx + this.n12 * vy + this.n13 * vz + this.n14 * vw;
-		v.y = this.n21 * vx + this.n22 * vy + this.n23 * vz + this.n24 * vw;
-		v.z = this.n31 * vx + this.n32 * vy + this.n33 * vz + this.n34 * vw;
-
-		vw = this.n41 * vx + this.n42 * vy + this.n43 * vz + this.n44 * vw;
-
-		if(v.w) {
-			v.w = vw;
-		} else {
-			v.x = v.x / vw;
-			v.y = v.y / vw;
-			v.z = v.z / vw;
-		}
-	},
-
-	multiply: function(a, b) {
-		this.n11 = a.n11 * b.n11 + a.n12 * b.n21 + a.n13 * b.n31 + a.n14 * b.n41;
-		this.n12 = a.n11 * b.n12 + a.n12 * b.n22 + a.n13 * b.n32 + a.n14 * b.n42;
-		this.n13 = a.n11 * b.n13 + a.n12 * b.n23 + a.n13 * b.n33 + a.n14 * b.n43;
-		this.n14 = a.n11 * b.n14 + a.n12 * b.n24 + a.n13 * b.n34 + a.n14 * b.n44;
-
-		this.n21 = a.n21 * b.n11 + a.n22 * b.n21 + a.n23 * b.n31 + a.n24 * b.n41;
-		this.n22 = a.n21 * b.n12 + a.n22 * b.n22 + a.n23 * b.n32 + a.n24 * b.n42;
-		this.n23 = a.n21 * b.n13 + a.n22 * b.n23 + a.n23 * b.n33 + a.n24 * b.n43;
-		this.n24 = a.n21 * b.n14 + a.n22 * b.n24 + a.n23 * b.n34 + a.n24 * b.n44;
-
-		this.n31 = a.n31 * b.n11 + a.n32 * b.n21 + a.n33 * b.n31 + a.n34 * b.n41;
-		this.n32 = a.n31 * b.n12 + a.n32 * b.n22 + a.n33 * b.n32 + a.n34 * b.n42;
-		this.n33 = a.n31 * b.n13 + a.n32 * b.n23 + a.n33 * b.n33 + a.n34 * b.n43;
-		this.n34 = a.n31 * b.n14 + a.n32 * b.n24 + a.n33 * b.n34 + a.n34 * b.n44;
-
-		this.n41 = a.n41 * b.n11 + a.n42 * b.n21 + a.n43 * b.n31 + a.n44 * b.n41;
-		this.n42 = a.n41 * b.n12 + a.n42 * b.n22 + a.n43 * b.n32 + a.n44 * b.n42;
-		this.n43 = a.n41 * b.n13 + a.n42 * b.n23 + a.n43 * b.n33 + a.n44 * b.n43;
-		this.n44 = a.n41 * b.n14 + a.n42 * b.n24 + a.n43 * b.n34 + a.n44 * b.n44;
-	},
-
-	$multiply: function(m) {
-		var n11 = this.n11, n12 = this.n12, n13 = this.n13, n14 = this.n14,
-    		n21 = this.n21, n22 = this.n22, n23 = this.n23, n24 = this.n24,
-    		n31 = this.n31, n32 = this.n32, n33 = this.n33, n34 = this.n34,
-    		n41 = this.n41, n42 = this.n42, n43 = this.n43, n44 = this.n44;
-
-		this.n11 = n11 * m.n11 + n12 * m.n21 + n13 * m.n31 + n14 * m.n41;
-		this.n12 = n11 * m.n12 + n12 * m.n22 + n13 * m.n32 + n14 * m.n42;
-		this.n13 = n11 * m.n13 + n12 * m.n23 + n13 * m.n33 + n14 * m.n43;
-		this.n14 = n11 * m.n14 + n12 * m.n24 + n13 * m.n34 + n14 * m.n44;
-
-		this.n21 = n21 * m.n11 + n22 * m.n21 + n23 * m.n31 + n24 * m.n41;
-		this.n22 = n21 * m.n12 + n22 * m.n22 + n23 * m.n32 + n24 * m.n42;
-		this.n23 = n21 * m.n13 + n22 * m.n23 + n23 * m.n33 + n24 * m.n43;
-		this.n24 = n21 * m.n14 + n22 * m.n24 + n23 * m.n34 + n24 * m.n44;
-
-		this.n31 = n31 * m.n11 + n32 * m.n21 + n33 * m.n31 + n34 * m.n41;
-		this.n32 = n31 * m.n12 + n32 * m.n22 + n33 * m.n32 + n34 * m.n42;
-		this.n33 = n31 * m.n13 + n32 * m.n23 + n33 * m.n33 + n34 * m.n43;
-		this.n34 = n31 * m.n14 + n32 * m.n24 + n33 * m.n34 + n34 * m.n44;
-
-		this.n41 = n41 * m.n11 + n42 * m.n21 + n43 * m.n31 + n44 * m.n41;
-		this.n42 = n41 * m.n12 + n42 * m.n22 + n43 * m.n32 + n44 * m.n42;
-		this.n43 = n41 * m.n13 + n42 * m.n23 + n43 * m.n33 + n44 * m.n43;
-		this.n44 = n41 * m.n14 + n42 * m.n24 + n43 * m.n34 + n44 * m.n44;
-	},
-
-	$scale: function(s) {
-		this.n11 *= s; this.n12 *= s; this.n13 *= s; this.n14 *= s;
-		this.n21 *= s; this.n22 *= s; this.n23 *= s; this.n24 *= s;
-		this.n31 *= s; this.n32 *= s; this.n33 *= s; this.n34 *= s;
-		this.n41 *= s; this.n42 *= s; this.n43 *= s; this.n44 *= s;
-		return this;
-	},
-	
-	$add: function(m) {
-	  this.n11 += m.n11;
-	  this.n12 += m.n12;
-	  this.n13 += m.n13;
-	  this.n14 += m.n14;
-	  this.n21 += m.n21;
-	  this.n22 += m.n22;
-	  this.n23 += m.n23;
-	  this.n24 += m.n24;
-	  this.n31 += m.n31;
-	  this.n32 += m.n32;
-	  this.n33 += m.n33;
-	  this.n34 += m.n34;
-	  this.n41 += m.n41;
-	  this.n42 += m.n42;
-	  this.n43 += m.n43;
-	  this.n44 += m.n44;
-	  return this;
-	},
-
-	determinant: function() {
-		return (
-			this.n14 * this.n23 * this.n32 * this.n41-
-			this.n13 * this.n24 * this.n32 * this.n41-
-			this.n14 * this.n22 * this.n33 * this.n41+
-			this.n12 * this.n24 * this.n33 * this.n41+
-
-			this.n13 * this.n22 * this.n34 * this.n41-
-			this.n12 * this.n23 * this.n34 * this.n41-
-			this.n14 * this.n23 * this.n31 * this.n42+
-			this.n13 * this.n24 * this.n31 * this.n42+
-
-			this.n14 * this.n21 * this.n33 * this.n42-
-			this.n11 * this.n24 * this.n33 * this.n42-
-			this.n13 * this.n21 * this.n34 * this.n42+
-			this.n11 * this.n23 * this.n34 * this.n42+
-
-			this.n14 * this.n22 * this.n31 * this.n43-
-			this.n12 * this.n24 * this.n31 * this.n43-
-			this.n14 * this.n21 * this.n32 * this.n43+
-			this.n11 * this.n24 * this.n32 * this.n43+
-
-			this.n12 * this.n21 * this.n34 * this.n43-
-			this.n11 * this.n22 * this.n34 * this.n43-
-			this.n13 * this.n22 * this.n31 * this.n44+
-			this.n12 * this.n23 * this.n31 * this.n44+
-
-			this.n13 * this.n21 * this.n32 * this.n44-
-			this.n11 * this.n23 * this.n32 * this.n44-
-			this.n12 * this.n21 * this.n33 * this.n44+
-			this.n11 * this.n22 * this.n33 * this.n44 );
-	},
-
-  $transpose: function() {
-	  function swap(obj, p1, p2) {
-	    var aux = obj[p1];
-	    obj[p1] = obj[p2];
-	    obj[p2] = aux;
-	  }
-	  
-	  swap(this, 'n21', 'n12');
-	  swap(this, 'n31', 'n13');
-	  swap(this, 'n32', 'n23');
-	  swap(this, 'n41', 'n14');
-	  swap(this, 'n42', 'n24');
-	  swap(this, 'n43', 'n34');
-	  return this;
-  },
-  
-	clone: function() {
-		var m = new Matrix4();
-		m.n11 = this.n11; m.n12 = this.n12; m.n13 = this.n13; m.n14 = this.n14;
-		m.n21 = this.n21; m.n22 = this.n22; m.n23 = this.n23; m.n24 = this.n24;
-		m.n31 = this.n31; m.n32 = this.n32; m.n33 = this.n33; m.n34 = this.n34;
-		m.n41 = this.n41; m.n42 = this.n42; m.n43 = this.n43; m.n44 = this.n44;
-		return m;
-	},
-	
-	flatten: function() {
-	  return [this.n11, this.n21, this.n31, this.n41,
-	      this.n12, this.n22, this.n32, this.n42,
-	      this.n13, this.n23, this.n33, this.n43,
-	      this.n14, this.n24, this.n34, this.n44];
-	}
-};
-
-Matrix4.translationMatrix = function(x, y, z) {
-	var m = new Matrix4();
-
-	m.n14 = x;
-	m.n24 = y;
-	m.n34 = z;
-
-	return m;
-};
-
-Matrix4.scaleMatrix = function(x, y, z) {
-	var m = new Matrix4();
-
-	m.n11 = x;
-	m.n22 = y;
-	m.n33 = z;
-
-	return m;
-};
-
-Matrix4.rotationXMatrix = function(theta) {
-	var rot = new Matrix4();
-
-	rot.n22 = rot.n33 = Math.cos( theta );
-	rot.n32 = Math.sin( theta );
-	rot.n23 = - rot.n32;
-
-	return rot;
-};
-
-Matrix4.rotationYMatrix = function(theta) {
-	var rot = new Matrix4();
-
-	rot.n11 = rot.n33 = Math.cos( theta );
-	rot.n13 = Math.sin( theta );
-	rot.n31 = - rot.n13;
-
-	return rot;
-};
-
-Matrix4.rotationZMatrix = function(theta) {
-	var rot = new Matrix4();
-
-	rot.n11 = rot.n22 = Math.cos( theta );
-	rot.n21 = Math.sin( theta );
-	rot.n12 = - rot.n21;
-
-	return rot;
-};
-
-Matrix4.makeInvert = function(m1) {
-	var m2 = new Matrix4();
-
-	m2.n11 = m1.n23*m1.n34*m1.n42 - m1.n24*m1.n33*m1.n42 + m1.n24*m1.n32*m1.n43 - m1.n22*m1.n34*m1.n43 - m1.n23*m1.n32*m1.n44 + m1.n22*m1.n33*m1.n44;
-	m2.n12 = m1.n14*m1.n33*m1.n42 - m1.n13*m1.n34*m1.n42 - m1.n14*m1.n32*m1.n43 + m1.n12*m1.n34*m1.n43 + m1.n13*m1.n32*m1.n44 - m1.n12*m1.n33*m1.n44;
-	m2.n13 = m1.n13*m1.n24*m1.n42 - m1.n14*m1.n23*m1.n42 + m1.n14*m1.n22*m1.n43 - m1.n12*m1.n24*m1.n43 - m1.n13*m1.n22*m1.n44 + m1.n12*m1.n23*m1.n44;
-	m2.n14 = m1.n14*m1.n23*m1.n32 - m1.n13*m1.n24*m1.n32 - m1.n14*m1.n22*m1.n33 + m1.n12*m1.n24*m1.n33 + m1.n13*m1.n22*m1.n34 - m1.n12*m1.n23*m1.n34;
-	m2.n21 = m1.n24*m1.n33*m1.n41 - m1.n23*m1.n34*m1.n41 - m1.n24*m1.n31*m1.n43 + m1.n21*m1.n34*m1.n43 + m1.n23*m1.n31*m1.n44 - m1.n21*m1.n33*m1.n44;
-	m2.n22 = m1.n13*m1.n34*m1.n41 - m1.n14*m1.n33*m1.n41 + m1.n14*m1.n31*m1.n43 - m1.n11*m1.n34*m1.n43 - m1.n13*m1.n31*m1.n44 + m1.n11*m1.n33*m1.n44;
-	m2.n23 = m1.n14*m1.n23*m1.n41 - m1.n13*m1.n24*m1.n41 - m1.n14*m1.n21*m1.n43 + m1.n11*m1.n24*m1.n43 + m1.n13*m1.n21*m1.n44 - m1.n11*m1.n23*m1.n44;
-	m2.n24 = m1.n13*m1.n24*m1.n31 - m1.n14*m1.n23*m1.n31 + m1.n14*m1.n21*m1.n33 - m1.n11*m1.n24*m1.n33 - m1.n13*m1.n21*m1.n34 + m1.n11*m1.n23*m1.n34;
-	m2.n31 = m1.n22*m1.n34*m1.n41 - m1.n24*m1.n32*m1.n41 + m1.n24*m1.n31*m1.n42 - m1.n21*m1.n34*m1.n42 - m1.n22*m1.n31*m1.n44 + m1.n21*m1.n32*m1.n44;
-	m2.n32 = m1.n14*m1.n32*m1.n41 - m1.n12*m1.n34*m1.n41 - m1.n14*m1.n31*m1.n42 + m1.n11*m1.n34*m1.n42 + m1.n12*m1.n31*m1.n44 - m1.n11*m1.n32*m1.n44;
-	m2.n33 = m1.n13*m1.n24*m1.n41 - m1.n14*m1.n22*m1.n41 + m1.n14*m1.n21*m1.n42 - m1.n11*m1.n24*m1.n42 - m1.n12*m1.n21*m1.n44 + m1.n11*m1.n22*m1.n44;
-	m2.n34 = m1.n14*m1.n22*m1.n31 - m1.n12*m1.n24*m1.n31 - m1.n14*m1.n21*m1.n32 + m1.n11*m1.n24*m1.n32 + m1.n12*m1.n21*m1.n34 - m1.n11*m1.n22*m1.n34;
-	m2.n41 = m1.n23*m1.n32*m1.n41 - m1.n22*m1.n33*m1.n41 - m1.n23*m1.n31*m1.n42 + m1.n21*m1.n33*m1.n42 + m1.n22*m1.n31*m1.n43 - m1.n21*m1.n32*m1.n43;
-	m2.n42 = m1.n12*m1.n33*m1.n41 - m1.n13*m1.n32*m1.n41 + m1.n13*m1.n31*m1.n42 - m1.n11*m1.n33*m1.n42 - m1.n12*m1.n31*m1.n43 + m1.n11*m1.n32*m1.n43;
-	m2.n43 = m1.n13*m1.n22*m1.n41 - m1.n12*m1.n23*m1.n41 - m1.n13*m1.n21*m1.n42 + m1.n11*m1.n23*m1.n42 + m1.n12*m1.n21*m1.n43 - m1.n11*m1.n22*m1.n43;
-	m2.n44 = m1.n12*m1.n23*m1.n31 - m1.n13*m1.n22*m1.n31 + m1.n13*m1.n21*m1.n32 - m1.n11*m1.n23*m1.n32 - m1.n12*m1.n21*m1.n33 + m1.n11*m1.n22*m1.n33;
-	m2.$scale(1 / m1.determinant());
-
-	return m2;
-};
-
-Matrix4.makeFrustum = function( left, right, bottom, top, near, far ) {
-	var m, x, y, a, b, c, d;
-
-	m = new Matrix4();
-	x = 2 * near / ( right - left );
-	y = 2 * near / ( top - bottom );
-	a = ( right + left ) / ( right - left );
-	b = ( top + bottom ) / ( top - bottom );
-	c = - ( far + near ) / ( far - near );
-	d = - 2 * far * near / ( far - near );
-
-	m.n11 = x;  m.n12 = 0;  m.n13 = a;   m.n14 = 0;
-	m.n21 = 0;  m.n22 = y;  m.n23 = b;   m.n24 = 0;
-	m.n31 = 0;  m.n32 = 0;  m.n33 = c;   m.n34 = d;
-	m.n41 = 0;  m.n42 = 0;  m.n43 = - 1; m.n44 = 0;
-
-	return m;
-};
-
-Matrix4.makePerspective = function( fov, aspect, near, far ) {
-	var ymax, ymin, xmin, xmax;
-
-	ymax = near * Math.tan( fov * Math.PI / 360 );
-	ymin = - ymax;
-	xmin = ymin * aspect;
-	xmax = ymax * aspect;
-
-	return Matrix4.makeFrustum( xmin, xmax, ymin, ymax, near, far );
-};
-
-Matrix4.makeOrtho = function( left, right, top, bottom, near, far ) {
-	var m, x, y, z, w, h, p;
-
-	m = new Matrix4();
-	w = right - left;
-	h = bottom - top;
-	p = far - near;
-	x = ( right + left ) / w;
-	y = ( bottom + top ) / h;
-	z = ( far + near ) / p;
-
-	m.n11 = 2 / w; m.n12 = 0;     m.n13 = 0;      m.n14 = -x;
-	m.n21 = 0;     m.n22 = 2 / h; m.n23 = 0;      m.n24 = -y;
-	m.n31 = 0;     m.n32 = 0;     m.n33 = -2 / p; m.n34 = -z;
-	m.n41 = 0;     m.n42 = 0;     m.n43 = 0;      m.n44 = 1;
-
-	return m;
-};
-
-
-/*
- * Camera class based on three.js http://github.com/mrdoob/three.js, Copyright (c) Mr.doob http://mrdoob.com/, MIT License http://github.com/mrdoob/three.js/blob/master/LICENSE 
- */
-
-var Camera = function (fov, aspect, near, far) {
-	this.projectionMatrix = Matrix4.makePerspective(fov, aspect, near, far);
-};
-
-Camera.prototype = {
-  position: new Vector3,
-  target: {
-    position: new Vector3
-  },
-  up: new Vector3(0, 1, 0),
-  matrix: new Matrix4,
-  
-  updateMatrix: function() {
-    this.matrix.lookAt(this.position, this.target.position, this.up);
-  }
-};
-
-
-Canvas.Base['3D'] = new Class({
-  Implements: Canvas.Base['2D'],
-  
-  program: null,
-  camera: null,
-  
-  initialize: function(viz) {
-    this.viz = viz;
-    this.opt = viz.config;
-    this.size = false;
-    this.createCanvas();
-    this.initWebGL();
-    this.initCamera();
-  },
-  
-  initWebGL: function() {
-    //initialize context
-    var gl = this.getCtx();
-    //get viewport size
-    var size = this.getSize();
-    //compile and get shaders
-    var fragmentShader = this.getShader(Canvas.Base['3D'].FragmentShader, gl.FRAGMENT_SHADER);
-    var vertexShader = this.getShader(Canvas.Base['3D'].VertexShader, gl.VERTEX_SHADER);
-    //create program and link shaders
-    var program = gl.createProgram();
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      throw "Could not link shaders";
-    }
-    gl.useProgram(program);
-    //bind name to variable location in shaders
-    $.extend(program, {
-      'viewMatrix': gl.getUniformLocation(program, 'viewMatrix'),
-      'projectionMatrix': gl.getUniformLocation(program, 'projectionMatrix'),
-      'normalMatrix': gl.getUniformLocation(program, 'normalMatrix'),
-      'color': gl.getUniformLocation(program, 'color'),
-      
-      'enableLighting': gl.getUniformLocation(program, 'enableLighting'),
-      'ambientColor': gl.getUniformLocation(program, 'ambientColor'),
-      'directionalColor': gl.getUniformLocation(program, 'directionalColor'),
-      'lightingDirection': gl.getUniformLocation(program, 'lightingDirection'),
-      
-      'position': gl.getAttribLocation(program, 'position'),
-      'normal': gl.getAttribLocation(program, 'normal'),
-    });
-    gl.enableVertexAttribArray(program.position);
-    gl.enableVertexAttribArray(program.normal);
-    this.program = program;
-    //set general rendering options
-    gl.clearColor(0, 0, 0, 0);
-    gl.clearDepth(1);
-
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
-
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    
-    gl.viewport(0, 0, size.width, size.height);
-  },
-  
-  initCamera: function() {
-    var size = this.getSize();
-    var camera = new Camera(75, size.width / size.height, 1, 1000);
-    camera.position.z = 500;
-    this.camera = camera;
-  },
-  
-  getShader: function(src, type) {
-    var gl = this.ctx;
-    var shader = gl.createShader(type);
-    gl.shaderSource(shader, src);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      var info = gl.getShaderInfoLog(shader);
-      throw "Could not compile shader src: " + info;
-    }
-    return shader;
-  },
-
-  getCtx: function() {
-    if(!this.ctx) 
-      return this.ctx = this.canvas.getContext('experimental-webgl');
-    return this.ctx;
-  },
-  
-  resize: function(width, height) {
-    var size = this.getSize(),
-        canvas = this.canvas,
-        styles = canvas.style,
-        gl = this.getCtx();
-    this.size = false;
-    canvas.width = width;
-    canvas.height = height;
-    styles.width = width + "px";
-    styles.height = height + "px";
-    gl.viewport(0, 0, width, height);
-
-    this.translateOffsetX =
-      this.translateOffsetY = 0;
-    this.scaleOffsetX = 
-      this.scaleOffsetY = 1;
-    this.clear();
-    this.viz.resize(width, height, this);
-  },
-
-  translateToCenter: $.empty,
-  scale: $.empty,
-  
-  translate: function(x, y, z, disablePlot) {
-    var sx = this.scaleOffsetX,
-        sy = this.scaleOffsetY;
-    this.translateOffsetX += x*sx;
-    this.translateOffsetY += y*sy;
-    var pos = this.camera.position;
-    pos.x += x;
-    pos.y += y;
-    pos.z += z;
-    !disablePlot && this.plot();
-  },
-
-  clear: function(){
-    var gl = this.getCtx();
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    //TODO(nico) is this OK? I mean, to put this line here.
-    this.camera.updateMatrix();
-  },
-  
-  plot: function() {
-    this.clear();
-    this.viz.plot(this);
-  }
-});
-
-//Shaders code
-Canvas.Base['3D'].FragmentShader = [
-  "#ifdef GL_ES",
-  "precision highp float;",
-  "#endif",
-  
-  "varying vec4 vcolor;",
-  "varying vec3 lightWeighting;",
-  
-  "void main(){",
-  
-    "gl_FragColor = vec4(vcolor.rgb * lightWeighting, vcolor.a);",
-  
-  "}"
-].join("\n");
-
-Canvas.Base['3D'].VertexShader = [
-  "attribute vec3 position;",
-  "attribute vec3 normal;",
-  "uniform vec4 color;",
-  
-  "uniform mat4 viewMatrix;",
-  "uniform mat4 projectionMatrix;",
-  "uniform mat4 normalMatrix;",
-
-  "uniform bool enableLighting;",
-  "uniform vec3 ambientColor;",
-  "uniform vec3 directionalColor;",
-  "uniform vec3 lightingDirection;",
-  
-  "varying vec4 vcolor;",
-  "varying vec3 lightWeighting;",
-  
-  "void main(void) {",
-  
-    "if(!enableLighting) {",
-      "lightWeighting = vec3(1.0, 1.0, 1.0);",
-    "} else {",
-      "vec4 transformedNormal = normalMatrix * vec4(normal, 1.0);",
-      "float directionalLightWeighting = max(dot(transformedNormal.xyz, lightingDirection), 0.0);",
-      "lightWeighting = ambientColor + directionalColor * directionalLightWeighting;",
-    "}",
-    
-    "vcolor = color;",
-    "gl_Position = projectionMatrix * viewMatrix * vec4( position, 1.0 );",
-  
-  "}"
-].join("\n");
-
-/*
- * Some of the geometries where inspired by three.js http://github.com/mrdoob/three.js, Copyright (c) Mr.doob http://mrdoob.com/, MIT License http://github.com/mrdoob/three.js/blob/master/LICENSE 
- */
-
-var O3D = {};
-
-$jit.O3D = O3D;
-
-O3D.base = new Class({
-  //array of { x, y, z } of float
-  vertices: [],
-  //array of { a, b, c, d? } of int
-  faces: [],
-  //updated on plotNode/plotEdge
-  position: new Vector3,
-  rotation: new Vector3,
-  scale: new Vector3(1, 1, 1),
-  //intrinsic coordinates
-  matrix: new Matrix4,
-  
-  update: function(elem) {
-    if(elem.nodeFrom && elem.nodeTo) {
-      this.updateEdge(elem);
-    } else {
-      this.updateNode(elem);
-    }
-  },
-  
-  updateNode: $.empty,
-  
-  updateEdge: function(elem) {
-    this.updateNode(elem);
-  },
-
-  updateMatrix: function() {
-    var pos = this.position,
-        rot = this.rotation,
-        scale = this.scale,
-        matrix = this.matrix;
-    
-    matrix.identity();
-  
-    matrix.$multiply( Matrix4.translationMatrix( pos.x, pos.y, pos.z ) );
-    matrix.$multiply( Matrix4.rotationXMatrix( rot.x ) );
-    matrix.$multiply( Matrix4.rotationYMatrix( rot.y ) );
-    matrix.$multiply( Matrix4.rotationZMatrix( rot.z ) );
-    matrix.$multiply( Matrix4.scaleMatrix( scale.x, scale.y, scale.z ) );
-  },
-  //compute faces normals
-  computeNormals: function () {
-    for (var f=0, vs=this.vertices, fs=this.faces, len=fs.length; f < len; f++) {
-      var va = vs[fs[f].a],
-          vb = vs[fs[f].b],
-          vc = vs[fs[f].c],
-          cb = new Vector3,
-          ab = new Vector3;
-      
-      cb.sub(vc, vb);
-      ab.sub(va, vb);
-      cb.$cross(ab);
-
-      if (!cb.isZero()) cb.normalize();
-      
-      fs[f].normal = cb;
-    }
-  }
-});
-
-//IsoCube
-function IsoCube() {
-  var vs = this.vertices,
-      f4 = this.faces,
-      vsp = function(x, y, z) { vs.push({ x: x, y: y, z: z }); },
-      f4p = function(a, b, c, d) { f4.push({ a: a, b: b, c: c, d: d }); };
-  
-  vsp( 1,  1, -1);
-  vsp( 1, -1, -1);
-  vsp(-1, -1, -1);
-  vsp(-1,  1, -1);
-  vsp( 1,  1,  1);
-  vsp( 1, -1,  1);
-  vsp(-1, -1,  1);
-  vsp(-1,  1,  1);
-  
-  f4p(0, 1, 2, 3);
-  f4p(4, 7, 6, 5);
-  f4p(0, 4, 5, 1);
-  f4p(1, 5, 6, 2);
-  f4p(2, 6, 7, 3);
-  f4p(4, 0, 3, 7);
-}
-
-//Cube
-O3D.cube = new Class({
-  Implements: O3D.base,
-  
-  initialize: function() {
-    IsoCube.call(this);
-    this.computeNormals();
-  },
-  
-  updateNode: function(obj) {
-    var dim = obj.getData('dim'),
-        pos = obj.pos;
-    
-    this.position.setc(pos.x, pos.y, pos.z);
-    this.scale.setc(dim, dim, dim);
-    this.updateMatrix();
-  }
-});
-
-O3D.sphere = new Class({
-  Implements: O3D.base,
-  
-  radius: 1,
-  segments_width: 10,
-  segments_height: 10,
-  
-  initialize: function() {
-    var radius = this.radius,
-        segments_width = this.segments_width,
-        segments_height = this.segments_height,
-        gridX = segments_width || 8,
-        gridY = segments_height || 6,
-        cos = Math.cos,
-        sin = Math.sin,
-        max = Math.max,
-        pi = Math.PI;
-  
-    var iHor = max(3, gridX),
-        iVer = max(2, gridY),
-        aVtc = [];
-  
-    for(var j=0; j < (iVer + 1) ; j++) {
-      var fRad1 = j / iVer,
-          fZ = radius * cos(fRad1 * pi),
-          fRds = radius * sin(fRad1 * pi),
-          aRow = [],
-          oVtx = 0;
-
-      for(var i=0; i<iHor; i++) {
-        var fRad2 = 2 * i / iHor,
-            fX = fRds * Math.sin(fRad2 * pi),
-            fY = fRds * Math.cos(fRad2 * pi);
-        if (!(( j == 0 || j == iVer) && i > 0)) {
-          oVtx = this.vertices.push({ x: fY, y: fZ, z: fX}) - 1;
-        }
-        aRow.push(oVtx);
-      }
-      aVtc.push(aRow);
-    }
-  
-    var iVerNum = aVtc.length;
-    for (var j=0; j<iVerNum; j++) {
-      var iHorNum = aVtc[j].length;
-      if (j > 0) {
-        for (var i = 0; i<iHorNum; i++ ) {
-          var bEnd = i == ( iHorNum - 1 );
-          var aP1 = aVtc[j][ bEnd ? 0 : i + 1 ];
-          var aP2 = aVtc[j][ ( bEnd ? iHorNum - 1 : i ) ];
-          var aP3 = aVtc[j -1][ ( bEnd ? iHorNum - 1 : i ) ];
-          var aP4 = aVtc[j -1][ bEnd ? 0 : i + 1 ];
-  
-          if(j < ( aVtc.length - 1)) {
-            this.faces.push({ a: aP1, b: aP2, c: aP3 });
-          }
-          if(j > 1) {
-            this.faces.push({ a: aP1, b: aP3, c: aP4 });
-          }
-        }
-      }
-    }
-    this.computeNormals();
-  },
-  
-  updateNode: function(obj) {
-    var dim = obj.getData('dim'),
-        pos = obj.pos;
-    
-    this.position.setc(pos.x, pos.y, pos.z);
-    this.scale.setc(dim, dim, dim);
-    this.updateMatrix();
-  }
-
-});
-
-
-O3D.tube = new Class({
-  Implements: O3D.base,
-  
-  numSegs: 10,
-  dim: 1,
-  initialize: function() {
-    var vs = this.vertices,
-        f4 = this.faces,
-        vsp = function(x, y, z) { vs.push({ x: x, y: y, z: z }); },
-        f4p = function(a, b, c, d) { f4.push({ a: a, b: b, c: c, d: d }); };
-
-    var scope = this,
-        sin = Math.sin,
-        cos = Math.cos,
-        pi = Math.PI,
-        pi2 = pi * 2,
-        numSegs = this.numSegs,
-        topRad = this.dim,
-        botRad = this.dim;
-  
-    // Top circle vertices
-    for (var i = 0; i < numSegs; i++) {
-      vsp(sin(pi2 * i / numSegs) * topRad, cos(pi2 * i / numSegs) * topRad, -0.5);
-    }
-    // Bottom circle vertices
-    for (var i = 0; i < numSegs; i++) {
-      vsp(sin(pi2 * i / numSegs) * botRad, cos(pi2 * i / numSegs) * botRad, 0.5);
-    }
-    // Body 
-    for (var i = 0; i < numSegs; i++) {
-      f4p(i, (i + 1) % numSegs, numSegs + (i + 1) % numSegs, i + numSegs);
-    }
-    this.computeNormals();
-  },
-  
-  updateEdge: function(obj) {
-    var lineWidth = obj.getData('lineWidth'),
-        nodeFrom = obj.nodeFrom,
-        nodeTo = obj.nodeTo,
-        nodeFromPos = nodeFrom.pos,
-        nodeToPos = nodeTo.pos,
-        dist = nodeFromPos.distanceTo(nodeToPos),
-        middle = new Vector3,
-        currentDir = new Vector3(0, 0, 1),
-        dvec = new Vector3;
-    
-    middle.add(nodeFromPos, nodeToPos).$scale(0.5);
-    dvec.sub(nodeToPos, nodeFromPos).normalize();
-    
-    var c = dvec.dot(currentDir),
-        xc = dvec.dot(new Vector3(1, 0, 0)),
-        yc = dvec.dot(new Vector3(0, 1, 0)),
-        t = 1 - c,
-        rotAngle = Math.acos(c),
-        s = Math.sin(rotAngle),
-        rotAxis = currentDir.$cross(dvec).normalize(),
-        x = rotAxis.x,
-        y = rotAxis.y,
-        z = rotAxis.z;
-    
-    var rot = new Matrix4();
-    rot.n11 = t * x * x + c;
-    rot.n12 = t * x * y - s * z;
-    rot.n13 = t * x * z + s * y;
-    rot.n21 = t * x * y + s * z;
-    rot.n22 = t * y * y + c;
-    rot.n23 = t * y * z - s * x;
-    rot.n31 = t * x * z - s * y;
-    rot.n32 = t * y * z + s * x;
-    rot.n33 = t * z * z + c;
-    this.rotationMatrix = rot;
-    this.scale.setc(lineWidth, lineWidth, dist);
-    this.position.setc(middle.x, middle.y, middle.z);
-    this.updateMatrix();
-  },
-  
-  updateMatrix: function() {
-    var pos = this.position,
-        scale = this.scale,
-        matrix = this.matrix;
-    
-    matrix.identity();
-  
-    matrix.$multiply( Matrix4.translationMatrix( pos.x, pos.y, pos.z ) );
-    matrix.$multiply( this.rotationMatrix );
-    matrix.$multiply( Matrix4.scaleMatrix( scale.x, scale.y, scale.z ) );
-  }
-
-}); 
-
-
-/*
- * File: Layouts.ForceDirected3D.js
- *
-*/
-
-/*
- * Class: Layouts.ForceDirected3D
- * 
- * Implements a Force Directed Layout.
- * 
- * Implemented By:
- * 
- * <ForceDirected3D>
- * 
- */
-Layouts.ForceDirected3D = new Class({
-
-  getOptions: function() {
-    var s = this.canvas.getSize();
-    var w = s.width, h = s.height;
-    //count nodes
-    var count = 0;
-    this.graph.eachNode(function(n) { 
-      count++;
-    });
-    var k2 = w * h / count, k = Math.sqrt(k2);
-    var l = this.config.levelDistance;
-    
-    return {
-      width: w,
-      height: h,
-      tstart: w * 0.1,
-      nodef: function(x) { return k2 / (x || 1); },
-      edgef: function(x) { return /* x * x / k; */ k * (x - l); }
-    };
-  },
-  
-  compute: function(property, incremental) {
-    var prop = $.splat(property || ['current', 'start', 'end']);
-    var opt = this.getOptions();
-    NodeDim.compute(this.graph, prop, this.config);
-    this.graph.computeLevels(this.root, 0, "ignore");
-    this.graph.eachNode(function(n) {
-      $.each(prop, function(p) {
-        var pos = n.getPos(p);
-        if(pos.isZero()) {
-          pos.x = opt.width/5 * (Math.random() - 0.5);
-          pos.y = opt.height/5 * (Math.random() - 0.5);
-          pos.z = 200 * (Math.random() - 0.5);
-        }
-        //initialize disp vector
-        n.disp = {};
-        $.each(prop, function(p) {
-          n.disp[p] = $V3(0, 0, 0);
-        });
-      });
-    });
-    this.computePositions(prop, opt, incremental);
-  },
-  
-  computePositions: function(property, opt, incremental) {
-    var times = this.config.iterations, i = 0, that = this;
-    if(incremental) {
-      (function iter() {
-        for(var total=incremental.iter, j=0; j<total; j++) {
-          opt.t = opt.tstart * (1 - i++/(times -1));
-          that.computePositionStep(property, opt);
-          if(i >= times) {
-            incremental.onComplete();
-            return;
-          }
-        }
-        incremental.onStep(Math.round(i / (times -1) * 100));
-        setTimeout(iter, 1);
-      })();
-    } else {
-      for(; i < times; i++) {
-        opt.t = opt.tstart * (1 - i/(times -1));
-        this.computePositionStep(property, opt);
-      }
-    }
-  },
-  
-  computePositionStep: function(property, opt) {
-    var graph = this.graph;
-    var min = Math.min, max = Math.max;
-    var dpos = $V3(0, 0, 0);
-    //calculate repulsive forces
-    graph.eachNode(function(v) {
-      //initialize disp
-      $.each(property, function(p) {
-        v.disp[p].x = 0; 
-        v.disp[p].y = 0;
-        v.disp[p].z = 0;
-      });
-      graph.eachNode(function(u) {
-        if(u.id != v.id) {
-          $.each(property, function(p) {
-            var vp = v.getPos(p), up = u.getPos(p);
-            dpos.x = vp.x - up.x;
-            dpos.y = vp.y - up.y;
-            dpos.z = vp.z - up.z;
-            var norm = dpos.norm() || 1;
-            v.disp[p].$add(dpos
-                .$scale(opt.nodef(norm) / norm));
-          });
-        }
-      });
-    });
-    //calculate attractive forces
-    var T = !!graph.getNode(this.root).visited;
-    graph.eachNode(function(node) {
-      node.eachAdjacency(function(adj) {
-        var nodeTo = adj.nodeTo;
-        if(!!nodeTo.visited === T) {
-          $.each(property, function(p) {
-            var vp = node.getPos(p), up = nodeTo.getPos(p);
-            dpos.x = vp.x - up.x;
-            dpos.y = vp.y - up.y;
-            dpos.z = vp.z - up.z;
-            var norm = dpos.norm() || 1;
-            node.disp[p].$add(dpos.$scale(-opt.edgef(norm) / norm));
-            nodeTo.disp[p].$add(dpos.$scale(-1));
-          });
-        }
-      });
-      node.visited = !T;
-    });
-    //arrange positions to fit the canvas
-    var t = opt.t, w2 = opt.width / 2, h2 = opt.height / 2;
-    graph.eachNode(function(u) {
-      $.each(property, function(p) {
-        var disp = u.disp[p];
-        var norm = disp.norm() || 1;
-        var p = u.getPos(p);
-        p.$add($V3(disp.x * min(Math.abs(disp.x), t) / norm, 
-                   disp.y * min(Math.abs(disp.y), t) / norm,
-                   disp.z * min(Math.abs(disp.z), t) / norm));
-        p.x = min(w2, max(-w2, p.x));
-        p.y = min(h2, max(-h2, p.y));
-        p.z = min(h2, max(-h2, p.z));
-      });
-    });
-  }
-});
-
-$jit.ForceDirected3D = new Class( {
-
-  Implements: [ Loader, Extras, Layouts.ForceDirected3D ],
-
-  initialize: function(controller) {
-    var $ForceDirected3D = $jit.ForceDirected3D;
-
-    var config = {
-      iterations: 50,
-      levelDistance: 50
-    };
-
-    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
-        "Fx", "Tips", "NodeStyles", "Events", "Navigation", "Controller", "Label"), config, controller);
-
-    var canvasConfig = this.config;
-    if(canvasConfig.useCanvas) {
-      this.canvas = canvasConfig.useCanvas;
-      this.config.labelContainer = this.canvas.id + '-label';
-    } else {
-      if(canvasConfig.background) {
-        canvasConfig.background = $.merge({
-          type: 'Circles'
-        }, canvasConfig.background);
-      }
-      this.canvas = new Canvas(this, canvasConfig);
-      this.config.labelContainer = (typeof canvasConfig.injectInto == 'string'? canvasConfig.injectInto : canvasConfig.injectInto.id) + '-label';
-    }
-
-    this.graphOptions = {
-      'klass': Vector3,
-      'Node': {
-        'selected': false,
-        'exist': true,
-        'drawn': true
-      }
-    };
-    this.graph = new Graph(this.graphOptions, this.config.Node,
-        this.config.Edge);
-    this.labels = new $ForceDirected3D.Label[canvasConfig.Label.type](this);
-    this.fx = new $ForceDirected3D.Plot(this, $ForceDirected3D);
-    this.op = new $ForceDirected3D.Op(this);
-    this.json = null;
-    this.busy = false;
-    // initialize extras
-    this.initializeExtras();
-  },
-
-  /* 
-    refresh 
-    
-    Computes positions and plots the tree.
-  */
-  refresh: function() {
-    this.compute();
-    this.plot();
-  },
-
-  reposition: function() {
-    this.compute('end');
-  },
-
-/*
-  computeIncremental
-  
-  Performs the Force Directed algorithm incrementally.
-  
-  Description:
-  
-  ForceDirected3D algorithms can perform many computations and lead to JavaScript taking too much time to complete. 
-  This method splits the algorithm into smaller parts allowing the user to track the evolution of the algorithm and 
-  avoiding browser messages such as "This script is taking too long to complete".
-  
-  Parameters:
-  
-  opt - (object) The object properties are described below
-  
-  iter - (number) Default's *20*. Split the algorithm into pieces of _iter_ iterations. For example, if the _iterations_ configuration property 
-  of your <ForceDirected3D> class is 100, then you could set _iter_ to 20 to split the main algorithm into 5 smaller pieces.
-  
-  property - (string) Default's *end*. Whether to update starting, current or ending node positions. Possible values are 'end', 'start', 'current'. 
-  You can also set an array of these properties. If you'd like to keep the current node positions but to perform these 
-  computations for final animation positions then you can just choose 'end'.
-  
-  onStep - (function) A callback function called when each "small part" of the algorithm completed. This function gets as first formal 
-  parameter a percentage value.
-  
-  onComplete - A callback function called when the algorithm completed.
-  
-  Example:
-  
-  In this example I calculate the end positions and then animate the graph to those positions
-  
-  (start code js)
-  var fd = new $jit.ForceDirected3D(...);
-  fd.computeIncremental({
-    iter: 20,
-    property: 'end',
-    onStep: function(perc) {
-      Log.write("loading " + perc + "%");
-    },
-    onComplete: function() {
-      Log.write("done");
-      fd.animate();
-    }
-  });
-  (end code)
-  
-  In this example I calculate all positions and (re)plot the graph
-  
-  (start code js)
-  var fd = new ForceDirected3D(...);
-  fd.computeIncremental({
-    iter: 20,
-    property: ['end', 'start', 'current'],
-    onStep: function(perc) {
-      Log.write("loading " + perc + "%");
-    },
-    onComplete: function() {
-      Log.write("done");
-      fd.plot();
-    }
-  });
-  (end code)
-  
-  */
-  computeIncremental: function(opt) {
-    opt = $.merge( {
-      iter: 20,
-      property: 'end',
-      onStep: $.empty,
-      onComplete: $.empty
-    }, opt || {});
-
-    this.config.onBeforeCompute(this.graph.getNode(this.root));
-    this.compute(opt.property, opt);
-  },
-
-  /*
-    plot
-   
-    Plots the ForceDirected3D graph. This is a shortcut to *fx.plot*.
-   */
-  plot: function() {
-    this.fx.plot();
-  },
-
-  /*
-     animate
-    
-     Animates the graph from the current positions to the 'end' node positions.
-  */
-  animate: function(opt) {
-    this.fx.animate($.merge( {
-      modes: [ 'linear' ]
-    }, opt || {}));
-  }
-});
-
-$jit.ForceDirected3D.$extend = true;
-
-(function(ForceDirected3D) {
-
-  /*
-     ForceDirected3D.Op
-     
-     Custom extension of <Graph.Op>.
-
-     Extends:
-
-     All <Graph.Op> methods
-     
-     See also:
-     
-     <Graph.Op>
-
-  */
-  ForceDirected3D.Op = new Class( {
-
-    Implements: Graph.Op
-
-  });
-
-  /*
-    ForceDirected3D.Plot
-    
-    Custom extension of <Graph.Plot>.
-  
-    Extends:
-  
-    All <Graph.Plot> methods
-    
-    See also:
-    
-    <Graph.Plot>
-  
-  */
-  ForceDirected3D.Plot = new Class( {
-
-    Implements: Graph.Plot3D
-
-  });
-
-  /*
-    ForceDirected3D.Label
-    
-    Custom extension of <Graph.Label>. 
-    Contains custom <Graph.Label.SVG>, <Graph.Label.HTML> and <Graph.Label.Native> extensions.
-  
-    Extends:
-  
-    All <Graph.Label> methods and subclasses.
-  
-    See also:
-  
-    <Graph.Label>, <Graph.Label.Native>, <Graph.Label.HTML>, <Graph.Label.SVG>.
-  
-  */
-  ForceDirected3D.Label = {};
-
-  /*
-     ForceDirected3D.Label.Native
-     
-     Custom extension of <Graph.Label.Native>.
-
-     Extends:
-
-     All <Graph.Label.Native> methods
-
-     See also:
-
-     <Graph.Label.Native>
-
-  */
-  ForceDirected3D.Label.Native = new Class( {
-    Implements: Graph.Label.Native
-  });
-
-  /*
-    ForceDirected3D.Label.SVG
-    
-    Custom extension of <Graph.Label.SVG>.
-  
-    Extends:
-  
-    All <Graph.Label.SVG> methods
-  
-    See also:
-  
-    <Graph.Label.SVG>
-  
-  */
-  ForceDirected3D.Label.SVG = new Class( {
-    Implements: Graph.Label.SVG,
-
-    initialize: function(viz) {
-      this.viz = viz;
-    },
-
-    /* 
-       placeLabel
-
-       Overrides abstract method placeLabel in <Graph.Label>.
-
-       Parameters:
-
-       tag - A DOM label element.
-       node - A <Graph.Node>.
-       controller - A configuration/controller object passed to the visualization.
-      
-     */
-    placeLabel: function(tag, node, controller) {
-      var pos = node.pos.getc(true), 
-          canvas = this.viz.canvas,
-          ox = canvas.translateOffsetX,
-          oy = canvas.translateOffsetY,
-          sx = canvas.scaleOffsetX,
-          sy = canvas.scaleOffsetY,
-          radius = canvas.getSize();
-      var labelPos = {
-        x: Math.round(pos.x * sx + ox + radius.width / 2),
-        y: Math.round(pos.y * sy + oy + radius.height / 2)
-      };
-      tag.setAttribute('x', labelPos.x);
-      tag.setAttribute('y', labelPos.y);
-
-      controller.onPlaceLabel(tag, node);
-    }
-  });
-
-  /*
-     ForceDirected3D.Label.HTML
-     
-     Custom extension of <Graph.Label.HTML>.
-
-     Extends:
-
-     All <Graph.Label.HTML> methods.
-
-     See also:
-
-     <Graph.Label.HTML>
-
-  */
-  ForceDirected3D.Label.HTML = new Class( {
-    Implements: Graph.Label.HTML,
-
-    initialize: function(viz) {
-      this.viz = viz;
-    },
-    /* 
-       placeLabel
-
-       Overrides abstract method placeLabel in <Graph.Plot>.
-
-       Parameters:
-
-       tag - A DOM label element.
-       node - A <Graph.Node>.
-       controller - A configuration/controller object passed to the visualization.
-      
-     */
-    placeLabel: function(tag, node, controller) {
-      var pos = node.pos.getc(true), 
-          canvas = this.viz.canvas,
-          ox = canvas.translateOffsetX,
-          oy = canvas.translateOffsetY,
-          sx = canvas.scaleOffsetX,
-          sy = canvas.scaleOffsetY,
-          radius = canvas.getSize();
-      var labelPos = {
-        x: Math.round(pos.x * sx + ox + radius.width / 2),
-        y: Math.round(pos.y * sy + oy + radius.height / 2)
-      };
-      var style = tag.style;
-      style.left = labelPos.x + 'px';
-      style.top = labelPos.y + 'px';
-      style.display = this.fitsInCanvas(labelPos, canvas) ? '' : 'none';
-
-      controller.onPlaceLabel(tag, node);
-    }
-  });
-
-  /*
-    ForceDirected3D.Plot.NodeTypes
-
-    This class contains a list of <Graph.Node> built-in types. 
-    Node types implemented are 'none', 'circle', 'triangle', 'rectangle', 'star', 'ellipse' and 'square'.
-
-    You can add your custom node types, customizing your visualization to the extreme.
-
-    Example:
-
-    (start code js)
-      ForceDirected3D.Plot.NodeTypes.implement({
-        'mySpecialType': {
-          'render': function(node, canvas) {
-            //print your custom node to canvas
-          },
-          //optional
-          'contains': function(node, pos) {
-            //return true if pos is inside the node or false otherwise
-          }
-        }
-      });
-    (end code)
-
-  */
-  ForceDirected3D.Plot.NodeTypes = new Class({
-    'none': {
-      'render': $.empty,
-      'contains': $.lambda(false)
-    },
-    'circle': {
-      'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            dim = node.getData('dim');
-        this.nodeHelper.circle.render('fill', pos, dim, canvas);
-      },
-      'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            dim = node.getData('dim');
-        return this.nodeHelper.circle.contains(npos, pos, dim);
-      }
-    },
-    'ellipse': {
-      'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            width = node.getData('width'), 
-            height = node.getData('height');
-        this.nodeHelper.ellipse.render('fill', pos, width, height, canvas);
-        },
-      'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            width = node.getData('width'), 
-            height = node.getData('height');
-        return this.nodeHelper.ellipse.contains(npos, pos, width, height);
-      }
-    },
-    'square': {
-      'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            dim = node.getData('dim');
-        this.nodeHelper.square.render('fill', pos, dim, canvas);
-      },
-      'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            dim = node.getData('dim');
-        return this.nodeHelper.square.contains(npos, pos, dim);
-      }
-    },
-    'rectangle': {
-      'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            width = node.getData('width'), 
-            height = node.getData('height');
-        this.nodeHelper.rectangle.render('fill', pos, width, height, canvas);
-      },
-      'contains': function(node, pos){
-        var npos = node.pos.getc(true), 
-            width = node.getData('width'), 
-            height = node.getData('height');
-        return this.nodeHelper.rectangle.contains(npos, pos, width, height);
-      }
-    },
-    'triangle': {
-      'render': function(node, canvas){
-        var pos = node.pos.getc(true), 
-            dim = node.getData('dim');
-        this.nodeHelper.triangle.render('fill', pos, dim, canvas);
-      },
-      'contains': function(node, pos) {
-        var npos = node.pos.getc(true), 
-            dim = node.getData('dim');
-        return this.nodeHelper.triangle.contains(npos, pos, dim);
-      }
-    },
-    'star': {
-      'render': function(node, canvas){
-        var pos = node.pos.getc(true),
-            dim = node.getData('dim');
-        this.nodeHelper.star.render('fill', pos, dim, canvas);
-      },
-      'contains': function(node, pos) {
-        var npos = node.pos.getc(true),
-            dim = node.getData('dim');
-        return this.nodeHelper.star.contains(npos, pos, dim);
-      }
-    }
-  });
-
-  /*
-    ForceDirected3D.Plot.EdgeTypes
-  
-    This class contains a list of <Graph.Adjacence> built-in types. 
-    Edge types implemented are 'none', 'line' and 'arrow'.
-  
-    You can add your custom edge types, customizing your visualization to the extreme.
-  
-    Example:
-  
-    (start code js)
-      ForceDirected3D.Plot.EdgeTypes.implement({
-        'mySpecialType': {
-          'render': function(adj, canvas) {
-            //print your custom edge to canvas
-          },
-          //optional
-          'contains': function(adj, pos) {
-            //return true if pos is inside the arc or false otherwise
-          }
-        }
-      });
-    (end code)
-  
-  */
-  ForceDirected3D.Plot.EdgeTypes = new Class({
-    'none': $.empty,
-    'line': {
-      'render': function(adj, canvas) {
-        var from = adj.nodeFrom.pos.getc(true),
-            to = adj.nodeTo.pos.getc(true);
-        this.edgeHelper.line.render(from, to, canvas);
-      },
-      'contains': function(adj, pos) {
-        var from = adj.nodeFrom.pos.getc(true),
-            to = adj.nodeTo.pos.getc(true);
-        return this.edgeHelper.line.contains(from, to, pos, this.edge.epsilon);
-      }
-    },
-    'arrow': {
-      'render': function(adj, canvas) {
-        var from = adj.nodeFrom.pos.getc(true),
-            to = adj.nodeTo.pos.getc(true),
-            dim = adj.getData('dim'),
-            direction = adj.data.$direction,
-            inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id);
-        this.edgeHelper.arrow.render(from, to, dim, inv, canvas);
-      },
-      'contains': function(adj, pos) {
-        var from = adj.nodeFrom.pos.getc(true),
-            to = adj.nodeTo.pos.getc(true);
-        return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
-      }
-    }
-  });
-
-})($jit.ForceDirected3D);
 
 // START METAMAPS CODE
 export default $jit
