@@ -7,7 +7,7 @@ First, run one of these two code blocks. The first is if you've merged the code 
 EITHER THIS
 
     git checkout instance/mycoolinstance
-    git fetch origin/instance/mycoolinstance
+    git fetch origin instance/mycoolinstance
     git reset --hard origin/instance/mycoolinstance
 
 OR
@@ -23,10 +23,9 @@ Now that you have the code, run these commands:
     source .env
 
     bundle install
-    npm install
     bundle exec rails db:migrate
-    bundle exec rails assets:precompile # includes `npm run build` and `bin/build-apidocs.sh`
-    bundle exec rails perms:fix
+    # the following includes `npm install`, `npm run build`, `bin/build-apidocs.sh`, `rails perms:fix`
+    bundle exec rails assets:precompile 
     passenger-config restart-app .
 
     forever list #find the uid of the realtime server, e.g. xQKv
