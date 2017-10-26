@@ -1,13 +1,13 @@
-import * as constants from './constants'
+import * as c from './constants'
 
 export const openChat = () => {
   return {
-    type: constants.OPEN_CHAT
+    type: c.OPEN_CHAT
   }
 }
 
 export const closeChat = () => {
   return {
-    type: constants.CLOSE_CHAT
+    type: c.CLOSE_CHAT
   }
 }
