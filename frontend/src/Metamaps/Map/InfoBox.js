@@ -116,7 +116,9 @@ const InfoBox = {
   },
   attachEventListeners: function() {
     var self = InfoBox
-
+    $('.mapInfoBox').click(function(event) {
+      event.stopPropagation()
+    })
     $('.mapInfoBox.canEdit .best_in_place').best_in_place()
 
     // because anyone who can edit the map can change the map title
