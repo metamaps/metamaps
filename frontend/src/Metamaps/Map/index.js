@@ -1,7 +1,7 @@
 /* global $ */
 
 import outdent from 'outdent'
-import { find as _find } from 'lodash'
+import _, { find as _find } from 'lodash'
 import { browserHistory } from 'react-router'
 
 import Active from '../Active'
