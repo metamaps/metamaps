@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import ContextMenu from '../components/ContextMenu'
+import ContextMenu from '../containers/ContextMenu'
+import UpperOptions from '../containers/UpperOptions'
+import InfoAndHelp from '../containers/InfoAndHelp'
+import VisualizationControls from '../containers/VisualizationControls'
+import TopicCard from '../containers/TopicCard'
+
 import TopicVis from '../components/TopicVis'
-import UpperOptions from '../components/UpperOptions'
-import InfoAndHelp from '../components/InfoAndHelp'
-import VisualizationControls from '../components/VisualizationControls'
-import TopicCard from '../components/TopicCard'
 
 export default class TopicView extends Component {
 
@@ -38,6 +39,7 @@ export default class TopicView extends Component {
   }
 
   endTopic() {
+    // TODO: fix upperOptions ref
     this.upperOptions.reset()
     this.props.endActiveTopic()
   }
@@ -60,26 +62,12 @@ export default class TopicView extends Component {
             openHelpLightbox, onZoomIn, onZoomOut, contextMenu } = this.props
     // TODO: stop using {...this.props} and make explicit
     return <div className="topicWrapper">
-      <UpperOptions ref={x => this.upperOptions = x}
-                    currentUser={currentUser}
-                    topic={topic}
-                    onForkClick={forkMap}
-                    filterData={filterData}
-                    allForFiltering={allForFiltering}
-                    visibleForFiltering={visibleForFiltering}
-                    toggleMetacode={toggleMetacode}
-                    toggleMapper={toggleMapper}
-                    toggleSynapse={toggleSynapse}
-                    filterAllMetacodes={filterAllMetacodes}
-                    filterAllMappers={filterAllMappers}
-                    filterAllSynapses={filterAllSynapses} />
+      <UpperOptions ref={x => this.upperOptions = x} {...this.props} />
       <TopicVis />
       <TopicCard {...this.props} />
       {contextMenu && <ContextMenu {...this.props} />}
-      <VisualizationControls onClickZoomIn={onZoomIn}
-                             onClickZoomOut={onZoomOut} />
-      <InfoAndHelp topic={topic}
-                   onHelpClick={openHelpLightbox} />
+      <VisualizationControls {...this.props} />
+      <InfoAndHelp {...this.props} />
     </div>
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import Autolinker from 'autolinker'
-import Util from '../../../Metamaps/Util'
+import Util from '../../Metamaps/Util'
 
 const linker = new Autolinker({ newWindow: true, truncate: 50, email: false, phone: false })
 

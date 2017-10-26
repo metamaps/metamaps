@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import ContextMenu from '../../components/ContextMenu'
+import UpperOptions from '../../containers/UpperOptions'
+import InfoAndHelp from '../../containers/InfoAndHelp'
+import VisualizationControls from '../../containers/VisualizationControls'
+import ContextMenu from '../../containers/ContextMenu'
+import TopicCard from '../../containers/TopicCard'
+
+import Instructions from '../../components/Instructions'
+import MapChat from '../../components/MapChat'
 import MapVis from '../../components/MapVis'
-import UpperOptions from '../../components/UpperOptions'
-import InfoAndHelp from '../../components/InfoAndHelp'
-import Instructions from './Instructions'
-import VisualizationControls from '../../components/VisualizationControls'
-import MapChat from './MapChat'
-import TopicCard from '../../components/TopicCard'
 
 export default class MapView extends Component {
 
@@ -53,6 +54,7 @@ export default class MapView extends Component {
   endMap() {
     this.props.closeChat()
     this.mapChat.reset()
+    // TODO: fix upperOptions ref
     this.upperOptions.reset()
     this.props.endActiveMap()
   }
@@ -80,38 +82,14 @@ export default class MapView extends Component {
     const canEditMap = map && map.authorizeToEdit(currentUser)
     // TODO: stop using {...this.props} and make explicit
     return <div className="mapWrapper">
-      <UpperOptions ref={x => this.upperOptions = x}
-                    map={map}
-                    currentUser={currentUser}
-                    onImportClick={openImportLightbox}
-                    onForkClick={forkMap}
-                    canEditMap={canEditMap}
-                    filterData={filterData}
-                    allForFiltering={allForFiltering}
-                    visibleForFiltering={visibleForFiltering}
-                    toggleMetacode={toggleMetacode}
-                    toggleMapper={toggleMapper}
-                    toggleSynapse={toggleSynapse}
-                    filterAllMetacodes={filterAllMetacodes}
-                    filterAllMappers={filterAllMappers}
-                    filterAllSynapses={filterAllSynapses} />
+      <UpperOptions ref={x => this.upperOptions = x} {...this.props} />
       <MapVis map={map} DataModel={DataModel} />
       {openTopic && <TopicCard {...this.props} />}
       {contextMenu && <ContextMenu {...this.props} />}
       {currentUser && <Instructions mobile={mobile} hasLearnedTopicCreation={hasLearnedTopicCreation} />}
       {currentUser && <MapChat {...this.props} onOpen={openChat} onClose={closeChat} chatOpen={chatIsOpen} ref={x => this.mapChat = x} />}
-      <VisualizationControls map={map}
-                             onClickZoomExtents={onZoomExtents}
-                             onClickZoomIn={onZoomIn}
-                             onClickZoomOut={onZoomOut} />
-      <InfoAndHelp mapIsStarred={mapIsStarred}
-                   currentUser={currentUser}
-                   map={map}
-                   onInfoClick={toggleMapInfoBox}
-                   onMapStar={onMapStar}
-                   onMapUnstar={onMapUnstar}
-                   onHelpClick={openHelpLightbox}
-                   infoBoxHtml={infoBoxHtml} />
+      <VisualizationControls {...this.props} />
+      <InfoAndHelp {...this.props} />
     </div>
   }
 }

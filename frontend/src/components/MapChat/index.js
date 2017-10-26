@@ -4,7 +4,7 @@ import Unread from './Unread'
 import Participant from './Participant'
 import Message from './Message'
 import NewMessage from './NewMessage'
-import Util from '../../../Metamaps/Util'
+import Util from '../../Metamaps/Util'
 
 function makeList(messages) {
   let currentHeader
