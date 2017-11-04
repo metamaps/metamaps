@@ -1,0 +1,12 @@
+{
+  "name": "Attachment Envelope",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "_attachment.json"
+    }
+  },
+  "required": [
+    "data"
+  ]
+}

@@ -33,7 +33,8 @@ module Attachable
     end
 
     def audio_types
-      ['audio/ogg', 'audio/mp3']
+      # .ogg files might be labelled as video
+      ['audio/ogg', 'video/ogg', 'audio/mpeg', 'audio/wav', 'video/webm']
     end
 
     def text_types

@@ -14,7 +14,8 @@ module Api
       def self.embeddable
         {
           user: {},
-          metacode: {}
+          metacode: {},
+          attachments: {}
         }
       end
 

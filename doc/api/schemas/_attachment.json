@@ -1,0 +1,34 @@
+{
+  "name": "Attachment",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "_id.json"
+    },
+    "file": {
+      "format": "uri",
+      "type": "string"
+    },
+    "attachable_type": {
+      "pattern": "(Topic|Message)",
+      "type": "string"
+    },
+    "attachable_id": {
+      "$ref": "_id.json"
+    },
+    "created_at": {
+      "$ref": "_datetimestamp.json"
+    },
+    "updated_at": {
+      "$ref": "_datetimestamp.json"
+    }
+  },
+  "required": [
+    "id",
+    "file",
+    "attachable_type",
+    "attachable_id",
+    "created_at",
+    "updated_at"
+  ]
+}
