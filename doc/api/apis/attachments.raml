@@ -1,0 +1,16 @@
+get:
+  is: [ searchable: { searchFields: "file" }, orderable, pageable ]
+  securedBy: [ null, token, oauth_2_0 ]
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include ../examples/attachments.json
+/{id}:
+  get:
+    securedBy: [ null, token, oauth_2_0 ]
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include ../examples/attachment.json

@@ -23,7 +23,7 @@ RSpec.describe MapPolicy, type: :policy do
     context 'private' do
       let(:map) { create(:map, permission: :private) }
       permissions :show?, :create?, :update?, :destroy? do
-        it 'permits access' do
+        it 'denies access' do
           expect(subject).to_not permit(nil, map)
         end
       end

@@ -1,0 +1,10 @@
+{
+  "data": {
+    "id": 1,
+    "file": "https://example.org/file.png",
+    "attachable_type": "Topic",
+    "attachable_id": 187,
+    "created_at": "2017-03-01T05:48:09.533Z",
+    "updated_at": "2017-03-01T05:48:09.533Z"
+  }
+}

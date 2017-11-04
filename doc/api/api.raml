@@ -22,6 +22,7 @@ traits:
   searchable: !include traits/searchable.raml
 
 schemas:
+  attachment: !include schemas/_attachment.json
   map: !include schemas/_map.json
   mapping: !include schemas/_mapping.json
   metacode: !include schemas/_metacode.json
@@ -35,6 +36,7 @@ schemas:
 #  item: !include resourceTypes/item.raml
 #  collection: !include resourceTypes/collection.raml
 
+/attachments : !include api/attachments.raml
 /maps: !include apis/maps.raml
 /mappings: !include apis/mappings.raml
 /metacodes: !include apis/metacodes.raml

@@ -1,0 +1,19 @@
+{
+  "name": "Attachments",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "_attachment.json"
+      }
+    },
+    "page": {
+      "$ref": "_page.json"
+    }
+  },
+  "required": [
+    "data",
+    "page"
+  ]
+}
