@@ -645,6 +645,8 @@ background-color: #E0E0E0;
   }
 }
 
+$attachment_button_size: 32px;
+
 .upload-audio-start,
 .upload-file-dropzone,
 .upload-photo-dropzone,
@@ -658,13 +660,6 @@ background-color: #E0E0E0;
     color: #999999;
   }
 
-  & > div {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    padding-top: 75%;
-  }
   &.photo-upload > div {
     background-image: url(<%= asset_path('upload_icons/CameraIcons.png') %>);
   }
@@ -684,14 +679,24 @@ background-color: #E0E0E0;
 .audio-upload,
 .file-upload {
   background-repeat: no-repeat;
-  background-size: 48px 48px;
+  background-size: $attachment_button_size $attachment_button_size;
   background-position: 0 center;
-  width: 48px;
-  height: 48px;
+  width: $attachment_button_size;
+  height: $attachment_button_size;
 
-  &:hover {
-    /*background-position: ;*/
+  & > div {
+    width: $attachment_button_size;
+    height: $attachment_button_size;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-top: $attachment_button_size;
+    background-size: $attachment_button_size;
+
+    &:hover {
+      background-position: 0 $attachment_button_size;
+    }
   }
+
 }
 
 .upload-audio-start,
