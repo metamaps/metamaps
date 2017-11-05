@@ -1,0 +1,254 @@
+$attachment_button_size: 32px;
+
+.attachments {
+  border-top: 1px solid #bdbdbd;
+  position: relative;
+  min-height: 3em;
+
+  .file {
+    margin-top: 0.75em;
+    max-width: 85%;
+
+    .filetype-icon {
+      width: 16px;
+      height: 16px;
+      padding: 0.5em;
+      padding-top: 0;
+      float: left;
+    }
+  }
+}
+
+.upload-audio-start,
+.upload-file-dropzone,
+.upload-photo-dropzone,
+.CardOnGraph .attachment-type-chooser > div {
+  text-align: center;
+  color: #cccccc;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    color: #999999;
+  }
+
+  &.photo-upload > div {
+    background-image: url(<%= asset_path('upload_icons/CameraIcons.png') %>);
+  }
+  &.link-upload > div {
+    background-image: url(<%= asset_path('upload_icons/LinkIcons.png') %>);
+  }
+  &.audio-upload > div {
+    background-image: url(<%= asset_path('upload_icons/MicIcons.png') %>);
+  }
+  &.file-upload > div {
+    background-image: url(<%= asset_path('upload_icons/CloudIcons.png') %>);
+  }
+}
+
+.photo-upload,
+.link-upload,
+.audio-upload,
+.file-upload {
+  background-repeat: no-repeat;
+  background-size: $attachment_button_size $attachment_button_size;
+  background-position: 0 center;
+  width: $attachment_button_size;
+  height: $attachment_button_size;
+
+  & > div {
+    width: $attachment_button_size;
+    height: $attachment_button_size;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-top: $attachment_button_size;
+    background-size: $attachment_button_size;
+
+    &:hover {
+      background-position: 0 $attachment_button_size;
+    }
+  }
+
+}
+
+.upload-audio-start,
+.upload-file-dropzone,
+.upload-photo-dropzone {
+  padding-top: 0.75em;
+}
+
+.upload-audio-recording {
+  font-size: small;
+  color: #aaa;
+  text-align: center;
+}
+
+$recording_button_size: 48px;
+.upload-audio-stop {
+  background-image: url(<%= asset_path('recording-button.png') %>);
+  background-size: $recording_button_size;
+  width: $recording_button_size;
+  height: $recording_button_size;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.CardOnGraph .attachment-type-chooser {
+  padding-top: .75em;
+
+  & > div {
+    display: inline-block;
+    width: 25%;
+  }
+}
+
+#embedlyLinkLoader {
+  margin: 0 auto;
+  width: 28px;
+}
+
+.CardOnGraph .link-chooser {
+  width:100%;
+  height:47px;
+  position: relative;
+}
+
+.link-chooser a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  margin-left: 40px;
+  padding-top:9px;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+#addlink, #addupload {
+  display: inline-block;
+  width: 102px;
+  height: 12px;
+  text-align: left;
+  padding: 18px 0 18px 48px;
+  font-size: 12px;
+  color: #9e9e9e;
+  cursor: pointer;
+  position: relative;
+}
+
+#addlink:hover, #addupload:hover {
+  color: #616161;
+}
+
+.attachmentIcon {
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+#linkIcon {
+  background-image: url(<%= asset_data_uri('link_sprite.png') %>);
+}
+#uploadIcon {
+  background-image: url(<%= asset_data_uri('upload_sprite.png') %>);
+}
+#addlink:hover #linkIcon, #addupload:hover #uploadIcon {
+  background-position: 0 -24px;
+}
+
+.addLink {
+  position: relative;
+}
+
+#addLinkInput {
+  height: 32px;
+  width: 268px;
+  padding: 8px 16px 8px 16px;
+  position: relative;
+  border: none;
+  line-height: 14px;
+}
+
+#addLinkInput input{
+  padding: 9px 27px 9px 31px;
+  height: 12px;
+  width: 210px;
+  margin: 0 0 0 0;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  line-height: 12px;
+  background: white;
+  color: black;
+  font-family: 'din-regular', helvetica, sans-serif;
+}
+#addLinkIcon {
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: url(<%= asset_data_uri('link_sprite.png') %>);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.attachment-cancel {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  float:none;
+  background-image: url(<%= asset_data_uri('remove.png') %>);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.embeds.nonEmbedlyLink {
+  padding-top: 24px;
+}
+
+#embedlyLink {
+  border-left: 8px solid #CCC;
+  overflow: hidden;
+  padding: 8px;
+  padding-left: 12px;
+  -moz-box-shadow: 1px 1px 5px 0 #ccc;
+  -webkit-box-shadow: 1px 1px 5px 0 #ccc;
+  box-shadow: 1px 1px 5px 0 #ccc;
+  -moz-border-radius-topright: 5px;
+  -webkit-border-top-right-radius: 5px;
+  border-top-right-radius: 5px;
+  -moz-border-radius-bottomright: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin: 8px;
+}
+
+.linkActions {
+  position: relative;
+}
+
+.CardOnGraph .embeds {
+  position: relative;
+  overflow: hidden;
+}
+
+#linkremove {
+  background-image: url(<%= asset_data_uri 'remove.png' %>);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 3px;
+  right: 0;
+  cursor: pointer;
+}
