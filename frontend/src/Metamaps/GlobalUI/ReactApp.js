@@ -37,12 +37,14 @@ const ReactApp = {
   mobileTitle: '',
   mobileTitleWidth: 0,
   metacodeSets: [],
+  attachmentFileTypeIcons: {},
   init: function(serverData, openLightbox) {
     const self = ReactApp
     self.serverData = serverData
     self.mobileTitle = serverData.mobileTitle
     self.openLightbox = openLightbox
     self.metacodeSets = serverData.metacodeSets
+    self.attachmentFileTypeIcons = serverData.attachmentFileTypeIcons
     routes = makeRoutes(serverData.ActiveMapper)
     self.resize()
     window && window.addEventListener('resize', self.resize)
@@ -154,10 +156,13 @@ const ReactApp = {
   getTopicCardProps: function() {
     const self = ReactApp
     return {
-      openTopic: TopicCard.openTopic,
       metacodeSets: self.metacodeSets,
+      onTopicFollow: Topic.onTopicFollow,
+      openTopic: TopicCard.openTopic,
       updateTopic: (topic, obj) => topic.save(obj),
-      onTopicFollow: Topic.onTopicFollow
+      uploadAttachment: TopicCard.uploadAttachment,
+      removeAttachment: TopicCard.removeAttachment,
+      fileTypeIcons: self.attachmentFileTypeIcons
     }
   },
   getContextMenuProps: function() {

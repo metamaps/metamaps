@@ -10,12 +10,17 @@ import Info from './Info'
 
 class ReactTopicCard extends Component {
   render = () => {
-    const { currentUser, onTopicFollow, updateTopic } = this.props
+    const {
+      currentUser, onTopicFollow, updateTopic, uploadAttachment,
+      removeAttachment
+    } = this.props
     const topic = this.props.openTopic
 
     if (!topic) return null
 
     const wrappedUpdateTopic = obj => updateTopic(topic, obj)
+    const wrappedUploadAttachment = file => uploadAttachment(topic, file)
+    const wrappedRemoveAttachment = () => removeAttachment(topic)
 
     const authorizedToEdit = topic.authorizeToEdit(currentUser)
     const hasAttachment = topic.get('link') && topic.get('link') !== ''
@@ -48,9 +53,13 @@ class ReactTopicCard extends Component {
                 authorizedToEdit={authorizedToEdit}
                 onChange={wrappedUpdateTopic}
               />
-              <Attachments topic={topic}
+              <Attachments key={topic.id}
+                topic={topic}
                 authorizedToEdit={authorizedToEdit}
                 updateTopic={wrappedUpdateTopic}
+                uploadAttachment={wrappedUploadAttachment}
+                removeAttachment={wrappedRemoveAttachment}
+                fileTypeIcons={this.props.fileTypeIcons}
               />
               <Info topic={topic} />
               <div className='clearfloat' />
@@ -75,7 +84,9 @@ ReactTopicCard.propTypes = {
       name: PropTypes.string
     }))
   })),
-  redrawCanvas: PropTypes.func
+  redrawCanvas: PropTypes.func,
+  uploadAttachment: PropTypes.func,
+  fileTypeIcons: PropTypes.objectOf(PropTypes.string)
 }
 
 export default ReactTopicCard

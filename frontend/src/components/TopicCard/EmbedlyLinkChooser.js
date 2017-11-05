@@ -1,10 +1,7 @@
-/* global embedly */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Card from './Card'
-
-class EmbedlyLink extends Component {
+class EmbedlyLinkChooser extends Component {
   constructor(props) {
     super(props)
 
@@ -13,12 +10,9 @@ class EmbedlyLink extends Component {
     }
   }
 
-  removeLink = () => {
-    this.props.updateTopic({ link: null })
-  }
-
   resetLink = () => {
     this.setState({ linkEdit: '' })
+    this.props.cancel()
   }
 
   onLinkChangeHandler = e => {
@@ -35,17 +29,11 @@ class EmbedlyLink extends Component {
   }
 
   render = () => {
-    const { link, authorizedToEdit, topicId } = this.props
     const { linkEdit } = this.state
-    const hasAttachment = !!link
-
-    if (!hasAttachment && !authorizedToEdit) return null
 
     return (
-      <div className={hasAttachment ? 'embeds' : 'link-adder'}>
-        <div className="addLink"
-          style={{ display: hasAttachment ? 'none' : 'block' }}
-        >
+      <div className="link-chooser">
+        <div className="addLink">
           <div id="addLinkIcon"></div>
           <div id="addLinkInput">
             <input ref={input => (this.linkInput = input)}
@@ -53,26 +41,17 @@ class EmbedlyLink extends Component {
               value={linkEdit}
               onChange={this.onLinkChangeHandler}
               onKeyUp={this.onLinkKeyUpHandler}></input>
-            {linkEdit && <div id="addLinkReset" onClick={this.resetLink}></div>}
+            <div className="attachment-cancel" onClick={this.resetLink}></div>
           </div>
         </div>
-        {link && <Card key={topicId} link={link} />}
-        {authorizedToEdit && (
-          <div id="linkremove"
-            style={{ display: hasAttachment ? 'block' : 'none' }}
-            onClick={this.removeLink}
-          />
-        )}
       </div>
     )
   }
 }
 
-EmbedlyLink.propTypes = {
-  topicId: PropTypes.number,
-  link: PropTypes.string,
-  authorizedToEdit: PropTypes.bool,
-  updateTopic: PropTypes.func
+EmbedlyLinkChooser.propTypes = {
+  updateTopic: PropTypes.func,
+  cancel: PropTypes.func
 }
 
-export default EmbedlyLink
+export default EmbedlyLinkChooser

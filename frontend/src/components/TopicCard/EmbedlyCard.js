@@ -1,4 +1,4 @@
-/* global $, embedly */
+/* global embedly */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
@@ -38,29 +38,33 @@ class EmbedlyCard extends Component {
   }
 
   render = () => {
-    const { link } = this.props
     const { embedlyLinkLoaded, embedlyLinkStarted, embedlyLinkError } = this.state
 
     const notReady = embedlyLinkStarted && !embedlyLinkLoaded && !embedlyLinkError
 
     return (
-      <div>
+      <div className="embeds">
         <a style={{ display: notReady ? 'none' : 'block' }}
-          href={link}
+          href={this.props.link}
           id="embedlyLink"
           target="_blank"
           data-card-description="0"
         >
-          {link}
+          {this.props.link}
         </a>
         {notReady && <div id="embedlyLinkLoader">loading...</div>}
+        {this.props.authorizedToEdit && (
+          <div id="linkremove" onClick={this.props.removeLink} />
+        )}
       </div>
     )
   }
 }
 
 EmbedlyCard.propTypes = {
-  link: PropTypes.string
+  link: PropTypes.string,
+  authorizedToEdit: PropTypes.bool,
+  removeLink: PropTypes.func
 }
 
 export default EmbedlyCard

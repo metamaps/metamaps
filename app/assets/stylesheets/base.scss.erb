@@ -197,6 +197,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
 
 .CardOnGraph .links {
   position: relative;
+  background-color: #e0e0e0;
   z-index: 2;
 
   .linkItem {
@@ -625,18 +626,117 @@ background-color: #E0E0E0;
  z-index:100;
 }
 
+.attachments {
+  border-top: 1px solid #bdbdbd;
+  position: relative;
+  min-height: 3em;
+
+  .file {
+    margin-top: 0.75em;
+    max-width: 85%;
+
+    .filetype-icon {
+      width: 16px;
+      height: 16px;
+      padding: 0.5em;
+      padding-top: 0;
+      float: left;
+    }
+  }
+}
+
+.upload-audio-start,
+.upload-file-dropzone,
+.upload-photo-dropzone,
+.CardOnGraph .attachment-type-chooser > div {
+  text-align: center;
+  color: #cccccc;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    color: #999999;
+  }
+
+  & > div {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-top: 75%;
+  }
+  &.photo-upload > div {
+    background-image: url(<%= asset_path('upload_icons/CameraIcons.png') %>);
+  }
+  &.link-upload > div {
+    background-image: url(<%= asset_path('upload_icons/LinkIcons.png') %>);
+  }
+  &.audio-upload > div {
+    background-image: url(<%= asset_path('upload_icons/MicIcons.png') %>);
+  }
+  &.file-upload > div {
+    background-image: url(<%= asset_path('upload_icons/CloudIcons.png') %>);
+  }
+}
+
+.photo-upload,
+.link-upload,
+.audio-upload,
+.file-upload {
+  background-repeat: no-repeat;
+  background-size: 48px 48px;
+  background-position: 0 center;
+  width: 48px;
+  height: 48px;
+
+  &:hover {
+    /*background-position: ;*/
+  }
+}
+
+.upload-audio-start,
+.upload-file-dropzone,
+.upload-photo-dropzone {
+  padding-top: 0.75em;
+}
+
+.upload-audio-recording {
+  font-size: small;
+  color: #aaa;
+  text-align: center;
+}
+
+$recording_button_size: 48px;
+.upload-audio-stop {
+  background-image: url(<%= asset_path('recording-button.png') %>);
+  background-size: $recording_button_size;
+  width: $recording_button_size;
+  height: $recording_button_size;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.CardOnGraph .attachment-type-chooser {
+  padding-top: .75em;
+
+  & > div {
+    display: inline-block;
+    width: 25%;
+  }
+}
+
 #embedlyLinkLoader {
   margin: 0 auto;
   width: 28px;
 }
 
-.CardOnGraph .link-adder {
+.CardOnGraph .link-chooser {
   width:100%;
   height:47px;
   position: relative;
 }
 
-.link-adder a {
+.link-chooser a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -720,7 +820,7 @@ font-family: 'din-regular', helvetica, sans-serif;
   z-index: 1;
 }
 
-#addLinkReset {
+.attachment-cancel {
   position: absolute;
   top: 8px;
   right: 15px;

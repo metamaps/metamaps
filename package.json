@@ -49,6 +49,7 @@
     "react-draggable": "3.0.3",
     "react-dropzone": "4.1.2",
     "react-onclickoutside": "6.5.0",
+    "react-recorder": "1.0.0",
     "react-router": "3.0.5",
     "redux": "3.7.2",
     "riek": "1.1.0",

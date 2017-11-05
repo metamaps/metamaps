@@ -13,6 +13,13 @@ Metamaps.ServerData['sounds/MM_sounds.ogg'] = '<%= asset_path 'sounds/MM_sounds.
 Metamaps.ServerData['exploremaps_sprite.png'] = '<%= asset_path 'exploremaps_sprite.png' %>'
 Metamaps.ServerData['map_control_sprite.png'] = '<%= asset_path 'map_control_sprite.png' %>'
 Metamaps.ServerData['user_sprite.png'] = '<%= asset_path 'user_sprite.png' %>'
+Metamaps.ServerData.attachmentFileTypeIcons = {
+  pdf: '<%= asset_path('attachmentFileTypeIcons//open-iconic-document.svg') %>',
+  text: '<%= asset_path('attachmentFileTypeIcons//open-iconic-file.svg') %>',
+  image: '<%= asset_path('attachmentFileTypeIcons//open-iconic-image.svg') %>',
+  audio: '<%= asset_path('attachmentFileTypeIcons//open-iconic-musical-note.svg') %>',
+  unknown: '<%= asset_path('attachmentFileTypeIcons//open-iconic-question-mark.svg') %>'
+}
 Metamaps.ServerData.Metacodes = <%= Metacode.all.to_json.gsub(%r[(icon.*?)(\"},)], '\1?purple=stupid\2').html_safe %>
 Metamaps.ServerData.REALTIME_SERVER = '<%= ENV['REALTIME_SERVER'] %>'
 Metamaps.ServerData.RAILS_ENV = '<%= ENV['RAILS_ENV'] %>'

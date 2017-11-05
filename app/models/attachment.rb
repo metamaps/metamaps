@@ -17,7 +17,7 @@ class Attachment < ApplicationRecord
 
   validates :attachable, presence: true
   validates_attachment_content_type :file, content_type: Attachable.allowed_types
-  validates_attachment_size :file, in: 0.megabytes..5.megabytes
+  validates_attachment_size :file, :in => 0.megabytes..5.megabytes
 
   def image?
     Attachable.image_types.include?(file.instance.file_content_type)
