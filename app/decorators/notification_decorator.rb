@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class NotificationDecorator
   class << self
     def decorate(notification, receipt)

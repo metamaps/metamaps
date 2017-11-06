@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Map < ApplicationRecord
   ATTRS_TO_WATCH = %w(name desc permission).freeze
 
@@ -15,7 +16,7 @@ class Map < ApplicationRecord
   has_many :messages, as: :resource, dependent: :destroy
   has_many :stars, dependent: :destroy
   has_many :follows, as: :followed, dependent: :destroy
-  has_many :followers, :through => :follows, source: :user
+  has_many :followers, through: :follows, source: :user
 
   has_many :access_requests, dependent: :destroy
   has_many :user_maps, dependent: :destroy
@@ -89,10 +90,10 @@ class Map < ApplicationRecord
 
   def as_json(_options = {})
     json = super(
-      methods: [:user_name, :user_image, :star_count, :topic_count, :synapse_count,
-                :contributor_count, :collaborator_ids, :screenshot_url],
-      except: [:screenshot_content_type, :screenshot_file_size, :screenshot_file_name,
-               :screenshot_updated_at]
+      methods: %i(user_name user_image star_count topic_count synapse_count
+                  contributor_count collaborator_ids screenshot_url),
+      except: %i(screenshot_content_type screenshot_file_size screenshot_file_name
+                 screenshot_updated_at)
     )
     json[:created_at_clean] = created_at_str
     json[:updated_at_clean] = updated_at_str
@@ -133,16 +134,16 @@ class Map < ApplicationRecord
     end
     removed.compact
   end
-  
+
   def update_deferring_topics_and_synapses
     Topic.where(defer_to_map_id: id).update(permission: permission)
     Synapse.where(defer_to_map_id: id).update(permission: permission)
   end
 
   protected
-  
+
   def after_created
-    FollowService.follow(self, self.user, 'created')
+    FollowService.follow(self, user, 'created')
     # notify users following the map creator
   end
 
@@ -150,7 +151,7 @@ class Map < ApplicationRecord
     return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
     ActionCable.server.broadcast 'map_' + id.to_s, type: 'mapUpdated'
   end
-  
+
   def after_updated_async
     if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
       FollowService.follow(self, updated_by, 'contributed')

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Events
   class ConversationStartedOnMap < Event
     # after_create :notify_users!

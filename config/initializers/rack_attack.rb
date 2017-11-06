@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Rack
   class Attack
     Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new

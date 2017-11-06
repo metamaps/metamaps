@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryGirl.define do
   factory :metacode do
     sequence(:name) { |n| "Cool Metacode ##{n}" }

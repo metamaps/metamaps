@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryGirl.define do
   factory :synapse do
     sequence(:desc) { |n| "Cool synapse ##{n}" }

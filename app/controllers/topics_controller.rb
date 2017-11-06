@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 class TopicsController < ApplicationController
   include TopicsHelper
 
-  before_action :require_user, only: [:create, :update, :destroy, :follow, :unfollow]
-  before_action :set_topic, only: [:show, :update, :relative_numbers,
-                                   :relatives, :network, :destroy,
-                                   :follow, :unfollow, :unfollow_from_email]
+  before_action :require_user, only: %i(create update destroy follow unfollow)
+  before_action :set_topic, only: %i(show update relative_numbers
+                                     relatives network destroy
+                                     follow unfollow unfollow_from_email)
   after_action :verify_authorized, except: :autocomplete_topic
 
   respond_to :html, :js, :json
@@ -13,7 +14,7 @@ class TopicsController < ApplicationController
   # GET /topics/autocomplete_topic
   def autocomplete_topic
     term = params[:term]
-    if term && !term.empty?
+    if term.present?
       topics = policy_scope(Topic)
                .where('LOWER("name") like ?', term.downcase + '%')
                .order('"name"')

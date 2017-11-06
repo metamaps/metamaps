@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Events
   class SynapseUpdated < Event
     # after_create :notify_users!

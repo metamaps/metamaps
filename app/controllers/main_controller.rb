@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MainController < ApplicationController
   before_action :authorize_main
   after_action :verify_authorized

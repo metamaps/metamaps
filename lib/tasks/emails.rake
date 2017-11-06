@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 namespace :metamaps do
-  desc "delivers recent map activity digest emails to users"
+  desc 'delivers recent map activity digest emails to users'
   task deliver_map_activity_emails: :environment do
     summarize_map_activity
   end

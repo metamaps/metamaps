@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 module Api
   module V2
     class MapsController < WithUpdatesController
       def searchable_columns
-        [:name, :desc]
+        %i(name desc)
       end
 
       def apply_filters(collection)

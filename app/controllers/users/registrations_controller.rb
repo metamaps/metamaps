@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Users
   class RegistrationsController < Devise::RegistrationsController
     before_action :configure_sign_up_params, only: [:create]
@@ -29,7 +30,7 @@ module Users
     end
 
     def configure_sign_up_params
-      devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :joinedwithcode])
+      devise_parameter_sanitizer.permit(:sign_up, keys: %i(name joinedwithcode))
     end
 
     def configure_account_update_params

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MapMailerHelper
   def access_approved_subject(map)
     map.name + ' - access approved'
@@ -5,7 +7,7 @@ module MapMailerHelper
 
   def access_request_subject(map)
     map.name + ' - request to edit'
-  end  
+  end
 
   def invite_to_edit_subject(map)
     map.name + ' - invited to edit'

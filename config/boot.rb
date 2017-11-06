@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 require 'rubygems'
 require 'rails/commands/server'
 
 module Rails
   class Server
     def default_options
-      super.merge(Host:  '0.0.0.0', Port: 3000)
+      super.merge(Host: '0.0.0.0', Port: 3000)
     end
   end
 end

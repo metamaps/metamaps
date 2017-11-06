@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MapMailer < ApplicationMailer
   include MapMailerHelper
   default from: 'team@metamaps.cc'

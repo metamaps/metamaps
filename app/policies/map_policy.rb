@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
@@ -20,7 +21,7 @@ class MapPolicy < ApplicationPolicy
       record.collaborators.include?(user) ||
       record.user == user
   end
-  
+
   def conversation?
     show? && %w(connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com).include?(user.email)
   end
@@ -30,7 +31,7 @@ class MapPolicy < ApplicationPolicy
   end
 
   def update?
-    return false unless user.present?
+    return false if user.blank?
     record.permission == 'commons' ||
       record.collaborators.include?(user) ||
       record.user == user

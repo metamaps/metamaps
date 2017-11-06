@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Webhooks::Slack::SynapseAddedToMap < Webhooks::Slack::Base
   def text
     connector = eventable.desc.empty? ? '->' : eventable.desc

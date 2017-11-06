@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventSerializer < ActiveModel::Serializer
   attributes :id, :sequence_id, :kind, :map_id, :created_at
 

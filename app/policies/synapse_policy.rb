@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SynapsePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
@@ -28,7 +29,7 @@ class SynapsePolicy < ApplicationPolicy
   end
 
   def update?
-    if !user.present?
+    if user.blank?
       false
     elsif record.defer_to_map.present?
       map_policy.update?

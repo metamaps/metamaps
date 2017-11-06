@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Events
   class TopicAddedToMap < Event
     after_create :notify_users!
@@ -10,7 +11,7 @@ module Events
               user: user,
               meta: meta)
     end
-    
+
     def notify_users!
       # in the future, notify followers of both the topic, and the map
       NotificationService.notify_followers(eventable, TOPIC_ADDED_TO_MAP, self)

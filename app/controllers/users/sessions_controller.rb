@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Users
   class SessionsController < Devise::SessionsController
     after_action :store_location, only: [:new]

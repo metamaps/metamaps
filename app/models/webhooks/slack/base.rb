@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Webhooks::Slack::Base = Struct.new(:webhook, :event) do
   include Routing
 
