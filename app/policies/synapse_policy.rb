@@ -48,13 +48,13 @@ class SynapsePolicy < ApplicationPolicy
   end
 
   def topic1_show?
-    @topic1_policy ||= Pundit.policy(user, record.topic1)
-    @topic1_policy&.show?
+    @topic1_policy ||= Pundit.policy(user, record&.topic1)
+    @topic1_policy&.show? != false
   end
 
   def topic2_show?
-    @topic2_policy ||= Pundit.policy(user, record.topic2)
-    @topic2_policy&.show?
+    @topic2_policy ||= Pundit.policy(user, record&.topic2)
+    @topic2_policy&.show? != false
   end
 
   def synapse_show?
