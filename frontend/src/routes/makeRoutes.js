@@ -39,6 +39,7 @@ export default function makeRoutes (currentUser) {
     </Route>
     <Route path="users">
       <Route path=":id/edit" component={nullComponent} />
+      <Route path="password" component={nullComponent} />
       <Route path="password/new" component={nullComponent} />
       <Route path="password/edit" component={nullComponent} />
     </Route>
