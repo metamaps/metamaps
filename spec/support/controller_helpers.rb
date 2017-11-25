@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # https://github.com/plataformatec/devise/wiki/How-To:-Stub-authentication-in-controller-specs
 
 require 'devise'

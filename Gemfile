@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 source 'https://rubygems.org'
 ruby '2.3.0'
 
@@ -47,10 +48,10 @@ end
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rubocop'
-  gem 'tunemygc'
-  gem 'faker'
+  gem 'rubocop', '~> 0.46.0' # match code climate https://github.com/tootsuite/mastodon/issues/1758
   gem 'timecop'
+  gem 'tunemygc'
 end

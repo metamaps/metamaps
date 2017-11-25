@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Topic < ApplicationRecord
   ATTRS_TO_WATCH = %w(name desc link metacode_id permission defer_to_map_id).freeze
   include TopicsHelper
@@ -16,7 +17,7 @@ class Topic < ApplicationRecord
   has_many :mappings, as: :mappable, dependent: :destroy
   has_many :maps, through: :mappings
   has_many :follows, as: :followed, dependent: :destroy
-  has_many :followers, :through => :follows, source: :user
+  has_many :followers, through: :follows, source: :user
 
   belongs_to :metacode
 
@@ -25,7 +26,7 @@ class Topic < ApplicationRecord
   after_create :after_created_async
   after_update :after_updated
   after_update :after_updated_async
-  #before_destroy :before_destroyed
+  # before_destroy :before_destroyed
 
   validates :permission, presence: true
   validates :permission, inclusion: { in: Perm::ISSIONS.map(&:to_s) }
@@ -69,7 +70,7 @@ class Topic < ApplicationRecord
   end
 
   def as_json(options = {})
-    super(methods: [:user_name, :user_image, :collaborator_ids])
+    super(methods: %i(user_name user_image collaborator_ids))
       .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
              map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
   end
@@ -89,7 +90,7 @@ class Topic < ApplicationRecord
 
   def collaborator_ids
     if defer_to_map
-      defer_to_map.editors.select { |mapper| mapper != user }.map(&:id)
+      defer_to_map.editors.reject { |mapper| mapper == user }.map(&:id)
     else
       []
     end
@@ -154,9 +155,9 @@ class Topic < ApplicationRecord
     self.link = Rails.application.routes.url_helpers
                      .map_url(host: ENV['MAILER_DEFAULT_URL'], id: @map.id)
   end
-  
+
   def after_created_async
-    FollowService.follow(self, self.user, 'created')
+    FollowService.follow(self, user, 'created')
     # notify users following the topic creator
   end
   handle_asynchronously :after_created_async
@@ -173,7 +174,7 @@ class Topic < ApplicationRecord
       end
     end
   end
-  
+
   def after_updated_async
     if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
       FollowService.follow(self, updated_by, 'contributed')
@@ -183,6 +184,6 @@ class Topic < ApplicationRecord
 
   def before_destroyed
     # hard to know how to do this yet, because the topic actually gets destroyed
-    #NotificationService.notify_followers(self, 'topic_deleted', ?)
+    # NotificationService.notify_followers(self, 'topic_deleted', ?)
   end
 end

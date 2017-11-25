@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # bad code that should be checked over before entering one of the
 # nice files from the right side of this repo
 class HacksController < ApplicationController

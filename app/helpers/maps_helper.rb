@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MapsHelper
   # JSON autocomplete format for typeahead
   def autocomplete_map_array_json(maps)

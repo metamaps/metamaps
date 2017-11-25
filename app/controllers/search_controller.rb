@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SearchController < ApplicationController
   include TopicsHelper
   include MapsHelper
@@ -7,7 +8,7 @@ class SearchController < ApplicationController
 
   before_action :authorize_search
   after_action :verify_authorized
-  after_action :verify_policy_scoped, only: [:maps, :mappers, :synapses, :topics]
+  after_action :verify_policy_scoped, only: %i(maps mappers synapses topics)
 
   # get /search/topics?term=SOMETERM
   def topics
@@ -140,13 +141,13 @@ class SearchController < ApplicationController
     topic1id = params[:topic1id]
     topic2id = params[:topic2id]
 
-    if term && !term.empty?
+    if term.present?
       @synapses = policy_scope(Synapse)
                   .where('LOWER("desc") like ?', '%' + term.downcase.strip + '%')
                   .order('"desc"')
 
       @synapses = @synapses.uniq(&:desc)
-    elsif topic1id && !topic1id.empty?
+    elsif topic1id.present?
       one = policy_scope(Synapse).where(topic1_id: topic1id, topic2_id: topic2id)
       two = policy_scope(Synapse).where(topic2_id: topic1id, topic1_id: topic2id)
       @synapses = one + two

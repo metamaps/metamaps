@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MetacodeSet < ApplicationRecord
   belongs_to :user
   has_many :in_metacode_sets

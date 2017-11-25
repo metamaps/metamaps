@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module UsersHelper
   # build custom json autocomplete for typeahead
   def autocomplete_user_array_json(users)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Metacode < ApplicationRecord
   has_many :in_metacode_sets
   has_many :metacode_sets, through: :in_metacode_sets

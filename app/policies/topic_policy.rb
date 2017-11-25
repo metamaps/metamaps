@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TopicPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
@@ -27,7 +28,7 @@ class TopicPolicy < ApplicationPolicy
   end
 
   def update?
-    return false unless user.present?
+    return false if user.blank?
     if record.defer_to_map.present?
       map_policy.update?
     else

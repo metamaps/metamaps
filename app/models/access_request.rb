@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 class AccessRequest < ApplicationRecord
   belongs_to :user
   belongs_to :map
   has_one    :user_map
-  
+
   after_create :after_created_async
 
   def approve
@@ -27,9 +28,9 @@ class AccessRequest < ApplicationRecord
       Mailboxer::Receipt.where(notification: notification).update_all(is_read: true)
     end
   end
-  
+
   protected
-  
+
   def after_created_async
     NotificationService.access_request(self)
   end

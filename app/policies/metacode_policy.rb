@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MetacodePolicy < ApplicationPolicy
   def index?
     true

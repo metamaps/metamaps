@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UserPreference
   attr_accessor :metacodes, :metacode_focus, :follow_topic_on_created, :follow_topic_on_contributed,
                 :follow_map_on_created, :follow_map_on_contributed

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module SynapsesHelper
   ## this one is for building our custom JSON autocomplete format for typeahead
   def autocomplete_synapse_generic_json(unique)

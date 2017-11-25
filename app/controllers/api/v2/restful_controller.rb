@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api
   module V2
     class RestfulController < ActionController::Base
@@ -7,7 +8,7 @@ module Api
 
       snorlax_used_rest!
 
-      before_action :load_resource, only: [:show, :update, :destroy]
+      before_action :load_resource, only: %i(show update destroy)
       after_action :verify_authorized
 
       def index
@@ -91,7 +92,7 @@ module Api
       end
 
       def doorkeeper_user
-        return unless doorkeeper_token.present?
+        return if doorkeeper_token.blank?
         doorkeeper_render_error unless valid_doorkeeper_token?
         @doorkeeper_user ||= User.find(doorkeeper_token.resource_owner_id)
       end

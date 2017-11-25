@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 class UsersController < ApplicationController
-  before_action :require_user, only: [:edit, :update, :updatemetacodes, :update_metacode_focus]
+  before_action :require_user, only: %i(edit update updatemetacodes update_metacode_focus)
 
   respond_to :html, :json
 
@@ -100,7 +101,7 @@ class UsersController < ApplicationController
     @user.settings.metacode_focus = params[:value]
     @user.save
     respond_to do |format|
-      format.json { render json: { success: "success" }}
+      format.json { render json: { success: 'success' } }
     end
   end
 

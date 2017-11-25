@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Synapse < ApplicationRecord
   ATTRS_TO_WATCH = %w(desc category permission defer_to_map_id).freeze
 
@@ -38,7 +39,7 @@ class Synapse < ApplicationRecord
 
   def collaborator_ids
     if defer_to_map
-      defer_to_map.editors.select { |mapper| mapper != user }.map(&:id)
+      defer_to_map.editors.reject { |mapper| mapper == user }.map(&:id)
     else
       []
     end
@@ -54,7 +55,7 @@ class Synapse < ApplicationRecord
   end
 
   def as_json(_options = {})
-    super(methods: [:user_name, :user_image, :collaborator_ids])
+    super(methods: %i(user_name user_image collaborator_ids))
   end
 
   def as_rdf
@@ -96,7 +97,7 @@ class Synapse < ApplicationRecord
 
   def before_destroyed
     # hard to know how to do this yet, because the synapse actually gets destroyed
-    #NotificationService.notify_followers(topic1, 'topic_disconnected', self)
-    #NotificationService.notify_followers(topic2, 'topic_disconnected', self)
+    # NotificationService.notify_followers(topic1, 'topic_disconnected', self)
+    # NotificationService.notify_followers(topic2, 'topic_disconnected', self)
   end
 end

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 class NotificationsController < ApplicationController
-  before_action :set_receipts, only: [:index, :show, :mark_read, :mark_unread]
-  before_action :set_notification, only: [:show, :mark_read, :mark_unread]
-  before_action :set_receipt, only: [:show, :mark_read, :mark_unread]
+  before_action :set_receipts, only: %i(index show mark_read mark_unread)
+  before_action :set_notification, only: %i(show mark_read mark_unread)
+  before_action :set_receipt, only: %i(show mark_read mark_unread)
 
   def index
     @notifications = current_user.mailbox.notifications.page(params[:page]).per(25)
@@ -27,14 +28,14 @@ class NotificationsController < ApplicationController
     respond_to do |format|
       format.html do
         case @notification.notification_code
-          when MAP_ACCESS_APPROVED, MAP_INVITE_TO_EDIT
-            redirect_to map_path(@notification.notified_object.map)
-          when TOPIC_ADDED_TO_MAP
-            redirect_to map_path(@notification.notified_object.map)
-          when TOPIC_CONNECTED_1
-            redirect_to topic_path(@notification.notified_object.topic1)
-          when TOPIC_CONNECTED_2
-            redirect_to topic_path(@notification.notified_object.topic2)
+        when MAP_ACCESS_APPROVED, MAP_INVITE_TO_EDIT
+          redirect_to map_path(@notification.notified_object.map)
+        when TOPIC_ADDED_TO_MAP
+          redirect_to map_path(@notification.notified_object.map)
+        when TOPIC_CONNECTED_1
+          redirect_to topic_path(@notification.notified_object.topic1)
+        when TOPIC_CONNECTED_2
+          redirect_to topic_path(@notification.notified_object.topic2)
         end
       end
       format.json do

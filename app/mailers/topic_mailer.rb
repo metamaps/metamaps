@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TopicMailer < ApplicationMailer
   include TopicMailerHelper
   default from: 'team@metamaps.cc'

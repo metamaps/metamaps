@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ContentHelper
   def resource_name
     :user

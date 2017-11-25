@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class NotificationService
   extend TopicMailerHelper
   extend MapMailerHelper
@@ -14,59 +15,57 @@ class NotificationService
 
   def self.get_settings_for_event(entity, event_type, event)
     case event_type
-      when TOPIC_ADDED_TO_MAP
-        subject = added_to_map_subject(entity, event.map)
-        template = 'topic_mailer/added_to_map'
-      when TOPIC_CONNECTED_1
-        subject = connected_subject(event.topic1)
-        template = 'topic_mailer/connected'
-      when TOPIC_CONNECTED_2
-        subject = connected_subject(event.topic2)
-        template = 'topic_mailer/connected'
+    when TOPIC_ADDED_TO_MAP
+      subject = added_to_map_subject(entity, event.map)
+      template = 'topic_mailer/added_to_map'
+    when TOPIC_CONNECTED_1
+      subject = connected_subject(event.topic1)
+      template = 'topic_mailer/connected'
+    when TOPIC_CONNECTED_2
+      subject = connected_subject(event.topic2)
+      template = 'topic_mailer/connected'
     end
-    
-    {template: template, subject: subject}
+
+    { template: template, subject: subject }
   end
 
   def self.send_for_follows(follows, entity, event_type, event)
-    return if follows.length == 0
+    return if follows.empty?
     settings = get_settings_for_event(entity, event_type, event)
     # we'll prbly want to put the body into the actual loop so we can pass the current user in as a local
     body = renderer.render(template: settings[:template], locals: { entity: entity, event: event }, layout: false)
-    follows.each{|follow|
+    follows.each do |follow|
       case event_type
-        when TOPIC_ADDED_TO_MAP
-          next unless TopicPolicy.new(follow.user, entity).show? && MapPolicy.new(follow.user, event.map).show?
-          next if follow.user.has_map_open(event.map)
-          # note, the caveat to this fork related code is that no future updates will be sent
-          # either. only the notifications for the initial fork should be squashed like this
-          next if event.map.source_id # if map is a fork, send notification for that instead
-        when TOPIC_CONNECTED_1, TOPIC_CONNECTED_2
-          next unless SynapsePolicy.new(follow.user, event).show?
-          next if follow.user.has_map_with_synapse_open(event)
+      when TOPIC_ADDED_TO_MAP
+        next unless TopicPolicy.new(follow.user, entity).show? && MapPolicy.new(follow.user, event.map).show?
+        next if follow.user.has_map_open(event.map)
+        # note, the caveat to this fork related code is that no future updates will be sent
+        # either. only the notifications for the initial fork should be squashed like this
+        next if event.map.source_id # if map is a fork, send notification for that instead
+      when TOPIC_CONNECTED_1, TOPIC_CONNECTED_2
+        next unless SynapsePolicy.new(follow.user, event).show?
+        next if follow.user.has_map_with_synapse_open(event)
       end
       # this handles email and in-app notifications, in the future, include push
       follow.user.notify(settings[:subject], body, event, false, event_type, follow.user.emails_allowed, event.user)
       # push could be handled with Actioncable to send transient notifications to the UI
       # the receipt from the notify call could be used to link to the full notification
-    }
+    end
   end
 
   def self.notify_followers(entity, event_type, event, reason_filter = nil, exclude_follows = nil)
     follows = entity.follows.active.where.not(user_id: event.user.id)
 
-    if !exclude_follows.nil?
-      follows = follows.where.not(id: exclude_follows)
-    end
-    
+    follows = follows.where.not(id: exclude_follows) unless exclude_follows.nil?
+
     if reason_filter.class == String && FollowReason::REASONS.include?(reason_filter)
       follows = follows.joins(:follow_reason).where('follow_reasons.' + reason_filter => true)
     elsif reason_filter.class == Array
       # TODO: throw an error here if all the reasons aren't valid
-      follows = follows.joins(:follow_reason).where(reason_filter.map{|r| "follow_reasons.#{r} = 't'"}.join(' OR '))
+      follows = follows.joins(:follow_reason).where(reason_filter.map { |r| "follow_reasons.#{r} = 't'" }.join(' OR '))
     end
     send_for_follows(follows, entity, event_type, event)
-    return follows.map(&:id)
+    follows.map(&:id)
   end
 
   def self.access_request(request)

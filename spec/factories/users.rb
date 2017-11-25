@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # This file supports three factories, because code and joinedwithcode
 # make things complicated!

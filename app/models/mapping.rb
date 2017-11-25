@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Mapping < ApplicationRecord
   scope :topicmapping, -> { where(mappable_type: :Topic) }
   scope :synapsemapping, -> { where(mappable_type: :Synapse) }
@@ -24,7 +25,7 @@ class Mapping < ApplicationRecord
   end
 
   def as_json(_options = {})
-    super(methods: [:user_name, :user_image])
+    super(methods: %i(user_name user_image))
   end
 
   def after_created

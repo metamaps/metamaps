@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MetacodesHelper
   def metacodeset
     metacodes = current_user.settings.metacodes
