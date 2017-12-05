@@ -15,10 +15,6 @@ class Permission extends Component {
     this.setState({selectingPermission: !this.state.selectingPermission})
   }
 
-  openPermissionSelect = () => {
-    this.setState({selectingPermission: true})
-  }
-
   closePermissionSelect = () => {
     this.setState({selectingPermission: false})
   }
@@ -67,4 +63,5 @@ Permission.propTypes = {
   updateTopic: PropTypes.func
 }
 
+export { Permission } // for testing
 export default onClickOutsideAddon(Permission)

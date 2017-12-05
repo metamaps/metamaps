@@ -21,7 +21,7 @@ function assertParentTitleSpan(wrapper) {
   })
 }
 
-describe('Title', function() {
+describe('TopicCard/Title', function() {
   describe('not authorized to edit', function() {
     const wrapper = render({ authorizedToEdit: false, name })
 
