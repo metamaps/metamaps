@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PermittedParams < Struct.new(:params)
-  %w(map synapse topic mapping token).each do |kind|
+  %w[map synapse topic mapping token].each do |kind|
     define_method(kind) do
       permitted_attributes = send("#{kind}_attributes")
       params.require(kind).permit(*permitted_attributes)
@@ -16,18 +16,18 @@ class PermittedParams < Struct.new(:params)
   end
 
   def map_attributes
-    %i(name desc permission arranged)
+    %i[name desc permission arranged]
   end
 
   def synapse_attributes
-    %i(desc category weight permission topic1_id topic2_id)
+    %i[desc category weight permission topic1_id topic2_id]
   end
 
   def topic_attributes
-    %i(name desc link permission metacode_id)
+    %i[name desc link permission metacode_id]
   end
 
   def mapping_attributes
-    %i(xloc yloc map_id mappable_type mappable_id)
+    %i[xloc yloc map_id mappable_type mappable_id]
   end
 end

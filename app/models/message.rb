@@ -14,7 +14,7 @@ class Message < ApplicationRecord
   end
 
   def as_json(_options = {})
-    json = super(methods: %i(user_name user_image))
+    json = super(methods: %i[user_name user_image])
     json
   end
 

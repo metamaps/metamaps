@@ -3,9 +3,9 @@
 class SynapsePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      return scope.where(permission: %w(public commons)) unless user
+      return scope.where(permission: %w[public commons]) unless user
 
-      scope.where(permission: %w(public commons))
+      scope.where(permission: %w[public commons])
            .or(scope.where(defer_to_map_id: user.all_accessible_maps.map(&:id)))
            .or(scope.where(user_id: user.id))
     end

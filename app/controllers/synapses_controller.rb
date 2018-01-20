@@ -3,7 +3,7 @@
 class SynapsesController < ApplicationController
   include TopicsHelper
 
-  before_action :require_user, only: %i(create update destroy)
+  before_action :require_user, only: %i[create update destroy]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
 

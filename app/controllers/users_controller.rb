@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :require_user, only: %i(edit update updatemetacodes update_metacode_focus)
+  before_action :require_user, only: %i[edit update updatemetacodes update_metacode_focus]
 
   respond_to :html, :json
 

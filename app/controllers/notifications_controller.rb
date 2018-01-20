@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class NotificationsController < ApplicationController
-  before_action :set_receipts, only: %i(index show mark_read mark_unread)
-  before_action :set_notification, only: %i(show mark_read mark_unread)
-  before_action :set_receipt, only: %i(show mark_read mark_unread)
+  before_action :set_receipts, only: %i[index show mark_read mark_unread]
+  before_action :set_notification, only: %i[show mark_read mark_unread]
+  before_action :set_receipt, only: %i[show mark_read mark_unread]
 
   def index
     @notifications = current_user.mailbox.notifications.page(params[:page]).per(25)

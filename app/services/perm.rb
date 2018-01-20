@@ -2,7 +2,7 @@
 
 class Perm
   # e.g. Perm::ISSIONS
-  ISSIONS = %i(commons public private).freeze
+  ISSIONS = %i[commons public private].freeze
 
   class << self
     def short(permission)

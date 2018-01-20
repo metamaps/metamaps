@@ -4,7 +4,7 @@ module Api
   module V2
     class TopicsController < WithUpdatesController
       def searchable_columns
-        %i(name desc link)
+        %i[name desc link]
       end
     end
   end

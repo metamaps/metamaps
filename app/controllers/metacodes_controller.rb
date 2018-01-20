@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class MetacodesController < ApplicationController
-  before_action :require_admin, except: %i(index show)
-  before_action :set_metacode, only: %i(edit update)
+  before_action :require_admin, except: %i[index show]
+  before_action :set_metacode, only: %i[edit update]
 
   # GET /metacodes
   # GET /metacodes.json

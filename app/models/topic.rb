@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Topic < ApplicationRecord
-  ATTRS_TO_WATCH = %w(name desc link metacode_id permission defer_to_map_id).freeze
+  ATTRS_TO_WATCH = %w[name desc link metacode_id permission defer_to_map_id].freeze
   include TopicsHelper
   include Attachable
 
@@ -70,7 +70,7 @@ class Topic < ApplicationRecord
   end
 
   def as_json(options = {})
-    super(methods: %i(user_name user_image collaborator_ids))
+    super(methods: %i[user_name user_image collaborator_ids])
       .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
              map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
   end

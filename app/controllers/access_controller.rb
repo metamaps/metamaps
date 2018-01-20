@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class AccessController < ApplicationController
-  before_action :require_user, only: %i(access access_request
+  before_action :require_user, only: %i[access access_request
                                         approve_access approve_access_post
-                                        deny_access deny_access_post request_access)
-  before_action :set_map, only: %i(access access_request
+                                        deny_access deny_access_post request_access]
+  before_action :set_map, only: %i[access access_request
                                    approve_access approve_access_post
-                                   deny_access deny_access_post request_access)
+                                   deny_access deny_access_post request_access]
   after_action :verify_authorized
 
   # GET maps/:id/request_access

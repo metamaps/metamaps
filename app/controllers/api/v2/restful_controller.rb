@@ -8,7 +8,7 @@ module Api
 
       snorlax_used_rest!
 
-      before_action :load_resource, only: %i(show update destroy)
+      before_action :load_resource, only: %i[show update destroy]
       after_action :verify_authorized
 
       def index

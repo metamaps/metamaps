@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FollowReason < ApplicationRecord
-  REASONS = %w(created commented contributed followed shared_on starred).freeze
+  REASONS = %w[created commented contributed followed shared_on starred].freeze
 
   belongs_to :follow
 

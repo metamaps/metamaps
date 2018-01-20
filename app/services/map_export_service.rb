@@ -47,16 +47,16 @@ class MapExportService
   private
 
   def topic_headings
-    %i(id name metacode x y description link user permission)
+    %i[id name metacode x y description link user permission]
   end
 
   def synapse_headings
-    %i(topic1 topic2 category description user permission)
+    %i[topic1 topic2 category description user permission]
   end
 
   def exportable_topics
     visible_topics ||= Pundit.policy_scope!(user, map.topics)
-    topic_mappings = Mapping.includes(mappable: %i(metacode user))
+    topic_mappings = Mapping.includes(mappable: %i[metacode user])
                             .where(mappable: visible_topics, map: map)
     topic_mappings.map do |mapping|
       topic = mapping.mappable

@@ -12,7 +12,7 @@ Rails:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 100
+  Max: 120
 
 Metrics/AbcSize:
   Max: 16

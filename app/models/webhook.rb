@@ -5,7 +5,7 @@ class Webhook < ApplicationRecord
 
   validates :uri, presence: true
   validates :hookable, presence: true
-  validates :kind, inclusion: { in: %w(slack) }
+  validates :kind, inclusion: { in: %w[slack] }
   validates :event_types, length: { minimum: 1 }
 
   def headers

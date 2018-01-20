@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Synapse < ApplicationRecord
-  ATTRS_TO_WATCH = %w(desc category permission defer_to_map_id).freeze
+  ATTRS_TO_WATCH = %w[desc category permission defer_to_map_id].freeze
 
   belongs_to :user
   belongs_to :defer_to_map, class_name: 'Map', foreign_key: 'defer_to_map_id'
@@ -55,7 +55,7 @@ class Synapse < ApplicationRecord
   end
 
   def as_json(_options = {})
-    super(methods: %i(user_name user_image collaborator_ids))
+    super(methods: %i[user_name user_image collaborator_ids])
   end
 
   def as_rdf

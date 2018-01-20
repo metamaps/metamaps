@@ -51,7 +51,7 @@ group :development, :test do
   gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rubocop', '~> 0.46.0' # match code climate https://github.com/tootsuite/mastodon/issues/1758
+  gem 'rubocop', '~> 0.48.1' # match code climate https://github.com/tootsuite/mastodon/issues/1758
   gem 'timecop'
   gem 'tunemygc'
 end

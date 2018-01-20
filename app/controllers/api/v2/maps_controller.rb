@@ -4,7 +4,7 @@ module Api
   module V2
     class MapsController < WithUpdatesController
       def searchable_columns
-        %i(name desc)
+        %i[name desc]
       end
 
       def apply_filters(collection)

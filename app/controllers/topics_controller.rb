@@ -3,10 +3,10 @@
 class TopicsController < ApplicationController
   include TopicsHelper
 
-  before_action :require_user, only: %i(create update destroy follow unfollow)
-  before_action :set_topic, only: %i(show update relative_numbers
+  before_action :require_user, only: %i[create update destroy follow unfollow]
+  before_action :set_topic, only: %i[show update relative_numbers
                                      relatives network destroy
-                                     follow unfollow unfollow_from_email)
+                                     follow unfollow unfollow_from_email]
   after_action :verify_authorized, except: :autocomplete_topic
 
   respond_to :html, :js, :json

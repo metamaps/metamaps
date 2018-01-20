@@ -25,7 +25,7 @@ class Mapping < ApplicationRecord
   end
 
   def as_json(_options = {})
-    super(methods: %i(user_name user_image))
+    super(methods: %i[user_name user_image])
   end
 
   def after_created

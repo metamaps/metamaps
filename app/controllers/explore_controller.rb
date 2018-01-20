@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ExploreController < ApplicationController
-  before_action :require_authentication, only: %i(mine shared starred)
+  before_action :require_authentication, only: %i[mine shared starred]
   before_action :authorize_explore
   after_action :verify_authorized
   after_action :verify_policy_scoped

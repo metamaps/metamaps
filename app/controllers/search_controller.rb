@@ -8,7 +8,7 @@ class SearchController < ApplicationController
 
   before_action :authorize_search
   after_action :verify_authorized
-  after_action :verify_policy_scoped, only: %i(maps mappers synapses topics)
+  after_action :verify_policy_scoped, only: %i[maps mappers synapses topics]
 
   # get /search/topics?term=SOMETERM
   def topics

@@ -3,7 +3,7 @@
 class MapPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      visible = %w(public commons)
+      visible = %w[public commons]
       return scope.where(permission: visible) unless user
 
       scope.where(permission: visible)
@@ -17,13 +17,13 @@ class MapPolicy < ApplicationPolicy
   end
 
   def show?
-    record.permission.in?(%w(commons public)) ||
+    record.permission.in?(%w[commons public]) ||
       record.collaborators.include?(user) ||
       record.user == user
   end
 
   def conversation?
-    show? && %w(connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com).include?(user.email)
+    show? && %w[connorturland@gmail.com devin@callysto.com chessscholar@gmail.com solaureum@gmail.com ishanshapiro@gmail.com].include?(user.email)
   end
 
   def create?

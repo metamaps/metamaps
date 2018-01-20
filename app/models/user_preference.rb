@@ -6,7 +6,7 @@ class UserPreference
 
   def initialize
     array = []
-    %w(Action Aim Idea Question Note Wildcard Subject).each do |m|
+    %w[Action Aim Idea Question Note Wildcard Subject].each do |m|
       begin
         metacode = Metacode.find_by(name: m)
         array.push(metacode.id.to_s) if metacode

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Map < ApplicationRecord
-  ATTRS_TO_WATCH = %w(name desc permission).freeze
+  ATTRS_TO_WATCH = %w[name desc permission].freeze
 
   belongs_to :user
   belongs_to :source, class_name: :Map
@@ -90,10 +90,10 @@ class Map < ApplicationRecord
 
   def as_json(_options = {})
     json = super(
-      methods: %i(user_name user_image star_count topic_count synapse_count
-                  contributor_count collaborator_ids screenshot_url),
-      except: %i(screenshot_content_type screenshot_file_size screenshot_file_name
-                 screenshot_updated_at)
+      methods: %i[user_name user_image star_count topic_count synapse_count
+                  contributor_count collaborator_ids screenshot_url],
+      except: %i[screenshot_content_type screenshot_file_size screenshot_file_name
+                 screenshot_updated_at]
     )
     json[:created_at_clean] = created_at_str
     json[:updated_at_clean] = updated_at_str

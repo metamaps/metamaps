@@ -5,6 +5,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     origins '*'
     resource '/api/*',
              headers: :any,
-             methods: %i(get post put delete options head)
+             methods: %i[get post put delete options head]
   end
 end
