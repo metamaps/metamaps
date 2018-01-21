@@ -153,11 +153,10 @@ class Map < ApplicationRecord
   end
 
   def after_updated_async
-    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
-      FollowService.follow(self, updated_by, 'contributed')
-      # NotificationService.notify_followers(self, 'map_updated', changed_attributes)
-      # or better yet publish an event
-    end
+    return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+    FollowService.follow(self, updated_by, 'contributed')
+    # NotificationService.notify_followers(self, 'map_updated', changed_attributes)
+    # or better yet publish an event
   end
   handle_asynchronously :after_updated_async
 

@@ -40,7 +40,10 @@ RSpec.describe SynapsesController, type: :controller do
     context 'with private topics' do
       it 'redirects to /' do
         post :create, format: :json, params: {
-          synapse: valid_attributes.merge(topic1_id: create(:topic, permission: 'private'), topic2_id: create(:topic, permission: 'private'))
+          synapse: valid_attributes.merge(
+            topic1_id: create(:topic, permission: 'private'),
+            topic2_id: create(:topic, permission: 'private')
+          )
         }
         expect(response.status).to eq 302
         expect(response).to redirect_to('/')

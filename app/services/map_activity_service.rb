@@ -5,7 +5,7 @@ class MapActivityService
     'Activity on map ' + map.name
   end
 
-  def self.summarize_data(map, user, until_moment = DateTime.now)
+  def self.summarize_data(map, user, until_moment = DateTime.current)
     results = {
       stats: {}
     }
@@ -18,7 +18,7 @@ class MapActivityService
     message_count = Message.where(resource: map)
                            .where('created_at > ? AND created_at < ?', since, until_moment)
                            .where.not(user: user).count
-    results[:stats][:messages_sent] = message_count if message_count > 0
+    results[:stats][:messages_sent] = message_count if message_count.positive?
 
     moved_count = Event.where(kind: 'topic_moved_on_map', map: map)
                        .where('created_at > ? AND created_at < ?', since, until_moment)
@@ -42,7 +42,9 @@ class MapActivityService
     topics_added_events.each do |ta|
       num_adds = topics_added_events.where(eventable_id: ta.eventable_id).count
       num_removes = topics_removed_events.where(eventable_id: ta.eventable_id).count
-      topics_added_to_include[ta.eventable_id] = ta if num_adds > num_removes && scoped_topic_ids.include?(ta.eventable.id)
+      if num_adds > num_removes && scoped_topic_ids.include?(ta.eventable.id)
+        topics_added_to_include[ta.eventable_id] = ta
+      end
     end
     unless topics_added_to_include.keys.empty?
       results[:stats][:topics_added] = topics_added_to_include.keys.length
@@ -53,7 +55,9 @@ class MapActivityService
     topics_removed_events.each do |ta|
       num_adds = topics_added_events.where(eventable_id: ta.eventable_id).count
       num_removes = topics_removed_events.where(eventable_id: ta.eventable_id).count
-      topics_removed_to_include[ta.eventable_id] = ta if num_removes > num_adds && TopicPolicy.new(user, ta.eventable).show?
+      if num_removes > num_adds && TopicPolicy.new(user, ta.eventable).show?
+        topics_removed_to_include[ta.eventable_id] = ta
+      end
     end
     unless topics_removed_to_include.keys.empty?
       results[:stats][:topics_removed] = topics_removed_to_include.keys.length
@@ -74,7 +78,9 @@ class MapActivityService
     synapses_added_events.each do |ta|
       num_adds = synapses_added_events.where(eventable_id: ta.eventable_id).count
       num_removes = synapses_removed_events.where(eventable_id: ta.eventable_id).count
-      synapses_added_to_include[ta.eventable_id] = ta if num_adds > num_removes && scoped_synapse_ids.include?(ta.eventable.id)
+      if num_adds > num_removes && scoped_synapse_ids.include?(ta.eventable.id)
+        synapses_added_to_include[ta.eventable_id] = ta
+      end
     end
     unless synapses_added_to_include.keys.empty?
       results[:stats][:synapses_added] = synapses_added_to_include.keys.length
@@ -85,7 +91,9 @@ class MapActivityService
     synapses_removed_events.each do |ta|
       num_adds = synapses_added_events.where(eventable_id: ta.eventable_id).count
       num_removes = synapses_removed_events.where(eventable_id: ta.eventable_id).count
-      synapses_removed_to_include[ta.eventable_id] = ta if num_removes > num_adds && SynapsePolicy.new(user, ta.eventable).show?
+      if num_removes > num_adds && SynapsePolicy.new(user, ta.eventable).show?
+        synapses_removed_to_include[ta.eventable_id] = ta
+      end
     end
     unless synapses_removed_to_include.keys.empty?
       results[:stats][:synapses_removed] = synapses_removed_to_include.keys.length

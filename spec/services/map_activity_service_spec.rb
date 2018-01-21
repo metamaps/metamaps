@@ -16,7 +16,8 @@ RSpec.describe MapActivityService do
   describe 'topics added to map' do
     it 'includes a topic added within the last 24 hours' do
       topic = create(:topic)
-      mapping = create(:mapping, user: other_user, map: map, mappable: topic, created_at: 6.hours.ago)
+      create(:mapping, user: other_user, map: map, mappable: topic, created_at: 6.hours.ago)
+
       event = Event.find_by(kind: 'topic_added_to_map', eventable_id: topic.id)
       event.update_columns(created_at: 6.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
@@ -47,26 +48,33 @@ RSpec.describe MapActivityService do
       mapping.destroy
       Event.find_by(kind: 'topic_removed_from_map', eventable_id: topic.id).update_columns(created_at: 6.hours.ago)
       mapping2 = create(:mapping, user: other_user, map: map, mappable: topic, created_at: 5.hours.ago)
-      Event.where(kind: 'topic_added_to_map').where("meta->>'mapping_id' = ?", mapping2.id.to_s).first.update_columns(created_at: 5.hours.ago)
+      Event.where(kind: 'topic_added_to_map').where("meta->>'mapping_id' = ?", mapping2.id.to_s)
+           .first
+           .update_columns(created_at: 5.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
       expect(response).to eq empty_response
     end
 
     it 'excludes a topic added outside the last 24 hours' do
       topic = create(:topic)
-      mapping = create(:mapping, user: other_user, map: map, mappable: topic, created_at: 25.hours.ago)
+      create(:mapping, user: other_user, map: map, mappable: topic, created_at: 25.hours.ago)
+
       Event.find_by(kind: 'topic_added_to_map', eventable_id: topic.id).update_columns(created_at: 25.hours.ago)
+
       response = MapActivityService.summarize_data(map, email_user)
       expect(response).to eq empty_response
     end
 
     it 'excludes topics added by the user who will receive the data' do
       topic = create(:topic)
-      topic2 = create(:topic)
-      mapping = create(:mapping, user: other_user, map: map, mappable: topic, created_at: 5.hours.ago)
+      create(:mapping, user: other_user, map: map, mappable: topic, created_at: 5.hours.ago)
+
       event = Event.find_by(kind: 'topic_added_to_map', eventable_id: topic.id)
       event.update_columns(created_at: 5.hours.ago)
-      mapping2 = create(:mapping, user: email_user, map: map, mappable: topic2, created_at: 5.hours.ago)
+
+      topic2 = create(:topic)
+      create(:mapping, user: email_user, map: map, mappable: topic2, created_at: 5.hours.ago)
+
       Event.find_by(kind: 'topic_added_to_map', eventable_id: topic2.id).update_columns(created_at: 5.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
       expect(response[:stats][:topics_added]).to eq(1)
@@ -166,7 +174,7 @@ RSpec.describe MapActivityService do
   describe 'synapses added to map' do
     it 'includes a synapse added within the last 24 hours' do
       synapse = create(:synapse)
-      mapping = create(:mapping, user: other_user, map: map, mappable: synapse, created_at: 6.hours.ago)
+      create(:mapping, user: other_user, map: map, mappable: synapse, created_at: 6.hours.ago)
       event = Event.find_by(kind: 'synapse_added_to_map', eventable_id: synapse.id)
       event.update_columns(created_at: 6.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
@@ -197,14 +205,16 @@ RSpec.describe MapActivityService do
       mapping.destroy
       Event.find_by(kind: 'synapse_removed_from_map', eventable_id: synapse.id).update_columns(created_at: 6.hours.ago)
       mapping2 = create(:mapping, user: other_user, map: map, mappable: synapse, created_at: 5.hours.ago)
-      Event.where(kind: 'synapse_added_to_map').where("meta->>'mapping_id' = ?", mapping2.id.to_s).first.update_columns(created_at: 5.hours.ago)
+      Event.where(kind: 'synapse_added_to_map').where("meta->>'mapping_id' = ?", mapping2.id.to_s)
+           .first
+           .update_columns(created_at: 5.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
       expect(response).to eq empty_response
     end
 
     it 'excludes a synapse added outside the last 24 hours' do
       synapse = create(:synapse)
-      mapping = create(:mapping, user: other_user, map: map, mappable: synapse, created_at: 25.hours.ago)
+      create(:mapping, user: other_user, map: map, mappable: synapse, created_at: 25.hours.ago)
       Event.find_by(kind: 'synapse_added_to_map', eventable_id: synapse.id).update_columns(created_at: 25.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
       expect(response).to eq empty_response
@@ -212,11 +222,14 @@ RSpec.describe MapActivityService do
 
     it 'excludes synapses added by the user who will receive the data' do
       synapse = create(:synapse)
-      synapse2 = create(:synapse)
-      mapping = create(:mapping, user: other_user, map: map, mappable: synapse, created_at: 5.hours.ago)
+      create(:mapping, user: other_user, map: map, mappable: synapse, created_at: 5.hours.ago)
+
       event = Event.find_by(kind: 'synapse_added_to_map', eventable_id: synapse.id)
       event.update_columns(created_at: 5.hours.ago)
-      mapping2 = create(:mapping, user: email_user, map: map, mappable: synapse2, created_at: 5.hours.ago)
+
+      synapse2 = create(:synapse)
+      create(:mapping, user: email_user, map: map, mappable: synapse2, created_at: 5.hours.ago)
+
       Event.find_by(kind: 'synapse_added_to_map', eventable_id: synapse2.id).update_columns(created_at: 5.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
       expect(response[:stats][:synapses_added]).to eq(1)
@@ -262,7 +275,9 @@ RSpec.describe MapActivityService do
       mapping2.destroy
       event = Event.find_by(kind: 'synapse_removed_from_map', eventable_id: synapse.id)
       event.update_columns(created_at: 5.hours.ago)
-      Event.find_by(kind: 'synapse_removed_from_map', eventable_id: synapse2.id).update_columns(created_at: 5.hours.ago)
+      Event
+        .find_by(kind: 'synapse_removed_from_map', eventable_id: synapse2.id)
+        .update_columns(created_at: 5.hours.ago)
       response = MapActivityService.summarize_data(map, email_user)
       expect(response[:stats][:synapses_removed]).to eq(1)
       expect(response[:synapses_removed]).to eq([event])
@@ -297,7 +312,8 @@ RSpec.describe MapActivityService do
       old_topic = create(:topic, permission: 'commons', user: other_user)
       old_topic_mapping = create(:mapping, map: map, mappable: old_topic, user: other_user)
       old_private_topic = create(:topic, permission: 'private', user: other_user)
-      old_private_topic_mapping = create(:mapping, map: map, mappable: old_private_topic, user: other_user)
+      old_private_topic_mapping = create(:mapping, map: map, mappable: old_private_topic,
+                                                   user: other_user)
     end
     Timecop.return
 
@@ -347,7 +363,8 @@ RSpec.describe MapActivityService do
       old_synapse = create(:synapse, permission: 'commons', user: other_user)
       old_synapse_mapping = create(:mapping, map: map, mappable: old_synapse, user: other_user)
       old_private_synapse = create(:synapse, permission: 'private', user: other_user)
-      old_private_synapse_mapping = create(:mapping, map: map, mappable: old_private_synapse, user: other_user)
+      old_private_synapse_mapping = create(:mapping, map: map, mappable: old_private_synapse,
+                                                     user: other_user)
     end
     Timecop.return
 

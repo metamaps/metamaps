@@ -7,7 +7,7 @@ class NotificationService
   include ActionView::Helpers::SanitizeHelper
 
   def self.renderer
-    renderer ||= ApplicationController.renderer.new(
+    @renderer ||= ApplicationController.renderer.new(
       http_host: ENV['MAILER_DEFAULT_URL'],
       https:     Rails.env.production? ? true : false
     )
@@ -70,19 +70,25 @@ class NotificationService
 
   def self.access_request(request)
     subject = access_request_subject(request.map)
-    body = renderer.render(template: 'map_mailer/access_request', locals: { map: request.map, request: request }, layout: false)
+    body = renderer.render(template: 'map_mailer/access_request',
+                           locals: { map: request.map, request: request },
+                           layout: false)
     request.map.user.notify(subject, body, request, false, MAP_ACCESS_REQUEST, true, request.user)
   end
 
   def self.access_approved(request)
     subject = access_approved_subject(request.map)
-    body = renderer.render(template: 'map_mailer/access_approved', locals: { map: request.map }, layout: false)
+    body = renderer.render(template: 'map_mailer/access_approved',
+                           locals: { map: request.map },
+                           layout: false)
     request.user.notify(subject, body, request, false, MAP_ACCESS_APPROVED, true, request.map.user)
   end
 
   def self.invite_to_edit(user_map)
     subject = invite_to_edit_subject(user_map.map)
-    body = renderer.render(template: 'map_mailer/invite_to_edit', locals: { map: user_map.map, inviter: user_map.map.user }, layout: false)
+    body = renderer.render(template: 'map_mailer/invite_to_edit',
+                           locals: { map: user_map.map, inviter: user_map.map.user },
+                           layout: false)
     user_map.user.notify(subject, body, user_map, false, MAP_INVITE_TO_EDIT, true, user_map.map.user)
   end
 

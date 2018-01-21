@@ -11,13 +11,11 @@ class Follow < ApplicationRecord
 
   after_create :add_subsetting
 
-  scope :active, -> {
-    where(muted: false)
-  }
+  scope :active, (-> { where(muted: false) })
 
   private
 
   def add_subsetting
-    follow_reason = FollowReason.create!(follow: self)
+    FollowReason.create!(follow: self)
   end
 end

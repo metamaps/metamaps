@@ -2,7 +2,9 @@
 
 class MapsController < ApplicationController
   before_action :require_user, only: %i[create update destroy events follow unfollow]
-  before_action :set_map, only: %i[show conversation update destroy contains events export follow unfollow unfollow_from_email]
+  before_action :set_map, only: %i[show conversation update destroy
+                                   contains events export
+                                   follow unfollow unfollow_from_email]
   after_action :verify_authorized
 
   # GET maps/:id

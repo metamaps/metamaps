@@ -52,24 +52,24 @@ class User < ApplicationRecord
   validates_attachment_content_type :image, content_type: %r{\Aimage/.*\Z}
 
   # override default as_json
-  def as_json(_options = {})
+  def as_json(options = {})
     json = { id: id,
              name: name,
              image: image.url(:sixtyfour),
              admin: admin }
-    if _options[:follows]
+    if options[:follows]
       json['follows'] = {
         topics: following.active.where(followed_type: 'Topic').to_a.map(&:followed_id),
         maps: following.active.where(followed_type: 'Map').to_a.map(&:followed_id)
       }
     end
-    if _options[:follow_settings]
+    if options[:follow_settings]
       json['follow_topic_on_created'] = settings.follow_topic_on_created == '1'
       json['follow_topic_on_contributed'] = settings.follow_topic_on_contributed == '1'
       json['follow_map_on_created'] = settings.follow_map_on_created == '1'
       json['follow_map_on_contributed'] = settings.follow_map_on_contributed == '1'
     end
-    json['email'] = email if _options[:email]
+    json['email'] = email if options[:email]
     json
   end
 
@@ -106,10 +106,14 @@ class User < ApplicationRecord
   end
 
   def most_used_metacodes
-    topics.to_a.each_with_object(Hash.new(0)) do |topic, memo|
-      memo[topic.metacode_id] += 1
-      memo
-    end.to_a.sort { |a, b| b[1] <=> a[1] }.map { |i| i[0] }.slice(0, 5)
+    metacode_counts = topics.to_a.each_with_object(Hash.new(0)) do |topic, list_so_far|
+      list_so_far[topic.metacode_id] += 1
+      list_so_far
+    end
+    id_count_pairs = metacode_counts.to_a
+    id_count_pairs.sort! { |a, b| b[1] <=> a[1] }
+    metacode_ids = id_count_pairs.map { |i| i[0] }
+    metacode_ids.slice(0, 5)
   end
 
   # generate a random 8 letter/digit code that they can use to invite people
@@ -132,11 +136,11 @@ class User < ApplicationRecord
   end
 
   def has_map_open(map)
-    latestEvent = Event.where(map: map, user: self)
-                       .where(kind: %w[user_present_on_map user_not_present_on_map])
-                       .order(:created_at)
-                       .last
-    latestEvent && latestEvent.kind == 'user_present_on_map'
+    latest_event = Event.where(map: map, user: self)
+                        .where(kind: %w[user_present_on_map user_not_present_on_map])
+                        .order(:created_at)
+                        .last
+    latest_event && latest_event.kind == 'user_present_on_map'
   end
 
   def has_map_with_synapse_open(synapse)

@@ -11,7 +11,7 @@ class Event < ApplicationRecord
   belongs_to :map
   belongs_to :user
 
-  scope :chronologically, -> { order('created_at asc') }
+  scope :chronologically, (-> { order('created_at asc') })
 
   after_create :notify_webhooks!, if: :map
 

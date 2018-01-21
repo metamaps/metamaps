@@ -22,3 +22,8 @@ Style/Documentation:
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+# I like this cop, but occasionally code is more readable without a guard clause,
+# and I don't want to write rubocop:disable comments every time that happens
+Style/GuardClause:
+  Enabled: false

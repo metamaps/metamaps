@@ -39,13 +39,13 @@ class Topic < ApplicationRecord
     topics1.or(topics2)
   end
 
-  scope :relatives, ->(topic_id = nil, user = nil) {
+  scope :relatives, (lambda do |topic_id = nil, user = nil|
     # should only see topics through *visible* synapses
     # e.g. Topic A (commons) -> synapse (private) -> Topic B (commons) must be filtered out
     topic_ids = Pundit.policy_scope(user, Synapse.where(topic1_id: topic_id)).pluck(:topic2_id)
     topic_ids += Pundit.policy_scope(user, Synapse.where(topic2_id: topic_id)).pluck(:topic1_id)
     where(id: topic_ids.uniq)
-  }
+  end)
 
   delegate :name, to: :user, prefix: true
 
@@ -65,13 +65,13 @@ class Topic < ApplicationRecord
     Pundit.policy_scope(user, maps).map(&:name)
   end
 
-  def inmapsLinks(user)
+  def inmaps_links(user)
     Pundit.policy_scope(user, maps).map(&:id)
   end
 
   def as_json(options = {})
     super(methods: %i[user_name user_image collaborator_ids])
-      .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmapsLinks(options[:user]),
+      .merge(inmaps: inmaps(options[:user]), inmapsLinks: inmaps_links(options[:user]),
              map_count: map_count(options[:user]), synapse_count: synapse_count(options[:user]))
   end
 
@@ -127,14 +127,9 @@ class Topic < ApplicationRecord
         end
       end
     end
-    if output_format == 'array'
-      return output
-    elsif output_format == 'text'
-      return output.join('; ')
-    else
-      raise 'invalid argument to synapses_csv'
-    end
-    output
+    return output if output_format == 'array'
+    return output.join('; ') if output_format == 'text'
+    raise 'invalid argument to synapses_csv'
   end
 
   def topic_autocomplete_method
@@ -144,7 +139,7 @@ class Topic < ApplicationRecord
   protected
 
   def set_perm_by_defer
-    permission = defer_to_map.permission if defer_to_map
+    self.permission = defer_to_map.permission if defer_to_map
   end
 
   def create_metamap?
@@ -163,22 +158,22 @@ class Topic < ApplicationRecord
   handle_asynchronously :after_created_async
 
   def after_updated
-    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
-      new = attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
-      old = changed_attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
-      meta = new.merge(old) # we are prioritizing the old values, keeping them
-      meta['changed'] = changed_attributes.keys.select { |k| ATTRS_TO_WATCH.include?(k) }
-      Events::TopicUpdated.publish!(self, updated_by, meta)
-      maps.each do |map|
-        ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
-      end
+    return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+
+    new = attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
+    old = changed_attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
+    meta = new.merge(old) # we are prioritizing the old values, keeping them
+    meta['changed'] = changed_attributes.keys.select { |k| ATTRS_TO_WATCH.include?(k) }
+    Events::TopicUpdated.publish!(self, updated_by, meta)
+    maps.each do |map|
+      ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'topicUpdated', id: id
     end
   end
 
   def after_updated_async
-    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
-      FollowService.follow(self, updated_by, 'contributed')
-    end
+    return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+
+    FollowService.follow(self, updated_by, 'contributed')
   end
   handle_asynchronously :after_updated_async
 

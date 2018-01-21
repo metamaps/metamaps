@@ -5,20 +5,24 @@ class UserPreference
                 :follow_map_on_created, :follow_map_on_contributed
 
   def initialize
-    array = []
-    %w[Action Aim Idea Question Note Wildcard Subject].each do |m|
+    @metacodes = init_metacodes.compact
+    @metacode_focus = @metacodes[0]
+    initialize_follow_settings
+  end
+
+  private
+
+  def init_metacodes
+    %w[Action Aim Idea Question Note Wildcard Subject].map do |m|
       begin
         metacode = Metacode.find_by(name: m)
-        array.push(metacode.id.to_s) if metacode
+        metacode.id.to_s if metacode
       rescue ActiveRecord::StatementInvalid
         if m == 'Action'
           Rails.logger.warn('TODO: remove this travis workaround in user_preference.rb')
         end
       end
-    end
-    @metacodes = array
-    @metacode_focus = array[0]
-    initialize_follow_settings
+    end.compact
   end
 
   def initialize_follow_settings

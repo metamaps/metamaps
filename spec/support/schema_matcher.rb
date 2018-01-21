@@ -2,11 +2,10 @@
 
 RSpec::Matchers.define :match_json_schema do |schema_name|
   match do |response|
-    schema_directory = Rails.root.join('doc', 'api', 'schemas').to_s
-    schema = "#{schema_directory}/#{schema_name}.json"
+    schema_path = Rails.root.join('doc', 'api', 'schemas', "#{schema_name}.json").to_s
 
     # schema customizations
-    schema = JSON.parse(File.read(schema))
+    schema = JSON.parse(File.read(schema_path))
     schema = update_file_refs(schema)
 
     data = JSON.parse(response.body)
@@ -15,7 +14,7 @@ RSpec::Matchers.define :match_json_schema do |schema_name|
 end
 
 def get_json_example(resource)
-  filepath = "#{Rails.root}/doc/api/examples/#{resource}.json"
+  filepath = Rails.root.join('doc', 'api', 'examples', "#{resource}.json")
   OpenStruct.new(body: File.read(filepath))
 end
 
@@ -25,7 +24,7 @@ def update_file_refs(schema)
     schema[key] = if value.is_a? Hash
                     update_file_refs(value)
                   elsif key == '$ref'
-                    "#{Rails.root}/doc/api/schemas/#{value}"
+                    Rails.root.join('doc', 'api', 'schemas', value).to_s
                   else
                     value
                   end

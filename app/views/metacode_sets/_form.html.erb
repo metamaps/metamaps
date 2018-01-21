@@ -35,7 +35,7 @@
        <% $i = 0 %>
        <% @m = Metacode.order("name").all %>
        <% while $i < (Metacode.all.length / 4) do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %> 
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].in_metacode_set(@metacode_set) %>class="toggledOff"<% end %> 
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
@@ -46,7 +46,7 @@
       </ul>
       <ul id="filters-two">
        <% while $i < (Metacode.all.length / 4 * 2) do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].in_metacode_set(@metacode_set) %>class="toggledOff"<% end %>
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
@@ -57,7 +57,7 @@
       </ul>
       <ul id="filters-three">         
        <% while $i < (Metacode.all.length / 4 * 3) do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].in_metacode_set(@metacode_set) %>class="toggledOff"<% end %>
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>
@@ -68,7 +68,7 @@
       </ul>
       <ul id="filters-four">         
        <% while $i < Metacode.all.length do %>
-            <li id="<%= @m[$i].id %>" <% if not @m[$i].inMetacodeSet(@metacode_set) %>class="toggledOff"<% end %>
+            <li id="<%= @m[$i].id %>" <% if not @m[$i].in_metacode_set(@metacode_set) %>class="toggledOff"<% end %>
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="<%= asset_path @m[$i].icon %>" alt="<%= @m[$i].name %>" />
               <p><%= @m[$i].name.downcase %></p>

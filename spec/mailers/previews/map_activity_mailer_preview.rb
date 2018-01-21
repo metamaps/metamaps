@@ -69,17 +69,20 @@ class MapActivityMailerPreview < ActionMailer::Preview
   end
 
   def generate_user
-    User.create(name: Faker::Name.name, email: Faker::Internet.email, password: 'password', password_confirmation: 'password', joinedwithcode: 'qwertyui')
+    User.create(name: Faker::Name.name, email: Faker::Internet.email,
+                password: 'password', password_confirmation: 'password',
+                joinedwithcode: 'qwertyui')
   end
 
   def generate_map
-    Map.create(name: Faker::HarryPotter.book, permission: 'commons', arranged: false, user: generate_user)
+    Map.create(name: Faker::HarryPotter.book, permission: 'commons',
+               arranged: false, user: generate_user)
   end
 
   def topic_added_to_map(map)
     user = generate_user
     topic = Topic.create(name: Faker::Friends.quote, permission: 'commons', user: user)
-    mapping = Mapping.create(map: map, mappable: topic, user: user)
+    Mapping.create(map: map, mappable: topic, user: user)
   end
 
   def topic_moved_on_map(mapping)
@@ -95,8 +98,9 @@ class MapActivityMailerPreview < ActionMailer::Preview
 
   def synapse_added_to_map(map, topic1, topic2)
     user = generate_user
-    topic = Synapse.create(desc: 'describes', permission: 'commons', user: user, topic1: topic1, topic2: topic2)
-    mapping = Mapping.create(map: map, mappable: topic, user: user)
+    topic = Synapse.create(desc: 'describes', permission: 'commons',
+                           user: user, topic1: topic1, topic2: topic2)
+    Mapping.create(map: map, mappable: topic, user: user)
   end
 
   def synapse_removed_from_map(mapping)

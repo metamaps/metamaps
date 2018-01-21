@@ -22,9 +22,9 @@ class Synapse < ApplicationRecord
 
   validates :category, inclusion: { in: ['from-to', 'both'], allow_nil: true }
 
-  scope :for_topic, ->(topic_id = nil) {
+  scope :for_topic, (lambda do |topic_id = nil|
     where(topic1_id: topic_id).or(where(topic2_id: topic_id))
-  }
+  end)
 
   before_create :set_perm_by_defer
   after_create :after_created_async
@@ -73,7 +73,7 @@ class Synapse < ApplicationRecord
   protected
 
   def set_perm_by_defer
-    permission = defer_to_map.permission if defer_to_map
+    defer_to_map&.permission
   end
 
   def after_created_async
@@ -83,15 +83,15 @@ class Synapse < ApplicationRecord
   handle_asynchronously :after_created_async
 
   def after_updated
-    if ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
-      new = attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
-      old = changed_attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
-      meta = new.merge(old) # we are prioritizing the old values, keeping them
-      meta['changed'] = changed_attributes.keys.select { |k| ATTRS_TO_WATCH.include?(k) }
-      Events::SynapseUpdated.publish!(self, updated_by, meta)
-      maps.each do |map|
-        ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'synapseUpdated', id: id
-      end
+    return unless ATTRS_TO_WATCH.any? { |k| changed_attributes.key?(k) }
+
+    new = attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
+    old = changed_attributes.select { |k| ATTRS_TO_WATCH.include?(k) }
+    meta = new.merge(old) # we are prioritizing the old values, keeping them
+    meta['changed'] = changed_attributes.keys.select { |k| ATTRS_TO_WATCH.include?(k) }
+    Events::SynapseUpdated.publish!(self, updated_by, meta)
+    maps.each do |map|
+      ActionCable.server.broadcast 'map_' + map.id.to_s, type: 'synapseUpdated', id: id
     end
   end
 

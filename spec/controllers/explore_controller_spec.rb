@@ -15,7 +15,7 @@ RSpec.describe ExploreController, type: :controller do
         expect(JSON.parse(response.body)).to eq []
       end
       it 'with 1 record' do
-        map = create(:map)
+        create(:map)
         get :active, format: :json
         expect(JSON.parse(response.body).class).to be Array
       end
