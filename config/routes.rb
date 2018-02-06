@@ -7,7 +7,7 @@ Metamaps::Application.routes.draw do
   root to: 'main#home', via: :get
   get 'request', to: 'main#requestinvite', as: :request
 
-  resources :attachments, only: [:create, :destroy], shallow: true
+  resources :attachments, only: %i[create destroy], shallow: true
 
   namespace :explore do
     get 'active'
