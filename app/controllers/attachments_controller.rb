@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AttachmentsController < ApplicationController
   before_action :set_attachment, only: [:destroy]
   after_action :verify_authorized
