@@ -52,6 +52,7 @@ module.exports = {
   output: {
     path: __dirname + '/public',
     filename: '[name].js',
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]'
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    publicPath: '/'
   }
 }

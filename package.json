@@ -4,6 +4,7 @@
   "description": "Metamaps webpacked javascript code",
   "scripts": {
     "start": "webpack-dev-server --open",
+    "server": "node server.js",
     "build": "webpack",
     "build:watch": "webpack --watch",
     "test": "mocha-webpack --webpack-config webpack.test.config.js --require frontend/test_support/dom.js --recursive frontend/test",
@@ -69,11 +70,13 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.3.0",
     "eslint-plugin-standard": "^3.0.1",
+    "express": "^4.16.2",
     "jsdom": "^11.2.0",
     "mocha": "^3.5.0",
     "mocha-webpack": "^0.7.0",
     "react-addons-test-utils": "^15.6.0",
     "sinon": "2.2.0",
+    "webpack-dev-middleware": "^2.0.5",
     "webpack-dev-server": "^2.11.1"
   },
   "optionalDependencies": {
