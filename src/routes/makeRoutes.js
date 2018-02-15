@@ -8,6 +8,10 @@ import MapView from './MapView'
 import Notifications from './Notifications'
 import TopicView from './TopicView'
 import LoggedOutHome from './LoggedOutHome'
+import RequestAccess from './RequestAccess'
+import RequestInvite from './RequestInvite'
+import Login from './Login'
+import Join from './Join'
 
 function nullComponent(props) {
   return null
@@ -27,13 +31,12 @@ export default function makeRoutes (currentUser) {
     </Route>
     <Route path="maps/:id">
       <IndexRoute component={MapView} />
-      <Route path="conversation" component={MapView} />
-      <Route path="request_access" component={nullComponent} />
+      <Route path="request_access" component={RequestAccess} />
     </Route>
     <Route path="topics/:id" component={TopicView} />
-    <Route path="login" component={nullComponent} />
-    <Route path="join" component={nullComponent} />
-    <Route path="request" component={nullComponent} />
+    <Route path="login" component={Login} />
+    <Route path="join" component={Join} />
+    <Route path="request" component={RequestInvite} />
     <Route path="notifications">
       <IndexRoute component={Notifications} />
       <Route path=":id" component={Notifications} />

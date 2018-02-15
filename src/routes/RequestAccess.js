@@ -1,22 +1,24 @@
-<%#
-# @file
-# Code to request access to a map
-# /maps/:id/request_access
-#%>
+import React, { Component } from 'react'
 
-<% content_for :title, 'Request Access | Metamaps' %>
-<% content_for :mobile_title, 'Request Access'  %>
+class RequestAccess extends Component {
+  render = () => {
+    return (
+      <div id="yield">
+        <div className='request_access'>
+          <div className='monkey'></div>
+          <div className='explainer_text'>
+            Hmmm. This map is private, but you can request to edit it from the map creator.
+          </div>
+          <div className='make_request'>REQUEST ACCESS</div>
+        </div>
+      </div>
+    )
+  }
+}
 
-<div id="yield">
-  <div class='request_access'>
-    <div class='monkey'></div>
-    <div class='explainer_text'>
-      Hmmm. This map is private, but you can request to edit it from the map creator.
-    </div>
-    <div class='make_request'>REQUEST ACCESS</div>
-  </div>
-</div>
+export default RequestAccess
 
+/*
 <script>
 $(document).ready(function() {
   $('.make_request').click(function() {
@@ -35,3 +37,4 @@ $(document).ready(function() {
   })
 })
 </script>
+*/
