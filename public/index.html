@@ -1,0 +1,395 @@
+<!--
+
+  Do you want to learn more about web development using Ruby or Javascript?
+
+  Metamaps.cc is an open source project, and we are always looking for new
+  developers to help contribute to our codebase! To get involved, send an
+  email to team@metamaps.cc or find us on Github at
+  https://github.com/metamaps/metamaps.
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" media="all" href="https://metamaps.cc/assets/application-3c8a3bd510d731d8b8f0ea69b9f9c232ced0105d6e14aa4d5d65ba1b6834b1d9.css">
+
+    <!-- typekit for vinyl font -->
+  <script type="text/javascript" src="https://use.typekit.net/tki2nyo.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+  <!--[if (IE)]>
+    <style type="text/css">
+      #lightbox_overlay {
+        display: block;
+      }
+
+      #lightbox_main {
+        top: 50%;
+        margin-top: -281px;
+      }
+
+      #lightbox_screen {
+        height: 100%;
+        opacity: 0.42;
+      }
+
+      .lightboxContent {
+        display: none;
+      }
+
+      #noIE {
+        display: block;
+      }
+
+      #lightbox_close {
+        display: none;
+      }
+
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#lightbox_screen").unbind().click(function(event){
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        });
+      });
+    </script>
+  <![endif]-->
+    
+</head>
+<body>
+    <div id="app"></div>
+    <div class="importDialogWrapper"></div>
+    <div id="loading"></div>
+    <script type="text/javascript">
+        var Metamaps = { 
+            ServerData: {
+                ActiveMapper: {
+                    id: 10,
+                    name: 'Connor',
+                    email: 'co@co.com',
+                    admin: false
+                }
+            }
+        }
+    </script>
+    <script src="/lib/jquery-1.12.4.min.js"></script>
+    <script src="/lib/jquery-ui.min.js"></script>
+    <script src="/lib/ajaxq.js"></script>
+    <script src="/lib/best_in_place.js"></script>
+    <script src="/lib/bitcoinsrc.js"></script>
+    <script src="/lib/canvas-to-blob.min.js"></script>
+    <script src="/lib/canvasloader.min.js"></script>
+    <script src="/lib/cloudcarousel.js"></script>
+    <script src="/lib/Countable.js"></script>
+    <script src="/lib/embedly.js"></script>
+    <script src="/lib/hogan-2.0.0.js"></script>
+    <script src="/lib/jquery.lettering.js"></script>
+    <script src="/lib/jquery.mousewheel.min.js"></script>
+    <script src="/lib/jquery.roundabout.min.js"></script>
+    <script src="/lib/jquery.typing-0.2.0.min.js"></script>
+    <script src="/lib/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="/metamaps.bundle.js"></script>
+    <script type="text/javascript">
+        Metamaps.Loading.setup()
+    </script>
+
+<div class="templates">
+        <script type="text/template" id="mapInfoBoxTemplate">
+          <div class="requestTitle">Click here to name this map</div>
+          <div class="mapInfoName" id="mapInfoName">{{{name}}}</div>
+      
+          <div class="mapInfoStat">
+            <div class="infoStatIcon mapContributors hoverForTip">
+              <img id="mapContribs" class="{{contributors_class}}"
+                width="25" height="25" src="{{contributor_image}}" />
+              <span class="count">{{contributor_count}}</span>
+              <div class="tip">{{{contributor_list}}}</div>
+            </div>
+            <div class="infoStatIcon mapTopics">
+              {{topic_count}}
+            </div>
+            <div class="infoStatIcon mapSynapses">
+              {{synapse_count}}
+            </div>
+            <div class="infoStatIcon mapPermission {{permission}} hoverForTip">
+              {{{map_creator_tip}}}
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+          <div class="mapInfoDesc" id="mapInfoDesc">
+            {{{desc}}}
+          </div>
+      
+          <div class="mapInfoMeta">
+            <p class="mapCreatedAt"><span>Created by:</span> {{user_name}} on {{created_at}}</p>
+            <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
+            <div class="mapInfoButtonsWrapper">
+              <div class="mapInfoThumbnail">
+                <div class="thumbnail"></div>
+                <div class="tooltip">Update Thumbnail</div>
+                <span>Thumb</span>
+              </div>
+              <div class="mapInfoDelete">
+                <div class="deleteMap"></div>
+                <span>Delete</span>
+              </div>
+              <div class="mapInfoShare">
+                <div class="mapInfoShareIcon"></div>
+                <span>Share</span>
+              </div>
+            </div>
+          </div>
+        </script>
+      
+        <script type="text/template" id="topicSearchTemplate">
+          <div class="result{{rtype}}">
+            <div class="topicMetacode searchResIconWrapper">
+              <img src="{{typeImageURL}}" class="topicIcon" />
+              <div class="metacodeTip">{{type}}</div>
+            </div>
+            <div class="resultText">
+              <p class="resultTitle">{{label}}</p>
+              <p class="resultDesc">{{description}}</p>
+            </div>
+            <div class="autoOptions">
+              <button class="addToMap hoverForTip" onclick="return Metamaps.Topic.getTopicFromSearch(event, {{id}})">
+                <span class="tip">add to map</span>
+              </button>
+              <div class="mapCount">
+                {{mapCount}}
+              </div>
+              <div class="synapseCount">
+                {{synapseCount}}
+              </div>
+              <div class="topicOriginatorIcon hoverForTip">
+                <img width="18" height="18" src="{{originatorImage}}">
+                <span class="tip topicOriginator">{{originator}}</span>
+              </div>
+              <div class="topicPermission {{permission}}">
+              </div>
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+        </script>
+      
+        <script type="text/template" id="mapSearchTemplate">
+          <div class="result{{rtype}}">
+            <div class="searchResIconWrapper">
+              <img class="icon" src="<%= asset_path('metamap36c.png') %>">
+            </div>
+            <div class="resultText">
+              <p class="resultTitle">{{label}}</p>
+              <p class="resultDesc">{{description}}</p>
+            </div>
+            <div class="autoOptions">
+              <div class="topicCount">
+                {{topicCount}}
+              </div>
+              <div class="synapseCount">
+                {{synapseCount}}
+              </div>
+              <div class="mapContributorsIcon hoverForTip">
+                <img id="mapContribs" width="25" height="25" src="{{mapContributorImage}}" />
+                <div class="tip">
+                  <ul>
+                    {{{contributorTip}}}
+                  </ul>
+                </div>
+                <span>{{contributorCount}}</span>
+              </div>
+              <div class="mapPermission {{permission}}">
+              </div>
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+        </script>
+      
+        <script type="text/template" id="mapperSearchTemplate">
+          <div class="result{{rtype}}">
+            <div class="searchResIconWrapper">
+              <img class="icon" width="32" height="32" src="{{profile}}">
+            </div>
+            <div class="resultText">
+              <p class="resultTitle">{{label}}</p>
+            </div>
+            <div class="autoOptions">
+              <div class="mapperCreated">
+                <p>Mapping since: {{created_at}}</p>
+              </div>
+              <div class="mapperGeneration">
+                <p>Generation: {{generation}}</p>
+              </div>
+              <div class="mapCount">
+                {{mapCount}}
+              </div>
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+        </script>
+      
+        <script type="text/template" id="collaboratorSearchTemplate">
+          <div class="collabResult">
+            <div class="collabIconWrapper">
+              <img class="icon" width="25" height="25" src="{{profile}}">
+            </div>
+            <div class="collabNameWrapper">
+              <p class="collabName">{{label}}</p>
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+        </script>
+      
+        <script type="text/template" id="synapseAutocompleteTemplate">
+          <div class="result{{rtype}}">
+            <p class="autocompleteSection synapseDesc">{{label}}</p>
+            <div class="synapseMetadata">
+              <div class="synapseOriginatorIcon hoverForTip">
+                <img width="24" height="24" src="{{originatorImage}}" />
+                <span class="tooltips synapseOriginator">{{originator}}</span>
+              </div>
+              <div class="synapsePermission {{permission}}"></div>
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+        </script>
+      
+        <script type="text/template" id="topicAutocompleteTemplate">
+          <div>
+            <img class="autocompleteSection topicType" width="24" height="24"
+              src="{{typeImageURL}}" alt="{{type}}" title="{{type}}" />
+            <p class="autocompleteSection topicTitle">{{label}}</p>
+            <div class="expandTopicMetadata"></div>
+            <div class="topicMetadata">
+              <div class="topicNumMaps">{{mapCount}}</div>
+              <div class="topicNumSynapses">{{synapseCount}}</div>
+              <div class="topicOriginatorIcon hoverForTip">
+                <img width="24" height="24" src="{{originatorImage}}" />
+                <span class="tooltips topicOriginator">{{originator}}</span>
+              </div>
+              <div class="topicPermission {{permission}}"></div>
+            </div>
+            <div class="clearfloat"></div>
+          </div>
+        </script>
+      </div>
+
+      <div id="lightbox_overlay">
+            <div id="lightbox_main">
+              <a id="lightbox_close" href="#"></a>
+              <div id="lightbox_content">
+          
+                <div class="lightboxContent" id="about">
+                  <h3>About Metamaps.cc</h3>
+                      <div id="aboutParms">
+                        <div id="leftAboutParms">
+                          <p>STATUS: </p>
+                          <p>VERSION:</p>
+                          <p>BUILD:</p>
+                          <p>LAST UPDATE:</p>
+                        </div>
+          
+                        <div id="rightAboutParms">
+                          <p>PRIVATE BETA</p>
+                          <p></p>
+                          <p></p>
+                          <p></p>
+                        </div>
+                        <div class="clearfloat"></div>
+                      </div>
+          
+                  <p>Metamaps.cc is a free and open source web platform that supports real-time sense-making and distributed collaboration between individuals, communities and organizations.</p>
+          
+          <p>Using an intuitive graph-based interface, Metamaps.cc helps map out networks of people, ideas, resources, stories, experiences, conversations and much more. The platform is evolving for a range of applications amidst a growing network of designers, developers, facilitators, practitioners, entrepreneurs, and artists.</p>
+          
+          <p>Metamaps.cc is created and maintained by a distributed community of contributors passionate about the evolution of collaboration, alternative forms of value creation and increase of collective intelligence through the lens of the open culture and the peer-to-peer revolution.</p>
+          
+                  <ul class="lightbox_links">
+                    <li>
+                      <a class="icon_twitter" href="https://twitter.com/metamapps" target="_blank">
+                        <div class="lightboxAboutIcon"></div>
+                        @metamapps
+                      </a>
+                    </li>
+                    <li>
+                      <a class="icon_community" href="https://www.hylo.com/c/metamaps/join/mice-late-hit-two-shown" target="_blank">
+                        <div class="lightboxAboutIcon"></div>
+                        community
+                      </a>
+                    </li>
+                    <li>
+                      <a class="icon_source_code" href="https://github.com/metamaps/metamaps" target="_blank">
+                        <div class="lightboxAboutIcon"></div>
+                        source code
+                      </a>
+                    </li>
+                    <li>
+                      <a class="icon_howtos" href="https://docs.metamaps.cc" target="_blank">
+                        <div class="lightboxAboutIcon"></div>
+                        howtos
+                      </a>
+                    </li>
+                    <li>
+                      <a class="icon_terms" href="https://metamaps.cc/maps/331" target="_blank">
+                        <div class="lightboxAboutIcon"></div>
+                        terms
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="clearfloat"></div>
+                </div>
+          
+                <div class="lightboxContent" id="noIE">
+                  <h3>OOPS! <br> YOUR BROWSER IS NOT SUPPORTED.</h3>
+                  <p id="noIEsubheading">To view this experience, please upgrade to the latest one of these browsers:</p>
+                  <a id="chromeIcon" href="https://www.google.com/chrome/browser/" target="_blank">Chrome</a>
+                  <a id="fireFoxIcon" href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a>
+                  <a id="safariIcon" href="http://support.apple.com/downloads/#safari" target="_blank">Safari</a>
+                  <p id="noIEbody">While it's downloading, explore our <a href="http://blog.metamaps.cc/">blog</a>,<br> watch the <a href="http://vimeo.com/88334167">tutorials</a>, or visit our <a href="https://docs.metamaps.cc">knowledge base</a>!
+          
+                </div>
+          
+                <div class="lightboxContent" id="tutorial">
+                  <h3>Tutorial</h3>
+                  <iframe src="//player.vimeo.com/video/88334167?title=0&amp;byline=0&amp;portrait=0" width="510" height="319" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                </div>
+          
+                <div class="lightboxContent" id="cheatsheet">
+                  <!--<%= render :partial => 'shared/cheatsheet' %>-->
+                </div>
+          
+                  <div class="lightboxContent" id="invite">
+                    <h3>SHARE INVITE</h3>
+          
+          <div class="leaveSpace"></div>
+          <p>The Metamaps platform is currently in an invite-only beta with the express purpose of creating a high value knowledge ecosystem, a diverse community of contributors and a culture of collaboration and curiosity.</p>
+          <p>As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
+          <p>Below is a personal invite link containing your unique access code, which can be used multiple times.</p>
+                      <div id="joinCodesBox">
+                      <p class="joinCodes">
+                      <button class="button" onclick="Metamaps.GlobalUI.shareInvite('<%= @invite_link %>');">COPY INVITE LINK!</button>
+                      </div>
+          
+                  </div>
+          
+                  <div class="lightboxContent" id="forkmap">
+                    <!--<%= render :partial => 'shared/forkmap' %>-->
+                  </div>
+          
+                  <div class="lightboxContent" id="switchMetacodes">
+                    <!--<%= render :partial => 'shared/switchmetacodes' %>-->
+                  </div>
+          
+              </div>
+            </div>
+            <div id="lightbox_screen" style="height: 100%;"></div>
+          </div>          
+</body>
+</html>

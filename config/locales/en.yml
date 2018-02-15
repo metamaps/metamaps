@@ -1,4 +1,0 @@
-en:
-  mailboxer:
-    notification_mailer:
-      subject: "%{subject}"

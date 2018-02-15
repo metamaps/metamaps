@@ -1,8 +1,0 @@
-<% map = @map || map %>
-<% button_style = "background-color:#4fc059;border-radius:2px;color:white;display:inline-block;font-family:Roboto,Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;min-height:29px;line-height:29px;min-width:54px;outline:0px;padding:0 8px;text-align:center;text-decoration:none" %>
-<p><span style="font-weight: bold;"><%= map.user.name %></span> has responded to your access request and invited you to <span style="font-weight: bold">collaboratively edit</span> the following map:</p>
-<p><%= link_to map.name, map_url(map), style: "font-size: 18px; text-decoration: none; color: #4fc059;" %></p>
-<% if map.desc %>
-  <p style="font-size: 12px;"><%= map.desc %></p>
-<% end %>
-<%= link_to 'Go to Map', map_url(map), style: button_style %> 

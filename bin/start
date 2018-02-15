@@ -1,2 +1,0 @@
-#start rails server and realtime node server 
-vagrant ssh --command "cd /vagrant; rails s -d; forever start ./realtime/realtime-server.js"

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Metamaps webpacked javascript code",
   "scripts": {
+    "start": "webpack-dev-server --open",
     "build": "webpack",
     "build:watch": "webpack --watch",
     "test": "mocha-webpack --webpack-config webpack.test.config.js --require frontend/test_support/dom.js --recursive frontend/test",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/metamaps/metamaps#readme",
   "dependencies": {
+    "action-cable-node": "^1.2.2",
     "ajaxq": "0.0.7",
     "async": "2.5.0",
     "attachmediastream": "2.0.0",
@@ -39,6 +41,7 @@
     "hark": "1.1.5",
     "howler": "2.0.4",
     "jquery": "3.2.1",
+    "jquery-ujs": "^1.2.2",
     "json-loader": "0.5.7",
     "lodash": "4.17.4",
     "node-uuid": "1.4.8",
@@ -70,7 +73,8 @@
     "mocha": "^3.5.0",
     "mocha-webpack": "^0.7.0",
     "react-addons-test-utils": "^15.6.0",
-    "sinon": "2.2.0"
+    "sinon": "2.2.0",
+    "webpack-dev-server": "^2.11.1"
   },
   "optionalDependencies": {
     "raml2html": "4.0.5"

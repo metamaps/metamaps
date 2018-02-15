@@ -44,10 +44,13 @@ module.exports = {
     ]
   },
   entry: {
-    'metamaps.bundle': './frontend/src/index.js'
+    'metamaps.bundle': './src/index.js'
   },
+	devServer: {
+	  contentBase: './public'
+	},
   output: {
-    path: __dirname + '/app/assets/javascripts/webpacked',
+    path: __dirname + '/public',
     filename: '[name].js',
     devtoolModuleFilenameTemplate: '[absolute-resource-path]'
   }
