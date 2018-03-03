@@ -34,7 +34,7 @@
       display: block;
       width: 72px;
       height: 72px;
-      background-image: url("<%= asset_data_uri('newmap_sprite.png') %>");
+      background-image: url('/images/newmap_sprite.png');
       background-repeat: no-repeat;
       background-position: 0 0;
       position: absolute;
@@ -121,10 +121,10 @@
       }
     }
     .mapHasMapper {
-      background: url('<%= asset_path('junto.png') %>') no-repeat 4px 0;
+      background: url('/images/junto.png') no-repeat 4px 0;
     }
     .mapHasConversation {
-      background: url('<%= asset_path('junto.gif') %>') no-repeat 4px 0;
+      background: url('/images/junto.gif') no-repeat 4px 0;
     }
 
     .dropdownMenu {
@@ -265,7 +265,7 @@
       text-align: center;
 
       div {
-        background: url('<%= asset_path('metadata.png') %>') no-repeat;
+        background: url('/images/metadata.png') no-repeat;
         width: 32px;
         height: 32px;
         margin: 0 auto;

@@ -19,7 +19,7 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   height: 32px;
-  background: #4fb5c0 url(<%= asset_data_uri('search.png') %>) no-repeat center center;
+  background: #4fb5c0 url('/images/search.png') no-repeat center center;
   background-size: 32px 32px;
   cursor: pointer;
 }
@@ -172,7 +172,7 @@
     .maximizeResults {
       width: 32px;
       height: 32px;
-      background-image: url(<%= asset_data_uri('arrowpermswhite_sprite.png') %>);
+      background-image: url('/images/arrowpermswhite_sprite.png');
       background-repeat: no-repeat;
       cursor: pointer;
       position: absolute;
@@ -329,7 +329,7 @@
     display:none;
     width: 24px;
     height: 24px;
-    background: url(<%= asset_data_uri('addtopic_sprite.png') %>);
+    background: url('/images/addtopic_sprite.png');
     background-repeat: no-repeat;
     background-size: 48px 24px;
     top: 12px;
@@ -344,7 +344,7 @@
   .topicCount {
     width: 24px;
     height: 24px;
-    background: url(<%= asset_data_uri('topic16.png') %>);
+    background: url('/images/topic16.png');
     background-repeat: no-repeat;
     background-position: 0 center;
     top: 0;
@@ -357,7 +357,7 @@
   .mapCount {
     width: 24px;
     height: 24px;
-    background: url(<%= asset_data_uri('metamap16.png') %>);
+    background: url('/images/metamap16.png');
     background-repeat: no-repeat;
     background-position: 0 center;
     left: 0;
@@ -369,7 +369,7 @@
   .synapseCount {
     width: 24px;
     height: 24px;
-    background: url(<%= asset_data_uri('synapse16.png') %>);
+    background: url('/images/synapse16.png');
     background-repeat: no-repeat;
     background-position: 0 center;
     top: 24px;
@@ -478,7 +478,7 @@
   .mapPermission {
     width: 24px;
     height: 24px;
-    background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+    background-image: url('/images/permissions32_sprite.png');
     background-repeat: no-repeat;
     background-size: 72px 48px !important;
     top: 24px;

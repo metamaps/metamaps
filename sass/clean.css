@@ -1,20 +1,20 @@
 @font-face {
     font-family: 'din-medium';
-    src: url(<%= asset_path 'Fonts/din.eot' %>);
-    src: url(<%= asset_path 'Fonts/din.eot?#iefix' %>) format('embedded-opentype'),
-         url(<%= asset_path 'Fonts/din.woff' %>) format('woff'),
-         url(<%= asset_path 'Fonts/din.ttf' %>) format('truetype'),
-         url(<%= asset_path 'Fonts/din.svg#din-medium' %>) format('svg');
+    src: url('/fonts/din.eot');
+    src: url('/fonts/din.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/din.woff') format('woff'),
+         url('/fonts/din.ttf') format('truetype'),
+         url('/fonts/din.svg#din-medium') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'din-regular';
-    src: url(<%= asset_path 'Fonts/din-reg.eot' %>);
-    src: url(<%= asset_path 'Fonts/din-reg.eot?#iefix' %>) format('embedded-opentype'),
-         url(<%= asset_path 'Fonts/din-reg.woff' %>) format('woff'),
-         url(<%= asset_path 'Fonts/din-reg.ttf' %>) format('truetype'),
-         url(<%= asset_path 'Fonts/din-reg.svg#din-reg' %>) format('svg');
+    src: url('/fonts/din-reg.eot');
+    src: url('/fonts/din-reg.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/din-reg.woff') format('woff'),
+         url('/fonts/din-reg.ttf') format('truetype'),
+         url('/fonts/din-reg.svg#din-reg') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -181,7 +181,7 @@
 .upperRightIcon {
     width: 32px;
     height: 32px;
-    background-image: url(<%= asset_path('topright_sprite.png') %>);
+    background-image: url('/images/topright_sprite.png');
     background-repeat: no-repeat;
     cursor: pointer;
 }
@@ -335,7 +335,7 @@
 }
 
 .fullWidthWrapper.withPartners {
-    background: url(<%= asset_path('homepage_bg_fade.png') %>) no-repeat center -300px;
+    background: url('/images/homepage_bg_fade.png') no-repeat center -300px;
 }
 .homeWrapper.homePartners {
     padding: 64px 0 280px;
@@ -367,7 +367,7 @@
     cursor: pointer;
 }
 .openCheatsheet {
-    background-image: url(<%= asset_path('help_sprite.png') %>);
+    background-image: url('/images/help_sprite.png');
     background-repeat:no-repeat;
 }
 .openCheatsheet:hover {
@@ -375,7 +375,7 @@
 }
 .mapInfoIcon {
 	position: relative;
-  background-image: url(<%= asset_path('mapinfo_sprite.png') %>);
+  background-image: url('/images/mapinfo_sprite.png');
   background-repeat:no-repeat;
 }
 .mapInfoIcon:hover {
@@ -383,7 +383,7 @@
 }
 
 .starMap {
-  background-image: url(<%= asset_path('starmap_sprite.png') %>);
+  background-image: url('/images/starmap_sprite.png');
   background-position: 0 0;
   background-repeat: no-repeat;
   width: 32px;
@@ -427,7 +427,7 @@
 .zoomExtents {
     margin-bottom:5px;
     border-radius: 2px;
-    background-image: url(<%= asset_path('extents_sprite.png') %>);
+    background-image: url('/images/extents_sprite.png');
 }
 
 .zoomExtents:hover {
@@ -614,7 +614,7 @@
 }
 
 .zoomIn {
-    background-image: url(<%= asset_path('zoom_sprite.png') %>);
+    background-image: url('/images/zoom_sprite.png');
     background-position: 0 /…0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
@@ -623,7 +623,7 @@
     background-position: -32px 0;
 }
 .zoomOut {
-    background-image: url(<%= asset_path('zoom_sprite.png') %>);
+    background-image: url('/images/zoom_sprite.png');
     background-position:0 -32px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
@@ -745,31 +745,31 @@
 }
 
 .navBarCenter .authedApps .navBarIcon {
-    background-image: url(<%= asset_path('user_sprite.png') %>);
+    background-image: url('/images/user_sprite.png');
     background-position: 0 -32px;
 }
 .navBarCenter .myMaps .navBarIcon {
-    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
+    background-image: url('/images/exploremaps_sprite.png');
     background-position: -32px 0;
 }
 .navBarCenter .sharedMaps .navBarIcon {
-    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
+    background-image: url('/images/exploremaps_sprite.png');
     background-position: -128px 0;
 }
 .navBarCenter .activeMaps .navBarIcon {
-    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
+    background-image: url('/images/exploremaps_sprite.png');
     background-position: 0 0;
 }
 .navBarCenter .featuredMaps .navBarIcon {
-    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
+    background-image: url('/images/exploremaps_sprite.png');
     background-position: -96px 0;
 }
 .navBarCenter .starredMaps .navBarIcon {
-    background-image: url(<%= asset_path 'exploremaps_sprite.png' %>);
+    background-image: url('/images/exploremaps_sprite.png');
     background-position: -96px 0;
 }
 .navBarCenter .notificationsLink .navBarIcon {
-    background-image: url(<%= asset_path 'topright_sprite.png' %>);
+    background-image: url('/images/topright_sprite.png');
     background-position: -128px 0;
 }
 .authedApps:hover .navBarIcon, .authedApps.active .navBarIcon {
@@ -843,7 +843,7 @@
 
 /* feedback */
 body a#barometer_tab {
-background-image: url(<%= asset_path 'feedback_sprite.png' %>);
+background-image: url('/images/feedback_sprite.png');
 background-position: 0 0;
 background-color: transparent;
 height: 110px;

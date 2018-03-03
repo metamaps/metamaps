@@ -91,7 +91,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
   padding: 0 16px;
 }
 .canEdit #titleActivator:hover {
-  background-image: url(<%= asset_data_uri('edit.png') %>);
+  background-image: url('/images/edit.png');
   background-repeat: no-repeat;
   background-position: bottom right;
   cursor: text;
@@ -185,7 +185,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
   padding-right: 26px;
 }
 .canEdit .CardOnGraph .riek_desc:not(.riek-editing):hover {
-  background-image: url(<%= asset_data_uri('edit.png') %>);
+  background-image: url('/images/edit.png');
   background-position: top right;
   background-repeat: no-repeat;
   cursor: text;
@@ -290,7 +290,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
       right: 0;
       width: 32px;
       height: 32px;
-      background-image: url(<%= asset_data_uri('map32_sprite.png') %>);
+      background-image: url('/images/map32_sprite.png');
       background-repeat: no-repeat;
       background-position: 0 0;
       cursor: pointer;
@@ -369,7 +369,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
       right: 0;
       width: 32px;
       height: 32px;
-      background-image: url(<%= asset_data_uri('synapse32_sprite.png') %>);
+      background-image: url('/images/synapse32_sprite.png');
       background-repeat: no-repeat;
       background-position: 0 0;
       opacity: 0.6;
@@ -423,7 +423,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
   min-width: 32px;
   margin-top: 8px;
   margin-left: 8px;
-  background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+  background-image: url('/images/permissions32_sprite.png');
   background-position: 0 0;
 }
 .mapPerm.co {
@@ -454,7 +454,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
   height: 32px;
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+  background-image: url('/images/permissions32_sprite.png');
 }
 .mapPerm .permissionSelect .commons {
   background-position: 0 0;
@@ -498,7 +498,7 @@ $mid-gray-opacity: rgba(66, 66, 66, 0.6);
   left: 4px;
   width: 16px;
   height: 16px;
-  background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
+  background-image: url('/images/arrowright_sprite.png');
   background-repeat: no-repeat;
   background-position: 0 -32px;
   display: inline-block;
@@ -571,7 +571,7 @@ background-color: #E0E0E0;
   right: 8px;
   width: 16px;
   height: 16px;
-  background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
+  background-image: url('/images/arrowright_sprite.png');
   background-repeat: no-repeat;
   background-position: 0 -32px;
 }
@@ -673,10 +673,10 @@ background-color: #E0E0E0;
   left: 12px;
 }
 #linkIcon {
-  background-image: url(<%= asset_data_uri('link_sprite.png') %>);
+  background-image: url('/images/link_sprite.png');
 }
 #uploadIcon {
-  background-image: url(<%= asset_data_uri('upload_sprite.png') %>);
+  background-image: url('/images/upload_sprite.png');
 }
 #addlink:hover #linkIcon, #addupload:hover #uploadIcon {
   background-position: 0 -24px;
@@ -715,7 +715,7 @@ font-family: 'din-regular', helvetica, sans-serif;
   height: 24px;
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-image: url(<%= asset_data_uri('link_sprite.png') %>);
+  background-image: url('/images/link_sprite.png');
   pointer-events: none;
   z-index: 1;
 }
@@ -728,7 +728,7 @@ font-family: 'din-regular', helvetica, sans-serif;
   height: 32px;
   cursor: pointer;
   float:none;
-  background-image: url(<%= asset_data_uri('remove.png') %>);
+  background-image: url('/images/remove.png');
   background-repeat: no-repeat;
   background-position: center center;
 }
@@ -764,7 +764,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 #linkremove {
-  background-image: url(<%= asset_data_uri 'remove.png' %>);
+  background-image: url('/images/remove.png');
   background-repeat: no-repeat;
   background-position: center center;
   width: 24px;
@@ -805,7 +805,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 #editSynUpperBar {
-  background: #FFFFFF url(<%= asset_data_uri('synapse32.png') %>) no-repeat 8px center;
+  background: #FFFFFF url('/images/synapse32.png') no-repeat 8px center;
   min-height: 48px;
   height: 48px;
   border-bottom: 1px solid #222222;
@@ -838,7 +838,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 .canEdit span.titleWrapper:hover {
-  background-image: url(<%= asset_data_uri('edit.png') %>);
+  background-image: url('/images/edit.png');
   background-repeat: no-repeat;
   background-position: 95% 95%;
   cursor: text;
@@ -865,7 +865,7 @@ font-family: 'din-regular', helvetica, sans-serif;
   height: 24px;
   top: 12px;
   right: 8px;
-  background-image: url(<%= asset_data_uri('arrowdown_sprite.png') %>);
+  background-image: url('/images/arrowdown_sprite.png');
   background-repeat: no-repeat;
   background-position: 4px -12px;
 }
@@ -947,11 +947,11 @@ font-family: 'din-regular', helvetica, sans-serif;
   background-repeat: no-repeat;
 }
 #edit_synapse_right {
-  background-image: url(<%= asset_data_uri('synapsedirectionright_sprite.png') %>);
+  background-image: url('/images/synapsedirectionright_sprite.png');
   right: 16px;
 }
 #edit_synapse_left {
-  background-image: url(<%= asset_data_uri('synapsedirectionleft_sprite.png') %>);
+  background-image: url('/images/synapsedirectionleft_sprite.png');
   right: 56px;
 }
 #edit_synapse_left.checked, #edit_synapse_right.checked {
@@ -1017,7 +1017,7 @@ font-family: 'din-regular', helvetica, sans-serif;
 }
 
 .mapperMetadata {
-    background: url(<%= asset_data_uri('profile_card_sprite.png') %>) no-repeat center 0;
+    background: url('/images/profile_card_sprite.png') no-repeat center 0;
     height: 64px;
     width: 160px;
     margin: 16px auto 0;

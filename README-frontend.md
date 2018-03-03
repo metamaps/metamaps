@@ -1,19 +1,11 @@
-To setup javascript dev, first run
 
-    npm install
+Make sure you have `nodemon` and `node-sass` installed
+`$ npm install -g nodemon node-sass`
 
-to set up your testing environment. Then use
 
-    npm run test
+Run both of the following at the same time, in two terminals
 
-to see the results of testing the current javascript files.
-
-To build the javascript files, run
-
-    npm run build
-
-If you are actively developing and would like any changes to trigger a rebuild, you can use 
-
-    npm run build:watch
-
-instead.
+```
+$ nodemon server.js
+$ node-sass -w sass/application.scss public/css/application.css
+```

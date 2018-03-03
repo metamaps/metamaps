@@ -68,7 +68,7 @@
     top: 85%;
     right: 0px;
     cursor: pointer;
-    background: url(<%= asset_path 'audio_sprite.png' %>) no-repeat;
+    background: url('/images/audio_sprite.png') no-repeat;
   }
   .video-audio:hover {
     background-position-x: -24px;
@@ -83,7 +83,7 @@
     top: 85%;
     left: 0px;
     cursor: pointer;
-    background: url(<%= asset_path 'camera_sprite.png' %>) no-repeat;
+    background: url('/images/camera_sprite.png') no-repeat;
   }
   .video-video:hover {
     background-position-x: -24px;
@@ -119,11 +119,11 @@
     left: -36px;
     width: 36px;
     height: 49px;
-    background: url(<%= asset_path 'junto.png' %>) no-repeat 2px 9px, url(<%= asset_path 'tray_tab.png' %>) no-repeat;
+    background: url('/images/junto.png') no-repeat 2px 9px, url('/images/tray_tab.png') no-repeat;
     cursor: pointer;
 
     &.active {
-      background: url(<%= asset_path 'junto_spinner_dark.gif' %>) no-repeat 2px 8px, url(<%= asset_path 'tray_tab.png' %>) no-repeat !important;
+      background: url('/images/junto_spinner_dark.gif') no-repeat 2px 8px, url('/images/tray_tab.png') no-repeat !important;
     }
     .chat-unread {
       background: #DAB539;
@@ -158,7 +158,7 @@
       margin-right: 8px;
       margin-top: -8px;
       float: right;
-      background: url(<%= asset_path 'cursor_sprite.png' %>) no-repeat;
+      background: url('/images/cursor_sprite.png') no-repeat;
     }
     .cursor-toggle:hover {
       background-position-x: -32px;
@@ -172,7 +172,7 @@
       margin-right: 10px;
       margin-top: -8px;
       float: right;
-      background: url(<%= asset_path 'video_sprite.png' %>) no-repeat;
+      background: url('/images/video_sprite.png') no-repeat;
     }
     .video-toggle:hover {
       background-position-x: -32px;
@@ -234,11 +234,11 @@
       .chat-participant-invite-join
        {
         float: right;
-        background: #4FC059 url(<%= asset_path 'invitepeer16.png' %>) no-repeat center center;
+        background: #4FC059 url('/images/invitepeer16.png') no-repeat center center;
       }
       .chat-participant-invite-call.pending,
       .chat-participant-invite-join.pending {
-          background: #dab539 url(<%= asset_path 'ellipsis.gif' %>) no-repeat center center;
+          background: #dab539 url('/images/ellipsis.gif') no-repeat center center;
       }
       .chat-participant-participating {
         float: right;
@@ -269,7 +269,7 @@
       margin-right: 10px;
       margin-top: -2px;
       float: right;
-      background: url(<%= asset_path 'sound_sprite.png' %>) no-repeat;
+      background: url('/images/sound_sprite.png') no-repeat;
     }
     .sound-toggle:hover {
       background-position-x: -24px;

@@ -14,7 +14,7 @@
   }
 
   .eyeball {
-    background: url('<%= asset_path('view-only.png') %>') no-repeat 4px 0;
+    background: url('/images/view-only.png') no-repeat 4px 0;
     padding-left: 40px;
     border-right: #747474;
     padding-right: 10px;

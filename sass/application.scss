@@ -1,16 +1,16 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
- *
- *= require_self
- *= require_tree .
-*/
+@import 'admin';
+@import 'apps';
+@import 'base';
+@import 'clean';
+@import 'emoji-mart-0.3.5';
+@import 'feedback';
+@import 'jquery-ui';
+@import 'junto';
+@import 'mapcard';
+@import 'mobile';
+@import 'notifications';
+@import 'request_access';
+@import 'search';
 
 /* clear styles */
 
@@ -78,7 +78,7 @@ html {
 
 }
 body {
-  background: #d8d9da url(<%= asset_path('shattered_@2X.png') %>);
+  background: #d8d9da url('/images/shattered_@2X.png');
   font-family: 'din-medium', helvetica, sans-serif;
   color: #424242;
   -moz-osx-font-smoothing: grayscale;
@@ -315,7 +315,7 @@ button.button.btn-no:hover {
     display: none;
     width: 40px;
     height: 40px;
-    background-image: url(<%= asset_data_uri('photo.png') %>);
+    background-image: url('/images/photo.png');
     position: absolute;
     top: 22px;
     left: 22px;
@@ -428,7 +428,7 @@ button.button.btn-no:hover {
 
 }
 .accountName:hover .nameEdit:after {
-    background: url(<%= asset_data_uri('edit.png') %>) no-repeat;
+    background: url('/images/edit.png') no-repeat;
     content:" ";
     position:absolute;
     width:25px;
@@ -564,7 +564,7 @@ body:not(.action-conversation) .new_topic {
     display: block;
     height: 16px;
     width: 16px;
-    background-image: url(<%= asset_data_uri('metacodesettings_sprite.png') %>);
+    background-image: url('/images/metacodesettings_sprite.png');
     position: absolute;
     z-index: 2;
     top: 20px;
@@ -578,7 +578,7 @@ body:not(.action-conversation) .new_topic {
     display: block;
     height: 16px;
     width: 16px;
-    background-image: url(<%= asset_data_uri('pincarousel_sprite.png') %>);
+    background-image: url('/images/pincarousel_sprite.png');
     position: absolute;
     z-index: 2;
     top: 20px;
@@ -772,7 +772,7 @@ label {
 .accountInnerArrow {
     width:16px;
     height:16px;
-    background-image: url(<%= asset_data_uri('arrowdown_sprite.png') %>);
+    background-image: url('/images/arrowdown_sprite.png');
     background-repeat: no-repeat;
     position:absolute;
     top: 8px;
@@ -837,7 +837,7 @@ label {
     position:absolute;
     pointer-events:none;
     background-repeat:no-repeat;
-    background-image: url(<%= asset_path('user_sprite.png') %>);
+    background-image: url('/images/user_sprite.png');
 }
 .accountSettings .accountIcon {
     background-position: 0 0;
@@ -870,7 +870,7 @@ li.accountInvite span {
     padding: 9px 0 9px 62px;
 }
 .accountImage {
-    background-image: url(<%= asset_data_uri 'user.png' %>);
+    background-image: url('/images/user.png');
     background-size: 84px 84px;
     background-repeat: no-repeat;
     height:84px;
@@ -1200,7 +1200,7 @@ h3.filterBox {
     position: absolute;
     top: 0;
     left: 4px;
-    background-image: url(<%= asset_data_uri('context_sprite.png') %>);
+    background-image: url('/images/context_sprite.png');
     background-repeat: no-repeat;
     width: 24px;
     height: 24px;
@@ -1216,7 +1216,7 @@ h3.filterBox {
 }
 
 .rightclickmenu .rc-center .rc-icon {
-    background-image: url(<%= asset_data_uri('context_topicview_sprite.png') %>);
+    background-image: url('/images/context_topicview_sprite.png');
 }
 .rightclickmenu .rc-popout .rc-icon {
     background-position: 0 -72px;
@@ -1229,7 +1229,7 @@ h3.filterBox {
 }
 .rightclickmenu .rc-siblings .rc-icon {
     background-position: 0 -24px;
-    background-image: url(<%= asset_data_uri('context_topicview_sprite.png') %>);
+    background-image: url('/images/context_topicview_sprite.png');
 }
 .rightclickmenu .expandLi {
     position: absolute;
@@ -1237,7 +1237,7 @@ h3.filterBox {
     right: 8px;
     width: 16px;
     height: 16px;
-    background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
+    background-image: url('/images/arrowright_sprite.png');
     background-repeat: no-repeat;
     background-position: 0 -32px;
 }
@@ -1272,7 +1272,7 @@ h3.filterBox {
     position: absolute;
     top: 0;
     left: 4px;
-    background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+    background-image: url('/images/permissions32_sprite.png');
     background-size: 72px 48px;
     background-repeat: no-repeat;
     width: 24px;
@@ -1318,7 +1318,7 @@ h3.filterBox {
     right: 4px;
     width: 16px;
     height: 16px;
-    background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
+    background-image: url('/images/arrowright_sprite.png');
     background-repeat: no-repeat;
     background-position: 0 -32px;
 }
@@ -1398,7 +1398,7 @@ h3.filterBox {
     top: 8px;
     right: 8px;
     background-repeat: no-repeat;
-    background-image: url(<%= asset_data_uri('arrowright_sprite.png') %>);
+    background-image: url('/images/arrowright_sprite.png');
     background-position: 0 -32px;
 }
 #new_topic .tt-suggestion:hover .expandTopicMetadata,
@@ -1424,7 +1424,7 @@ h3.filterBox {
     width: 32px;
     height: 32px;
     background-repeat: no-repeat;
-    background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+    background-image: url('/images/permissions32_sprite.png');
     position: absolute;
     bottom: 4px;
     right: 4px;
@@ -1444,7 +1444,7 @@ h3.filterBox {
 #new_topic .topicNumMaps {
     height: 14px;
     padding: 1px 0 1px 32px;
-    background-image: url(<%= asset_data_uri('metamap16.png') %>);
+    background-image: url('/images/metamap16.png');
     background-repeat: no-repeat;
     background-position: 8px 0;
     position: absolute;
@@ -1453,7 +1453,7 @@ h3.filterBox {
 #new_topic .topicNumSynapses {
     height: 14px;
     padding: 1px 0 1px 32px;
-    background-image: url(<%= asset_data_uri('synapse16.png') %>);
+    background-image: url('/images/synapse16.png');
     background-repeat: no-repeat;
     background-position: 8px 0;
     position: absolute;
@@ -1543,7 +1543,7 @@ h3.filterBox {
     width: 32px;
     height: 32px;
     background-repeat: no-repeat;
-    background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+    background-image: url('/images/permissions32_sprite.png');
 }
 /* map info box */
 
@@ -1644,7 +1644,7 @@ h3.filterBox {
     resize: none;
 }
 .mapInfoBox.canEdit #mapInfoName:hover {
-    background-image: url(<%= asset_data_uri('edit.png') %>);
+    background-image: url('/images/edit.png');
     background-repeat: no-repeat;
     background-position: bottom right;
     cursor: text;
@@ -1820,7 +1820,7 @@ span.removeCollaborator {
     right: 8px;
     height: 16px;
     width: 16px;
-    background-image: url(<%= asset_data_uri('removecollab_sprite.png') %>);
+    background-image: url('/images/removecollab_sprite.png');
     cursor: pointer;
 }
 
@@ -1831,7 +1831,7 @@ span.removeCollaborator:hover {
 span.addCollab {
     width: 16px;
     height: 16px;
-    background-image: url(<%= asset_data_uri('addcollab_sprite.png') %>);
+    background-image: url('/images/addcollab_sprite.png');
     display: inline-block;
     vertical-align: middle;
     margin: 0 12px 0 10px;
@@ -1889,11 +1889,11 @@ input.collaboratorSearchField {
 }
 
 .mapTopics {
-    background-image: url(<%= asset_data_uri('topic32.png') %>);
+    background-image: url('/images/topic32.png');
     background-position: 13px center;
 }
 .mapSynapses {
-    background-image: url(<%= asset_data_uri('synapse32padded.png') %>);
+    background-image: url('/images/synapse32padded.png');
     background-position: 13px center;
 }
 .mapInfoBox .mapPermission {
@@ -1903,7 +1903,7 @@ input.collaboratorSearchField {
     padding: 0;
     margin: 8px 30px 8px 10px;
     position: relative;
-    background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+    background-image: url('/images/permissions32_sprite.png');
 }
 .mapInfoBox .mapPermission.commons {
     background-position: 0 0;
@@ -1931,7 +1931,7 @@ input.collaboratorSearchField {
     width: 32px;
     height: 32px;
     background-repeat: no-repeat;
-    background-image: url(<%= asset_data_uri('permissions32_sprite.png') %>);
+    background-image: url('/images/permissions32_sprite.png');
 }
 .mapInfoBox .mapPermission .permissionSelect .commons {
     background-position: 0 0;
@@ -1978,7 +1978,7 @@ input.collaboratorSearchField {
     width: 340px;
 }
 .mapInfoBox.canEdit .mapInfoDesc:hover {
-    background-image: url(<%= asset_data_uri('edit.png') %>);
+    background-image: url('/images/edit.png');
     background-position: top right;
     background-repeat: no-repeat;
     cursor: text;
@@ -2024,7 +2024,7 @@ input.collaboratorSearchField {
 .mapInfoShareIcon {
     width: 24px;
     height: 24px;
-    background-image: url(<%= asset_data_uri('share_sprite_mapinfo.png') %>);
+    background-image: url('/images/share_sprite_mapinfo.png');
     background-repeat: no-repeat;
     margin: 4px auto 0;
     background-position: 0 -24px;
@@ -2045,7 +2045,7 @@ and it won't be important on password protected instances */
     width: 16px;
     height: 16px;
     margin: 8px auto 0;
-    background-image: url(<%= asset_data_uri('remove_mapinfo_sprite.png') %>);
+    background-image: url('/images/remove_mapinfo_sprite.png');
     background-repeat: no-repeat;
     background-position: -16px 0;
 }
@@ -2062,7 +2062,7 @@ and it won't be important on password protected instances */
 
 .mapInfoButtonsWrapper .mapInfoThumbnail {
   display: block;
-  background-image: url(<%= asset_path('screenshot_sprite.png') %>);
+  background-image: url('/images/screenshot_sprite.png');
   width: 32px;
   height: 32px;
 
@@ -2143,7 +2143,7 @@ and it won't be important on password protected instances */
     border: solid 2px #000;
 }
 #lightbox_overlay #lightbox_main a#lightbox_close {
-    background-image: url(<%= asset_data_uri('xlightbox.png') %>);
+    background-image: url('/images/xlightbox.png');
     cursor: pointer;
     height: 32px;
     outline-style: none;
@@ -2251,7 +2251,7 @@ and it won't be important on password protected instances */
 .icon_twitter .lightboxAboutIcon,
 .icon_source_code .lightboxAboutIcon,
 .icon_terms .lightboxAboutIcon {
-    background-image: url(<%= asset_data_uri('about_sprite.png') %>);
+    background-image: url('/images/about_sprite.png');
     background-repeat: no-repeat;
     background-position: 0 0;
 }
@@ -2532,15 +2532,15 @@ and it won't be important on password protected instances */
     opacity: 0.7;
 }
 #chromeIcon {
-    background: url(<%= asset_data_uri 'browser_icons.png' %>) no-repeat;
+    background: url('/images/browser_icons.png') no-repeat;
 }
 
 #fireFoxIcon {
-    background: url(<%= asset_data_uri 'browser_icons.png' %>) no-repeat -105px 0;
+    background: url('/images/browser_icons.png') no-repeat -105px 0;
 }
 
 #safariIcon {
-    background: url(<%= asset_data_uri 'browser_icons.png' %>) no-repeat -220px 0;
+    background: url('/images/browser_icons.png') no-repeat -220px 0;
 }
 
 #chromeIcon:hover{
@@ -2677,7 +2677,7 @@ and it won't be important on password protected instances */
     position: relative;
 }
 .new_map .mapPermIcon {
-    background-image: url(<%= asset_data_uri('permissions64sprite.png') %>);
+    background-image: url('/images/permissions64sprite.png');
     background-repeat: no-repeat;
     width:64px;
     height:64px;
@@ -2792,7 +2792,7 @@ and it won't be important on password protected instances */
 }
 
 #zoomIn {
-    background: #424242 url(<%= asset_data_uri('zoom_sprite.png') %>) no-repeat;
+    background: #424242 url('/images/zoom_sprite.png') no-repeat;
     width: 22px;
     height: 22px;
     display: inline-block;
@@ -2804,7 +2804,7 @@ and it won't be important on password protected instances */
 }
 
 #zoomOut {
-    background: #424242 url(<%= asset_data_uri('zoom_sprite.png') %>) no-repeat;
+    background: #424242 url('/images/zoom_sprite.png') no-repeat;
     width: 22px;
     height: 22px;
     display: inline-block;
@@ -2816,7 +2816,7 @@ and it won't be important on password protected instances */
 }
 
 #centerMap {
-    background: #424242 url(<%= asset_data_uri('extents_sprite.png') %>) no-repeat;
+    background: #424242 url('/images/extents_sprite.png') no-repeat;
     width: 22px;
     height: 22px;
     display: inline-block;
@@ -2993,7 +2993,7 @@ and it won't be important on password protected instances */
 .compassArrow {
     display: none;
     background-repeat: no-repeat;
-    background-image: url(<%= asset_data_uri('compass_arrow.png') %>);
+    background-image: url('/images/compass_arrow.png');
     width: 48px;
     height: 32px;
     position: absolute;

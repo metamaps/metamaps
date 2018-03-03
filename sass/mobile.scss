@@ -190,10 +190,10 @@
         }
       }
       .mobileHasMapper {
-        background: url('<%= asset_path('junto.png') %>') no-repeat 12px 0;
+        background: url('/images/junto.png') no-repeat 12px 0;
       }
       .mobileHasConversation {
-        background: url('<%= asset_path('junto.gif') %>') no-repeat 12px 0;
+        background: url('/images/junto.gif') no-repeat 12px 0;
       }
       .mobileMetadata {
         margin: 0 auto;
@@ -225,7 +225,7 @@
   height: 50px;
   border-right: 1px solid #DDD;
   position: absolute;
-  background: #EEE url('<%= asset_path('menu-alt-256.png') %>') no-repeat center center;
+  background: #EEE url('/images/menu-alt-256.png') no-repeat center center;
   background-size: 30px;
 }
 

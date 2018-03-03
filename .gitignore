@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 #assety stuff
+public/css
 public/assets
 public/metamaps_mobile
 public/api/index.html

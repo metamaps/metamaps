@@ -4,7 +4,7 @@
 
 .feedback-icon {
         position: fixed;
-	background-image: url(<%= asset_data_uri 'feedback_sprite.png' %>);
+	background-image: url('/images/feedback_sprite.png');
 	background-repeat: no-repeat;
 	color:#FFFFFF;
 	cursor:pointer;
