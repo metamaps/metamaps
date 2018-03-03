@@ -9,7 +9,7 @@ import InfoBox from '../Map/InfoBox'
 import Mapper from '../Mapper'
 
 const Map = Backbone.Model.extend({
-  urlRoot: '/maps',
+  urlRoot: '/main/maps',
   blacklist: ['created_at', 'updated_at', 'created_at_clean', 'updated_at_clean', 'user_name', 'contributor_count', 'topic_count', 'synapse_count', 'topics', 'synapses', 'mappings', 'mappers'],
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)

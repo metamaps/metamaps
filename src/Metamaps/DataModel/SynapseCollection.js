@@ -5,7 +5,7 @@ import Synapse from './Synapse'
 
 const SynapseCollection = Backbone.Collection.extend({
   model: Synapse,
-  url: '/synapses'
+  url: '/main/synapses'
 })
 
 export default SynapseCollection

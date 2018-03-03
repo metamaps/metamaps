@@ -5,7 +5,7 @@ import Topic from './Topic'
 
 const TopicCollection = Backbone.Collection.extend({
   model: Topic,
-  url: '/topics'
+  url: '/main/topics'
 })
 
 export default TopicCollection

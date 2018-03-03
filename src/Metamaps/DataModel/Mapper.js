@@ -4,7 +4,7 @@ try { Backbone.$ = window.$ } catch (err) {}
 import outdent from 'outdent'
 
 const Mapper = Backbone.Model.extend({
-  urlRoot: '/users',
+  urlRoot: '/main/users',
   blacklist: ['created_at', 'updated_at', 'follows'],
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)

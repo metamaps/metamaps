@@ -109,7 +109,7 @@ const ExploreMaps = {
 
     // first load the mapper object and then call the render function
     $.ajax({
-      url: '/users/' + self.collection.mapperId + '/details.json',
+      url: '/main/users/' + self.collection.mapperId + '/details.json',
       success: function(response) {
         self.mapper = response
         document.title = self.mapper.name + ' | Metamaps'
@@ -122,7 +122,7 @@ const ExploreMaps = {
     })
   },
   onStar: function(map) {
-    $.post('/maps/' + map.id + '/star')
+    $.post('/main/maps/' + map.id + '/star')
     map.set('star_count', map.get('star_count') + 1)
     if (DataModel.Stars) DataModel.Stars.push({ user_id: Active.Mapper.id, map_id: map.id })
     DataModel.Maps.Starred.add(map)
@@ -131,14 +131,14 @@ const ExploreMaps = {
   },
   onRequest: function(map) {
     $.post({
-      url: `/maps/${map.id}/access_request`
+      url: `/main/maps/${map.id}/access_request`
     })
     GlobalUI.notifyUser('You will be notified by email if request accepted')
   },
   onMapFollow: function(map) {
     const isFollowing = map.isFollowedBy(Active.Mapper)
     $.post({
-      url: `/maps/${map.id}/${isFollowing ? 'un' : ''}follow`
+      url: `/main/maps/${map.id}/${isFollowing ? 'un' : ''}follow`
     })
     if (isFollowing) {
       GlobalUI.notifyUser('You are no longer following this map')

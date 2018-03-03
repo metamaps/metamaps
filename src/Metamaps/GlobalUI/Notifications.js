@@ -9,7 +9,7 @@ const Notifications = {
   },
   fetch: render => {
     $.ajax({
-      url: '/notifications.json',
+      url: '/main/notifications.json',
       success: function(data) {
         Notifications.notifications = data
         render()
@@ -27,7 +27,7 @@ const Notifications = {
   markAsRead: (render, id) => {
     const n = Notifications.notifications.find(n => n.id === id)
     $.ajax({
-      url: `/notifications/${id}/mark_read.json`,
+      url: `/main/notifications/${id}/mark_read.json`,
       method: 'PUT',
       success: function(r) {
         if (n) {
@@ -44,7 +44,7 @@ const Notifications = {
   markAsUnread: (render, id) => {
     const n = Notifications.notifications.find(n => n.id === id)
     $.ajax({
-      url: `/notifications/${id}/mark_unread.json`,
+      url: `/main/notifications/${id}/mark_unread.json`,
       method: 'PUT',
       success: function() {
         if (n) {

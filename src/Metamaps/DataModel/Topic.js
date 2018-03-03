@@ -10,7 +10,7 @@ import Visualize from '../Visualize'
 import DataModel from './index'
 
 const Topic = Backbone.Model.extend({
-  urlRoot: '/topics',
+  urlRoot: '/main/topics',
   blacklist: ['node', 'created_at', 'updated_at', 'user_name', 'user_image', 'map_count', 'synapse_count'],
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)

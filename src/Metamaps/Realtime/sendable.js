@@ -101,7 +101,7 @@ export const acceptCall = self => userid => {
     invited: Active.Mapper.id,
     inviter: userid
   })
-  $.post('/maps/' + Active.Map.id + '/events/conversation')
+  $.post('/main/maps/' + Active.Map.id + '/events/conversation')
   self.joinCall()
   GlobalUI.clearNotify()
 }

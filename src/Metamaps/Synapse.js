@@ -18,7 +18,7 @@ const Synapse = {
     // if the desired topic is not yet in the local topic repository, fetch it
     if (DataModel.Synapses.get(id) === undefined) {
       $.ajax({
-        url: '/synapses/' + id + '.json',
+        url: '/main/synapses/' + id + '.json',
         success: function(data) {
           DataModel.Synapses.add(data)
           callback(DataModel.Synapses.get(id))

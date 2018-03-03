@@ -213,7 +213,7 @@ const InfoBox = {
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/search/mappers?term=%QUERY',
+          url: '/main/search/mappers?term=%QUERY',
           wildcard: '%QUERY'
         }
       })
@@ -237,7 +237,7 @@ const InfoBox = {
     var self = InfoBox
     DataModel.Collaborators.remove(DataModel.Collaborators.get(collaboratorId))
     var mapperIds = DataModel.Collaborators.models.map(function(mapper) { return mapper.id })
-    $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
+    $.post('/main/maps/' + Active.Map.id + '/access', { access: mapperIds })
     self.updateNumbers()
   },
   addCollaborator: function(newCollaboratorId) {
@@ -251,13 +251,13 @@ const InfoBox = {
     function callback(mapper) {
       DataModel.Collaborators.add(mapper)
       var mapperIds = DataModel.Collaborators.models.map(function(mapper) { return mapper.id })
-      $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
+      $.post('/main/maps/' + Active.Map.id + '/access', { access: mapperIds })
       var name = DataModel.Collaborators.get(newCollaboratorId).get('name')
       GlobalUI.notifyUser(name + ' will be notified')
       self.updateNumbers()
     }
 
-    $.getJSON('/users/' + newCollaboratorId + '.json', callback)
+    $.getJSON('/main/users/' + newCollaboratorId + '.json', callback)
   },
   handleResultClick: function(event, item) {
     var self = InfoBox

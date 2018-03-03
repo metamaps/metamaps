@@ -63,7 +63,7 @@ const Map = {
     self.setAccessRequest()
     const mapId = Active.Map.id
     $.post({
-      url: `/maps/${mapId}/access_request`
+      url: `/main/maps/${mapId}/access_request`
     })
     GlobalUI.notifyUser('Map creator will be notified of your request')
   },
@@ -117,7 +117,7 @@ const Map = {
     else {
       Loading.show()
       $.ajax({
-        url: '/maps/' + id + '/contains.json',
+        url: '/main/maps/' + id + '/contains.json',
         success: function(data) {
           Active.Map = new DataModelMap(data.map)
           DataModel.Mappers = new DataModel.MapperCollection(data.mappers)
@@ -153,7 +153,7 @@ const Map = {
     var self = Map
 
     if (!Active.Map) return
-    $.post('/maps/' + Active.Map.id + '/star')
+    $.post('/main/maps/' + Active.Map.id + '/star')
     DataModel.Stars.push({ user_id: Active.Mapper.id, map_id: Active.Map.id })
     DataModel.Maps.Starred.add(Active.Map)
     GlobalUI.notifyUser('Map is now starred')
@@ -164,7 +164,7 @@ const Map = {
     var self = Map
 
     if (!Active.Map) return
-    $.post('/maps/' + Active.Map.id + '/unstar')
+    $.post('/main/maps/' + Active.Map.id + '/unstar')
     DataModel.Stars = DataModel.Stars.filter(function(s) { return s.user_id !== Active.Mapper.id })
     DataModel.Maps.Starred.remove(Active.Map)
     self.mapIsStarred = false
@@ -263,7 +263,7 @@ const Map = {
       $.ajax({
         type: 'PATCH',
         dataType: 'json',
-        url: `/maps/${Active.Map.id}`,
+        url: `/main/maps/${Active.Map.id}`,
         data: formData,
         processData: false,
         contentType: false,
