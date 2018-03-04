@@ -8,7 +8,7 @@ import Synapse from '../Synapse'
 import Topic from '../Topic'
 
 const Mapping = Backbone.Model.extend({
-  urlRoot: '/main/mappings',
+  urlRoot: '/mappings',
   blacklist: ['created_at', 'updated_at'],
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)

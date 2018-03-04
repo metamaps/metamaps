@@ -98,7 +98,7 @@ const ContextMenu = {
 
     $.ajax({
       type: 'GET',
-      url: `/main/topics/${id}/relative_numbers.json?network=${topicsString}`,
+      url: `/topics/${id}/relative_numbers.json?network=${topicsString}`,
       success: successCallback,
       error: function() {}
     })

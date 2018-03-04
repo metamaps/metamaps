@@ -370,7 +370,7 @@ const Import = {
       {
         success: function(topic) {
           if (topic.get('name') !== 'Link') return
-          $.get('/main/hacks/load_url_title', {
+          $.get('/hacks/load_url_title', {
             url
           }, function success(data, textStatus) {
             if (typeof data === 'string' && data.trim() === '') return

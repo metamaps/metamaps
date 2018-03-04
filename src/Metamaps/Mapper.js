@@ -7,7 +7,7 @@ const Mapper = {
   // @param id = the id of the mapper to retrieve
   get: function(id, callback) {
     $.ajax({
-      url: `/main/users/${id}.json`,
+      url: `/users/${id}.json`,
       success: data => {
         callback(new DataModel.Mapper(data))
       }

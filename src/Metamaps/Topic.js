@@ -28,7 +28,7 @@ const Topic = {
     // if the desired topic is not yet in the local topic repository, fetch it
     if (DataModel.Topics.get(id) === undefined) {
       $.ajax({
-        url: '/main/topics/' + id + '.json',
+        url: '/topics/' + id + '.json',
         success: function(data) {
           DataModel.Topics.add(data)
           callback(DataModel.Topics.get(id))
@@ -55,7 +55,7 @@ const Topic = {
     else {
       Loading.show()
       $.ajax({
-        url: '/main/topics/' + id + '/network.json',
+        url: '/topics/' + id + '/network.json',
         success: function(data) {
           Active.Topic = new DataModel.Topic(data.topic)
           DataModel.Creators = new DataModel.MapperCollection(data.creators)
@@ -90,7 +90,7 @@ const Topic = {
   onTopicFollow: topic => {
     const isFollowing = topic.isFollowedBy(Active.Mapper)
     $.post({
-      url: `/main/topics/${topic.id}/${isFollowing ? 'un' : ''}follow`
+      url: `/topics/${topic.id}/${isFollowing ? 'un' : ''}follow`
     })
     if (isFollowing) {
       GlobalUI.notifyUser('You are no longer following this topic')
@@ -166,7 +166,7 @@ const Topic = {
 
     $.ajax({
       type: 'GET',
-      url: '/main/topics/' + topic.id + '/relatives.json?' + paramsString,
+      url: '/topics/' + topic.id + '/relatives.json?' + paramsString,
       success: successCallback,
       error: function() {}
     })

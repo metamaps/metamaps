@@ -1,13 +1,12 @@
-import request from 'request'
+const request = require('request')
 
 function apiProxyMiddleware (req, res, next) {
-    if (true) { // is application/json
+    if (!req.xhr) {
         return next()
     }
-    console.log(req.get('Content-Type'))
     const method = req.method.toLowerCase()
     req.pipe(
-        request[method](url, {
+        request[method](process.env.API + req.originalUrl, {
             headers: {
                 ...req.headers,
                 host: process.env.API
@@ -18,4 +17,4 @@ function apiProxyMiddleware (req, res, next) {
     .pipe(res)
 }
 
-export default apiProxyMiddleware
+module.exports = apiProxyMiddleware

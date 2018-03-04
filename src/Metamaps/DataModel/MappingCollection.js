@@ -5,7 +5,7 @@ import Mapping from './Mapping'
 
 const MappingCollection = Backbone.Collection.extend({
   model: Mapping,
-  url: '/main/mappings'
+  url: '/mappings'
 })
 
 export default MappingCollection

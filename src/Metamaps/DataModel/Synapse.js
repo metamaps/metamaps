@@ -11,7 +11,7 @@ import Visualize from '../Visualize'
 import DataModel from './index'
 
 const Synapse = Backbone.Model.extend({
-  urlRoot: '/main/synapses',
+  urlRoot: '/synapses',
   blacklist: ['edge', 'created_at', 'updated_at'],
   toJSON: function(options) {
     return _.omit(this.attributes, this.blacklist)

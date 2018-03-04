@@ -147,7 +147,7 @@ const Create = {
     $.ajax({
       type: 'POST',
       dataType: 'json',
-      url: '/main/user/updatemetacodes',
+      url: '/user/updatemetacodes',
       data: mdata,
       success: function(data) {
         console.log('selected metacodes saved')
@@ -206,7 +206,7 @@ const Create = {
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/main/topics/autocomplete_topic?term=%QUERY',
+          url: '/topics/autocomplete_topic?term=%QUERY',
           wildcard: '%QUERY'
         }
       })
@@ -296,7 +296,7 @@ const Create = {
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/main/search/synapses?term=%QUERY',
+          url: '/search/synapses?term=%QUERY',
           wildcard: '%QUERY'
         }
       })
@@ -304,7 +304,7 @@ const Create = {
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/main/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
+          url: '/search/synapses?topic1id=%TOPIC1&topic2id=%TOPIC2',
           prepare: function(query, settings) {
             var self = Create.newSynapse
             if (Selected.Nodes.length < 2 && self.topic1id && self.topic2id) {

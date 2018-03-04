@@ -85,7 +85,7 @@ const SynapseCard = {
     $('#edit_synapse_desc').attr('data-bip-attribute', 'desc')
     $('#edit_synapse_desc').attr('data-bip-type', 'textarea')
     $('#edit_synapse_desc').attr('data-bip-nil', dataNil)
-    $('#edit_synapse_desc').attr('data-bip-url', '/main/synapses/' + synapse.id)
+    $('#edit_synapse_desc').attr('data-bip-url', '/synapses/' + synapse.id)
     $('#edit_synapse_desc').attr('data-bip-value', synapse.get('desc'))
     $('#edit_synapse_desc').html(synapse.get('desc'))
 

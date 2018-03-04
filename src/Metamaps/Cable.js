@@ -67,7 +67,7 @@ const Cable = {
         })
       }
       $.ajax({
-        url: '/main/synapses/' + event.synapse.id + '.json',
+        url: '/synapses/' + event.synapse.id + '.json',
         success: function(response) {
           DataModel.Synapses.add(response)
           synapse = DataModel.Synapses.get(response.id)
@@ -77,7 +77,7 @@ const Cable = {
         }
       })
       $.ajax({
-        url: '/main/mappings/' + event.mapping_id + '.json',
+        url: '/mappings/' + event.mapping_id + '.json',
         success: function(response) {
           DataModel.Mappings.add(response)
           mapping = DataModel.Mappings.get(response.id)
@@ -149,7 +149,7 @@ const Cable = {
         })
       }
       $.ajax({
-        url: '/main/topics/' + event.topic.id + '.json',
+        url: '/topics/' + event.topic.id + '.json',
         success: function(response) {
           DataModel.Topics.add(response)
           topic = DataModel.Topics.get(response.id)
@@ -159,7 +159,7 @@ const Cable = {
         }
       })
       $.ajax({
-        url: '/main/mappings/' + event.mapping_id + '.json',
+        url: '/mappings/' + event.mapping_id + '.json',
         success: function(response) {
           DataModel.Mappings.add(response)
           mapping = DataModel.Mappings.get(response.id)

@@ -5,7 +5,7 @@ import Message from './Message'
 
 const MessageCollection = Backbone.Collection.extend({
   model: Message,
-  url: '/main/messages'
+  url: '/messages'
 })
 
 export default MessageCollection

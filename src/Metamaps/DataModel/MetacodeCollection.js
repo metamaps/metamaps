@@ -5,7 +5,7 @@ import Metacode from './Metacode'
 
 const MetacodeCollection = Backbone.Collection.extend({
   model: Metacode,
-  url: '/main/metacodes',
+  url: '/metacodes',
   comparator: function(a, b) {
     a = a.get('name').toLowerCase()
     b = b.get('name').toLowerCase()

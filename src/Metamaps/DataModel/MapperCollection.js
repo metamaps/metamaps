@@ -5,7 +5,7 @@ import Mapper from './Mapper'
 
 const MapperCollection = Backbone.Collection.extend({
   model: Mapper,
-  url: '/main/users'
+  url: '/users'
 })
 
 export default MapperCollection

@@ -68,7 +68,7 @@ const Search = {
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/main/search/topics',
+          url: '/search/topics',
           prepare: function(query, settings) {
             settings.url += '?term=' + query
             if (Active.Mapper && self.limitTopicsToMe) {
@@ -101,7 +101,7 @@ const Search = {
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/main/search/maps',
+          url: '/search/maps',
           prepare: function(query, settings) {
             settings.url += '?term=' + query
             if (Active.Mapper && self.limitMapsToMe) {
@@ -135,7 +135,7 @@ const Search = {
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/main/search/mappers?term=%QUERY',
+          url: '/search/mappers?term=%QUERY',
           wildcard: '%QUERY'
         }
       })
