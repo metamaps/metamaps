@@ -1,11 +1,11 @@
 <div id="yield">
   <div class="centerContent">
     <div class="page-header">
-      <h2><%= t('doorkeeper.authorizations.error.title') %></h2>
+      <h2>{ t('doorkeeper.authorizations.error.title') }</h2>
     </div>
 
     <main role="main">
-      <div><%= @pre_auth.error_response.body[:error_description] %></div>
+      <div>{ @pre_auth.error_response.body[:error_description] }</div>
     </main>
   </div>
 </div>

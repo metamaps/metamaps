@@ -1,15 +1,15 @@
-<% #
+{ #
    # @file
    # Shows a list of recently active maps
    # GET /explore/active(.:format)
-   # %>
+   # }
 
 <script>
-  <% content_for :title, "Explore Active Maps | Metamaps" %>
-  <% content_for :mobile_title, "Recently Active" %>
+  { content_for :title, "Explore Active Maps | Metamaps" }
+  { content_for :mobile_title, "Recently Active" }
 
   Metamaps.currentSection = "explore";
   Metamaps.currentPage = "active";
-  Metamaps.ServerData.Active = <%= @maps.to_json.html_safe %>;
+  Metamaps.ServerData.Active = { @maps.to_json.html_safe };
   Metamaps.GlobalUI.Search.focus();
 </script>

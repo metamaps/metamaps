@@ -1,11 +1,11 @@
 <div id="yield">
 <div class="centerContent">
-<%= link_to t('doorkeeper.applications.buttons.back'), oauth_applications_path(), class: 'button link-button button-margin' %>
+{ link_to t('doorkeeper.applications.buttons.back'), oauth_applications_path(), class: 'button link-button button-margin' }
 <div class="page-header">
-  <h2><%= t('.title') %></h2>
+  <h2>{ t('.title') }</h2>
 </div>
 
-<%= render 'form', application: @application %>
+{ render 'form', application: @application }
 </div>
 </div>
-<%= render 'script' %>
+{ render 'script' }

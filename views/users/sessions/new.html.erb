@@ -1,32 +1,32 @@
-<% content_for :title, "Sign In | Metamaps" %>
-<% content_for :mobile_title, "Login" %>
+{ content_for :title, "Sign In | Metamaps" }
+{ content_for :mobile_title, "Login" }
 
 <div id="yield">
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :method => :post, :class => "centerGreyForm login" }) do |f| %>
+{ form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :method => :post, :class => "centerGreyForm login" }) do |f| }
   <h3>SIGN IN</h3>
   
   <div class="accountImage"></div>
   <div>
-  <%= f.email_field :email, :autofocus => true, :placeholder => "Email" %></div>
+  { f.email_field :email, :autofocus => true, :placeholder => "Email" }</div>
 
   <div>
-  <%= f.password_field :password, :placeholder => "Password" %></div>
+  { f.password_field :password, :placeholder => "Password" }</div>
 
-  <div class="accountSubmit"><%= f.submit "Sign in" %></div>
+  <div class="accountSubmit">{ f.submit "Sign in" }</div>
   
-  <% if devise_mapping.rememberable? -%>
+  { if devise_mapping.rememberable? -}
   <div class="accountRememberMe">
-    <%= f.label :remember_me, "Stay signed in" %>
-    <%= f.check_box :remember_me %>
+    { f.label :remember_me, "Stay signed in" }
+    { f.check_box :remember_me }
     <div class="clearfloat"></div>
   </div>
-  <% end -%>
+  { end -}
   <div class="clearfloat"></div>
   <div class="accountForgotPass">
-    <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-      <%= link_to "Forgot password?", new_password_path(resource_name) %>
-    <% end -%>
+    {- if devise_mapping.recoverable? && controller_name != 'passwords' }
+      { link_to "Forgot password?", new_password_path(resource_name) }
+    { end -}
   </div>
-<% end %>
+{ end }
 </div>
 

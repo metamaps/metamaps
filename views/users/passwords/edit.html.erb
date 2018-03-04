@@ -1,20 +1,20 @@
-<% content_for :title, "Change Password | Metamaps" %>
-<% content_for :mobile_title, "Change Password" %>
+{ content_for :title, "Change Password | Metamaps" }
+{ content_for :mobile_title, "Change Password" }
 
 <div id="yield">
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "forgotPassword centerGreyForm forgotPasswordReset" }) do |f| %>
-  <%= f.hidden_field :reset_password_token %>
+{ form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "forgotPassword centerGreyForm forgotPasswordReset" }) do |f| }
+  { f.hidden_field :reset_password_token }
   
   <h3>Change password</h3>
 
-  <div><%= f.label :password, "New password", :class => "firstFieldText" %>
-  <%= f.password_field :password, :autofocus => true %></div>
+  <div>{ f.label :password, "New password", :class => "firstFieldText" }
+  { f.password_field :password, :autofocus => true }</div>
 
-  <div><%= f.label :password_confirmation, "Confirm new password", :class => "firstFieldText" %>
-  <%= f.password_field :password_confirmation %></div>
+  <div>{ f.label :password_confirmation, "Confirm new password", :class => "firstFieldText" }
+  { f.password_field :password_confirmation }</div>
 
-  <div><%= f.submit "Change my password" %></div>
+  <div>{ f.submit "Change my password" }</div>
   
-<% end %>
+{ end }
 </div>
 

@@ -1,14 +1,14 @@
 <div id="yield">
   <div class='centerContent'>
-    <%= render 'form' %>
+    { render 'form' }
   </div>
 </div>
 
 <script>
-<% Metacode.all.each do |m| %>
-  <% if m.in_metacode_set(@metacode_set) %>
-    Metamaps.Admin.selectMetacodes.push("<%= m.id %>");
-  <% end %>
-  Metamaps.Admin.allMetacodes.push("<%= m.id %>");
-<% end %>
+{ Metacode.all.each do |m| }
+  { if m.in_metacode_set(@metacode_set) }
+    Metamaps.Admin.selectMetacodes.push("{ m.id }");
+  { end }
+  Metamaps.Admin.allMetacodes.push("{ m.id }");
+{ end }
 </script>

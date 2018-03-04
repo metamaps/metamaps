@@ -12,31 +12,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= yield(:title) %></title>
-  <%= csrf_meta_tags %>
+  <title>{ yield(:title) }</title>
+  { csrf_meta_tags }
   <meta name="viewport" content="width=device-width, user-scalable=no">
   
-  <% if controller.class.name == 'MapsController' && @map %>
-    <meta property="og:title" content="<%= @map.name %>" />
+  { if controller.class.name == 'MapsController' && @map }
+    <meta property="og:title" content="{ @map.name }" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="<%= @map.screenshot_url %>" />
-    <meta property="og:description" content="<%= @map.desc %>" />
-    <meta property="og:url" content="<%= request.original_url %>" />
+    <meta property="og:image" content="{ @map.screenshot_url }" />
+    <meta property="og:description" content="{ @map.desc }" />
+    <meta property="og:url" content="{ request.original_url }" />
 
-    <meta name="twitter:title" content="<%= @map.name %>" />
-    <meta name="twitter:image" content="<%= @map.screenshot_url %>" />
-    <meta name="twitter:description" content="<%= @map.desc %>" />
-    <meta name="twitter:url" content="<%= request.original_url %>" />
-  <% end %>
+    <meta name="twitter:title" content="{ @map.name }" />
+    <meta name="twitter:image" content="{ @map.screenshot_url }" />
+    <meta name="twitter:description" content="{ @map.desc }" />
+    <meta name="twitter:url" content="{ request.original_url }" />
+  { end }
 
-  <% if controller_name == 'maps' && action_name == "conversation" %>
-    <%= stylesheet_link_tag    "application", :media => "all" %>
-    <%= stylesheet_link_tag    "application-secret", :media => "all" %>
-    <%= javascript_include_tag "application-secret" %>
-  <% else %>
-    <%= stylesheet_link_tag    "application", :media => "all" %>
-    <%= javascript_include_tag "application" %>
-  <% end %>
+  { if controller_name == 'maps' && action_name == "conversation" }
+    { stylesheet_link_tag    "application", :media => "all" }
+    { stylesheet_link_tag    "application-secret", :media => "all" }
+    { javascript_include_tag "application-secret" }
+  { else }
+    { stylesheet_link_tag    "application", :media => "all" }
+    { javascript_include_tag "application" }
+  { end }
 
   <!-- typekit for vinyl font -->
   <script type="text/javascript" src="https://use.typekit.net/tki2nyo.js"></script>

@@ -1,7 +1,7 @@
-<%#
+{#
   # @file
   # The inner HTML of the cheatsheet
-  #%>
+  #}
 
 <h3>HELP</h3>
 
@@ -26,7 +26,7 @@
   </ul>
 
   <div id="csTopicView">
-    <div class="csItem"><span class="csTitle">Enter Topic (radial) View:</span> Click on a Topic result from Search, or click the synapse <img src="<%= asset_path 'synapse16.png' %>" width="16" align="middle" /> icon inside open Topic Card on map</div>
+    <div class="csItem"><span class="csTitle">Enter Topic (radial) View:</span> Click on a Topic result from Search, or click the synapse <img src="{ asset_path 'synapse16.png' }" width="16" align="middle" /> icon inside open Topic Card on map</div>
     <div class="csItem"><span class="csTitle">Recenter Topics around chosen Topic:</span> Alt + click on the topic OR Alt + E</div>
     <div class="csItem"><span class="csTitle">Reveal the siblings for a Topic:</span> Right-click and choose 'Reveal siblings' OR Alt + R</div>
     <div class="csItem"><span class="csTitle">Center topic and reveal siblings:</span> Alt + T</div>
@@ -64,7 +64,7 @@
         <span class="csTitle">Change Topic permission:</span> Click on 'Permission' icon (only for topic creator)
     </div>
     <div class="csItem indented">
-        <span class="csTitle">Open Topic view:</span> Click on <img src="<%= asset_path 'synapse16.png' %>" width="16" align="middle" /> icon within topic card bar
+        <span class="csTitle">Open Topic view:</span> Click on <img src="{ asset_path 'synapse16.png' }" width="16" align="middle" /> icon within topic card bar
     </div>
     <div class="csItem indented">
         <span class="csTitle">Close Topic card:</span> Click on canvas

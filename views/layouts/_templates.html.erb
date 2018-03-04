@@ -1,7 +1,7 @@
-<%#
+{#
   # @file
   # templates for the upper right autocomplete results
-  #%>
+  #}
 
 <div class="templates">
   <script type="text/template" id="mapInfoBoxTemplate">
@@ -85,7 +85,7 @@
   <script type="text/template" id="mapSearchTemplate">
     <div class="result{{rtype}}">
       <div class="searchResIconWrapper">
-        <img class="icon" src="<%= asset_path('metamap36c.png') %>">
+        <img class="icon" src="{ asset_path('metamap36c.png') }">
       </div>
       <div class="resultText">
         <p class="resultTitle">{{label}}</p>

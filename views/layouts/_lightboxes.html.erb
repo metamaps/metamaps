@@ -1,7 +1,7 @@
-<%#
+{#
   # @file
   # The inner HTML of the account box that comes up in the bottom left
-  #%>
+  #}
 <div id="lightbox_overlay">
   <div id="lightbox_main">
     <a id="lightbox_close" href="#"></a>
@@ -19,9 +19,9 @@
 
               <div id="rightAboutParms">
                 <p>PRIVATE BETA</p>
-                <p><%= METAMAPS_VERSION %></p>
-                <p><%= METAMAPS_BUILD %></p>
-                <p><%= METAMAPS_LAST_UPDATED %></p>
+                <p>{ METAMAPS_VERSION }</p>
+                <p>{ METAMAPS_BUILD }</p>
+                <p>{ METAMAPS_LAST_UPDATED }</p>
               </div>
               <div class="clearfloat"></div>
             </div>
@@ -83,10 +83,10 @@
       </div>
 
       <div class="lightboxContent" id="cheatsheet">
-        <%= render :partial => 'shared/cheatsheet' %>
+        { render :partial => 'shared/cheatsheet' }
       </div>
 
-      <% if current_user %>
+      { if current_user }
         <div class="lightboxContent" id="invite">
           <h3>SHARE INVITE</h3>
 
@@ -95,20 +95,20 @@
 <p>As a valued beta tester, you have the ability to invite your peers, colleagues and collaborators onto the platform.</p>
 <p>Below is a personal invite link containing your unique access code, which can be used multiple times.</p>
             <div id="joinCodesBox">
-            <p class="joinCodes"><%= invite_link() %>
-            <button class="button" onclick="Metamaps.GlobalUI.shareInvite('<%= @invite_link %>');">COPY INVITE LINK!</button>
+            <p class="joinCodes">{ invite_link() }
+            <button class="button" onclick="Metamaps.GlobalUI.shareInvite('{ @invite_link }');">COPY INVITE LINK!</button>
             </div>
 
         </div>
 
         <div class="lightboxContent" id="forkmap">
-          <%= render :partial => 'shared/forkmap' %>
+          { render :partial => 'shared/forkmap' }
         </div>
 
         <div class="lightboxContent" id="switchMetacodes">
-          <%= render :partial => 'shared/switchmetacodes' %>
+          { render :partial => 'shared/switchmetacodes' }
         </div>
-      <% end %>
+      { end }
 
     </div>
   </div>

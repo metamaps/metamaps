@@ -1,23 +1,23 @@
-<%#
+{#
 # @file
 # Main application file. Holds scaffolding present on every page.
 # Then a certain non-partial view (no _ preceding filename) will be
 # displayed within, based on URL
-#%>
+#}
 
-<%= render :partial => 'layouts/head' %>
-<body class="<%= current_user ? "authenticated" : "unauthenticated" %> controller-<%= controller_name %> action-<%= action_name %>">
+{ render :partial => 'layouts/head' }
+<body class="{ current_user ? "authenticated" : "unauthenticated" } controller-{ controller_name } action-{ action_name }">
     <div class="main" id="react-app"></div>
-    <%= yield %>
-    <% if current_user %>
-        <% # for creating and pulling in topics and synapses %>
-        <% if controller_name == 'maps' && action_name == "conversation" %>
-          <%= render :partial => 'maps/newtopicsecret' %>
-        <% else %>
-          <%= render :partial => 'maps/newtopic' %>
-        <% end %>
-        <%= render :partial => 'maps/newsynapse' %>
-        <% # for populating the change metacode list on the topic card %>
-        <%= render :partial => 'shared/metacodeoptions' %>
-    <% end %>
-<%= render :partial => 'layouts/foot' %>
+    { yield }
+    { if current_user }
+        { # for creating and pulling in topics and synapses }
+        { if controller_name == 'maps' && action_name == "conversation" }
+          { render :partial => 'maps/newtopicsecret' }
+        { else }
+          { render :partial => 'maps/newtopic' }
+        { end }
+        { render :partial => 'maps/newsynapse' }
+        { # for populating the change metacode list on the topic card }
+        { render :partial => 'shared/metacodeoptions' }
+    { end }
+{ render :partial => 'layouts/foot' }
