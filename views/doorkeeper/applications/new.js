@@ -18,4 +18,3 @@ class MyComponent extends Component {
 }
 
 export default MyComponent
-{ render 'script' }

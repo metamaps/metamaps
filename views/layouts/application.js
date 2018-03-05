@@ -12,7 +12,6 @@
           { render :partial => 'maps/newtopic' }
         { end }
         { render :partial => 'maps/newsynapse' }
-        { # for populating the change metacode list on the topic card }
         { render :partial => 'shared/metacodeoptions' }
     { end }
 { render :partial => 'layouts/foot' }
