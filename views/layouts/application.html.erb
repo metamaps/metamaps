@@ -1,9 +1,4 @@
-{#
-# @file
-# Main application file. Holds scaffolding present on every page.
-# Then a certain non-partial view (no _ preceding filename) will be
-# displayed within, based on URL
-#}
+
 
 { render :partial => 'layouts/head' }
 <body className="{ current_user ? "authenticated" : "unauthenticated" } controller-{ controller_name } action-{ action_name }">

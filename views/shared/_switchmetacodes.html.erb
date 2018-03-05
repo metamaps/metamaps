@@ -1,7 +1,4 @@
-{#
-  # @file
-  # The inner HTML for switching your metacode set
-  #}
+
 
 { metacodes = current_user.settings.metacodes }
 { selectedSet = metacodes[0].include?("metacodeset") ? metacodes[0].sub("metacodeset-","")  : "custom" }
