@@ -1,6 +1,11 @@
 
 
 
+import React, { Component } from react
+
+class MyComponent extends Component {
+  render = () => {
+    return (
 <div id="yield">
 { form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :className => "forgotPassword centerGreyForm" }) do |f| }
   
@@ -13,5 +18,10 @@
   
 { end }
 </div>
+    )
+  }
+}
+
+export default MyComponent
 
 

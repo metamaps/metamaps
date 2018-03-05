@@ -1,6 +1,11 @@
 
 
 
+import React, { Component } from react
+
+class MyComponent extends Component {
+  render = () => {
+    return (
 <div id="yield">
   <div className="centerContent withPadding back">
     { link_to 'Back to notifications', notifications_path }
@@ -50,3 +55,8 @@
      { end }
   </div>
 </div>
+    )
+  }
+}
+
+export default MyComponent

@@ -2,6 +2,11 @@
   
  
 
+import React, { Component } from react
+
+class MyComponent extends Component {
+  render = () => {
+    return (
 <div id="yield">
 { form_for @user, url: user_url, :html =>{ :multipart => true, :className => "edit_user centerGreyForm"} do |form| }
   <h3>Edit Settings</h3>
@@ -81,3 +86,8 @@
   <div className="clearfloat"></div>
 { end }
 </div>
+    )
+  }
+}
+
+export default MyComponent
