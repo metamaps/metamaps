@@ -1,7 +1,7 @@
 const request = require('request')
 
 function apiProxyMiddleware (req, res, next) {
-    if (!(req.xhr || req.originalUrl.indexOf('.json') > -1)) {
+    if (!(req.xhr || req.originalUrl.indexOf('.json') > -1 || req.method !== 'GET')) {
         return next()
     }
     console.log('xhr request', req.originalUrl)

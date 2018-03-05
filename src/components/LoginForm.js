@@ -14,11 +14,6 @@ class LoginForm extends Component {
     this.state = { token: '' }
   }
 
-  componentDidMount() {
-    const token = document.head.getElementsByTagName('meta')['csrf-token'].content
-    this.setState({token})
-  }
-
   emailInputDidMount(node) {
     node && node.focus()
   }
@@ -30,7 +25,6 @@ class LoginForm extends Component {
   render () {
     return <form className="loginAnywhere" id="new_user" action="/login" acceptCharset="UTF-8" method="post">
       <input name="utf8" type="hidden" value="✓" />
-      <input type="hidden" name="authenticity_token" value={this.state.token} />
       <div className="accountImage"></div>
       <div className="accountInput accountEmail">
         <input placeholder="Email" type="email" name="user[email]" id="user_email" ref={this.emailInputDidMount}/>
