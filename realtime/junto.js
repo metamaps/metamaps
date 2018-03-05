@@ -17,7 +17,7 @@ const {
   INVITE_A_CALL,
   JOIN_CALL,
   LEAVE_CALL
-} = require('../frontend/src/Metamaps/Realtime/events')
+} = require('../src/Metamaps/Realtime/events')
 
 const { mapRoom, userMapRoom } = require('./rooms')
 

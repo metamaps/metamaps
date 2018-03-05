@@ -4,6 +4,7 @@ function apiProxyMiddleware (req, res, next) {
     if (!req.xhr) {
         return next()
     }
+    console.log('xhr request', req.originalUrl)
     const method = req.method.toLowerCase()
     req.pipe(
         request[method](process.env.API + req.originalUrl, {
@@ -14,6 +15,7 @@ function apiProxyMiddleware (req, res, next) {
             followRedirect: false
         })
     )
+    .on('error', console.log)
     .pipe(res)
 }
 

@@ -4,7 +4,7 @@ const {
   LEAVE_MAP,
   JOIN_CALL,
   LEAVE_CALL
-} = require('../frontend/src/Metamaps/Realtime/events')
+} = require('../src/Metamaps/Realtime/events')
 
 const NOT_IN_CONVERSATION = 0
 const IN_CONVERSATION = 1

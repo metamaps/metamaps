@@ -10,7 +10,7 @@ const {
   SEND_COORDS,
   SEND_MAPPER_INFO,
   DRAG_TOPIC
-} = require('../frontend/src/Metamaps/Realtime/events')
+} = require('../src/Metamaps/Realtime/events')
 
 const { mapRoom, userMapRoom } = require('./rooms')
 

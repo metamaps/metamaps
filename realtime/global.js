@@ -7,7 +7,7 @@ const {
   LEAVE_CALL,
   JOIN_MAP,
   LEAVE_MAP
-} = require('../frontend/src/Metamaps/Realtime/events')
+} = require('../src/Metamaps/Realtime/events')
 
 module.exports = function(io, store) {
   store.subscribe(() => {
