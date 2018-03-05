@@ -5,6 +5,7 @@ import AutoLayout from './AutoLayout'
 import Cable from './Cable'
 import Control from './Control'
 import Create from './Create'
+import DataFetcher from './DataFetcher'
 import DataModel from './DataModel'
 import Debug from './Debug'
 import Filter from './Filter'
@@ -38,6 +39,7 @@ Metamaps.AutoLayout = AutoLayout
 Metamaps.Cable = Cable
 Metamaps.Control = Control
 Metamaps.Create = Create
+Metamaps.DataFetcher = DataFetcher
 Metamaps.DataModel = DataModel
 Metamaps.Debug = Debug
 Metamaps.Filter = Filter
@@ -69,7 +71,7 @@ Metamaps.Util = Util
 Metamaps.Views = Views
 Metamaps.Visualize = Visualize
 
-document.addEventListener('DOMContentLoaded', function() {
+function runInitFunctions(serverData) {
   // initialize all the modules
   for (const prop in Metamaps) {
     // this runs the init function within each sub-object on the Metamaps one
@@ -78,8 +80,20 @@ document.addEventListener('DOMContentLoaded', function() {
       Metamaps[prop].hasOwnProperty('init') &&
       typeof (Metamaps[prop].init) === 'function'
     ) {
-      Metamaps[prop].init(Metamaps.ServerData)
+      Metamaps[prop].init(serverData)
     }
+  }
+}
+
+// fetch data from API then pass into init functions
+document.addEventListener('DOMContentLoaded', async function() {
+  Metamaps.ServerData = Metamaps.ServerData || {}
+  try {
+    const metacodes = await DataFetcher.getMetacodes()
+    Metamaps.ServerData.Metacodes = metacodes
+    runInitFunctions(Metamaps.ServerData)
+  } catch (e) {
+    console.log(e)
   }
 })
 
