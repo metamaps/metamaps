@@ -1,5 +1,5 @@
 <div id="yield">
-  <div class='centerContent'>
+  <div className='centerContent'>
     <br />
     <table>
       <tr>
@@ -13,9 +13,9 @@
     { @metacodes.each do |metacode| }
       <tr>
         <td>{ metacode.name }</td>
-        <td class="iconURL">{ metacode.icon }</td>
+        <td className="iconURL">{ metacode.icon }</td>
         { if metacode.color }
-          <td class="iconColor" style="background-color: { metacode.color }">
+          <td className="iconColor" style="background-color: { metacode.color }">
             { metacode.color }
           </td>
         { else }

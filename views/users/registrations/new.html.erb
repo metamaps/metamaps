@@ -2,28 +2,28 @@
 { content_for :mobile_title, "Join" }
 
 <div id="yield">
-{ form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :post, :class => "new_user centerGreyForm" }) do |f| }
+{ form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :post, :className => "new_user centerGreyForm" }) do |f| }
   
   <h3>Sign Up</h3>
 
-  <div>{ f.label :name, "Name:", :class => "firstFieldText" }
+  <div>{ f.label :name, "Name:", :className => "firstFieldText" }
   { f.text_field :name, :autofocus => true }</div>
   
-  <div>{ f.label :email, "Email:", :class => "fieldText" }
+  <div>{ f.label :email, "Email:", :className => "fieldText" }
   { f.email_field :email }</div>
 
-  <div>{ f.label :password, "Password:", :class => "fieldText" }
+  <div>{ f.label :password, "Password:", :className => "fieldText" }
   { f.password_field :password }</div>
 
-  <div>{ f.label :password_confirmation, "Password Confirmation:", :class => "fieldText" }
+  <div>{ f.label :password_confirmation, "Password Confirmation:", :className => "fieldText" }
   { f.password_field :password_confirmation }</div>
   
-  <div>{ f.label "Access Code:", :class => "fieldText" }
+  <div>{ f.label "Access Code:", :className => "fieldText" }
   { f.text_field :joinedwithcode, :value => params[:code] }</div>
 
   <div>{ f.submit "Sign up!" }</div>
   
-  <div class = "smallText"><br />Don't have an access code?<br /><a href="/request">Request an Invite</a></div>
+  <div className = "smallText"><br />Don't have an access code?<br /><a href="/request">Request an Invite</a></div>
 { end }
 </div>
 

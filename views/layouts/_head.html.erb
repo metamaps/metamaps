@@ -16,7 +16,7 @@
   { csrf_meta_tags }
   <meta name="viewport" content="width=device-width, user-scalable=no">
   
-  { if controller.class.name == 'MapsController' && @map }
+  { if controller.className.name == 'MapsController' && @map }
     <meta property="og:title" content="{ @map.name }" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="{ @map.screenshot_url }" />

@@ -2,68 +2,68 @@
 { content_for :mobile_title, 'Notifications' }
 
 <div id="yield">
-  <div class="centerContent notificationsPage">
-    <header class="page-header">
-      <h2 class="title">Notifications</h4>
+  <div className="centerContent notificationsPage">
+    <header className="page-header">
+      <h2 className="title">Notifications</h4>
     </header>
-    <ul class="notifications">
+    <ul className="notifications">
       { blacklist = [MAP_ACCESS_REQUEST, MAP_ACCESS_APPROVED, MAP_INVITE_TO_EDIT] }
       { notifications = @notifications.to_a.delete_if{|n| blacklist.include?(n.notification_code) && (n.notified_object.nil? || n.notified_object.map.nil?) }}
       { notifications.each do |notification| }
         { receipt = @receipts.find_by(notification_id: notification.id) }
-        <li class="notification { receipt.is_read? ? 'read' : 'unread' }" id="notification-{ notification.id }">
+        <li className="notification { receipt.is_read? ? 'read' : 'unread' }" id="notification-{ notification.id }">
           { link_to notification_path(notification.id) do }
-            <div class="notification-actor">
+            <div className="notification-actor">
               { image_tag notification.sender.image(:thirtytwo) }
             </div>
-            <div class="notification-body">
-              <div class="in-bold">{ notification.sender.name }</div>
+            <div className="notification-body">
+              <div className="in-bold">{ notification.sender.name }</div>
               {
                 case notification.notification_code
                   when MAP_ACCESS_APPROVED }
                     { map = notification.notified_object.map }
-                    granted your request to edit map <span class="in-bold">{ map.name }</span>
+                    granted your request to edit map <span className="in-bold">{ map.name }</span>
                   { when MAP_ACCESS_REQUEST }
                     { map = notification.notified_object.map }
-                    wants permission to map with you on <span class="in-bold">{ map.name }</span>
+                    wants permission to map with you on <span className="in-bold">{ map.name }</span>
                     { if !notification.notified_object.answered }
-                      &nbsp;&nbsp;<div class="action">Offer a response</div>
+                      &nbsp;&nbsp;<div className="action">Offer a response</div>
                     { end }
                   { when MAP_INVITE_TO_EDIT }
                     { map = notification.notified_object.map }
-                    gave you edit access to map  <span class="in-bold">{ map.name }</span>
+                    gave you edit access to map  <span className="in-bold">{ map.name }</span>
                   { when TOPIC_ADDED_TO_MAP }
                     { topic = notification.notified_object.eventable
                     map = notification.notified_object.map }
-                    added topic <span class="in-bold">{ topic.name }</span> to map <span class="in-bold">{ map.name }</span>
+                    added topic <span className="in-bold">{ topic.name }</span> to map <span className="in-bold">{ map.name }</span>
                   { when TOPIC_CONNECTED_1 }
                     { topic1 = notification.notified_object&.topic1 }
                     { topic2 = notification.notified_object&.topic2 }
-                    connected <span class="in-bold">{ topic1&.name }</span> to <span class="in-bold">{ topic2&.name }</span>
+                    connected <span className="in-bold">{ topic1&.name }</span> to <span className="in-bold">{ topic2&.name }</span>
                   { when TOPIC_CONNECTED_2 }
                     { topic1 = notification.notified_object&.topic1 }
                     { topic2 = notification.notified_object&.topic2 }
-                    connected <span class="in-bold">{ topic2&.name }</span> to <span class="in-bold">{ topic1&.name }</span>
+                    connected <span className="in-bold">{ topic2&.name }</span> to <span className="in-bold">{ topic1&.name }</span>
                   { when MESSAGE_FROM_DEVS }
                     { notification.subject }
               { end }
             </div>
           { end }
-          <div class="notification-read-unread">
+          <div className="notification-read-unread">
             { if receipt.is_read? }
               { link_to 'mark as unread', mark_unread_notification_path(notification.id), remote: true, method: :put }
             { else }
               { link_to 'mark as read', mark_read_notification_path(notification.id), remote: true, method: :put }
             { end }
           </div>
-          <div class="notification-date">
+          <div className="notification-date">
             { notification.created_at.strftime("%b %d") }
           </div>
-          <div class="clearfloat"></div>
+          <div className="clearfloat"></div>
         </li>
       { end }
       { if notifications.count == 0 }
-        <div class="emptyInbox">
+        <div className="emptyInbox">
           You have no notifications. More time for dancing.
         </div>
       { end }
@@ -71,7 +71,7 @@
   </div>
 
   { if @notifications.total_pages > 1 }
-    <div class="centerContent withPadding pagination">
+    <div className="centerContent withPadding pagination">
       { paginate @notifications }
     </div>
   { end }

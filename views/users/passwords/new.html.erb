@@ -2,11 +2,11 @@
 { content_for :mobile_title, "Password Reset" }
 
 <div id="yield">
-{ form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "forgotPassword centerGreyForm" }) do |f| }
+{ form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :className => "forgotPassword centerGreyForm" }) do |f| }
   
   <h3>FORGOT PASSWORD?</h3>
 
-  <div>{ f.label :email, "Enter your email:", :class => "firstFieldText" }
+  <div>{ f.label :email, "Enter your email:", :className => "firstFieldText" }
   { f.email_field :email, :autofocus => true }</div>
 
   <div>{ f.submit "Send Password Reset Instructions" }</div>

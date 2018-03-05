@@ -3,48 +3,48 @@
   # templates for the upper right autocomplete results
   #}
 
-<div class="templates">
+<div className="templates">
   <script type="text/template" id="mapInfoBoxTemplate">
-    <div class="requestTitle">Click here to name this map</div>
-    <div class="mapInfoName" id="mapInfoName">{{{name}}}</div>
+    <div className="requestTitle">Click here to name this map</div>
+    <div className="mapInfoName" id="mapInfoName">{{{name}}}</div>
 
-    <div class="mapInfoStat">
-      <div class="infoStatIcon mapContributors hoverForTip">
-        <img id="mapContribs" class="{{contributors_class}}"
+    <div className="mapInfoStat">
+      <div className="infoStatIcon mapContributors hoverForTip">
+        <img id="mapContribs" className="{{contributors_className}}"
           width="25" height="25" src="{{contributor_image}}" />
-        <span class="count">{{contributor_count}}</span>
-        <div class="tip">{{{contributor_list}}}</div>
+        <span className="count">{{contributor_count}}</span>
+        <div className="tip">{{{contributor_list}}}</div>
       </div>
-      <div class="infoStatIcon mapTopics">
+      <div className="infoStatIcon mapTopics">
         {{topic_count}}
       </div>
-      <div class="infoStatIcon mapSynapses">
+      <div className="infoStatIcon mapSynapses">
         {{synapse_count}}
       </div>
-      <div class="infoStatIcon mapPermission {{permission}} hoverForTip">
+      <div className="infoStatIcon mapPermission {{permission}} hoverForTip">
         {{{map_creator_tip}}}
       </div>
-      <div class="clearfloat"></div>
+      <div className="clearfloat"></div>
     </div>
-    <div class="mapInfoDesc" id="mapInfoDesc">
+    <div className="mapInfoDesc" id="mapInfoDesc">
       {{{desc}}}
     </div>
 
-    <div class="mapInfoMeta">
-      <p class="mapCreatedAt"><span>Created by:</span> {{user_name}} on {{created_at}}</p>
-      <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
-      <div class="mapInfoButtonsWrapper">
-        <div class="mapInfoThumbnail">
-          <div class="thumbnail"></div>
-          <div class="tooltip">Update Thumbnail</div>
+    <div className="mapInfoMeta">
+      <p className="mapCreatedAt"><span>Created by:</span> {{user_name}} on {{created_at}}</p>
+      <p className="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
+      <div className="mapInfoButtonsWrapper">
+        <div className="mapInfoThumbnail">
+          <div className="thumbnail"></div>
+          <div className="tooltip">Update Thumbnail</div>
           <span>Thumb</span>
         </div>
-        <div class="mapInfoDelete">
-          <div class="deleteMap"></div>
+        <div className="mapInfoDelete">
+          <div className="deleteMap"></div>
           <span>Delete</span>
         </div>
-        <div class="mapInfoShare">
-          <div class="mapInfoShareIcon"></div>
+        <div className="mapInfoShare">
+          <div className="mapInfoShareIcon"></div>
           <span>Share</span>
         </div>
       </div>
@@ -52,133 +52,133 @@
   </script>
 
   <script type="text/template" id="topicSearchTemplate">
-    <div class="result{{rtype}}">
-      <div class="topicMetacode searchResIconWrapper">
-        <img src="{{typeImageURL}}" class="topicIcon" />
-        <div class="metacodeTip">{{type}}</div>
+    <div className="result{{rtype}}">
+      <div className="topicMetacode searchResIconWrapper">
+        <img src="{{typeImageURL}}" className="topicIcon" />
+        <div className="metacodeTip">{{type}}</div>
       </div>
-      <div class="resultText">
-        <p class="resultTitle">{{label}}</p>
-        <p class="resultDesc">{{description}}</p>
+      <div className="resultText">
+        <p className="resultTitle">{{label}}</p>
+        <p className="resultDesc">{{description}}</p>
       </div>
-      <div class="autoOptions">
-        <button class="addToMap hoverForTip" onclick="return Metamaps.Topic.getTopicFromSearch(event, {{id}})">
-          <span class="tip">add to map</span>
+      <div className="autoOptions">
+        <button className="addToMap hoverForTip" onclick="return Metamaps.Topic.getTopicFromSearch(event, {{id}})">
+          <span className="tip">add to map</span>
         </button>
-        <div class="mapCount">
+        <div className="mapCount">
           {{mapCount}}
         </div>
-        <div class="synapseCount">
+        <div className="synapseCount">
           {{synapseCount}}
         </div>
-        <div class="topicOriginatorIcon hoverForTip">
+        <div className="topicOriginatorIcon hoverForTip">
           <img width="18" height="18" src="{{originatorImage}}">
-          <span class="tip topicOriginator">{{originator}}</span>
+          <span className="tip topicOriginator">{{originator}}</span>
         </div>
-        <div class="topicPermission {{permission}}">
+        <div className="topicPermission {{permission}}">
         </div>
       </div>
-      <div class="clearfloat"></div>
+      <div className="clearfloat"></div>
     </div>
   </script>
 
   <script type="text/template" id="mapSearchTemplate">
-    <div class="result{{rtype}}">
-      <div class="searchResIconWrapper">
-        <img class="icon" src="/images/metamap36c.png">
+    <div className="result{{rtype}}">
+      <div className="searchResIconWrapper">
+        <img className="icon" src="/images/metamap36c.png">
       </div>
-      <div class="resultText">
-        <p class="resultTitle">{{label}}</p>
-        <p class="resultDesc">{{description}}</p>
+      <div className="resultText">
+        <p className="resultTitle">{{label}}</p>
+        <p className="resultDesc">{{description}}</p>
       </div>
-      <div class="autoOptions">
-        <div class="topicCount">
+      <div className="autoOptions">
+        <div className="topicCount">
           {{topicCount}}
         </div>
-        <div class="synapseCount">
+        <div className="synapseCount">
           {{synapseCount}}
         </div>
-        <div class="mapContributorsIcon hoverForTip">
+        <div className="mapContributorsIcon hoverForTip">
           <img id="mapContribs" width="25" height="25" src="{{mapContributorImage}}" />
-          <div class="tip">
+          <div className="tip">
             <ul>
               {{{contributorTip}}}
             </ul>
           </div>
           <span>{{contributorCount}}</span>
         </div>
-        <div class="mapPermission {{permission}}">
+        <div className="mapPermission {{permission}}">
         </div>
       </div>
-      <div class="clearfloat"></div>
+      <div className="clearfloat"></div>
     </div>
   </script>
 
   <script type="text/template" id="mapperSearchTemplate">
-    <div class="result{{rtype}}">
-      <div class="searchResIconWrapper">
-        <img class="icon" width="32" height="32" src="{{profile}}">
+    <div className="result{{rtype}}">
+      <div className="searchResIconWrapper">
+        <img className="icon" width="32" height="32" src="{{profile}}">
       </div>
-      <div class="resultText">
-        <p class="resultTitle">{{label}}</p>
+      <div className="resultText">
+        <p className="resultTitle">{{label}}</p>
       </div>
-      <div class="autoOptions">
-        <div class="mapperCreated">
+      <div className="autoOptions">
+        <div className="mapperCreated">
           <p>Mapping since: {{created_at}}</p>
         </div>
-        <div class="mapperGeneration">
+        <div className="mapperGeneration">
           <p>Generation: {{generation}}</p>
         </div>
-        <div class="mapCount">
+        <div className="mapCount">
           {{mapCount}}
         </div>
       </div>
-      <div class="clearfloat"></div>
+      <div className="clearfloat"></div>
     </div>
   </script>
 
   <script type="text/template" id="collaboratorSearchTemplate">
-    <div class="collabResult">
-      <div class="collabIconWrapper">
-        <img class="icon" width="25" height="25" src="{{profile}}">
+    <div className="collabResult">
+      <div className="collabIconWrapper">
+        <img className="icon" width="25" height="25" src="{{profile}}">
       </div>
-      <div class="collabNameWrapper">
-        <p class="collabName">{{label}}</p>
+      <div className="collabNameWrapper">
+        <p className="collabName">{{label}}</p>
       </div>
-      <div class="clearfloat"></div>
+      <div className="clearfloat"></div>
     </div>
   </script>
 
   <script type="text/template" id="synapseAutocompleteTemplate">
-    <div class="result{{rtype}}">
-      <p class="autocompleteSection synapseDesc">{{label}}</p>
-      <div class="synapseMetadata">
-        <div class="synapseOriginatorIcon hoverForTip">
+    <div className="result{{rtype}}">
+      <p className="autocompleteSection synapseDesc">{{label}}</p>
+      <div className="synapseMetadata">
+        <div className="synapseOriginatorIcon hoverForTip">
           <img width="24" height="24" src="{{originatorImage}}" />
-          <span class="tooltips synapseOriginator">{{originator}}</span>
+          <span className="tooltips synapseOriginator">{{originator}}</span>
         </div>
-        <div class="synapsePermission {{permission}}"></div>
+        <div className="synapsePermission {{permission}}"></div>
       </div>
-      <div class="clearfloat"></div>
+      <div className="clearfloat"></div>
     </div>
   </script>
 
   <script type="text/template" id="topicAutocompleteTemplate">
     <div>
-      <img class="autocompleteSection topicType" width="24" height="24"
+      <img className="autocompleteSection topicType" width="24" height="24"
         src="{{typeImageURL}}" alt="{{type}}" title="{{type}}" />
-      <p class="autocompleteSection topicTitle">{{label}}</p>
-      <div class="expandTopicMetadata"></div>
-      <div class="topicMetadata">
-        <div class="topicNumMaps">{{mapCount}}</div>
-        <div class="topicNumSynapses">{{synapseCount}}</div>
-        <div class="topicOriginatorIcon hoverForTip">
+      <p className="autocompleteSection topicTitle">{{label}}</p>
+      <div className="expandTopicMetadata"></div>
+      <div className="topicMetadata">
+        <div className="topicNumMaps">{{mapCount}}</div>
+        <div className="topicNumSynapses">{{synapseCount}}</div>
+        <div className="topicOriginatorIcon hoverForTip">
           <img width="24" height="24" src="{{originatorImage}}" />
-          <span class="tooltips topicOriginator">{{originator}}</span>
+          <span className="tooltips topicOriginator">{{originator}}</span>
         </div>
-        <div class="topicPermission {{permission}}"></div>
+        <div className="topicPermission {{permission}}"></div>
       </div>
-      <div class="clearfloat"></div>
+      <div className="clearfloat"></div>
     </div>
   </script>
 </div>

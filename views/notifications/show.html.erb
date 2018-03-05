@@ -2,24 +2,24 @@
 { content_for :mobile_title, 'Notifications' }
 
 <div id="yield">
-  <div class="centerContent withPadding back">
+  <div className="centerContent withPadding back">
     { link_to 'Back to notifications', notifications_path }
   </div>
-  <div class="centerContent notificationPage">
-    <h2 class="notification-title">
+  <div className="centerContent notificationPage">
+    <h2 className="notification-title">
       { case @notification.notification_code
            when MAP_ACCESS_REQUEST
              request = @notification.notified_object
              map = request.map }
-         { image_tag @notification.sender.image(:thirtytwo), class: 'thirty-two-avatar' } <span style='font-weight:bold;' class='requesterName'>{ request.user.name }</span> wants to collaborate on map <span style='font-weight:bold;'>{ map.name }</span>
+         { image_tag @notification.sender.image(:thirtytwo), className: 'thirty-two-avatar' } <span style='font-weight:bold;' className='requesterName'>{ request.user.name }</span> wants to collaborate on map <span style='font-weight:bold;'>{ map.name }</span>
        { else }
          { @notification.subject }
        { end }
     </h2>
     { case @notification.notification_code
          when MAP_ACCESS_REQUEST }
-       <div class="notification-body">
-         <p class="main-text">
+       <div className="notification-body">
+         <p className="main-text">
            { if false && request.answered }
              { if request.approved }
                You already responded to this access request, and allowed access.
@@ -28,9 +28,9 @@
                them access by going to the map and adding them as a collaborator.
              { end }
            { else }
-             { image_tag asset_path('ellipsis.gif'), class: 'hidden' }
-             { link_to 'Allow', approve_access_post_map_path(id: map.id, request_id: request.id), remote: true, method: :post, class: 'button allow' }
-             { link_to 'Decline', deny_access_post_map_path(id: map.id, request_id: request.id), remote: true, method: :post, class: 'button decline' }
+             { image_tag asset_path('ellipsis.gif'), className: 'hidden' }
+             { link_to 'Allow', approve_access_post_map_path(id: map.id, request_id: request.id), remote: true, method: :post, className: 'button allow' }
+             { link_to 'Decline', deny_access_post_map_path(id: map.id, request_id: request.id), remote: true, method: :post, className: 'button decline' }
              <script>
                $(document).ready(function() {
                  $('.notification-body .button').click(function() {
@@ -44,7 +44,7 @@
          &nbsp;&nbsp;{ link_to 'View mapper profile', explore_path(id: request.user.id) }
        </div>
      { else }
-       <div class="notification-body">
+       <div className="notification-body">
          { raw @notification.body }
        </div>
      { end }

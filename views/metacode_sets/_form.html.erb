@@ -11,79 +11,79 @@
     </div>
   { end }
 
-  <div class="field">
+  <div className="field">
     { f.label :name }
     { f.text_field :name }
-    <div class="clearfloat"></div>
+    <div className="clearfloat"></div>
   </div>
-  <div class="field">
+  <div className="field">
     { f.label :desc, "Description" }
     { f.text_area :desc, :cols => "40", :rows => "4" }
-    <div class="clearfloat"></div>
+    <div className="clearfloat"></div>
   </div>
 
   <br />
 
   <p>Choose Metacodes</p>
-  <div class="allMetacodes">
+  <div className="allMetacodes">
     <span id="showAll" onclick="Metamaps.Admin.selectAll();">Select All</span>
     <span id="hideAll" onclick="Metamaps.Admin.deselectAll();">Unselect All</span>
   </div>
-    <div class="clearfloat"></div>
-  <div class="editMetacodes">
+    <div className="clearfloat"></div>
+  <div className="editMetacodes">
       <ul id="filters-one">
        { $i = 0 }
        { @m = Metacode.order("name").all }
        { while $i < (Metacode.all.length / 4) do }
-            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }class="toggledOff"{ end } 
+            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }className="toggledOff"{ end } 
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="{ asset_path @m[$i].icon }" alt="{ @m[$i].name }" />
               <p>{ @m[$i].name.downcase }</p>
-              <div class="clearfloat"></div>
+              <div className="clearfloat"></div>
             </li>
             { $i += 1 }
        { end }
       </ul>
       <ul id="filters-two">
        { while $i < (Metacode.all.length / 4 * 2) do }
-            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }class="toggledOff"{ end }
+            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }className="toggledOff"{ end }
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="{ asset_path @m[$i].icon }" alt="{ @m[$i].name }" />
               <p>{ @m[$i].name.downcase }</p>
-              <div class="clearfloat"></div>
+              <div className="clearfloat"></div>
             </li>
             { $i += 1 }
        { end }         
       </ul>
       <ul id="filters-three">         
        { while $i < (Metacode.all.length / 4 * 3) do }
-            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }class="toggledOff"{ end }
+            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }className="toggledOff"{ end }
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="{ asset_path @m[$i].icon }" alt="{ @m[$i].name }" />
               <p>{ @m[$i].name.downcase }</p>
-              <div class="clearfloat"></div>
+              <div className="clearfloat"></div>
             </li>
             { $i += 1 }
        { end }
       </ul>
       <ul id="filters-four">         
        { while $i < Metacode.all.length do }
-            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }class="toggledOff"{ end }
+            <li id="{ @m[$i].id }" { if not @m[$i].in_metacode_set(@metacode_set) }className="toggledOff"{ end }
               onclick="Metamaps.Admin.liClickHandler.call(this);">
               <img src="{ asset_path @m[$i].icon }" alt="{ @m[$i].name }" />
               <p>{ @m[$i].name.downcase }</p>
-              <div class="clearfloat"></div>
+              <div className="clearfloat"></div>
             </li>
             { $i += 1 }
        { end }
       </ul>
   </div>
   { hidden_field(:metacodes, :value, {:value => 0}) }
-  <div class="clearfloat"></div>
+  <div className="clearfloat"></div>
   
-  <div class="actions">
+  <div className="actions">
     { link_to 'Cancel', metacode_sets_path, 
-        { :class => 'button' } }
-    { f.submit :class => 'add', :onclick => "return Metamaps.Admin.validate();" }
+        { :className => 'button' } }
+    { f.submit :className => 'add', :onclick => "return Metamaps.Admin.validate();" }
   </div>
 { end }

@@ -1,25 +1,25 @@
 { @metacodes = user_metacodes() }
 
 { form_for Topic.new, url: topics_url, remote: true do |form| }
-  <div class="openMetacodeSwitcher openLightbox" data-open="switchMetacodes">
-    <div class="tooltipsAbove">Switch Metacodes</div>
+  <div className="openMetacodeSwitcher openLightbox" data-open="switchMetacodes">
+    <div className="tooltipsAbove">Switch Metacodes</div>
   </div>
 
-  <div class="pinCarousel">
-    <div class="tooltipsAbove helpPin">Pin Open</div>
-    <div class="tooltipsAbove helpUnpin">Unpin</div>
+  <div className="pinCarousel">
+    <div className="tooltipsAbove helpPin">Pin Open</div>
+    <div className="tooltipsAbove helpUnpin">Unpin</div>
   </div>
 
   <div id="metacodeImg">
     { @metacodes.each do |metacode| }
-      <img class="cloudcarousel" width="40" height="40" src="{ asset_path metacode.icon }" alt="{ metacode.name }" title="{ metacode.name }" data-id="{ metacode.id }" />
+      <img className="cloudcarousel" width="40" height="40" src="{ asset_path metacode.icon }" alt="{ metacode.name }" title="{ metacode.name }" data-id="{ metacode.id }" />
     { end }
   </div>
 
   { form.text_field :name, :maxlength => 140, :placeholder => "title..." }
 
   <div id="metacodeImgTitle"></div>
-  <div class="clearfloat"></div>
+  <div className="clearfloat"></div>
 
   <script>
     { @metacodes.each do |metacode| }

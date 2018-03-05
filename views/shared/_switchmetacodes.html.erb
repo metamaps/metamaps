@@ -34,18 +34,18 @@
        data-metacodes="{ recent.map(&:id).join(',') }">
     { @list = '' }
     { recent.each_with_index do |m, index| }
-      { @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' } 
+      { @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div className="clearfloat"></div></li>' } 
     { end }
-    <div class="metacodeSwitchTab">
-      <p class="setDesc">The 5 Metacodes you've used most recently.</p>
-      <div class="metacodeSetList">
+    <div className="metacodeSwitchTab">
+      <p className="setDesc">The 5 Metacodes you've used most recently.</p>
+      <div className="metacodeSetList">
         <ul>
           { @list.html_safe }
         </ul>
-        <div class="clearfloat"></div>
+        <div className="clearfloat"></div>
       </div>
     </div>
-    <button class="button" onclick="Metamaps.Create.updateMetacodeSet('Recent', 0, false);">
+    <button className="button" onclick="Metamaps.Create.updateMetacodeSet('Recent', 0, false);">
         Switch Set
     </button>
   </div>
@@ -54,18 +54,18 @@
        data-metacodes="{ most_used.map(&:id).join(',') }">
     { @list = '' }
     { most_used.each_with_index do |m, index| }
-      { @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' } 
+      { @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div className="clearfloat"></div></li>' } 
     { end }
-    <div class="metacodeSwitchTab">
-      <p class="setDesc">The 5 Metacodes you've used the most.</p>
-      <div class="metacodeSetList">
+    <div className="metacodeSwitchTab">
+      <p className="setDesc">The 5 Metacodes you've used the most.</p>
+      <div className="metacodeSetList">
         <ul>
           { @list.html_safe }
         </ul>
-        <div class="clearfloat"></div>
+        <div className="clearfloat"></div>
       </div>
     </div>
-    <button class="button" onclick="Metamaps.Create.updateMetacodeSet('Most', 1, false);">
+    <button className="button" onclick="Metamaps.Create.updateMetacodeSet('Most', 1, false);">
         Switch Set
     </button>
   </div>
@@ -74,46 +74,46 @@
        data-metacodes="{ m.metacodes.map(&:id).join(',') }">
     { @list = '' }
     { m.metacodes.sort{|x,y| x.name <=> y.name }.each_with_index do |m, index| }
-      { @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' } 
+      { @list += '<li><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div className="clearfloat"></div></li>' } 
     { end }
-    <div class="metacodeSwitchTab">
-      <p class="setDesc">{ m.desc }</p>
-      <div class="metacodeSetList">
+    <div className="metacodeSwitchTab">
+      <p className="setDesc">{ m.desc }</p>
+      <div className="metacodeSetList">
         <ul>
           { @list.html_safe }
         </ul>
-        <div class="clearfloat"></div>
+        <div className="clearfloat"></div>
       </div>
     </div>
-    <button class="button" onclick="Metamaps.Create.updateMetacodeSet({ m.id }, { localindex + 2 }, false);">
+    <button className="button" onclick="Metamaps.Create.updateMetacodeSet({ m.id }, { localindex + 2 }, false);">
         Switch Set
     </button>
   </div>
   { end }
     <div id="metacodeSwitchTabsCustom">
-        <div class="setDesc">Choose Your Metacodes</div>
-        <div class="selectNone">NONE</div>
-        <div class="selectAll">ALL</div>
+        <div className="setDesc">Choose Your Metacodes</div>
+        <div className="selectNone">NONE</div>
+        <div className="selectAll">ALL</div>
         { @list = '' }
         { metacodesInUse = user_metacodes() } 
         { Metacode.order("name").all.each_with_index do |m, index| }
           { mClass = metacodesInUse.index(m) == nil ? "toggledOff" : "" }
-          { @list += '<li id="' + m.id.to_s + '" data-name="' + m.name + '" class="' + mClass + '"><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div class="clearfloat"></div></li>' } 
+          { @list += '<li id="' + m.id.to_s + '" data-name="' + m.name + '" className="' + mClass + '"><img src="' + asset_path(m.icon) + '" alt="' + m.name + '" /><p>' + m.name.downcase + '</p><div className="clearfloat"></div></li>' } 
         { end }
 
-        <div class="customMetacodeList">
+        <div className="customMetacodeList">
           <ul>
             { @list.html_safe }
           </ul>
-          <div class="clearfloat"></div>
+          <div className="clearfloat"></div>
         </div>
-        <button class="button" onclick="Metamaps.Create.updateMetacodeSet('custom', { allMetacodeSets.length + 2 }, true);">
+        <button className="button" onclick="Metamaps.Create.updateMetacodeSet('custom', { allMetacodeSets.length + 2 }, true);">
             Switch to Custom Set
         </button>
     </div>
 </div>
 
-<div class="clearfloat"></div>
+<div className="clearfloat"></div>
 
 <script>
   Metamaps.Create.selectedMetacodeSet = "metacodeset-{ selectedSet }"

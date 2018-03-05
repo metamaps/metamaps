@@ -10,18 +10,18 @@
     </div>
   { end }
 
-  <div class="field">
+  <div className="field">
     { f.label :name }
     { f.text_field :name }
-    <div class="clearfloat"></div>
+    <div className="clearfloat"></div>
   </div>
   { unless @metacode.new_record? }
-    <div class="field">
+    <div className="field">
       { f.label 'Current Icon' }
       { image_tag @metacode.icon, width: 96 }
     </div>
   { end }
-  <div class="field">
+  <div className="field">
     { if @metacode.new_record? }
       { f.label 'Icon' }
     { else }
@@ -29,15 +29,15 @@
     { end }
     { f.hidden_field :manual_icon, value: nil }
     { f.file_field :aws_icon }
-    <div class="clearfloat"></div>
+    <div className="clearfloat"></div>
   </div>
-  <div class="field">
+  <div className="field">
     { f.label :color, "Color (hex with # sign)" }
     { f.text_field :color }
-    <div class="clearfloat"></div>
+    <div className="clearfloat"></div>
   </div>
-  <div class="actions">
-    { link_to 'Cancel', metacodes_path, { :class => 'button' } }
-    { f.submit :class => 'add' }
+  <div className="actions">
+    { link_to 'Cancel', metacodes_path, { :className => 'button' } }
+    { f.submit :className => 'add' }
   </div>
 { end }

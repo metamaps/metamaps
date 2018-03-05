@@ -1,10 +1,10 @@
 <div id="yield">
-  <div class='centerContent'>
+  <div className='centerContent'>
     <br />
     <table>
       <tr>
         <th>Name</th>
-        <th class='metacodeSetsDescription'>Description</th>
+        <th className='metacodeSetsDescription'>Description</th>
         <th>Metacodes</th>
       </tr>
 
@@ -19,15 +19,15 @@
               metacode_set, method: :delete,
               data: { confirm: 'Are you sure?' } }
         </td>
-        <td class='metacodeSetDesc'>{ metacode_set.desc }</td>
+        <td className='metacodeSetDesc'>{ metacode_set.desc }</td>
         <td>
           { metacode_set.metacodes.each_with_index do |metacode, index| }
-            <img class='metacodeSetImage' src='{ asset_path metacode.icon }' />
+            <img className='metacodeSetImage' src='{ asset_path metacode.icon }' />
             { if (index+1)%4 == 0 }
-            <div class='clearfloat'></div>
+            <div className='clearfloat'></div>
             { end }
           { end }
-          <div class='clearfloat'></div>
+          <div className='clearfloat'></div>
         </td>
       </tr>
     { end }

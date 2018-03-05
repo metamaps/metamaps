@@ -1,6 +1,6 @@
 <div id="yield">
-<div class="centerContent">
-<header class="page-header">
+<div className="centerContent">
+<header className="page-header">
   <h2>{ t('doorkeeper.authorized_applications.index.title') }</h2>
 </header>
 
@@ -11,7 +11,7 @@
     If you're a developer interested in building an app for Metamaps, check out <a href="https://metamaps.cc/api" target="_blank">the API docs</a>.
   </div><br />
   { if @applications.count > 0 }
-  <table class="table table-striped">
+  <table className="table table-striped">
     <thead>
     <tr>
       <th>{ t('doorkeeper.authorized_applications.index.application') }</th>
