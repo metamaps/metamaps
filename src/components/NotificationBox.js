@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router'
 
 import onClickOutsideAddon from 'react-onclickoutside'
 import Notification from './Notification'
@@ -53,9 +54,9 @@ class NotificationBox extends Component {
         key={`notification-${n.id}`} />
     ).concat([
       <li key='notification-see-all'>
-        <a href='/notifications' className='notificationsBoxSeeAll'>
+        <Link to='/notifications' className='notificationsBoxSeeAll'>
           See all
-        </a>
+        </Link>
       </li>
     ])
   }

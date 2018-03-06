@@ -47,6 +47,7 @@
     "json-loader": "0.5.7",
     "lodash": "4.17.4",
     "node-uuid": "1.4.8",
+    "nodemon": "^1.17.1",
     "outdent": "0.3.0",
     "prop-types": "15.5.10",
     "react": "15.6.1",

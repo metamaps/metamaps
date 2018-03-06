@@ -5,7 +5,8 @@ import App from './App'
 import Apps from './Apps'
 import Maps from './Maps'
 import MapView from './MapView'
-import Notifications from './Notifications'
+import Notifications from './Notifications/Notifications'
+import NotificationPage from './Notifications/NotificationPage'
 import TopicView from './TopicView'
 import LoggedOutHome from './LoggedOutHome'
 import RequestAccess from './RequestAccess'
@@ -40,7 +41,7 @@ export default function makeRoutes (currentUser) {
     <Route path="request" component={RequestInvite} />
     <Route path="notifications">
       <IndexRoute component={Notifications} />
-      <Route path=":id" component={Notifications} />
+      <Route path=":id" component={NotificationPage} />
     </Route>
     <Route path="users">
       <Route path=":id/edit" component={UserSettings} />

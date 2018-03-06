@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import NavBar from '../components/NavBar'
-import NavBarLink from '../components/NavBarLink'
 
-class Notifications extends Component {
+import NavBar from '../../components/NavBar'
+import NavBarLink from '../../components/NavBarLink'
+
+class NotificationsHeader extends Component {
   render = () => {
     return (
       <NavBar>
@@ -14,4 +15,4 @@ class Notifications extends Component {
   }
 }
 
-export default Notifications
+export default NotificationsHeader
