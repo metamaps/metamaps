@@ -1,4 +1,3 @@
-import Account from './Account'
 import Active from './Active'
 import Admin from './Admin'
 import AutoLayout from './AutoLayout'
@@ -32,7 +31,6 @@ import Views from './Views'
 import Visualize from './Visualize'
 
 const Metamaps = window.Metamaps || {}
-Metamaps.Account = Account
 Metamaps.Active = Active
 Metamaps.Admin = Admin
 Metamaps.AutoLayout = AutoLayout
@@ -91,6 +89,12 @@ document.addEventListener('DOMContentLoaded', async function() {
   try {
     const metacodes = await DataFetcher.getMetacodes()
     Metamaps.ServerData.Metacodes = metacodes
+
+    const activeMapper = await DataFetcher.getCurrentUser()
+    if (activeMapper) {
+      Metamaps.ServerData.ActiveMapper = activeMapper
+      $('body').removeClass('unauthenticated').addClass('authenticated')
+    }
     runInitFunctions(Metamaps.ServerData)
   } catch (e) {
     console.log(e)

@@ -1,17 +1,3 @@
-@import 'admin';
-@import 'apps';
-@import 'base';
-@import 'clean';
-@import 'emoji-mart-0.3.5';
-@import 'feedback';
-@import 'jquery-ui';
-@import 'junto';
-@import 'mapcard';
-@import 'mobile';
-@import 'notifications';
-@import 'request_access';
-@import 'search';
-
 /* clear styles */
 
 html,
@@ -243,10 +229,6 @@ button.button.btn-no:hover {
     color:#424242;
 }
 
-.toHide {
-    display:none;
-}
-
 .forgotPassword {
     height: 134px;
     font-family: din-medium;
@@ -327,7 +309,6 @@ button.button.btn-no:hover {
     position: absolute;
     top: 88px;
     left: -18px;
-    display: none;
 }
 .userMenuArrow {
     border-color: transparent;
@@ -436,7 +417,6 @@ button.button.btn-no:hover {
     margin:5px 0px 0px 5px;
 }
 .changeName {
-    display: none;
     margin-top: 24px;
 }
 
@@ -3029,3 +3009,17 @@ script.data-gratipay-username {
     font-size: 13px;
     font-weight: bold;
 }
+
+@import 'admin';
+@import 'apps';
+@import 'base';
+@import 'clean';
+@import 'emoji-mart-0.3.5';
+@import 'feedback';
+@import 'jquery-ui';
+@import 'junto';
+@import 'mapcard';
+@import 'mobile';
+@import 'notifications';
+@import 'request_access';
+@import 'search';

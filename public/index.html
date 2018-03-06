@@ -64,8 +64,7 @@
   <![endif]-->
     
 </head>
-<!-- TODO: make 'authenticated' class dynamic -->
-<body class="authenticated">
+<body class="unauthenticated">
     <div class="main">
       <div id="app"></div>
       <div id="loading"></div>
@@ -107,13 +106,6 @@
     <script type="text/javascript">
       Metamaps.ServerData = Metamaps.ServerData || {}
       Metamaps.ServerData.RAILS_ENV = 'development'
-      Metamaps.ServerData.ActiveMapper = {
-        id: 10,
-        name: 'Connor',
-        email: 'co@co.com',
-        admin: false,
-        image: 'https://metamaps-live.s3.amazonaws.com/users/images/555/629/996/sixtyfour/11835c3.png?1417298429'
-      }
       Metamaps.ServerData['junto_spinner_darkgrey.gif'] = '/images/junto_spinner_darkgrey.gif'
       Metamaps.ServerData['user.png'] = '/images/user.png'
       Metamaps.ServerData['icons/wildcard.png'] = '/images/icons/wildcard.png'

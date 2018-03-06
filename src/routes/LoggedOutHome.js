@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 
 class LoggedOutHome extends Component {
   render = () => {
@@ -17,8 +18,8 @@ class LoggedOutHome extends Component {
               <h3>Who finds it useful?</h3>
               <p>Designers, inventors, artists, educators, strategists, consultants, facilitators, entrepreneurs, systems thinkers, changemakers, analysts, students, researchers... maybe you!</p>
               <button type="button" className="button learnMoreCTA" onClick={() => {Metamaps.GlobalUI.openLightbox('about')}}>LEARN MORE</button>
-              <a href="/explore/featured" data-router="true" className="exploreFeaturedCTA">EXPLORE FEATURED MAPS</a>
-              <a href="/request" className="requestInviteCTA">REQUEST INVITE</a>
+              <Link to="/explore/featured" data-router="true" className="exploreFeaturedCTA">EXPLORE FEATURED MAPS</Link>
+              <Link to="/request" className="requestInviteCTA">REQUEST INVITE</Link>
             </div>
             <div className="clearfloat"></div>
           </div>

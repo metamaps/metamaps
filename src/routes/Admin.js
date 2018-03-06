@@ -6,10 +6,10 @@ class Admin extends Component {
   render = () => {
     return (
       <NavBar>
-        <NavBarLink show hardReload href="/metacode_sets" text="Metacode Sets" />
-        <NavBarLink show hardReload href="/metacode_sets/new" text="New Set" />
-        <NavBarLink show hardReload href="/metacodes" text="Metacodes" />
-        <NavBarLink show hardReload href="/metacodes/new" text="New Metacode" />
+        <NavBarLink show href="/metacode_sets" text="Metacode Sets" />
+        <NavBarLink show href="/metacode_sets/new" text="New Set" />
+        <NavBarLink show href="/metacodes" text="Metacodes" />
+        <NavBarLink show href="/metacodes/new" text="New Metacode" />
       </NavBar>
     )
   }

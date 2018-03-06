@@ -5,7 +5,6 @@ import _ from 'lodash'
 
 const PROP_LIST = [
   'matchChildRoutes',
-  'hardReload',
   'show',
   'text',
   'href',
@@ -15,7 +14,6 @@ const PROP_LIST = [
 class NavBarLink extends Component {
   static propTypes = {
     matchChildRoutes: PropTypes.bool,
-    hardReload: PropTypes.bool,
     show: PropTypes.bool,
     text: PropTypes.string,
     href: PropTypes.string,
@@ -29,7 +27,6 @@ class NavBarLink extends Component {
   render = () => {
     const {
       matchChildRoutes,
-      hardReload,
       show,
       text,
       href,
@@ -44,14 +41,6 @@ class NavBarLink extends Component {
     if (active) classes.push('active')
     if (!show) {
       return null
-    }
-    if (hardReload) {
-      return (
-        <a { ...otherProps } href={href} className={classes.join(' ')}>
-          {linkClass && <div className="navBarIcon"></div>}
-          <div className="navBarLinkText">{text}</div>
-        </a>
-      )
     }
     return (
       <Link { ...otherProps } to={href} className={classes.join(' ')}>

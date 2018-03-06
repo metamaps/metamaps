@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router'
 
 import onClickOutsideAddon from 'react-onclickoutside'
 
@@ -22,15 +23,15 @@ class AccountMenu extends Component {
       <ul>
         <li className="accountListItem accountSettings">
           <div className="accountIcon"></div>
-          <a href={`/users/${currentUser.id}/edit`}>Settings</a>
+          <Link to={`/users/${currentUser.id}/edit`}>Settings</Link>
         </li>
         <li className="accountListItem accountAdmin">
           <div className="accountIcon"></div>
-          <a href="/metacodes">Admin</a>
+          <Link to="/metacodes">Admin</Link>
         </li>
         <li className="accountListItem accountApps">
           <div className="accountIcon"></div>
-          <a href="/oauth/authorized_applications">Apps</a>
+          <Link to="/oauth/authorized_applications">Apps</Link>
         </li>
         <li className="accountListItem accountInvite" onClick={onInviteClick}>
           <div className="accountIcon"></div>

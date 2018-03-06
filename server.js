@@ -1,5 +1,6 @@
 const path = require('path')
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const webpack = require('webpack')
 const socketio = require('socket.io')
 const { createServer } = require('http')
@@ -12,6 +13,8 @@ const app = express()
 const server = createServer(app)
 const io = socketio(server)
 realtime(io) // sets up the socketio event listeners
+
+app.use(cookieParser())
 
 // serve the whole public folder as static files
 app.use(express.static(path.join(__dirname, 'public')))

@@ -16,8 +16,7 @@ class UpperLeftUI extends Component {
     const { map, currentUser, userRequested, requestAnswered, requestApproved, onRequestClick } = this.props
     return <div className="upperLeftUI">
       <div className="homeButton">
-        {currentUser && <Link to="/">METAMAPS</Link>}
-        {!currentUser && <a href="/">METAMAPS</a>}
+        <Link to="/">METAMAPS</Link>
       </div>
       <div className="sidebarSearch">
         <input type="text" className="sidebarSearchField" placeholder="Search for topics, maps, and mappers..." />

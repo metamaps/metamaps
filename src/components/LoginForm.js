@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router'
 
 import onClickOutsideAddon from 'react-onclickoutside'
 
@@ -43,7 +44,7 @@ class LoginForm extends Component {
       </div>
       <div className="clearfloat"></div>
       <div className="accountForgotPass">
-          <a href="/users/password/new">Forgot password?</a>
+          <Link to="/users/password/new">Forgot password?</Link>
       </div>
     </form>
   }

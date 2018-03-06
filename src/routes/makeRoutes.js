@@ -12,6 +12,7 @@ import RequestAccess from './RequestAccess'
 import RequestInvite from './RequestInvite'
 import Login from './Login'
 import Join from './Join'
+import UserSettings from './UserSettings'
 
 function nullComponent(props) {
   return null
@@ -42,7 +43,7 @@ export default function makeRoutes (currentUser) {
       <Route path=":id" component={Notifications} />
     </Route>
     <Route path="users">
-      <Route path=":id/edit" component={nullComponent} />
+      <Route path=":id/edit" component={UserSettings} />
       <Route path="password" component={nullComponent} />
       <Route path="password/new" component={nullComponent} />
       <Route path="password/edit" component={nullComponent} />
