@@ -5,6 +5,16 @@ class UsersController < ApplicationController
 
   respond_to :html, :json
 
+  # GET /users/current
+  def current
+    #if current_user
+      # these are just options, saying include these values, they aren't the values themselves
+      render json: current_user.to_json({follows: true, email: true, follow_settings: true, emails_allowed: true})
+    #else
+     # render json: nil
+    #end
+  end
+
   # GET /users/1.json
   def show
     @user = User.find(params[:id])

@@ -112,6 +112,9 @@ Metamaps::Application.routes.draw do
   end
 
   resources :users, except: %i[index destroy] do
+    collection do
+      get :current
+    end
     member do
       get :details
     end

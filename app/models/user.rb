@@ -70,6 +70,7 @@ class User < ApplicationRecord
       json['follow_map_on_contributed'] = settings.follow_map_on_contributed == '1'
     end
     json['email'] = email if options[:email]
+    json['emails_allowed'] = emails_allowed if options[:emails_allowed]
     json
   end
 
