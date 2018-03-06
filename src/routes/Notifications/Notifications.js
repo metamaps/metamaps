@@ -6,6 +6,13 @@ import NotificationsHeader from './NotificationsHeader'
 // these come from mailboxer.rb in the api repo
 const BLACKLIST = ['ACCESS_REQUEST', 'ACCESS_APPROVED', 'INVITE_TO_EDIT']
 
+/* TODO!!
+  pagination
+  mark read/unread
+  receipts
+  fetchNotifications
+*/
+
 function getNotificationText (notification) {
   let map, topic, topic1, topic2
   switch (notification.type) {
@@ -76,7 +83,7 @@ class Notifications extends Component {
             </header>
             <ul className="notifications">
               {notifications.map(n => {
-                //const receipt = this.props.receipts.find(n => n.notification_id === notification.id)
+                // TODO: const receipt = this.props.receipts.find(n => n.notification_id === notification.id)
                 const receipt = {
                   is_read: false
                 }
