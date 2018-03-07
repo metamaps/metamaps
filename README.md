@@ -26,11 +26,12 @@ Checklist
 - [x] Fix images referenced in the JS
 - [x] Figure out how authentication of requests from the frontend to the API works
 - [x] Figure out how to combine the nodejs realtime server into server.js
-- [ ] Notifications: make sure loading states are working for popup and page
+- [x] Notifications: make sure loading states are working for popup and page
 - [ ] Notifications: make sure notifications either look nice, or redirect
 - [ ] Notifications: pagination
+- [ ] Notifications: Request unreadNotificationCount
+- [ ] Make sure loading state for explore maps pages work
 - [ ] Get actioncable working
-- [ ] Request unreadNotificationCount
 - [ ] Request invite code
 - [x] Request user object itself
 - [ ] Handle CSS metacode colors
