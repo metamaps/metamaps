@@ -1,18 +1,38 @@
 /* global $ */
+import { findIndex } from 'lodash'
 import GlobalUI from './index'
 
 const Notifications = {
-  notifications: null,
+  notifications: [],
   unreadNotificationsCount: 0,
   init: serverData => {
     Notifications.unreadNotificationsCount = serverData.unreadNotificationsCount
   },
-  fetch: render => {
+  fetchNotifications: render => {
     $.ajax({
       url: '/notifications.json',
       success: function(data) {
         Notifications.notifications = data
         render()
+      }
+    })
+  },
+  fetchNotification: (render, id) => {
+    $.ajax({
+      url: `/notifications/${id}.json`,
+      success: function(data) {
+        const index = findIndex(Notifications.notifications, n => n.id === data.id)
+        if (index === -1) {
+          // notification not loaded yet, insert it at the start
+          Notifications.notifications.unshift(data)
+        } else {
+          // notification there, replace it
+          Notifications.notifications[index] = data
+        }
+        render()
+      },
+      error: function() {
+        GlobalUI.notifyUser('There was an error fetching that notification')
       }
     })
   },
@@ -54,7 +74,7 @@ const Notifications = {
         }
       },
       error: function() {
-        GlobalUI.notifyUser('There was an error marking that notification as read')
+        GlobalUI.notifyUser('There was an error marking that notification as unread')
       }
     })
   }

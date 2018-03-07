@@ -26,6 +26,9 @@ Checklist
 - [x] Fix images referenced in the JS
 - [x] Figure out how authentication of requests from the frontend to the API works
 - [x] Figure out how to combine the nodejs realtime server into server.js
+- [ ] Notifications: make sure loading states are working for popup and page
+- [ ] Notifications: make sure notifications either look nice, or redirect
+- [ ] Notifications: pagination
 - [ ] Get actioncable working
 - [ ] Request unreadNotificationCount
 - [ ] Request invite code
@@ -34,8 +37,8 @@ Checklist
 - [ ] Fix Request An Invite page
 - [ ] Make 'new map' action work
 - [ ] Modify the remaining rails templates into JSX templates
-  - [ ] notifications list
-  - [ ] notification page
+  - [x] notifications list
+  - [x] notification page
   - [ ] list metacodes
   - [ ] new metacode
   - [ ] edit metacode

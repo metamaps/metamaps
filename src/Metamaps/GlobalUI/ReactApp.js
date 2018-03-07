@@ -108,7 +108,8 @@ const ReactApp = {
       openInviteLightbox: () => self.openLightbox('invite'),
       serverData: self.serverData,
       notifications: Notifications.notifications,
-      fetchNotifications: apply(Notifications.fetch, ReactApp.render),
+      fetchNotifications: apply(Notifications.fetchNotifications, ReactApp.render),
+      fetchNotification: apply(Notifications.fetchNotification, ReactApp.render),
       markAsRead: apply(Notifications.markAsRead, ReactApp.render),
       markAsUnread: apply(Notifications.markAsUnread, ReactApp.render)
     },

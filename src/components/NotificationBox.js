@@ -16,10 +16,7 @@ class NotificationBox extends Component {
   }
 
   componentDidMount = () => {
-    const { notifications, fetchNotifications } = this.props
-    if (!notifications) {
-      fetchNotifications()
-    }
+    this.props.fetchNotifications()
   }
 
   handleClickOutside = () => {
@@ -28,7 +25,7 @@ class NotificationBox extends Component {
 
   hasSomeNotifications = () => {
     const { notifications } = this.props
-    return notifications && notifications.length > 0
+    return notifications.length > 0
   }
 
   showLoading = () => {
@@ -51,10 +48,11 @@ class NotificationBox extends Component {
       n => <Notification notification={n}
         markAsRead={markAsRead}
         markAsUnread={markAsUnread}
-        key={`notification-${n.id}`} />
+        key={`notification-${n.id}`}
+        onClick={() => this.props.toggleNotificationsBox()} />
     ).concat([
       <li key='notification-see-all'>
-        <Link to='/notifications' className='notificationsBoxSeeAll'>
+        <Link to='/notifications' className='notificationsBoxSeeAll' onClick={() => this.props.toggleNotificationsBox()}>
           See all
         </Link>
       </li>
