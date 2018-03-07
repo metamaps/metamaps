@@ -30,6 +30,7 @@ Checklist
 - [ ] Notifications: make sure notifications either look nice, or redirect
 - [ ] Notifications: pagination
 - [ ] Notifications: Request unreadNotificationCount
+- [ ] Notifications: CSS fixes related to 'controller-x' in body classes
 - [ ] Make sure loading state for explore maps pages work
 - [ ] Get actioncable working
 - [ ] Request invite code
