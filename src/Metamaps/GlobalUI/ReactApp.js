@@ -53,7 +53,6 @@ const ReactApp = {
     switch (pathname.split('/')[1]) {
       case '':
         if (Active.Mapper && Active.Mapper.id) {
-          $('#yield').hide()
           ExploreMaps.updateFromPath(pathname)
           self.mapId = null
           Active.Map = null
@@ -61,7 +60,6 @@ const ReactApp = {
         }
         break
       case 'explore':
-        $('#yield').hide()
         ExploreMaps.updateFromPath(pathname)
         self.mapId = null
         self.topicId = null
@@ -69,21 +67,18 @@ const ReactApp = {
         Active.Topic = null
         break
       case 'topics':
-        $('#yield').hide()
         Active.Map = null
         self.mapId = null
         self.topicId = pathname.split('/')[2]
         break
       case 'maps':
         if (!pathname.includes('request_access')) {
-          $('#yield').hide()
           Active.Topic = null
           self.topicId = null
           self.mapId = pathname.split('/')[2]
         }
         break
       default:
-        $('#yield').show()
         break
     }
     self.render()
@@ -108,6 +103,7 @@ const ReactApp = {
       openInviteLightbox: () => self.openLightbox('invite'),
       serverData: self.serverData,
       notifications: Notifications.notifications,
+      notificationsLoading: Notifications.notificationsLoading,
       fetchNotifications: apply(Notifications.fetchNotifications, ReactApp.render),
       fetchNotification: apply(Notifications.fetchNotification, ReactApp.render),
       markAsRead: apply(Notifications.markAsRead, ReactApp.render),

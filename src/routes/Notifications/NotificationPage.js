@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 
 import { MAP_ACCESS_REQUEST } from '../../constants'
 import NotificationsHeader from './NotificationsHeader'
+import LoadingPage from '../helpers/LoadingPage'
 import Loading from '../../components/Loading'
 import NotificationBody from '../../components/NotificationBody'
 
@@ -25,11 +26,7 @@ class NotificationPage extends Component {
     if (!notification) {
       return (
         <div>
-          <div id="yield">
-            <div className="centerContent withPadding back">
-              <Loading />
-            </div>
-          </div>
+          <LoadingPage />
           <NotificationsHeader />
         </div>
       )

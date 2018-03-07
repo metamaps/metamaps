@@ -4,16 +4,23 @@ import GlobalUI from './index'
 
 const Notifications = {
   notifications: [],
+  notificationsLoading: false,
   unreadNotificationsCount: 0,
   init: serverData => {
     Notifications.unreadNotificationsCount = serverData.unreadNotificationsCount
   },
   fetchNotifications: render => {
+    Notifications.notificationsLoading = true
+    render()
     $.ajax({
       url: '/notifications.json',
       success: function(data) {
         Notifications.notifications = data
+        Notifications.notificationsLoading = false
         render()
+      },
+      error: function() {
+        GlobalUI.notifyUser('There was an error fetching notifications')
       }
     })
   },

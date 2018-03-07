@@ -43,7 +43,7 @@ class App extends Component {
             mobile, mobileTitle, mobileTitleWidth, mobileTitleClick, location,
             map, userRequested, requestAnswered, requestApproved, serverData,
             onRequestAccess, notifications, fetchNotifications,
-            markAsRead, markAsUnread } = this.props
+            markAsRead, markAsUnread, notificationsLoading } = this.props
     const { pathname } = location || {}
     // this fixes a bug that happens otherwise when you logout
     const currentUser = this.props.currentUser && this.props.currentUser.id ? this.props.currentUser : null
@@ -64,6 +64,7 @@ class App extends Component {
       {!mobile && <UpperRightUI currentUser={currentUser}
                                 unreadNotificationsCount={unreadNotificationsCount}
                                 notifications={notifications}
+                                notificationsLoading={notificationsLoading}
                                 fetchNotifications={fetchNotifications}
                                 markAsRead={markAsRead}
                                 markAsUnread={markAsUnread}

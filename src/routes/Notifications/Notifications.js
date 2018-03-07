@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
+import LoadingPage from '../helpers/LoadingPage'
 import Notification from '../../components/Notification'
 
 import {
@@ -10,7 +11,6 @@ import {
 } from '../../constants'
 import NotificationsHeader from './NotificationsHeader'
 
-// these come from mailboxer.rb in the api repo
 const BLACKLIST = [MAP_ACCESS_REQUEST, MAP_ACCESS_APPROVED, MAP_INVITE_TO_EDIT]
 
 /* TODO!!
@@ -25,8 +25,16 @@ class Notifications extends Component {
   }
 
   render = () => {
-    const { markAsRead, markAsUnread } = this.props
+    const { notificationsLoading, markAsRead, markAsUnread } = this.props
     const notifications = (this.props.notifications || []).filter(n => !(BLACKLIST.indexOf(n.type) > -1 && (!n.data.object || !n.data.map)))
+    if (notificationsLoading) {
+      return (
+        <div>
+          <LoadingPage />
+          <NotificationsHeader />
+        </div>
+      )
+    }
     return (
       <div>
         <div id="yield">

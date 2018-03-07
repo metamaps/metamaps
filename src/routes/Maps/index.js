@@ -4,6 +4,7 @@ import { throttle } from 'lodash'
 import Header from './Header'
 import MapperCard from './MapperCard'
 import MapCard from './MapCard'
+import LoadingPage from '../helpers/LoadingPage'
 
 class Maps extends Component {
   static propTypes = {
@@ -45,7 +46,17 @@ class Maps extends Component {
     const { mobile, maps, mapsWidth, currentUser, juntoState, pending, section, user, onStar, onRequest, onMapFollow } = this.props
     const style = { width: mapsWidth + 'px' }
 
-    if (!maps) return null // do loading here instead
+    if (!maps) {
+      return (
+        <div>
+          <LoadingPage />
+          <Header signedIn={ !!currentUser }
+            section={ section }
+            user={ user }
+            />
+        </div>
+      )
+    }
 
     return (
       <div>

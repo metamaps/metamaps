@@ -9,6 +9,7 @@ import Loading from './Loading'
 class NotificationBox extends Component {
   static propTypes = {
     notifications: PropTypes.array,
+    loading: PropTypes.bool.isRequired,
     fetchNotifications: PropTypes.func.isRequired,
     toggleNotificationsBox: PropTypes.func.isRequired,
     markAsRead: PropTypes.func.isRequired,
@@ -60,11 +61,11 @@ class NotificationBox extends Component {
   }
 
   render = () => {
-    const { notifications } = this.props
+    const { loading } = this.props
     return <div className='notificationsBox'>
       <div className='notificationsBoxTriangle' />
       <ul className='notifications'>
-        {notifications ? this.showNotifications() : this.showLoading()}
+        {loading ?  this.showLoading() : this.showNotifications()}
       </ul>
     </div>
   }

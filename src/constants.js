@@ -1,3 +1,5 @@
+
+// these come from mailboxer.rb in the api repo
 export const MAP_ACCESS_REQUEST  = 'ACCESS_REQUEST'
 export const MAP_ACCESS_APPROVED = 'ACCESS_APPROVED'
 export const MAP_INVITE_TO_EDIT  = 'INVITE_TO_EDIT'
