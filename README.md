@@ -1,24 +1,27 @@
 
-Make sure you have `nodemon` and `node-sass` installed
-`$ npm install -g nodemon node-sass`
+Make sure you're running a good up to date LTS version of `node`, like 8.9.4
 
+Make sure you have `node-sass` installed
+`$ npm install -g node-sass`
 
-Run the following at the same time, in two terminals
-
+Run the following at the same time, in TWO SEPARATE terminals. We tell the server where the backend process is running with the API environment variable
+JS files, and CSS will rebuild automatically, just refresh the page
+If coding the server itself, you will have to use nodemon, or kill and restart the server process manually
 ```
-$ API=http://localhost:3001 nodemon server.js
+$ API=http://localhost:3001 node server.js
 $ node-sass -w sass/application.scss public/css/application.css
 ```
 
-To run the server as a daemon that will be re-run if it crashes, you can
-use the forever node package.
+To make sure the css files get built, use the following in another terminal
 ```
-$ npm install -g forever
-$ forever start server.js
+touch sass/application.scss
 ```
 
-Run the metamaps api in another terminal using
+Run the metamaps api in another terminal using (on port 3001, so the UI can talk to it)
+For now, make sure you are running on the `add-user-route` branch of Metamaps, and that it's up to date with the latest on that branch
 `$ rails s -p 3001`
+
+open up http://localhost:3000 and start coding!
 
 Checklist
 - [x] Get the Import lightbox working, and not conflicting on screen
@@ -66,3 +69,10 @@ Checklist
 - [ ] Modify the RubyOnRails app to only serve JSON responses, no HTML pages anymore
 - [ ] Modify the frontend to request that data from the API which is necessary at first to load the page
   - [x] Load the metacode sets
+
+To run the server as a daemon that will be re-run if it crashes, you can
+use the forever node package.
+```
+$ npm install -g forever
+$ forever start server.js
+```
