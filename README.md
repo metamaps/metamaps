@@ -33,6 +33,7 @@ Checklist
 - [x] Load the metacodes
 - [x] move ImportDialog lightbox into main app
 - [x] create topic form
+- [x] Fork map lightbox / component
 
 - [ ] create synapse form
 - [ ] replace old loader with react loader
@@ -43,7 +44,6 @@ Checklist
 - [ ] lightboxes
 - [ ] About lightbox
 - [ ] Switch Metacodes lightbox / component
-- [ ] Fork map lightbox / component
 - [ ] break up index.html into parts
 - [ ] Handle CSS metacode colors
 - [ ] Fix Request An Invite page
