@@ -5,6 +5,7 @@ import MobileHeader from '../components/MobileHeader'
 import UpperLeftUI from '../components/UpperLeftUI'
 import UpperRightUI from '../components/UpperRightUI'
 import Toast from '../components/Toast'
+import LightBoxes from '../components/LightBoxes'
 
 class App extends Component {
   static propTypes = {
@@ -72,6 +73,7 @@ class App extends Component {
                                 signInPage={pathname === '/login'} />}
       <Toast message={toast} />
       {children}
+      <LightBoxes />
     </div>
   }
 }

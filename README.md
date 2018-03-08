@@ -26,13 +26,16 @@ Checklist
 - [x] Fix images referenced in the JS
 - [x] Figure out how authentication of requests from the frontend to the API works
 - [x] Figure out how to combine the nodejs realtime server into server.js
-- [ ] Notifications: make sure loading states are working for popup and page
+- [x] Notifications: make sure loading states are working for popup and page
 - [ ] Notifications: make sure notifications either look nice, or redirect
 - [ ] Notifications: pagination
 - [ ] Get actioncable working
-- [ ] Request unreadNotificationCount
-- [ ] Request invite code
+- [ ] lightboxes
+- [x] Request unreadNotificationCount
+- [x] Request invite code
 - [x] Request user object itself
+- [ ] About lightbox
+- [ ] break up index.html into parts
 - [ ] Handle CSS metacode colors
 - [ ] Fix Request An Invite page
 - [ ] Make 'new map' action work
