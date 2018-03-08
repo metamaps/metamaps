@@ -32,9 +32,15 @@ async function denyAccessRequest(mapId, requestId) {
   return res.status === 200
 }
 
+async function requestAccess(mapId) {
+  const res = await postWithCookies(`/maps/${mapId}/access_request`)
+  return res.status === 200
+}
+
 module.exports = {
   getMetacodes,
   getCurrentUser,
   approveAccessRequest,
-  denyAccessRequest
+  denyAccessRequest,
+  requestAccess
 }

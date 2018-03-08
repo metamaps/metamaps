@@ -128,6 +128,14 @@ const Map = {
           DataModel.attachCollectionEvents()
           self.requests = data.requests
           isLoaded()
+        },
+        error: function(res) {
+          // forbidden
+          if (res.status === 403) {
+            browserHistory.push(`/maps/${id}/request_access`)
+          } else {
+            GlobalUI.notifyUser('There was an error fetching the map')
+          }
         }
       })
     }

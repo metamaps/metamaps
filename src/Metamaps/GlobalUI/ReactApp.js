@@ -149,7 +149,8 @@ const ReactApp = {
       downloadScreenshot: ImportDialog.downloadScreenshot,
       onExport: format => () => {
         window.open(`${window.location.pathname}/export.${format}`, '_blank')
-      }
+      },
+      requestAccess: DataFetcher.requestAccess
     }
   },
   getCommonProps: function() {
