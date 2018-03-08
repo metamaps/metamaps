@@ -51,10 +51,10 @@ Checklist
 - [ ] Modify the remaining rails templates into JSX templates
   - [x] notifications list
   - [x] notification page
-  - [ ] list metacodes
+  - [x] list metacodes
   - [ ] new metacode
   - [ ] edit metacode
-  - [ ] list metacode_sets
+  - [x] list metacode_sets
   - [ ] new metacode set
   - [ ] edit metacode set
   - [ ] authorized apps

@@ -16,6 +16,12 @@ async function getMetacodes() {
   return data
 }
 
+async function getMetacodeSets() {
+  const res = await fetchWithCookies('/metacode_sets.json')
+  const data = await res.json()
+  return data
+}
+
 async function getCurrentUser() {
   const res = await fetchWithCookies('/users/current.json')
   const data = await res.json()
@@ -39,6 +45,7 @@ async function requestAccess(mapId) {
 
 module.exports = {
   getMetacodes,
+  getMetacodeSets,
   getCurrentUser,
   approveAccessRequest,
   denyAccessRequest,

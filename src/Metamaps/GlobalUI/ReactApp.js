@@ -112,7 +112,8 @@ const ReactApp = {
       markAsRead: apply(Notifications.markAsRead, ReactApp.render),
       markAsUnread: apply(Notifications.markAsUnread, ReactApp.render),
       denyAccessRequest: DataFetcher.denyAccessRequest,
-      approveAccessRequest: DataFetcher.approveAccessRequest
+      approveAccessRequest: DataFetcher.approveAccessRequest,
+      metacodes: DataModel.Metacodes.toJSON()
     },
     self.getMapProps(),
     self.getTopicProps(),

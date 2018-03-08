@@ -89,6 +89,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const metacodes = await DataFetcher.getMetacodes()
     Metamaps.ServerData.Metacodes = metacodes
 
+    const metacodeSets = await DataFetcher.getMetacodeSets()
+    Metamaps.ServerData.metacodeSets = metacodeSets
+
     const activeMapper = await DataFetcher.getCurrentUser()
     if (activeMapper) {
       Metamaps.ServerData.ActiveMapper = activeMapper
