@@ -1,1 +1,0 @@
-$('.main-text').text($('.requesterName').text() + ' has been shared on the map and notified.')

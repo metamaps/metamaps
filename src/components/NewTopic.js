@@ -42,3 +42,13 @@ class NewTopic extends Component {
 }
 
 export default NewTopic
+
+/*
+TODO:
+{ @metacodes.each do |metacode| }
+      Metamaps.Create.selectedMetacodes.push("{ metacode.id }");
+      Metamaps.Create.newSelectedMetacodes.push("{ metacode.id }");
+      Metamaps.Create.selectedMetacodeNames.push("{ metacode.name }");
+      Metamaps.Create.newSelectedMetacodeNames.push("{ metacode.name }");
+    { end } 
+*/

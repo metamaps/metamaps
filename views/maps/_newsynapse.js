@@ -1,3 +1,0 @@
-{ form_for Synapse.new, url: synapses_url, remote: true do |form| }
-{ form.text_field :desc, :placeholder => "describe the connection..." }
-{ end }

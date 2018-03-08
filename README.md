@@ -35,6 +35,8 @@ Checklist
 - [x] create topic form
 - [x] Fork map lightbox / component
 
+- [ ] fix other places where metacode sets are used
+- [ ] make newtopic form load metacodes from users selected ones
 - [ ] create synapse form
 - [ ] replace old loader with react loader
 - [ ] ensure exports of maps work
@@ -63,4 +65,4 @@ Checklist
   - [ ] user passwords
 - [ ] Modify the RubyOnRails app to only serve JSON responses, no HTML pages anymore
 - [ ] Modify the frontend to request that data from the API which is necessary at first to load the page
-  - [ ] Load the metacode sets
+  - [x] Load the metacode sets
