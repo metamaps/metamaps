@@ -44,11 +44,11 @@ class MobileHeader extends Component {
               </Link>
             </li>
             <li>
-              <a href="/maps/new">
+              <Link to="/maps/new">
                 <Sprite src={serverData['map_control_sprite.png']}
                       width={32} height={32} xIndex={4} yIndex={0} />
                 New Map
-              </a>
+              </Link>
             </li>
             <li>
               <Link to="/explore/mine">
@@ -79,34 +79,34 @@ class MobileHeader extends Component {
               </Link>
             </li>
             <li>
-              <a href={`/users/${currentUser.id}/edit`}>
+              <Link to={`/users/${currentUser.id}/edit`}>
                 <Sprite src={serverData['user_sprite.png']}
                         width={32} height={32} xIndex={0} yIndex={0} />
                 Account
-              </a>
+              </Link>
             </li>
             <li className="notifications">
-              <a href="/notifications">
+              <Link to="/notifications">
                 <Sprite src={serverData['map_control_sprite.png']}
                         width={32} height={32} xIndex={0} yIndex={0} />
                 Notifications
-              </a>
+              </Link>
               {unreadNotificationsCount > 0 && <div className="unread-notifications-dot"></div>}
             </li>
             <li>
-              <a id="Logout" href="/logout">
+              <Link id="Logout" to="/logout">
                 <Sprite src={serverData['user_sprite.png']}
                         width={32} height={32} xIndex={0} yIndex={3} />
                 Sign Out
-              </a>
+              </Link>
             </li>
         </ul>}
         {!currentUser && <ul onClick={this.toggle}>
-          <li><a href="/">Home</a></li>
+          <li><Link to="/">Home</Link></li>
           <li><Link to="/explore/active">All Maps</Link></li>
           <li><Link to="/explore/featured">Featured Maps</Link></li>
-          <li><a href="/request">Request Invite</a></li>
-          <li><a href="/login">Login</a></li>
+          <li><Link to="/request">Request Invite</Link></li>
+          <li><Link to="/login">Login</Link></li>
         </ul>}
       </div>}
     </div>
