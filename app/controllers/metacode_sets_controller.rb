@@ -2,7 +2,7 @@
 
 class MetacodeSetsController < ApplicationController
   include MetacodesHelper
-  before_action :require_admin
+  before_action :require_admin, except: :index
 
   # GET /metacode_sets
   # GET /metacode_sets.json
@@ -10,37 +10,8 @@ class MetacodeSetsController < ApplicationController
     @metacode_sets = MetacodeSet.order('name').all
 
     respond_to do |format|
-      format.html # index.html.erb
       format.json { render json: metacode_sets_json }
     end
-  end
-
-  ### SHOW IS NOT CURRENTLY IN USE
-  # GET /metacode_sets/1
-  # GET /metacode_sets/1.json
-  #  def show
-  #    @metacode_set = MetacodeSet.find(params[:id])
-  #
-  #    respond_to do |format|
-  #      format.html # show.html.erb
-  #      format.json { render json: @metacode_set }
-  #    end
-  #  end
-
-  # GET /metacode_sets/new
-  # GET /metacode_sets/new.json
-  def new
-    @metacode_set = MetacodeSet.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @metacode_set }
-    end
-  end
-
-  # GET /metacode_sets/1/edit
-  def edit
-    @metacode_set = MetacodeSet.find(params[:id])
   end
 
   # POST /metacode_sets
@@ -57,15 +28,10 @@ class MetacodeSetsController < ApplicationController
         @metacodes.each do |m|
           InMetacodeSet.create(metacode_id: m, metacode_set_id: @metacode_set.id)
         end
-        format.html do
-          redirect_to metacode_sets_url,
-                      notice: 'Metacode set was successfully created.'
-        end
         format.json do
           render json: @metacode_set, status: :created, location: metacode_sets_url
         end
       else
-        format.html { render action: 'new' }
         format.json { render json: @metacode_set.errors, status: :unprocessable_entity }
       end
     end
@@ -97,10 +63,8 @@ class MetacodeSetsController < ApplicationController
           InMetacodeSet.create(metacode_id: m, metacode_set_id: @metacode_set.id)
         end
 
-        format.html { redirect_to metacode_sets_url, notice: 'Metacode set was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
         format.json { render json: @metacode_set.errors, status: :unprocessable_entity }
       end
     end
@@ -117,7 +81,6 @@ class MetacodeSetsController < ApplicationController
     @metacode_set.destroy
 
     respond_to do |format|
-      format.html { redirect_to metacode_sets_url }
       format.json { head :no_content }
     end
   end
