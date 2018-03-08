@@ -32,7 +32,7 @@ Checklist
 - [x] Request user object itself
 - [x] Load the metacodes
 
-- [ ] create topic form
+- [x] create topic form
 - [ ] create synapse form
 - [ ] move ImportDialog lightbox into main app
 - [ ] Notifications: make sure notifications either look nice, or redirect

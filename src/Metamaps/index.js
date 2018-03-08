@@ -15,7 +15,7 @@ import Import from './Import'
 import JIT from './JIT'
 import Listeners from './Listeners'
 import Loading from './Loading'
-import Map, { CheatSheet, InfoBox } from './Map'
+import Map, { InfoBox } from './Map'
 import Mapper from './Mapper'
 import Mouse from './Mouse'
 import Organize from './Organize'
@@ -52,7 +52,6 @@ Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
 Metamaps.Loading = Loading
 Metamaps.Map = Map
-Metamaps.Map.CheatSheet = CheatSheet
 Metamaps.Map.InfoBox = InfoBox
 Metamaps.Maps = {}
 Metamaps.Mapper = Mapper

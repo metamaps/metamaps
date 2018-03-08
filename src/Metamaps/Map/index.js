@@ -20,7 +20,6 @@ import ContextMenu from '../Views/ContextMenu'
 import TopicCard from '../Views/TopicCard'
 import Visualize from '../Visualize'
 
-import CheatSheet from './CheatSheet'
 import InfoBox from './InfoBox'
 
 const Map = {
@@ -45,7 +44,6 @@ const Map = {
     InfoBox.init(serverData, function updateThumbnail() {
       self.uploadMapScreenshot()
     })
-    CheatSheet.init(serverData)
     $(document).on(Map.events.editedByActiveMapper, self.editedByActiveMapper)
   },
   setHasLearnedTopicCreation: function(value) {
