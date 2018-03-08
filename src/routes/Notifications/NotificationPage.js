@@ -34,7 +34,7 @@ class NotificationPage extends Component {
     const request = notification.data.object
     const map = notification.data.map
     const subject = notification.type === MAP_ACCESS_REQUEST ?
-      (<span><span style={{ fontWeight: 'bold' }} className='requesterName'>{request.user.name}</span> wants to collaborate on map <span style={{fontWeight: 'bold'}}>{ map.name }</span></span>)
+      (<span><span style={{ fontWeight: 'bold' }} className='requesterName'>{notification.actor.name}</span> wants to collaborate on map <span style={{fontWeight: 'bold'}}>{ map.name }</span></span>)
       : notification.subject
     return (
       <div>
@@ -62,7 +62,7 @@ class NotificationPage extends Component {
               </p>
               <Link to={`/maps/${map.id}`}>Go to map</Link>
               &nbsp;&nbsp;
-              <Link to={`/explore/mapper/${request.user.id}`}>View mapper profile</Link>
+              <Link to={`/explore/mapper/${notification.actor.id}`}>View mapper profile</Link>
             </div>}
             {notification.type !== MAP_ACCESS_REQUEST && <NotificationBody notification={notification} />}
           </div>
