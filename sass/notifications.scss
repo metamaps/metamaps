@@ -117,6 +117,7 @@ $unread_notifications_dot_size: 8px;
     height: 32px;
     border-radius: 16px;
     vertical-align: middle;
+    margin-right: 8px;
   }
 
   .button {
@@ -127,6 +128,7 @@ $unread_notifications_dot_size: 8px;
     }
 
     &.decline {
+      margin-left: 8px;
       background: #DB5D5D;
       &:hover {
         background: #DC4B4B;
@@ -138,6 +140,10 @@ $unread_notifications_dot_size: 8px;
     p, div {
       margin: 1em auto;
       line-height: 20px;
+    }
+
+    .accessRequestError {
+      color: #DB5D5D;
     }
   }
 }

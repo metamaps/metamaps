@@ -27,14 +27,21 @@ Checklist
 - [x] Figure out how authentication of requests from the frontend to the API works
 - [x] Figure out how to combine the nodejs realtime server into server.js
 - [x] Notifications: make sure loading states are working for popup and page
+- [x] Request unreadNotificationCount
+- [x] Request invite code
+- [x] Request user object itself
+- [x] Load the metacodes
+
+- [ ] create topic form
+- [ ] create synapse form
+- [ ] move ImportDialog lightbox into main app
 - [ ] Notifications: make sure notifications either look nice, or redirect
 - [ ] Notifications: pagination
 - [ ] Get actioncable working
 - [ ] lightboxes
-- [x] Request unreadNotificationCount
-- [x] Request invite code
-- [x] Request user object itself
 - [ ] About lightbox
+- [ ] Switch Metacodes lightbox / component
+- [ ] Fork map lightbox / component
 - [ ] break up index.html into parts
 - [ ] Handle CSS metacode colors
 - [ ] Fix Request An Invite page
@@ -53,7 +60,5 @@ Checklist
   - [ ] authorize
   - [ ] user passwords
 - [ ] Modify the RubyOnRails app to only serve JSON responses, no HTML pages anymore
-- [ ] Modify the RubyOnRails app to include an endpoint that responds with basic data the front end needs to display (such as the invite code for the user, and the current metamaps build) (a bunch of the data found here: https://github.com/metamaps/metamaps/blob/frontendonly/Metamaps.ServerData.js.erb)
 - [ ] Modify the frontend to request that data from the API which is necessary at first to load the page
-- [x] Load the metacodes
-- [ ] Load the metacode sets
+  - [ ] Load the metacode sets

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 class CheatSheet extends Component {
   render = () => {
     return (
-      <div classNameName="lightboxContent" id="cheatsheet">
+      <div className="lightboxContent" id="cheatsheet">
         <h3>HELP</h3>
         <div id="cheatSheet">
           <ul id="helpWrapper">
@@ -24,7 +24,7 @@ class CheatSheet extends Component {
               <li><a href="#csKeyboardShortcuts">Keyboard Shortcuts</a></li>
             </ul>
             <div id="csTopicView">
-              <div className="csItem"><span className="csTitle">Enter Topic (radial) View:</span> Click on a Topic result from Search, or click the synapse <img src="<%= asset_path 'synapse16.png' %>" width="16" align="middle" /> icon inside open Topic Card on map</div>
+              <div className="csItem"><span className="csTitle">Enter Topic (radial) View:</span> Click on a Topic result from Search, or click the synapse <img src="/images/synapse16.png" width="16" /> icon inside open Topic Card on map</div>
               <div className="csItem"><span className="csTitle">Recenter Topics around chosen Topic:</span> Alt + click on the topic OR Alt + E</div>
               <div className="csItem"><span className="csTitle">Reveal the siblings for a Topic:</span> Right-click and choose 'Reveal siblings' OR Alt + R</div>
               <div className="csItem"><span className="csTitle">Center topic and reveal siblings:</span> Alt + T</div>
@@ -60,7 +60,7 @@ class CheatSheet extends Component {
                 <span className="csTitle">Change Topic permission:</span> Click on 'Permission' icon (only for topic creator)
               </div>
               <div className="csItem indented">
-                <span className="csTitle">Open Topic view:</span> Click on <img src="<%= asset_path 'synapse16.png' %>" width="16" align="middle" /> icon within topic card bar
+                <span className="csTitle">Open Topic view:</span> Click on <img src="/images/synapse16.png" width="16" /> icon within topic card bar
               </div>
               <div className="csItem indented">
                 <span className="csTitle">Close Topic card:</span> Click on canvas
@@ -131,7 +131,7 @@ class CheatSheet extends Component {
             </div>
           </div>
           <div id="tutorials">
-            <iframe id="tutorialVideo" src="//player.vimeo.com/video/88334167" width="552" height="320" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <iframe id="tutorialVideo" src="//player.vimeo.com/video/88334167" width="552" height="320" frameBorder="0" allowFullScreen></iframe>
           </div>
           <div id="moreResources">
             <p>For more information about Metamaps.cc, visit our Knowledge Base or skip directly to a section by clicking on one of the categories below.</p>

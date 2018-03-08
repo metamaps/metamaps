@@ -19,8 +19,6 @@ const Create = {
   newSelectedMetacodes: [],
   init: function() {
     var self = Create
-    self.newTopic.init()
-    self.newSynapse.init()
 
     // // SWITCHING METACODE SETS
 

@@ -10,7 +10,9 @@ import { notifyUser } from './index.js'
 import ImportDialog from './ImportDialog'
 import Notifications from './Notifications'
 import Active from '../Active'
+import Create from '../Create'
 import DataModel from '../DataModel'
+import DataFetcher from '../DataFetcher'
 import { ExploreMaps, ChatView, TopicCard, ContextMenu } from '../Views'
 import Filter from '../Filter'
 import JIT from '../JIT'
@@ -107,7 +109,9 @@ const ReactApp = {
       fetchNotifications: apply(Notifications.fetchNotifications, ReactApp.render),
       fetchNotification: apply(Notifications.fetchNotification, ReactApp.render),
       markAsRead: apply(Notifications.markAsRead, ReactApp.render),
-      markAsUnread: apply(Notifications.markAsUnread, ReactApp.render)
+      markAsUnread: apply(Notifications.markAsUnread, ReactApp.render),
+      denyAccessRequest: DataFetcher.denyAccessRequest,
+      approveAccessRequest: DataFetcher.approveAccessRequest
     },
     self.getMapProps(),
     self.getTopicProps(),
@@ -134,9 +138,12 @@ const ReactApp = {
       toggleMapInfoBox: InfoBox.toggleBox,
       infoBoxHtml: InfoBox.html,
       openImportLightbox: () => ImportDialog.show(),
+      openMetacodeSwitcher: () => self.openLightbox('metacodeSwitcher'),
       forkMap: Map.fork,
       onMapStar: Map.star,
-      onMapUnstar: Map.unstar
+      onMapUnstar: Map.unstar,
+      initNewTopic: Create.newTopic.init,
+      initNewSynapse: Create.newSynapse.init
     }
   },
   getCommonProps: function() {
