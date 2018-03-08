@@ -18,7 +18,7 @@ class LightBoxes extends Component {
             <About />
             <CheatSheet />
             <ForkMap />
-            <Invite />
+            <Invite inviteCode={this.props.inviteCode} />
             <NoIE />
             <SwitchMetacodes />
             <Tutorial />

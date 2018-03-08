@@ -123,13 +123,3 @@ class NotificationPage extends Component {
 }
 
 export default NotificationPage
-
-/*
-<script>
-               $(document).ready(function() {
-                 $('.notification-body .button').click(function() {
-                   $(this).html('<img src="{ asset_path('ellipsis.gif') }" />')
-                 })
-               })
-             </script>
-             */

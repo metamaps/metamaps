@@ -73,7 +73,7 @@ class App extends Component {
                                 signInPage={pathname === '/login'} />}
       <Toast message={toast} />
       {children}
-      <LightBoxes />
+      <LightBoxes inviteCode={currentUser && currentUser.get('invite_code')} />
     </div>
   }
 }

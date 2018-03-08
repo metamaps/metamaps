@@ -1,7 +1,5 @@
 /* global $ */
 
-import clipboard from 'clipboard-js'
-
 import Create from '../Create'
 
 import Notifications from './Notifications'
@@ -137,19 +135,6 @@ const GlobalUI = {
       ReactApp.render()
       self.notifying = false
     }
-  },
-  shareInvite: function(inviteLink) {
-    clipboard.copy({
-      'text/plain': inviteLink
-    }).then(() => {
-      $('#joinCodesBox .popup').remove()
-      $('#joinCodesBox').append('<p class="popup" style="text-align: center">Copied!</p>')
-      window.setTimeout(() => $('#joinCodesBox .popup').remove(), 1500)
-    }, () => {
-      $('#joinCodesBox .popup').remove()
-      $('#joinCodesBox').append(`<p class="popup" style="text-align: center">Your browser doesn't support copying, please copy manually.</p>`)
-      window.setTimeout(() => $('#joinCodesBox .popup').remove(), 1500)
-    })
   }
 }
 
