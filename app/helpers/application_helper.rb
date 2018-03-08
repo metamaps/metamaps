@@ -5,7 +5,7 @@ module ApplicationHelper
     "#{request.base_url}/join" + (current_user ? "?code=#{current_user.code}" : '')
   end
 
-  def user_unread_notification_count
+  def user_unread_notifications_count
     return 0 if current_user.nil?
     @uunc ||= current_user.mailboxer_notification_receipts.reduce(0) do |total, receipt|
       receipt.is_read ? total : total + 1

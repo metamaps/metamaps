@@ -1,6 +1,6 @@
 <div id="loading"></div>
 <script type="text/javascript">
-  Metamaps.ServerData.unreadNotificationsCount = <%= current_user ? user_unread_notification_count : 0 %>
+  Metamaps.ServerData.unreadNotificationsCount = <%= current_user ? user_unread_notifications_count : 0 %>
   Metamaps.ServerData.mapIsStarred = <%= current_user && @map && current_user.starred_map?(@map) ? true : false %>
   Metamaps.ServerData.mobileTitle = "<%= yield(:mobile_title) %>"
   Metamaps.ServerData.ActiveMapper = <%= current_user ? current_user.to_json({follows: true, email: true, follow_settings: true}).html_safe : nil %>

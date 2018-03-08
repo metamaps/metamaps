@@ -7,12 +7,19 @@ class UsersController < ApplicationController
 
   # GET /users/current
   def current
-    #if current_user
+    if current_user
       # these are just options, saying include these values, they aren't the values themselves
-      render json: current_user.to_json({follows: true, email: true, follow_settings: true, emails_allowed: true})
-    #else
-     # render json: nil
-    #end
+      render json: current_user.to_json({
+        follows: true,
+        email: true,
+        follow_settings: true,
+        emails_allowed: true,
+        inviteCode: true,
+        unread_notifications_count: user_unread_notifications_count
+      })
+    else
+      render json: nil
+    end
   end
 
   # GET /users/1.json
