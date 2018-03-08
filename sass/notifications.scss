@@ -81,67 +81,63 @@ $unread_notifications_dot_size: 8px;
   }
 }
 
-.controller-notifications {
-  .notificationPage,
-  .notificationsPage {
-    font-family: 'din-regular', Sans-Serif;
+.notificationPage,
+.notificationsPage {
+  font-family: 'din-regular', Sans-Serif;
 
-    & a:hover {
-      text-decoration: none;
+  & a:hover {
+    text-decoration: none;
+  }
+
+  & > .notification-title {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.25em;
+    margin-bottom: 0.5em;
+  }
+
+  .back {
+    margin-top: 1em;
+  }
+}
+
+.notificationsPage {
+  header {
+    margin-bottom: 0;
+  }
+
+  .emptyInbox {
+    padding-top: 15px;
+  }
+}
+
+.notificationPage {
+  .thirty-two-avatar {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    vertical-align: middle;
+  }
+
+  .button {
+    line-height: 32px;
+
+    img {
+      margin-top: 8px;
     }
 
-    & > .notification-title {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 0.25em;
-      margin-bottom: 0.5em;
-    }
-
-    .back {
-      margin-top: 1em;
+    &.decline {
+      background: #DB5D5D;
+      &:hover {
+        background: #DC4B4B;
+      }
     }
   }
 
-  .notificationsPage {
-    header {
-      margin-bottom: 0;
-    }
-
-    .emptyInbox {
-      padding-top: 15px;
-    }
-  }
-
-
-
-  .notificationPage {
-    .thirty-two-avatar {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
-      border-radius: 16px;
-      vertical-align: middle;
-    }
-
-    .button {
-      line-height: 32px;
-
-      img {
-        margin-top: 8px;
-      }
-
-      &.decline {
-        background: #DB5D5D;
-        &:hover {
-          background: #DC4B4B;
-        }
-      }
-    }
-
-    .notification-body {
-      p, div {
-        margin: 1em auto;
-        line-height: 20px;
-      }
+  .notification-body {
+    p, div {
+      margin: 1em auto;
+      line-height: 20px;
     }
   }
 }

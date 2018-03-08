@@ -7,7 +7,7 @@ const Notifications = {
   notificationsLoading: false,
   unreadNotificationsCount: 0,
   init: serverData => {
-    Notifications.unreadNotificationsCount = serverData.unreadNotificationsCount
+    Notifications.unreadNotificationsCount = serverData.ActiveMapper.unread_notifications_count
   },
   fetchNotifications: render => {
     Notifications.notificationsLoading = true
