@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import About from './About'
 import CheatSheet from './CheatSheet'
 import ForkMap from './ForkMap'
+import ImportDialogBox from './ImportDialogBox'
 import Invite from './Invite'
 import NoIE from './NoIE'
 import SwitchMetacodes from './SwitchMetacodes'
@@ -10,6 +11,11 @@ import Tutorial from './Tutorial'
 
 class LightBoxes extends Component {
   render = () => {
+    const importProps = {
+      onFileAdded: this.props.importHandleFile,
+      downloadScreenshot: this.props.downloadScreenshot,
+      onExport: this.props.onExport
+    }
     return (
       <div id="lightbox_overlay">
         <div id="lightbox_main">
@@ -18,6 +24,7 @@ class LightBoxes extends Component {
             <About />
             <CheatSheet />
             <ForkMap />
+            <ImportDialogBox {...importProps} />
             <Invite inviteCode={this.props.inviteCode} />
             <NoIE />
             <SwitchMetacodes />

@@ -31,10 +31,12 @@ Checklist
 - [x] Request invite code
 - [x] Request user object itself
 - [x] Load the metacodes
-
+- [x] move ImportDialog lightbox into main app
 - [x] create topic form
+
 - [ ] create synapse form
-- [ ] move ImportDialog lightbox into main app
+- [ ] replace old loader with react loader
+- [ ] ensure exports of maps work
 - [ ] Notifications: make sure notifications either look nice, or redirect
 - [ ] Notifications: pagination
 - [ ] Get actioncable working

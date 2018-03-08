@@ -44,7 +44,8 @@ class App extends Component {
             mobile, mobileTitle, mobileTitleWidth, mobileTitleClick, location,
             map, userRequested, requestAnswered, requestApproved, serverData,
             onRequestAccess, notifications, fetchNotifications,
-            markAsRead, markAsUnread, notificationsLoading } = this.props
+            markAsRead, markAsUnread, notificationsLoading,
+            importHandleFile, downloadScreenshot, onExport } = this.props
     const { pathname } = location || {}
     // this fixes a bug that happens otherwise when you logout
     const currentUser = this.props.currentUser && this.props.currentUser.id ? this.props.currentUser : null
@@ -73,7 +74,10 @@ class App extends Component {
                                 signInPage={pathname === '/login'} />}
       <Toast message={toast} />
       {children}
-      <LightBoxes inviteCode={currentUser && currentUser.get('invite_code')} />
+      <LightBoxes inviteCode={currentUser && currentUser.get('invite_code')}
+                  importHandleFile={importHandleFile}
+                  downloadScreenshot={downloadScreenshot}
+                  onExport={onExport} />
     </div>
   }
 }

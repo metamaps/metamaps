@@ -16,6 +16,7 @@ import DataFetcher from '../DataFetcher'
 import { ExploreMaps, ChatView, TopicCard, ContextMenu } from '../Views'
 import Filter from '../Filter'
 import JIT from '../JIT'
+import PasteInput from '../PasteInput'
 import Realtime from '../Realtime'
 import Map, { InfoBox } from '../Map'
 import Topic from '../Topic'
@@ -143,7 +144,12 @@ const ReactApp = {
       onMapStar: Map.star,
       onMapUnstar: Map.unstar,
       initNewTopic: Create.newTopic.init,
-      initNewSynapse: Create.newSynapse.init
+      initNewSynapse: Create.newSynapse.init,
+      importHandleFile: PasteInput.handleFile,
+      downloadScreenshot: ImportDialog.downloadScreenshot,
+      onExport: format => () => {
+        window.open(`${window.location.pathname}/export.${format}`, '_blank')
+      }
     }
   },
   getCommonProps: function() {

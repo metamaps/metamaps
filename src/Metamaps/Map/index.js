@@ -381,5 +381,5 @@ const Map = {
   }
 }
 
-export { CheatSheet, InfoBox }
+export { InfoBox }
 export default Map
