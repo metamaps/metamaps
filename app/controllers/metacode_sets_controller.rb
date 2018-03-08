@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class MetacodeSetsController < ApplicationController
+  include MetacodesHelper
   before_action :require_admin
 
   # GET /metacode_sets
@@ -10,7 +11,7 @@ class MetacodeSetsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @metacode_sets }
+      format.json { render json: metacode_sets_json }
     end
   end
 

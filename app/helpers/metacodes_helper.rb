@@ -52,27 +52,30 @@ module MetacodesHelper
 
   def metacode_sets_json
     metacode_sets = []
-    metacode_sets << {
-      name: 'Recently Used',
-      metacodes: user_recent_metacodes
-                     .map { |m| { id: m.id, icon_path: asset_path(m.icon), name: m.name } }
-    }
-    metacode_sets << {
-      name: 'Most Used',
-      metacodes: user_most_used_metacodes
-                     .map { |m| { id: m.id, icon_path: asset_path(m.icon), name: m.name } }
-    }
+    if current_user
+      metacode_sets << {
+        name: 'Recently Used',
+        description: 'Your recently used metacodes',
+        metacodes: user_recent_metacodes.map { |m| m.id }
+      }
+      metacode_sets << {
+        name: 'Most Used',
+        description: 'Your most used metacodes',
+        metacodes: user_most_used_metacodes.map { |m| m.id }
+      }
+    end
     metacode_sets += MetacodeSet.order('name').all.map do |set|
       {
+        id: set.id,
         name: set.name,
-        metacodes: set.metacodes.order('name')
-                      .map { |m| { id: m.id, icon_path: asset_path(m.icon), name: m.name } }
+        desc: set.desc,
+        metacodes: set.metacodes.order('name').map { |m| m.id }
       }
     end
     metacode_sets << {
       name: 'All',
-      metacodes: Metacode.order('name').all
-                         .map { |m| { id: m.id, icon_path: asset_path(m.icon), name: m.name } }
+      desc: 'A list of all the metacodes',
+      metacodes: Metacode.order('name').all.map { |m| m.id }
     }
     metacode_sets.to_json
   end
