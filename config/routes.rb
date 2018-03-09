@@ -15,7 +15,6 @@ Metamaps::Application.routes.draw do
     get 'starred'
     get 'mapper/:id', action: 'mapper'
   end
-  get :explore, to: redirect('/')
 
   resources :maps, except: %i[index edit] do
     member do
@@ -70,7 +69,7 @@ Metamaps::Application.routes.draw do
 
   resources :metacode_sets, except: [:show]
 
-  resources :metacodes, except: [:destroy]
+  resources :metacodes, except: [:new, :edit, :destroy]
   get 'metacodes/:name', to: 'metacodes#show'
 
   namespace :search do

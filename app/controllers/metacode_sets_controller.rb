@@ -5,84 +5,64 @@ class MetacodeSetsController < ApplicationController
   before_action :require_admin, except: :index
 
   # GET /metacode_sets
-  # GET /metacode_sets.json
   def index
     @metacode_sets = MetacodeSet.order('name').all
-
-    respond_to do |format|
-      format.json { render json: metacode_sets_json }
-    end
+    render json: metacode_sets_json
   end
 
   # POST /metacode_sets
-  # POST /metacode_sets.json
   def create
     @user = current_user
     @metacode_set = MetacodeSet.new(metacode_set_params)
     @metacode_set.user_id = @user.id
-
-    respond_to do |format|
-      if @metacode_set.save
-        # create the InMetacodeSet for all the metacodes that were selected for the set
-        @metacodes = params[:metacodes][:value].split(',')
-        @metacodes.each do |m|
-          InMetacodeSet.create(metacode_id: m, metacode_set_id: @metacode_set.id)
-        end
-        format.json do
-          render json: @metacode_set, status: :created, location: metacode_sets_url
-        end
-      else
-        format.json { render json: @metacode_set.errors, status: :unprocessable_entity }
+    if @metacode_set.save
+      # create the InMetacodeSet for all the metacodes that were selected for the set
+      @metacodes = params[:metacodes][:value].split(',')
+      @metacodes.each do |m|
+        InMetacodeSet.create(metacode_id: m, metacode_set_id: @metacode_set.id)
       end
+      render json: @metacode_set, status: :created
+    else
+      render json: @metacode_set.errors, status: :unprocessable_entity
     end
   end
 
   # PUT /metacode_sets/1
-  # PUT /metacode_sets/1.json
   def update
     @metacode_set = MetacodeSet.find(params[:id])
+    if @metacode_set.update_attributes(metacode_set_params)
 
-    respond_to do |format|
-      if @metacode_set.update_attributes(metacode_set_params)
+      # build an array of the IDs of the metacodes currently in the set
+      current_metacodes = @metacode_set.metacodes.map { |m| m.id.to_s }
+      # get the list of desired metacodes for the set from the user input and build an array out of it
+      new_metacodes = params[:metacodes][:value].split(',')
 
-        # build an array of the IDs of the metacodes currently in the set
-        current_metacodes = @metacode_set.metacodes.map { |m| m.id.to_s }
-        # get the list of desired metacodes for the set from the user input and build an array out of it
-        new_metacodes = params[:metacodes][:value].split(',')
-
-        # remove the metacodes that were in it, but now aren't
-        removed_metacodes = current_metacodes - new_metacodes
-        removed_metacodes.each do |m|
-          inmetacodeset = InMetacodeSet.find_by(metacode_id: m, metacode_set_id: @metacode_set.id)
-          inmetacodeset.destroy
-        end
-
-        # add the new metacodes
-        added_metacodes = new_metacodes - current_metacodes
-        added_metacodes.each do |m|
-          InMetacodeSet.create(metacode_id: m, metacode_set_id: @metacode_set.id)
-        end
-
-        format.json { head :no_content }
-      else
-        format.json { render json: @metacode_set.errors, status: :unprocessable_entity }
+      # remove the metacodes that were in it, but now aren't
+      removed_metacodes = current_metacodes - new_metacodes
+      removed_metacodes.each do |m|
+        inmetacodeset = InMetacodeSet.find_by(metacode_id: m, metacode_set_id: @metacode_set.id)
+        inmetacodeset.destroy
       end
+
+      # add the new metacodes
+      added_metacodes = new_metacodes - current_metacodes
+      added_metacodes.each do |m|
+        InMetacodeSet.create(metacode_id: m, metacode_set_id: @metacode_set.id)
+      end
+
+      head :no_content
+    else
+      render json: @metacode_set.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /metacode_sets/1
-  # DELETE /metacode_sets/1.json
   def destroy
     @metacode_set = MetacodeSet.find(params[:id])
-
     # delete everything that tracks what's in the set
     @metacode_set.in_metacode_sets.each(&:destroy)
-
     @metacode_set.destroy
-
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    head :no_content
   end
 
   private
