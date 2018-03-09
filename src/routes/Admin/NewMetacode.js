@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import AdminHeader from './AdminHeader'
 
-class Metacodes extends Component {
+class NewMetacode extends Component {
   render = () => {
     return (
       <div>
@@ -11,4 +11,4 @@ class Metacodes extends Component {
   }
 }
 
-export default Metacodes
+export default NewMetacode

@@ -60,8 +60,8 @@ Checklist
   - [ ] new metacode
   - [ ] edit metacode
   - [x] list metacode_sets
-  - [ ] new metacode set
-  - [ ] edit metacode set
+  - [x] new metacode set
+  - [x] edit metacode set
   - [ ] authorized apps
   - [ ] registered apps
   - [ ] authorize

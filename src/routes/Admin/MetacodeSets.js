@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import AdminHeader from './AdminHeader'
 
+/*
+TODO: 
+  make the delete metacode set button work
+*/
+
 class MetacodeSets extends Component {
   render = () => {
     const { metacodeSets, metacodes } = this.props
@@ -43,7 +48,7 @@ class MetacodeSetRow extends Component {
           <a data-confirm="Are you sure?" rel="nofollow" data-method="delete" href={`/metacode_sets/${metacodeSet.id}`}>Delete</a>
         </td>
         <td className="metacodeSetDesc">
-          {metacodeSet.description}
+          {metacodeSet.desc}
         </td>
         <td>
           {metacodeSet.metacodes.map((mId, index) => {

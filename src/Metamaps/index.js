@@ -1,5 +1,4 @@
 import Active from './Active'
-import Admin from './Admin'
 import AutoLayout from './AutoLayout'
 import Cable from './Cable'
 import Control from './Control'
@@ -32,7 +31,6 @@ import Visualize from './Visualize'
 
 const Metamaps = window.Metamaps || {}
 Metamaps.Active = Active
-Metamaps.Admin = Admin
 Metamaps.AutoLayout = AutoLayout
 Metamaps.Cable = Cable
 Metamaps.Control = Control
@@ -86,6 +84,7 @@ function runInitFunctions(serverData) {
 document.addEventListener('DOMContentLoaded', async function() {
   Metamaps.ServerData = Metamaps.ServerData || {}
   try {
+    // TODO: do these in parallel (Promise.all)
     const metacodes = await DataFetcher.getMetacodes()
     Metamaps.ServerData.Metacodes = metacodes
 

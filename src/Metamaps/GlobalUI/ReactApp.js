@@ -122,7 +122,8 @@ const ReactApp = {
     self.getMapsProps(),
     self.getContextMenuProps(),
     self.getTopicCardProps(),
-    self.getChatProps())
+    self.getChatProps(),
+    self.getAdminProps())
   },
   getMapProps: function() {
     const self = ReactApp
@@ -253,6 +254,16 @@ const ReactApp = {
       filterAllMetacodes: Filter.filterAllMetacodes,
       filterAllMappers: Filter.filterAllMappers,
       filterAllSynapses: Filter.filterAllSynapses
+    }
+  },
+  getAdminProps: function() {
+    const self = ReactApp
+    return {
+      createMetacodeSet: DataFetcher.createMetacodeSet,
+      updateMetacodeSet: DataFetcher.updateMetacodeSet,
+      deleteMetacodeSet: DataFetcher.deleteMetacodeSet,
+      createMetacode: DataFetcher.createMetacode,
+      updateMetacode: DataFetcher.updateMetacode
     }
   },
   resize: function() {
