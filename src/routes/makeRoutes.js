@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, IndexRoute } from 'react-router'
+import { Route, IndexRoute, Redirect } from 'react-router'
 import App from './App'
 import Apps from './Apps'
 import Maps from './Maps'
@@ -41,9 +41,12 @@ export default function makeRoutes (currentUser) {
       <Route path="request_access" component={RequestAccess} />
     </Route>
     <Route path="topics/:id" component={TopicView} />
-    <Route path="login" component={Login} />
-    <Route path="join" component={Join} />
-    <Route path="request" component={RequestInvite} />
+    {!currentUser && <Route path="login" component={Login} />}
+    {!currentUser && <Route path="join" component={Join} />}
+    {!currentUser && <Route path="request" component={RequestInvite} />}
+    {currentUser && <Redirect path="login" to="/" />}
+    {currentUser && <Redirect path="join" to="/" />}
+    {currentUser && <Redirect path="request" to="/" />}
     <Route path="notifications">
       <IndexRoute component={Notifications} />
       <Route path=":id" component={NotificationPage} />
