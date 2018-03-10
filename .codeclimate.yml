@@ -32,7 +32,7 @@ ratings:
 exclude_paths:
 - app/assets/images/
 - app/assets/javascripts/lib/
-- frontend/src/patched/
+- src/patched/
 - db/
 - script/
 - spec/
