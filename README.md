@@ -57,8 +57,8 @@ Checklist
   - [x] notifications list
   - [x] notification page
   - [x] list metacodes
-  - [ ] new metacode
-  - [ ] edit metacode
+  - [x] new metacode
+  - [x] edit metacode
   - [x] list metacode_sets
   - [x] new metacode set
   - [x] edit metacode set
