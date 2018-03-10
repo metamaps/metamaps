@@ -1,5 +1,4 @@
 import Active from './Active'
-import Admin from './Admin'
 import AutoLayout from './AutoLayout'
 import Cable from './Cable'
 import Control from './Control'
@@ -15,7 +14,7 @@ import Import from './Import'
 import JIT from './JIT'
 import Listeners from './Listeners'
 import Loading from './Loading'
-import Map, { CheatSheet, InfoBox } from './Map'
+import Map, { InfoBox } from './Map'
 import Mapper from './Mapper'
 import Mouse from './Mouse'
 import Organize from './Organize'
@@ -32,7 +31,6 @@ import Visualize from './Visualize'
 
 const Metamaps = window.Metamaps || {}
 Metamaps.Active = Active
-Metamaps.Admin = Admin
 Metamaps.AutoLayout = AutoLayout
 Metamaps.Cable = Cable
 Metamaps.Control = Control
@@ -52,7 +50,6 @@ Metamaps.JIT = JIT
 Metamaps.Listeners = Listeners
 Metamaps.Loading = Loading
 Metamaps.Map = Map
-Metamaps.Map.CheatSheet = CheatSheet
 Metamaps.Map.InfoBox = InfoBox
 Metamaps.Maps = {}
 Metamaps.Mapper = Mapper
@@ -87,8 +84,12 @@ function runInitFunctions(serverData) {
 document.addEventListener('DOMContentLoaded', async function() {
   Metamaps.ServerData = Metamaps.ServerData || {}
   try {
+    // TODO: do these in parallel (Promise.all)
     const metacodes = await DataFetcher.getMetacodes()
     Metamaps.ServerData.Metacodes = metacodes
+
+    const metacodeSets = await DataFetcher.getMetacodeSets()
+    Metamaps.ServerData.metacodeSets = metacodeSets
 
     const activeMapper = await DataFetcher.getCurrentUser()
     if (activeMapper) {

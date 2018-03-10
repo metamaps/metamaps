@@ -61,11 +61,11 @@ class NotificationBox extends Component {
   }
 
   render = () => {
-    const { loading } = this.props
+    const { notifications, loading } = this.props
     return <div className='notificationsBox'>
       <div className='notificationsBoxTriangle' />
       <ul className='notifications'>
-        {loading ?  this.showLoading() : this.showNotifications()}
+        {notifications.length === 0 && loading ?  this.showLoading() : this.showNotifications()}
       </ul>
     </div>
   }

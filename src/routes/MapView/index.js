@@ -9,6 +9,8 @@ import Instructions from './Instructions'
 import VisualizationControls from '../../components/VisualizationControls'
 import MapChat from './MapChat'
 import TopicCard from '../../components/TopicCard'
+import NewTopic from '../../components/NewTopic'
+import NewSynapse from '../../components/NewSynapse'
 
 export default class MapView extends Component {
 
@@ -82,7 +84,7 @@ export default class MapView extends Component {
             openImportLightbox, forkMap, openHelpLightbox,
             mapIsStarred, onMapStar, onMapUnstar, openTopic,
             onZoomExtents, onZoomIn, onZoomOut, hasLearnedTopicCreation,
-            contextMenu } = this.props
+            contextMenu, initNewTopic, initNewSynapse, openMetacodeSwitcher } = this.props
     const { chatOpen } = this.state
     const onChatOpen = () => {
       this.setState({chatOpen: true})
@@ -111,6 +113,8 @@ export default class MapView extends Component {
                     filterAllMappers={filterAllMappers}
                     filterAllSynapses={filterAllSynapses} />
       <DataVis />
+      <NewTopic initNewTopic={initNewTopic} openMetacodeSwitcher={openMetacodeSwitcher} />
+      <NewSynapse initNewSynapse={initNewSynapse} />
       {openTopic && <TopicCard {...this.props} />}
       {contextMenu && <ContextMenu {...this.props} />}
       {currentUser && <Instructions mobile={mobile} hasLearnedTopicCreation={hasLearnedTopicCreation} />}

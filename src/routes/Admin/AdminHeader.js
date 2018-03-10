@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import NavBar from '../components/NavBar'
-import NavBarLink from '../components/NavBarLink'
+import NavBar from '../../components/NavBar'
+import NavBarLink from '../../components/NavBarLink'
 
-class Admin extends Component {
+class AdminHeader extends Component {
   render = () => {
     return (
       <NavBar>
@@ -15,4 +15,4 @@ class Admin extends Component {
   }
 }
 
-export default Admin
+export default AdminHeader

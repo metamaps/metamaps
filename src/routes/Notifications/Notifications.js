@@ -27,7 +27,7 @@ class Notifications extends Component {
   render = () => {
     const { notificationsLoading, markAsRead, markAsUnread } = this.props
     const notifications = (this.props.notifications || []).filter(n => !(BLACKLIST.indexOf(n.type) > -1 && (!n.data.object || !n.data.map)))
-    if (notificationsLoading) {
+    if (notifications.length === 0 && notificationsLoading) {
       return (
         <div>
           <LoadingPage />

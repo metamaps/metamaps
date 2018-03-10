@@ -10,10 +10,13 @@ import { notifyUser } from './index.js'
 import ImportDialog from './ImportDialog'
 import Notifications from './Notifications'
 import Active from '../Active'
+import Create from '../Create'
 import DataModel from '../DataModel'
+import DataFetcher from '../DataFetcher'
 import { ExploreMaps, ChatView, TopicCard, ContextMenu } from '../Views'
 import Filter from '../Filter'
 import JIT from '../JIT'
+import PasteInput from '../PasteInput'
 import Realtime from '../Realtime'
 import Map, { InfoBox } from '../Map'
 import Topic from '../Topic'
@@ -107,7 +110,10 @@ const ReactApp = {
       fetchNotifications: apply(Notifications.fetchNotifications, ReactApp.render),
       fetchNotification: apply(Notifications.fetchNotification, ReactApp.render),
       markAsRead: apply(Notifications.markAsRead, ReactApp.render),
-      markAsUnread: apply(Notifications.markAsUnread, ReactApp.render)
+      markAsUnread: apply(Notifications.markAsUnread, ReactApp.render),
+      denyAccessRequest: DataFetcher.denyAccessRequest,
+      approveAccessRequest: DataFetcher.approveAccessRequest,
+      metacodes: DataModel.Metacodes.toJSON()
     },
     self.getMapProps(),
     self.getTopicProps(),
@@ -116,7 +122,8 @@ const ReactApp = {
     self.getMapsProps(),
     self.getContextMenuProps(),
     self.getTopicCardProps(),
-    self.getChatProps())
+    self.getChatProps(),
+    self.getAdminProps())
   },
   getMapProps: function() {
     const self = ReactApp
@@ -134,9 +141,18 @@ const ReactApp = {
       toggleMapInfoBox: InfoBox.toggleBox,
       infoBoxHtml: InfoBox.html,
       openImportLightbox: () => ImportDialog.show(),
+      openMetacodeSwitcher: () => self.openLightbox('metacodeSwitcher'),
       forkMap: Map.fork,
       onMapStar: Map.star,
-      onMapUnstar: Map.unstar
+      onMapUnstar: Map.unstar,
+      initNewTopic: Create.newTopic.init,
+      initNewSynapse: Create.newSynapse.init,
+      importHandleFile: PasteInput.handleFile,
+      downloadScreenshot: ImportDialog.downloadScreenshot,
+      onExport: format => () => {
+        window.open(`${window.location.pathname}/export.${format}`, '_blank')
+      },
+      requestAccess: DataFetcher.requestAccess
     }
   },
   getCommonProps: function() {
@@ -238,6 +254,16 @@ const ReactApp = {
       filterAllMetacodes: Filter.filterAllMetacodes,
       filterAllMappers: Filter.filterAllMappers,
       filterAllSynapses: Filter.filterAllSynapses
+    }
+  },
+  getAdminProps: function() {
+    const self = ReactApp
+    return {
+      createMetacodeSet: DataFetcher.createMetacodeSet,
+      updateMetacodeSet: DataFetcher.updateMetacodeSet,
+      deleteMetacodeSet: DataFetcher.deleteMetacodeSet,
+      createMetacode: DataFetcher.createMetacode,
+      updateMetacode: DataFetcher.updateMetacode
     }
   },
   resize: function() {

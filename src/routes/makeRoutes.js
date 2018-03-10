@@ -1,10 +1,15 @@
 import React from 'react'
-import { Route, IndexRoute } from 'react-router'
-import Admin from './Admin'
+import { Route, IndexRoute, Redirect } from 'react-router'
 import App from './App'
 import Apps from './Apps'
 import Maps from './Maps'
 import MapView from './MapView'
+import Metacodes from './Admin/Metacodes'
+import NewMetacode from './Admin/NewMetacode'
+import EditMetacode from './Admin/EditMetacode'
+import MetacodeSets from './Admin/MetacodeSets'
+import NewMetacodeSet from './Admin/NewMetacodeSet'
+import EditMetacodeSet from './Admin/EditMetacodeSet'
 import Notifications from './Notifications/Notifications'
 import NotificationPage from './Notifications/NotificationPage'
 import TopicView from './TopicView'
@@ -36,9 +41,12 @@ export default function makeRoutes (currentUser) {
       <Route path="request_access" component={RequestAccess} />
     </Route>
     <Route path="topics/:id" component={TopicView} />
-    <Route path="login" component={Login} />
-    <Route path="join" component={Join} />
-    <Route path="request" component={RequestInvite} />
+    {!currentUser && <Route path="login" component={Login} />}
+    {!currentUser && <Route path="join" component={Join} />}
+    {!currentUser && <Route path="request" component={RequestInvite} />}
+    {currentUser && <Redirect path="login" to="/" />}
+    {currentUser && <Redirect path="join" to="/" />}
+    {currentUser && <Redirect path="request" to="/" />}
     <Route path="notifications">
       <IndexRoute component={Notifications} />
       <Route path=":id" component={NotificationPage} />
@@ -50,14 +58,14 @@ export default function makeRoutes (currentUser) {
       <Route path="password/edit" component={nullComponent} />
     </Route>
     <Route path="metacodes">
-      <IndexRoute component={Admin} />
-      <Route path="new" component={Admin} />
-      <Route path=":id/edit" component={Admin} />
+      <IndexRoute component={Metacodes} />
+      <Route path="new" component={NewMetacode} />
+      <Route path=":id/edit" component={EditMetacode} />
     </Route>
     <Route path="metacode_sets">
-      <IndexRoute component={Admin} />
-      <Route path="new" component={Admin} />
-      <Route path=":id/edit" component={Admin} />
+      <IndexRoute component={MetacodeSets} />
+      <Route path="new" component={NewMetacodeSet} />
+      <Route path=":id/edit" component={EditMetacodeSet} />
     </Route>
     <Route path="oauth">
       <Route path="token/info" component={Apps} />
