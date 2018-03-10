@@ -26,13 +26,13 @@ At the time of writing, there are four directories in the spec folder. One,
 `support`, is for helper functions. `rails_helper.rb` and `spec_helper.rb` are
 also for helper functions.
 
-`factories` is for a gem called [factory-girl][factory-girl]. This gem lets you
+`factories` is for a gem called [factory-bot][factory_bot]. This gem lets you
 use the `create` and `build` functions to quickly create the simplest possible
 valid version of a given model. For instance:
 
     let(:map1) { create :map }
-    let(:ronald) { create :user, name: "Ronald" }
-    let(:map2) { create :map, user: ronald }
+    let(:alex) { create :user, name: "Alex" }
+    let(:map2) { create :map, user: alex }
 
 As you can see, you can also customize the factories. You can read the full
 documentation at the link above or check the existing specs to see how it works.
@@ -53,5 +53,5 @@ the added code works. This will help in a few ways:
 
 Happy testing!
 
-[factory-girl]: https://github.com/thoughtbot/factory_girl
+[factory-bot]: https://github.com/thoughtbot/factory_bot
 [rspec-docs]: http://rspec.info

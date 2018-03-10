@@ -10,7 +10,7 @@
 # have actual codes, you'll need to specify one simple_user and then you
 # can specify other :code_user users based on the pre-existing user's code.
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :code_user, class: User do
     sequence(:name) { |n| "Cool User ##{n}" }
     sequence(:email) { |n| "cooluser#{n}@cooldomain.com" }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :synapse do
     sequence(:desc) { |n| "Cool synapse ##{n}" }
     category :'from-to'

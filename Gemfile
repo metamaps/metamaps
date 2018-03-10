@@ -38,7 +38,7 @@ gem 'uglifier'
 
 group :test do
   gem 'brakeman', require: false
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'json-schema'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
