@@ -7,9 +7,9 @@
     "server": "node server.js",
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "mocha-webpack --webpack-config webpack.test.config.js --require frontend/test_support/dom.js --recursive frontend/test",
-    "eslint": "eslint frontend",
-    "eslint:fix": "eslint --fix frontend"
+    "test": "mocha-webpack --webpack-config webpack.test.config.js --require test_support/dom.js --recursive test",
+    "eslint": "eslint src",
+    "eslint:fix": "eslint --fix src"
   },
   "repository": {
     "type": "git",
