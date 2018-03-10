@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/metamaps/metamaps-ui.svg?branch=master)](https://travis-ci.org/metamaps/metamaps-ui)
 
 Make sure you're running a good up to date LTS version of `node`, like 8.9.4
 
