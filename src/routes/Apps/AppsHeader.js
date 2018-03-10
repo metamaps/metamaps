@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import NavBar from '../components/NavBar'
 import NavBarLink from '../components/NavBarLink'
 
-class Apps extends Component {
+class AppsHeader extends Component {
   render = () => {
     const { currentUser } = this.props
 
@@ -21,4 +21,4 @@ class Apps extends Component {
   }
 }
 
-export default Apps
+export default AppsHeader

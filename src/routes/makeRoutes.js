@@ -1,7 +1,14 @@
 import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 import App from './App'
-import Apps from './Apps'
+import Apps from './Apps/Apps'
+import ShowApp from './Apps/ShowApp'
+import NewApp from './Apps/NewApp'
+import EditApp from './Apps/EditApp'
+import Authorizations from './Apps/Authorizations'
+import NewAuthorization from './Apps/NewAuthorization'
+import ShowAuthorization from './Apps/ShowAuthorization'
+import Authorized from './Apps/Authorized'
 import Maps from './Maps'
 import MapView from './MapView'
 import Metacodes from './Admin/Metacodes'
@@ -70,18 +77,17 @@ export default function makeRoutes (currentUser) {
     <Route path="oauth">
       <Route path="token/info" component={Apps} />
       <Route path="authorize">
-        <IndexRoute component={nullComponent} />
-        <Route path=":code" component={nullComponent} />
+        <IndexRoute component={NewAuthorization} />
+        <Route path=":code" component={ShowAuthorization} />
       </Route>
       <Route path="authorized_applications">
-        <IndexRoute component={Apps} />
-        <Route path=":id" component={Apps} />
+        <IndexRoute component={Authorized} />
       </Route>
       <Route path="applications">
         <IndexRoute component={Apps} />
-        <Route path="new" component={Apps} />
-        <Route path=":id" component={Apps} />
-        <Route path=":id/edit" component={Apps} />
+        <Route path="new" component={NewApp} />
+        <Route path=":id" component={ShowApp} />
+        <Route path=":id/edit" component={EditApp} />
       </Route>
     </Route>
   </Route>
