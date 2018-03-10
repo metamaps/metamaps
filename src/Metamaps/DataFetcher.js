@@ -18,6 +18,14 @@ function post(url, data = {}) {
   })
 }
 
+function postNoStringify(url, data = {}) {
+  return fetch(url, {
+    credentials: 'same-origin',
+    method: 'POST',
+    body: data
+  })
+}
+
 function put(url, data = {}) {
   return fetch(url, {
     credentials: 'same-origin',
@@ -26,6 +34,14 @@ function put(url, data = {}) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
+  })
+}
+
+function putNoStringify(url, data = {}) {
+  return fetch(url, {
+    credentials: 'same-origin',
+    method: 'PUT',
+    body: data
   })
 }
 
@@ -92,12 +108,11 @@ async function deleteMetacodeSet(id) {
 }
 
 async function createMetacode(name, color, icon) {
-  const res = await post(`/metacodes`, {
-    metacode: {
-      name,
-      color
-    }
-  })
+  const formdata = new FormData()
+  formdata.append('metacode[name]', name)
+  formdata.append('metacode[color]', color)
+  formdata.append('metacode[aws_icon]', icon)
+  const res = await postNoStringify(`/metacodes`, formdata)
   if (!res.ok) {
     throw new Error()
     return
@@ -107,7 +122,11 @@ async function createMetacode(name, color, icon) {
 }
 
 async function updateMetacode(id, name, color, icon) {
-  const res = await put(`/metacodes/${id}`)
+  const formdata = new FormData()
+  formdata.append('metacode[name]', name)
+  formdata.append('metacode[color]', color)
+  if (icon) formdata.append('metacode[aws_icon]', icon)
+  const res = await putNoStringify(`/metacodes/${id}`, formdata)
   return res.ok
 }
 

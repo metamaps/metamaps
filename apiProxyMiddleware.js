@@ -2,7 +2,7 @@ const request = require('request')
 
 function apiProxyMiddleware (req, res, next) {
     // TODO: tidy this up!
-    if (!(req.xhr || req.headers['Content-Type'] === 'application/json' || req.originalUrl.indexOf('.json') > -1 || req.method !== 'GET')) {
+    if (!(req.xhr || req.headers['content-type'] === 'application/json' || req.originalUrl.indexOf('.json') > -1 || req.method !== 'GET')) {
         return next()
     }
     const method = req.method.toLowerCase()
