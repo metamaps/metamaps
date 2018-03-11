@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import Loading from '../components/Loading'
 
 class UserSettings extends Component {
@@ -9,6 +10,7 @@ class UserSettings extends Component {
       changePasswordOpen: false,
       changeName: false,
       loading: false,
+      image: null,
       imagePreview: null,
       currentPassword: '',
       newPassword: '',
@@ -37,14 +39,40 @@ class UserSettings extends Component {
     })
   }
 
-  init = (serverData) => {
-    Account.userIconUrl = serverData['user.png']
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.imagePreviewFile && !prevState.imagePreviewFile) {
+      this.updatePreview()
+    }
   }
 
-  initListeners = () => {
-    /*
-    $('#user_image').change(self.showImagePreview)
-    */
+  updatePreview = () => {
+    const reader = new window.FileReader()
+    const imageObj = new window.Image()
+    const canvas = ReactDOM.findDOMNode(this.refs.imagePreview)
+    const context = canvas.getContext('2d')
+    imageObj.onload = () => {
+      const imgWidth = imageObj.width
+      const imgHeight = imageObj.height
+      const dimensionToMatch = imgWidth > imgHeight ? imgHeight : imgWidth
+      // draw cropped image
+      const nonZero = Math.abs(imgHeight - imgWidth) / 2
+      const sourceX = dimensionToMatch === imgWidth ? 0 : nonZero
+      const sourceY = dimensionToMatch === imgHeight ? 0 : nonZero
+      const sourceWidth = dimensionToMatch
+      const sourceHeight = dimensionToMatch
+      const destX = 0
+      const destY = 0
+      const destWidth = 84
+      const destHeight = 84
+      context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
+    }
+    reader.onload = () => { 
+      imageObj.src = reader.result
+    }
+    if (this.state.imagePreviewFile) {
+      reader.readAsDataURL(this.state.imagePreviewFile)
+      this.setState({ userImageMenuOpen: false, removeImage: '0' })
+    }
   }
 
   toggleChangePicture = () => {
@@ -69,62 +97,21 @@ class UserSettings extends Component {
     this.setState({ loading: true })
   }
 
-  showImagePreview = () => {
-    var file = $('#user_image')[0].files[0]
-
-    var reader = new window.FileReader()
-
-    reader.onload = function(e) {
-      var $canvas = $('<canvas>').attr({
-        width: 84,
-        height: 84
-      })
-      var context = $canvas[0].getContext('2d')
-      var imageObj = new window.Image()
-
-      imageObj.onload = function() {
-        $('.userImageDiv canvas').remove()
-        $('.userImageDiv img').hide()
-
-        var imgWidth = imageObj.width
-        var imgHeight = imageObj.height
-
-        var dimensionToMatch = imgWidth > imgHeight ? imgHeight : imgWidth
-        // draw cropped image
-        var nonZero = Math.abs(imgHeight - imgWidth) / 2
-        var sourceX = dimensionToMatch === imgWidth ? 0 : nonZero
-        var sourceY = dimensionToMatch === imgHeight ? 0 : nonZero
-        var sourceWidth = dimensionToMatch
-        var sourceHeight = dimensionToMatch
-        var destX = 0
-        var destY = 0
-        var destWidth = 84
-        var destHeight = 84
-
-        context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
-        $('.userImageDiv').prepend($canvas)
-      }
-      imageObj.src = reader.result
-    }
-
-    if (file) {
-      reader.readAsDataURL(file)
-      $('.userImageMenu').hide()
-      $('#remove_image').val('0')
-    }
+  showImagePreview = (event) => {
+    const file = event.target.files[0]
+    this.setState({
+      imagePreviewFile: file
+    })
   }
 
   removePicture = () => {
     /*
-    $('.userImageDiv canvas').remove()
     $('.userImageDiv img').attr('src', '/images/user.png').show()
-    $('.userImageMenu').hide()
 
     var input = $('#user_image')
     input.replaceWith(input.val('').clone(true))
-    $('#remove_image').val('1')
     */
-    this.setState({ removeImage: '1' })
+    this.setState({ userImageMenuOpen: false, removeImage: '1', imagePreviewFile: null })
   }
 
   changeName = () => {
@@ -166,7 +153,9 @@ class UserSettings extends Component {
           <h3>Edit Settings</h3>
           <div className="userImage">
             <div className="userImageDiv" onClick={this.toggleChangePicture}>
-              <img src={this.state.image} alt="11835c3" width="84" height="84" />
+              {this.state.imagePreviewFile && <canvas ref="imagePreview" width="84" height="84" />}
+              {!this.state.imagePreviewFile && this.state.removeImage !== '1' && <img src={this.state.image} width="84" height="84" />}
+              {this.state.removeImage === '1' && <img src="/images/user.png" width="84" height="84" />}
               <div className="editPhoto"></div>
             </div>
             {this.state.userImageMenuOpen && <div className="userImageMenu">
@@ -175,7 +164,7 @@ class UserSettings extends Component {
                 <li className="upload">
                   Upload Photo
                   <input type="hidden" name="remove_image" id="remove_image" value={this.state.removeImage} />
-                  <input type="file" name="user[image]" id="user_image" />
+                  <input onChange={this.showImagePreview} type="file" name="user[image]" id="user_image" />
                   <label htmlFor="user_image">Image</label>
                 </li>
                 <li className="remove" onClick={this.removePicture}>Remove</li>
