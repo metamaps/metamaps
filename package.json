@@ -5,9 +5,12 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack",
+    "sass": "node-sass sass/application.scss public/css/application.css",
+    "sass:watch": "node-sass -w sass/application.scss public/css/application.css",
     "test": "mocha-webpack --webpack-config webpack.test.config.js --require test_support/dom.js --recursive test",
     "eslint": "eslint src",
-    "eslint:fix": "eslint --fix src"
+    "eslint:fix": "eslint --fix src",
+    "postinstall": "[ \"$NODE_ENV\" === production ] && npm build && npm run sass"
   },
   "repository": {
     "type": "git",

@@ -19,10 +19,10 @@ Start up the nodejs server which serves the UI files, the socketio realtime serv
 $ npm start
 ```
 
-Build the css. If you're developing and writing css, make sure that it will rebuild the css when you make changes, by running the `node-sass` process with the `-w` flag.
+Build the css. If you're developing and writing css, make sure that it will rebuild the css when you make changes, by running the `npm sass:watch` process and leaving it running.
 ```
-$ node-sass sass/application.scss public/css/application.css # to run it once
-$ node-sass -w sass/application.scss public/css/application.css # to watch it for more changes
+$ npm run sass # to build the css once
+$ npm run sass:watch # to watch it for more changes
 ```
 
 Run the metamaps api in another terminal, on whichever port you configured in your .env file.
@@ -87,3 +87,6 @@ use the forever node package.
 $ npm install -g forever
 $ forever start server.js
 ```
+
+To build the javascript file
+`$ npm run build`
