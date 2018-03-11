@@ -98,6 +98,7 @@ const ReactApp = {
     return merge({
       unreadNotificationsCount: Notifications.unreadNotificationsCount,
       currentUser: Active.Mapper,
+      updateUser: DataFetcher.updateUser,
       toast: self.toast,
       mobile: self.mobile,
       mobileTitle: self.mobileTitle,

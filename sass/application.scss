@@ -444,10 +444,19 @@ button.button.btn-no:hover {
 }
 
 #accountPageLoading {
-    display: none;
     position: absolute;
     bottom: 16px;
     right: 120px;
+}
+
+#accountPageSuccess {
+    margin-top: 8px;
+    text-align: right;
+}
+
+#accountPageError {
+    margin-top: 8px;
+    color: #c04f4f;
 }
 
 .centerGreyForm input[type="text"],

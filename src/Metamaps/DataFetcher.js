@@ -136,6 +136,24 @@ async function getCurrentUser() {
   return data
 }
 
+async function updateUser(id, opts) {
+  const formdata = new FormData()
+  formdata.append('user[name]', opts.name)
+  formdata.append('user[email]', opts.email)
+  formdata.append('user[emails_allowed]', opts.emailsAllowed)
+  formdata.append('current_password', opts.currentPassword)
+  formdata.append('user[password]', opts.newPassword)
+  formdata.append('user[password_confirmation]', opts.newPasswordConfirmation)
+  formdata.append('settings[follow_topic_on_created]', opts.followTopicOnCreated)
+  formdata.append('settings[follow_topic_on_contributed]', opts.followTopicOnContributed)
+  formdata.append('settings[follow_map_on_created]', opts.followMapOnCreated)
+  formdata.append('settings[follow_map_on_contributed]', opts.followMapOnContributed)
+  formdata.append('remove_image', opts.removeImage)
+  if (opts.image) formdata.append('user[image]', opts.image)
+  const res = await putNoStringify(`/users/${id}`, formdata)
+  return res
+}
+
 async function approveAccessRequest(mapId, requestId) {
   const res = await post(`/maps/${mapId}/approve_access/${requestId}`)
   return res.ok
@@ -160,6 +178,7 @@ module.exports = {
   createMetacode,
   updateMetacode,
   getCurrentUser,
+  updateUser,
   approveAccessRequest,
   denyAccessRequest,
   requestAccess

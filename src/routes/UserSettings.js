@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import ReactDOM from 'react-dom'
 import Loading from '../components/Loading'
 
@@ -6,12 +7,14 @@ class UserSettings extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      success: false,
+      error: false,
       userImageMenuOpen: false,
       changePasswordOpen: false,
       changeName: false,
       loading: false,
       image: null,
-      imagePreview: null,
+      imagePreviewFile: null,
       currentPassword: '',
       newPassword: '',
       newPasswordConfirmation: '',
@@ -93,10 +96,6 @@ class UserSettings extends Component {
     })
   }
 
-  showLoading = () => {
-    this.setState({ loading: true })
-  }
-
   showImagePreview = (event) => {
     const file = event.target.files[0]
     this.setState({
@@ -143,12 +142,58 @@ class UserSettings extends Component {
     }
   }
 
+  onSubmit = async (event) => {
+    event.preventDefault()
+    const { updateUser, params: { id } } = this.props
+    const { name, email, imagePreviewFile, emailsAllowed, removeImage,
+            followTopicOnCreated, followTopicOnContributed,
+            followMapOnCreated, followMapOnContributed,
+            currentPassword, newPassword, newPasswordConfirmation  } = this.state
+    this.setState({ loading: true, error: false })
+    try {
+      const res = await updateUser(id, {
+        name,
+        email,
+        removeImage,
+        image: imagePreviewFile,
+        emailsAllowed,
+        followTopicOnCreated,
+        followTopicOnContributed,
+        followMapOnCreated,
+        followMapOnContributed,
+        currentPassword,
+        newPassword,
+        newPasswordConfirmation
+      })
+      if (res.ok) {
+        this.setState({ loading: false, success: true })
+        window.setTimeout(() => this.setState({ success: false }), 4000)
+      } else {
+        const parsed = await res.json()
+        const error = parsed.error
+        this.setState({
+          loading: false,
+          error
+        })
+      }
+    } catch (e) {
+      this.setState({
+        loading: false,
+        error: 'There was an error saving'
+      })
+    }
+  }
+
+  submitClick = (event) => {
+    // validate
+  }
+
   render = () => {
     const id = this.props.currentUser.get('id')
     const name = this.props.currentUser.get('name')
     return (
       <div id="yield">
-        <form className="edit_user centerGreyForm" id={`edit_user_${id}`} encType="multipart/form-data" action={`/users/${id}`} acceptCharset="UTF-8" method="patch">
+        <form onSubmit={this.onSubmit} className="edit_user centerGreyForm" id={`edit_user_${id}`} acceptCharset="UTF-8">
           <input name="utf8" type="hidden" value="✓" />
           <h3>Edit Settings</h3>
           <div className="userImage">
@@ -224,7 +269,16 @@ class UserSettings extends Component {
           <div id="accountPageLoading">
             {this.state.loading && <Loading />}
           </div>
-          <input type="submit" name="commit" value="Update" className="update" onClick={this.showLoading} data-disable-with="Update" />
+          <div className="clearfloat"></div>
+          <div id="accountPageSuccess">
+            {this.state.success && "Saved"}
+          </div>
+          <div className="clearfloat"></div>
+          <div id="accountPageError">
+            {this.state.error}
+          </div>
+          <div className="clearfloat"></div>
+          <input type="submit" name="commit" value="Update" className="update" onClick={this.submitClick} />
           <div className="clearfloat"></div>
         </form>
       </div>
