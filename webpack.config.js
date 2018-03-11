@@ -1,10 +1,12 @@
 const webpack = require('webpack')
 
 const NODE_ENV = process.env.NODE_ENV || 'development'
+const ACTIONCABLE = process.env.ACTIONCABLE
 
 const plugins = [
   new webpack.DefinePlugin({
-    "process.env.NODE_ENV": `"${NODE_ENV}"`
+    "process.env.NODE_ENV": `"${NODE_ENV}"`,
+    "process.env.ACTIONCABLE": `"${ACTIONCABLE}"`
   }),
   new webpack.IgnorePlugin(/^mock-firmata$/), // work around bindings.js error
   new webpack.ContextReplacementPlugin(/bindings$/, /^$/) // work around bindings.js error

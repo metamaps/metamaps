@@ -5,7 +5,6 @@ import ActionCable from 'action-cable-node'
 
 import Active from './Active'
 import Control from './Control'
-import config from '../config'
 import DataModel from './DataModel'
 import Map from './Map'
 import Mapper from './Mapper'
@@ -17,7 +16,7 @@ import Visualize from './Visualize'
 const Cable = {
   init: () => {
     let self = Cable
-    self.cable = ActionCable.createConsumer(config.ACTIONCABLE)
+    self.cable = ActionCable.createConsumer(process.env.ACTIONCABLE)
   },
   subscribeToMap: id => {
     let self = Cable

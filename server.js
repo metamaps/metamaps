@@ -1,3 +1,4 @@
+require('dotenv').config()
 const path = require('path')
 const express = require('express')
 const cookieParser = require('cookie-parser')
@@ -19,13 +20,15 @@ app.use(cookieParser())
 // serve the whole public folder as static files
 app.use(express.static(path.join(__dirname, 'public')))
 
-const config = require('./webpack.config.js')
-const compiler = webpack(config)
-// Tell express to use the webpack-dev-middleware and use the webpack.config.js
-// configuration file as a base.
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: config.output.publicPath
-}))
+if (process.env.NODE_ENV === 'development') {
+  const config = require('./webpack.config.js')
+  const compiler = webpack(config)
+  // Tell express to use the webpack-dev-middleware and use the webpack.config.js
+  // configuration file as a base.
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: config.output.publicPath
+  }))
+}
 
 // pass XMLHttpRequests
 // through to the API
@@ -40,7 +43,7 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public/index.html'))
 })
 
-// Serve the files on set port or port 3000.
+// Start up the server
 server.listen(port, function () {
   console.log('Metamaps listening on port ' + port + '\n')
 });

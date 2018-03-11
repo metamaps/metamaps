@@ -1,24 +1,31 @@
 [![Build Status](https://travis-ci.org/metamaps/metamaps-ui.svg?branch=master)](https://travis-ci.org/metamaps/metamaps-ui)
 
-Make sure you're running a good up to date LTS version of `node`, like 8.9.4
+Make sure you're running a good up to date LTS version of `node`
+
+Install all the dependencies
+`$ npm install`
 
 Make sure you have `node-sass` installed
 `$ npm install -g node-sass`
 
-Run the following at the same time, in TWO SEPARATE terminals. We tell the server where the backend process is running with the API environment variable
-JS files, and CSS will rebuild automatically, just refresh the page
-If coding the server itself, you will have to use nodemon, or kill and restart the server process manually
+Make sure that you have a .env file setup. You can copy the .example-env
 ```
-$ API=http://localhost:3001 node server.js
-$ node-sass -w sass/application.scss public/css/application.css
+$ cp .example-env .env
+```
+Edit it however you need to.
+
+Start up the nodejs server which serves the UI files, the socketio realtime server, and proxies requests to the API.
+```
+$ npm start
 ```
 
-To make sure the css files get built, use the following in another terminal
+Build the css. If you're developing and writing css, make sure that it will rebuild the css when you make changes, by running the `node-sass` process with the `-w` flag.
 ```
-touch sass/application.scss
+$ node-sass sass/application.scss public/css/application.css # to run it once
+$ node-sass -w sass/application.scss public/css/application.css # to watch it for more changes
 ```
 
-Run the metamaps api in another terminal using (on port 3001, so the UI can talk to it)
+Run the metamaps api in another terminal, on whichever port you configured in your .env file.
 For now, make sure you are running on the `add-user-route` branch of Metamaps, and that it's up to date with the latest on that branch
 `$ rails s -p 3001`
 

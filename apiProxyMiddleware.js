@@ -1,4 +1,15 @@
+/*
+This file takes appropriate requests from our UI client
+and pipes them through to the API, proxying the response
+back to the client. To do this, it needs to pass
+the _Metamaps_session cookie in particular,
+in order to make authorized requests
+*/
+
 const request = require('request')
+const { API_PROTOCOL, API_HOST } = process.env
+
+const API_URL = `${API_PROTOCOL}://${API_HOST}`
 
 function apiProxyMiddleware (req, res, next) {
     // TODO: tidy this up!
@@ -7,11 +18,11 @@ function apiProxyMiddleware (req, res, next) {
     }
     const method = req.method.toLowerCase()
     req.pipe(
-        request[method](process.env.API + req.originalUrl, {
+        request[method](API_URL + req.originalUrl, {
             headers: {
                 ...req.headers,
                 cookie: `_Metamaps_session=${req.cookies._Metamaps_session}`,
-                host: 'localhost:3001'
+                host: API_HOST
             },
             followRedirect: false
         })

@@ -6,13 +6,9 @@
 
 #assety stuff
 public/css
-public/assets
-public/metamaps_mobile
-public/api/index.html
 vendor/
 node_modules
 npm-debug.log
-app/assets/javascripts/webpacked
 
 #secrets and config
 .env
@@ -31,6 +27,3 @@ coverage
 .DS_Store
 */.DS_Store
 .DS_Store?
-.vagrant
-gentle/
-startserver.sh
