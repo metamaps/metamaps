@@ -58,6 +58,9 @@ Checklist
 - [x] edit metacode set
 
 - [ ] fix other places where metacode sets are used
+- [ ] page titles
+- [ ] mobile titles
+- [ ] open graph meta tags
 - [ ] make newtopic form load metacodes from users selected ones
 - [ ] create synapse form
 - [ ] replace old loader with react loader

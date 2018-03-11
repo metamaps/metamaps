@@ -104,7 +104,12 @@
     -->
   <script type="text/javascript">
     Metamaps.ServerData = Metamaps.ServerData || {}
+    // TODO: fix some of these
     Metamaps.ServerData.RAILS_ENV = 'development'
+    Metamaps.ServerData.VERSION = '<%= METAMAPS_VERSION %>'
+    Metamaps.ServerData.BUILD = '<%= METAMAPS_BUILD %>'
+    Metamaps.ServerData.LAST_UPDATED = '<%= METAMAPS_LAST_UPDATED %>'
+
     Metamaps.ServerData['junto_spinner_darkgrey.gif'] = '/images/junto_spinner_darkgrey.gif'
     Metamaps.ServerData['user.png'] = '/images/user.png'
     Metamaps.ServerData['icons/wildcard.png'] = '/images/icons/wildcard.png'
