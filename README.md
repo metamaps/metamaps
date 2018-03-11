@@ -45,6 +45,17 @@ Checklist
 - [x] move ImportDialog lightbox into main app
 - [x] create topic form
 - [x] Fork map lightbox / component
+- [x] lightboxes
+- [x] About lightbox
+- [x] Notifications: Request unreadNotificationCount
+- [x] notifications list
+- [x] notification page
+- [x] list metacodes
+- [x] new metacode
+- [x] edit metacode
+- [x] list metacode_sets
+- [x] new metacode set
+- [x] edit metacode set
 
 - [ ] fix other places where metacode sets are used
 - [ ] make newtopic form load metacodes from users selected ones
@@ -53,26 +64,15 @@ Checklist
 - [ ] ensure exports of maps work
 - [ ] Notifications: make sure notifications either look nice, or redirect
 - [ ] Notifications: pagination
-- [ ] Notifications: Request unreadNotificationCount
 - [ ] Notifications: CSS fixes related to 'controller-x' in body classes
 - [ ] Make sure loading state for explore maps pages work
 - [ ] Get actioncable working
-- [ ] lightboxes
-- [ ] About lightbox
 - [ ] Switch Metacodes lightbox / component
 - [ ] break up index.html into parts
 - [ ] Handle CSS metacode colors
 - [ ] Fix Request An Invite page
 - [ ] Make 'new map' action work
 - [ ] Modify the remaining rails templates into JSX templates
-  - [x] notifications list
-  - [x] notification page
-  - [x] list metacodes
-  - [x] new metacode
-  - [x] edit metacode
-  - [x] list metacode_sets
-  - [x] new metacode set
-  - [x] edit metacode set
   - [ ] authorized apps
   - [ ] registered apps
   - [ ] authorize
