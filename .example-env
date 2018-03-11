@@ -1,2 +1,5 @@
-API=http://localhost:3000
+NODE_ENV=development
+PORT=3000
+API_PROTOCOL=http
+API_HOST=localhost:3001
 ACTIONCABLE=ws://localhost:3001/cable
