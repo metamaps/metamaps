@@ -42,7 +42,7 @@ class UsersController < ApplicationController
       correct_pass = @user.valid_password?(params[:current_password])
 
       if correct_pass && @user.update_attributes(user_params)
-        update_follow_settings(@user, params[:settings]) if is_tester(@user)
+        update_follow_settings(@user, params[:settings])
         @user.image = nil if params[:remove_image] == '1'
         @user.save
         sign_in(@user, bypass: true)
