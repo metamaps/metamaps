@@ -94,7 +94,6 @@ const Map = {
       Visualize.type = 'ForceDirected'
       JIT.prepareVizData()
       Selected.reset()
-      InfoBox.load()
       Filter.reset()
       Filter.checkMetacodes()
       Filter.checkSynapses()
@@ -104,13 +103,10 @@ const Map = {
       document.title = Active.Map.get('name') + ' | Metamaps'
       ReactApp.mobileTitle = Active.Map.get('name')
       ReactApp.render()
-    }
-    function isLoaded() {
-      if (InfoBox.generateBoxHTML) dataIsReadySetupMap()
-      else setTimeout(() => isLoaded(), 50)
+      InfoBox.load()
     }
     if (Active.Map && Active.Map.id === id) {
-      isLoaded()
+      dataIsReadySetupMap()
     }
     else {
       Loading.show()
@@ -127,7 +123,7 @@ const Map = {
           DataModel.Stars = data.stars
           DataModel.attachCollectionEvents()
           self.requests = data.requests
-          isLoaded()
+          dataIsReadySetupMap()
         },
         error: function(res) {
           // forbidden

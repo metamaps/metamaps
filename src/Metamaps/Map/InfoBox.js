@@ -11,45 +11,12 @@ import Util from '../Util'
 const InfoBox = {
   isOpen: false,
   selectingPermission: false,
-  changePermissionText: "<div class='tooltips'>As the creator, you can change the permission of this map, and the permission of all the topics and synapses you have authority to change will change as well.</div>",
-  nameHTML: outdent`
-    <span class="best_in_place best_in_place_name"
-      id="best_in_place_map_{{id}}_name"
-      data-bip-url="/maps/{{id}}"
-      data-bip-object="map"
-      data-bip-attribute="name"
-      data-bip-type="textarea"
-      data-bip-activator="#mapInfoName"
-      data-bip-value="{{name}}"
-    >{{name}}</span>`,
-  descHTML: outdent`
-    <span class="best_in_place best_in_place_desc"
-      id="best_in_place_map_{{id}}_desc"
-      data-bip-url="/maps/{{id}}"
-      data-bip-object="map"
-      data-bip-attribute="desc"
-      data-bip-nil="Click to add description..."
-      data-bip-type="textarea"
-      data-bip-activator="#mapInfoDesc"
-      data-bip-value="{{desc}}"
-    >{{desc}}</span>`,
-  userImageUrl: '',
-  html: '',
   init: function(serverData, updateThumbnail) {
     var self = InfoBox
 
     self.updateThumbnail = updateThumbnail
 
-    $('.mapInfoBox').click(function(event) {
-      event.stopPropagation()
-    })
     $('body').click(self.close)
-
-    self.attachEventListeners()
-
-    self.generateBoxHTML = Hogan.compile($('#mapInfoBoxTemplate').html())
-
-    self.userImageUrl = serverData['user.png']
 
     var querystring = window.location.search.replace(/^\?/, '')
     if (querystring === 'new') {
@@ -85,34 +52,7 @@ const InfoBox = {
     })
   },
   load: function() {
-    var self = InfoBox
-
-    var map = Active.Map
-
-    var obj = map.pick('permission', 'topic_count', 'synapse_count')
-
-    var isCreator = map.authorizePermissionChange(Active.Mapper)
-    var canEdit = map.authorizeToEdit(Active.Mapper)
-    var relevantPeople = map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
-    var shareable = map.get('permission') !== 'private'
-
-    obj['name'] = canEdit ? Hogan.compile(self.nameHTML).render({id: map.id, name: map.get('name')}) : map.get('name')
-    obj['desc'] = canEdit ? Hogan.compile(self.descHTML).render({id: map.id, desc: map.get('desc')}) : map.get('desc')
-    obj['map_creator_tip'] = isCreator ? self.changePermissionText : ''
-
-    obj['contributor_count'] = relevantPeople.length
-    obj['contributors_class'] = relevantPeople.length > 1 ? 'multiple' : ''
-    obj['contributors_class'] += relevantPeople.length === 2 ? ' mTwo' : ''
-    obj['contributor_image'] = relevantPeople.length > 0 ? relevantPeople.models[0].get('image') : self.userImageUrl
-    obj['contributor_list'] = self.createContributorList()
-
-    obj['user_name'] = isCreator ? 'You' : map.get('user_name')
-    obj['created_at'] = map.get('created_at_clean')
-    obj['updated_at'] = map.get('updated_at_clean')
-
-    self.html = self.generateBoxHTML.render(obj)
-    ReactApp.render()
-    self.attachEventListeners()
+    InfoBox.attachEventListeners()
   },
   attachEventListeners: function() {
     var self = InfoBox
@@ -238,7 +178,6 @@ const InfoBox = {
     DataModel.Collaborators.remove(DataModel.Collaborators.get(collaboratorId))
     var mapperIds = DataModel.Collaborators.models.map(function(mapper) { return mapper.id })
     $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
-    self.updateNumbers()
   },
   addCollaborator: function(newCollaboratorId) {
     var self = InfoBox
@@ -254,7 +193,6 @@ const InfoBox = {
       $.post('/maps/' + Active.Map.id + '/access', { access: mapperIds })
       var name = DataModel.Collaborators.get(newCollaboratorId).get('name')
       GlobalUI.notifyUser(name + ' will be notified')
-      self.updateNumbers()
     }
 
     $.getJSON('/users/' + newCollaboratorId + '.json', callback)
@@ -270,59 +208,6 @@ const InfoBox = {
     $('.mapInfoName .best_in_place_name').html(name)
     $('.mapInfoDesc .best_in_place_desc').html(desc)
     $('.mapInfoBox .mapPermission').removeClass('commons public private').addClass(perm)
-  },
-  createContributorList: function() {
-    var relevantPeople = Active.Map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
-    var activeMapperIsCreator = Active.Mapper && Active.Mapper.id === Active.Map.get('user_id')
-    var string = ''
-    string += '<ul>'
-
-    relevantPeople.each(function(m) {
-      var isCreator = Active.Map.get('user_id') === m.get('id')
-      string += '<li><a href="/explore/mapper/' + m.get('id') + '">' + '<img class="rtUserImage" width="25" height="25" src="' + m.get('image') + '" />' + m.get('name')
-      if (isCreator) string += ' (creator)'
-      string += '</a>'
-      if (activeMapperIsCreator && !isCreator) string += '<span class="removeCollaborator" data-id="' + m.get('id') + '"></span>'
-      string += '</li>'
-    })
-
-    string += '</ul>'
-
-    if (activeMapperIsCreator) {
-      string += '<div class="collabSearchField"><span class="addCollab"></span><input class="collaboratorSearchField" placeholder="Add a collaborator"></input></div>'
-    }
-    return string
-  },
-  updateNumbers: function() {
-    if (!Active.Map) return
-
-    const self = InfoBox
-
-    var relevantPeople = Active.Map.get('permission') === 'commons' ? DataModel.Mappers : DataModel.Collaborators
-
-    let contributorsClass = ''
-    if (relevantPeople.length === 2) {
-      contributorsClass = 'multiple mTwo'
-    } else if (relevantPeople.length > 2) {
-      contributorsClass = 'multiple'
-    }
-
-    let contributorsImage = self.userImageUrl
-    if (relevantPeople.length > 0) {
-      // get the first contributor and use their image
-      contributorsImage = relevantPeople.models[0].get('image')
-    }
-    $('.mapContributors img').attr('src', contributorsImage).removeClass('multiple mTwo').addClass(contributorsClass)
-    $('.mapContributors span').text(relevantPeople.length)
-    $('.mapContributors .tip').html(self.createContributorList())
-    self.addTypeahead()
-    $('.mapContributors .tip').unbind().click(function(event) {
-      event.stopPropagation()
-    })
-    $('.mapTopics').text(DataModel.Topics.length)
-    $('.mapSynapses').text(DataModel.Synapses.length)
-
-    $('.mapEditedAt').html('<span>Last edited: </span>' + Util.nowDateFormatted())
   },
   onPermissionClick: function(event) {
     var self = InfoBox

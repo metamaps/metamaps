@@ -140,7 +140,6 @@ const ReactApp = {
       endActiveMap: Map.end,
       launchNewMap: Map.launch,
       toggleMapInfoBox: InfoBox.toggleBox,
-      infoBoxHtml: InfoBox.html,
       openImportLightbox: () => ImportDialog.show(),
       openMetacodeSwitcher: () => self.openLightbox('metacodeSwitcher'),
       forkMap: Map.fork,

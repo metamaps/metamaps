@@ -32,7 +32,6 @@ export default class MapView extends Component {
     filterAllMappers: PropTypes.func,
     filterAllSynapses: PropTypes.func,
     toggleMapInfoBox: PropTypes.func,
-    infoBoxHtml: PropTypes.string,
     currentUser: PropTypes.object,
     endActiveMap: PropTypes.func,
     launchNewMap: PropTypes.func,
@@ -78,7 +77,7 @@ export default class MapView extends Component {
 
   render = () => {
     const { mobile, map, currentUser, onOpen, onClose,
-            toggleMapInfoBox, infoBoxHtml, allForFiltering, visibleForFiltering,
+            toggleMapInfoBox, allForFiltering, visibleForFiltering,
             toggleMetacode, toggleMapper, toggleSynapse, filterAllMetacodes,
             filterAllMappers, filterAllSynapses, filterData,
             openImportLightbox, forkMap, openHelpLightbox,
@@ -129,8 +128,7 @@ export default class MapView extends Component {
                    onInfoClick={toggleMapInfoBox}
                    onMapStar={onMapStar}
                    onMapUnstar={onMapUnstar}
-                   onHelpClick={openHelpLightbox}
-                   infoBoxHtml={infoBoxHtml} />
+                   onHelpClick={openHelpLightbox} />
     </div>
   }
 }

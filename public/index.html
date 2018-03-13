@@ -88,7 +88,7 @@
   <script src="/lib/jquery.typing-0.2.0.min.js"></script>
   <script src="/lib/typeahead.bundle.js"></script>
   <script type="text/javascript" src="/metamaps.bundle.js"></script>
-  <!-- 
+  <!--
       Metamaps.ServerData.mobileTitle = "{ yield(:mobile_title) }"
       { if devise_error_messages? }
         Metamaps.ServerData.toast = "{ devise_error_messages! }"
@@ -125,53 +125,6 @@
   </script>
 
   <div class="templates">
-    <script type="text/template" id="mapInfoBoxTemplate">
-      <div class="requestTitle">Click here to name this map</div>
-      <div class="mapInfoName" id="mapInfoName">{{{name}}}</div>
-  
-      <div class="mapInfoStat">
-        <div class="infoStatIcon mapContributors hoverForTip">
-          <img id="mapContribs" class="{{contributors_class}}"
-            width="25" height="25" src="{{contributor_image}}" />
-          <span class="count">{{contributor_count}}</span>
-          <div class="tip">{{{contributor_list}}}</div>
-        </div>
-        <div class="infoStatIcon mapTopics">
-          {{topic_count}}
-        </div>
-        <div class="infoStatIcon mapSynapses">
-          {{synapse_count}}
-        </div>
-        <div class="infoStatIcon mapPermission {{permission}} hoverForTip">
-          {{{map_creator_tip}}}
-        </div>
-        <div class="clearfloat"></div>
-      </div>
-      <div class="mapInfoDesc" id="mapInfoDesc">
-        {{{desc}}}
-      </div>
-  
-      <div class="mapInfoMeta">
-        <p class="mapCreatedAt"><span>Created by:</span> {{user_name}} on {{created_at}}</p>
-        <p class="mapEditedAt"><span>Last edited:</span> {{updated_at}}</p>
-        <div class="mapInfoButtonsWrapper">
-          <div class="mapInfoThumbnail">
-            <div class="thumbnail"></div>
-            <div class="tooltip">Update Thumbnail</div>
-            <span>Thumb</span>
-          </div>
-          <div class="mapInfoDelete">
-            <div class="deleteMap"></div>
-            <span>Delete</span>
-          </div>
-          <div class="mapInfoShare">
-            <div class="mapInfoShareIcon"></div>
-            <span>Share</span>
-          </div>
-        </div>
-      </div>
-    </script>
-
     <script type="text/template" id="topicSearchTemplate">
       <div class="result{{rtype}}">
         <div class="topicMetacode searchResIconWrapper">
