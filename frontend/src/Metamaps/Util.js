@@ -39,36 +39,30 @@ const Util = {
   },
 
   decodeEntities: function(desc) {
-    let temp = document.createElement('p')
-    temp.innerHTML = desc // browser handles the topics
-    let str = temp.textContent || temp.innerText
-    temp = null // delete the element
+    let paragraph = document.createElement('p')
+    paragraph.innerHTML = desc // browser handles the topics
+    let str = paragraph.textContent || paragraph.innerText
+    paragraph = null // delete the element
     return str
-  }, // decodeEntities
+  },
 
   getDistance: function(p1, p2) {
     return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2))
   },
 
-  // Try using Visualize.mGraph
   coordsToPixels: function(mGraph, coords) {
-    if (mGraph) {
-      const canvas = mGraph.canvas
-      const s = canvas.getSize()
-      const p = canvas.getPos()
-      const ox = canvas.translateOffsetX
-      const oy = canvas.translateOffsetY
-      const sx = canvas.scaleOffsetX
-      const sy = canvas.scaleOffsetY
-      return {
-        x: (coords.x / (1 / sx)) + p.x + s.width / 2 + ox,
-        y: (coords.y / (1 / sy)) + p.y + s.height / 2 + oy
-      }
-    } else {
-      return {
-        x: 0,
-        y: 0
-      }
+    if (!mGraph) return { x: 0, y: 0 }
+
+    const canvas = mGraph.canvas
+    const s = canvas.getSize()
+    const p = canvas.getPos()
+    const ox = canvas.translateOffsetX
+    const oy = canvas.translateOffsetY
+    const sx = canvas.scaleOffsetX
+    const sy = canvas.scaleOffsetY
+    return {
+      x: (coords.x / (1 / sx)) + p.x + s.width / 2 + ox,
+      y: (coords.y / (1 / sy)) + p.y + s.height / 2 + oy
     }
   },
 
