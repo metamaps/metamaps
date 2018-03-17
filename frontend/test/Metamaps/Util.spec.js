@@ -275,6 +275,34 @@ describe('Metamaps.Util.js', function() {
     })
   })
   describe('resizeCanvas', function() {
-    it.skip('TODO')
+    it('resizes, scales, and translates canvas', function() {
+      const oldAttr = {
+        scaleX: 1,
+        scaleY: 2,
+        centreCoords: { x: 3, y: 4 }
+      }
+      const newAttr = {
+        centreCoords: { x: 5, y: 6 }
+      }
+      const canvas = {
+        resize: sinon.spy(),
+        scale: sinon.spy(),
+        translate: sinon.spy()
+      }
+      sinon.stub(Util, 'logCanvasAttributes').withArgs(canvas)
+        .onFirstCall().returns(oldAttr)
+        .onSecondCall().returns(newAttr)
+      const jQueryStub = sinon.stub().returns({
+        width: () => 7,
+        height: () => 8
+      })
+
+      Util.resizeCanvas(canvas, jQueryStub)
+
+      expect(canvas.resize.calledWith(7, 8)).to.equal(true)
+      expect(canvas.scale.calledWith(1, 2))
+        .to.equal(true)
+      expect(canvas.scale.calledWith(5 - 3, 6 - 4)).to.equal(true)
+    })
   })
 })

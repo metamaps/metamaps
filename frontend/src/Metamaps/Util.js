@@ -158,7 +158,7 @@ const Util = {
       centreCoords: Util.pixelsToCoords(fakeMgraph, { x: canvas.canvases[0].size.width / 2, y: canvas.canvases[0].size.height / 2 })
     }
   },
-  resizeCanvas: function(canvas) {
+  resizeCanvas: function(canvas, $ = window.$) {
     // Store the current canvas attributes, i.e. scale and map-coordinate at the centre of the user's screen
     const oldAttr = Util.logCanvasAttributes(canvas)
 
