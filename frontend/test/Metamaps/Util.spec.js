@@ -42,7 +42,7 @@ describe('Metamaps.Util.js', function() {
   describe('decodeEntities', function() {
     function assertDecodeEntities(expected, { textContent, innerText, desc }) {
       const paragraph = { textContent, innerText }
-      sandbox.stub(document, "createElement").withArgs('p').returns(paragraph)
+      sandbox.stub(document, 'createElement').withArgs('p').returns(paragraph)
 
       const actual = Util.decodeEntities(desc)
 
@@ -77,13 +77,15 @@ describe('Metamaps.Util.js', function() {
   })
   describe('coordsToPixels', function() {
     function assertCoordsToPixels(expectedX, expectedY,
-        x, y, sx, sy, px, py, width, height, ox, oy) {
+        { x, y, sx, sy, px, py, width, height, ox, oy }) {
       const mGraph = {
         canvas: {
           getSize: () => ({ width, height }),
           getPos: () => ({ x: px, y: py }),
-          translateOffsetX: ox, translateOffsetY: oy,
-          scaleOffsetX: sx, scaleOffsetY: sy
+          translateOffsetX: ox,
+          translateOffsetY: oy,
+          scaleOffsetX: sx,
+          scaleOffsetY: sy
         }
       }
       const coords = { x, y }
@@ -92,33 +94,44 @@ describe('Metamaps.Util.js', function() {
       expect(actual.y).to.equal(expectedY)
     }
 
-
     it('returns 0,0 for null canvas', function() {
       expect(Util.coordsToPixels(null, {}).x).to.equal(0)
       expect(Util.coordsToPixels(null, {}).y).to.equal(0)
     })
     it('does the correct calculation', function() {
-      assertCoordsToPixels(0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
-      assertCoordsToPixels(1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0)
-      assertCoordsToPixels(2, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0, 0)
-      assertCoordsToPixels(2, 2, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0)
-      assertCoordsToPixels(3, 2, 1, 1, 2, 2, 1, 0, 0, 0, 0, 0)
-      assertCoordsToPixels(3, 3, 1, 1, 2, 2, 1, 1, 0, 0, 0, 0)
-      assertCoordsToPixels(4, 3, 1, 1, 2, 2, 1, 1, 2, 0, 0, 0)
-      assertCoordsToPixels(4, 4, 1, 1, 2, 2, 1, 1, 2, 2, 0, 0)
-      assertCoordsToPixels(9, 4, 1, 1, 2, 2, 1, 1, 2, 2, 5, 0)
-      assertCoordsToPixels(9, 9, 1, 1, 2, 2, 1, 1, 2, 2, 5, 5)
+      assertCoordsToPixels(0, 0, 
+        { x: 0, y: 0, sx: 1, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
+      assertCoordsToPixels(1, 1, 
+        { x: 1, y: 1, sx: 1, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
+      assertCoordsToPixels(2, 1, 
+        { x: 1, y: 1, sx: 2, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
+      assertCoordsToPixels(2, 2, 
+        { x: 1, y: 1, sx: 2, sy: 2, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
+      assertCoordsToPixels(3, 2, 
+        { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
+      assertCoordsToPixels(3, 3, 
+        { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 0, height: 0, ox: 0, oy: 0 })
+      assertCoordsToPixels(4, 3, 
+        { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 0, ox: 0, oy: 0 })
+      assertCoordsToPixels(4, 4, 
+        { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 0, oy: 0 })
+      assertCoordsToPixels(9, 4, 
+        { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 5, oy: 0 })
+      assertCoordsToPixels(9, 9, 
+        { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 5, oy: 5 })
     })
   })
   describe('pixelsToCoords', function() {
     function assertPixelsToCoords(expectedX, expectedY,
-        x, y, px, py, width, height, ox, oy, sx, sy) {
+        { x, y, px, py, width, height, ox, oy, sx, sy }) {
       const mGraph = {
         canvas: {
           getSize: () => ({ width, height }),
           getPos: () => ({ x: px, y: py }),
-          translateOffsetX: ox, translateOffsetY: oy,
-          scaleOffsetX: sx, scaleOffsetY: sy
+          translateOffsetX: ox,
+          translateOffsetY: oy,
+          scaleOffsetX: sx,
+          scaleOffsetY: sy
         }
       }
       const coords = { x, y }
@@ -131,16 +144,26 @@ describe('Metamaps.Util.js', function() {
       expect(Util.pixelsToCoords(null, {}).y).to.equal(0)
     })
     it('does the correct calculation', function() {
-     assertPixelsToCoords(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1)
-     assertPixelsToCoords(5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 1, 1)
-     assertPixelsToCoords(4, 5, 5, 5, 1, 0, 0, 0, 0, 0, 1, 1)
-     assertPixelsToCoords(4, 4, 5, 5, 1, 1, 0, 0, 0, 0, 1, 1)
-     assertPixelsToCoords(3, 4, 5, 5, 1, 1, 2, 0, 0, 0, 1, 1)
-     assertPixelsToCoords(3, 3, 5, 5, 1, 1, 2, 2, 0, 0, 1, 1)
-     assertPixelsToCoords(2, 3, 5, 5, 1, 1, 2, 2, 1, 0, 1, 1)
-     assertPixelsToCoords(2, 2, 5, 5, 1, 1, 2, 2, 1, 1, 1, 1)
-     assertPixelsToCoords(4, 2, 5, 5, 1, 1, 2, 2, 1, 1, 0.5, 1)
-     assertPixelsToCoords(4, 4, 5, 5, 1, 1, 2, 2, 1, 1, 0.5, 0.5)
+      assertPixelsToCoords(0, 0, 
+        { x: 0, y: 0, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
+      assertPixelsToCoords(5, 5, 
+        { x: 5, y: 5, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
+      assertPixelsToCoords(4, 5, 
+        { x: 5, y: 5, px: 1, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
+      assertPixelsToCoords(4, 4, 
+        { x: 5, y: 5, px: 1, py: 1, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
+      assertPixelsToCoords(3, 4, 
+        { x: 5, y: 5, px: 1, py: 1, width: 2, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
+      assertPixelsToCoords(3, 3, 
+        { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 0, oy: 0, sx: 1, sy: 1 })
+      assertPixelsToCoords(2, 3, 
+        { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 0, sx: 1, sy: 1 })
+      assertPixelsToCoords(2, 2, 
+        { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 1, sy: 1 })
+      assertPixelsToCoords(4, 2, 
+        { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 0.5, sy: 1 })
+      assertPixelsToCoords(4, 4, 
+        { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 0.5, sy: 0.5 })
     })
   })
   describe('getPastelColor', function() {
@@ -186,8 +209,8 @@ describe('Metamaps.Util.js', function() {
   })
   describe('openLink', function() {
     function stubWindow({ popupsAllowed }) {
-      const open = sandbox.stub(window, "open").returns(popupsAllowed)
-      const alert = sandbox.stub(window, "alert")
+      const open = sandbox.stub(window, 'open').returns(popupsAllowed)
+      const alert = sandbox.stub(window, 'alert')
       return { open, alert }
     }
     afterEach(function() {
@@ -235,10 +258,11 @@ describe('Metamaps.Util.js', function() {
   describe('logCanvasAttributes', function() {
     it('returns correct canvas attributes', function() {
       const canvas = {
-        scaleOffsetX: 1, scaleOffsetY: 2,
+        scaleOffsetX: 1,
+        scaleOffsetY: 2,
         canvases: [{ size: { width: 3, height: 4 } }]
       }
-      sinon.stub(Util, "pixelsToCoords").returnsArg(1)
+      sinon.stub(Util, 'pixelsToCoords').returnsArg(1)
 
       const actual = Util.logCanvasAttributes(canvas)
 
