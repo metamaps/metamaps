@@ -99,25 +99,25 @@ describe('Metamaps.Util.js', function() {
       expect(Util.coordsToPixels(null, {}).y).to.equal(0)
     })
     it('does the correct calculation', function() {
-      assertCoordsToPixels(0, 0, 
+      assertCoordsToPixels(0, 0,
         { x: 0, y: 0, sx: 1, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(1, 1, 
+      assertCoordsToPixels(1, 1,
         { x: 1, y: 1, sx: 1, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(2, 1, 
+      assertCoordsToPixels(2, 1,
         { x: 1, y: 1, sx: 2, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(2, 2, 
+      assertCoordsToPixels(2, 2,
         { x: 1, y: 1, sx: 2, sy: 2, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(3, 2, 
+      assertCoordsToPixels(3, 2,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(3, 3, 
+      assertCoordsToPixels(3, 3,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(4, 3, 
+      assertCoordsToPixels(4, 3,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(4, 4, 
+      assertCoordsToPixels(4, 4,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 0, oy: 0 })
-      assertCoordsToPixels(9, 4, 
+      assertCoordsToPixels(9, 4,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 5, oy: 0 })
-      assertCoordsToPixels(9, 9, 
+      assertCoordsToPixels(9, 9,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 5, oy: 5 })
     })
   })
@@ -144,25 +144,25 @@ describe('Metamaps.Util.js', function() {
       expect(Util.pixelsToCoords(null, {}).y).to.equal(0)
     })
     it('does the correct calculation', function() {
-      assertPixelsToCoords(0, 0, 
+      assertPixelsToCoords(0, 0,
         { x: 0, y: 0, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(5, 5, 
+      assertPixelsToCoords(5, 5,
         { x: 5, y: 5, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(4, 5, 
+      assertPixelsToCoords(4, 5,
         { x: 5, y: 5, px: 1, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(4, 4, 
+      assertPixelsToCoords(4, 4,
         { x: 5, y: 5, px: 1, py: 1, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(3, 4, 
+      assertPixelsToCoords(3, 4,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(3, 3, 
+      assertPixelsToCoords(3, 3,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(2, 3, 
+      assertPixelsToCoords(2, 3,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(2, 2, 
+      assertPixelsToCoords(2, 2,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 1, sy: 1 })
-      assertPixelsToCoords(4, 2, 
+      assertPixelsToCoords(4, 2,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 0.5, sy: 1 })
-      assertPixelsToCoords(4, 4, 
+      assertPixelsToCoords(4, 4,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 0.5, sy: 0.5 })
     })
   })

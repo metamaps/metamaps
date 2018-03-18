@@ -1,5 +1,3 @@
-/* global $ */
-
 import { Parser, HtmlRenderer, Node } from 'commonmark'
 import { emojiIndex } from 'emoji-mart'
 import { escapeRegExp } from 'lodash'
