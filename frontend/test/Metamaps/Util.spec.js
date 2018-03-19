@@ -4,8 +4,22 @@ import { expect } from 'chai'
 import sinon from 'sinon'
 
 import Util from '../../src/Metamaps/Util'
+import * as EmojiMart from 'emoji-mart'
 
 const sandbox = sinon.sandbox.create()
+
+function mockMGraph({ x, y, sx, sy, px, py, width, height, ox, oy }) {
+  return {
+    canvas: {
+      getSize: () => ({ width, height }),
+      getPos: () => ({ x: px, y: py }),
+      translateOffsetX: ox,
+      translateOffsetY: oy,
+      scaleOffsetX: sx,
+      scaleOffsetY: sy
+    }
+  }
+}
 
 describe('Metamaps.Util.js', function() {
   describe('splitLine', function() {
@@ -78,16 +92,9 @@ describe('Metamaps.Util.js', function() {
   describe('coordsToPixels', function() {
     function assertCoordsToPixels(expectedX, expectedY,
         { x, y, sx, sy, px, py, width, height, ox, oy }) {
-      const mGraph = {
-        canvas: {
-          getSize: () => ({ width, height }),
-          getPos: () => ({ x: px, y: py }),
-          translateOffsetX: ox,
-          translateOffsetY: oy,
-          scaleOffsetX: sx,
-          scaleOffsetY: sy
-        }
-      }
+      const mGraph = mockMGraph({
+        x, y, sx, sy, px, py, width, height, ox, oy
+      }){
       const coords = { x, y }
       const actual = Util.coordsToPixels(mGraph, coords)
       expect(actual.x).to.equal(expectedX)
@@ -124,17 +131,9 @@ describe('Metamaps.Util.js', function() {
   describe('pixelsToCoords', function() {
     function assertPixelsToCoords(expectedX, expectedY,
         { x, y, px, py, width, height, ox, oy, sx, sy }) {
-      const mGraph = {
-        canvas: {
-          getSize: () => ({ width, height }),
-          getPos: () => ({ x: px, y: py }),
-          translateOffsetX: ox,
-          translateOffsetY: oy,
-          scaleOffsetX: sx,
-          scaleOffsetY: sy
-        }
-      }
-      const coords = { x, y }
+      const mGraph = mockMGraph({
+        x, y, sx, sy, px, py, width, height, ox, oy
+      }){
       const actual = Util.pixelsToCoords(mGraph, coords)
       expect(actual.x).to.equal(expectedX)
       expect(actual.y).to.equal(expectedY)
@@ -303,6 +302,28 @@ describe('Metamaps.Util.js', function() {
       expect(canvas.scale.calledWith(1, 2))
         .to.equal(true)
       expect(canvas.scale.calledWith(5 - 3, 6 - 4)).to.equal(true)
+    })
+  }),
+  describe('emoji', function() {
+    EmojiMart.emojiIndex = {
+      emojis: {
+        emoji1: { native: '__EMOJI1__', colons: ':emoji1:' },
+        emoji2: { native: '__EMOJI2__', colons: ':emoji2:' }
+      }
+    }
+    const withEmojiText = 'test __EMOJI1__ test __EMOJI2__ test';
+    const noEmojiText = 'test :emoji1: test :emoji2: test';
+    const emoticonsText = 'test :) test :( test'
+    const emoticonsReplacedText = 'test __EMOJI1__ test __EMOJI2__ test'
+    it('removeEmoji replaces emoji with text', function() {
+      expect(Util.removeEmoji(withEmojiText)).to.equal(noEmojiText)
+    })
+    it('addEmoji replaces text with emoji', function() {
+      expect(Util.addEmoji(noEmojiText)).to.equal(withEmojiText)
+    })
+    it.skip('addEmoji replaces emoticons with emoji', function() {
+      expect(Util.addEmoji(emoticonsText, { emoticons: true }))
+        .to.equal(emoticonsReplacedText)
     })
   })
 })
