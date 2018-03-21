@@ -8,19 +8,6 @@ import * as EmojiMart from 'emoji-mart'
 
 const sandbox = sinon.sandbox.create()
 
-function mockMGraph({ x, y, sx, sy, px, py, width, height, ox, oy }) {
-  return {
-    canvas: {
-      getSize: () => ({ width, height }),
-      getPos: () => ({ x: px, y: py }),
-      translateOffsetX: ox,
-      translateOffsetY: oy,
-      scaleOffsetX: sx,
-      scaleOffsetY: sy
-    }
-  }
-}
-
 describe('Metamaps.Util.js', function() {
   describe('splitLine', function() {
     it('splits on words', function() {
@@ -89,80 +76,81 @@ describe('Metamaps.Util.js', function() {
         .to.equal('8.6023')
     })
   })
-  describe('coordsToPixels', function() {
-    function assertCoordsToPixels(expectedX, expectedY,
+  describe('coords/pixels conversions', function() {
+    function mockMGraph({ x, y, sx, sy, px, py, width, height, ox, oy }) {
+      return {
+        canvas: {
+          getSize: () => ({ width, height }),
+          getPos: () => ({ x: px, y: py }),
+          translateOffsetX: ox,
+          translateOffsetY: oy,
+          scaleOffsetX: sx,
+          scaleOffsetY: sy
+        }
+      }
+    }
+
+    function assertConversion(testFunction, expectedX, expectedY,
         { x, y, sx, sy, px, py, width, height, ox, oy }) {
       const mGraph = mockMGraph({
         x, y, sx, sy, px, py, width, height, ox, oy
       })
       const coords = { x, y }
-      const actual = Util.coordsToPixels(mGraph, coords)
+      const actual = testFunction(mGraph, coords)
       expect(actual.x).to.equal(expectedX)
       expect(actual.y).to.equal(expectedY)
     }
 
-    it('returns 0,0 for null canvas', function() {
+    it('coordsToPixels returns 0,0 for null canvas', function() {
       expect(Util.coordsToPixels(null, {}).x).to.equal(0)
       expect(Util.coordsToPixels(null, {}).y).to.equal(0)
     })
-    it('does the correct calculation', function() {
-      assertCoordsToPixels(0, 0,
+    it('coordsToPixels', function() {
+      assertConversion(Util.coordsToPixels, 0, 0,
         { x: 0, y: 0, sx: 1, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(1, 1,
+      assertConversion(Util.coordsToPixels, 1, 1,
         { x: 1, y: 1, sx: 1, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(2, 1,
+      assertConversion(Util.coordsToPixels, 2, 1,
         { x: 1, y: 1, sx: 2, sy: 1, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(2, 2,
+      assertConversion(Util.coordsToPixels, 2, 2,
         { x: 1, y: 1, sx: 2, sy: 2, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(3, 2,
+      assertConversion(Util.coordsToPixels, 3, 2,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 0, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(3, 3,
+      assertConversion(Util.coordsToPixels, 3, 3,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 0, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(4, 3,
+      assertConversion(Util.coordsToPixels, 4, 3,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 0, ox: 0, oy: 0 })
-      assertCoordsToPixels(4, 4,
+      assertConversion(Util.coordsToPixels, 4, 4,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 0, oy: 0 })
-      assertCoordsToPixels(9, 4,
+      assertConversion(Util.coordsToPixels, 9, 4,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 5, oy: 0 })
-      assertCoordsToPixels(9, 9,
+      assertConversion(Util.coordsToPixels, 9, 9,
         { x: 1, y: 1, sx: 2, sy: 2, px: 1, py: 1, width: 2, height: 2, ox: 5, oy: 5 })
     })
-  })
-  describe('pixelsToCoords', function() {
-    function assertPixelsToCoords(expectedX, expectedY,
-        { x, y, px, py, width, height, ox, oy, sx, sy }) {
-      const mGraph = mockMGraph({
-        x, y, sx, sy, px, py, width, height, ox, oy
-      })
-      const coords = { x, y }
-      const actual = Util.pixelsToCoords(mGraph, coords)
-      expect(actual.x).to.equal(expectedX)
-      expect(actual.y).to.equal(expectedY)
-    }
-    it('returns 0,0 for null canvas', function() {
+    it('pixelsToCoords returns 0,0 for null canvas', function() {
       expect(Util.pixelsToCoords(null, {}).x).to.equal(0)
       expect(Util.pixelsToCoords(null, {}).y).to.equal(0)
     })
-    it('does the correct calculation', function() {
-      assertPixelsToCoords(0, 0,
+    it('pixelsToCoords', function() {
+      assertConversion(Util.pixelsToCoords, 0, 0,
         { x: 0, y: 0, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(5, 5,
+      assertConversion(Util.pixelsToCoords, 5, 5,
         { x: 5, y: 5, px: 0, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(4, 5,
+      assertConversion(Util.pixelsToCoords, 4, 5,
         { x: 5, y: 5, px: 1, py: 0, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(4, 4,
+      assertConversion(Util.pixelsToCoords, 4, 4,
         { x: 5, y: 5, px: 1, py: 1, width: 0, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(3, 4,
+      assertConversion(Util.pixelsToCoords, 3, 4,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 0, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(3, 3,
+      assertConversion(Util.pixelsToCoords, 3, 3,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 0, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(2, 3,
+      assertConversion(Util.pixelsToCoords, 2, 3,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 0, sx: 1, sy: 1 })
-      assertPixelsToCoords(2, 2,
+      assertConversion(Util.pixelsToCoords, 2, 2,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 1, sy: 1 })
-      assertPixelsToCoords(4, 2,
+      assertConversion(Util.pixelsToCoords, 4, 2,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 0.5, sy: 1 })
-      assertPixelsToCoords(4, 4,
+      assertConversion(Util.pixelsToCoords, 4, 4,
         { x: 5, y: 5, px: 1, py: 1, width: 2, height: 2, ox: 1, oy: 1, sx: 0.5, sy: 0.5 })
     })
   })
@@ -299,7 +287,6 @@ describe('Metamaps.Util.js', function() {
 
       Util.resizeCanvas(canvas, jQueryStub)
 
-      debugger
       expect(canvas.resize.calledWith(7, 8), 'resize not called')
         .to.equal(true)
       expect(canvas.scale.calledWith(1, 2), 'scale not called')
@@ -308,20 +295,20 @@ describe('Metamaps.Util.js', function() {
              'translate not called')
         .to.equal(true)
     })
-  }),
+  })
   describe('emoji', function() {
     EmojiMart.emojiIndex = {
       emojis: {
         emoji1: { native: '__EMOJI1__', colons: ':emoji1:' },
         emoji2: { native: '__EMOJI2__', colons: ':emoji2:' }
-      }, 
+      },
       emoticons: {
         ':)': 'emoji1',
         ':(': 'emoji2'
       }
     }
-    const withEmojiText = 'test __EMOJI1__ test __EMOJI2__ test';
-    const noEmojiText = 'test :emoji1: test :emoji2: test';
+    const withEmojiText = 'test __EMOJI1__ test __EMOJI2__ test'
+    const noEmojiText = 'test :emoji1: test :emoji2: test'
     const emoticonsText = 'test :) test :( test'
     const emoticonsReplacedText = 'test __EMOJI1__ test __EMOJI2__ test'
     it('removeEmoji replaces emoji with text', function() {
