@@ -94,7 +94,7 @@ describe('Metamaps.Util.js', function() {
         { x, y, sx, sy, px, py, width, height, ox, oy }) {
       const mGraph = mockMGraph({
         x, y, sx, sy, px, py, width, height, ox, oy
-      }){
+      })
       const coords = { x, y }
       const actual = Util.coordsToPixels(mGraph, coords)
       expect(actual.x).to.equal(expectedX)
@@ -133,7 +133,8 @@ describe('Metamaps.Util.js', function() {
         { x, y, px, py, width, height, ox, oy, sx, sy }) {
       const mGraph = mockMGraph({
         x, y, sx, sy, px, py, width, height, ox, oy
-      }){
+      })
+      const coords = { x, y }
       const actual = Util.pixelsToCoords(mGraph, coords)
       expect(actual.x).to.equal(expectedX)
       expect(actual.y).to.equal(expectedY)
@@ -298,10 +299,14 @@ describe('Metamaps.Util.js', function() {
 
       Util.resizeCanvas(canvas, jQueryStub)
 
-      expect(canvas.resize.calledWith(7, 8)).to.equal(true)
-      expect(canvas.scale.calledWith(1, 2))
+      debugger
+      expect(canvas.resize.calledWith(7, 8), 'resize not called')
         .to.equal(true)
-      expect(canvas.scale.calledWith(5 - 3, 6 - 4)).to.equal(true)
+      expect(canvas.scale.calledWith(1, 2), 'scale not called')
+        .to.equal(true)
+      expect(canvas.translate.calledWith(5 - 3, 6 - 4),
+             'translate not called')
+        .to.equal(true)
     })
   }),
   describe('emoji', function() {
@@ -309,6 +314,10 @@ describe('Metamaps.Util.js', function() {
       emojis: {
         emoji1: { native: '__EMOJI1__', colons: ':emoji1:' },
         emoji2: { native: '__EMOJI2__', colons: ':emoji2:' }
+      }, 
+      emoticons: {
+        ':)': 'emoji1',
+        ':(': 'emoji2'
       }
     }
     const withEmojiText = 'test __EMOJI1__ test __EMOJI2__ test';
@@ -319,9 +328,9 @@ describe('Metamaps.Util.js', function() {
       expect(Util.removeEmoji(withEmojiText)).to.equal(noEmojiText)
     })
     it('addEmoji replaces text with emoji', function() {
-      expect(Util.addEmoji(noEmojiText)).to.equal(withEmojiText)
+      expect(Util.addEmoji(noEmojiText, { emoticons: false })).to.equal(withEmojiText)
     })
-    it.skip('addEmoji replaces emoticons with emoji', function() {
+    it('addEmoji replaces emoticons with emoji', function() {
       expect(Util.addEmoji(emoticonsText, { emoticons: true }))
         .to.equal(emoticonsReplacedText)
     })
