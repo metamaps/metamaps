@@ -55,7 +55,7 @@ class MapActivityService
     topics_removed_events.each do |ta|
       num_adds = topics_added_events.where(eventable_id: ta.eventable_id).count
       num_removes = topics_removed_events.where(eventable_id: ta.eventable_id).count
-      if num_removes > num_adds && TopicPolicy.new(user, ta.eventable).show?
+      if num_removes > num_adds && ta.eventable.present? && TopicPolicy.new(user, ta.eventable).show?
         topics_removed_to_include[ta.eventable_id] = ta
       end
     end
